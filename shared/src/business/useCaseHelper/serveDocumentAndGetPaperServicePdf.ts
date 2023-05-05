@@ -1,7 +1,5 @@
-const {
-  aggregatePartiesForService,
-} = require('../utilities/aggregatePartiesForService');
-const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
 /**
  * serveDocumentAndGetPaperServicePdf
@@ -12,7 +10,7 @@ const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {Promise<*>} the updated case entity
  */
-exports.serveDocumentAndGetPaperServicePdf = async ({
+export const serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntities,
   docketEntryId,

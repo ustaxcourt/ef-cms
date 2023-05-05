@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getUserCaseNoteInteractorProxy
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.docketNumber the docket number to get notes for the logged in user
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUserCaseNoteInteractor = (applicationContext, { docketNumber }) => {
+export const getUserCaseNoteInteractor = (
+  applicationContext,
+  { docketNumber },
+) => {
   return get({
     applicationContext,
     endpoint: `/case-notes/${docketNumber}/user-notes`,

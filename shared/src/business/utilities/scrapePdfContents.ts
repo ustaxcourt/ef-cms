@@ -1,4 +1,4 @@
-const { isEmpty } = require('lodash');
+import { isEmpty } from 'lodash';
 
 /**
  * scrapes the text content out of a pdf
@@ -6,7 +6,7 @@ const { isEmpty } = require('lodash');
  * @param {string} pdfBuffer the buffer for the pdf content
  * @returns {Promise} the template with the brackets replaced with replacement values
  */
-const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
+export const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
   let pdfjsLib;
 
   try {
@@ -48,5 +48,3 @@ const scrapePdfContents = async ({ applicationContext, pdfBuffer }) => {
     );
   }
 };
-
-exports.scrapePdfContents = scrapePdfContents;

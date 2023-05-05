@@ -1,12 +1,10 @@
-const joi = require('joi');
-const {
-  AddPrivatePractitionerFactory,
-} = require('./AddPrivatePractitionerFactory');
-const {
+import { AddPrivatePractitionerFactory } from './AddPrivatePractitionerFactory';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+} from '../JoiValidationDecorator';
+import joi from 'joi';
 
 /**
  * Edit Petitioner Counsel Factory entity
@@ -14,7 +12,7 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
  * @param {object} rawProps the raw counsel data
  * @constructor
  */
-function EditPetitionerCounselFactory(rawProps) {
+export function EditPetitionerCounselFactory(rawProps) {
   /**
    * bare constructor for entity factory
    */
@@ -46,5 +44,3 @@ EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
   ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
   representing: 'Select a representing party',
 };
-
-module.exports = { EditPetitionerCounselFactory };

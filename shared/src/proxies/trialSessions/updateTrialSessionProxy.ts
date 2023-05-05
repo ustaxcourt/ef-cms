@@ -7,7 +7,7 @@ import { put } from '../requests';
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateTrialSessionInteractor = (
+export const updateTrialSessionInteractor = (
   applicationContext,
   { isDismissingThirtyDayAlert, trialSession },
 ) => {

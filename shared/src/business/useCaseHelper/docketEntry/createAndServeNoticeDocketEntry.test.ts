@@ -1,17 +1,13 @@
 import { getFakeFile } from '../../test/getFakeFile';
 
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  createAndServeNoticeDocketEntry,
-} = require('./createAndServeNoticeDocketEntry');
-const {
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createAndServeNoticeDocketEntry } from './createAndServeNoticeDocketEntry';
 
 describe('createAndServeDocketEntry', () => {
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';

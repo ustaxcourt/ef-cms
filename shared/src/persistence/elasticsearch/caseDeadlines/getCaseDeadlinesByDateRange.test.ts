@@ -1,14 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getCaseDeadlinesByDateRange,
-} = require('./getCaseDeadlinesByDateRange');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getCaseDeadlinesByDateRange } from './getCaseDeadlinesByDateRange';
 jest.mock('../searchClient');
-const {
-  DEADLINE_REPORT_PAGE_SIZE,
-} = require('../../../business/entities/EntityConstants');
-const { search } = require('../searchClient');
+import { DEADLINE_REPORT_PAGE_SIZE } from '../../../business/entities/EntityConstants';
+import { search } from '../searchClient';
 
 describe('getCaseDeadlinesByDateRange', () => {
   const START_DATE = '2019-08-25T05:00:00.000Z';

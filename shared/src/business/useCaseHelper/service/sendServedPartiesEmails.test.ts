@@ -1,16 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
-} = require('../../entities/EntityConstants');
-const {
-  reactTemplateGenerator,
-} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { sendServedPartiesEmails } = require('./sendServedPartiesEmails');
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import { sendServedPartiesEmails } from './sendServedPartiesEmails';
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
   () => ({

@@ -1,4 +1,4 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 /**
  * getCasesClosedByJudge
@@ -10,7 +10,7 @@ const { search } = require('./searchClient');
  * @param {string} providers.endDate end date
  * @returns {array} array of docket numbers
  */
-exports.getCasesClosedByJudge = async ({
+export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
   judgeName,
