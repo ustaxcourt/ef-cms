@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * initialize consolidated case state values for ConfirmInitiateServiceModal
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get object
  * @param {object} providers.store the cerebral store object
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const loadConsolidatedCasesForAddDocketNumbersModalAction = ({
   get,
   store,
-}) => {
+}: ActionProps) => {
   let addedDocketNumbers = get(state.addedDocketNumbers);
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
   let caseDetail = get(state.caseDetail);

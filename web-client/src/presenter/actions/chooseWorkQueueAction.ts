@@ -6,7 +6,6 @@ const DEFAULT_QUEUE_PREFS = {
 };
 /**
  * Used for changing which work queue (myself, section) and box (inbox, outbox).
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
@@ -16,7 +15,12 @@ const DEFAULT_QUEUE_PREFS = {
  * @param {object} providers.store the cerebral store object used for setting workQueueToDisplay
  * @returns {*} returns the next action in the sequence's path
  */
-export const chooseWorkQueueAction = ({ get, path, props, store }) => {
+export const chooseWorkQueueAction = ({
+  get,
+  path,
+  props,
+  store,
+}: ActionProps) => {
   if (props.queue) {
     store.set(state.workQueueToDisplay.queue, props.queue);
   }

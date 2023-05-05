@@ -3,13 +3,15 @@ import { state } from 'cerebral';
 
 /**
  * validate practitioner search by name form
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
-export const validatePractitionerSearchByNameAction = ({ get, path }) => {
+export const validatePractitionerSearchByNameAction = ({
+  get,
+  path,
+}: ActionProps) => {
   const { practitionerName } = get(
     state.advancedSearchForm.practitionerSearchByName,
   );

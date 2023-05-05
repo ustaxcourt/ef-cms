@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * upload document to s3.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.path the cerebral path to take depending on if the file was uploaded successfully or not
@@ -13,7 +12,7 @@ export const overwriteOrderFileAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { primaryDocumentFile } = get(state.form);
   const documentToEdit = get(state.documentToEdit);
 

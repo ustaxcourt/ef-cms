@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the petition.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -11,7 +10,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing props.irsNoticeDate, props.petitionPaymentDate, and props.petitionPaymentWaivedDate
  * @returns {object} the next path based on if validation was successful or error
  */
-export const validatePetitionAction = ({ applicationContext, get, path }) => {
+export const validatePetitionAction = ({
+  applicationContext,
+  get,
+  path,
+}: ActionProps) => {
   const form = omit(
     {
       ...get(state.form),

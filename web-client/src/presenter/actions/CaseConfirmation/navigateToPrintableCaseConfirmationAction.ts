@@ -9,6 +9,6 @@
 export const navigateToPrintableCaseConfirmationAction = async ({
   props,
   router,
-}) => {
+}: ActionProps) => {
   await router.route(`/case-detail/${props.docketNumber}/confirmation`);
 };

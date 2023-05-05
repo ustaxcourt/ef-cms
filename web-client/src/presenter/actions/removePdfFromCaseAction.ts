@@ -2,12 +2,11 @@ import { state } from 'cerebral';
 
 /**
  * Removes a document from state.caseDetail
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @returns {object} the new documentUploadMode
  */
-export const removePdfFromCaseAction = ({ get }) => {
+export const removePdfFromCaseAction = ({ get }: ActionProps) => {
   const form = get(state.form);
   const docketEntryId = get(state.docketEntryId);
 

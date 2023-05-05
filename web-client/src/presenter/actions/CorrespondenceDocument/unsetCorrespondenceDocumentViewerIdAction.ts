@@ -5,6 +5,8 @@ import { state } from 'cerebral';
  *
  * @param {object} providers.store the cerebral store object
  */
-export const unsetCorrespondenceDocumentViewerIdAction = ({ store }) => {
+export const unsetCorrespondenceDocumentViewerIdAction = ({
+  store,
+}: ActionProps) => {
   store.unset(state.correspondenceId);
 };
