@@ -5,7 +5,9 @@
  * @param {object} providers.applicationContext needed for getting the getCase use case
  * @returns {object} contains the trial sessions returned from the use case
  */
-export const getTrialSessionsAction = async ({ applicationContext }) => {
+export const getTrialSessionsAction = async ({
+  applicationContext,
+}: ActionProps) => {
   const trialSessions = await applicationContext
     .getUseCases()
     .getTrialSessionsInteractor(applicationContext);

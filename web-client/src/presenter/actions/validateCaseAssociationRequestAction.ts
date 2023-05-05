@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the case association request.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -13,7 +12,7 @@ export const validateCaseAssociationRequestAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const caseAssociationRequest = {
     ...get(state.form),
   };

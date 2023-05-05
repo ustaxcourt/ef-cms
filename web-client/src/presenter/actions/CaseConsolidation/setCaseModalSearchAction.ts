@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const setCaseModalSearchAction = ({ props, store }) => {
+export const setCaseModalSearchAction = ({ props, store }: ActionProps) => {
   const { caseDetail } = props;
 
   store.unset(state.modal.error);

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets state.form.orderForCds based on the partyType and whether an CDS file has been uploaded
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get method
@@ -14,7 +13,7 @@ export const updateOrderForCdsAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   if (['corporateDisclosureFile', 'partyType'].includes(props.key)) {
     const { corporateDisclosureFile, partyType } = get(state.form);
     const { PARTY_TYPES } = applicationContext.getConstants();

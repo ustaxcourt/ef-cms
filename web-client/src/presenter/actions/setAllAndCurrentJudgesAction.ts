@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.legacyAndCurrentJudges and state.judges based on the role of judges in props.user.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.props the cerebral props object containing the props.user
@@ -12,7 +11,7 @@ export const setAllAndCurrentJudgesAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const currentJudges = props.users.filter(

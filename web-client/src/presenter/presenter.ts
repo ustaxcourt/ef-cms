@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { ActionError } from './errors/ActionError';
+import { ClientApplicationContext } from '../applicationContext';
 import { GatewayTimeoutError } from './errors/GatewayTimeoutError';
 import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
@@ -1056,4 +1057,18 @@ export const presenter = {
 
 declare global {
   type Sequences = typeof sequences;
+}
+
+declare global {
+  type ActionProps = {
+    applicationContext: ClientApplicationContext;
+    get: <T>(slice: T) => T;
+    store: {
+      set: (key: any, value: any) => void;
+      unset: (key: any) => void;
+    };
+    path: any;
+    props: any;
+    router: any;
+  };
 }

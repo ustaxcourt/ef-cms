@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * get the case inventory report data
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const getCaseInventoryReportAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { associatedJudge, page, status } = get(state.screenMetadata);
 
   if (associatedJudge || status) {
