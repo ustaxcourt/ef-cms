@@ -481,6 +481,12 @@ export const DATE_RANGE_VALIDATION_RULE_KEYS = {
     ),
 };
 
+// TODO: validate workItems in DocketEntry
+// DOCKET_ENTRY_VALIDATION_RULE_KEYS.workItem = joi
+//   .object()
+//   .keys(WORK_ITEM_VALIDATION_RULE_KEYS)
+//   .optional();
+
 export const DOCKET_ENTRY_VALIDATION_RULES = joi
   .object()
   .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS);
