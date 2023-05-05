@@ -6,7 +6,10 @@
  * @param {object} providers.path the next object in the path
  * @returns {object} path execution results
  */
-export const takePathForDocumentPreviewAction = ({ path, props }) => {
+export const takePathForDocumentPreviewAction = ({
+  path,
+  props,
+}: ActionProps) => {
   if (props.fileFromBrowserMemory) {
     return path.pdfInMemory({ file: props.fileFromBrowserMemory });
   }

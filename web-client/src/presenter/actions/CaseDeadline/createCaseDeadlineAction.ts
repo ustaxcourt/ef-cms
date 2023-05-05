@@ -2,7 +2,6 @@ import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
 
 /**
  * creates a case deadline
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -15,7 +14,7 @@ export const createCaseDeadlineAction = async ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const caseDeadline = getCaseDeadlineFromFormAction({
     applicationContext,
     get,

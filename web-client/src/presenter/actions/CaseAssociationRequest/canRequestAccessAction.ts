@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
  * @returns {object} the list of section work items
  */
-export const canRequestAccessAction = ({ get, path, props }) => {
+export const canRequestAccessAction = ({ get, path, props }: ActionProps) => {
   const { isDirectlyAssociated } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
   if (!isDirectlyAssociated) {

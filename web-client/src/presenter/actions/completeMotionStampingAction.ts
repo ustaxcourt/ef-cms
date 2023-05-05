@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * generates an action for completing motion stamping
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const completeMotionStampingAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const motionDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
