@@ -29,7 +29,11 @@ export const formatSession = (session, applicationContext) => {
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
-  if (session.isCalendared && session.formattedStartDate) {
+  if (
+    !session.dismissedAlertForNOTT &&
+    session.isCalendared &&
+    session.formattedStartDate
+  ) {
     const { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted } =
       set30DayNoticeOfTrialReminder({
         applicationContext,
