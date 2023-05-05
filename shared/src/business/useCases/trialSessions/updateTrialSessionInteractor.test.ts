@@ -471,6 +471,7 @@ describe('updateTrialSessionInteractor', () => {
 
   it('should make a call to sendNotificationToUser when the trial session is successfully completed', async () => {
     await updateTrialSessionInteractor(applicationContext, {
+      isDismissingThirtyDayAlert: true,
       trialSession: {
         ...MOCK_TRIAL_INPERSON,
         dismissedAlertForNOTT: true,
@@ -482,8 +483,8 @@ describe('updateTrialSessionInteractor', () => {
         .calls[0][0].message,
     ).toMatchObject({
       action: 'update_trial_session_complete',
-      dismissedAlertForNOTT: true,
       hasPaper: false,
+      isDismissingThirtyDayAlert: true,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
   });

@@ -46,6 +46,10 @@ describe('dismissThirtyDayAlertFromTrialSessionAction', () => {
       ...MOCK_TRIAL_REGULAR,
       dismissedAlertForNOTT: true,
     });
+    expect(
+      applicationContext.getUseCases().updateTrialSessionInteractor.mock
+        .calls[0][1].isDismissingThirtyDayAlert,
+    ).toBe(true);
   });
 
   it('should call the success path when the trial session has been successfully updated', async () => {

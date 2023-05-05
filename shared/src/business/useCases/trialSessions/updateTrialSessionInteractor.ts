@@ -137,8 +137,8 @@ const createWorkingCopyForNewUserOnSession = async ({
  * @param {object} providers.trialSession the trial session data
  */
 export const updateTrialSessionInteractor = async (
-  applicationContext,
-  { isDismissingThirtyDayAlert, trialSession },
+  applicationContext: IApplicationContext,
+  { isDismissingThirtyDayAlert = false, trialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -152,8 +152,6 @@ export const updateTrialSessionInteractor = async (
       applicationContext,
       trialSessionId: trialSession.trialSessionId,
     });
-
-  console.log(currentTrialSession, '--');
 
   if (
     currentTrialSession.startDate <
