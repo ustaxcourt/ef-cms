@@ -1,14 +1,12 @@
-const {
+import { Case } from '../../entities/cases/Case';
+import {
+  FORMATS,
   formatDateString,
   formatNow,
-  FORMATS,
-} = require('../../utilities/DateHandler');
-const {
-  reactTemplateGenerator,
-} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { Case } = require('../../entities/cases/Case');
+} from '../../utilities/DateHandler';
+import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-exports.sendIrsSuperuserPetitionEmail = async ({
+export const sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
   caseEntity,
   docketEntryId,

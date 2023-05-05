@@ -7,9 +7,10 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
+import { Case } from '../business/entities/cases/Case';
 import { MOCK_DOCUMENTS } from './mockDocuments';
 
-export const MOCK_CASE: TCase = {
+export const MOCK_CASE: Case = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
@@ -269,7 +270,7 @@ export const MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
   docketNumber: '110-19',
   entityName: 'Case',
   filingType: 'Myself',
-  leadDocketNumber: exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+  leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {
@@ -314,7 +315,7 @@ export const MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   docketNumber: '111-19',
   entityName: 'Case',
   filingType: 'Myself',
-  leadDocketNumber: exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+  leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {

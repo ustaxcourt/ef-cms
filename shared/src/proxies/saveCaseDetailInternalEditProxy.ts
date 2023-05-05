@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * saveCaseDetailInternalEditInteractor
@@ -9,7 +9,7 @@ const { put } = require('./requests');
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.saveCaseDetailInternalEditInteractor = (
+export const saveCaseDetailInternalEditInteractor = (
   applicationContext,
   { caseToUpdate },
 ) => {

@@ -1,12 +1,13 @@
-const {
+import {
+  FORMATS,
   calculateDifferenceInDays,
   calculateISODate,
   combineISOandEasternTime,
   createISODateString,
   formatDateString,
-  FORMATS,
-} = require('./DateHandler');
-const {
+} from './DateHandler';
+
+import {
   CASE_STATUS_TYPES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
@@ -16,13 +17,14 @@ const {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
-} = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
-const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { isServed } = require('../entities/DocketEntry');
+} from '../entities/EntityConstants';
 
-const TRANSCRIPT_AGE_DAYS_MIN = 90;
-const documentMeetsAgeRequirements = doc => {
+import { Case } from '../entities/cases/Case';
+import { cloneDeep, isEmpty, sortBy } from 'lodash';
+import { isServed } from '../entities/DocketEntry';
+
+export const TRANSCRIPT_AGE_DAYS_MIN = 90;
+export const documentMeetsAgeRequirements = doc => {
   const transcriptCodes = [
     TRANSCRIPT_EVENT_CODE,
     CORRECTED_TRANSCRIPT_EVENT_CODE,
@@ -63,7 +65,7 @@ const computeIsNotServedDocument = ({ formattedEntry }) => {
   );
 };
 
-const formatDocketEntry = (applicationContext, docketEntry) => {
+export const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
   formattedEntry.servedAtFormatted = formatDateString(
@@ -164,7 +166,7 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   return formattedEntry;
 };
 
-const getFilingsAndProceedings = formattedDocketEntry => {
+export const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
@@ -285,7 +287,7 @@ const formatTrialSessionScheduling = ({
   }
 };
 
-const formatCase = (applicationContext, caseDetail) => {
+export const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
@@ -472,7 +474,7 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 };
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
-const sortUndefined = (a, b) => {
+export const sortUndefined = (a, b) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
   }
@@ -482,7 +484,7 @@ const sortUndefined = (a, b) => {
   }
 };
 
-const sortDocketEntries = (docketEntries = [], sortByString = '') => {
+export const sortDocketEntries = (docketEntries = [], sortByString = '') => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
   const isReversed = sortByString.includes('Desc');
   docketEntries.sort(sortFunc);
@@ -493,7 +495,7 @@ const sortDocketEntries = (docketEntries = [], sortByString = '') => {
   return docketEntries.sort(sortUndefined);
 };
 
-const getFormattedCaseDetail = ({
+export const getFormattedCaseDetail = ({
   applicationContext,
   caseDetail,
   docketRecordSort,
@@ -511,15 +513,4 @@ const getFormattedCaseDetail = ({
   result.docketRecordSort = docketRecordSort;
 
   return result;
-};
-
-module.exports = {
-  TRANSCRIPT_AGE_DAYS_MIN,
-  documentMeetsAgeRequirements,
-  formatCase,
-  formatDocketEntry,
-  getFilingsAndProceedings,
-  getFormattedCaseDetail,
-  sortDocketEntries,
-  sortUndefined,
 };

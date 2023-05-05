@@ -36,7 +36,7 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
@@ -58,7 +58,7 @@ resource "aws_lambda_function" "websockets_default_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
@@ -81,7 +81,7 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment

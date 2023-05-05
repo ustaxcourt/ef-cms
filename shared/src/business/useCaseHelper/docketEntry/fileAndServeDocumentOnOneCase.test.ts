@@ -1,28 +1,23 @@
 /* eslint-disable max-lines */
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+
+import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
-  fileAndServeDocumentOnOneCase,
-} = require('./fileAndServeDocumentOnOneCase');
-const {
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} = require('../../../test/mockCase');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { docketClerkUser, judgeUser } = require('../../../test/mockUsers');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { WorkItem } from '../../entities/WorkItem';
+import { createISODateString } from '../../utilities/DateHandler';
+import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;

@@ -3,7 +3,6 @@ import { addCoverToPdf } from './addCoverToPdf';
 
 /**
  * addCoversheetInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketEntryId the docket entry id
@@ -23,7 +22,7 @@ export const addCoversheetInteractor = async (
     replaceCoversheet,
     useInitialData,
   }: {
-    caseEntity?: TCaseEntity;
+    caseEntity?: Case;
     docketEntryId: string;
     docketNumber: string;
     filingDateUpdated: boolean;
