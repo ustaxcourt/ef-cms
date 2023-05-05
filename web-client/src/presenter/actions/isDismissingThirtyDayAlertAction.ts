@@ -6,5 +6,5 @@
  * @returns {object} the next path based on if the 30 day NOTT alert has been dismissed
  */
 export const isDismissingThirtyDayAlertAction = ({ path, props }) => {
-  return props.dismissedAlertForNOTT ? path.yes() : path.no();
+  return props.isDismissingThirtyDayAlert ? path.yes() : path.no();
 };

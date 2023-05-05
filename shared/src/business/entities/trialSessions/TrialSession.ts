@@ -1,3 +1,11 @@
+/* eslint-disable complexity */
+import {
+  FORMATS,
+  createISODateString,
+  formatDateString,
+  isTodayWithinGivenInterval,
+  prepareDateFromString,
+} from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
@@ -12,7 +20,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
-import { createISODateString } from '../../utilities/DateHandler';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
@@ -93,6 +100,8 @@ export class TrialSession extends JoiValidationEntity {
   public judge?: TJudge;
   public trialClerk?: TTrialClerk;
   public dismissedAlertForNOTT?: boolean;
+  public isStartDateWithinNOTTReminderRange?: boolean;
+  public thirtyDaysBeforeTrialFormatted?: string;
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -300,6 +309,12 @@ export class TrialSession extends JoiValidationEntity {
       };
     }
 
+    if (rawSession.isCalendared && rawSession.startDate) {
+      this.set30DayNoticeOfTrialReminder();
+    } else {
+      this.isStartDateWithinNOTTReminderRange = false;
+    }
+
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
       this.trialClerk = {
         name: rawSession.trialClerk.name,
@@ -375,6 +390,37 @@ export class TrialSession extends JoiValidationEntity {
     const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
     return skPrefix;
+  }
+
+  /**
+   * generate sort key prefix
+   * @returns {string} the sort key prefix
+   */
+  set30DayNoticeOfTrialReminder() {
+    const { startDate } = this;
+    const formattedStartDate = formatDateString(startDate, FORMATS.MMDDYY);
+    const trialStartDateString: any = prepareDateFromString(
+      formattedStartDate,
+      FORMATS.MMDDYY,
+    );
+
+    const thirtyFiveDaysBeforeTrial: any = trialStartDateString.minus({
+      ['days']: 35,
+    });
+
+    const thirtyDaysBeforeTrial: any = trialStartDateString.minus({
+      ['days']: 30,
+    });
+
+    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
+      intervalEndDate: thirtyDaysBeforeTrial,
+      intervalStartDate: thirtyFiveDaysBeforeTrial,
+    });
+
+    this.thirtyDaysBeforeTrialFormatted = formatDateString(
+      thirtyDaysBeforeTrial,
+      FORMATS.MMDDYY,
+    );
   }
 
   /**
