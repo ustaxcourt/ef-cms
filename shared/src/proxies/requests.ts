@@ -1,17 +1,16 @@
-const moize = require('moize').default;
 const maxRetries = 10;
+import moize from 'moize';
 
 /**
  *
- * head
- *
+ *head
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.head = async ({ applicationContext, endpoint, params }) => {
+export const head = async ({ applicationContext, endpoint, params }) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
@@ -23,15 +22,14 @@ exports.head = async ({ applicationContext, endpoint, params }) => {
 
 /**
  *
- * get
- *
+ *get
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response body data
  */
-const get = async ({ applicationContext, endpoint, params }) => {
+const internalGet = async ({ applicationContext, endpoint, params }) => {
   const response = await getResponse({
     applicationContext,
     endpoint,
@@ -42,15 +40,14 @@ const get = async ({ applicationContext, endpoint, params }) => {
 
 /**
  *
- * getResponse
- *
+ *getResponse
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the complete http response
  */
-const getResponse = ({ applicationContext, endpoint, params }) => {
+export const getResponse = ({ applicationContext, endpoint, params }) => {
   return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
@@ -59,8 +56,6 @@ const getResponse = ({ applicationContext, endpoint, params }) => {
     });
 };
 
-exports.getResponse = getResponse;
-
 const getMemoized = moize({
   equals(cacheKeyArgument, keyArgument) {
     return cacheKeyArgument.endpoint === keyArgument.endpoint;
@@ -68,14 +63,13 @@ const getMemoized = moize({
   isPromise: true,
   maxAge: 5 * 1000, // five seconds
   updateExpire: true,
-})(get);
+})(internalGet);
 
-exports.get = process.env.CI ? get : getMemoized;
+export const get = process.env.CI ? internalGet : getMemoized;
 
 /**
  *
- * post
- *
+ *post
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
@@ -83,7 +77,7 @@ exports.get = process.env.CI ? get : getMemoized;
  * @param {object} providers.options the options we can pass through to the http client
  * @returns {Promise<*>} the response data
  */
-exports.post = async ({
+export const post = async ({
   applicationContext,
   body,
   endpoint,
@@ -121,15 +115,20 @@ exports.post = async ({
 
 /**
  *
- * put
- *
+ *put
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.put = async ({ applicationContext, body, endpoint, retry = 0 }) => {
+
+export const put = async ({
+  applicationContext,
+  body,
+  endpoint,
+  retry = 0,
+}) => {
   getMemoized.clear();
   try {
     const res = await applicationContext
@@ -157,8 +156,7 @@ exports.put = async ({ applicationContext, body, endpoint, retry = 0 }) => {
 };
 /**
  *
- * remove
- *
+ *remove
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -166,7 +164,7 @@ exports.put = async ({ applicationContext, body, endpoint, retry = 0 }) => {
  * @param {object} providers.options the options we can pass through to the http client
  * @returns {Promise<*>} the response data
  */
-exports.remove = async ({
+export const remove = async ({
   applicationContext,
   endpoint,
   options = {},

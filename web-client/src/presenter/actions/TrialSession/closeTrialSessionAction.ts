@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set trial session status to closed
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @returns {object} the trialSession with cases
@@ -11,7 +10,7 @@ export const closeTrialSessionAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const trialSessionId = get(state.trialSession.trialSessionId);
 
   let trialSession;

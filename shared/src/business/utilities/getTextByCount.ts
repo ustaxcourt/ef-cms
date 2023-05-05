@@ -1,4 +1,4 @@
-const getTextByCount = count => {
+export const getTextByCount = count => {
   const baseText =
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
   const baseCount = baseText.length;
@@ -12,5 +12,3 @@ const getTextByCount = count => {
 
   return resultText.slice(0, count);
 };
-
-module.exports = { getTextByCount };

@@ -1,23 +1,18 @@
-const {
-  addDraftStampOrderDocketEntryInteractor,
-} = require('./addDraftStampOrderDocketEntryInteractor');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import {
   MOTION_DISPOSITIONS,
   ORDER_TYPES,
   PETITIONS_SECTION,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '../../../errors/errors';
-import { clerkOfCourtUser } from '../../../test/mockUsers';
-const { judgeUser } = require('../../../test/mockUsers');
-const { MOCK_CASE } = require('../../../test/mockCase');
-import { MOCK_LOCK } from '../../../test/mockLock';
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDocketEntryInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { clerkOfCourtUser, judgeUser } from '../../../test/mockUsers';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   let mockLock;

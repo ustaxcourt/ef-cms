@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * removes the petitioner counsel from the case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context for getting constants
  * @param {Function} providers.get the cerebral get function used for getting state.modal
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const removePetitionerCounselFromCaseAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { barNumber } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;

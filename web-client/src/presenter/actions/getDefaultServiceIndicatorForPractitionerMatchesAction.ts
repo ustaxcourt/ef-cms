@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the default serviceIndicator for the selected practitioner
- *
  * @param {string} matchesKey the key on state.modal from where to fetch practitioners
  * @returns {Function} the cerebral action
  */
@@ -14,7 +13,7 @@ export const getDefaultServiceIndicatorForPractitionerMatchesAction =
      * @param {object} providers.get the cerebral get method
      * @returns {object} props object containing defaultServiceIndicator
      */
-    return ({ applicationContext, get }) => {
+    return ({ applicationContext, get }: ActionProps) => {
       const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
       const matches = get(state.modal[matchesKey]);
       const selectedPractitionerId = get(state.modal.user.userId);

@@ -1,4 +1,8 @@
 import { Case } from '../../entities/cases/Case';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -6,16 +10,11 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
+import { omit } from 'lodash';
 import { withLocking } from '../../useCaseHelper/acquireLock';
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_SERVED_MESSAGES,
-} = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
- *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab

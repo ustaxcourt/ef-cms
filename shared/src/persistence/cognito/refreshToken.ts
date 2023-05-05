@@ -1,6 +1,7 @@
-const { getClientId } = require('./getClientId');
+import { getClientId } from './getClientId';
 
-exports.refreshToken = async (applicationContext, { refreshToken }) => {
+// eslint-disable-next-line no-shadow
+export const refreshToken = async (applicationContext, { refreshToken }) => {
   const { COGNITO_SUFFIX, STAGE } = process.env;
 
   const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });

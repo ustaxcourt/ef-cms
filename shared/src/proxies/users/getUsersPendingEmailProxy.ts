@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getUsersPendingEmailInteractor
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.userIds the userIds to check for pending emails
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUsersPendingEmailInteractor = (applicationContext, { userIds }) => {
+export const getUsersPendingEmailInteractor = (
+  applicationContext,
+  { userIds },
+) => {
   return get({
     applicationContext,
     endpoint: `/users/pending-email?userIds=${userIds.join(',')}`,

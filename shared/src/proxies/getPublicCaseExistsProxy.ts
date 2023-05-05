@@ -1,4 +1,4 @@
-const { head } = require('./requests');
+import { head } from './requests';
 
 /**
  * getPublicCaseInteractor
@@ -8,7 +8,7 @@ const { head } = require('./requests');
  * @param {string} providers.docketNumber the docket number to get
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPublicCaseExistsInteractor = (
+export const getPublicCaseExistsInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set the default sort for the working copy table
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.get the cerebral get function
@@ -11,7 +10,7 @@ export const setDefaultWorkingCopyValuesAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
   const sort = get(state.trialSessionWorkingCopy.sort);
   const sortOrder = get(state.trialSessionWorkingCopy.sortOrder);

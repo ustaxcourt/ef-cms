@@ -1,14 +1,10 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { WorkItem } = require('../../entities/WorkItem');
+import { Case } from '../../entities/cases/Case';
+import { DOCKET_SECTION } from '../../entities/EntityConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { WorkItem } from '../../entities/WorkItem';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
-exports.fileAndServeDocumentOnOneCase = async ({
+export const fileAndServeDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,

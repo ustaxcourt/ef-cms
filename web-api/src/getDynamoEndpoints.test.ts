@@ -1,4 +1,4 @@
-const { getDynamoEndpoints } = require('./getDynamoEndpoints');
+import { getDynamoEndpoints } from './getDynamoEndpoints';
 
 describe('getDynamoEndpoints', () => {
   let mockEnvironment = {

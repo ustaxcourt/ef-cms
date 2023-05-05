@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../../../web-client/src/applicationContext');
-const {
+import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} = require('../entities/EntityConstants');
-const { formatDocketEntry } = require('./getFormattedCaseDetail');
+} from '../entities/EntityConstants';
+import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { formatDocketEntry } from './getFormattedCaseDetail';
 
 describe('formatDocketEntry', () => {
   it('should format the servedAt date', () => {

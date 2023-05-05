@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @returns {void}
  */
-export const setConsolidatedCasesForCaseAction = ({ props, store }) => {
+export const setConsolidatedCasesForCaseAction = ({
+  props,
+  store,
+}: ActionProps) => {
   const { consolidatedCases } = props;
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };
