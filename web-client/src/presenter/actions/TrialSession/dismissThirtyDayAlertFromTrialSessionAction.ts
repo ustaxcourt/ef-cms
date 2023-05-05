@@ -21,6 +21,7 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
     await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
+        isDismissingThirtyDayAlert: true,
         trialSession,
       });
   } catch (err) {

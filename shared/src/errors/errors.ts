@@ -1,12 +1,11 @@
 /**
  * Custom not found error handling for middlewares
- *
  * @type {module.NotFoundError}
  */
-module.exports.NotFoundError = class NotFoundError extends Error {
+export const NotFoundError = class NotFoundError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -18,13 +17,12 @@ module.exports.NotFoundError = class NotFoundError extends Error {
 
 /**
  * Invalid request error
- *
  * @type {module.NotFoundError}
  */
-module.exports.InvalidRequest = class InvalidRequest extends Error {
+export const InvalidRequest = class InvalidRequest extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -36,13 +34,12 @@ module.exports.InvalidRequest = class InvalidRequest extends Error {
 
 /**
  * Custom unknown user error handling for middlewares
- *
  * @type {module.UnknownUserError}
  */
-module.exports.UnknownUserError = class UnknownUserError extends Error {
+export const UnknownUserError = class UnknownUserError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -54,13 +51,12 @@ module.exports.UnknownUserError = class UnknownUserError extends Error {
 
 /**
  * Unauthorized error
- *
  * @type {module.UnauthorizedError}
  */
-module.exports.UnauthorizedError = class UnauthorizedError extends Error {
+export const UnauthorizedError = class UnauthorizedError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -72,15 +68,12 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
 
 /**
  * UnprocessableEntityError error
- *
  * @type {module.UnprocessableEntity}
  */
-module.exports.UnprocessableEntityError = class UnprocessableEntityError extends (
-  Error
-) {
+export const UnprocessableEntityError = class UnprocessableEntityError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message = 'cannot process') {
@@ -92,15 +85,12 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
 
 /**
  * UnsanitizedEntityError error
- *
  * @type {module.UnsanitizedEntity}
  */
-module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
-  Error
-) {
+export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message = 'Unsanitized entity') {
@@ -112,13 +102,11 @@ module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
 
 /**
  * InvalidEntityError error
- *
  * @type {module.InvalidEntityError}
  */
-module.exports.InvalidEntityError = class InvalidEntityError extends Error {
+export const InvalidEntityError = class InvalidEntityError extends Error {
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(

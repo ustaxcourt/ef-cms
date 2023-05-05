@@ -138,7 +138,7 @@ const createWorkingCopyForNewUserOnSession = async ({
  */
 export const updateTrialSessionInteractor = async (
   applicationContext,
-  { trialSession },
+  { isDismissingThirtyDayAlert, trialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -152,6 +152,8 @@ export const updateTrialSessionInteractor = async (
       applicationContext,
       trialSessionId: trialSession.trialSessionId,
     });
+
+  console.log(currentTrialSession, '--');
 
   if (
     currentTrialSession.startDate <
@@ -281,8 +283,8 @@ export const updateTrialSessionInteractor = async (
     applicationContext,
     message: {
       action: 'update_trial_session_complete',
-      dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
       hasPaper,
+      isDismissingThirtyDayAlert,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },
