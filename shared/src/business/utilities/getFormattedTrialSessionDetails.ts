@@ -1,7 +1,7 @@
-const { compact, partition } = require('lodash');
-const { PARTIES_CODES } = require('../entities/EntityConstants');
+import { PARTIES_CODES } from '../entities/EntityConstants';
+import { compact, partition } from 'lodash';
 
-exports.setPretrialMemorandumFiler = ({ caseItem }) => {
+export const setPretrialMemorandumFiler = ({ caseItem }) => {
   let filingPartiesCode;
   let numberOfPetitionerFilers = 0;
 
@@ -37,7 +37,7 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   return filingPartiesCode;
 };
 
-exports.formatCase = ({
+export const formatCase = ({
   applicationContext,
   caseItem,
   eligibleCases,
@@ -62,7 +62,7 @@ exports.formatCase = ({
   );
 
   if (setFilingPartiesCode) {
-    caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler({
+    caseItem.filingPartiesCode = setPretrialMemorandumFiler({
       caseItem,
     });
   }
@@ -90,7 +90,7 @@ const getDocketNumberSortString = ({ allCases = [], theCase }) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareCasesByDocketNumberFactory =
+export const compareCasesByDocketNumberFactory =
   ({ allCases }) =>
   (a, b) => {
     const aSortString = getDocketNumberSortString({
@@ -109,23 +109,20 @@ const getSortableDocketNumber = docketNumber => {
   return `${year}-${number.padStart(6, '0')}`;
 };
 
-const compareCasesByDocketNumber = (a, b) => {
+export const compareCasesByDocketNumber = (a, b) => {
   const aSortString = getSortableDocketNumber(a.docketNumber);
   const bSortString = getSortableDocketNumber(b.docketNumber);
   return aSortString.localeCompare(bSortString);
 };
 
-exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
-exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
-
-exports.getFormattedTrialSessionDetails = ({
+export const getFormattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
 }) => {
   if (!trialSession) return undefined;
 
   const allCases = (trialSession.calendaredCases || []).map(caseItem =>
-    exports.formatCase({
+    formatCase({
       applicationContext,
       caseItem,
       setFilingPartiesCode: true,

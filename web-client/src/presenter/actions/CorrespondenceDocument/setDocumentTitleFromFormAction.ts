@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.get the get function
  */
-export const setDocumentTitleFromFormAction = ({ get, store }) => {
+export const setDocumentTitleFromFormAction = ({ get, store }: ActionProps) => {
   store.set(state.form.documentTitle, get(state.form.documentTitle));
 };

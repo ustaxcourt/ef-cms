@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the search deadline form.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.get the cerebral get function used for getting state.form
@@ -13,7 +12,7 @@ export const validateSearchDeadlinesAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const startDate = get(state.screenMetadata.filterStartDateState);
   const endDate = get(state.screenMetadata.filterEndDateState);
 

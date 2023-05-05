@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { DOCUMENT_SERVED_MESSAGES } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -7,11 +8,9 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { withLocking } from '../../useCaseHelper/acquireLock';
-const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
 
 /**
  * serveCourtIssuedDocumentInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab

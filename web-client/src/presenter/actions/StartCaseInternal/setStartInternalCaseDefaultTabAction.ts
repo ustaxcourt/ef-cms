@@ -7,6 +7,8 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object
  * @param {Function} providers.store the cerebral store object
  */
-export const setStartInternalCaseDefaultTabAction = ({ store }) => {
+export const setStartInternalCaseDefaultTabAction = ({
+  store,
+}: ActionProps) => {
   store.set(state.currentViewMetadata.startCaseInternal.tab, 'partyInfo');
 };

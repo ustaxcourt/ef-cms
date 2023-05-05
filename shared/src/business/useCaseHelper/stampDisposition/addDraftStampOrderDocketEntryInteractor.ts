@@ -1,22 +1,17 @@
-const {
+import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { Message } = require('../../entities/Message');
-const { orderBy } = require('lodash');
-const { Stamp } = require('../../entities/Stamp');
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { Message } from '../../entities/Message';
+import { Stamp } from '../../entities/Stamp';
 import { UnauthorizedError } from '../../../errors/errors';
+import { orderBy } from 'lodash';
 import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document

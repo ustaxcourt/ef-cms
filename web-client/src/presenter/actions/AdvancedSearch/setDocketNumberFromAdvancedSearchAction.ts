@@ -3,7 +3,6 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**
  * sets the docket number from the advanced search form in props
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
@@ -12,7 +11,7 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 export const setDocketNumberFromAdvancedSearchAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const searchTerm = get(
     state.advancedSearchForm.caseSearchByDocketNumber.docketNumber,
   );

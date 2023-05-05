@@ -6,6 +6,6 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.store the cerebral store function
  */
-export const setCaseDetailPageTabUnfrozenAction = ({ store }) => {
+export const setCaseDetailPageTabUnfrozenAction = ({ store }: ActionProps) => {
   store.unset(state.currentViewMetadata.caseDetail.frozen);
 };

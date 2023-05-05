@@ -22,7 +22,7 @@ import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
  * @param {object} providers.user the user object that includes userId, barNumber etc.
  * @returns {Promise<User[]>} the internal users
  */
-const createDocketEntryForChange = async ({
+export const createDocketEntryForChange = async ({
   applicationContext,
   caseEntity,
   docketMeta = {},
@@ -120,7 +120,7 @@ const createDocketEntryForChange = async ({
   };
 };
 
-const createWorkItemForChange = async ({
+export const createWorkItemForChange = async ({
   applicationContext,
   caseEntity,
   changeOfAddressDocketEntry,

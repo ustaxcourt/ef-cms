@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the name to be used for signing a pdf
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext object
  * @param {object} providers.store the cerebral store object used for setting pdfForSigning.nameForSigning
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const setSignatureNameForPdfSigningAction = async ({
   applicationContext,
   store,
-}) => {
+}: ActionProps) => {
   const user = applicationContext.getCurrentUser();
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 

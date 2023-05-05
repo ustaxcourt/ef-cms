@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * fetched the document qc inbox items for a section.
- *
  * @param {object} applicationContext object that contains all the context specific methods
  * @param {Function} providers.get the cerebral get helper function
  * @returns {Promise<{workItems: Array}>} a list of work items
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const getDocumentQCInboxForSectionAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const selectedSection = get(state.workQueueToDisplay.section);
 
   const { CHIEF_JUDGE, USER_ROLES } = applicationContext.getConstants();

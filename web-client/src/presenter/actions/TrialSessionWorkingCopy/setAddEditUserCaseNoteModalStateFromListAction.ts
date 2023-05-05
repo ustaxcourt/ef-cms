@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * set the state for the add edit user's notes modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { docketNumber, docketNumberWithSuffix } = props;
 
   const notes = _get(get(state.trialSessionWorkingCopy.userNotes), [

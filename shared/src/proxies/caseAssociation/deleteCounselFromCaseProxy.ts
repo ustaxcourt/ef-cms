@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * deleteCounselFromCaseInteractor
@@ -9,7 +9,7 @@ const { remove } = require('../requests');
  * @param {string} providers.userId the id of the user to delete from the case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteCounselFromCaseInteractor = (
+export const deleteCounselFromCaseInteractor = (
   applicationContext,
   { docketNumber, userId },
 ) => {
