@@ -11,7 +11,7 @@ export const checkLock = async ({
   identifier: string;
   onLockError?: Error | Function;
   options?: any;
-}) => {
+}): Promise<void> => {
   const isCaseLockingEnabled = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -63,8 +63,7 @@ export const acquireLock = async ({
   retries?: number;
   ttl?: number;
   waitTime?: number;
-}) => {
-  if (!identifier) return;
+}): Promise<void> => {
   const identifiersToLock =
     typeof identifier === 'string' ? [identifier] : identifier;
 
@@ -112,8 +111,7 @@ export const removeLock = ({
 }: {
   applicationContext: IApplicationContext;
   identifier: string | string[];
-}) => {
-  if (!identifier) return;
+}): Promise<void[]> => {
   const identifiersToUnlock =
     typeof identifier === 'string' ? [identifier] : identifier;
 
@@ -129,23 +127,32 @@ export const removeLock = ({
 
 /**
  * will wrap a function with logic to acquire a lock and delete a lock after finishing.
- *
- * @param {function} cb the original function to wrap
+ * @param {function} interactor the original function to wrap
  * @param {function} getLockInfo a function which is passes the original args for getting the lock suffix
  * @param {error} onLockError the error object to throw if a lock is already in use
  * @returns {object} the item that was retrieved
  */
-export function withLocking(
-  cb: (applicationContext: IApplicationContext, options: any) => any,
-  getLockInfo: Function,
-  onLockError?: Error | Function,
-) {
-  return async function (
+export function withLocking<InteractorInput, InteractorOutput>(
+  interactor: (
+    applicationContext: IApplicationContext,
+    options: InteractorInput,
+  ) => Promise<InteractorOutput>,
+  getLockInfo: (
     applicationContext: IApplicationContext,
     options: any,
+  ) =>
+    | Promise<{ identifier: string; ttl?: number }>
+    | { identifier: string; ttl?: number },
+  onLockError?: Error | Function,
+): (
+  applicationContext: IApplicationContext,
+  options: InteractorInput,
+) => Promise<InteractorOutput> {
+  return async function (
+    applicationContext: IApplicationContext,
+    options: InteractorInput,
   ) {
-    const { identifier, ttl }: { identifier: string; ttl?: number } =
-      await getLockInfo(applicationContext, options);
+    const { identifier, ttl } = await getLockInfo(applicationContext, options);
 
     await acquireLock({
       applicationContext,
@@ -156,9 +163,9 @@ export function withLocking(
     });
 
     let caughtError;
-    let results;
+    let results: InteractorOutput;
     try {
-      results = await cb(applicationContext, options);
+      results = await interactor(applicationContext, options);
     } catch (err) {
       caughtError = err;
     }
@@ -171,6 +178,6 @@ export function withLocking(
     if (caughtError) {
       throw caughtError;
     }
-    return results;
+    return results!;
   };
 }
