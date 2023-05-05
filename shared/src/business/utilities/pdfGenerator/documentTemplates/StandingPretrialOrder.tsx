@@ -1,6 +1,6 @@
-const React = require('react');
 import { OrderDocketHeader } from '../components/OrderDocketHeader';
 import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
+import React from 'react';
 
 export const StandingPretrialOrder = ({ options, trialInfo }) => {
   return (

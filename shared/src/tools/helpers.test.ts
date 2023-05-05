@@ -1,9 +1,9 @@
-const {
+import {
   gatherRecords,
   getCsvOptions,
   sortableTitle,
   whitespaceCleanup,
-} = require('./helpers');
+} from './helpers';
 
 describe('tools/helpers', () => {
   const MOCK_RECORDS = [

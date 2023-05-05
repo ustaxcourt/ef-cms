@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * authenticateUserInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} auth.code the OAuth2 authorization code
  * @returns {Promise<*>} the promise of the api call
  */
-exports.authenticateUserInteractor = (applicationContext, { code }) => {
+export const authenticateUserInteractor = (applicationContext, { code }) => {
   return post({
     applicationContext,
     body: { code },

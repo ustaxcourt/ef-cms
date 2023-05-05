@@ -1,7 +1,6 @@
 import { state } from 'cerebral';
 /**
  * fetches the inbox messages for the section
- *
  * @param {object} applicationContext object that contains all the context specific methods
  * @param {Function} providers.get the cerebral get helper function
  * @returns {Promise<{Message: Array}>} a list of messages
@@ -9,7 +8,7 @@ import { state } from 'cerebral';
 export const getInboxMessagesForSectionAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const selectedSection = get(state.messageBoxToDisplay.section);
 
   const messages = await applicationContext

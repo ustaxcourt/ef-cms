@@ -6,7 +6,7 @@ module.exports = {
     'reindex-status':
       './web-api/workflow-terraform/reindex-cron/main/lambdas/reindex-status.js',
   },
-  externals: ['aws-crt', 'aws-sdk'],
+  externals: ['aws-crt'],
   output: {
     clean: true,
     libraryTarget: 'umd',

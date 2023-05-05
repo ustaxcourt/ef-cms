@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the first draft document from the current case detail to set as the default viewerDocumentToDisplay
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get method
@@ -13,7 +12,7 @@ import { state } from 'cerebral';
 export const getDefaultDraftViewerDocumentToDisplayAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const draftDocketEntryId =
     get(state.draftDocumentViewerDocketEntryId) ||
     get(state.screenMetadata.draftDocumentViewerDocketEntryId);

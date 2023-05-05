@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Fetches the cases with the given lead docket number.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
  * @param {object} providers.get the cerebral props object
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getConsolidatedCasesByCaseAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { ConsolidatedCaseDTO } = applicationContext.getDTOs();
   const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
   let consolidatedCases = [];

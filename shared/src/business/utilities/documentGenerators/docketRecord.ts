@@ -1,10 +1,8 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { COUNTRY_TYPES } = require('../../entities/EntityConstants');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { COUNTRY_TYPES } from '../../entities/EntityConstants';
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const docketRecord = async ({ applicationContext, data }) => {
+export const docketRecord = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
     caseDetail,
@@ -53,8 +51,4 @@ const docketRecord = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  docketRecord,
 };

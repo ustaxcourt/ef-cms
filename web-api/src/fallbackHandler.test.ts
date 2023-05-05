@@ -1,4 +1,4 @@
-const { fallbackHandler } = require('./fallbackHandler');
+import { fallbackHandler } from './fallbackHandler';
 
 const mockGet = jest.fn();
 

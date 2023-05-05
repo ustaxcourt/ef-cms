@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the practitioner user form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const validatePractitionerAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const practitioner = get(state.form);
   practitioner.admissionsDate = props.computedDate;
 

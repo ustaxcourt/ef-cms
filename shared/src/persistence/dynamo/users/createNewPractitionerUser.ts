@@ -80,7 +80,7 @@ export const createNewPractitionerUser = async ({
     })
     .promise();
 
-  const updatedUser = await exports.updateUserRecords({
+  const updatedUser = await updateUserRecords({
     applicationContext,
     updatedUser: user,
     userId,

@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updatePractitionerUserInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {object} providers.user the user data
  * @returns {Promise<object>} the updated user data
  */
-exports.updatePractitionerUserInteractor = (
+export const updatePractitionerUserInteractor = (
   applicationContext,
   { barNumber, user },
 ) => {

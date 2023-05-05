@@ -4,5 +4,5 @@ resource "aws_lambda_layer_version" "puppeteer_layer" {
   s3_key              = "${var.current_color}_puppeteer_lambda_layer.zip"
   layer_name          = "puppeteer-${var.environment}-${var.current_color}"
   source_code_hash    = var.puppeteer_object_hash
-  compatible_runtimes = ["nodejs18.x"]
+  compatible_runtimes = [var.node_version]
 }
