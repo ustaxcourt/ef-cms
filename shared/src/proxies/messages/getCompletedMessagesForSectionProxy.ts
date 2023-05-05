@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getCompletedMessagesForSectionInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.section the section
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCompletedMessagesForSectionInteractor = (
+export const getCompletedMessagesForSectionInteractor = (
   applicationContext,
   { section },
 ) => {

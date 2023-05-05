@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { refreshToken } = require('./refreshToken');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { refreshToken } from './refreshToken';
 
 jest.mock('aws-sdk');
-const aws = require('aws-sdk');
+import aws from 'aws-sdk';
 
 describe('refreshToken', () => {
   const expectedToken = '123';

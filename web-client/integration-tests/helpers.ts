@@ -33,7 +33,7 @@ import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCa
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
-import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
@@ -97,7 +97,7 @@ Object.assign(applicationContext, {
     dynamoDbTableName: 'efcms-local',
     stage: 'local',
   }),
-  getScanner: getScannerInterface,
+  getScanner: getScannerMockInterface,
 });
 
 export const fakeFile = (() => {
@@ -114,7 +114,7 @@ let sqsCache;
 export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
   const environment = {
-    s3Endpoint: process.env.S3_ENDPOINT || 'http://localhost:9000',
+    s3Endpoint: process.env.S3_ENDPOINT || 'http://0.0.0.0:9000',
     stage: process.env.STAGE || 'local',
   };
   const apiApplicationContext = {

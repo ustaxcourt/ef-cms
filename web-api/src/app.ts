@@ -118,6 +118,7 @@ import { getUsersPendingEmailLambda } from './users/getUsersPendingEmailLambda';
 import { getWorkItemLambda } from './workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logger } from './logger';
 import { opinionAdvancedSearchLambda } from './documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './documents/orderAdvancedSearchLambda';
 import { prioritizeCaseLambda } from './cases/prioritizeCaseLambda';
@@ -191,7 +192,6 @@ import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLamb
 import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
 import cors from 'cors';
 import express from 'express';
-import logger from './logger';
 
 const applicationContext = createApplicationContext({});
 

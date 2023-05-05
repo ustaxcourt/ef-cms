@@ -1,12 +1,8 @@
 import { testPdfDoc } from '../../test/getFakeFile';
 
-const {
-  appendPaperServiceAddressPageToPdf,
-} = require('./appendPaperServiceAddressPageToPdf');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { PDFDocument } = require('pdf-lib');
+import { PDFDocument } from 'pdf-lib';
+import { appendPaperServiceAddressPageToPdf } from './appendPaperServiceAddressPageToPdf';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('appendPaperServiceAddressPageToPdf', () => {
   applicationContext

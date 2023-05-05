@@ -1,7 +1,10 @@
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
-const { search } = require('../searchClient');
+import { GET_PARENT_CASE } from '../helpers/searchClauses';
+import { search } from '../searchClient';
 
-exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
+export const getSectionInboxMessages = async ({
+  applicationContext,
+  section,
+}) => {
   const query = {
     body: {
       query: {

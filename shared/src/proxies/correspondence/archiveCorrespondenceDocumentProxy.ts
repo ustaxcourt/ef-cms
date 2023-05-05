@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * archiveCorrespondenceDocumentProxy
@@ -9,7 +9,7 @@ const { remove } = require('../requests');
  * @param {string} providers.correspondenceId the id of the correspondence document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.archiveCorrespondenceDocumentInteractor = (
+export const archiveCorrespondenceDocumentInteractor = (
   applicationContext,
   { correspondenceId, docketNumber },
 ) => {

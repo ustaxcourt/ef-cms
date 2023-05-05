@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * verifyUserPendingEmailInteractor
@@ -8,7 +8,10 @@ const { put } = require('../requests');
  * @param {object} providers.token the pending email token
  * @returns {Promise<*>} the promise of the api call
  */
-exports.verifyUserPendingEmailInteractor = (applicationContext, { token }) => {
+export const verifyUserPendingEmailInteractor = (
+  applicationContext,
+  { token },
+) => {
   return put({
     applicationContext,
     body: {

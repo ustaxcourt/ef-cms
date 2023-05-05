@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
-  getDocketEntriesServedWithinTimeframe,
-} = require('./getDocketEntriesServedWithinTimeframe');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getDocketEntriesServedWithinTimeframe } from './getDocketEntriesServedWithinTimeframe';
 
 describe('getDocketEntriesServedWithinTimeframe', () => {
   it('performs a valid elasticsearch request', async () => {

@@ -1,8 +1,5 @@
-const { ipLimiter } = require('./ipLimiter');
-
-const {
-  applicationContext,
-} = require('../../../shared/src/business/test/createTestApplicationContext');
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { ipLimiter } from './ipLimiter';
 
 describe('ipLimiter', () => {
   let statusMock;
