@@ -1,13 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  createTrialSessionAndWorkingCopy,
-} = require('./createTrialSessionAndWorkingCopy');
-const {
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createTrialSessionAndWorkingCopy } from './createTrialSessionAndWorkingCopy';
 
 const DATE = '2018-11-21T20:49:28.192Z';
 

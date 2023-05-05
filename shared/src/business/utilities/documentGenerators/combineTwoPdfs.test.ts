@@ -1,10 +1,8 @@
 import { testPdfDoc } from '../../test/getFakeFile';
 
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { combineTwoPdfs } = require('./combineTwoPdfs');
-const { PDFDocument } = require('pdf-lib');
+import { PDFDocument } from 'pdf-lib';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { combineTwoPdfs } from './combineTwoPdfs';
 
 describe('combineTwoPdfs', () => {
   applicationContext

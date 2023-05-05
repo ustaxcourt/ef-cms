@@ -4,7 +4,7 @@
  * @param {object} params object to be filtered
  * @returns {object} filter object
  */
-exports.filterEmptyStrings = params => {
+export const filterEmptyStrings = params => {
   const removeEmpty = obj => {
     Object.keys(obj).forEach(key => {
       if (obj[key] && typeof obj[key] === 'object') {

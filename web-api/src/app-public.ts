@@ -1,12 +1,14 @@
 import { createApplicationContext } from './applicationContext';
+import { get } from '../../shared/src/persistence/dynamodbClientService';
+import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logger } from './logger';
+import { set } from 'lodash';
 import cors from 'cors';
 import express from 'express';
-import logger from './logger';
-const app = express();
-import { getCurrentInvoke } from '@vendia/serverless-express';
-import { set } from 'lodash';
+
+export const app = express();
 
 const applicationContext = createApplicationContext({});
 
@@ -29,9 +31,6 @@ app.use(async (req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const {
-      get,
-    } = require('../../shared/src/persistence/dynamodbClientService.ts');
     const whitelist = await get({
       Key: {
         pk: 'allowed-terminal-ips',
@@ -135,5 +134,3 @@ app.get(
 );
 
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
-
-exports.app = app;

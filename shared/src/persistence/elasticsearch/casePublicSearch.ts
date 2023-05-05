@@ -1,10 +1,6 @@
-const {
-  aggregateCommonQueryParams,
-} = require('../../business/utilities/aggregateCommonQueryParams');
-const {
-  MAX_SEARCH_CLIENT_RESULTS,
-} = require('../../business/entities/EntityConstants');
-const { search } = require('./searchClient');
+import { MAX_SEARCH_CLIENT_RESULTS } from '../../business/entities/EntityConstants';
+import { aggregateCommonQueryParams } from '../../business/utilities/aggregateCommonQueryParams';
+import { search } from './searchClient';
 
 /**
  * casePublicSearch
@@ -12,7 +8,7 @@ const { search } = require('./searchClient');
  * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.casePublicSearch = async ({
+export const casePublicSearch = async ({
   applicationContext,
   countryType,
   petitionerName,

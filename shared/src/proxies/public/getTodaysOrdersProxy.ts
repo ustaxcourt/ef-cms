@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getTodaysOrdersInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {object} providers.sortOrder the requested order of search results
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getTodaysOrdersInteractor = (
+export const getTodaysOrdersInteractor = (
   applicationContext,
   { page, todaysOrdersSort },
 ) => {

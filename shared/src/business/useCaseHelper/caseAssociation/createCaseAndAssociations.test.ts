@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
-const { createCaseAndAssociations } = require('./createCaseAndAssociations');
-const { MOCK_CASE } = require('../../../../src/test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../../src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createCaseAndAssociations } from './createCaseAndAssociations';
 
 describe('createCaseAndAssociations', () => {
   let createCaseMock = jest.fn();

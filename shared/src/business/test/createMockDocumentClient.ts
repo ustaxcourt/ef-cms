@@ -1,8 +1,8 @@
-const {
+import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} = require('../entities/EntityConstants');
+} from '../entities/EntityConstants';
 
 const mockDynamoUsers = {
   ['user|1805d1ab-18d0-43ec-bafb-654e83405416 user|1805d1ab-18d0-43ec-bafb-654e83405416']:
@@ -46,7 +46,7 @@ const mockDynamoUsers = {
     },
 };
 
-const createMockDocumentClient = () => {
+export const createMockDocumentClient = () => {
   return {
     batchGet: jest.fn().mockImplementation(({ RequestItems }) => {
       const { Keys } = RequestItems['efcms-local'];
@@ -229,5 +229,3 @@ const createMockDocumentClient = () => {
     }),
   };
 };
-
-module.exports = { createMockDocumentClient };

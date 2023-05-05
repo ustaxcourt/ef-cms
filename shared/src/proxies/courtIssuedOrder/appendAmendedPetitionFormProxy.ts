@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * appendAmendedPetitionFormProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketEntryId the id of the docket entry to append the form to
  * @returns {Promise<*>} the promise of the api call
  */
-exports.appendAmendedPetitionFormInteractor = (
+export const appendAmendedPetitionFormInteractor = (
   applicationContext,
   { docketEntryId },
 ) => {

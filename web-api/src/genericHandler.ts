@@ -85,7 +85,7 @@ export const genericHandler = (awsEvent, cb, options = {}) => {
         user,
       });
 
-      const returnResults = exports.dataSecurityFilter(results, {
+      const returnResults = dataSecurityFilter(results, {
         applicationContext,
       });
 

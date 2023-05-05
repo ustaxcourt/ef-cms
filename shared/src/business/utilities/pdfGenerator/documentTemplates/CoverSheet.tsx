@@ -1,7 +1,7 @@
 import { STRICKEN_FROM_TRIAL_SESSION_MESSAGE } from '../../../entities/EntityConstants';
 
-const classNames = require('classnames');
-const React = require('react');
+import React from 'react';
+import classNames from 'classnames';
 
 export const CoverSheet = ({
   caseCaptionExtension,
