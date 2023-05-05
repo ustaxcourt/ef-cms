@@ -8,7 +8,6 @@ import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} params the params object
  * @param {string} params.docketNumber the docket number of the case
@@ -55,6 +54,6 @@ export const associatePrivatePractitionerWithCase = async (
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(
   associatePrivatePractitionerWithCase,
   (_applicationContext: IApplicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

@@ -9,7 +9,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used to remove a petitioner from a case
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseCaption the updated caseCaption
@@ -84,6 +83,6 @@ export const removePetitionerAndUpdateCaption = async (
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(
   removePetitionerAndUpdateCaption,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

@@ -53,7 +53,6 @@ export const needsNewCoversheet = ({
 
 /**
  * completeDocketEntryQCInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.entryMetadata the entry metadata
@@ -383,7 +382,7 @@ const completeDocketEntryQC = async (
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
   (_applicationContext: IApplicationContext, { entryMetadata }) => ({
-    identifier: `docket-entry|${entryMetadata.docketEntryId}`,
+    identifiers: [`docket-entry|${entryMetadata.docketEntryId}`],
   }),
   new InvalidRequest('The document is currently being updated'),
 );

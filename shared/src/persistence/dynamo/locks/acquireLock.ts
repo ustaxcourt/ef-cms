@@ -43,14 +43,11 @@ export async function createLock({
  */
 export async function removeLock({
   applicationContext,
-  identifier,
+  identifiers,
 }: {
   applicationContext: IApplicationContext;
-  identifier: string | string[];
+  identifiers: string[];
 }): Promise<void> {
-  const identifiers =
-    typeof identifier === 'string' ? [identifier] : identifier;
-
   await Promise.all(
     identifiers.map(identifierToUnlock =>
       applicationContext

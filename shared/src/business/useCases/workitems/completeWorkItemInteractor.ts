@@ -103,7 +103,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: `case|${originalWorkItem.docketNumber}`,
+    identifiers: [`case|${originalWorkItem.docketNumber}`],
   };
 };
 

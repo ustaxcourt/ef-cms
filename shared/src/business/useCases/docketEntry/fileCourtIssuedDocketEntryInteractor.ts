@@ -213,7 +213,7 @@ export const fileCourtIssuedDocketEntryInteractor = withLocking(
     _applicationContext: IApplicationContext,
     { docketNumbers = [], subjectDocketNumber },
   ) => ({
-    identifier: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+    identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
       item => `case|${item}`,
     ),
   }),

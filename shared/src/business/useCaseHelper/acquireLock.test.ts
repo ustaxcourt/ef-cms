@@ -191,11 +191,11 @@ describe('acquireLock', () => {
 });
 
 describe('withLocking', () => {
-  const callbackFunction = jest.fn(); // this is the interactor that we are wrapping
+  const mockInteractor = jest.fn();
   const getLockInfo = jest
     .fn()
     .mockImplementation((_applicationContext, options) => ({
-      identifier: `case|${options.docketNumber}`,
+      identifiers: [`case|${options.docketNumber}`],
       ttl: 60,
     }));
   let func;
@@ -214,7 +214,7 @@ describe('withLocking', () => {
   });
 
   beforeEach(() => {
-    func = withLocking(callbackFunction, getLockInfo, onLockError);
+    func = withLocking(mockInteractor, getLockInfo, onLockError);
   });
 
   describe('is locked', () => {
@@ -231,8 +231,8 @@ describe('withLocking', () => {
         await expect(
           func(applicationContext, { docketNumber: '123-45' }),
         ).resolves.not.toThrow();
-        expect(callbackFunction).toHaveBeenCalledTimes(1);
-        expect(callbackFunction).toHaveBeenCalledWith(applicationContext, {
+        expect(mockInteractor).toHaveBeenCalledTimes(1);
+        expect(mockInteractor).toHaveBeenCalledWith(applicationContext, {
           docketNumber: '123-45',
         });
       });
@@ -273,12 +273,12 @@ describe('withLocking', () => {
         await expect(
           func(applicationContext, { docketNumber: '123-45' }),
         ).rejects.toThrow(ServiceUnavailableError);
-        expect(callbackFunction).not.toHaveBeenCalled();
+        expect(mockInteractor).not.toHaveBeenCalled();
       });
 
       it('calls the onLockError function if one is provided', async () => {
         const onLockErrorFunction = jest.fn();
-        func = withLocking(callbackFunction, getLockInfo, onLockErrorFunction);
+        func = withLocking(mockInteractor, getLockInfo, onLockErrorFunction);
         await expect(
           func(applicationContext, { docketNumber: '123-45' }),
         ).rejects.toThrow(ServiceUnavailableError);
@@ -288,7 +288,7 @@ describe('withLocking', () => {
       });
 
       it('throws a ServiceUnavailableError if an onLockError function is provided', async () => {
-        func = withLocking(callbackFunction, getLockInfo, jest.fn());
+        func = withLocking(mockInteractor, getLockInfo, jest.fn());
         await expect(
           func(applicationContext, { docketNumber: '123-45' }),
         ).rejects.toThrow(ServiceUnavailableError);
@@ -317,8 +317,8 @@ describe('withLocking', () => {
 
     it('calls the specified callback function', async () => {
       await func(applicationContext, { docketNumber: '123-45' });
-      expect(callbackFunction).toHaveBeenCalledTimes(1);
-      expect(callbackFunction).toHaveBeenCalledWith(applicationContext, {
+      expect(mockInteractor).toHaveBeenCalledTimes(1);
+      expect(mockInteractor).toHaveBeenCalledWith(applicationContext, {
         docketNumber: '123-45',
       });
     });
@@ -329,7 +329,7 @@ describe('withLocking', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: 'case|123-45',
+        identifiers: ['case|123-45'],
       });
       expect(
         applicationContext.getPersistenceGateway().removeLock,
@@ -337,7 +337,7 @@ describe('withLocking', () => {
     });
 
     it('returns the results of the callback function', async () => {
-      callbackFunction.mockReturnValue(
+      mockInteractor.mockReturnValue(
         'Serve the public trust, protect the innocent, uphold the law.',
       );
       const result = await func(applicationContext, { docketNumber: '123-45' });
@@ -347,7 +347,7 @@ describe('withLocking', () => {
     });
 
     it('removes the lock if the callback function throws an error', async () => {
-      callbackFunction.mockRejectedValueOnce(new Error('something went wrong'));
+      mockInteractor.mockRejectedValueOnce(new Error('something went wrong'));
       await expect(
         func(applicationContext, { docketNumber: '123-45' }),
       ).rejects.toThrow('something went wrong');
@@ -355,7 +355,7 @@ describe('withLocking', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: 'case|123-45',
+        identifiers: ['case|123-45'],
       });
       expect(
         applicationContext.getPersistenceGateway().removeLock,
@@ -363,7 +363,7 @@ describe('withLocking', () => {
     });
 
     it('rethrows the error if if the callback function throws an error', async () => {
-      callbackFunction.mockRejectedValueOnce(new Error('something went wrong'));
+      mockInteractor.mockRejectedValueOnce(new Error('something went wrong'));
       await expect(
         func(applicationContext, { docketNumber: '123-45' }),
       ).rejects.toThrow('something went wrong');
@@ -495,7 +495,7 @@ describe('removeLock', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: 'case|123-45',
+      identifiers: ['case|123-45'],
     });
   });
 

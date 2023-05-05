@@ -10,7 +10,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * updateCaseContextInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.associatedJudge the associated judge to set on the case
@@ -123,6 +122,6 @@ export const updateCaseContext = async (
 export const updateCaseContextInteractor = withLocking(
   updateCaseContext,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

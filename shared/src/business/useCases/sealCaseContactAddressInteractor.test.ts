@@ -161,7 +161,7 @@ describe('sealCaseContactAddressInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
   });
 });

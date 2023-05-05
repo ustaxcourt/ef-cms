@@ -15,7 +15,6 @@ import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * updateUserContactInformationHelper
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
@@ -125,7 +124,6 @@ const updateUserContactInformationHelper = async (
 
 /**
  * updateUserContactInformationInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
@@ -188,7 +186,7 @@ export const handleLockError = async (
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
-): Promise<{ identifier: string[]; ttl: number }> => {
+) => {
   const docketNumbers: string[] = await applicationContext
     .getPersistenceGateway()
     .getCasesByUserId({
@@ -197,7 +195,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: docketNumbers?.map(item => `case|${item}`),
+    identifiers: docketNumbers?.map(item => `case|${item}`),
     ttl: 900,
   };
 };

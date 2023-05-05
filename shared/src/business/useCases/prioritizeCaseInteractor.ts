@@ -8,7 +8,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used for setting a case as high priority
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.reason the reason the case is being set as high priority
@@ -66,6 +65,6 @@ export const prioritizeCase = async (
 export const prioritizeCaseInteractor = withLocking(
   prioritizeCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

@@ -120,7 +120,6 @@ export const updatePetitionerCases = async ({
  * where they are an IRS practitioner or private practitioner, sending an
  * update to the practitioner for each case updated, as well as a final email when
  * all case updates have been completed.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.user the user who is a primary or secondary contact on a case
@@ -206,7 +205,6 @@ export const updatePractitionerCases = async ({
  * this interactor is invoked when a petitioner logs into DAWSON
  * and changes their email to a different email address and clicks the
  * verify link that was sent to their new email address.
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
@@ -313,7 +311,7 @@ export const handleLockError = async (
 
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
-): Promise<{ identifier: string[]; ttl: number }> => {
+) => {
   const user = await applicationContext.getCurrentUser();
 
   const docketNumbers: string[] = await applicationContext
@@ -324,7 +322,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: docketNumbers.map(item => `case|${item}`),
+    identifiers: docketNumbers.map(item => `case|${item}`),
     ttl: 900,
   };
 };
