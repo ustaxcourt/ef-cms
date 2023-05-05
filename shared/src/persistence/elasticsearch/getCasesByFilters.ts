@@ -86,10 +86,10 @@ export const getCasesByFilters = async ({
     track_total_hits: true,
   });
 
-  const { hits } = chunk.body.hits;
-  const lastId = hits[hits.length - 1].sort;
-
   const { results, total } = formatResults(chunk.body);
+
+  const { hits } = chunk.body.hits;
+  const lastId = hits ? 0 : hits[hits.length - 1].sort;
 
   return {
     foundCases: results,

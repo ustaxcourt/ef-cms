@@ -51,9 +51,10 @@ export const getCustomCaseInventoryReportAction = async ({
     });
 
   let tracker = get(state.customCaseInventory.lastIdOfPages);
-  tracker[props.selectedPage] = reportData.last[0];
+  tracker[props.selectedPage] = reportData.last[0] || 0;
 
   store.set(state.customCaseInventory.lastIdOfPages, tracker);
+
   store.set(state.customCaseInventory.cases, reportData.foundCases);
   store.set(state.customCaseInventory.totalCases, reportData.totalCount);
 };
