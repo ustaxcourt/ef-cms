@@ -10,29 +10,31 @@ describe('isDismissingThirtyDayAlertAction', () => {
     pathNoStub = jest.fn();
     pathYesStub = jest.fn();
 
-    presenter.providers.path = {
-      no: pathNoStub,
-      yes: pathYesStub,
+    presenter.providers = {
+      path: {
+        no: pathNoStub,
+        yes: pathYesStub,
+      },
     };
   });
 
-  it('should call path.yes when props.dismissedAlertForNOTT is true', async () => {
+  it('should call path.yes when props.isDismissingThirtyDayAlert is true', async () => {
     await runAction(isDismissingThirtyDayAlertAction, {
       modules: {
         presenter,
       },
-      props: { dismissedAlertForNOTT: true },
+      props: { isDismissingThirtyDayAlert: true },
     });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
 
-  it('should call path.no when props.dismissedAlertForNOTT is false', async () => {
+  it('should call path.no when props.isDismissingThirtyDayAlert is false', async () => {
     await runAction(isDismissingThirtyDayAlertAction, {
       modules: {
         presenter,
       },
-      state: { dismissedAlertForNOTT: false },
+      state: { isDismissingThirtyDayAlert: false },
     });
 
     expect(pathNoStub).toHaveBeenCalled();

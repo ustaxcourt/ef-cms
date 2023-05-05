@@ -1,7 +1,6 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
-import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
@@ -29,20 +28,10 @@ export const formatSession = (session, applicationContext) => {
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
-  if (
+  session.showAlertForNOTTReminder =
     !session.dismissedAlertForNOTT &&
-    session.isCalendared &&
-    session.formattedStartDate
-  ) {
-    const { isCurrentDateWithinReminderRange, thirtyDaysBeforeTrialFormatted } =
-      set30DayNoticeOfTrialReminder({
-        applicationContext,
-        trialStartDate: session.formattedStartDate,
-      });
-
-    session.showAlertForNOTTReminder = isCurrentDateWithinReminderRange;
-    session.alertMessageForNOTT = `The 30-day notice is due before ${thirtyDaysBeforeTrialFormatted}`;
-  }
+    session.isStartDateWithinNOTTReminderRange;
+  session.alertMessageForNOTT = `The 30-day notice is due before ${session.thirtyDaysBeforeTrialFormatted}`;
 
   return session;
 };
