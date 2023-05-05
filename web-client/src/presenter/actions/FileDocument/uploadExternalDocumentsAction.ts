@@ -10,9 +10,20 @@ const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
     });
 };
 
+const removeSealedCases = consolidatedCases => {
+  const filteredConsolidatedCases: any = [];
+  consolidatedCases.forEach(consolidatedCase => {
+    if (!consolidatedCase.isSealed) {
+      filteredConsolidatedCases.push(consolidatedCase);
+    } else if (consolidatedCase.irsPractitioners?.length > 0) {
+      filteredConsolidatedCases.push(consolidatedCase);
+    }
+  });
+  return filteredConsolidatedCases;
+};
+
 /**
  * upload document to s3.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -44,11 +55,15 @@ export const uploadExternalDocumentsAction = async ({
     privatePractitioners = form.practitioner;
   }
 
+  const consolidatedCasesToFileAcross = form.fileAcrossConsolidatedGroup
+    ? removeSealedCases(consolidatedCases)
+    : undefined;
+
+  console.log('consolidatedCasesToFileAcross', consolidatedCasesToFileAcross);
+
   const documentMetadata: any = {
     ...form,
-    consolidatedCasesToFileAcross: form.fileAcrossConsolidatedGroup
-      ? consolidatedCases
-      : undefined,
+    consolidatedCasesToFileAcross,
     docketNumber,
     filers,
     isFileAttached: true,
