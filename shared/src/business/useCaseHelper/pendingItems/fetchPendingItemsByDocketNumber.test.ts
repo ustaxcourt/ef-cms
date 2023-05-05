@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  fetchPendingItemsByDocketNumber,
-} = require('./fetchPendingItemsByDocketNumber');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fetchPendingItemsByDocketNumber } from './fetchPendingItemsByDocketNumber';
 
 describe('fetchPendingItems', () => {
   beforeAll(() => {

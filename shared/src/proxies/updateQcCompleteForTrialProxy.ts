@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * updateQcCompleteForTrialInteractor
@@ -10,7 +10,7 @@ const { put } = require('./requests');
  * @param {string} providers.trialSessionId the id of the trial session to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateQcCompleteForTrialInteractor = (
+export const updateQcCompleteForTrialInteractor = (
   applicationContext,
   { docketNumber, qcCompleteForTrial, trialSessionId },
 ) => {

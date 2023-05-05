@@ -1,4 +1,3 @@
-const React = require('react');
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { SelectedFiltersSection } from '../components/SelectedFiltersSection';
@@ -8,6 +7,7 @@ import {
   generateCaseStatus,
   isMemberCase,
 } from '../../generateSelectedFilterList';
+import React from 'react';
 import classNames from 'classnames';
 
 export const PrintableWorkingCopySessionList = ({

@@ -1,4 +1,4 @@
-const { replaceBracketed } = require('./replaceBracketed');
+import { replaceBracketed } from './replaceBracketed';
 
 describe('replaceBracketed', () => {
   it('puts in the correct values', () => {

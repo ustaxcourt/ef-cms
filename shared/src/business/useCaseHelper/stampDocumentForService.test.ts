@@ -1,8 +1,6 @@
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { stampDocumentForService } = require('./stampDocumentForService');
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { stampDocumentForService } from './stampDocumentForService';
 
 describe('stampDocumentForService', () => {
   it('should set `Served` as the stamp text when the documentType is NOT order and the document eventCode is not one of ENTERED_AND_SERVED_EVENT_CODES', async () => {
