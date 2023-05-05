@@ -1,8 +1,5 @@
-const { advancedQueryLimiter } = require('./advancedQueryLimiter');
-
-const {
-  applicationContext,
-} = require('../../../shared/src/business/test/createTestApplicationContext');
+import { advancedQueryLimiter } from './advancedQueryLimiter';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 describe('advancedQueryLimiter', () => {
   let statusMock;

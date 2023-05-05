@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { noticeOfTrialIssued } = require('./noticeOfTrialIssued');
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfTrialIssued } from './noticeOfTrialIssued';
 
 describe('documentGenerators', () => {
   generateAndVerifyPdfDiff({

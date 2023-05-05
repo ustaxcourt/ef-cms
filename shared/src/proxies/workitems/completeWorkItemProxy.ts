@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * completeWorkItemInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {Promise<*>} the promise of the api call
  */
-exports.completeWorkItemInteractor = (
+export const completeWorkItemInteractor = (
   applicationContext,
   { completedMessage, workItemId },
 ) => {

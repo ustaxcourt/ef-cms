@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createPractitionerDocumentInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.user the user data
  * @returns {Promise<object>} the created user data
  */
-exports.createPractitionerDocumentInteractor = (
+export const createPractitionerDocumentInteractor = (
   applicationContext,
   { barNumber, documentMetadata },
 ) => {

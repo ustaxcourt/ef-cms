@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { sendSlackNotification } = require('./sendSlackNotification');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { sendSlackNotification } from './sendSlackNotification';
 
 describe('sendSlackNotification', () => {
   beforeEach(() => {

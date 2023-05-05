@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * set trial session calendar
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.trialSessionId the id of the trial session to set the calendar
  * @returns {Promise<*>} the promise of the api call
  */
-exports.setTrialSessionCalendarInteractor = (
+export const setTrialSessionCalendarInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {
