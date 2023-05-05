@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getTrialSessionsInteractor
@@ -6,7 +6,7 @@ const { get } = require('../requests');
  * @param {object} applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getTrialSessionsInteractor = applicationContext => {
+export const getTrialSessionsInteractor = applicationContext => {
   return get({
     applicationContext,
     endpoint: '/trial-sessions',

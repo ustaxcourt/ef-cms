@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-} = require('../../business/entities/EntityConstants');
-const { getReadyForTrialCases } = require('./getReadyForTrialCases');
+import { CASE_STATUS_TYPES } from '../../business/entities/EntityConstants';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getReadyForTrialCases } from './getReadyForTrialCases';
 jest.mock('./searchClient');
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 describe('getReadyForTrialCases', () => {
   it('should search for docket entries of type `Answer` which were served greater than 45 days ago and whose case status is `General Docket - Not at Issue`', async () => {

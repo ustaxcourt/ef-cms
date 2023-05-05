@@ -1,9 +1,7 @@
 import { testPdfDoc } from '../test/getFakeFile';
 
-const {
-  copyPagesAndAppendToTargetPdf,
-} = require('./copyPagesAndAppendToTargetPdf');
-const { PDFDocument } = require('pdf-lib');
+import { PDFDocument } from 'pdf-lib';
+import { copyPagesAndAppendToTargetPdf } from './copyPagesAndAppendToTargetPdf';
 
 describe('copyPagesAndAppendToTargetPdf', () => {
   it('should copy the pages from the source pdf into the target pdf', async () => {

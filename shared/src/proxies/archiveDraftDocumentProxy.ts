@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * archiveDraftDocumentInteractor
@@ -9,7 +9,7 @@ const { put } = require('./requests');
  * @param {string} providers.docketEntryId the docket entry id to archive
  * @returns {Promise<*>} the promise of the api call
  */
-exports.archiveDraftDocumentInteractor = (
+export const archiveDraftDocumentInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

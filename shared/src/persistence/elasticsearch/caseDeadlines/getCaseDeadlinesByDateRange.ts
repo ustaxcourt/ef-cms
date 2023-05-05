@@ -1,9 +1,7 @@
-const {
-  DEADLINE_REPORT_PAGE_SIZE,
-} = require('../../../business/entities/EntityConstants');
-const { search } = require('../searchClient');
+import { DEADLINE_REPORT_PAGE_SIZE } from '../../../business/entities/EntityConstants';
+import { search } from '../searchClient';
 
-exports.getCaseDeadlinesByDateRange = async ({
+export const getCaseDeadlinesByDateRange = async ({
   applicationContext,
   endDate,
   from = 0,

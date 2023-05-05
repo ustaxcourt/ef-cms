@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  formatConsolidatedCaseCoversheetData,
-} = require('./formatConsolidatedCaseCoversheetData');
 import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { formatConsolidatedCaseCoversheetData } from './formatConsolidatedCaseCoversheetData';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
   const mockDocketEntry = MOCK_CASE.docketEntries[0];

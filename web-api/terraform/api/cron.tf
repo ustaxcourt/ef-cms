@@ -10,7 +10,7 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
   timeout          = "900"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment

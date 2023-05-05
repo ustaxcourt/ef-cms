@@ -1,8 +1,10 @@
-const { Case } = require('../../entities/cases/Case');
-const { IrsPractitioner } = require('../../entities/IrsPractitioner');
-const { UserCase } = require('../../entities/UserCase');
+import { Case } from '../../entities/cases/Case';
+import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { UserCase } from '../../entities/UserCase';
+
 /**
  * associateIrsPractitionerToCase
+ *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -10,7 +12,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} providers.user the user object for the logged in user
  * @returns {Promise<*>} the updated case entity
  */
-exports.associateIrsPractitionerToCase = async ({
+export const associateIrsPractitionerToCase = async ({
   applicationContext,
   consolidatedCasesDocketNumbers = [],
   docketNumber,

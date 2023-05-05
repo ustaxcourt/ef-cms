@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * saveSignedDocumentInteractor
@@ -11,7 +11,7 @@ const { post } = require('../requests');
  * @param {string} providers.nameForSigning name
  * @returns {Promise<*>} the promise of the api call
  */
-exports.saveSignedDocumentInteractor = (
+export const saveSignedDocumentInteractor = (
   applicationContext,
   {
     docketNumber,

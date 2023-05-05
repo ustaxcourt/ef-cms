@@ -1,7 +1,7 @@
-const { get } = require('lodash');
-const { getCurrentInvoke } = require('@vendia/serverless-express');
+import { get } from 'lodash';
+import { getCurrentInvoke } from '@vendia/serverless-express';
 
-exports.ipLimiter =
+export const ipLimiter =
   ({ applicationContext, key }) =>
   async (req, res, next) => {
     const currentInvoke = getCurrentInvoke();

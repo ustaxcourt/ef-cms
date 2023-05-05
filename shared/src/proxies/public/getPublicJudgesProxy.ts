@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getPublicJudgesProxy
@@ -7,7 +7,7 @@ const { get } = require('../requests');
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPublicJudgesInteractor = applicationContext => {
+export const getPublicJudgesInteractor = applicationContext => {
   return get({
     applicationContext,
     endpoint: '/public-api/judges',

@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import { query } from '../../dynamodbClientService';
 
 export const getWorkItemById = async ({
   applicationContext,
@@ -7,7 +7,7 @@ export const getWorkItemById = async ({
   applicationContext: IApplicationContext;
   workItemId: string;
 }) => {
-  const results = await client.query({
+  const results = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
