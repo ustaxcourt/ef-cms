@@ -1,4 +1,4 @@
-const { sortUndefined } = require('./getFormattedCaseDetail');
+import { sortUndefined } from './getFormattedCaseDetail';
 
 describe('sortUndefined', () => {
   it('should return -1 if first arg has createdAtFormatted and the second does not', () => {

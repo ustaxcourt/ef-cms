@@ -1,4 +1,4 @@
-exports.countPagesInDocument = async ({
+export const countPagesInDocument = async ({
   applicationContext,
   docketEntryId,
   documentBytes,

@@ -1,4 +1,4 @@
-const { UserCase } = require('../../entities/UserCase');
+import { UserCase } from '../../entities/UserCase';
 
 /**
  * Retrieves all cases associated with the provided leadDocketNumber.
@@ -8,7 +8,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} providers.leadDocketNumber the leadDocketNumber
  * @returns {object} a list of all cases associated with the leadDocketNumber
  */
-exports.getConsolidatedCasesForLeadCase = async ({
+export const getConsolidatedCasesForLeadCase = async ({
   applicationContext,
   leadDocketNumber,
 }) => {

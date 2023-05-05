@@ -1,4 +1,4 @@
-const FORMATTED_CASES = [
+export const FORMATTED_CASES = [
   {
     calendarNotes:
       'Spicy jalapeno bacon ipsum dolor amet laborum nostrud eiusmod, ex drumstick quis eu dolore excepteur fatback. Qui sirloin andouille chuck. Jowl velit capicola quis elit meatloaf.',
@@ -441,7 +441,7 @@ const FORMATTED_CASES = [
   },
 ];
 
-const FORMATTED_TRIAL_SESSION = {
+export const FORMATTED_TRIAL_SESSION = {
   endDateForAdditionalPageHeaders: 'Feb 10, 2023',
   formattedChambersPhoneNumber: '1234567',
   formattedCourtReporter: 'Test court report',
@@ -456,11 +456,5 @@ const FORMATTED_TRIAL_SESSION = {
   trialLocation: 'Washington, District of Columbia',
 };
 
-const SESSION_NOTES =
+export const SESSION_NOTES =
   'Bacon ipsum dolor amet bresaola sirloin capicola, prosciutto pork belly cupim fatback picanha ham meatball drumstick shankle turducken shank. Pork pork belly tail beef filet mignon burgdoggen pastrami porchetta shankle. T-bone ball tip kielbasa, capicola pork pork loin venison pork belly shank shoulder buffalo andouille hamburger sirloin. Rump drumstick pig beef filet mignon, shankle picanha. Rump pastrami meatball, ham pancetta prosciutto jerky pork belly ribeye tongue bacon. Turducken ham hock burgdoggen andouille beef ribs, pork belly fatback t-bone tail. Shank pork chop meatball brisket.\n\nChislic picanha burgdoggen drumstick kielbasa flank biltong chuck frankfurter jowl fatback shankle filet mignon. Bacon pancetta bresaola beef ribs. Bacon leberkas meatloaf sausage pig, turkey bresaola fatback flank pastrami. Meatloaf prosciutto pastrami filet mignon.';
-
-module.exports = {
-  FORMATTED_CASES,
-  FORMATTED_TRIAL_SESSION,
-  SESSION_NOTES,
-};

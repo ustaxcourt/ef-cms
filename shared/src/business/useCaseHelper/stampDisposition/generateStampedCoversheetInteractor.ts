@@ -1,7 +1,5 @@
-const {
-  generateCoverSheetData,
-} = require('../../useCases/generateCoverSheetData');
-const { Case } = require('../../entities/cases/Case');
+import { Case } from '../../entities/cases/Case';
+import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
 
 /**
  * a helper function which creates a coversheet with stampData on it, then returns the new coversheet pdf
@@ -13,7 +11,7 @@ const { Case } = require('../../entities/cases/Case');
  * @param {object} options.stampData the stampData from the form to add to the coversheet pdf
  * @returns {object} the new coversheet pdf
  */
-exports.createStampedCoversheetPdf = async ({
+export const createStampedCoversheetPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
@@ -57,7 +55,7 @@ exports.createStampedCoversheetPdf = async ({
  * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
  * @returns {Promise<*>} updated docket entry entity
  */
-exports.generateStampedCoversheetInteractor = async (
+export const generateStampedCoversheetInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
 ) => {
@@ -74,7 +72,7 @@ exports.generateStampedCoversheetInteractor = async (
     docketEntryId,
   });
 
-  const { pdfData: newPdfData } = await exports.createStampedCoversheetPdf({
+  const { pdfData: newPdfData } = await createStampedCoversheetPdf({
     applicationContext,
     caseEntity,
     docketEntryEntity: motionDocketEntryEntity,

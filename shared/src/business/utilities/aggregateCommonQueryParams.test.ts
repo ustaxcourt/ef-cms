@@ -1,14 +1,14 @@
-const {
-  aggregateCommonQueryParams,
-  removeAdvancedSyntaxSymbols,
-} = require('./aggregateCommonQueryParams');
-const {
+import {
   CASE_SEARCH_MIN_YEAR,
   COUNTRY_TYPES,
   US_STATES,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { formatNow, FORMATS } = require('./DateHandler');
+} from '../entities/EntityConstants';
+import { FORMATS, formatNow } from './DateHandler';
+import {
+  aggregateCommonQueryParams,
+  removeAdvancedSyntaxSymbols,
+} from './aggregateCommonQueryParams';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('aggregateCommonQueryParams', () => {
   describe('removeAdvancedSyntaxSymbols', () => {

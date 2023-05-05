@@ -1,22 +1,20 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  associatePrivatePractitionerToCase,
-} = require('./associatePrivatePractitionerToCase');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
+
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+
+import { MOCK_USERS } from '../../../test/mockUsers';
+import {
   getContactPrimary,
   getContactSecondary,
-} = require('../../entities/cases/Case');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+} from '../../entities/cases/Case';
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;

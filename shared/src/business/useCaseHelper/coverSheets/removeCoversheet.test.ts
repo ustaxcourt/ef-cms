@@ -1,9 +1,7 @@
 import { testPdfDoc } from '../../test/getFakeFile';
 
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { removeCoversheet } = require('./removeCoversheet');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { removeCoversheet } from './removeCoversheet';
 describe('removeCoversheet', () => {
   it('should throw an exception when the requested document cannot be found in S3', async () => {
     applicationContext.getStorageClient().getObject.mockReturnValue({

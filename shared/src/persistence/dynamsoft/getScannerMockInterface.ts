@@ -1,4 +1,4 @@
-const { image1, image2 } = require('../../business/useCases/scannerMockFiles');
+import { image1, image2 } from '../../business/useCases/scannerMockFiles';
 
 let scanBuffer = [];
 
@@ -49,7 +49,7 @@ const DWObject = {
   SelectSourceByIndex: () => null,
 };
 
-exports.getScannerInterface = () => {
+export const getScannerMockInterface = () => {
   const completeScanSession = () => {
     DWObject.RemoveAllImages();
     DWObject.CloseSource();

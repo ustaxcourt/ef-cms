@@ -5,7 +5,7 @@
  * @param {string} trialLocation location of trial for case
  * @returns {string} formatted clinic letter key
  */
-exports.getClinicLetterKey = ({ procedureType, trialLocation }) => {
+export const getClinicLetterKey = ({ procedureType, trialLocation }) => {
   const formattedPreferredTrialCity = trialLocation
     .replace(',', '')
     .replace(/ /g, '-');

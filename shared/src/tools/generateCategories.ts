@@ -4,10 +4,10 @@
  * again, but we've kept it in the project just in case.
  */
 
-const fs = require('fs');
-const { gatherRecords, getCsvOptions, sortableTitle } = require('./helpers');
-const { parse } = require('csv-parse');
-const { remove } = require('lodash');
+import { gatherRecords, getCsvOptions, sortableTitle } from './helpers';
+import { parse } from 'csv-parse';
+import { remove } from 'lodash';
+import fs from 'fs';
 
 const USAGE = `
 Usage: node generateCategories.js [internal/external] spreadsheet.csv > output.json
