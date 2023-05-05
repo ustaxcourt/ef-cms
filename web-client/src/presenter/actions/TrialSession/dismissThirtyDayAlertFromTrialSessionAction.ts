@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 /**
- * sets the state.screenMetadata.showNewTab depending on the user role
+ * dismisses the NOTT alert on a trial session
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext object
  * @param {object} providers.get the cerebral get method
