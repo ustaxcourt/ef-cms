@@ -1,7 +1,5 @@
+import { getMonthDayYearInETObj } from '../../../business/utilities/DateHandler';
 import { updateConsistent } from '../../dynamodbClientService';
-const {
-  getMonthDayYearInETObj,
-} = require('../../../business/utilities/DateHandler');
 /**
  * incrementCounter
  *

@@ -216,6 +216,8 @@ import { getPractitionerDocumentInteractor } from '../../shared/src/proxies/getP
 import { getPractitionerDocumentsInteractor } from '../../shared/src/proxies/practitioners/getPractitionerDocumentsProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
+import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerInterface';
+import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -689,21 +691,11 @@ const applicationContext = {
   },
   getPublicSiteUrl,
   getReduceImageBlob: () => reduce,
-  getScanner: async () => {
+  getScanner: () => {
     if (process.env.NO_SCANNER) {
-      const scanner = (
-        await import(
-          '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
-        )
-      ).default;
-      return scanner.getScannerInterface();
+      return getScannerMockInterface();
     } else {
-      const scanner = (
-        await import(
-          '../../shared/src/persistence/dynamsoft/getScannerInterface'
-        )
-      ).default;
-      return scanner.getScannerInterface();
+      return getScannerInterface();
     }
   },
   getScannerResourceUri: () => {

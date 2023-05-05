@@ -1,4 +1,4 @@
-const { getSealedQuery } = require('./getSealedQuery');
+import { getSealedQuery } from './getSealedQuery';
 
 describe('getSealedQuery', () => {
   it('returns a query for cases where they either must have "isSealed: false" OR the isSealed field should not exist', () => {

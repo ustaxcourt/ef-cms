@@ -1,4 +1,4 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -9,22 +9,20 @@ const {
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   PETITIONS_SECTION,
-} = require('../entities/EntityConstants');
-const {
-  fileExternalDocumentInteractor,
-} = require('../useCases/externalDocument/fileExternalDocumentInteractor');
-const {
-  serveCaseToIrsInteractor,
-} = require('../useCases/serveCaseToIrs/serveCaseToIrsInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { createCaseInteractor } = require('../useCases/createCaseInteractor');
-const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { getContactPrimary } = require('../entities/cases/Case');
-const { ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
+  ROLES,
+} from '../entities/EntityConstants';
+
+import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createCaseInteractor } from '../useCases/createCaseInteractor';
+import { fileExternalDocumentInteractor } from '../useCases/externalDocument/fileExternalDocumentInteractor';
+import { getCaseInteractor } from '../useCases/getCaseInteractor';
+import { getContactPrimary } from '../entities/cases/Case';
+import { serveCaseToIrsInteractor } from '../useCases/serveCaseToIrs/serveCaseToIrsInteractor';
 
 // mock out ONLY the 'createISODateString' function while allowing original implementations
-const { createISODateString, formatNow } = require('../utilities/DateHandler');
+import { createISODateString, formatNow } from '../utilities/DateHandler';
+
 jest.mock('../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../utilities/DateHandler');
   return {

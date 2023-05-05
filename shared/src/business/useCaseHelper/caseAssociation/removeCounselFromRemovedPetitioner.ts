@@ -1,8 +1,8 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * removeCounselFromRemovedPetitioner
@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} options.petitionerContactId the contactId of the petitioner being removed from the case
  * @returns {Case} the updated case entity
  */
-exports.removeCounselFromRemovedPetitioner = async ({
+export const removeCounselFromRemovedPetitioner = async ({
   applicationContext,
   caseEntity,
   petitionerContactId,

@@ -1,4 +1,4 @@
-const { getDescriptionDisplay } = require('./getDescriptionDisplay');
+import { getDescriptionDisplay } from './getDescriptionDisplay';
 
 describe('getDescriptionDisplay', () => {
   const documentTitle = 'doc title';

@@ -1,4 +1,4 @@
-const { User } = require('../entities/User');
+import { User } from '../entities/User';
 /**
  * returns whether the given feature flag is enabled for the current user and environment
  *
@@ -8,7 +8,7 @@ const { User } = require('../entities/User');
  * @returns {boolean} whether the feature is enabled
  */
 
-const getIsFeatureEnabled = (featureName, user, env) => {
+export const getIsFeatureEnabled = (featureName, user, env) => {
   const features = {
     advanced_opinion_search: (() => {
       const isProduction = env === 'prod';
@@ -20,8 +20,4 @@ const getIsFeatureEnabled = (featureName, user, env) => {
   };
 
   return !!features[featureName];
-};
-
-module.exports = {
-  getIsFeatureEnabled,
 };

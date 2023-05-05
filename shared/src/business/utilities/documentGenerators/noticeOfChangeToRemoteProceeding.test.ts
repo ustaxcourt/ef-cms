@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  noticeOfChangeToRemoteProceeding,
-} = require('./noticeOfChangeToRemoteProceeding');
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfChangeToRemoteProceeding } from './noticeOfChangeToRemoteProceeding';
 
 describe('noticeOfChangeToRemoteProceeding', () => {
   generateAndVerifyPdfDiff({
