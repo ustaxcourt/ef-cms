@@ -17,10 +17,12 @@ export type CustomCaseInventoryReportFilters = {
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
   pageNumber: number;
   pageSize: number;
+  searchAfter: number;
 };
 
 export type GetCaseInventoryReportResponse = {
   foundCases: CaseInventory[];
+  last: number;
   totalCount: number;
 };
 
@@ -41,7 +43,6 @@ export type CaseInventory = Pick<
 
 /**
  * getCustomCaseInventoryReportInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.createEndDate the createEndDate filter

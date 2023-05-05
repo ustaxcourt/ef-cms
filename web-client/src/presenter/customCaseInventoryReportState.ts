@@ -7,6 +7,7 @@ export type CustomCaseInventoryReportState = {
   totalCases: number;
   cases: CaseInventory[];
   filters: CustomCaseInventoryReportFilters;
+  lastIdOfPages: number[];
 };
 
 export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportState =
@@ -19,5 +20,6 @@ export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportSta
       createStartDate: '',
       filingMethod: 'all',
     },
+    lastIdOfPages: [0],
     totalCases: 0,
   };
