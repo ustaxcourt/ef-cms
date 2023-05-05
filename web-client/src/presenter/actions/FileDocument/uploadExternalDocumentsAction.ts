@@ -12,7 +12,6 @@ const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
 
 /**
  * upload document to s3.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -103,6 +102,7 @@ export const uploadExternalDocumentsAction = async ({
       caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
+      fileAcrossConsolidatedGroup: form.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
     return path.error();
