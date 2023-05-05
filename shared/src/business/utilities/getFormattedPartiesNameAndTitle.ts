@@ -1,4 +1,4 @@
-const { CONTACT_TYPE_TITLES } = require('../entities/EntityConstants');
+import { CONTACT_TYPE_TITLES } from '../entities/EntityConstants';
 
 /**
  * Append contact type title to the name of each petitioner.

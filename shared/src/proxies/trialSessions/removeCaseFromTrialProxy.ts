@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * removeCaseFromTrialInteractor
@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
  * @returns {Promise<*>} the promise of the api call
  */
-exports.removeCaseFromTrialInteractor = (
+export const removeCaseFromTrialInteractor = (
   applicationContext,
   { associatedJudge, caseStatus, disposition, docketNumber, trialSessionId },
 ) => {

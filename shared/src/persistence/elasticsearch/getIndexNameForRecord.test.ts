@@ -1,4 +1,4 @@
-const { getIndexNameForRecord } = require('./getIndexNameForRecord');
+import { getIndexNameForRecord } from './getIndexNameForRecord';
 
 describe('getIndexNameForRecord', () => {
   it('returns null as a default', () => {

@@ -1,7 +1,5 @@
-const {
-  AddPrivatePractitionerFactory,
-} = require('./AddPrivatePractitionerFactory');
-const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
+import { AddPrivatePractitionerFactory } from './AddPrivatePractitionerFactory';
+import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
 
 const errorMessages = AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES;
 

@@ -1,4 +1,4 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 /**
  * getFirstSingleCaseRecord
@@ -7,7 +7,7 @@ const { search } = require('./searchClient');
  * @param {object} providers.applicationContext the application context
  * @returns {object} the items found and the total count
  */
-exports.getFirstSingleCaseRecord = async ({ applicationContext }) => {
+export const getFirstSingleCaseRecord = async ({ applicationContext }) => {
   const results = await search({
     applicationContext,
     searchParameters: {

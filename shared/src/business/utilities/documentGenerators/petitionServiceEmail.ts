@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const petitionServiceEmail = async ({ applicationContext, data }) => {
+export const petitionServiceEmail = async ({ applicationContext, data }) => {
   const petitionServiceEmailTemplate = reactTemplateGenerator({
     componentName: 'PetitionService',
     data,
@@ -22,8 +20,4 @@ const petitionServiceEmail = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  petitionServiceEmail,
 };

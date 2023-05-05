@@ -1,4 +1,4 @@
-const { User } = require('../entities/User');
+import { User } from '../entities/User';
 
 /**
  * returns the userId of who this note should be stored on.  This is mainly
@@ -11,7 +11,7 @@ const { User } = require('../entities/User');
  * @returns {string} the user id this note should be attached to
  */
 
-exports.getUserIdForNote = async (
+export const getUserIdForNote = async (
   applicationContext,
   { userIdMakingRequest },
 ) => {

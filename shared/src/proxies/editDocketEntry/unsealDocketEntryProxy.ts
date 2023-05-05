@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * unsealDocketEntryInteractor proxy
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {object} providers.docketNumber the docket number for the case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.unsealDocketEntryInteractor = (
+export const unsealDocketEntryInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

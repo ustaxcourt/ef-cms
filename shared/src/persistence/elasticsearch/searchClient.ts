@@ -1,10 +1,8 @@
-const AWS = require('aws-sdk');
-const {
-  formatDocketEntryResult,
-} = require('./helpers/formatDocketEntryResult');
-const { formatMessageResult } = require('./helpers/formatMessageResult');
-const { formatWorkItemResult } = require('./helpers/formatWorkItemResult');
-const { get } = require('lodash');
+import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
+import { formatMessageResult } from './helpers/formatMessageResult';
+import { formatWorkItemResult } from './helpers/formatWorkItemResult';
+import { get } from 'lodash';
+import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
 
@@ -48,7 +46,7 @@ const formatResults = body => {
   };
 };
 
-exports.search = async ({ applicationContext, searchParameters }) => {
+export const search = async ({ applicationContext, searchParameters }) => {
   let body;
   try {
     ({ body } = await applicationContext
@@ -61,7 +59,7 @@ exports.search = async ({ applicationContext, searchParameters }) => {
   return formatResults(body);
 };
 
-exports.searchAll = async ({ applicationContext, searchParameters }) => {
+export const searchAll = async ({ applicationContext, searchParameters }) => {
   const index = searchParameters.index || '';
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;
