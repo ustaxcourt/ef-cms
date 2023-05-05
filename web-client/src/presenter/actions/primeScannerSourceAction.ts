@@ -2,12 +2,14 @@ import { state } from 'cerebral';
 
 /**
  * preps props to allow use of setScannerSourceAction from modal state
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const primeScannerSourceAction = ({ applicationContext, get }) => {
+export const primeScannerSourceAction = ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const { SCAN_MODES } = applicationContext.getConstants();
 
   const scannerSourceName = get(state.modal.scanner);

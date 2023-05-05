@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.form from props.caseDetail
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const setupContactFormAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { caseDetail, contactId } = props;
   const contactToEdit = applicationContext
     .getUtilities()
