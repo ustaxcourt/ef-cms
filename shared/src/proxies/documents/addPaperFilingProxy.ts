@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * addPaperFilingProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} providers.data the data being forwarded to the API call
  * @returns {Promise<*>} the promise of the api call
  */
-exports.addPaperFilingInteractor = (applicationContext, data) => {
+export const addPaperFilingInteractor = (applicationContext, data) => {
   const { documentMetadata } = data;
   const { docketNumber } = documentMetadata;
 

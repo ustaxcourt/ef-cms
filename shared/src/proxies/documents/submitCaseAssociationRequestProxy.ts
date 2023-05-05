@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.submitCaseAssociationRequestInteractor = (
+export const submitCaseAssociationRequestInteractor = (
   applicationContext,
   { consolidatedCasesDocketNumbers, docketNumber, filers },
 ) => {

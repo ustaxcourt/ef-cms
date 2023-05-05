@@ -10,7 +10,7 @@ resource "aws_lambda_function" "zip_handle_bounce" {
   timeout          = "60"
   memory_size      = "768"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment

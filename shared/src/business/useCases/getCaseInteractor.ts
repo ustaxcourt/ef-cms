@@ -25,9 +25,9 @@ const getSealedCase = ({
   isAssociatedWithCase,
 }: {
   applicationContext: IApplicationContext;
-  caseRecord: TCase;
+  caseRecord: Case;
   isAssociatedWithCase: boolean;
-}): TCase => {
+}): Case => {
   const currentUser = applicationContext.getCurrentUser();
 
   let isAuthorizedToViewSealedCase = isAuthorized(
@@ -83,11 +83,10 @@ const getCaseForExternalUser = ({
 /**
  * Decorate a case with some calculations based on the attributes of the case that may be
  * obfuscated to the client
- *
  * @param {Object} caseRecord the original caseRecord
  * @returns {Object} decorated caseRecord
  */
-export const decorateForCaseStatus = (caseRecord: TCase) => {
+export const decorateForCaseStatus = (caseRecord: Case) => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
@@ -100,7 +99,6 @@ export const decorateForCaseStatus = (caseRecord: TCase) => {
 
 /**
  * getCaseInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to get

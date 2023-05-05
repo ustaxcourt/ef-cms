@@ -1,11 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  PARTIES_CODES,
-  PARTY_TYPES,
-} = require('../../entities/EntityConstants');
-const { docketRecord } = require('./docketRecord');
+import { PARTIES_CODES, PARTY_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { docketRecord } from './docketRecord';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('docketRecord', () => {

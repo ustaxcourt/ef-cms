@@ -1,7 +1,5 @@
-const {
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
-} = require('../../business/entities/EntityConstants');
-const { union } = require('lodash');
+import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from '../../business/entities/EntityConstants';
+import { union } from 'lodash';
 
 /**
  * creates a lookup of changed contact fields
@@ -11,7 +9,7 @@ const { union } = require('lodash');
  * @param {object} providers.oldData the old contact information
  * @returns {object} diff object with old and new values for each changed field
  */
-const getAddressPhoneDiff = ({ newData, oldData }) => {
+export const getAddressPhoneDiff = ({ newData, oldData }) => {
   const diff = {};
   const fields = union(Object.keys(newData), Object.keys(oldData));
   fields.forEach(key => {
@@ -36,7 +34,7 @@ const getAddressPhoneDiff = ({ newData, oldData }) => {
  * @param {object} providers.oldData the old contact information
  * @returns {string} documentType for the address / phone change scenario
  */
-const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
+export const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
   let documentType;
 
   const initialDiff = diff || getAddressPhoneDiff({ newData, oldData });
@@ -77,9 +75,4 @@ const getDocumentTypeForAddressChange = ({ diff, newData, oldData }) => {
   }
 
   return documentType;
-};
-
-module.exports = {
-  getAddressPhoneDiff,
-  getDocumentTypeForAddressChange,
 };

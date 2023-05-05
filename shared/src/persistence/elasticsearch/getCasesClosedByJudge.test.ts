@@ -1,8 +1,6 @@
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getCasesClosedByJudge } from './getCasesClosedByJudge';
 import { judgeUser } from '../../test/mockUsers';
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getCasesClosedByJudge } = require('./getCasesClosedByJudge');
 
 describe('getCasesClosedByJudge', () => {
   const mockValidRequest = {

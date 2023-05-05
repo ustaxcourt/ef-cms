@@ -5,7 +5,7 @@
 # note that the `nodejs` directory is a special named directory used on layers: 
 #   https://docs.aws.amazon.com/lambda/latest/dg/configuration-layers.html
 
-npm ci
+npm ci --production
 mkdir nodejs
 cp -R node_modules nodejs/
 cp package.json nodejs/

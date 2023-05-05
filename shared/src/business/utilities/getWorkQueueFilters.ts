@@ -1,12 +1,12 @@
-const {
+import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} = require('../entities/EntityConstants');
+} from '../entities/EntityConstants';
 
-const getDocQcSectionForUser = user => {
+export const getDocQcSectionForUser = user => {
   const showDocketSectionQC =
     user.section !== PETITIONS_SECTION &&
     user.section !== CASE_SERVICES_SUPERVISOR_SECTION;
@@ -14,7 +14,7 @@ const getDocQcSectionForUser = user => {
   return showDocketSectionQC ? DOCKET_SECTION : user.section;
 };
 
-const getWorkQueueFilters = ({ section, user }) => {
+export const getWorkQueueFilters = ({ section, user }) => {
   const sectionToDisplay = section || getDocQcSectionForUser(user);
   const isCaseServicesSupervisor = user.role === ROLES.caseServicesSupervisor;
   const isDocketClerk = user.role === ROLES.docketClerk;
@@ -100,9 +100,4 @@ const getWorkQueueFilters = ({ section, user }) => {
       },
     },
   };
-};
-
-module.exports = {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
 };

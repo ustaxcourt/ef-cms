@@ -1,4 +1,4 @@
-const { post } = require('./requests');
+import { post } from './requests';
 
 /**
  * generatePrintableFilingReceiptInteractor (proxy)
@@ -9,7 +9,7 @@ const { post } = require('./requests');
  * @param {boolean} providers.fileAcrossConsolidatedGroup flag to determine whether the document should be filed across the consolidated cases group
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePrintableFilingReceiptInteractor = (
+export const generatePrintableFilingReceiptInteractor = (
   applicationContext,
   { docketNumber, documentsFiled, fileAcrossConsolidatedGroup },
 ) => {

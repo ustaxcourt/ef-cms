@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { DOCUMENT_SERVED_MESSAGES } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -6,7 +7,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
-const { DOCUMENT_SERVED_MESSAGES } = require('../../entities/EntityConstants');
 
 /**
  * serveCourtIssuedDocumentInteractor

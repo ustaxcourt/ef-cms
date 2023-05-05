@@ -6,7 +6,7 @@
  * @returns {string} document title after modification
  */
 
-const getDescriptionDisplay = docketEntry => {
+export const getDescriptionDisplay = docketEntry => {
   let descriptionDisplay =
     docketEntry.documentTitle ||
     docketEntry.description ||
@@ -21,8 +21,4 @@ const getDescriptionDisplay = docketEntry => {
   }
 
   return descriptionDisplay;
-};
-
-module.exports = {
-  getDescriptionDisplay,
 };

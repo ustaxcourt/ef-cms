@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  * getDocumentDownloadUrlInteractor
@@ -10,7 +10,7 @@ const { get } = require('./requests');
  * @param {boolean} providers.isPublic whether the url is for the public site or not
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getDocumentDownloadUrlInteractor = (
+export const getDocumentDownloadUrlInteractor = (
   applicationContext,
   { docketNumber, isPublic, key },
 ) => {
