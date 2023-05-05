@@ -84,7 +84,7 @@ export const combineISOandEasternTime = (dateString, timeString) => {
 export const prepareDateFromString = (
   dateString?: string,
   inputFormat?: TimeFormats,
-) => {
+): DateTime => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
@@ -215,7 +215,7 @@ export const createISODateStringFromObject = options => {
 export const formatDateString = (
   dateString,
   formatArg: TimeFormats = FORMATS.ISO,
-) => {
+): string => {
   if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
 
@@ -242,7 +242,7 @@ export const formatDateString = (
   return result;
 };
 
-export const formatNow = (formatStr: TimeFormats) => {
+export const formatNow = (formatStr?: TimeFormats): string => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };
