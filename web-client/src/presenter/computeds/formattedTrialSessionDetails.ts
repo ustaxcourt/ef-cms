@@ -27,7 +27,10 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     formattedTrialSession.showAlertForNOTTReminder =
       !formattedTrialSession.dismissedAlertForNOTT &&
       formattedTrialSession.isStartDateWithinNOTTReminderRange;
-    formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+
+    if (formattedTrialSession.showAlertForNOTTReminder) {
+      formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+    }
 
     if (formattedTrialSession.chambersPhoneNumber) {
       formattedTrialSession.chambersPhoneNumber = applicationContext

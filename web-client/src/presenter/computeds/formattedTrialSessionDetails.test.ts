@@ -1,24 +1,22 @@
-import { TRIAL_SESSION_SCOPE_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  HYBRID_SESSION_TYPES,
+  SESSION_STATUS_GROUPS,
+  SESSION_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { chambersUser, judgeUser } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
 import { runCompute } from 'cerebral/test';
-import { set30DayNoticeOfTrialReminder } from './utilities/set30DayNoticeOfTrialReminder';
 import { withAppContextDecorator } from '../../withAppContext';
-jest.mock('./utilities/set30DayNoticeOfTrialReminder', () => {
-  return { set30DayNoticeOfTrialReminder: jest.fn() };
-});
 
 describe('formattedTrialSessionDetails', () => {
   let mockTrialSession;
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
-  const { HYBRID_SESSION_TYPES, SESSION_TYPES } =
-    applicationContext.getConstants();
   const REGULAR_SESSION_TYPE = SESSION_TYPES.regular;
-  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
   const formattedTrialSessionDetails = withAppContextDecorator(
     formattedTrialSessionDetailsComputed,
@@ -51,17 +49,12 @@ describe('formattedTrialSessionDetails', () => {
       .getFormattedTrialSessionDetails.mockImplementation(
         () => mockTrialSession,
       );
-
-    set30DayNoticeOfTrialReminder.mockReturnValue({
-      isCurrentDateWithinReminderRange: true,
-      thirtyDaysBeforeTrialFormatted: '2020/10/10',
-    });
   });
 
   it('returns undefined if state.trialSession is undefined', () => {
     mockTrialSession = undefined;
 
-    const result = runCompute(formattedTrialSessionDetails, {
+    const result: any = runCompute(formattedTrialSessionDetails, {
       state: {},
     });
     expect(result).toBeUndefined();
@@ -72,7 +65,7 @@ describe('formattedTrialSessionDetails', () => {
       ...TRIAL_SESSION,
       sessionType: REGULAR_SESSION_TYPE,
     };
-    const result = runCompute(formattedTrialSessionDetails, {
+    const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
       },
@@ -86,7 +79,7 @@ describe('formattedTrialSessionDetails', () => {
       ...TRIAL_SESSION,
       sessionType: HYBRID_SESSION_TYPES.hybrid,
     };
-    let result = runCompute(formattedTrialSessionDetails, {
+    let result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
       },
@@ -129,7 +122,7 @@ describe('formattedTrialSessionDetails', () => {
       ],
       sessionType: HYBRID_SESSION_TYPES[0],
     };
-    const result = runCompute(formattedTrialSessionDetails, {
+    const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
       },
@@ -143,7 +136,7 @@ describe('formattedTrialSessionDetails', () => {
       ...TRIAL_SESSION,
       sessionType: HYBRID_SESSION_TYPES[1],
     };
-    const result = runCompute(formattedTrialSessionDetails, {
+    const result: any = runCompute(formattedTrialSessionDetails, {
       state: {
         trialSession: {},
       },
@@ -155,7 +148,7 @@ describe('formattedTrialSessionDetails', () => {
   it('should NOT set canDelete, canEdit, or can canClose when the trial session does NOT have a start date', () => {
     mockTrialSession = omit(mockTrialSession, 'startDate');
 
-    const result = runCompute(formattedTrialSessionDetails, {
+    const result: any = runCompute(formattedTrialSessionDetails, {
       state: {},
     });
 
@@ -166,7 +159,7 @@ describe('formattedTrialSessionDetails', () => {
 
   describe('canDelete', () => {
     it('should be false when the trial session start date is in the past and it is NOT calendared', () => {
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {
             ...TRIAL_SESSION,
@@ -187,7 +180,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: PAST_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -205,7 +198,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: FUTURE_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -223,7 +216,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: FUTURE_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -237,7 +230,7 @@ describe('formattedTrialSessionDetails', () => {
 
   describe('canEdit', () => {
     it('should be false when trial session start date is in the past and it is NOT closed', () => {
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {
             ...TRIAL_SESSION,
@@ -258,7 +251,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: PAST_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -278,7 +271,7 @@ describe('formattedTrialSessionDetails', () => {
 
       applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -298,7 +291,7 @@ describe('formattedTrialSessionDetails', () => {
 
       applicationContext.getCurrentUser.mockReturnValue(chambersUser);
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -316,7 +309,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: FUTURE_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -337,7 +330,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: PAST_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -354,7 +347,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: FUTURE_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -371,7 +364,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: PAST_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -387,7 +380,7 @@ describe('formattedTrialSessionDetails', () => {
         startDate: PAST_DATE,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -404,7 +397,7 @@ describe('formattedTrialSessionDetails', () => {
         sessionStatus: SESSION_STATUS_GROUPS.open,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -421,7 +414,7 @@ describe('formattedTrialSessionDetails', () => {
         sessionStatus: SESSION_STATUS_GROUPS.closed,
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {},
         },
@@ -438,7 +431,7 @@ describe('formattedTrialSessionDetails', () => {
         chambersPhoneNumber: '1234567890',
       };
 
-      const result = runCompute(formattedTrialSessionDetails, {
+      const result: any = runCompute(formattedTrialSessionDetails, {
         state: {
           trialSession: {
             ...mockTrialSession,
@@ -450,64 +443,65 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  it('should set an NOTT reminder flag and message when the session is calendared and no previous notification has been dismissed', () => {
-    mockTrialSession = {
-      ...TRIAL_SESSION,
-      dismissedAlertForNOTT: false,
-      formattedStartDate: '2019-11-25T15:00:00.000Z',
-      isCalendared: true,
-    };
+  describe('NOTT reminder', () => {
+    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and isStartDateWithinNOTTReminderRange is true', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        dismissedAlertForNOTT: false,
+        isStartDateWithinNOTTReminderRange: true,
+        thirtyDaysBeforeTrialFormatted: '2/2/2022',
+      };
 
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...mockTrialSession,
+      const result: any = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            ...mockTrialSession,
+          },
         },
-      },
+      });
+
+      expect(result.showAlertForNOTTReminder).toBe(true);
+      expect(result.alertMessageForNOTT).toEqual(
+        '30-day trial notices are due before 2/2/2022. Have notices been served?',
+      );
     });
 
-    expect(result).toMatchObject({
-      alertMessageForNOTT:
-        '30-day trial notices are due before 2020/10/10. Have notices been served?',
-      showAlertForNOTTReminder: true,
-    });
-  });
+    it('should set showAlertForNOTTReminder to false when the alert has been previously dismissed', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        dismissedAlertForNOTT: true,
+        isStartDateWithinNOTTReminderRange: true,
+      };
 
-  it('should NOT set an NOTT reminder flag when the alert has been previously dismissed', () => {
-    mockTrialSession = {
-      ...TRIAL_SESSION,
-      dismissedAlertForNOTT: true,
-      isCalendared: true,
-    };
-
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...mockTrialSession,
+      const result: any = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            ...mockTrialSession,
+          },
         },
-      },
+      });
+
+      expect(result.showAlertForNOTTReminder).toBe(false);
+      expect(result.alertMessageForNOTT).toBeUndefined();
     });
 
-    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
-    expect(result.showAlertForNOTTReminder).toBeUndefined();
-  });
+    it('should set showAlertForNOTTReminder to false when isStartDateWithinNOTTReminderRange is false', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        dismissedAlertForNOTT: true,
+        isStartDateWithinNOTTReminderRange: false,
+      };
 
-  it('should NOT set an NOTT reminder flag when the session is NOT calendared', () => {
-    mockTrialSession = {
-      ...TRIAL_SESSION,
-      dismissedAlertForNOTT: false,
-      isCalendared: false,
-    };
-
-    const result = runCompute(formattedTrialSessionDetails, {
-      state: {
-        trialSession: {
-          ...mockTrialSession,
+      const result: any = runCompute(formattedTrialSessionDetails, {
+        state: {
+          trialSession: {
+            ...mockTrialSession,
+          },
         },
-      },
-    });
+      });
 
-    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
-    expect(result.showAlertForNOTTReminder).toBeUndefined();
+      expect(result.showAlertForNOTTReminder).toBe(false);
+      expect(result.alertMessageForNOTT).toBeUndefined();
+    });
   });
 });
