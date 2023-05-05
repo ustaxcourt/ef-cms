@@ -281,8 +281,13 @@ describe('removeConsolidatedCasesInteractor', () => {
     ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(2);
-
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: ['case|105-19', 'case|104-19'],
+    });
     ['105-19', '104-19'].forEach(docketNumber => {
       expect(
         applicationContext.getPersistenceGateway().createLock,
@@ -290,13 +295,6 @@ describe('removeConsolidatedCasesInteractor', () => {
         applicationContext,
         identifier: `case|${docketNumber}`,
         ttl: 30,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${docketNumber}`],
       });
     });
   });

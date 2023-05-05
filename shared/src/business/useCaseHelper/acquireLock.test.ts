@@ -6,7 +6,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 const onLockError = new ServiceUnavailableError('The case is currently locked');
 
 describe('acquireLock', () => {
-  let mockCall;
+  let mockCall: Parameters<typeof acquireLock>[0];
   let mockFeatureFlagValue = true;
   let mockLock;
 
@@ -24,8 +24,9 @@ describe('acquireLock', () => {
   beforeEach(() => {
     mockCall = {
       applicationContext,
-      identifier: 'case|123-45',
+      identifiers: ['case|123-45'],
       onLockError,
+      retries: 0,
     };
     mockFeatureFlagValue = true; // enabled
     mockLock = undefined; // unlocked
@@ -42,7 +43,7 @@ describe('acquireLock', () => {
   });
 
   it('gets the current lock for the given array of identifiers', async () => {
-    mockCall.identifier = ['case|123-45', 'case|678-90'];
+    mockCall.identifiers = ['case|123-45', 'case|678-90'];
     await acquireLock(mockCall);
     expect(
       applicationContext.getPersistenceGateway().getLock,
@@ -77,7 +78,7 @@ describe('acquireLock', () => {
       });
 
       it('does not create a lock for any of the cases if one of the cases is locked', async () => {
-        mockCall.identifier = ['123-45', '678-90'];
+        mockCall.identifiers = ['123-45', '678-90'];
         applicationContext
           .getPersistenceGateway()
           .getLock.mockReturnValueOnce(undefined)
@@ -183,7 +184,7 @@ describe('acquireLock', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCall.identifier,
+        identifier: mockCall.identifiers[0],
         ttl: 30,
       });
     });
@@ -482,7 +483,7 @@ describe('removeLock', () => {
   beforeEach(() => {
     mockCall = {
       applicationContext,
-      identifier: 'case|123-45',
+      identifiers: ['case|123-45'],
     };
   });
 
@@ -500,18 +501,16 @@ describe('removeLock', () => {
   });
 
   it('removes an array of specified locks from persistence', async () => {
-    mockCall.identifier = ['123-11', '123-22', '123-33'];
+    mockCall.identifiers = ['123-11', '123-22', '123-33'];
     await removeLock(mockCall);
     expect(
       applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(3);
-    mockCall.identifier.forEach(identifier => {
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier,
-      });
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: ['123-11', '123-22', '123-33'],
     });
   });
 });

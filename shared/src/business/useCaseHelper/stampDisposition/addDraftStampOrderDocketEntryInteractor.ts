@@ -5,6 +5,10 @@ import {
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { Stamp } from '../../entities/Stamp';
 import { UnauthorizedError } from '../../../errors/errors';
 import { orderBy } from 'lodash';

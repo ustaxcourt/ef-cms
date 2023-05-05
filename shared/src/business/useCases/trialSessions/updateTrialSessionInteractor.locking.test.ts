@@ -39,24 +39,24 @@ describe('determineEntitiesToLock', () => {
   });
 
   it('should return an object that includes the specified trial session', async () => {
-    const { identifier } = await determineEntitiesToLock(
+    const { identifiers } = await determineEntitiesToLock(
       applicationContext,
       mockParams,
     );
-    expect(identifier).toContain(
+    expect(identifiers).toContain(
       `trial-session|${mockParams.trialSession.trialSessionId}`,
     );
   });
 
   it('should return an object that includes all of the docketNumbers associated with the trial session', async () => {
-    const { identifier } = await determineEntitiesToLock(
+    const { identifiers } = await determineEntitiesToLock(
       applicationContext,
       mockParams,
     );
 
-    expect(identifier).toContain(`case|${mockCases[1].docketNumber}`);
-    expect(identifier).toContain(`case|${mockCases[0].docketNumber}`);
-    expect(identifier).toContain(`case|${mockCases[2].docketNumber}`);
+    expect(identifiers).toContain(`case|${mockCases[1].docketNumber}`);
+    expect(identifiers).toContain(`case|${mockCases[0].docketNumber}`);
+    expect(identifiers).toContain(`case|${mockCases[2].docketNumber}`);
   });
 });
 
@@ -162,13 +162,17 @@ describe('updateTrialSessionInteractor', () => {
     it('should remove the lock', async () => {
       await updateTrialSessionInteractor(applicationContext, mockRequest);
 
-      MOCK_TRIAL_INPERSON.caseOrder.forEach(({ docketNumber }) => {
-        expect(
-          applicationContext.getPersistenceGateway().removeLock,
-        ).toHaveBeenCalledWith({
-          applicationContext,
-          identifiers: [`case|${docketNumber}`],
-        });
+      let expectedIdentifiers = MOCK_TRIAL_INPERSON.caseOrder.map(
+        ({ docketNumber }) => `case|${docketNumber}`,
+      );
+      expectedIdentifiers.unshift(
+        `trial-session|${mockRequest.trialSession.trialSessionId}`,
+      );
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifiers: expectedIdentifiers,
       });
     });
   });
