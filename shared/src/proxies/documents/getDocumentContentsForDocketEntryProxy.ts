@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getDocumentContentsForDocketEntryInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.documentContentsId the documentContentsId
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getDocumentContentsForDocketEntryInteractor = (
+export const getDocumentContentsForDocketEntryInteractor = (
   applicationContext,
   { documentContentsId },
 ) => {

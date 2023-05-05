@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props props passed through via cerebral
  * @param {object} providers.store the cerebral store
  */
-export const setAdvancedSearchResultsAction = ({ get, props, store }) => {
+export const setAdvancedSearchResultsAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const tabName = get(state.advancedSearchTab);
   store.set(state.searchResults[tabName], props.searchResults);
 };

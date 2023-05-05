@@ -1,5 +1,5 @@
-const { ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
 
 /**
  * getJudgeInSectionHelper - returns the judge user for a given section
@@ -10,7 +10,10 @@ const { User } = require('../entities/User');
  * @returns {User} the judge user for the given chambers user
  */
 
-exports.getJudgeInSectionHelper = async (applicationContext, { section }) => {
+export const getJudgeInSectionHelper = async (
+  applicationContext,
+  { section },
+) => {
   const rawUsers = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({

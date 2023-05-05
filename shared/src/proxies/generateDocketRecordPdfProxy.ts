@@ -1,4 +1,4 @@
-const { post } = require('./requests');
+import { post } from './requests';
 
 /**
  * generateDocketRecordPdfInteractor (proxy)
@@ -9,7 +9,7 @@ const { post } = require('./requests');
  * @param {string} providers.contentHtml the html content for the pdf
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generateDocketRecordPdfInteractor = (
+export const generateDocketRecordPdfInteractor = (
   applicationContext,
   { docketNumber, docketRecordSort, includePartyDetail },
 ) => {

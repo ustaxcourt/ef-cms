@@ -347,6 +347,7 @@ module "api-west-green" {
     aws = aws.us-west-1
   }
   current_color                  = "green"
+  node_version                   = var.green_node_version
   deploying_color                = var.deploying_color
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_green_west_object.etag
@@ -412,6 +413,7 @@ module "api-west-blue" {
     aws = aws.us-west-1
   }
   current_color                  = "blue"
+  node_version                   = var.blue_node_version
   deploying_color                = var.deploying_color
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_west_object.etag

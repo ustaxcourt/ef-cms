@@ -1,8 +1,8 @@
-const {
+import {
   getMetadataLines,
   redact,
   removeDuplicateLogInformation,
-} = require('./createLogger');
+} from './createLogger';
 
 describe('getMetadataLines', () => {
   it('should get empty array with no info', () => {

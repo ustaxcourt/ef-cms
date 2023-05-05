@@ -1,6 +1,4 @@
-const {
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 
 /**
  * setNoticeOfChangeToInPersonProceeding
@@ -12,7 +10,7 @@ const {
  * @param {object} providers.newTrialSessionEntity the new trial session data
  * @param {object} providers.userId the user ID
  */
-exports.setNoticeOfChangeToInPersonProceeding = async (
+export const setNoticeOfChangeToInPersonProceeding = async (
   applicationContext,
   { caseEntity, newPdfDoc, newTrialSessionEntity, userId },
 ) => {

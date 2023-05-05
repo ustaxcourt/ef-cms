@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * filters out any statistics that are empty
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const filterEmptyStatisticsAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { caseType, hasVerifiedIrsNotice } = get(state.form);
   let statistics = get(state.form.statistics) || [];
 

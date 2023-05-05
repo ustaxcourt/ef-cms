@@ -1,4 +1,4 @@
-const { Practitioner } = require('../entities/Practitioner');
+import { Practitioner } from '../entities/Practitioner';
 
 /**
  * Create a new practitioner
@@ -8,7 +8,7 @@ const { Practitioner } = require('../entities/Practitioner');
  * @param {object} providers.user the user data
  * @returns {object} new practitioner user
  */
-exports.createPractitionerUser = async ({ applicationContext, user }) => {
+export const createPractitionerUser = async ({ applicationContext, user }) => {
   const barNumber =
     user.barNumber ||
     (await applicationContext.barNumberGenerator.createBarNumber({

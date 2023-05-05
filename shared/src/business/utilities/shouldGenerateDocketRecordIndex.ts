@@ -1,9 +1,9 @@
-const {
+import {
   COURT_ISSUED_EVENT_CODES,
   INITIAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
   UNSERVABLE_EVENT_CODES,
-} = require('../entities/EntityConstants');
+} from '../entities/EntityConstants';
 
 const getIsInitialFilingType = docketEntry => {
   const INITIAL_DOCUMENT_EVENT_CODES = Object.keys(INITIAL_DOCUMENT_TYPES).map(
@@ -37,7 +37,10 @@ const getIsUnservable = docketEntry =>
  * @param {object} docketEntry the docket entry
  * @returns {boolean} true if a given entry should have an index applied or false otherwise
  */
-const shouldGenerateDocketRecordIndex = ({ caseDetail, docketEntry }) => {
+export const shouldGenerateDocketRecordIndex = ({
+  caseDetail,
+  docketEntry,
+}) => {
   if (docketEntry.index) {
     return false; // an index does not need to be generated
   }
@@ -78,5 +81,3 @@ const shouldGenerateDocketRecordIndex = ({ caseDetail, docketEntry }) => {
 
   return isUnservable || isMinuteEntry || !!docketEntry.servedAt;
 };
-
-exports.shouldGenerateDocketRecordIndex = shouldGenerateDocketRecordIndex;

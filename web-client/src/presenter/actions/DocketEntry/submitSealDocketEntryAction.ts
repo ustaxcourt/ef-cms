@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * calls interactor to seal a docket entry
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const submitSealDocketEntryAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { docketEntryId, docketEntrySealedTo } = get(state.modal);
   const { docketEntries, docketNumber } = get(state.caseDetail);
 

@@ -2,12 +2,13 @@ import { state } from 'cerebral';
 
 /**
  * gets the first docket entry document from the current case detail to set as the default viewerDocumentToDisplay
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get method
  * @returns {object} object containing viewerDocumentToDisplay
  */
-export const getDefaultDocketViewerDocumentToDisplayAction = ({ get }) => {
+export const getDefaultDocketViewerDocumentToDisplayAction = ({
+  get,
+}: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const entriesWithDocument = docketEntries.filter(

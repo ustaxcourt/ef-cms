@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { fetchPendingItems } = require('./fetchPendingItems');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { fetchPendingItems } from './fetchPendingItems';
 jest.mock('./searchClient');
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 describe('fetchPendingItems', () => {
   it('returns results from a query without judge', async () => {

@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const coverSheet = async ({ applicationContext, data }) => {
+export const coverSheet = async ({ applicationContext, data }) => {
   const coverSheetTemplate = reactTemplateGenerator({
     componentName: 'CoverSheet',
     data,
@@ -35,8 +33,4 @@ const coverSheet = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  coverSheet,
 };

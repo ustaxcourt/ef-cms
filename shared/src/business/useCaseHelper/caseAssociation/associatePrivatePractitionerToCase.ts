@@ -1,7 +1,7 @@
-const { Case } = require('../../entities/cases/Case');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
-const { UserCase } = require('../../entities/UserCase');
+import { Case } from '../../entities/cases/Case';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { UserCase } from '../../entities/UserCase';
 
 /**
  * associatePrivatePractitionerToCase
@@ -14,7 +14,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
  */
-exports.associatePrivatePractitionerToCase = async ({
+export const associatePrivatePractitionerToCase = async ({
   applicationContext,
   docketNumber,
   representing,
