@@ -76,7 +76,7 @@ describe('deleteCaseDeadlineInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: `case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`,
+      identifiers: [`case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`],
     });
   });
 

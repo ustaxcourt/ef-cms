@@ -49,7 +49,7 @@ export const checkLock = async ({
 
 export const acquireLock = async ({
   applicationContext,
-  identifier,
+  identifiers = [],
   onLockError,
   options = {},
   retries = 0,
@@ -57,16 +57,13 @@ export const acquireLock = async ({
   waitTime = 3000,
 }: {
   applicationContext: IApplicationContext;
-  identifier: string | string[];
+  identifiers: string[];
   onLockError?: Error | Function;
   options?: any;
   retries?: number;
   ttl?: number;
   waitTime?: number;
 }): Promise<void> => {
-  const identifiersToLock =
-    typeof identifier === 'string' ? [identifier] : identifier;
-
   let isLockAcquired = false;
   let attempts = 0;
 
@@ -75,7 +72,7 @@ export const acquireLock = async ({
     try {
       attempts++;
       await Promise.all(
-        identifiersToLock.map(entityIdentifier =>
+        identifiers.map(entityIdentifier =>
           checkLock({
             applicationContext,
             identifier: entityIdentifier,
@@ -95,7 +92,7 @@ export const acquireLock = async ({
 
   // Second, lock them up so the are unavailable
   await Promise.all(
-    identifiersToLock.map(entityIdentifier =>
+    identifiers.map(entityIdentifier =>
       applicationContext.getPersistenceGateway().createLock({
         applicationContext,
         identifier: entityIdentifier,
@@ -107,22 +104,15 @@ export const acquireLock = async ({
 
 export const removeLock = ({
   applicationContext,
-  identifier,
+  identifiers = [],
 }: {
   applicationContext: IApplicationContext;
-  identifier: string | string[];
-}): Promise<void[]> => {
-  const identifiersToUnlock =
-    typeof identifier === 'string' ? [identifier] : identifier;
-
-  return Promise.all(
-    identifiersToUnlock.map(entityIdentifier =>
-      applicationContext.getPersistenceGateway().removeLock({
-        applicationContext,
-        identifier: entityIdentifier,
-      }),
-    ),
-  );
+  identifiers: string[];
+}): Promise<void> => {
+  return applicationContext.getPersistenceGateway().removeLock({
+    applicationContext,
+    identifiers,
+  });
 };
 
 /**
@@ -141,8 +131,8 @@ export function withLocking<InteractorInput, InteractorOutput>(
     applicationContext: IApplicationContext,
     options: any,
   ) =>
-    | Promise<{ identifier: string; ttl?: number }>
-    | { identifier: string; ttl?: number },
+    | Promise<{ identifiers: string[]; ttl?: number }>
+    | { identifiers: string[]; ttl?: number },
   onLockError?: Error | Function,
 ): (
   applicationContext: IApplicationContext,
@@ -152,11 +142,11 @@ export function withLocking<InteractorInput, InteractorOutput>(
     applicationContext: IApplicationContext,
     options: InteractorInput,
   ) {
-    const { identifier, ttl } = await getLockInfo(applicationContext, options);
+    const { identifiers, ttl } = await getLockInfo(applicationContext, options);
 
     await acquireLock({
       applicationContext,
-      identifier,
+      identifiers,
       onLockError,
       options,
       ttl,
@@ -172,7 +162,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
 
     await removeLock({
       applicationContext,
-      identifier,
+      identifiers,
     });
 
     if (caughtError) {

@@ -195,7 +195,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: `case|${mockCase.docketNumber}`,
+        identifiers: `case|${mockCase.docketNumber}`,
       });
     });
   });

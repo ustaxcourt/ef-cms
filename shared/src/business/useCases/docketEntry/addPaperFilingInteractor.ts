@@ -230,7 +230,6 @@ export const addPaperFiling = async (
 
 /**
  * Helper function to save any work items required when filing this docket entry
- *
  * @param {object} providers  The providers Object
  * @param {object} providers.applicationContext The application Context
  * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
@@ -276,11 +275,8 @@ export const determineEntitiesToLock = (
     consolidatedGroupDocketNumbers?: string[];
     documentMetadata: DocumentMetadata;
   },
-): {
-  identifier: string[];
-  ttl: number;
-} => ({
-  identifier: [
+) => ({
+  identifiers: [
     ...new Set([
       ...consolidatedGroupDocketNumbers,
       documentMetadata?.docketNumber,

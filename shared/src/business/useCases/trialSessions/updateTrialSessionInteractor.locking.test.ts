@@ -167,7 +167,7 @@ describe('updateTrialSessionInteractor', () => {
           applicationContext.getPersistenceGateway().removeLock,
         ).toHaveBeenCalledWith({
           applicationContext,
-          identifier: `case|${docketNumber}`,
+          identifiers: [`case|${docketNumber}`],
         });
       });
     });

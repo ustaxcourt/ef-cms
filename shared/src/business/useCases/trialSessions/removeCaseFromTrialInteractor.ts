@@ -9,7 +9,6 @@ import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * removeCaseFromTrial
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to remove from trial
@@ -115,6 +114,6 @@ export const removeCaseFromTrialInteractor = withLocking(
     _applicationContext: IApplicationContext,
     { docketNumber }: { docketNumber: string },
   ) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

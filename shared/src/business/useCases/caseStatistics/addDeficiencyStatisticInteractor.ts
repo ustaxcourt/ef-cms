@@ -91,6 +91,6 @@ export const addDeficiencyStatistic = async (
 export const addDeficiencyStatisticInteractor = withLocking(
   addDeficiencyStatistic,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

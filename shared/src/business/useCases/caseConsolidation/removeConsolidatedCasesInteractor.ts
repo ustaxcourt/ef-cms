@@ -123,7 +123,7 @@ const determineEntitiesToLock = (
   );
 
   return {
-    identifier: docketNumbers,
+    identifiers: docketNumbers,
   };
 };
 

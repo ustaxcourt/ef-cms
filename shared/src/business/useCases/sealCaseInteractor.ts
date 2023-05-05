@@ -8,7 +8,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * sealCase
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
@@ -49,6 +48,6 @@ export const sealCase = async (
 export const sealCaseInteractor = withLocking(
   sealCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

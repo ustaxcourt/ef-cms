@@ -10,7 +10,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used to add a petitioner to a case
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.contact the contact data to add to the case
@@ -67,6 +66,6 @@ export const addPetitionerToCase = async (
 export const addPetitionerToCaseInteractor = withLocking(
   addPetitionerToCase,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

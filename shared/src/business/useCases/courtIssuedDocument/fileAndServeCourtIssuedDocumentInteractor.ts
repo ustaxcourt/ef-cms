@@ -261,11 +261,8 @@ export const determineEntitiesToLock = (
     docketNumbers?: string[];
     subjectCaseDocketNumber: string;
   },
-): {
-  identifier: string[];
-  ttl: number;
-} => ({
-  identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
   ),
   ttl: 900,

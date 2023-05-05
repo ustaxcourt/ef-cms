@@ -68,7 +68,7 @@ describe('removeLock', () => {
   it('deletes the specified lock from persistence', async () => {
     await removeLock({
       applicationContext,
-      identifier: 'case|123-45',
+      identifiers: ['case|123-45'],
     });
 
     expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
@@ -83,7 +83,7 @@ describe('removeLock', () => {
   it('deletes all of the specified locks from persistence when handed an array of identifiers', async () => {
     await removeLock({
       applicationContext,
-      identifier: ['case|111-45', 'case|222-45'],
+      identifiers: ['case|111-45', 'case|222-45'],
     });
 
     expect(applicationContext.getDocumentClient().delete).toHaveBeenCalledWith({
