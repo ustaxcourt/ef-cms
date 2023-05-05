@@ -25,6 +25,24 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     formattedTrialSession.showOnlyClosedCases =
       formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
 
+    if (
+      !formattedTrialSession.dismissedAlertForNOTT &&
+      formattedTrialSession.isCalendared &&
+      formattedTrialSession.formattedStartDate
+    ) {
+      const {
+        isCurrentDateWithinReminderRange,
+        thirtyDaysBeforeTrialFormatted,
+      } = set30DayNoticeOfTrialReminder({
+        applicationContext,
+        trialStartDate: formattedTrialSession.formattedStartDate,
+      });
+
+      formattedTrialSession.showAlertForNOTTReminder =
+        isCurrentDateWithinReminderRange;
+      formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+    }
+
     if (formattedTrialSession.chambersPhoneNumber) {
       formattedTrialSession.chambersPhoneNumber = applicationContext
         .getUtilities()
@@ -63,23 +81,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       );
       const hasNoActiveCases =
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
-
-      if (
-        formattedTrialSession.isCalendared &&
-        formattedTrialSession.formattedStartDate
-      ) {
-        const {
-          isCurrentDateWithinReminderRange,
-          thirtyDaysBeforeTrialFormatted,
-        } = set30DayNoticeOfTrialReminder({
-          applicationContext,
-          trialStartDate: formattedTrialSession.formattedStartDate,
-        });
-
-        formattedTrialSession.showAlertForNOTTReminder =
-          isCurrentDateWithinReminderRange;
-        formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due before ${thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
-      }
 
       if (
         hasNoActiveCases &&

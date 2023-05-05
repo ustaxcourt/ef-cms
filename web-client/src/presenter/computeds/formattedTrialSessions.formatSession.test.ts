@@ -13,6 +13,7 @@ describe('formattedTrialSessions formatSession', () => {
   const mockTrialSessions = [
     {
       caseOrder: [],
+      dismissedAlertForNOTT: false,
       isCalendared: true,
       judge: { name: '3', userId: '3' },
       noticeIssuedDate: '2019-07-25T15:00:00.000Z',
@@ -63,7 +64,7 @@ describe('formattedTrialSessions formatSession', () => {
     });
   });
 
-  it('should set an NOTT reminder flag and message when the session is calendared and has a startDate that is between 30 and 35 days calendar days of the current date', () => {
+  it('should set an NOTT reminder flag and message when the session is calendared and no previous notification has been dismissed', () => {
     const result = formatSession(mockTrialSessions[0], applicationContext);
 
     expect(result).toMatchObject({
@@ -72,8 +73,28 @@ describe('formattedTrialSessions formatSession', () => {
     });
   });
 
+  it('should NOT set an NOTT reminder flag when the alert has been previously dismissed', () => {
+    formatSession(
+      {
+        ...mockTrialSessions[0],
+        dismissedAlertForNOTT: true,
+        isCalendared: true,
+      },
+      applicationContext,
+    );
+
+    expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
+  });
+
   it('should NOT set an NOTT reminder flag when the session is NOT calendared', () => {
-    formatSession(mockTrialSessions[1], applicationContext);
+    formatSession(
+      {
+        ...mockTrialSessions[0],
+        dismissedAlertForNOTT: false,
+        isCalendared: false,
+      },
+      applicationContext,
+    );
 
     expect(set30DayNoticeOfTrialReminder).not.toHaveBeenCalled();
   });

@@ -130,7 +130,7 @@ export class Case extends JoiValidationEntity {
       isNewCase = false,
     }: {
       applicationContext: IApplicationContext;
-      filtered: boolean;
+      filtered?: boolean;
       isNewCase?: boolean;
     },
   ) {
