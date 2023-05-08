@@ -80,8 +80,8 @@ export const combineISOandEasternTime = (dateString, timeString) => {
  * @returns {luxon} a luxon object
  */
 export const prepareDateFromString = (
-  dateString = undefined,
-  inputFormat = undefined,
+  dateString: any = undefined,
+  inputFormat: any = undefined,
 ) => {
   if (dateString === undefined) {
     dateString = createISODateString();

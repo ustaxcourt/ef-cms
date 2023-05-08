@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 import {
   FORMATS,
   createISODateString,
@@ -302,7 +301,7 @@ export class TrialSession extends JoiValidationEntity {
     this.trialSessionId =
       rawSession.trialSessionId || applicationContext.getUniqueId();
 
-    if (rawSession.judge && rawSession.judge.name) {
+    if (rawSession.judge?.name) {
       this.judge = {
         name: rawSession.judge.name,
         userId: rawSession.judge.userId,
@@ -310,9 +309,7 @@ export class TrialSession extends JoiValidationEntity {
     }
 
     if (rawSession.isCalendared && rawSession.startDate) {
-      this.set30DayNoticeOfTrialReminder();
-    } else {
-      this.isStartDateWithinNOTTReminderRange = false;
+      this.setNoticeOfTrialReminderAlert();
     }
 
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
@@ -393,10 +390,9 @@ export class TrialSession extends JoiValidationEntity {
   }
 
   /**
-   * generate sort key prefix
-   * @returns {string} the sort key prefix
+   * sets the trial session's NOTT reminder flag and due date
    */
-  set30DayNoticeOfTrialReminder() {
+  setNoticeOfTrialReminderAlert() {
     const { startDate } = this;
     const formattedStartDate = formatDateString(startDate, FORMATS.MMDDYY);
     const trialStartDateString: any = prepareDateFromString(
