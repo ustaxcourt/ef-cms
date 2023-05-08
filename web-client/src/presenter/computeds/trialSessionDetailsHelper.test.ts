@@ -183,10 +183,10 @@ describe('trialSessionDetailsHelper', () => {
   });
 
   describe('canDismissThirtyDayAlert', () => {
-    it('should be true when the curent user has DISMISS_30_DAY_ALERT permissions', () => {
+    it('should be true when the curent user has DIMISS_NOTT_REMINDER permissions', () => {
       const result = runCompute(trialSessionDetailsHelper, {
         state: {
-          permissions: { DISMISS_30_DAY_ALERT: true },
+          permissions: { DIMISS_NOTT_REMINDER: true },
           trialSession: TRIAL_SESSION,
         },
       });
@@ -194,10 +194,10 @@ describe('trialSessionDetailsHelper', () => {
       expect(result.canDismissThirtyDayAlert).toBe(true);
     });
 
-    it('should be false when the curent user does NOT have DISMISS_30_DAY_ALERT permissions', () => {
+    it('should be false when the curent user does NOT have DIMISS_NOTT_REMINDER permissions', () => {
       const result = runCompute(trialSessionDetailsHelper, {
         state: {
-          permissions: { DISMISS_30_DAY_ALERT: false },
+          permissions: { DIMISS_NOTT_REMINDER: false },
           trialSession: TRIAL_SESSION,
         },
       });
