@@ -36,10 +36,11 @@ describe('CustomCaseInventorySearch', () => {
       });
     });
 
-    it('should have validation errors when the end date provided is chronologically before the start date', () => {
+    it('should have validation errors when the end date provided is chronologically before a valid start date', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
         createEndDate: mockPastDate,
         createStartDate: today,
+        filingMethod: 'all',
       });
 
       expect(
@@ -50,7 +51,7 @@ describe('CustomCaseInventorySearch', () => {
       });
     });
 
-    it('should have validation errors when the start date provided is in the future', () => {
+    it('should have validation errors when the start date provided is in the future and the end date is not submitted', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
         createEndDate: undefined,
         createStartDate: mockFutureDate,
@@ -59,6 +60,7 @@ describe('CustomCaseInventorySearch', () => {
       expect(
         customCaseInventorySearch.getFormattedValidationErrors(),
       ).toMatchObject({
+        createEndDate: 'Enter an end date.',
         createStartDate:
           'Start date cannot be in the future. Enter a valid date.',
       });
