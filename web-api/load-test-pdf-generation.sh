@@ -10,8 +10,8 @@ export ENV
 export REGION
 export SIZE
 
-STAGE=${ENV} \
+STAGE="${ENV}" \
     DYNAMODB_ENDPOINT="dynamodb.${REGION}.amazonaws.com" \
     S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
     DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
-    npx ts-node --transpile-only ./web-api/storage/scripts/loadTest/loadTestTrialSession.ts
+    npx ts-node --transpile-only ./web-api/storage/scripts/loadTest/loadTestPdfGeneration.ts
