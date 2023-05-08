@@ -35,6 +35,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
       console.log(response);
     } catch (e) {
       console.log('ERROR', e);
+      throw e;
     }
   }
 })();
