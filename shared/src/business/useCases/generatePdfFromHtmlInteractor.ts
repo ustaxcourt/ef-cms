@@ -106,6 +106,10 @@ export const generatePdfFromHtmlInteractor = async (
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
+  } finally {
+    if (browser !== null) {
+      await browser.close();
+    }
   }
   return result;
 };
