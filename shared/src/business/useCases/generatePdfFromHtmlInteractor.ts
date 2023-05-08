@@ -3,7 +3,6 @@ import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/
 
 /**
  * generatePdfFromHtmlInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
@@ -29,13 +28,11 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
-  let browserPid;
   let browser = null;
   let result: any = null;
 
   try {
     browser = await applicationContext.getChromiumBrowser();
-    browserPid = browser.process()?.pid;
 
     let page = await browser?.newPage();
 
@@ -109,14 +106,6 @@ export const generatePdfFromHtmlInteractor = async (
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
-  } finally {
-    if (browser !== null) {
-      if (process.env.NODE_ENV !== 'production') {
-        await browser.close();
-      } else {
-        process.kill(browserPid);
-      }
-    }
   }
   return result;
 };
