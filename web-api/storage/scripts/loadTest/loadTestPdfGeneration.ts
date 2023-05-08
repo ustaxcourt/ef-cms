@@ -3,7 +3,7 @@ const axios = require('axios');
 const { getUserToken } = require('./loadTestHelpers');
 
 const cognito = new AWS.CognitoIdentityServiceProvider({
-  region: process.env.REGION,
+  region: 'us-east-1',
 });
 
 (async () => {
