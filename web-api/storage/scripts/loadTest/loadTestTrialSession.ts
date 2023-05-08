@@ -18,22 +18,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   let petitionerUser;
   let docketClerkUser;
 
-  const apigateway = new AWS.APIGateway({
-    region: process.env.REGION,
-  });
-  const { items: apis } = await apigateway
-    .getRestApis({ limit: 200 })
-    .promise();
-
-  const services = apis
-    .filter(api => api.name.includes(`gateway_api_${process.env.ENV}`))
-    .reduce((obj, api) => {
-      obj[
-        api.name.replace(`_${process.env.ENV}`, '')
-      ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
-      return obj;
-    }, {});
-
   let token = await getUserToken({
     cognito,
     env: process.env.ENV,
@@ -41,11 +25,14 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'petitioner1@example.com',
   });
 
-  let response = await axios.get(`${services['gateway_api']}/users`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  let response = await axios.get(
+    `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/users`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
   petitionerUser = response.data;
 
@@ -56,11 +43,14 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'docketclerk1@example.com',
   });
 
-  response = await axios.get(`${services['gateway_api']}/users`, {
-    headers: {
-      Authorization: `Bearer ${token}`,
+  response = await axios.get(
+    `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/users`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
     },
-  });
+  );
 
   docketClerkUser = response.data;
 

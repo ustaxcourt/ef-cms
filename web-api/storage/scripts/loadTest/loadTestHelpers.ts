@@ -52,6 +52,7 @@ const createTrialSession = async ({ applicationContext }) => {
       trialSession: {
         isCalendared: false,
         maxCases: 100,
+        proceedingType: 'In Person',
         sessionType: 'Hybrid',
         startDate: startDate.toISOString(),
         term,
