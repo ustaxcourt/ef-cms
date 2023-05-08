@@ -14,7 +14,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'petitionsclerk1@example.com',
   });
 
-  for (let i = 0; i < 400; i++) {
+  for (let i = 0; i < +process.env.SIZE; i++) {
     try {
       const response = await axios.post(
         `https://api-${process.env.DEPLOYING_COLOR}.${$process.env.EFCMS_DOMAIN}/reports/case-inventory-report`,
