@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * sets state.form.contactPrimary and state.form.contactSecondary from props.caseDetail
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const setContactsOnFormAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = cloneDeep(props.caseDetail);
 
   const contactPrimary = applicationContext

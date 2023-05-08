@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * submit public case advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const submitPublicCaseAdvancedSearchAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const form = get(state.advancedSearchForm.caseSearchByName);
   const searchResults = await applicationContext
     .getUseCases()

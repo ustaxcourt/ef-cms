@@ -2,12 +2,11 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.progressIndicator.waitingForResponse to false
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store used for setting state.progressIndicator.waitingForResponse
  */
-export const unsetWaitingForResponseAction = ({ get, store }) => {
+export const unsetWaitingForResponseAction = ({ get, store }: ActionProps) => {
   let requestCount = get(state.progressIndicator.waitingForResponseRequests);
 
   if (requestCount > 0) {

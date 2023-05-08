@@ -13,7 +13,7 @@ export const navigateToTrialSessionDetailAction = async ({
   get,
   props,
   router,
-}) => {
+}: ActionProps) => {
   const trialSessionId = props.trialSessionId || get(state.trialSessionId);
   await router.route(`/trial-session-detail/${trialSessionId}`);
 };

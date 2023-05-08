@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Retrieves the cases closed by a judge in a date range
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getCasesClosedByJudgeAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { endDate, judgeName, startDate } = get(state.form);
 
   const casesClosedByJudge = await applicationContext

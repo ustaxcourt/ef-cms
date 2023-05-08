@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 // eslint-disable-next-line spellcheck/spell-checker
 /**
  * Determines if the docket entry event code is one that can be multi-docketed
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext object
  * @param {object} providers.get the cerebral get object
@@ -14,7 +13,7 @@ export const isDocketEntryMultiDocketableAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
     applicationContext.getConstants();
 

@@ -801,3 +801,5 @@ const applicationContext = {
 };
 
 export { applicationContext };
+
+export type ClientApplicationContext = typeof applicationContext;
