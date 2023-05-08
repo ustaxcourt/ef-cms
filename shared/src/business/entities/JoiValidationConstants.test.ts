@@ -1,5 +1,5 @@
-const { createISODateString, FORMATS } = require('../utilities/DateHandler');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
+import { FORMATS, createISODateString } from '../utilities/DateHandler';
+import { JoiValidationConstants } from './JoiValidationConstants';
 
 describe('JoiValidationConstants', () => {
   describe('current year validation', () => {

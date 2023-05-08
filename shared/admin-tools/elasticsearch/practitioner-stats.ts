@@ -4,14 +4,22 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { computeDate } from '../../src/business/utilities/DateHandler';
 import { createApplicationContext } from '../../../web-api/src/applicationContext';
 import { searchAll } from '../../src/persistence/elasticsearch/searchClient';
+import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
-const fromDate = computeDate({ day: 1, month: 1, year });
-const toDate = computeDate({ day: 1, month: 1, year: year + 1 });
+const fromDate = validateDateAndCreateISO({
+  day: '1',
+  month: '1',
+  year: `${year}`,
+});
+const toDate = validateDateAndCreateISO({
+  day: '1',
+  month: '1',
+  year: `${year + 1}`,
+});
 
 const getAllPractitioners = async ({
   applicationContext,
