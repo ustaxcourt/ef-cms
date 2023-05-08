@@ -156,7 +156,7 @@
     "loadtest:medium": "./web-api/load-test-trial-session.sh dev us-east-1 125",
     "loadtest:practitioners": "./web-api/load-test-practitioners.sh dev us-east-1 200",
     "loadtest:work-queue": "./web-api/load-test-work-queue.sh dev us-east-1 200",
-    "loadtest:pdf-generation": "./web-api/load-test-pdf-generation.sh exp1 us-east-1 100",
+    "loadtest:pdf-generation": "ts-node --transpile-only ./web-api/storage/scripts/loadTest/loadTestPdfGeneration.ts",
     "loadtest:small": "./web-api/load-test-trial-session.sh dev us-east-1 100",
     "maintenance:disengage": "./scripts/dynamo/set-maintenance-mode.sh false",
     "maintenance:engage": "./scripts/dynamo/set-maintenance-mode.sh true",
