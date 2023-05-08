@@ -310,6 +310,8 @@ export class TrialSession extends JoiValidationEntity {
 
     if (rawSession.isCalendared && rawSession.startDate) {
       this.setNoticeOfTrialReminderAlert();
+    } else {
+      this.isStartDateWithinNOTTReminderRange = false;
     }
 
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
@@ -393,8 +395,7 @@ export class TrialSession extends JoiValidationEntity {
    * sets the trial session's NOTT reminder flag and due date
    */
   setNoticeOfTrialReminderAlert() {
-    const { startDate } = this;
-    const formattedStartDate = formatDateString(startDate, FORMATS.MMDDYY);
+    const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
     const trialStartDateString: any = prepareDateFromString(
       formattedStartDate,
       FORMATS.MMDDYY,
