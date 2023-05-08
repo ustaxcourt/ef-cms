@@ -6,7 +6,11 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting the state.calendaredCases
  */
-export const updateCalendaredCaseUserNoteAction = ({ get, props, store }) => {
+export const updateCalendaredCaseUserNoteAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const calendaredCases = get(state.trialSession.calendaredCases);
   const { userNote } = props;
   const caseToUpdate = calendaredCases.find(

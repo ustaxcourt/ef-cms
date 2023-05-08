@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validate opinion advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const validateOpinionAdvancedSearchAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const opinionSearch = get(state.advancedSearchForm.opinionSearch);
 
   const opinionTypes = Object.keys(opinionSearch.opinionTypes).filter(

@@ -26,7 +26,9 @@ export const FORMATS = {
   YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
   YYYYMMDD_NUMERIC: 'yyyyMMdd',
-};
+} as const;
+const FORMATS1 = Object.values(FORMATS);
+export type TimeFormats = (typeof FORMATS1)[number];
 
 export const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
@@ -80,8 +82,8 @@ export const combineISOandEasternTime = (dateString, timeString) => {
  * @returns {luxon} a luxon object
  */
 export const prepareDateFromString = (
-  dateString: any = undefined,
-  inputFormat: any = undefined,
+  dateString?: string,
+  inputFormat?: TimeFormats,
 ) => {
   if (dateString === undefined) {
     dateString = createISODateString();
@@ -119,6 +121,10 @@ export const calculateISODate = ({
   dateString = undefined,
   howMuch = 0,
   units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
 }) => {
   if (!howMuch) return dateString;
 
@@ -206,7 +212,10 @@ export const createISODateStringFromObject = options => {
  * @param {string} formatArg the desired formatting as specified by the luxon library
  * @returns {string|void} a formatted date string
  */
-export const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
+export const formatDateString = (
+  dateString,
+  formatArg: TimeFormats = FORMATS.ISO,
+) => {
   if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
 
@@ -233,10 +242,7 @@ export const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   return result;
 };
 
-export const formatNow = formatStr => {
-  /*
-  Using `module.exports` to allow mocking in tests
-  */
+export const formatNow = (formatStr: TimeFormats) => {
   const now = createISODateString();
   return formatDateString(now, formatStr);
 };

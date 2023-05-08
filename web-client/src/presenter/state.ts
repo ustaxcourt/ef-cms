@@ -30,6 +30,7 @@ import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelp
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
+import { customCaseInventoryReportHelper } from './computeds/customCaseInventoryReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -40,6 +41,7 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -66,6 +68,7 @@ import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
+import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -154,6 +157,7 @@ const helpers = {
   createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
+  customCaseInventoryReportHelper,
   dashboardExternalHelper,
   docketEntryQcHelper,
   docketRecordHelper,
@@ -164,6 +168,7 @@ const helpers = {
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
+  externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
   featureFlagHelper,
   fileDocumentHelper,
@@ -254,7 +259,7 @@ export const baseState = {
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
   caseDeadlineReport: {},
-  caseDetail: {},
+  caseDetail: {} as TCase,
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
@@ -287,6 +292,7 @@ export const baseState = {
       tab: null,
     },
   },
+  customCaseInventory: initialCustomCaseInventoryReportState,
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,

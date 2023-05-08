@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set the modal state from props
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const setupConfirmRemoveCaseDetailPendingItemModalAction = ({
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { caseDetail, docketEntryId } = props;
 
   const selectedDocument = caseDetail.docketEntries.find(

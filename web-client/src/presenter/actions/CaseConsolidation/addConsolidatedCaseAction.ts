@@ -1,6 +1,5 @@
 /**
  * call to consolidate cases
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -9,7 +8,7 @@
 export const addConsolidatedCaseAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { caseDetail, caseToConsolidate } = props;
 
   const docketNumberToConsolidateWith = caseDetail.docketNumber;

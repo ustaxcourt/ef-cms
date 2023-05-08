@@ -6,7 +6,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the case detail form and sets state.validationErrors when errors occur.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the getUseCaseForDocumentUpload use case
  * @param {Function} providers.get the cerebral get function
@@ -21,7 +20,7 @@ export const validateCaseDetailAction = ({
   path,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { formWithComputedDates } = props;
   const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
 

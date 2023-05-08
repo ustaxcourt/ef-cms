@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * associates a respondent with case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -13,7 +12,7 @@ export const associateIrsPractitionerWithCaseAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const userId = get(state.modal.user.userId);
   const serviceIndicator = get(state.modal.serviceIndicator);
   const docketNumber = get(state.caseDetail.docketNumber);
