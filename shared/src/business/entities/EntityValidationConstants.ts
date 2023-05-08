@@ -463,11 +463,12 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
 const DATE_RANGE_VALIDATION_RULE_KEYS = {
   endDate: joi.alternatives().conditional('startDate', {
     is: JoiValidationConstants.ISO_DATE.exist().not(null),
-    otherwise: JoiValidationConstants.ISO_DATE.required().description(
-      'The end date search filter must be of valid date format',
-    ),
-    then: JoiValidationConstants.ISO_DATE.required()
+    otherwise: JoiValidationConstants.ISO_DATE.max('now')
+      .required()
+      .description('The end date search filter must be of valid date format'),
+    then: JoiValidationConstants.ISO_DATE.max('now')
       .min(joi.ref('startDate'))
+      .required()
       .description(
         'The end date search filter must be of valid date format and greater than or equal to the start date',
       ),

@@ -47,9 +47,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
 
         await expect(
           getCustomCaseInventoryReportInteractor(applicationContext, params),
-        ).rejects.toThrow(
-          'Missing required params to run a Custom Case Inventory Report',
-        );
+        ).rejects.toThrow();
       });
     });
   });

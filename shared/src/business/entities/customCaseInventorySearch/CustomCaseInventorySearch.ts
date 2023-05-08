@@ -77,7 +77,10 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
       createEndDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
       createStartDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
-      filingMethod: joi.string().valid(...CUSTOM_CASE_REPORT_FILING_METHODS),
+      filingMethod: joi
+        .string()
+        .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
+        .required(),
       pageNumber: joi.number(),
       pageSize: joi.number(),
     };
