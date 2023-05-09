@@ -5,10 +5,9 @@ import {
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 10;
 /**
  * get the case inventory report data
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -36,15 +35,23 @@ export const getCustomCaseInventoryReportAction = async ({
     .getUtilities()
     .createISODateString(filterValues.createEndDate, FORMATS.MMDDYYYY);
 
+  const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
+  const pageToGoTo = lastIdsOfPages[props.selectedPage];
+
   const reportData: GetCaseInventoryReportResponse = await applicationContext
     .getUseCases()
     .getCustomCaseInventoryReportInteractor(applicationContext, {
       ...filterValues,
       createEndDate: formattedEndDate,
       createStartDate: formattedStartDate,
-      pageNumber: props.selectedPage,
       pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+      searchAfter: pageToGoTo,
     });
+
+  store.set(
+    state.customCaseInventory.lastIdsOfPages[props.selectedPage + 1],
+    reportData.lastCaseId,
+  );
 
   store.set(state.customCaseInventory.cases, reportData.foundCases);
   store.set(state.customCaseInventory.totalCases, reportData.totalCount);

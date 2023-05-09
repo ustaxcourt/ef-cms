@@ -1,8 +1,5 @@
 import { CaseStatus, CaseType } from '../../entities/EntityConstants';
-import {
-  CustomCaseFilingMethods,
-  CustomCaseInventorySearch,
-} from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
+import { CustomCaseFilingMethods } from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,12 +15,13 @@ export type CustomCaseInventoryReportFilters = {
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
-  pageNumber: number;
   pageSize: number;
+  searchAfter: number;
 };
 
 export type GetCaseInventoryReportResponse = {
   foundCases: CaseInventory[];
+  lastCaseId: number;
   totalCount: number;
 };
 
@@ -53,7 +51,7 @@ export type CaseInventory = Pick<
  * @param {string} providers.filingMethod filing method filter
  * @returns {object} the report data
  */
-export const getCustomCaseInventoryReportInteractor = async (
+export const getCustomCaseInventoryReportInteractor = (
   applicationContext: IApplicationContext,
   params: GetCaseInventoryReportRequest,
 ): Promise<GetCaseInventoryReportResponse> => {
@@ -65,9 +63,26 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
 
-  new CustomCaseInventorySearch(params).validate();
+  const {
+    caseStatuses,
+    caseTypes,
+    createEndDate,
+    createStartDate,
+    filingMethod,
+  } = params;
+  if (
+    !createEndDate ||
+    !createStartDate ||
+    !filingMethod ||
+    !caseStatuses ||
+    !caseTypes
+  ) {
+    throw new Error(
+      'Missing required params to run a Custom Case Inventory Report',
+    );
+  }
 
-  return await applicationContext.getPersistenceGateway().getCasesByFilters({
+  return applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,
     params,
   });
