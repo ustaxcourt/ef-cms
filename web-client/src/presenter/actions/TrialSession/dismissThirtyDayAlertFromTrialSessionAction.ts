@@ -12,15 +12,13 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
   get,
   path,
 }) => {
-  const { trialSessionId: formattedTrialSessionId } = get(
-    state.formattedTrialSessionDetails,
-  );
+  const { trialSessionId } = get(state.formattedTrialSessionDetails);
 
   try {
     await applicationContext
       .getUseCases()
       .dismissNOTTReminderForTrialInteractor(applicationContext, {
-        trialSessionId: formattedTrialSessionId,
+        trialSessionId,
       });
   } catch (err) {
     return path.error({
