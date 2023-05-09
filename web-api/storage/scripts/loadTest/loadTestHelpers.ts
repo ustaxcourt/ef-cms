@@ -145,18 +145,21 @@ const createCase = async ({
       });
   };
 
+  // this is not accurate irl, we don't add coversheets to the RQT
   for (const docketEntry of caseDetail.docketEntries) {
-    if (shouldUpload) {
-      await addCoversheet(docketEntry);
-    }
+    if (docketEntry.eventCode !== 'RQT') {
+      if (shouldUpload) {
+        await addCoversheet(docketEntry);
+      }
 
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryProcessingStatus({
-        applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryProcessingStatus({
+          applicationContext,
+          docketEntryId: docketEntry.docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+        });
+    }
   }
 
   return { caseDetail, petitionFileId, stinFileId };
