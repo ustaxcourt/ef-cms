@@ -64,6 +64,7 @@ import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFe
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
+import { getSubmittedAndCavCasesByJudgeInteractor } from '../../shared/src/proxies/reports/getSubmittedAndCavCasesByJudgeProxy';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
@@ -472,6 +473,7 @@ const allUseCases = {
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
+  getSubmittedAndCavCasesByJudgeInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getStatusOfVirusScanInteractor: (applicationContext, args) =>
