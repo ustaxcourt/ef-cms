@@ -82,6 +82,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
       });
     } catch (e) {
       console.log('err', e);
+      throw e;
     }
   }
 
