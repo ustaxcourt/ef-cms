@@ -23,12 +23,15 @@ describe('validateCustomInventoryFiltersAction', () => {
   });
 
   it('should call the success path when the date range is valid', async () => {
-    customCaseInventoryState.filters.createStartDate = '01/01/1990';
-    customCaseInventoryState.filters.createEndDate = '01/01/2000';
+    customCaseInventoryState.filters.startDate = '01/01/1990';
+    customCaseInventoryState.filters.endDate = '01/01/2000';
 
     await runAction(validateCustomInventoryFiltersAction, {
       modules: {
         presenter,
+      },
+      props: {
+        selectedPage: 0,
       },
       state: {
         customCaseInventory: customCaseInventoryState,
@@ -39,11 +42,14 @@ describe('validateCustomInventoryFiltersAction', () => {
   });
 
   it('should call the error path when the date range is not in the correct format', async () => {
-    customCaseInventoryState.filters.createStartDate = 'blooh blah';
-    customCaseInventoryState.filters.createEndDate = '01/01/2000';
+    customCaseInventoryState.filters.startDate = 'blooh blah';
+    customCaseInventoryState.filters.endDate = '01/01/2000';
     await runAction(validateCustomInventoryFiltersAction, {
       modules: {
         presenter,
+      },
+      props: {
+        selectedPage: 0,
       },
       state: {
         customCaseInventory: customCaseInventoryState,
@@ -53,13 +59,16 @@ describe('validateCustomInventoryFiltersAction', () => {
     expect(mockErrorPath).toHaveBeenCalled();
   });
 
-  it('should notify the user that the createStartDate and createEndDate are required when they are not filled out', async () => {
-    customCaseInventoryState.filters.createStartDate = '';
-    customCaseInventoryState.filters.createEndDate = '';
+  it('should notify the user that the startDate and endDate are required when they are not filled out', async () => {
+    customCaseInventoryState.filters.startDate = '';
+    customCaseInventoryState.filters.endDate = '';
 
     await runAction(validateCustomInventoryFiltersAction, {
       modules: {
         presenter,
+      },
+      props: {
+        selectedPage: 0,
       },
       state: {
         customCaseInventory: customCaseInventoryState,

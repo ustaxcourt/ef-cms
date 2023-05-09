@@ -36,8 +36,8 @@ export const getCasesByFilters = async ({
   const createDateFilter = {
     range: {
       'createdAt.S': {
-        gte: params.createStartDate,
-        lt: params.createEndDate,
+        gte: params.startDate,
+        lt: params.endDate,
       },
     },
   };

@@ -8,7 +8,7 @@ import { state } from 'cerebral';
 /**
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object used for passing props.date
- * @param {object} providers.store the cerebral store used for setting the state.customCaseInventoryFilters.createStartDate or state.customCaseInventoryFilters.createEndDate
+ * @param {object} providers.store the cerebral store used for setting the state.customCaseInventoryFilters
  */
 export const setCustomCaseInventoryFiltersAction = ({
   get,
@@ -26,17 +26,11 @@ export const setCustomCaseInventoryFiltersAction = ({
     state.customCaseInventory.filters,
   );
 
-  if (props.createStartDate || props.createStartDate === '') {
-    store.set(
-      state.customCaseInventory.filters.createStartDate,
-      props.createStartDate,
-    );
+  if (props.startDate || props.startDate === '') {
+    store.set(state.customCaseInventory.filters.startDate, props.startDate);
   }
-  if (props.createEndDate || props.createEndDate === '') {
-    store.set(
-      state.customCaseInventory.filters.createEndDate,
-      props.createEndDate,
-    );
+  if (props.endDate || props.endDate === '') {
+    store.set(state.customCaseInventory.filters.endDate, props.endDate);
   }
   if (props.filingMethod) {
     store.set(

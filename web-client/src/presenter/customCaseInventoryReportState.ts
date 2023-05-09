@@ -16,9 +16,9 @@ export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportSta
     filters: {
       caseStatuses: [],
       caseTypes: [],
-      createEndDate: '',
-      createStartDate: '',
+      endDate: '',
       filingMethod: 'all',
+      startDate: '',
     },
     lastIdsOfPages: [0],
     totalCases: 0,

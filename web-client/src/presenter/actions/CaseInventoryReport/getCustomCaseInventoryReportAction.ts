@@ -1,3 +1,4 @@
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportResponse,
@@ -5,7 +6,6 @@ import {
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 10;
 /**
  * get the case inventory report data
  * @param {object} providers the providers object
@@ -30,22 +30,22 @@ export const getCustomCaseInventoryReportAction = async ({
 
   const formattedStartDate = applicationContext
     .getUtilities()
-    .createISODateString(filterValues.createStartDate, FORMATS.MMDDYYYY);
+    .createISODateString(filterValues.startDate, FORMATS.MMDDYYYY);
   const formattedEndDate = applicationContext
     .getUtilities()
-    .createISODateString(filterValues.createEndDate, FORMATS.MMDDYYYY);
+    .createISODateString(filterValues.endDate, FORMATS.MMDDYYYY);
 
   const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
-  const pageToGoTo = lastIdsOfPages[props.selectedPage];
+  const searchAfter = lastIdsOfPages[props.selectedPage];
 
   const reportData: GetCaseInventoryReportResponse = await applicationContext
     .getUseCases()
     .getCustomCaseInventoryReportInteractor(applicationContext, {
       ...filterValues,
-      createEndDate: formattedEndDate,
-      createStartDate: formattedStartDate,
+      endDate: formattedEndDate,
       pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
-      searchAfter: pageToGoTo,
+      searchAfter,
+      startDate: formattedStartDate,
     });
 
   store.set(
