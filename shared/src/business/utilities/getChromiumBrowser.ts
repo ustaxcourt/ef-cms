@@ -5,7 +5,6 @@ import puppeteerCore from 'puppeteer-core';
 export const getChromiumBrowser = async () => {
   return await puppeteer.launch({
     args: ['--no-sandbox'],
-    headless: chromium.headless,
   });
 };
 
