@@ -36,8 +36,7 @@ export const getCustomCaseInventoryReportAction = async ({
     .createISODateString(filterValues.createEndDate, FORMATS.MMDDYYYY);
 
   const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
-  const pageToGoTo =
-    props.selectedPage === 0 ? 0 : lastIdsOfPages[props.selectedPage - 1];
+  const pageToGoTo = lastIdsOfPages[props.selectedPage];
 
   const reportData: GetCaseInventoryReportResponse = await applicationContext
     .getUseCases()
@@ -50,8 +49,10 @@ export const getCustomCaseInventoryReportAction = async ({
       searchAfter: pageToGoTo,
     });
 
-  lastIdsOfPages[props.selectedPage] = reportData.lastCaseId || 0;
-  store.set(state.customCaseInventory.lastIdsOfPages, lastIdsOfPages);
+  store.set(
+    state.customCaseInventory.lastIdsOfPages[props.selectedPage + 1],
+    reportData.lastCaseId,
+  );
 
   store.set(state.customCaseInventory.cases, reportData.foundCases);
   store.set(state.customCaseInventory.totalCases, reportData.totalCount);
