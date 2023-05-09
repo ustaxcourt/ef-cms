@@ -14,17 +14,9 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'petitionsclerk1@example.com',
   });
 
-  console.log(process.env.ENV);
-  console.log(process.env.DEFAULT_ACCOUNT_PASS);
-  console.log(process.env.SIZE);
-  console.log(process.env.DEPLOYING_COLOR);
-  console.log(process.env.EFCMS_DOMAIN);
-
-  console.log({ token });
-
   for (let i = 0; i < 100; i++) {
     try {
-      const response = await axios.get(
+      await axios.get(
         `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/reports/printable-case-inventory-report?associatedJudge=Ashford&status=Assigned+-+Case`,
         {
           headers: {
@@ -32,7 +24,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
           },
         },
       );
-      console.log(response);
     } catch (e) {
       console.log('ERROR', e);
       throw e;
