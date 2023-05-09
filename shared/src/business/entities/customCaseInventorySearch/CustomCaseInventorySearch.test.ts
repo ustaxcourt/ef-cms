@@ -12,54 +12,57 @@ describe('CustomCaseInventorySearch', () => {
   describe('Start and End Date', () => {
     it('should have validation errors when start date is not provided', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
-        endDate: today,
-        startDate: undefined,
+        createEndDate: today,
+        createStartDate: undefined,
       });
 
       expect(
         customCaseInventorySearch.getFormattedValidationErrors(),
       ).toMatchObject({
-        startDate: 'Enter a start date.',
+        createStartDate: 'Enter a start date.',
       });
     });
 
     it('should have validation errors when end date is not provided', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
-        endDate: undefined,
-        startDate: today,
+        createEndDate: undefined,
+        createStartDate: today,
       });
 
       expect(
         customCaseInventorySearch.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: 'Enter an end date.',
+        createEndDate: 'Enter an end date.',
       });
     });
 
-    it('should have validation errors when the end date provided is chronologically before the start date', () => {
+    it('should have validation errors when the end date provided is chronologically before a valid start date', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
-        endDate: mockPastDate,
-        startDate: today,
+        createEndDate: mockPastDate,
+        createStartDate: today,
+        filingMethod: 'all',
       });
 
       expect(
         customCaseInventorySearch.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate:
+        createEndDate:
           'End date cannot be prior to start date. Enter a valid end date.',
       });
     });
 
-    it('should have validation errors when the start date provided is in the future', () => {
+    it('should have validation errors when the start date provided is in the future and the end date is not submitted', () => {
       const customCaseInventorySearch = new CustomCaseInventorySearch({
-        endDate: undefined,
-        startDate: mockFutureDate,
+        createEndDate: undefined,
+        createStartDate: mockFutureDate,
       });
 
       expect(
         customCaseInventorySearch.getFormattedValidationErrors(),
       ).toMatchObject({
-        startDate: 'Start date cannot be in the future. Enter a valid date.',
+        createEndDate: 'Enter an end date.',
+        createStartDate:
+          'Start date cannot be in the future. Enter a valid date.',
       });
     });
   });
