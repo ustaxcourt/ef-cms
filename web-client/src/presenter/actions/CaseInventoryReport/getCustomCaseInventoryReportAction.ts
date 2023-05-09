@@ -44,7 +44,6 @@ export const getCustomCaseInventoryReportAction = async ({
       ...filterValues,
       createEndDate: formattedEndDate,
       createStartDate: formattedStartDate,
-      pageNumber: props.selectedPage,
       pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
       searchAfter: pageToGoTo,
     });

@@ -15,7 +15,6 @@ export type CustomCaseInventoryReportFilters = {
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
-  pageNumber: number;
   pageSize: number;
   searchAfter: number;
 };
