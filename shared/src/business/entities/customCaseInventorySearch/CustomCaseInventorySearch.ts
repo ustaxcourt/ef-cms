@@ -22,29 +22,29 @@ export type CustomCaseFilingMethods =
   (typeof CUSTOM_CASE_REPORT_FILING_METHODS)[number];
 
 export class CustomCaseInventorySearch extends JoiValidationEntity {
-  public createStartDate: string;
-  public createEndDate: string;
+  public startDate: string;
+  public endDate: string;
   public caseStatuses: CaseStatus[];
-  public pageNumber: number;
   public pageSize: number;
   public caseTypes: CaseType[];
   public filingMethod: CustomCaseFilingMethods;
+  public searchAfter: number;
 
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
-    this.createStartDate = rawProps.createStartDate;
-    this.createEndDate = rawProps.createEndDate;
+    this.startDate = rawProps.startDate;
+    this.endDate = rawProps.endDate;
     this.caseStatuses = rawProps.caseStatuses;
-    this.pageNumber = rawProps.pageNumber;
     this.pageSize = rawProps.pageSize;
     this.caseTypes = rawProps.caseTypes;
     this.filingMethod = rawProps.filingMethod;
+    this.searchAfter = rawProps.searchAfter;
   }
 
   static VALIDATION_ERROR_MESSAGES = {
-    createEndDate: [
+    endDate: [
       {
-        contains: 'ref:createStartDate',
+        contains: 'ref:startDate',
         message:
           'End date cannot be prior to start date. Enter a valid end date.',
       },
@@ -58,7 +58,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
       },
       'Enter a valid end date.',
     ],
-    createStartDate: [
+    startDate: [
       {
         contains: 'must be less than or equal to',
         message: 'Start date cannot be in the future. Enter a valid date.',
@@ -75,14 +75,14 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     return {
       caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
-      createEndDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
-      createStartDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
+      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
       filingMethod: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
         .required(),
-      pageNumber: joi.number(),
-      pageSize: joi.number(),
+      pageSize: joi.number().required(),
+      searchAfter: joi.number().required(),
+      startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
     };
   }
   getErrorToMessageMap() {

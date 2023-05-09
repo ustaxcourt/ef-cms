@@ -12,8 +12,8 @@ import { UnauthorizedError } from '../../../errors/errors';
 export type CustomCaseInventoryReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
-  createEndDate: string;
-  createStartDate: string;
+  endDate: string;
+  startDate: string;
   filingMethod: CustomCaseFilingMethods;
 };
 
@@ -47,14 +47,14 @@ export type CaseInventory = Pick<
  * getCustomCaseInventoryReportInteractor
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.createEndDate the createEndDate filter
- * @param {string} providers.createStartDate the createStartDate filter
+ * @param {string} providers.endDate the endDate filter
+ * @param {string} providers.startDate the startDate filter
  * @param {array} providers.caseStatuses the case statuses array filter
  * @param {array} providers.caseTypes the caseTypes array filter
  * @param {string} providers.filingMethod filing method filter
  * @returns {object} the report data
  */
-export const getCustomCaseInventoryReportInteractor = (
+export const getCustomCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCaseInventoryReportRequest,
 ): Promise<GetCaseInventoryReportResponse> => {
@@ -68,7 +68,7 @@ export const getCustomCaseInventoryReportInteractor = (
 
   new CustomCaseInventorySearch(params).validate();
 
-  return applicationContext.getPersistenceGateway().getCasesByFilters({
+  return await applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,
     params,
   });

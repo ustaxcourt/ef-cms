@@ -64,12 +64,12 @@ export const CustomCaseReport = connect(
                 startValue=""
                 onChangeEnd={e => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    createEndDate: e.target.value,
+                    endDate: e.target.value,
                   });
                 }}
                 onChangeStart={e => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    createStartDate: e.target.value,
+                    startDate: e.target.value,
                   });
                 }}
               />

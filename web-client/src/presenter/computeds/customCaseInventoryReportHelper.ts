@@ -1,19 +1,22 @@
 import {
   CASE_STATUSES,
   CASE_TYPES,
+  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
   const cases = get(state.customCaseInventory.cases);
 
-  const populatedFilters = get(state.customCaseInventory.filters);
+  const populatedFilters: CustomCaseInventoryReportFilters = get(
+    state.customCaseInventory.filters,
+  );
 
   const runReportButtonIsDisabled = !(
-    populatedFilters.createStartDate && populatedFilters.createEndDate
+    populatedFilters.startDate && populatedFilters.endDate
   );
 
   const caseStatuses = CASE_STATUSES.map(status => ({
