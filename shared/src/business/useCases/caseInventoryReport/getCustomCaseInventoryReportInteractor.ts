@@ -22,7 +22,7 @@ export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
 
 export type GetCaseInventoryReportResponse = {
   foundCases: CaseInventory[];
-  last: number;
+  lastCaseId: number;
   totalCount: number;
 };
 
@@ -52,7 +52,7 @@ export type CaseInventory = Pick<
  * @param {string} providers.filingMethod filing method filter
  * @returns {object} the report data
  */
-export const getCustomCaseInventoryReportInteractor = async (
+export const getCustomCaseInventoryReportInteractor = (
   applicationContext: IApplicationContext,
   params: GetCaseInventoryReportRequest,
 ): Promise<GetCaseInventoryReportResponse> => {
@@ -83,7 +83,7 @@ export const getCustomCaseInventoryReportInteractor = async (
     );
   }
 
-  return await applicationContext.getPersistenceGateway().getCasesByFilters({
+  return applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,
     params,
   });

@@ -5,7 +5,7 @@ import {
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 10;
 /**
  * get the case inventory report data
  * @param {object} providers the providers object
@@ -35,9 +35,9 @@ export const getCustomCaseInventoryReportAction = async ({
     .getUtilities()
     .createISODateString(filterValues.createEndDate, FORMATS.MMDDYYYY);
 
-  const lastIdsOfPage = get(state.customCaseInventory.lastIdOfPages);
+  const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
   const pageToGoTo =
-    props.selectedPage === 0 ? 0 : lastIdsOfPage[props.selectedPage - 1];
+    props.selectedPage === 0 ? 0 : lastIdsOfPages[props.selectedPage - 1];
 
   const reportData: GetCaseInventoryReportResponse = await applicationContext
     .getUseCases()
@@ -50,10 +50,8 @@ export const getCustomCaseInventoryReportAction = async ({
       searchAfter: pageToGoTo,
     });
 
-  let tracker = get(state.customCaseInventory.lastIdOfPages);
-  tracker[props.selectedPage] = reportData.last[0] || 0;
-
-  store.set(state.customCaseInventory.lastIdOfPages, tracker);
+  lastIdsOfPages[props.selectedPage] = reportData.lastCaseId || 0;
+  store.set(state.customCaseInventory.lastIdsOfPages, lastIdsOfPages);
 
   store.set(state.customCaseInventory.cases, reportData.foundCases);
   store.set(state.customCaseInventory.totalCases, reportData.totalCount);

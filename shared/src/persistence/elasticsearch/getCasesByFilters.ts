@@ -15,7 +15,7 @@ export const getCasesByFilters = async ({
 }): Promise<{
   totalCount: number;
   foundCases: CaseInventory[];
-  last: number;
+  lastCaseId: number;
 }> => {
   const source = [
     'associatedJudge',
@@ -70,7 +70,7 @@ export const getCasesByFilters = async ({
     filters.push(filingMethodFilter);
   }
 
-  const chunk = await applicationContext.getSearchClient().search({
+  const searchResults = await applicationContext.getSearchClient().search({
     _source: source,
     body: {
       query: {
@@ -86,14 +86,17 @@ export const getCasesByFilters = async ({
     track_total_hits: true,
   });
 
-  const { results, total } = formatResults(chunk.body);
+  const { results, total } = formatResults(searchResults.body);
 
-  const { hits } = chunk.body.hits;
-  const lastId = hits ? 0 : hits[hits.length - 1].sort;
+  const matchingCases: any[] = searchResults.body.hits.hits;
+  const lastCaseId =
+    matchingCases.length === 0
+      ? 0
+      : matchingCases[matchingCases.length - 1].sort[0];
 
   return {
     foundCases: results,
-    last: lastId,
+    lastCaseId,
     totalCount: total,
   };
 };
