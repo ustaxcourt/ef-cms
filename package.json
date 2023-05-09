@@ -65,7 +65,6 @@
     "react-dom": "^18.2.0",
     "react-idle-timer": "^5.6.2",
     "react-number-format": "^5.1.4",
-    "react-paginate": "^8.2.0",
     "react-quill": "^2.0.0",
     "react-responsive": "^9.0.2",
     "react-select": "^5.7.2",
