@@ -5,19 +5,23 @@ import {
 import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportRequest,
+  GetCaseInventoryReportResponse,
 } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getCustomCaseInventoryReportAction', () => {
-  const mockCustomCaseReportResponse = {
-    foundCases: [],
-    last: [0],
-    totalCount: 0,
-  };
+  const lastCaseId = 8291;
+  let mockCustomCaseReportResponse: GetCaseInventoryReportResponse;
 
-  beforeAll(() => {
+  beforeEach(() => {
+    mockCustomCaseReportResponse = {
+      foundCases: [],
+      lastCaseId,
+      totalCount: 0,
+    };
+
     applicationContext
       .getUseCases()
       .getCustomCaseInventoryReportInteractor.mockResolvedValue(
@@ -38,7 +42,6 @@ describe('getCustomCaseInventoryReportAction', () => {
     ...filterValues,
     createEndDate: '2022-05-14T04:00:00.000Z',
     createStartDate: '2022-05-10T04:00:00.000Z',
-    pageNumber: 0,
     pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
     searchAfter: 0,
   };
@@ -54,7 +57,7 @@ describe('getCustomCaseInventoryReportAction', () => {
       state: {
         customCaseInventory: {
           filters: filterValues,
-          lastIdOfPages: [0],
+          lastIdsOfPages: [0],
         },
       },
     });
@@ -68,23 +71,26 @@ describe('getCustomCaseInventoryReportAction', () => {
     expect(result.state.customCaseInventory.totalCases).toEqual(
       mockCustomCaseReportResponse.totalCount,
     );
-    expect(result.state.customCaseInventory.lastIdOfPages).toMatchObject([0]);
+    expect(result.state.customCaseInventory.lastIdsOfPages).toMatchObject([
+      0,
+      lastCaseId,
+    ]);
   });
 
   it('should populate page ID tracking array when navigating to later pages', async () => {
-    const expectedResponse = {
+    const page2SearchId = 9001;
+    mockCustomCaseReportResponse = {
       foundCases: [],
-      last: [1],
+      lastCaseId: page2SearchId,
       totalCount: 0,
     };
-
     applicationContext
       .getUseCases()
       .getCustomCaseInventoryReportInteractor.mockResolvedValue(
-        expectedResponse,
+        mockCustomCaseReportResponse,
       );
-
-    expectedRequest.pageNumber = 1;
+    const page1SearchId = 123;
+    expectedRequest.searchAfter = page1SearchId;
 
     const result = await runAction(getCustomCaseInventoryReportAction, {
       modules: {
@@ -96,7 +102,7 @@ describe('getCustomCaseInventoryReportAction', () => {
       state: {
         customCaseInventory: {
           filters: filterValues,
-          lastIdOfPages: [0],
+          lastIdsOfPages: [0, page1SearchId],
         },
       },
     });
@@ -105,13 +111,15 @@ describe('getCustomCaseInventoryReportAction', () => {
       applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
     ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
     expect(result.state.customCaseInventory.cases).toEqual(
-      expectedResponse.foundCases,
+      mockCustomCaseReportResponse.foundCases,
     );
     expect(result.state.customCaseInventory.totalCases).toEqual(
-      expectedResponse.totalCount,
+      mockCustomCaseReportResponse.totalCount,
     );
-    expect(result.state.customCaseInventory.lastIdOfPages).toMatchObject([
-      0, 1,
+    expect(result.state.customCaseInventory.lastIdsOfPages).toMatchObject([
+      0,
+      page1SearchId,
+      page2SearchId,
     ]);
   });
 });
