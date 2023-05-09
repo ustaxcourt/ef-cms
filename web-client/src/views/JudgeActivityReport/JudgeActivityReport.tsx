@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+// import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { connect } from '@cerebral/react';
@@ -170,6 +171,58 @@ export const JudgeActivityReport = connect(
       </>
     );
 
+    const progressDescription: () => JSX.Element = () => (
+      <>
+        <table
+          aria-describedby="progressDescription"
+          className="usa-table ustc-table"
+        >
+          <caption id="progressDescription">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Progress Description
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.opinionsFiledTotal}
+              </div>
+            </div>
+          </caption>
+          <thead>
+            <tr>
+              <th aria-label="consolidation icon">
+                <span className="usa-sr-only">Consolidated Case Indicator</span>
+              </th>
+              <th aria-label="docket number">Docket No.</th>
+              <th aria-label="opinion type">No. of Cases</th>
+              <th aria-label="event total">Petitioner(s)</th>
+              <th aria-label="event total">Case Status</th>
+              <th aria-label="event total">Days in Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td className="consolidated-case-column">
+                {/* <div className={indentMemberCase ? 'margin-left-2' : ''}>
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      formattedCase.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+                    showLeadCaseIcon={formattedCase.isLeadCase}
+                  />
+                </div> */}
+              </td>
+              <td>Hello</td>
+              <td>there</td>
+              <td>fellow</td>
+              <td>traveler</td>
+              <td>extraordinaire.</td>
+            </tr>
+          </tbody>
+        </table>
+      </>
+    );
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -237,6 +290,10 @@ export const JudgeActivityReport = connect(
               <div className="grid-row grid-gap">
                 <div className="grid-col-6">{ordersIssued()}</div>
                 <div className="grid-col-6">{opinionsIssued()}</div>
+              </div>
+
+              <div className="grid-row grid-gap">
+                <div className="grid-col-12">{progressDescription()}</div>
               </div>
             </>
           ) : (
