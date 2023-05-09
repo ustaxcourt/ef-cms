@@ -40,6 +40,7 @@ import { deleteDeficiencyStatisticLambda } from './cases/deleteDeficiencyStatist
 import { deletePractitionerDocumentLambda } from './practitioners/deletePractitionerDocumentLambda';
 import { deleteTrialSessionLambda } from './trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './caseNote/deleteUserCaseNoteLambda';
+import { dismissNOTTReminderForTrialLambda } from './trialSessions/dismissNOTTReminderForTrialLambda';
 import { downloadPolicyUrlLambda } from './documents/downloadPolicyUrlLambda';
 import { editPaperFilingLambda } from './documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './practitioners/editPractitionerDocumentLambda';
@@ -829,6 +830,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.put(
     '/async/trial-sessions',
     lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
+  );
+  app.put(
+    '/async/trial-sessions/dismiss-alert',
+    lambdaWrapper(dismissNOTTReminderForTrialLambda, { isAsync: true }),
   );
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',
