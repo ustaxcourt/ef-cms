@@ -62,6 +62,7 @@ import {
 } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
+import { getCasesByStatusAndByJudge } from '../../shared/src/persistence/elasticsearch/getCasesByStatusAndByJudge';
 import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedByJudge } from '../../shared/src/persistence/elasticsearch/getCasesClosedByJudge';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
@@ -173,7 +174,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
    * Decorates the function to verify any entities passed have the isValid flag.
    * Should be used whenever a persistence method might be called by an interactor via lambda
    * when an entity's complete record is being created or updated.
-   *
    * @returns {Function} the original methods decorated
    */
   function decorate(method) {
@@ -305,6 +305,7 @@ const gatewayMethods = {
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
+  getCasesByStatusAndByJudge,
   getCasesByUserId,
   getCasesForUser,
   getClientId,

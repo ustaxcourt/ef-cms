@@ -112,6 +112,7 @@ import { getPublicCaseInteractor } from '../../shared/src/business/useCases/publ
 import { getPublicDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/business/useCases/document/getStatusOfVirusScanInteractor';
+import { getSubmittedAndCavCasesByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getSubmittedAndCavCasesByJudgeInteractor';
 import { getTodaysOpinionsInteractor } from '../../shared/src/business/useCases/public/getTodaysOpinionsInteractor';
 import { getTodaysOrdersInteractor } from '../../shared/src/business/useCases/public/getTodaysOrdersInteractor';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor';
@@ -310,6 +311,7 @@ const useCases = {
   getPublicDownloadPolicyUrlInteractor,
   getReconciliationReportInteractor,
   getStatusOfVirusScanInteractor,
+  getSubmittedAndCavCasesByJudgeInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,

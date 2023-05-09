@@ -184,6 +184,7 @@ import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLamb
 import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
 import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
+import { getSubmittedAndCavCasesByJudgeLambda } from './reports/getSubmittedAndCavCasesByJudgeLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
 import cors from 'cors';
 import express from 'express';
@@ -742,6 +743,10 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/open-cases',
+    lambdaWrapper(getSubmittedAndCavCasesByJudgeLambda),
   );
 }
 

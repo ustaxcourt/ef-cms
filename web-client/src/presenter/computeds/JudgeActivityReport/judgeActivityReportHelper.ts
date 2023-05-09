@@ -4,9 +4,15 @@ import { sum, sumBy } from 'lodash';
 export const judgeActivityReportHelper = (get, applicationContext) => {
   const { endDate, judgeName, startDate } = get(state.form);
 
-  const { casesClosedByJudge, opinions, orders, trialSessions } = get(
-    state.judgeActivityReportData,
-  );
+  const {
+    casesClosedByJudge,
+    opinions,
+    orders,
+    submittedAndCavCasesByJudge,
+    trialSessions,
+  } = get(state.judgeActivityReportData);
+
+  console.log('submittedAndCavCasesByJudge', submittedAndCavCasesByJudge);
 
   let closedCasesTotal: number = 0,
     trialSessionsHeldTotal: number = 0,
