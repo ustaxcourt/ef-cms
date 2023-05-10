@@ -17,7 +17,9 @@ export const computeCertificateOfServiceFormDateAction = ({
   let year = get(state.form.certificateOfServiceYear);
   store.set(
     state.form.certificateOfServiceDate,
-    applicationContext.getUtilities().computeDate({ day, month, year }),
+    applicationContext
+      .getUtilities()
+      .validateDateAndCreateISO({ day, month, year }),
   );
 
   const secondaryDocument = get(state.form.secondaryDocument);
@@ -28,7 +30,9 @@ export const computeCertificateOfServiceFormDateAction = ({
     year = get(state.form.secondaryDocument.certificateOfServiceYear);
     store.set(
       state.form.secondaryDocument.certificateOfServiceDate,
-      applicationContext.getUtilities().computeDate({ day, month, year }),
+      applicationContext
+        .getUtilities()
+        .validateDateAndCreateISO({ day, month, year }),
     );
   }
 
@@ -43,7 +47,9 @@ export const computeCertificateOfServiceFormDateAction = ({
       year = get(state.form.supportingDocuments[idx].certificateOfServiceYear);
       store.set(
         state.form.supportingDocuments[idx].certificateOfServiceDate,
-        applicationContext.getUtilities().computeDate({ day, month, year }),
+        applicationContext
+          .getUtilities()
+          .validateDateAndCreateISO({ day, month, year }),
       );
     });
   }
@@ -65,7 +71,9 @@ export const computeCertificateOfServiceFormDateAction = ({
       );
       store.set(
         state.form.secondarySupportingDocuments[idx].certificateOfServiceDate,
-        applicationContext.getUtilities().computeDate({ day, month, year }),
+        applicationContext
+          .getUtilities()
+          .validateDateAndCreateISO({ day, month, year }),
       );
     });
   }

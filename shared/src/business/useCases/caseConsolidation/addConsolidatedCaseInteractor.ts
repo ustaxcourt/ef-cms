@@ -103,7 +103,7 @@ export const determineEntitiesToLock = (
   _applicationContext,
   { docketNumber, docketNumberToConsolidateWith },
 ) => ({
-  identifier: [docketNumber, docketNumberToConsolidateWith].map(
+  identifiers: [docketNumber, docketNumberToConsolidateWith].map(
     item => `case|${item}`,
   ),
 });

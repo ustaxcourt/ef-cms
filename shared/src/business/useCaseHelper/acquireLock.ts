@@ -11,7 +11,7 @@ export const checkLock = async ({
   identifier: string;
   onLockError?: Error | Function;
   options?: any;
-}) => {
+}): Promise<void> => {
   const isCaseLockingEnabled = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -49,7 +49,7 @@ export const checkLock = async ({
 
 export const acquireLock = async ({
   applicationContext,
-  identifier,
+  identifiers = [],
   onLockError,
   options = {},
   retries = 0,
@@ -57,17 +57,13 @@ export const acquireLock = async ({
   waitTime = 3000,
 }: {
   applicationContext: IApplicationContext;
-  identifier: string | string[];
+  identifiers: string[];
   onLockError?: Error | Function;
   options?: any;
   retries?: number;
   ttl?: number;
   waitTime?: number;
-}) => {
-  if (!identifier) return;
-  const identifiersToLock =
-    typeof identifier === 'string' ? [identifier] : identifier;
-
+}): Promise<void> => {
   let isLockAcquired = false;
   let attempts = 0;
 
@@ -76,7 +72,7 @@ export const acquireLock = async ({
     try {
       attempts++;
       await Promise.all(
-        identifiersToLock.map(entityIdentifier =>
+        identifiers.map(entityIdentifier =>
           checkLock({
             applicationContext,
             identifier: entityIdentifier,
@@ -96,7 +92,7 @@ export const acquireLock = async ({
 
   // Second, lock them up so the are unavailable
   await Promise.all(
-    identifiersToLock.map(entityIdentifier =>
+    identifiers.map(entityIdentifier =>
       applicationContext.getPersistenceGateway().createLock({
         applicationContext,
         identifier: entityIdentifier,
@@ -108,69 +104,70 @@ export const acquireLock = async ({
 
 export const removeLock = ({
   applicationContext,
-  identifier,
+  identifiers = [],
 }: {
   applicationContext: IApplicationContext;
-  identifier: string | string[];
-}) => {
-  if (!identifier) return;
-  const identifiersToUnlock =
-    typeof identifier === 'string' ? [identifier] : identifier;
-
-  return Promise.all(
-    identifiersToUnlock.map(entityIdentifier =>
-      applicationContext.getPersistenceGateway().removeLock({
-        applicationContext,
-        identifier: entityIdentifier,
-      }),
-    ),
-  );
+  identifiers: string[];
+}): Promise<void> => {
+  return applicationContext.getPersistenceGateway().removeLock({
+    applicationContext,
+    identifiers,
+  });
 };
 
 /**
  * will wrap a function with logic to acquire a lock and delete a lock after finishing.
- *
- * @param {function} cb the original function to wrap
+ * @param {function} interactor the original function to wrap
  * @param {function} getLockInfo a function which is passes the original args for getting the lock suffix
  * @param {error} onLockError the error object to throw if a lock is already in use
  * @returns {object} the item that was retrieved
  */
-export function withLocking(
-  cb: (applicationContext: IApplicationContext, options: any) => any,
-  getLockInfo: Function,
-  onLockError?: Error | Function,
-) {
-  return async function (
+export function withLocking<InteractorInput, InteractorOutput>(
+  interactor: (
+    applicationContext: IApplicationContext,
+    options: InteractorInput,
+  ) => Promise<InteractorOutput>,
+  getLockInfo: (
     applicationContext: IApplicationContext,
     options: any,
+  ) =>
+    | Promise<{ identifiers: string[]; ttl?: number }>
+    | { identifiers: string[]; ttl?: number },
+  onLockError?: Error | Function,
+): (
+  applicationContext: IApplicationContext,
+  options: InteractorInput,
+) => Promise<InteractorOutput> {
+  return async function (
+    applicationContext: IApplicationContext,
+    options: InteractorInput,
   ) {
-    const { identifier, ttl }: { identifier: string; ttl?: number } =
-      await getLockInfo(applicationContext, options);
+    const { identifiers, ttl } = await getLockInfo(applicationContext, options);
 
     await acquireLock({
       applicationContext,
-      identifier,
+      identifiers,
       onLockError,
       options,
       ttl,
     });
 
     let caughtError;
-    let results;
+    let results: InteractorOutput;
     try {
-      results = await cb(applicationContext, options);
+      results = await interactor(applicationContext, options);
     } catch (err) {
       caughtError = err;
     }
 
     await removeLock({
       applicationContext,
-      identifier,
+      identifiers,
     });
 
     if (caughtError) {
       throw caughtError;
     }
-    return results;
+    return results!;
   };
 }

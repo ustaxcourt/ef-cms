@@ -502,11 +502,8 @@ export const determineEntitiesToLock = (
     consolidatedGroupDocketNumbers?: string[];
     documentMetadata: object;
   },
-): {
-  identifier: string[];
-  ttl?: number;
-} => ({
-  identifier: [
+) => ({
+  identifiers: [
     ...new Set([
       documentMetadata.docketNumber,
       ...consolidatedGroupDocketNumbers,

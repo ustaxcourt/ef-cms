@@ -1,5 +1,8 @@
 import { FORMATS, formatNow } from '../../../business/utilities/DateHandler';
+import { TDynamoRecord } from '../dynamoTypes';
 import { getTableName } from '../../dynamodbClientService';
+
+export type TLockDynamoRecord = TDynamoRecord & { timestamp: string };
 
 /**
  * tries to createLock a lock from a dynamodb table
@@ -12,21 +15,22 @@ export async function createLock({
   applicationContext: IApplicationContext;
   identifier: string;
   ttl?: number;
-}) {
+}): Promise<void> {
   const now = formatNow();
   const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  const item: TLockDynamoRecord = {
+    pk: identifier,
+    sk: 'lock',
+    timestamp: now,
+    ttl: ttl + nowUnix,
+  };
 
   await applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
     .put({
-      Item: {
-        pk: identifier,
-        sk: 'lock',
-        timestamp: now,
-        ttl: ttl + nowUnix,
-      },
+      Item: item,
       TableName: getTableName({
         applicationContext,
       }),
@@ -39,14 +43,11 @@ export async function createLock({
  */
 export async function removeLock({
   applicationContext,
-  identifier,
+  identifiers,
 }: {
   applicationContext: IApplicationContext;
-  identifier: string | string[];
-}) {
-  const identifiers =
-    typeof identifier === 'string' ? [identifier] : identifier;
-
+  identifiers: string[];
+}): Promise<void> {
   await Promise.all(
     identifiers.map(identifierToUnlock =>
       applicationContext
@@ -76,7 +77,7 @@ export async function getLock({
 }: {
   applicationContext: IApplicationContext;
   identifier: string;
-}) {
+}): Promise<undefined | TLockDynamoRecord> {
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
     .getDocumentClient({

@@ -6,7 +6,9 @@ requireEnvVars(['ENV', 'REGION']);
 const {
   createApplicationContext,
 } = require('../../../web-api/src/applicationContext');
-const { computeDate } = require('../../src/business/utilities/DateHandler');
+const {
+  validateDateAndCreateISO,
+} = require('../../src/business/utilities/DateHandler');
 const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
 const cachedCases = {};
@@ -55,8 +57,16 @@ const getM071AndM074DocketEntriesFiledIn2021Or2022 = async ({
               {
                 range: {
                   'receivedAt.S': {
-                    gte: computeDate({ day: 1, month: 1, year: 2021 }),
-                    lt: computeDate({ day: 1, month: 1, year: 2023 }),
+                    gte: validateDateAndCreateISO({
+                      day: 1,
+                      month: 1,
+                      year: 2021,
+                    }),
+                    lt: validateDateAndCreateISO({
+                      day: 1,
+                      month: 1,
+                      year: 2023,
+                    }),
                   },
                 },
               },

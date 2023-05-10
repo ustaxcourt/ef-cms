@@ -22,20 +22,20 @@ describe('determineEntitiesToLock', () => {
   it('should return an object that includes the documentMetadata.docketNumber in the identifiers', () => {
     mockParams.subjectCaseDocketNumber = '123-20';
     expect(
-      determineEntitiesToLock(applicationContext, mockParams).identifier,
+      determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|123-20');
   });
 
   it('should return an object that includes all of the consolidatedGroupDocketNumbers specified in the identifiers', () => {
     mockParams.docketNumbers = ['111-20', '222-20', '333-20'];
     expect(
-      determineEntitiesToLock(applicationContext, mockParams).identifier,
+      determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|111-20');
     expect(
-      determineEntitiesToLock(applicationContext, mockParams).identifier,
+      determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|222-20');
     expect(
-      determineEntitiesToLock(applicationContext, mockParams).identifier,
+      determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
   });
 });
@@ -188,7 +188,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
       });
     });
 
@@ -201,7 +201,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
       });
     });
   });

@@ -51,7 +51,6 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
 
 /**
  * updatePractitionerUserInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.barNumber the barNumber of the user to update
@@ -207,7 +206,7 @@ export const handleLockError = async (
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { user }: { user: Practitioner },
-): Promise<{ identifier: string[]; ttl: number }> => {
+) => {
   const docketNumbers: string[] = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({
@@ -216,7 +215,7 @@ export const determineEntitiesToLock = async (
     });
 
   return {
-    identifier: docketNumbers.map(item => `case|${item}`),
+    identifiers: docketNumbers.map(item => `case|${item}`),
     ttl: 900,
   };
 };

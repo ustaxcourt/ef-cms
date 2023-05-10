@@ -9,7 +9,6 @@ import { acquireLock } from '../../useCaseHelper/acquireLock';
 
 /**
  * deleteTrialSession
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the id of the trial session
@@ -61,7 +60,7 @@ export const deleteTrialSessionInteractor = async (
   );
   await acquireLock({
     applicationContext,
-    identifier: docketNumbers.map(item => `case|${item}`),
+    identifiers: docketNumbers.map(item => `case|${item}`),
   });
 
   if (trialSessionEntity.judge) {
@@ -106,7 +105,7 @@ export const deleteTrialSessionInteractor = async (
     docketNumbers.map(docketNumber =>
       applicationContext.getPersistenceGateway().removeLock({
         applicationContext,
-        identifier: `case|${docketNumber}`,
+        identifiers: [`case|${docketNumber}`],
       }),
     ),
   );

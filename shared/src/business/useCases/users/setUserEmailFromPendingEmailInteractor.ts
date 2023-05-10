@@ -8,7 +8,6 @@ import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
  *
  * this is invoked when logging in as a admissionsclerk and setting
  * a party's email to a new petitioner who doesn't exist in cognito yet.
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.user the user
@@ -39,7 +38,7 @@ export const setUserEmailFromPendingEmailInteractor = async (
     });
     await acquireLock({
       applicationContext,
-      identifier: docketNumbersAssociatedWithUser.map(item => `case|${item}`),
+      identifiers: docketNumbersAssociatedWithUser.map(item => `case|${item}`),
       retries: 5,
       waitTime: 3000,
     });
@@ -76,7 +75,7 @@ export const setUserEmailFromPendingEmailInteractor = async (
         docketNumbersAssociatedWithUser.map(docketNumber =>
           applicationContext.getPersistenceGateway().removeLock({
             applicationContext,
-            identifier: `case|${docketNumber}`,
+            identifiers: [`case|${docketNumber}`],
           }),
         ),
       );

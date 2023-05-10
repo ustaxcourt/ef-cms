@@ -8,7 +8,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used for unblocking a case
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number to unblock
@@ -58,6 +57,6 @@ export const unblockCaseFromTrial = async (
 export const unblockCaseFromTrialInteractor = withLocking(
   unblockCaseFromTrial,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

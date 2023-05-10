@@ -35,7 +35,7 @@ export const getComputedFormDateFactoryAction = (
       formDay = get(state.form.day);
     }
 
-    computedDate = applicationContext.getUtilities().computeDate({
+    computedDate = applicationContext.getUtilities().validateDateAndCreateISO({
       day: formDay,
       month: formMonth,
       year: formYear,
@@ -47,13 +47,11 @@ export const getComputedFormDateFactoryAction = (
         .getUtilities()
         .isValidDateString(`${formMonth}-${formDay}-${formYear}`)
     ) {
-      computedDate = applicationContext
-        .getUtilities()
-        .createISODateStringFromObject({
-          day: formDay,
-          month: formMonth,
-          year: formYear,
-        });
+      computedDate = applicationContext.getUtilities().createStartOfDayISO({
+        day: formDay,
+        month: formMonth,
+        year: formYear,
+      });
     }
 
     return { [stateKey]: computedDate };

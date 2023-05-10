@@ -11,7 +11,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * sealCaseContactAddress
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.contactId the id of the contact address to be sealed
@@ -63,6 +62,6 @@ export const sealCaseContactAddress = async (
 export const sealCaseContactAddressInteractor = withLocking(
   sealCaseContactAddress,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

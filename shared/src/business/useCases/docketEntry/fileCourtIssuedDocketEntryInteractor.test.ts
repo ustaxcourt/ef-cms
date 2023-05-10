@@ -385,13 +385,14 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: `case|${caseRecord.docketNumber}`,
+      identifiers: [`case|${caseRecord.docketNumber}`],
     });
   });
 
   it('should acquire and remove the lock for every case', async () => {
+    const docketNumbers = ['888-88', '999-99'];
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
-      docketNumbers: ['888-88', '999-99'],
+      docketNumbers,
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         documentTitle: 'Order',
@@ -402,12 +403,22 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       subjectDocketNumber: caseRecord.docketNumber,
     } as any);
 
+    const expectedIdentifiers = docketNumbers.map(
+      docketNumber => `case|${docketNumber}`,
+    );
+    expectedIdentifiers.unshift(`case|${caseRecord.docketNumber}`);
     expect(
       applicationContext.getPersistenceGateway().createLock,
     ).toHaveBeenCalledTimes(3);
     expect(
       applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(3);
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: expectedIdentifiers,
+    });
 
     [caseRecord.docketNumber, '888-88', '999-99'].forEach(docketNumber => {
       expect(
@@ -416,13 +427,6 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         applicationContext,
         identifier: `case|${docketNumber}`,
         ttl: 30,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${docketNumber}`,
       });
     });
   });

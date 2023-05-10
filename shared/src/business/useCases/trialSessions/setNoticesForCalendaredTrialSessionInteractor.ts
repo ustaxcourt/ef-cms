@@ -23,7 +23,6 @@ const waitForJobToFinish = async ({ applicationContext, jobId }) => {
 
 /**
  * Generates notices for all calendared cases for the given trialSessionId
- *
  * @param {object} applicationContext the applicationContext
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
@@ -174,7 +173,7 @@ export const determineEntitiesToLock = async (
     .getCalendaredCasesForTrialSession({ applicationContext, trialSessionId });
 
   return {
-    identifier: calendaredCases.map(
+    identifiers: calendaredCases.map(
       ({ docketNumber }) => `case|${docketNumber}`,
     ),
     ttl: 900,

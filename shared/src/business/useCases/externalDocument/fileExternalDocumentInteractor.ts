@@ -193,6 +193,6 @@ export const fileExternalDocument = async (
 export const fileExternalDocumentInteractor = withLocking(
   fileExternalDocument,
   (_applicationContext: IApplicationContext, { documentMetadata }) => ({
-    identifier: `case|${documentMetadata.docketNumber}`,
+    identifiers: [`case|${documentMetadata.docketNumber}`],
   }),
 );

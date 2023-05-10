@@ -6,7 +6,7 @@ import { runAction } from 'cerebral/test';
 describe('computeCertificateOfServiceFormDateAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set certificateOfServiceDate to null if state.form is empty', async () => {
+  it('should set certificateOfServiceDate to undefined if state.form is empty', async () => {
     const result = await runAction(computeCertificateOfServiceFormDateAction, {
       modules: {
         presenter,
@@ -16,7 +16,7 @@ describe('computeCertificateOfServiceFormDateAction', () => {
       },
     });
 
-    expect(result.state.form.certificateOfServiceDate).toBeNull();
+    expect(result.state.form.certificateOfServiceDate).toBeUndefined();
   });
 
   it('should set certificateOfServiceDate to YYYY-MM-DD if state.form has year, month, and day', async () => {
