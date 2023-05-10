@@ -5,7 +5,7 @@ resource "aws_lambda_function" "pdf_generation_lambda" {
   handler          = "pdf-generation.handler"
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "pdf_generation_${var.current_color}.js.zip"
-  source_code_hash = var.pdf_generation_object
+  source_code_hash = var.pdf_generation_object_hash
   timeout          = "29"
   memory_size      = "3008"
 
