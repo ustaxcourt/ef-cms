@@ -81,6 +81,10 @@ variable "websockets_object" {
   type = any
 }
 
+variable "pdf_generation_object" {
+  type = any
+}
+
 variable "maintenance_notify_object" {
   type = any
 }
@@ -98,6 +102,10 @@ variable "streams_object" {
 }
 
 variable "public_object_hash" {
+  type = string
+}
+
+variable "pdf_generation_object_hash" {
   type = string
 }
 
