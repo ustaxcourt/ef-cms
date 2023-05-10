@@ -14,6 +14,6 @@ export const dismissNOTTReminderForTrialInteractor = (
   return put({
     applicationContext,
     body: { trialSessionId },
-    endpoint: '/async/trial-sessions/dismiss-alert',
+    endpoint: '/trial-sessions/dismiss-alert',
   });
 };
