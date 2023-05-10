@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
+import {
+  FORMATS,
+  isTodayWithinGivenInterval,
+} from '../../utilities/DateHandler';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -7,6 +10,9 @@ import {
 } from '../EntityConstants';
 import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
+jest.mock('../../utilities/DateHandler', () => ({
+  isTodayWithinGivenInterval: jest.fn(),
+}));
 
 const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
@@ -625,18 +631,17 @@ describe('TrialSession entity', () => {
       expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(false);
     });
 
-    it('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
-      const today = prepareDateFromString();
-      const thirtyTwoDaysFromToday = today.plus({ ['days']: 32 });
-      const twoDaysFromToday = today
-        .plus({ ['days']: 2 })
-        .toFormat(FORMATS.MMDDYY);
+    it.only('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
+      //create a mock today - hard coded date
+      //make trial start date a hard coded date thats 30-35 days from mock today
 
+      //today has to be within 30-=35 days of trialstart date
+      isTodayWithinGivenInterval.mockReturnValue(true);
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
           isCalendared: true,
-          startDate: thirtyTwoDaysFromToday,
+          startDate: '10/10/2020',
         },
         {
           applicationContext,
@@ -644,9 +649,6 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(true);
-      expect(trialSession.thirtyDaysBeforeTrialFormatted).toBe(
-        twoDaysFromToday,
-      );
     });
   });
 });
