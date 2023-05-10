@@ -1,4 +1,6 @@
+import { ActionProps } from '../../presenter';
 import { state } from 'cerebral';
+
 /**
  * dismisses the NOTT alert on a trial session
  * @param {object} providers the providers object
@@ -11,7 +13,7 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { trialSessionId } = get(state.formattedTrialSessionDetails);
 
   try {
