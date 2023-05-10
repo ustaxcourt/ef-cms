@@ -409,14 +409,10 @@ export class TrialSession extends JoiValidationEntity {
       ['days']: 30,
     });
 
-    const withinGivenInterval = isTodayWithinGivenInterval({
+    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
       intervalEndDate: thirtyDaysBeforeTrial,
       intervalStartDate: thirtyFiveDaysBeforeTrial,
     });
-
-    console.log('withinGivenInterval', withinGivenInterval);
-
-    this.isStartDateWithinNOTTReminderRange = withinGivenInterval;
 
     this.thirtyDaysBeforeTrialFormatted = formatDateString(
       thirtyDaysBeforeTrial,
