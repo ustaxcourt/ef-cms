@@ -12,39 +12,28 @@ import { search } from './searchClient';
  */
 export const getCasesByStatusAndByJudge = async ({
   applicationContext,
-  endDate,
   judgeName,
-  startDate,
   statuses,
 }) => {
-  const source = ['caseCaption', 'docketNumber', 'status'];
+  const source = [
+    'caseCaption',
+    'docketNumber',
+    'status',
+    'caseStatusHistory',
+    'leadDocketNumber',
+  ];
 
   const searchParameters = {
     body: {
       _source: source,
       query: {
         bool: {
-          // filter: [
-          //   {
-          //     range: {
-          //       'createdAt.S': {
-          //         gte: `${startDate}||/h`,
-          //         lte: `${endDate}||/h`,
-          //       },
-          //     },
-          //   },
-          // ],
           must: [
             {
               match_phrase: { 'associatedJudge.S': `${judgeName}` },
             },
             {
               terms: { 'status.S': statuses },
-            },
-          ],
-          must_not: [
-            {
-              terms: { 'status.S': ['Closed', 'Closed - Dismissed'] },
             },
           ],
         },

@@ -24,6 +24,14 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'caseStatusHistory.S': {
+      properties: {
+        changedBy: { type: 'text' },
+        date: { type: 'text' },
+        updatedCaseStatus: { type: 'text' },
+      },
+      type: 'nested',
+    },
     'closedDate.S': {
       type: 'date',
     },
