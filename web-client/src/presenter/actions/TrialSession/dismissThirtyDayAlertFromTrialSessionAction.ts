@@ -29,5 +29,5 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
     });
   }
 
-  return path.success();
+  return path.success({ trialSessionId });
 };
