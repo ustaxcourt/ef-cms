@@ -345,6 +345,24 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress-readonly/videos/
 
+  loadtests:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Load tests'
+          command: npm run loadtest:pdf-generation
+
   deploy-switch-colors-cron:
     docker:
       - image: *efcms-docker-image
@@ -571,9 +589,25 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - smoketests-readonly:
+      - loadtests:
           requires:
             - smoketests
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - smoketests-readonly:
+          requires:
+            - loadtests
           filters:
             branches:
               only:
@@ -646,10 +680,14 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - wait-for-reindex
-      - smoketests-readonly:
+      - loadtests:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - disable-reindex-cron
+      - smoketests-readonly:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - loadtests
       - deploy-switch-colors-cron:
           <<: *build-and-deploy-with-context-defaults
           requires:

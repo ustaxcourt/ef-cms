@@ -3,7 +3,7 @@ const axios = require('axios');
 const { getUserToken } = require('./loadTestHelpers');
 
 const cognito = new AWS.CognitoIdentityServiceProvider({
-  region: process.env.REGION,
+  region: 'us-east-1',
 });
 
 (async () => {
@@ -14,27 +14,19 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
     username: 'petitionsclerk1@example.com',
   });
 
-  for (let i = 0; i < 400; i++) {
-    const docketNumber = 310 + i;
+  for (let i = 0; i < 100; i++) {
     try {
-      const response = await axios.post(
-        `https://api-blue.dawson.flexion.us/case-parties/${docketNumber}-20/associate-private-practitioner`,
-        {
-          docketNumber: `${docketNumber}-20`,
-          representingPrimary: true,
-          representingSecondary: false,
-          serviceIndicator: 'Electronic',
-          userId: '56560b2a-d612-4283-b578-256d311b974a',
-        },
+      await axios.get(
+        `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/reports/printable-case-inventory-report?associatedJudge=Ashford&status=Assigned+-+Case`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         },
       );
-      console.log(response);
     } catch (e) {
       console.log('ERROR', e);
+      throw e;
     }
   }
 })();

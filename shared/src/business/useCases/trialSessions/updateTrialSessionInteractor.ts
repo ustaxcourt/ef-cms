@@ -139,10 +139,7 @@ const createWorkingCopyForNewUserOnSession = async ({
  */
 export const updateTrialSession = async (
   applicationContext: IApplicationContext,
-  {
-    isDismissingThirtyDayAlert = false,
-    trialSession,
-  }: { isDismissingThirtyDayAlert: Boolean; trialSession: TrialSession },
+  { trialSession }: { trialSession: TrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -286,7 +283,6 @@ export const updateTrialSession = async (
     message: {
       action: 'update_trial_session_complete',
       hasPaper,
-      isDismissingThirtyDayAlert,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },
