@@ -53,6 +53,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesByStatusAndByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
@@ -64,7 +65,6 @@ import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFe
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
-import { getSubmittedAndCavCasesByJudgeInteractor } from '../../shared/src/proxies/reports/getSubmittedAndCavCasesByJudgeProxy';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
@@ -439,6 +439,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesByStatusAndByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getChiefJudgeNameForSigningInteractor,
@@ -473,7 +474,6 @@ const allUseCases = {
   getPractitionerDocumentDownloadUrlInteractor,
   getPractitionerDocumentInteractor,
   getPractitionerDocumentsInteractor,
-  getSubmittedAndCavCasesByJudgeInteractor,
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getStatusOfVirusScanInteractor: (applicationContext, args) =>

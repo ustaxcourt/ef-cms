@@ -200,9 +200,12 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="consolidated-case-column">
-                {/* <div className={indentMemberCase ? 'margin-left-2' : ''}>
+            {judgeActivityReportData.submittedAndCavCasesByJudge.map(
+              (formattedCase, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="consolidated-case-column">
+                      {/* <div className={indentMemberCase ? 'margin-left-2' : ''}>
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={
                       formattedCase.consolidatedIconTooltipText
@@ -211,13 +214,16 @@ export const JudgeActivityReport = connect(
                     showLeadCaseIcon={formattedCase.isLeadCase}
                   />
                 </div> */}
-              </td>
-              <td>Hello</td>
-              <td>there</td>
-              <td>fellow</td>
-              <td>traveler</td>
-              <td>extraordinaire.</td>
-            </tr>
+                    </td>
+                    <td>{formattedCase.docketNumber}</td>
+                    <td>IDK!</td>
+                    <td>{formattedCase.caseCaption}</td>
+                    <td>{formattedCase.status}</td>
+                    <td>Too Many Days!</td>
+                  </tr>
+                );
+              },
+            )}
           </tbody>
         </table>
       </>

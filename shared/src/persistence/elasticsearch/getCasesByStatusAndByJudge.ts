@@ -5,8 +5,6 @@ import { search } from './searchClient';
  * @param {object} providers the providers object containing applicationContext
  * @param {string} providers.applicationContext application context
  * @param {string} providers.judgeName judge
- * @param {string} providers.startDate start date
- * @param {string} providers.endDate end date
  * @param {array} providers.statuses statuses
  * @returns {array} array of docket numbers
  */
