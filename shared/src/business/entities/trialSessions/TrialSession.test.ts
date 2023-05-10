@@ -1,15 +1,12 @@
 /* eslint-disable max-lines */
 import {
-  FORMATS,
-  isTodayWithinGivenInterval,
-} from '../../utilities/DateHandler';
-import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../EntityConstants';
 import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { isTodayWithinGivenInterval } from '../../utilities/DateHandler';
 
 jest.mock('../../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../../utilities/DateHandler');
