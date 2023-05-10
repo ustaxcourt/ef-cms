@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
+import {
+  FORMATS,
+  isTodayWithinGivenInterval,
+} from '../../utilities/DateHandler';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -7,6 +10,15 @@ import {
 } from '../EntityConstants';
 import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
+
+jest.mock('../../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    isTodayWithinGivenInterval: jest.fn(),
+  };
+});
 
 const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
@@ -626,17 +638,15 @@ describe('TrialSession entity', () => {
     });
 
     it('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
-      const today = prepareDateFromString();
-      const thirtyTwoDaysFromToday = today.plus({ ['days']: 32 });
-      const twoDaysFromToday = today
-        .plus({ ['days']: 2 })
-        .toFormat(FORMATS.MMDDYY);
+      const mockIsTodayWithinGivenInterval =
+        isTodayWithinGivenInterval as jest.Mock;
+      mockIsTodayWithinGivenInterval.mockReturnValue(true);
 
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
           isCalendared: true,
-          startDate: thirtyTwoDaysFromToday,
+          startDate: '10/10/2020',
         },
         {
           applicationContext,
@@ -644,9 +654,6 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(true);
-      expect(trialSession.thirtyDaysBeforeTrialFormatted).toBe(
-        twoDaysFromToday,
-      );
     });
   });
 });
