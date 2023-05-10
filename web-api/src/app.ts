@@ -827,8 +827,8 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
   );
   app.put(
-    '/async/trial-sessions/dismiss-alert',
-    lambdaWrapper(dismissNOTTReminderForTrialLambda, { isAsync: true }),
+    '/trial-sessions/dismiss-alert',
+    lambdaWrapper(dismissNOTTReminderForTrialLambda),
   );
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',
