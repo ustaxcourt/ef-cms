@@ -637,12 +637,11 @@ describe('TrialSession entity', () => {
       expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(false);
     });
 
-    it.only('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
-      //create a mock today - hard coded date
-      //make trial start date a hard coded date thats 30-35 days from mock today
+    it('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
+      const mockIsTodayWithinGivenInterval =
+        isTodayWithinGivenInterval as jest.Mock;
+      mockIsTodayWithinGivenInterval.mockReturnValue(true);
 
-      //today has to be within 30-=35 days of trialstart date
-      isTodayWithinGivenInterval.mockReturnValue(true);
       const trialSession = new TrialSession(
         {
           ...VALID_TRIAL_SESSION,
