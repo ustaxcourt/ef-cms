@@ -14,6 +14,7 @@ module.exports = {
       './web-api/terraform/template/lambdas/handle-bounced-service-email.js',
     'maintenance-notify':
       './web-api/terraform/template/lambdas/maintenance-notify.js',
+    'pdf-generation': './web-api/terraform/template/lambdas/pdf-generation.js',
     'public-api-authorizer':
       './web-api/terraform/template/lambdas/public-api-authorizer.js',
     'seal-in-lower-environment':
