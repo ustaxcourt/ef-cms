@@ -1,8 +1,11 @@
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
+import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionsTab } from './journey/docketClerkViewsTrialSessionsTab';
+import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
+import { petitionsClerkViewsOpenTrialSession } from './journey/petitionsClerkViewsOpenTrialSession';
 import { prepareDateFromString } from '../../shared/src/business/utilities/DateHandler';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -16,7 +19,6 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
     ['days']: 31,
   });
 
-  // trialDate should be 30 days from now
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
@@ -52,17 +54,30 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkViewsTrialSessionsTab(cerebralTest);
 
-    it('should see the NOTT icon on the new trial session', () => {});
+    it('should see the NOTT reminder icon', () => {
+      let trialSessionFormatted = runCompute(
+        withAppContextDecorator(formattedTrialSessionDetails),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      expect(trialSessionFormatted.showAlertForNOTTReminder).toEqual(true);
+    });
+
+    it('should see the alert banner in the latest trial session', async () => {
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
+      });
+
+      // expect(trialSessionFormatted.alertMessageForNOTT).toEqual('blah blah');
+    });
+
+    // assert that the alert banner is there, but can't clear it
   });
 
-  // go back to the main trial session page
-  // assert that the trial session is showing the clock (helper?)
-  // assert the tooltip?
-  // login as docketclerk (non Petitions Clerk, CSS, or CotC)
-  // go into the trial session
-  // assert that the alert banner is there, but can't clear it
   // login as petitionsClerk
-  // go into the trial session
+  // go into the last created trial session
   // assert that the alert banner is there
   // clear the alert
   // assert the banner is success
