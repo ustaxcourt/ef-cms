@@ -23,6 +23,7 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
@@ -286,7 +287,7 @@ export const baseState = {
       tab: null,
     },
   },
-  customCaseInventory: initialCustomCaseInventoryReportState,
+  customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
