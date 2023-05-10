@@ -28,8 +28,6 @@ export const dismissNOTTReminderForTrialInteractor = async (
       trialSessionId,
     });
 
-  console.log(trialSessionId);
-
   const updatedTrialSessionEntity = new TrialSession(
     { ...currentTrialSession, dismissedAlertForNOTT: true },
     {
@@ -42,13 +40,13 @@ export const dismissNOTTReminderForTrialInteractor = async (
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'update_trial_session_complete',
-      isDismissingThirtyDayAlert: true,
-      trialSessionId,
-    },
-    userId: user.userId,
-  });
+  // await applicationContext.getNotificationGateway().sendNotificationToUser({
+  //   applicationContext,
+  //   message: {
+  //     action: 'update_trial_session_complete',
+  //     isDismissingThirtyDayAlert: true,
+  //     trialSessionId,
+  //   },
+  //   userId: user.userId,
+  // });
 };
