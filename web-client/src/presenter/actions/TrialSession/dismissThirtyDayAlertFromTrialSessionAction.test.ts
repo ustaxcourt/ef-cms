@@ -24,11 +24,9 @@ describe('dismissThirtyDayAlertFromTrialSessionAction', () => {
 
     applicationContext
       .getUseCases()
-      .updateTrialSessionInteractor.mockResolvedValue({
-        newTrialSession: {
-          ...MOCK_TRIAL_REGULAR,
-        },
-      });
+      .dismissNOTTReminderForTrialInteractor.mockResolvedValue(
+        MOCK_TRIAL_REGULAR,
+      );
   });
 
   it('should update the trial session from state after setting dismissedAlertForNOTT to true', async () => {
@@ -40,16 +38,9 @@ describe('dismissThirtyDayAlertFromTrialSessionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updateTrialSessionInteractor.mock
-        .calls[0][1].trialSession,
-    ).toEqual({
-      ...MOCK_TRIAL_REGULAR,
-      dismissedAlertForNOTT: true,
-    });
-    expect(
-      applicationContext.getUseCases().updateTrialSessionInteractor.mock
-        .calls[0][1].isDismissingThirtyDayAlert,
-    ).toBe(true);
+      applicationContext.getUseCases().dismissNOTTReminderForTrialInteractor
+        .mock.calls[0][1].trialSessionId,
+    ).toEqual(MOCK_TRIAL_REGULAR.trialSessionId);
   });
 
   it('should call the success path when the trial session has been successfully updated', async () => {
@@ -66,7 +57,9 @@ describe('dismissThirtyDayAlertFromTrialSessionAction', () => {
   it('should call the error path when the trial session has been successfully updated', async () => {
     applicationContext
       .getUseCases()
-      .updateTrialSessionInteractor.mockRejectedValueOnce(new Error('bad'));
+      .dismissNOTTReminderForTrialInteractor.mockRejectedValueOnce(
+        new Error('bad'),
+      );
 
     await runAction(dismissThirtyDayAlertFromTrialSessionAction, {
       modules: {

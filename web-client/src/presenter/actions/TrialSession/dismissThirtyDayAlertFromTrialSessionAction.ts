@@ -1,4 +1,6 @@
+import { ActionProps } from '../../presenter';
 import { state } from 'cerebral';
+
 /**
  * dismisses the NOTT alert on a trial session
  * @param {object} providers the providers object
@@ -11,18 +13,14 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
   applicationContext,
   get,
   path,
-}) => {
-  const trialSession = {
-    ...get(state.formattedTrialSessionDetails),
-    dismissedAlertForNOTT: true,
-  };
+}: ActionProps) => {
+  const { trialSessionId } = get(state.formattedTrialSessionDetails);
 
   try {
     await applicationContext
       .getUseCases()
-      .updateTrialSessionInteractor(applicationContext, {
-        isDismissingThirtyDayAlert: true,
-        trialSession,
+      .dismissNOTTReminderForTrialInteractor(applicationContext, {
+        trialSessionId,
       });
   } catch (err) {
     return path.error({
@@ -33,5 +31,5 @@ export const dismissThirtyDayAlertFromTrialSessionAction = async ({
     });
   }
 
-  return path.success();
+  return path.success({ trialSessionId });
 };
