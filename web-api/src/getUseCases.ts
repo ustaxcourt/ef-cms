@@ -74,6 +74,7 @@ import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getC
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
 import { getCaseInventoryReportInteractor } from '../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
+import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
 import { getCasesForUserInteractor } from '../../shared/src/business/useCases/getCasesForUserInteractor';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor';
@@ -112,7 +113,6 @@ import { getPublicCaseInteractor } from '../../shared/src/business/useCases/publ
 import { getPublicDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/public/getPublicDownloadPolicyUrlInteractor';
 import { getReconciliationReportInteractor } from '../../shared/src/business/useCases/getReconciliationReportInteractor';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/business/useCases/document/getStatusOfVirusScanInteractor';
-import { getSubmittedAndCavCasesByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getSubmittedAndCavCasesByJudgeInteractor';
 import { getTodaysOpinionsInteractor } from '../../shared/src/business/useCases/public/getTodaysOpinionsInteractor';
 import { getTodaysOrdersInteractor } from '../../shared/src/business/useCases/public/getTodaysOrdersInteractor';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor';
@@ -273,6 +273,7 @@ const useCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesByStatusAndByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
@@ -311,7 +312,6 @@ const useCases = {
   getPublicDownloadPolicyUrlInteractor,
   getReconciliationReportInteractor,
   getStatusOfVirusScanInteractor,
-  getSubmittedAndCavCasesByJudgeInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   getTrialSessionDetailsInteractor,

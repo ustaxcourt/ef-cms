@@ -1,9 +1,8 @@
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getCasesClosedByJudgeInteractor
@@ -15,17 +14,13 @@ import {
  * @param {array} providers.statuses statuses of cases for judge activity
  * @returns {object} errors (null if no errors)
  */
-export const getSubmittedAndCavCasesByJudgeInteractor = async (
+export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   {
-    endDate,
     judgeName,
-    startDate,
     statuses,
   }: {
     judgeName: string;
-    endDate: string;
-    startDate: string;
     statuses: string[];
   },
 ) => {
@@ -35,25 +30,13 @@ export const getSubmittedAndCavCasesByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch({
-    endDate,
-    judgeName,
-    startDate,
-  });
-
-  if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
-  }
-
   const submittedAndCavCasesByJudge = await applicationContext
     .getPersistenceGateway()
     .getCasesByStatusAndByJudge({
       applicationContext,
-      judgeName: searchEntity.judgeName,
+      judgeName,
       statuses,
     });
 
-  return {
-    submittedAndCavCasesByJudge,
-  };
+  return submittedAndCavCasesByJudge.foundCases;
 };

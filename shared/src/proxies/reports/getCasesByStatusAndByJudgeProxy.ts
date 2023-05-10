@@ -9,7 +9,7 @@ import { post } from '../requests';
  * @param {string} providers.startDate the start date for the report query
  * @returns {Promise<*>} the promise of the api call
  */
-export const getSubmittedAndCavCasesByJudgeInteractor = (
+export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext,
   {
     judgeName,
