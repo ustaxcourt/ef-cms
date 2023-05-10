@@ -1,4 +1,4 @@
-import { DateTime, DurationLike } from 'luxon';
+import { DateTime, DurationLike, Interval } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -520,4 +520,23 @@ export const getBusinessDateInFuture = ({
   }
 
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+};
+
+/**
+ * Returns whether or not the current date falls within the given date time range
+ * @param {string} intervalStartDate the interval start ISO date string
+ * @param {string} intervalEndDate the interval end ISO date string
+ * @returns {boolean} whether or not the current date falls within the given date time range
+ */
+export const isTodayWithinGivenInterval = ({
+  intervalEndDate,
+  intervalStartDate,
+}): boolean => {
+  const today = DateTime.now().setZone(USTC_TZ);
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDate,
+    intervalEndDate,
+  );
+
+  return dateRangeInterval.contains(today);
 };

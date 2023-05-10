@@ -1,142 +1,127 @@
 /**
  * Custom not found error handling for middlewares
- *
  * @type {module.NotFoundError}
  */
-export const NotFoundError = class NotFoundError extends Error {
+export class NotFoundError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
   constructor(message) {
     super(message);
 
     this.statusCode = 404;
   }
-};
+}
 
 /**
  * Invalid request error
- *
  * @type {module.NotFoundError}
  */
-export const InvalidRequest = class InvalidRequest extends Error {
+export class InvalidRequest extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
   constructor(message) {
     super(message);
 
     this.statusCode = 400;
   }
-};
+}
 
 /**
  * Custom unknown user error handling for middlewares
- *
  * @type {module.UnknownUserError}
  */
-export const UnknownUserError = class UnknownUserError extends Error {
+export class UnknownUserError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
   constructor(message) {
     super(message);
 
     this.statusCode = 401;
   }
-};
+}
 
 /**
  * Unauthorized error
- *
  * @type {module.UnauthorizedError}
  */
-export const UnauthorizedError = class UnauthorizedError extends Error {
+export class UnauthorizedError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
   constructor(message) {
     super(message);
 
     this.statusCode = 403;
   }
-};
+}
 
 /**
  * UnprocessableEntityError error
- *
  * @type {module.UnprocessableEntity}
  */
-export const UnprocessableEntityError = class UnprocessableEntityError extends Error {
+export class UnprocessableEntityError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
   constructor(message = 'cannot process') {
     super(message);
 
     this.statusCode = 422;
   }
-};
+}
 
 /**
  * UnsanitizedEntityError error
- *
  * @type {module.UnsanitizedEntity}
  */
-export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
+export class UnsanitizedEntityError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
   constructor(message = 'Unsanitized entity') {
     super(message);
 
     this.statusCode = 500;
   }
-};
+}
 
-export const ServiceUnavailableError = class ServiceUnavailableError extends Error {
+export class ServiceUnavailableError extends Error {
+  public statusCode: number;
+  public retryAfter?: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
-  statusCode: number;
-  retryAfter?: number;
   constructor(message = 'Service Unavailable', retryAfter = 3000) {
     super(message);
 
     this.retryAfter = retryAfter;
     this.statusCode = 503;
   }
-};
+}
 
 /**
  * InvalidEntityError error
- *
  * @type {module.InvalidEntityError}
  */
-export const InvalidEntityError = class InvalidEntityError extends Error {
+export class InvalidEntityError extends Error {
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(
@@ -151,4 +136,4 @@ export const InvalidEntityError = class InvalidEntityError extends Error {
       },
     });
   }
-};
+}

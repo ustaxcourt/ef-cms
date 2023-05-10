@@ -11,7 +11,7 @@ export const addConsolidatedProperties = ({
   applicationContext,
   caseObject,
 }) => {
-  let consolidatedIconTooltipText = null;
+  let consolidatedIconTooltipText: string | null = null;
   const isLeadCase = applicationContext.getUtilities().isLeadCase(caseObject);
 
   const inConsolidatedGroup = !!caseObject.leadDocketNumber;

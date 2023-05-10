@@ -233,7 +233,7 @@ describe('DateHandler', () => {
       it('gets an ISO Date String representing today at Midnight when given no arguments', () => {
         const sameDay = '2022-07-16';
         mockTimeFunc.setDateMockValue(`${sameDay}T18:54:00.000Z`);
-        const result = createISODateAtStartOfDayEST();
+        const result = createISODateAtStartOfDayEST(null);
         expect(result).toBe(`${sameDay}T04:00:00.000Z`);
       });
     });
@@ -628,6 +628,43 @@ describe('DateHandler', () => {
       });
 
       expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
+    });
+  });
+
+  describe('isTodayWithinGivenInterval', () => {
+    it('should return false when the current date does not fall within the specified date time range', () => {
+      const mockPastStartDate = prepareDateFromString(
+        '10/10/2020',
+        FORMATS.MMDDYY,
+      );
+      const mockPastEndDate = prepareDateFromString(
+        '12/12/2020',
+        FORMATS.MMDDYY,
+      );
+
+      const result = isTodayWithinGivenInterval({
+        intervalEndDate: mockPastEndDate,
+        intervalStartDate: mockPastStartDate,
+      });
+
+      expect(result).toBe(false);
+    });
+
+    it('should return true when the current date falls within the specified date time range', () => {
+      const mockPastStartDate = prepareDateFromString().minus({
+        ['days']: 2,
+      });
+
+      const mockPastEndDate = prepareDateFromString().plus({
+        ['days']: 2,
+      });
+
+      const result = isTodayWithinGivenInterval({
+        intervalEndDate: mockPastEndDate,
+        intervalStartDate: mockPastStartDate,
+      });
+
+      expect(result).toBe(true);
     });
   });
 });

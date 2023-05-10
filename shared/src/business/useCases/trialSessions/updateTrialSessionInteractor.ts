@@ -138,8 +138,11 @@ const createWorkingCopyForNewUserOnSession = async ({
  * @param {object} providers.trialSession the trial session data
  */
 export const updateTrialSession = async (
-  applicationContext,
-  { trialSession }: { trialSession: TrialSession },
+  applicationContext: IApplicationContext,
+  {
+    isDismissingThirtyDayAlert = false,
+    trialSession,
+  }: { isDismissingThirtyDayAlert: Boolean; trialSession: TrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -169,6 +172,7 @@ export const updateTrialSession = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
+    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     joinPhoneNumber: trialSession.joinPhoneNumber,
@@ -210,7 +214,7 @@ export const updateTrialSession = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge.userId,
+      userId: updatedTrialSessionEntity.judge?.userId,
     });
   }
 
@@ -226,7 +230,7 @@ export const updateTrialSession = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk.userId,
+      userId: updatedTrialSessionEntity.trialClerk?.userId,
     });
   }
 
@@ -282,6 +286,7 @@ export const updateTrialSession = async (
     message: {
       action: 'update_trial_session_complete',
       hasPaper,
+      isDismissingThirtyDayAlert,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },

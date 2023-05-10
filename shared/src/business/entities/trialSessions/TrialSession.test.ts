@@ -1,13 +1,12 @@
 /* eslint-disable max-lines */
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
+import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} = require('../EntityConstants');
-const { isStandaloneRemoteSession, TrialSession } = require('./TrialSession');
+} from '../EntityConstants';
+import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
@@ -593,6 +592,61 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.isValid()).toBe(true);
+    });
+  });
+
+  describe('dismissedAlertForNOTT', () => {
+    it('should have a default value of false', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.dismissedAlertForNOTT).toBe(false);
+    });
+  });
+
+  describe('Notice of trial reminder', () => {
+    it('should set isStartDateWithinNOTTReminderRange to false when the trial session is not calendared', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          isCalendared: false,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(false);
+    });
+
+    it('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
+      const today = prepareDateFromString();
+      const thirtyTwoDaysFromToday = today.plus({ ['days']: 32 });
+      const twoDaysFromToday = today
+        .plus({ ['days']: 2 })
+        .toFormat(FORMATS.MMDDYY);
+
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          isCalendared: true,
+          startDate: thirtyTwoDaysFromToday,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(true);
+      expect(trialSession.thirtyDaysBeforeTrialFormatted).toBe(
+        twoDaysFromToday,
+      );
     });
   });
 });
