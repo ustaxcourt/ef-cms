@@ -10,9 +10,15 @@ import {
 } from '../EntityConstants';
 import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
-jest.mock('../../utilities/DateHandler', () => ({
-  isTodayWithinGivenInterval: jest.fn(),
-}));
+
+jest.mock('../../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    isTodayWithinGivenInterval: jest.fn(),
+  };
+});
 
 const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
