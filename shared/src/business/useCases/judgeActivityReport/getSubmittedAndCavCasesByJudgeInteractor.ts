@@ -49,9 +49,7 @@ export const getSubmittedAndCavCasesByJudgeInteractor = async (
     .getPersistenceGateway()
     .getCasesByStatusAndByJudge({
       applicationContext,
-      endDate: searchEntity.endDate,
       judgeName: searchEntity.judgeName,
-      startDate: searchEntity.startDate,
       statuses,
     });
 

@@ -7,18 +7,16 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {object} closed cases
  */
-export const getCavAndSubmittedCasesByJudgeAction = async ({
+export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { judgeName } = get(state.form);
 
   const submittedAndCavCasesByJudge = await applicationContext
     .getUseCases()
     .getSubmittedAndCavCasesByJudgeInteractor(applicationContext, {
-      endDate,
       judgeName,
-      startDate,
       statuses: ['Submitted', 'CAV'],
     });
 

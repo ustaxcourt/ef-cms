@@ -12,13 +12,9 @@ import { post } from '../requests';
 export const getSubmittedAndCavCasesByJudgeInteractor = (
   applicationContext,
   {
-    endDate,
     judgeName,
-    startDate,
     statuses,
   }: {
-    startDate: string;
-    endDate: string;
     judgeName: string;
     statuses: string[];
   },
@@ -26,9 +22,7 @@ export const getSubmittedAndCavCasesByJudgeInteractor = (
   return post({
     applicationContext,
     body: {
-      endDate,
       judgeName,
-      startDate,
       statuses,
     },
     endpoint: '/judge-activity-report/open-cases',
