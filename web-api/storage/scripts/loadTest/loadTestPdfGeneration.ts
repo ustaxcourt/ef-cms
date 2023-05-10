@@ -2,11 +2,11 @@ const AWS = require('aws-sdk');
 const axios = require('axios');
 const { getUserToken } = require('./loadTestHelpers');
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
-  region: 'us-east-1',
-});
-
 (async () => {
+  const cognito = new AWS.CognitoIdentityServiceProvider({
+    region: 'us-east-1',
+  });
+
   const token = await getUserToken({
     cognito,
     env: process.env.ENV,
@@ -17,7 +17,7 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
   for (let i = 0; i < 100; i++) {
     try {
       await axios.get(
-        `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/reports/printable-case-inventory-report?associatedJudge=Ashford&status=Assigned+-+Case`,
+        `https://api-${process.env.DEPLOYING_COLOR}.${process.env.EFCMS_DOMAIN}/reports/printable-case-inventory-report?associatedJudge=&status=New`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
