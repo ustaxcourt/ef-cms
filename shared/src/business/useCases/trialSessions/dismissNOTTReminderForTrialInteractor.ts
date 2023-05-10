@@ -13,8 +13,8 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const dismissNOTTReminderForTrialInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSessionId },
-) => {
+  { trialSessionId }: { trialSessionId: string },
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.DIMISS_NOTT_REMINDER)) {
@@ -28,7 +28,7 @@ export const dismissNOTTReminderForTrialInteractor = async (
       trialSessionId,
     });
 
-  const updatedTrialSessionEntity = new TrialSession(
+  const updatedTrialSessionEntity: TrialSession = new TrialSession(
     { ...currentTrialSession, dismissedAlertForNOTT: true },
     {
       applicationContext,
@@ -39,14 +39,4 @@ export const dismissNOTTReminderForTrialInteractor = async (
     applicationContext,
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
-
-  // await applicationContext.getNotificationGateway().sendNotificationToUser({
-  //   applicationContext,
-  //   message: {
-  //     action: 'update_trial_session_complete',
-  //     isDismissingThirtyDayAlert: true,
-  //     trialSessionId,
-  //   },
-  //   userId: user.userId,
-  // });
 };
