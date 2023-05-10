@@ -290,7 +290,7 @@ describe('formattedTrialSessions', () => {
     expect(result.sessionsByTerm).toEqual([
       {
         caseOrder: [],
-        formattedEstimatedEndDate: undefined,
+        formattedEstimatedEndDate: '',
         formattedNoticeIssuedDate: '07/25/2019',
         formattedStartDate: '11/27/19',
         judge: { name: '3', userId: '3' },
@@ -309,8 +309,8 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
-        formattedEstimatedEndDate: undefined,
-        formattedNoticeIssuedDate: undefined,
+        formattedEstimatedEndDate: '',
+        formattedNoticeIssuedDate: '',
         formattedStartDate: '11/25/19',
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',

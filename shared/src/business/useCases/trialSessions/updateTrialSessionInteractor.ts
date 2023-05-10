@@ -133,7 +133,6 @@ const createWorkingCopyForNewUserOnSession = async ({
 
 /**
  * updateTrialSessionInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
@@ -293,7 +292,7 @@ export const updateTrialSession = async (
 export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { trialSession }: { trialSession: TrialSession },
-): Promise<{ identifier: string[]; ttl: number }> => {
+) => {
   const { caseOrder } = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
@@ -308,7 +307,7 @@ export const determineEntitiesToLock = async (
   );
 
   return {
-    identifier: entitiesToLock,
+    identifiers: entitiesToLock,
     ttl: 900,
   };
 };

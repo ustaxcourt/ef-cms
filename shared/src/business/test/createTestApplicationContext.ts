@@ -211,7 +211,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
-    computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
     copyPagesAndAppendToTargetPdf: jest
       .fn()
       .mockImplementation(copyPagesAndAppendToTargetPdf),
@@ -221,9 +220,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
-    createISODateStringFromObject: jest
-      .fn()
-      .mockImplementation(DateHandler.createISODateStringFromObject),
     createStartOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createStartOfDayISO),
@@ -310,9 +306,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isStandaloneRemoteSession: jest
       .fn()
       .mockImplementation(isStandaloneRemoteSession),
-    isStringISOFormatted: jest
-      .fn()
-      .mockImplementation(DateHandler.isStringISOFormatted),
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),

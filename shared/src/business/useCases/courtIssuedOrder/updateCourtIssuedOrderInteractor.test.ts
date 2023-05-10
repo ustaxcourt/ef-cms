@@ -427,7 +427,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       applicationContext.getPersistenceGateway().removeLock,
     ).toHaveBeenCalledWith({
       applicationContext,
-      identifier: `case|${caseRecord.docketNumber}`,
+      identifiers: [`case|${caseRecord.docketNumber}`],
     });
   });
 });

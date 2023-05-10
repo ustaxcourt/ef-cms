@@ -13,7 +13,7 @@ export const updatePetitionerCasesInteractor = async ({
 
   await applicationContext.getUseCaseHelpers().acquireLock({
     applicationContext,
-    identifier: docketNumbers.map(item => `case|${item}`),
+    identifiers: docketNumbers.map(item => `case|${item}`),
     retries: 10,
     ttl: 900,
     waitTime: 5000,
@@ -27,6 +27,6 @@ export const updatePetitionerCasesInteractor = async ({
 
   await applicationContext.getPersistenceGateway().removeLock({
     applicationContext,
-    identifier: docketNumbers.map(item => `case|${item}`),
+    identifiers: docketNumbers.map(item => `case|${item}`),
   });
 };

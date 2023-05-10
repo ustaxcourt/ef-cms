@@ -8,7 +8,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * removePdfFromDocketEntry
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update
@@ -61,6 +60,6 @@ export const removePdfFromDocketEntry = async (
 export const removePdfFromDocketEntryInteractor = withLocking(
   removePdfFromDocketEntry,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

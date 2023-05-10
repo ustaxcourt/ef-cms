@@ -29,11 +29,11 @@ describe('determineEntitiesToLock', () => {
     });
   });
   it('should return an object that includes all of the docketNumbers associated with the user', async () => {
-    const { identifier } = await determineEntitiesToLock(applicationContext);
+    const { identifiers } = await determineEntitiesToLock(applicationContext);
 
-    expect(identifier).toContain('case|111-20');
-    expect(identifier).toContain('case|222-20');
-    expect(identifier).toContain('case|333-20');
+    expect(identifiers).toContain('case|111-20');
+    expect(identifiers).toContain('case|222-20');
+    expect(identifiers).toContain('case|333-20');
   });
 });
 
@@ -158,7 +158,7 @@ describe('verifyUserPendingEmailInteractor', () => {
         applicationContext.getPersistenceGateway().removeLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
       });
     });
   });

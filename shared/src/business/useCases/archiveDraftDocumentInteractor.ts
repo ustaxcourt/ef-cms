@@ -8,7 +8,6 @@ import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * archiveDraftDocumentInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which a document will be archived
@@ -65,6 +64,6 @@ export const archiveDraftDocument = async (
 export const archiveDraftDocumentInteractor = withLocking(
   archiveDraftDocument,
   (_applicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

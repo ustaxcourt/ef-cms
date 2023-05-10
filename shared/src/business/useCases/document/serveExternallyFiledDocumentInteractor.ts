@@ -16,7 +16,6 @@ import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * serveExternallyFiledDocumentInteractor
- *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
@@ -242,11 +241,8 @@ export const determineEntitiesToLock = (
     docketNumbers?: string[];
     subjectCaseDocketNumber: string;
   },
-): {
-  identifier: string[];
-  ttl?: number;
-} => ({
-  identifier: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
   ),
   ttl: 900,

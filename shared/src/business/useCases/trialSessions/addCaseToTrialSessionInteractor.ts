@@ -9,7 +9,6 @@ import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * addCaseToTrialSession
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.calendarNotes notes for why the trial session/hearing was added
@@ -103,6 +102,6 @@ export const addCaseToTrialSession = async (
 export const addCaseToTrialSessionInteractor = withLocking(
   addCaseToTrialSession,
   (_applicationContext: IApplicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );

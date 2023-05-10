@@ -452,7 +452,6 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
 
 /**
  * serveCaseToIrs
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
@@ -618,6 +617,6 @@ export const serveCaseToIrs = async (applicationContext, { docketNumber }) => {
 export const serveCaseToIrsInteractor = withLocking(
   serveCaseToIrs,
   (_applicationContext: IApplicationContext, { docketNumber }) => ({
-    identifier: `case|${docketNumber}`,
+    identifiers: [`case|${docketNumber}`],
   }),
 );
