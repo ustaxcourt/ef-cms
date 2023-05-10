@@ -894,7 +894,7 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 10; //TODO change back to 100
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
