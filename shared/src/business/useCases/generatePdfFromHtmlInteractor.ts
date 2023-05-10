@@ -1,3 +1,4 @@
+import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { headerFontFace } from './headerFontFace';
 import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 
@@ -28,88 +29,115 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
-  let browser = null;
-  let result: any = null;
+  const sendGenerateEvent = true;
 
-  try {
-    browser = await applicationContext.getChromiumBrowser();
-
-    let page = await browser?.newPage();
-
-    await page.setContent(contentHtml);
-
-    if (headerHtml === undefined) {
-      headerHtml = reactTemplateGenerator({
-        componentName: 'PageMetaHeaderDocket',
-        data: {
+  if (sendGenerateEvent) {
+    const { currentColor, region, stage } = applicationContext.environment;
+    const client = new LambdaClient({
+      region,
+    });
+    const command = new InvokeCommand({
+      FunctionName: `pdf-generator-${currentColor}-${stage}`,
+      InvocationType: 'RequestResponse',
+      Payload: Buffer.from(
+        JSON.stringify({
+          contentHtml,
+          displayHeaderFooter,
           docketNumber,
-        },
-      });
-    }
+          footerHtml,
+          headerHtml,
+          overwriteFooter,
+        }),
+      ),
+    });
+    const response = await client.send(command);
+    console.log(response);
+  } else {
+    let browser = null;
+    let result: any = null;
 
-    const headerTemplate = `
+    try {
+      browser = await applicationContext.getChromiumBrowser();
+
+      let page = await browser?.newPage();
+
+      await page.setContent(contentHtml);
+
+      if (headerHtml === undefined) {
+        headerHtml = reactTemplateGenerator({
+          componentName: 'PageMetaHeaderDocket',
+          data: {
+            docketNumber,
+          },
+        });
+      }
+
+      const headerTemplate = `
           <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${headerHtml}
           </div>
     `;
 
-    const footerTemplate = overwriteFooter
-      ? `${footerHtml || ''}`
-      : `
+      const footerTemplate = overwriteFooter
+        ? `${footerHtml || ''}`
+        : `
           <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${footerHtml || ''}
           </div>`;
 
-    const firstPage = await page.pdf({
-      displayHeaderFooter: true,
-      footerTemplate,
-      format: 'Letter',
-      margin: {
-        bottom: '100px',
-        top: '80px',
-      },
-      pageRanges: '1',
-      printBackground: true,
-    });
-
-    let remainingPages: any;
-    try {
-      remainingPages = await page.pdf({
-        displayHeaderFooter,
+      const firstPage = await page.pdf({
+        displayHeaderFooter: true,
         footerTemplate,
         format: 'Letter',
-        headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
         margin: {
           bottom: '100px',
           top: '80px',
         },
-        pageRanges: '2-',
+        pageRanges: '1',
         printBackground: true,
       });
-    } catch (err) {
-      // this was probably a 1 page document
-      if (!err.message.includes('Page range exceeds page count')) {
-        throw err;
+
+      let remainingPages: any;
+      try {
+        remainingPages = await page.pdf({
+          displayHeaderFooter,
+          footerTemplate,
+          format: 'Letter',
+          headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
+          margin: {
+            bottom: '100px',
+            top: '80px',
+          },
+          pageRanges: '2-',
+          printBackground: true,
+        });
+      } catch (err) {
+        // this was probably a 1 page document
+        if (!err.message.includes('Page range exceeds page count')) {
+          throw err;
+        }
+      }
+
+      if (remainingPages) {
+        const returnVal = await applicationContext
+          .getUtilities()
+          .combineTwoPdfs({
+            applicationContext,
+            firstPdf: firstPage,
+            secondPdf: remainingPages,
+          });
+        result = Buffer.from(returnVal);
+      } else {
+        result = firstPage;
+      }
+    } catch (error) {
+      applicationContext.logger.error(error);
+      throw error;
+    } finally {
+      if (browser !== null) {
+        await browser.close();
       }
     }
-
-    if (remainingPages) {
-      const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
-        applicationContext,
-        firstPdf: firstPage,
-        secondPdf: remainingPages,
-      });
-      result = Buffer.from(returnVal);
-    } else {
-      result = firstPage;
-    }
-  } catch (error) {
-    applicationContext.logger.error(error);
-    throw error;
-  } finally {
-    if (browser !== null) {
-      await browser.close();
-    }
+    return result;
   }
-  return result;
 };
