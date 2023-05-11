@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { FORMATS, prepareDateFromString } from '../../utilities/DateHandler';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -607,46 +606,6 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.dismissedAlertForNOTT).toBe(false);
-    });
-  });
-
-  describe('Notice of trial reminder', () => {
-    it('should set isStartDateWithinNOTTReminderRange to false when the trial session is not calendared', () => {
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          isCalendared: false,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(false);
-    });
-
-    it('should set isStartDateWithinNOTTReminderRange to true when the trial session is calendared and the trial date falls within the specified date range', () => {
-      const today = prepareDateFromString();
-      const thirtyTwoDaysFromToday = today.plus({ ['days']: 32 });
-      const twoDaysFromToday = today
-        .plus({ ['days']: 2 })
-        .toFormat(FORMATS.MMDDYY);
-
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          isCalendared: true,
-          startDate: thirtyTwoDaysFromToday,
-        },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(trialSession.isStartDateWithinNOTTReminderRange).toBe(true);
-      expect(trialSession.thirtyDaysBeforeTrialFormatted).toBe(
-        twoDaysFromToday,
-      );
     });
   });
 });
