@@ -50,9 +50,13 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
-    return new Uint8Array(
-      Buffer.from(response.Payload as unknown as string, 'base64'),
-    );
+    return await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      key: response.Payload as unknown as string,
+      protocol: 'S3',
+      useTempBucket: true,
+    });
+
     // return new Uint8Array(binaryData);
   } else {
     const ret = await applicationContext
