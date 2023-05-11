@@ -50,16 +50,15 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
-    console.log('response id', response.Payload!.toString());
+
+    const key = Buffer.from(response.Payload!).toString('utf-8');
 
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
-      key: response.Payload!.toString(),
+      key,
       protocol: 'S3',
       useTempBucket: true,
     });
-
-    // return new Uint8Array(binaryData);
   } else {
     const ret = await applicationContext
       .getUseCaseHelpers()
