@@ -10,7 +10,14 @@ import { fakeFile } from '../helpers';
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
   {
-    overrides = { trialLocation: 'Birmingham, Alabama' },
+    overrides = {
+      receivedAt: {
+        day: '01',
+        month: '01',
+        year: '2001',
+      },
+      trialLocation: 'Birmingham, Alabama',
+    },
     shouldServe = true,
   } = {},
 ) => {
@@ -44,16 +51,16 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',
-      value: '01',
+      value: overrides.receivedAt.month,
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtDay',
-      value: '01',
+      value: overrides.receivedAt.day,
     });
     const receivedAtYear = '2001';
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtYear',
-      value: receivedAtYear,
+      value: overrides.receivedAt.year,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

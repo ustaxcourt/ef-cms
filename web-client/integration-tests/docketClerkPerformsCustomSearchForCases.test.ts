@@ -9,8 +9,16 @@ describe('Docket clerk performs custom searches for cases', () => {
     cerebralTest.closeSocket();
   });
 
+  const overrides = {
+    receivedAt: {
+      day: '29',
+      month: '02',
+      year: '2012',
+    },
+    trialLocation: 'Birmingham, Alabama',
+  };
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest);
+  petitionsClerkCreatesNewCase(cerebralTest, { overrides, shouldServe: true });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -25,12 +33,12 @@ describe('Docket clerk performs custom searches for cases', () => {
   it('should set custom case inventory filters in state', async () => {
     await cerebralTest.runSequence(
       'setCustomCaseInventoryReportFiltersSequence',
-      { endDate: '05/12/2023' },
+      { startDate: '02/28/2012' },
     );
 
     await cerebralTest.runSequence(
       'setCustomCaseInventoryReportFiltersSequence',
-      { startDate: '05/10/2023' },
+      { endDate: '03/01/2012' },
     );
     // await cerebralTest.runSequence(
     //   'setCustomCaseInventoryReportFiltersSequence',
@@ -55,7 +63,8 @@ describe('Docket clerk performs custom searches for cases', () => {
       selectedPage: 0,
     });
 
-    cerebralTest.getState('customCaseInventory');
+    const testState = cerebralTest.getState('customCaseInventory');
+    console.log('test state', testState);
   });
   // expectation of something in state, confirm initial state of custom case inventory
 
