@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
 /**
@@ -27,8 +28,11 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
-  // TODO: replace me
-  const sendGenerateEvent = true;
+  const sendGenerateEvent = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key,
+    });
 
   if (sendGenerateEvent) {
     const { currentColor, region, stage } = applicationContext.environment;
