@@ -1,6 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
-// import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { connect } from '@cerebral/react';
@@ -205,15 +205,13 @@ export const JudgeActivityReport = connect(
                 return (
                   <tr key={index}>
                     <td className="consolidated-case-column">
-                      {/* <div className={indentMemberCase ? 'margin-left-2' : ''}>
-                  <ConsolidatedCaseIcon
-                    consolidatedIconTooltipText={
-                      formattedCase.consolidatedIconTooltipText
-                    }
-                    inConsolidatedGroup={formattedCase.inConsolidatedGroup}
-                    showLeadCaseIcon={formattedCase.isLeadCase}
-                  />
-                </div> */}
+                      <ConsolidatedCaseIcon
+                        consolidatedIconTooltipText={
+                          formattedCase.consolidatedIconTooltipText
+                        }
+                        inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+                        showLeadCaseIcon={formattedCase.isLeadCase}
+                      />
                     </td>
                     <td>{formattedCase.docketNumber}</td>
                     <td>{formattedCase?.formattedCaseCount}</td>
