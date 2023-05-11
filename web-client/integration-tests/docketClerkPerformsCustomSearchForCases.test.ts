@@ -1,13 +1,6 @@
-import {
-  CASE_TYPES_MAP,
-  CaseStatus,
-  CaseType,
-} from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, loginAs, setupTest } from './helpers';
 import { initialCustomCaseInventoryReportState } from '../src/presenter/customCaseInventoryReportState';
-// import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
-import { pinkLog } from '../../shared/src/tools/pinkLog';
+import { loginAs, setupTest } from './helpers';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
 describe('Docket clerk performs custom searches for cases', () => {
   const cerebralTest = setupTest();
@@ -16,15 +9,8 @@ describe('Docket clerk performs custom searches for cases', () => {
     cerebralTest.closeSocket();
   });
 
-  const overrides = {
-    receivedAtDay: '07',
-    receivedAtMonth: '05',
-    receivedAtYear: '1776',
-  };
-
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile, overrides);
-  // may need to serve case
+  petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
 
@@ -39,12 +25,12 @@ describe('Docket clerk performs custom searches for cases', () => {
   it('should set custom case inventory filters in state', async () => {
     await cerebralTest.runSequence(
       'setCustomCaseInventoryReportFiltersSequence',
-      { endDate: '05/08/1776' },
+      { endDate: '05/12/2023' },
     );
 
     await cerebralTest.runSequence(
       'setCustomCaseInventoryReportFiltersSequence',
-      { startDate: '05/06/1776' },
+      { startDate: '05/10/2023' },
     );
     // await cerebralTest.runSequence(
     //   'setCustomCaseInventoryReportFiltersSequence',
@@ -69,8 +55,7 @@ describe('Docket clerk performs custom searches for cases', () => {
       selectedPage: 0,
     });
 
-    const customCaseReportState = cerebralTest.getState('customCaseInventory');
-    pinkLog(customCaseReportState);
+    cerebralTest.getState('customCaseInventory');
   });
   // expectation of something in state, confirm initial state of custom case inventory
 

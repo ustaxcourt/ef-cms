@@ -31,9 +31,11 @@ export const getCustomCaseInventoryReportAction = async ({
   const formattedStartDate = applicationContext
     .getUtilities()
     .createISODateString(filterValues.startDate, FORMATS.MMDDYYYY);
+  const [month, day, year] = filterValues.endDate.split('/');
+
   const formattedEndDate = applicationContext
     .getUtilities()
-    .createISODateString(filterValues.endDate, FORMATS.MMDDYYYY);
+    .createEndOfDayISO({ day, month, year });
 
   const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
