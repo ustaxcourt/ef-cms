@@ -50,8 +50,12 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
+    console.log('response', response);
 
-    const key = Buffer.from(response.Payload!).toString('utf-8');
+    const textDecoder = new TextDecoder('utf-8');
+    const responseStr = textDecoder.decode(response.Payload);
+    const key = JSON.parse(responseStr);
+    console.log('key', key);
 
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
