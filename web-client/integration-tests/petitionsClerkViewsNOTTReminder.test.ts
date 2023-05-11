@@ -56,14 +56,14 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
       await cerebralTest.runSequence('gotoTrialSessionsSequence');
       expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
-      const trialSessionFormatted = runCompute(
+      const trialSessionFormatted: any = runCompute(
         withAppContextDecorator(formattedTrialSessions),
         {
           state: cerebralTest.getState(),
         },
       );
 
-      const filteredSessions =
+      const filteredSessions: any[] =
         trialSessionFormatted.filteredTrialSessions['Open'];
 
       let foundSession;
@@ -95,7 +95,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
         trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const trialSessionDetailsFormatted = runCompute(
+      const trialSessionDetailsFormatted: any = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
           state: cerebralTest.getState(),
@@ -106,7 +106,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
         `30-day trial notices are due before ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
       );
 
-      let trialSessionDetailsHelperComputed = runCompute(
+      let trialSessionDetailsHelperComputed: any = runCompute(
         withAppContextDecorator(trialSessionDetailsHelper),
         {
           state: cerebralTest.getState(),
@@ -139,7 +139,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
         trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const trialSessionDetailsFormatted = runCompute(
+      const trialSessionDetailsFormatted: any = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
           state: cerebralTest.getState(),
@@ -150,7 +150,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
         `30-day trial notices are due before ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
       );
 
-      let trialSessionDetailsHelperComputed = runCompute(
+      let trialSessionDetailsHelperComputed: any = runCompute(
         withAppContextDecorator(trialSessionDetailsHelper),
         {
           state: cerebralTest.getState(),
@@ -161,8 +161,28 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
         trialSessionDetailsHelperComputed.canDismissThirtyDayAlert,
       ).toEqual(true);
     });
-  });
 
-  // clear the alert
-  // assert the banner is gone
+    it('should dismiss the alert banner and verify that the alert no longer shows up for that trial session', async () => {
+      await cerebralTest.runSequence('showDismissThirtyDayAlertModalSequence');
+
+      expect(cerebralTest.getState('modal.showModal')).toEqual(
+        'DismissThirtyDayNoticeAlertModal',
+      );
+
+      await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');
+
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'TrialSessionDetail',
+      );
+
+      const trialSessionDetailsFormatted: any = runCompute(
+        withAppContextDecorator(formattedTrialSessionDetails),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      expect(trialSessionDetailsFormatted.showAlertForNOTTReminder).toBe(false);
+    });
+  });
 });
