@@ -55,6 +55,8 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
   const casesCount = new Map();
   let filteredSubmittedAndCavCasesByJudge: any = [];
 
+  console.log('submittedAndCavCasesByJudge', submittedAndCavCasesByJudge);
+
   submittedAndCavCasesByJudge.forEach(individualCase => {
     if (individualCase.leadDocketNumber) {
       if (!casesCount.has(individualCase.leadDocketNumber)) {
@@ -74,6 +76,10 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
       filteredSubmittedAndCavCasesByJudge.push(individualCase);
     }
   });
+  const currentDateInIsoFormat: string = applicationContext
+    .getUtilities()
+    .prepareDateFromString()
+    .toISOString();
 
   filteredSubmittedAndCavCasesByJudge.forEach(filteredCase => {
     filteredCase.formattedCaseCount = casesCount.get(filteredCase.docketNumber);
@@ -82,9 +88,22 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
       filteredCase.isLeadCase = true;
       filteredCase.inConsolidatedGroup = true;
     }
-  });
 
-  console.log(casesCount);
+    filteredCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+
+    const newestCaseStatusChangeIndex =
+      filteredCase.caseStatusHistory.length - 1;
+
+    const dateOfLastCaseStatusChange =
+      filteredCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+
+    filteredCase.daysElapsedSinceLastStatusChange = applicationContext
+      .getUtilities()
+      .calculateDifferenceInDays(
+        currentDateInIsoFormat,
+        dateOfLastCaseStatusChange,
+      );
+  });
 
   return {
     closedCasesTotal,

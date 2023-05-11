@@ -217,7 +217,7 @@ export const JudgeActivityReport = connect(
                     <td>{formattedCase?.formattedCaseCount}</td>
                     <td>{formattedCase.caseCaption}</td>
                     <td>{formattedCase.status}</td>
-                    <td>Too Many Days!</td>
+                    <td>{formattedCase.daysElapsedSinceLastStatusChange}</td>
                   </tr>
                 );
               },
