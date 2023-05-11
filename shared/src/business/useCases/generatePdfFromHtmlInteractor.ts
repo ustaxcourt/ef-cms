@@ -50,8 +50,7 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
-    console.log('cody', response.Payload);
-    return response.Payload;
+    return new Uint8Array(response.Payload!);
   } else {
     const ret = await applicationContext
       .getUseCaseHelpers()
