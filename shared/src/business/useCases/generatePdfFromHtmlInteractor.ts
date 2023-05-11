@@ -54,7 +54,7 @@ export const generatePdfFromHtmlInteractor = async (
     //   response.Payload as unknown as string,
     //   'base64',
     // );
-    return response.Payload!;
+    return Buffer.from(response.Payload as unknown as string, 'base64');
     // return new Uint8Array(binaryData);
   } else {
     const ret = await applicationContext

@@ -11,11 +11,11 @@ export const handler = async event => {
     .generatePdfFromHtmlHelper(applicationContext, event);
 
   return {
-    body: results,
+    body: Buffer.from(results).toString('base64'),
     headers: {
       'Content-Type': 'application/octet-stream',
     },
-    isBase64Encoded: false,
+    isBase64Encoded: true,
     statusCode: 200,
   };
 };
