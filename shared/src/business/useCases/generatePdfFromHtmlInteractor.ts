@@ -50,6 +50,7 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
+    console.log(response);
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key: response.Payload as unknown as string,
