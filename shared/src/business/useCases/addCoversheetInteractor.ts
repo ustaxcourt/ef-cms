@@ -51,6 +51,7 @@ export const addCoversheetInteractor = async (
       })
       .promise();
     pdfData = Body;
+    console.log('got some data', typeof pdfData);
   } catch (err) {
     err.message = `${err.message} docket entry id is ${docketEntryId}`;
     throw err;

@@ -53,7 +53,7 @@ export const generatePdfFromHtmlInteractor = async (
     // response.Payload is a UInt8Array
     return Buffer.from(response.Payload!);
   } else {
-    return await applicationContext
+    const ret = await applicationContext
       .getUseCaseHelpers()
       .generatePdfFromHtmlHelper(applicationContext, {
         contentHtml,
@@ -63,5 +63,8 @@ export const generatePdfFromHtmlInteractor = async (
         headerHtml,
         overwriteFooter,
       });
+    console.log('ret', ret);
+    console.log('ret', typeof ret);
+    return ret;
   }
 };
