@@ -9,6 +9,7 @@ export const getChromiumBrowser = async () => {
 };
 
 export const getChromiumBrowserAWS = async () => {
+  chromium.setGraphicsMode = false;
   return await puppeteerCore.launch({
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
