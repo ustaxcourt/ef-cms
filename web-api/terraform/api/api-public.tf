@@ -9,10 +9,6 @@ resource "aws_lambda_function" "api_public_lambda" {
   timeout          = "10"
   memory_size      = "3008"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
-
   runtime = var.node_version
 
   environment {

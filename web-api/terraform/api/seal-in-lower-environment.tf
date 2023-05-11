@@ -15,10 +15,6 @@ resource "aws_lambda_function" "zip_seal" {
   environment {
     variables = var.lambda_environment
   }
-
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 }
 
 resource "aws_lambda_permission" "allow_topic_to_seal" {
