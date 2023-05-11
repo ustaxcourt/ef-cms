@@ -42,6 +42,9 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
     variables = var.lambda_environment
   }
 
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 resource "aws_lambda_function" "websockets_default_lambda" {
@@ -61,6 +64,9 @@ resource "aws_lambda_function" "websockets_default_lambda" {
     variables = var.lambda_environment
   }
 
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
 }
 
 
