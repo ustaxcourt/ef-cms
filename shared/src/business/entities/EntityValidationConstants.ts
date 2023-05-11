@@ -20,8 +20,8 @@ import {
   ROLES,
   SCENARIOS,
 } from './EntityConstants';
-
 import { JoiValidationConstants } from './JoiValidationConstants';
+import { createEndOfDayISO } from '../utilities/DateHandler';
 
 export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
@@ -465,10 +465,10 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
 export const DATE_RANGE_VALIDATION_RULE_KEYS = {
   endDate: joi.alternatives().conditional('startDate', {
     is: JoiValidationConstants.ISO_DATE.exist().not(null),
-    otherwise: JoiValidationConstants.ISO_DATE.max('now')
+    otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
       .required()
       .description('The end date search filter must be of valid date format'),
-    then: JoiValidationConstants.ISO_DATE.max('now')
+    then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
       .min(joi.ref('startDate'))
       .required()
       .description(

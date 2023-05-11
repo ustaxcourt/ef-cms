@@ -209,6 +209,10 @@ describe('DateHandler', () => {
   });
 
   describe('createStartOfDayISO', () => {
+    const mockTimeFunc = setupMockTestCurrentTime('2021-10-07T00:31:51.621Z');
+    beforeAll(mockTimeFunc.setupDateMock);
+    afterAll(mockTimeFunc.restoreDateMock);
+
     it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone', () => {
       const startOfDay = createStartOfDayISO({
         day: '7',
@@ -224,9 +228,18 @@ describe('DateHandler', () => {
       );
       expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
     });
+
+    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone when no params are passed in', () => {
+      const startOfDay = createStartOfDayISO();
+      expect(startOfDay).toEqual('2021-10-06T04:00:00.000Z');
+    });
   });
 
   describe('createEndOfDayISO', () => {
+    const mockTimeFunc = setupMockTestCurrentTime('2021-10-07T00:31:51.621Z');
+    beforeAll(mockTimeFunc.setupDateMock);
+    afterAll(mockTimeFunc.restoreDateMock);
+
     it('creates a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone', () => {
       const endOfDay = createEndOfDayISO({
         day: '7',
@@ -238,6 +251,11 @@ describe('DateHandler', () => {
       // now confirm it converts "back" to originally desired time
       const formattedInEastern = formatDateString(endOfDay, FORMATS.DATE_TIME);
       expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+    });
+
+    it('creates a timestamp one millisecond before midnight of today when no params are passed in', () => {
+      const endOfDayToday = createEndOfDayISO();
+      expect(endOfDayToday).toEqual('2021-10-07T03:59:59.999Z');
     });
   });
 

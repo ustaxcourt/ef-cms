@@ -185,18 +185,36 @@ export const createDateAtStartOfWeekEST = (dateString, format) => {
   return dateOutput;
 };
 
-export const createEndOfDayISO = ({ day, month, year }) => {
-  return DateTime.fromObject({ day, month, year }, { zone: USTC_TZ })
-    .set({ hour: 23, millisecond: 999, minute: 59, second: 59 })
-    .setZone('utc')
-    .toISO();
+export const createEndOfDayISO = (params?: {
+  day: string;
+  month: string;
+  year: string;
+}): string => {
+  const dateObject = params
+    ? DateTime.fromObject({
+        day: params.day,
+        month: params.month,
+        year: params.year,
+      })
+    : DateTime.now();
+
+  return dateObject.setZone(USTC_TZ).endOf('day').setZone('utc').toISO();
 };
 
-export const createStartOfDayISO = ({ day, month, year }) => {
-  return DateTime.fromObject({ day, month, year }, { zone: USTC_TZ })
-    .startOf('day')
-    .setZone('utc')
-    .toISO();
+export const createStartOfDayISO = (params?: {
+  day: string;
+  month: string;
+  year: string;
+}): string => {
+  const dateObject = params
+    ? DateTime.fromObject({
+        day: params.day,
+        month: params.month,
+        year: params.year,
+      })
+    : DateTime.now();
+
+  return dateObject.setZone(USTC_TZ).startOf('day').setZone('utc').toISO();
 };
 
 /**
