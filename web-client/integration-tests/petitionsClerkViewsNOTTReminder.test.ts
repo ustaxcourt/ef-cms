@@ -16,7 +16,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
   const trialLocation = `Seattle, Washington, ${Date.now()}`;
 
   const currentDate = prepareDateFromString().plus({
-    ['days']: 31,
+    ['days']: 30,
   });
 
   const overrides = {
