@@ -183,7 +183,7 @@ export const JudgeActivityReport = connect(
                 Progress Description
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.opinionsFiledTotal}
+                Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
               </div>
             </div>
           </caption>
@@ -200,7 +200,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.submittedAndCavCasesByJudge.map(
+            {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
               (formattedCase, index) => {
                 return (
                   <tr key={index}>
@@ -216,7 +216,7 @@ export const JudgeActivityReport = connect(
                 </div> */}
                     </td>
                     <td>{formattedCase.docketNumber}</td>
-                    <td>IDK!</td>
+                    <td>{formattedCase?.formattedCaseCount}</td>
                     <td>{formattedCase.caseCaption}</td>
                     <td>{formattedCase.status}</td>
                     <td>Too Many Days!</td>
@@ -226,6 +226,9 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
+        {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
+          <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
+        )}
       </>
     );
 
