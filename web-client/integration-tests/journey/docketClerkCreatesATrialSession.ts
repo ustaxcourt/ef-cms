@@ -45,7 +45,7 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'startDateDay',
-      value: '12',
+      value: overrides.trialDay || '12',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -118,10 +118,12 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'startDateMonth',
-      value: '12',
+      value: overrides.trialMonth || '12',
     });
 
-    expect(cerebralTest.getState('form.term')).toEqual('Fall');
+    if (!overrides.trialMonth) {
+      expect(cerebralTest.getState('form.term')).toEqual('Fall');
+    }
     expect(cerebralTest.getState('form.termYear')).toEqual(
       overrides.trialYear || '2025',
     );
