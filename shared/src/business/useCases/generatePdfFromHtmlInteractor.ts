@@ -50,6 +50,7 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
+    console.log('response', response);
     return response.Payload;
   } else {
     return await applicationContext
