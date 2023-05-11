@@ -8,11 +8,9 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
     casesClosedByJudge,
     opinions,
     orders,
-    submittedAndCavCasesByJudge,
+    submittedAndCavCasesByJudge = [],
     trialSessions,
   } = get(state.judgeActivityReportData);
-
-  console.log('submittedAndCavCasesByJudge', submittedAndCavCasesByJudge);
 
   let closedCasesTotal: number = 0,
     trialSessionsHeldTotal: number = 0,
@@ -54,11 +52,42 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
+  const casesCount = new Map();
+  let filteredSubmittedAndCavCasesByJudge: any = [];
+
+  submittedAndCavCasesByJudge.forEach(individualCase => {
+    if (individualCase.leadDocketNumber) {
+      if (!casesCount.has(individualCase.leadDocketNumber)) {
+        casesCount.set(individualCase.leadDocketNumber, 1);
+      } else {
+        casesCount.set(
+          individualCase.leadDocketNumber,
+          casesCount.get(individualCase.leadDocketNumber) + 1,
+        );
+      }
+    } else {
+      casesCount.set(individualCase.docketNumber, 1);
+      filteredSubmittedAndCavCasesByJudge.push(individualCase);
+    }
+
+    if (individualCase.docketNumber === individualCase.leadDocketNumber) {
+      filteredSubmittedAndCavCasesByJudge.push(individualCase);
+    }
+  });
+
+  filteredSubmittedAndCavCasesByJudge.forEach(filteredCase => {
+    filteredCase.formattedCaseCount = casesCount.get(filteredCase.docketNumber);
+  });
+
+  console.log(casesCount);
+
   return {
     closedCasesTotal,
+    filteredSubmittedAndCavCasesByJudge,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
     ordersFiledTotal,
+    progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
     reportHeader,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
