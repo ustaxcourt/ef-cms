@@ -19,8 +19,8 @@ const cases = [
     ...MOCK_CASE,
     associatedJudge: 'Chief Judge',
     caseType: 'New',
-    createdAt: '2018-03-01T21:40:46.415Z',
     procedureType: 'Regular',
+    receivedAt: '2018-03-01T21:40:46.415Z',
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -28,10 +28,10 @@ const cases = [
     associatedJudge: 'Judge Currozo',
     caseCaption: 'Test Petitioner 2',
     caseType: 'Deficiency',
-    createdAt: '2022-03-01T21:40:46.415Z',
     docketNumber: '1338-20',
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: 'Regular',
+    receivedAt: '2022-03-01T21:40:46.415Z',
     status: CASE_STATUS_TYPES.generalDocket,
   },
 ];
@@ -64,17 +64,17 @@ describe('customCaseInventoryReportHelper', () => {
       {
         associatedJudge: 'Chief Judge',
         caseType: 'New',
-        createdAt: '03/01/18',
         docketNumber: '101-18',
         preferredTrialCity: 'Washington, District of Columbia',
+        receivedAt: '03/01/18',
         status: CASE_STATUS_TYPES.new,
       },
       {
         associatedJudge: 'Judge Currozo',
         caseType: 'Deficiency',
-        createdAt: '03/01/22',
         docketNumber: '1338-20',
         preferredTrialCity: 'Birmingham, Alabama',
+        receivedAt: '03/01/22',
         status: CASE_STATUS_TYPES.generalDocket,
       },
     ]);

@@ -29,10 +29,9 @@ export type GetCaseInventoryReportResponse = {
 };
 
 export type CaseInventory = Pick<
-  TCase,
+  RawCase,
   | 'associatedJudge'
   | 'isPaper'
-  | 'createdAt'
   | 'procedureType'
   | 'caseCaption'
   | 'caseType'
