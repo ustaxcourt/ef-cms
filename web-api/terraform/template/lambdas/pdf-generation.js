@@ -2,6 +2,7 @@ import { createApplicationContext } from '../../../src/applicationContext';
 
 /**
  * handler
+ * @returns {string} id for the temporary stored pdf
  */
 export const handler = async event => {
   const applicationContext = createApplicationContext();
