@@ -11,6 +11,11 @@ resource "aws_lambda_function" "set_trial_session_lambda" {
 
   runtime = var.node_version
 
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
+
+
   environment {
     variables = var.lambda_environment
   }
