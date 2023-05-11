@@ -10,5 +10,14 @@ export const handler = async event => {
     .getUseCaseHelpers()
     .generatePdfFromHtmlHelper(applicationContext, event);
 
-  return results.toString('base64');
+  const tempId = applicationContext.getUniqueId();
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: results,
+    key: tempId,
+    useTempBucket: true,
+  });
+
+  return tempId;
 };
