@@ -37,10 +37,13 @@ export const addCoverToPdf = async ({
 
   const { PDFDocument } = await applicationContext.getPdfLib();
 
+  console.log('cody - calling load with', pdfData);
   const pdfDoc = await PDFDocument.load(pdfData);
 
   // allow GC to clear original loaded pdf data
   pdfData = null;
+
+  console.log('cody - generating coversheet');
 
   const coverPagePdf = await applicationContext
     .getDocumentGenerators()
@@ -49,11 +52,15 @@ export const addCoverToPdf = async ({
       data: coverSheetData,
     });
 
+  console.log('cody - done generating coversheet', coverPagePdf);
+
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
   const coverPageDocumentPages = await pdfDoc.copyPages(
     coverPageDocument,
     coverPageDocument.getPageIndices(),
   );
+
+  console.log('cody - copy pages');
 
   if (replaceCoversheet) {
     pdfDoc.removePage(0);
