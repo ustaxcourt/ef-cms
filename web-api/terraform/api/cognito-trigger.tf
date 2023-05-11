@@ -34,10 +34,6 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   s3_key           = "triggers_${var.current_color}.js.zip"
   source_code_hash = var.triggers_object_hash
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
-
   environment {
     variables = var.lambda_environment
   }
@@ -55,10 +51,6 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   s3_key           = "triggers_${var.current_color}.js.zip"
   source_code_hash = var.triggers_object_hash
   count            = var.create_triggers
-
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 
   environment {
     variables = var.lambda_environment
@@ -78,10 +70,6 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "triggers_${var.current_color}.js.zip"
   source_code_hash = var.triggers_object_hash
-
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 
   environment {
     variables = var.lambda_environment

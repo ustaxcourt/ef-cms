@@ -9,10 +9,6 @@ resource "aws_lambda_function" "api_async_lambda" {
   timeout          = "900"
   memory_size      = "7000"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
-
   runtime = var.node_version
 
   environment {

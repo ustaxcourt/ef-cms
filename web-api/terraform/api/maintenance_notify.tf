@@ -16,7 +16,4 @@ resource "aws_lambda_function" "maintenance_notify_lambda" {
     variables = var.lambda_environment
   }
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 }

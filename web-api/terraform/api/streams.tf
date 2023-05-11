@@ -17,9 +17,6 @@ resource "aws_lambda_function" "zip_streams" {
     variables = var.lambda_environment
   }
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 }
 
 resource "aws_lambda_event_source_mapping" "streams_mapping" {
