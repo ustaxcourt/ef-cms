@@ -15,7 +15,7 @@ export const handler = async event => {
     headers: {
       'Content-Type': 'application/pdf',
     },
-    isBase64Encoded: true,
+    isBase64Encoded: false,
     statusCode: 200,
   };
 };
