@@ -12,6 +12,10 @@ resource "aws_lambda_function" "zip_streams" {
 
   runtime = var.node_version
 
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
+
 
   environment {
     variables = var.lambda_environment
