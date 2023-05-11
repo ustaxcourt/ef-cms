@@ -114,6 +114,7 @@ import { getUsersPendingEmailLambda } from './users/getUsersPendingEmailLambda';
 import { getWorkItemLambda } from './workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
+import { logger } from './logger';
 import { opinionAdvancedSearchLambda } from './documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './documents/orderAdvancedSearchLambda';
 import { prioritizeCaseLambda } from './cases/prioritizeCaseLambda';
@@ -180,9 +181,13 @@ import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from
 import { validatePdfLambda } from './documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
+
+import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
+import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
+import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
+import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
 import cors from 'cors';
 import express from 'express';
-import logger from './logger';
 
 const applicationContext = createApplicationContext({});
 
@@ -739,6 +744,10 @@ app.get(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
   );
+  app.post(
+    '/judge-activity-report/closed-cases',
+    lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
 }
 
 /**
@@ -832,6 +841,18 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.get(
     '/judges/:judgeId/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/trial-sessions',
+    lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
+  );
+  app.post(
+    '/judge-activity-report/opinions',
+    lambdaWrapper(getOpinionsFiledByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/orders',
+    lambdaWrapper(getOrdersFiledByJudgeLambda),
   );
 }
 

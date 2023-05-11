@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @param {object} providers.store the cerebral store object used for setting or unsetting open menu
  */
-export const toggleMenuAction = ({ get, props, store }) => {
+export const toggleMenuAction = ({ get, props, store }: ActionProps) => {
   const openMenu = get(state.navigation.openMenu);
   if (openMenu === props.openMenu) {
     store.unset(state.navigation.openMenu);

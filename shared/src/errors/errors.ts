@@ -3,7 +3,7 @@
  *
  * @type {module.NotFoundError}
  */
-module.exports.NotFoundError = class NotFoundError extends Error {
+export const NotFoundError = class NotFoundError extends Error {
   /**
    * constructor
    *
@@ -21,7 +21,7 @@ module.exports.NotFoundError = class NotFoundError extends Error {
  *
  * @type {module.NotFoundError}
  */
-module.exports.InvalidRequest = class InvalidRequest extends Error {
+export const InvalidRequest = class InvalidRequest extends Error {
   /**
    * constructor
    *
@@ -39,7 +39,7 @@ module.exports.InvalidRequest = class InvalidRequest extends Error {
  *
  * @type {module.UnknownUserError}
  */
-module.exports.UnknownUserError = class UnknownUserError extends Error {
+export const UnknownUserError = class UnknownUserError extends Error {
   /**
    * constructor
    *
@@ -57,7 +57,7 @@ module.exports.UnknownUserError = class UnknownUserError extends Error {
  *
  * @type {module.UnauthorizedError}
  */
-module.exports.UnauthorizedError = class UnauthorizedError extends Error {
+export const UnauthorizedError = class UnauthorizedError extends Error {
   /**
    * constructor
    *
@@ -75,9 +75,7 @@ module.exports.UnauthorizedError = class UnauthorizedError extends Error {
  *
  * @type {module.UnprocessableEntity}
  */
-module.exports.UnprocessableEntityError = class UnprocessableEntityError extends (
-  Error
-) {
+export const UnprocessableEntityError = class UnprocessableEntityError extends Error {
   /**
    * constructor
    *
@@ -95,9 +93,7 @@ module.exports.UnprocessableEntityError = class UnprocessableEntityError extends
  *
  * @type {module.UnsanitizedEntity}
  */
-module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
-  Error
-) {
+export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
   /**
    * constructor
    *
@@ -115,7 +111,7 @@ module.exports.UnsanitizedEntityError = class UnsanitizedEntityError extends (
  *
  * @type {module.InvalidEntityError}
  */
-module.exports.InvalidEntityError = class InvalidEntityError extends Error {
+export const InvalidEntityError = class InvalidEntityError extends Error {
   /**
    * constructor
    *

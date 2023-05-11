@@ -4,7 +4,7 @@ export const resetAdvancedDocumentSearchDatesAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const orderSearch = get(state.advancedSearchForm.orderSearch);
   if (
     orderSearch.dateRange ===

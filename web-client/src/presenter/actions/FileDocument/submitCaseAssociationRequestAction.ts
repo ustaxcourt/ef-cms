@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set practitioner to a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const submitCaseAssociationRequestAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 

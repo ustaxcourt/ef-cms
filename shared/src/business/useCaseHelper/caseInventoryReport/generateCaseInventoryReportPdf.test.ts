@@ -1,14 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  generateCaseInventoryReportPdf,
-} = require('./generateCaseInventoryReportPdf');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateCaseInventoryReportPdf } from './generateCaseInventoryReportPdf';
 
 const mockCases = [
   {

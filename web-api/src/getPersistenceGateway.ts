@@ -64,6 +64,7 @@ import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cas
 import { getCasesByFilters } from '../../shared/src/persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
+import { getCasesClosedByJudge } from '../../shared/src/persistence/elasticsearch/getCasesClosedByJudge';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
 import { getClientId } from '../../shared/src/persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from '../../shared/src/persistence/cognito/getCognitoUserIdByEmail';
@@ -226,6 +227,7 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
+    getCasesClosedByJudge,
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,

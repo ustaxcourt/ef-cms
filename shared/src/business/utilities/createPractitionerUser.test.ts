@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { createPractitionerUser } = require('./createPractitionerUser');
-const { ROLES } = require('../entities/EntityConstants');
+import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createPractitionerUser } from './createPractitionerUser';
 
 describe('createPractitionerUser', () => {
   const mockAdmissionsDate = '1876-02-19';

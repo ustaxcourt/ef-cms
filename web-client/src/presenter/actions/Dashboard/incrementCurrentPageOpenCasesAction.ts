@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {Function} providers.store the cerebral store function
  */
-export const incrementCurrentPageOpenCasesAction = ({ get, store }) => {
+export const incrementCurrentPageOpenCasesAction = ({
+  get,
+  store,
+}: ActionProps) => {
   const currentPage = get(state.openCasesCurrentPage) || 1;
 
   store.set(state.openCasesCurrentPage, currentPage + 1);

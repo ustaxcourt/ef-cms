@@ -5,7 +5,9 @@
  * @param {object} providers.applicationContext the applicationContext
  * @returns {Promise} a list of today's opinion documents
  */
-export const getTodaysOpinionsAction = async ({ applicationContext }) => {
+export const getTodaysOpinionsAction = async ({
+  applicationContext,
+}: ActionProps) => {
   const todaysOpinions = await applicationContext
     .getUseCases()
     .getTodaysOpinionsInteractor(applicationContext);

@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 import * as barNumberGenerator from '../../shared/src/persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import { addressLabelCoverSheet } from '../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet';
 import axios from 'axios';
 import pug from 'pug';
@@ -50,7 +51,10 @@ import { docketRecord } from '../../shared/src/business/utilities/documentGenera
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
 import { fallbackHandler } from './fallbackHandler';
-import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
+import {
+  getChromiumBrowser,
+  getChromiumBrowserAWS,
+} from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
@@ -230,7 +234,10 @@ export const createApplicationContext = (
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser,
+    getChromiumBrowser:
+      process.env.NODE_ENV === 'production'
+        ? getChromiumBrowserAWS
+        : getChromiumBrowser,
     getClerkOfCourtNameForSigning: () => {
       return clerkOfCourtNameForSigning;
     },
@@ -486,7 +493,6 @@ export const createApplicationContext = (
       return notificationServiceCache;
     },
     getPdfJs: () => {
-      const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
     },

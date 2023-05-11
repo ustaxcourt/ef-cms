@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const computeChangeOptions = ({ documentType }) => {
+export const computeChangeOptions = ({ documentType }) => {
   const options = {
     h3: documentType.title,
     isAddressAndPhoneChange: documentType.eventCode === 'NCAP',
@@ -14,7 +12,7 @@ const computeChangeOptions = ({ documentType }) => {
   return options;
 };
 
-const changeOfAddress = async ({ applicationContext, content }) => {
+export const changeOfAddress = async ({ applicationContext, content }) => {
   const {
     caseCaptionExtension,
     caseTitle,
@@ -56,9 +54,4 @@ const changeOfAddress = async ({ applicationContext, content }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  changeOfAddress,
-  computeChangeOptions,
 };
