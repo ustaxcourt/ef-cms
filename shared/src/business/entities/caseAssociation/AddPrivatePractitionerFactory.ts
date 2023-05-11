@@ -1,10 +1,10 @@
-const joi = require('joi');
-const {
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import {
   joiValidationDecorator,
   validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
+} from '../JoiValidationDecorator';
+import joi from 'joi';
 
 /**
  * Add Private Practitioner Factory entity
@@ -12,7 +12,7 @@ const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
  * @param {object} rawProps the raw private practitioner data
  * @constructor
  */
-function AddPrivatePractitionerFactory(rawProps) {
+export function AddPrivatePractitionerFactory(rawProps) {
   /**
    * bare constructor for entity factory
    */
@@ -69,5 +69,3 @@ AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {
   ],
   user: 'Select a petitioner counsel',
 };
-
-module.exports = { AddPrivatePractitionerFactory };

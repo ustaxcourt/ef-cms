@@ -1,8 +1,6 @@
-const {
-  DOCUMENT_SEARCH_SORT,
-} = require('../../../business/entities/EntityConstants');
+import { DOCUMENT_SEARCH_SORT } from '../../../business/entities/EntityConstants';
 
-exports.getSortQuery = sortField => {
+export const getSortQuery = sortField => {
   let sort;
   let sortOrder = 'desc';
 

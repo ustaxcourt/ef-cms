@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} providers.data the data being forwarded to the API call
  * @returns {Promise<*>} the promise of the API call
  */
-exports.fileAndServeCourtIssuedDocumentInteractor = (
+export const fileAndServeCourtIssuedDocumentInteractor = (
   applicationContext,
   data,
 ) => {

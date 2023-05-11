@@ -1,4 +1,4 @@
-exports.advancedQueryLimiter =
+export const advancedQueryLimiter =
   ({ applicationContext, key }) =>
   async (req, res, next) => {
     const maxRequests = await applicationContext

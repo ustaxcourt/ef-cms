@@ -1,13 +1,6 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
-
-import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
-import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
-import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
-import path from 'path';
-import sharedAppContext, { ERROR_MAP_429 } from '../../sharedAppContext';
-
+import * as pdfLib from 'pdf-lib';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -24,7 +17,26 @@ import {
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-
+import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
+import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
+import {
+  DocketEntry,
+  getServedPartiesCode,
+  isServed,
+} from '../entities/DocketEntry';
+import {
+  ERROR_MAP_429,
+  getCognitoLoginUrl,
+  getPublicSiteUrl,
+  getUniqueId,
+} from '../../sharedAppContext';
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { abbreviateState } from '../utilities/abbreviateState';
+import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -36,12 +48,15 @@ import {
   compareStrings,
 } from '../utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
+import { createCase } from '../../persistence/dynamo/cases/createCase';
 import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createDocketNumber } from '../../persistence/dynamo/cases/docketNumberGenerator';
+import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '../../persistence/elasticsearch/deleteRecord';
 import { deleteWorkItem } from '../../persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
 import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
 import {
   formatCase,
@@ -49,6 +64,7 @@ import {
   getFormattedCaseDetail,
   sortDocketEntries,
 } from '../../../src/business/utilities/getFormattedCaseDetail';
+import { formatDollars } from '../utilities/formatDollars';
 import {
   formatJudgeName,
   getJudgeLastName,
@@ -63,28 +79,12 @@ import {
 import { getAllWebSocketConnections } from '../../persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { getFakeFile } from './getFakeFile';
-
 import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
 } from '../../persistence/dynamo/chambers/getJudgesChambers';
-
-import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
-import {
-  DocketEntry,
-  getServedPartiesCode,
-  isServed,
-} from '../entities/DocketEntry';
-import { ROLES } from '../entities/EntityConstants';
-import { User } from '../entities/User';
-import { abbreviateState } from '../utilities/abbreviateState';
-import { createCase } from '../../persistence/dynamo/cases/createCase';
-import { createMockDocumentClient } from './createMockDocumentClient';
-import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
-import { formatDollars } from '../utilities/formatDollars';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -94,6 +94,7 @@ import {
 } from '../utilities/getWorkQueueFilters';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
@@ -128,6 +129,9 @@ import { updateUserRecords } from '../../persistence/dynamo/users/updateUserReco
 import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
+import path from 'path';
+import pug from 'pug';
+import sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -271,6 +275,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
@@ -542,7 +547,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const applicationContext = {
-    ...sharedAppContext,
     barNumberGenerator: {
       createBarNumber: jest.fn().mockReturnValue('CS20001'),
     },
@@ -576,6 +580,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       }),
     }),
     getCognitoClientId: jest.fn(),
+    getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
@@ -626,16 +631,17 @@ export const createTestApplicationContext = ({ user } = {}) => {
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    getNodeSass: jest.fn().mockReturnValue(require('sass')),
+    getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfLib: jest.fn().mockResolvedValue(require('pdf-lib')),
+    getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn().mockReturnValue(require('pug')),
+    getPublicSiteUrl,
+    getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
@@ -644,7 +650,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
+    getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
@@ -678,4 +684,5 @@ Object.entries(applicationContext).forEach(([key, value]) => {
     intermediary[key] = value;
   }
 });
-export const applicationContextForClient = intermediary;
+export const applicationContextForClient =
+  intermediary as ClientApplicationContext;

@@ -6,7 +6,11 @@
  * @param {string} providers.text the message to dispatch
  * @param {string} providers.topic the topic of the message to dispatch (to prevent spamming)
  */
-exports.sendSlackNotification = async ({ applicationContext, text, topic }) => {
+export const sendSlackNotification = async ({
+  applicationContext,
+  text,
+  topic,
+}) => {
   const slackWebhookUrl = applicationContext.getSlackWebhookUrl();
   if (!slackWebhookUrl) {
     applicationContext.logger.warn(

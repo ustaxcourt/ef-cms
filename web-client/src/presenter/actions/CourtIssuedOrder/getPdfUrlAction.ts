@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the passed in props
  * @returns {object} pdfUrl
  */
-export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
+export const getPdfUrlAction = async ({
+  applicationContext,
+  get,
+  props,
+}: ActionProps) => {
   const { contentHtml, documentTitle, signatureText } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
   const addedDocketNumbers = get(state.addedDocketNumbers);

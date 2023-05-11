@@ -1,6 +1,5 @@
 /**
  * Fetches the details about a trial session
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getTrialSessionDetails use case
  * @param {object} providers.props the cerebral props object containing the props.sessionId
@@ -9,7 +8,7 @@
 export const getTrialSessionDetailsAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { trialSessionId } = props;
   const trialSession = await applicationContext
     .getUseCases()

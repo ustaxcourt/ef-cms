@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validate case advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const validateCaseAdvancedSearchAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const caseSearch = get(state.advancedSearchForm.caseSearchByName);
   const errors = applicationContext
     .getUseCases()

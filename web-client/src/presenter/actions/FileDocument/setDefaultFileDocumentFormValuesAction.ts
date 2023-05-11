@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Set default values on file document form
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
   store,
-}) => {
+}: ActionProps) => {
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);

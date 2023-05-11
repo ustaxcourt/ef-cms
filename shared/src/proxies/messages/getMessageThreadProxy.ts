@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getMessageThreadInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getMessageThreadInteractor = (
+export const getMessageThreadInteractor = (
   applicationContext,
   { parentMessageId },
 ) => {

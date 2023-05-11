@@ -81,7 +81,6 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
   popd
 fi
 
-
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
   GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
@@ -116,6 +115,20 @@ else
   fi
 fi
 
+
+# // 1. fetch current node version (16.x) from dynamo 
+#   // pass that to terraform (current_color <- current_node_version)
+# // 2. fetch deploying node version (18.x) from dynamo 
+#   // pass that to terraform (deploing_color <- deploying_node_version)
+
+if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
+  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+else
+  BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
+  GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+fi
+
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
   SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 else
@@ -147,6 +160,8 @@ export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
+export TF_VAR_green_node_version=$GREEN_NODE_VERSION
+export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
