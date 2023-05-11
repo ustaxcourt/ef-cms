@@ -93,6 +93,7 @@ import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authen
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
+  calculateDifferenceInDays,
   calculateISODate,
   checkDate,
   computeDate,
@@ -713,6 +714,7 @@ const applicationContext = {
     return {
       abbreviateState,
       aggregatePartiesForService,
+      calculateDifferenceInDays,
       calculateISODate,
       canAllowDocumentServiceForCase,
       caseHasServedDocketEntries,

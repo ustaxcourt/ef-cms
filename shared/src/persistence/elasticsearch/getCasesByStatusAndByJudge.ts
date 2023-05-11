@@ -5,13 +5,11 @@ import { search } from './searchClient';
  * @param {object} providers the providers object containing applicationContext
  * @param {string} providers.applicationContext application context
  * @param {string} providers.judgeName judge
- * @param {array} providers.statuses statuses
- * @returns {array} array of docket numbers
+ * @returns {array} array of records with field based on source
  */
 export const getCasesByStatusAndByJudge = async ({
   applicationContext,
   judgeName,
-  statuses,
 }) => {
   const source = [
     'caseCaption',
@@ -30,8 +28,10 @@ export const getCasesByStatusAndByJudge = async ({
             {
               match_phrase: { 'associatedJudge.S': `${judgeName}` },
             },
+          ],
+          must_not: [
             {
-              terms: { 'status.S': statuses },
+              terms: { 'status.S': ['Closed', 'Closed - Dismissed'] },
             },
           ],
         },
