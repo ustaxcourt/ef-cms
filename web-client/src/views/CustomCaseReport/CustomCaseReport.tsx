@@ -348,7 +348,7 @@ const ReportTable = ({
                 <td>
                   <CaseLink formattedCase={entry} />
                 </td>
-                <td>{entry.createdAt}</td>
+                <td>{entry.receivedAt}</td>
                 <td>{entry.caseTitle}</td>
                 <td>{entry.status}</td>
                 <td>{entry.caseType}</td>

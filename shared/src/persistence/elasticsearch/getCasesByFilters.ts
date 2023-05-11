@@ -20,7 +20,6 @@ export const getCasesByFilters = async ({
   const source = [
     'associatedJudge',
     'isPaper',
-    'createdAt',
     'procedureType',
     'caseCaption',
     'caseType',
@@ -35,7 +34,7 @@ export const getCasesByFilters = async ({
 
   const createDateFilter = {
     range: {
-      'createdAt.S': {
+      'receivedAt.S': {
         gte: params.startDate,
         lt: params.endDate,
       },
@@ -79,7 +78,7 @@ export const getCasesByFilters = async ({
         },
       },
       search_after: [params.searchAfter],
-      sort: [{ 'createdAt.S': 'asc' }],
+      sort: [{ 'receivedAt.S': 'asc' }],
     },
     index: 'efcms-case',
     size: params.pageSize,

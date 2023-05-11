@@ -38,7 +38,7 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     return {
       ...entry,
       caseTitle: Case.getCaseTitle(entry.caseCaption),
-      createdAt: formatDate(entry.createdAt),
+      receivedAt: formatDate(entry.receivedAt),
     };
   });
 
