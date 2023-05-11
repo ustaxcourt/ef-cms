@@ -77,6 +77,11 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   filteredSubmittedAndCavCasesByJudge.forEach(filteredCase => {
     filteredCase.formattedCaseCount = casesCount.get(filteredCase.docketNumber);
+    if (filteredCase.leadDocketNumber === filteredCase.docketNumber) {
+      filteredCase.consolidatedIconTooltipText = 'Lead case';
+      filteredCase.isLeadCase = true;
+      filteredCase.inConsolidatedGroup = true;
+    }
   });
 
   console.log(casesCount);
