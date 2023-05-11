@@ -13,7 +13,7 @@ export const handler = async event => {
   return {
     body: results,
     headers: {
-      'Content-Type': 'application/pdf',
+      'Content-Type': 'application/octet-stream',
     },
     isBase64Encoded: false,
     statusCode: 200,

@@ -50,11 +50,12 @@ export const generatePdfFromHtmlInteractor = async (
       ),
     });
     const response = await client.send(command);
-    const binaryData = Buffer.from(
-      response.Payload as unknown as string,
-      'base64',
-    );
-    return new Uint8Array(binaryData);
+    // const binaryData = Buffer.from(
+    //   response.Payload as unknown as string,
+    //   'base64',
+    // );
+    return response.Payload!;
+    // return new Uint8Array(binaryData);
   } else {
     const ret = await applicationContext
       .getUseCaseHelpers()
