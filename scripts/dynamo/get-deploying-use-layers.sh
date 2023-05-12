@@ -13,6 +13,6 @@
 
 ENV=$1
 
-DEPLOYING_USE_LAYERS=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deploying-use-layers"},"sk":{"S":"deploying-use-layers"}}' | jq -r ".Item.current.S")
+DEPLOYING_USE_LAYERS=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"deploying-use-layers"},"sk":{"S":"deploying-use-layers"}}' | jq -r ".Item.current.BOOL")
 
 echo "${DEPLOYING_USE_LAYERS}"
