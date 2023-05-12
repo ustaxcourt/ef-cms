@@ -1,8 +1,8 @@
 import { FormGroup } from '../FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-// import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
-// import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
+import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-range-picker/src';
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
@@ -42,17 +42,17 @@ export const DateRangePickerComponent = ({
   const startDateInputRef = useRef<HTMLInputElement>(null);
   const endDateInputRef = useRef<HTMLInputElement>(null);
 
-  //   useEffect(() => {
-  //     if (
-  //       startDatePickerRef.current &&
-  //       endDatePickerRef.current &&
-  //       dateRangePickerRef.current
-  //     ) {
-  //       datePicker.on(startDatePickerRef.current);
-  //       datePicker.on(endDatePickerRef.current);
-  //       dateRangePicker.on(dateRangePickerRef.current);
-  //     }
-  //   }, [dateRangePickerRef]);
+  useEffect(() => {
+    if (
+      startDatePickerRef.current &&
+      endDatePickerRef.current &&
+      dateRangePickerRef.current
+    ) {
+      datePicker.on(startDatePickerRef.current);
+      datePicker.on(endDatePickerRef.current);
+      dateRangePicker.on(dateRangePickerRef.current);
+    }
+  }, [dateRangePickerRef]);
 
   useEffect(() => {
     const startInput = window.document.getElementById(
