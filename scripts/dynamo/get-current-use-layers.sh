@@ -13,6 +13,6 @@
 
 ENV=$1
 
-CURRENT_USE_LAYERS=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-use-layers"},"sk":{"S":"current-use-layers"}}' | jq -r ".Item.current.S")
+CURRENT_USE_LAYERS=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-use-layers"},"sk":{"S":"current-use-layers"}}' | jq -r ".Item.current.BOOL")
 
 echo "${CURRENT_USE_LAYERS}"
