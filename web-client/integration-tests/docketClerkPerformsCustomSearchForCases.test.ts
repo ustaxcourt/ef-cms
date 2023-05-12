@@ -10,6 +10,7 @@ import {
 } from '../src/presenter/customCaseInventoryReportState';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+
 describe('Docket clerk performs custom searches for cases', () => {
   const cerebralTest = setupTest();
   let createdDocketNumber: string;
@@ -36,6 +37,27 @@ describe('Docket clerk performs custom searches for cases', () => {
     expect(customCaseReportState).toEqual(
       initialCustomCaseInventoryReportState,
     );
+  });
+
+  it('should not get custom case report when the startDate and endDate are invalid', async () => {
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { startDate: 'blegh' },
+    );
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { endDate: '' },
+    );
+
+    await cerebralTest.runSequence('getCustomCaseInventoryReportSequence', {
+      selectedPage: 0,
+    });
+
+    const validationErrors = cerebralTest.getState('validationErrors');
+    expect(validationErrors).toEqual({
+      endDate: 'Enter an end date.',
+      startDate: 'Enter a valid start date.',
+    });
   });
 
   it('should set custom case inventory filters in state', async () => {

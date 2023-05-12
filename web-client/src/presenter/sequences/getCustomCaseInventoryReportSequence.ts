@@ -13,11 +13,7 @@ export const getCustomCaseInventoryReportSequence =
     startShowValidationAction,
     validateCustomInventoryFiltersAction,
     {
-      error: [
-        setAlertErrorAction,
-        setValidationErrorsAction,
-        setValidationErrorsAction,
-      ],
+      error: [setAlertErrorAction, setValidationErrorsAction],
       success: [
         stopShowValidationAction,
         clearErrorAlertsAction,
