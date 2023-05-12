@@ -12,13 +12,7 @@ export const getCasesByStatusAndByJudge = async ({
   judgeName,
   statuses,
 }) => {
-  const source = [
-    'caseCaption',
-    'docketNumber',
-    'status',
-    'caseStatusHistory',
-    'leadDocketNumber',
-  ];
+  const source = ['docketNumber'];
 
   const searchParameters = {
     body: {
@@ -33,11 +27,6 @@ export const getCasesByStatusAndByJudge = async ({
               terms: { 'status.S': statuses },
             },
           ],
-          must_not: [
-            {
-              terms: { 'status.S': ['Closed', 'Closed - Dismissed'] },
-            },
-          ],
         },
       },
       size: 10000,
@@ -47,13 +36,10 @@ export const getCasesByStatusAndByJudge = async ({
     index: 'efcms-case',
   };
 
-  const { results, total } = await search({
+  const { results } = await search({
     applicationContext,
     searchParameters,
   });
 
-  return {
-    foundCases: results,
-    totalCount: total,
-  };
+  return results;
 };
