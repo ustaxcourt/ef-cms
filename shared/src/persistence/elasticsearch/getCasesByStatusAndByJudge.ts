@@ -10,6 +10,7 @@ import { search } from './searchClient';
 export const getCasesByStatusAndByJudge = async ({
   applicationContext,
   judgeName,
+  statuses,
 }) => {
   const source = [
     'caseCaption',
@@ -27,6 +28,9 @@ export const getCasesByStatusAndByJudge = async ({
           must: [
             {
               match_phrase: { 'associatedJudge.S': `${judgeName}` },
+            },
+            {
+              terms: { 'status.S': statuses },
             },
           ],
           must_not: [
