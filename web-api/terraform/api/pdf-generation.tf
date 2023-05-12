@@ -9,6 +9,7 @@ resource "aws_lambda_function" "pdf_generation_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
+  # this one ALWAYS needs the puppeteer layer 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
   ]

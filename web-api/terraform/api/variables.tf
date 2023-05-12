@@ -201,3 +201,8 @@ variable "bounce_handler_object_hash" {
 variable "node_version" {
   type = string
 }
+
+variable "use_layers" {
+  type = bool
+  default = true
+}

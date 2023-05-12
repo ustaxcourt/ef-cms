@@ -386,6 +386,7 @@ module "api-west-green" {
   send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_green_west_object.etag
   trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_green_west_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
+  use_layers                     = var.green_use_layers
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
   cron_object_hash               = ""
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
@@ -451,6 +452,7 @@ module "api-west-blue" {
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_west_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_blue_west_object.etag
   send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_blue_west_object.etag
+  use_layers                     = var.blue_use_layers
   pdf_generation_object_hash     = data.aws_s3_bucket_object.pdf_generation_blue_west_object.etag
   trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_blue_west_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_west_object.etag
