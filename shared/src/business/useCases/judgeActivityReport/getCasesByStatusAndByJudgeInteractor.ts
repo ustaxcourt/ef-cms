@@ -5,6 +5,58 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
+const hasUnwantedDocketEntryEventCode = docketEntries => {
+  const prohibitedDocketEntryEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
+  const boolResult = docketEntries.some(docketEntry =>
+    prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode),
+  );
+  console.log(
+    `boolResult for ${docketEntries[0].docketNumber}::::`,
+    boolResult,
+  );
+  return boolResult;
+};
+
+const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
+  const caseRecordsToReturn = [];
+  const consolidatedCaseGroupsToRemoveByLeadCase: string[] = [];
+
+  caseRecords.forEach(individualCaseRecord => {
+    if (
+      !individualCaseRecord.leadDocketNumber &&
+      hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)
+    ) {
+      return;
+    } else if (
+      !individualCaseRecord.leadDocketNumber &&
+      !hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)
+    ) {
+      caseRecordsToReturn.push(individualCaseRecord);
+    } else if (
+      individualCaseRecord.docketNumber ===
+        individualCaseRecord.leadDocketNumber &&
+      hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)
+    ) {
+      consolidatedCaseGroupsToRemoveByLeadCase.push(
+        individualCaseRecord.docketNumber,
+      );
+    } else {
+      caseRecordsToReturn.push(individualCaseRecord);
+    }
+  });
+
+  console.log('caseRecordsToReturn::::', caseRecordsToReturn);
+
+  const filteredCaseRecords = caseRecordsToReturn.filter(
+    individualCaseRecord =>
+      !consolidatedCaseGroupsToRemoveByLeadCase.includes(
+        individualCaseRecord.docketNumber,
+      ),
+  );
+
+  return filteredCaseRecords;
+};
+
 /**
  * getCasesClosedByJudgeInteractor
  * @param {object} applicationContext the application context
@@ -50,11 +102,21 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
-  // const filteredCaseRecords = rawCaseRecords.map(rawCaseRecord => {});
+  // const rawCaseRecordsWithConsolidatedCases = await Promise.all(
+  //   rawCaseRecords.map(async rawCaseRecord => {
+  //     const consolidatedCases
+  //   }),
+  // );
+  // if in CCG loop over and
+  //   - if lead case grab consolidated cases array
+  //   - if member case filter out
 
-  console.log('rawCaseRecords::::', rawCaseRecords);
+  const filteredCaseRecords =
+    filterCasesWithUnwantedDocketEntryEventCodes(rawCaseRecords);
 
-  return Case.validateRawCollection(rawCaseRecords, {
+  console.log('filteredCaseRecords::::', filteredCaseRecords);
+
+  return Case.validateRawCollection(filteredCaseRecords, {
     applicationContext,
   });
 };
