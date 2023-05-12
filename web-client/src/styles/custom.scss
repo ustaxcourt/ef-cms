@@ -1,3 +1,6 @@
+@use "uswds" as *;
+@use '../variables' as *;
+
 body.no-scroll {
   overflow: hidden;
   cursor: default;

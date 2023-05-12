@@ -70,10 +70,15 @@ export default async function ({
       }, {}),
     },
     entryNames: '[name].[hash]',
-    entryPoints: [`web-client/src/${entryPoint}`],
+    entryPoints: [
+      `web-client/src/${entryPoint}`,
+      // '@forward "usa-date-picker"',
+      // '@forward "usa-date-range-picker"',
+    ],
     format: 'esm',
     loader: {
       '.html': 'text',
+      '.jpg': 'dataurl',
       '.pdf': 'file',
       '.png': 'dataurl',
       '.svg': 'dataurl',
@@ -94,6 +99,10 @@ export default async function ({
         stream: 'stream-browserify',
       }),
       sassPlugin({
+        loadPaths: [
+          './node_modules/@uswds',
+          './node_modules/@uswds/uswds/packages',
+        ],
         async transform(source, resolveDir, filePath) {
           let value = sassMap.get(filePath);
           if (!value || value.source !== source) {
