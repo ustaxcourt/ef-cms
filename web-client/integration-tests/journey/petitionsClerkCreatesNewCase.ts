@@ -9,18 +9,24 @@ import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
-  {
-    overrides = {
-      receivedAt: {
-        day: '01',
-        month: '01',
-        year: '2001',
-      },
-      trialLocation: 'Birmingham, Alabama',
-    },
-    shouldServe = true,
-  } = {},
+  overrides?: {
+    procedureType?: string;
+    receivedAtDay?: string;
+    receivedAtMonth?: string;
+    receivedAtYear?: string;
+    shouldServe?: boolean;
+    trialLocation?: string;
+  },
 ) => {
+  const defaults = {
+    procedureType: 'Small',
+    receivedAtDay: '01',
+    receivedAtMonth: '01',
+    receivedAtYear: '2001',
+    shouldServe: true,
+    trialLocation: 'Birmingham, Alabama',
+  };
+  overrides = Object.assign(defaults, overrides || {});
   const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
   return it('Petitions clerk creates a new case', async () => {
@@ -51,16 +57,16 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtMonth',
-      value: overrides.receivedAt.month,
+      value: overrides.receivedAtMonth,
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtDay',
-      value: overrides.receivedAt.day,
+      value: overrides.receivedAtDay,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtYear',
-      value: overrides.receivedAt.year,
+      value: overrides.receivedAtYear,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -143,7 +149,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: overrides.procedureType || 'Small',
+      value: overrides.procedureType,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -224,10 +230,10 @@ export const petitionsClerkCreatesNewCase = (
 
     const docketNumber = cerebralTest.getState('caseDetail.docketNumber');
     const receivedDocketNumberYear = docketNumber.slice(-2);
-    const expectedDocketNumberYear = overrides.receivedAt.year.slice(-2);
+    const expectedDocketNumberYear = overrides.receivedAtYear.slice(-2);
     expect(receivedDocketNumberYear).toBe(expectedDocketNumberYear);
 
-    if (shouldServe) {
+    if (overrides.shouldServe) {
       await cerebralTest.runSequence('serveCaseToIrsSequence');
     }
 
