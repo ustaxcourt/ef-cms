@@ -1,9 +1,18 @@
-import { initialCustomCaseInventoryReportState } from '../src/presenter/customCaseInventoryReportState';
+import {
+  CASE_STATUS_TYPES,
+  CASE_TYPES_MAP,
+  CaseStatus,
+  CaseType,
+} from '../../shared/src/business/entities/EntityConstants';
+import {
+  CustomCaseInventoryReportState,
+  initialCustomCaseInventoryReportState,
+} from '../src/presenter/customCaseInventoryReportState';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-
 describe('Docket clerk performs custom searches for cases', () => {
   const cerebralTest = setupTest();
+  let createdDocketNumber: string;
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -18,10 +27,16 @@ describe('Docket clerk performs custom searches for cases', () => {
     trialLocation: 'Birmingham, Alabama',
   };
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, { overrides, shouldServe: true });
+  petitionsClerkCreatesNewCase(cerebralTest, {
+    overrides,
+    shouldServe: true,
+  });
+
+  it('should capture the new cases docket number', () => {
+    createdDocketNumber = cerebralTest.docketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-
   it('navigates to the custom case report page', async () => {
     await cerebralTest.runSequence('gotoCustomCaseReportSequence');
     const customCaseReportState = cerebralTest.getState('customCaseInventory');
@@ -40,22 +55,23 @@ describe('Docket clerk performs custom searches for cases', () => {
       'setCustomCaseInventoryReportFiltersSequence',
       { endDate: '03/01/2012' },
     );
-    // await cerebralTest.runSequence(
-    //   'setCustomCaseInventoryReportFiltersSequence',
-    //   { filingMethod: 'paper' },
-    // );
 
-    // const caseStatus: CaseStatus = CASE_STATUS_TYPES.rule155;
-    // await cerebralTest.runSequence(
-    //   'setCustomCaseInventoryReportFiltersSequence',
-    //   { action: 'add', caseStatus },
-    // );
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { filingMethod: 'paper' },
+    );
 
-    // const caseType: CaseType = CASE_TYPES_MAP.workerClassification;
-    // await cerebralTest.runSequence(
-    //   'setCustomCaseInventoryReportFiltersSequence',
-    //   { action: 'add', caseType },
-    // );
+    const caseStatus: CaseStatus = CASE_STATUS_TYPES.new;
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { action: 'add', caseStatus },
+    );
+
+    const caseType: CaseType = CASE_TYPES_MAP.deficiency;
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { action: 'add', caseType },
+    );
   });
 
   it('should run the custom case inventory report', async () => {
@@ -63,16 +79,11 @@ describe('Docket clerk performs custom searches for cases', () => {
       selectedPage: 0,
     });
 
-    const testState = cerebralTest.getState('customCaseInventory');
-    console.log('test state', testState);
+    const customCaseInventoryState: CustomCaseInventoryReportState =
+      cerebralTest.getState('customCaseInventory');
+    const foundCase = customCaseInventoryState.cases.find(
+      case1 => case1.docketNumber === createdDocketNumber,
+    );
+    expect(foundCase!.docketNumber).toEqual(createdDocketNumber);
   });
-  // expectation of something in state, confirm initial state of custom case inventory
-
-  // await cerebralTest.runSequence('serveCaseToIrsSequence');
 });
-
-// FLOW OF INTEGRATION TESTS
-// ARRANGE: CREATE CASE WITH SPECIFIC QUERIABLE INFORMATION
-// 1. NAVIGATE TO CUSTOM CASE REPORT
-// 2. ADD VERY SPECIFIC FILTERS TO RETURN ONLY ONE CASE
-// 3. MODIFY THE FILTERS AND RUN REPORT SO THAT NO CASES ARE RETURNED

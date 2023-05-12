@@ -57,7 +57,7 @@ export const petitionsClerkCreatesNewCase = (
       key: 'receivedAtDay',
       value: overrides.receivedAt.day,
     });
-    const receivedAtYear = '2001';
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'receivedAtYear',
       value: overrides.receivedAt.year,
@@ -224,7 +224,7 @@ export const petitionsClerkCreatesNewCase = (
 
     const docketNumber = cerebralTest.getState('caseDetail.docketNumber');
     const receivedDocketNumberYear = docketNumber.slice(-2);
-    const expectedDocketNumberYear = receivedAtYear.slice(-2);
+    const expectedDocketNumberYear = overrides.receivedAt.year.slice(-2);
     expect(receivedDocketNumberYear).toBe(expectedDocketNumberYear);
 
     if (shouldServe) {
