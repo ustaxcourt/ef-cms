@@ -13,5 +13,7 @@
 );
 
 @forward "uswds";
+@forward "usa-date-picker";
+@forward "usa-date-range-picker";
 
 @use './styles' as *;

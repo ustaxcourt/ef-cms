@@ -70,11 +70,7 @@ export default async function ({
       }, {}),
     },
     entryNames: '[name].[hash]',
-    entryPoints: [
-      `web-client/src/${entryPoint}`,
-      // '@forward "usa-date-picker"',
-      // '@forward "usa-date-range-picker"',
-    ],
+    entryPoints: [`web-client/src/${entryPoint}`],
     format: 'esm',
     loader: {
       '.html': 'text',
