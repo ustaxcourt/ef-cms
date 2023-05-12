@@ -8,7 +8,7 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "cron.checkForReadyForTrialCasesHandler"
   timeout          = "900"
-  memory_size      = "3008"
+  memory_size      = "768"
 
   runtime = var.node_version
 

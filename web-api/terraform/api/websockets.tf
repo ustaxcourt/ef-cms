@@ -34,7 +34,7 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
   s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
   timeout          = "29"
-  memory_size      = "3008"
+  memory_size      = "768"
 
   runtime = var.node_version
 
@@ -54,7 +54,7 @@ resource "aws_lambda_function" "websockets_default_lambda" {
   s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
   timeout          = "29"
-  memory_size      = "3008"
+  memory_size      = "768"
 
   runtime = var.node_version
 
@@ -75,7 +75,7 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
   s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
   timeout          = "29"
-  memory_size      = "3008"
+  memory_size      = "768"
 
   runtime = var.node_version
 
