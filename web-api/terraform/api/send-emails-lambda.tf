@@ -12,7 +12,7 @@ resource "aws_lambda_function" "send_emails_lambda" {
   runtime = var.node_version
 
 
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : [null]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment

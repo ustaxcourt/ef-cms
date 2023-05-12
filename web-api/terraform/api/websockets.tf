@@ -42,7 +42,7 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
     variables = var.lambda_environment
   }
 
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : [null]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 }
 
 resource "aws_lambda_function" "websockets_default_lambda" {
@@ -62,7 +62,7 @@ resource "aws_lambda_function" "websockets_default_lambda" {
     variables = var.lambda_environment
   }
 
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : [null]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 }
 
 
@@ -79,7 +79,7 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
 
   runtime = var.node_version
 
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : [null]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment
