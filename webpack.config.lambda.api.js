@@ -26,10 +26,6 @@ module.exports = {
       './web-api/terraform/template/lambdas/websocket-authorizer.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
-  externals: {
-    '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
-    'puppeteer-core': 'commonjs puppeteer-core',
-  },
   output: {
     clean: true,
     libraryTarget: 'umd',
