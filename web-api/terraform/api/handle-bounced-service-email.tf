@@ -13,7 +13,7 @@ resource "aws_lambda_function" "zip_handle_bounce" {
   runtime = var.node_version
 
 
-  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : [null]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment
