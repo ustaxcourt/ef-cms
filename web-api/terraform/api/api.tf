@@ -7,7 +7,7 @@ resource "aws_lambda_function" "api_lambda" {
   s3_key           = "api_${var.current_color}.js.zip"
   source_code_hash = var.api_object_hash
   timeout          = "29"
-  memory_size      = "3008"
+  memory_size      = "768"
 
   layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
