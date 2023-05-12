@@ -4,7 +4,6 @@ module.exports = {
   externals: {
     '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
     'aws-crt': 'commonjs aws-crt',
-    pug: 'commonjs pug',
     'puppeteer-core': 'commonjs puppeteer-core',
   },
   mode: 'production',
