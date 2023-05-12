@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const printableWorkingCopySessionList = async ({
+export const printableWorkingCopySessionList = async ({
   applicationContext,
   data,
 }) => {
@@ -46,8 +44,4 @@ const printableWorkingCopySessionList = async ({
     });
 
   return pdf;
-};
-
-module.exports = {
-  printableWorkingCopySessionList,
 };

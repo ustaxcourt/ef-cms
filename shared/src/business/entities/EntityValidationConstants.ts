@@ -1,5 +1,6 @@
-const joi = require('joi');
-const {
+import joi from 'joi';
+
+import {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   AMICUS_BRIEF_EVENT_CODE,
@@ -18,15 +19,16 @@ const {
   PARTIES_CODES,
   ROLES,
   SCENARIOS,
-} = require('./EntityConstants');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
+} from './EntityConstants';
 
-const SERVICE_INDICATOR_ERROR = {
+import { JoiValidationConstants } from './JoiValidationConstants';
+
+export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
     'You cannot change from paper to electronic service. Select a valid service preference.',
 };
 
-const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
+export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   action: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
@@ -460,20 +462,14 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
 
-// TODO: validate workItems in DocketEntry
-// DOCKET_ENTRY_VALIDATION_RULE_KEYS.workItem = joi
-//   .object()
-//   .keys(WORK_ITEM_VALIDATION_RULE_KEYS)
-//   .optional();
+export const DOCKET_ENTRY_VALIDATION_RULES = joi
+  .object()
+  .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS);
 
-module.exports = {
-  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
-  DOCKET_ENTRY_VALIDATION_RULES: joi
-    .object()
-    .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),
-  OUTBOX_ITEM_VALIDATION_RULES: joi
-    .object()
-    .keys(OUTBOX_ITEM_VALIDATION_RULE_KEYS),
-  SERVICE_INDICATOR_ERROR,
-  WORK_ITEM_VALIDATION_RULES: joi.object().keys(WORK_ITEM_VALIDATION_RULE_KEYS),
-};
+export const OUTBOX_ITEM_VALIDATION_RULES = joi
+  .object()
+  .keys(OUTBOX_ITEM_VALIDATION_RULE_KEYS);
+
+export const WORK_ITEM_VALIDATION_RULES = joi
+  .object()
+  .keys(WORK_ITEM_VALIDATION_RULE_KEYS);

@@ -120,4 +120,20 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
       },
     });
   });
+
+  it('should return the correct success message', async () => {
+    const result = await runAction(getFileExternalDocumentAlertSuccessAction, {
+      modules: {
+        presenter,
+      },
+      props: { fileAcrossConsolidatedGroup: true },
+      state: {},
+    });
+
+    expect(result.output).toMatchObject({
+      alertSuccess: {
+        message: 'Document served to selected cases in group.',
+      },
+    });
+  });
 });

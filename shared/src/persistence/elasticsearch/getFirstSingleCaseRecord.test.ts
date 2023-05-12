@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getFirstSingleCaseRecord } = require('./getFirstSingleCaseRecord');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getFirstSingleCaseRecord } from './getFirstSingleCaseRecord';
 
 describe('getFirstSingleCaseRecord', () => {
   it('should search for the first single case record', async () => {

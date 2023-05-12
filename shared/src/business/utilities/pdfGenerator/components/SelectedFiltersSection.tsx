@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 
 export const SelectedFiltersSection = ({ count, selectedFilters }) => (
   <div className="card margin-top-0">

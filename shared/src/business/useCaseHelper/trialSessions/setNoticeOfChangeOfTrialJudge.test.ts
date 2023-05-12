@@ -1,18 +1,12 @@
 import { getFakeFile } from '../../test/getFakeFile';
 
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  setNoticeOfChangeOfTrialJudge,
-} = require('./setNoticeOfChangeOfTrialJudge');
-const {
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
+import { setNoticeOfChangeOfTrialJudge } from './setNoticeOfChangeOfTrialJudge';
 
 jest.mock('../../utilities/getJudgeWithTitle', () => ({
   getJudgeWithTitle: jest.fn(),

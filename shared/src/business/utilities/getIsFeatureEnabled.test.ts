@@ -1,5 +1,5 @@
-const { getIsFeatureEnabled } = require('./getIsFeatureEnabled');
-const { ROLES } = require('../entities/EntityConstants');
+import { ROLES } from '../entities/EntityConstants';
+import { getIsFeatureEnabled } from './getIsFeatureEnabled';
 
 describe('getIsFeatureEnabled', () => {
   describe('advanced_opinion_search', () => {

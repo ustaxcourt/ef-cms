@@ -1,9 +1,7 @@
 /* eslint-disable react/no-array-index-key */
-const React = require('react');
-const {
-  CompressedDocketHeader,
-} = require('../components/CompressedDocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import React from 'react';
 
 const DocumentRow = ({ document }) => {
   const hasAttachments = !!document.attachments;
@@ -37,7 +35,9 @@ const DocumentRow = ({ document }) => {
 };
 
 export const ReceiptOfFiling = ({
+  consolidatedCasesDocketNumbers,
   document,
+  fileAcrossConsolidatedGroup,
   filedAt,
   filedBy,
   options,
@@ -57,8 +57,10 @@ export const ReceiptOfFiling = ({
       <CompressedDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
+        consolidatedCasesDocketNumbers={consolidatedCasesDocketNumbers}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
         documentTitle="Receipt of Filing"
+        fileAcrossConsolidatedGroup={fileAcrossConsolidatedGroup}
       />
       <div>
         <div className="float-left width-half" id="receipt-filed-by">

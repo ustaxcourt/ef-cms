@@ -1,14 +1,14 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const receiptOfFiling = async ({ applicationContext, data }) => {
+export const receiptOfFiling = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
     caseTitle,
+    consolidatedCasesDocketNumbers,
     docketNumberWithSuffix,
     document,
+    fileAcrossConsolidatedGroup,
     filedAt,
     filedBy,
     secondaryDocument,
@@ -19,7 +19,9 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
   const reactReceiptOfFilingTemplate = reactTemplateGenerator({
     componentName: 'ReceiptOfFiling',
     data: {
+      consolidatedCasesDocketNumbers,
       document,
+      fileAcrossConsolidatedGroup,
       filedAt,
       filedBy,
       options: {
@@ -47,8 +49,4 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  receiptOfFiling,
 };

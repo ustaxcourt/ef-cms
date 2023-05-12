@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const noticeOfChangeToRemoteProceeding = async ({
+export const noticeOfChangeToRemoteProceeding = async ({
   applicationContext,
   data,
 }) => {
@@ -36,8 +34,4 @@ const noticeOfChangeToRemoteProceeding = async ({
     });
 
   return pdf;
-};
-
-module.exports = {
-  noticeOfChangeToRemoteProceeding,
 };
