@@ -1,3 +1,6 @@
+@use "uswds" as *;
+@use '../variables' as *;
+
 #main-content .big-blue-header .case-detail-menu {
   .case-detail-menu__button {
     padding-top: 0.5rem;
