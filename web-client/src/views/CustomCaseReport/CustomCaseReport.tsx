@@ -245,6 +245,7 @@ export const CustomCaseReport = connect(
           </div>
           <Button
             disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
+            id="run-custom-case-report"
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
@@ -279,7 +280,9 @@ export const CustomCaseReport = connect(
             />
           )}
           <div className="text-right margin-bottom-2">
-            <span className="text-bold">Count: &nbsp;</span>
+            <span className="text-bold" id="custom-case-result-count">
+              Count: &nbsp;
+            </span>
             {formatNumber(totalCases)}
           </div>
           <ReportTable
