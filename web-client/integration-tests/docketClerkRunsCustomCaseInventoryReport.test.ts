@@ -11,7 +11,7 @@ import {
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
-describe('Docket clerk performs custom searches for cases', () => {
+describe('Docket clerk runs custom case inventory report', () => {
   const cerebralTest = setupTest();
   let createdDocketNumber: string;
 
