@@ -18,18 +18,11 @@ describe('Docket clerk performs custom searches for cases', () => {
     cerebralTest.closeSocket();
   });
 
-  const overrides = {
-    receivedAt: {
-      day: '29',
-      month: '02',
-      year: '2012',
-    },
-    trialLocation: 'Birmingham, Alabama',
-  };
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides,
-    shouldServe: true,
+    receivedAtDay: '29',
+    receivedAtMonth: '02',
+    receivedAtYear: '2012',
   });
 
   it('should capture the new cases docket number', () => {
