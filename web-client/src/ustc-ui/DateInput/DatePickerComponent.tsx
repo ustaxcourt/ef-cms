@@ -2,7 +2,7 @@ import { FormGroup } from '../FormGroup/FormGroup';
 import { getComputedInputValue } from './DatePickerComponentHelper';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-// import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 
 export const DatePickerComponent = ({
   className,
@@ -31,21 +31,21 @@ export const DatePickerComponent = ({
   // YYYY-MM-DD is indeed the format required by `data-default-value`
   const defaultValue = `${values.year}-${values.month}-${values.day}`;
 
-  //   useEffect(() => {
-  //     if (datePickerRef.current) {
-  //       datePicker.on(datePickerRef.current);
-  //     }
-  //   }, [datePickerRef]);
+  useEffect(() => {
+    if (datePickerRef.current) {
+      datePicker.on(datePickerRef.current);
+    }
+  }, [datePickerRef]);
 
-  //   useEffect(() => {
-  //     const input = datePickerRef.current.querySelector('.usa-date-picker');
+  useEffect(() => {
+    const input = datePickerRef.current.querySelector('.usa-date-picker');
 
-  //     if (disabled) {
-  //       datePicker.disable(input);
-  //     } else {
-  //       datePicker.enable(input);
-  //     }
-  //   });
+    if (disabled) {
+      datePicker.disable(input);
+    } else {
+      datePicker.enable(input);
+    }
+  });
 
   useEffect(() => {
     if (!datePickerRef.current) return;

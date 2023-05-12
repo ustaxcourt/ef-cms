@@ -2,8 +2,8 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
-// import datePicker from 'uswds/src/js/components/date-picker';
-// import dateRangePicker from 'uswds/src/js/components/date-range-picker';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
+import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-range-picker/src';
 
 export const SearchDateRangePickerComponent = connect(
   {
@@ -24,13 +24,13 @@ export const SearchDateRangePickerComponent = connect(
     const startDateInputRef = useRef();
     const endDateInputRef = useRef();
 
-    // useEffect(() => {
-    //   if (startDatePickerRef.current && endDatePickerRef.current) {
-    //     datePicker.on(startDatePickerRef.current);
-    //     datePicker.on(endDatePickerRef.current);
-    //     dateRangePicker.on(dateRangePickerRef.current);
-    //   }
-    // }, [dateRangePickerRef]);
+    useEffect(() => {
+      if (startDatePickerRef.current && endDatePickerRef.current) {
+        datePicker.on(startDatePickerRef.current);
+        datePicker.on(endDatePickerRef.current);
+        dateRangePicker.on(dateRangePickerRef.current);
+      }
+    }, [dateRangePickerRef]);
 
     useEffect(() => {
       const startInput = window.document.getElementById('startDate-date-start');
