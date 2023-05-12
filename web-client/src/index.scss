@@ -1,19 +1,4 @@
 @use './fonts/fonts';
 @use './variables' as *; // must be imported before uswds-required
-@use "uswds-core" as * with (
-    $theme-show-notifications: false,
-    $theme-font-path: '../../node_modules/@uswds/uswds/dist/fonts',
-    $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
-
-    $theme-banner-max-width: 'widescreen',
-    $theme-footer-max-width: 'widescreen',
-    $theme-grid-container-max-width: 'widescreen',
-    $theme-header-max-width: 'widescreen',
-    $theme-font-weight-semibold: 600
-);
-
-@forward "uswds";
-@forward "usa-date-picker";
-@forward "usa-date-range-picker";
-
+@use './uswds' as *;
 @use './styles' as *;
