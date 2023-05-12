@@ -1,3 +1,4 @@
+import { Case } from '../../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -30,7 +31,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const submittedAndCavCasesByJudge = await applicationContext
+  const submittedAndCavCasesResults = await applicationContext
     .getPersistenceGateway()
     .getCasesByStatusAndByJudge({
       applicationContext,
@@ -38,5 +39,22 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       statuses,
     });
 
-  return submittedAndCavCasesByJudge.foundCases;
+  const rawCaseRecords = await Promise.all(
+    submittedAndCavCasesResults.map(async result => {
+      return await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: result.docketNumber,
+        });
+    }),
+  );
+
+  // const filteredCaseRecords = rawCaseRecords.map(rawCaseRecord => {});
+
+  console.log('rawCaseRecords::::', rawCaseRecords);
+
+  return Case.validateRawCollection(rawCaseRecords, {
+    applicationContext,
+  });
 };
