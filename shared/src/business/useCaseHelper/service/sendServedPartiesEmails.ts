@@ -1,11 +1,9 @@
-const {
-  reactTemplateGenerator,
-} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { cloneDeep } = require('lodash');
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { cloneDeep } from 'lodash';
+import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-exports.sendServedPartiesEmails = async ({
+export const sendServedPartiesEmails = async ({
   applicationContext,
   caseEntity,
   docketEntryId,

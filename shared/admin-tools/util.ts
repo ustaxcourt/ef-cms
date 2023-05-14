@@ -1,4 +1,6 @@
-const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
+import readline from 'readline';
+
+import { CognitoIdentityServiceProvider, DynamoDB } from 'aws-sdk';
 
 const { ENV } = process.env;
 const UserPoolCache = {};
@@ -9,7 +11,7 @@ const UserPoolCache = {};
  * @param {String} environmentName The environment we are going to lookup the current color
  * @returns {String} The current version of the application
  */
-const getVersion = async () => {
+export const getVersion = async () => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   const dynamodb = new DynamoDB({ region: 'us-east-1' });
@@ -33,7 +35,12 @@ const getVersion = async () => {
   return result.Item.current.S;
 };
 
-const requireEnvVars = requiredEnvVars => {
+/**
+ * Exit if any of the provided strings are not set as environment variables
+ *
+ * @param {Array<String>} requiredEnvVars Array of strings to check
+ */
+export const requireEnvVars = requiredEnvVars => {
   const envVars = Object.keys(process.env);
   let missing = '';
   for (const key of requiredEnvVars) {
@@ -53,7 +60,7 @@ const requireEnvVars = requiredEnvVars => {
  * @param {String} value The value to ensure is truthy
  * @param {String} message The message to relay if the value is not truthy
  */
-const checkEnvVar = (value, message) => {
+export const checkEnvVar = (value, message) => {
   if (!value) {
     console.log(message);
     process.exit(1);
@@ -66,7 +73,7 @@ const checkEnvVar = (value, message) => {
  * @param {Object} cognitoInstance (optional) instance of the CognitoIdentityServiceProvider
  * @returns {String} The unique identifier of the Cognito User Pool
  */
-const getUserPoolId = async cognitoInstance => {
+export const getUserPoolId = async cognitoInstance => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   if (UserPoolCache[ENV]) {
@@ -95,7 +102,7 @@ const getUserPoolId = async cognitoInstance => {
  * @param {String} userPoolId The unique identifier of the Cognito User Pool
  * @returns {String} The unique identifier of the Cognito Client ID
  */
-const getClientId = async userPoolId => {
+export const getClientId = async userPoolId => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const results = await cognito
     .listUserPoolClients({
@@ -113,7 +120,7 @@ const getClientId = async userPoolId => {
  * @param {Number} numChars Number of characters for the password
  * @returns {String} A strong password that is numChars long
  */
-const generatePassword = numChars => {
+export const generatePassword = numChars => {
   const pickRandomChar = src => {
     const rand = Math.floor(Math.random() * chars[src].length);
     return chars[src][rand];
@@ -162,9 +169,22 @@ const shuffle = arr => {
   return arr;
 };
 
-exports.checkEnvVar = checkEnvVar;
-exports.generatePassword = generatePassword;
-exports.getUserPoolId = getUserPoolId;
-exports.getClientId = getClientId;
-exports.getVersion = getVersion;
-exports.requireEnvVars = requireEnvVars;
+/**
+ * Wrapper for readline that asks a question and returns the input from stdin
+ *
+ * @param {String} query Question to ask
+ * @returns {Promise<String>} The answer provided via stdin
+ */
+export const askQuestion = query => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+
+  return new Promise(resolve =>
+    rl.question(query, ans => {
+      rl.close();
+      resolve(ans);
+    }),
+  );
+};

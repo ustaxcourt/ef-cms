@@ -1,8 +1,5 @@
-const {
-  CASE_CAPTION_POSTFIX,
-  PARTY_TYPES,
-} = require('../entities/EntityConstants');
-const { getCaseCaptionMeta } = require('./getCaseCaptionMeta');
+import { CASE_CAPTION_POSTFIX, PARTY_TYPES } from '../entities/EntityConstants';
+import { getCaseCaptionMeta } from './getCaseCaptionMeta';
 
 describe('getCaseCaptionMeta', () => {
   it('returns an empty string for caseCaptionWithPostfix if the case caption on case detail is undefined or empty, such as when the info is not available on a sealed case', () => {

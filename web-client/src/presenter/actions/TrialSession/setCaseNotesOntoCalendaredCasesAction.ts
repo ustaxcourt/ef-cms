@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.trialSession.calendaredCases
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object containing the props.calendaredCases
@@ -12,7 +11,7 @@ export const setCaseNotesOntoCalendaredCasesAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const calendaredCases = get(state.trialSession.calendaredCases);
   for (const note of props.notes) {
     const calendaredCase = calendaredCases.find(

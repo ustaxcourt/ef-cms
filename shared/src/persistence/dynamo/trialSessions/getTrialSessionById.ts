@@ -1,4 +1,4 @@
-const { get } = require('../../dynamodbClientService');
+import { get } from '../../dynamodbClientService';
 
 export const getTrialSessionById = ({
   applicationContext,

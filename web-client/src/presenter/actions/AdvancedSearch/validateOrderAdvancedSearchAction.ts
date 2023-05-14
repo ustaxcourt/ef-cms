@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validate order advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const validateOrderAdvancedSearchAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const orderSearch = get(state.advancedSearchForm.orderSearch);
 
   const errors = applicationContext

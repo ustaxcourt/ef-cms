@@ -1,8 +1,6 @@
-const {
-  ORDER_JUDGE_FIELD,
-} = require('../../../business/entities/EntityConstants');
+import { ORDER_JUDGE_FIELD } from '../../../business/entities/EntityConstants';
 
-exports.getJudgeFilterForOrderSearch = ({ judgeName }) => {
+export const getJudgeFilterForOrderSearch = ({ judgeName }) => {
   return {
     bool: {
       should: {

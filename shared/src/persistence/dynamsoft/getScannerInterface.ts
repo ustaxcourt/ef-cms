@@ -1,7 +1,7 @@
 let DWObject = null;
 let dynamsoftLoader = null;
 
-exports.getScannerInterface = () => {
+export const getScannerInterface = () => {
   const completeScanSession = () => {
     DWObject.RemoveAllImages();
     DWObject.CloseSource();

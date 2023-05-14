@@ -1,4 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -8,7 +9,6 @@ import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * generatePrintableTrialSessionCopyReportInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.filters the selected trial status filters
@@ -32,7 +32,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     userHeading,
   }: {
     filters: TPrintableTableFilters;
-    formattedCases: TCase[];
+    formattedCases: Case[];
     formattedTrialSession: RawTrialSession;
     sessionNotes: string;
     showCaseNotes: boolean;
