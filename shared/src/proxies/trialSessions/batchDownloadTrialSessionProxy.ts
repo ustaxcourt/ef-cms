@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * batchDownloadTrialSessionInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.batchDownloadTrialSessionInteractor = (
+export const batchDownloadTrialSessionInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {

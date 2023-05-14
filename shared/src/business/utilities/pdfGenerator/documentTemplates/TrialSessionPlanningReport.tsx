@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
-const React = require('react');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
-const { ReportsHeader } = require('../components/ReportsHeader.tsx');
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import React from 'react';
 
 const getTermHeaders = (termData, idx) => {
   return <th key={`th-${idx}`}>{termData.termDisplay}</th>;

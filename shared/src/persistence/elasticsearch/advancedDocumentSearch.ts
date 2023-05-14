@@ -1,23 +1,13 @@
-const {
-  getJudgeFilterForOpinionSearch,
-} = require('./advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch');
-const {
-  getJudgeFilterForOrderSearch,
-} = require('./advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch');
-const {
-  getSealedQuery,
-} = require('./advancedDocumentSearchHelpers/getSealedQuery');
-const {
-  getSortQuery,
-} = require('./advancedDocumentSearchHelpers/getSortQuery');
-const {
-  MAX_SEARCH_CLIENT_RESULTS,
-} = require('../../business/entities/EntityConstants');
-const { search } = require('./searchClient');
+import { MAX_SEARCH_CLIENT_RESULTS } from '../../business/entities/EntityConstants';
+import { getJudgeFilterForOpinionSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch';
+import { getJudgeFilterForOrderSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch';
+import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
+import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
+import { search } from './searchClient';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
-exports.advancedDocumentSearch = async ({
+export const advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
   docketNumber,

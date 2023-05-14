@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * setNoticesForCalendaredTrialSessionInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketNumber optional docketNumber for setting a single case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.setNoticesForCalendaredTrialSessionInteractor = (
+export const setNoticesForCalendaredTrialSessionInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {

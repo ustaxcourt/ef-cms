@@ -3,7 +3,6 @@ import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/
 
 /**
  * generatePdfFromHtmlInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
@@ -30,11 +29,12 @@ export const generatePdfFromHtmlInteractor = async (
   },
 ) => {
   let browser = null;
-  let result = null;
+  let result: any = null;
 
   try {
     browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
+
+    let page = await browser?.newPage();
 
     await page.setContent(contentHtml);
 
@@ -60,17 +60,49 @@ export const generatePdfFromHtmlInteractor = async (
             ${footerHtml || ''}
           </div>`;
 
-    result = await page.pdf({
-      displayHeaderFooter,
+    const firstPage = await page.pdf({
+      displayHeaderFooter: true,
       footerTemplate,
       format: 'Letter',
-      headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
       margin: {
         bottom: '100px',
         top: '80px',
       },
+      pageRanges: '1',
       printBackground: true,
     });
+
+    let remainingPages: any;
+    try {
+      remainingPages = await page.pdf({
+        displayHeaderFooter,
+        footerTemplate,
+        format: 'Letter',
+        headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
+        margin: {
+          bottom: '100px',
+          top: '80px',
+        },
+        pageRanges: '2-',
+        printBackground: true,
+      });
+    } catch (err) {
+      // this was probably a 1 page document
+      if (!err.message.includes('Page range exceeds page count')) {
+        throw err;
+      }
+    }
+
+    if (remainingPages) {
+      const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
+        applicationContext,
+        firstPdf: firstPage,
+        secondPdf: remainingPages,
+      });
+      result = Buffer.from(returnVal);
+    } else {
+      result = firstPage;
+    }
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;

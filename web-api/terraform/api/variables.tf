@@ -57,6 +57,22 @@ variable "api_object" {
   type = any
 }
 
+variable "send_emails_object" {
+  type = any
+}
+
+variable "send_emails_object_hash" {
+  type = any
+}
+
+variable "trial_session_object_hash" {
+  type = any
+}
+
+variable "trial_session_object" { 
+  type = any
+}
+
 variable "api_public_object" {
   type = any
 }
@@ -171,5 +187,9 @@ variable "bounce_handler_object" {
 }
 
 variable "bounce_handler_object_hash" {
+  type = string
+}
+
+variable "node_version" {
   type = string
 }

@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.primaryDocumentFileId the id of the correspondence document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCorrespondenceDocumentInteractor = (
+export const fileCorrespondenceDocumentInteractor = (
   applicationContext,
   { documentMetadata, primaryDocumentFileId },
 ) => {

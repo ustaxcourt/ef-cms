@@ -1,51 +1,35 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { Case, caseDecorator } = require('./Case');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { Case } from './Case';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import joi from 'joi';
 
-CaseQC.VALIDATION_ERROR_MESSAGES = {
-  ...Case.VALIDATION_ERROR_MESSAGES,
-  hasVerifiedIrsNotice: 'Select an option',
-};
+export class CaseQC extends Case {
+  constructor(rawCase, { applicationContext, filtered = false }) {
+    super(rawCase, {
+      applicationContext,
+      filtered,
+    });
+    this.entityName = 'CaseQC';
+  }
 
-/**
- * CaseQC Entity
- * Represents a Case that is being QCed
- *
- * @param {object} rawCase the raw case data
- * @constructor
- */
-function CaseQC() {
-  this.entityName = 'CaseQC';
+  static VALIDATION_ERROR_MESSAGES = {
+    ...Case.VALIDATION_ERROR_MESSAGES,
+    hasVerifiedIrsNotice: 'Select an option',
+  };
+
+  getErrorToMessageMap() {
+    return CaseQC.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getValidationRules() {
+    return {
+      ...super.getValidationRules(),
+      entityName: JoiValidationConstants.STRING.valid('CaseQC').required(),
+      hasVerifiedIrsNotice: joi
+        .boolean()
+        .required()
+        .description(
+          'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
+        ),
+    };
+  }
 }
-
-CaseQC.prototype.init = function init(
-  rawCase,
-  { applicationContext, filtered = false },
-) {
-  caseDecorator(this, rawCase, { applicationContext, filtered });
-};
-
-CaseQC.VALIDATION_RULES = {
-  ...Case.VALIDATION_RULES,
-  entityName: JoiValidationConstants.STRING.valid('CaseQC').required(),
-  hasVerifiedIrsNotice: joi
-    .boolean()
-    .required()
-    .description(
-      'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
-    ),
-};
-
-joiValidationDecorator(
-  CaseQC,
-  joi.object().keys(CaseQC.VALIDATION_RULES),
-  CaseQC.VALIDATION_ERROR_MESSAGES,
-);
-
-module.exports = {
-  CaseQC: validEntityDecorator(CaseQC),
-};

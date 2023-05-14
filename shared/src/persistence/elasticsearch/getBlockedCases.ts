@@ -1,4 +1,4 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 /**
  * getBlockedCases
@@ -8,7 +8,10 @@ const { search } = require('./searchClient');
  * @param {string} providers.trialLocation the preferredTrialLocation to filter the blocked cases by
  * @returns {object} the case data
  */
-exports.getBlockedCases = async ({ applicationContext, trialLocation }) => {
+export const getBlockedCases = async ({
+  applicationContext,
+  trialLocation,
+}) => {
   const { results } = await search({
     applicationContext,
     searchParameters: {

@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 /**
  * Takes the selected work items in the store and invoke the assignWorkItems so that the assignee is attached to each
  * of the work items.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
  * @param {object} providers.store the cerebral store containing the selectedWorkItems, workQueue, assigneeId, assigneeName this method uses
@@ -14,7 +13,7 @@ export const assignSelectedWorkItemsAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const selectedWorkItems = get(state.selectedWorkItems);
   const sectionWorkQueue = get(state.workQueue);
   const assigneeId = get(state.assigneeId);
