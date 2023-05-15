@@ -3,6 +3,7 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -22,6 +23,11 @@ import {
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -47,6 +53,7 @@ import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/save
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
@@ -56,7 +63,6 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios from 'axios';
@@ -203,6 +209,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       return pdfLib;
     },
     getPersistenceGateway: () => ({
+      createLock,
       getCaseByDocketNumber,
       getCasesForUser,
       getDocketNumbersByUser,
@@ -211,7 +218,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           url: 'http://example.com',
         };
       },
+      getLock,
       getUserById,
+      removeLock,
       saveDocumentFromLambda,
       saveWorkItem,
       updateCase,
@@ -236,12 +245,16 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getUniqueId,
     getUseCaseHelpers: () => ({
+      acquireLock,
       countPagesInDocument,
       generateAndServeDocketEntry,
       sendServedPartiesEmails,
       updateCaseAndAssociations,
     }),
-    getUseCases: () => ({ generatePdfFromHtmlInteractor }),
+    getUseCases: () => ({
+      generatePdfFromHtmlInteractor,
+      getFeatureFlagValueInteractor: () => true,
+    }),
     getUtilities: () => ({
       calculateDifferenceInDays,
       calculateISODate,
@@ -250,11 +263,13 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       formatNow,
       getDocumentTypeForAddressChange,
       prepareDateFromString,
+      sleep,
     }),
     logger: {
       debug: () => {},
       error: () => {},
       info: () => {},
+      warn: () => {},
     },
   };
 

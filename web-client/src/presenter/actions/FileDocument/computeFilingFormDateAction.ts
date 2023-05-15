@@ -21,7 +21,7 @@ export const computeFilingFormDateAction = ({
   if (month && day && year) {
     filingDate = applicationContext
       .getUtilities()
-      .computeDate({ day, month, year });
+      .validateDateAndCreateISO({ day, month, year });
 
     store.set(state.form.filingDate, filingDate);
   }
