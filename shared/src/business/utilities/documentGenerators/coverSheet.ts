@@ -32,7 +32,5 @@ export const coverSheet = async ({ applicationContext, data }) => {
       headerHtml: '',
     });
 
-  console.log('cody - pdf', pdf);
-
   return pdf;
 };
