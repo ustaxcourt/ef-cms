@@ -15,7 +15,7 @@ resource "aws_lambda_function" "migration_lambda" {
 
   runtime     = "nodejs18.x"
   timeout     = "30"
-  memory_size = "3008"
+  memory_size = "768"
 
   environment {
     variables = {
