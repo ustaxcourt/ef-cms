@@ -9,70 +9,124 @@ describe('CustomCaseInventorySearch', () => {
   const mockPastDate = calculateISODate({ howMuch: -5, units: 'days' });
   const today = createISODateString();
 
-  it('should have validation errors when start date is not provided', () => {
-    const customCaseInventorySearch = new CustomCaseInventorySearch({
-      endDate: today,
-      startDate: undefined,
+  describe('Start and End Date', () => {
+    it('should have validation errors when start date is not provided', () => {
+      const customCaseInventorySearch = new CustomCaseInventorySearch({
+        endDate: today,
+        startDate: undefined,
+      });
+
+      expect(
+        customCaseInventorySearch.getFormattedValidationErrors(),
+      ).toMatchObject({
+        startDate: 'Enter a start date.',
+      });
     });
 
-    expect(
-      customCaseInventorySearch.getFormattedValidationErrors(),
-    ).toMatchObject({
-      startDate: 'Enter a start date.',
+    it('should have validation errors when end date is not provided', () => {
+      const customCaseInventorySearch = new CustomCaseInventorySearch({
+        endDate: undefined,
+        startDate: today,
+      });
+
+      expect(
+        customCaseInventorySearch.getFormattedValidationErrors(),
+      ).toMatchObject({
+        endDate: 'Enter an end date.',
+      });
+    });
+
+    it('should have validation errors when the end date provided is chronologically before a valid start date', () => {
+      const customCaseInventorySearch = new CustomCaseInventorySearch({
+        endDate: mockPastDate,
+        filingMethod: 'all',
+        startDate: today,
+      });
+
+      expect(
+        customCaseInventorySearch.getFormattedValidationErrors(),
+      ).toMatchObject({
+        endDate:
+          'End date cannot be prior to start date. Enter a valid end date.',
+      });
+    });
+
+    it('should have validation errors when the start date provided is in the future and the end date is not submitted', () => {
+      const customCaseInventorySearch = new CustomCaseInventorySearch({
+        endDate: undefined,
+        startDate: mockFutureDate,
+      });
+
+      expect(
+        customCaseInventorySearch.getFormattedValidationErrors(),
+      ).toMatchObject({
+        endDate: 'Enter an end date.',
+        startDate: 'Start date cannot be in the future. Enter a valid date.',
+      });
     });
   });
 
-  it('should have validation errors when end date is not provided', () => {
+  it('should have validation errors when an invalid case type is being searched for', () => {
     const customCaseInventorySearch = new CustomCaseInventorySearch({
-      endDate: undefined,
-      startDate: today,
+      caseTypes: ['Wait... I am not a case type'],
     });
 
     expect(
-      customCaseInventorySearch.getFormattedValidationErrors(),
-    ).toMatchObject({
-      endDate: 'Enter an end date.',
-    });
+      customCaseInventorySearch.getFormattedValidationErrors()?.[
+        'caseTypes[0]'
+      ],
+    ).toBeDefined();
   });
 
-  it('should have validation errors when the end date provided is chronologically before the start date', () => {
+  it('should have validation errors when an invalid case status is being searched for', () => {
     const customCaseInventorySearch = new CustomCaseInventorySearch({
-      endDate: mockPastDate,
-      startDate: today,
+      caseStatuses: ['Wait... I am not a case status'],
     });
 
     expect(
-      customCaseInventorySearch.getFormattedValidationErrors(),
-    ).toMatchObject({
-      endDate:
-        'End date cannot be prior to start date. Enter a valid end date.',
-    });
+      customCaseInventorySearch.getFormattedValidationErrors()?.[
+        'caseStatuses[0]'
+      ],
+    ).toBeDefined();
   });
 
-  it('should have validation errors when the start date provided is in the future', () => {
+  it('should enforce that the pageNumber is a number', () => {
     const customCaseInventorySearch = new CustomCaseInventorySearch({
-      endDate: undefined,
-      startDate: mockFutureDate,
+      pageNumber: 'I am string',
     });
 
     expect(
-      customCaseInventorySearch.getFormattedValidationErrors(),
-    ).toMatchObject({
-      startDate: 'Start date cannot be in the future. Enter a valid date.',
-    });
+      customCaseInventorySearch.getFormattedValidationErrors()?.pageNumber,
+    ).toBeDefined();
   });
 
-  // TODO: Decide if we need to restrict end date to future dates
-  it.skip('should have validation errors when the end date provided is in the future', () => {
+  it('should enforce that pageSize is a number', () => {
     const customCaseInventorySearch = new CustomCaseInventorySearch({
-      endDate: mockFutureDate,
-      startDate: '2020-03-01',
+      pageSize: 'I am string',
     });
 
     expect(
-      customCaseInventorySearch.getFormattedValidationErrors(),
-    ).toMatchObject({
-      endDate: 'End date cannot be in the future. Enter a valid date.',
+      customCaseInventorySearch.getFormattedValidationErrors()?.pageSize,
+    ).toBeDefined();
+  });
+
+  it('should not allow filing methods that are not all, paper, nor electronic', () => {
+    const customCaseInventorySearch = new CustomCaseInventorySearch({
+      filingMethod: 'I am not a paper',
     });
+
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.filingMethod,
+    ).toBeDefined();
+  });
+
+  it('should allow filing methods that are either all, paper, or electronic', () => {
+    const customCaseInventorySearch = new CustomCaseInventorySearch({
+      filingMethod: 'paper',
+    });
+
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.filingMethod,
+    ).toBeUndefined();
   });
 });

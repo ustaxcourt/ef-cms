@@ -129,7 +129,6 @@ import { updateCaseCorrespondence } from '../../persistence/dynamo/correspondenc
 import { updateDocketEntry } from '../../persistence/dynamo/documents/updateDocketEntry';
 import { updateUserRecords } from '../../persistence/dynamo/users/updateUserRecords';
 import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
-import { validateCustomCaseInventorySearchFiltersInteractor } from '../useCases/validateCustomCaseInventorySearchFiltersInteractor';
 import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
@@ -364,9 +363,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
-    validateCustomCaseInventorySearchFiltersInteractor: jest
-      .fn()
-      .mockImplementation(validateCustomCaseInventorySearchFiltersInteractor),
     validatePenaltiesInteractor: jest
       .fn()
       .mockImplementation(validatePenaltiesInteractor),

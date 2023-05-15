@@ -1,5 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../actions/CaseInventoryReport/getCustomCaseInventoryReportAction';
+import {
+  CASE_STATUS_TYPES,
+  CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { CustomCaseInventoryReportState } from '../customCaseInventoryReportState';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -17,8 +19,8 @@ const cases = [
     ...MOCK_CASE,
     associatedJudge: 'Chief Judge',
     caseType: 'New',
-    createdAt: '2018-03-01T21:40:46.415Z',
     procedureType: 'Regular',
+    receivedAt: '2018-03-01T21:40:46.415Z',
     status: CASE_STATUS_TYPES.new,
   },
   {
@@ -26,10 +28,10 @@ const cases = [
     associatedJudge: 'Judge Currozo',
     caseCaption: 'Test Petitioner 2',
     caseType: 'Deficiency',
-    createdAt: '2022-03-01T21:40:46.415Z',
     docketNumber: '1338-20',
     preferredTrialCity: 'Birmingham, Alabama',
     procedureType: 'Regular',
+    receivedAt: '2022-03-01T21:40:46.415Z',
     status: CASE_STATUS_TYPES.generalDocket,
   },
 ];
@@ -42,10 +44,11 @@ describe('customCaseInventoryReportHelper', () => {
       filters: {
         caseStatuses: [],
         caseTypes: [],
-        createEndDate: '2024-03-01T00:00:00.000Z',
-        createStartDate: '2018-03-01T00:00:00.000Z',
+        endDate: '2024-03-01T00:00:00.000Z',
         filingMethod: 'all',
+        startDate: '2018-03-01T00:00:00.000Z',
       },
+      lastIdsOfPages: [0],
       totalCases: 0,
     };
   });
@@ -61,17 +64,17 @@ describe('customCaseInventoryReportHelper', () => {
       {
         associatedJudge: 'Chief Judge',
         caseType: 'New',
-        createdAt: '03/01/18',
         docketNumber: '101-18',
         preferredTrialCity: 'Washington, District of Columbia',
+        receivedAt: '03/01/18',
         status: CASE_STATUS_TYPES.new,
       },
       {
         associatedJudge: 'Judge Currozo',
         caseType: 'Deficiency',
-        createdAt: '03/01/22',
         docketNumber: '1338-20',
         preferredTrialCity: 'Birmingham, Alabama',
+        receivedAt: '03/01/22',
         status: CASE_STATUS_TYPES.generalDocket,
       },
     ]);
@@ -99,9 +102,9 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should return true for runReportButtonIsDisabled if createEndDate or createStartDate are falsy', () => {
-    defaultCustomCaseState.filters.createEndDate = 's';
-    defaultCustomCaseState.filters.createStartDate = '';
+  it('should return true for runReportButtonIsDisabled if endDate or startDate are falsy', () => {
+    defaultCustomCaseState.filters.endDate = 's';
+    defaultCustomCaseState.filters.startDate = '';
 
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
@@ -110,9 +113,9 @@ describe('customCaseInventoryReportHelper', () => {
     expect(result.runReportButtonIsDisabled).toEqual(true);
   });
 
-  it('should return true for runReportButtonIsDisabled if createEndDate and createStartDate are both truthy', () => {
-    defaultCustomCaseState.filters.createEndDate = 's';
-    defaultCustomCaseState.filters.createStartDate = 's';
+  it('should return true for runReportButtonIsDisabled if endDate and startDate are both truthy', () => {
+    defaultCustomCaseState.filters.endDate = 's';
+    defaultCustomCaseState.filters.startDate = 's';
     const result = runCompute(customCaseInventoryReportHelper, {
       state: { customCaseInventory: defaultCustomCaseState },
     });

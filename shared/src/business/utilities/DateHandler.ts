@@ -159,48 +159,44 @@ export const createDateAtStartOfWeekEST = (
   return dateOutput;
 };
 
-export const createEndOfDayISO = ({
-  day,
-  month,
-  year,
-}: {
+export const createEndOfDayISO = (params?: {
   day: string;
   month: string;
   year: string;
 }): string => {
-  return DateTime.fromObject(
-    {
-      day: Number.parseInt(day),
-      month: Number.parseInt(month),
-      year: Number.parseInt(year),
-    },
-    { zone: USTC_TZ },
-  )
-    .set({ hour: 23, millisecond: 999, minute: 59, second: 59 })
-    .setZone('utc')
-    .toISO()!;
+  const dateObject = params
+    ? DateTime.fromObject({
+        day: Number.parseInt(params.day),
+        month: Number.parseInt(params.month),
+        year: Number.parseInt(params.year),
+      })
+    : DateTime.now();
+
+  return dateObject.setZone(USTC_TZ).endOf('day').setZone('utc').toISO()!;
 };
 
-export const createStartOfDayISO = ({
-  day,
-  month,
-  year,
-}: {
+export const createStartOfDayISO = (params?: {
   day: string;
   month: string;
   year: string;
 }): string => {
-  return DateTime.fromObject(
-    {
-      day: Number.parseInt(day),
-      month: Number.parseInt(month),
-      year: Number.parseInt(year),
-    },
-    { zone: USTC_TZ },
-  )
-    .startOf('day')
-    .setZone('utc')
-    .toISO()!;
+  const dateObject = params
+    ? DateTime.fromObject({
+        day: Number.parseInt(params.day),
+        month: Number.parseInt(params.month),
+        year: Number.parseInt(params.year),
+      })
+    : DateTime.now();
+
+  return dateObject.setZone(USTC_TZ).startOf('day').setZone('utc').toISO()!;
+};
+
+/**
+ * @param {object} options the date options containing year, month, day
+ * @returns {string} a formatted ISO date string
+ */
+export const createISODateStringFromObject = options => {
+  return DateTime.fromObject(options, { zone: USTC_TZ }).setZone('utc').toISO();
 };
 
 /**

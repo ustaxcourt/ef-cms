@@ -20,8 +20,8 @@ import {
   ROLES,
   SCENARIOS,
 } from './EntityConstants';
-
 import { JoiValidationConstants } from './JoiValidationConstants';
+import { createEndOfDayISO } from '../utilities/DateHandler';
 
 export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
@@ -465,11 +465,12 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
 export const DATE_RANGE_VALIDATION_RULE_KEYS = {
   endDate: joi.alternatives().conditional('startDate', {
     is: JoiValidationConstants.ISO_DATE.exist().not(null),
-    otherwise: JoiValidationConstants.ISO_DATE.required().description(
-      'The end date search filter must be of valid date format',
-    ),
-    then: JoiValidationConstants.ISO_DATE.required()
+    otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+      .required()
+      .description('The end date search filter must be of valid date format'),
+    then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
       .min(joi.ref('startDate'))
+      .required()
       .description(
         'The end date search filter must be of valid date format and greater than or equal to the start date',
       ),
@@ -480,12 +481,6 @@ export const DATE_RANGE_VALIDATION_RULE_KEYS = {
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
     ),
 };
-
-// TODO: validate workItems in DocketEntry
-// DOCKET_ENTRY_VALIDATION_RULE_KEYS.workItem = joi
-//   .object()
-//   .keys(WORK_ITEM_VALIDATION_RULE_KEYS)
-//   .optional();
 
 export const DOCKET_ENTRY_VALIDATION_RULES = joi
   .object()
