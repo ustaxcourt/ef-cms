@@ -8,7 +8,7 @@ resource "aws_lambda_function" "zip_seal" {
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "seal-in-lower-environment.handler"
   timeout          = "60"
-  memory_size      = "768"
+  memory_size      = "3000"
 
   runtime = var.node_version
 

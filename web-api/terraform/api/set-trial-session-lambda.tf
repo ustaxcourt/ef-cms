@@ -7,7 +7,7 @@ resource "aws_lambda_function" "set_trial_session_lambda" {
   s3_key           = "trial_session_${var.current_color}.js.zip"
   source_code_hash = var.trial_session_object_hash
   timeout          = "30"
-  memory_size      = "768"
+  memory_size      = "3000"
 
   runtime = var.node_version
 
