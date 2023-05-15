@@ -8,7 +8,7 @@ resource "aws_lambda_function" "zip_handle_bounce" {
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "handle-bounced-service-email.handler"
   timeout          = "60"
-  memory_size      = "3000"
+  memory_size      = "768"
 
   runtime = var.node_version
 
