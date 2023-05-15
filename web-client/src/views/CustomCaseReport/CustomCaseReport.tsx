@@ -360,7 +360,7 @@ const ReportTable = ({
                 <td>
                   {entry.highPriority && (
                     <Icon
-                      aria-label={`high priority for calendering for case ${entry.docketNumber}`}
+                      aria-label={`Case ${entry.docketNumber} has high-priority calendaring.`}
                       className="margin-left-5 mini-success margin-top-1"
                       icon="check"
                       size="1x"
