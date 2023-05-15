@@ -5,9 +5,9 @@ import { search } from './searchClient';
  * @param {object} providers the providers object containing applicationContext
  * @param {string} providers.applicationContext application context
  * @param {string} providers.judgeName judge
- * @returns {array} array of records with field based on source
+ * @returns {array} array of docketNumbers with field based on source
  */
-export const getCasesByStatusAndByJudge = async ({
+export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
   judgeName,
   statuses,
