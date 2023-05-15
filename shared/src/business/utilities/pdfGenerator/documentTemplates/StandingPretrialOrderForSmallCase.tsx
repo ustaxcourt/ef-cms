@@ -244,13 +244,13 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
                       they must file a joint Status Report including a summary
                       of the basis of settlement no later than 21 days before
                       the first day of the trial session. A Stipulation of
-                      Settled Issues should be attached, if available. The
-                      Status Report must state the reasons for delay in filing
-                      the Proposed Stipulated Decision. The Court may issue an
-                      Order specifying the date by which the Proposed Stipulated
-                      Decision will be due. If a basis for settlement is reached
-                      after the trial session begins, the Court will handle any
-                      required scheduling on the record.
+                      Settled Issues should be filed concurrently, if available.
+                      The Status Report must state the reasons for delay in
+                      filing the Proposed Stipulated Decision. The Court may
+                      issue an Order specifying the date by which the Proposed
+                      Stipulated Decision will be due. If a basis for settlement
+                      is reached after the trial session begins, the Court will
+                      handle any required scheduling on the record.
                     </span>
                   </p>
                 </li>
