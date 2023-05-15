@@ -27,6 +27,7 @@ import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
+import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
@@ -238,10 +239,14 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getUseCaseHelpers: () => ({
       countPagesInDocument,
       generateAndServeDocketEntry,
+      generatePdfFromHtmlHelper,
       sendServedPartiesEmails,
       updateCaseAndAssociations,
     }),
-    getUseCases: () => ({ generatePdfFromHtmlInteractor }),
+    getUseCases: () => ({
+      generatePdfFromHtmlInteractor,
+      getFeatureFlagValueInteractor: () => false,
+    }),
     getUtilities: () => ({
       calculateDifferenceInDays,
       calculateISODate,
