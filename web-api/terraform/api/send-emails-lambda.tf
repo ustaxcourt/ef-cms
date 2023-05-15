@@ -7,7 +7,7 @@ resource "aws_lambda_function" "send_emails_lambda" {
   s3_key           = "send_emails_${var.current_color}.js.zip"
   source_code_hash = var.send_emails_object_hash
   timeout          = "30"
-  memory_size      = "768"
+  memory_size      = "3000"
 
   runtime = var.node_version
 

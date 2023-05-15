@@ -25,7 +25,7 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_confirmation_lambda_role_${var.environment}"
   handler          = "cognito-triggers.handler"
   timeout          = "29"
-  memory_size      = "768"
+  memory_size      = "3000"
   runtime          = var.node_version
   count            = var.create_triggers
 
@@ -46,7 +46,7 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/iam_cognito_post_authentication_lambda_role_${var.environment}"
   handler          = "cognito-triggers.handler"
   timeout          = "29"
-  memory_size      = "768"
+  memory_size      = "3000"
   runtime          = var.node_version
   depends_on       = [var.triggers_object]
   s3_bucket        = var.lambda_bucket_id
@@ -68,7 +68,7 @@ resource "aws_lambda_function" "update_petitioner_cases_lambda" {
   handler          = "cognito-triggers.updatePetitionerCasesLambda"
   timeout          = "29"
   count            = var.create_triggers
-  memory_size      = "768"
+  memory_size      = "3000"
   runtime          = var.node_version
   depends_on       = [var.triggers_object]
   s3_bucket        = var.lambda_bucket_id

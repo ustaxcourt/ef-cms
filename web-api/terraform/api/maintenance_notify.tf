@@ -8,7 +8,7 @@ resource "aws_lambda_function" "maintenance_notify_lambda" {
   s3_key           = "maintenance_notify_${var.current_color}.js.zip"
   source_code_hash = var.maintenance_notify_object_hash
   timeout          = "29"
-  memory_size      = "768"
+  memory_size      = "3000"
 
   runtime = var.node_version
 

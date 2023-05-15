@@ -7,7 +7,7 @@ resource "aws_lambda_function" "api_public_lambda" {
   s3_key           = "api_public_${var.current_color}.js.zip"
   source_code_hash = var.public_object_hash
   timeout          = "10"
-  memory_size      = "768"
+  memory_size      = "3000"
 
   runtime = var.node_version
 
