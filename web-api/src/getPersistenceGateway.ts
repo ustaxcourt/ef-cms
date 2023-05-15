@@ -62,7 +62,6 @@ import {
 } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers';
 import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
-import { getCasesByStatusAndByJudge } from '../../shared/src/persistence/elasticsearch/getCasesByStatusAndByJudge';
 import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedByJudge } from '../../shared/src/persistence/elasticsearch/getCasesClosedByJudge';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
@@ -74,6 +73,7 @@ import { getConfigurationItemValue } from '../../shared/src/persistence/dynamo/d
 import { getDeployTableStatus } from '../../shared/src/persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketNumbersByStatusAndByJudge } from '../../shared/src/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -305,7 +305,6 @@ const gatewayMethods = {
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByLeadDocketNumber,
-  getCasesByStatusAndByJudge,
   getCasesByUserId,
   getCasesForUser,
   getClientId,
@@ -315,6 +314,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
