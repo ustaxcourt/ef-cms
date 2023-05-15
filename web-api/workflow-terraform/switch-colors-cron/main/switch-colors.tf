@@ -14,7 +14,7 @@ resource "aws_lambda_function" "switch_colors_status_lambda" {
 
   runtime     = "nodejs18.x"
   timeout     = "900"
-  memory_size = "3008"
+  memory_size = "768"
 
   environment {
     variables = {
