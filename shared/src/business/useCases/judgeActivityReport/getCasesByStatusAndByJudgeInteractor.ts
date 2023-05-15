@@ -139,11 +139,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }
   });
 
-  console.log(
-    'consolidatedCasesGroupCountMap:::::',
-    consolidatedCasesGroupCountMap,
-  );
-
   return {
     cases: Case.validateRawCollection(filteredCaseRecords, {
       applicationContext,
