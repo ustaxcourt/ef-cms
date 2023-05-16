@@ -63,6 +63,7 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
+import { ALLOWLIST_FEATURE_FLAGS } from '../../shared/src/business/entities/EntityConstants';
 import {
   fakeData,
   getFakeFile,
@@ -119,6 +120,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     stage: process.env.STAGE || 'local',
   };
   const apiApplicationContext = {
+    environment: {
+      currentColor: 'blue',
+    },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getConstants: () => ({ MAX_SES_RETRIES: 6 }),
@@ -245,7 +249,16 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getFeatureFlagValueInteractor: () => false,
+      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
+        if (
+          featureFlag ===
+          ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      },
     }),
     getUtilities: () => ({
       calculateDifferenceInDays,
