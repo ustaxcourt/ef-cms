@@ -2,7 +2,8 @@ import puppeteer from 'puppeteer';
 
 export const getChromiumBrowser = async () => {
   return await puppeteer.launch({
-    headless: 'new',
+    // removing this causes integration tests to fail
+    args: ['--no-sandbox'],
   });
 };
 
