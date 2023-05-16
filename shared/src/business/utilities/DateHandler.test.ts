@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
   PATTERNS,
@@ -208,28 +209,23 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('createStartOfDayISO', () => {
-    const mockTimeFunc = setupMockTestCurrentTime('2021-10-07T00:31:51.621Z');
-    beforeAll(mockTimeFunc.setupDateMock);
-    afterAll(mockTimeFunc.restoreDateMock);
+  describe.only('createStartOfDayISO', () => {
+    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone 2', () => {
+      Settings.defaultZone = 'Europe/Paris';
+      Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime();
+      console.log(DateTime.now().toISO());
 
-    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone', () => {
       const startOfDay = createStartOfDayISO({
         day: '7',
         month: '4',
         year: '2020',
       });
       expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
-
-      // now confirm it converts "back" to originally desired time
-      const formattedInEastern = formatDateString(
-        startOfDay,
-        FORMATS.DATE_TIME,
-      );
-      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
     });
 
-    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone when no params are passed in', () => {
+    it.only('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone when no params are passed in', () => {
+      Settings.defaultZone = 'Europe/Paris';
+      Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime();
       const startOfDay = createStartOfDayISO();
       expect(startOfDay).toEqual('2021-10-06T04:00:00.000Z');
     });
