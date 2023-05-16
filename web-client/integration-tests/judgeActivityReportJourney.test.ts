@@ -72,8 +72,10 @@ describe('Judge activity report journey', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
     expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
       casesClosedByJudge: expect.anything(),
+      consolidatedCasesGroupCountMap: expect.anything(),
       opinions: expect.anything(),
       orders: expect.anything(),
+      submittedAndCavCasesByJudge: expect.anything(),
       trialSessions: expect.anything(),
     });
   });
