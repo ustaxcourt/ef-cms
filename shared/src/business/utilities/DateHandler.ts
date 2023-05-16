@@ -207,14 +207,17 @@ export const createStartOfDayISO = (params?: {
   year: string;
 }): string => {
   const dateObject = params
-    ? DateTime.fromObject({
-        day: params.day,
-        month: params.month,
-        year: params.year,
-      })
-    : DateTime.now();
+    ? DateTime.fromObject(
+        {
+          day: params.day,
+          month: params.month,
+          year: params.year,
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.setZone(USTC_TZ).startOf('day').setZone('utc').toISO();
+  return dateObject.startOf('day').setZone('utc').toISO();
 };
 
 /**
