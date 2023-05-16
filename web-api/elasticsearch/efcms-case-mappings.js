@@ -24,6 +24,9 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'caseType.S': {
+      type: 'keyword',
+    },
     'closedDate.S': {
       type: 'date',
     },
