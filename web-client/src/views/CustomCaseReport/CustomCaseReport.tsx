@@ -323,9 +323,9 @@ const ReportTable = ({
   return (
     <>
       <table
-        aria-label="case inventory record"
+        aria-label="custom case inventory record"
         className="usa-table case-detail ustc-table responsive-table"
-        id="docket-record-table"
+        id="custom-case-report-table"
       >
         <thead>
           <tr>
@@ -344,9 +344,9 @@ const ReportTable = ({
             </th>
           </tr>
         </thead>
-        <tbody>
-          {cases &&
-            cases.map(entry => (
+        {cases.length !== 0 && (
+          <tbody id="custom-case-report-table-body">
+            {cases.map(entry => (
               <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
                 <td>
                   <CaseLink formattedCase={entry} />
@@ -360,7 +360,7 @@ const ReportTable = ({
                 <td>
                   {entry.highPriority && (
                     <Icon
-                      aria-label={`high priority for calendering for case ${entry.docketNumber}`}
+                      aria-label={`Case ${entry.docketNumber} has high-priority calendaring.`}
                       className="margin-left-5 mini-success margin-top-1"
                       icon="check"
                       size="1x"
@@ -369,7 +369,8 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-        </tbody>
+          </tbody>
+        )}
       </table>
       {hasRunCustomCaseReport && totalCases === 0 && (
         <p>There are no cases for the selected criteria.</p>
