@@ -72,7 +72,6 @@ import {
 import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
-import { generatePdfFromHtmlHelper } from '../useCaseHelper/generatePdfFromHtmlHelper';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
@@ -382,9 +381,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
-    generatePdfFromHtmlHelper: jest
-      .fn()
-      .mockImplementation(generatePdfFromHtmlHelper),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     removeCounselFromRemovedPetitioner: jest
