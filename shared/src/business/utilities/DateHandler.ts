@@ -164,15 +164,27 @@ export const createEndOfDayISO = (params?: {
   month: string;
   year: string;
 }): string => {
-  const dateObject = params
-    ? DateTime.fromObject({
-        day: Number.parseInt(params.day),
-        month: Number.parseInt(params.month),
-        year: Number.parseInt(params.year),
-      })
-    : DateTime.now();
+  let dateToCreate;
+  if (!params) {
+    const now = DateTime.now();
+    dateToCreate.day = now.day;
+    dateToCreate.month = now.month;
+    dateToCreate.year = now.year;
+  } else {
+    dateToCreate = params;
+  }
 
-  return dateObject.setZone(USTC_TZ).endOf('day').setZone('utc').toISO()!;
+  return DateTime.fromObject(
+    {
+      day: Number.parseInt(dateToCreate.day),
+      month: Number.parseInt(dateToCreate.month),
+      year: Number.parseInt(dateToCreate.year),
+    },
+    { zone: USTC_TZ },
+  )
+    .endOf('day')
+    .setZone('utc')
+    .toISO()!;
 };
 
 export const createStartOfDayISO = (params?: {
@@ -180,15 +192,27 @@ export const createStartOfDayISO = (params?: {
   month: string;
   year: string;
 }): string => {
-  const dateObject = params
-    ? DateTime.fromObject({
-        day: Number.parseInt(params.day),
-        month: Number.parseInt(params.month),
-        year: Number.parseInt(params.year),
-      })
-    : DateTime.now();
+  let dateToCreate;
+  if (!params) {
+    const now = DateTime.now();
+    dateToCreate.day = now.day;
+    dateToCreate.month = now.month;
+    dateToCreate.year = now.year;
+  } else {
+    dateToCreate = params;
+  }
 
-  return dateObject.setZone(USTC_TZ).startOf('day').setZone('utc').toISO()!;
+  return DateTime.fromObject(
+    {
+      day: Number.parseInt(dateToCreate.day),
+      month: Number.parseInt(dateToCreate.month),
+      year: Number.parseInt(dateToCreate.year),
+    },
+    { zone: USTC_TZ },
+  )
+    .startOf('day')
+    .setZone('utc')
+    .toISO()!;
 };
 
 /**
