@@ -1,9 +1,9 @@
+const maxRetries = 10;
 import moize from 'moize';
 
 /**
  *
- * head
- *
+ *head
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -22,8 +22,7 @@ export const head = async ({ applicationContext, endpoint, params }) => {
 
 /**
  *
- * get
- *
+ *get
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -41,8 +40,7 @@ const internalGet = async ({ applicationContext, endpoint, params }) => {
 
 /**
  *
- * getResponse
- *
+ *getResponse
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -71,8 +69,7 @@ export const get = process.env.CI ? internalGet : getMemoized;
 
 /**
  *
- * post
- *
+ *post
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
@@ -86,43 +83,80 @@ export const post = async ({
   endpoint,
   headers = {},
   options = {},
+  retry = 0,
 }) => {
   getMemoized.clear();
-  return await applicationContext
-    .getHttpClient()
-    .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-      headers: {
-        ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
-        ...headers,
-      },
-      ...options,
-    })
-    .then(response => response.data);
+  try {
+    return await applicationContext
+      .getHttpClient()
+      .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
+        headers: {
+          ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
+          ...headers,
+        },
+        ...options,
+      })
+      .then(response => response.data);
+  } catch (err) {
+    if (err.response.status === 503 && retry < maxRetries) {
+      await applicationContext
+        .getUtilities()
+        .sleep(err.response.headers['Retry-After'] || 5000);
+      return exports.post({
+        applicationContext,
+        body,
+        endpoint,
+        retry: retry + 1,
+      });
+    }
+    throw err;
+  }
 };
 
 /**
  *
- * put
- *
+ *put
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-export const put = async ({ applicationContext, body, endpoint }) => {
+
+export const put = async ({
+  applicationContext,
+  body,
+  endpoint,
+  retry = 0,
+}) => {
   getMemoized.clear();
-  return await applicationContext
-    .getHttpClient()
-    .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
-    })
-    .then(response => response.data);
+  try {
+    const res = await applicationContext
+      .getHttpClient()
+      .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
+        headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
+      })
+      .then(response => response.data);
+
+    return res;
+  } catch (err) {
+    if (err.response.status === 503 && retry < maxRetries) {
+      await applicationContext
+        .getUtilities()
+        .sleep(err.response.headers['Retry-After'] || 5000);
+      return exports.put({
+        applicationContext,
+        body,
+        endpoint,
+        retry: retry + 1,
+      });
+    }
+    throw err;
+  }
 };
 /**
  *
- * remove
- *
+ *remove
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -135,16 +169,33 @@ export const remove = async ({
   endpoint,
   options = {},
   params,
+  retry = 0,
 }) => {
   getMemoized.clear();
-  return await applicationContext
-    .getHttpClient()
-    .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
-      params,
-      ...options,
-    })
-    .then(response => response.data);
+  try {
+    return await applicationContext
+      .getHttpClient()
+      .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
+        headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
+        params,
+        ...options,
+      })
+      .then(response => response.data);
+  } catch (err) {
+    if (err.response.status === 503 && retry < maxRetries) {
+      await applicationContext
+        .getUtilities()
+        .sleep(err.response.headers['Retry-After'] || 5000);
+      return exports.remove({
+        applicationContext,
+        endpoint,
+        params,
+        ...options,
+        retry: retry + 1,
+      });
+    }
+    throw err;
+  }
 };
 
 const getDefaultHeaders = userToken => {

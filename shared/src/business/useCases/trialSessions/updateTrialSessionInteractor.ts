@@ -8,6 +8,7 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
 import { get } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,
@@ -132,14 +133,13 @@ const createWorkingCopyForNewUserOnSession = async ({
 
 /**
  * updateTrialSessionInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
  */
-export const updateTrialSessionInteractor = async (
-  applicationContext,
-  { trialSession },
+export const updateTrialSession = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: TrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -169,6 +169,7 @@ export const updateTrialSessionInteractor = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
+    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     joinPhoneNumber: trialSession.joinPhoneNumber,
@@ -210,7 +211,7 @@ export const updateTrialSessionInteractor = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge.userId,
+      userId: updatedTrialSessionEntity.judge?.userId,
     });
   }
 
@@ -226,7 +227,7 @@ export const updateTrialSessionInteractor = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk.userId,
+      userId: updatedTrialSessionEntity.trialClerk?.userId,
     });
   }
 
@@ -288,3 +289,49 @@ export const updateTrialSessionInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: TrialSession },
+) => {
+  const { caseOrder } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId: trialSession.trialSessionId,
+    });
+
+  const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
+
+  caseOrder?.forEach(({ docketNumber }) =>
+    entitiesToLock.push(`case|${docketNumber}`),
+  );
+
+  return {
+    identifiers: entitiesToLock,
+    ttl: 900,
+  };
+};
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_trial_session',
+    },
+    userId: user.userId,
+  });
+};
+
+export const updateTrialSessionInteractor = withLocking(
+  updateTrialSession,
+  determineEntitiesToLock,
+  handleLockError,
+);

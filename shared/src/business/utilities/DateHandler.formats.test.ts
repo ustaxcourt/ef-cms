@@ -1,6 +1,4 @@
-import * as DateHandler from './DateHandler';
-const { createISODateString, formatDateString, FORMATS, prepareDateFromEST } =
-  DateHandler;
+import { FORMATS, createISODateString, formatDateString } from './DateHandler';
 import { JoiValidationConstants } from '../entities/JoiValidationConstants';
 
 describe('DateHandler', () => {
@@ -15,6 +13,8 @@ describe('DateHandler', () => {
       FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
       LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
+      MDYYYY: '7/2/2018',
+      MDYYYY_DASHED: '7-2-2018',
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
       MMDDYYYY_DASHED: '07-02-2018',
@@ -58,12 +58,6 @@ describe('DateHandler', () => {
       const result = formatDateString(dateStringFormat, 'DATE_TIME_TZ');
       expect(result).toEqual('09/08/11 2:00 pm ET');
     });
-
-    it('converts EST to GMT', () => {
-      const dateString = '2011-09-08 14:00'; // 2pm on Sept 9th
-      const result = prepareDateFromEST(dateString, FORMATS.TRIAL_TIME);
-      expect(result).toEqual('2011-09-08T18:00:00.000Z');
-    });
   });
 
   describe('createISODateString', () => {
@@ -82,7 +76,7 @@ describe('DateHandler', () => {
       const dateNowStub = jest.fn().mockReturnValue(mockTimeValue);
       global.Date.now = dateNowStub;
 
-      const myDate = DateHandler.createISODateString();
+      const myDate = createISODateString();
       expect(myDate).toBe(expectedReturnValue);
       expect(dateNowStub).toHaveBeenCalled();
 
@@ -90,32 +84,27 @@ describe('DateHandler', () => {
     });
 
     it('creates a date from a year', () => {
-      const myDate = DateHandler.createISODateString('2000', FORMATS.YEAR);
+      const myDate = createISODateString('2000', FORMATS.YEAR);
       expect(myDate).toBe('2000-01-01T05:00:00.000Z');
     });
 
     it('creates a date from a two-digit year', () => {
-      const myDate = DateHandler.createISODateString(
-        '89',
-        FORMATS.YEAR_TWO_DIGIT,
-      );
+      const myDate = createISODateString('89', FORMATS.YEAR_TWO_DIGIT);
       expect(myDate).toBe('1989-01-01T05:00:00.000Z');
     });
 
     it('creates an EST-set UTC date from a YYYY-MM-DD string', () => {
-      const myDate = DateHandler.createISODateString('2001-01-01'); // Jan 1, 2001 at the stroke of midnight, EST
+      const myDate = createISODateString('2001-01-01'); // Jan 1, 2001 at the stroke of midnight, EST
       expect(myDate).toBe('2001-01-01T05:00:00.000Z');
     });
 
     it('should not alter a zulu time string', () => {
-      const myDate = DateHandler.createISODateString(
-        '2001-01-01T00:00:00.000Z',
-      ); // Jan 1, 2001 at the stroke of midnight, GMT
+      const myDate = createISODateString('2001-01-01T00:00:00.000Z'); // Jan 1, 2001 at the stroke of midnight, GMT
       expect(myDate).toBe('2001-01-01T00:00:00.000Z');
     });
 
     it('creates timestamps that strictly adhere to Joi formatting rules', () => {
-      const thisDate = DateHandler.createISODateString();
+      const thisDate = createISODateString();
       expect(
         JoiValidationConstants.ISO_DATE.validate(thisDate).error,
       ).toBeUndefined();

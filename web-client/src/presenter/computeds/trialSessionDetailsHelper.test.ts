@@ -181,4 +181,28 @@ describe('trialSessionDetailsHelper', () => {
     });
     expect(result.showSmallAndRegularQcComplete).toEqual(false);
   });
+
+  describe('canDismissThirtyDayAlert', () => {
+    it('should be true when the curent user has DIMISS_NOTT_REMINDER permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DIMISS_NOTT_REMINDER: true },
+          trialSession: TRIAL_SESSION,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toBe(true);
+    });
+
+    it('should be false when the curent user does NOT have DIMISS_NOTT_REMINDER permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DIMISS_NOTT_REMINDER: false },
+          trialSession: TRIAL_SESSION,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toBe(false);
+    });
+  });
 });
