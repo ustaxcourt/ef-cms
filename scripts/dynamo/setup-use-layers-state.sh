@@ -25,7 +25,6 @@ ITEM=$(cat <<-END
 END
 )
 
-echo "HERE"
 aws dynamodb put-item \
     --region us-east-1 \
     --table-name "efcms-deploy-${ENV}" \
@@ -46,8 +45,6 @@ ITEM=$(cat <<-END
 }
 END
 )
-
-echo "THERE"
 
 aws dynamodb put-item \
     --region us-east-1 \
