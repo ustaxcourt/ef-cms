@@ -164,7 +164,7 @@ export const createEndOfDayISO = (params?: {
   month: string;
   year: string;
 }): string => {
-  let dateToCreate;
+  let dateToCreate = {};
   if (!params) {
     const now = DateTime.now();
     dateToCreate.day = now.day;
@@ -192,7 +192,7 @@ export const createStartOfDayISO = (params?: {
   month: string;
   year: string;
 }): string => {
-  let dateToCreate;
+  let dateToCreate = {};
   if (!params) {
     const now = DateTime.now();
     dateToCreate.day = now.day;
