@@ -81,7 +81,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const submittedAndCavCasesResults = await applicationContext
     .getPersistenceGateway()
-    .getCasesByStatusAndByJudge({
+    .getDocketNumbersByStatusAndByJudge({
       applicationContext,
       judgeName,
       statuses,
@@ -117,6 +117,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
                 applicationContext,
                 leadDocketNumber: rawCaseRecord.docketNumber,
               });
+
             return rawCaseRecord;
           }
         } else {
