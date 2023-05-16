@@ -35,7 +35,9 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
+  // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
+  workerIdleMemoryLimit: '20%',
 };
 
 // eslint-disable-next-line import/no-default-export
