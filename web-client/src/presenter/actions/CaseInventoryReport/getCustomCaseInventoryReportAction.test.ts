@@ -38,7 +38,7 @@ describe('getCustomCaseInventoryReportAction', () => {
   };
   const expectedRequest: GetCaseInventoryReportRequest = {
     ...filterValues,
-    endDate: '2022-05-14T04:00:00.000Z',
+    endDate: '2022-05-15T03:59:59.999Z',
     pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
     searchAfter: 0,
     startDate: '2022-05-10T04:00:00.000Z',
