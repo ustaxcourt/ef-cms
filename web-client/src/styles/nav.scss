@@ -229,6 +229,7 @@
 
           .usa-nav__submenu {
             background-color: color($theme-color-primary);
+            padding: 1rem;
 
             /* this is for buttons in submenus that should be styled the same as links in submenus */
             .usa-nav__submenu-item button {
