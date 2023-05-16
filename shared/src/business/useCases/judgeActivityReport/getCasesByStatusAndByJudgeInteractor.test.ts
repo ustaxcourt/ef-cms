@@ -155,6 +155,8 @@ const mockCavConsolidatedMemberCase = {
 
 let mockReturnedDocketNumbers = [];
 
+let expectedConsolidatedCasesGroupCountMap = {};
+
 describe('getCasesByStatusAndByJudgeInteractor', () => {
   const mockValidRequest = {
     judgeName: judgeUser.name,
@@ -192,6 +194,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
     ];
 
+    const casesForLeadDocketNumber = [
+      mockCavLeadCase,
+      mockCavConsolidatedMemberCase,
+    ];
+
+    expectedConsolidatedCasesGroupCountMap = {
+      [`${mockCavLeadCase.docketNumber}`]: casesForLeadDocketNumber.length,
+    };
+
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue(
@@ -206,10 +217,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValueOnce([
-        mockCavLeadCase,
-        mockCavConsolidatedMemberCase,
-      ]);
+      .getCasesByLeadDocketNumber.mockResolvedValueOnce(
+        casesForLeadDocketNumber,
+      );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
@@ -227,7 +237,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
-    expect(result.consolidatedCasesGroupCountMap).toBeTruthy();
+    expect(result.consolidatedCasesGroupCountMap).toEqual(
+      expectedConsolidatedCasesGroupCountMap,
+    );
   });
 
   it('should return an array of 2 cases (stripping out the member case of consolidated cases and case with ODD) and consolidatedCasesGroupMap', async () => {
@@ -237,6 +249,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       { docketNumber: mockCavLeadCase.docketNumber },
       { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
     ];
+
+    const casesForLeadDocketNumber = [
+      mockCavLeadCase,
+      mockCavConsolidatedMemberCase,
+    ];
+
+    expectedConsolidatedCasesGroupCountMap = {
+      [`${mockCavLeadCase.docketNumber}`]: casesForLeadDocketNumber.length,
+    };
 
     applicationContext
       .getPersistenceGateway()
@@ -253,10 +274,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValueOnce([
-        mockCavLeadCase,
-        mockCavConsolidatedMemberCase,
-      ]);
+      .getCasesByLeadDocketNumber.mockResolvedValueOnce(
+        casesForLeadDocketNumber,
+      );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
@@ -274,7 +294,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
-    expect(result.consolidatedCasesGroupCountMap).toBeTruthy();
+    expect(result.consolidatedCasesGroupCountMap).toEqual(
+      expectedConsolidatedCasesGroupCountMap,
+    );
   });
 
   it('should return an array of 1 (stripping out the case with ODD and no consolidated cases) and consolidatedCasesGroupMap', async () => {
@@ -307,5 +329,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
   });
 });

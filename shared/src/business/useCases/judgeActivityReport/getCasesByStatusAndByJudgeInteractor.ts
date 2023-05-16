@@ -6,34 +6,17 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 
 const getConsolidatedCaseGroupCountMap = (
-  consolidatedCases,
+  filteredCaseRecords,
   consolidatedCasesGroupCountMap,
 ) => {
-  consolidatedCases
-    .sort(
-      (a, b) =>
-        Case.getSortableDocketNumber(a.docketNumber) -
-        Case.getSortableDocketNumber(b.docketNumber),
-    )
-    .forEach(consolidatedCase => {
-      if (consolidatedCase.leadDocketNumber) {
-        if (
-          !consolidatedCasesGroupCountMap.has(consolidatedCase.leadDocketNumber)
-        ) {
-          consolidatedCasesGroupCountMap.set(
-            consolidatedCase.leadDocketNumber,
-            1,
-          );
-        } else {
-          consolidatedCasesGroupCountMap.set(
-            consolidatedCase.leadDocketNumber,
-            consolidatedCasesGroupCountMap.get(
-              consolidatedCase.leadDocketNumber,
-            ) + 1,
-          );
-        }
-      }
-    });
+  filteredCaseRecords.forEach(caseRecord => {
+    if (caseRecord.leadDocketNumber) {
+      consolidatedCasesGroupCountMap.set(
+        caseRecord.leadDocketNumber,
+        caseRecord.consolidatedCases.length,
+      );
+    }
+  });
 };
 
 const hasUnwantedDocketEntryEventCode = docketEntries => {
@@ -110,16 +93,13 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       )
       .map(async rawCaseRecord => {
         if (rawCaseRecord.leadDocketNumber) {
-          if (rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber) {
-            rawCaseRecord.consolidatedCases = await applicationContext
-              .getPersistenceGateway()
-              .getCasesByLeadDocketNumber({
-                applicationContext,
-                leadDocketNumber: rawCaseRecord.docketNumber,
-              });
-
-            return rawCaseRecord;
-          }
+          rawCaseRecord.consolidatedCases = await applicationContext
+            .getPersistenceGateway()
+            .getCasesByLeadDocketNumber({
+              applicationContext,
+              leadDocketNumber: rawCaseRecord.docketNumber,
+            });
+          return rawCaseRecord;
         } else {
           return rawCaseRecord;
         }
@@ -131,14 +111,11 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   );
 
   const consolidatedCasesGroupCountMap = new Map();
-  filteredCaseRecords.forEach(filteredCaseRecord => {
-    if (filteredCaseRecord.leadDocketNumber) {
-      getConsolidatedCaseGroupCountMap(
-        filteredCaseRecord.consolidatedCases,
-        consolidatedCasesGroupCountMap,
-      );
-    }
-  });
+
+  getConsolidatedCaseGroupCountMap(
+    filteredCaseRecords,
+    consolidatedCasesGroupCountMap,
+  );
 
   return {
     cases: Case.validateRawCollection(filteredCaseRecords, {
