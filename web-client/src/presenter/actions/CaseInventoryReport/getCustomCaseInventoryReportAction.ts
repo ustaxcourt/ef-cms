@@ -3,7 +3,6 @@ import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportResponse,
 } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 /**
@@ -28,9 +27,10 @@ export const getCustomCaseInventoryReportAction = async ({
     state.customCaseInventory.filters,
   );
 
+  const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
   const formattedStartDate = applicationContext
     .getUtilities()
-    .createISODateString(filterValues.startDate, FORMATS.MMDDYYYY);
+    .createStartOfDayISO({ day: startDay, month: startMonth, year: startYear });
   const [month, day, year] = filterValues.endDate.split('/');
 
   const formattedEndDate = applicationContext
