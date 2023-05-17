@@ -462,7 +462,7 @@ describe('formattedTrialSessionDetails', () => {
 
       expect(result.showAlertForNOTTReminder).toBe(true);
       expect(result.alertMessageForNOTT).toEqual(
-        '30-day trial notices are due before 2/2/2022. Have notices been served?',
+        '30-day trial notices are due by 2/2/2022. Have notices been served?',
       );
     });
 
