@@ -33,7 +33,7 @@ export const formatSession = (session, applicationContext) => {
     session.isStartDateWithinNOTTReminderRange;
 
   if (session.showAlertForNOTTReminder) {
-    session.alertMessageForNOTT = `The 30-day notice is due before ${session.thirtyDaysBeforeTrialFormatted}`;
+    session.alertMessageForNOTT = `The 30-day notice is due by ${session.thirtyDaysBeforeTrialFormatted}`;
   }
 
   return session;
