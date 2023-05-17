@@ -60,7 +60,12 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
       applicationContext.getConstants().DATE_FORMATS.ISO,
     );
 
-  submittedAndCavCasesByJudge.forEach(individualCase => {
+  const filteredSubmittedAndCavCasesByJudge =
+    submittedAndCavCasesByJudge.filter(
+      unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
+    );
+
+  filteredSubmittedAndCavCasesByJudge.forEach(individualCase => {
     individualCase.formattedCaseCount =
       consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
@@ -85,7 +90,7 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
       );
   });
 
-  submittedAndCavCasesByJudge.sort((a, b) => {
+  filteredSubmittedAndCavCasesByJudge.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
@@ -93,14 +98,14 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   return {
     closedCasesTotal,
+    filteredSubmittedAndCavCasesByJudge,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
     ordersFiledTotal,
-    progressDescriptionTableTotal: submittedAndCavCasesByJudge.length,
+    progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
     reportHeader,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
-    submittedAndCavCasesByJudge,
     trialSessionsHeldTotal,
   };
 };
