@@ -223,4 +223,140 @@ describe('judgeActivityReportHelper', () => {
       expect(trialSessionsHeldTotal).toBe(3);
     });
   });
+
+  describe('progressDescriptionTableTotal', () => {
+    it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
+      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map();
+      baseState.judgeActivityReportData.submittedAndCavCasesByJudge = [
+        {
+          caseStatusHistory: [
+            { date: '2022-02-15T05:00:00.000Z' },
+            { date: '2022-02-16T05:00:00.000Z' },
+          ],
+          docketNumber: '101-20',
+        },
+        {
+          caseStatusHistory: [
+            { date: '2022-02-15T05:00:00.000Z' },
+            { date: '2022-02-16T05:00:00.000Z' },
+          ],
+          docketNumber: '103-20',
+        },
+        {
+          caseStatusHistory: [
+            { date: '2022-02-15T05:00:00.000Z' },
+            { date: '2022-02-16T05:00:00.000Z' },
+          ],
+          docketNumber: '102-20',
+        },
+      ];
+      const { progressDescriptionTableTotal } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(progressDescriptionTableTotal).toBe(3);
+    });
+  });
+
+  describe('submittedAndCavCasesByJudge', () => {
+    const mockSubmittedAndCavCasesByJudge = [
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '101-20',
+        leadDocketNumber: '101-20',
+      },
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-26T05:00:00.000Z' },
+        ],
+        docketNumber: '110-15',
+      },
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '202-11',
+      },
+    ];
+
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
+        .mockReturnValueOnce(5);
+
+      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map([['101-20', 4]]);
+      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      const leadCase = submittedAndCavCasesByJudge.find(caseRecord => {
+        return caseRecord.leadDocketNumber;
+      });
+
+      const unconsolidatedCases = submittedAndCavCasesByJudge.filter(
+        caseRecord => {
+          return !caseRecord.leadDocketNumber;
+        },
+      );
+
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
+      expect(leadCase.consolidatedIconTooltipText).toBe('Lead case');
+      expect(leadCase.isLeadCase).toBe(true);
+      expect(leadCase.inConsolidatedGroup).toBe(true);
+      expect(leadCase.formattedCaseCount).toBe(4);
+      expect(leadCase.daysElapsedSinceLastStatusChange).toBe(5);
+
+      expect(unconsolidatedCases.length).toBe(2);
+      unconsolidatedCases.forEach(unconsolidatedCase => {
+        expect(unconsolidatedCase.formattedCaseCount).toBe(1);
+        expect(unconsolidatedCase.daysElapsedSinceLastStatusChange).toBe(10);
+      });
+    });
+
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
+        .mockReturnValueOnce(5);
+
+      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map([['101-20', 4]]);
+      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
+      expect(
+        submittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
+      ).toBe(10);
+      expect(
+        submittedAndCavCasesByJudge[1].daysElapsedSinceLastStatusChange,
+      ).toBe(10);
+      expect(
+        submittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
+      ).toBe(5);
+    });
+  });
 });
