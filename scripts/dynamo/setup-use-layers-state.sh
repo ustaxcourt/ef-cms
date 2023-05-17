@@ -19,7 +19,7 @@ ITEM=$(cat <<-END
         "S": "deploying-use-layers"
     },
     "current": {
-        "BOOL": false
+        "BOOL": true
     }
 }
 END
