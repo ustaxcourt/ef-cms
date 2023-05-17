@@ -1,5 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -213,7 +214,9 @@ export const JudgeActivityReport = connect(
                         showLeadCaseIcon={formattedCase.isLeadCase}
                       />
                     </td>
-                    <td>{formattedCase.docketNumber}</td>
+                    <td>
+                      <CaseLink docketNumber={formattedCase.docketNumber} />
+                    </td>
                     <td>{formattedCase?.formattedCaseCount}</td>
                     <td>{formattedCase.caseCaption}</td>
                     <td>{formattedCase.status}</td>
