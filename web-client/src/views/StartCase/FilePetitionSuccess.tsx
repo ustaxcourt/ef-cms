@@ -27,7 +27,7 @@ export const FilePetitionSuccess = connect(
           <ul className="usa-list steps-after-filing">
             <li>
               You’ll need to pay a filing fee or submit a waiver. You can view
-              all the options for this on your “My Cases“ page.
+              all the options for this on your &quot;My Cases&quot; page.
             </li>
             <li>
               As new info about the case becomes available you will be notified.
@@ -39,7 +39,7 @@ export const FilePetitionSuccess = connect(
             href="/"
             id="button-back-to-dashboard"
           >
-            View My Cases
+            View Dashboard
           </Button>
         </section>
       </>
