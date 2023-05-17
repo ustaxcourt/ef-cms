@@ -55,10 +55,13 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
-    .prepareDateFromString()
-    .toISOString();
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString(),
+      applicationContext.getConstants().DATE_FORMATS.ISO,
+    );
 
   submittedAndCavCasesByJudge.forEach(individualCase => {
+    console.log('individualCase', individualCase);
     individualCase.formattedCaseCount =
       consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
@@ -81,6 +84,12 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
         currentDateInIsoFormat,
         dateOfLastCaseStatusChange,
       );
+  });
+
+  submittedAndCavCasesByJudge.sort((a, b) => {
+    return (
+      b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
+    );
   });
 
   return {
