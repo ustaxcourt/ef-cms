@@ -263,7 +263,32 @@ describe('judgeActivityReportHelper', () => {
   });
 
   describe('submittedAndCavCasesByJudge', () => {
-    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values and sorted by daysElapsedSinceLastStatusChange', () => {
+    const mockSubmittedAndCavCasesByJudge = [
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '101-20',
+        leadDocketNumber: '101-20',
+      },
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-26T05:00:00.000Z' },
+        ],
+        docketNumber: '110-15',
+      },
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '202-11',
+      },
+    ];
+
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
       applicationContext
         .getUtilities()
         .calculateDifferenceInDays.mockReturnValue(10)
@@ -271,30 +296,9 @@ describe('judgeActivityReportHelper', () => {
 
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
         new Map([['101-20', 4]]);
-      baseState.judgeActivityReportData.submittedAndCavCasesByJudge = [
-        {
-          caseStatusHistory: [
-            { date: '2022-02-15T05:00:00.000Z' },
-            { date: '2022-02-16T05:00:00.000Z' },
-          ],
-          docketNumber: '101-20',
-          leadDocketNumber: '101-20',
-        },
-        {
-          caseStatusHistory: [
-            { date: '2022-02-15T05:00:00.000Z' },
-            { date: '2022-02-26T05:00:00.000Z' },
-          ],
-          docketNumber: '110-15',
-        },
-        {
-          caseStatusHistory: [
-            { date: '2022-02-15T05:00:00.000Z' },
-            { date: '2022-02-16T05:00:00.000Z' },
-          ],
-          docketNumber: '202-11',
-        },
-      ];
+      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+
       const { submittedAndCavCasesByJudge } = runCompute(
         judgeActivityReportHelper,
         {
@@ -324,7 +328,26 @@ describe('judgeActivityReportHelper', () => {
         expect(unconsolidatedCase.formattedCaseCount).toBe(1);
         expect(unconsolidatedCase.daysElapsedSinceLastStatusChange).toBe(10);
       });
+    });
 
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
+        .mockReturnValueOnce(5);
+
+      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map([['101-20', 4]]);
+      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
       expect(
         submittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
       ).toBe(10);
