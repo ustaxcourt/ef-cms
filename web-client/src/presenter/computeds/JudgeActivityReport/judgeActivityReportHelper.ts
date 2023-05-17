@@ -6,6 +6,7 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const {
     casesClosedByJudge,
+    consolidatedCasesGroupCountMap,
     opinions,
     orders,
     submittedAndCavCasesByJudge = [],
@@ -52,52 +53,29 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
-  const casesCount = new Map();
-  let filteredSubmittedAndCavCasesByJudge: any = [];
-
-  console.log('submittedAndCavCasesByJudge', submittedAndCavCasesByJudge);
-
-  submittedAndCavCasesByJudge.forEach(individualCase => {
-    if (individualCase.leadDocketNumber) {
-      if (!casesCount.has(individualCase.leadDocketNumber)) {
-        casesCount.set(individualCase.leadDocketNumber, 1);
-      } else {
-        casesCount.set(
-          individualCase.leadDocketNumber,
-          casesCount.get(individualCase.leadDocketNumber) + 1,
-        );
-      }
-    } else {
-      casesCount.set(individualCase.docketNumber, 1);
-      filteredSubmittedAndCavCasesByJudge.push(individualCase);
-    }
-
-    if (individualCase.docketNumber === individualCase.leadDocketNumber) {
-      filteredSubmittedAndCavCasesByJudge.push(individualCase);
-    }
-  });
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
     .prepareDateFromString()
     .toISOString();
 
-  filteredSubmittedAndCavCasesByJudge.forEach(filteredCase => {
-    filteredCase.formattedCaseCount = casesCount.get(filteredCase.docketNumber);
-    if (filteredCase.leadDocketNumber === filteredCase.docketNumber) {
-      filteredCase.consolidatedIconTooltipText = 'Lead case';
-      filteredCase.isLeadCase = true;
-      filteredCase.inConsolidatedGroup = true;
+  submittedAndCavCasesByJudge.forEach(individualCase => {
+    individualCase.formattedCaseCount =
+      consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
+    if (individualCase.leadDocketNumber === individualCase.docketNumber) {
+      individualCase.consolidatedIconTooltipText = 'Lead case';
+      individualCase.isLeadCase = true;
+      individualCase.inConsolidatedGroup = true;
     }
 
-    filteredCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+    individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
 
     const newestCaseStatusChangeIndex =
-      filteredCase.caseStatusHistory.length - 1;
+      individualCase.caseStatusHistory.length - 1;
 
     const dateOfLastCaseStatusChange =
-      filteredCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+      individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
 
-    filteredCase.daysElapsedSinceLastStatusChange = applicationContext
+    individualCase.daysElapsedSinceLastStatusChange = applicationContext
       .getUtilities()
       .calculateDifferenceInDays(
         currentDateInIsoFormat,
@@ -107,14 +85,14 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   return {
     closedCasesTotal,
-    filteredSubmittedAndCavCasesByJudge,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
     ordersFiledTotal,
-    progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
+    progressDescriptionTableTotal: submittedAndCavCasesByJudge.length,
     reportHeader,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
+    submittedAndCavCasesByJudge,
     trialSessionsHeldTotal,
   };
 };

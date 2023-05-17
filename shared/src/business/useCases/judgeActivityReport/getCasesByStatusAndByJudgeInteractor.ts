@@ -5,56 +5,54 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
+const getConsolidatedCaseGroupCountMap = (
+  consolidatedCases,
+  consolidatedCasesGroupCountMap,
+) => {
+  consolidatedCases
+    .sort(
+      (a, b) =>
+        Case.getSortableDocketNumber(a.docketNumber) -
+        Case.getSortableDocketNumber(b.docketNumber),
+    )
+    .forEach(consolidatedCase => {
+      if (consolidatedCase.leadDocketNumber) {
+        if (
+          !consolidatedCasesGroupCountMap.has(consolidatedCase.leadDocketNumber)
+        ) {
+          consolidatedCasesGroupCountMap.set(
+            consolidatedCase.leadDocketNumber,
+            1,
+          );
+        } else {
+          consolidatedCasesGroupCountMap.set(
+            consolidatedCase.leadDocketNumber,
+            consolidatedCasesGroupCountMap.get(
+              consolidatedCase.leadDocketNumber,
+            ) + 1,
+          );
+        }
+      }
+    });
+};
+
 const hasUnwantedDocketEntryEventCode = docketEntries => {
   const prohibitedDocketEntryEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
-  const boolResult = docketEntries.some(docketEntry =>
+  return docketEntries.some(docketEntry =>
     prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode),
   );
-  console.log(
-    `boolResult for ${docketEntries[0].docketNumber}::::`,
-    boolResult,
-  );
-  return boolResult;
 };
 
 const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
   const caseRecordsToReturn = [];
-  const consolidatedCaseGroupsToRemoveByLeadCase: string[] = [];
 
   caseRecords.forEach(individualCaseRecord => {
-    if (
-      !individualCaseRecord.leadDocketNumber &&
-      hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)
-    ) {
-      return;
-    } else if (
-      !individualCaseRecord.leadDocketNumber &&
-      !hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)
-    ) {
-      caseRecordsToReturn.push(individualCaseRecord);
-    } else if (
-      individualCaseRecord.docketNumber ===
-        individualCaseRecord.leadDocketNumber &&
-      hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)
-    ) {
-      consolidatedCaseGroupsToRemoveByLeadCase.push(
-        individualCaseRecord.docketNumber,
-      );
-    } else {
+    if (!hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)) {
       caseRecordsToReturn.push(individualCaseRecord);
     }
   });
 
-  console.log('caseRecordsToReturn::::', caseRecordsToReturn);
-
-  const filteredCaseRecords = caseRecordsToReturn.filter(
-    individualCaseRecord =>
-      !consolidatedCaseGroupsToRemoveByLeadCase.includes(
-        individualCaseRecord.docketNumber,
-      ),
-  );
-
-  return filteredCaseRecords;
+  return caseRecordsToReturn;
 };
 
 /**
@@ -102,21 +100,63 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
-  // const rawCaseRecordsWithConsolidatedCases = await Promise.all(
-  //   rawCaseRecords.map(async rawCaseRecord => {
-  //     const consolidatedCases
-  //   }),
-  // );
-  // if in CCG loop over and
-  //   - if lead case grab consolidated cases array
-  //   - if member case filter out
+  // We need to filter out member cases returned from elasticsearch so we can get an accurate
+  // conolidated cases group count even when the case status of a member case does not match
+  // the lead case status.
+  const rawCaseRecordsWithWithoutMemberCases = await Promise.all(
+    rawCaseRecords
+      .filter(
+        rawCaseRecord =>
+          !rawCaseRecord.leadDocketNumber ||
+          rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber,
+      )
+      .map(async rawCaseRecord => {
+        if (rawCaseRecord.leadDocketNumber) {
+          if (rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber) {
+            rawCaseRecord.consolidatedCases = await applicationContext
+              .getPersistenceGateway()
+              .getCasesByLeadDocketNumber({
+                applicationContext,
+                leadDocketNumber: rawCaseRecord.docketNumber,
+              });
+            return rawCaseRecord;
+          }
+        } else {
+          return rawCaseRecord;
+        }
+      }),
+  );
 
-  const filteredCaseRecords =
-    filterCasesWithUnwantedDocketEntryEventCodes(rawCaseRecords);
+  console.log(
+    'rawCaseRecordsWithWithoutMemberCases:::::',
+    rawCaseRecordsWithWithoutMemberCases,
+  );
 
-  console.log('filteredCaseRecords::::', filteredCaseRecords);
+  const filteredCaseRecords = filterCasesWithUnwantedDocketEntryEventCodes(
+    rawCaseRecordsWithWithoutMemberCases,
+  );
 
-  return Case.validateRawCollection(filteredCaseRecords, {
-    applicationContext,
+  const consolidatedCasesGroupCountMap = new Map();
+  filteredCaseRecords.forEach(filteredCaseRecord => {
+    if (filteredCaseRecord.leadDocketNumber) {
+      getConsolidatedCaseGroupCountMap(
+        filteredCaseRecord.consolidatedCases,
+        consolidatedCasesGroupCountMap,
+      );
+    }
   });
+
+  console.log(
+    'consolidatedCasesGroupCountMap:::::',
+    consolidatedCasesGroupCountMap,
+  );
+
+  return {
+    cases: Case.validateRawCollection(filteredCaseRecords, {
+      applicationContext,
+    }),
+    consolidatedCasesGroupCountMap: Object.fromEntries(
+      consolidatedCasesGroupCountMap,
+    ),
+  };
 };

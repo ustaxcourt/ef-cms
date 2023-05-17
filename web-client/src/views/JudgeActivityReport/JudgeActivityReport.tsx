@@ -200,7 +200,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
+            {judgeActivityReportHelper.submittedAndCavCasesByJudge.map(
               (formattedCase, index) => {
                 return (
                   <tr key={index}>
