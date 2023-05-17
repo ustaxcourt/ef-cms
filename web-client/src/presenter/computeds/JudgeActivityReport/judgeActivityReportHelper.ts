@@ -61,7 +61,6 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
     );
 
   submittedAndCavCasesByJudge.forEach(individualCase => {
-    console.log('individualCase', individualCase);
     individualCase.formattedCaseCount =
       consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
