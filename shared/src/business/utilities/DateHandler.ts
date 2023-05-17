@@ -165,14 +165,17 @@ export const createEndOfDayISO = (params?: {
   year: string;
 }): string => {
   const dateObject = params
-    ? DateTime.fromObject({
-        day: Number.parseInt(params.day),
-        month: Number.parseInt(params.month),
-        year: Number.parseInt(params.year),
-      })
-    : DateTime.now();
+    ? DateTime.fromObject(
+        {
+          day: params.day,
+          month: params.month,
+          year: params.year,
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.setZone(USTC_TZ).endOf('day').setZone('utc').toISO()!;
+  return dateObject.endOf('day').setZone('utc').toISO();
 };
 
 export const createStartOfDayISO = (params?: {
@@ -181,14 +184,17 @@ export const createStartOfDayISO = (params?: {
   year: string;
 }): string => {
   const dateObject = params
-    ? DateTime.fromObject({
-        day: Number.parseInt(params.day),
-        month: Number.parseInt(params.month),
-        year: Number.parseInt(params.year),
-      })
-    : DateTime.now();
+    ? DateTime.fromObject(
+        {
+          day: params.day,
+          month: params.month,
+          year: params.year,
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.setZone(USTC_TZ).startOf('day').setZone('utc').toISO()!;
+  return dateObject.startOf('day').setZone('utc').toISO();
 };
 
 /**
