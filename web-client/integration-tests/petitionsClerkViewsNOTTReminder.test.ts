@@ -84,7 +84,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
       expect(foundSession).toBeDefined();
       expect(foundSession.showAlertForNOTTReminder).toEqual(true);
       expect(foundSession.alertMessageForNOTT).toEqual(
-        `The 30-day notice is due before ${foundSession.thirtyDaysBeforeTrialFormatted}`,
+        `The 30-day notice is due by ${foundSession.thirtyDaysBeforeTrialFormatted}`,
       );
     });
 
@@ -103,7 +103,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
       );
 
       expect(trialSessionDetailsFormatted.alertMessageForNOTT).toEqual(
-        `30-day trial notices are due before ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
+        `30-day trial notices are due by ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
       );
 
       let trialSessionDetailsHelperComputed: any = runCompute(
@@ -147,7 +147,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
       );
 
       expect(trialSessionDetailsFormatted.alertMessageForNOTT).toEqual(
-        `30-day trial notices are due before ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
+        `30-day trial notices are due by ${trialSessionDetailsFormatted.thirtyDaysBeforeTrialFormatted}. Have notices been served?`,
       );
 
       let trialSessionDetailsHelperComputed: any = runCompute(
