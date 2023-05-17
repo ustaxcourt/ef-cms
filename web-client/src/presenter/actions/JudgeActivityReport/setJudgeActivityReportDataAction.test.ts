@@ -130,4 +130,58 @@ describe('setJudgeActivityReportDataAction', () => {
 
     expect(state.judgeActivityReportData.orders).toBe(mockOrdersIssuedByJudge);
   });
+
+  it('should set props.submittedAndCavCasesByJudge on state', async () => {
+    const mockSubmittedAndCavCasesByJudge = [
+      {
+        docketNumber: '101-22',
+        leadDocketNumber: '101-22',
+        status: 'Submitted',
+      },
+      { docketNumber: '111-11', status: 'Submitted' },
+      { docketNumber: '134-21', status: 'CAV' },
+    ];
+
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        submittedAndCavCasesByJudge: mockSubmittedAndCavCasesByJudge,
+      },
+      state: {
+        judgeActivityReportData: {
+          submittedAndCavCasesByJudge: undefined,
+        },
+      },
+    });
+
+    expect(state.judgeActivityReportData.submittedAndCavCasesByJudge).toBe(
+      mockSubmittedAndCavCasesByJudge,
+    );
+  });
+
+  it('should set props.submittedAndCavCasesByJudge on state', async () => {
+    const mockConsolidatedCasesGroupCountMap = new Map([['101-22', 5]]);
+
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCountMap,
+      },
+      state: {
+        judgeActivityReportData: {
+          consolidatedCasesGroupCountMap: undefined,
+        },
+      },
+    });
+
+    expect(
+      Object.fromEntries(
+        state.judgeActivityReportData.consolidatedCasesGroupCountMap,
+      ),
+    ).toMatchObject(Object.fromEntries(mockConsolidatedCasesGroupCountMap));
+  });
 });
