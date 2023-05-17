@@ -215,7 +215,7 @@ export const JudgeActivityReport = connect(
                       />
                     </td>
                     <td>
-                      <CaseLink docketNumber={formattedCase.docketNumber} />
+                      <CaseLink formattedCase={formattedCase} />
                     </td>
                     <td>{formattedCase?.formattedCaseCount}</td>
                     <td>{formattedCase.caseCaption}</td>
@@ -307,9 +307,14 @@ export const JudgeActivityReport = connect(
               </div>
             </>
           ) : (
-            <div className="text-semibold margin-0">
-              There is no activity for the selected dates
-            </div>
+            <>
+              <div className="text-semibold margin-bottom-30px">
+                There is no activity for the selected dates
+              </div>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-12">{progressDescription()}</div>
+              </div>
+            </>
           )}
         </section>
       </>
