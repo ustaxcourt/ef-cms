@@ -401,21 +401,19 @@ export class TrialSession extends JoiValidationEntity {
       FORMATS.MMDDYY,
     );
 
-    const thirtyFiveDaysBeforeTrial: any = trialStartDateString.minus({
-      ['days']: 35,
-    });
-
-    const twentyNineDaysBeforeTrial: any = trialStartDateString.minus({
-      ['days']: 29,
-    });
-
     this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
-      intervalEndDate: twentyNineDaysBeforeTrial,
-      intervalStartDate: thirtyFiveDaysBeforeTrial,
+      intervalEndDate: trialStartDateString.minus({
+        ['days']: 28,
+      }),
+      intervalStartDate: trialStartDateString.minus({
+        ['days']: 34,
+      }),
     });
 
+    // this includes the end date in the calculation
+    // e.g. startDate is 6/14/23, then 5/16/23 is thirtyDaysBeforeTrial
     const thirtyDaysBeforeTrial: any = trialStartDateString.minus({
-      ['days']: 30,
+      ['days']: 29,
     });
 
     this.thirtyDaysBeforeTrialFormatted = formatDateString(
