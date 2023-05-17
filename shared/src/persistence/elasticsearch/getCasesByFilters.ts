@@ -4,7 +4,7 @@ import {
 } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 // eslint-disable-next-line import/no-unresolved
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { search } from './searchClient';
+import { formatResults } from './searchClient';
 
 export const getCasesByFilters = async ({
   applicationContext,
@@ -12,11 +12,14 @@ export const getCasesByFilters = async ({
 }: {
   applicationContext: IApplicationContext;
   params: GetCaseInventoryReportRequest;
-}): Promise<{ totalCount: number; foundCases: CaseInventory[] }> => {
+}): Promise<{
+  totalCount: number;
+  foundCases: CaseInventory[];
+  lastCaseId: number;
+}> => {
   const source = [
     'associatedJudge',
     'isPaper',
-    'createdAt',
     'procedureType',
     'caseCaption',
     'caseType',
@@ -31,9 +34,9 @@ export const getCasesByFilters = async ({
 
   const createDateFilter = {
     range: {
-      'createdAt.S': {
-        gte: params.createStartDate,
-        lt: params.createEndDate,
+      'receivedAt.S': {
+        gte: params.startDate,
+        lt: params.endDate,
       },
     },
   };
@@ -66,27 +69,33 @@ export const getCasesByFilters = async ({
     filters.push(filingMethodFilter);
   }
 
-  const { results, total } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: source,
-        query: {
-          bool: {
-            must: filters,
-          },
+  const searchResults = await applicationContext.getSearchClient().search({
+    _source: source,
+    body: {
+      query: {
+        bool: {
+          must: filters,
         },
-        sort: [{ 'createdAt.S': 'asc' }],
       },
-      from: params.pageNumber * params.pageSize,
-      index: 'efcms-case',
-      size: params.pageSize,
-      track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
+      search_after: [params.searchAfter],
+      sort: [{ 'receivedAt.S': 'asc' }],
     },
+    index: 'efcms-case',
+    size: params.pageSize,
+    track_total_hits: true,
   });
+
+  const { results, total } = formatResults(searchResults.body);
+
+  const matchingCases: any[] = searchResults.body.hits.hits;
+  const lastCaseId =
+    matchingCases.length === 0
+      ? 0
+      : matchingCases[matchingCases.length - 1].sort[0];
 
   return {
     foundCases: results,
+    lastCaseId,
     totalCount: total,
   };
 };

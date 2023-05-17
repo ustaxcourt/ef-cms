@@ -14,76 +14,73 @@ describe('setCustomCaseInventoryFiltersAction', () => {
       filters: {
         caseStatuses: [],
         caseTypes: [],
-        createEndDate: '',
-        createStartDate: '',
+        endDate: '',
         filingMethod: 'all',
+        startDate: '',
       },
+      lastIdsOfPages: [0],
       totalCases: 0,
     };
   });
 
   describe('createdStartDate', () => {
-    it('should set customCaseInventoryFilters createStartDate with an empty string when no createStartDate was provided', async () => {
+    it('should set customCaseInventoryFilters startDate with an empty string when no startDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createStartDate: '',
+          startDate: '',
         },
         state: {
           customCaseInventory: initialFilterState,
         },
       });
 
-      expect(result.state.customCaseInventory.filters.createStartDate).toEqual(
-        '',
-      );
+      expect(result.state.customCaseInventory.filters.startDate).toEqual('');
     });
-    it('should set customCaseInventoryFilters createStartDate with a string when a createStartDate was provided', async () => {
+    it('should set customCaseInventoryFilters startDate with a string when a startDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createStartDate: 'a truthy item',
+          startDate: 'a truthy item',
         },
         state: {
           customCaseInventory: initialFilterState,
         },
       });
 
-      expect(result.state.customCaseInventory.filters.createStartDate).toEqual(
+      expect(result.state.customCaseInventory.filters.startDate).toEqual(
         'a truthy item',
       );
     });
   });
 
   describe('createdEndDate', () => {
-    it('should set customCaseInventoryFilters createEndDate with an empty string when no createEndDate was provided', async () => {
+    it('should set customCaseInventoryFilters endDate with an empty string when no endDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createEndDate: '',
+          endDate: '',
         },
         state: {
           customCaseInventory: initialFilterState,
         },
       });
 
-      expect(result.state.customCaseInventory.filters.createEndDate).toEqual(
-        '',
-      );
+      expect(result.state.customCaseInventory.filters.endDate).toEqual('');
     });
 
-    it('should set customCaseInventoryFilters createEndDate with a string when a createEndDate was provided', async () => {
+    it('should set customCaseInventoryFilters endDate with a string when a endDate was provided', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
-          createEndDate: 'a truthy item',
+          endDate: 'a truthy item',
         },
         state: {
           customCaseInventory: initialFilterState,
         },
       });
 
-      expect(result.state.customCaseInventory.filters.createEndDate).toEqual(
+      expect(result.state.customCaseInventory.filters.endDate).toEqual(
         'a truthy item',
       );
     });

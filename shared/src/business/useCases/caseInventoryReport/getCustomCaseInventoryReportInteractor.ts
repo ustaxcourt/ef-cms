@@ -1,5 +1,9 @@
 import { CaseStatus, CaseType } from '../../entities/EntityConstants';
 import {
+  CustomCaseFilingMethods,
+  CustomCaseInventorySearch,
+} from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
@@ -8,26 +12,26 @@ import { UnauthorizedError } from '../../../errors/errors';
 export type CustomCaseInventoryReportFilters = {
   caseStatuses: CaseStatus[];
   caseTypes: CaseType[];
-  createEndDate: string;
-  createStartDate: string;
-  filingMethod: 'all' | 'electronic' | 'paper';
+  endDate: string;
+  startDate: string;
+  filingMethod: CustomCaseFilingMethods;
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
-  pageNumber: number;
   pageSize: number;
+  searchAfter: number;
 };
 
 export type GetCaseInventoryReportResponse = {
   foundCases: CaseInventory[];
+  lastCaseId: number;
   totalCount: number;
 };
 
 export type CaseInventory = Pick<
-  TCase,
+  RawCase,
   | 'associatedJudge'
   | 'isPaper'
-  | 'createdAt'
   | 'procedureType'
   | 'caseCaption'
   | 'caseType'
@@ -40,11 +44,10 @@ export type CaseInventory = Pick<
 
 /**
  * getCustomCaseInventoryReportInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.createEndDate the createEndDate filter
- * @param {string} providers.createStartDate the createStartDate filter
+ * @param {string} providers.endDate the endDate filter
+ * @param {string} providers.startDate the startDate filter
  * @param {array} providers.caseStatuses the case statuses array filter
  * @param {array} providers.caseTypes the caseTypes array filter
  * @param {string} providers.filingMethod filing method filter
@@ -62,24 +65,7 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
 
-  const {
-    caseStatuses,
-    caseTypes,
-    createEndDate,
-    createStartDate,
-    filingMethod,
-  } = params;
-  if (
-    !createEndDate ||
-    !createStartDate ||
-    !filingMethod ||
-    !caseStatuses ||
-    !caseTypes
-  ) {
-    throw new Error(
-      'Missing required params to run a Custom Case Inventory Report',
-    );
-  }
+  new CustomCaseInventorySearch(params).validate();
 
   return await applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,

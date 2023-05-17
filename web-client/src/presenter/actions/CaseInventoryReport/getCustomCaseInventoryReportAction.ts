@@ -1,14 +1,12 @@
+import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportResponse,
 } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
-export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
 /**
  * get the case inventory report data
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -29,22 +27,33 @@ export const getCustomCaseInventoryReportAction = async ({
     state.customCaseInventory.filters,
   );
 
+  const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
   const formattedStartDate = applicationContext
     .getUtilities()
-    .createISODateString(filterValues.createStartDate, FORMATS.MMDDYYYY);
+    .createStartOfDayISO({ day: startDay, month: startMonth, year: startYear });
+  const [month, day, year] = filterValues.endDate.split('/');
+
   const formattedEndDate = applicationContext
     .getUtilities()
-    .createISODateString(filterValues.createEndDate, FORMATS.MMDDYYYY);
+    .createEndOfDayISO({ day, month, year });
+
+  const lastIdsOfPages = get(state.customCaseInventory.lastIdsOfPages);
+  const searchAfter = lastIdsOfPages[props.selectedPage];
 
   const reportData: GetCaseInventoryReportResponse = await applicationContext
     .getUseCases()
     .getCustomCaseInventoryReportInteractor(applicationContext, {
       ...filterValues,
-      createEndDate: formattedEndDate,
-      createStartDate: formattedStartDate,
-      pageNumber: props.selectedPage,
+      endDate: formattedEndDate,
       pageSize: CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+      searchAfter,
+      startDate: formattedStartDate,
     });
+
+  store.set(
+    state.customCaseInventory.lastIdsOfPages[props.selectedPage + 1],
+    reportData.lastCaseId,
+  );
 
   store.set(state.customCaseInventory.cases, reportData.foundCases);
   store.set(state.customCaseInventory.totalCases, reportData.totalCount);

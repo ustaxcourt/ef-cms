@@ -11,9 +11,11 @@ describe('getCustomCaseInventoryReportInteractor', () => {
     params = {
       caseStatuses: ['CAV'],
       caseTypes: ['Deficiency'],
-      createEndDate: '2022-02-01T17:21:05.483Z',
-      createStartDate: '2022-01-01T17:21:05.483Z',
+      endDate: '2022-02-01T17:21:05.483Z',
       filingMethod: 'all',
+      pageSize: 100,
+      searchAfter: 827493,
+      startDate: '2022-01-01T17:21:05.483Z',
     };
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
@@ -34,8 +36,8 @@ describe('getCustomCaseInventoryReportInteractor', () => {
     });
 
     const testCases = [
-      { missingField: 'createEndDate' },
-      { missingField: 'createStartDate' },
+      { missingField: 'endDate' },
+      { missingField: 'startDate' },
       { missingField: 'filingMethod' },
     ];
 
@@ -45,9 +47,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
 
         await expect(
           getCustomCaseInventoryReportInteractor(applicationContext, params),
-        ).rejects.toThrow(
-          'Missing required params to run a Custom Case Inventory Report',
-        );
+        ).rejects.toThrow();
       });
     });
   });

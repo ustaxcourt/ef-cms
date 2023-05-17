@@ -8,6 +8,7 @@ import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
+import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 
@@ -63,12 +64,12 @@ export const CustomCaseReport = connect(
                 startValue=""
                 onChangeEnd={e => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    createEndDate: e.target.value,
+                    endDate: e.target.value,
                   });
                 }}
                 onChangeStart={e => {
                   setCustomCaseInventoryReportFiltersSequence({
-                    createStartDate: e.target.value,
+                    startDate: e.target.value,
                   });
                 }}
               />
@@ -244,6 +245,7 @@ export const CustomCaseReport = connect(
           </div>
           <Button
             disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
+            id="run-custom-case-report"
             tooltip="Run Report"
             onClick={() => {
               setHasRunCustomCaseReport(true);
@@ -264,9 +266,11 @@ export const CustomCaseReport = connect(
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           {customCaseInventoryReportHelper.pageCount > 1 && (
             <Paginator
+              breakClassName="hide"
               forcePage={activePage}
+              marginPagesDisplayed={0}
               pageCount={customCaseInventoryReportHelper.pageCount}
-              pageRangeDisplayed={3}
+              pageRangeDisplayed={0}
               onPageChange={pageChange => {
                 setActivePage(pageChange.selected);
                 getCustomCaseInventoryReportSequence({
@@ -276,14 +280,31 @@ export const CustomCaseReport = connect(
             />
           )}
           <div className="text-right margin-bottom-2">
-            <span className="text-bold">Count: &nbsp;</span>
-            {totalCases}
+            <span className="text-bold" id="custom-case-result-count">
+              Count: &nbsp;
+            </span>
+            {formatNumber(totalCases)}
           </div>
           <ReportTable
             cases={customCaseInventoryReportHelper.cases}
             hasRunCustomCaseReport={hasRunCustomCaseReport}
             totalCases={totalCases}
           />
+          {customCaseInventoryReportHelper.pageCount > 1 && (
+            <Paginator
+              breakClassName="hide"
+              forcePage={activePage}
+              marginPagesDisplayed={0}
+              pageCount={customCaseInventoryReportHelper.pageCount}
+              pageRangeDisplayed={0}
+              onPageChange={pageChange => {
+                setActivePage(pageChange.selected);
+                getCustomCaseInventoryReportSequence({
+                  selectedPage: pageChange.selected,
+                });
+              }}
+            />
+          )}
         </section>
       </>
     );
@@ -302,9 +323,9 @@ const ReportTable = ({
   return (
     <>
       <table
-        aria-label="case inventory record"
+        aria-label="custom case inventory record"
         className="usa-table case-detail ustc-table responsive-table"
-        id="docket-record-table"
+        id="custom-case-report-table"
       >
         <thead>
           <tr>
@@ -323,14 +344,14 @@ const ReportTable = ({
             </th>
           </tr>
         </thead>
-        <tbody>
-          {cases &&
-            cases.map(entry => (
+        {cases.length !== 0 && (
+          <tbody id="custom-case-report-table-body">
+            {cases.map(entry => (
               <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
                 <td>
                   <CaseLink formattedCase={entry} />
                 </td>
-                <td>{entry.createdAt}</td>
+                <td>{entry.receivedAt}</td>
                 <td>{entry.caseTitle}</td>
                 <td>{entry.status}</td>
                 <td>{entry.caseType}</td>
@@ -339,7 +360,7 @@ const ReportTable = ({
                 <td>
                   {entry.highPriority && (
                     <Icon
-                      aria-label={`high priority for calendering for case ${entry.docketNumber}`}
+                      aria-label={`Case ${entry.docketNumber} has high-priority calendaring.`}
                       className="margin-left-5 mini-success margin-top-1"
                       icon="check"
                       size="1x"
@@ -348,7 +369,8 @@ const ReportTable = ({
                 </td>
               </tr>
             ))}
-        </tbody>
+          </tbody>
+        )}
       </table>
       {hasRunCustomCaseReport && totalCases === 0 && (
         <p>There are no cases for the selected criteria.</p>
