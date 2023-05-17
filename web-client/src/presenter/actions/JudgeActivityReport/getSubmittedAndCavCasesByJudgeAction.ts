@@ -13,12 +13,17 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 }: ActionProps) => {
   const { judgeName } = get(state.form);
 
-  const submittedAndCavCasesByJudge = await applicationContext
+  const { cases, consolidatedCasesGroupCountMap } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judgeName,
       statuses: ['Submitted', 'CAV'],
     });
 
-  return { submittedAndCavCasesByJudge };
+  return {
+    consolidatedCasesGroupCountMap: new Map(
+      Object.entries(consolidatedCasesGroupCountMap),
+    ),
+    submittedAndCavCasesByJudge: cases,
+  };
 };
