@@ -1,10 +1,11 @@
 import { search } from './searchClient';
 
 /**
- * getCasesByStatusAndByJudge
+ * getDocketNumbersByStatusAndByJudge
  * @param {object} providers the providers object containing applicationContext
  * @param {string} providers.applicationContext application context
  * @param {string} providers.judgeName judge
+ * @param {string} providers.statuses case statuses
  * @returns {array} array of docketNumbers with field based on source
  */
 export const getDocketNumbersByStatusAndByJudge = async ({
