@@ -810,12 +810,18 @@ textarea#case-caption {
 }
 
 .beta {
-  padding: 10px;
   background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
 
   a {
     color: color($theme-color-base-darkest);
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding: 10px 10px 0px 10px;
+  }
+  @media only screen and (max-width: $large-screen - 1px) {
+    padding: 10px;
   }
 }
 
