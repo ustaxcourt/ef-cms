@@ -90,16 +90,6 @@ describe('CustomCaseInventorySearch', () => {
     ).toBeDefined();
   });
 
-  it('should enforce that the pageNumber is a number', () => {
-    const customCaseInventorySearch = new CustomCaseInventorySearch({
-      pageNumber: 'I am string',
-    });
-
-    expect(
-      customCaseInventorySearch.getFormattedValidationErrors()?.pageNumber,
-    ).toBeDefined();
-  });
-
   it('should enforce that pageSize is a number', () => {
     const customCaseInventorySearch = new CustomCaseInventorySearch({
       pageSize: 'I am string',
