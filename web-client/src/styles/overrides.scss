@@ -38,13 +38,15 @@ option:first-child {
   &.ustc-form-hint-with-svg {
     position: relative;
     padding-right: 2rem;
-    padding-left: 2rem;
+    padding-left: 2.45rem;
     color: color($theme-color-base-darkest);
     font-size: 17px;
 
     svg {
       position: absolute;
       left: 0;
+      font-size: 30px;
+      color: black;
     }
   }
 }
