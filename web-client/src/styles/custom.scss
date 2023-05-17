@@ -508,10 +508,11 @@ select[disabled] {
   }
 
   display: inline-block;
-  padding: 1.25rem 1.25rem 1rem 1.75rem;
-  border-left: 5px solid color($theme-color-primary-vivid);
+  padding: 1.25rem 1.25rem 1rem 1.6rem;
+  border-left: 0.5rem solid color($theme-color-primary-vivid);
   background: color($theme-color-base-lightest);
   color: color($theme-color-base-dark);
+  max-width: 45em;
 
   .usa-hint {
     margin: 0;
