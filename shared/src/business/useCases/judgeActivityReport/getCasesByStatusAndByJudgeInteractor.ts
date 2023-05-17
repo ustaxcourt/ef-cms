@@ -117,7 +117,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
-  return {
+  const returnMe = {
     cases: Case.validateRawCollection(filteredCaseRecords, {
       applicationContext,
     }),
@@ -125,4 +125,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       consolidatedCasesGroupCountMap,
     ),
   };
+
+  return returnMe;
 };
