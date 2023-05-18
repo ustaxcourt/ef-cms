@@ -68,7 +68,7 @@ describe('createCaseFromPaperAction', () => {
         receivedAt: applicationContext
           .getUtilities()
           .prepareDateFromString(receivedAt)
-          .toISOString(),
+          .toISO(),
       },
       requestForPlaceOfTrialFile: {},
       stinFile: {},

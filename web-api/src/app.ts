@@ -40,6 +40,7 @@ import { deleteDeficiencyStatisticLambda } from './cases/deleteDeficiencyStatist
 import { deletePractitionerDocumentLambda } from './practitioners/deletePractitionerDocumentLambda';
 import { deleteTrialSessionLambda } from './trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './caseNote/deleteUserCaseNoteLambda';
+import { dismissNOTTReminderForTrialLambda } from './trialSessions/dismissNOTTReminderForTrialLambda';
 import { downloadPolicyUrlLambda } from './documents/downloadPolicyUrlLambda';
 import { editPaperFilingLambda } from './documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './practitioners/editPractitionerDocumentLambda';
@@ -182,6 +183,7 @@ import { validatePdfLambda } from './documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
 
+import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
 import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
@@ -748,6 +750,10 @@ app.get(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
   );
+  app.post(
+    '/judge-activity-report/open-cases',
+    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
+  );
 }
 
 /**
@@ -829,6 +835,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.put(
     '/async/trial-sessions',
     lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
+  );
+  app.put(
+    '/trial-sessions/dismiss-alert',
+    lambdaWrapper(dismissNOTTReminderForTrialLambda),
   );
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',

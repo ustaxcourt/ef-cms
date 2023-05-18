@@ -47,6 +47,9 @@ describe('updateUserContactInformationInteractor', () => {
       role: ROLES.irsPractitioner,
     };
 
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue();
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()

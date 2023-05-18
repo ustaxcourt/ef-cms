@@ -5,9 +5,10 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
+
 /**
  * used to remove a petitioner from a case
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseCaption the updated caseCaption
@@ -16,7 +17,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @returns {object} the case data
  */
 
-export const removePetitionerAndUpdateCaptionInteractor = async (
+export const removePetitionerAndUpdateCaption = async (
   applicationContext: IApplicationContext,
   {
     caseCaption,
@@ -78,3 +79,10 @@ export const removePetitionerAndUpdateCaptionInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const removePetitionerAndUpdateCaptionInteractor = withLocking(
+  removePetitionerAndUpdateCaption,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
