@@ -15,7 +15,7 @@ export const getCasesByFilters = async ({
 }): Promise<{
   totalCount: number;
   foundCases: CaseInventory[];
-  lastCaseId: number;
+  lastCaseId: { receivedAt: number; pk: string };
 }> => {
   const source = [
     'associatedJudge',
@@ -77,8 +77,8 @@ export const getCasesByFilters = async ({
           must: filters,
         },
       },
-      search_after: [params.searchAfter],
-      sort: [{ 'receivedAt.S': 'asc' }],
+      search_after: [params.searchAfter.receivedAt, params.searchAfter.pk],
+      sort: [{ 'receivedAt.S': 'asc' }, { 'pk.S': 'asc' }],
     },
     index: 'efcms-case',
     size: params.pageSize,
@@ -88,10 +88,12 @@ export const getCasesByFilters = async ({
   const { results, total } = formatResults(searchResults.body);
 
   const matchingCases: any[] = searchResults.body.hits.hits;
-  const lastCaseId =
-    matchingCases.length === 0
-      ? 0
-      : matchingCases[matchingCases.length - 1].sort[0];
+  const lastCase = matchingCases?.[matchingCases.length - 1];
+
+  const lastCaseId = {
+    pk: (lastCase?.sort[1] as string) || '',
+    receivedAt: (lastCase?.sort[0] as number) || 0,
+  };
 
   return {
     foundCases: results,

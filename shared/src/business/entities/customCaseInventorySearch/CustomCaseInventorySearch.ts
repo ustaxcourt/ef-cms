@@ -28,7 +28,10 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   public pageSize: number;
   public caseTypes: CaseType[];
   public filingMethod: CustomCaseFilingMethods;
-  public searchAfter: number;
+  public searchAfter: {
+    receivedAt: number;
+    pk: string;
+  };
 
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
@@ -81,7 +84,13 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
         .required(),
       pageSize: joi.number().required(),
-      searchAfter: joi.number().required(),
+      searchAfter: joi
+        .object()
+        .keys({
+          pk: joi.string().allow('').required(),
+          receivedAt: joi.number().required(),
+        })
+        .required(),
       startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
     };
   }

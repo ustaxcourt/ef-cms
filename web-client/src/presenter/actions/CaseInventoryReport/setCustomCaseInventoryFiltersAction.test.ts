@@ -1,5 +1,9 @@
-import { CustomCaseInventoryReportState } from '../../customCaseInventoryReportState';
+import {
+  CustomCaseInventoryReportState,
+  initialCustomCaseInventoryReportState,
+} from '../../customCaseInventoryReportState';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setCustomCaseInventoryFiltersAction } from './setCustomCaseInventoryFiltersAction';
@@ -9,18 +13,7 @@ presenter.providers.applicationContext = applicationContext;
 describe('setCustomCaseInventoryFiltersAction', () => {
   let initialFilterState: CustomCaseInventoryReportState;
   beforeEach(() => {
-    initialFilterState = {
-      cases: [],
-      filters: {
-        caseStatuses: [],
-        caseTypes: [],
-        endDate: '',
-        filingMethod: 'all',
-        startDate: '',
-      },
-      lastIdsOfPages: [0],
-      totalCases: 0,
-    };
+    initialFilterState = cloneDeep(initialCustomCaseInventoryReportState);
   });
 
   describe('createdStartDate', () => {

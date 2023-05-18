@@ -119,4 +119,23 @@ describe('CustomCaseInventorySearch', () => {
       customCaseInventorySearch.getFormattedValidationErrors()?.filingMethod,
     ).toBeUndefined();
   });
+
+  it('should not have validation errors when searchAfter contains a pk and receivedAt value', () => {
+    const customCaseInventorySearch = new CustomCaseInventorySearch({
+      searchAfter: {
+        pk: 'case|102-23',
+        receivedAt: 12,
+      },
+    });
+
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.searchAfter,
+    ).toBeUndefined();
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.pk,
+    ).toBeUndefined();
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.receivedAt,
+    ).toBeUndefined();
+  });
 });

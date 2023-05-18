@@ -14,7 +14,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       endDate: '2022-02-01T17:21:05.483Z',
       filingMethod: 'all',
       pageSize: 100,
-      searchAfter: 827493,
+      searchAfter: { pk: '', receivedAt: 827493 },
       startDate: '2022-01-01T17:21:05.483Z',
     };
     applicationContext.getCurrentUser.mockReturnValue({
