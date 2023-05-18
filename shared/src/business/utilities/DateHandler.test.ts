@@ -7,10 +7,8 @@ import {
   castToISO,
   checkDate,
   combineISOandEasternTime,
-  computeDate,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
-  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -18,16 +16,26 @@ import {
   formatNow,
   getBusinessDateInFuture,
   getMonthDayYearInETObj,
-  isStringISOFormatted,
   isTodayWithinGivenInterval,
   isValidDateString,
-  prepareDateFromEST,
   prepareDateFromString,
   subtractISODates,
   validateDateAndCreateISO,
 } from './DateHandler';
+import { Settings } from 'luxon';
 
 describe('DateHandler', () => {
+  const timeZones = [
+    'utc',
+    'Europe/Paris',
+    'America/New_York',
+    'America/Chicago',
+    'America/Denver',
+    'America/Los_Angeles',
+    'Africa/Cairo',
+    'Asia/Tehran',
+    'Europe/Vienna',
+  ];
   // Takes an ISO-8601 timestamp representing UTC and temporarily
   // mocks the system's current time by overriding global Date implementation
   const setupMockTestCurrentTime = isoTimestamp => {
@@ -78,13 +86,6 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('prepareDateFromEST', () => {
-    it('converts calendar date to ISO', () => {
-      const result = prepareDateFromEST('11/11/11', FORMATS.MMDDYY);
-      expect(result).toBe('2011-11-11T05:00:00.000Z');
-    });
-  });
-
   describe('prepareDateFromString', () => {
     it("Creates a new datetime object for 'now' when given no inputs", () => {
       const myDatetime = prepareDateFromString();
@@ -100,28 +101,8 @@ describe('DateHandler', () => {
     it('Creates a new datetime object for a given strict ISO timestamp with unchanged timezone', () => {
       const strictIsoStamp = '2021-03-21T01:00:00.000Z';
       const myDatetime = prepareDateFromString(strictIsoStamp);
-      const isoString = myDatetime.toISOString();
+      const isoString = myDatetime.toISO();
       expect(isoString).toEqual(strictIsoStamp);
-    });
-  });
-
-  describe('createISODateStringFromObject', () => {
-    it('should return expected date when using single digit month and day', () => {
-      const myDate = createISODateStringFromObject({
-        day: '1',
-        month: '1',
-        year: '1990',
-      });
-      expect(myDate).toEqual('1990-01-01T05:00:00.000Z');
-    });
-
-    it('should return expected date when using double digit month and day', () => {
-      const myDate = createISODateStringFromObject({
-        day: '01',
-        month: '01',
-        year: '1990',
-      });
-      expect(myDate).toEqual('1990-01-01T05:00:00.000Z');
     });
   });
 
@@ -210,35 +191,70 @@ describe('DateHandler', () => {
   });
 
   describe('createStartOfDayISO', () => {
-    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone', () => {
-      const startOfDay = createStartOfDayISO({
-        day: '7',
-        month: '4',
-        year: '2020',
-      });
-      expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
+    const originalImplementation = Settings.now.bind(Settings.now);
+    afterEach(() => {
+      Settings.now = originalImplementation;
+      Settings.defaultZone = 'system';
+    });
 
-      // now confirm it converts "back" to originally desired time
-      const formattedInEastern = formatDateString(
-        startOfDay,
-        FORMATS.DATE_TIME,
-      );
-      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp exactly at midnight, the first moment of the day in Eastern Time, when the system time zone is ${timeZone} and the day,month,year is specified`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+
+        const startOfDay = createStartOfDayISO({
+          day: '7',
+          month: '4',
+          year: '2020',
+        });
+
+        expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
+      });
+    });
+
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp exactly at midnight of today, the first moment of the day in Eastern Time, when the system time zone is ${timeZone}`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+        // eslint-disable-next-line @miovision/disallow-date/no-new-date
+        Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
+
+        const startOfDay = createStartOfDayISO();
+
+        expect(startOfDay).toEqual('2021-10-06T04:00:00.000Z');
+      });
     });
   });
 
   describe('createEndOfDayISO', () => {
-    it('creates a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone', () => {
-      const endOfDay = createEndOfDayISO({
-        day: '7',
-        month: '4',
-        year: '2020',
-      });
-      expect(endOfDay).toEqual('2020-04-08T03:59:59.999Z');
+    const originalImplementation = Settings.now.bind(Settings.now);
+    afterEach(() => {
+      Settings.now = originalImplementation;
+      Settings.defaultZone = 'system';
+    });
 
-      // now confirm it converts "back" to originally desired time
-      const formattedInEastern = formatDateString(endOfDay, FORMATS.DATE_TIME);
-      expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone, when the system time zone is ${timeZone} and the day,month,year is specified`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+
+        const startOfDay = createEndOfDayISO({
+          day: '7',
+          month: '4',
+          year: '2020',
+        });
+
+        expect(startOfDay).toBe('2020-04-08T03:59:59.999Z');
+      });
+    });
+
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp one millisecond before midnight of today, the last moment of the day according to Eastern Timezone, when the system time zone is ${timeZone}`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+        // eslint-disable-next-line @miovision/disallow-date/no-new-date
+        Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
+
+        const startOfDay = createEndOfDayISO();
+
+        expect(startOfDay).toBe('2021-10-07T03:59:59.999Z');
+      });
     });
   });
 
@@ -273,11 +289,6 @@ describe('DateHandler', () => {
     it('creates a timestamp at start of day EST when provided YYYY-MM-DD', () => {
       const myDate = createISODateAtStartOfDayEST('2020-03-15');
       expect(myDate).toEqual('2020-03-15T04:00:00.000Z');
-    });
-
-    it('creates a timestamp at start of day EST when given no arguments', () => {
-      const myDate = createISODateAtStartOfDayEST(null);
-      expect(isStringISOFormatted(myDate)).toBeTruthy();
     });
 
     it('creates a timestamp at start of day EST when provided full ISO that is not already at the start of the day', () => {
@@ -438,7 +449,7 @@ describe('DateHandler', () => {
     });
 
     it('should return false when undefined is provided as the date value', () => {
-      expect(isValidDateString(undefined)).toBeFalsy();
+      expect(isValidDateString(undefined as any)).toBeFalsy();
     });
   });
 
@@ -481,38 +492,6 @@ describe('DateHandler', () => {
 
     it('should return the expected date in ISO format', () => {
       expect(checkDate('2009-09-03')).toEqual('2009-09-03T04:00:00.000Z');
-    });
-  });
-
-  describe('computeDate', () => {
-    it('should return a zero-padded date formatted like YYYY-MM-DDTHH:mm:ss.SSSZ when provided day, month, and year', () => {
-      const result = computeDate({
-        day: '9',
-        month: '3',
-        year: '1993',
-      });
-
-      expect(result).toBe('1993-03-09T05:00:00.000Z');
-    });
-
-    it('should return undefined when year, month, or day is not provided', () => {
-      const result = computeDate({
-        day: '5',
-        month: '11',
-        year: null,
-      });
-
-      expect(result).toBe(undefined);
-    });
-
-    it('should return null if not provided values for all of day, month, and year', () => {
-      const result = computeDate({
-        day: null,
-        month: null,
-        year: null,
-      });
-
-      expect(result).toBe(null);
     });
   });
 
@@ -568,18 +547,38 @@ describe('DateHandler', () => {
       const result = validateDateAndCreateISO({
         day: '4',
         month: '10',
-      });
+      } as any);
 
       expect(result).toBe(undefined);
     });
 
-    it('should return expected ISO date when date object is valid', () => {
-      const validDate = createISODateStringFromObject({
-        day: '1',
-        month: '1',
-        year: '2001',
+    it('should return a zero-padded date formatted like YYYY-MM-DDTHH:mm:ss.SSSZ when provided day, month, and year', () => {
+      const result = validateDateAndCreateISO({
+        day: '9',
+        month: '3',
+        year: '1993',
       });
-      expect(validDate).toEqual('2001-01-01T05:00:00.000Z');
+
+      expect(result).toBe('1993-03-09T05:00:00.000Z');
+    });
+
+    it('should return undefined when year, month, or day is not provided', () => {
+      const result = validateDateAndCreateISO({
+        day: '5',
+        month: '11',
+      } as any);
+
+      expect(result).toBe(undefined);
+    });
+
+    it('should return undefined if not provided values for all of day, month, and year', () => {
+      const result = validateDateAndCreateISO({
+        daynotprovided: true,
+        not: 'date info',
+        some: 'other thing',
+      } as any);
+
+      expect(result).toBe(undefined);
     });
   });
 

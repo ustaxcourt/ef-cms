@@ -1,5 +1,6 @@
 import {
   ADC_SECTION,
+  ADMISSIONS_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   DOCKET_SECTION,
@@ -7,6 +8,7 @@ import {
   ROLES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
+
 import { getJudgesChambers } from '../persistence/dynamo/chambers/getJudgesChambers';
 
 export const adcUser = {
@@ -103,6 +105,13 @@ export const petitionsClerkUser = {
   role: ROLES.petitionsClerk,
   section: PETITIONS_SECTION,
   userId: 'e7d90c05-f6cd-442c-a168-202db587f16f',
+};
+
+export const admissionsClerkUser = {
+  name: 'AdmissionsClerk',
+  role: ROLES.admissionsClerk,
+  section: ADMISSIONS_SECTION,
+  userId: '07d90c05-f6cd-442c-a168-202db587f16f',
 };
 
 export const MOCK_USERS = {

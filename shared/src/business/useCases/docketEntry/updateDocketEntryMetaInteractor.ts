@@ -11,6 +11,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -20,7 +21,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentT
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @returns {object} the updated case after the documents are added
  */
-export const updateDocketEntryMetaInteractor = async (
+export const updateDocketEntryMeta = async (
   applicationContext: IApplicationContext,
   {
     docketEntryMeta,
@@ -213,3 +214,10 @@ export const shouldGenerateCoversheetForDocketEntry = ({
     !originalDocketEntry.isMinuteEntry
   );
 };
+
+export const updateDocketEntryMetaInteractor = withLocking(
+  updateDocketEntryMeta,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
