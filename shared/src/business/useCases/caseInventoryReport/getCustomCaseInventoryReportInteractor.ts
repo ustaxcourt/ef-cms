@@ -19,12 +19,15 @@ export type CustomCaseInventoryReportFilters = {
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
   pageSize: number;
-  searchAfter: number;
+  searchAfter: {
+    receivedAt: number;
+    pk: string;
+  };
 };
 
 export type GetCaseInventoryReportResponse = {
   foundCases: CaseInventory[];
-  lastCaseId: number;
+  lastCaseId: { receivedAt: number; pk: string };
   totalCount: number;
 };
 
