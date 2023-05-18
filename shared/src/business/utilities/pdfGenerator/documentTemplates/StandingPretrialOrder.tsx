@@ -220,11 +220,10 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
               </span>
               <span className="text-normal">
                 If a party plans to call an expert witness at trial, that party
-                must file a Motion for Leave to File an Expert Report and lodge
-                (that is, submit separately through DAWSON if registered for
-                eFiling or otherwise submit in paper) the expert report. An
-                expert witness’s testimony may be excluded if the party fails to
-                comply with this Order and Rule 143(g).
+                must file an Expert Report (that is, submit separately through
+                DAWSON if registered for eFiling or otherwise submit in paper)
+                the expert report. An expert witness’s testimony may be excluded
+                if the party fails to comply with this Order and Rule 143(g).
               </span>
             </p>
           </li>
@@ -258,13 +257,13 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
                     they must file a joint Status Report including a summary of
                     the basis of settlement no later than 21 days before the
                     first day of the trial session. A Stipulation of Settled
-                    Issues should be attached, if available. The Status Report
-                    must state the reasons for delay in filing the Proposed
-                    Stipulated Decision. The Court may issue an Order specifying
-                    the date by which the Proposed Stipulated Decision will be
-                    due. If a basis for settlement is reached after the trial
-                    session begins, the Court will handle any required
-                    scheduling on the record.
+                    Issues should be filed concurrently, if available. The
+                    Status Report must state the reasons for delay in filing the
+                    Proposed Stipulated Decision. The Court may issue an Order
+                    specifying the date by which the Proposed Stipulated
+                    Decision will be due. If a basis for settlement is reached
+                    after the trial session begins, the Court will handle any
+                    required scheduling on the record.
                   </span>
                 </p>
               </li>
