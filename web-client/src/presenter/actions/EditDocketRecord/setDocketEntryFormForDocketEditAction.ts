@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the current docket entry data for edit
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
@@ -15,7 +14,7 @@ export const setDocketEntryFormForDocketEditAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { docketEntryId } = props;
 

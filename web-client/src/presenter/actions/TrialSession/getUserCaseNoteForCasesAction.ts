@@ -1,6 +1,5 @@
 /**
  * Fetches the cases notes
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting cases notes via getUserCaseNoteForCasesInteractor
  * @param {object} providers.props the cerebral props object containing the props.trialSession
@@ -9,7 +8,7 @@
 export const getUserCaseNoteForCasesAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { trialSession } = props;
 
   let notes = [];

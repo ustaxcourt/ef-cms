@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const setJudgeActivityReportDataAction = ({ props, store }) => {
+export const setJudgeActivityReportDataAction = ({
+  props,
+  store,
+}: ActionProps) => {
   const { casesClosedByJudge, opinions, orders, trialSessions } = props;
 
   store.set(

@@ -2,11 +2,13 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.modal.trialYears
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const setupTrialYearsAction = ({ applicationContext, store }) => {
+export const setupTrialYearsAction = ({
+  applicationContext,
+  store,
+}: ActionProps) => {
   const currentYearString = applicationContext.getUtilities().formatNow('YEAR');
   const currentYearInt = parseInt(currentYearString);
   const currentYearPlus1 = `${currentYearInt + 1}`;

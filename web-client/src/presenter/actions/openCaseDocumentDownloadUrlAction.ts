@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * opens the document in a new tab
- *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object used for clearing alertError, alertSuccess
@@ -11,7 +10,7 @@ export const openCaseDocumentDownloadUrlAction = async ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const {
     docketEntryId,
     docketNumber,

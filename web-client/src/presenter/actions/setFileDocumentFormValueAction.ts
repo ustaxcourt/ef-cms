@@ -2,12 +2,15 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.form[props.key] to the props.value passed in
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const setFileDocumentFormValueAction = ({ get, props, store }) => {
+export const setFileDocumentFormValueAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   if (
     ['previousDocument', 'secondaryDocument.previousDocument'].includes(
       props.key,

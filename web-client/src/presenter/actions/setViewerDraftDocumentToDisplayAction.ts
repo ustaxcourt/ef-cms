@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the viewerDraftDocumentToDisplay from props
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get method
@@ -14,7 +13,7 @@ export const setViewerDraftDocumentToDisplayAction = async ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { viewerDraftDocumentToDisplay } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
 

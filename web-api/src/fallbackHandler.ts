@@ -1,6 +1,6 @@
-const { getDynamoEndpoints } = require('./getDynamoEndpoints');
+import { getDynamoEndpoints } from './getDynamoEndpoints';
 
-const fallbackHandler = ({
+export const fallbackHandler = ({
   fallbackRegion,
   fallbackRegionEndpoint,
   key,
@@ -42,5 +42,3 @@ const fallbackHandler = ({
     };
   };
 };
-
-module.exports.fallbackHandler = fallbackHandler;

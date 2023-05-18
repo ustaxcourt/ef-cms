@@ -1,11 +1,11 @@
-const {
+import {
   InvalidEntityError,
   NotFoundError,
   UnauthorizedError,
   UnknownUserError,
   UnprocessableEntityError,
   UnsanitizedEntityError,
-} = require('./errors');
+} from './errors';
 
 describe('NotFoundError', () => {
   let error;

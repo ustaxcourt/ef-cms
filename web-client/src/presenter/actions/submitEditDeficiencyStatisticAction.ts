@@ -2,7 +2,6 @@ import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatis
 import { state } from 'cerebral';
 /**
  * submits the edit deficiency statistics form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const submitEditDeficiencyStatisticAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const {
     determinationDeficiencyAmount,
     determinationTotalPenalties,

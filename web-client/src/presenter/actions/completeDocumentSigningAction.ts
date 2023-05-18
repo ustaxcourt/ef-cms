@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * generates an action for completing document signing
- *
  * @param {object} providers the providers object
  * @param {string} providers.get the cerebral get function
  * @param {string} providers.applicationContext the applicationContext
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const completeDocumentSigningAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
