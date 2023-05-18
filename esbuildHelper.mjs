@@ -74,7 +74,6 @@ export default async function ({
     format: 'esm',
     loader: {
       '.html': 'text',
-      '.jpg': 'dataurl',
       '.pdf': 'file',
       '.png': 'dataurl',
       '.svg': 'dataurl',
