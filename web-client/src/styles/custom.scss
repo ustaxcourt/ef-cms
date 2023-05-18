@@ -508,11 +508,11 @@ select[disabled] {
   }
 
   display: inline-block;
+  max-width: 45em;
   padding: 1.25rem 1.25rem 1rem 1.6rem;
   border-left: 0.5rem solid color($theme-color-primary-vivid);
   background: color($theme-color-base-lightest);
   color: color($theme-color-base-dark);
-  max-width: 45em;
 
   .usa-hint {
     margin: 0;
@@ -818,8 +818,9 @@ textarea#case-caption {
   }
 
   @media only screen and (min-width: $large-screen) {
-    padding: 10px 10px 0px 10px;
+    padding: 10px 10px 0 10px;
   }
+  
   @media only screen and (max-width: $large-screen - 1px) {
     padding: 10px;
   }
