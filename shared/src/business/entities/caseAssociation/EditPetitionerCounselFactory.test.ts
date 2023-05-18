@@ -1,6 +1,4 @@
-const {
-  EditPetitionerCounselFactory,
-} = require('./EditPetitionerCounselFactory');
+import { EditPetitionerCounselFactory } from './EditPetitionerCounselFactory';
 
 const errorMessages = EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES;
 

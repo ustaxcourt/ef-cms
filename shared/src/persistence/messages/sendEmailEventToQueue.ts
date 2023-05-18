@@ -1,4 +1,7 @@
-exports.sendEmailEventToQueue = async ({ applicationContext, emailParams }) => {
+export const sendEmailEventToQueue = async ({
+  applicationContext,
+  emailParams,
+}) => {
   const concurrencyLimit =
     applicationContext.getConstants().SES_CONCURRENCY_LIMIT;
 

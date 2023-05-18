@@ -1,21 +1,21 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PAYMENT_STATUS,
   PETITIONS_SECTION,
-} = require('../entities/EntityConstants');
-const {
-  createCaseFromPaperInteractor,
-} = require('../useCases/createCaseFromPaperInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCaseInteractor } = require('../useCases/getCaseInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+  ROLES,
+} from '../entities/EntityConstants';
+
+import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createCaseFromPaperInteractor } from '../useCases/createCaseFromPaperInteractor';
+import { getCaseInteractor } from '../useCases/getCaseInteractor';
 
 // mock out ONLY the 'createISODateString' function while allowing original implementations
-const { createISODateString } = require('../utilities/DateHandler');
+import { createISODateString } from '../utilities/DateHandler';
+
 jest.mock('../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../utilities/DateHandler');
   return {

@@ -1,9 +1,9 @@
+import { Case } from '../entities/cases/Case';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../test/mockTrial';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getClinicLetterKey } from './getClinicLetterKey';
 import { shouldAppendClinicLetter } from './shouldAppendClinicLetter';
-const { Case } = require('../entities/cases/Case');
 
 jest.mock('./getClinicLetterKey');
 

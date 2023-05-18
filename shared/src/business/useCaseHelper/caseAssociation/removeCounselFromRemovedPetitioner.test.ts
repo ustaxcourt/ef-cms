@@ -1,20 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  MOCK_PRACTITIONER,
-  petitionsClerkUser,
-} = require('../../../test/mockUsers');
-const {
-  removeCounselFromRemovedPetitioner,
-} = require('./removeCounselFromRemovedPetitioner');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { removeCounselFromRemovedPetitioner } from './removeCounselFromRemovedPetitioner';
 
 describe('removeCounselFromRemovedPetitioner', () => {
   const mockContactPrimaryId = MOCK_CASE.petitioners[0].contactId;

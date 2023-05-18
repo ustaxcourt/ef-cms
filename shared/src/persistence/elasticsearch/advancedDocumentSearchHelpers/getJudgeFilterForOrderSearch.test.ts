@@ -1,9 +1,5 @@
-const {
-  getJudgeFilterForOrderSearch,
-} = require('./getJudgeFilterForOrderSearch');
-const {
-  ORDER_JUDGE_FIELD,
-} = require('../../../business/entities/EntityConstants');
+import { ORDER_JUDGE_FIELD } from '../../../business/entities/EntityConstants';
+import { getJudgeFilterForOrderSearch } from './getJudgeFilterForOrderSearch';
 
 describe('getJudgeFilterForOrderSearch', () => {
   it('does a search for signed judge name', () => {

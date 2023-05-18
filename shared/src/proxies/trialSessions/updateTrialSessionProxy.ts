@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateTrialSessionInteractor
@@ -8,7 +8,7 @@ const { put } = require('../requests');
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateTrialSessionInteractor = (
+export const updateTrialSessionInteractor = (
   applicationContext,
   { trialSession },
 ) => {

@@ -4,6 +4,7 @@ import AWS from 'aws-sdk';
 import * as barNumberGenerator from '../../shared/src/persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
+import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import { addressLabelCoverSheet } from '../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet';
 import axios from 'axios';
 import pug from 'pug';
@@ -492,7 +493,6 @@ export const createApplicationContext = (
       return notificationServiceCache;
     },
     getPdfJs: () => {
-      const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
       return pdfjsLib;
     },

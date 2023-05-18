@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/cases/Case');
+import { Case } from '../../entities/cases/Case';
 
 /**
  * Formats consolidated cases coversheet data
@@ -9,7 +9,7 @@ const { Case } = require('../../entities/cases/Case');
  * @param {object} providers.docketEntryEntity the docketEntryEntity
  * @returns {object} coversheet data with consolidated cases
  */
-exports.formatConsolidatedCaseCoversheetData = async ({
+export const formatConsolidatedCaseCoversheetData = async ({
   applicationContext,
   caseEntity,
   coverSheetData,

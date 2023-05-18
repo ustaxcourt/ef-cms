@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * defaults state.form.freeText if props.key is eventCode and props.value is NOT or O
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const setDefaultFreeTextForCourtIssuedDocketEntryAction = ({
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { key, value } = props;
   if (key === 'eventCode' && value) {
     const eventCode = value;

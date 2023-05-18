@@ -270,7 +270,7 @@ export const MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
   docketNumber: '110-19',
   entityName: 'Case',
   filingType: 'Myself',
-  leadDocketNumber: exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+  leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {
@@ -315,7 +315,7 @@ export const MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   docketNumber: '111-19',
   entityName: 'Case',
   filingType: 'Myself',
-  leadDocketNumber: exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+  leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {

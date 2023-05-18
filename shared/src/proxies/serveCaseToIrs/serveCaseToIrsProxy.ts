@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * serveCaseToIrsInteractor
@@ -8,7 +8,10 @@ const { post } = require('../requests');
  * @param {string} providers.docketNumber docket number for serving a case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.serveCaseToIrsInteractor = (applicationContext, { docketNumber }) => {
+export const serveCaseToIrsInteractor = (
+  applicationContext,
+  { docketNumber },
+) => {
   return post({
     applicationContext,
     endpoint: `/cases/${docketNumber}/serve-to-irs`,

@@ -1,7 +1,6 @@
 import { state } from 'cerebral';
 /**
  * sets the default countryType on the advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.store the cerebral store function
@@ -10,7 +9,7 @@ export const defaultAdvancedSearchFormAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
     applicationContext.getConstants();
   const advancedSearchForm = get(state.advancedSearchForm);

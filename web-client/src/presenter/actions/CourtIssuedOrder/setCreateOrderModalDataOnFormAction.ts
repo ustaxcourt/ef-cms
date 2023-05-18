@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setCreateOrderModalDataOnFormAction = ({ get, props, store }) => {
+export const setCreateOrderModalDataOnFormAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const documentTitle = props.documentTitle || get(state.modal.documentTitle);
 
   const documentType = props.documentType || get(state.modal.documentType);

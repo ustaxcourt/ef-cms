@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * updates trial session in state.trialSessions
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @param {object} providers.store the cerebral store for setting state
@@ -13,7 +12,7 @@ export const updateTrialSessionInTrialSessionsAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { trialSession } = props;
   const trialSessions = get(state.trialSessions);
 

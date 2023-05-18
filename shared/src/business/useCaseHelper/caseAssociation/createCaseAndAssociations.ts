@@ -1,7 +1,7 @@
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { IrsPractitioner } = require('../../entities/IrsPractitioner');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 
 /**
  * createCaseDocketEntries
@@ -96,7 +96,7 @@ const connectPrivatePractitioners = ({
  * @param {string} providers.caseToCreate the case object to be created
  * @returns {Promise} which resolves when case and associations have been created
  */
-exports.createCaseAndAssociations = async ({
+export const createCaseAndAssociations = async ({
   applicationContext,
   caseToCreate,
 }) => {

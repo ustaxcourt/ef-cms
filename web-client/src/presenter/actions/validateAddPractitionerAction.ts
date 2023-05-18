@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 /**
  * combines contact error fields into a single contact error object -
  * this modifies the original errors object rather than returning the value
- *
  * @param {object} providers the providers object
  * @param {object} providers.errors the errors
  */
@@ -35,7 +34,6 @@ export const combineContactErrors = ({ errors }) => {
 
 /**
  * validates the add practitioner user form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -47,7 +45,7 @@ export const validateAddPractitionerAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const practitioner = get(state.form);
   practitioner.admissionsDate = props.computedDate;
 
