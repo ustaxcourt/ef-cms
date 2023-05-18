@@ -66,7 +66,7 @@ describe('formattedTrialSessions formatSession', () => {
 
       expect(session.showAlertForNOTTReminder).toBe(true);
       expect(session.alertMessageForNOTT).toEqual(
-        'The 30-day notice is due before 2/2/2022',
+        'The 30-day notice is due by 2/2/2022',
       );
     });
 
