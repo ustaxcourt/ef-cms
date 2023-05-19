@@ -136,7 +136,17 @@ export const TrialSessionsTable = connect(
               {trialDate.sessions.map(item => (
                 <tbody key={item.trialSessionId}>
                   <tr className="trial-sessions-row">
-                    <td>{item.formattedStartDate}</td>
+                    <td>
+                      {item.showAlertForNOTTReminder && (
+                        <FontAwesomeIcon
+                          className="fa-icon-blue margin-right-05"
+                          icon="clock"
+                          size="sm"
+                          title={item.alertMessageForNOTT}
+                        />
+                      )}
+                      {item.formattedStartDate}
+                    </td>
                     <td>{item.formattedEstimatedEndDate}</td>
                     <td>
                       {item.swingSession && (
