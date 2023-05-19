@@ -186,6 +186,7 @@ import { getChiefJudgeNameForSigningInteractor } from '../../shared/src/proxies/
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConstants } from './getConstants';
+import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
@@ -348,6 +349,7 @@ import { validateUpdateUserEmailInteractor } from '../../shared/src/business/use
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
+
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
@@ -447,6 +449,7 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
   getDocumentQCInboxForSectionInteractor,
