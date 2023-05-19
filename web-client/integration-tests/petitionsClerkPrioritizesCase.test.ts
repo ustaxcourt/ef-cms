@@ -14,9 +14,7 @@ describe('Prioritize a Case', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      trialLocation: 'Lubbock, Texas',
-    },
+    trialLocation: 'Lubbock, Texas',
   });
   petitionsClerkPrioritizesCase(cerebralTest);
   petitionsClerkVerifyEligibleCase(cerebralTest);
