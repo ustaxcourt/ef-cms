@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { TrialSession } = require('./TrialSession');
-const { VALID_TRIAL_SESSION } = require('./TrialSession.test');
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { TrialSession } from './TrialSession';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('thirtyDaysBeforeTrialFormatted', () => {
@@ -11,7 +9,7 @@ describe('TrialSession entity', () => {
     it("should set thirtyDaysBeforeTrialFormatted to 30 days prior to the trial's startDate, inclusive of the startDate, when the trial session is calendared", () => {
       const trialSession = new TrialSession(
         {
-          ...VALID_TRIAL_SESSION,
+          ...MOCK_TRIAL_REGULAR,
           isCalendared: true,
           startDate: '2023-06-15',
         },
