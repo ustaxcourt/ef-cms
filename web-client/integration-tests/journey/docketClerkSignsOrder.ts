@@ -1,5 +1,7 @@
 export const docketClerkSignsOrder = cerebralTest => {
   return it('Docket clerk signs order', async () => {
+    console.log('docketClerkSignsOrder', cerebralTest.docketEntryId);
+
     await cerebralTest.runSequence('gotoSignOrderSequence', {
       docketEntryId: cerebralTest.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
