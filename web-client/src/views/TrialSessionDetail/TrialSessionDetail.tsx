@@ -6,7 +6,9 @@ import { DismissThirtyDayNoticeAlertModal } from './DismissThirtyDayNoticeAlertM
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
+import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
+import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -204,6 +206,8 @@ export const TrialSessionDetail = connect(
         {showModal === 'DismissThirtyDayNoticeAlertModal' && (
           <DismissThirtyDayNoticeAlertModal />
         )}
+        {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
+        {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
       </>
     );
   },
