@@ -28,6 +28,14 @@ export const formatSession = (session, applicationContext) => {
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
 
+  session.showAlertForNOTTReminder =
+    !session.dismissedAlertForNOTT &&
+    session.isStartDateWithinNOTTReminderRange;
+
+  if (session.showAlertForNOTTReminder) {
+    session.alertMessageForNOTT = `The 30-day notice is due by ${session.thirtyDaysBeforeTrialFormatted}`;
+  }
+
   return session;
 };
 
@@ -166,7 +174,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
   );
 
   const selectedTerm = get(state.form.term);
-  let sessionsByTerm = [];
+  let sessionsByTerm: any[] = [];
   if (selectedTerm) {
     const selectedTermYear = get(state.form.termYear);
     sessionsByTerm = orderBy(

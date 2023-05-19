@@ -1,19 +1,19 @@
 import { put } from '../requests';
 
 /**
- * updateTrialSessionInteractor
+ * dismissNOTTReminderForTrialInteractor
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
+ * @param {object} providers.trialSessionId the trial session ID
  * @returns {Promise<*>} the promise of the api call
  */
-export const updateTrialSessionInteractor = (
+export const dismissNOTTReminderForTrialInteractor = (
   applicationContext,
-  { trialSession },
+  { trialSessionId },
 ) => {
   return put({
     applicationContext,
-    body: trialSession,
-    endpoint: '/async/trial-sessions',
+    body: { trialSessionId },
+    endpoint: '/trial-sessions/dismiss-alert',
   });
 };
