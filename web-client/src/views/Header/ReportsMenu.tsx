@@ -30,7 +30,7 @@ export const ReportsMenu = connect(
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
-            reportMenuHelper && 'usa-current',
+            reportMenuHelper.pageIsReports && 'usa-current',
           )}
           id="reports-btn"
           onClick={() => {
