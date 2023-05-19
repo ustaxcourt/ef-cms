@@ -101,6 +101,7 @@ import { disengageAppMaintenanceSequence } from './sequences/disengageAppMainten
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
@@ -357,6 +358,7 @@ import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerC
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
+import { showDismissThirtyDayAlertModalSequence } from './sequences/showDismissThirtyDayAlertModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
@@ -621,6 +623,7 @@ const sequences = {
   dismissAlertSequence,
   dismissCreateMessageModalSequence,
   dismissModalSequence,
+  dismissThirtyDayTrialAlertSequence,
   editCorrespondenceDocumentSequence,
   editUploadCourtIssuedDocumentSequence,
   fetchUserNotificationsSequence,
@@ -875,6 +878,7 @@ const sequences = {
   setViewerDocumentToDisplaySequence,
   setViewerDraftDocumentToDisplaySequence,
   showCalculatePenaltiesModalSequence,
+  showDismissThirtyDayAlertModalSequence,
   showDocketRecordDetailModalSequence,
   showMoreClosedCasesSequence,
   showMoreOpenCasesSequence,
