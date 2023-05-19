@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { TrialSession } = require('./TrialSession');
-const { VALID_TRIAL_SESSION } = require('./TrialSession.test');
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { TrialSession } from './TrialSession';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { prepareDateFromString } from '../../utilities/DateHandler';
 
 describe('TrialSession entity', () => {
@@ -22,7 +20,7 @@ describe('TrialSession entity', () => {
     it('should set isStartDateWithinNOTTReminderRange to false when the trial session is not calendared', () => {
       const trialSession = new TrialSession(
         {
-          ...VALID_TRIAL_SESSION,
+          ...MOCK_TRIAL_REGULAR,
           isCalendared: false,
         },
         {
@@ -39,7 +37,7 @@ describe('TrialSession entity', () => {
 
         const trialSession = new TrialSession(
           {
-            ...VALID_TRIAL_SESSION,
+            ...MOCK_TRIAL_REGULAR,
             isCalendared: true,
             startDate: thirtyDaysFromToday,
           },
