@@ -6,7 +6,7 @@ import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
 
-const formatResults = body => {
+export const formatResults = body => {
   const total = get(body, 'hits.total.value', 0);
 
   let caseMap = {};
