@@ -105,6 +105,7 @@ import {
   formatNow,
   getMonthDayYearInETObj,
   isStringISOFormatted,
+  isTodayWithinGivenInterval,
   isValidDateString,
   prepareDateFromString,
   validateDateAndCreateISO,
@@ -136,6 +137,7 @@ import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAs
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
+import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { fileAndServeCourtIssuedDocumentInteractor } from '../../shared/src/proxies/documents/fileAndServeCourtIssuedDocumentProxy';
 import { fileCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/fileCorrespondenceDocumentProxy';
@@ -410,6 +412,7 @@ const allUseCases = {
   deletePractitionerDocumentInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
+  dismissNOTTReminderForTrialInteractor,
   editPaperFilingInteractor,
   editPractitionerDocumentInteractor,
   fetchPendingItemsInteractor,
@@ -779,6 +782,7 @@ const applicationContext = {
       isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
+      isTodayWithinGivenInterval,
       isUserIdRepresentedByPrivatePractitioner,
       isUserPartOfGroup,
       isValidDateString,
