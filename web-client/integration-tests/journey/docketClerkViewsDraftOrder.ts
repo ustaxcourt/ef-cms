@@ -15,6 +15,8 @@ export const docketClerkViewsDraftOrder = cerebralTest => {
       doc => doc.docketEntryId === cerebralTest.docketEntryId,
     );
 
+    console.log('views draftOrderDocument', draftOrderDocument);
+
     expect(draftOrderDocument).toBeDefined();
   });
 };
