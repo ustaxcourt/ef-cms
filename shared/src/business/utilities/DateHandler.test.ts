@@ -26,8 +26,20 @@ import {
   subtractISODates,
   validateDateAndCreateISO,
 } from './DateHandler';
+import { Settings } from 'luxon';
 
 describe('DateHandler', () => {
+  const timeZones = [
+    'utc',
+    'Europe/Paris',
+    'America/New_York',
+    'America/Chicago',
+    'America/Denver',
+    'America/Los_Angeles',
+    'Africa/Cairo',
+    'Asia/Tehran',
+    'Europe/Vienna',
+  ];
   // Takes an ISO-8601 timestamp representing UTC and temporarily
   // mocks the system's current time by overriding global Date implementation
   const setupMockTestCurrentTime = isoTimestamp => {
@@ -210,35 +222,70 @@ describe('DateHandler', () => {
   });
 
   describe('createStartOfDayISO', () => {
-    it('creates a timestamp exactly at midnight, the first moment of the day according to Eastern Timezone', () => {
-      const startOfDay = createStartOfDayISO({
-        day: '7',
-        month: '4',
-        year: '2020',
-      });
-      expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
+    const originalImplementation = Settings.now.bind(Settings.now);
+    afterEach(() => {
+      Settings.now = originalImplementation;
+      Settings.defaultZone = 'system';
+    });
 
-      // now confirm it converts "back" to originally desired time
-      const formattedInEastern = formatDateString(
-        startOfDay,
-        FORMATS.DATE_TIME,
-      );
-      expect(formattedInEastern).toEqual('04/07/20 12:00 am'); // the stroke of midnight
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp exactly at midnight, the first moment of the day in Eastern Time, when the system time zone is ${timeZone} and the day,month,year is specified`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+
+        const startOfDay = createStartOfDayISO({
+          day: '7',
+          month: '4',
+          year: '2020',
+        });
+
+        expect(startOfDay).toBe('2020-04-07T04:00:00.000Z');
+      });
+    });
+
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp exactly at midnight of today, the first moment of the day in Eastern Time, when the system time zone is ${timeZone}`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+        // eslint-disable-next-line @miovision/disallow-date/no-new-date
+        Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
+
+        const startOfDay = createStartOfDayISO();
+
+        expect(startOfDay).toEqual('2021-10-06T04:00:00.000Z');
+      });
     });
   });
 
   describe('createEndOfDayISO', () => {
-    it('creates a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone', () => {
-      const endOfDay = createEndOfDayISO({
-        day: '7',
-        month: '4',
-        year: '2020',
-      });
-      expect(endOfDay).toEqual('2020-04-08T03:59:59.999Z');
+    const originalImplementation = Settings.now.bind(Settings.now);
+    afterEach(() => {
+      Settings.now = originalImplementation;
+      Settings.defaultZone = 'system';
+    });
 
-      // now confirm it converts "back" to originally desired time
-      const formattedInEastern = formatDateString(endOfDay, FORMATS.DATE_TIME);
-      expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp one millisecond before midnight, the last moment of the day according to Eastern Timezone, when the system time zone is ${timeZone} and the day,month,year is specified`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+
+        const startOfDay = createEndOfDayISO({
+          day: '7',
+          month: '4',
+          year: '2020',
+        });
+
+        expect(startOfDay).toBe('2020-04-08T03:59:59.999Z');
+      });
+    });
+
+    timeZones.forEach(timeZone => {
+      it(`should create a timestamp one millisecond before midnight of today, the last moment of the day according to Eastern Timezone, when the system time zone is ${timeZone}`, () => {
+        Settings.defaultZone = timeZone; // Mock the system timezone.
+        // eslint-disable-next-line @miovision/disallow-date/no-new-date
+        Settings.now = () => new Date('2021-10-07T00:31:51.621Z').getTime(); // Mock the system time.
+
+        const startOfDay = createEndOfDayISO();
+
+        expect(startOfDay).toBe('2021-10-07T03:59:59.999Z');
+      });
     });
   });
 

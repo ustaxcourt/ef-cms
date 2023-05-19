@@ -67,9 +67,20 @@ const renderTabFactory = ({
     );
   };
 /**
- * Tab
+ * Tab //: This is a strange hollow component that is being used in renderTabFactory + TabsComponent to make a styled component
  */
-export function Tab() {}
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function Tab(properties: {
+  children?: React.ReactNode;
+  className?: string;
+  disabled?: boolean;
+  icon?: JSX.Element;
+  id?: string;
+  tabName?: string;
+  title?: string;
+}) {
+  return <></>;
+}
 
 /**
  * TabsComponent
