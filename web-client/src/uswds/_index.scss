@@ -4,7 +4,6 @@
     $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
     $theme-font-weight-semibold: 600
 );
-
 @forward 'uswds-global';
 @forward "usa-date-picker";
 @forward "usa-date-range-picker";
