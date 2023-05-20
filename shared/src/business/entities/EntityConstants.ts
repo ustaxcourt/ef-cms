@@ -186,7 +186,9 @@ export const CASE_STATUS_TYPES = {
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
-};
+} as const;
+export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
+export type CaseStatus = (typeof CASE_STATUSES)[number];
 
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
@@ -892,6 +894,8 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
   deficiency: 'Deficiency',
@@ -907,9 +911,10 @@ export const CASE_TYPES_MAP = {
   passport: 'Passport',
   whistleblower: 'Whistleblower',
   workerClassification: 'Worker Classification',
-};
+} as const;
 
 export const CASE_TYPES = Object.values(CASE_TYPES_MAP);
+export type CaseType = (typeof CASE_TYPES)[number];
 
 export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
