@@ -2,8 +2,7 @@ import moize from 'moize';
 
 /**
  *
- * head
- *
+ *head
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -22,8 +21,7 @@ export const head = async ({ applicationContext, endpoint, params }) => {
 
 /**
  *
- * get
- *
+ *get
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -41,8 +39,7 @@ const internalGet = async ({ applicationContext, endpoint, params }) => {
 
 /**
  *
- * getResponse
- *
+ *getResponse
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
@@ -71,8 +68,7 @@ export const get = process.env.CI ? internalGet : getMemoized;
 
 /**
  *
- * post
- *
+ *post
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
@@ -102,8 +98,7 @@ export const post = async ({
 
 /**
  *
- * put
- *
+ *put
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
@@ -121,8 +116,7 @@ export const put = async ({ applicationContext, body, endpoint }) => {
 };
 /**
  *
- * remove
- *
+ *remove
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
