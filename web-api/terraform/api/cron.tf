@@ -12,13 +12,12 @@ resource "aws_lambda_function" "check_case_cron_lambda" {
 
   runtime = var.node_version
 
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
+
   environment {
     variables = var.lambda_environment
   }
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 }
 
 resource "aws_cloudwatch_event_rule" "check_case_cron_rule" {

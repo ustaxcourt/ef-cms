@@ -6,21 +6,30 @@ import {
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { UnauthorizedError } from '../../errors/errors';
+import { MOCK_LOCK } from '../../test/mockLock';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
+  let mockLock;
 
   beforeAll(() => {
     applicationContext.getUniqueId.mockReturnValue(
       '20354d7a-e4fe-47af-8ff6-187bca92f3f9',
     );
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
+    mockLock = undefined;
     mockCase = cloneDeep(MOCK_CASE);
     generalDocketReadyForTrialCase = cloneDeep({
       ...MOCK_CASE,
@@ -385,5 +394,48 @@ describe('updateCaseDetailsInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate.partyType,
     ).toEqual(MOCK_CASE.partyType); // does not change
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      updateCaseDetailsInteractor(applicationContext, {
+        caseDetails: {
+          ...mockCase,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+        },
+        docketNumber: mockCase.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 });

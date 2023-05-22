@@ -269,7 +269,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(docketEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'HEAR',
-      servedAtFormatted: undefined,
+      servedAtFormatted: '',
       showNotServed: false,
       showServed: false,
       trialLocation: 'Birmingham, AL',
@@ -295,9 +295,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     expect(orderEntry.index).toBeUndefined();
     expect(orderEntry).toMatchObject({
-      createdAtFormatted: undefined,
+      createdAtFormatted: '',
       eventCode: 'O',
-      servedAtFormatted: undefined,
+      servedAtFormatted: '',
       showNotServed: true,
     });
   });
