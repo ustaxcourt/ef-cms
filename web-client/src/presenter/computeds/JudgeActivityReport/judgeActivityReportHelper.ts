@@ -1,7 +1,23 @@
 import { state } from 'cerebral';
 import { sum, sumBy } from 'lodash';
 
-export const judgeActivityReportHelper = (get, applicationContext) => {
+interface IJudgeActivityReportHelper {
+  closedCasesTotal: number;
+  filteredSubmittedAndCavCasesByJudge: any;
+  isFormPristine: boolean;
+  opinionsFiledTotal: number;
+  ordersFiledTotal: number;
+  progressDescriptionTableTotal: number;
+  reportHeader: any;
+  showResultsTables: boolean;
+  showSelectDateRangeText: boolean;
+  trialSessionsHeldTotal: number;
+}
+
+export const judgeActivityReportHelper = (
+  get: any,
+  applicationContext: IApplicationContext,
+): IJudgeActivityReportHelper => {
   const { endDate, judgeName, startDate } = get(state.form);
 
   const {
