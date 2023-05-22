@@ -5,25 +5,18 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import {
-  formatDateString,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
-import { getConstants } from '../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from 'cerebral/test';
+import { viewJudgeActivityReportResults } from './journey/viewJudgeActivityReportResults';
 import { withAppContextDecorator } from '../src/withAppContext';
-
-const currentDate = formatDateString(
-  prepareDateFromString(),
-  getConstants().DATE_FORMATS.MMDDYYYY,
-);
 
 const judgeActivityReportHelper = withAppContextDecorator(
   judgeActivityReportHelperComputed,
 );
+
+let progressDescriptionTableTotalBefore = 0;
 
 describe('Judge activity report journey', () => {
   const cerebralTest = setupTest();
@@ -70,78 +63,18 @@ describe('Judge activity report journey', () => {
     });
   });
 
-  it("Get judge's Progress Description table count before", async () => {
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    cerebralTest.progressDescriptionTableTotalBefore = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
   });
 
-  it('should submit the form with valid dates and display judge activity report results', async () => {
-    const { progressDescriptionTableTotalBefore } = cerebralTest;
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    const progressDescriptionTableTotalAfter = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: expect.anything(),
-      consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
-      submittedAndCavCasesByJudge: expect.anything(),
-      trialSessions: expect.anything(),
-    });
-    expect(progressDescriptionTableTotalAfter).toEqual(
-      progressDescriptionTableTotalBefore,
-    );
-  });
-
-  // create a single CAV case
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
 
-  // create a single Submitted case
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -153,144 +86,43 @@ describe('Judge activity report journey', () => {
   );
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-  it('should submit the form with valid dates and display judge activity report results with Progress Description Table Total increase by 2 when there is one "CAV" case and one "Submitted" case added', async () => {
-    const { progressDescriptionTableTotalBefore } = cerebralTest;
-    await refreshElasticsearchIndex();
-    await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
 
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', async () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    const progressDescriptionTableTotalAfter = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: expect.anything(),
-      consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
-      submittedAndCavCasesByJudge: expect.anything(),
-      trialSessions: expect.anything(),
-    });
     expect(progressDescriptionTableTotalAfter).toEqual(
       progressDescriptionTableTotalBefore + 2,
     );
   });
 
-  it("Get judge's Progress Description table count before", async () => {
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    cerebralTest.progressDescriptionTableTotalBefore = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
   });
 
-  // create another non "Submitted" or "CAV" case
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-  it('should submit the form with valid dates and display judge activity report results with Progress Description Table Total without increasing the count when a non-submitted or non-CAV case is added', async () => {
-    const { progressDescriptionTableTotalBefore } = cerebralTest;
-    await refreshElasticsearchIndex();
-    await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', async () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
 
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    const progressDescriptionTableTotalAfter = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: expect.anything(),
-      consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
-      submittedAndCavCasesByJudge: expect.anything(),
-      trialSessions: expect.anything(),
-    });
     expect(progressDescriptionTableTotalAfter).toEqual(
       progressDescriptionTableTotalBefore,
     );
   });
 
-  it("Get judge's Progress Description table count before", async () => {
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    cerebralTest.progressDescriptionTableTotalBefore = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
   });
 
-  // create a submitted case and then creates a docket entry with an event code of OAD
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -311,42 +143,11 @@ describe('Judge activity report journey', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-  it('should submit the form with valid dates and display judge activity report results with Progress Description Table Total without increasing the count when a case with a status of "Submitted" and has a decision-type of document on the docket record', async () => {
-    const { progressDescriptionTableTotalBefore } = cerebralTest;
-    await refreshElasticsearchIndex();
-    await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '01/01/2020',
-      },
-    );
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', async () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
 
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: currentDate,
-      },
-    );
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    const progressDescriptionTableTotalAfter = runCompute(
-      judgeActivityReportHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ).progressDescriptionTableTotal;
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: expect.anything(),
-      consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
-      submittedAndCavCasesByJudge: expect.anything(),
-      trialSessions: expect.anything(),
-    });
     expect(progressDescriptionTableTotalAfter).toEqual(
       progressDescriptionTableTotalBefore,
     );
