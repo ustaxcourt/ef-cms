@@ -37,10 +37,14 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     index: 'efcms-case',
   };
 
-  const { results } = await search({
-    applicationContext,
-    searchParameters,
-  });
+  const {
+    results,
+  }: { results: Array<{ docketNumber: string }>; total: number } = await search(
+    {
+      applicationContext,
+      searchParameters,
+    },
+  );
 
   return results;
 };
