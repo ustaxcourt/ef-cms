@@ -290,7 +290,7 @@ describe('Judge activity report journey', () => {
     ).progressDescriptionTableTotal;
   });
 
-  // create a submitted case and then creates a docket entry with an event code of ODD
+  // create a submitted case and then creates a docket entry with an event code of OAD
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -307,7 +307,7 @@ describe('Judge activity report journey', () => {
   });
   docketClerkViewsDraftOrder(cerebralTest);
   docketClerkSignsOrder(cerebralTest);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
   docketClerkServesDocument(cerebralTest, 0);
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
