@@ -84,6 +84,7 @@ export const SessionInformationForm = connect(
                 }
                 id="start-date"
                 label="Start date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'startDateDay',
                   month: 'startDateMonth',
