@@ -19,9 +19,7 @@ describe('Petitions Clerk Views Draft Documents', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      trialLocation: 'Lubbock, Texas',
-    },
+    trialLocation: 'Lubbock, Texas',
   });
 
   it('views case detail', async () => {
