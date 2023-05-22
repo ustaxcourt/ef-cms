@@ -2,16 +2,16 @@ import { state } from 'cerebral';
 import { sum, sumBy } from 'lodash';
 
 interface IJudgeActivityReportHelper {
-  closedCasesTotal: number;
-  filteredSubmittedAndCavCasesByJudge: any;
-  isFormPristine: boolean;
-  opinionsFiledTotal: number;
-  ordersFiledTotal: number;
-  progressDescriptionTableTotal: number;
-  reportHeader: any;
-  showResultsTables: boolean;
-  showSelectDateRangeText: boolean;
-  trialSessionsHeldTotal: number;
+  closedCasesTotal: number | undefined;
+  filteredSubmittedAndCavCasesByJudge: any | undefined;
+  isFormPristine: boolean | undefined;
+  opinionsFiledTotal: number | undefined;
+  ordersFiledTotal: number | undefined;
+  progressDescriptionTableTotal: number | undefined;
+  reportHeader: string | undefined;
+  showResultsTables: boolean | undefined;
+  showSelectDateRangeText: boolean | undefined;
+  trialSessionsHeldTotal: number | undefined;
 }
 
 export const judgeActivityReportHelper = (
