@@ -77,6 +77,5 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
     }
     cerebralTest.draftOrders.push(newDraftOrder);
     cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
-    console.log('creates orders:', cerebralTest.draftOrders);
   });
 };
