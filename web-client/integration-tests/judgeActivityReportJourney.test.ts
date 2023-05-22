@@ -30,7 +30,7 @@ describe('Judge activity report journey', () => {
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
     const { isFormPristine, reportHeader } = runCompute(
-      judgeActivityReportHelper,
+      judgeActivityReportHelper as any,
       {
         state: cerebralTest.getState(),
       },
