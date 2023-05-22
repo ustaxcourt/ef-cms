@@ -311,6 +311,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isTodayWithinGivenInterval: jest
+      .fn()
+      .mockImplementation(DateHandler.isTodayWithinGivenInterval),
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
@@ -466,6 +469,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getCasesByFilters: jest.fn(),
     getChambersSections: jest.fn().mockImplementation(getChambersSections),
     getChambersSectionsLabels: jest
       .fn()

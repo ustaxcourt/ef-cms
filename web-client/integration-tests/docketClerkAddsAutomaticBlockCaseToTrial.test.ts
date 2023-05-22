@@ -34,7 +34,7 @@ describe('Adds automatic block case to trial', () => {
   };
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, { overrides: { trialLocation } });
+  petitionsClerkCreatesNewCase(cerebralTest, { trialLocation });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);

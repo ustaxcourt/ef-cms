@@ -23,6 +23,7 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
@@ -30,6 +31,7 @@ import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelp
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
+import { customCaseInventoryReportHelper } from './computeds/customCaseInventoryReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -66,6 +68,7 @@ import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
+import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -154,6 +157,7 @@ const helpers = {
   createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
+  customCaseInventoryReportHelper,
   dashboardExternalHelper,
   docketEntryQcHelper,
   docketRecordHelper,
@@ -287,6 +291,7 @@ export const baseState = {
       tab: null,
     },
   },
+  customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
