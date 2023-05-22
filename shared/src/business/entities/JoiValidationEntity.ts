@@ -76,7 +76,7 @@ function getFormattedValidationErrorsHelper(entity) {
  *
  * @returns {object} the formatted errors
  */
-function getFormattedValidationErrors(entity) {
+function getFormattedValidationErrors(entity): Record<string, any> | null {
   const keys = Object.keys(entity);
   const obj = {};
   let errors = null;
