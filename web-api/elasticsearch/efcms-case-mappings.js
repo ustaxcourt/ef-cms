@@ -30,6 +30,9 @@ module.exports = {
     'closedDate.S': {
       type: 'date',
     },
+    'createdAt.S': {
+      type: 'date',
+    },
     'docketNumber.S': {
       type: 'keyword',
     },
@@ -50,6 +53,9 @@ module.exports = {
     },
     'irsPractitioners.L.M.userId.S': {
       type: 'keyword',
+    },
+    'isPaper.BOOL': {
+      type: 'boolean',
     },
     'isSealed.BOOL': { type: 'boolean' },
     'leadDocketNumber.S': {
@@ -80,6 +86,9 @@ module.exports = {
       type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {
+      type: 'keyword',
+    },
+    'procedureType.S': {
       type: 'keyword',
     },
     'receivedAt.S': {

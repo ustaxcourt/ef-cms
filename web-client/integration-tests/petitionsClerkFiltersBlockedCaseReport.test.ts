@@ -20,10 +20,8 @@ const createAndBlockCase = (
 ) => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      procedureType,
-      trialLocation,
-    },
+    procedureType,
+    trialLocation,
   });
   it('track the docket number', () => {
     blockedCases.push({
