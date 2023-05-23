@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validate the case or session note
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const validateUserContactAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const formContact = get(state.form);
   const currentUser = applicationContext.getCurrentUser();
 

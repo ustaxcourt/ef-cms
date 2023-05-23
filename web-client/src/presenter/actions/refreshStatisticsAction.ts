@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * refreshes the default value of the statistics
- *
  * @param {object} providers the providers object
  * @param {Function} providers.applicationContext the applicationContext
  * @param {Function} providers.get the cerebral get function getting the batch to delete
@@ -10,7 +9,11 @@ import { state } from 'cerebral';
  * @returns {void}
  */
 
-export const refreshStatisticsAction = ({ applicationContext, get, store }) => {
+export const refreshStatisticsAction = ({
+  applicationContext,
+  get,
+  store,
+}: ActionProps) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   let { caseType, hasVerifiedIrsNotice, statistics } = get(state.form);
 

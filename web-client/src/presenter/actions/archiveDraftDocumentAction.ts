@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * calls the proxy/interactor to archive a document on the backend
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
  * @param {object} providers.props props passed through via cerebral
@@ -13,7 +12,7 @@ export const archiveDraftDocumentAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { docketEntryId, redirectToCaseDetail } = get(
     state.archiveDraftDocument,
   );

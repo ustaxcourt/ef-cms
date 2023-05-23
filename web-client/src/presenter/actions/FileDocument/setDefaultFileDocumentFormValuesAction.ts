@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Set default values on file document form
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
@@ -11,7 +10,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const isExternalConsolidatedCaseGroupFilingEnabled = get(
     state.isExternalConsolidatedCaseGroupFilingEnabled,
   );
