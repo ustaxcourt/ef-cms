@@ -421,7 +421,7 @@ export class DocketEntry extends JoiValidationEntity {
    * @returns {boolean} true if the docket entry was filed after 8/1/23
    * otherwise false
    */
-  getFiledAfterPolicyChange() {
+  getFiledAfterPolicyChange(): boolean {
     const policyChangeDate = prepareDateFromString('2023-08-01').toISO();
     return this.filingDate >= policyChangeDate;
   }
