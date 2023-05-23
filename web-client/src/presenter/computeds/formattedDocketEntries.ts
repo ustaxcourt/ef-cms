@@ -193,16 +193,12 @@ export const getFormattedDocketEntry = ({
 
   let casePractitioners;
   let filedByPractitioner;
-  if (formattedCase.irsPractitioners && formattedCase.privatePractitioners) {
+  if (formattedCase?.irsPractitioners && formattedCase.privatePractitioners) {
     casePractitioners = [
       ...formattedCase.irsPractitioners,
       ...formattedCase.privatePractitioners,
     ];
-    console.log(
-      'casePractitioners',
-      casePractitioners.map(p => p.userId),
-    );
-    console.log('entry.userId', entry.userId);
+
     filedByPractitioner = casePractitioners.some(
       p => p.userId === entry.userId,
     );

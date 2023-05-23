@@ -312,6 +312,34 @@ describe('getShowDocumentViewerLink', () => {
       },
       output: true,
     },
+    {
+      description: `sealed, practitioner e-filed briefs filed after ${POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: true,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description: `stricken, practitioner e-filed briefs filed after ${POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: true,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
   ];
 
   tests.forEach(({ description, inputs, output }) => {
