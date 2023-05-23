@@ -36,9 +36,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      false,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when isConsolidatedGroupAccessEnabled is true, case has a leadDocketNumber and has a multiDocketable event code', async () => {
@@ -64,9 +62,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      true,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(true);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to false on state when case does not have a leadDocketNumber', async () => {
@@ -90,9 +86,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      false,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to false on state when there is not a multiDocketable event code', async () => {
@@ -117,9 +111,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      false,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when there is a overrideForRequestAccess', async () => {
@@ -142,8 +134,6 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      true,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(true);
   });
 });

@@ -11,10 +11,10 @@ export const setDefaultFileDocumentFormValuesAction = ({
   get,
   store,
 }: ActionProps) => {
-  const isExternalConsolidatedCaseGroupFilingEnabled = get(
-    state.isExternalConsolidatedCaseGroupFilingEnabled,
+  const allowExternalConsolidatedGroupFiling = get(
+    state.allowExternalConsolidatedGroupFiling,
   );
-  if (isExternalConsolidatedCaseGroupFilingEnabled) {
+  if (allowExternalConsolidatedGroupFiling) {
     store.set(state.form.fileAcrossConsolidatedGroup, true);
   }
 
