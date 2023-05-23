@@ -63,9 +63,7 @@ describe('petitions clerk sets a trial session calendar', () => {
     describe('case #5 - manually added to session', () => {
       loginAs(cerebralTest, 'petitionsclerk@example.com');
       cerebralTest.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(cerebralTest, {
-        overrides: { trialLocation },
-      });
+      petitionsClerkCreatesNewCase(cerebralTest, { trialLocation });
       petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
     });
   });

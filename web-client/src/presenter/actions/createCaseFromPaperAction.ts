@@ -62,7 +62,6 @@ export const setupPercentDone = (files, store) => {
 
 /**
  * invokes the filePetition useCase.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
@@ -75,7 +74,7 @@ export const createCaseFromPaperAction = async ({
   path,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const {
     applicationForWaiverOfFilingFeeFile,
     corporateDisclosureFile,

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * calls the removeCaseFromTrialInteractor to remove the case from the trial session
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const removeCaseFromTrialAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   let trialSessionId;
   const { docketNumber, trialSessionId: stateTrialSessionId } = get(
     state.caseDetail,

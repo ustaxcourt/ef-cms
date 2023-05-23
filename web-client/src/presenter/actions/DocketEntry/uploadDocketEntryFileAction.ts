@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * upload document to s3.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -16,7 +15,7 @@ export const uploadDocketEntryFileAction = async ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { primaryDocumentFile } = get(state.form);
   const docketEntryId = get(state.docketEntryId);
 

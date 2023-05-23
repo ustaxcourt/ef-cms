@@ -14,6 +14,6 @@ export const setTitleForGlobalReportFactoryAction =
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.headerTitle
    */
-  ({ store }) => {
+  ({ store }: ActionProps) => {
     store.set(state.screenMetadata.headerTitle, headerTitle);
   };

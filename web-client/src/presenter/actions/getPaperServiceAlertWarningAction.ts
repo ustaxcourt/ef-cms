@@ -1,6 +1,5 @@
 /**
  * sets the alertError on props for paper service warning
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.props the cerebral props object
@@ -9,7 +8,7 @@
 export const getPaperServiceAlertWarningAction = ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
   const hasPartyWithElectronicService = applicationContext

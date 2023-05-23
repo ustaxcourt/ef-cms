@@ -13,7 +13,7 @@ export const getFileExternalDocumentAlertSuccessAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { DOCUMENT_SERVED_MESSAGES, NOTICE_EVENT_CODES } =
     applicationContext.getConstants();
   const documentToEdit = get(state.documentToEdit);

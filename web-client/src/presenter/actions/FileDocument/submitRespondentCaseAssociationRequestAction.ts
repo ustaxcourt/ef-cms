@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * submit case association request for a respondent
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();

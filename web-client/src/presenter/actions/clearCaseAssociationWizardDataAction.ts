@@ -2,11 +2,13 @@ import { state } from 'cerebral';
 
 /**
  * Clears wizard data scenario.
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for clearing scenario
  */
-export const clearCaseAssociationWizardDataAction = ({ props, store }) => {
+export const clearCaseAssociationWizardDataAction = ({
+  props,
+  store,
+}: ActionProps) => {
   switch (props.key) {
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);

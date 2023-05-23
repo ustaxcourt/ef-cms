@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Returns the in-memory file if there is one, otherwise returns the document from case detail.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get method
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getDocumentSelectedForPreviewAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
   const documentSelectedForPreview = get(
     state.currentViewMetadata.documentSelectedForPreview,
