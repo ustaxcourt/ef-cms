@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 body.no-scroll {
   overflow: hidden;
   cursor: default;
@@ -25,11 +28,6 @@ hr {
   border: 0;
   border-top: 1px solid color($theme-color-base-light);
   margin: 20px 0;
-}
-
-.ustc-icon-square--small {
-  width: 15px;
-  height: 15px;
 }
 
 .hide {
@@ -510,8 +508,9 @@ select[disabled] {
   }
 
   display: inline-block;
-  padding: 1.25rem 1.25rem 1rem 1.75rem;
-  border-left: 5px solid color($theme-color-primary-vivid);
+  max-width: 45em;
+  padding: 1.25rem 1.25rem 1rem 1.6rem;
+  border-left: 0.5rem solid color($theme-color-primary-vivid);
   background: color($theme-color-base-lightest);
   color: color($theme-color-base-dark);
 
@@ -811,12 +810,19 @@ textarea#case-caption {
 }
 
 .beta {
-  padding: 10px;
   background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
 
   a {
     color: color($theme-color-base-darkest);
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding: 10px 10px 0 10px;
+  }
+  
+  @media only screen and (max-width: $large-screen - 1px) {
+    padding: 10px;
   }
 }
 
@@ -888,6 +894,11 @@ textarea#case-caption {
 #save-and-finish {
   padding-right: 45px;
   padding-left: 45px;
+}
+
+
+.padding-right-6 {
+  padding-right: 48px !important;
 }
 
 header.usa-header {

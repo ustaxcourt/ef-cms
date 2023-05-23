@@ -1,9 +1,9 @@
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import iconDotGov from '../../../node_modules/uswds/dist/img/icon-dot-gov.svg';
-import iconHttps from '../../../node_modules/uswds/dist/img/icon-https.svg';
-import usFlag from '../../../node_modules/uswds/dist/img/us_flag_small.png';
+import iconDotGov from '../../../node_modules/@uswds/uswds/dist/img/icon-dot-gov.svg';
+import iconHttps from '../../../node_modules/@uswds/uswds/dist/img/icon-https.svg';
+import usFlag from '../../../node_modules/@uswds/uswds/dist/img/us_flag_small.png';
 
 export const UsaBanner = connect(
   {
