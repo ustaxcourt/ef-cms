@@ -6,6 +6,7 @@ import {
   EXTERNAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PARTIES_CODES,
+  POLICY_CHANGE_DATE,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   ROLES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
@@ -422,8 +423,7 @@ export class DocketEntry extends JoiValidationEntity {
    * otherwise false
    */
   getFiledAfterPolicyChange(): boolean {
-    const policyChangeDate = prepareDateFromString('2023-08-01').toISO();
-    return this.filingDate >= policyChangeDate;
+    return this.filingDate >= POLICY_CHANGE_DATE;
   }
 
   /**
