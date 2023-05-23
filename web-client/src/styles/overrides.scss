@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .grid-container {
   max-width: 1440px;
 }
@@ -35,13 +38,15 @@ option:first-child {
   &.ustc-form-hint-with-svg {
     position: relative;
     padding-right: 2rem;
-    padding-left: 2rem;
+    padding-left: 2.45rem;
     color: color($theme-color-base-darkest);
     font-size: 17px;
 
     svg {
       position: absolute;
       left: 0;
+      color: black;
+      font-size: 30px;
     }
   }
 }
@@ -104,6 +109,11 @@ option:first-child {
   }
 }
 
+.usa-form-group--year {
+  width: 4.5rem;
+  margin-right: 1rem;
+}
+
 .usa-input--error {
   padding-top: unset;
   padding-bottom: 0;
@@ -158,7 +168,7 @@ option:first-child {
 .usa-alert--success,
 .usa-alert--info,
 .usa-alert--warning {
-  max-width: 45em;
+  max-width: 48em;
   min-height: 50px;
 
   .usa-alert__heading {
@@ -172,6 +182,7 @@ option:first-child {
 
   .usa-alert__body {
     display: block;
+    padding-right: unset;
   }
 
   .usa-alert__action {
