@@ -429,6 +429,17 @@ export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const SERIATIM_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE = [
+  ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  ...SERIATIM_DOCUMENT_EVENT_CODES,
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
