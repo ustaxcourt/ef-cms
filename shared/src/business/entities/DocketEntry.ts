@@ -18,6 +18,7 @@ import { WorkItem } from './WorkItem';
 import {
   createISODateAtStartOfDayEST,
   createISODateString,
+  prepareDateFromString,
 } from '../utilities/DateHandler';
 
 export class DocketEntry extends JoiValidationEntity {
@@ -107,7 +108,7 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
-  public something?: boolean;
+  public filedAfterPolicyChange: boolean;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -198,8 +199,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
-    this.something = this.filedByPractitioner();
-    console.log('something!!!', this.something);
+    this.filedAfterPolicyChange = this.getFiledAfterPolicyChange();
     // only share the userId with an external user if it is the logged in user
     if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
@@ -417,15 +417,13 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   /**
-   *todo
+   * Determines whether or not the docket entry filingDate occurs after the policy change date
+   * @returns {boolean} true if the docket entry was filed after 8/1/23
+   * otherwise false
    */
-  filedByPractitioner() {
-    const butt = this.privatePractitioners?.some(
-      practitioner => practitioner.userId === this.userId,
-    );
-    console.log(butt, '--');
-
-    return butt;
+  getFiledAfterPolicyChange() {
+    const policyChangeDate = prepareDateFromString('2023-08-01').toISO();
+    return this.filingDate >= policyChangeDate;
   }
 
   /**
