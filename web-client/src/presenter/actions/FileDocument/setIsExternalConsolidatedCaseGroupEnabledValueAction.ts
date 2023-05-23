@@ -31,13 +31,16 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
       .getConstants()
       .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
 
-  store.set(state.isExternalConsolidatedCaseGroupFilingEnabled, false);
-
+  let allowExternalConsolidatedGroupFiling = false;
   if (
     isConsolidatedGroupAccessEnabled &&
     isInConsolidatedGroup &&
     isMultiDocketableEventCode
   ) {
-    store.set(state.isExternalConsolidatedCaseGroupFilingEnabled, true);
+    allowExternalConsolidatedGroupFiling = true;
   }
+  store.set(
+    state.allowExternalConsolidatedGroupFiling,
+    allowExternalConsolidatedGroupFiling,
+  );
 };
