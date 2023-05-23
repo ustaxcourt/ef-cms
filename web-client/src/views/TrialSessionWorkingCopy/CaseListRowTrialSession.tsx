@@ -123,14 +123,24 @@ const getCaseRow = ({
       {formattedCase.userNotes && (
         <tr className="notes-row">
           <td></td>
-          <td></td>
-          <td className="font-body-2xs" colSpan={4}>
+          <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Notes:</span>
             <TextView
               bind={`trialSessionWorkingCopy.userNotes.${formattedCase.docketNumber}.notes`}
             />
           </td>
-          <td className="no-wrap text-align-right">
+          <td>
+            <Button
+              link
+              icon="edit"
+              onClick={() => {
+                trialSequences.openAddEditUserCaseNoteModalFromListSequence({
+                  docketNumber: formattedCase.docketNumber,
+                });
+              }}
+            >
+              Edit Note
+            </Button>
             <Button
               link
               className="red-warning"
@@ -142,20 +152,6 @@ const getCaseRow = ({
               }}
             >
               Delete Note
-            </Button>
-          </td>
-
-          <td className="no-wrap text-align-right">
-            <Button
-              link
-              icon="edit"
-              onClick={() => {
-                trialSequences.openAddEditUserCaseNoteModalFromListSequence({
-                  docketNumber: formattedCase.docketNumber,
-                });
-              }}
-            >
-              Edit Note
             </Button>
           </td>
         </tr>
