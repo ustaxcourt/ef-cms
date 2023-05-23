@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
-import {
-  acquireLock,
-  deleteLock,
-} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from '../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from '../../shared/src/persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from '../../shared/src/persistence/dynamo/cases/associateUserWithCase';
@@ -18,6 +14,11 @@ import { createCase } from '../../shared/src/persistence/dynamo/cases/createCase
 import { createCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createJobStatus } from '../../shared/src/persistence/dynamo/trialSessions/createJobStatus';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { createMessage } from '../../shared/src/persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPractitionerUser';
@@ -74,6 +75,7 @@ import { getConfigurationItemValue } from '../../shared/src/persistence/dynamo/d
 import { getDeployTableStatus } from '../../shared/src/persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketNumbersByStatusAndByJudge } from '../../shared/src/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -174,7 +176,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
    * Decorates the function to verify any entities passed have the isValid flag.
    * Should be used whenever a persistence method might be called by an interactor via lambda
    * when an entity's complete record is being created or updated.
-   *
    * @returns {Function} the original methods decorated
    */
   function decorate(method) {
@@ -273,19 +274,18 @@ const gatewayMethods = {
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
-  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createLock,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
-  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
@@ -316,6 +316,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
@@ -329,6 +330,7 @@ const gatewayMethods = {
   getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
+  getLock,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
@@ -367,6 +369,7 @@ const gatewayMethods = {
       })
     : refreshToken,
   removeIrsPractitionerOnCase,
+  removeLock,
   removePrivatePractitionerOnCase,
   updateUserCaseMapping,
   verifyCaseForUser,

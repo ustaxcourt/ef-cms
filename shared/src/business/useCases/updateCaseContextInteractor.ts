@@ -6,10 +6,10 @@ import {
 } from '../../authorization/authorizationClientService';
 import { TrialSession } from '../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * updateCaseContextInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.associatedJudge the associated judge to set on the case
@@ -18,7 +18,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {object} providers.caseStatus the status to set on the case
  * @returns {object} the updated case data
  */
-export const updateCaseContextInteractor = async (
+export const updateCaseContext = async (
   applicationContext: IApplicationContext,
   {
     associatedJudge,
@@ -118,3 +118,10 @@ export const updateCaseContextInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).toRawObject();
 };
+
+export const updateCaseContextInteractor = withLocking(
+  updateCaseContext,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

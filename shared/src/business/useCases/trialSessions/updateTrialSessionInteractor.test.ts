@@ -20,8 +20,6 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
-
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockReturnValue({
@@ -31,6 +29,7 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   beforeEach(() => {
+    applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
@@ -41,7 +40,7 @@ describe('updateTrialSessionInteractor', () => {
       role: ROLES.petitioner,
       userId: 'petitioner',
     });
-    applicationContext.getCurrentUser.mockReturnValueOnce(unauthedUser);
+    applicationContext.getCurrentUser.mockReturnValue(unauthedUser);
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {

@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedCaseGroupFilingCard } from './ExternalConsolidatedCaseGroupFilingCard';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { MultiDocumentPartiesFiling } from './MultiDocumentPartiesFiling';
 import { PartiesFiling } from './PartiesFiling';
 import { PrimaryDocumentForm } from './PrimaryDocumentForm';
 import { SecondaryDocumentForm } from './SecondaryDocumentForm';
@@ -15,6 +15,8 @@ export const FileDocument = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    isExternalConsolidatedCaseGroupFilingEnabled:
+      state.isExternalConsolidatedCaseGroupFilingEnabled,
     navigateBackSequence: sequences.navigateBackSequence,
     reviewExternalDocumentInformationSequence:
       sequences.reviewExternalDocumentInformationSequence,
@@ -23,6 +25,7 @@ export const FileDocument = connect(
   function FileDocument({
     fileDocumentHelper,
     formCancelToggleCancelSequence,
+    isExternalConsolidatedCaseGroupFilingEnabled,
     navigateBackSequence,
     reviewExternalDocumentInformationSequence,
     showModal,
@@ -54,9 +57,11 @@ export const FileDocument = connect(
           </>
         )}
 
-        {(fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-          <MultiDocumentPartiesFiling />
-        )) || <PartiesFiling />}
+        <PartiesFiling />
+
+        {isExternalConsolidatedCaseGroupFilingEnabled && (
+          <ExternalConsolidatedCaseGroupFilingCard />
+        )}
 
         <div className="margin-top-4">
           <Button
