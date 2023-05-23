@@ -153,7 +153,7 @@ const mockCavConsolidatedMemberCase = {
   status: CASE_STATUS_TYPES.cav,
 };
 
-let mockReturnedDocketNumbers = [];
+let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
 
 let expectedConsolidatedCasesGroupCountMap = {};
 

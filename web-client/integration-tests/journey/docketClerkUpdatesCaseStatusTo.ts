@@ -17,7 +17,7 @@ export const docketClerkUpdatesCaseStatusTo = (
     await cerebralTest.runSequence('openUpdateCaseModalSequence');
 
     const updateCaseModalHelper = runCompute(
-      withAppContextDecorator(updateCaseModalHelperComputed),
+      withAppContextDecorator(updateCaseModalHelperComputed) as any,
       {
         state: cerebralTest.getState(),
       },

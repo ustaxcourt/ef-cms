@@ -13,8 +13,8 @@ const judgeActivityReportHelper = withAppContextDecorator(
 );
 
 export const viewJudgeActivityReportResults = (
-  cerebralTest,
-  overrides = {},
+  cerebralTest: any,
+  overrides: { startDate?: string; endDate?: string } = {},
 ) => {
   return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
@@ -27,7 +27,7 @@ export const viewJudgeActivityReportResults = (
     await cerebralTest.runSequence(
       'selectDateRangeFromJudgeActivityReportSequence',
       {
-        startDate: overrides.startDate || '01/01/2020',
+        startDate: (overrides.startDate as string) || '01/01/2020',
       },
     );
 
@@ -41,7 +41,7 @@ export const viewJudgeActivityReportResults = (
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
     const { progressDescriptionTableTotal } = runCompute(
-      judgeActivityReportHelper,
+      judgeActivityReportHelper as any,
       {
         state: cerebralTest.getState(),
       },
