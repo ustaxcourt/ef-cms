@@ -128,4 +128,39 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
         .calls[0][1].searchParams.opinionTypes,
     ).toEqual(['Cucumber']);
   });
+
+  it('throw an error if response code was not 429', async () => {
+    applicationContext
+      .getUseCases()
+      .opinionPublicSearchInteractor.mockImplementation(() => {
+        const e = new Error();
+        e.message = 'bad request';
+        e.originalError = {
+          response: {
+            data: {
+              type: 'ip-limiter',
+            },
+          },
+        };
+        e.responseCode = 425;
+        throw e;
+      });
+
+    await expect(() =>
+      runAction(submitPublicOpinionAdvancedSearchAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            opinionSearch: {
+              docketNumber: '105-20L',
+              keyword: 'a',
+              opinionTypes: {},
+            },
+          },
+        },
+      }),
+    ).rejects.toThrow('bad request');
+  });
 });
