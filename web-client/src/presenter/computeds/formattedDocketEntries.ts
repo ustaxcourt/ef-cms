@@ -42,6 +42,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
 
 export const getShowDocumentViewerLink = ({
   filedAfterPolicyChange,
+  filedByPractitioner,
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
@@ -72,6 +73,7 @@ export const getShowDocumentViewerLink = ({
       }
     }
     if (userHasNoAccessToDocument) return false;
+    if (filedAfterPolicyChange && filedByPractitioner) return true;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
@@ -127,10 +129,12 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
+// eslint-disable-next-line complexity
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
+  formattedCase,
   isExternalUser,
   permissions,
   userAssociatedWithCase,
@@ -187,8 +191,26 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
+  let casePractitioners;
+  let filedByPractitioner;
+  if (formattedCase.irsPractitioners && formattedCase.privatePractitioners) {
+    casePractitioners = [
+      ...formattedCase.irsPractitioners,
+      ...formattedCase.privatePractitioners,
+    ];
+    console.log(
+      'casePractitioners',
+      casePractitioners.map(p => p.userId),
+    );
+    console.log('entry.userId', entry.userId);
+    filedByPractitioner = casePractitioners.some(
+      p => p.userId === entry.userId,
+    );
+  }
+
   showDocumentLinks = getShowDocumentViewerLink({
     filedAfterPolicyChange: entry.filedAfterPolicyChange,
+    filedByPractitioner,
     hasDocument: entry.isFileAttached,
     isCourtIssuedDocument: entry.isCourtIssuedDocument,
     isExternalUser,
@@ -313,6 +335,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
       applicationContext,
       docketNumber,
       entry,
+      formattedCase: result,
       isExternalUser,
       permissions,
       userAssociatedWithCase,
