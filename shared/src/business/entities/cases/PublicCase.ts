@@ -24,7 +24,6 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 /**
  * Public Case Entity
  * Represents the view of the public case.
- *
  * @param {object} rawCase the raw case data
  * @constructor
  */
@@ -50,11 +49,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
 
   const currentUser = applicationContext.getCurrentUser();
 
-  if (
-    (currentUser.role === ROLES.irsPractitioner ||
-      currentUser.role === ROLES.privatePractitioner) &&
-    !this.isSealed
-  ) {
+  if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
     this.petitioners = rawCase.petitioners;
 
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
