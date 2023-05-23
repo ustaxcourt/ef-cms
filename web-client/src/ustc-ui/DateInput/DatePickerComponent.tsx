@@ -2,7 +2,7 @@ import { FormGroup } from '../FormGroup/FormGroup';
 import { getComputedInputValue } from './DatePickerComponentHelper';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 
 export const DatePickerComponent = ({
   className,
