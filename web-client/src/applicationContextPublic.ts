@@ -33,6 +33,9 @@ import {
   getContactPrimary,
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
+const {
+  getFiledByPractitioner,
+} = require('../../shared/src/business/entities/cases/PublicCase');
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
@@ -194,6 +197,7 @@ const applicationContextPublic = {
       getContactPrimary,
       getContactSecondary,
       getDescriptionDisplay,
+      getFiledByPractitioner,
       getJudgeLastName,
       getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
