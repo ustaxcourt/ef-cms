@@ -5,7 +5,7 @@ import { state } from 'cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
-  { entry, isTerminalUser },
+  { entry, filedByPractitioner, isTerminalUser },
 ) => {
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
     applicationContext.getConstants();
@@ -24,8 +24,11 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
+  // todo: var for the && policy stuff below
   const canTerminalUserSeeLink =
     record.isFileAttached &&
+    record.filedAfterPolicyChange &&
+    filedByPractitioner &&
     isServedDocument &&
     !record.isSealed &&
     !record.isStricken;
@@ -33,6 +36,8 @@ export const formatDocketEntryOnDocketRecord = (
   const canPublicUserSeeLink =
     record.isCourtIssuedDocument &&
     record.isFileAttached &&
+    record.filedAfterPolicyChange &&
+    filedByPractitioner &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
@@ -118,6 +123,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     entry =>
       formatDocketEntryOnDocketRecord(applicationContext, {
         entry,
+        filedByPractitioner: publicCase.filedByPractitioner,
         isTerminalUser,
       }),
   );

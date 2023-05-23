@@ -24,7 +24,6 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 /**
  * Public Case Entity
  * Represents the view of the public case.
- *
  * @param {object} rawCase the raw case data
  * @constructor
  */
@@ -44,6 +43,7 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
+  this.filedByPractitioner = getFiledByPractitioner(rawCase, this.userId);
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -150,6 +150,22 @@ const isPrivateDocument = function (documentEntity) {
   return (
     (isPublicDocumentType && !isDocumentOnDocketRecord) || !isPublicDocumentType
   );
+};
+
+const getFiledByPractitioner = (rawCase, userId) => {
+  let casePractitioners;
+  let filedByPractitioner;
+
+  if (rawCase.irsPractitioners && rawCase.privatePractitioners) {
+    casePractitioners = [
+      ...rawCase.irsPractitioners,
+      ...rawCase.privatePractitioners,
+    ];
+
+    filedByPractitioner = casePractitioners.some(p => p.userId === userId);
+  }
+
+  return filedByPractitioner;
 };
 
 module.exports = {
