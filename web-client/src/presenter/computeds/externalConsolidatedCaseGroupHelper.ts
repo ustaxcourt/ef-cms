@@ -46,15 +46,15 @@ export const externalConsolidatedCaseGroupHelper = (
 
     caseDetail.consolidatedCases.forEach((memberCase, i) => {
       consolidatedGroupServiceParties[i] = {};
-      const combinedPartiesList = [
+      const combinedPartiesList = {
         ...memberCase.petitioners,
         ...memberCase.privatePractitioners,
         ...memberCase.irsPractitioners,
-      ];
-      combinedPartiesList.forEach((party, j) => {
-        consolidatedGroupServiceParties[i][j] = `${party.name}, ${roleToDisplay(
-          party,
-        )}`;
+      };
+      Object.keys(combinedPartiesList).forEach((key, j) => {
+        consolidatedGroupServiceParties[i][j] = `${
+          combinedPartiesList[key].name
+        }, ${roleToDisplay(combinedPartiesList[key])}`;
       });
     });
   }
