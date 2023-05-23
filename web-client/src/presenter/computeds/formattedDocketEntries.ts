@@ -41,6 +41,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
 };
 
 export const getShowDocumentViewerLink = ({
+  filedAfterPolicyChange,
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
@@ -187,6 +188,7 @@ export const getFormattedDocketEntry = ({
     .includes(entry.documentType);
 
   showDocumentLinks = getShowDocumentViewerLink({
+    filedAfterPolicyChange: entry.filedAfterPolicyChange,
     hasDocument: entry.isFileAttached,
     isCourtIssuedDocument: entry.isCourtIssuedDocument,
     isExternalUser,

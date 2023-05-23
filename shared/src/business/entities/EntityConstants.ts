@@ -1,6 +1,10 @@
 /* eslint-disable max-lines */
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
+import {
+  FORMATS,
+  formatNow,
+  prepareDateFromString,
+} from '../utilities/DateHandler';
 import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
 import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
@@ -439,6 +443,8 @@ export const BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
 ];
+
+export const POLICY_CHANGE_DATE = prepareDateFromString('2023-08-01').toISO();
 
 export const SCENARIOS = [
   'Standard',
