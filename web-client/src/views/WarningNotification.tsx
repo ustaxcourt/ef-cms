@@ -51,7 +51,12 @@ export const WarningNotificationComponent =
             ref={notificationRef}
             role="alert"
           >
-            <div className="usa-alert__body">
+            <div
+              className={classNames(
+                'usa-alert__body',
+                alertWarning.dismissText && 'padding-right-6',
+              )}
+            >
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
