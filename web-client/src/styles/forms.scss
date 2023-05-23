@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .usa-form-group,
 .usa-fieldset {
   max-width: 30rem;
