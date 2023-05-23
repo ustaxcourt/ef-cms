@@ -16,7 +16,7 @@ describe('setJudgeActivityReportDataAction', () => {
       [CASE_STATUS_TYPES.closedDismissed]: 3,
     };
 
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
       },
@@ -42,7 +42,7 @@ describe('setJudgeActivityReportDataAction', () => {
       [SESSION_TYPES.motionHearing]: 2,
     };
 
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
       },
@@ -83,7 +83,7 @@ describe('setJudgeActivityReportDataAction', () => {
       },
     ];
 
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
       },
@@ -114,7 +114,7 @@ describe('setJudgeActivityReportDataAction', () => {
       },
     ];
 
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
       },
@@ -142,7 +142,7 @@ describe('setJudgeActivityReportDataAction', () => {
       { docketNumber: '134-21', status: 'CAV' },
     ];
 
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
       },
@@ -164,7 +164,7 @@ describe('setJudgeActivityReportDataAction', () => {
   it('should set props.submittedAndCavCasesByJudge on state', async () => {
     const mockConsolidatedCasesGroupCountMap = new Map([['101-22', 5]]);
 
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
       },
