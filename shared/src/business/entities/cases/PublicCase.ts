@@ -43,7 +43,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
-  this.filedByPractitioner = getFiledByPractitioner(rawCase, this.userId);
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -170,5 +169,6 @@ const getFiledByPractitioner = (rawCase, userId) => {
 
 module.exports = {
   PublicCase: validEntityDecorator(PublicCase),
+  getFiledByPractitioner,
   isPrivateDocument,
 };

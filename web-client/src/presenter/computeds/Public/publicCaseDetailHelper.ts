@@ -24,11 +24,12 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  // todo: var for the && policy stuff below
+  const filedByPractitionerAfterPolicyChange =
+    record.filedAfterPolicyChange && filedByPractitioner;
+
   const canTerminalUserSeeLink =
     record.isFileAttached &&
-    record.filedAfterPolicyChange &&
-    filedByPractitioner &&
+    filedByPractitionerAfterPolicyChange &&
     isServedDocument &&
     !record.isSealed &&
     !record.isStricken;
@@ -36,8 +37,7 @@ export const formatDocketEntryOnDocketRecord = (
   const canPublicUserSeeLink =
     record.isCourtIssuedDocument &&
     record.isFileAttached &&
-    record.filedAfterPolicyChange &&
-    filedByPractitioner &&
+    filedByPractitionerAfterPolicyChange &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
@@ -120,12 +120,17 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
-    entry =>
-      formatDocketEntryOnDocketRecord(applicationContext, {
+    entry => {
+      const filedByPractitioner = applicationContext
+        .getUtilities()
+        .getFiledByPractitioner(publicCase, entry.userId);
+
+      return formatDocketEntryOnDocketRecord(applicationContext, {
         entry,
-        filedByPractitioner: publicCase.filedByPractitioner,
+        filedByPractitioner,
         isTerminalUser,
-      }),
+      });
+    },
   );
 
   if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
