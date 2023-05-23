@@ -163,9 +163,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('reportHeader', () => {
     it('should return reportHeader that includes judge name and the currentDate in MMDDYY format', () => {
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString.mockReturnValue('2020-01-01');
+      (
+        applicationContext.getUtilities().prepareDateFromString as jest.Mock
+      ).mockReturnValue('2020-01-01');
 
       const { reportHeader } = runCompute(judgeActivityReportHelper as any, {
         state: baseState,
@@ -310,9 +310,8 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
+      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
+        .mockReturnValue(10)
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
@@ -352,9 +351,8 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
+      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
+        .mockReturnValue(10)
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
@@ -381,9 +379,8 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange with cases without caseStatusHistory filtered out', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
+      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
+        .mockReturnValue(10)
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
