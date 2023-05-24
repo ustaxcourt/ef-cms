@@ -129,7 +129,6 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
   return !docketEntryIsOpinion;
 };
 
-// eslint-disable-next-line complexity
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -191,17 +190,12 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
-  let casePractitioners;
-  let filedByPractitioner;
-  if (formattedCase?.irsPractitioners && formattedCase.privatePractitioners) {
-    casePractitioners = [
-      ...formattedCase.irsPractitioners,
-      ...formattedCase.privatePractitioners,
-    ];
-
-    filedByPractitioner = casePractitioners.some(
-      p => p.userId === entry.userId,
-    );
+  let filedByPractitioner: boolean = false;
+  if (EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode)) {
+    filedByPractitioner =
+      formattedCase.docketEntriesFiledByPractitioner.includes(
+        entry.docketEntryId,
+      );
   }
 
   showDocumentLinks = getShowDocumentViewerLink({
