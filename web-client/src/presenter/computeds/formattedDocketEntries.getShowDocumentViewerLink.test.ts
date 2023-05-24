@@ -1,4 +1,4 @@
-import { POLICY_CHANGE_DATE } from '../../../../shared/src/business/entities/EntityConstants';
+import { DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE } from '../../../../shared/src/business/entities/EntityConstants';
 import { getShowDocumentViewerLink } from './formattedDocketEntries';
 
 describe('getShowDocumentViewerLink', () => {
@@ -285,7 +285,7 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `unsealed, unstricken practitioner e-filed briefs filed after ${POLICY_CHANGE_DATE} should display a clickable link to external users`,
+      description: `unsealed, unstricken practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should display a clickable link to external users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -299,7 +299,7 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      description: `unsealed, unstricken practitioner e-filed briefs filed after ${POLICY_CHANGE_DATE} should display a clickable link to internal users`,
+      description: `unsealed, unstricken practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should display a clickable link to internal users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -313,7 +313,7 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      description: `sealed, practitioner e-filed briefs filed after ${POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      description: `sealed, practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -327,7 +327,7 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `stricken, practitioner e-filed briefs filed after ${POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      description: `stricken, practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
