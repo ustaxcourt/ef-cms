@@ -14,7 +14,6 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * PublicDocketEntry
- *
  * @param {object} rawDocketEntry the raw docket entry
  * @constructor
  */
@@ -31,6 +30,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.documentType = rawDocketEntry.documentType;
   this.eventCode = rawDocketEntry.eventCode;
   this.filedBy = rawDocketEntry.filedBy;
+  this.filedAfterPolicyChange = rawDocketEntry.filedAfterPolicyChange;
   this.filingDate = rawDocketEntry.filingDate;
   this.freeText = rawDocketEntry.freeText;
   this.index = rawDocketEntry.index;

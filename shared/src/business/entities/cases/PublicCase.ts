@@ -1,5 +1,4 @@
-const joi = require('joi');
-const {
+import {
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
@@ -7,19 +6,20 @@ const {
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} = require('../EntityConstants');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { compareStrings } = require('../../utilities/sortFunctions');
-const { IrsPractitioner } = require('../IrsPractitioner');
-const { isSealedCase } = require('./Case');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { map } = require('lodash');
-const { PrivatePractitioner } = require('../PrivatePractitioner');
+} from '../EntityConstants';
+import { IrsPractitioner } from '../IrsPractitioner';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { PrivatePractitioner } from '../PrivatePractitioner';
 const { PublicContact } = require('./PublicContact');
 const { PublicDocketEntry } = require('./PublicDocketEntry');
+import { compareStrings } from '../../utilities/sortFunctions';
+import { isSealedCase } from './Case';
+import {
+  joiValidationDecorator,
+  validEntityDecorator,
+} from '../JoiValidationDecorator';
+import { map } from 'lodash';
+import joi from 'joi';
 
 /**
  * Public Case Entity
@@ -40,6 +40,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
+  // is this an acceptable name?
+  this.docketEntriesFiledByPractitioner =
+    getDocketEntriesFiledByPractitioner(rawCase);
+
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
@@ -151,9 +155,9 @@ const isPrivateDocument = function (documentEntity) {
   );
 };
 
-const getFiledByPractitioner = (rawCase, userId) => {
-  let casePractitioners;
-  let filedByPractitioner;
+const getDocketEntriesFiledByPractitioner = rawCase => {
+  let casePractitioners: any[];
+  let docketEntriesFiledByPractitioner: string[] = [];
 
   if (rawCase.irsPractitioners && rawCase.privatePractitioners) {
     casePractitioners = [
@@ -161,14 +165,22 @@ const getFiledByPractitioner = (rawCase, userId) => {
       ...rawCase.privatePractitioners,
     ];
 
-    filedByPractitioner = casePractitioners.some(p => p.userId === userId);
+    for (let i = 0; i < rawCase.docketEntries.length; i++) {
+      const currentDocketEntry = rawCase.docketEntries[i];
+      let docketEntryFiledByPractitioner = casePractitioners.some(
+        p => p.userId === currentDocketEntry.userId,
+      );
+
+      if (docketEntryFiledByPractitioner) {
+        docketEntriesFiledByPractitioner.push(currentDocketEntry.docketEntryId);
+      }
+    }
   }
 
-  return filedByPractitioner;
+  return docketEntriesFiledByPractitioner;
 };
 
 module.exports = {
   PublicCase: validEntityDecorator(PublicCase),
-  getFiledByPractitioner,
   isPrivateDocument,
 };

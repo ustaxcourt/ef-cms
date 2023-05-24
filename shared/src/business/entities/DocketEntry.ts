@@ -19,7 +19,6 @@ import { WorkItem } from './WorkItem';
 import {
   createISODateAtStartOfDayEST,
   createISODateString,
-  prepareDateFromString,
 } from '../utilities/DateHandler';
 
 export class DocketEntry extends JoiValidationEntity {
