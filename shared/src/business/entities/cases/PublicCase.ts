@@ -183,6 +183,6 @@ const getDocketEntriesEFiledByPractitioner = rawCase => {
 
 module.exports = {
   PublicCase: validEntityDecorator(PublicCase),
+  getDocketEntriesEFiledByPractitioner,
   isPrivateDocument,
-  getDocketEntriesEFiledByPractitioner
 };
