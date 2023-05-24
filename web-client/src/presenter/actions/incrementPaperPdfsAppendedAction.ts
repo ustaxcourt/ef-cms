@@ -1,0 +1,17 @@
+import { state } from 'cerebral';
+
+/**
+ * increments the appended state
+ * @param {object} providers the providers object
+ * @param {Function} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store used for setting state.progressIndicator.waitingForResponse
+ */
+export const incrementPaperPdfsAppendedAction = ({
+  get,
+  store,
+}: ActionProps) => {
+  store.set(
+    state.paperServiceStatusState.pdfsAppended,
+    get(state.paperServiceStatusState.pdfsAppended) + 1,
+  );
+};

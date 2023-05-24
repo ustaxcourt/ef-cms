@@ -25,7 +25,7 @@ describe('uploadExternalDocumentsAction', () => {
     };
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor for the added document', async () => {
+  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the case docketNumber for the added document', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
     applicationContext
       .getUseCases()
@@ -45,6 +45,7 @@ describe('uploadExternalDocumentsAction', () => {
         caseDetail: MOCK_CASE,
         form: {
           attachments: true,
+          fileAcrossConsolidatedGroup: false,
           primaryDocumentFile: mockPrimaryDocumentFile,
         },
       },
@@ -61,6 +62,7 @@ describe('uploadExternalDocumentsAction', () => {
       documentFiles: { primary: mockPrimaryDocumentFile },
       documentMetadata: {
         attachments: true,
+        consolidatedCasesToFileAcross: undefined,
         docketNumber: MOCK_CASE.docketNumber,
       },
     });
@@ -73,6 +75,68 @@ describe('uploadExternalDocumentsAction', () => {
     ).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
       docketNumber: MOCK_CASE.docketNumber,
+    });
+  });
+
+  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the leadDocketNumber for the added document', async () => {
+    const mockPrimaryDocumentFile = { data: 'something' };
+    const testCase = {
+      ...MOCK_CASE,
+      consolidatedCases: [
+        { docketNumber: '111-11' },
+        { docketNumber: '108-19' },
+      ],
+      leadDocketNumber: '111-11',
+    };
+
+    applicationContext
+      .getUseCases()
+      .uploadExternalDocumentsInteractor.mockReturnValue({
+        caseDetail: {
+          ...testCase,
+          docketEntries: [mockAnswerDocketEntry],
+        },
+        docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+      });
+
+    await runAction(uploadExternalDocumentsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: testCase,
+        form: {
+          attachments: true,
+          fileAcrossConsolidatedGroup: true,
+          primaryDocumentFile: mockPrimaryDocumentFile,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      documentFiles: { primary: mockPrimaryDocumentFile },
+      documentMetadata: {
+        attachments: true,
+        consolidatedCasesToFileAcross: testCase.consolidatedCases,
+        docketNumber: testCase.docketNumber,
+      },
+    });
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls
+        .length,
+    ).toEqual(1);
+    expect(
+      applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
+    ).toMatchObject({
+      docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      docketNumber: testCase.leadDocketNumber,
     });
   });
 
