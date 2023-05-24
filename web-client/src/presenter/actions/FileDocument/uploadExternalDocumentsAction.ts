@@ -59,8 +59,6 @@ export const uploadExternalDocumentsAction = async ({
     ? removeSealedCases(consolidatedCases)
     : undefined;
 
-  console.log('consolidatedCasesToFileAcross', consolidatedCasesToFileAcross);
-
   const documentMetadata: any = {
     ...form,
     consolidatedCasesToFileAcross,

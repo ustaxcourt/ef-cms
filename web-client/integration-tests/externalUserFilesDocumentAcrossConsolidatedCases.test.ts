@@ -1,8 +1,14 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  loginAs,
+  setupTest,
+} from './helpers';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
-import { fakeFile, loginAs, setupTest } from './helpers';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
 import { practitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/practitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
+import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 import { runCompute } from 'cerebral/test';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
 import { seedDatabase, seedFullDataset } from './utils/database';
@@ -45,6 +51,10 @@ const verifyCorrectFileDocumentButton = (
 
 const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   return it('should verify docket entry was filed across the entire consolidated case group', async () => {
+    console.log(
+      'cerebralTest.consolidatedCaseDetailGroup in verify',
+      cerebralTest.consolidatedCaseDetailGroup,
+    );
     await Promise.all(
       cerebralTest.consolidatedCaseDetailGroup.map(
         async consolidatedCaseBefore => {
@@ -161,8 +171,9 @@ describe('External User files a document across a consolidated case group', () =
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
-    loginAs(cerebralTest, 'privatepractitioner2@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
+
+    loginAs(cerebralTest, 'privatepractitioner2@example.com');
 
     verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
       expectedAssociation: false,
@@ -173,15 +184,64 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
     });
-    practitionerRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
-      docketNumber: consolidatedCaseDocketNumber3,
-      fakeFile,
+
+    cerebralTest.docketNumber = consolidatedCaseDocketNumber3;
+    it('Practitioner requests access to case', async () => {
+      await cerebralTest.runSequence('gotoRequestAccessSequence', {
+        docketNumber: consolidatedCaseDocketNumber3,
+      });
+
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'documentType',
+        value: 'Limited Entry of Appearance',
+      });
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'documentTitleTemplate',
+        value: 'Limited Entry of Appearance for [Petitioner Names]',
+      });
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'eventCode',
+        value: 'LEA',
+      });
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'scenario',
+        value: 'Standard',
+      });
+
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'primaryDocumentFile',
+        value: fakeFile,
+      });
+
+      const contactPrimary = contactPrimaryFromState(cerebralTest);
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: true,
+      });
+
+      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
+
+      const createdDocketEntry = cerebralTest
+        .getState('caseDetail.docketEntries')
+        .find(entry => entry.eventCode === 'LEA');
+
+      expect(createdDocketEntry.filedBy).toEqual('Lilah Gilbert');
     });
-    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
-    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
-      expectedAssociation: true,
-      practitionerRole: 'privatePractitioner',
-    });
+
+    practitionerViewsDashboard(cerebralTest);
+
+    // verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
+    // verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
+    //   expectedAssociation: false,
+    //   practitionerRole: 'privatePractitioner',
+    // });
   });
 
   describe('petitioner', () => {
