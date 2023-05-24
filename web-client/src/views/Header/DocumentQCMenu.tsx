@@ -1,4 +1,3 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -36,17 +35,15 @@ export const DocumentQCMenu = connect(
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
-              <Button
-                link
+              <a
                 href="/document-qc/my/inbox"
-                id="my-qc-btn"
                 onClick={() => {
                   resetHeaderAccordionsSequence();
                   toggleMobileMenuSequence();
                 }}
               >
                 My Document QC
-              </Button>
+              </a>
             </li>
             <li className="usa-nav__submenu-item">
               <a
