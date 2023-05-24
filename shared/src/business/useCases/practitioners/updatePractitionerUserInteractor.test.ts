@@ -16,6 +16,9 @@ describe('updatePractitionerUserInteractor', () => {
       userId: 'admissionsclerk',
     };
     mockPractitioner = { ...MOCK_PRACTITIONER };
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockReturnValue(['123-23']);
 
     applicationContext.getCurrentUser.mockImplementation(() => testUser);
     applicationContext

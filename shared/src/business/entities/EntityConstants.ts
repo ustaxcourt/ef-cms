@@ -84,6 +84,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
@@ -115,6 +118,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
+  },
+  USE_EXTERNAL_PDF_GENERATION: {
+    disabledMessage:
+      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
+    key: 'use-external-pdf-generation',
   },
 };
 

@@ -10,6 +10,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { cloneDeep } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -25,7 +26,7 @@ interface IEditPaperFilingRequest {
  * @param {IEditPaperFilingRequest} request the request data
  * @returns {object} The paper service PDF url
  */
-export const editPaperFilingInteractor = async (
+export const editPaperFiling = async (
   applicationContext: IApplicationContext,
   request: IEditPaperFilingRequest,
 ) => {
@@ -491,3 +492,43 @@ const getDocketEntryToEdit = async ({
 
   return { caseEntity, docketEntryEntity };
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    consolidatedGroupDocketNumbers = [],
+    documentMetadata,
+  }: {
+    consolidatedGroupDocketNumbers?: string[];
+    documentMetadata: object;
+  },
+) => ({
+  identifiers: [
+    ...new Set([
+      documentMetadata.docketNumber,
+      ...consolidatedGroupDocketNumbers,
+    ]),
+  ].map(item => `case|${item}`),
+  ttl: 900,
+});
+
+export const handleLockError = async (applicationContext, originalRequest) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'edit_paper_filing',
+    },
+    userId: user.userId,
+  });
+};
+
+export const editPaperFilingInteractor = withLocking(
+  editPaperFiling,
+  determineEntitiesToLock,
+  handleLockError,
+);
