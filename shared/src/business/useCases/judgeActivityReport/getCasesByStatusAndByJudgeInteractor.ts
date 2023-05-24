@@ -26,8 +26,9 @@ const hasUnwantedDocketEntryEventCode = docketEntries => {
     'OAD',
     'SDEC',
   ];
+
   return docketEntries.some(docketEntry => {
-    if (!docketEntry.isDraft) {
+    if (docketEntry.servedAt) {
       return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
     }
 
