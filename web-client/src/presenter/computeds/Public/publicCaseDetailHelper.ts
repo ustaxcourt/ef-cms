@@ -8,7 +8,7 @@ export const formatDocketEntryOnDocketRecord = (
   { docketEntriesEFiledByPractitioner, entry, isTerminalUser },
 ) => {
   const {
-    BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE,
+    BRIEF_EVENTCODES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
   } = applicationContext.getConstants();
@@ -43,7 +43,7 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 
-  if (BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE.includes(entry.eventCode)) {
+  if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
     const filedByPractitioner: boolean =
       docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
 
