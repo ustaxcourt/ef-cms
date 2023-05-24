@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .loading-overlay {
   position: fixed;
   z-index: 9600;

@@ -44,15 +44,6 @@ export const setNoticesForCalendaredTrialSession = async (
       trialSessionId,
     });
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'notice_generation_start',
-      totalCases: calendaredCases.length,
-    },
-    userId: user.userId,
-  });
-
   let trialNoticePdfsKeys = [];
 
   if (calendaredCases.length === 0) {
@@ -68,6 +59,15 @@ export const setNoticesForCalendaredTrialSession = async (
 
     return;
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_start',
+      totalCases: calendaredCases.length,
+    },
+    userId: user.userId,
+  });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
