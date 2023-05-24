@@ -94,6 +94,10 @@ export default async function ({
         stream: 'stream-browserify',
       }),
       sassPlugin({
+        loadPaths: [
+          './node_modules/@uswds',
+          './node_modules/@uswds/uswds/packages',
+        ],
         async transform(source, resolveDir, filePath) {
           let value = sassMap.get(filePath);
           if (!value || value.source !== source) {
