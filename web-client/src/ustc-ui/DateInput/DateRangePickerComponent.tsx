@@ -1,8 +1,8 @@
 import { FormGroup } from '../FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
-import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
+import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-range-picker/src';
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
