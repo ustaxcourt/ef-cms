@@ -5,6 +5,7 @@ module.exports = {
     'stylelint-config-recommended',
   ],
   rules: {
+    'at-rule-no-unknown': null,
     'function-no-unknown': [
       true,
       {

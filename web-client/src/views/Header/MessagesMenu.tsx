@@ -39,8 +39,8 @@ export const MessagesMenu = connect(
         {isExpanded && (
           <ul className="usa-nav__submenu">
             <li className="usa-nav__submenu-item">
-              <Button
-                link
+              <a
+                className="margin-right-205"
                 href="/messages/my/inbox"
                 id="my-messages-btn"
                 onClick={() => {
@@ -49,9 +49,9 @@ export const MessagesMenu = connect(
                 }}
               >
                 My Messages
-              </Button>
+              </a>
               {headerHelper.unreadMessageCount > 0 && (
-                <div className="icon-unread-messages padding-top-2px text-bold text-ttop text-center">
+                <div className="icon-unread-messages padding-top-2px text-bold text-ttop text-center display-inline-block">
                   {headerHelper.unreadMessageCount}
                 </div>
               )}

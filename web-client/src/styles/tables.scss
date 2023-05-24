@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 table,
 .usa-table {
   * {
@@ -23,7 +26,6 @@ table,
     padding-top: 18px;
     padding-bottom: 15px;
     background-color: transparent;
-    vertical-align: top;
   }
 
   p {
