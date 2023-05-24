@@ -8,7 +8,6 @@ import {
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
 import { practitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/practitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
-import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 import { runCompute } from 'cerebral/test';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
 import { seedDatabase, seedFullDataset } from './utils/database';
@@ -51,10 +50,6 @@ const verifyCorrectFileDocumentButton = (
 
 const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   return it('should verify docket entry was filed across the entire consolidated case group', async () => {
-    console.log(
-      'cerebralTest.consolidatedCaseDetailGroup in verify',
-      cerebralTest.consolidatedCaseDetailGroup,
-    );
     await Promise.all(
       cerebralTest.consolidatedCaseDetailGroup.map(
         async consolidatedCaseBefore => {
@@ -185,7 +180,6 @@ describe('External User files a document across a consolidated case group', () =
       shouldShowRequestAccessToCaseButton: true,
     });
 
-    cerebralTest.docketNumber = consolidatedCaseDocketNumber3;
     it('Practitioner requests access to case', async () => {
       await cerebralTest.runSequence('gotoRequestAccessSequence', {
         docketNumber: consolidatedCaseDocketNumber3,
@@ -235,13 +229,26 @@ describe('External User files a document across a consolidated case group', () =
       expect(createdDocketEntry.filedBy).toEqual('Lilah Gilbert');
     });
 
-    practitionerViewsDashboard(cerebralTest);
+    it('Practitioner verifies association only with one case in the consolidated group', () => {
+      const userId: string = cerebralTest.getState('user.userId');
+      const consolidatedCases = cerebralTest.getState(
+        'caseDetail.consolidatedCases',
+      );
 
-    // verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
-    // verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
-    //   expectedAssociation: false,
-    //   practitionerRole: 'privatePractitioner',
-    // });
+      consolidatedCases.forEach(aCase => {
+        let expectedAssociation = false;
+        if (aCase.docketNumber === consolidatedCaseDocketNumber3) {
+          expectedAssociation = true;
+        }
+
+        const practitioners = aCase.privatePractitioners;
+        const isAssociated = !!practitioners.find(
+          practitioner => practitioner.userId === userId,
+        );
+
+        expect(isAssociated).toBe(expectedAssociation);
+      });
+    });
   });
 
   describe('petitioner', () => {
