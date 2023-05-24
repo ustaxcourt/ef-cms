@@ -1,10 +1,13 @@
 import type { Config } from 'jest';
+const testFilesEnv = process.env.TESTFILES;
+const testFiles = testFilesEnv?.split(' ') || [];
+console.log('testFiles in config', testFiles);
 
 const config: Config = {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: [
-    'src/**/*.{js,ts}',
+    ...testFiles,
     '!integration-tests/**/*.js',
     '!integration-tests-public/**/*.js',
     '!src/applicationContext.ts',
@@ -32,8 +35,8 @@ const config: Config = {
     presenter: { providers: { applicationContext: {} } },
   },
   testEnvironment: 'jsdom',
-  testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'],
-  testSequencer: `${__dirname}/../jestSequencer.js`,
+  // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'],
+  // testSequencer: `${__dirname}/../jestSequencer.js`,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
