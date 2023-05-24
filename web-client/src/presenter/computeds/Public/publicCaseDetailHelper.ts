@@ -35,9 +35,8 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isStricken;
 
   const canPublicUserSeeLink =
-    record.isCourtIssuedDocument &&
+    (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
     record.isFileAttached &&
-    filedByPractitionerAfterPolicyChange &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
@@ -98,6 +97,7 @@ export const formatDocketEntryOnDocketRecord = (
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
     MOTION_EVENT_CODES,
     ORDER_EVENT_CODES,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -121,9 +121,13 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
     entry => {
-      const filedByPractitioner = applicationContext
-        .getUtilities()
-        .getFiledByPractitioner(publicCase, entry.userId);
+      let filedByPractitioner: boolean = false;
+      if (EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode)) {
+        filedByPractitioner =
+          publicCase.docketEntriesFiledByPractitioner.includes(
+            entry.docketEntryId,
+          );
+      }
 
       return formatDocketEntryOnDocketRecord(applicationContext, {
         entry,
