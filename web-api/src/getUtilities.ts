@@ -32,7 +32,6 @@ import {
   getWorkQueueFilters,
 } from '../../shared/src/business/utilities/getWorkQueueFilters';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { getFiledByPractitioner } from '../../shared/src/business/entities/cases/PublicCase';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import {
@@ -67,7 +66,6 @@ const utilities = {
   getDocQcSectionForUser,
   getDocumentTitleWithAdditionalInfo,
   getDocumentTypeForAddressChange,
-  getFiledByPractitioner,
   getFormattedCaseDetail,
   getFormattedTrialSessionDetails,
   getStampBoxCoordinates,
