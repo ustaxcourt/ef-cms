@@ -23,6 +23,7 @@ export class PublicCase extends JoiValidationEntity {
   public canAllowDocumentService?: string;
   public canAllowPrintableDocketRecord?: string;
   public caseCaption: string;
+  public leadDocketNumber?: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
@@ -74,7 +75,11 @@ export class PublicCase extends JoiValidationEntity {
 
     const currentUser = applicationContext.getCurrentUser();
 
-    if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
+    if (
+      (currentUser.role === ROLES.irsPractitioner ||
+        currentUser.role === ROLES.privatePractitioner) &&
+      !this.isSealed
+    ) {
       this.petitioners = rawCase.petitioners;
 
       this.irsPractitioners = (rawCase.irsPractitioners || []).map(
@@ -83,6 +88,8 @@ export class PublicCase extends JoiValidationEntity {
       this.privatePractitioners = (rawCase.privatePractitioners || []).map(
         practitioner => new PrivatePractitioner(practitioner),
       );
+
+      this.leadDocketNumber = rawCase.leadDocketNumber;
     } else if (!this.isSealed) {
       this.petitioners = [];
       rawCase.petitioners.map(petitioner => {
