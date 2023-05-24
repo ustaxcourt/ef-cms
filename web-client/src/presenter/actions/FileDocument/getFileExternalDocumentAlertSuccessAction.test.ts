@@ -1,3 +1,4 @@
+import { DOCUMENT_SERVED_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFileExternalDocumentAlertSuccessAction } from './getFileExternalDocumentAlertSuccessAction';
 import { presenter } from '../../presenter-mock';
@@ -132,7 +133,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
 
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message: 'Document served to selected cases in group.',
+        message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
       },
     });
   });
