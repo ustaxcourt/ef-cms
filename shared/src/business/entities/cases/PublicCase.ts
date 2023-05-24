@@ -40,9 +40,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     `${this.docketNumber}${this.docketNumberSuffix || ''}`;
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
-  // is this an acceptable name?
   this.docketEntriesEFiledByPractitioner =
-    getdocketEntriesEFiledByPractitioner(rawCase);
+    getDocketEntriesEFiledByPractitioner(rawCase);
 
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
@@ -155,7 +154,7 @@ const isPrivateDocument = function (documentEntity) {
   );
 };
 
-const getdocketEntriesEFiledByPractitioner = rawCase => {
+const getDocketEntriesEFiledByPractitioner = rawCase => {
   let casePractitioners: any[];
   let docketEntriesEFiledByPractitioner: string[] = [];
 
@@ -185,4 +184,5 @@ const getdocketEntriesEFiledByPractitioner = rawCase => {
 module.exports = {
   PublicCase: validEntityDecorator(PublicCase),
   isPrivateDocument,
+  getDocketEntriesEFiledByPractitioner
 };

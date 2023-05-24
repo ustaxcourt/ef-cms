@@ -1,7 +1,7 @@
-const {
+import {
   applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -10,12 +10,12 @@ const {
   ROLES,
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
-} = require('../EntityConstants');
-const { getContactSecondary } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_COMPLEX_CASE } = require('../../../test/mockComplexCase');
-const { MOCK_USERS } = require('../../../test/mockUsers');
-const { PublicCase } = require('./PublicCase');
+} from '../EntityConstants';
+import { getContactSecondary } from './Case';
+import { MOCK_CASE }  from '../../../test/mockCase';
+import { MOCK_COMPLEX_CASE }  from '../../../test/mockComplexCase';
+import { MOCK_USERS }  from '../../../test/mockUsers';
+import { PublicCase }  from './PublicCase';
 
 const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
 const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
