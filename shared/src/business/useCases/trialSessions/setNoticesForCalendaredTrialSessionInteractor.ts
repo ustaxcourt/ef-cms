@@ -4,32 +4,30 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
-const waitForJobToFinish = ({ applicationContext, jobId }) => {
-  return new Promise(resolve => {
-    const interval = setInterval(async () => {
-      const jobStatus = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionJobStatusForCase({
-          applicationContext,
-          jobId,
-        });
-      if (jobStatus.unfinishedCases === 0) {
-        clearInterval(interval);
-        resolve(undefined);
-      }
-    }, 5000);
-  });
+const waitForJobToFinish = async ({ applicationContext, jobId }) => {
+  let unfinishedCases;
+  while (unfinishedCases !== 0) {
+    const jobStatus = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionJobStatusForCase({
+        applicationContext,
+        jobId,
+      });
+    ({ unfinishedCases } = jobStatus);
+
+    await applicationContext.getUtilities().sleep(5000);
+  }
 };
 
 /**
  * Generates notices for all calendared cases for the given trialSessionId
- *
  * @param {object} applicationContext the applicationContext
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
  */
-export const setNoticesForCalendaredTrialSessionInteractor = async (
+export const setNoticesForCalendaredTrialSession = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
@@ -61,6 +59,15 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
     return;
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_start',
+      totalCases: calendaredCases.length,
+    },
+    userId: user.userId,
+  });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()
@@ -165,3 +172,43 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
+) => {
+  const calendaredCases = await applicationContext
+    .getPersistenceGateway()
+    .getCalendaredCasesForTrialSession({ applicationContext, trialSessionId });
+
+  return {
+    identifiers: calendaredCases.map(
+      ({ docketNumber }) => `case|${docketNumber}`,
+    ),
+    ttl: 900,
+  };
+};
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'set_notices_for_calendared_trial_session',
+    },
+    userId: user.userId,
+  });
+};
+
+export const setNoticesForCalendaredTrialSessionInteractor = withLocking(
+  setNoticesForCalendaredTrialSession,
+  determineEntitiesToLock,
+  handleLockError,
+);
