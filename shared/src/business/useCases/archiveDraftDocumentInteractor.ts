@@ -4,17 +4,17 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * archiveDraftDocumentInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which a document will be archived
  * @param {string} providers.docketEntryId the id of the docket entry which will be archived
  * @returns {object} the updated case note returned from persistence
  */
-export const archiveDraftDocumentInteractor = async (
+export const archiveDraftDocument = async (
   applicationContext: IApplicationContext,
   {
     docketEntryId,
@@ -60,3 +60,10 @@ export const archiveDraftDocumentInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const archiveDraftDocumentInteractor = withLocking(
+  archiveDraftDocument,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

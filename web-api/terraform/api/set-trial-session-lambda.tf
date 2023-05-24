@@ -9,11 +9,9 @@ resource "aws_lambda_function" "set_trial_session_lambda" {
   timeout          = "30"
   memory_size      = "3008"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
-
   runtime = var.node_version
+
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment

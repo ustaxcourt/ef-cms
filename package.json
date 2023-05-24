@@ -11,6 +11,7 @@
   "dependencies": {
     "@18f/us-federal-holidays": "^4.0.0",
     "@aws-crypto/sha256-browser": "^4.0.0",
+    "@aws-sdk/client-lambda": "^3.329.0",
     "@aws-sdk/client-cloudwatch": "^3.335.0",
     "@aws-sdk/client-cognito-identity-provider": "^3.335.0",
     "@aws-sdk/client-dynamodb": "^3.335.0",
@@ -257,6 +258,7 @@
     "@types/react-paginate": "^7.1.1",
     "@types/jest": "^29.5.1",
     "@types/lodash": "^4.14.194",
+    "@types/luxon": "^3.3.0",
     "@types/node": "^20.2.1",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
