@@ -53,7 +53,11 @@ export const OrdersNeededSummary = connect(
 
                     {reviewSavedPetitionHelper.showOrdersAndNoticesInDraftHeader && (
                       <p
-                        className="heading-4 padding-top-2"
+                        className={classNames(
+                          'heading-4',
+                          reviewSavedPetitionHelper.ordersAndNoticesNeeded
+                            .length && 'padding-top-2',
+                        )}
                         id="orders-notices-auto-created-in-draft"
                       >
                         Orders/Notices Automatically Created in Drafts After
