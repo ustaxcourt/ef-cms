@@ -80,7 +80,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       statuses,
     });
 
-  const rawCaseRecords: any = await Promise.all(
+  const rawCaseRecords: RawCase[] = await Promise.all(
     submittedAndCavCasesResults.map(async result => {
       return await applicationContext
         .getPersistenceGateway()
@@ -92,7 +92,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   );
 
   // We need to filter out member cases returned from elasticsearch so we can get an accurate
-  // conolidated cases group count even when the case status of a member case does not match
+  // consolidated cases group count even when the case status of a member case does not match
   // the lead case status.
   const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
     rawCaseRecords
