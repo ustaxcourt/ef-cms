@@ -447,7 +447,7 @@ export const SERIATIM_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
-export const BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE = [
+export const BRIEF_EVENTCODES = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
 ];
@@ -657,7 +657,7 @@ export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
-  ...BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE,
+  ...BRIEF_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',

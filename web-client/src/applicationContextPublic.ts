@@ -3,6 +3,7 @@ import {
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -34,9 +35,6 @@ import {
   getContactPrimary,
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
-const {
-  getFiledByPractitioner,
-} = require('../../shared/src/business/entities/cases/PublicCase');
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
@@ -122,6 +120,7 @@ const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_TABS,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -199,7 +198,6 @@ const applicationContextPublic = {
       getContactPrimary,
       getContactSecondary,
       getDescriptionDisplay,
-      getFiledByPractitioner,
       getJudgeLastName,
       getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
