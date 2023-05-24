@@ -69,7 +69,7 @@ const mockSubmittedCaseWithOddOnDocketRecord = {
       pending: false,
       processingStatus: 'complete',
       receivedAt: '2018-03-01T05:00:00.000Z',
-      servedAt: '2019-08-25T05:00:00.000Z',
+      servedAt: '2019-05-24T18:41:36.122Z',
       servedParties: [
         {
           name: 'Bernard Lowe',
@@ -79,6 +79,9 @@ const mockSubmittedCaseWithOddOnDocketRecord = {
           role: 'irsSuperuser',
         },
       ],
+      signedAt: '2019-05-24T18:41:36.122Z',
+      signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      signedJudgeName: 'John O. Colvin',
       stampData: {},
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
@@ -332,11 +335,58 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     );
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
   });
+
   it('should return an array of 2 cases with one case containing an ODD in draft status and consolidatedCasesGroupMap', async () => {
     mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
       {
         ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
         isDraft: true,
+        servedAt: undefined,
+        servedParties: undefined,
+      },
+    ];
+    mockReturnedDocketNumbers = [
+      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
+    ];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
+        mockReturnedDocketNumbers,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .mockResolvedValueOnce(mockSubmittedCaseWithOddOnDocketRecord);
+
+    const result = await getCasesByStatusAndByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
+
+    expect(result.cases.length).toEqual(2);
+    expect(result.cases).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '101-18',
+        }),
+        expect.objectContaining({
+          docketNumber: '101-19',
+        }),
+      ]),
+    );
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
+  });
+
+  it('should return an array of 2 cases with one case containing an unserved ODD and consolidatedCasesGroupMap', async () => {
+    mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
+      {
+        ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
+        isDraft: false,
+        servedAt: undefined,
+        servedParties: undefined,
       },
     ];
     mockReturnedDocketNumbers = [
