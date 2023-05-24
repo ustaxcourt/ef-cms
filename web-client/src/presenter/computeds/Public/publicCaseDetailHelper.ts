@@ -5,10 +5,13 @@ import { state } from 'cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
-  { entry, filedByPractitioner, isTerminalUser },
+  { docketEntriesEFiledByPractitioner, entry, isTerminalUser },
 ) => {
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
-    applicationContext.getConstants();
+  const {
+    BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE,
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
+  } = applicationContext.getConstants();
   const record = cloneDeep(entry);
 
   let filingsAndProceedingsWithAdditionalInfo = '';
@@ -24,18 +27,14 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  const filedByPractitionerAfterPolicyChange =
-    record.filedAfterPolicyChange && filedByPractitioner;
-
-  const canTerminalUserSeeLink =
+  let canTerminalUserSeeLink =
     record.isFileAttached &&
-    filedByPractitionerAfterPolicyChange &&
     isServedDocument &&
     !record.isSealed &&
     !record.isStricken;
 
-  const canPublicUserSeeLink =
-    (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
+  let canPublicUserSeeLink =
+    record.isCourtIssuedDocument &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
@@ -43,6 +42,20 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isStipDecision &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+
+  if (BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE.includes(entry.eventCode)) {
+    const filedByPractitioner: boolean =
+      docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
+
+    const filedByPractitionerAfterPolicyChange =
+      record.filedAfterPolicyChange && filedByPractitioner;
+
+    canTerminalUserSeeLink =
+      canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
+
+    canPublicUserSeeLink =
+      canPublicUserSeeLink && filedByPractitionerAfterPolicyChange;
+  }
 
   const canDisplayDocumentLink = isTerminalUser
     ? canTerminalUserSeeLink
@@ -97,7 +110,6 @@ export const formatDocketEntryOnDocketRecord = (
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
     MOTION_EVENT_CODES,
     ORDER_EVENT_CODES,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -121,17 +133,10 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
 
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
     entry => {
-      let filedByPractitioner: boolean = false;
-      if (EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode)) {
-        filedByPractitioner =
-          publicCase.docketEntriesEFiledByPractitioner.includes(
-            entry.docketEntryId,
-          );
-      }
-
       return formatDocketEntryOnDocketRecord(applicationContext, {
+        docketEntriesEFiledByPractitioner:
+          publicCase.docketEntriesEFiledByPractitioner,
         entry,
-        filedByPractitioner,
         isTerminalUser,
       });
     },
