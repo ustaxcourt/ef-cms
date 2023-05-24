@@ -26,9 +26,13 @@ const hasUnwantedDocketEntryEventCode = docketEntries => {
     'OAD',
     'SDEC',
   ];
-  return docketEntries.some(docketEntry =>
-    prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode),
-  );
+  return docketEntries.some(docketEntry => {
+    if (!docketEntry.isDraft) {
+      return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
+    }
+
+    return false;
+  });
 };
 
 const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
