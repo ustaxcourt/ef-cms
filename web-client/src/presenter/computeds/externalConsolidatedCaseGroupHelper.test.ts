@@ -121,4 +121,27 @@ describe('externalConsolidatedCaseGroupHelper', () => {
       ]),
     );
   });
+
+  it('should omit petitioner information from formattedConsolidatedCaseList when a case is sealed', () => {
+    state = {
+      caseDetail: {
+        ...mockMemberCase,
+        consolidatedCases: [
+          { ...mockLeadCase, isSealed: true },
+          mockMemberCase,
+        ],
+      },
+    };
+
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
+      state,
+    });
+
+    expect(results.formattedConsolidatedCaseList).toEqual(
+      expect.arrayContaining([
+        `${mockMemberCase.docketNumber} ${mockMemberCase.petitioners[0].name} & ${mockMemberCase.petitioners[1].name}`,
+        `${testCase.consolidatedCases[0].docketNumber} Sealed Case`,
+      ]),
+    );
+  });
 });
