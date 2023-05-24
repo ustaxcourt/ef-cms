@@ -27,6 +27,7 @@ describe('publicCaseDetailHelper', () => {
     documentTitle: 'PRE-TRIAL MEMORANDUM for Resp. (C/S 5-16-13)',
     documentType: 'Miscellaneous',
     eventCode: 'PMT',
+    filedAfterPolicyChange: false,
     filedBy: 'See Filings and Proceedings',
     filingDate: '2013-05-16T00:00:00.000-04:00',
     index: 14,
@@ -44,6 +45,7 @@ describe('publicCaseDetailHelper', () => {
     state = {
       caseDetail: {
         docketEntries: [],
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
         docketNumber: '123-45',
       },
       sessionMetadata: {
@@ -62,6 +64,7 @@ describe('publicCaseDetailHelper', () => {
       };
 
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
         entry: mockSealedDocketEntry,
         isTerminalUser: false,
       });
@@ -77,6 +80,7 @@ describe('publicCaseDetailHelper', () => {
       };
 
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
         entry: mockDocketEntry,
         isTerminalUser: false,
       });
@@ -91,6 +95,7 @@ describe('publicCaseDetailHelper', () => {
       };
 
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
         entry: mockDocketEntry,
         isTerminalUser: false,
       });
@@ -100,6 +105,7 @@ describe('publicCaseDetailHelper', () => {
 
     it('should not display the document link when the entry is stricken and the user is the terminal user', () => {
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
         entry: { ...baseDocketEntry, isStricken: true },
         isTerminalUser: true,
       });
