@@ -444,6 +444,7 @@ export const BRIEF_EVENTCODES_VIEWABLE_TO_EVERYONE = [
   ...SERIATIM_DOCUMENT_EVENT_CODES,
 ];
 
+// TODO: this and associated can should get removed after this date
 export const POLICY_CHANGE_DATE = prepareDateFromString('2023-08-01').toISO();
 
 export const SCENARIOS = [
