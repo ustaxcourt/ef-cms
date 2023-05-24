@@ -14,6 +14,7 @@ describe('getFormattedDocketEntry', () => {
     applicationContext,
     docketNumber: MOCK_CASE.docketNumber,
     entry: simpleDocketEntry,
+    formattedCase: { ...MOCK_CASE, docketEntriesEFiledByPractitioner: [] },
     isExternalUser: false,
     permissions: {},
     userAssociatedWithCase: true,
