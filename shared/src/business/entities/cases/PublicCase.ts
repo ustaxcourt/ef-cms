@@ -41,8 +41,8 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.hasIrsPractitioner =
     !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
   // is this an acceptable name?
-  this.docketEntriesFiledByPractitioner =
-    getDocketEntriesFiledByPractitioner(rawCase);
+  this.docketEntriesEFiledByPractitioner =
+    getdocketEntriesEFiledByPractitioner(rawCase);
 
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
@@ -155,9 +155,9 @@ const isPrivateDocument = function (documentEntity) {
   );
 };
 
-const getDocketEntriesFiledByPractitioner = rawCase => {
+const getdocketEntriesEFiledByPractitioner = rawCase => {
   let casePractitioners: any[];
-  let docketEntriesFiledByPractitioner: string[] = [];
+  let docketEntriesEFiledByPractitioner: string[] = [];
 
   if (rawCase.irsPractitioners && rawCase.privatePractitioners) {
     casePractitioners = [
@@ -172,12 +172,14 @@ const getDocketEntriesFiledByPractitioner = rawCase => {
       );
 
       if (docketEntryFiledByPractitioner) {
-        docketEntriesFiledByPractitioner.push(currentDocketEntry.docketEntryId);
+        docketEntriesEFiledByPractitioner.push(
+          currentDocketEntry.docketEntryId,
+        );
       }
     }
   }
 
-  return docketEntriesFiledByPractitioner;
+  return docketEntriesEFiledByPractitioner;
 };
 
 module.exports = {
