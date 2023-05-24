@@ -240,7 +240,7 @@ describe('Case permissions test', () => {
     });
 
     publicFieldsVisible();
-    associatedFieldsVisible();
+    associatedFieldsBlocked();
     internalFieldsBlocked();
     stinBlocked();
     await printableDocketRecordVisible();
