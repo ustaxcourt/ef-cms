@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .fa-file-pdf {
   margin-right: 0.5em;
   color: color($theme-color-base-darkest);
