@@ -1,7 +1,4 @@
 import {
-  applicationContext,
-} from '../../test/createTestApplicationContext';
-import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -11,11 +8,12 @@ import {
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { PublicCase } from './PublicCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactSecondary } from './Case';
-import { MOCK_CASE }  from '../../../test/mockCase';
-import { MOCK_COMPLEX_CASE }  from '../../../test/mockComplexCase';
-import { MOCK_USERS }  from '../../../test/mockUsers';
-import { PublicCase }  from './PublicCase';
 
 const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
 const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
