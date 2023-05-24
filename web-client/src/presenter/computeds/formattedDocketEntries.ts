@@ -193,7 +193,7 @@ export const getFormattedDocketEntry = ({
   let filedByPractitioner: boolean = false;
   if (EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode)) {
     filedByPractitioner =
-      formattedCase.docketEntriesFiledByPractitioner.includes(
+      formattedCase.docketEntriesEFiledByPractitioner.includes(
         entry.docketEntryId,
       );
   }

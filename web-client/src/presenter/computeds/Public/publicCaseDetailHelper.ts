@@ -124,7 +124,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
       let filedByPractitioner: boolean = false;
       if (EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode)) {
         filedByPractitioner =
-          publicCase.docketEntriesFiledByPractitioner.includes(
+          publicCase.docketEntriesEFiledByPractitioner.includes(
             entry.docketEntryId,
           );
       }
