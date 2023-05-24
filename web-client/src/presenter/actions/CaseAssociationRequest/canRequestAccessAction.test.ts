@@ -29,8 +29,8 @@ describe('canRequestAccessAction', () => {
     expect(presenter.providers.path.proceed).toHaveBeenCalled();
   });
 
-  it('should set overrideForRequestAccess to true when user is an unassociated irsPractitioner', async () => {
-    const overrideForRequestAccess = true;
+  it('should set isRequestingAccess to true when user is an unassociated practitioner', async () => {
+    const isRequestingAccess = true;
 
     await runAction(canRequestAccessAction, {
       modules: {
@@ -41,26 +41,7 @@ describe('canRequestAccessAction', () => {
     });
 
     expect(presenter.providers.path.proceed).toHaveBeenCalledWith({
-      overrideForRequestAccess,
-    });
-  });
-
-  it('should set overrideForRequestAccess to false when user is unassociated and is NOT an irsPractitioner', async () => {
-    applicationContext.getCurrentUser.mockReturnValueOnce({
-      role: USER_ROLES.privatePractitioner,
-    });
-    const overrideForRequestAccess = false;
-
-    await runAction(canRequestAccessAction, {
-      modules: {
-        presenter,
-      },
-      props: { isDirectlyAssociated: false },
-      state: { caseDetail: { docketNumber: '123-45' } },
-    });
-
-    expect(presenter.providers.path.proceed).toHaveBeenCalledWith({
-      overrideForRequestAccess,
+      isRequestingAccess,
     });
   });
 
