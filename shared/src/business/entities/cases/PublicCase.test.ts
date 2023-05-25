@@ -10,6 +10,7 @@ import {
 } from '../EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
+import { MOCK_USERS } from '../../../test/mockUsers';
 import { PublicCase } from './PublicCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactSecondary } from './Case';
