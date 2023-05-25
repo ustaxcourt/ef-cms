@@ -48,7 +48,7 @@ jobs:
           name: coverage-artifacts
           path: coverage
       - name: Process Coverage
-        run: npx nyc report --check-coverage --branches 90 --functions 90 --lines 90 --statements 90 --reporter lcov --reporter text --reporter clover -t coverage
+        run: npx nyc report --check-coverage --branches 94.56 --functions 98.81 --lines 99.25 --statements 99.23 --reporter lcov --reporter text --reporter clover -t coverage
       - uses: geekyeggo/delete-artifact@v1
         with:
           name: coverage-artifacts
