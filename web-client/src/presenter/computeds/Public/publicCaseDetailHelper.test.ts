@@ -112,6 +112,22 @@ describe('publicCaseDetailHelper', () => {
 
       expect(result.showLinkToDocument).toBe(false);
     });
+
+    it('should show document link for brief when filed by practitioner after policy change date', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'SAMB',
+          filedAfterPolicyChange: true,
+          isCourtIssuedDocument: true,
+          isNotServedDocument: false,
+        },
+        isTerminalUser: true,
+      });
+
+      expect(result.showLinkToDocument).toBe(true);
+    });
   });
 
   describe('printableDocketRecord', () => {
@@ -769,7 +785,7 @@ describe('publicCaseDetailHelper', () => {
         filingsAndProceedingsWithAdditionalInfo:
           ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
-        servedAtFormatted: undefined,
+        servedAtFormatted: '',
         servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
@@ -875,7 +891,7 @@ describe('publicCaseDetailHelper', () => {
         index: 9,
       },
       {
-        createdAtFormatted: undefined,
+        createdAtFormatted: '',
         index: 2,
       },
     ]);
