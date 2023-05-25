@@ -65,6 +65,7 @@ const mockSubmittedCaseWithOddOnDocketRecord = {
       isFileAttached: true,
       isMinuteEntry: false,
       isOnDocketRecord: false,
+      isStricken: false,
       judge: 'Colvin',
       pending: false,
       processingStatus: 'complete',
@@ -191,7 +192,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return an array of 2 cases (stripping out the consolidated member case) and consolidatedCasesGroupMap', async () => {
+  it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the consolidated member case)', async () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockCavLeadCase.docketNumber },
@@ -246,7 +247,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     );
   });
 
-  it('should return an array of 2 cases (stripping out the member case of consolidated cases and case with ODD) cases and consolidatedCasesGroupMap', async () => {
+  it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the member case of consolidated cases and case with ODD)', async () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
@@ -303,7 +304,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     );
   });
 
-  it('should return an array of 1 (stripping out the case with served ODD and no consolidated cases) case and consolidatedCasesGroupMap', async () => {
+  it('should return an array of 1 case and consolidatedCasesGroupMap (stripping out the case with served ODD and no consolidated cases)', async () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
@@ -336,7 +337,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
   });
 
-  it('should return an array of 2 cases with one case containing an ODD in draft status and consolidatedCasesGroupMap', async () => {
+  it('should return an array of 2 cases (one case containing an ODD in draft status) and consolidatedCasesGroupMap', async () => {
     mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
       {
         ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
@@ -380,13 +381,58 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
   });
 
-  it('should return an array of 2 cases with one case containing an unserved ODD and consolidatedCasesGroupMap', async () => {
+  it('should return an array of 2 cases (one case containing an unserved ODD) and consolidatedCasesGroupMap', async () => {
     mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
       {
         ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
         isDraft: false,
         servedAt: undefined,
         servedParties: undefined,
+      },
+    ];
+    mockReturnedDocketNumbers = [
+      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
+    ];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
+        mockReturnedDocketNumbers,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .mockResolvedValueOnce(mockSubmittedCaseWithOddOnDocketRecord);
+
+    const result = await getCasesByStatusAndByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
+
+    expect(result.cases.length).toEqual(2);
+    expect(result.cases).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '101-18',
+        }),
+        expect.objectContaining({
+          docketNumber: '101-19',
+        }),
+      ]),
+    );
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
+  });
+
+  it('should return an array of 2 cases (one case containing an ODD has been stricken) and consolidatedCasesGroupMap', async () => {
+    mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
+      {
+        ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
+        isStricken: true,
+        strickenAt: '2023-05-25T16:15:59.058Z',
+        strickenBy: 'Test Docketclerk',
+        strickenByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
       },
     ];
     mockReturnedDocketNumbers = [
