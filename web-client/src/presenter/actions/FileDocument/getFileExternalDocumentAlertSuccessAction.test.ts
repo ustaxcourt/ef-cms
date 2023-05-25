@@ -18,7 +18,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
 
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message: 'Document filed and is accessible from the Docket Record.',
+        message: DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED,
       },
     });
   });
@@ -57,7 +57,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
       alertSuccess: {
         linkText: 'Print receipt.',
         linkUrl: 'http://example.com',
-        message: 'Document filed and is accessible from the Docket Record.',
+        message: DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED,
       },
     });
   });
