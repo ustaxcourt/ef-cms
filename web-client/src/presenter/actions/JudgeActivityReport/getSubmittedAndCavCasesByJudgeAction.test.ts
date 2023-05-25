@@ -18,27 +18,33 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       { docketNumber: '111-11', status: 'Submitted' },
       { docketNumber: '134-21', status: 'CAV' },
     ];
-    applicationContext
-      .getUseCases()
-      .getCasesByStatusAndByJudgeInteractor.mockReturnValue({
-        cases: mockReturnedCases,
-        consolidatedCasesGroupCountMap: { '101-22': 3 },
-      });
-
-    const { output } = await runAction(getSubmittedAndCavCasesByJudgeAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          judgeName: mockJudgeName,
-        },
-      },
+    (
+      applicationContext.getUseCases()
+        .getCasesByStatusAndByJudgeInteractor as jest.Mock
+    ).mockReturnValue({
+      cases: mockReturnedCases,
+      consolidatedCasesGroupCountMap: { '101-22': 3 },
     });
 
+    const { output } = await runAction(
+      getSubmittedAndCavCasesByJudgeAction as any,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          form: {
+            judgeName: mockJudgeName,
+          },
+        },
+      },
+    );
+
     expect(
-      applicationContext.getUseCases().getCasesByStatusAndByJudgeInteractor.mock
-        .calls[0][1],
+      (
+        applicationContext.getUseCases()
+          .getCasesByStatusAndByJudgeInteractor as jest.Mock
+      ).mock.calls[0][1],
     ).toMatchObject({
       judgeName: mockJudgeName,
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],

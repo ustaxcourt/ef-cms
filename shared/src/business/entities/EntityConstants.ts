@@ -1,6 +1,10 @@
 /* eslint-disable max-lines */
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
+import {
+  FORMATS,
+  formatNow,
+  prepareDateFromString,
+} from '../utilities/DateHandler';
 import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
 import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
@@ -439,6 +443,20 @@ export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const SERIATIM_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const BRIEF_EVENTCODES = [
+  ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  ...SERIATIM_DOCUMENT_EVENT_CODES,
+];
+
+export const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE =
+  prepareDateFromString('2023-08-01').toISO();
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -642,6 +660,7 @@ export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
+  ...BRIEF_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',

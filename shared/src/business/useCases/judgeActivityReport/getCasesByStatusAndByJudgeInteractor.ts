@@ -20,14 +20,24 @@ const getConsolidatedCaseGroupCountMap = (
 };
 
 const hasUnwantedDocketEntryEventCode = docketEntries => {
-  const prohibitedDocketEntryEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
-  return docketEntries.some(docketEntry =>
-    prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode),
-  );
+  const prohibitedDocketEntryEventCodes: string[] = [
+    'ODD',
+    'DEC',
+    'OAD',
+    'SDEC',
+  ];
+
+  return docketEntries.some(docketEntry => {
+    if (docketEntry.servedAt && !docketEntry.isStricken) {
+      return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
+    }
+
+    return false;
+  });
 };
 
 const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
-  const caseRecordsToReturn = [];
+  const caseRecordsToReturn: Array<any> = [];
 
   caseRecords.forEach(individualCaseRecord => {
     if (!hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)) {
@@ -70,7 +80,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       statuses,
     });
 
-  const rawCaseRecords = await Promise.all(
+  const rawCaseRecords: RawCase[] = await Promise.all(
     submittedAndCavCasesResults.map(async result => {
       return await applicationContext
         .getPersistenceGateway()
@@ -82,9 +92,9 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   );
 
   // We need to filter out member cases returned from elasticsearch so we can get an accurate
-  // conolidated cases group count even when the case status of a member case does not match
+  // consolidated cases group count even when the case status of a member case does not match
   // the lead case status.
-  const rawCaseRecordsWithWithoutMemberCases = await Promise.all(
+  const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
     rawCaseRecords
       .filter(
         rawCaseRecord =>
@@ -117,7 +127,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
-  const returnMe = {
+  return {
     cases: Case.validateRawCollection(filteredCaseRecords, {
       applicationContext,
     }),
@@ -125,6 +135,4 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       consolidatedCasesGroupCountMap,
     ),
   };
-
-  return returnMe;
 };

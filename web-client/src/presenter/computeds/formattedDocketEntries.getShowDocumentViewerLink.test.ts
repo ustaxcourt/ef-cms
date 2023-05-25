@@ -1,3 +1,4 @@
+import { DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE } from '../../../../shared/src/business/entities/EntityConstants';
 import { getShowDocumentViewerLink } from './formattedDocketEntries';
 
 describe('getShowDocumentViewerLink', () => {
@@ -280,6 +281,62 @@ describe('getShowDocumentViewerLink', () => {
         isSealed: true,
         isServed: true,
         userHasAccessToCase: true,
+      },
+      output: false,
+    },
+    {
+      description: `unsealed, unstricken practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should display a clickable link to external users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: true,
+    },
+    {
+      description: `unsealed, unstricken practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should display a clickable link to internal users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: false,
+        isSealed: false,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: true,
+    },
+    {
+      description: `sealed, practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: true,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description: `stricken, practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: true,
+        userHasAccessToCase: false,
       },
       output: false,
     },

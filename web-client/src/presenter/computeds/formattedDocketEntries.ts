@@ -41,6 +41,8 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
 };
 
 export const getShowDocumentViewerLink = ({
+  filedAfterPolicyChange,
+  filedByPractitioner,
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
@@ -71,6 +73,7 @@ export const getShowDocumentViewerLink = ({
       }
     }
     if (userHasNoAccessToDocument) return false;
+    if (filedAfterPolicyChange && filedByPractitioner) return true;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
@@ -130,11 +133,13 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
+  formattedCase,
   isExternalUser,
   permissions,
   userAssociatedWithCase,
 }) => {
   const {
+    BRIEF_EVENTCODES,
     DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
@@ -186,7 +191,17 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
+  let filedByPractitioner: boolean = false;
+  if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
+    filedByPractitioner =
+      formattedCase.docketEntriesEFiledByPractitioner.includes(
+        entry.docketEntryId,
+      );
+  }
+
   showDocumentLinks = getShowDocumentViewerLink({
+    filedAfterPolicyChange: entry.filedAfterPolicyChange,
+    filedByPractitioner,
     hasDocument: entry.isFileAttached,
     isCourtIssuedDocument: entry.isCourtIssuedDocument,
     isExternalUser,
@@ -311,6 +326,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
       applicationContext,
       docketNumber,
       entry,
+      formattedCase: result,
       isExternalUser,
       permissions,
       userAssociatedWithCase,
