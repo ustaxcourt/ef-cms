@@ -4,7 +4,6 @@ import { UserCase } from '../../entities/UserCase';
 
 /**
  * associateIrsPractitionerToCase
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -21,8 +20,8 @@ export const associateIrsPractitionerToCase = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  consolidatedCasesDocketNumbers: string[];
-  serviceIndicator: string;
+  consolidatedCasesDocketNumbers: string[] | undefined;
+  serviceIndicator?: string;
   user: RawUser;
 }) => {
   let docketNumbersToAssociate: string[] = [];
