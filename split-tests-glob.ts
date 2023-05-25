@@ -5,7 +5,6 @@ const testType = process.argv[2] || '';
 
 let testFiles;
 if (testType.includes('unit')) {
-  // could use for shared? pass the path?
   testFiles = glob.sync('./web-client/src/**/?(*.)+(spec|test).[jt]s?(x)');
 }
 
