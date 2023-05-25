@@ -1,7 +1,4 @@
 import type { Config } from 'jest';
-const testFilesEnv = process.env.TESTFILES;
-const testFiles = testFilesEnv?.split(' ') || [];
-console.log('testFiles in config', testFiles);
 
 const config: Config = {
   clearMocks: true,
