@@ -43,7 +43,6 @@ export const submitCaseAssociationRequestInteractor = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner) {
-    // not passing serviceIndicator: bug?
     return await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
