@@ -43,6 +43,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { PublicCase } from './PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { User } from '../User';
@@ -50,7 +51,6 @@ import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
-import { PublicCase } from './PublicCase';
 import joi from 'joi';
 
 export class Case extends JoiValidationEntity {
@@ -160,7 +160,8 @@ export class Case extends JoiValidationEntity {
     this.assignDocketEntries(params);
     this.assignHearings(params);
     this.assignPractitioners(params);
-    this.docketEntriesEFiledByPractitioner = PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
+    this.docketEntriesEFiledByPractitioner =
+      PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
     this.assignFieldsForAllUsers(params);
     if (isNewCase) {
       const changedBy = rawCase.isPaper
