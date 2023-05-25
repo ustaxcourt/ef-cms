@@ -6,6 +6,8 @@ const testType = process.argv[2] || '';
 let testFiles;
 if (testType.includes('unit')) {
   testFiles = glob.sync('./web-client/src/**/?(*.)+(spec|test).[jt]s?(x)');
+} else if (testType.includes('shared')) {
+  testFiles = glob.sync('./shared/src/**/?(*.)+(spec|test).[jt]s?(x)');
 }
 
 const shuffled = shuffleSeed.shuffle(testFiles, process.env.GITHUB_SHA);

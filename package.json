@@ -218,6 +218,7 @@
     "test:pa11y": "npm run test:pa11y:1 && npm run test:pa11y:2 && npm run test:pa11y:3 && npm run test:pa11y:4",
     "test:document-generation": "npm run build:assets && jest --config shared/src/business/utilities/documentGenerators/document_generator.jest.config.ts",
     "test:shared": "npm run build:assets && jest --config shared/jest-shared.config.ts",
+    "test:shared:ci": "npm run build:assets && jest --config shared/jest-shared.config.ts ${TESTFILES}",
     "test:watch": "jest --watch .*test\\.js$",
     "test": "echo 'Best run with start:api:ci and start:client:ci' && sleep 3 && CI=true npx run-s test:shared test:api test:client test:pa11y cypress lint --prefix=web-client/pa11y/",
     "verify-authorizers": "./scripts/verify-authorizers.sh",
