@@ -139,6 +139,7 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
+    BRIEF_EVENTCODES,
     DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
@@ -191,7 +192,7 @@ export const getFormattedDocketEntry = ({
     .includes(entry.documentType);
 
   let filedByPractitioner: boolean = false;
-  if (EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode)) {
+  if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
     filedByPractitioner =
       formattedCase.docketEntriesEFiledByPractitioner.includes(
         entry.docketEntryId,

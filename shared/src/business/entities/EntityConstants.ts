@@ -452,7 +452,8 @@ export const BRIEF_EVENTCODES = [
   ...SERIATIM_DOCUMENT_EVENT_CODES,
 ];
 
-export const POLICY_CHANGE_DATE = prepareDateFromString('2023-08-01').toISO();
+export const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE =
+  prepareDateFromString('2023-08-01').toISO();
 
 export const SCENARIOS = [
   'Standard',
