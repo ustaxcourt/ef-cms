@@ -22,7 +22,7 @@ export const associatePrivatePractitionerToCase = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  serviceIndicator: string;
+  serviceIndicator?: string;
   user: RawUser;
   representing: string[];
 }) => {

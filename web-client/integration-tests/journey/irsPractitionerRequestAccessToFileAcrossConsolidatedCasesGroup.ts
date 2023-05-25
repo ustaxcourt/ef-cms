@@ -7,11 +7,11 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
-export const practitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
+export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
   cerebralTest,
   { docketNumber, fakeFile },
 ) => {
-  return it('practitioner requests access to consolidated cases group', async () => {
+  return it('IRS practitioner requests access to consolidated cases group', async () => {
     const caseDetailHeaderHelper = withAppContextDecorator(
       caseDetailHeaderComputed,
     );

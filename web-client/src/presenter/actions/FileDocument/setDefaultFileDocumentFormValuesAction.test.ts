@@ -33,7 +33,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
     });
   });
 
-  it('sets up the form with default values when state.allowExternalConsolidatedGroupFiling is falsy', async () => {
+  it('sets up the form with default values when state.allowExternalConsolidatedGroupFiling is false', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.privatePractitioner,
       userId: mockUserId,
@@ -50,6 +50,7 @@ describe('setDefaultFileDocumentFormValuesAction', () => {
     expect(result.state.form).toEqual({
       attachments: false,
       certificateOfService: false,
+      fileAcrossConsolidatedGroup: false,
       filersMap: {},
       hasSecondarySupportingDocuments: false,
       hasSupportingDocuments: false,

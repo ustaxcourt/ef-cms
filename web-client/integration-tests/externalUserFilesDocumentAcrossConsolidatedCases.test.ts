@@ -7,7 +7,7 @@ import {
 } from './helpers';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
-import { practitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/practitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
+import { irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { runCompute } from 'cerebral/test';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
 import { seedDatabase, seedFullDataset } from './utils/database';
@@ -145,10 +145,13 @@ describe('External User files a document across a consolidated case group', () =
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
     });
-    practitionerRequestAccessToFileAcrossConsolidatedCasesGroup(cerebralTest, {
-      docketNumber: consolidatedCaseDocketNumber3,
-      fakeFile,
-    });
+    irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup(
+      cerebralTest,
+      {
+        docketNumber: consolidatedCaseDocketNumber3,
+        fakeFile,
+      },
+    );
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
     verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
       expectedAssociation: true,
