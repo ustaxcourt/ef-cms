@@ -21,15 +21,10 @@ export const externalConsolidatedCaseGroupHelper = (
 
     formattedConsolidatedCaseList = caseDetail.consolidatedCases.map(
       currentCase => {
-        if (!currentCase.isSealed) {
-          const formattedPetitioners = currentCase.petitioners
-            .map(ptr => ptr.name)
-            .join(' & ');
-
-          return `${currentCase.docketNumber} ${formattedPetitioners}`;
-        }
-
-        return `${currentCase.docketNumber} Sealed Case`;
+        const formattedPetitioners = currentCase.petitioners
+          .map(ptr => ptr.name)
+          .join(' & ');
+        return `${currentCase.docketNumber} ${formattedPetitioners}`;
       },
     );
 
