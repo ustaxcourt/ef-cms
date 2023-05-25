@@ -13,10 +13,10 @@ import classNames from 'classnames';
 
 export const RequestAccess = connect(
   {
+    allowExternalConsolidatedGroupFiling:
+      state.allowExternalConsolidatedGroupFiling,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    isExternalConsolidatedCaseGroupFilingEnabled:
-      state.isExternalConsolidatedCaseGroupFilingEnabled,
     requestAccessHelper: state.requestAccessHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
@@ -27,9 +27,9 @@ export const RequestAccess = connect(
     validationErrors: state.validationErrors,
   },
   function RequestAccess({
+    allowExternalConsolidatedGroupFiling,
     form,
     formCancelToggleCancelSequence,
-    isExternalConsolidatedCaseGroupFilingEnabled,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -108,7 +108,7 @@ export const RequestAccess = connect(
           {requestAccessHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
-          {isExternalConsolidatedCaseGroupFilingEnabled && (
+          {allowExternalConsolidatedGroupFiling && (
             <ExternalConsolidatedCaseGroupFilingCard />
           )}
           <div className="margin-top-5">

@@ -41,9 +41,9 @@ export const externalConsolidatedCaseGroupHelper = (
     caseDetail.consolidatedCases.forEach((memberCase, i) => {
       consolidatedGroupServiceParties[i] = {};
       const combinedPartiesList = [
-        ...memberCase.petitioners,
-        ...memberCase.privatePractitioners,
-        ...memberCase.irsPractitioners,
+        ...(memberCase.petitioners ?? []),
+        ...(memberCase.privatePractitioners ?? []),
+        ...(memberCase.irsPractitioners ?? []),
       ];
       combinedPartiesList.forEach((party, j) => {
         consolidatedGroupServiceParties[i][j] = `${party.name}, ${roleToDisplay(

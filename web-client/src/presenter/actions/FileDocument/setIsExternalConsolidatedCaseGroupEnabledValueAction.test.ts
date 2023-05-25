@@ -1,4 +1,7 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
@@ -8,6 +11,11 @@ import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from './setIsExt
 describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
   presenter.providers.applicationContext = applicationContext;
   let baseCase;
+  beforeAll(() => {
+    (applicationContext.getCurrentUser as any).mockReturnValue({
+      role: ROLES.privatePractitioner,
+    });
+  });
 
   beforeEach(() => {
     baseCase = MOCK_CASE;
@@ -21,7 +29,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideForRequestAccess: undefined,
+          isRequestingAccess: undefined,
         },
         state: {
           caseDetail: testCase,
@@ -36,9 +44,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      false,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when isConsolidatedGroupAccessEnabled is true, case has a leadDocketNumber and has a multiDocketable event code', async () => {
@@ -49,7 +55,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideForRequestAccess: undefined,
+          isRequestingAccess: undefined,
         },
         state: {
           caseDetail: testCase,
@@ -64,9 +70,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      true,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(true);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to false on state when case does not have a leadDocketNumber', async () => {
@@ -75,7 +79,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideForRequestAccess: undefined,
+          isRequestingAccess: undefined,
         },
         state: {
           caseDetail: baseCase,
@@ -90,9 +94,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      false,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to false on state when there is not a multiDocketable event code', async () => {
@@ -102,7 +104,7 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       {
         modules: { presenter },
         props: {
-          overrideForRequestAccess: undefined,
+          isRequestingAccess: undefined,
         },
         state: {
           caseDetail: testCase,
@@ -117,19 +119,20 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      false,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
-  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when there is a overrideForRequestAccess', async () => {
+  it('should set setIsExternalConsolidatedCaseGroupEnabledValueAction to true on state when in irsPractitioner is requesting access', async () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce({
+      role: ROLES.irsPractitioner,
+    });
     const testCase = { ...baseCase, leadDocketNumber: '111-11' };
     const result = await runAction(
       setIsExternalConsolidatedCaseGroupEnabledValueAction,
       {
         modules: { presenter },
         props: {
-          overrideForRequestAccess: true,
+          isRequestingAccess: true,
         },
         state: {
           caseDetail: testCase,
@@ -142,8 +145,6 @@ describe('setIsExternalConsolidatedCaseGroupEnabledValueAction', () => {
       },
     );
 
-    expect(result.state.isExternalConsolidatedCaseGroupFilingEnabled).toEqual(
-      true,
-    );
+    expect(result.state.allowExternalConsolidatedGroupFiling).toEqual(true);
   });
 });

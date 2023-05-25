@@ -1,24 +1,25 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
-
-import {
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
+  associatePrivatePractitionerToCase,
+} = require('./associatePrivatePractitionerToCase');
+const {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../entities/EntityConstants';
-
-import { MOCK_USERS } from '../../../test/mockUsers';
-import {
+} = require('../../entities/EntityConstants');
+const {
   getContactPrimary,
   getContactSecondary,
-} from '../../entities/cases/Case';
+} = require('../../entities/cases/Case');
+const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('associatePrivatePractitionerToCase', () => {
-  let caseRecord1;
-  let caseRecord2;
+  let caseRecord;
 
   const practitionerUser = {
     barNumber: 'BN1234',
@@ -28,7 +29,7 @@ describe('associatePrivatePractitionerToCase', () => {
   };
 
   beforeEach(() => {
-    caseRecord1 = {
+    caseRecord = {
       caseCaption: 'Case Caption',
       caseType: CASE_TYPES_MAP.deficiency,
       docketEntries: [
@@ -46,7 +47,6 @@ describe('associatePrivatePractitionerToCase', () => {
       ],
       docketNumber: '123-19',
       filingType: 'Myself',
-      leadDocketNumber: '123-19',
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
         {
@@ -92,51 +92,13 @@ describe('associatePrivatePractitionerToCase', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
-    caseRecord2 = {
-      caseCaption: 'Caption',
-      caseType: CASE_TYPES_MAP.deficiency,
-      docketEntries: [
-        {
-          createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-          docketNumber: '123-19',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          eventCode: 'P',
-          filedBy: 'Test Petitioner',
-          processingStatus: 'pending',
-          userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
-        },
-      ],
-      docketNumber: '124-19',
-      filingType: 'Myself',
-      leadDocketNumber: '123-19',
-      partyType: PARTY_TYPES.petitioner,
-      petitioners: [
-        {
-          address1: '123 Main St',
-          city: 'Somewhere',
-          contactType: CONTACT_TYPES.primary,
-          countryType: COUNTRY_TYPES.DOMESTIC,
-          email: 'fieri@example.com',
-          name: 'Guy Fieri',
-          phone: '1234567890',
-          postalCode: '12345',
-          state: 'CA',
-        },
-      ],
-      preferredTrialCity: 'Fresno, California',
-      procedureType: 'Regular',
-      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-    };
-
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
     );
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord1);
+      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
@@ -146,9 +108,8 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      docketNumber: caseRecord1.docketNumber,
-      representing: [caseRecord1.petitioners[0].contactId],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 
@@ -167,9 +128,8 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      docketNumber: caseRecord1.docketNumber,
-      representing: [caseRecord1.petitioners[0].contactId],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 
@@ -181,62 +141,6 @@ describe('associatePrivatePractitionerToCase', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should add mapping to all cases in a consolidated group for a privatePractitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(caseRecord1)
-      .mockResolvedValueOnce(caseRecord2);
-
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
-
-    const user = {
-      barNumber: 'RT9834',
-      name: 'Nick "Goose" Bradshaw',
-      role: ROLES.privatePractitioner,
-      userId: '330d4b65-620a-489d-8414-6623653ebc4f',
-    };
-
-    await associatePrivatePractitionerToCase({
-      applicationContext,
-      consolidatedCasesDocketNumbers: [
-        caseRecord1.docketNumber,
-        caseRecord2.docketNumber,
-      ],
-      docketNumber: caseRecord1.docketNumber,
-      representing: [caseRecord1.petitioners[0].contactId],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      user,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    ).toMatchObject({
-      privatePractitioners: [
-        {
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          userId: '330d4b65-620a-489d-8414-6623653ebc4f',
-        },
-      ],
-    });
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[1][0].caseToUpdate,
-    ).toMatchObject({
-      privatePractitioners: [
-        {
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          userId: '330d4b65-620a-489d-8414-6623653ebc4f',
-        },
-      ],
-    });
-  });
-
   it('should set petitioners to receive no service if the practitioner is representing them', async () => {
     applicationContext
       .getPersistenceGateway()
@@ -244,13 +148,12 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      docketNumber: caseRecord1.docketNumber,
+      docketNumber: caseRecord.docketNumber,
       representing: [
-        caseRecord1.petitioners[0].contactId,
-        caseRecord1.petitioners[1].contactId,
-        caseRecord1.petitioners[2].contactId,
+        caseRecord.petitioners[0].contactId,
+        caseRecord.petitioners[1].contactId,
+        caseRecord.petitioners[2].contactId,
       ],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       user: practitionerUser,
     });
 
@@ -277,9 +180,8 @@ describe('associatePrivatePractitionerToCase', () => {
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      docketNumber: caseRecord1.docketNumber,
-      representing: [caseRecord1.petitioners[1].contactId],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[1].contactId],
       user: practitionerUser,
     });
 
@@ -308,15 +210,14 @@ describe('associatePrivatePractitionerToCase', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord1,
+        ...caseRecord,
         privatePractitioners: [],
       });
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      docketNumber: caseRecord1.docketNumber,
+      docketNumber: caseRecord.docketNumber,
       representing: [],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       user: practitionerUser,
     });
 
@@ -326,7 +227,7 @@ describe('associatePrivatePractitionerToCase', () => {
 
     expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord1.docketNumber} but did not appear in the privatePractitioners array.`,
+      `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
     );
   });
 
@@ -338,14 +239,14 @@ describe('associatePrivatePractitionerToCase', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord1,
+        ...caseRecord,
         privatePractitioners: [{ userId: practitionerUser.userId }],
       });
 
     await associatePrivatePractitionerToCase({
       applicationContext,
-      docketNumber: caseRecord1.docketNumber,
-      representing: [caseRecord1.petitioners[0].contactId],
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[0].contactId],
       user: practitionerUser,
     });
 

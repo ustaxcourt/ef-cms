@@ -1,3 +1,4 @@
+import { DOCUMENT_SERVED_MESSAGES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getFileExternalDocumentAlertSuccessAction } from './getFileExternalDocumentAlertSuccessAction';
 import { presenter } from '../../presenter-mock';
@@ -17,7 +18,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
 
     expect(result.output).toMatchObject({
       alertSuccess: {
-        message: 'Document filed and is accessible from the Docket Record.',
+        message: DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED,
       },
     });
   });
@@ -56,7 +57,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
       alertSuccess: {
         linkText: 'Print receipt.',
         linkUrl: 'http://example.com',
-        message: 'Document filed and is accessible from the Docket Record.',
+        message: DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED,
       },
     });
   });
@@ -117,6 +118,22 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
     expect(result.output).toMatchObject({
       alertSuccess: {
         message: `${mockDocumentTitle} saved.`,
+      },
+    });
+  });
+
+  it('should return the correct success message', async () => {
+    const result = await runAction(getFileExternalDocumentAlertSuccessAction, {
+      modules: {
+        presenter,
+      },
+      props: { fileAcrossConsolidatedGroup: true },
+      state: {},
+    });
+
+    expect(result.output).toMatchObject({
+      alertSuccess: {
+        message: DOCUMENT_SERVED_MESSAGES.SELECTED_CASES,
       },
     });
   });

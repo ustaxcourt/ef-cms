@@ -14,10 +14,12 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
   props,
   store,
 }) => {
-  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS, USER_ROLES } =
+    applicationContext.getConstants();
+
   const caseDetail = get(state.caseDetail);
   const { eventCode: documentToFileEventCode } = get(state.form);
-  const { overrideForRequestAccess } = props;
+  const { isRequestingAccess } = props;
 
   const isConsolidatedGroupAccessEnabled = get(
     state.featureFlags[
@@ -25,19 +27,25 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
     ],
   );
   const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
-  const isMultiDocketableEventCode =
-    overrideForRequestAccess ??
-    !!applicationContext
-      .getConstants()
-      .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
+  const isIrsPractitionerRequestingAccess =
+    isRequestingAccess &&
+    applicationContext.getCurrentUser().role === USER_ROLES.irsPractitioner;
 
-  store.set(state.isExternalConsolidatedCaseGroupFilingEnabled, false);
+  let allowExternalConsolidatedGroupFiling = false;
 
   if (
     isConsolidatedGroupAccessEnabled &&
     isInConsolidatedGroup &&
-    isMultiDocketableEventCode
+    (isMultiDocketableEventCode || isIrsPractitionerRequestingAccess)
   ) {
-    store.set(state.isExternalConsolidatedCaseGroupFilingEnabled, true);
+    allowExternalConsolidatedGroupFiling = true;
   }
+
+  store.set(
+    state.allowExternalConsolidatedGroupFiling,
+    allowExternalConsolidatedGroupFiling,
+  );
 };

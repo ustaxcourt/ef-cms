@@ -102,6 +102,7 @@ export const uploadExternalDocumentsAction = async ({
       caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
+      fileAcrossConsolidatedGroup: form.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
     return path.error();
