@@ -107,6 +107,7 @@ describe('PublicCase', () => {
       canAllowDocumentService: true,
       canAllowPrintableDocketRecord: false,
       caseCaption: 'testing',
+      createdAt: 'testing',
       docketEntries: [],
       docketEntriesEFiledByPractitioner: [],
       docketNumber: 'testing',
@@ -122,6 +123,8 @@ describe('PublicCase', () => {
           contactId: mockContactId,
           contactType: CONTACT_TYPES.primary,
           entityName: 'PublicContact',
+          name: undefined,
+          state: undefined,
         },
         {
           contactId: mockContactIdSecond,
@@ -159,7 +162,10 @@ describe('PublicCase', () => {
     );
 
     expect(entity.toRawObject()).toEqual({
+      canAllowDocumentService: undefined,
+      canAllowPrintableDocketRecord: undefined,
       caseCaption: 'testing',
+      createdAt: 'testing',
       docketEntries: [],
       docketEntriesEFiledByPractitioner: [],
       docketNumber: 'testing',
@@ -174,6 +180,8 @@ describe('PublicCase', () => {
           contactId: mockContactId,
           contactType: CONTACT_TYPES.primary,
           entityName: 'PublicContact',
+          name: undefined,
+          state: undefined,
         },
       ],
       receivedAt: 'testing',
