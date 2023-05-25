@@ -50,6 +50,7 @@ import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
+import { PublicCase } from './PublicCase';
 import joi from 'joi';
 
 export class Case extends JoiValidationEntity {
@@ -121,6 +122,7 @@ export class Case extends JoiValidationEntity {
   public correspondence: any[];
   public archivedCorrespondences: any[];
   public hasPendingItems: boolean;
+  public docketEntriesEFiledByPractitioner: string[];
 
   constructor(
     rawCase: any,
@@ -158,6 +160,7 @@ export class Case extends JoiValidationEntity {
     this.assignDocketEntries(params);
     this.assignHearings(params);
     this.assignPractitioners(params);
+    this.docketEntriesEFiledByPractitioner = PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
     this.assignFieldsForAllUsers(params);
     if (isNewCase) {
       const changedBy = rawCase.isPaper
