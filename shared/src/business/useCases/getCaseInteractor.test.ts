@@ -417,8 +417,8 @@ describe('getCaseInteractor', () => {
     it('should return a PublicCase entity when the current user is an external user who is NOT associated with the case', async () => {
       applicationContext.getCurrentUser.mockReturnValue({
         name: 'Tasha Yar',
-        role: ROLES.petitioner,
-        userId: petitionerId,
+        role: ROLES.privatePractitioner,
+        userId: practitionerId,
       });
 
       const result = await getCaseInteractor(applicationContext, {
