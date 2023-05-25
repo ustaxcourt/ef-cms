@@ -23,6 +23,7 @@ export class PublicCase extends JoiValidationEntity {
   public canAllowDocumentService?: string;
   public canAllowPrintableDocketRecord?: string;
   public caseCaption: string;
+  public createdAt?: string;
   public leadDocketNumber?: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
@@ -56,6 +57,7 @@ export class PublicCase extends JoiValidationEntity {
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
     this.caseCaption = rawCase.caseCaption;
+    this.createdAt = rawCase.createdAt;
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberSuffix = rawCase.docketNumberSuffix;
     this.docketNumberWithSuffix =
