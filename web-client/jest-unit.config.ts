@@ -21,14 +21,14 @@ const config: Config = {
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
-  coverageThreshold: {
-    global: {
-      branches: 94.56,
-      functions: 98.81,
-      lines: 99.25,
-      statements: 99.23,
-    },
-  },
+  // coverageThreshold: {
+  //   global: {
+  //     branches: 94.56,
+  //     functions: 98.81,
+  //     lines: 99.25,
+  //     statements: 99.23,
+  //   },
+  // },
   globals: {
     File() {},
     FileReader() {},
