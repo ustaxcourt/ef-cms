@@ -28,7 +28,7 @@ const hasUnwantedDocketEntryEventCode = docketEntries => {
   ];
 
   return docketEntries.some(docketEntry => {
-    if (docketEntry.servedAt) {
+    if (docketEntry.servedAt && !docketEntry.isStricken) {
       return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
     }
 
