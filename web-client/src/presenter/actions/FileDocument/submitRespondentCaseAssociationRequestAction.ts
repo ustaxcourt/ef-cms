@@ -11,14 +11,19 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
+
+  const consolidatedCasesDocketNumbers = consolidatedCases?.map(aCase => {
+    return aCase.docketNumber;
+  });
 
   if (user.role === USER_ROLES.irsPractitioner) {
     return await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
+        consolidatedCasesDocketNumbers,
         docketNumber,
       });
   }
