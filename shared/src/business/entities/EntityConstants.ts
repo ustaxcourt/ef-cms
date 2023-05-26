@@ -1,6 +1,10 @@
 /* eslint-disable max-lines */
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
+import {
+  FORMATS,
+  formatNow,
+  prepareDateFromString,
+} from '../utilities/DateHandler';
 import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
 import courtIssuedEventCodesJson from '../../tools/courtIssuedEventCodes.json';
 import externalFilingEventsJson from '../../tools/externalFilingEvents.json';
@@ -80,6 +84,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
@@ -111,6 +118,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
+  },
+  USE_EXTERNAL_PDF_GENERATION: {
+    disabledMessage:
+      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
+    key: 'use-external-pdf-generation',
   },
 };
 
@@ -205,6 +217,8 @@ export const DOCUMENT_RELATIONSHIPS = {
 
 export const DOCUMENT_SERVED_MESSAGES = {
   ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  EXTERNAL_ENTRY_ADDED:
+    'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
@@ -429,6 +443,20 @@ export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const SERIATIM_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const BRIEF_EVENTCODES = [
+  ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  ...SERIATIM_DOCUMENT_EVENT_CODES,
+];
+
+export const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE =
+  prepareDateFromString('2023-08-01').toISO();
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -632,6 +660,7 @@ export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
+  ...BRIEF_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',

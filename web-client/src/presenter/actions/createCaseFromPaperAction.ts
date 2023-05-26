@@ -88,7 +88,7 @@ export const createCaseFromPaperAction = async ({
       applicationContext
         .getUtilities()
         .prepareDateFromString(props.receivedAt)
-        .toISOString()) ||
+        .toISO()) ||
     null;
 
   const form = omit(

@@ -309,6 +309,7 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
+import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
@@ -835,6 +836,7 @@ const sequences = {
   resetCaseMenuSequence,
   resetHeaderAccordionsSequence,
   resetIdleTimerSequence,
+  retryAsyncRequestSequence,
   reviewExternalDocumentInformationSequence,
   reviewRequestAccessInformationSequence,
   runTrialSessionPlanningReportSequence,

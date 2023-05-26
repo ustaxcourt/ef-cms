@@ -32,6 +32,15 @@
     padding: 20px;
     background-color: $color-white;
 
+    .service-party-divider:not(:last-of-type) {
+      padding: 10px 0;
+      border-bottom: 1px solid color($theme-color-base-lighter);
+    }
+
+    .service-party-divider:last-of-type {
+      padding-top: 10px;
+    }
+
     &.gray {
       background-color: color($theme-color-base-lightest);
     }

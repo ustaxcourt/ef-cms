@@ -52,6 +52,18 @@ resource "null_resource" "send_emails_west_object" {
   }
 }
 
+resource "null_resource" "pdf_generation_west_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.pdf_generation.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_west.id}/pdf_generation_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
+
 
 resource "null_resource" "trial_session_west_object" {
   depends_on = [aws_s3_bucket.api_lambdas_bucket_west]
@@ -146,6 +158,23 @@ resource "aws_acm_certificate_validation" "wildcard_dns_validation_west" {
   validation_record_fqdns = [for record in aws_route53_record.route53_record_west : record.fqdn]
   provider                = aws.us-west-1
 }
+
+
+
+data "aws_s3_bucket_object" "pdf_generation_blue_west_object" {
+  depends_on = [null_resource.pdf_generation_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "pdf_generation_blue.js.zip"
+  provider   = aws.us-west-1
+}
+
+data "aws_s3_bucket_object" "pdf_generation_green_west_object" {
+  depends_on = [null_resource.pdf_generation_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "pdf_generation_green.js.zip"
+  provider   = aws.us-west-1
+}
+
 
 data "aws_s3_bucket_object" "api_public_blue_west_object" {
   depends_on = [null_resource.api_public_west_object]
@@ -321,6 +350,7 @@ module "api-west-green" {
   api_public_object         = null_resource.api_public_west_object
   send_emails_object        = null_resource.send_emails_west_object
   trial_session_object      = null_resource.trial_session_west_object
+  pdf_generation_object     = null_resource.pdf_generation_west_object
   websockets_object         = null_resource.websockets_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
   cron_object               = ""
@@ -351,10 +381,12 @@ module "api-west-green" {
   deploying_color                = var.deploying_color
   lambda_bucket_id               = aws_s3_bucket.api_lambdas_bucket_west.id
   public_object_hash             = data.aws_s3_bucket_object.api_public_green_west_object.etag
+  pdf_generation_object_hash     = data.aws_s3_bucket_object.pdf_generation_green_west_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_green_west_object.etag
   send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_green_west_object.etag
   trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_green_west_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
+  use_layers                     = var.green_use_layers
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
   cron_object_hash               = ""
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
@@ -385,6 +417,7 @@ module "api-west-green" {
 module "api-west-blue" {
   api_object                = null_resource.api_west_object
   api_public_object         = null_resource.api_public_west_object
+  pdf_generation_object     = null_resource.pdf_generation_west_object
   websockets_object         = null_resource.websockets_west_object
   send_emails_object        = null_resource.send_emails_west_object
   trial_session_object      = null_resource.trial_session_west_object
@@ -419,6 +452,8 @@ module "api-west-blue" {
   public_object_hash             = data.aws_s3_bucket_object.api_public_blue_west_object.etag
   api_object_hash                = data.aws_s3_bucket_object.api_blue_west_object.etag
   send_emails_object_hash        = data.aws_s3_bucket_object.send_emails_blue_west_object.etag
+  use_layers                     = var.blue_use_layers
+  pdf_generation_object_hash     = data.aws_s3_bucket_object.pdf_generation_blue_west_object.etag
   trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_blue_west_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_west_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
