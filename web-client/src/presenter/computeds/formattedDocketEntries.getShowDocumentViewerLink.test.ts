@@ -1,4 +1,4 @@
-import { DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE } from '../../../../shared/src/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { getShowDocumentViewerLink } from './formattedDocketEntries';
 
 describe('getShowDocumentViewerLink', () => {
@@ -246,6 +246,18 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
+      // User is external, with no access to case, docket entry is a legacy sealed and served order, document link is not visible
+      inputs: {
+        hasDocument: true,
+        isCourtIssuedDocument: true,
+        isExternalUser: true,
+        isLegacySealed: true,
+        isServed: true,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
       // User is external, with access to case, docket entry is a sealed and served order, document link is visible
       inputs: {
         hasDocument: true,
@@ -285,7 +297,7 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `unsealed, unstricken practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should display a clickable link to external users`,
+      description: `unsealed, unstricken practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should display a clickable link to external users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -299,7 +311,7 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      description: `unsealed, unstricken practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should display a clickable link to internal users`,
+      description: `unsealed, unstricken practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should display a clickable link to internal users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -313,7 +325,7 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      description: `sealed, practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      description: `sealed, practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should NOT display a clickable link to external users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -327,7 +339,7 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `stricken, practitioner e-filed briefs filed after ${DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE} should NOT display a clickable link to external users`,
+      description: `stricken, practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should NOT display a clickable link to external users`,
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -336,6 +348,20 @@ describe('getShowDocumentViewerLink', () => {
         isSealed: false,
         isServed: true,
         isStricken: true,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description: `unsealed, unstricken non-practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should NOT display a clickable link to external users`,
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: false,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: false,
         userHasAccessToCase: false,
       },
       output: false,

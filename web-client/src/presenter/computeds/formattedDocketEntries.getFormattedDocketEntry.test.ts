@@ -361,6 +361,20 @@ describe('getFormattedDocketEntry', () => {
       expect(result.showLinkToDocument).toBeFalsy();
     });
 
+    it('should be false if isExternalUser is true and document links are not shown because the docket entry is a brief, not filed by practitioner', () => {
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: {
+          ...simpleDocketEntry,
+          eventCode: 'SEAB',
+          filedAfterPolicyChange: true,
+        },
+        isExternalUser: true,
+      });
+
+      expect(result.showLinkToDocument).toBeFalsy();
+    });
+
     it('should be false if isExternalUser is false', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
