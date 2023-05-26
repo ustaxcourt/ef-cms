@@ -55,7 +55,7 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
       applicationContext.getUseCases().submitCaseAssociationRequestInteractor
         .mock.calls[0][1],
     ).toMatchObject({
-      consolidatedCasesDocketNumbers,
+      consolidatedCasesDocketNumbers: undefined,
       docketNumber: mockDocketNumber,
     });
   });
@@ -82,5 +82,30 @@ describe('submitRespondentCaseAssociationRequestAction', () => {
     );
 
     expect(output).toEqual(expect.objectContaining(MOCK_CASE));
+  });
+
+  it('should call submitCaseAssociationRequestInteractor with a list of consolidated case docketNumbers when props.fileAcrossConsolidatedGroup is true', async () => {
+    await runAction(submitRespondentCaseAssociationRequestAction, {
+      modules: { presenter },
+      props: { fileAcrossConsolidatedGroup: true },
+      state: {
+        caseDetail: {
+          consolidatedCases: [
+            { docketNumber: '100-20' },
+            { docketNumber: '101-20' },
+            { docketNumber: mockDocketNumber },
+          ],
+          docketNumber: mockDocketNumber,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().submitCaseAssociationRequestInteractor
+        .mock.calls[0][1],
+    ).toMatchObject({
+      consolidatedCasesDocketNumbers,
+      docketNumber: mockDocketNumber,
+    });
   });
 });
