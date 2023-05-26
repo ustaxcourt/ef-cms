@@ -6,6 +6,9 @@ describe('incrementPaperPdfsAppendedAction', () => {
   it('returns the yes path when form.contact.updatedEmail is defined', async () => {
     const result = await runAction(incrementPaperPdfsAppendedAction, {
       modules: { presenter },
+      props: {
+        pdfsAppended: 10,
+      },
       state: {
         paperServiceStatusState: {
           pdfsAppended: 0,
@@ -13,6 +16,6 @@ describe('incrementPaperPdfsAppendedAction', () => {
       },
     });
 
-    expect(result.state.paperServiceStatusState.pdfsAppended).toEqual(1);
+    expect(result.state.paperServiceStatusState.pdfsAppended).toEqual(10);
   });
 });
