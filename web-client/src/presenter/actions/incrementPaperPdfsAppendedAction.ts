@@ -7,11 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store used for setting state.progressIndicator.waitingForResponse
  */
 export const incrementPaperPdfsAppendedAction = ({
-  get,
+  props,
   store,
 }: ActionProps) => {
-  store.set(
-    state.paperServiceStatusState.pdfsAppended,
-    get(state.paperServiceStatusState.pdfsAppended) + 1,
-  );
+  store.set(state.paperServiceStatusState.pdfsAppended, props.pdfsAppended);
 };
