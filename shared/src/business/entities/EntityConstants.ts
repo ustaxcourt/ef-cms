@@ -83,7 +83,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
-    value: prepareDateFromString('2023-08-01').toISO(),
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
@@ -447,6 +446,9 @@ export const BRIEF_EVENTCODES = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
 ];
+
+export const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE =
+  prepareDateFromString('2023-08-01').toISO();
 
 export const SCENARIOS = [
   'Standard',
