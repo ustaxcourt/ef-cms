@@ -297,7 +297,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `unsealed, unstricken practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should display a clickable link to external users`,
+      description:
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date should display a clickable link to external users',
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -311,7 +312,8 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      description: `unsealed, unstricken practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should display a clickable link to internal users`,
+      description:
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date should display a clickable link to internal users',
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -325,7 +327,8 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      description: `sealed, practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should NOT display a clickable link to external users`,
+      description:
+        'sealed, practitioner e-filed briefs filed after policy change date should NOT display a clickable link to external users',
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -339,7 +342,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `stricken, practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should NOT display a clickable link to external users`,
+      description:
+        'stricken, practitioner e-filed briefs filed after policy change date should NOT display a clickable link to external users',
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -353,7 +357,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      description: `unsealed, unstricken non-practitioner e-filed briefs filed after ${ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.value} should NOT display a clickable link to external users`,
+      description:
+        'unsealed, unstricken non-practitioner e-filed briefs filed after policy change date should NOT display a clickable link to external users',
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: false,
