@@ -14,7 +14,7 @@ const waitForJobToFinish = ({ applicationContext, jobId }) => {
           applicationContext,
           jobId,
         });
-      if (jobStatus.unfinishedCases === 0) {
+      if (jobStatus && jobStatus.unfinishedCases === 0) {
         clearInterval(interval);
         resolve(undefined);
       }
