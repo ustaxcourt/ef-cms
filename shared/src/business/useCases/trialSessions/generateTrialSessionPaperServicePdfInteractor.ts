@@ -34,12 +34,14 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     userId: user.userId,
   });
 
-  for (let index = 0; index < trialNoticePdfsKeys.length; index++) {
+  let pdfsAppended = 0;
+
+  for (const trialNoticePdfsKey of trialNoticePdfsKeys) {
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: trialNoticePdfsKeys[index],
+        key: trialNoticePdfsKey,
         protocol: 'S3',
         useTempBucket: true,
       });
@@ -51,10 +53,13 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       copyInto: paperServiceDocumentsPdf,
     });
 
+    pdfsAppended++;
+
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'paper_service_updated',
+        pdfsAppended,
       },
       userId: user.userId,
     });
