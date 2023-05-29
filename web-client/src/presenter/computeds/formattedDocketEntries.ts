@@ -132,6 +132,7 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
+  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
   entry,
   formattedCase,
   isExternalUser,
@@ -199,8 +200,16 @@ export const getFormattedDocketEntry = ({
       );
   }
 
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
+
+  const filedAfterPolicyChange =
+    entry.filingDate >= visibilityPolicyDateFormatted;
+
   showDocumentLinks = getShowDocumentViewerLink({
-    filedAfterPolicyChange: entry.filedAfterPolicyChange,
+    filedAfterPolicyChange,
     filedByPractitioner,
     hasDocument: entry.isFileAttached,
     isCourtIssuedDocument: entry.isCourtIssuedDocument,
@@ -277,6 +286,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     DOCKET_RECORD_FILTER_OPTIONS,
     EXHIBIT_EVENT_CODES,
     MOTION_EVENT_CODES,
@@ -321,8 +331,15 @@ export const formattedDocketEntries = (get, applicationContext) => {
     docketRecordSort,
   );
 
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+
   docketEntriesFormatted = docketEntriesFormatted.map(entry =>
     getFormattedDocketEntry({
+      DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
       applicationContext,
       docketNumber,
       entry,
