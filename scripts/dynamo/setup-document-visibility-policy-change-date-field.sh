@@ -3,7 +3,7 @@
 # Sets the DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE flag to a date in the dynamo deploy table
 
 # Usage
-#   ENV=dev ./setup-policy-change-date-flag.sh
+#   ENV=dev ./document-visibility-policy-change-date-field.sh
 
 ./check-env-variables.sh \
   "ENV" \
