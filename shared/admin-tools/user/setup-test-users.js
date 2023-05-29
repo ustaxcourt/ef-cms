@@ -4,7 +4,7 @@ const {
   deactivateAdminAccount,
 } = require('./admin');
 
-const { DEFAULT_ACCOUNT_PASS } = process.env;
+const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
 const baseUser = {
   birthYear: '1950',
@@ -39,6 +39,7 @@ const createManyAccounts = async ([num, role, section]) => {
       section,
     };
     await createDawsonUser({
+      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
       setPermanentPassword: true,
       user,
     });
@@ -130,6 +131,7 @@ const setupPractitioners = async () => {
         section: role,
       };
       return createDawsonUser({
+        deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
         setPermanentPassword: true,
         user,
       });
