@@ -337,8 +337,6 @@ export const formattedDocketEntries = (get, applicationContext) => {
     ],
   );
 
-  console.log(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE, '------');
-
   docketEntriesFormatted = docketEntriesFormatted.map(entry =>
     getFormattedDocketEntry({
       DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,

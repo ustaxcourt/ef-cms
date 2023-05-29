@@ -141,7 +141,9 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
   const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
-    state[ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key],
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
   );
 
   const visibilityPolicyDateFormatted = applicationContext
