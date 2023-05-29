@@ -46,6 +46,7 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
   formatDocketEntry,
@@ -201,6 +202,7 @@ const applicationContextPublic = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       openUrlInNewTab,
+      prepareDateFromString,
       sortDocketEntries,
     };
   },
