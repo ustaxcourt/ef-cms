@@ -5,7 +5,12 @@ import { state } from 'cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
-  { docketEntriesEFiledByPractitioner, entry, isTerminalUser },
+  {
+    docketEntriesEFiledByPractitioner,
+    entry,
+    isTerminalUser,
+    visibilityPolicyDateFormatted,
+  },
 ) => {
   const {
     BRIEF_EVENTCODES,
@@ -47,8 +52,11 @@ export const formatDocketEntryOnDocketRecord = (
     const filedByPractitioner: boolean =
       docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
 
+    const filedAfterPolicyChange =
+      record.filingDate >= visibilityPolicyDateFormatted;
+
     const filedByPractitionerAfterPolicyChange =
-      record.filedAfterPolicyChange && filedByPractitioner;
+      filedAfterPolicyChange && filedByPractitioner;
 
     canTerminalUserSeeLink =
       canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
@@ -110,6 +118,7 @@ export const formatDocketEntryOnDocketRecord = (
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     MOTION_EVENT_CODES,
     ORDER_EVENT_CODES,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -131,6 +140,15 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state[ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key],
+  );
+
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
+
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
     entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
@@ -138,6 +156,7 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
           publicCase.docketEntriesEFiledByPractitioner,
         entry,
         isTerminalUser,
+        visibilityPolicyDateFormatted,
       });
     },
   );
