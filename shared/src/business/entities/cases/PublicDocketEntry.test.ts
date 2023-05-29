@@ -15,7 +15,6 @@ describe('PublicDocketEntry', () => {
       docketNumber: '123-20',
       documentType: 'testing',
       eventCode: 'testing',
-      filedAfterPolicyChange: true,
       filedBy: 'testing',
       isFileAttached: true,
       isLegacyServed: true,
@@ -49,7 +48,6 @@ describe('PublicDocketEntry', () => {
       docketNumber: '123-20',
       documentType: 'testing',
       eventCode: 'testing',
-      filedAfterPolicyChange: true,
       filedBy: 'testing',
       isFileAttached: true,
       isLegacyServed: true,
@@ -91,7 +89,6 @@ describe('PublicDocketEntry', () => {
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filedAfterPolicyChange: true,
         filedBy: 'testing',
         filingDate: '2020-05-27T09:23:43.007Z',
         index: 1,
@@ -108,7 +105,6 @@ describe('PublicDocketEntry', () => {
         docketNumber: '101-21',
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        filedAfterPolicyChange: true,
         filedBy: 'testing',
         filingDate: '2020-05-27T09:23:43.007Z',
         index: 1,
