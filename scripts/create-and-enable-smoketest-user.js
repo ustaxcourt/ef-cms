@@ -5,7 +5,7 @@ const {
   deactivateAdminAccount,
   enableUser,
 } = require('../shared/admin-tools/user/admin');
-const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
+const { DEFAULT_ACCOUNT_PASS } = process.env;
 
 const baseUser = {
   birthYear: '1950',
@@ -43,7 +43,6 @@ const createAndEnableSmoketestUser = async () => {
 
     console.log('About to create test user!');
     await createDawsonUser({
-      deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
       setPermanentPassword: true,
       user,
     });
