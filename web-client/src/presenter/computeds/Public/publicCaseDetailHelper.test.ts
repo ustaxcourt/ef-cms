@@ -803,7 +803,6 @@ describe('publicCaseDetailHelper', () => {
         filingsAndProceedingsWithAdditionalInfo:
           ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
-        servedAtFormatted: '',
         servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
@@ -909,7 +908,6 @@ describe('publicCaseDetailHelper', () => {
         index: 9,
       },
       {
-        createdAtFormatted: '',
         index: 2,
       },
     ]);
