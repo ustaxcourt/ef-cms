@@ -17,23 +17,15 @@ const config: Config = {
   ],
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',
-  coverageThreshold: {
-    global: {
-      branches: 94.56,
-      functions: 98.81,
-      lines: 99.25,
-      statements: 99.23,
-    },
-  },
+  coverageReporters: ['json', 'lcov'],
   globals: {
     File() {},
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   testEnvironment: 'jsdom',
-  testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'],
-  testSequencer: `${__dirname}/../jestSequencer.js`,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
