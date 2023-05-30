@@ -132,8 +132,8 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
-  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
   entry,
+  filedAfterPolicyChange,
   formattedCase,
   isExternalUser,
   permissions,
@@ -199,14 +199,6 @@ export const getFormattedDocketEntry = ({
         entry.docketEntryId,
       );
   }
-
-  const visibilityPolicyDateFormatted = applicationContext
-    .getUtilities()
-    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
-    .toISO();
-
-  const filedAfterPolicyChange =
-    entry.filingDate >= visibilityPolicyDateFormatted;
 
   showDocumentLinks = getShowDocumentViewerLink({
     filedAfterPolicyChange,
@@ -336,18 +328,26 @@ export const formattedDocketEntries = (get, applicationContext) => {
     ],
   );
 
-  docketEntriesFormatted = docketEntriesFormatted.map(entry =>
-    getFormattedDocketEntry({
-      DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
+
+  docketEntriesFormatted = docketEntriesFormatted.map(entry => {
+    const filedAfterPolicyChange =
+      entry.filingDate >= visibilityPolicyDateFormatted;
+
+    return getFormattedDocketEntry({
       applicationContext,
       docketNumber,
       entry,
+      filedAfterPolicyChange,
       formattedCase: result,
       isExternalUser,
       permissions,
       userAssociatedWithCase,
-    }),
-  );
+    });
+  });
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,

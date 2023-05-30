@@ -1,4 +1,3 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { getShowDocumentViewerLink } from './formattedDocketEntries';
 
 describe('getShowDocumentViewerLink', () => {
@@ -222,7 +221,8 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      // User is external, with no access to case, document link is not publicly visible
+      description:
+        'User is external, with no access to case, document link is not publicly visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -234,7 +234,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      // User is external, with no access to case, docket entry is a sealed and served order, document link is not visible
+      description:
+        'User is external, with no access to case, docket entry is a sealed and served order, document link is not visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -246,7 +247,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      // User is external, with no access to case, docket entry is a legacy sealed and served order, document link is not visible
+      description:
+        'User is external, with no access to case, docket entry is a legacy sealed and served order, document link is not visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -258,7 +260,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      // User is external, with access to case, docket entry is a sealed and served order, document link is visible
+      description:
+        'User is external, with access to case, docket entry is a sealed and served order, document link is visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -271,7 +274,8 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      // User is external, with access to case, document link is visible
+      description:
+        'User is external, with access to case, document link is visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
