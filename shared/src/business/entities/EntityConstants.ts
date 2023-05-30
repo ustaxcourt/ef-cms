@@ -77,8 +77,14 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
     key: 'consolidated-cases-group-access-petitioner',
   },
+  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
+    key: 'document-visibility-policy-change-date',
+  },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
+  },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
   },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
@@ -111,6 +117,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
+  },
+  USE_EXTERNAL_PDF_GENERATION: {
+    disabledMessage:
+      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
+    key: 'use-external-pdf-generation',
   },
 };
 
@@ -431,6 +442,17 @@ export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const SERIATIM_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const BRIEF_EVENTCODES = [
+  ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  ...SERIATIM_DOCUMENT_EVENT_CODES,
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -634,6 +656,7 @@ export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
+  ...BRIEF_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',

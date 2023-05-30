@@ -44,6 +44,7 @@ describe('publicCaseDetailHelper', () => {
     state = {
       caseDetail: {
         docketEntries: [],
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
         docketNumber: '123-45',
       },
       sessionMetadata: {
@@ -61,10 +62,15 @@ describe('publicCaseDetailHelper', () => {
         sealedToTooltip: undefined,
       };
 
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: mockSealedDocketEntry,
-        isTerminalUser: false,
-      });
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: mockSealedDocketEntry,
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '',
+        },
+      );
 
       expect(result.sealedToTooltip).toBe('Sealed to the public');
     });
@@ -76,10 +82,15 @@ describe('publicCaseDetailHelper', () => {
         sealedToTooltip: undefined,
       };
 
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: mockDocketEntry,
-        isTerminalUser: false,
-      });
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: mockDocketEntry,
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '',
+        },
+      );
 
       expect(result.sealedToTooltip).toBe(undefined);
     });
@@ -90,27 +101,56 @@ describe('publicCaseDetailHelper', () => {
         isSealed: false,
       };
 
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: mockDocketEntry,
-        isTerminalUser: false,
-      });
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: mockDocketEntry,
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '',
+        },
+      );
 
       expect(result.isSealed).toBe(mockDocketEntry.isSealed);
     });
 
     it('should not display the document link when the entry is stricken and the user is the terminal user', () => {
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: { ...baseDocketEntry, isStricken: true },
-        isTerminalUser: true,
-      });
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: { ...baseDocketEntry, isStricken: true },
+          isTerminalUser: true,
+          visibilityPolicyDateFormatted: '',
+        },
+      );
 
       expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should show document link for brief when filed by practitioner after policy change date', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'SAMB',
+            isCourtIssuedDocument: true,
+            isNotServedDocument: false,
+          },
+          isTerminalUser: true,
+          visibilityPolicyDateFormatted: '',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(true);
     });
   });
 
   describe('printableDocketRecord', () => {
     it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
             canAllowPrintableDocketRecord: true,
@@ -126,7 +166,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should not show printable docket record button if canAllowPrintableDocketRecord is false', () => {
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
             canAllowPrintableDocketRecord: false,
@@ -144,7 +184,7 @@ describe('publicCaseDetailHelper', () => {
 
   describe('formattedDocketEntriesOnDocketRecord', () => {
     it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
-      const result = runCompute(publicCaseDetailHelper, { state });
+      const result: any = runCompute(publicCaseDetailHelper, { state });
       expect(
         Array.isArray(result.formattedDocketEntriesOnDocketRecord),
       ).toBeTruthy();
@@ -163,7 +203,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, { state });
+      const result: any = runCompute(publicCaseDetailHelper, { state });
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
@@ -185,7 +225,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, { state });
+      const result: any = runCompute(publicCaseDetailHelper, { state });
 
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
@@ -207,7 +247,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'PMT',
         },
       ];
-      const result = runCompute(publicCaseDetailHelper, { state });
+      const result: any = runCompute(publicCaseDetailHelper, { state });
 
       expect(
         result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
@@ -275,7 +315,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, { state });
+      const result: any = runCompute(publicCaseDetailHelper, { state });
 
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
@@ -340,7 +380,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, { state });
+      const result: any = runCompute(publicCaseDetailHelper, { state });
 
       expect(
         result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
@@ -414,7 +454,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: { ...state, isTerminalUser: true },
       });
 
@@ -540,7 +580,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: { ...state, isTerminalUser: false },
       });
 
@@ -624,7 +664,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: { ...state, isTerminalUser: true },
       });
 
@@ -674,7 +714,7 @@ describe('publicCaseDetailHelper', () => {
     };
 
     it('should ONLY show order type docket entries when "Orders" has been selected as the filter', () => {
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail,
           sessionMetadata: {
@@ -690,7 +730,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should ONLY show motion type docket entries when "Motions" has been selected as the filter', () => {
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail,
           sessionMetadata: {
@@ -706,7 +746,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should show all docket entries when "All documents" has been selected as the filter', () => {
-      const result = runCompute(publicCaseDetailHelper, {
+      const result: any = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail,
           sessionMetadata: {
@@ -724,7 +764,7 @@ describe('publicCaseDetailHelper', () => {
 
   it('should indicate when a case is sealed', () => {
     state.caseDetail.isSealed = true;
-    const result = runCompute(publicCaseDetailHelper, { state });
+    const result: any = runCompute(publicCaseDetailHelper, { state });
     expect(result.formattedCaseDetail.isCaseSealed).toBeTruthy();
   });
 
@@ -750,7 +790,7 @@ describe('publicCaseDetailHelper', () => {
       },
     ];
 
-    const result = runCompute(publicCaseDetailHelper, { state });
+    const result: any = runCompute(publicCaseDetailHelper, { state });
 
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -763,7 +803,6 @@ describe('publicCaseDetailHelper', () => {
         filingsAndProceedingsWithAdditionalInfo:
           ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
-        servedAtFormatted: undefined,
         servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
@@ -833,7 +872,7 @@ describe('publicCaseDetailHelper', () => {
       },
     ];
 
-    const result = runCompute(publicCaseDetailHelper, { state });
+    const result: any = runCompute(publicCaseDetailHelper, { state });
 
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -869,7 +908,6 @@ describe('publicCaseDetailHelper', () => {
         index: 9,
       },
       {
-        createdAtFormatted: undefined,
         index: 2,
       },
     ]);

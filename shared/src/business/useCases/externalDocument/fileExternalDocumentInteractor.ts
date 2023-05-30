@@ -13,6 +13,7 @@ import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * fileExternalDocumentInteractor
@@ -21,7 +22,7 @@ import { pick } from 'lodash';
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-export const fileExternalDocumentInteractor = async (
+export const fileExternalDocument = async (
   applicationContext: IApplicationContext,
   { documentMetadata }: { documentMetadata: any },
 ) => {
@@ -229,3 +230,10 @@ export const fileExternalDocumentInteractor = async (
     caseEntity => caseEntity.docketNumber === docketNumber,
   );
 };
+
+export const fileExternalDocumentInteractor = withLocking(
+  fileExternalDocument,
+  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+    identifiers: [`case|${documentMetadata.docketNumber}`],
+  }),
+);

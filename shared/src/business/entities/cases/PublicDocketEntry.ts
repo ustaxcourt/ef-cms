@@ -14,7 +14,6 @@ const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
  * PublicDocketEntry
- *
  * @param {object} rawDocketEntry the raw docket entry
  * @constructor
  */

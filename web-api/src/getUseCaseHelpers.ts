@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
@@ -20,6 +21,7 @@ import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
+import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
 import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
@@ -44,6 +46,7 @@ import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelpe
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
+  acquireLock,
   addDocketEntryForSystemGeneratedOrder,
   addDraftStampOrderDocketEntryInteractor,
   addExistingUserToCase,
@@ -65,6 +68,7 @@ const useCaseHelpers = {
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,
+  generatePdfFromHtmlHelper,
   generateStampedCoversheetInteractor,
   getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,

@@ -3,7 +3,7 @@ import { prepareDateFromString } from '../utilities/DateHandler';
 
 const validUserCase = {
   caseCaption: 'Guy Fieri, Petitioner',
-  createdAt: prepareDateFromString().toISOString(),
+  createdAt: prepareDateFromString().toISO(),
   docketNumber: '104-21',
   docketNumberWithSuffix: '104-20W',
   leadDocketNumber: '101-21',

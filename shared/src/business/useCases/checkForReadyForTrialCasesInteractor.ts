@@ -1,5 +1,7 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
+import { ServiceUnavailableError } from '../../errors/errors';
+import { acquireLock } from '../useCaseHelper/acquireLock';
 import { createISODateString } from '../utilities/DateHandler';
 
 /**
@@ -33,10 +35,39 @@ export const checkForReadyForTrialCasesInteractor = async (
     }
   };
 
-  const updatedCases = [];
+  const acquireLockForCase = async ({
+    docketNumber,
+    retry = 0,
+  }: {
+    docketNumber: string;
+    retry?: number;
+  }) => {
+    const maxRetries = 20;
+    try {
+      await acquireLock({
+        applicationContext,
+        identifiers: [`case|${docketNumber}`],
+        onLockError: new ServiceUnavailableError(
+          `${docketNumber} is currently being updated`,
+        ),
+        ttl: 900,
+      });
+    } catch (err) {
+      if (retry < maxRetries && err instanceof ServiceUnavailableError) {
+        await applicationContext.getUtilities().sleep(5000);
+        return acquireLockForCase({
+          docketNumber,
+          retry: retry + 1,
+        });
+      }
+      throw err;
+    }
+  };
 
-  for (let caseRecord of caseCatalog) {
+  const checkReadyForTrial = async caseRecord => {
     const { docketNumber } = caseRecord;
+    await acquireLockForCase({ docketNumber });
+
     const caseToCheck = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
@@ -46,17 +77,22 @@ export const checkForReadyForTrialCasesInteractor = async (
 
     if (caseToCheck) {
       const caseEntity = new Case(caseToCheck, { applicationContext });
-
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
         if (
           caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
         ) {
-          updatedCases.push(updateForTrial(caseEntity));
+          await updateForTrial(caseEntity);
         }
       }
     }
-  }
+    await applicationContext.getPersistenceGateway().removeLock({
+      applicationContext,
+      identifiers: [`case|${docketNumber}`],
+    });
+  };
+
+  const updatedCases = caseCatalog.map(checkReadyForTrial);
 
   await Promise.all(updatedCases);
 
