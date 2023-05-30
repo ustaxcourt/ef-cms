@@ -48,9 +48,13 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
+  const judges = [judgeName];
+
   return {
     closedCasesTotal,
+    currentJudge: judgeName,
     isFormPristine: !endDate || !startDate,
+    judges,
     opinionsFiledTotal,
     ordersFiledTotal,
     reportHeader,
