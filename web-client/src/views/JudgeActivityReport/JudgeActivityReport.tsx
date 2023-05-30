@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -209,6 +210,38 @@ export const JudgeActivityReport = connect(
                   }}
                 />
               </div>
+              <div className="grid-col-auto margin-x-3">
+                <label
+                  className="usa-label"
+                  htmlFor="judge-selection"
+                  id="judge-selection-label"
+                >
+                  Judge
+                </label>
+                <select
+                  aria-describedby="judge-selection-label"
+                  aria-label="judge"
+                  className="usa-select select-left width-card-lg inline-select margin-left-1pt5rem"
+                  name="associatedJudge"
+                  value={judgeActivityReportHelper.currentJudge}
+                  // onChange={e =>
+                  //   getCaseInventoryReportSequence({
+                  //     key: e.target.name,
+                  //     value: e.target.value,
+                  //   })
+                  // }
+                >
+                  <option value="">- Judge -</option>
+                  {judgeActivityReportHelper.judges.map(judge => {
+                    return (
+                      <option key={judge} value={judge}>
+                        {judge}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+
               <div className="grid-col-auto display-flex flex-align-center">
                 <Button
                   className="position-relative margin-bottom-35"
