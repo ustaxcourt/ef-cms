@@ -40,6 +40,12 @@ const mockLeadCase = {
   privatePractitioners: [],
 };
 
+const mockSealedCase = {
+  docketNumber: '300-23',
+  hasIrsPractitioner: false,
+  isSealed: true,
+};
+
 const testCase = {
   ...mockMemberCase,
   consolidatedCases: [mockLeadCase, mockMemberCase],
@@ -118,6 +124,25 @@ describe('externalConsolidatedCaseGroupHelper', () => {
       expect.arrayContaining([
         `${testCase.docketNumber} ${testCase.petitioners[0].name} & ${testCase.petitioners[1].name}`,
         `${testCase.consolidatedCases[0].docketNumber} ${testCase.consolidatedCases[0].petitioners[0].name} & ${testCase.consolidatedCases[0].petitioners[1].name}`,
+      ]),
+    );
+  });
+
+  it('should return `Sealed Case` instead of petitioner names in formattedConsolidatedCaseList for sealed cases', () => {
+    state = {
+      caseDetail: {
+        ...testCase,
+        consolidatedCases: [mockSealedCase, mockMemberCase],
+      },
+    };
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
+      state,
+    });
+
+    expect(results.formattedConsolidatedCaseList).toEqual(
+      expect.arrayContaining([
+        `${testCase.docketNumber} ${testCase.petitioners[0].name} & ${testCase.petitioners[1].name}`,
+        `${mockSealedCase.docketNumber} Sealed Case`,
       ]),
     );
   });
