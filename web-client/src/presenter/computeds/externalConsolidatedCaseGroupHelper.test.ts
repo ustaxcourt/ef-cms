@@ -115,6 +115,32 @@ describe('externalConsolidatedCaseGroupHelper', () => {
     ]);
   });
 
+  it('should return `Sealed Case` instead of petitioner names in consolidatedGroupServiceParties when a sealed case is in the list of consolidated cases', () => {
+    state = {
+      caseDetail: {
+        ...testCase,
+        consolidatedCases: [mockSealedCase, mockMemberCase],
+      },
+    };
+
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
+      state,
+    });
+
+    expect(results.consolidatedGroupServiceParties).toEqual([
+      {
+        '0': 'Sealed Case',
+      },
+      {
+        '0': `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
+        '1': `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
+        '2': `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
+        '3': `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
+        '4': `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
+      },
+    ]);
+  });
+
   it('should return formattedConsolidatedCaseList when a consolidated case is on state', () => {
     const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
       state,
