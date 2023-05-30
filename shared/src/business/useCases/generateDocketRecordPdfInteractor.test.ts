@@ -231,4 +231,24 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     expect(result).toEqual(mockPdfUrlAndID);
   });
+
+  it('returns a PDF url for an external, indirectly associated user attempting to view a sealed case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...caseDetail,
+        userId: petitionerUser.userId,
+      });
+
+    const result = await generateDocketRecordPdfInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      isIndirectlyAssociated: true,
+    } as any);
+
+    expect(result).toEqual(mockPdfUrlAndID);
+  });
 });

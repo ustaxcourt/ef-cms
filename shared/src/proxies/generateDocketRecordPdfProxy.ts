@@ -2,7 +2,6 @@ import { post } from './requests';
 
 /**
  * generateDocketRecordPdfInteractor (proxy)
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
@@ -11,7 +10,12 @@ import { post } from './requests';
  */
 export const generateDocketRecordPdfInteractor = (
   applicationContext,
-  { docketNumber, docketRecordSort, includePartyDetail },
+  {
+    docketNumber,
+    docketRecordSort,
+    includePartyDetail,
+    isIndirectlyAssociated,
+  },
 ) => {
   return post({
     applicationContext,
@@ -19,6 +23,7 @@ export const generateDocketRecordPdfInteractor = (
       docketNumber,
       docketRecordSort,
       includePartyDetail,
+      isIndirectlyAssociated,
     },
     endpoint: '/api/docket-record-pdf',
   });
