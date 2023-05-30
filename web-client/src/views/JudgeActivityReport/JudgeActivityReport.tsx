@@ -2,7 +2,6 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -12,8 +11,8 @@ export const JudgeActivityReport = connect(
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence:
-      sequences.selectDateRangeFromJudgeActivityReportSequence,
+    setJudgeActivityReportFiltersSequence:
+      sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     validationErrors: state.validationErrors,
@@ -22,7 +21,7 @@ export const JudgeActivityReport = connect(
     form,
     judgeActivityReportData,
     judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence,
+    setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
@@ -199,12 +198,12 @@ export const JudgeActivityReport = connect(
                   startPickerCls={'grid-col-6 padding-right-2'}
                   startValue={form.endDate}
                   onChangeEnd={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       endDate: e.target.value,
                     });
                   }}
                   onChangeStart={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       startDate: e.target.value,
                     });
                   }}
@@ -221,7 +220,7 @@ export const JudgeActivityReport = connect(
                 <select
                   aria-describedby="judge-selection-label"
                   aria-label="judge"
-                  className="usa-select select-left width-card-lg inline-select margin-left-1pt5rem"
+                  className="usa-select select-left width-card-lg"
                   name="associatedJudge"
                   value={judgeActivityReportHelper.currentJudge}
                   // onChange={e =>
