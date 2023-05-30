@@ -2,7 +2,7 @@ import { documentMeetsAgeRequirements } from '../../../../shared/src/business/ut
 import { state } from 'cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
-  let iconsToDisplay = [];
+  let iconsToDisplay: any[] = [];
 
   if (formattedResult.sealedTo) {
     iconsToDisplay.push({
@@ -133,6 +133,7 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
+  filedAfterPolicyChange,
   formattedCase,
   isExternalUser,
   permissions,
@@ -200,7 +201,7 @@ export const getFormattedDocketEntry = ({
   }
 
   showDocumentLinks = getShowDocumentViewerLink({
-    filedAfterPolicyChange: entry.filedAfterPolicyChange,
+    filedAfterPolicyChange,
     filedByPractitioner,
     hasDocument: entry.isFileAttached,
     isCourtIssuedDocument: entry.isCourtIssuedDocument,
@@ -241,7 +242,6 @@ export const getFormattedDocketEntry = ({
   formattedResult.showSealDocketRecordEntry = getShowSealDocketRecordEntry({
     applicationContext,
     entry,
-    userPermissions: permissions,
   });
 
   formattedResult.showDocumentDescriptionWithoutLink =
@@ -277,6 +277,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     DOCKET_RECORD_FILTER_OPTIONS,
     EXHIBIT_EVENT_CODES,
     MOTION_EVENT_CODES,
@@ -321,17 +322,32 @@ export const formattedDocketEntries = (get, applicationContext) => {
     docketRecordSort,
   );
 
-  docketEntriesFormatted = docketEntriesFormatted.map(entry =>
-    getFormattedDocketEntry({
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
+
+  docketEntriesFormatted = docketEntriesFormatted.map(entry => {
+    const filedAfterPolicyChange =
+      entry.filingDate >= visibilityPolicyDateFormatted;
+
+    return getFormattedDocketEntry({
       applicationContext,
       docketNumber,
       entry,
+      filedAfterPolicyChange,
       formattedCase: result,
       isExternalUser,
       permissions,
       userAssociatedWithCase,
-    }),
-  );
+    });
+  });
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,

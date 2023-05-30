@@ -11,7 +11,6 @@ import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
@@ -47,6 +46,7 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
   formatDocketEntry,
@@ -128,7 +128,6 @@ const frozenConstants = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
   ERROR_MAP_429,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   INITIAL_DOCUMENT_TYPES,
@@ -203,6 +202,7 @@ const applicationContextPublic = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       openUrlInNewTab,
+      prepareDateFromString,
       sortDocketEntries,
     };
   },

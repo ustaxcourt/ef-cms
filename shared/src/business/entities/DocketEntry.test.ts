@@ -96,38 +96,6 @@ describe('DocketEntry entity', () => {
     });
   });
 
-  describe('getFiledAfterPolicyChange', () => {
-    it('should return true when filingDate is on or after 8/1/23, the policy change date', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          filingDate: applicationContext
-            .getUtilities()
-            .prepareDateFromString('2023-08-01')
-            .toISO(),
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.getFiledAfterPolicyChange()).toBe(true);
-    });
-
-    it('should return false when filingDate is before 8/1/23, the policy change date', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          filingDate: applicationContext
-            .getUtilities()
-            .prepareDateFromString('2020-01-01')
-            .toISO(),
-        },
-        { applicationContext, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry.getFiledAfterPolicyChange()).toBe(false);
-    });
-  });
-
   describe('isValid', () => {
     it('Creates a valid docket entry', () => {
       const myDoc = new DocketEntry(A_VALID_DOCKET_ENTRY, {

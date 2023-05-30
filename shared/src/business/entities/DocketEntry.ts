@@ -3,7 +3,6 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE,
   EXTERNAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PARTIES_CODES,
@@ -108,7 +107,6 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
-  public filedAfterPolicyChange: boolean;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -199,7 +197,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
-    this.filedAfterPolicyChange = this.getFiledAfterPolicyChange();
     // only share the userId with an external user if it is the logged in user
     if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
@@ -414,15 +411,6 @@ export class DocketEntry extends JoiValidationEntity {
    */
   setAsProcessingStatusAsCompleted() {
     this.processingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-  }
-
-  /**
-   * Determines whether or not the docket entry filingDate occurs after the policy change date
-   * @returns {boolean} true if the docket entry was filed after 8/1/23
-   * otherwise false
-   */
-  getFiledAfterPolicyChange(): boolean {
-    return this.filingDate >= DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE;
   }
 
   /**
