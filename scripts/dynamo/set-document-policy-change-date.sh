@@ -1,24 +1,28 @@
 #!/bin/bash
 
-# Sets the document visibility policy change date to the passed in value in the dynamo deploy table
+# Sets the document visibility policy change date to the passed in value in the dynamo deploy table. 
 
 # Usage
 #   ./set-document-policy-change-date.sh 2023-08-01 dev
 
 # Arguments
-#   - $1 - date to use as the effective policy change date
-#   - $2 - the environment to set the flag
+#   - $1 - the environment to set the flag
+#   - $2 - date to use as the effective policy change date. Defaults to 2023-08-01 (date chosen by court) if this value is not passed in
 
-[ -z "$1" ] && echo "The value to set for the maintenance mode flag must be provided as the \$1 argument." && exit 1
-[ -z "$2" ] && echo "The environment must be provided as the \$2 argument." && exit 1
+[ -z "$1" ] && echo "The environment must be provided as the \$1 argument." && exit 1
 
-DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE=$1
-ENV=$2
+ENV=$1
+DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE=$2
 
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
+
+if [[ -z $DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE ]] ; then
+    DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE="2023-08-01"
+fi
+
 
 ITEM=$(cat <<-END
 {
