@@ -116,7 +116,10 @@ export const generateCoverSheetData = async ({
   const isMultiDocketablePaperFiled = MULTI_DOCKET_FILING_EVENT_CODES.includes(
     docketEntryEntity.eventCode,
   );
-  if (isMultiDocketableCourtIssued || isMultiDocketablePaperFiled) {
+  if (
+    caseEntity.leadDocketNumber &&
+    (isMultiDocketableCourtIssued || isMultiDocketablePaperFiled)
+  ) {
     coverSheetData = await applicationContext
       .getUseCaseHelpers()
       .formatConsolidatedCaseCoversheetData({

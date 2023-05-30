@@ -79,7 +79,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the leadDocketNumber for the added document', async () => {
+  it('should call uploadExternalDocumentsInteractor with a list of consolidated cases when filing across consolidated case group', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
     const testCase = {
       ...MOCK_CASE,
@@ -138,7 +138,7 @@ describe('uploadExternalDocumentsAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: testCase.leadDocketNumber,
+      docketNumber: testCase.docketNumber,
     });
   });
 
