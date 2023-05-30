@@ -22,13 +22,14 @@ const getCaseRow = ({
       <tr className="hoverable vertical-align-middle-row">
         <td className="consolidated-case-column">
           <div className={indentMemberCase ? 'margin-left-2' : ''}>
-            <ConsolidatedCaseIcon
-              consolidatedIconTooltipText={
-                formattedCase.consolidatedIconTooltipText
-              }
-              inConsolidatedGroup={formattedCase.inConsolidatedGroup}
-              showLeadCaseIcon={formattedCase.isLeadCase}
-            />
+            {formattedCase.inConsolidatedGroup && (
+              <ConsolidatedCaseIcon
+                consolidatedIconTooltipText={
+                  formattedCase.consolidatedIconTooltipText
+                }
+                showLeadCaseIcon={formattedCase.isLeadCase}
+              />
+            )}
           </div>
         </td>
         <td>
@@ -113,6 +114,7 @@ const getCaseRow = ({
         <tr className="notes-row">
           <td></td>
           <td></td>
+          <td></td>
           <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Calendar notes:</span>
             {formattedCase.calendarNotes}
@@ -124,39 +126,41 @@ const getCaseRow = ({
         <tr className="notes-row">
           <td></td>
           <td></td>
-          <td className="font-body-2xs" colSpan={4}>
+          <td></td>
+          <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Notes:</span>
             <TextView
               bind={`trialSessionWorkingCopy.userNotes.${formattedCase.docketNumber}.notes`}
             />
           </td>
-          <td className="no-wrap text-align-right">
-            <Button
-              link
-              className="red-warning"
-              icon="trash"
-              onClick={() => {
-                trialSequences.openDeleteUserCaseNoteConfirmModalSequence({
-                  docketNumber: formattedCase.docketNumber,
-                });
-              }}
-            >
-              Delete Note
-            </Button>
-          </td>
-
-          <td className="no-wrap text-align-right">
-            <Button
-              link
-              icon="edit"
-              onClick={() => {
-                trialSequences.openAddEditUserCaseNoteModalFromListSequence({
-                  docketNumber: formattedCase.docketNumber,
-                });
-              }}
-            >
-              Edit Note
-            </Button>
+          <td>
+            <div>
+              <Button
+                link
+                icon="edit"
+                onClick={() => {
+                  trialSequences.openAddEditUserCaseNoteModalFromListSequence({
+                    docketNumber: formattedCase.docketNumber,
+                  });
+                }}
+              >
+                Edit Note
+              </Button>
+            </div>
+            <div>
+              <Button
+                link
+                className="red-warning"
+                icon="trash"
+                onClick={() => {
+                  trialSequences.openDeleteUserCaseNoteConfirmModalSequence({
+                    docketNumber: formattedCase.docketNumber,
+                  });
+                }}
+              >
+                Delete Note
+              </Button>
+            </div>
           </td>
         </tr>
       )}
