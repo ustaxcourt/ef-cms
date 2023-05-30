@@ -128,7 +128,7 @@ describe('publicCaseDetailHelper', () => {
       expect(result.showLinkToDocument).toBe(false);
     });
 
-    it('should show document link for brief when filed by practitioner after policy change date', () => {
+    it('should show document link for brief for the terminal user when filed by practitioner after policy change date', () => {
       const result: any = formatDocketEntryOnDocketRecord(
         applicationContextPublic,
         {
@@ -136,15 +136,74 @@ describe('publicCaseDetailHelper', () => {
           entry: {
             ...baseDocketEntry,
             eventCode: 'SAMB',
-            isCourtIssuedDocument: true,
+            isCourtIssuedDocument: false,
             isNotServedDocument: false,
           },
           isTerminalUser: true,
-          visibilityPolicyDateFormatted: '',
+          visibilityPolicyDateFormatted: '2010-05-16T00:00:00.000-04:00',
         },
       );
 
       expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should not show document link for brief for the terminal user when filed by practitioner before policy change date', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'SAMB',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+          },
+          isTerminalUser: true,
+          visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should show document link for brief when filed by practitioner after policy change date for the public user and is not a court issued document', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'SAMB',
+            filingDate: '2030-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2020-05-16T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should not show document link for brief when filed by practitioner after policy change date for the public user and is not a court issued document', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'SAMB',
+            filingDate: '2030-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
     });
   });
 

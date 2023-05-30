@@ -32,14 +32,34 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
+  let filedByPractitionerAfterPolicyChange = false;
+  const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
+    entry.eventCode,
+  );
+  if (isDocketEntryBriefEventCode) {
+    const filedByPractitioner: boolean =
+      docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
+
+    const filedAfterPolicyChange =
+      record.filingDate >= visibilityPolicyDateFormatted;
+
+    filedByPractitionerAfterPolicyChange =
+      filedAfterPolicyChange && filedByPractitioner;
+  }
+
   let canTerminalUserSeeLink =
     record.isFileAttached &&
     isServedDocument &&
     !record.isSealed &&
     !record.isStricken;
 
+  if (isDocketEntryBriefEventCode) {
+    canTerminalUserSeeLink =
+      canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
+  }
+
   let canPublicUserSeeLink =
-    record.isCourtIssuedDocument &&
+    (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
@@ -47,23 +67,6 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isStipDecision &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
-
-  if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
-    const filedByPractitioner: boolean =
-      docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
-
-    const filedAfterPolicyChange =
-      record.filingDate >= visibilityPolicyDateFormatted;
-
-    const filedByPractitionerAfterPolicyChange =
-      filedAfterPolicyChange && filedByPractitioner;
-
-    canTerminalUserSeeLink =
-      canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
-
-    canPublicUserSeeLink =
-      canPublicUserSeeLink && filedByPractitionerAfterPolicyChange;
-  }
 
   const canDisplayDocumentLink = isTerminalUser
     ? canTerminalUserSeeLink
