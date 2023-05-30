@@ -6,7 +6,7 @@ import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { updateDateFromPickerFromFormAction } from '../actions/JudgeActivityReport/updateDateFromPickerFromFormAction';
 import { validateJudgeActivityReportSearchAction } from '../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
-export const selectDateRangeFromJudgeActivityReportSequence = [
+export const setJudgeActivityReportFiltersSequence = [
   updateDateFromPickerFromFormAction,
   shouldValidateAction,
   {
