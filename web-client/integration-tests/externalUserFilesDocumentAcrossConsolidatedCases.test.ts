@@ -128,7 +128,7 @@ describe('External User files a document across a consolidated case group', () =
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber2);
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber2,
-      shouldShowFileFirstDocumentButton: true,
+      shouldShowFileDocumentButton: true,
     });
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
