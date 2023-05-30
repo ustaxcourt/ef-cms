@@ -2,7 +2,7 @@ import { documentMeetsAgeRequirements } from '../../../../shared/src/business/ut
 import { state } from 'cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
-  let iconsToDisplay = [];
+  let iconsToDisplay: any[] = [];
 
   if (formattedResult.sealedTo) {
     iconsToDisplay.push({
@@ -250,7 +250,6 @@ export const getFormattedDocketEntry = ({
   formattedResult.showSealDocketRecordEntry = getShowSealDocketRecordEntry({
     applicationContext,
     entry,
-    userPermissions: permissions,
   });
 
   formattedResult.showDocumentDescriptionWithoutLink =
