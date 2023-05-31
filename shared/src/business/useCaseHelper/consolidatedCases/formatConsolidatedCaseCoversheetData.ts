@@ -2,7 +2,6 @@ import { Case } from '../../entities/cases/Case';
 
 /**
  * Formats consolidated cases coversheet data
- *
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.caseEntity the case entity
  * @param {object} providers.coverSheetData the coversheet data
@@ -19,7 +18,7 @@ export const formatConsolidatedCaseCoversheetData = async ({
     .getPersistenceGateway()
     .getCasesByLeadDocketNumber({
       applicationContext,
-      leadDocketNumber: caseEntity.docketNumber,
+      leadDocketNumber: caseEntity.leadDocketNumber,
     });
 
   consolidatedCases.sort(

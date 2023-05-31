@@ -2,7 +2,7 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
-import { Case, isLeadCase } from '../entities/cases/Case';
+import { Case } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
@@ -117,7 +117,7 @@ export const generateCoverSheetData = async ({
     docketEntryEntity.eventCode,
   );
   if (
-    isLeadCase(caseEntity) &&
+    caseEntity.leadDocketNumber &&
     (isMultiDocketableCourtIssued || isMultiDocketablePaperFiled)
   ) {
     coverSheetData = await applicationContext
