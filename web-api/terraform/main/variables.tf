@@ -113,3 +113,13 @@ variable "blue_node_version" {
 variable "green_node_version" {
   type = string
 }
+
+variable "blue_use_layers" {
+  type = bool
+  default = true
+}
+
+variable "green_use_layers" {
+  type = bool
+  default = true
+}
