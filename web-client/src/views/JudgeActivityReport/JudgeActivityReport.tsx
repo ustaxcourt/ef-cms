@@ -227,7 +227,9 @@ export const JudgeActivityReport = connect(
                     })
                   }
                 >
-                  <option value="">- Judge -</option>
+                  <option value={judgeActivityReportHelper.currentJudge}>
+                    {judgeActivityReportHelper.currentJudge}
+                  </option>
                   {judgeActivityReportHelper.judges.map(judge => {
                     return (
                       <option key={judge} value={judge}>
