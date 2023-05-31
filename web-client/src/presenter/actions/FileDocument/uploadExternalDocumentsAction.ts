@@ -36,7 +36,7 @@ export const uploadExternalDocumentsAction = async ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * generates a PDF from the currently scanned images / batches
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting state
@@ -13,7 +12,7 @@ import { state } from 'cerebral';
 export const generatePdfFromScanSessionAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   // wait a bit so that the spinner shows up because generatePDFFromJPGDataInteractor blocks the browser
   await new Promise(resolve => setTimeout(resolve, 100));
   const documentSelectedForScan = get(

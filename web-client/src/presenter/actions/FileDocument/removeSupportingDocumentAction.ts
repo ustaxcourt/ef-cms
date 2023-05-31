@@ -9,7 +9,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {undefined}
  */
-export const removeSupportingDocumentAction = ({ get, props, store }) => {
+export const removeSupportingDocumentAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const { index } = props;
 
   const supportingDocuments = get(state.form.supportingDocuments) || [];

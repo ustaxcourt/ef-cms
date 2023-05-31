@@ -3,13 +3,15 @@ import { state } from 'cerebral';
 /**
  * Determines if the user is associated with the case or not, and if there is a
  * pending association to the case for privatePractitioners
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @param {object} providers.applicationContext needed for getting the getCase use case
  * @returns {object} contains the association returned from the use case
  */
-export const getCaseAssociationAction = async ({ applicationContext, get }) => {
+export const getCaseAssociationAction = async ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   let isAssociated = false;

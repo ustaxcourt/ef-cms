@@ -2,6 +2,7 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { DismissThirtyDayNoticeAlertModal } from './DismissThirtyDayNoticeAlertModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
@@ -11,7 +12,10 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
-import { WarningNotification } from '../WarningNotification';
+import {
+  WarningNotification,
+  WarningNotificationComponent,
+} from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -21,6 +25,8 @@ export const TrialSessionDetail = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmModalSequence: sequences.openConfirmModalSequence,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
+    showDismissThirtyDayAlertModalSequence:
+      sequences.showDismissThirtyDayAlertModalSequence,
     showModal: state.modal.showModal,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
@@ -28,6 +34,7 @@ export const TrialSessionDetail = connect(
     formattedTrialSessionDetails,
     openConfirmModalSequence,
     openSetCalendarModalSequence,
+    showDismissThirtyDayAlertModalSequence,
     showModal,
     trialSessionDetailsHelper,
   }) {
@@ -39,6 +46,20 @@ export const TrialSessionDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WarningNotification />
+          {formattedTrialSessionDetails.showAlertForNOTTReminder && (
+            <WarningNotificationComponent
+              alertWarning={{
+                dismissIcon: 'paper-plane',
+                dismissText: 'Yes, served',
+                message: formattedTrialSessionDetails.alertMessageForNOTT,
+              }}
+              dismissAlertSequence={showDismissThirtyDayAlertModalSequence}
+              dismissable={trialSessionDetailsHelper.canDismissThirtyDayAlert}
+              iconRight={false}
+              messageNotBold={true}
+              scrollToTop={false}
+            />
+          )}
           <TrialSessionInformation />
           {!formattedTrialSessionDetails.isCalendared && (
             <Tabs
@@ -179,6 +200,9 @@ export const TrialSessionDetail = connect(
             {' '}
             You will not be able to reopen this session.
           </ConfirmModal>
+        )}
+        {showModal === 'DismissThirtyDayNoticeAlertModal' && (
+          <DismissThirtyDayNoticeAlertModal />
         )}
       </>
     );

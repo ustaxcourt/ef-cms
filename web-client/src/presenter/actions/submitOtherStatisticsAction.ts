@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * submits the add/edit other statistics form
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.applicationContext the applicationContext
@@ -13,7 +12,7 @@ export const submitOtherStatisticsAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { damages, isEditing, litigationCosts } = get(state.form);
   const docketNumber = get(state.caseDetail.docketNumber);
 

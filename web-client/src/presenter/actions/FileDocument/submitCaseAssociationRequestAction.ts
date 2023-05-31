@@ -12,7 +12,7 @@ export const submitCaseAssociationRequestAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
     applicationContext.getConstants();
 

@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.pdfFile
  * @param {object} providers.store the cerebral store used for setting the state.form.primaryDocumentFile
  */
-export const setPdfFileAction = ({ props, store }) => {
+export const setPdfFileAction = ({ props, store }: ActionProps) => {
   store.set(state.form.primaryDocumentFile, props.pdfFile);
 };

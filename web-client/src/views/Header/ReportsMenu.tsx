@@ -30,7 +30,7 @@ export const ReportsMenu = connect(
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
-            reportMenuHelper && 'usa-current',
+            reportMenuHelper.pageIsReports && 'usa-current',
           )}
           id="reports-btn"
           onClick={() => {
@@ -66,6 +66,18 @@ export const ReportsMenu = connect(
               >
                 Case Inventory
               </Button>
+            </li>
+            <li className="usa-nav__submenu-item">
+              <a
+                href="/reports/custom-case"
+                id="custom-case-report-btn"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Custom Case Report
+              </a>
             </li>
             <li className="usa-nav__submenu-item">
               <a

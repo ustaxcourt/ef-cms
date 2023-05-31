@@ -1,6 +1,5 @@
 /**
  * gets documentContents based on props.docketEntryIdToEdit
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the cerebral props object
  * @param {object} providers.props the cerebral props object
@@ -9,7 +8,7 @@
 export const getDocumentContentsAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { caseDetail, docketEntryIdToEdit } = props;
 
   if (docketEntryIdToEdit) {

@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 /**
  * computes the certificate of service dates from the form
  * month, day and year values
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const computeCertificateOfServiceFormDateAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   let month = get(state.form.certificateOfServiceMonth);
   let day = get(state.form.certificateOfServiceDay);
   let year = get(state.form.certificateOfServiceYear);

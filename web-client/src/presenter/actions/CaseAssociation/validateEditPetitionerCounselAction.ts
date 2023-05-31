@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the privatePractitioners on the modal form for the edit counsel modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.get the cerebral get function used for getting state.modal
@@ -15,7 +14,7 @@ export const validateEditPetitionerCounselAction = ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
     applicationContext.getConstants();
 

@@ -2,13 +2,12 @@ import { state } from 'cerebral';
 
 /**
  * determines if the current url path is a case detail route and returns the appropriate path
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {path} the cerebral path object that contains the next path in the sequence
  * @returns {Function} the next path in the sequence
  */
-export const getIsOnCaseDetailAction = ({ get, path }) => {
+export const getIsOnCaseDetailAction = ({ get, path }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
   let isOnCaseDetail = false;
