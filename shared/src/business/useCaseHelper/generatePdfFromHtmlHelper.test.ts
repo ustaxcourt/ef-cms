@@ -1,5 +1,5 @@
 import { applicationContext } from '../test/createTestApplicationContext';
-import { generatePdfFromHtmlInteractor } from './generatePdfFromHtmlInteractor';
+import { generatePdfFromHtmlHelper } from './generatePdfFromHtmlHelper';
 
 jest.mock(
   '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
@@ -10,7 +10,7 @@ jest.mock(
   },
 );
 
-describe('generatePdfFromHtmlInteractor', () => {
+describe('generatePdfFromHtmlHelper', () => {
   let pageContent = '';
   let closeMock;
 
@@ -68,7 +68,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     };
 
     await expect(
-      generatePdfFromHtmlInteractor(applicationContext, args as any),
+      generatePdfFromHtmlHelper(applicationContext, args as any),
     ).rejects.toThrow();
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });
@@ -81,7 +81,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       docketNumber: '123-45',
     };
 
-    await generatePdfFromHtmlInteractor(applicationContext, args as any);
+    await generatePdfFromHtmlHelper(applicationContext, args as any);
 
     expect(launchMock).toHaveBeenCalled();
     expect(newPageMock).toHaveBeenCalled();
@@ -97,7 +97,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       docketNumber: '123-45',
     };
 
-    const result = await generatePdfFromHtmlInteractor(
+    const result = await generatePdfFromHtmlHelper(
       applicationContext,
       args as any,
     );
@@ -115,7 +115,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       headerHtml: customHeader,
     };
 
-    await generatePdfFromHtmlInteractor(applicationContext, args as any);
+    await generatePdfFromHtmlHelper(applicationContext, args as any);
 
     const secondPageHeader = pdfMock.mock.calls[1][0].headerTemplate;
     expect(
@@ -132,7 +132,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       headerHtml: '',
     };
 
-    const result = await generatePdfFromHtmlInteractor(
+    const result = await generatePdfFromHtmlHelper(
       applicationContext,
       args as any,
     );
@@ -148,7 +148,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       footerHtml: 'Test Footer',
     };
 
-    await generatePdfFromHtmlInteractor(applicationContext, args as any);
+    await generatePdfFromHtmlHelper(applicationContext, args as any);
 
     const firstPageFooter = pdfMock.mock.calls[0][0].footerTemplate;
 
@@ -164,7 +164,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     };
     const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
 
-    const result = await generatePdfFromHtmlInteractor(
+    const result = await generatePdfFromHtmlHelper(
       applicationContext,
       args as any,
     );
@@ -182,7 +182,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     };
     const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
 
-    await generatePdfFromHtmlInteractor(applicationContext, args as any);
+    await generatePdfFromHtmlHelper(applicationContext, args as any);
 
     const firstPageFooter = pdfMock.mock.calls[0][0].footerTemplate;
 

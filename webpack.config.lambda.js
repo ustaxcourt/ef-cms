@@ -1,7 +1,11 @@
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  externals: ['@sparticuz/chromium', 'pug', 'puppeteer-core'],
+  externals: {
+    '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
+    'aws-crt': 'commonjs aws-crt',
+    'puppeteer-core': 'commonjs puppeteer-core',
+  },
   mode: 'production',
   module: {
     rules: [
