@@ -62,15 +62,17 @@ describe('unauthed user views practitioner filed brief', () => {
     });
   });
 
-  loginAs(testClient, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(testClient);
+  describe('petitionsclerk serves petition and adds privatePractitioner1 to case', () => {
+    loginAs(testClient, 'petitionsclerk@example.com');
+    petitionsClerkServesElectronicCaseToIrs(testClient);
 
-  petitionsClerkAddsPractitionerToPrimaryContact(
-    testClient,
-    privatePractitioner1BarNumber,
-  );
+    petitionsClerkAddsPractitionerToPrimaryContact(
+      testClient,
+      privatePractitioner1BarNumber,
+    );
+  });
 
-  describe('Petitioner creates case', () => {
+  describe('privatePractitioner1 files a seriatim brief on the case', () => {
     loginAs(testClient, 'privatePractitioner1@example.com');
     it('Practitioner files document for stipulated decision', async () => {
       await testClient.runSequence('gotoCaseDetailSequence', {
@@ -144,23 +146,27 @@ describe('unauthed user views practitioner filed brief', () => {
     });
   });
 
-  // loginAs(testClient, 'privatePractitioner3@example.com');
-  // practitionerSearchesForCase(testClient);
-  // it('unassociated practitioner is able to view the previously filed seriatim brief and access the document link', async () => {
-  //   let { formattedDocketEntriesOnDocketRecord } =
-  //     await getFormattedDocketEntriesForTest(testClient);
+  describe('privatePractitioner3 searches for the case and views the seriatim brief document', () => {
+    loginAs(testClient, 'privatePractitioner3@example.com');
+    practitionerSearchesForCase(testClient);
+    it('unassociated practitioner is able to view the previously filed seriatim brief and access the document link', async () => {
+      let { formattedDocketEntriesOnDocketRecord } =
+        await getFormattedDocketEntriesForTest(testClient);
 
-  //   const practitioner1FiledSeriatimBrief =
-  //     formattedDocketEntriesOnDocketRecord.find(
-  //       entry => entry.eventCode === seriatimBriefDocument.eventCode,
-  //     );
+      const practitioner1FiledSeriatimBrief =
+        formattedDocketEntriesOnDocketRecord.find(
+          entry => entry.eventCode === seriatimBriefDocument.eventCode,
+        );
 
-  //   expect(practitioner1FiledSeriatimBrief).toEqual('');
-  // });
+      expect(practitioner1FiledSeriatimBrief).toEqual('');
+    });
+  });
+
+  //unuathed user searches for case
+  // verify that they can see document link for brief
 
   // describe('Unauthed user searches for a case and views a case detail page', () => {
   //   unauthedUserNavigatesToPublicSite(cerebralTest);
-  //   unauthedUserSearchesByMeta(cerebralTest);
   //   unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
   //   unauthedUserViewsCaseDetail(cerebralTest);
   //   unauthedUserViewsFilteredDocketRecord(cerebralTest);
