@@ -24,7 +24,7 @@ import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserVi
 describe('unauthed user views practitioner filed brief', () => {
   const cerebralTest = setupTest();
   const testClient = setupTestClient();
-  const privatePractitioner1BarNumber = 'PT5432';
+  const privatePractitionerBarNumber = 'PT1234';
 
   const seriatimBriefDocument = {
     category: 'Seriatim Brief',
@@ -62,18 +62,18 @@ describe('unauthed user views practitioner filed brief', () => {
     });
   });
 
-  describe('petitionsclerk serves petition and adds privatePractitioner1 to case', () => {
+  describe('petitionsclerk serves petition and adds privatePractitioner to case', () => {
     loginAs(testClient, 'petitionsclerk@example.com');
     petitionsClerkServesElectronicCaseToIrs(testClient);
 
     petitionsClerkAddsPractitionerToPrimaryContact(
       testClient,
-      privatePractitioner1BarNumber,
+      privatePractitionerBarNumber,
     );
   });
 
-  describe('privatePractitioner1 files a seriatim brief on the case', () => {
-    loginAs(testClient, 'privatePractitioner1@example.com');
+  describe('privatePractitioner files a seriatim brief on the case', () => {
+    loginAs(testClient, 'privatepractitioner@example.com');
     it('Practitioner files document for stipulated decision', async () => {
       await testClient.runSequence('gotoCaseDetailSequence', {
         docketNumber: testClient.docketNumber,
@@ -142,12 +142,17 @@ describe('unauthed user views practitioner filed brief', () => {
 
       expect(testClient.getState('validationErrors')).toEqual({});
 
+      await testClient.runSequence('updateFormValueSequence', {
+        key: 'redactionAcknowledgement',
+        value: true,
+      });
+
       await testClient.runSequence('submitExternalDocumentSequence');
     });
   });
 
   describe('privatePractitioner3 searches for the case and views the seriatim brief document', () => {
-    loginAs(testClient, 'privatePractitioner3@example.com');
+    loginAs(testClient, 'privatepractitioner3@example.com');
     practitionerSearchesForCase(testClient);
     it('unassociated practitioner is able to view the previously filed seriatim brief and access the document link', async () => {
       let { formattedDocketEntriesOnDocketRecord } =
@@ -158,7 +163,7 @@ describe('unauthed user views practitioner filed brief', () => {
           entry => entry.eventCode === seriatimBriefDocument.eventCode,
         );
 
-      expect(practitioner1FiledSeriatimBrief).toEqual('');
+      expect(practitioner1FiledSeriatimBrief).toBeDefined();
     });
   });
 
