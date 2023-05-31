@@ -14,6 +14,24 @@ const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
     : '';
 };
 
+export const formatCaseTitle = ({
+  applicationContext,
+  caseEntity,
+  useInitialData,
+}) => {
+  const caseCaption = useInitialData
+    ? caseEntity.initialCaption
+    : caseEntity.caseCaption;
+
+  let caseTitle = applicationContext.getCaseTitle(caseCaption);
+  let caseCaptionExtension = '';
+  if (caseTitle !== caseCaption) {
+    caseTitle += ', ';
+    caseCaptionExtension = caseCaption.replace(caseTitle, '');
+  }
+  return { caseCaptionExtension, caseTitle };
+};
+
 /**
  * a helper function which assembles the correct data to be used in the generation of a PDF
  * @param {object} options the providers object
@@ -55,26 +73,21 @@ export const generateCoverSheetData = async ({
     stampData.date = formatDateString(stampData.date, FORMATS.MMDDYYYY);
   }
 
-  const caseCaption = useInitialData
-    ? caseEntity.initialCaption
-    : caseEntity.caseCaption;
-
-  const docketNumberSuffixToUse = useInitialData
-    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
-    : caseEntity.docketNumberSuffix;
-
-  let caseTitle = applicationContext.getCaseTitle(caseCaption);
-  let caseCaptionExtension = '';
-  if (caseTitle !== caseCaption) {
-    caseTitle += ', ';
-    caseCaptionExtension = caseCaption.replace(caseTitle, '');
-  }
+  const { caseCaptionExtension, caseTitle } = formatCaseTitle({
+    applicationContext,
+    caseEntity,
+    useInitialData,
+  });
 
   let documentTitle =
     docketEntryEntity.documentTitle || docketEntryEntity.documentType;
   if (docketEntryEntity.additionalInfo && docketEntryEntity.addToCoversheet) {
     documentTitle += ` ${docketEntryEntity.additionalInfo}`;
   }
+
+  const docketNumberSuffixToUse = useInitialData
+    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    : caseEntity.docketNumberSuffix;
 
   const docketNumberWithSuffix =
     caseEntity.docketNumber + (docketNumberSuffixToUse || '');
@@ -127,6 +140,7 @@ export const generateCoverSheetData = async ({
         caseEntity,
         coverSheetData,
         docketEntryEntity,
+        useInitialData,
       });
   }
 
