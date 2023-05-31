@@ -50,13 +50,13 @@ export const externalConsolidatedCaseGroupHelper = (
       ];
 
       if (!combinedPartiesList.length && memberCase.isSealed) {
-        consolidatedGroupServiceParties[i] = { 0: 'Sealed Case' };
+        consolidatedGroupServiceParties[i] = ['Sealed Case'];
       } else {
-        consolidatedGroupServiceParties[i] = {};
-        combinedPartiesList.forEach((party, j) => {
-          consolidatedGroupServiceParties[i][j] = `${
-            party.name
-          }, ${roleToDisplay(party)}`;
+        consolidatedGroupServiceParties[i] = [];
+        combinedPartiesList.forEach(party => {
+          consolidatedGroupServiceParties[i].push(
+            `${party.name}, ${roleToDisplay(party)}`,
+          );
         });
       }
     });

@@ -101,17 +101,17 @@ describe('externalConsolidatedCaseGroupHelper', () => {
     });
 
     expect(results.consolidatedGroupServiceParties).toEqual([
-      {
-        '0': `${testCase.consolidatedCases[0].petitioners[0].name}, Petitioner`,
-        '1': `${testCase.consolidatedCases[0].petitioners[1].name}, Petitioner`,
-      },
-      {
-        '0': `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
-        '1': `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
-        '2': `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
-        '3': `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
-        '4': `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
-      },
+      [
+        `${testCase.consolidatedCases[0].petitioners[0].name}, Petitioner`,
+        `${testCase.consolidatedCases[0].petitioners[1].name}, Petitioner`,
+      ],
+      [
+        `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
+      ],
     ]);
   });
 
@@ -128,16 +128,14 @@ describe('externalConsolidatedCaseGroupHelper', () => {
     });
 
     expect(results.consolidatedGroupServiceParties).toEqual([
-      {
-        '0': 'Sealed Case',
-      },
-      {
-        '0': `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
-        '1': `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
-        '2': `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
-        '3': `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
-        '4': `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
-      },
+      ['Sealed Case'],
+      [
+        `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
+      ],
     ]);
   });
 
