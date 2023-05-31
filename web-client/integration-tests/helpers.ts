@@ -27,6 +27,7 @@ import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
+import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
@@ -62,6 +63,7 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
+import { ALLOWLIST_FEATURE_FLAGS } from '../../shared/src/business/entities/EntityConstants';
 import {
   fakeData,
   getFakeFile,
@@ -118,6 +120,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     stage: process.env.STAGE || 'local',
   };
   const apiApplicationContext = {
+    environment: {
+      currentColor: 'blue',
+    },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getConstants: () => ({ MAX_SES_RETRIES: 6 }),
@@ -238,10 +243,23 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getUseCaseHelpers: () => ({
       countPagesInDocument,
       generateAndServeDocketEntry,
+      generatePdfFromHtmlHelper,
       sendServedPartiesEmails,
       updateCaseAndAssociations,
     }),
-    getUseCases: () => ({ generatePdfFromHtmlInteractor }),
+    getUseCases: () => ({
+      generatePdfFromHtmlInteractor,
+      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
+        if (
+          featureFlag ===
+          ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+    }),
     getUtilities: () => ({
       calculateDifferenceInDays,
       calculateISODate,
