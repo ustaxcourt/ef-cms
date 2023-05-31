@@ -191,8 +191,6 @@ export const JudgeActivityReport = connect(
                   endValue={form.endDate}
                   formGroupCls={'margin-bottom-0'}
                   rangePickerCls={'grid-row '}
-                  showHint={false}
-                  showPlaceholder={true}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}
@@ -223,12 +221,11 @@ export const JudgeActivityReport = connect(
                   className="usa-select select-left width-card-lg"
                   name="associatedJudge"
                   value={judgeActivityReportHelper.currentJudge}
-                  // onChange={e =>
-                  //   getCaseInventoryReportSequence({
-                  //     key: e.target.name,
-                  //     value: e.target.value,
-                  //   })
-                  // }
+                  onChange={e =>
+                    setJudgeActivityReportFiltersSequence({
+                      judgeName: e.target.value,
+                    })
+                  }
                 >
                   <option value="">- Judge -</option>
                   {judgeActivityReportHelper.judges.map(judge => {
