@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Sets last name of the judge on form used for the judge activity report on state
- *
  * @param {object} providers the providers object
  * @param {object} applicationContext the applicationContext
  * @param {object} providers.store the cerebral store object
@@ -33,4 +32,5 @@ export const setJudgeLastNameOnFormAction = ({
   }
 
   store.set(state.form.judgeName, judgeName);
+  store.set(state.form.signedInJudge, judgeName);
 };
