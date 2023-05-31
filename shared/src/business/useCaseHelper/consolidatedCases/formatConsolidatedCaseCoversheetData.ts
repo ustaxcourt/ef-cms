@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { formatCaseTitle } from '../../useCases/generateCoverSheetData';
 
 /**
  * Formats consolidated cases coversheet data
@@ -13,6 +14,7 @@ export const formatConsolidatedCaseCoversheetData = async ({
   caseEntity,
   coverSheetData,
   docketEntryEntity,
+  useInitialData,
 }) => {
   let consolidatedCases = await applicationContext
     .getPersistenceGateway()
@@ -27,6 +29,8 @@ export const formatConsolidatedCaseCoversheetData = async ({
       Case.getSortableDocketNumber(b.docketNumber),
   );
 
+  let caseTitle;
+  let caseCaptionExtension;
   consolidatedCases = consolidatedCases
     .map(consolidatedCase => ({
       docketNumber: consolidatedCase.docketNumber,
@@ -37,10 +41,21 @@ export const formatConsolidatedCaseCoversheetData = async ({
         ) || {}
       ).index,
     }))
-    .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
+    .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined)
+    .forEach(consolidatedCase => {
+      if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
+        ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
+          applicationContext,
+          caseEntity: consolidatedCase,
+          useInitialData,
+        }));
+      }
+    });
 
   if (consolidatedCases.length) {
     coverSheetData.consolidatedCases = consolidatedCases;
+    coverSheetData.caseTitle = caseTitle;
+    coverSheetData.caseCaptionExtension = caseCaptionExtension;
   }
 
   return coverSheetData;
