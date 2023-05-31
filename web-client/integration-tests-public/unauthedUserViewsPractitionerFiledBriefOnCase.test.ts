@@ -3,6 +3,7 @@ import {
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextPublic } from '../src/applicationContextPublic';
 import {
   contactPrimaryFromState,
   getFormattedDocketEntriesForTest,
@@ -14,17 +15,21 @@ import { fakeFile, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionerToPrimaryContact } from '../integration-tests/journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerSearchesForCase } from '../integration-tests/journey/practitionerSearchesForCase';
+import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../src/presenter/computeds/Public/publicCaseDetailHelper';
+import { runCompute } from 'cerebral/test';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
-import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
-import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
-import { unauthedUserViewsFilteredDocketRecord } from './journey/unauthedUserViewsFilteredDocketRecord';
-import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('unauthed user views practitioner filed brief', () => {
   const cerebralTest = setupTest();
   const testClient = setupTestClient();
   const privatePractitionerBarNumber = 'PT1234';
+
+  const publicCaseDetailHelper = withAppContextDecorator(
+    publicCaseDetailHelperComputed,
+    applicationContextPublic,
+  );
 
   const seriatimBriefDocument = {
     category: 'Seriatim Brief',
@@ -163,18 +168,37 @@ describe('unauthed user views practitioner filed brief', () => {
           entry => entry.eventCode === seriatimBriefDocument.eventCode,
         );
 
-      expect(practitioner1FiledSeriatimBrief).toBeDefined();
+      expect(practitioner1FiledSeriatimBrief).toMatchObject({
+        showDocumentDescriptionWithoutLink: false,
+        showLinkToDocument: true,
+      });
     });
   });
 
-  //unuathed user searches for case
-  // verify that they can see document link for brief
+  describe('Unauthed user searches for a case and views a case detail page', () => {
+    unauthedUserNavigatesToPublicSite(cerebralTest);
+    unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
+    it('unauthed user is able to view the practitioner filed seriatim brief', async () => {
+      await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-  // describe('Unauthed user searches for a case and views a case detail page', () => {
-  //   unauthedUserNavigatesToPublicSite(cerebralTest);
-  //   unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
-  //   unauthedUserViewsCaseDetail(cerebralTest);
-  //   unauthedUserViewsFilteredDocketRecord(cerebralTest);
-  //   unauthedUserViewsPrintableDocketRecord(cerebralTest);
-  // });
+      let { formattedDocketEntriesOnDocketRecord } = runCompute(
+        publicCaseDetailHelper,
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      const practitioner1FiledSeriatimBrief =
+        formattedDocketEntriesOnDocketRecord.find(
+          entry => entry.eventCode === seriatimBriefDocument.eventCode,
+        );
+
+      expect(practitioner1FiledSeriatimBrief).toMatchObject({
+        showDocumentDescriptionWithoutLink: false,
+        showLinkToDocument: true,
+      });
+    });
+  });
 });
