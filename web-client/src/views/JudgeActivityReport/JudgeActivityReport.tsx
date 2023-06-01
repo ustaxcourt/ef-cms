@@ -220,16 +220,13 @@ export const JudgeActivityReport = connect(
                   aria-label="judge"
                   className="usa-select select-left width-card-lg"
                   name="associatedJudge"
-                  value={judgeActivityReportHelper.currentJudge}
+                  value={form.judgeName}
                   onChange={e =>
                     setJudgeActivityReportFiltersSequence({
                       judgeName: e.target.value,
                     })
                   }
                 >
-                  <option value={judgeActivityReportHelper.currentJudge}>
-                    {judgeActivityReportHelper.currentJudge}
-                  </option>
                   {judgeActivityReportHelper.judges.map(judge => {
                     return (
                       <option key={judge} value={judge}>
