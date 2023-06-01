@@ -32,5 +32,4 @@ export const setJudgeLastNameOnFormAction = ({
   }
 
   store.set(state.form.judgeName, judgeName);
-  store.set(state.form.signedInJudge, judgeName);
 };
