@@ -359,6 +359,19 @@ describe('getDownloadPolicyUrlInteractor', () => {
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });
+
+    it('should NOT throw an error when the document requested is a brief', async () => {
+      const briefDocketEntry = MOCK_CASE.docketEntries.find(d =>
+        d.documentType.includes('Brief'),
+      );
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: briefDocketEntry.docketEntryId,
+      });
+
+      expect(url).toEqual('localhost');
+    });
   });
 
   describe('when the user is a private practitioner not associated with case', () => {
