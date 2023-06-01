@@ -11,12 +11,12 @@ export const updateDateFromPickerFromFormAction = ({
   props,
   store,
 }: ActionProps) => {
-  const filterStartDate = props.startDate;
-  const filterEndDate = props.endDate;
-  const { judgeName } = props;
+  const filterStartDate: string = props.startDate;
+  const filterEndDate: string = props.endDate;
+  const selectedJudge: string = props.judgeName;
 
-  if (judgeName) {
-    store.set(state.form.judgeName, judgeName);
+  if (selectedJudge) {
+    store.set(state.form.judgeName, selectedJudge);
   }
   if (filterStartDate === '') {
     store.unset(state.form.startDate);
