@@ -229,13 +229,11 @@ export const JudgeActivityReport = connect(
                     })
                   }
                 >
-                  {(judgeActivityReportJudges || [])
-                    .map(judge => judge.name)
-                    .map(judge => (
-                      <option key={judge} value={judge}>
-                        {judge}
-                      </option>
-                    ))}
+                  {(judgeActivityReportJudges || []).map(judge => (
+                    <option key={judge.name} value={judge.name}>
+                      {judge.name}
+                    </option>
+                  ))}
                 </select>
               </div>
 
