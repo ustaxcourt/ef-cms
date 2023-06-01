@@ -22,14 +22,13 @@ const getCaseRow = ({
       <tr className="hoverable vertical-align-middle-row">
         <td className="consolidated-case-column">
           <div className={indentMemberCase ? 'margin-left-2' : ''}>
-            {formattedCase.inConsolidatedGroup && (
-              <ConsolidatedCaseIcon
-                consolidatedIconTooltipText={
-                  formattedCase.consolidatedIconTooltipText
-                }
-                showLeadCaseIcon={formattedCase.isLeadCase}
-              />
-            )}
+            <ConsolidatedCaseIcon
+              consolidatedIconTooltipText={
+                formattedCase.consolidatedIconTooltipText
+              }
+              inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+              showLeadCaseIcon={formattedCase.isLeadCase}
+            />
           </div>
         </td>
         <td>
