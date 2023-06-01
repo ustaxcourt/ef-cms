@@ -48,8 +48,10 @@ export const judgeActivityReportHelper = (get, applicationContext) => {
 
   const reportHeader: string = `${judgeName} ${currentDate}`;
 
-  const listOfJudgesForActivityReport = get(state.judges);
-  const judges = listOfJudgesForActivityReport.map(judge => judge.name);
+  const listOfJudgesForActivityReport = get(state.judges) || [];
+  const judges: string[] = listOfJudgesForActivityReport.map(
+    judge => judge.name,
+  );
 
   return {
     closedCasesTotal,
