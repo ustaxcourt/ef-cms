@@ -1,15 +1,15 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
-import { updateDateFromPickerFromFormAction } from './updateDateFromPickerFromFormAction';
+import { setJudgeActivityReportFiltersAction } from './setJudgeActivityReportFiltersAction';
 
 presenter.providers.applicationContext = applicationContextForClient;
 
-describe('updateDateFromPickerFromFormAction', () => {
+describe('setJudgeActivityReportFiltersAction', () => {
   it('should set only state.form.startDate to the formatted props.startDate if props.endDate is not passed in', async () => {
     const testDate = '2019-05-14';
 
-    const result = await runAction(updateDateFromPickerFromFormAction, {
+    const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
         startDate: testDate,
@@ -23,7 +23,7 @@ describe('updateDateFromPickerFromFormAction', () => {
   });
 
   it('should unset state.form.startDate when formatted props.startDate is an empty string', async () => {
-    const result = await runAction(updateDateFromPickerFromFormAction, {
+    const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
         startDate: '',
@@ -40,7 +40,7 @@ describe('updateDateFromPickerFromFormAction', () => {
     const testStartDate = '2019-05-14';
     const testEndDate = '2019-05-17';
 
-    const result = await runAction(updateDateFromPickerFromFormAction, {
+    const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
         endDate: testEndDate,
@@ -54,7 +54,7 @@ describe('updateDateFromPickerFromFormAction', () => {
   });
 
   it('should unset state.form.endDate when formatted props.endDate is an empty string', async () => {
-    const result = await runAction(updateDateFromPickerFromFormAction, {
+    const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
         endDate: '',
