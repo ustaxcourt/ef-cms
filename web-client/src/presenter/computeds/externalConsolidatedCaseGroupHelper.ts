@@ -21,9 +21,13 @@ export const externalConsolidatedCaseGroupHelper = (
 
     formattedConsolidatedCaseList = caseDetail.consolidatedCases.map(
       currentCase => {
+        if (!currentCase.petitioners?.length && currentCase.isSealed) {
+          return `${currentCase.docketNumber} Sealed Case`;
+        }
         const formattedPetitioners = currentCase.petitioners
           .map(ptr => ptr.name)
           .join(' & ');
+
         return `${currentCase.docketNumber} ${formattedPetitioners}`;
       },
     );
@@ -39,17 +43,22 @@ export const externalConsolidatedCaseGroupHelper = (
     };
 
     caseDetail.consolidatedCases.forEach((memberCase, i) => {
-      consolidatedGroupServiceParties[i] = {};
       const combinedPartiesList = [
-        ...memberCase.petitioners,
-        ...memberCase.privatePractitioners,
-        ...memberCase.irsPractitioners,
+        ...(memberCase.petitioners ?? []),
+        ...(memberCase.privatePractitioners ?? []),
+        ...(memberCase.irsPractitioners ?? []),
       ];
-      combinedPartiesList.forEach((party, j) => {
-        consolidatedGroupServiceParties[i][j] = `${party.name}, ${roleToDisplay(
-          party,
-        )}`;
-      });
+
+      if (!combinedPartiesList.length && memberCase.isSealed) {
+        consolidatedGroupServiceParties[i] = ['Sealed Case'];
+      } else {
+        consolidatedGroupServiceParties[i] = [];
+        combinedPartiesList.forEach(party => {
+          consolidatedGroupServiceParties[i].push(
+            `${party.name}, ${roleToDisplay(party)}`,
+          );
+        });
+      }
     });
   }
 

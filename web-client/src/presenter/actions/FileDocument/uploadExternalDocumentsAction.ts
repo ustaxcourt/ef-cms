@@ -92,9 +92,7 @@ export const uploadExternalDocumentsAction = async ({
       await addCoversheet({
         applicationContext,
         docketEntryId,
-        docketNumber: form.fileAcrossConsolidatedGroup
-          ? caseDetail.leadDocketNumber
-          : docketNumber,
+        docketNumber,
       });
     }
 
@@ -102,6 +100,7 @@ export const uploadExternalDocumentsAction = async ({
       caseDetail,
       docketNumber,
       documentsFiled: documentMetadata,
+      fileAcrossConsolidatedGroup: form.fileAcrossConsolidatedGroup,
     });
   } catch (err) {
     return path.error();

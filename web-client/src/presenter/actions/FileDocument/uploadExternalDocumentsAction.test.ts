@@ -64,6 +64,7 @@ describe('uploadExternalDocumentsAction', () => {
         attachments: true,
         consolidatedCasesToFileAcross: undefined,
         docketNumber: MOCK_CASE.docketNumber,
+        fileAcrossConsolidatedGroup: false,
       },
     });
     expect(
@@ -78,7 +79,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should call uploadExternalDocumentsInteractor for a single document file and call addCoversheetInteractor with the leadDocketNumber for the added document', async () => {
+  it('should call uploadExternalDocumentsInteractor with a list of consolidated cases when filing across consolidated case group', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
     const testCase = {
       ...MOCK_CASE,
@@ -126,6 +127,7 @@ describe('uploadExternalDocumentsAction', () => {
         attachments: true,
         consolidatedCasesToFileAcross: testCase.consolidatedCases,
         docketNumber: testCase.docketNumber,
+        fileAcrossConsolidatedGroup: true,
       },
     });
     expect(
@@ -136,7 +138,7 @@ describe('uploadExternalDocumentsAction', () => {
       applicationContext.getUseCases().addCoversheetInteractor.mock.calls[0][1],
     ).toMatchObject({
       docketEntryId: 'f6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-      docketNumber: testCase.leadDocketNumber,
+      docketNumber: testCase.docketNumber,
     });
   });
 
@@ -153,6 +155,7 @@ describe('uploadExternalDocumentsAction', () => {
         caseDetail: MOCK_CASE,
         form: {
           attachments: true,
+          fileAcrossConsolidatedGroup: undefined,
           hasSecondarySupportingDocuments: true,
           hasSupportingDocuments: true,
           primaryDocumentFile: { data: 'something' },
@@ -199,6 +202,7 @@ describe('uploadExternalDocumentsAction', () => {
       documentMetadata: {
         attachments: true,
         docketNumber: MOCK_CASE.docketNumber,
+        fileAcrossConsolidatedGroup: undefined,
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
         supportingDocuments: [
@@ -233,6 +237,7 @@ describe('uploadExternalDocumentsAction', () => {
         form: {
           attachments: true,
           eventCode: PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP[0].eventCode,
+          fileAcrossConsolidatedGroup: false,
           practitioner: [mockPrivatePractitioner],
           primaryDocumentFile: mockPrimaryDocumentFile,
         },
@@ -243,6 +248,7 @@ describe('uploadExternalDocumentsAction', () => {
       applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
         .calls[0][1].documentMetadata,
     ).toMatchObject({
+      fileAcrossConsolidatedGroup: false,
       privatePractitioners: [mockPrivatePractitioner],
     });
   });
@@ -270,6 +276,7 @@ describe('uploadExternalDocumentsAction', () => {
         caseDetail: MOCK_CASE,
         form: {
           attachments: true,
+          fileAcrossConsolidatedGroup: undefined,
           practitioner: [mockPrivatePractitioner],
           primaryDocumentFile: mockPrimaryDocumentFile,
         },
@@ -280,6 +287,7 @@ describe('uploadExternalDocumentsAction', () => {
       applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
         .calls[0][1].documentMetadata,
     ).toMatchObject({
+      fileAcrossConsolidatedGroup: undefined,
       privatePractitioners: null,
     });
   });

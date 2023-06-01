@@ -49,11 +49,9 @@ export const ExternalConsolidatedGroupCards = connect(
                     (partyGroup, index1) => (
                       <React.Fragment key={index1}>
                         <ul className="ustc-unstyled-list without-margins service-party-divider">
-                          {Object.values(partyGroup).map(
-                            (serviceParty, index2) => {
-                              return <li key={index2}>{serviceParty}</li>;
-                            },
-                          )}
+                          {partyGroup.map((serviceParty, index2) => {
+                            return <li key={index2}>{serviceParty}</li>;
+                          })}
                         </ul>
                       </React.Fragment>
                     ),

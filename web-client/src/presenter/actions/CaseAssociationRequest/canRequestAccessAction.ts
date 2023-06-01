@@ -10,9 +10,9 @@ import { state } from 'cerebral';
 export const canRequestAccessAction = ({ get, path, props }: ActionProps) => {
   const { isDirectlyAssociated } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
+
   if (!isDirectlyAssociated) {
-    const overrideForRequestAccess = true;
-    return path['proceed']({ overrideForRequestAccess });
+    return path['proceed']({ isRequestingAccess: true });
   } else {
     return path['unauthorized']({ docketNumber });
   }

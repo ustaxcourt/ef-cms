@@ -15,7 +15,7 @@ const waitForJobToFinish = async ({ applicationContext, jobId }) => {
         applicationContext,
         jobId,
       });
-    ({ unfinishedCases } = jobStatus);
+    ({ unfinishedCases } = jobStatus ?? {});
 
     await applicationContext.getUtilities().sleep(5000);
   }
@@ -59,6 +59,15 @@ export const setNoticesForCalendaredTrialSession = async (
 
     return;
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_start',
+      totalCases: calendaredCases.length,
+    },
+    userId: user.userId,
+  });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()

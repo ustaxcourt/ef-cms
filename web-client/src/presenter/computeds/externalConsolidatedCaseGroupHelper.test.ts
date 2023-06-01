@@ -40,6 +40,12 @@ const mockLeadCase = {
   privatePractitioners: [],
 };
 
+const mockSealedCase = {
+  docketNumber: '300-23',
+  hasIrsPractitioner: false,
+  isSealed: true,
+};
+
 const testCase = {
   ...mockMemberCase,
   consolidatedCases: [mockLeadCase, mockMemberCase],
@@ -95,17 +101,41 @@ describe('externalConsolidatedCaseGroupHelper', () => {
     });
 
     expect(results.consolidatedGroupServiceParties).toEqual([
-      {
-        '0': `${testCase.consolidatedCases[0].petitioners[0].name}, Petitioner`,
-        '1': `${testCase.consolidatedCases[0].petitioners[1].name}, Petitioner`,
+      [
+        `${testCase.consolidatedCases[0].petitioners[0].name}, Petitioner`,
+        `${testCase.consolidatedCases[0].petitioners[1].name}, Petitioner`,
+      ],
+      [
+        `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
+      ],
+    ]);
+  });
+
+  it('should return `Sealed Case` instead of petitioner names in consolidatedGroupServiceParties when a sealed case is in the list of consolidated cases', () => {
+    state = {
+      caseDetail: {
+        ...testCase,
+        consolidatedCases: [mockSealedCase, mockMemberCase],
       },
-      {
-        '0': `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
-        '1': `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
-        '2': `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
-        '3': `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
-        '4': `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
-      },
+    };
+
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
+      state,
+    });
+
+    expect(results.consolidatedGroupServiceParties).toEqual([
+      ['Sealed Case'],
+      [
+        `${testCase.consolidatedCases[1].petitioners[0].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].petitioners[1].name}, Petitioner`,
+        `${testCase.consolidatedCases[1].privatePractitioners[0].name}, Petitioner Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[0].name}, Respondent Counsel`,
+        `${testCase.consolidatedCases[1].irsPractitioners[1].name}, Respondent Counsel`,
+      ],
     ]);
   });
 
@@ -118,6 +148,25 @@ describe('externalConsolidatedCaseGroupHelper', () => {
       expect.arrayContaining([
         `${testCase.docketNumber} ${testCase.petitioners[0].name} & ${testCase.petitioners[1].name}`,
         `${testCase.consolidatedCases[0].docketNumber} ${testCase.consolidatedCases[0].petitioners[0].name} & ${testCase.consolidatedCases[0].petitioners[1].name}`,
+      ]),
+    );
+  });
+
+  it('should return `Sealed Case` instead of petitioner names in formattedConsolidatedCaseList for sealed cases', () => {
+    state = {
+      caseDetail: {
+        ...testCase,
+        consolidatedCases: [mockSealedCase, mockMemberCase],
+      },
+    };
+    const results: any = runCompute(externalConsolidatedCaseGroupHelper, {
+      state,
+    });
+
+    expect(results.formattedConsolidatedCaseList).toEqual(
+      expect.arrayContaining([
+        `${testCase.docketNumber} ${testCase.petitioners[0].name} & ${testCase.petitioners[1].name}`,
+        `${mockSealedCase.docketNumber} Sealed Case`,
       ]),
     );
   });

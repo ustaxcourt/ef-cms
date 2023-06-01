@@ -1,7 +1,23 @@
 import { state } from 'cerebral';
 import { sum, sumBy } from 'lodash';
 
-export const judgeActivityReportHelper = (get, applicationContext) => {
+interface IJudgeActivityReportHelper {
+  closedCasesTotal: number | undefined;
+  filteredSubmittedAndCavCasesByJudge: any | undefined;
+  isFormPristine: boolean | undefined;
+  opinionsFiledTotal: number | undefined;
+  ordersFiledTotal: number | undefined;
+  progressDescriptionTableTotal: number | undefined;
+  reportHeader: string | undefined;
+  showResultsTables: boolean | undefined;
+  showSelectDateRangeText: boolean | undefined;
+  trialSessionsHeldTotal: number | undefined;
+}
+
+export const judgeActivityReportHelper = (
+  get: any,
+  applicationContext: IApplicationContext,
+): IJudgeActivityReportHelper => {
   const { endDate, judgeName, startDate } = get(state.form);
 
   const {

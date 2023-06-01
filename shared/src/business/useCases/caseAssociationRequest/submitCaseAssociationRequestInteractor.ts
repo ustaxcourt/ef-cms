@@ -24,7 +24,7 @@ export const submitCaseAssociationRequest = async (
   }: {
     consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
-    filers: string[];
+    filers?: string[];
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -48,7 +48,6 @@ export const submitCaseAssociationRequest = async (
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
         applicationContext,
-        consolidatedCasesDocketNumbers,
         docketNumber,
         representing: filers,
         user,
