@@ -32,17 +32,7 @@ export const formatConsolidatedCaseCoversheetData = async ({
   let caseTitle;
   let caseCaptionExtension;
   consolidatedCases = consolidatedCases
-    .map(consolidatedCase => ({
-      docketNumber: consolidatedCase.docketNumber,
-      documentNumber: (
-        consolidatedCase.docketEntries.find(
-          docketEntry =>
-            docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
-        ) || {}
-      ).index,
-    }))
-    .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined)
-    .forEach(consolidatedCase => {
+    .map(consolidatedCase => {
       if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
           applicationContext,
@@ -50,9 +40,19 @@ export const formatConsolidatedCaseCoversheetData = async ({
           useInitialData,
         }));
       }
-    });
+      return {
+        docketNumber: consolidatedCase.docketNumber,
+        documentNumber: (
+          consolidatedCase.docketEntries.find(
+            docketEntry =>
+              docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
+          ) || {}
+        ).index,
+      };
+    })
+    .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
 
-  if (consolidatedCases.length) {
+  if (consolidatedCases.length > 1) {
     coverSheetData.consolidatedCases = consolidatedCases;
     coverSheetData.caseTitle = caseTitle;
     coverSheetData.caseCaptionExtension = caseCaptionExtension;
