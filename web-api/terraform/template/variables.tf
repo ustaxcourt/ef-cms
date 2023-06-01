@@ -119,3 +119,12 @@ variable "green_node_version" {
 variable "blue_node_version" {
   type = string
 }
+
+
+variable "green_use_layers" {
+  type = string
+}
+
+variable "blue_use_layers" {
+  type = string
+}
