@@ -46,7 +46,7 @@ describe('Judge activity report journey', () => {
     });
   });
 
-  it('should submit the form with valid dates and display judge activity report results', async () => {
+  it('should submit the form with valid dates and the currently signed in judge to display judge activity report results', async () => {
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
       startDate: '01/01/2020',
     });
@@ -55,9 +55,39 @@ describe('Judge activity report journey', () => {
       endDate: '04/01/2023',
     });
 
+    expect(cerebralTest.getState('form.judgeName')).toEqual('Colvin');
+
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
+      casesClosedByJudge: expect.anything(),
+      opinions: expect.anything(),
+      orders: expect.anything(),
+      trialSessions: expect.anything(),
+    });
+  });
+
+  it('should submit the form with valid dates and with selected judge to display judge activity report results', async () => {
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      startDate: '01/01/2020',
+    });
+
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      endDate: '04/01/2023',
+    });
+
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      judgeName: 'Buch',
+    });
+
+    expect(cerebralTest.getState('form.judgeName')).toEqual('Buch');
+
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
     expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
       casesClosedByJudge: expect.anything(),
       opinions: expect.anything(),
