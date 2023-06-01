@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { formatCaseTitle } from '../../useCases/generateCoverSheetData';
 
 /**
  * Formats consolidated cases coversheet data
@@ -13,6 +14,7 @@ export const formatConsolidatedCaseCoversheetData = async ({
   caseEntity,
   coverSheetData,
   docketEntryEntity,
+  useInitialData,
 }) => {
   let consolidatedCases = await applicationContext
     .getPersistenceGateway()
@@ -27,20 +29,33 @@ export const formatConsolidatedCaseCoversheetData = async ({
       Case.getSortableDocketNumber(b.docketNumber),
   );
 
+  let caseTitle;
+  let caseCaptionExtension;
   consolidatedCases = consolidatedCases
-    .map(consolidatedCase => ({
-      docketNumber: consolidatedCase.docketNumber,
-      documentNumber: (
-        consolidatedCase.docketEntries.find(
-          docketEntry =>
-            docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
-        ) || {}
-      ).index,
-    }))
+    .map(consolidatedCase => {
+      if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
+        ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
+          applicationContext,
+          caseEntity: consolidatedCase,
+          useInitialData,
+        }));
+      }
+      return {
+        docketNumber: consolidatedCase.docketNumber,
+        documentNumber: (
+          consolidatedCase.docketEntries.find(
+            docketEntry =>
+              docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
+          ) || {}
+        ).index,
+      };
+    })
     .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
 
-  if (consolidatedCases.length) {
+  if (consolidatedCases.length > 1) {
     coverSheetData.consolidatedCases = consolidatedCases;
+    coverSheetData.caseTitle = caseTitle;
+    coverSheetData.caseCaptionExtension = caseCaptionExtension;
   }
 
   return coverSheetData;
