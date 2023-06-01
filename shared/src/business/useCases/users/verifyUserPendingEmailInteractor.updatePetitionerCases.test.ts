@@ -9,46 +9,26 @@ import {
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { getContactPrimary } from '../../entities/cases/Case';
 import { updatePetitionerCases } from './verifyUserPendingEmailInteractor';
 import { validUser } from '../../../test/mockUsers';
 
 describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
-  let mockPetitionerUser, userCases;
   const UPDATED_EMAIL = 'hello@example.com';
+  const mockPetitionerUser = {
+    ...validUser,
+    email: UPDATED_EMAIL,
+    role: ROLES.petitioner,
+    userId: getContactPrimary(MOCK_CASE).contactId,
+  };
 
   beforeEach(() => {
-    mockPetitionerUser = {
-      ...validUser,
-      email: UPDATED_EMAIL,
-      role: ROLES.petitioner,
-    };
-
     applicationContext
       .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([]);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(undefined);
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
-  it('should call getCasesForUser with user.userId', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(undefined);
-    await updatePetitionerCases({
-      applicationContext,
-      user: mockPetitionerUser,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser.mock
-        .calls[0][0],
-    ).toMatchObject({
-      userId: validUser.userId,
-    });
-  });
-
-  it('should call getCaseByDocketNumber for each case returned by getCasesForUser', async () => {
+  it('should call getCaseByDocketNumber for each docketNumber passed in', async () => {
     const casesMock = [
       {
         ...MOCK_CASE,
@@ -73,13 +53,13 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesForUser.mockResolvedValue(casesMock);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(casesMock[0]);
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
+        casesMock.find(c => c.docketNumber === docketNumber),
+      );
 
     await updatePetitionerCases({
       applicationContext,
+      docketNumbersAssociatedWithUser: ['101-21', MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
     });
 
@@ -103,7 +83,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
   });
 
   it('should log an error if the petitioner is not found on a case returned by getCasesForUser and call updateCaseAndAssociations only once', async () => {
-    userCases = [
+    const casesMock = [
       {
         ...MOCK_CASE,
         docketNumber: '101-21',
@@ -113,7 +93,7 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
         petitioners: [
           {
             ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
+            contactId: 'some-other-uuid',
           },
         ],
       },
@@ -121,17 +101,14 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue(userCases);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0])
-      .mockReturnValueOnce(userCases[1])
-      .mockReturnValueOnce(MOCK_CASE);
+      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) =>
+        casesMock.find(c => c.docketNumber === docketNumber),
+      );
 
     await expect(
       updatePetitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser: ['101-21', MOCK_CASE.docketNumber],
         user: mockPetitionerUser,
       }),
     ).resolves.not.toThrow();
@@ -143,31 +120,18 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
   });
 
   it('should log an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
-    userCases = [
-      {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         docketNumber: 'not a docket number',
         invalidCase: 'yep',
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser.userId,
-          },
-        ],
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValueOnce(userCases);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(userCases[0]);
+      });
 
     await expect(
       updatePetitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
         user: mockPetitionerUser,
       }),
     ).rejects.toThrow('entity was invalid');
@@ -178,12 +142,16 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
   });
 
   it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {
-    userCases = [
-      {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: [
-          ...MOCK_CASE.petitioners,
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: '41189629-abe1-46d7-b7a4-9d3834f919cb',
+          },
           {
             ...MOCK_CASE.petitioners[0],
             contactId: mockPetitionerUser.userId,
@@ -191,19 +159,11 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
             inCareOf: 'Barney',
           },
         ],
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue(userCases);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+      });
 
     await updatePetitionerCases({
       applicationContext,
+      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
     });
 
@@ -215,12 +175,16 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
   });
 
   it('should update the petitioner service indicator when they are not represented', async () => {
-    userCases = [
-      {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: [
-          ...MOCK_CASE.petitioners,
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: '41189629-abe1-46d7-b7a4-9d3834f919cb',
+          },
           {
             ...MOCK_CASE.petitioners[0],
             contactId: mockPetitionerUser.userId,
@@ -235,19 +199,11 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
             representing: [],
           },
         ],
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue(userCases);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+      });
 
     await updatePetitionerCases({
       applicationContext,
+      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
     });
 
@@ -261,9 +217,10 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
     expect(caseToUpdate.docketNumber).toBe(MOCK_CASE.docketNumber);
   });
 
-  it('should update the petitioner service indicator when they are not represented', async () => {
-    userCases = [
-      {
+  it('should update the petitioner service indicator when they are represented', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         partyType: PARTY_TYPES.petitionerDeceasedSpouse,
         petitioners: [
@@ -282,19 +239,11 @@ describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
             representing: [mockPetitionerUser.userId],
           },
         ],
-      },
-    ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue(userCases);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(userCases[0]);
+      });
 
     await updatePetitionerCases({
       applicationContext,
+      docketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
       user: mockPetitionerUser,
     });
 

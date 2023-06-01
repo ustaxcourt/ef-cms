@@ -43,6 +43,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { PublicCase } from './PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { User } from '../User';
@@ -121,6 +122,7 @@ export class Case extends JoiValidationEntity {
   public correspondence: any[];
   public archivedCorrespondences: any[];
   public hasPendingItems: boolean;
+  public docketEntriesEFiledByPractitioner: string[];
 
   constructor(
     rawCase: any,
@@ -158,6 +160,8 @@ export class Case extends JoiValidationEntity {
     this.assignDocketEntries(params);
     this.assignHearings(params);
     this.assignPractitioners(params);
+    this.docketEntriesEFiledByPractitioner =
+      PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
     this.assignFieldsForAllUsers(params);
     if (isNewCase) {
       const changedBy = rawCase.isPaper
@@ -1707,7 +1711,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;

@@ -24462,6 +24462,11 @@
     "pk": "chief-judge-name"
   },
   {
+    "sk": "document-visibility-policy-change-date",
+    "current": "2023-05-01",
+    "pk": "document-visibility-policy-change-date"
+  },
+  {
     "endpoint": "ws://localhost:3011",
     "clientConnectionId": "edbc99ff-2179-45c5-b8b7-a6c37c413afd",
     "sk": "connection|8218a248-790f-468c-aef9-f8503b62dd18",
@@ -24536,6 +24541,11 @@
     "sk": "e-consent-fields-enabled-feature-flag",
     "current": true,
     "pk": "e-consent-fields-enabled-feature-flag"
+  },
+  {
+    "sk": "entity-locking-feature-flag",
+    "current": true,
+    "pk": "entity-locking-feature-flag"
   },
   {
     "sk": "redaction-acknowledgement-enabled",

@@ -5,10 +5,18 @@ import { state } from 'cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
-  { entry, isTerminalUser },
+  {
+    docketEntriesEFiledByPractitioner,
+    entry,
+    isTerminalUser,
+    visibilityPolicyDateFormatted,
+  },
 ) => {
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
-    applicationContext.getConstants();
+  const {
+    BRIEF_EVENTCODES,
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
+  } = applicationContext.getConstants();
   const record = cloneDeep(entry);
 
   let filingsAndProceedingsWithAdditionalInfo = '';
@@ -24,14 +32,34 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  const canTerminalUserSeeLink =
+  let filedByPractitionerAfterPolicyChange = false;
+  const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
+    entry.eventCode,
+  );
+  if (isDocketEntryBriefEventCode) {
+    const filedByPractitioner: boolean =
+      docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
+
+    const filedAfterPolicyChange =
+      record.filingDate >= visibilityPolicyDateFormatted;
+
+    filedByPractitionerAfterPolicyChange =
+      filedAfterPolicyChange && filedByPractitioner;
+  }
+
+  let canTerminalUserSeeLink =
     record.isFileAttached &&
     isServedDocument &&
     !record.isSealed &&
     !record.isStricken;
 
-  const canPublicUserSeeLink =
-    record.isCourtIssuedDocument &&
+  if (isDocketEntryBriefEventCode) {
+    canTerminalUserSeeLink =
+      canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
+  }
+
+  let canPublicUserSeeLink =
+    (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
@@ -93,6 +121,7 @@ export const formatDocketEntryOnDocketRecord = (
 
 export const publicCaseDetailHelper = (get, applicationContext) => {
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     MOTION_EVENT_CODES,
     ORDER_EVENT_CODES,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
@@ -114,12 +143,27 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
+
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
-    entry =>
-      formatDocketEntryOnDocketRecord(applicationContext, {
+    entry => {
+      return formatDocketEntryOnDocketRecord(applicationContext, {
+        docketEntriesEFiledByPractitioner:
+          publicCase.docketEntriesEFiledByPractitioner,
         entry,
         isTerminalUser,
-      }),
+        visibilityPolicyDateFormatted,
+      });
+    },
   );
 
   if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
