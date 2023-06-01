@@ -18,6 +18,7 @@ export const submitCaseAssociationRequestInteractor = (
     applicationContext,
     body: {
       consolidatedCasesDocketNumbers,
+      docketNumber,
       filers,
     },
     endpoint: `/users/${user.userId}/case/${docketNumber}`,
