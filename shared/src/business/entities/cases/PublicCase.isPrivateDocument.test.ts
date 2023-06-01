@@ -1,4 +1,5 @@
 const {
+  BRIEF_EVENTCODES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
@@ -63,6 +64,15 @@ describe('PublicCase isPrivateDocument', () => {
     const isPrivate = PublicCase.isPrivateDocument({
       docketEntryId: '123',
       documentType: 'Order',
+      isOnDocketRecord: true,
+    });
+    expect(isPrivate).toEqual(false);
+  });
+
+  it('should return false for a brief document that is on the docket record', () => {
+    const isPrivate = PublicCase.isPrivateDocument({
+      docketEntryId: '123',
+      eventCode: BRIEF_EVENTCODES[0],
       isOnDocketRecord: true,
     });
     expect(isPrivate).toEqual(false);
