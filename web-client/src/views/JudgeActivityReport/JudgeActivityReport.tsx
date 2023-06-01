@@ -11,6 +11,7 @@ export const JudgeActivityReport = connect(
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
+    judgeActivityReportJudges: state.judges,
     setJudgeActivityReportFiltersSequence:
       sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
@@ -21,6 +22,7 @@ export const JudgeActivityReport = connect(
     form,
     judgeActivityReportData,
     judgeActivityReportHelper,
+    judgeActivityReportJudges,
     setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
@@ -227,13 +229,13 @@ export const JudgeActivityReport = connect(
                     })
                   }
                 >
-                  {judgeActivityReportHelper.judges.map(judge => {
-                    return (
+                  {(judgeActivityReportJudges || [])
+                    .map(judge => judge.name)
+                    .map(judge => (
                       <option key={judge} value={judge}>
                         {judge}
                       </option>
-                    );
-                  })}
+                    ))}
                 </select>
               </div>
 
