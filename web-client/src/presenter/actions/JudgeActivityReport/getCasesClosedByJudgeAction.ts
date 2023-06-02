@@ -11,7 +11,9 @@ export const getCasesClosedByJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
   const casesClosedByJudge = await applicationContext
     .getUseCases()

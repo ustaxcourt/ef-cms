@@ -13,7 +13,9 @@ export const validateJudgeActivityReportSearchAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
   const errors = applicationContext
     .getUseCases()

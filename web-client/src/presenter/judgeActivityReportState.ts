@@ -6,6 +6,7 @@ export type JudgeAcitivityReportFilters = {
 
 export type JudgeActivityReportState = {
   filters: JudgeAcitivityReportFilters;
+  judgeActivityReportData: any; // TODO: ADD BETTER TYPES
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
@@ -14,4 +15,5 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
     judgeName: '',
     startDate: '',
   },
+  judgeActivityReportData: {},
 };
