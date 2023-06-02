@@ -1,5 +1,4 @@
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
-import { clearFormAction } from '../../actions/clearFormAction';
 import { clearJudgeActivityReportResultAction } from '../../actions/JudgeActivityReport/clearJudgeActivityReportResultAction';
 import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
@@ -18,8 +17,7 @@ const gotoJudgeActivityReport = [
   stopShowValidationAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
-  clearFormAction,
-  clearJudgeActivityReportResultAction,
+  clearJudgeActivityReportResultAction, // chage state location
   setJudgeLastNameOnFormAction,
   getUsersInSectionAction({ section: 'judge' }),
   setAllAndCurrentJudgesAction,

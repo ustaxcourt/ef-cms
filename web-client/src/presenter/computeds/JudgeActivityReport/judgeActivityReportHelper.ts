@@ -2,10 +2,12 @@ import { state } from 'cerebral';
 import { sum, sumBy } from 'lodash';
 
 export const judgeActivityReportHelper = (get, applicationContext) => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
   const { casesClosedByJudge, opinions, orders, trialSessions } = get(
-    state.judgeActivityReportData,
+    state.judgeActivityReport.judgeActivityReportData,
   );
 
   let closedCasesTotal: number = 0,

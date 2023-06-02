@@ -8,8 +8,8 @@ import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
-    form: state.form,
-    judgeActivityReportData: state.judgeActivityReportData,
+    judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
+    judgeActivityReportFilters: state.judgeActivityReport.filters,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     judgeActivityReportJudges: state.judges,
     setJudgeActivityReportFiltersSequence:
@@ -19,8 +19,8 @@ export const JudgeActivityReport = connect(
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
-    form,
     judgeActivityReportData,
+    judgeActivityReportFilters,
     judgeActivityReportHelper,
     judgeActivityReportJudges,
     setJudgeActivityReportFiltersSequence,
@@ -190,13 +190,13 @@ export const JudgeActivityReport = connect(
                   endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
                   endPickerCls={'grid-col-6 padding-left-2'}
-                  endValue={form.endDate}
+                  endValue={judgeActivityReportFilters.endDate}
                   formGroupCls={'margin-bottom-0'}
                   rangePickerCls={'grid-row '}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}
-                  startValue={form.endDate}
+                  startValue={judgeActivityReportFilters.endDate}
                   onChangeEnd={e => {
                     setJudgeActivityReportFiltersSequence({
                       endDate: e.target.value,
@@ -222,7 +222,7 @@ export const JudgeActivityReport = connect(
                   aria-label="judge"
                   className="usa-select select-left width-card-lg"
                   name="associatedJudge"
-                  value={form.judgeName}
+                  value={judgeActivityReportFilters.judgeName}
                   onChange={e =>
                     setJudgeActivityReportFiltersSequence({
                       judgeName: e.target.value,
