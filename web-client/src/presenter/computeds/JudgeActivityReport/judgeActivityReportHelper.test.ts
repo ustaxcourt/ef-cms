@@ -10,7 +10,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('judgeActivityReportHelper', () => {
   let mockJudgeActivityReport;
-  let mockForm;
+  let judgeActivityReportFilters;
   let baseState;
 
   const judgeActivityReportHelper = withAppContextDecorator(
@@ -65,13 +65,15 @@ describe('judgeActivityReportHelper', () => {
       },
     };
 
-    mockForm = {
+    judgeActivityReportFilters = {
       judgeName: judgeUser.name,
     };
 
     baseState = {
-      form: mockForm,
-      judgeActivityReportData: mockJudgeActivityReport,
+      judgeActivityReport: {
+        filters: judgeActivityReportFilters,
+        judgeActivityReportData: mockJudgeActivityReport,
+      },
     };
   });
 
@@ -89,11 +91,13 @@ describe('judgeActivityReportHelper', () => {
     it('should be true when startDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
-          ...baseState,
-          form: {
-            ...mockForm,
-            endDate: '01/02/2020',
-            startDate: undefined,
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            filters: {
+              ...judgeActivityReportFilters,
+              endDate: '01/02/2020',
+              startDate: '',
+            },
           },
         },
       });
@@ -104,11 +108,13 @@ describe('judgeActivityReportHelper', () => {
     it('should be true when endDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
-          ...baseState,
-          form: {
-            ...mockForm,
-            endDate: undefined,
-            startDate: '01/02/2020',
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            filters: {
+              ...judgeActivityReportFilters,
+              endDate: '',
+              startDate: '01/02/2020',
+            },
           },
         },
       });
@@ -119,11 +125,13 @@ describe('judgeActivityReportHelper', () => {
     it('should be false when both startDate and endDate are populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
-          ...baseState,
-          form: {
-            ...mockForm,
-            endDate: '01/02/2020',
-            startDate: '01/02/2020',
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            filters: {
+              ...judgeActivityReportFilters,
+              endDate: '01/02/2020',
+              startDate: '01/02/2020',
+            },
           },
         },
       });
@@ -170,8 +178,10 @@ describe('judgeActivityReportHelper', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
       const { showResultsTables } = runCompute(judgeActivityReportHelper, {
         state: {
-          form: mockForm,
-          judgeActivityReportData: {},
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            judgeActivityReportData: {},
+          },
         },
       });
 
@@ -204,8 +214,10 @@ describe('judgeActivityReportHelper', () => {
         judgeActivityReportHelper,
         {
           state: {
-            form: mockForm,
-            judgeActivityReportData: {},
+            judgeActivityReport: {
+              ...baseState.judgeActivityReport,
+              judgeActivityReportData: {},
+            },
           },
         },
       );
