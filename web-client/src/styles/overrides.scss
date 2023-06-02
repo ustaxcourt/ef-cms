@@ -387,5 +387,7 @@ input[type='file']::-webkit-file-upload-button {
 }
 
 td.message-select-control {
-  vertical-align: top;
+  .usa-checkbox {
+    padding-bottom: 5px;
+  }
 }
