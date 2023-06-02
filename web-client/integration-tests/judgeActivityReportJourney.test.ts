@@ -55,13 +55,17 @@ describe('Judge activity report journey', () => {
       endDate: '04/01/2023',
     });
 
-    expect(cerebralTest.getState('form.judgeName')).toEqual('Colvin');
+    expect(
+      cerebralTest.getState('judgeActivityReport.filters.judgeName'),
+    ).toEqual('Colvin');
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toEqual({
       casesClosedByJudge: expect.anything(),
       opinions: expect.anything(),
       orders: expect.anything(),
@@ -82,13 +86,17 @@ describe('Judge activity report journey', () => {
       judgeName: 'Buch',
     });
 
-    expect(cerebralTest.getState('form.judgeName')).toEqual('Buch');
+    expect(
+      cerebralTest.getState('judgeActivityReport.filters.judgeName'),
+    ).toEqual('Buch');
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toEqual({
       casesClosedByJudge: expect.anything(),
       opinions: expect.anything(),
       orders: expect.anything(),
