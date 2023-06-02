@@ -4,14 +4,13 @@
 # shellcheck disable=SC2086
 
 
-trialSessionId="[PLACE TOKEN HERE]"
-token="[PLACE TOKEN HERE]"
-targetExperimentalEnvironment="[EXP OF CHOICE]"
-currentColor="[CURRENT COLOR OF EXP]"
+trialSessionId="[INSERT ID HERE]"
+token="[INSERT TOKEN HERE]"
+targetExperimentalEnvironment="[INSERT ENV HERE]"
+currentColor="[INSERT COLOR HERE]"
 hostName="api-${currentColor}.${targetExperimentalEnvironment}.ustc-case-mgmt.flexion.us"
 baseUrl="https://${hostName}"
-petitionFileId="[PLACE HERE]"
-requestForPlaceOfTrialFileId="[PLACE HERE]"
+petitionFileId="[INSERT ID HERE]"
 numberOfCasesToCreate=5
 
 createCaseAndAddToTrialSession(){
@@ -32,7 +31,7 @@ createCaseAndAddToTrialSession(){
     -H 'sec-fetch-mode: cors' \
     -H 'sec-fetch-site: same-site' \
     -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
-    --data-raw '{"petitionFileId":"'$petitionFileId'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Kelsie Taylor","address1":"811 Milton Road","address2":"Iusto quam consequat","address3":"Repellendus Tenetur","city":"Exercitation repelle","postalCode":"36589","phone":"+1 (778) 202-3151","state":"KY"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":false,"statistics":[],"partyType":"Petitioner","orderForCds":false,"petitionFile":{},"petitionFileSize":3028,"requestForPlaceOfTrialFile":{},"requestForPlaceOfTrialFileSize":3028,"caseCaption":"Kelsie Taylor, Petitioner","mailingDate":"24-Jul-1994","orderToShowCause":true,"petitionPaymentStatus":"Not paid","orderForFilingFee":true,"orderForAmendedPetitionAndFilingFee":true,"preferredTrialCity":"Dallas, Texas","caseType":"Innocent Spouse","receivedAt":"2022-07-04T04:00:00.000Z","petitionPaymentDate":null,"petitionPaymentWaivedDate":null},"requestForPlaceOfTrialFileId":"'$requestForPlaceOfTrialFileId'"}' \
+    --data-raw '{"petitionFileId":"'$petitionFileId'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Rachel Foreman","address1":"688 Green Nobel Road","address2":"Rerum atque facere q","address3":"Deleniti explicabo ","city":"In est tempor adipis","postalCode":"38854","phone":"+1 (266) 459-9362","state":"NJ"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":true,"statistics":[],"isPaper":true,"partyType":"Petitioner","orderForCds":false,"petitionFile":{},"petitionFileSize":3028,"caseCaption":"Rachel Foreman, Petitioner","mailingDate":"Test","petitionPaymentStatus":"Paid","orderForFilingFee":false,"paymentDateDay":"29","paymentDateMonth":"05","paymentDateYear":"2023","petitionPaymentMethod":"Check","caseType":"Other","receivedAt":"2023-05-28T04:00:00.000Z","petitionPaymentDate":"2023-05-29T04:00:00.000Z","petitionPaymentWaivedDate":null}}' \
     --compressed | jq -r '.docketNumber')
 
   curl "${baseUrl}/cases/$docketNumber/serve-to-irs" \
