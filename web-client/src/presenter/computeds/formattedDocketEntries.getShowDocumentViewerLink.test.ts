@@ -302,7 +302,7 @@ describe('getShowDocumentViewerLink', () => {
     },
     {
       description:
-        'unsealed, unstricken practitioner e-filed briefs filed after policy change date should display a clickable link to external users',
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date and served should display a clickable link to external users',
       inputs: {
         filedAfterPolicyChange: true,
         filedByPractitioner: true,
@@ -370,6 +370,21 @@ describe('getShowDocumentViewerLink', () => {
         isExternalUser: true,
         isSealed: false,
         isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description:
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date and NOT served should NOT display a clickable link to external users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: false,
         isStricken: false,
         userHasAccessToCase: false,
       },
