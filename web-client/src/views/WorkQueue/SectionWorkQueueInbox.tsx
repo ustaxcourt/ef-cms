@@ -112,23 +112,25 @@ SectionWorkQueueTable.Row = React.memo(
         <tr>
           {showSelectColumn && (
             <td className="message-select-control">
-              <input
-                aria-label="Select work item"
-                checked={item.selected}
-                className="usa-checkbox__input"
-                id={item.workItemId}
-                type="checkbox"
-                onChange={() => {
-                  selectWorkItemSequence({
-                    workItem: item,
-                  });
-                }}
-              />
-              <label
-                className="padding-top-05 usa-checkbox__label"
-                htmlFor={item.workItemId}
-                id={`label-${item.workItemId}`}
-              />
+              <div className="usa-checkbox">
+                <input
+                  aria-label="Select work item"
+                  checked={item.selected}
+                  className="usa-checkbox__input"
+                  id={item.workItemId}
+                  type="checkbox"
+                  onChange={() => {
+                    selectWorkItemSequence({
+                      workItem: item,
+                    });
+                  }}
+                />
+                <label
+                  className="padding-top-05 usa-checkbox__label"
+                  htmlFor={item.workItemId}
+                  id={`label-${item.workItemId}`}
+                />
+              </div>
             </td>
           )}
           <td className="consolidated-case-column">
