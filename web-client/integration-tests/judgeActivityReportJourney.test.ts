@@ -1,7 +1,22 @@
+import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
+import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loginAs, setupTest } from './helpers';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from 'cerebral/test';
+import { viewJudgeActivityReportResults } from './journey/viewJudgeActivityReportResults';
 import { withAppContextDecorator } from '../src/withAppContext';
+
+const judgeActivityReportHelper = withAppContextDecorator(
+  judgeActivityReportHelperComputed,
+);
+
+let progressDescriptionTableTotalBefore = 0;
 
 describe('Judge activity report journey', () => {
   const cerebralTest = setupTest();
@@ -14,12 +29,8 @@ describe('Judge activity report journey', () => {
   it('should disable the submit button on initial page load when form has not yet been completed', async () => {
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
-    const judgeActivityReportHelper = withAppContextDecorator(
-      judgeActivityReportHelperComputed,
-    );
-
     const { isFormPristine, reportHeader } = runCompute(
-      judgeActivityReportHelper,
+      judgeActivityReportHelper as any,
       {
         state: cerebralTest.getState(),
       },
@@ -46,53 +57,93 @@ describe('Judge activity report journey', () => {
     });
   });
 
-  it('should submit the form with valid dates and the currently signed in judge to display judge activity report results', async () => {
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      startDate: '01/01/2020',
-    });
-
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      endDate: '04/01/2023',
-    });
-
-    expect(cerebralTest.getState('form.judgeName')).toEqual('Colvin');
-
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
-      trialSessions: expect.anything(),
-    });
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
   });
 
-  it('should submit the form with valid dates and with selected judge to display judge activity report results', async () => {
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      startDate: '01/01/2020',
-    });
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
 
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      endDate: '04/01/2023',
-    });
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
 
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      judgeName: 'Buch',
-    });
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
 
-    expect(cerebralTest.getState('form.judgeName')).toEqual('Buch');
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
+  loginAs(cerebralTest, 'judgecolvin@example.com');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
 
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
-      casesClosedByJudge: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
-      trialSessions: expect.anything(),
-    });
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore + 2,
+    );
+  });
+
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore,
+    );
+  });
+
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order and Decision',
+    eventCode: 'OAD',
+    expectedDocumentType: 'Order and Decision',
+  });
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
+  docketClerkServesDocument(cerebralTest, 0);
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore,
+    );
   });
 });
