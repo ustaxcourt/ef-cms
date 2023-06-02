@@ -11,14 +11,10 @@ export const setJudgeActivityReportFiltersAction = ({
   if (selectedJudge) {
     store.set(state.judgeActivityReport.filters.judgeName, selectedJudge);
   }
-  if (filterStartDate === '') {
-    store.unset(state.judgeActivityReport.filters.startDate);
-  } else if (filterStartDate !== undefined) {
+  if (filterStartDate || filterStartDate === '') {
     store.set(state.judgeActivityReport.filters.startDate, filterStartDate);
   }
-  if (filterEndDate === '') {
-    store.unset(state.judgeActivityReport.filters.endDate);
-  } else if (filterEndDate !== undefined) {
+  if (filterEndDate || filterEndDate === '') {
     store.set(state.judgeActivityReport.filters.endDate, filterEndDate);
   }
 };
