@@ -7,11 +7,14 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 export const docketClerkAddsDocketEntryFromOrder = (
   cerebralTest,
   draftOrderIndex,
+  associatedJudge = '',
 ) => {
   return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
     let caseDetailFormatted;
     let nonstandardHelperComputed;
     let addCourtIssuedDocketEntryHelperComputed;
+
+    const decisionTypeDocumentEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -179,6 +182,16 @@ export const docketClerkAddsDocketEntryFromOrder = (
         value: draftOrderDocument.eventCode,
       },
     );
+
+    if (decisionTypeDocumentEventCodes.includes(draftOrderDocument.eventCode)) {
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'judge',
+          value: associatedJudge,
+        },
+      );
+    }
 
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
