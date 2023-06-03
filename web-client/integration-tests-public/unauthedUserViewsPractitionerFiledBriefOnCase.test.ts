@@ -11,6 +11,7 @@ import {
   setupTest as setupTestClient,
   uploadPetition,
 } from '../integration-tests/helpers';
+import { docketClerkQCsDocketEntry } from '../integration-tests/journey/docketClerkQCsDocketEntry';
 import { fakeFile, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionerToPrimaryContact } from '../integration-tests/journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
@@ -36,6 +37,14 @@ describe('unauthed user views practitioner filed brief', () => {
     documentTitle: 'Seriatim Answering Brief',
     documentType: 'Seriatim Answering Brief',
     eventCode: 'SEAB',
+    scenario: 'Standard',
+  };
+
+  const qcableSeriatimBriefDocument = {
+    category: 'Seriatim Brief',
+    documentTitle: 'Seriatim Opening Brief',
+    documentType: 'Seriatim Opening Brief',
+    eventCode: 'SEOB',
     scenario: 'Standard',
   };
 
@@ -288,6 +297,90 @@ describe('unauthed user views practitioner filed brief', () => {
     });
   });
 
+  describe('privatePractitioner files a qcable seriatim opening brief on the case', () => {
+    loginAs(testClient, 'privatepractitioner@example.com');
+    it('Practitioner files document for brief', async () => {
+      await testClient.runSequence('gotoCaseDetailSequence', {
+        docketNumber: testClient.docketNumber,
+      });
+
+      await testClient.runSequence('gotoFileDocumentSequence', {
+        docketNumber: testClient.docketNumber,
+      });
+
+      for (const key of Object.keys(qcableSeriatimBriefDocument)) {
+        await testClient.runSequence(
+          'updateFileDocumentWizardFormValueSequence',
+          {
+            key,
+            value: qcableSeriatimBriefDocument[key],
+          },
+        );
+      }
+
+      await testClient.runSequence('validateSelectDocumentTypeSequence');
+
+      expect(testClient.getState('validationErrors')).toEqual({});
+
+      await testClient.runSequence('completeDocumentSelectSequence');
+
+      expect(testClient.getState('form.documentType')).toEqual(
+        qcableSeriatimBriefDocument.documentType,
+      );
+
+      expect(testClient.getState('form.partyPrimary')).toEqual(undefined);
+
+      await testClient.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: 'attachments',
+          value: false,
+        },
+      );
+      await testClient.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: 'objections',
+          value: OBJECTIONS_OPTIONS_MAP.NO,
+        },
+      );
+
+      await testClient.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: 'primaryDocumentFile',
+          value: fakeFile,
+        },
+      );
+
+      const contactPrimary = contactPrimaryFromState(testClient);
+
+      await testClient.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: `filersMap.${contactPrimary.contactId}`,
+          value: true,
+        },
+      );
+
+      await testClient.runSequence('reviewExternalDocumentInformationSequence');
+
+      expect(testClient.getState('validationErrors')).toEqual({});
+
+      await testClient.runSequence('updateFormValueSequence', {
+        key: 'redactionAcknowledgement',
+        value: true,
+      });
+
+      await testClient.runSequence('submitExternalDocumentSequence');
+    });
+  });
+
+  describe('docketClerk qcs the seriatim opening brief', () => {
+    loginAs(testClient, 'docketclerk@example.com');
+    docketClerkQCsDocketEntry(testClient);
+  });
+
   describe('Unauthed user searches for a case and views a case detail page', () => {
     unauthedUserNavigatesToPublicSite(cerebralTest);
     unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
@@ -313,11 +406,20 @@ describe('unauthed user views practitioner filed brief', () => {
           entry => entry.eventCode === servableBriefDocument.eventCode,
         );
 
+      const practitioner1FiledQcableBrief =
+        formattedDocketEntriesOnDocketRecord.find(
+          entry => entry.eventCode === qcableSeriatimBriefDocument.eventCode,
+        );
+
       expect(practitioner1FiledSeriatimBrief).toMatchObject({
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
       });
       expect(practitioner1FiledServedBrief).toMatchObject({
+        showDocumentDescriptionWithoutLink: false,
+        showLinkToDocument: true,
+      });
+      expect(practitioner1FiledQcableBrief).toMatchObject({
         showDocumentDescriptionWithoutLink: false,
         showLinkToDocument: true,
       });
