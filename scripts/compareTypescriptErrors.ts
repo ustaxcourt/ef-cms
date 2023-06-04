@@ -65,7 +65,7 @@ const stagingCypressErrorCount = countTypescriptErrors(
 const stagingTotalErrors: number =
   stagingProjectErrorCount + stagingCypressErrorCount;
 
-console.log('Staging errors: ', stagingProjectErrorCount);
+console.log('Staging errors: ', stagingTotalErrors);
 console.log('Your branch errors: ', compareBranchTotalErrors);
 if (compareBranchTotalErrors > stagingTotalErrors) {
   console.log(
