@@ -23,16 +23,18 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       ]);
 
     const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction,
+      getTrialSessionsForJudgeActivityReportAction as any,
       {
         modules: {
           presenter,
         },
         props: {},
         state: {
-          form: {
-            endDate: 'whatever',
-            startDate: 'whatever',
+          judgeActivityReport: {
+            filters: {
+              endDate: 'whatever',
+              startDate: 'whatever',
+            },
           },
         },
       },
@@ -54,16 +56,18 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       ]);
 
     const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction,
+      getTrialSessionsForJudgeActivityReportAction as any,
       {
         modules: {
           presenter,
         },
         props: {},
         state: {
-          form: {
-            endDate: 'whatever',
-            startDate: 'whatever',
+          judgeActivityReport: {
+            filters: {
+              endDate: 'whatever',
+              startDate: 'whatever',
+            },
           },
           judgeUser: {
             role: 'judge',

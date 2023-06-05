@@ -11,7 +11,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { judgeName } = get(state.form);
+  const { judgeName } = get(state.judgeActivityReport.filters);
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
   const { cases, consolidatedCasesGroupCountMap } = await applicationContext
