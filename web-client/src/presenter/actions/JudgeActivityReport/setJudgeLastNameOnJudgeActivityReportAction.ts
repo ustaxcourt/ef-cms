@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const setJudgeLastNameOnFormAction = ({
+export const setJudgeLastNameOnJudgeActivityReportAction = ({
   applicationContext,
   store,
 }: ActionProps) => {
