@@ -23,7 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -380,7 +380,8 @@ const completeDocketEntryQC = async (
 
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
-  ({ entryMetadata }) =>
-    `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`,
+  (_applicationContext: IApplicationContext, { entryMetadata }) => ({
+    identifiers: [`docket-entry|${entryMetadata.docketEntryId}`],
+  }),
   new InvalidRequest('The document is currently being updated'),
 );

@@ -312,6 +312,88 @@ describe('PublicCase', () => {
     }).not.toThrow();
   });
 
+  it('should not show leadDocketNumber if user does not have IRS Practitioner role', () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce({
+      role: ROLES.privatePractitioner,
+    });
+
+    const rawCase = {
+      ...MOCK_CASE,
+      irsPractitioners: [
+        {
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isSealed: false,
+      leadDocketNumber: 'number',
+      otherFilers: [
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary },
+        {
+          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.otherPetitioner,
+        },
+      ],
+      privatePractitioners: [
+        {
+          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+    const entity = new PublicCase(rawCase, { applicationContext });
+
+    expect(entity.irsPractitioners).toBeUndefined();
+    expect(entity.otherFilers).toBeUndefined();
+    expect(entity.privatePractitioners).toBeUndefined();
+    expect(entity.leadDocketNumber).toBeUndefined();
+  });
+
+  it('should show leadDocketNumber if user is has IRS Practitioner role', () => {
+    applicationContext.getCurrentUser.mockReturnValueOnce({
+      role: ROLES.irsPractitioner,
+    });
+
+    const rawCase = {
+      ...MOCK_CASE,
+      irsPractitioners: [
+        {
+          userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      isSealed: false,
+      leadDocketNumber: 'number',
+      otherFilers: [
+        {
+          contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        { contactType: CONTACT_TYPES.primary },
+        {
+          contactId: '9905d1ab-18d0-43ec-bafb-654e83405416',
+          contactType: CONTACT_TYPES.otherPetitioner,
+        },
+      ],
+      privatePractitioners: [
+        {
+          userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+      ],
+    };
+    const entity = new PublicCase(rawCase, { applicationContext });
+
+    expect(entity.irsPractitioners).toBeDefined();
+    expect(entity.otherFilers).toBeUndefined();
+    expect(entity.privatePractitioners).toBeDefined();
+    expect(entity.leadDocketNumber).toBeDefined();
+  });
+
   describe('irsPractitioner', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(
@@ -519,5 +601,6 @@ describe('PublicCase', () => {
       expect(entity.privatePractitioners).toBeUndefined();
     });
   });
+
   // eslint-disable-next-line max-lines
 });

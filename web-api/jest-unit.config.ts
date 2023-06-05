@@ -33,6 +33,7 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   verbose: false,
+  workerIdleMemoryLimit: '20%',
 };
 // eslint-disable-next-line import/no-default-export
 export default config;

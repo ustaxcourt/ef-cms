@@ -24543,6 +24543,11 @@
     "pk": "e-consent-fields-enabled-feature-flag"
   },
   {
+    "sk": "entity-locking-feature-flag",
+    "current": true,
+    "pk": "entity-locking-feature-flag"
+  },
+  {
     "sk": "redaction-acknowledgement-enabled",
     "current": true,
     "pk": "redaction-acknowledgement-enabled"

@@ -1711,7 +1711,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;

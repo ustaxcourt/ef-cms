@@ -83,6 +83,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
@@ -213,6 +216,8 @@ export const DOCUMENT_RELATIONSHIPS = {
 
 export const DOCUMENT_SERVED_MESSAGES = {
   ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  EXTERNAL_ENTRY_ADDED:
+    'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
