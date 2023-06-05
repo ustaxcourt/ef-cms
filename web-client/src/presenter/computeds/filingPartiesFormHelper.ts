@@ -1,3 +1,4 @@
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { state } from 'cerebral';
 
 export const filingPartiesFormHelper = (get, applicationContext) => {
@@ -27,7 +28,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
-  const isServed = applicationContext.getUtilities().isServed(form);
+  const isServed = DocketEntry.isServed(form);
 
   const showSecondaryParty =
     partyType === PARTY_TYPES.petitionerSpouse ||

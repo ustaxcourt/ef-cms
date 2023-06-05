@@ -3,7 +3,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
-import { DocketEntry, isServed } from '../../entities/DocketEntry';
+import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -57,7 +57,7 @@ export const updateDocketEntryMetaInteractor = async (
   }
 
   if (
-    !isServed(originalDocketEntry) &&
+    !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
     !originalDocketEntry.isMinuteEntry
   ) {
