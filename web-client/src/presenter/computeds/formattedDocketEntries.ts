@@ -145,7 +145,6 @@ export const getFormattedDocketEntry = ({
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
-    POLICY_DATE_IMPACTED_EVENTCODES,
   } = applicationContext.getConstants();
 
   const userHasAccessToCase = !isExternalUser || userAssociatedWithCase;
