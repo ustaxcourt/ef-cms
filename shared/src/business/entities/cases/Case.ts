@@ -45,6 +45,7 @@ import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
+import { UnprocessableEntityError } from '../../../errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
@@ -1011,6 +1012,11 @@ export class Case extends JoiValidationEntity {
       applicationContext,
       petitioners: this.petitioners,
     });
+    if (isServed(docketEntry)) {
+      throw new UnprocessableEntityError(
+        'Cannot archive docket entry that has already been served.',
+      );
+    }
     docketEntryToArchive.archive();
     this.archivedDocketEntries.push(docketEntryToArchive);
     this.deleteDocketEntryById({
