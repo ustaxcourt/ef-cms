@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const archiveDraftDocumentAction = async ({
   applicationContext,
   get,
+  path,
   store,
 }: ActionProps) => {
   const { docketEntryId, redirectToCaseDetail } = get(
@@ -18,12 +19,23 @@ export const archiveDraftDocumentAction = async ({
   );
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const updatedCase = await applicationContext
-    .getUseCases()
-    .archiveDraftDocumentInteractor(applicationContext, {
-      docketEntryId,
-      docketNumber,
-    });
+  let updatedCase;
+  try {
+    updatedCase = await applicationContext
+      .getUseCases()
+      .archiveDraftDocumentInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
+  } catch (error) {
+    const isArchivingServedEntry = JSON.stringify(error).includes(
+      'Cannot archive docket entry that has already been served.',
+    );
+    if (isArchivingServedEntry) {
+      return path.error({ showModal: 'DocketEntryHasAlreadyBeenServedModal' });
+    }
+    throw error;
+  }
 
   store.unset(state.viewerDraftDocumentToDisplay);
   store.unset(state.draftDocumentViewerDocketEntryId);

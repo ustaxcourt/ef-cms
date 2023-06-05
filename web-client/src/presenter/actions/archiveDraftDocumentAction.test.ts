@@ -4,9 +4,15 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('archiveDraftDocumentAction', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+  const mockSuccessPath = jest.fn();
+  const mockErrorPath = jest.fn();
+
+  presenter.providers.applicationContext = applicationContext;
+
+  presenter.providers.path = {
+    error: mockErrorPath,
+    success: mockSuccessPath,
+  };
 
   it('archives a drafted document successfully', async () => {
     const result = await runAction(archiveDraftDocumentAction, {
@@ -83,5 +89,61 @@ describe('archiveDraftDocumentAction', () => {
 
     expect(state.draftDocumentViewerDocketEntryId).toBeUndefined();
     expect(state.viewerDraftDocumentToDisplay).toBeUndefined();
+  });
+
+  it('should re-throw an error when the error is generic', async () => {
+    const mockError = new Error('I died :(');
+    applicationContext
+      .getUseCases()
+      .archiveDraftDocumentInteractor.mockRejectedValue(mockError);
+
+    await expect(
+      runAction(archiveDraftDocumentAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          archiveDraftDocument: {
+            docketEntryId: 'def-gfed213-441-abce-312f',
+            redirectToCaseDetail: true,
+          },
+          caseDetail: {
+            docketNumber: '101-20',
+          },
+        },
+      }),
+    ).rejects.toEqual(mockError);
+  });
+
+  it('should return path.error when the docket entry has already been served', async () => {
+    applicationContext
+      .getUseCases()
+      .archiveDraftDocumentInteractor.mockRejectedValue({
+        originalError: {
+          response: {
+            data: 'Cannot archive docket entry that has already been served.',
+          },
+        },
+        responseCode: 422,
+      });
+
+    await runAction(archiveDraftDocumentAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        archiveDraftDocument: {
+          docketEntryId: 'def-gfed213-441-abce-312f',
+          redirectToCaseDetail: true,
+        },
+        caseDetail: {
+          docketNumber: '101-20',
+        },
+      },
+    });
+
+    expect(mockErrorPath).toHaveBeenCalledWith({
+      showModal: 'DocketEntryHasAlreadyBeenServedModal',
+    });
   });
 });
