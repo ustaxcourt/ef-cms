@@ -13,8 +13,9 @@ export const JudgeActivityReport = connect(
     form: state.form,
     judgeActivityReportData: state.judgeActivityReportData,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence:
-      sequences.selectDateRangeFromJudgeActivityReportSequence,
+    judgeActivityReportJudges: state.judges,
+    setJudgeActivityReportFiltersSequence:
+      sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     validationErrors: state.validationErrors,
@@ -23,7 +24,8 @@ export const JudgeActivityReport = connect(
     form,
     judgeActivityReportData,
     judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence,
+    judgeActivityReportJudges,
+    setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
@@ -254,24 +256,50 @@ export const JudgeActivityReport = connect(
                   endValue={form.endDate}
                   formGroupCls={'margin-bottom-0'}
                   rangePickerCls={'grid-row '}
-                  showHint={false}
-                  showPlaceholder={true}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}
                   startValue={form.endDate}
                   onChangeEnd={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       endDate: e.target.value,
                     });
                   }}
                   onChangeStart={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       startDate: e.target.value,
                     });
                   }}
                 />
               </div>
+              <div className="grid-col-auto margin-x-3">
+                <label
+                  className="usa-label"
+                  htmlFor="judge-selection"
+                  id="judge-selection-label"
+                >
+                  Judge
+                </label>
+                <select
+                  aria-describedby="judge-selection-label"
+                  aria-label="judge"
+                  className="usa-select select-left width-card-lg"
+                  name="associatedJudge"
+                  value={form.judgeName}
+                  onChange={e =>
+                    setJudgeActivityReportFiltersSequence({
+                      judgeName: e.target.value,
+                    })
+                  }
+                >
+                  {(judgeActivityReportJudges || []).map(judge => (
+                    <option key={judge.name} value={judge.name}>
+                      {judge.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="grid-col-auto display-flex flex-align-center">
                 <Button
                   className="position-relative margin-bottom-35"

@@ -3,18 +3,21 @@ import { state } from 'cerebral';
 /**
  * sets the state.form.startDate and state.form.endDate
  * based on the props.startDate and props.endDate passed in.
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting the state.form.startDate and state.form.endDate
  * @param {object} providers.props the cerebral props object used for passing the props.startDate and props.endDate
  */
-export const updateDateFromPickerFromFormAction = ({
+export const setJudgeActivityReportFiltersAction = ({
   props,
   store,
 }: ActionProps) => {
-  const filterStartDate = props.startDate;
-  const filterEndDate = props.endDate;
+  const filterStartDate: string = props.startDate;
+  const filterEndDate: string = props.endDate;
+  const selectedJudge: string = props.judgeName;
 
+  if (selectedJudge) {
+    store.set(state.form.judgeName, selectedJudge);
+  }
   if (filterStartDate === '') {
     store.unset(state.form.startDate);
   } else if (filterStartDate !== undefined) {
