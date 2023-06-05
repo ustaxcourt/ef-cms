@@ -44,8 +44,15 @@ export const caseDeadlineReportHelper = (get, applicationContext) => {
   caseDeadlines = caseDeadlines.map(d => {
     const inConsolidatedGroup = !!d.leadDocketNumber;
     const inLeadCase = d.leadDocketNumber === d.docketNumber;
-    const consolidatedIconTooltipText =
-      inConsolidatedGroup && inLeadCase ? 'Lead case' : 'Consolidated case';
+    let consolidatedIconTooltipText;
+
+    if (inConsolidatedGroup) {
+      if (inLeadCase) {
+        consolidatedIconTooltipText = 'Lead case';
+      } else {
+        consolidatedIconTooltipText = 'Consolidated case';
+      }
+    }
 
     return {
       ...d,
