@@ -13,7 +13,7 @@ export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,
   archiveDraftDocumentAction,
   {
-    error: [({ props }) => setShowModalFactoryAction(props.showModal)],
+    error: [setShowModalFactoryAction('DocketEntryHasAlreadyBeenServedModal')],
     success: [
       setCaseAction,
       resetArchiveDraftDocumentAction,
