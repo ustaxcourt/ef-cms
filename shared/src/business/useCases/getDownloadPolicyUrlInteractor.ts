@@ -4,7 +4,6 @@ import {
   INITIAL_DOCUMENT_TYPES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { Case, isUserPartOfGroup } from '../entities/cases/Case';
@@ -71,11 +70,6 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   );
 
   if (!isServed(docketEntryEntity) && !isUnservable) {
-    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
-  } else if (
-    docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
-    !userAssociatedWithCase
-  ) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);

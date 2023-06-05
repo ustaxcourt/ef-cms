@@ -459,6 +459,7 @@ export const SIGNED_DOCUMENT_TYPES = {
 export const POLICY_DATE_IMPACTED_EVENTCODES = [
   ...BRIEF_EVENTCODES,
   AMICUS_BRIEF_EVENT_CODE,
+  SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
 ];
 
 export const SCENARIOS = [
