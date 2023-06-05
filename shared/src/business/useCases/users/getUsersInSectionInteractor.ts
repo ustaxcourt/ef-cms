@@ -7,7 +7,6 @@ import { User } from '../../entities/User';
 
 /**
  * getUsersInSectionInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.section the section to get the users
