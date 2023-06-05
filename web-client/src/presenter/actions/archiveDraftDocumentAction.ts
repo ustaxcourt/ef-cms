@@ -27,8 +27,8 @@ export const archiveDraftDocumentAction = async ({
         docketEntryId,
         docketNumber,
       });
-  } catch (error) {
-    const isArchivingServedEntry = JSON.stringify(error).includes(
+  } catch (error: any) {
+    const isArchivingServedEntry = error.originalError.response.data.includes(
       'Cannot archive docket entry that has already been served.',
     );
     if (isArchivingServedEntry) {
