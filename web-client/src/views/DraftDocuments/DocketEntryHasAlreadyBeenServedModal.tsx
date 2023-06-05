@@ -1,10 +1,11 @@
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
+import { sequences } from 'cerebral';
 import React from 'react';
 
 export const DocketEntryHasAlreadyBeenServedModal = connect(
   {
-    // cancelSequence: sequences.bleh,
+    cancelSequence: sequences.discardDraftDocketEntrySequence,
     // confirmSequence: sequences.blah,
   },
   function DocketEntryHasAlreadyBeenServedModal({
