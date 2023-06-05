@@ -13,7 +13,7 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
   const { endDate, startDate } = get(state.judgeActivityReport.filters);
   const { role, userId } = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
-  const chambersJudgeUser = get(state.judgeUser); // TODO: is this the correct chambers user?
+  const chambersJudgeUser = get(state.judgeUser);
   const isChambersUser = role === USER_ROLES.chambers;
   const judgeId =
     isChambersUser && chambersJudgeUser ? chambersJudgeUser.userId : userId;
