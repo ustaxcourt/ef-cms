@@ -5,7 +5,6 @@ import {
   PARTY_TYPES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';

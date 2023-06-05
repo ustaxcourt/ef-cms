@@ -4,6 +4,7 @@ import {
   PARTIES_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  STIPULATED_DECISION_EVENT_CODE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import {
@@ -185,6 +186,27 @@ describe('publicCaseDetailHelper', () => {
       );
 
       expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should NOT show document link for a policy date impacted, court-issued stip decision when filed before policy change date for the public user', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: STIPULATED_DECISION_EVENT_CODE,
+            filingDate: '2030-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: true,
+            isNotServedDocument: false,
+            isStipDecision: true,
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
     });
 
     it('should not show document link for a policy date impacted document when filed by practitioner before policy change date for the public user and is not a court issued document', () => {
