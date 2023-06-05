@@ -5,16 +5,22 @@ import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCa
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,
   archiveDraftDocumentAction,
-  setCaseAction,
-  resetArchiveDraftDocumentAction,
-  getDefaultDraftViewerDocumentToDisplayAction,
-  setViewerDraftDocumentToDisplayAction,
-  getMessagesForCaseAction,
-  navigateToCaseDetailAction,
+  {
+    error: [({ props }) => setShowModalFactoryAction(props.showModal)],
+    success: [
+      setCaseAction,
+      resetArchiveDraftDocumentAction,
+      getDefaultDraftViewerDocumentToDisplayAction,
+      setViewerDraftDocumentToDisplayAction,
+      getMessagesForCaseAction,
+      navigateToCaseDetailAction,
+    ],
+  },
 ]);
