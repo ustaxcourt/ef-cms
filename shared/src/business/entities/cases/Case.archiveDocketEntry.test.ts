@@ -1,16 +1,18 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
 import { Case } from './Case';
+import { DocketEntry } from '../DocketEntry';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocuments';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 
 describe('archiveDocketEntry', () => {
   let caseRecord: Case;
-  let docketEntryToArchive: RawDocketEntry;
+  let docketEntryToArchive: DocketEntry;
   beforeEach(() => {
-    docketEntryToArchive = cloneDeep(PENDING_DOCKET_ENTRY);
+    docketEntryToArchive = new DocketEntry(cloneDeep(PENDING_DOCKET_ENTRY), {
+      applicationContext,
+    });
+    docketEntryToArchive.servedAt = undefined;
 
     caseRecord = new Case(
       {
@@ -23,20 +25,17 @@ describe('archiveDocketEntry', () => {
     );
   });
 
-  it('marks the docket entry as archived', () => {
-    caseRecord.archiveDocketEntry(docketEntryToArchive, {
-      applicationContext,
-    });
+  it('should mark the docket entry as archived', () => {
+    caseRecord.archiveDocketEntry(docketEntryToArchive);
+
     const archivedDocketEntry = caseRecord.archivedDocketEntries.find(
       d => d.docketEntryId === docketEntryToArchive.docketEntryId,
     );
-    expect(archivedDocketEntry.archived).toBeTruthy();
+    expect(archivedDocketEntry!.archived).toEqual(true);
   });
 
   it('adds the provided docket entry to the case archivedDocketEntries', () => {
-    caseRecord.archiveDocketEntry(docketEntryToArchive, {
-      applicationContext,
-    });
+    caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
       caseRecord.archivedDocketEntries.find(
@@ -46,9 +45,7 @@ describe('archiveDocketEntry', () => {
   });
 
   it('removes the provided docket entry from the case docketEntries array', () => {
-    caseRecord.archiveDocketEntry(docketEntryToArchive, {
-      applicationContext,
-    });
+    caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
       caseRecord.docketEntries.find(
@@ -60,10 +57,8 @@ describe('archiveDocketEntry', () => {
   it('should not allow a docket entry that has already been served to be archived', () => {
     docketEntryToArchive.servedAt = '2014-02-01T05:00:00.000Z';
 
-    expect(() =>
-      caseRecord.archiveDocketEntry(docketEntryToArchive, {
-        applicationContext,
-      }),
-    ).toThrow('Cannot archive docket entry that has already been served.');
+    expect(() => caseRecord.archiveDocketEntry(docketEntryToArchive)).toThrow(
+      'Cannot archive docket entry that has already been served.',
+    );
   });
 });
