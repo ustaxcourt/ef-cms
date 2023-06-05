@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { state } from 'cerebral';
 
@@ -73,11 +74,12 @@ export const getShowDocumentViewerLink = ({
       }
     }
     if (userHasNoAccessToDocument) return false;
-    if (filedAfterPolicyChange && filedByPractitioner) return true;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
       if (!isServed) return false;
     } else {
+      if (isServed && filedAfterPolicyChange && filedByPractitioner)
+        return true;
       if (!userHasAccessToCase) return false;
       if (isInitialDocument) return true;
       if (!isServed) return false;
