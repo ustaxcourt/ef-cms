@@ -14,7 +14,7 @@ export const docketClerkAddsDocketEntryFromOrder = (
     let nonstandardHelperComputed;
     let addCourtIssuedDocketEntryHelperComputed;
 
-    const jarDecisionTypeDocumentEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
+    const decisionTypeDocumentEventCodes = ['ODD', 'DEC', 'OAD', 'SDEC'];
 
     caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
@@ -183,9 +183,7 @@ export const docketClerkAddsDocketEntryFromOrder = (
       },
     );
 
-    if (
-      jarDecisionTypeDocumentEventCodes.includes(draftOrderDocument.eventCode)
-    ) {
+    if (decisionTypeDocumentEventCodes.includes(draftOrderDocument.eventCode)) {
       await cerebralTest.runSequence(
         'updateCourtIssuedDocketEntryFormValueSequence',
         {
