@@ -1,23 +1,16 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../EntityConstants');
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocuments';
+import { cloneDeep } from 'lodash';
 
 describe('archiveDocketEntry', () => {
-  let caseRecord;
-  let docketEntryToArchive;
+  let caseRecord: Case;
+  let docketEntryToArchive: RawDocketEntry;
   beforeEach(() => {
-    docketEntryToArchive = {
-      archived: undefined,
-      docketEntryId: '79c29d3f-d292-482c-b722-388577154664',
-      documentType: 'Order',
-      eventCode: 'O',
-      filedBy: 'Test Petitioner',
-      role: ROLES.petitioner,
-      userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-    };
+    docketEntryToArchive = cloneDeep(PENDING_DOCKET_ENTRY);
 
     caseRecord = new Case(
       {
@@ -62,5 +55,15 @@ describe('archiveDocketEntry', () => {
         d => d.docketEntryId === docketEntryToArchive.docketEntryId,
       ),
     ).toBeUndefined();
+  });
+
+  it('should not allow a docket entry that has already been served to be archived', () => {
+    docketEntryToArchive.servedAt = '2014-02-01T05:00:00.000Z';
+
+    expect(() =>
+      caseRecord.archiveDocketEntry(docketEntryToArchive, {
+        applicationContext,
+      }),
+    ).toThrow('Cannot archive docket entry that has already been served.');
   });
 });
