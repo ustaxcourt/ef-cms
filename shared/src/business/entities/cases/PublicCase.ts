@@ -1,9 +1,9 @@
 import {
-  BRIEF_EVENTCODES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   PARTY_TYPES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
@@ -123,7 +123,8 @@ export class PublicCase extends JoiValidationEntity {
     const isStipDecision =
       documentEntity.eventCode === STIPULATED_DECISION_EVENT_CODE;
     const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
-    const isBrief = BRIEF_EVENTCODES.includes(documentEntity.eventCode);
+    const hasPolicyDateImpactedEventCode =
+      POLICY_DATE_IMPACTED_EVENTCODES.includes(documentEntity.eventCode);
     const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
     const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
     const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
@@ -132,7 +133,7 @@ export class PublicCase extends JoiValidationEntity {
     const documentIsStricken = !!documentEntity.isStricken;
 
     const isPublicDocumentType =
-      (isOrder || isCourtIssuedDocument || isBrief) &&
+      (isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode) &&
       !isTranscript &&
       !isStipDecision &&
       !documentIsStricken;

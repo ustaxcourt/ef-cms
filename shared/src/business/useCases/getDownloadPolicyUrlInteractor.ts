@@ -1,8 +1,8 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
@@ -204,11 +204,11 @@ export const getDownloadPolicyUrlInteractor = async (
       const selectedIsStin =
         docketEntryEntity.documentType ===
         INITIAL_DOCUMENT_TYPES.stin.documentType;
-      const selectedIsBrief = BRIEF_EVENTCODES.includes(
-        docketEntryEntity.eventCode,
-      );
+      const hasPolicyDateImpactedEventCode =
+        POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntryEntity.eventCode);
       const unAuthorizedToViewNonCourtIssued =
-        (selectedIsStin || !userAssociatedWithCase) && !selectedIsBrief;
+        (selectedIsStin || !userAssociatedWithCase) &&
+        !hasPolicyDateImpactedEventCode;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
