@@ -124,9 +124,13 @@ fi
 if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
   GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
   BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 else
   BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
   GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
@@ -162,6 +166,8 @@ export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_green_node_version=$GREEN_NODE_VERSION
 export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
+export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
+export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
