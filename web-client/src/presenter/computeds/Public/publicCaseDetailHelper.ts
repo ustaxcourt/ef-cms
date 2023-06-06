@@ -65,12 +65,12 @@ export const formatDocketEntryOnDocketRecord = (
   }
 
   let canPublicUserSeeLink =
-    (record.isCourtIssuedDocument || meetsPolicyChangeRequirements) &&
+    ((record.isCourtIssuedDocument && !record.isStipDecision) ||
+      meetsPolicyChangeRequirements) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
-    !record.isStipDecision &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 

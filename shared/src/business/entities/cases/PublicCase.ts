@@ -5,7 +5,6 @@ import {
   PARTY_TYPES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -116,8 +115,6 @@ export class PublicCase extends JoiValidationEntity {
   static isPrivateDocument(documentEntity) {
     const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-    const isStipDecision =
-      documentEntity.eventCode === STIPULATED_DECISION_EVENT_CODE;
     const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
     const hasPolicyDateImpactedEventCode =
       POLICY_DATE_IMPACTED_EVENTCODES.includes(documentEntity.eventCode);
@@ -131,7 +128,6 @@ export class PublicCase extends JoiValidationEntity {
     const isPublicDocumentType =
       (isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode) &&
       !isTranscript &&
-      !isStipDecision &&
       !documentIsStricken;
 
     return (
