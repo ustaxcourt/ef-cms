@@ -18,7 +18,7 @@ const judgeActivityReportHelper = withAppContextDecorator(
 
 let progressDescriptionTableTotalBefore = 0;
 
-describe('Judge activity report journey', () => {
+describe('Judge views own activity report', () => {
   const cerebralTest = setupTest();
 
   afterAll(() => {
@@ -26,6 +26,7 @@ describe('Judge activity report journey', () => {
   });
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
+
   it('should disable the submit button on initial page load when form has not yet been completed', async () => {
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
