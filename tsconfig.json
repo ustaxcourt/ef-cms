@@ -19,9 +19,9 @@
   "include": [
     "./types/**/*.d.ts",
     "./web-api/src/**/*",
-    "./shared/admin-tools/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
+    "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts"
   ],
   "exclude": ["node_modules"]
