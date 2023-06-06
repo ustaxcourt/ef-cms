@@ -33,8 +33,10 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
           presenter,
         },
         state: {
-          form: {
-            judgeName: mockJudgeName,
+          judgeActivityReport: {
+            filters: {
+              judgeName: mockJudgeName,
+            },
           },
         },
       },

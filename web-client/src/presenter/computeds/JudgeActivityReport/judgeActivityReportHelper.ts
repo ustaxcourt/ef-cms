@@ -18,7 +18,9 @@ export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
   const {
     casesClosedByJudge,
@@ -27,7 +29,7 @@ export const judgeActivityReportHelper = (
     orders,
     submittedAndCavCasesByJudge = [],
     trialSessions,
-  } = get(state.judgeActivityReportData);
+  } = get(state.judgeActivityReport.judgeActivityReportData);
 
   let closedCasesTotal: number = 0,
     trialSessionsHeldTotal: number = 0,

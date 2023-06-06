@@ -20,18 +20,27 @@ export const setJudgeActivityReportDataAction = ({
   } = props;
 
   store.set(
-    state.judgeActivityReportData.casesClosedByJudge,
+    state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
     casesClosedByJudge,
   );
-  store.set(state.judgeActivityReportData.trialSessions, trialSessions);
-  store.set(state.judgeActivityReportData.opinions, opinions);
-  store.set(state.judgeActivityReportData.orders, orders);
   store.set(
-    state.judgeActivityReportData.submittedAndCavCasesByJudge,
+    state.judgeActivityReport.judgeActivityReportData.trialSessions,
+    trialSessions,
+  );
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData.opinions,
+    opinions,
+  );
+
+  store.set(state.judgeActivityReport.judgeActivityReportData.orders, orders);
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData
+      .submittedAndCavCasesByJudge,
     submittedAndCavCasesByJudge,
   );
   store.set(
-    state.judgeActivityReportData.consolidatedCasesGroupCountMap,
+    state.judgeActivityReport.judgeActivityReportData
+      .consolidatedCasesGroupCountMap,
     consolidatedCasesGroupCountMap,
   );
 };

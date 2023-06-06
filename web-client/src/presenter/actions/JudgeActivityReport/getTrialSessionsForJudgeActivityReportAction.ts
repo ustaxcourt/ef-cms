@@ -10,8 +10,7 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, startDate } = get(state.form);
-
+  const { endDate, startDate } = get(state.judgeActivityReport.filters);
   const { role, userId } = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const chambersJudgeUser = get(state.judgeUser);

@@ -18,14 +18,16 @@ describe('validateJudgeActivityReportSearchAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should return the success path when the search critera are all valid', () => {
-    runAction(validateJudgeActivityReportSearchAction, {
+  it('should return the success path when the search critera are all valid', async () => {
+    await runAction(validateJudgeActivityReportSearchAction as any, {
       modules: { presenter },
       state: {
-        form: {
-          endDate: '02/02/2022',
-          judgeName: 'Colvin',
-          startDate: '02/01/2022',
+        judgeActivityReport: {
+          filters: {
+            endDate: '02/02/2022',
+            judgeName: 'Colvin',
+            startDate: '02/01/2022',
+          },
         },
       },
     });
@@ -33,20 +35,16 @@ describe('validateJudgeActivityReportSearchAction', () => {
     expect(mockSuccessPath).toHaveBeenCalled();
   });
 
-  it('should return the error path when the search critera are NOT valid', () => {
-    applicationContext
-      .getUseCases()
-      .validateJudgeActivityReportSearchInteractor.mockReturnValue({
-        endDate: 'End date is required.',
-      });
-
-    runAction(validateJudgeActivityReportSearchAction, {
+  it('should return the error path when the search critera are NOT valid', async () => {
+    await runAction(validateJudgeActivityReportSearchAction as any, {
       modules: { presenter },
       state: {
-        form: {
-          endDate: undefined,
-          judgeName: 'Colvin',
-          startDate: '02/01/2022',
+        judgeActivityReport: {
+          filters: {
+            endDate: undefined,
+            judgeName: 'Colvin',
+            startDate: '02/01/2022',
+          },
         },
       },
     });

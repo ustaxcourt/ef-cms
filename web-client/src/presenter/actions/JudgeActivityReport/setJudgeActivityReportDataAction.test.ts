@@ -24,15 +24,17 @@ describe('setJudgeActivityReportDataAction', () => {
         casesClosedByJudge: mockCasesClosedByJudge,
       },
       state: {
-        judgeActivityReportData: {
-          casesClosedByJudge: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            casesClosedByJudge: undefined,
+          },
         },
       },
     });
 
-    expect(state.judgeActivityReportData.casesClosedByJudge).toBe(
-      mockCasesClosedByJudge,
-    );
+    expect(
+      state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
+    ).toBe(mockCasesClosedByJudge);
   });
 
   it('should set props.trialSessions on state', async () => {
@@ -50,13 +52,17 @@ describe('setJudgeActivityReportDataAction', () => {
         trialSessions: mockTrialSessions,
       },
       state: {
-        judgeActivityReportData: {
-          trialSessions: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            trialSessions: undefined,
+          },
         },
       },
     });
 
-    expect(state.judgeActivityReportData.trialSessions).toBe(mockTrialSessions);
+    expect(
+      state.judgeActivityReport.judgeActivityReportData.trialSessions,
+    ).toBe(mockTrialSessions);
   });
 
   it('should set props.opinions on state', async () => {
@@ -91,13 +97,17 @@ describe('setJudgeActivityReportDataAction', () => {
         opinions: mockOpinions,
       },
       state: {
-        judgeActivityReportData: {
-          opinions: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            opinions: undefined,
+          },
         },
       },
     });
 
-    expect(state.judgeActivityReportData.opinions).toBe(mockOpinions);
+    expect(state.judgeActivityReport.judgeActivityReportData.opinions).toBe(
+      mockOpinions,
+    );
   });
 
   it('should set props.orders on state', async () => {
@@ -122,13 +132,17 @@ describe('setJudgeActivityReportDataAction', () => {
         orders: mockOrdersIssuedByJudge,
       },
       state: {
-        judgeActivityReportData: {
-          orders: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            orders: undefined,
+          },
         },
       },
     });
 
-    expect(state.judgeActivityReportData.orders).toBe(mockOrdersIssuedByJudge);
+    expect(state.judgeActivityReport.judgeActivityReportData.orders).toBe(
+      mockOrdersIssuedByJudge,
+    );
   });
 
   it('should set props.submittedAndCavCasesByJudge on state', async () => {
@@ -156,9 +170,10 @@ describe('setJudgeActivityReportDataAction', () => {
       },
     });
 
-    expect(state.judgeActivityReportData.submittedAndCavCasesByJudge).toBe(
-      mockSubmittedAndCavCasesByJudge,
-    );
+    expect(
+      state.judgeActivityReport.judgeActivityReportData
+        .submittedAndCavCasesByJudge,
+    ).toBe(mockSubmittedAndCavCasesByJudge);
   });
 
   it('should set props.submittedAndCavCasesByJudge on state', async () => {
@@ -172,15 +187,18 @@ describe('setJudgeActivityReportDataAction', () => {
         consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCountMap,
       },
       state: {
-        judgeActivityReportData: {
-          consolidatedCasesGroupCountMap: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            consolidatedCasesGroupCountMap: undefined,
+          },
         },
       },
     });
 
     expect(
       Object.fromEntries(
-        state.judgeActivityReportData.consolidatedCasesGroupCountMap,
+        state.judgeActivityReport.judgeActivityReportData
+          .consolidatedCasesGroupCountMap,
       ),
     ).toMatchObject(Object.fromEntries(mockConsolidatedCasesGroupCountMap));
   });
