@@ -21,8 +21,8 @@ describe('archiveDraftDocumentAction', () => {
       .archiveDraftDocumentInteractor.mockResolvedValue(MOCK_CASE);
   });
 
-  it('archives a drafted document successfully, saves alerts for navigation, and returns docketNumber', async () => {
-    const result = await runAction(archiveDraftDocumentAction, {
+  it('archives a drafted document successfully', async () => {
+    await runAction(archiveDraftDocumentAction, {
       modules: {
         presenter,
       },
@@ -43,9 +43,7 @@ describe('archiveDraftDocumentAction', () => {
         message: 'Document deleted.',
       },
       caseDetail: MOCK_CASE,
-      docketNumber: MOCK_CASE.docketNumber,
     });
-    expect(result.state.saveAlertsForNavigation).toEqual(true);
   });
 
   it('should re-throw an error when the error is generic', async () => {
