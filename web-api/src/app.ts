@@ -183,6 +183,7 @@ import { validatePdfLambda } from './documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
 
+import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
 import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
@@ -748,6 +749,10 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/open-cases',
+    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
   );
 }
 

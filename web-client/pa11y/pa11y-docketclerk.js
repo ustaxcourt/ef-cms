@@ -2,8 +2,8 @@ module.exports = [
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/',
   {
     actions: [
-      'wait for td.message-select-control>label to be visible',
-      'click element td.message-select-control>label',
+      'wait for td.message-select-control .usa-checkbox>label to be visible',
+      'click element td.message-select-control .usa-checkbox>label',
       'wait for .action-section to be visible',
     ],
     notes: 'checks a11y of section queue tab panel',
