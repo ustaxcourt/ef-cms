@@ -1,4 +1,5 @@
 import { archiveDraftDocumentAction } from '../actions/archiveDraftDocumentAction';
+import { clearDraftDocumentViewerAction } from '../actions/clearDraftDocumentViewerAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { getDefaultDraftViewerDocumentToDisplayAction } from '../actions/getDefaultDraftViewerDocumentToDisplayAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
@@ -11,6 +12,7 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 
 export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,
+  clearDraftDocumentViewerAction,
   archiveDraftDocumentAction,
   {
     error: [setShowModalFactoryAction('DocketEntryHasAlreadyBeenServedModal')],
