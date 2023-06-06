@@ -6,7 +6,7 @@ import { setCaseAction } from '../../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 
-export const discardDraftDocketEntrySequence = showProgressSequenceDecorator([
+export const closeModalAndRefetchCase = showProgressSequenceDecorator([
   clearModalAction,
   parallel([getCaseAction, getConsolidatedCasesByCaseAction]),
   setCaseAction,

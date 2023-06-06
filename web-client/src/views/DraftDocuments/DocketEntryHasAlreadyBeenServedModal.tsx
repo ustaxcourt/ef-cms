@@ -5,7 +5,7 @@ import React from 'react';
 
 export const DocketEntryHasAlreadyBeenServedModal = connect(
   {
-    refreshCaseSequence: sequences.discardDraftDocketEntrySequence,
+    refreshCaseSequence: sequences.closeModalAndRefetchCase,
   },
   function DocketEntryHasAlreadyBeenServedModal({ refreshCaseSequence }) {
     return (
