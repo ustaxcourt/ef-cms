@@ -58,5 +58,3 @@ export class AddPrivatePractitionerFactory extends JoiValidationEntity {
     };
   }
 }
-
-// AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES = {};
