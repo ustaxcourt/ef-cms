@@ -16,7 +16,7 @@ export const viewJudgeActivityReportResults = (
   cerebralTest: any,
   overrides: { startDate?: string; endDate?: string } = {},
 ) => {
-  return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
+  return it('should submit the form with valid dates and a judge selection to display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
       prepareDateFromString(),
       getConstants().DATE_FORMATS.MMDDYYYY,
@@ -25,7 +25,7 @@ export const viewJudgeActivityReportResults = (
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      startDate: (overrides.startDate as string) || '01/01/2020',
+      startDate: overrides.startDate || '01/01/2020',
     });
 
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
@@ -44,7 +44,9 @@ export const viewJudgeActivityReportResults = (
     cerebralTest.progressDescriptionTableTotal = progressDescriptionTableTotal;
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toEqual({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
       opinions: expect.anything(),

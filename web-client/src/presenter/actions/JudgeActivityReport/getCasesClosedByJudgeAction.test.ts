@@ -19,15 +19,17 @@ describe('getCasesClosedByJudgeAction', () => {
       .getUseCases()
       .getCasesClosedByJudgeInteractor.mockReturnValue(mockCasesClosedByJudge);
 
-    const { output } = await runAction(getCasesClosedByJudgeAction, {
+    const { output } = await runAction(getCasesClosedByJudgeAction as any, {
       modules: {
         presenter,
       },
       state: {
-        form: {
-          endDate: mockEndDate,
-          judgeName: mockJudgeName,
-          startDate: mockStartDate,
+        judgeActivityReport: {
+          filters: {
+            endDate: mockEndDate,
+            judgeName: mockJudgeName,
+            startDate: mockStartDate,
+          },
         },
       },
     });

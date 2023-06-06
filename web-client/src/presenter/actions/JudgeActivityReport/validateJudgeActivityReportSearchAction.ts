@@ -1,3 +1,4 @@
+import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import { state } from 'cerebral';
 
 /**
@@ -9,19 +10,18 @@ import { state } from 'cerebral';
  * @returns {object} the next path based on if validation was successful or error
  */
 export const validateJudgeActivityReportSearchAction = ({
-  applicationContext,
   get,
   path,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
-  const errors = applicationContext
-    .getUseCases()
-    .validateJudgeActivityReportSearchInteractor({
-      endDate,
-      judgeName,
-      startDate,
-    });
+  const errors = new JudgeActivityReportSearch({
+    endDate,
+    judgeName,
+    startDate,
+  }).getFormattedValidationErrors();
 
   if (errors) {
     return path.error({
