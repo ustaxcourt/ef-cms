@@ -10,10 +10,11 @@ export const DocketEntryHasAlreadyBeenServedModal = connect(
   function DocketEntryHasAlreadyBeenServedModal({ refreshCaseSequence }) {
     return (
       <ModalDialog
+        cancelSequence={refreshCaseSequence}
         closeLink={false}
-        confirmLabel="Ok"
+        confirmLabel="Close and Refresh"
         confirmSequence={refreshCaseSequence}
-        message="This document was served. Your changes were not saved."
+        message="This action could not be completed because this document was already served."
         title="Document Already Served"
       ></ModalDialog>
     );
