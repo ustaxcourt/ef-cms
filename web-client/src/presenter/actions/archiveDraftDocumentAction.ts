@@ -28,27 +28,32 @@ export const archiveDraftDocumentAction = async ({
         docketNumber,
       });
   } catch (error: any) {
-    const isArchivingServedEntry = error.originalError.response.data.includes(
-      'Cannot archive docket entry that has already been served.',
-    );
+    const isArchivingServedEntry =
+      error?.originalError?.response?.data?.includes(
+        'Cannot archive docket entry that has already been served.',
+      );
     if (isArchivingServedEntry) {
       return path.error({ showModal: 'DocketEntryHasAlreadyBeenServedModal' });
     }
     throw error;
   }
 
-  store.set(state.alertSuccess, {
-    message: 'Document deleted.',
-  });
-
   if (redirectToCaseDetail) {
     store.set(state.saveAlertsForNavigation, true);
 
-    return {
+    return path.success({
+      alertSuccess: {
+        message: 'Document deleted.',
+      },
       caseDetail: updatedCase,
       docketNumber,
-    };
+    });
   }
 
-  return { caseDetail: updatedCase };
+  return path.success({
+    alertSuccess: {
+      message: 'Document deleted.',
+    },
+    caseDetail: updatedCase,
+  });
 };

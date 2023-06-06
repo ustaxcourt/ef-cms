@@ -5,6 +5,7 @@ import { getDefaultDraftViewerDocumentToDisplayAction } from '../actions/getDefa
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { resetArchiveDraftDocumentAction } from '../actions/resetArchiveDraftDocumentAction';
+import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setViewerDraftDocumentToDisplayAction } from '../actions/setViewerDraftDocumentToDisplayAction';
@@ -17,6 +18,8 @@ export const archiveDraftDocumentSequence = showProgressSequenceDecorator([
   {
     error: [setShowModalFactoryAction('DocketEntryHasAlreadyBeenServedModal')],
     success: [
+      setAlertSuccessAction,
+      // setSaveAlertsForNavigationAction,
       setCaseAction,
       resetArchiveDraftDocumentAction,
       getDefaultDraftViewerDocumentToDisplayAction,

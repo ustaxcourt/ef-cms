@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveDraftDocumentAction } from './archiveDraftDocumentAction';
 import { presenter } from '../presenter-mock';
@@ -7,22 +8,27 @@ describe('archiveDraftDocumentAction', () => {
   const mockSuccessPath = jest.fn();
   const mockErrorPath = jest.fn();
 
-  presenter.providers.applicationContext = applicationContext;
-
   presenter.providers.path = {
     error: mockErrorPath,
     success: mockSuccessPath,
   };
 
+  presenter.providers.applicationContext = applicationContext;
+
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .archiveDraftDocumentInteractor.mockResolvedValue(MOCK_CASE);
+  });
+
   it('archives a drafted document successfully', async () => {
-    const result = await runAction(archiveDraftDocumentAction, {
+    await runAction(archiveDraftDocumentAction, {
       modules: {
         presenter,
       },
-      props: {},
       state: {
         archiveDraftDocument: {
-          docketEntryId: 'def-gfed213-441-abce-312f',
+          docketEntryId: 'e7df98c8-b310-41bb-953c-d9390c6c5884',
           documentTitle: 'document-title-123',
         },
         caseDetail: {
@@ -34,8 +40,11 @@ describe('archiveDraftDocumentAction', () => {
     expect(
       applicationContext.getUseCases().archiveDraftDocumentInteractor,
     ).toHaveBeenCalled();
-    expect(result.state.alertSuccess).toMatchObject({
-      message: 'Document deleted.',
+    expect(mockSuccessPath).toHaveBeenCalledWith({
+      alertSuccess: {
+        message: 'Document deleted.',
+      },
+      caseDetail: MOCK_CASE,
     });
   });
 
@@ -44,7 +53,6 @@ describe('archiveDraftDocumentAction', () => {
       modules: {
         presenter,
       },
-      props: {},
       state: {
         archiveDraftDocument: {
           docketEntryId: 'def-gfed213-441-abce-312f',
@@ -52,7 +60,7 @@ describe('archiveDraftDocumentAction', () => {
           redirectToCaseDetail: true,
         },
         caseDetail: {
-          docketNumber: '101-20',
+          docketNumber: MOCK_CASE.docketNumber,
         },
       },
     });
@@ -60,35 +68,14 @@ describe('archiveDraftDocumentAction', () => {
     expect(
       applicationContext.getUseCases().archiveDraftDocumentInteractor,
     ).toHaveBeenCalled();
-    expect(result.state.alertSuccess).toMatchObject({
-      message: 'Document deleted.',
+    expect(mockSuccessPath).toHaveBeenCalledWith({
+      alertSuccess: {
+        message: 'Document deleted.',
+      },
+      caseDetail: MOCK_CASE,
+      docketNumber: MOCK_CASE.docketNumber,
     });
     expect(result.state.saveAlertsForNavigation).toEqual(true);
-    expect(result.output.docketNumber).toEqual('101-20');
-  });
-
-  it('should unset state.viewerDraftDocumentToDisplay and state.draftDocumentViewerDocketEntryId so the viewer does not display an archived document', async () => {
-    const { state } = await runAction(archiveDraftDocumentAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        archiveDraftDocument: {
-          docketEntryId: 'def-gfed213-441-abce-312f',
-          documentTitle: 'document-title-123',
-          redirectToCaseDetail: true,
-        },
-        caseDetail: {
-          docketNumber: '101-20',
-        },
-        draftDocumentViewerDocketEntryId: '99999999',
-        viewerDraftDocumentToDisplay: { docketEntryId: '999999' },
-      },
-    });
-
-    expect(state.draftDocumentViewerDocketEntryId).toBeUndefined();
-    expect(state.viewerDraftDocumentToDisplay).toBeUndefined();
   });
 
   it('should re-throw an error when the error is generic', async () => {
