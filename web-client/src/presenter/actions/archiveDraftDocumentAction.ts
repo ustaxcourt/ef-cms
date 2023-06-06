@@ -1,18 +1,9 @@
 import { state } from 'cerebral';
 
-/**
- * calls the proxy/interactor to archive a document on the backend
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
- * @param {object} providers.props props passed through via cerebral
- * @param {object} providers.store the cerebral store object
- * @returns {Promise} async action
- */
 export const archiveDraftDocumentAction = async ({
   applicationContext,
   get,
   path,
-  store,
 }: ActionProps) => {
   const { docketEntryId, docketNumber } = get(state.archiveDraftDocument);
 
@@ -35,13 +26,10 @@ export const archiveDraftDocumentAction = async ({
     throw error;
   }
 
-  store.set(state.saveAlertsForNavigation, true);
-
   return path.success({
     alertSuccess: {
       message: 'Document deleted.',
     },
     caseDetail: updatedCase,
-    docketNumber,
   });
 };
