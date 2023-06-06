@@ -24,7 +24,6 @@ import {
 import { createApplicationContext } from '../../../web-api/src/applicationContext';
 // eslint-disable-next-line import/no-unresolved
 import { parse } from 'csv-parse/sync';
-// @ts-ignore
 import fs from 'fs';
 
 const dynamodbClient = new DynamoDBClient({ region: process.env.REGION });
@@ -36,7 +35,7 @@ const getCaseRecord = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-}): Promise<Record<string, AttributeValue>> => {
+}): Promise<Record<string, AttributeValue> | undefined> => {
   const getCaseCommand = new GetItemCommand({
     Key: {
       pk: { S: `case|${docketNumber}` },
@@ -55,14 +54,11 @@ const putCaseStatusHistoryRecord = async ({
   updatedCaseStatus,
 }: {
   applicationContext: IApplicationContext;
-  caseRecord: Record<string, any>;
+  caseRecord: Record<string, AttributeValue>;
   date: string;
   updatedCaseStatus: string;
 }): Promise<boolean> => {
-  if (
-    !('caseStatusHistory' in caseRecord) ||
-    !('L' in caseRecord.caseStatusHistory)
-  ) {
+  if (typeof caseRecord.caseStatusHistory.L === 'undefined') {
     caseRecord.caseStatusHistory = { L: [] };
   }
   caseRecord.caseStatusHistory.L.push({
@@ -72,6 +68,7 @@ const putCaseStatusHistoryRecord = async ({
       updatedCaseStatus: { S: updatedCaseStatus },
     },
   });
+
   const putCaseCommand = new PutItemCommand({
     Item: caseRecord,
     TableName: applicationContext.environment.dynamoDbTableName,
@@ -92,8 +89,8 @@ const parseCsv = (): Array<any> => {
     delimiter: ',',
     from_line: 2,
   };
-  const data = fs.readFileSync(INPUT_FILE, 'utf8');
-  return parse(data, csvOptions);
+  const csvContent = fs.readFileSync(INPUT_FILE, 'utf8');
+  return parse(csvContent, csvOptions);
 };
 
 (async () => {
@@ -107,12 +104,16 @@ const parseCsv = (): Array<any> => {
       applicationContext,
       docketNumber,
     });
-    await putCaseStatusHistoryRecord({
-      applicationContext,
-      caseRecord,
-      date,
-      updatedCaseStatus,
-    });
-    console.log(`Added ${updatedCaseStatus} status to ${docketNumber}`);
+    if (caseRecord) {
+      const caseStatusHistoryUpdated = await putCaseStatusHistoryRecord({
+        applicationContext,
+        caseRecord,
+        date,
+        updatedCaseStatus,
+      });
+      if (caseStatusHistoryUpdated) {
+        console.log(`Added ${updatedCaseStatus} status to ${docketNumber}`);
+      }
+    }
   }
 })();
