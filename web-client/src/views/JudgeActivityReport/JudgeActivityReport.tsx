@@ -1,5 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { connect } from '@cerebral/react';
@@ -170,6 +172,67 @@ export const JudgeActivityReport = connect(
       </>
     );
 
+    const progressDescription: () => JSX.Element = () => (
+      <>
+        <table
+          aria-describedby="progressDescription"
+          className="usa-table ustc-table"
+        >
+          <caption id="progressDescription">
+            <div className="grid-row display-flex flex-row flex-align-end">
+              <div className="grid-col-9 table-caption-serif">
+                Progress Description
+              </div>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
+              </div>
+            </div>
+          </caption>
+          <thead>
+            <tr>
+              <th aria-label="consolidation icon">
+                <span className="usa-sr-only">Consolidated Case Indicator</span>
+              </th>
+              <th aria-label="docket number">Docket No.</th>
+              <th aria-label="opinion type">No. of Cases</th>
+              <th aria-label="event total">Petitioner(s)</th>
+              <th aria-label="event total">Case Status</th>
+              <th aria-label="event total">Days in Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
+              (formattedCase, index) => {
+                return (
+                  <tr key={index}>
+                    <td className="consolidated-case-column">
+                      <ConsolidatedCaseIcon
+                        consolidatedIconTooltipText={
+                          formattedCase.consolidatedIconTooltipText
+                        }
+                        inConsolidatedGroup={formattedCase.inConsolidatedGroup}
+                        showLeadCaseIcon={formattedCase.isLeadCase}
+                      />
+                    </td>
+                    <td>
+                      <CaseLink formattedCase={formattedCase} />
+                    </td>
+                    <td>{formattedCase?.formattedCaseCount}</td>
+                    <td>{formattedCase.caseCaption}</td>
+                    <td>{formattedCase.status}</td>
+                    <td>{formattedCase.daysElapsedSinceLastStatusChange}</td>
+                  </tr>
+                );
+              },
+            )}
+          </tbody>
+        </table>
+        {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
+          <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
+        )}
+      </>
+    );
+
     return (
       <>
         <BigHeader text="Reports" />
@@ -238,11 +301,20 @@ export const JudgeActivityReport = connect(
                 <div className="grid-col-6">{ordersIssued()}</div>
                 <div className="grid-col-6">{opinionsIssued()}</div>
               </div>
+
+              <div className="grid-row grid-gap">
+                <div className="grid-col-12">{progressDescription()}</div>
+              </div>
             </>
           ) : (
-            <div className="text-semibold margin-0">
-              There is no activity for the selected dates
-            </div>
+            <>
+              <div className="text-semibold margin-bottom-30px">
+                There is no activity for the selected dates
+              </div>
+              <div className="grid-row grid-gap">
+                <div className="grid-col-12">{progressDescription()}</div>
+              </div>
+            </>
           )}
         </section>
       </>

@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .grid-container {
@@ -368,4 +368,10 @@ input[type='file']::-webkit-file-upload-button {
 
 .border-none {
   border: none;
+}
+
+td.message-select-control {
+  .usa-checkbox {
+    padding-bottom: 5px;
+  }
 }

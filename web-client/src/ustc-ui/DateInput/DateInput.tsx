@@ -25,6 +25,34 @@ export const DateInput = ({
   titleHintText,
   useHintNoWrap,
   values = null,
+}: {
+  className?: any;
+  errorText?: string;
+  minDate?: string;
+  names?: {
+    day: string;
+    month: string;
+    year: string;
+  };
+  id: string;
+  hintText?: string | undefined;
+  label: string;
+  placeholder?: string;
+  showDateHint?: boolean;
+  titleHintText?: string;
+  useHintNoWrap?: boolean;
+  hideLegend?: boolean;
+  onBlur?: () => void;
+  onChange?: () => void;
+  onValueChange?: () => void;
+  optional?: boolean;
+  values: null | {
+    day: string;
+    month: string;
+    year: string;
+  };
+  shouldClearHiddenInput?: boolean;
+  disabled?: boolean;
 }) => {
   return (
     <DatePickerComponent
