@@ -21,46 +21,16 @@ describe('archiveDraftDocumentAction', () => {
       .archiveDraftDocumentInteractor.mockResolvedValue(MOCK_CASE);
   });
 
-  it('archives a drafted document successfully', async () => {
-    await runAction(archiveDraftDocumentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        archiveDraftDocument: {
-          docketEntryId: 'e7df98c8-b310-41bb-953c-d9390c6c5884',
-          documentTitle: 'document-title-123',
-        },
-        caseDetail: {
-          docketNumber: '101-20',
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().archiveDraftDocumentInteractor,
-    ).toHaveBeenCalled();
-    expect(mockSuccessPath).toHaveBeenCalledWith({
-      alertSuccess: {
-        message: 'Document deleted.',
-      },
-      caseDetail: MOCK_CASE,
-    });
-  });
-
-  it('archives a drafted document successfully, saves alerts for navigation, and returns docketNumber if state.archiveDraftDocument.redirectToCaseDetail is true', async () => {
+  it('archives a drafted document successfully, saves alerts for navigation, and returns docketNumber', async () => {
     const result = await runAction(archiveDraftDocumentAction, {
       modules: {
         presenter,
       },
       state: {
         archiveDraftDocument: {
-          docketEntryId: 'def-gfed213-441-abce-312f',
-          documentTitle: 'document-title-123',
-          redirectToCaseDetail: true,
-        },
-        caseDetail: {
+          docketEntryId: 'd3455b15-bd48-42f6-a03b-c5735cd44eab',
           docketNumber: MOCK_CASE.docketNumber,
+          documentTitle: 'document-title-123',
         },
       },
     });
@@ -91,11 +61,8 @@ describe('archiveDraftDocumentAction', () => {
         },
         state: {
           archiveDraftDocument: {
-            docketEntryId: 'def-gfed213-441-abce-312f',
-            redirectToCaseDetail: true,
-          },
-          caseDetail: {
-            docketNumber: '101-20',
+            docketEntryId: 'e1a5ca3e-3a65-4399-b84c-00dbdebcd52d',
+            docketNumber: MOCK_CASE.docketNumber,
           },
         },
       }),
@@ -120,11 +87,8 @@ describe('archiveDraftDocumentAction', () => {
       },
       state: {
         archiveDraftDocument: {
-          docketEntryId: 'def-gfed213-441-abce-312f',
-          redirectToCaseDetail: true,
-        },
-        caseDetail: {
-          docketNumber: '101-20',
+          docketEntryId: 'f51f402b-bc95-448a-b0b3-cf1914a81e99',
+          docketNumber: MOCK_CASE.docketNumber,
         },
       },
     });
