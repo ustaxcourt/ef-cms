@@ -5,19 +5,14 @@ import React from 'react';
 
 export const DocketEntryHasAlreadyBeenServedModal = connect(
   {
-    cancelSequence: sequences.discardDraftDocketEntrySequence,
-    // confirmSequence: sequences.blah,
+    refreshCaseSequence: sequences.discardDraftDocketEntrySequence,
   },
-  function DocketEntryHasAlreadyBeenServedModal({
-    cancelSequence,
-    confirmSequence,
-  }) {
+  function DocketEntryHasAlreadyBeenServedModal({ refreshCaseSequence }) {
     return (
       <ModalDialog
-        cancelLabel="Discard Draft"
-        cancelSequence={cancelSequence}
-        confirmLabel="Save as New Draft"
-        confirmSequence={confirmSequence}
+        closeLink={false}
+        confirmLabel="Ok"
+        confirmSequence={refreshCaseSequence}
         message="This document was served. Your changes were not saved."
         title="Document Already Served"
       ></ModalDialog>
