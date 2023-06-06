@@ -19,6 +19,7 @@
   "include": [
     "./types/**/*.d.ts",
     "./web-api/src/**/*",
+    "./shared/admin-tools/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts"
