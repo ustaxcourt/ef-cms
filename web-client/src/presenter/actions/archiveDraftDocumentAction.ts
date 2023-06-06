@@ -14,12 +14,9 @@ export const archiveDraftDocumentAction = async ({
   path,
   store,
 }: ActionProps) => {
-  const { docketEntryId, redirectToCaseDetail } = get(
-    state.archiveDraftDocument,
-  );
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const { docketEntryId, docketNumber } = get(state.archiveDraftDocument);
 
-  let updatedCase;
+  let updatedCase: RawCase;
   try {
     updatedCase = await applicationContext
       .getUseCases()
@@ -38,22 +35,13 @@ export const archiveDraftDocumentAction = async ({
     throw error;
   }
 
-  if (redirectToCaseDetail) {
-    store.set(state.saveAlertsForNavigation, true);
-
-    return path.success({
-      alertSuccess: {
-        message: 'Document deleted.',
-      },
-      caseDetail: updatedCase,
-      docketNumber,
-    });
-  }
+  store.set(state.saveAlertsForNavigation, true);
 
   return path.success({
     alertSuccess: {
       message: 'Document deleted.',
     },
     caseDetail: updatedCase,
+    docketNumber,
   });
 };
