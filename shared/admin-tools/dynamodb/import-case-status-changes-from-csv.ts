@@ -1,13 +1,12 @@
-/**
- * Ingests case status changes from a CSV and then inserts entries into each case's caseStatusHistory array
- *
- *  Example CSV:
- *     Docket,Date,Status
- *     23887-13L,3/24/2022,CAV
- *     22570-18W,3/9/2020,CAV
- *
- * usage: npx ts-node --transpile-only shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts
- */
+// Ingests case status changes from a CSV and then inserts entries into each case's caseStatusHistory array
+//
+//  Example CSV content:
+//     Docket,Date,Status
+//     23887-13L,3/24/2022,CAV
+//     22570-18W,3/9/2020,CAV
+//
+// usage: npx ts-node --transpile-only shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts
+
 import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'HOME', 'REGION']);
 
@@ -58,7 +57,10 @@ const putCaseStatusHistoryRecord = async ({
   date: string;
   updatedCaseStatus: string;
 }): Promise<boolean> => {
-  if (typeof caseRecord.caseStatusHistory.L === 'undefined') {
+  if (
+    !('caseStatusHistory' in caseRecord) ||
+    typeof caseRecord.caseStatusHistory.L === 'undefined'
+  ) {
     caseRecord.caseStatusHistory = { L: [] };
   }
   caseRecord.caseStatusHistory.L.push({
