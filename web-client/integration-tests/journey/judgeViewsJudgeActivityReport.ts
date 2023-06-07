@@ -10,7 +10,9 @@ export const judgeViewsJudgeActivityReportPage = cerebralTest => {
   return it('Judge navigates to Judge Activity Report Page', async () => {
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
-    const judgeUser = cerebralTest.getState('user.name');
+    const judgeName = cerebralTest.getState(
+      'judgeActivityReport.filters.judgeName',
+    );
 
     const { isFormPristine, reportHeader } = runCompute(
       judgeActivityReportHelper,
@@ -20,7 +22,7 @@ export const judgeViewsJudgeActivityReportPage = cerebralTest => {
     );
 
     expect(isFormPristine).toBe(true);
-    expect(reportHeader).toContain(judgeUser);
+    expect(reportHeader).toContain(judgeName);
     expect(cerebralTest.getState('currentPage')).toEqual('JudgeActivityReport');
   });
 };
