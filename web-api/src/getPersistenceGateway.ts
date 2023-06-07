@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
-import {
-  acquireLock,
-  deleteLock,
-} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from '../../shared/src/persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from '../../shared/src/persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from '../../shared/src/persistence/dynamo/cases/associateUserWithCase';
@@ -18,6 +14,11 @@ import { createCase } from '../../shared/src/persistence/dynamo/cases/createCase
 import { createCaseDeadline } from '../../shared/src/persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from '../../shared/src/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createJobStatus } from '../../shared/src/persistence/dynamo/trialSessions/createJobStatus';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from '../../shared/src/persistence/dynamo/locks/acquireLock';
 import { createMessage } from '../../shared/src/persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from '../../shared/src/persistence/dynamo/users/createNewPractitionerUser';
@@ -273,19 +274,18 @@ const gatewayMethods = {
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
-  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createLock,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
-  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
@@ -330,6 +330,7 @@ const gatewayMethods = {
   getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
+  getLock,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
@@ -368,6 +369,7 @@ const gatewayMethods = {
       })
     : refreshToken,
   removeIrsPractitionerOnCase,
+  removeLock,
   removePrivatePractitionerOnCase,
   updateUserCaseMapping,
   verifyCaseForUser,

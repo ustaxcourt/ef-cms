@@ -23,7 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -53,7 +53,6 @@ export const needsNewCoversheet = ({
 
 /**
  * completeDocketEntryQCInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.entryMetadata the entry metadata
@@ -140,7 +139,6 @@ const completeDocketEntryQC = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,
@@ -382,7 +380,8 @@ const completeDocketEntryQC = async (
 
 export const completeDocketEntryQCInteractor = withLocking(
   completeDocketEntryQC,
-  ({ entryMetadata }) =>
-    `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`,
+  (_applicationContext: IApplicationContext, { entryMetadata }) => ({
+    identifiers: [`docket-entry|${entryMetadata.docketEntryId}`],
+  }),
   new InvalidRequest('The document is currently being updated'),
 );
