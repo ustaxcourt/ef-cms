@@ -8,6 +8,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { orderBy } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -17,7 +18,7 @@ import { orderBy } from 'lodash';
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the updated case entity after the document is added
  */
-export const fileCourtIssuedOrderInteractor = async (
+export const fileCourtIssuedOrder = async (
   applicationContext: IApplicationContext,
   {
     documentMetadata,
@@ -149,3 +150,10 @@ export const fileCourtIssuedOrderInteractor = async (
 
   return caseEntity.toRawObject();
 };
+
+export const fileCourtIssuedOrderInteractor = withLocking(
+  fileCourtIssuedOrder,
+  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+    identifiers: [`case|${documentMetadata.docketNumber}`],
+  }),
+);

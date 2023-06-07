@@ -96,18 +96,14 @@ import {
   calculateDifferenceInDays,
   calculateISODate,
   checkDate,
-  computeDate,
   createEndOfDayISO,
   createISODateString,
-  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
   formatDateString,
   formatNow,
   getMonthDayYearInETObj,
-  isStringISOFormatted,
-  isTodayWithinGivenInterval,
   isValidDateString,
   prepareDateFromString,
   validateDateAndCreateISO,
@@ -276,6 +272,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
@@ -729,10 +726,8 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
-      computeDate,
       createEndOfDayISO,
       createISODateString,
-      createISODateStringFromObject,
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
@@ -785,8 +780,6 @@ const applicationContext = {
       isSealedCase,
       isServed,
       isStandaloneRemoteSession,
-      isStringISOFormatted,
-      isTodayWithinGivenInterval,
       isUserIdRepresentedByPrivatePractitioner,
       isUserPartOfGroup,
       isValidDateString,
@@ -796,6 +789,7 @@ const applicationContext = {
       setConsolidationFlagsForDisplay,
       setServiceIndicatorsForCase,
       setupPdfDocument,
+      sleep,
       sortDocketEntries,
       transformFormValueToTitleCaseOrdinal,
       userIsDirectlyAssociated,

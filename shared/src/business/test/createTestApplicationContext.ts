@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 import * as DateHandler from '../utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
+import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -30,9 +31,9 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../sharedAppContext';
-import { ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { abbreviateState } from '../utilities/abbreviateState';
+import { acquireLock } from '../useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
@@ -95,6 +96,7 @@ import {
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
+import { getFeatureFlagValueInteractor } from '../useCases/featureFlag/getFeatureFlagValueInteractor';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
@@ -209,7 +211,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(compareCasesByDocketNumber),
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
-    computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
     copyPagesAndAppendToTargetPdf: jest
       .fn()
       .mockImplementation(copyPagesAndAppendToTargetPdf),
@@ -219,9 +220,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     createISODateString: jest
       .fn()
       .mockImplementation(DateHandler.createISODateString),
-    createISODateStringFromObject: jest
-      .fn()
-      .mockImplementation(DateHandler.createISODateStringFromObject),
     createStartOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createStartOfDayISO),
@@ -308,12 +306,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isStandaloneRemoteSession: jest
       .fn()
       .mockImplementation(isStandaloneRemoteSession),
-    isStringISOFormatted: jest
-      .fn()
-      .mockImplementation(DateHandler.isStringISOFormatted),
-    isTodayWithinGivenInterval: jest
-      .fn()
-      .mockImplementation(DateHandler.isTodayWithinGivenInterval),
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
@@ -334,6 +326,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
+    sleep: jest.fn(),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
     uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
@@ -342,17 +335,21 @@ export const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetHttpClientReturnValue = {
+    delete: jest.fn(),
     get: () => ({
       data: 'url',
     }),
     post: jest.fn(),
+    put: jest.fn(),
   };
 
   const mockGetUseCases = appContextProxy({
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getFeatureFlagValueInteractor: jest.fn().mockImplementation(() => false),
+    getFeatureFlagValueInteractor: jest
+      .fn()
+      .mockImplementation(getFeatureFlagValueInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
@@ -372,6 +369,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
+    acquireLock: jest.fn().mockImplementation(acquireLock),
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
@@ -445,13 +443,13 @@ export const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
-    acquireLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createCase: jest.fn().mockImplementation(createCase),
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
+    createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
@@ -485,6 +483,12 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
+    getFeatureFlagValue: jest.fn().mockImplementation(({ featureFlag }) => {
+      switch (featureFlag) {
+        case ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key:
+          return { current: true };
+      }
+    }),
     getItem: jest.fn().mockImplementation(getItem),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
@@ -497,6 +501,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getTrialSessionJobStatusForCase: jest.fn(),
+    getTrialSessionProcessingStatus: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
@@ -515,6 +520,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
+    setTrialSessionProcessingStatus: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
       .fn()
@@ -637,7 +643,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
     getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
-    getNotificationGateway: emptyAppContextProxy,
+    getNotificationGateway: appContextProxy({
+      sendNotificationToUser: jest.fn(),
+    }),
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
