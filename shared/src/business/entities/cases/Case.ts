@@ -2076,7 +2076,7 @@ export const isLeadCase = rawCase =>
   rawCase.docketNumber === rawCase.leadDocketNumber;
 
 export const caseHasServedDocketEntries = rawCase => {
-  return !!rawCase.docketEntries.some(docketEntry =>
+  return rawCase.docketEntries.some(docketEntry =>
     DocketEntry.isServed(docketEntry),
   );
 };
