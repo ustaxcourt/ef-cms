@@ -1,12 +1,15 @@
-export type JudgeAcitivityReportFilters = {
+import { RawTrialSession } from './../../../shared/src/business/entities/trialSessions/TrialSession';
+export type JudgeActitivityReportFilters = {
   endDate: string;
   startDate: string;
   judgeName: string;
 };
 
 export type JudgeActivityReportState = {
-  filters: JudgeAcitivityReportFilters;
-  judgeActivityReportData: any; // TODO: ADD BETTER TYPES
+  filters: JudgeActitivityReportFilters;
+  judgeActivityReportData: {
+    trialSessions?: RawTrialSession[];
+  }; // TODO: ADD BETTER TYPES
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
