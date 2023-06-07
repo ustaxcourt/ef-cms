@@ -51,7 +51,7 @@ Flexion developers and designers will test if the story meets acceptance criteri
  - [ ] Verify that language for docket record for internal users and external users is identical.
  - [ ] New screens have been added to pa11y scripts.
  - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html.
- - [ ] READMEs, other appropriate docs, JSDocs and swagger/APIs fully updated.
+ - [ ] READMEs, other appropriate docs, and swagger/APIs fully updated.
  - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required).
  - [ ] Interactors should validate entities before calling persistence methods.
  - [ ] Code refactored for clarity and to remove any known technical debt.
