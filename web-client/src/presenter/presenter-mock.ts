@@ -7,4 +7,11 @@ export const presenter = {
   },
   sequences: {},
   state: baseState,
+} as {
+  providers: {
+    applicationContext: ClientApplicationContext;
+    path: any;
+  };
+  sequences: any;
+  state: typeof baseState;
 };

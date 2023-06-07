@@ -15,7 +15,6 @@ import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLett
 /**
  * serves a notice of trial session and standing pretrial document on electronic
  * recipients and generates paper notices for those that get paper service
- *
  * @param {object} deconstructed.applicationContext the applicationContext
  * @param {object} deconstructed.appendClinicLetter true if the clinic letter has been appended to the notice
  * @param {object} deconstructed.caseEntity the case entity
@@ -111,7 +110,6 @@ const serveNoticesForCase = async ({
 
 /**
  * generates a notice of trial session and adds to the case
- *
  * @param {object} deconstructed.applicationContext the applicationContext
  * @param {object} deconstructed.caseRecord true if the clinic letter has been appended to the notice
  * @param {string} deconstructed.docketNumber the case entity
@@ -397,4 +395,12 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
       jobId,
       status: 'processed',
     });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_updated',
+    },
+    userId,
+  });
 };

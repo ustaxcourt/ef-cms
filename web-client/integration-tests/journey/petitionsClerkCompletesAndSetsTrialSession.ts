@@ -1,4 +1,8 @@
-import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
+import {
+  waitForExpectedItem,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+} from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
   cerebralTest,
@@ -60,6 +64,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
 
     await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     if (overrides.hasPaper) {
       await waitForExpectedItem({
