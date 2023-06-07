@@ -13,10 +13,6 @@ export const formatPendingItem = (item, { applicationContext }) => {
     });
   }
 
-  result.docketNumberWithSuffix = `${item.docketNumber}${
-    item.docketNumberSuffix || ''
-  }`;
-
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
