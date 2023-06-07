@@ -56,7 +56,7 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Order',
       eventCode: 'O', // O
-      isSealed: true, // the event code MUST be an opinion type
+      isDocketEntrySealed: true, // the event code MUST be an opinion type
     });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
@@ -71,7 +71,7 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
-      isSealed: true,
+      isDocketEntrySealed: true,
     });
 
     const validationErrors = searchResult.getFormattedValidationErrors();
@@ -87,7 +87,7 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
-      isSealed: true,
+      isDocketEntrySealed: true,
     });
 
     const validationErrors = searchResult.getFormattedValidationErrors();
@@ -103,8 +103,9 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
+      isCaseSealed: false,
+      isDocketEntrySealed: true,
       isFileAttached: false,
-      isSealed: true,
       judge: null,
       numberOfPages: null,
       signedJudgeName: null,

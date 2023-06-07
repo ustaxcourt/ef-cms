@@ -3,22 +3,22 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 export class InternalDocumentSearchResult extends JoiValidationEntity {
-  public caseCaption;
-  public docketEntryId;
-  public docketNumber;
-  public docketNumberWithSuffix;
-  public documentTitle;
-  public documentType;
-  public eventCode;
-  public filingDate;
-  public isCaseSealed;
-  public isDocketEntrySealed;
-  public isFileAttached;
-  public isStricken;
-  public judge;
-  public numberOfPages;
-  public sealedDate;
-  public signedJudgeName;
+  public caseCaption: string;
+  public docketEntryId: string;
+  public docketNumber: string;
+  public docketNumberWithSuffix: string;
+  public documentTitle: string;
+  public documentType?: string;
+  public eventCode?: string;
+  public filingDate?: string;
+  public isCaseSealed?: boolean;
+  public isDocketEntrySealed?: boolean;
+  public isFileAttached?: boolean;
+  public isStricken?: boolean;
+  public judge?: string;
+  public numberOfPages?: number;
+  public sealedDate?: string;
+  public signedJudgeName?: string;
 
   constructor(rawProps) {
     super('InternalDocumentSearchResult');
@@ -73,3 +73,6 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
     return InternalDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export type RawInternalDocumentSearchResult =
+  ExcludeMethods<InternalDocumentSearchResult>;
