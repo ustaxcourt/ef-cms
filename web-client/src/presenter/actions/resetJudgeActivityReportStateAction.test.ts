@@ -22,6 +22,6 @@ describe('resetJudgeActivityReportStateAction', () => {
       },
     });
 
-    expect(state.customCaseInventory).toEqual(initialJudgeActivityReportState);
+    expect(state.judgeActivityReport).toEqual(initialJudgeActivityReportState);
   });
 });
