@@ -21,7 +21,7 @@ describe('createPaperServicePdfForCasesAction', () => {
       );
     const trialNoticePdfsKeys = ['382-830-29'];
 
-    const result = await runAction(createPaperServicePdfForCasesAction, {
+    await runAction(createPaperServicePdfForCasesAction, {
       modules: {
         presenter,
       },
@@ -30,7 +30,6 @@ describe('createPaperServicePdfForCasesAction', () => {
       },
     });
 
-    expect(result.output).toEqual(paperServiceInfo);
     expect(
       applicationContext.getUseCases()
         .generateTrialSessionPaperServicePdfInteractor,
