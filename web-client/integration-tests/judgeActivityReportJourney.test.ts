@@ -5,22 +5,16 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
+import { judgeViewsJudgeActivityReportPage } from './journey/judgeViewsJudgeActivityReport';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { runCompute } from 'cerebral/test';
 import { viewJudgeActivityReportResults } from './journey/viewJudgeActivityReportResults';
-import { withAppContextDecorator } from '../src/withAppContext';
-const judgeActivityReportHelper = withAppContextDecorator(
-  judgeActivityReportHelperComputed,
-);
 
 let progressDescriptionTableTotalBefore = 0;
-
 const selectedJudgeUsersForTesting = ['Colvin', 'Buch'];
 
 selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
-  describe(`Judge activity report journey for Judge ${selectedJudgeName}`, () => {
+  describe(`Judge activity report journey for ${selectedJudgeName}`, () => {
     const cerebralTest = setupTest();
 
     afterAll(() => {
@@ -28,19 +22,7 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
     });
 
     loginAs(cerebralTest, 'judgecolvin@example.com');
-    it('should disable the submit button on initial page load when form has not yet been completed', async () => {
-      await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
-
-      const { isFormPristine, reportHeader } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: cerebralTest.getState(),
-        },
-      );
-
-      expect(isFormPristine).toBe(true);
-      expect(reportHeader).toContain(selectedJudgeName);
-    });
+    judgeViewsJudgeActivityReportPage(cerebralTest);
 
     it('should display an error message when invalid dates are entered into the form', async () => {
       await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
