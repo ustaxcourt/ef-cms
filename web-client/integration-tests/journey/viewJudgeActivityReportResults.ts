@@ -20,7 +20,7 @@ export const viewJudgeActivityReportResults = (
     selectedJudgeName?: string;
   },
 ) => {
-  return it('should submit the form with valid dates and a judge selection to display judge activity report results and Progress Description Table Results', async () => {
+  return it('should submit the user-selected valid dates and a judge selection to display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
       prepareDateFromString(),
       getConstants().DATE_FORMATS.MMDDYYYY,

@@ -183,7 +183,7 @@ export const JudgeActivityReport = connect(
           <caption id="progressDescription">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
-                Progress Description
+                Submitted/CAV Cases
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
