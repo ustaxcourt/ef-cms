@@ -8,7 +8,9 @@ export const PendingReport = ({ pendingItems, subtitle }) => {
     <>
       <PrimaryHeader />
       <ReportsHeader subtitle={subtitle} title="Pending Report" />
-      <div>Count: {pendingItems.length}</div>
+      <div className="text-right margin-bottom-5">
+        Count: {pendingItems.length}
+      </div>
       <table>
         <thead>
           <tr>
@@ -34,6 +36,7 @@ export const PendingReport = ({ pendingItems, subtitle }) => {
                         } ${
                           pendingItem.inConsolidatedGroup && 'consolidated-icon'
                         }`,
+                        'inline-consolidated-icon',
                       )}
                     />
                   </td>
