@@ -12,10 +12,10 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { addCoverToPdf } from '../addCoverToPdf';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * serveExternallyFiledDocumentInteractor
- *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
  * @param {object} providers.clientConnectionId the client connection Id
@@ -23,7 +23,7 @@ import { addCoverToPdf } from '../addCoverToPdf';
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  */
-export const serveExternallyFiledDocumentInteractor = async (
+export const serveExternallyFiledDocument = async (
   applicationContext: IApplicationContext,
   {
     clientConnectionId,
@@ -158,7 +158,6 @@ export const serveExternallyFiledDocumentInteractor = async (
             isPendingService: isSubjectCase,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-            userId: user.userId,
           },
           { applicationContext },
         );
@@ -231,3 +230,43 @@ export const serveExternallyFiledDocumentInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = (
+  _applicationContext: IApplicationContext,
+  {
+    docketNumbers = [],
+    subjectCaseDocketNumber,
+  }: {
+    docketNumbers?: string[];
+    subjectCaseDocketNumber: string;
+  },
+) => ({
+  identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
+    item => `case|${item}`,
+  ),
+  ttl: 900,
+});
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: originalRequest.clientConnectionId,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'serve_externally_filed_document',
+    },
+    userId: user.userId,
+  });
+};
+
+export const serveExternallyFiledDocumentInteractor = withLocking(
+  serveExternallyFiledDocument,
+  determineEntitiesToLock,
+  handleLockError,
+);

@@ -52,15 +52,18 @@ describe('casePublicSearchInteractor', () => {
 
     expect(results).toEqual([
       {
+        canAllowDocumentService: undefined,
+        canAllowPrintableDocketRecord: undefined,
         caseCaption: 'Test Case Caption One',
-        contactSecondary: undefined,
         createdAt: undefined,
         docketEntries: [],
+        docketEntriesEFiledByPractitioner: [],
         docketNumber: '123-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketNumberWithSuffix: '123-19S',
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
+        isPaper: undefined,
         isSealed: false,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [

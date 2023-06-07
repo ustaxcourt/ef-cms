@@ -8,6 +8,7 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
@@ -76,13 +77,13 @@ const updateCaseEntityAndGenerateChange = async ({
   return caseEntity.validate();
 };
 
-export const updateCasesForPetitioner = async ({
+export const updatePetitionerCases = async ({
   applicationContext,
-  petitionerCases,
+  docketNumbersAssociatedWithUser,
   user,
 }) => {
   const rawCasesToUpdate = await Promise.all(
-    petitionerCases.map(({ docketNumber }) =>
+    docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
@@ -114,30 +115,6 @@ export const updateCasesForPetitioner = async ({
 };
 
 /**
- * updatePetitionerCases
- * for the provided user, update their email address on all cases
- * where they are the contactPrimary or contactSecondary
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the user who is a primary or secondary contact on a case
- * @returns {Promise} resolves upon completion of case updates
- */
-export const updatePetitionerCases = async ({ applicationContext, user }) => {
-  const petitionerCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
-
-  return await updateCasesForPetitioner({
-    applicationContext,
-    petitionerCases,
-    user,
-  });
-};
-
-/**
  * updatePractitionerCases
  * for the provided user, update their email address on all cases
  * where they are an IRS practitioner or private practitioner, sending an
@@ -150,19 +127,15 @@ export const updatePetitionerCases = async ({ applicationContext, user }) => {
  */
 export const updatePractitionerCases = async ({
   applicationContext,
+  docketNumbersAssociatedWithUser,
   user,
 }: {
   applicationContext: IApplicationContext;
+  docketNumbersAssociatedWithUser: string[];
   user: any;
 }) => {
-  const practitionerDocketNumbers = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
   const casesToUpdate = await Promise.all(
-    practitionerDocketNumbers.map(docketNumber =>
+    docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
@@ -236,7 +209,7 @@ export const updatePractitionerCases = async ({
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
  */
-export const verifyUserPendingEmailInteractor = async (
+export const verifyUserPendingEmail = async (
   applicationContext: IApplicationContext,
   { token }: { token: string },
 ) => {
@@ -249,6 +222,13 @@ export const verifyUserPendingEmailInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const docketNumbersAssociatedWithUser = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
 
   let userEntity;
   if (user.role === ROLES.petitioner) {
@@ -294,16 +274,61 @@ export const verifyUserPendingEmailInteractor = async (
     if (userEntity.role === ROLES.petitioner) {
       await updatePetitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser,
         user: updatedRawUser,
       });
     } else if (userEntity.role === ROLES.privatePractitioner) {
       await updatePractitionerCases({
         applicationContext,
+        docketNumbersAssociatedWithUser,
         user: updatedRawUser,
       });
     }
   } catch (error) {
-    applicationContext.logger.error(error);
+    applicationContext.logger.error('Unable to verify pending user email', {
+      error,
+    });
     throw error;
   }
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'verify_user_pending_email',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+) => {
+  const user = await applicationContext.getCurrentUser();
+
+  const docketNumbers: string[] = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByUser({
+      applicationContext,
+      userId: user.userId,
+    });
+
+  return {
+    identifiers: docketNumbers.map(item => `case|${item}`),
+    ttl: 900,
+  };
+};
+
+export const verifyUserPendingEmailInteractor = withLocking(
+  verifyUserPendingEmail,
+  determineEntitiesToLock,
+  handleLockError,
+);

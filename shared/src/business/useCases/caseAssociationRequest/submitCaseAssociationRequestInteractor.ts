@@ -4,24 +4,28 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
-import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * submitCaseAssociationRequestInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {array}  providers.consolidatedCasesDocketNumbers a list of the docketNumbers on which to file the case association document
  * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.representingPrimary true if the user is representing
- * the primary contact on the case, false otherwise
- * @param {string} providers.representingSecondary true if the user is representing
- * the secondary contact on the case, false otherwise
+ * @param {string} providers.filers the parties represented by the practitioner
  * @returns {Promise<*>} the promise of the case association request
  */
-export const submitCaseAssociationRequestInteractor = async (
+export const submitCaseAssociationRequest = async (
   applicationContext: IApplicationContext,
-  { docketNumber, filers }: { docketNumber: string; filers: string[] },
+  {
+    consolidatedCasesDocketNumbers,
+    docketNumber,
+    filers,
+  }: {
+    consolidatedCasesDocketNumbers?: string[];
+    docketNumber: string;
+    filers?: string[];
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -40,17 +44,29 @@ export const submitCaseAssociationRequestInteractor = async (
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
   if (isPrivatePractitioner) {
-    return await associatePrivatePractitionerToCase({
-      applicationContext,
-      docketNumber,
-      representing: filers,
-      user,
-    });
+    return await applicationContext
+      .getUseCaseHelpers()
+      .associatePrivatePractitionerToCase({
+        applicationContext,
+        docketNumber,
+        representing: filers,
+        user,
+      });
   } else if (isIrsPractitioner) {
-    return await associateIrsPractitionerToCase({
-      applicationContext,
-      docketNumber,
-      user,
-    });
+    return await applicationContext
+      .getUseCaseHelpers()
+      .associateIrsPractitionerToCase({
+        applicationContext,
+        consolidatedCasesDocketNumbers,
+        docketNumber,
+        user,
+      });
   }
 };
+
+export const submitCaseAssociationRequestInteractor = withLocking(
+  submitCaseAssociationRequest,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
