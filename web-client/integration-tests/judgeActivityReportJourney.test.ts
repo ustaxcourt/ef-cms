@@ -44,7 +44,7 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
     viewJudgeActivityReportResults(cerebralTest, {
       selectedJudgeName,
     });
-    it('should set the progressDescriptionTableBeforeCount', () => {
+    it('should set the progressDescriptionTableBeforeCount to test addition of CAV and submitted cases', () => {
       progressDescriptionTableTotalBefore =
         cerebralTest.progressDescriptionTableTotal;
     });
@@ -70,11 +70,11 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
     );
 
     loginAs(cerebralTest, 'judgecolvin@example.com');
-
     viewJudgeActivityReportResults(cerebralTest, {
       selectedJudgeName,
     });
-    it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
+
+    it('should increase progressDescriptionTableTotal by 2 for newly created "CAV" and "Submitted" cases', () => {
       const progressDescriptionTableTotalAfter =
         cerebralTest.progressDescriptionTableTotal;
 
@@ -86,7 +86,7 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
     viewJudgeActivityReportResults(cerebralTest, {
       selectedJudgeName,
     });
-    it('should set the progressDescriptionTableBeforeCount', () => {
+    it('should set the progressDescriptionTableBeforeCount to test for a non-submitted case created', () => {
       progressDescriptionTableTotalBefore =
         cerebralTest.progressDescriptionTableTotal;
     });
@@ -98,7 +98,8 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
     viewJudgeActivityReportResults(cerebralTest, {
       selectedJudgeName,
     });
-    it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
+
+    it('should not increase progressDescriptionTableTotal for non-submitted or non-CAV cases  added', () => {
       const progressDescriptionTableTotalAfter =
         cerebralTest.progressDescriptionTableTotal;
 
@@ -110,7 +111,8 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
     viewJudgeActivityReportResults(cerebralTest, {
       selectedJudgeName,
     });
-    it('should set the progressDescriptionTableBeforeCount', () => {
+
+    it('should set the progressDescriptionTableBeforeCount to test for the addition of a Decision type on a case', () => {
       progressDescriptionTableTotalBefore =
         cerebralTest.progressDescriptionTableTotal;
     });
