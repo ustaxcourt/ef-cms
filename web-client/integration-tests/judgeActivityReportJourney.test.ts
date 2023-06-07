@@ -5,7 +5,6 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { initialJudgeActivityReportState } from '../src/presenter/judgeActivityReportState';
 import { judgeViewsJudgeActivityReportPage } from './journey/judgeViewsJudgeActivityReport';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
@@ -20,10 +19,6 @@ selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
 
     afterAll(() => {
       cerebralTest.closeSocket();
-      cerebralTest.setState(
-        'judgeActivityReport',
-        initialJudgeActivityReportState,
-      );
     });
 
     loginAs(cerebralTest, 'judgecolvin@example.com');
