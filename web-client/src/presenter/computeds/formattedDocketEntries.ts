@@ -209,14 +209,6 @@ export const getFormattedDocketEntry = ({
 
   formattedResult.showLinkToDocument = isExternalUser && showDocumentLinks;
 
-  formattedResult.filingsAndProceedingsWithAdditionalInfo = '';
-  if (entry.filingsAndProceedings) {
-    formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.filingsAndProceedings}`;
-  }
-  if (entry.additionalInfo2) {
-    formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.additionalInfo2}`;
-  }
-
   formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
     applicationContext,
     entry,

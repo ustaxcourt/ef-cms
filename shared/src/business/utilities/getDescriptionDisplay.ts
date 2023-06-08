@@ -16,6 +16,14 @@ export const getDescriptionDisplay = docketEntry => {
     descriptionDisplay += ` ${docketEntry.additionalInfo}`;
   }
 
+  if (docketEntry.filingsAndProceedings) {
+    descriptionDisplay += ` ${docketEntry.filingsAndProceedings}`;
+  }
+
+  if (docketEntry.additionalInfo2) {
+    descriptionDisplay += ` ${docketEntry.additionalInfo2}`;
+  }
+
   if (docketEntry.eventCode === 'OCS' && docketEntry.freeText) {
     descriptionDisplay = `${docketEntry.freeText} - ${descriptionDisplay}`;
   }

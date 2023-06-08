@@ -130,10 +130,6 @@ export const FilingsAndProceedings = connect(
 
         <span> {entry.signatory}</span>
 
-        <span className="filings-and-proceedings">
-          {entry.filingsAndProceedingsWithAdditionalInfo}
-        </span>
-
         {entry.isStricken && <span>(STRICKEN)</span>}
       </>
     );
