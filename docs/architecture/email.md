@@ -106,6 +106,7 @@ Here are the steps required to verify a new email:
     }
     ```
 
+
 5. Need to make the Rule Set active
 6. Use SES to send a verification email to that account.
 7. Check the S3 bucket. It should have an item in there with a link to confirm the Email Address. Follow the link, and the email address should be verified.
