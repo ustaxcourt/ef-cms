@@ -12,6 +12,7 @@ export const fetchPendingItems = async ({
     'docketNumber',
     'docketNumberSuffix',
     'status',
+    'leadDocketNumber',
   ];
   const docketEntrySource = [
     'docketEntryId',
