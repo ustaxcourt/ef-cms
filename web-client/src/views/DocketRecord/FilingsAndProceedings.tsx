@@ -122,7 +122,6 @@ export const FilingsAndProceedings = connect(
               )}
               {entry.descriptionDisplay}
             </Button>
-            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </>
         )}
 

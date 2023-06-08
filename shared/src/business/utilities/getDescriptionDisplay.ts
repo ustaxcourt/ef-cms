@@ -12,7 +12,12 @@ export const getDescriptionDisplay = docketEntry => {
     docketEntry.description ||
     docketEntry.documentType;
 
-  if (docketEntry.additionalInfo && docketEntry.addToCoversheet) {
+  // can we just not check addToCoversheet? moved the ! condition
+  // over from getFormattedCaseDetail
+  if (
+    (docketEntry.additionalInfo && docketEntry.addToCoversheet) ||
+    (docketEntry.additionalInfo && !docketEntry.addToCoversheet)
+  ) {
     descriptionDisplay += ` ${docketEntry.additionalInfo}`;
   }
 
