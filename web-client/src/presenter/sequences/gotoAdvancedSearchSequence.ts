@@ -2,7 +2,6 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { defaultAdvancedSearchFormAction } from '../actions/AdvancedSearch/defaultAdvancedSearchFormAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
@@ -11,18 +10,11 @@ import { parallel } from 'cerebral';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const fetchFeatureFlagAndSetAlert = flagName => {
   return [
-    getFeatureFlagFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS[flagName].key,
-    ),
-    setFeatureFlagFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS[flagName].key,
-    ),
     isFeatureFlagEnabledFactoryAction(
       getConstants().ALLOWLIST_FEATURE_FLAGS[flagName],
     ),

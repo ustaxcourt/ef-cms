@@ -5,13 +5,11 @@ import { generateTitleForPaperFilingAction } from '../actions/FileDocument/gener
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
 import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
-import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -37,8 +35,6 @@ export const openConfirmPaperServiceModalSequence = [
   {
     no: [],
     yes: [
-      getFeatureFlagFactoryAction(multiDocketablePaperFilings.key),
-      setFeatureFlagFactoryAction(multiDocketablePaperFilings.key),
       isFeatureFlagEnabledFactoryAction(multiDocketablePaperFilings),
       {
         no: [],
