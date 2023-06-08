@@ -4,17 +4,20 @@ describe('getDescriptionDisplay', () => {
   const documentTitle = 'doc title';
   const documentType = 'doc type';
   const description = 'doc description';
+  let baseDocketEntry;
 
-  let baseDocketEntry = {
-    documentTitle,
-  };
+  beforeEach(() => {
+    baseDocketEntry = {
+      documentTitle,
+    };
+  });
 
-  it('returns descriptionDisplay as documentTitle with no added information', () => {
+  it('should return descriptionDisplay as documentTitle with no added information', () => {
     const result = getDescriptionDisplay(baseDocketEntry);
     expect(result).toEqual('doc title');
   });
 
-  it('returns descriptionDisplay as documentType with no added information', () => {
+  it('should return descriptionDisplay as documentType with no added information', () => {
     baseDocketEntry = {
       ...baseDocketEntry,
       documentTitle: undefined,
@@ -25,7 +28,7 @@ describe('getDescriptionDisplay', () => {
     expect(result).toEqual('doc type');
   });
 
-  it('returns descriptionDisplay as description with no added information', () => {
+  it('should return descriptionDisplay as description with no added information', () => {
     baseDocketEntry = {
       ...baseDocketEntry,
       description,
@@ -46,7 +49,7 @@ describe('getDescriptionDisplay', () => {
     expect(result).toEqual('doc title superfulous text');
   });
 
-  it('returns descriptionDisplay as freeText and documentTitle if eventCode is OCS and freeText is available', () => {
+  it('should return descriptionDisplay as freeText and documentTitle if eventCode is OCS and freeText is available', () => {
     baseDocketEntry = {
       ...baseDocketEntry,
       addToCoversheet: false,
