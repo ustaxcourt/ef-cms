@@ -10,7 +10,6 @@ import { partition } from 'lodash';
 
 /**
  * Removes a manually added case from the trial session
- *
  * @param {object} applicationContext the application context
  * @param {object} caseRecord the case to remove from the trial session
  * @param {object} trialSessionEntity the trial session to remove the case from
@@ -37,7 +36,6 @@ const removeManuallyAddedCaseFromTrialSession = ({
 
 /**
  * set trial session calendar
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the id of the trial session to set the calendar
@@ -111,7 +109,6 @@ export const setTrialSessionCalendarInteractor = async (
 
   /**
    * sets a manually added case as calendared with the trial session details
-   *
    * @param {object} caseRecord the providers object
    * @returns {Promise} the promise of the updateCase call
    */
@@ -136,7 +133,6 @@ export const setTrialSessionCalendarInteractor = async (
 
   /**
    * sets an eligible case as calendared and adds it to the trial session calendar
-   *
    * @param {object} caseRecord the providers object
    * @returns {Promise} the promises of the updateCase and deleteCaseTrialSortMappingRecords calls
    */
