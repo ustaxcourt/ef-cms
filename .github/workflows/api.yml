@@ -19,4 +19,4 @@ jobs:
       - name: Install Node Dependencies
         run: npm ci
       - name: API
-        run: npm run test:api
+        run: npm run test:api --node-flags --max-old-space-size=4096
