@@ -10,16 +10,6 @@ import { addConsolidatedProperties } from './utilities/addConsolidatedProperties
 import { state } from 'cerebral';
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
-  const cases = get(state.customCaseInventory.cases);
-
-  const populatedFilters: CustomCaseInventoryReportFilters = get(
-    state.customCaseInventory.filters,
-  );
-
-  const runReportButtonIsDisabled = !(
-    populatedFilters.startDate && populatedFilters.endDate
-  );
-
   const caseStatuses = CASE_STATUSES.map(status => ({
     label: status,
     value: status,
@@ -30,10 +20,7 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     value: type,
   }));
 
-  const formatDate = isoDateString =>
-    applicationContext
-      .getUtilities()
-      .formatDateString(isoDateString, FORMATS.MMDDYY);
+  const cases = get(state.customCaseInventory.cases);
 
   const reportData = cases.map(entry => {
     entry = addConsolidatedProperties({
@@ -47,13 +34,31 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     return entry;
   });
 
+  const populatedFilters: CustomCaseInventoryReportFilters = get(
+    state.customCaseInventory.filters,
+  );
+
   const clearFiltersIsDisabled = ![
     ...populatedFilters.caseStatuses,
     ...populatedFilters.caseTypes,
   ].length;
 
+  const judges = get(state.judges).map(judge => ({
+    label: judge.name,
+    value: judge.name,
+  }));
+
   const totalCases = get(state.customCaseInventory.totalCases);
   const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
+
+  const runReportButtonIsDisabled = !(
+    populatedFilters.startDate && populatedFilters.endDate
+  );
+
+  const formatDate = isoDateString =>
+    applicationContext
+      .getUtilities()
+      .formatDateString(isoDateString, FORMATS.MMDDYY);
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
@@ -62,6 +67,7 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     caseTypes,
     cases: reportData,
     clearFiltersIsDisabled,
+    judges,
     pageCount,
     runReportButtonIsDisabled,
     today,
