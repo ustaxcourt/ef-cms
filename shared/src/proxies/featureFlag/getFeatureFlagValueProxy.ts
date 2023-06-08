@@ -8,12 +8,10 @@ import { get } from '../requests';
  * @param {string} providers.featureFlag the feature flag
  * @returns {Promise<*>} the promise of the api call
  */
-export const getFeatureFlagValueInteractor = (
-  applicationContext,
-  { featureFlag },
-) => {
+export const getFeatureFlagValueInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: `/feature-flag/${featureFlag}`,
+    endpoint: '/feature-flag/',
+    params: {},
   });
 };

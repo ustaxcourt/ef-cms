@@ -133,4 +133,4 @@ app.get(
   lambdaWrapper(getMaintenanceModeLambda),
 );
 
-app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+app.get('/feature-flag', lambdaWrapper(getFeatureFlagValueLambda));

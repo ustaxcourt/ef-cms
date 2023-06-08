@@ -970,7 +970,7 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
 /**
  * feature-flag
  */
-app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+app.get('/feature-flag', lambdaWrapper(getFeatureFlagValueLambda));
 
 /**
  * Authentication/Authorization

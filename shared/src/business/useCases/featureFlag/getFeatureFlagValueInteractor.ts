@@ -1,5 +1,4 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getFeatureFlagValueInteractor
@@ -10,29 +9,26 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const getFeatureFlagValueInteractor = async (
   applicationContext: IApplicationContext,
-  { featureFlag }: { featureFlag: string },
 ) => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     (flag: any) => flag.key,
   );
 
-  if (!allowlistFeatures.includes(featureFlag)) {
-    throw new UnauthorizedError(
-      `Unauthorized: ${featureFlag} is not included in the allowlist`,
-    );
-  }
+  let allFFS: any = {};
+  for (let featureFlagKey of allowlistFeatures) {
+    const result = await applicationContext
+      .getPersistenceGateway()
+      .getFeatureFlagValue({ applicationContext, featureFlag: featureFlagKey });
 
-  const result = await applicationContext
-    .getPersistenceGateway()
-    .getFeatureFlagValue({ applicationContext, featureFlag });
-
-  if (result) {
-    if (typeof result.current === 'boolean') {
-      return !!result.current;
+    if (result) {
+      if (typeof result.current === 'boolean') {
+        allFFS[featureFlagKey] = !!result.current;
+      } else {
+        allFFS[featureFlagKey] = result.current;
+      }
     } else {
-      return result.current;
+      allFFS[featureFlagKey] = false;
     }
-  } else {
-    return false;
   }
+  return allFFS;
 };
