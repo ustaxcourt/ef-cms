@@ -1,7 +1,7 @@
 import { faker } from '@faker-js/faker';
 
 export const fillInCreateCaseFromPaperForm = testData => {
-  const petitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+  const petitionerName = `${faker.person.firstName()} ${faker.person.lastName()}`;
   cy.get('#party-type').select('Petitioner');
   cy.get('#name').type(petitionerName);
   if (testData) {

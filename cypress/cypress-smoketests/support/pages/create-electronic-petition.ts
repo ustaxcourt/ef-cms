@@ -84,10 +84,10 @@ export const completeWizardStep3 = (filingType, petitionerName) => {
       .check({ force: true });
 
     cy.get('input#secondaryName').type(
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
+      `${faker.person.firstName()} ${faker.person.lastName()}`,
     );
     cy.get('input#secondaryInCareOf').type(
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
+      `${faker.person.firstName()} ${faker.person.lastName()}`,
     );
   }
 
