@@ -183,7 +183,6 @@ export const DocumentViewerDocument = connect(
 
               <Button
                 link
-                data-cy="view-full-pdf"
                 icon="file-pdf"
                 iconColor="white"
                 onClick={() =>

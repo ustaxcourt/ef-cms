@@ -148,7 +148,6 @@ export const MessagesIndividualInbox = connect(
                           'padding-0',
                           message.isRead ? '' : 'text-bold',
                         )}
-                        data-cy="message-detail"
                         href={message.messageDetailLink}
                       >
                         {message.subject}
