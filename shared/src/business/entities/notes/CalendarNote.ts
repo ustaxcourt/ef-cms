@@ -6,6 +6,7 @@ export class CalendarNote extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('CalendarNote');
+
     this.note = rawProps.note?.trim();
   }
 
