@@ -18,7 +18,6 @@ export const petitionsDeletesOrderFromCase = cerebralTest => {
       docketEntryId: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
       documentTitle: draftOrder.documentTitle,
-      redirectToCaseDetail: true,
     });
 
     await cerebralTest.runSequence('archiveDraftDocumentSequence');

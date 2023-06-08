@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearDraftDocumentViewerDocketEntryIdAction } from '../actions/clearDraftDocumentViewerDocketEntryIdAction';
+import { clearDraftDocumentViewerAction } from '../actions/clearDraftDocumentViewerAction';
 import { getIsOnCaseDetailAction } from '../actions/CaseDetail/getIsOnCaseDetailAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
@@ -14,6 +14,6 @@ export const caseDetailPrimaryTabChangeSequence = [
     yes: [],
   },
   setIsPrimaryTabAction,
-  clearDraftDocumentViewerDocketEntryIdAction,
+  clearDraftDocumentViewerAction,
   unsetCorrespondenceDocumentViewerIdAction,
 ];
