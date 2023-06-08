@@ -65,7 +65,7 @@ export const docketClerkEditsDocketEntryNonstandardG = cerebralTest => {
     const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay:
-        'Sixteenth Request for Admissions some additional info',
+        'Sixteenth Request for Admissions some additional info (C/S 01/01/11) (Attachment(s)) (Lodged) some additional info pt 2',
     });
 
     const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
