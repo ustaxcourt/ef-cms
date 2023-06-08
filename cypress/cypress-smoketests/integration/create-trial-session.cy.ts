@@ -108,7 +108,7 @@ describe('Petitions Clerk', () => {
           goToWizardStep3();
           completeWizardStep3(
             filingTypes.INDIVIDUAL,
-            `${faker.name.firstName()} ${faker.name.lastName()}`,
+            `${faker.person.firstName()} ${faker.person.lastName()}`,
           );
           goToWizardStep4();
           completeWizardStep4();
@@ -139,7 +139,7 @@ describe('Petitions Clerk', () => {
           goToWizardStep3();
           completeWizardStep3(
             filingTypes.INDIVIDUAL,
-            `${faker.name.firstName()} ${faker.name.lastName()}`,
+            `${faker.person.firstName()} ${faker.person.lastName()}`,
           );
           goToWizardStep4();
           completeWizardStep4();

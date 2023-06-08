@@ -57,7 +57,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
     const mockContactPrimary = {
       key: 'contactPrimary.name',
-      value: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      value: `${faker.person.firstName()} ${faker.person.lastName()}`,
     };
 
     let formValues = [
