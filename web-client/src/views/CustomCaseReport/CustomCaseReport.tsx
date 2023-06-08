@@ -8,6 +8,7 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
+import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences, state } from 'cerebral';
@@ -293,17 +294,17 @@ export const CustomCaseReport = connect(
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
-                  aria-labelledby="case-status-label"
-                  id="case-status"
-                  name="caseStatus"
-                  options={customCaseInventoryReportHelper.caseStatuses}
+                  aria-labelledby="judges-label"
+                  id="judges"
+                  name="judges"
+                  options={customCaseInventoryReportHelper.judges}
                   placeholder="- Select one or more -"
                   value={'Select one or more'}
                   onChange={inputValue => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      caseStatuses: {
+                      judges: {
                         action: 'add',
-                        caseStatus: inputValue.value,
+                        judge: inputValue.value,
                       },
                     });
                   }}
@@ -319,7 +320,7 @@ export const CustomCaseReport = connect(
 
 
 
-                REQ PL OF TR
+                REQUESTED PLACE OF TRIAL
 
 
 
@@ -328,22 +329,14 @@ export const CustomCaseReport = connect(
                   Requested place of trial{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <SelectSearch
-                  aria-labelledby="case-type-label"
-                  id="case-type"
-                  name="eventCode"
-                  options={customCaseInventoryReportHelper.caseTypes}
-                  placeholder="- Select one or more -"
-                  value="Select one or more"
-                  onChange={inputValue => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      caseTypes: {
-                        action: 'add',
-                        caseType: inputValue.value,
-                      },
-                    });
-                  }}
-                />
+                <select
+                  className="usa-select"
+                  id="trial-location"
+                  name="trialLocation"
+                >
+                  <option value="">-- Select one or more--</option>
+                  <TrialCityOptions procedureType="All" />
+                </select>
               </div>
             </div>
           </div>
@@ -384,6 +377,28 @@ export const CustomCaseReport = connect(
                           caseTypes: {
                             action: 'remove',
                             caseType,
+                          },
+                        });
+                      }}
+                    />
+                  </span>
+                );
+              })}
+
+              {customCaseInventoryFilters.judges.map(judge => {
+                return (
+                  <span className="blue-pill" key={judge}>
+                    {judge}
+                    <Icon
+                      aria-label={`remove ${judge} selection`}
+                      className="margin-left-1 cursor-pointer"
+                      icon="times"
+                      size="1x"
+                      onClick={() => {
+                        setCustomCaseInventoryReportFiltersSequence({
+                          judges: {
+                            action: 'remove',
+                            judge,
                           },
                         });
                       }}

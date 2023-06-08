@@ -15,6 +15,7 @@ export type CustomCaseInventoryReportFilters = {
   endDate: string;
   startDate: string;
   filingMethod: CustomCaseFilingMethods;
+  judges: string[];
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
@@ -39,6 +40,7 @@ export type CaseInventory = Pick<
   | 'caseCaption'
   | 'caseType'
   | 'docketNumber'
+  | 'leadDocketNumber'
   | 'preferredTrialCity'
   | 'receivedAt'
   | 'status'

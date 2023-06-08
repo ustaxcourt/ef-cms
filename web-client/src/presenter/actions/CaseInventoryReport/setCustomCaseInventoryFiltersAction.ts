@@ -19,6 +19,7 @@ export const setCustomCaseInventoryFiltersAction = ({
   props: Partial<CustomCaseInventoryReportFilters> & {
     caseStatuses: { action: 'add' | 'remove'; caseStatus: CaseStatus };
     caseTypes: { action: 'add' | 'remove'; caseType: CaseType };
+    judges: { action: 'add' | 'remove'; judge: string };
   };
   store: any;
 }) => {
@@ -65,6 +66,22 @@ export const setCustomCaseInventoryFiltersAction = ({
         caseType => caseType === props.caseTypes.caseType,
       );
       currentFilters.caseTypes.splice(foundIndex, 1);
+      store.merge(state.customCaseInventory.filters, currentFilters);
+    }
+  }
+
+  if (props.judges) {
+    if (
+      props.judges.action === 'add' &&
+      !currentFilters.judges.includes(props.judges.judge)
+    ) {
+      currentFilters.judges.push(props.judges.judge);
+      store.merge(state.customCaseInventory.filters, currentFilters);
+    } else if (props.judges.action === 'remove') {
+      const foundIndex = currentFilters.judges.findIndex(
+        caseType => caseType === props.judges.judge,
+      );
+      currentFilters.judges.splice(foundIndex, 1);
       store.merge(state.customCaseInventory.filters, currentFilters);
     }
   }
