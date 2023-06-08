@@ -11,17 +11,6 @@ export const formatDocketEntryOnDocketRecord = (
     applicationContext.getConstants();
   const record = cloneDeep(entry);
 
-  let filingsAndProceedingsWithAdditionalInfo = '';
-  if (record.documentTitle && record.additionalInfo) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
-  }
-  if (record.filingsAndProceedings) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
-  }
-  if (record.additionalInfo2) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
-  }
-
   const isServedDocument = !record.isNotServedDocument;
 
   const canTerminalUserSeeLink =
@@ -72,7 +61,6 @@ export const formatDocketEntryOnDocketRecord = (
     docketEntryId: record.docketEntryId,
     eventCode: record.eventCode,
     filedBy: record.filedBy,
-    filingsAndProceedingsWithAdditionalInfo,
     hasDocument: !record.isMinuteEntry,
     index: record.index,
     isPaper: record.isPaper,
