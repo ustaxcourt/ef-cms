@@ -204,9 +204,9 @@ export const JudgeActivityReport = connect(
           </thead>
           <tbody>
             {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
-              (formattedCase, index) => {
+              formattedCase => {
                 return (
-                  <tr key={index}>
+                  <tr key={formattedCase.docketNumber}>
                     <td className="consolidated-case-column">
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
