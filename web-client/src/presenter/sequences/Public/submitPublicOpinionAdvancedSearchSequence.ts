@@ -1,6 +1,8 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../../actions/clearSearchTermAction';
+import { getConstants } from '../../../getConstants';
+import { isFeatureFlagEnabledFactoryAction } from '../../actions/isFeatureFlagEnabledFactoryAction';
 import { setAdvancedSearchResultsAction } from '../../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setAlertWarningAction } from '../../actions/setAlertWarningAction';
@@ -12,6 +14,9 @@ import { submitPublicOpinionAdvancedSearchAction } from '../../actions/Public/su
 import { validateOpinionAdvancedSearchAction } from '../../actions/AdvancedSearch/validateOpinionAdvancedSearchAction';
 
 export const submitPublicOpinionAdvancedSearchSequence = [
+  isFeatureFlagEnabledFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH,
+  ),
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
     yes: [
