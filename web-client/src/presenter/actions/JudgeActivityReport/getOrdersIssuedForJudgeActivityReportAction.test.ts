@@ -36,10 +36,12 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
           presenter,
         },
         state: {
-          form: {
-            endDate: mockEndDate,
-            judgeName: mockJudgeName,
-            startDate: mockStartDate,
+          judgeActivityReport: {
+            filters: {
+              endDate: mockEndDate,
+              judgeName: mockJudgeName,
+              startDate: mockStartDate,
+            },
           },
         },
       },
