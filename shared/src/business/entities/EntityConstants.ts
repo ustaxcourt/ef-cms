@@ -1259,7 +1259,10 @@ export const SESSION_TYPES = {
   hybridSmall: 'Hybrid-S',
   special: 'Special',
   motionHearing: 'Motion/Hearing',
-};
+} as const;
+
+export const SESSION_TYPES_VALUES = Object.values(SESSION_TYPES);
+export type SESSIONS = (typeof SESSION_TYPES_VALUES)[number];
 
 export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
   'hybrid',
