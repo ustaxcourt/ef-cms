@@ -1021,6 +1021,20 @@ export const waitForLoadingComponentToHide = async ({
   console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
+export const waitForModalsToHide = async ({
+  cerebralTest,
+  component = 'modal.showModal',
+  maxWait = 30000,
+  refreshInterval = 500,
+}) => {
+  const waitTime = await waitForCondition({
+    booleanExpressionCondition: () => !cerebralTest.getState(component),
+    maxWait,
+    refreshInterval,
+  });
+  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
+};
+
 export const waitForPage = async ({
   cerebralTest,
   expectedPage,
