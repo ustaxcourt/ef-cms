@@ -2,7 +2,7 @@
  * returns a modified document title when adding new information to a previous document title
  * especially in the case of qc'ing a docket entry
  *
- * @param {string} documentMetaData name of the feature
+ * @param {Object} docketEntry name of the feature
  * @returns {string} document title after modification
  */
 
@@ -12,12 +12,7 @@ export const getDescriptionDisplay = docketEntry => {
     docketEntry.description ||
     docketEntry.documentType;
 
-  // can we just not check addToCoversheet? moved the ! condition
-  // over from getFormattedCaseDetail
-  if (
-    (docketEntry.additionalInfo && docketEntry.addToCoversheet) ||
-    (docketEntry.additionalInfo && !docketEntry.addToCoversheet)
-  ) {
+  if (docketEntry.additionalInfo) {
     descriptionDisplay += ` ${docketEntry.additionalInfo}`;
   }
 
