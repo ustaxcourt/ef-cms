@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -404,8 +405,7 @@ export const CustomCaseReport = connect(
               htmlFor="thing"
               id={'label-high-priority'}
             >
-              {' '}
-              Calendaring high priority{' '}
+              Calendaring high priority
             </label>
           </div>
           <Button
@@ -494,6 +494,7 @@ const ReportTable = ({
       >
         <thead>
           <tr>
+            <th></th>
             <th>Docket No.</th>
             <th>Date Created</th>
             <th>Case Title</th>
@@ -513,6 +514,15 @@ const ReportTable = ({
           <tbody id="custom-case-report-table-body">
             {cases.map(entry => (
               <tr key={`${entry.docketNumber}-${entry.caseCreationEndDate}`}>
+                <td>
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      entry.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={entry.inConsolidatedGroup}
+                    showLeadCaseIcon={entry.inLeadCase}
+                  />
+                </td>
                 <td>
                   <CaseLink formattedCase={entry} />
                 </td>
