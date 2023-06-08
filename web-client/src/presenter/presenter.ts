@@ -62,6 +62,7 @@ import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDoc
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
+import { closeModalAndRefetchCase } from './sequences/DocketEntry/closeModalAndRefetchCase';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
@@ -309,6 +310,7 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
+import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
@@ -322,7 +324,6 @@ import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
-import { selectDateRangeFromJudgeActivityReportSequence } from './sequences/selectDateRangeFromJudgeActivityReportSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
@@ -346,6 +347,7 @@ import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequ
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
@@ -589,6 +591,7 @@ const sequences = {
   closeModalAndNavigateBackSequence,
   closeModalAndNavigateSequence,
   closeModalAndNavigateToMaintenanceSequence,
+  closeModalAndRefetchCase,
   closeModalAndReturnToCaseDetailDraftDocumentsSequence,
   closeModalAndReturnToCaseDetailSequence,
   closeModalAndReturnToDashboardSequence,
@@ -835,6 +838,7 @@ const sequences = {
   resetCaseMenuSequence,
   resetHeaderAccordionsSequence,
   resetIdleTimerSequence,
+  retryAsyncRequestSequence,
   reviewExternalDocumentInformationSequence,
   reviewRequestAccessInformationSequence,
   runTrialSessionPlanningReportSequence,
@@ -848,7 +852,6 @@ const sequences = {
   sealDocketEntrySequence,
   selectAssigneeSequence,
   selectDateRangeFromCalendarSequence,
-  selectDateRangeFromJudgeActivityReportSequence,
   selectDocumentForPreviewSequence,
   selectDocumentForScanSequence,
   selectScannerSequence,
@@ -871,6 +874,7 @@ const sequences = {
   setIdleStatusIdleSequence,
   setIdleTimerRefSequence,
   setIrsNoticeFalseSequence,
+  setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence,
   setPDFPageForSigningSequence,
   setPDFSignatureDataSequence,

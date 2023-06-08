@@ -3,7 +3,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
-import { DocketEntry, isServed } from '../../entities/DocketEntry';
+import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -11,6 +11,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
 import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -20,7 +21,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentT
  * @param {object} providers.docketNumber the docket number of the case to be updated
  * @returns {object} the updated case after the documents are added
  */
-export const updateDocketEntryMetaInteractor = async (
+export const updateDocketEntryMeta = async (
   applicationContext: IApplicationContext,
   {
     docketEntryMeta,
@@ -57,7 +58,7 @@ export const updateDocketEntryMetaInteractor = async (
   }
 
   if (
-    !isServed(originalDocketEntry) &&
+    !DocketEntry.isServed(originalDocketEntry) &&
     !UNSERVABLE_EVENT_CODES.includes(originalDocketEntry.eventCode) &&
     !originalDocketEntry.isMinuteEntry
   ) {
@@ -213,3 +214,10 @@ export const shouldGenerateCoversheetForDocketEntry = ({
     !originalDocketEntry.isMinuteEntry
   );
 };
+
+export const updateDocketEntryMetaInteractor = withLocking(
+  updateDocketEntryMeta,
+  (_applicationContext: IApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

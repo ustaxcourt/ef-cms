@@ -10,20 +10,22 @@ import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
-    form: state.form,
-    judgeActivityReportData: state.judgeActivityReportData,
+    judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
+    judgeActivityReportFilters: state.judgeActivityReport.filters,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence:
-      sequences.selectDateRangeFromJudgeActivityReportSequence,
+    judgeActivityReportJudges: state.judges,
+    setJudgeActivityReportFiltersSequence:
+      sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
-    form,
     judgeActivityReportData,
+    judgeActivityReportFilters,
     judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence,
+    judgeActivityReportJudges,
+    setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
@@ -181,7 +183,7 @@ export const JudgeActivityReport = connect(
           <caption id="progressDescription">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
-                Progress Description
+                Submitted/CAV Cases
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
@@ -251,27 +253,53 @@ export const JudgeActivityReport = connect(
                   endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
                   endPickerCls={'grid-col-6 padding-left-2'}
-                  endValue={form.endDate}
+                  endValue={judgeActivityReportFilters.endDate}
                   formGroupCls={'margin-bottom-0'}
                   rangePickerCls={'grid-row '}
-                  showHint={false}
-                  showPlaceholder={true}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}
-                  startValue={form.endDate}
+                  startValue={judgeActivityReportFilters.endDate}
                   onChangeEnd={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       endDate: e.target.value,
                     });
                   }}
                   onChangeStart={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       startDate: e.target.value,
                     });
                   }}
                 />
               </div>
+              <div className="grid-col-auto margin-x-3">
+                <label
+                  className="usa-label"
+                  htmlFor="judge-selection"
+                  id="judge-selection-label"
+                >
+                  Judge
+                </label>
+                <select
+                  aria-describedby="judge-selection-label"
+                  aria-label="judge"
+                  className="usa-select select-left width-card-lg"
+                  name="associatedJudge"
+                  value={judgeActivityReportFilters.judgeName}
+                  onChange={e =>
+                    setJudgeActivityReportFiltersSequence({
+                      judgeName: e.target.value,
+                    })
+                  }
+                >
+                  {(judgeActivityReportJudges || []).map(judge => (
+                    <option key={judge.name} value={judge.name}>
+                      {judge.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="grid-col-auto display-flex flex-align-center">
                 <Button
                   className="position-relative margin-bottom-35"

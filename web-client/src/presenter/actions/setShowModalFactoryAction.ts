@@ -5,7 +5,7 @@ import { state } from 'cerebral';
  * @param {string } showModal the value to set the modal to
  * @returns {Function} the primed action
  */
-export const setShowModalFactoryAction = showModal => {
+export const setShowModalFactoryAction = (showModal: string) => {
   /**
    * sets the state.modal.showModal to whatever was passed in the factory function
    * @param {object} providers the providers object

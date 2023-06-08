@@ -1,5 +1,10 @@
 import { MOCK_CASE } from '../../../test/mockCase';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { MOCK_LOCK } from '../../../test/mockLock';
+import {
+  NotFoundError,
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { getContactPrimary } from '../../entities/cases/Case';
@@ -8,7 +13,7 @@ import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteract
 describe('updateDocketEntryMetaInteractor', () => {
   let mockDocketEntries;
 
-  const mockUserId = applicationContext.getUniqueId();
+  const mockUserId = 'c99dfb85-867d-436b-8b12-1fcb547d490a';
 
   const baseDocketEntry = {
     docketNumber: MOCK_CASE.docketNumber,
@@ -17,8 +22,17 @@ describe('updateDocketEntryMetaInteractor', () => {
     filingDate: '2011-02-22T00:01:00.000Z',
     userId: mockUserId,
   };
+  let mockLock;
+
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
+    mockLock = undefined;
+
     mockDocketEntries = [
       {
         ...baseDocketEntry,
@@ -139,6 +153,43 @@ describe('updateDocketEntryMetaInteractor', () => {
         processingStatus: 'complete',
         userId: mockUserId,
       }));
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      updateDocketEntryMetaInteractor(applicationContext, {
+        docketEntryMeta: mockDocketEntries[0],
+        docketNumber: MOCK_CASE.docketNumber,
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the case', async () => {
+    await updateDocketEntryMetaInteractor(applicationContext, {
+      docketEntryMeta: mockDocketEntries[0],
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {

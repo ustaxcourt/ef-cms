@@ -6,7 +6,8 @@ import {
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
-import { partition } from 'lodash';
+import { acquireLock } from '../../useCaseHelper/acquireLock';
+import { flatten, partition, uniq } from 'lodash';
 
 /**
  * Removes a manually added case from the trial session
@@ -107,6 +108,20 @@ export const setTrialSessionCalendarInteractor = async (
       trialSessionEntity.maxCases - manuallyAddedQcCompleteCases.length,
     );
 
+  const allDocketNumbers = uniq(
+    flatten([
+      eligibleCases.map(({ docketNumber }) => docketNumber),
+      manuallyAddedQcCompleteCases.map(({ docketNumber }) => docketNumber),
+      manuallyAddedQcIncompleteCases.map(({ docketNumber }) => docketNumber),
+    ]),
+  );
+
+  await acquireLock({
+    applicationContext,
+    identifiers: allDocketNumbers.map(item => `case|${item}`),
+    ttl: 900,
+  });
+
   /**
    * sets a manually added case as calendared with the trial session details
    * @param {object} caseRecord the providers object
@@ -173,6 +188,15 @@ export const setTrialSessionCalendarInteractor = async (
     ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
     ...eligibleCases.map(setTrialSessionCalendarForEligibleCase),
   ]);
+
+  await Promise.all(
+    allDocketNumbers.map(docketNumber =>
+      applicationContext.getPersistenceGateway().removeLock({
+        applicationContext,
+        identifiers: [`case|${docketNumber}`],
+      }),
+    ),
+  );
 
   const updatedTrialSession = await applicationContext
     .getPersistenceGateway()
