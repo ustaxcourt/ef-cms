@@ -53,11 +53,6 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isSealed &&
     !record.isStricken;
 
-  if (isDocketEntryBriefEventCode) {
-    canTerminalUserSeeLink =
-      canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
-  }
-
   let canPublicUserSeeLink =
     (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
     record.isFileAttached &&
