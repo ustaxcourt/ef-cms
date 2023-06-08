@@ -75,76 +75,146 @@ export const CustomCaseReport = connect(
               />
             </div>
           </div>
-          <div className="grid-col-6 margin-bottom-4">
-            <legend>Petition filing method</legend>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="petition-filing-method-radios"
-                checked={customCaseInventoryFilters.filingMethod === 'all'}
-                className="usa-radio__input"
-                id="petitionFilingMethod-all"
-                name="filingMethod"
-                type="radio"
-                onChange={() => {
-                  setCustomCaseInventoryReportFiltersSequence({
-                    filingMethod: 'all',
-                  });
-                }}
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="petitionFilingMethod-all"
-              >
-                All
-              </label>
+          <div className="grid-row grid-col-8">
+            <div className="grid-col margin-right-4">
+              <div className="usa-radio usa-radio__inline">
+                <legend>Petition filing method</legend>
+                <input
+                  aria-describedby="petition-filing-method-radios"
+                  checked={customCaseInventoryFilters.filingMethod === 'all'}
+                  className="usa-radio__input"
+                  id="petitionFilingMethod-all"
+                  name="filingMethod"
+                  type="radio"
+                  onChange={() => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      filingMethod: 'all',
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="petitionFilingMethod-all"
+                >
+                  All
+                </label>
+              </div>
+              <div className="usa-radio usa-radio__inline">
+                <input
+                  aria-describedby="petition-filing-method-radios"
+                  checked={
+                    customCaseInventoryFilters.filingMethod === 'electronic'
+                  }
+                  className="usa-radio__input"
+                  id="petitionFilingMethod-electronic"
+                  name="filingMethod"
+                  type="radio"
+                  onChange={() => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      filingMethod: 'electronic',
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="petitionFilingMethod-electronic"
+                >
+                  Electronic
+                </label>
+              </div>
+              <div className="usa-radio usa-radio__inline">
+                <input
+                  aria-describedby="petition-filing-method-radios"
+                  checked={customCaseInventoryFilters.filingMethod === 'paper'}
+                  className="usa-radio__input"
+                  id="petitionFilingMethod-paper"
+                  name="filingMethod"
+                  type="radio"
+                  onChange={() => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      filingMethod: 'paper',
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="petitionFilingMethod-paper"
+                >
+                  Paper
+                </label>
+              </div>
             </div>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="petition-filing-method-radios"
-                checked={
-                  customCaseInventoryFilters.filingMethod === 'electronic'
-                }
-                className="usa-radio__input"
-                id="petitionFilingMethod-electronic"
-                name="filingMethod"
-                type="radio"
-                onChange={() => {
-                  setCustomCaseInventoryReportFiltersSequence({
-                    filingMethod: 'electronic',
-                  });
-                }}
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="petitionFilingMethod-electronic"
-              >
-                Electronic
-              </label>
-            </div>
-            <div className="usa-radio usa-radio__inline">
-              <input
-                aria-describedby="petition-filing-method-radios"
-                checked={customCaseInventoryFilters.filingMethod === 'paper'}
-                className="usa-radio__input"
-                id="petitionFilingMethod-paper"
-                name="filingMethod"
-                type="radio"
-                onChange={() => {
-                  setCustomCaseInventoryReportFiltersSequence({
-                    filingMethod: 'paper',
-                  });
-                }}
-              />
-              <label
-                className="usa-radio__label"
-                htmlFor="petitionFilingMethod-paper"
-              >
-                Paper
-              </label>
+            <div className="grid-col">
+              <div className="usa-radio usa-radio__inline">
+                <legend>Case procedure</legend>
+                <input
+                  aria-describedby="petition-filing-method-radios"
+                  checked={customCaseInventoryFilters.filingMethod === 'all'}
+                  className="usa-radio__input"
+                  id="petitionFilingMethod-all"
+                  name="filingMethod"
+                  type="radio"
+                  onChange={() => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      filingMethod: 'all',
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="petitionFilingMethod-all"
+                >
+                  All
+                </label>
+              </div>
+              <div className="usa-radio usa-radio__inline">
+                <input
+                  aria-describedby="petition-filing-method-radios"
+                  checked={
+                    customCaseInventoryFilters.filingMethod === 'electronic'
+                  }
+                  className="usa-radio__input"
+                  id="petitionFilingMethod-electronic"
+                  name="filingMethod"
+                  type="radio"
+                  onChange={() => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      filingMethod: 'electronic',
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="petitionFilingMethod-electronic"
+                >
+                  Regular
+                </label>
+              </div>
+              <div className="usa-radio usa-radio__inline">
+                <input
+                  aria-describedby="petition-filing-method-radios"
+                  checked={customCaseInventoryFilters.filingMethod === 'paper'}
+                  className="usa-radio__input"
+                  id="petitionFilingMethod-paper"
+                  name="filingMethod"
+                  type="radio"
+                  onChange={() => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      filingMethod: 'paper',
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="petitionFilingMethod-paper"
+                >
+                  Small
+                </label>
+              </div>
             </div>
           </div>
           <div className="grid-col-8">
-            <div className="grid-row margin-bottom-2">
+            <div className="grid-row margin-top-4 margin-bottom-2">
               <div className="grid-col margin-right-4">
                 <label
                   className="usa-label"
@@ -159,6 +229,7 @@ export const CustomCaseReport = connect(
                   id="case-status"
                   name="caseStatus"
                   options={customCaseInventoryReportHelper.caseStatuses}
+                  placeholder="- Select one or more -"
                   value={'Select one or more'}
                   onChange={inputValue => {
                     setCustomCaseInventoryReportFiltersSequence({
@@ -184,6 +255,7 @@ export const CustomCaseReport = connect(
                   id="case-type"
                   name="eventCode"
                   options={customCaseInventoryReportHelper.caseTypes}
+                  placeholder="- Select one or more -"
                   value="Select one or more"
                   onChange={inputValue => {
                     setCustomCaseInventoryReportFiltersSequence({
@@ -198,7 +270,84 @@ export const CustomCaseReport = connect(
             </div>
           </div>
 
-          <div className="grid-col-12 margin-bottom-3">
+          <div className="grid-col-8">
+            <div className="grid-row margin-top-4 margin-bottom-2">
+              <div className="grid-col margin-right-4">
+                <label
+                  className="usa-label"
+                  htmlFor="case-status"
+                  id="case-status-label"
+                >
+                  {/*
+
+
+
+                JUDGES
+
+
+
+
+                */}
+                  Assigned judge{' '}
+                  <span className="optional-light-text">(optional)</span>
+                </label>
+                <SelectSearch
+                  aria-labelledby="case-status-label"
+                  id="case-status"
+                  name="caseStatus"
+                  options={customCaseInventoryReportHelper.caseStatuses}
+                  placeholder="- Select one or more -"
+                  value={'Select one or more'}
+                  onChange={inputValue => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      caseStatuses: {
+                        action: 'add',
+                        caseStatus: inputValue.value,
+                      },
+                    });
+                  }}
+                />
+              </div>
+              <div className="grid-col">
+                <label
+                  className="usa-label"
+                  htmlFor="case-type"
+                  id="case-type-label"
+                >
+                  {/*
+
+
+
+                REQ PL OF TR
+
+
+
+
+                */}
+                  Requested place of trial{' '}
+                  <span className="optional-light-text">(optional)</span>
+                </label>
+                <SelectSearch
+                  aria-labelledby="case-type-label"
+                  id="case-type"
+                  name="eventCode"
+                  options={customCaseInventoryReportHelper.caseTypes}
+                  placeholder="- Select one or more -"
+                  value="Select one or more"
+                  onChange={inputValue => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      caseTypes: {
+                        action: 'add',
+                        caseType: inputValue.value,
+                      },
+                    });
+                  }}
+                />
+              </div>
+            </div>
+          </div>
+
+          <div className="grid-col-12">
             <div className="grid-row">
               {customCaseInventoryFilters.caseStatuses.map(status => (
                 <span className="blue-pill" key={status}>
@@ -242,6 +391,22 @@ export const CustomCaseReport = connect(
                 );
               })}
             </div>
+          </div>
+          <div className="usa-checkbox">
+            <input
+              aria-label="Select calendaring high priority"
+              className="usa-checkbox__input"
+              id="thing"
+              type="checkbox"
+            />
+            <label
+              className="usa-checkbox__label"
+              htmlFor="thing"
+              id={'label-high-priority'}
+            >
+              {' '}
+              Calendaring high priority{' '}
+            </label>
           </div>
           <Button
             disabled={customCaseInventoryReportHelper.runReportButtonIsDisabled}
