@@ -6,6 +6,7 @@ import {
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
+import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { state } from 'cerebral';
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
@@ -35,11 +36,15 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
       .formatDateString(isoDateString, FORMATS.MMDDYY);
 
   const reportData = cases.map(entry => {
-    return {
-      ...entry,
-      caseTitle: Case.getCaseTitle(entry.caseCaption),
-      receivedAt: formatDate(entry.receivedAt),
-    };
+    entry = addConsolidatedProperties({
+      applicationContext,
+      caseObject: entry,
+    });
+
+    entry.caseTitle = Case.getCaseTitle(entry.caseCaption);
+    entry.receivedAt = formatDate(entry.receivedAt);
+
+    return entry;
   });
 
   const clearFiltersIsDisabled = ![
