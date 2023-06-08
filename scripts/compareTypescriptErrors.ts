@@ -15,7 +15,6 @@ import { spawnSync } from 'child_process';
  |   |   ├── compareTypescriptErrors.ts
 */
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 function countTypescriptErrors(text: string): number {
   return (text.match(/: error TS/g) || []).length;
 }
