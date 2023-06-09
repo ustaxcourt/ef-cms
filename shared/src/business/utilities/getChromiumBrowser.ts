@@ -3,7 +3,6 @@ import puppeteer from 'puppeteer';
 export const getChromiumBrowser = async () => {
   return await puppeteer.launch({
     args: ['--no-sandbox'],
-    headless: 'new',
   });
 };
 
@@ -18,6 +17,6 @@ export const getChromiumBrowserAWS = async () => {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath(),
-    headless: 'new',
+    headless: chromium.headless,
   });
 };
