@@ -59,11 +59,6 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isSealed &&
     !record.isStricken;
 
-  if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    canTerminalUserSeeLink =
-      canTerminalUserSeeLink && meetsPolicyChangeRequirements;
-  }
-
   let canPublicUserSeeLink =
     ((record.isCourtIssuedDocument && !record.isStipDecision) ||
       meetsPolicyChangeRequirements) &&
