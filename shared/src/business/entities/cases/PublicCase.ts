@@ -24,7 +24,6 @@ const { PublicDocketEntry } = require('./PublicDocketEntry');
 /**
  * Public Case Entity
  * Represents the view of the public case.
- *
  * @param {object} rawCase the raw case data
  * @constructor
  */
@@ -56,9 +55,12 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
     this.irsPractitioners = (rawCase.irsPractitioners || []).map(
       irsPractitioner => new IrsPractitioner(irsPractitioner),
     );
+
     this.privatePractitioners = (rawCase.privatePractitioners || []).map(
       practitioner => new PrivatePractitioner(practitioner),
     );
+
+    this.leadDocketNumber = rawCase.leadDocketNumber;
   } else if (!this.isSealed) {
     this.petitioners = [];
     rawCase.petitioners.map(petitioner => {
