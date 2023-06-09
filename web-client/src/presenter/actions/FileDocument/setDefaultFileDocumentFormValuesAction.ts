@@ -8,8 +8,13 @@ import { state } from 'cerebral';
  */
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
+  get,
   store,
 }: ActionProps) => {
+  store.set(
+    state.form.fileAcrossConsolidatedGroup,
+    !!get(state.allowExternalConsolidatedGroupFiling),
+  );
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);
