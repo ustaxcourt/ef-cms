@@ -4,6 +4,7 @@ import { state } from 'cerebral';
  * set practitioner to a case
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
+ * @param {object} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
  * @returns {Promise} async action
  */
@@ -16,7 +17,7 @@ export const submitCaseAssociationRequestAction = async ({
     applicationContext.getConstants();
 
   const { primaryDocumentId } = props.documentsFiled;
-  const { docketNumber } = get(state.caseDetail);
+  const { consolidatedCases, docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
 
   let documentMetadata = get(state.form);
@@ -32,6 +33,17 @@ export const submitCaseAssociationRequestAction = async ({
       },
     ],
   };
+
+  let consolidatedCasesDocketNumbers = [];
+
+  if (
+    documentMetadata.fileAcrossConsolidatedGroup &&
+    consolidatedCases.length > 0
+  ) {
+    consolidatedCasesDocketNumbers = consolidatedCases.map(
+      individualCase => individualCase.docketNumber,
+    );
+  }
 
   const isDocumentWithImmediateAssociation =
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
@@ -51,6 +63,7 @@ export const submitCaseAssociationRequestAction = async ({
     await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
+        consolidatedCasesDocketNumbers,
         docketNumber,
         filers: documentMetadata.filers,
       });
