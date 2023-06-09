@@ -21,6 +21,7 @@ describe('generatePrintableFilingReceiptAction', () => {
         form: {
           category: 'Motion',
           documentType: 'Motion for Judgment on the Pleadings',
+          fileAcrossConsolidatedGroup: true,
         },
       },
     });
