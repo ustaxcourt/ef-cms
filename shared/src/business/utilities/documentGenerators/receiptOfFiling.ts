@@ -5,8 +5,10 @@ export const receiptOfFiling = async ({ applicationContext, data }) => {
   const {
     caseCaptionExtension,
     caseTitle,
+    consolidatedCasesDocketNumbers,
     docketNumberWithSuffix,
     document,
+    fileAcrossConsolidatedGroup,
     filedAt,
     filedBy,
     secondaryDocument,
@@ -17,7 +19,9 @@ export const receiptOfFiling = async ({ applicationContext, data }) => {
   const reactReceiptOfFilingTemplate = reactTemplateGenerator({
     componentName: 'ReceiptOfFiling',
     data: {
+      consolidatedCasesDocketNumbers,
       document,
+      fileAcrossConsolidatedGroup,
       filedAt,
       filedBy,
       options: {
