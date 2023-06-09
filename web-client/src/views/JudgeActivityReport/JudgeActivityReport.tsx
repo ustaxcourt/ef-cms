@@ -293,6 +293,9 @@ export const JudgeActivityReport = connect(
                     })
                   }
                 >
+                  <option key="all" value="all">
+                    All Judges
+                  </option>
                   {(judgeActivityReportJudges || []).map(judge => (
                     <option key={judge.name} value={judge.name}>
                       {judge.name}
