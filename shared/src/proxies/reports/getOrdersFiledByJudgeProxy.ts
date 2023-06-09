@@ -1,3 +1,4 @@
+import { OrdersAndOpinionTypes } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 /**
@@ -17,7 +18,7 @@ export const getOrdersFiledByJudgeInteractor = (
     judgeName,
     startDate,
   }: { startDate: string; endDate: string; judgeName: string },
-) => {
+): Promise<OrdersAndOpinionTypes[]> => {
   return post({
     applicationContext,
     body: {
