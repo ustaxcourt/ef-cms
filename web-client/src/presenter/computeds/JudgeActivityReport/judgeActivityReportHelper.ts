@@ -1,3 +1,4 @@
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 import { sum, sumBy } from 'lodash';
 
@@ -12,6 +13,7 @@ interface IJudgeActivityReportHelper {
   showResultsTables: boolean | undefined;
   showSelectDateRangeText: boolean | undefined;
   trialSessionsHeldTotal: number | undefined;
+  today: string;
 }
 
 export const judgeActivityReportHelper = (
@@ -114,6 +116,8 @@ export const judgeActivityReportHelper = (
     );
   });
 
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
   return {
     closedCasesTotal,
     filteredSubmittedAndCavCasesByJudge,
@@ -124,6 +128,7 @@ export const judgeActivityReportHelper = (
     reportHeader,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
+    today,
     trialSessionsHeldTotal,
   };
 };

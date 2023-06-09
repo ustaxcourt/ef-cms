@@ -255,11 +255,12 @@ export const JudgeActivityReport = connect(
                   endPickerCls={'grid-col-6 padding-left-2'}
                   endValue={judgeActivityReportFilters.endDate}
                   formGroupCls={'margin-bottom-0'}
+                  maxDate={judgeActivityReportHelper.today}
                   rangePickerCls={'grid-row '}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}
-                  startValue={judgeActivityReportFilters.endDate}
+                  startValue=""
                   onChangeEnd={e => {
                     setJudgeActivityReportFiltersSequence({
                       endDate: e.target.value,
