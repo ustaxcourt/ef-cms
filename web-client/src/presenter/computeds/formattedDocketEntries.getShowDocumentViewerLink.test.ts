@@ -221,7 +221,8 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      // User is external, with no access to case, document link is not publicly visible
+      description:
+        'User is external, with no access to case, document link is not publicly visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -233,7 +234,8 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      // User is external, with no access to case, docket entry is a sealed and served order, document link is not visible
+      description:
+        'User is external, with no access to case, docket entry is a sealed and served order, document link is not visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -245,7 +247,21 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
-      // User is external, with access to case, docket entry is a sealed and served order, document link is visible
+      description:
+        'User is external, with no access to case, docket entry is a legacy sealed and served order, document link is not visible',
+      inputs: {
+        hasDocument: true,
+        isCourtIssuedDocument: true,
+        isExternalUser: true,
+        isLegacySealed: true,
+        isServed: true,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description:
+        'User is external, with access to case, docket entry is a sealed and served order, document link is visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -258,7 +274,8 @@ describe('getShowDocumentViewerLink', () => {
       output: true,
     },
     {
-      // User is external, with access to case, document link is visible
+      description:
+        'User is external, with access to case, document link is visible',
       inputs: {
         hasDocument: true,
         isCourtIssuedDocument: true,
@@ -280,6 +297,96 @@ describe('getShowDocumentViewerLink', () => {
         isSealed: true,
         isServed: true,
         userHasAccessToCase: true,
+      },
+      output: false,
+    },
+    {
+      description:
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date and served should display a clickable link to external users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: true,
+    },
+    {
+      description:
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date should display a clickable link to internal users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: false,
+        isSealed: false,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: true,
+    },
+    {
+      description:
+        'sealed, practitioner e-filed briefs filed after policy change date should NOT display a clickable link to external users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: true,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description:
+        'stricken, practitioner e-filed briefs filed after policy change date should NOT display a clickable link to external users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: true,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description:
+        'unsealed, unstricken non-practitioner e-filed briefs filed after policy change date should NOT display a clickable link to external users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: false,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: true,
+        isStricken: false,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      description:
+        'unsealed, unstricken practitioner e-filed briefs filed after policy change date and NOT served should NOT display a clickable link to external users',
+      inputs: {
+        filedAfterPolicyChange: true,
+        filedByPractitioner: true,
+        hasDocument: true,
+        isExternalUser: true,
+        isSealed: false,
+        isServed: false,
+        isStricken: false,
+        userHasAccessToCase: false,
       },
       output: false,
     },
