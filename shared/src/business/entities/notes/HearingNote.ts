@@ -12,7 +12,7 @@ export class HearingNote extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     note: JoiValidationConstants.STRING.max(200).required(),
-  };
+  } as const;
 
   static VALIDATION_ERROR_MESSAGES = {
     note: [
