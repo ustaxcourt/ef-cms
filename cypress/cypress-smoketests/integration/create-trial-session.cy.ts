@@ -46,7 +46,7 @@ import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 let docketClerkToken = null;
 let petitionsClerkToken = null;

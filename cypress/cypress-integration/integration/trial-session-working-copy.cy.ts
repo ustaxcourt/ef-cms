@@ -31,7 +31,7 @@ import {
   manuallyAddCaseToNewTrialSession,
 } from '../../cypress-smoketests/support/pages/case-detail';
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 const testData = {
   docketNumbers: [],

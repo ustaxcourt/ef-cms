@@ -8,14 +8,14 @@ export const fillInCreateCaseFromPaperForm = testData => {
     testData.testPetitionerName = petitionerName;
   }
   cy.get('input[name="contactPrimary.address1"]').type(
-    faker.address.streetAddress(),
+    faker.location.streetAddress(),
   );
-  cy.get('input[name="contactPrimary.city"]').type(faker.address.city());
+  cy.get('input[name="contactPrimary.city"]').type(faker.location.city());
   cy.get('select[name="contactPrimary.state"]').select(
-    faker.address.stateAbbr(),
+    faker.location.stateAbbr(),
   );
   cy.get('input[name="contactPrimary.postalCode"]').type(
-    faker.address.zipCode(),
+    faker.location.zipCode(),
   );
   cy.get('input[name="contactPrimary.phone"]').type(faker.phone.number());
 
