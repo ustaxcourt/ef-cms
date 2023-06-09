@@ -22,7 +22,7 @@ export const validateOpinionAdvancedSearchAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateOpinionAdvancedSearchInteractor(applicationContext, {
+    .validateOpinionAdvancedSearchInteractor({
       opinionSearch: {
         ...opinionSearch,
         opinionTypes,
