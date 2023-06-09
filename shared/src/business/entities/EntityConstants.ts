@@ -450,6 +450,20 @@ export const BRIEF_EVENTCODES = [
   ...SERIATIM_DOCUMENT_EVENT_CODES,
 ];
 
+export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const SIGNED_DOCUMENT_TYPES = {
+  signedStipulatedDecision: {
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+  },
+};
+
+export const POLICY_DATE_IMPACTED_EVENTCODES = [
+  ...BRIEF_EVENTCODES,
+  AMICUS_BRIEF_EVENT_CODE,
+  SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -647,13 +661,11 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
 
-export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
-
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
-  ...BRIEF_EVENTCODES,
+  ...POLICY_DATE_IMPACTED_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',
@@ -792,13 +804,6 @@ export const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
 export const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Stipulated Decision',
 ).eventCode;
-
-export const SIGNED_DOCUMENT_TYPES = {
-  signedStipulatedDecision: {
-    documentType: 'Stipulated Decision',
-    eventCode: 'SDEC',
-  },
-};
 
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   {
