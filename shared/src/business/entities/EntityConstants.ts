@@ -210,6 +210,8 @@ export const DOCUMENT_RELATIONSHIPS = {
 
 export const DOCUMENT_SERVED_MESSAGES = {
   ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  EXTERNAL_ENTRY_ADDED:
+    'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };

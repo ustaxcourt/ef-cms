@@ -94,6 +94,22 @@ option:first-child {
   }
 }
 
+.ustc-unstyled-consolidated-case-list {
+  list-style-type: none;
+
+  &.without-margins {
+    margin-bottom: 0;
+
+    li {
+      margin-bottom: 0;
+    }
+  }
+
+  li:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
 .usa-memorable-date {
   label {
     margin: 0 0 5px;
