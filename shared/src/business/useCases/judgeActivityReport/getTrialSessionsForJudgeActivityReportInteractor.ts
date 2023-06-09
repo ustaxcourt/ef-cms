@@ -9,15 +9,6 @@ import {
   SESSION_TYPES,
 } from '../../entities/EntityConstants';
 
-/**
- * getTrialSessionsForJudgeActivityReportInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers.endDate the report end date
- * @param {object} providers.judgeId the judgeId to query for
- * @param {object} providers.startDate the report start date
- * @returns {Object} the counts of the different session types held for the judge
- */
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
   {
