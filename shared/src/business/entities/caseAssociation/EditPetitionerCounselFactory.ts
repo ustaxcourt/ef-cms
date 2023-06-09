@@ -1,4 +1,4 @@
-import { AddPrivatePractitionerFactory } from './AddPrivatePractitionerFactory';
+import { AddPrivatePractitioner } from './AddPrivatePractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import {
   joiValidationDecorator,
@@ -41,6 +41,6 @@ export function EditPetitionerCounselFactory(rawProps) {
 }
 
 EditPetitionerCounselFactory.VALIDATION_ERROR_MESSAGES = {
-  ...AddPrivatePractitionerFactory.VALIDATION_ERROR_MESSAGES,
+  ...AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES,
   representing: 'Select a representing party',
 };
