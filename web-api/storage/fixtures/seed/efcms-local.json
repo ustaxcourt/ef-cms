@@ -35138,6 +35138,35 @@
     "email": "judgeurda@example.com"
   },
   {
+    "attachments": [
+      {
+        "documentId": "4796a931-14fb-43e6-948f-d2b67ce4c1cb"
+      }
+    ],
+    "isRepliedTo": false,
+    "caseStatus": "Calendared",
+    "fromUserId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
+    "subject": "Administrative Record",
+    "toSection": "petitions",
+    "gsi1pk": "message|1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "caseTitle": "Reuben Blair",
+    "isRead": false,
+    "messageId": "1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "message": "Could you please review this?",
+    "toUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2023-06-02T21:15:50.105Z",
+    "entityName": "Message",
+    "parentMessageId": "1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "sk": "message|1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "docketNumberWithSuffix": "103-20L",
+    "from": "Test Admissions Clerk",
+    "to": "Test Petitionsclerk",
+    "pk": "case|103-20",
+    "fromSection": "admissions",
+    "docketNumber": "103-20",
+    "isCompleted": false
+  },
+  {
     "judgeTitle": "Legacy Judge",
     "judgeFullName": "Guy S. B. Fieri",
     "role": "legacyJudge",
