@@ -30,7 +30,7 @@ export const goToEditContactInformation = () => {
 export const updateAddress1 = () => {
   cy.get('input[id=contact\\.address1]')
     .clear()
-    .type(faker.address.streetAddress());
+    .type(faker.location.streetAddress());
 };
 
 export const saveContactInformation = () => {

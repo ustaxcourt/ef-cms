@@ -63,15 +63,15 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     let formValues = [
       {
         key: 'receivedAtMonth',
-        value: faker.datatype.number({ max: 11, min: 1 }),
+        value: faker.number.int({ max: 11, min: 1 }),
       },
       {
         key: 'receivedAtDay',
-        value: faker.datatype.number({ max: 28, min: 1 }),
+        value: faker.number.int({ max: 28, min: 1 }),
       },
       {
         key: 'receivedAtYear',
-        value: faker.datatype.number({ max: 2021, min: 2001 }),
+        value: faker.number.int({ max: 2021, min: 2001 }),
       },
       {
         key: 'mailingDate',
@@ -144,7 +144,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       mockContactPrimary,
       {
         key: 'contactPrimary.address1',
-        value: faker.address.streetAddress(),
+        value: faker.location.streetAddress(),
       },
       {
         key: 'contactPrimary.city',
@@ -152,7 +152,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       },
       {
         key: 'contactPrimary.postalCode',
-        value: faker.address.zipCode(),
+        value: faker.location.zipCode(),
       },
       {
         key: 'contactPrimary.phone',
