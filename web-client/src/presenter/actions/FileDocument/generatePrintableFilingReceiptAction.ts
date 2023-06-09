@@ -16,6 +16,7 @@ export const generatePrintableFilingReceiptAction = async ({
   props,
 }: ActionProps) => {
   const { documentsFiled } = props;
+  const { fileAcrossConsolidatedGroup } = get(state.form) || false;
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const filingReceiptUrl = await applicationContext
@@ -23,6 +24,7 @@ export const generatePrintableFilingReceiptAction = async ({
     .generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber,
       documentsFiled,
+      fileAcrossConsolidatedGroup,
     });
 
   return { printReceiptLink: filingReceiptUrl };

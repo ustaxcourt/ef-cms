@@ -183,6 +183,7 @@ import { validatePdfLambda } from './documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
 
+import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
 import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
@@ -749,6 +750,10 @@ app.get(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
   );
+  app.post(
+    '/judge-activity-report/open-cases',
+    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
+  );
 }
 
 /**
@@ -770,8 +775,8 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
  */
 {
   app.post(
-    '/trial-sessions/paper-service-pdf',
-    lambdaWrapper(generateTrialSessionPaperServicePdfLambda),
+    '/async/trial-sessions/paper-service-pdf',
+    lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
