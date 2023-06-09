@@ -1,10 +1,9 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { Case, isUserPartOfGroup } from '../entities/cases/Case';
@@ -71,11 +70,6 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   );
 
   if (!isServed(docketEntryEntity) && !isUnservable) {
-    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
-  } else if (
-    docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
-    !userAssociatedWithCase
-  ) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
@@ -204,11 +198,11 @@ export const getDownloadPolicyUrlInteractor = async (
       const selectedIsStin =
         docketEntryEntity.documentType ===
         INITIAL_DOCUMENT_TYPES.stin.documentType;
-      const selectedIsBrief = BRIEF_EVENTCODES.includes(
-        docketEntryEntity.eventCode,
-      );
+      const hasPolicyDateImpactedEventCode =
+        POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntryEntity.eventCode);
       const unAuthorizedToViewNonCourtIssued =
-        (selectedIsStin || !userAssociatedWithCase) && !selectedIsBrief;
+        (selectedIsStin || !userAssociatedWithCase) &&
+        !hasPolicyDateImpactedEventCode;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
