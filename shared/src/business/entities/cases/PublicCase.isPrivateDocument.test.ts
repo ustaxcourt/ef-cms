@@ -1,34 +1,10 @@
 const {
-  BRIEF_EVENTCODES,
-  STIPULATED_DECISION_EVENT_CODE,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   TRANSCRIPT_EVENT_CODE,
 } = require('../EntityConstants');
 const { PublicCase } = require('./PublicCase');
 
 describe('PublicCase isPrivateDocument', () => {
-  it('should return true for a stipulated decision document that is not on the docket record', () => {
-    const isPrivate = PublicCase.isPrivateDocument(
-      {
-        documentType: 'Stipulated Decision',
-        eventCode: STIPULATED_DECISION_EVENT_CODE,
-      },
-      [],
-    );
-    expect(isPrivate).toEqual(true);
-  });
-
-  it('should return true for a stipulated decision document that is on the docket record', () => {
-    const isPrivate = PublicCase.isPrivateDocument(
-      {
-        documentType: 'Stipulated Decision',
-        eventCode: STIPULATED_DECISION_EVENT_CODE,
-        isOnDocketRecord: true,
-      },
-      [],
-    );
-    expect(isPrivate).toEqual(true);
-  });
-
   it('should return true for a transcript document', () => {
     const isPrivate = PublicCase.isPrivateDocument(
       {
@@ -69,10 +45,10 @@ describe('PublicCase isPrivateDocument', () => {
     expect(isPrivate).toEqual(false);
   });
 
-  it('should return false for a brief document that is on the docket record', () => {
+  it('should return false for a document with hasPolicyDateImpactedEventCode true that is on the docket record', () => {
     const isPrivate = PublicCase.isPrivateDocument({
       docketEntryId: '123',
-      eventCode: BRIEF_EVENTCODES[0],
+      eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
       isOnDocketRecord: true,
     });
     expect(isPrivate).toEqual(false);
