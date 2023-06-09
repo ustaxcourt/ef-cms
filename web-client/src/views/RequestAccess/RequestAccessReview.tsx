@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedGroupCards } from '../FileDocument/ExternalConsolidatedGroupCards';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -119,12 +120,9 @@ export const RequestAccessReview = connect(
                         <div className="grid-row grid-gap overline padding-top-105 margin-top-105">
                           <div className="tablet:grid-col-6 margin-bottom-1">
                             <div className="tablet:margin-bottom-0 margin-bottom-205">
-                              <label
-                                className="usa-label"
-                                htmlFor={`supporting-documents-${idx}`}
-                              >
+                              <h3 className="usa-label">
                                 {item.documentTitle}
-                              </label>
+                              </h3>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
                                   <PDFPreviewButton
@@ -175,9 +173,7 @@ export const RequestAccessReview = connect(
                     <h3 className="underlined">Parties You’re Representing</h3>
                     <div className="grid-row grid-gap">
                       <div className="tablet:grid-col-6 margin-bottom-1">
-                        <label className="usa-label" htmlFor="filing-parties">
-                          Parties
-                        </label>
+                        <h3 className="usa-label">Parties</h3>
                         <ul className="ustc-unstyled-list without-margins">
                           {requestAccessHelper.representingPartiesNames.map(
                             name => (
@@ -193,6 +189,8 @@ export const RequestAccessReview = connect(
             )}
           </div>
         </div>
+
+        {form.fileAcrossConsolidatedGroup && <ExternalConsolidatedGroupCards />}
 
         <div className="grid-row grid-gap margin-bottom-5">
           <div className="tablet:grid-col-12 bg-white submit-reminders">
