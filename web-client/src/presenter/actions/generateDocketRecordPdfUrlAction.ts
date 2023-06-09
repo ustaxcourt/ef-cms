@@ -15,15 +15,22 @@ export const generateDocketRecordPdfUrlAction = async ({
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
+  const { isAssociated } = props;
 
-  const { isAssociated: shouldIncludePartyDetail } = props;
+  let includePartyDetail = false;
+  let isIndirectlyAssociated = false;
+  if (isAssociated) {
+    includePartyDetail = true;
+    isIndirectlyAssociated = true;
+  }
 
   const { url } = await applicationContext
     .getUseCases()
     .generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
       docketRecordSort,
-      includePartyDetail: shouldIncludePartyDetail,
+      includePartyDetail,
+      isIndirectlyAssociated,
     });
 
   return { pdfUrl: url };
