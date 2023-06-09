@@ -14,13 +14,19 @@ export const getFileExternalDocumentAlertSuccessAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { NOTICE_EVENT_CODES } = applicationContext.getConstants();
+  const { DOCUMENT_SERVED_MESSAGES, NOTICE_EVENT_CODES } =
+    applicationContext.getConstants();
   const documentToEdit = get(state.documentToEdit);
   const isCreatingOrder = get(state.isCreatingOrder);
   const isCreatingNotice = NOTICE_EVENT_CODES.includes(props.eventCode);
+  const { fileAcrossConsolidatedGroup } = props;
+
+  const alertSuccessMessage = fileAcrossConsolidatedGroup
+    ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+    : DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED;
 
   const alertSuccess = {
-    message: 'Document filed and is accessible from the Docket Record.',
+    message: alertSuccessMessage,
   };
 
   if (props.documentWithPendingAssociation) {

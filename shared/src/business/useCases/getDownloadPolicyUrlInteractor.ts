@@ -1,5 +1,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
@@ -203,8 +204,11 @@ export const getDownloadPolicyUrlInteractor = async (
       const selectedIsStin =
         docketEntryEntity.documentType ===
         INITIAL_DOCUMENT_TYPES.stin.documentType;
+      const selectedIsBrief = BRIEF_EVENTCODES.includes(
+        docketEntryEntity.eventCode,
+      );
       const unAuthorizedToViewNonCourtIssued =
-        selectedIsStin || !userAssociatedWithCase;
+        (selectedIsStin || !userAssociatedWithCase) && !selectedIsBrief;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
