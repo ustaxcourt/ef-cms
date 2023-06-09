@@ -77,11 +77,7 @@ export class PublicCase extends JoiValidationEntity {
 
     const currentUser = applicationContext.getCurrentUser();
 
-    if (
-      (currentUser.role === ROLES.irsPractitioner ||
-        currentUser.role === ROLES.privatePractitioner) &&
-      !this.isSealed
-    ) {
+    if (currentUser.role === ROLES.irsPractitioner && !this.isSealed) {
       this.petitioners = rawCase.petitioners;
 
       this.irsPractitioners = (rawCase.irsPractitioners || []).map(
