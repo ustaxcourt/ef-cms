@@ -5,7 +5,6 @@ import { UserCase } from '../../entities/UserCase';
 
 /**
  * associatePrivatePractitionerToCase
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -20,6 +19,12 @@ export const associatePrivatePractitionerToCase = async ({
   representing,
   serviceIndicator,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  serviceIndicator?: string;
+  user: RawUser;
+  representing: string[];
 }) => {
   const isAssociated = await applicationContext
     .getPersistenceGateway()
