@@ -3,6 +3,7 @@ import {
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -45,6 +46,7 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
   formatDocketEntry,
@@ -118,6 +120,7 @@ const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_TABS,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -199,6 +202,7 @@ const applicationContextPublic = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       openUrlInNewTab,
+      prepareDateFromString,
       sortDocketEntries,
     };
   },

@@ -8,7 +8,6 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 /**
  * generateDocketRecordPdfInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number for the docket record to be generated
@@ -20,14 +19,16 @@ export const generateDocketRecordPdfInteractor = async (
     docketNumber,
     docketRecordSort,
     includePartyDetail = false,
+    isIndirectlyAssociated = false,
   }: {
     docketNumber: string;
     docketRecordSort?: string;
     includePartyDetail: boolean;
+    isIndirectlyAssociated?: boolean;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
-  const isAssociated = await applicationContext
+  const isDirectlyAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
       applicationContext,
@@ -55,7 +56,11 @@ export const generateDocketRecordPdfInteractor = async (
         ROLE_PERMISSIONS.VIEW_SEALED_CASE,
       );
 
-      if (isAuthorizedToViewSealedCase || isAssociated) {
+      if (
+        isAuthorizedToViewSealedCase ||
+        isDirectlyAssociated ||
+        isIndirectlyAssociated
+      ) {
         caseEntity = new Case(caseSource, { applicationContext });
       } else {
         // unassociated user viewing sealed case
