@@ -149,7 +149,7 @@ describe('publicCaseDetailHelper', () => {
       expect(result.showLinkToDocument).toBe(true);
     });
 
-    it('should not show document link for a policy date impacted document for the terminal user when filed by practitioner before policy change date', () => {
+    it('should show document link for brief for the terminal user when filed by practitioner before policy change date', () => {
       const result: any = formatDocketEntryOnDocketRecord(
         applicationContextPublic,
         {
@@ -165,7 +165,7 @@ describe('publicCaseDetailHelper', () => {
         },
       );
 
-      expect(result.showLinkToDocument).toBe(false);
+      expect(result.showLinkToDocument).toBe(true);
     });
 
     it('should show document link for a policy date impacted document when filed by practitioner after policy change date for the public user and is not a court issued document', () => {
