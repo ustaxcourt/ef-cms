@@ -24,7 +24,7 @@ export const ConsolidatedCases = connect(
                   <CaseLink formattedCase={consolidatedCase} />
                 </div>
                 <div className="tablet:grid-col-9 desktop:grid-col-10">
-                  {consolidatedCase.caseTitle}
+                  {consolidatedCase.caseTitle || 'Sealed Case'}
                 </div>
               </NonMobile>
               <Mobile>
