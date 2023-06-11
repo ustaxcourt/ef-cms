@@ -775,8 +775,8 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
  */
 {
   app.post(
-    '/trial-sessions/paper-service-pdf',
-    lambdaWrapper(generateTrialSessionPaperServicePdfLambda),
+    '/async/trial-sessions/paper-service-pdf',
+    lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',

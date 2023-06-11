@@ -7,6 +7,31 @@ export const socketRouter = (app, onMessageCallbackFn) => {
     const { action } = message;
 
     switch (action) {
+      case 'paper_service_started':
+        await app.getSequence('showPaperServiceProgressSequence')({
+          ...message,
+        });
+        break;
+      case 'paper_service_updated':
+        await app.getSequence('updatePaperServiceProgressSequence')({
+          ...message,
+        });
+        break;
+      case 'paper_service_complete':
+        await app.getSequence('paperServiceCompleteSequence')({
+          ...message,
+        });
+        break;
+      case 'notice_generation_start':
+        await app.getSequence('showGenerateNoticesProgressSequence')({
+          ...message,
+        });
+        break;
+      case 'notice_generation_updated':
+        await app.getSequence('updateGenerateNoticesProgressSequence')({
+          ...message,
+        });
+        break;
       case 'notice_generation_complete':
         await app.getSequence('noticeGenerationCompleteSequence')({
           ...message,

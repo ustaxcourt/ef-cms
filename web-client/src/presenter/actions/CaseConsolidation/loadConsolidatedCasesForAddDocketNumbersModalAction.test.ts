@@ -7,7 +7,7 @@ describe('loadConsolidatedCasesForAddDocketNumbersModalAction', () => {
     const consolidatedCases = [
       {
         docketNumber: '101-20',
-        petitioners: [],
+        petitioners: [{ name: 'Roy Kent' }, { name: 'Jamie Tartt' }],
       },
       {
         docketNumber: '102-20',
@@ -35,6 +35,7 @@ describe('loadConsolidatedCasesForAddDocketNumbersModalAction', () => {
     ).toMatchObject({
       checkboxDisabled: true,
       checked: true,
+      formattedPetitioners: 'Roy Kent & Jamie Tartt',
     });
     expect(
       consolidatedCases.find(({ docketNumber }) => docketNumber === '102-20'),
