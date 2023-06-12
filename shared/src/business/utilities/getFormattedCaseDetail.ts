@@ -153,10 +153,6 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     .getUtilities()
     .getDescriptionDisplay(formattedEntry);
 
-  if (formattedEntry.additionalInfo && !formattedEntry.addToCoversheet) {
-    formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
-  }
-
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
   }
