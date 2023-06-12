@@ -1,3 +1,4 @@
+import { consolidatedCasesGroupCountMapResponseType } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 /**
@@ -17,7 +18,10 @@ export const getCasesByStatusAndByJudgeInteractor = (
     judgeName: string;
     statuses: string[];
   },
-) => {
+): Promise<{
+  cases: RawCase;
+  consolidatedCasesGroupCountMap: consolidatedCasesGroupCountMapResponseType;
+}> => {
   return post({
     applicationContext,
     body: {

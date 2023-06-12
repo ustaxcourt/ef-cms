@@ -1,15 +1,47 @@
-import { RawTrialSession } from './../../../shared/src/business/entities/trialSessions/TrialSession';
-export type JudgeActitivityReportFilters = {
+import {
+  CASE_STATUS_TYPES,
+  SESSION_TYPES,
+} from '../../../shared/src/business/entities/EntityConstants';
+
+export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
   judgeName: string;
 };
 
+export type CasesClosedType = {
+  [CASE_STATUS_TYPES.closed]: number;
+  [CASE_STATUS_TYPES.closedDismissed]: number;
+};
+
+export type TrialSessionTypes = {
+  [SESSION_TYPES.regular]: number;
+  [SESSION_TYPES.small]: number;
+  [SESSION_TYPES.hybrid]: number;
+  [SESSION_TYPES.special]: number;
+  [SESSION_TYPES.motionHearing]: number;
+};
+
+export type OrdersAndOpinionTypes = {
+  count: number;
+  documentType: string | undefined;
+  eventCode: string;
+};
+
+export type consolidatedCasesGroupCountMapResponseType = {
+  [leadDocketNumber: string]: number;
+};
+
 export type JudgeActivityReportState = {
-  filters: JudgeActitivityReportFilters;
+  filters: JudgeActivityReportFilters;
   judgeActivityReportData: {
-    trialSessions?: RawTrialSession[];
-  }; // TODO: ADD BETTER TYPES
+    trialSessions?: TrialSessionTypes;
+    casesClosedByJudge?: CasesClosedType;
+    consolidatedCasesGroupCountMap?: consolidatedCasesGroupCountMapResponseType;
+    opinions?: OrdersAndOpinionTypes[];
+    orders?: OrdersAndOpinionTypes[];
+    submittedAndCavCasesByJudge?: RawCase[];
+  };
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
