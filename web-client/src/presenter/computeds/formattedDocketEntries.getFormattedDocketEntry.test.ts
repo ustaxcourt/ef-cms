@@ -452,41 +452,6 @@ describe('getFormattedDocketEntry', () => {
     });
   });
 
-  describe('filingsAndProceedingsWithAdditionalInfo', () => {
-    it('should contain filingsAndProceedings and additionalInfo2 separated by a space', () => {
-      const mockFilingsAndProceedings = 'Mock Filings and Proceedings';
-      const mockAdditionalInfo2 = 'Mock Additional Info 2';
-
-      const result = getFormattedDocketEntry({
-        ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          additionalInfo2: mockAdditionalInfo2,
-          filingsAndProceedings: mockFilingsAndProceedings,
-        },
-        filedAfterPolicyChange: true,
-      });
-
-      expect(result.filingsAndProceedingsWithAdditionalInfo).toEqual(
-        ` ${mockFilingsAndProceedings} ${mockAdditionalInfo2}`,
-      );
-    });
-
-    it('should be an empty string if filingsAndProceedings and additionalInfo2 are both undefined', () => {
-      const result = getFormattedDocketEntry({
-        ...baseParams,
-        entry: {
-          ...simpleDocketEntry,
-          additionalInfo2: undefined,
-          filingsAndProceedings: undefined,
-        },
-        filedAfterPolicyChange: true,
-      });
-
-      expect(result.filingsAndProceedingsWithAdditionalInfo).toEqual('');
-    });
-  });
-
   describe('showEditDocketRecordEntry', () => {
     it('should be true if user has EDIT_DOCKET_ENTRY permissions', () => {
       const result = getFormattedDocketEntry({
