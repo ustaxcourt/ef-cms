@@ -29,3 +29,5 @@ export class EditPetitionerCounsel extends JoiValidationEntity {
     return EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export type RawEditPetitionerCounsel = ExcludeMethods<EditPetitionerCounsel>;
