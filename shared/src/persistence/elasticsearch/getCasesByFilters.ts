@@ -30,7 +30,6 @@ export const getCasesByFilters = async ({
     'status',
     'highPriority',
   ];
-  console.log('params#####', params);
 
   const filters: QueryDslQueryContainer[] = [];
 
@@ -98,6 +97,7 @@ export const getCasesByFilters = async ({
     filters.push(procedureTypeFilter);
   }
 
+  //TODO: figure out why boolean isn't being parsed back into boolean from string
   if (params.highPriority === 'true') {
     const procedureTypeFilter = {
       match: {

@@ -63,7 +63,7 @@ export type CaseInventory = Pick<
  */
 export const getCustomCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
-  params: GetCaseInventoryReportRequest,
+  { params }: { params: GetCaseInventoryReportRequest },
 ): Promise<GetCaseInventoryReportResponse> => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
