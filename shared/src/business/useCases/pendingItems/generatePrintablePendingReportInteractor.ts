@@ -7,7 +7,6 @@ import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * generatePrintablePendingReportInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.judge the optional judge filter
@@ -16,7 +15,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  */
 export const generatePrintablePendingReportInteractor = async (
   applicationContext: IApplicationContext,
-  { docketNumber, judge }: { docketNumber: string; judge: string },
+  { docketNumber, judge }: { docketNumber?: string; judge?: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -54,6 +53,8 @@ export const generatePrintablePendingReportInteractor = async (
       .getUtilities()
       .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
     formattedName: pendingItem.documentTitle || pendingItem.documentType,
+    inConsolidatedGroup: !!pendingItem.leadDocketNumber,
+    inLeadCase: applicationContext.getUtilities().isLeadCase(pendingItem),
   }));
 
   let reportTitle = 'All Judges';

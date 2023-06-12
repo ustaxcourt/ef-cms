@@ -19,7 +19,8 @@ export const practitionerUpdatesAddress = cerebralTest => {
       contact: { address1: expect.anything() },
     });
 
-    cerebralTest.updatedPractitionerAddress = faker.address.streetAddress(true);
+    cerebralTest.updatedPractitionerAddress =
+      faker.location.streetAddress(true);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contact.address1',
