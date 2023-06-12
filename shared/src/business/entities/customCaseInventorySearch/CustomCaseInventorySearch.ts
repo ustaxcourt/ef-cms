@@ -21,6 +21,14 @@ export const CUSTOM_CASE_REPORT_FILING_METHODS = [
 export type CustomCaseFilingMethods =
   (typeof CUSTOM_CASE_REPORT_FILING_METHODS)[number];
 
+export const CUSTOM_CASE_REPORT_PROCEDURE_TYPES = [
+  'all',
+  'regular',
+  'small',
+] as const;
+export type CustomCaseProcedureTypes =
+  (typeof CUSTOM_CASE_REPORT_PROCEDURE_TYPES)[number];
+
 export class CustomCaseInventorySearch extends JoiValidationEntity {
   public startDate: string;
   public endDate: string;
