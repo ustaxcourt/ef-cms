@@ -30,6 +30,7 @@ export const getCasesByFilters = async ({
     'status',
     'highPriority',
   ];
+  console.log('params#####', params);
 
   const filters: QueryDslQueryContainer[] = [];
 
@@ -92,6 +93,15 @@ export const getCasesByFilters = async ({
     const procedureTypeFilter = {
       terms: {
         'procedureType.S': [params.procedureType],
+      },
+    };
+    filters.push(procedureTypeFilter);
+  }
+
+  if (params.highPriority === 'true') {
+    const procedureTypeFilter = {
+      match: {
+        'highPriority.BOOL': true,
       },
     };
     filters.push(procedureTypeFilter);
