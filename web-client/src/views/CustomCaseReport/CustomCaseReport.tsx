@@ -280,16 +280,6 @@ export const CustomCaseReport = connect(
                   htmlFor="case-status"
                   id="case-status-label"
                 >
-                  {/*
-
-
-
-                JUDGES
-
-
-
-
-                */}
                   Assigned judge{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
@@ -299,6 +289,7 @@ export const CustomCaseReport = connect(
                   name="judges"
                   options={customCaseInventoryReportHelper.judges}
                   placeholder="- Select one or more -"
+                  value={'Select one or more'}
                   onChange={inputValue => {
                     setCustomCaseInventoryReportFiltersSequence({
                       judges: {
@@ -315,16 +306,6 @@ export const CustomCaseReport = connect(
                   htmlFor="case-type"
                   id="case-type-label"
                 >
-                  {/*
-
-
-
-                REQUESTED PLACE OF TRIAL
-
-
-
-
-                */}
                   Requested place of trial{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
@@ -414,9 +395,10 @@ export const CustomCaseReport = connect(
               className="usa-checkbox__input"
               id="high-priority-checkbox"
               type="checkbox"
+              //TODO: reconsider this spaghetti
               onChange={() => {
                 setCustomCaseInventoryReportFiltersSequence({
-                  highPriority: true,
+                  highPriority: 'highPriority',
                 });
               }}
             />
