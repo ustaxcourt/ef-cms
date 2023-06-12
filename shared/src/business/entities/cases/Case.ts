@@ -346,7 +346,7 @@ export class Case extends JoiValidationEntity {
       },
       'Your STIN file size is empty',
     ],
-  };
+  } as const;
 
   getErrorToMessageMap() {
     return Case.VALIDATION_ERROR_MESSAGES;
@@ -1008,7 +1008,7 @@ export class Case extends JoiValidationEntity {
   }
 
   archiveDocketEntry(docketEntry: DocketEntry) {
-    if (DocketEntry.isServed(docketEntry)) {
+    if (DocketEntry.isServed(docketEntry) || docketEntry.isOnDocketRecord) {
       throw new UnprocessableEntityError(
         'Cannot archive docket entry that has already been served.',
       );

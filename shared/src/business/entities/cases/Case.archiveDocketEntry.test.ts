@@ -8,6 +8,7 @@ import { cloneDeep } from 'lodash';
 describe('archiveDocketEntry', () => {
   let caseRecord: Case;
   let docketEntryToArchive: DocketEntry;
+
   beforeEach(() => {
     docketEntryToArchive = new DocketEntry(cloneDeep(PENDING_DOCKET_ENTRY), {
       applicationContext,
@@ -34,7 +35,7 @@ describe('archiveDocketEntry', () => {
     expect(archivedDocketEntry!.archived).toEqual(true);
   });
 
-  it('adds the provided docket entry to the case archivedDocketEntries', () => {
+  it('should add the provided docket entry to the case archivedDocketEntries', () => {
     caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
@@ -44,7 +45,7 @@ describe('archiveDocketEntry', () => {
     ).toBeDefined();
   });
 
-  it('removes the provided docket entry from the case docketEntries array', () => {
+  it('should remove the provided docket entry from the case docketEntries array', () => {
     caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
@@ -56,6 +57,15 @@ describe('archiveDocketEntry', () => {
 
   it('should not allow a docket entry that has already been served to be archived', () => {
     docketEntryToArchive.servedAt = '2014-02-01T05:00:00.000Z';
+
+    expect(() => caseRecord.archiveDocketEntry(docketEntryToArchive)).toThrow(
+      'Cannot archive docket entry that has already been served.',
+    );
+  });
+
+  it('should not allow a docket entry that is already on the docket record be archived', () => {
+    docketEntryToArchive.servedAt = undefined;
+    docketEntryToArchive.isOnDocketRecord = true;
 
     expect(() => caseRecord.archiveDocketEntry(docketEntryToArchive)).toThrow(
       'Cannot archive docket entry that has already been served.',

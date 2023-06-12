@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 export const goToTrialSessions = () => {
   cy.get('a[href="/trial-sessions"]').click();
@@ -17,12 +17,12 @@ export const goToCreateTrialSession = () => {
 
 export const createTrialSession = (testData, overrides = {}) => {
   const createFutureDate = () => {
-    const month = faker.datatype.number({ max: 12, min: 1 });
-    const day = faker.datatype.number({ max: 28, min: 1 });
+    const month = faker.number.int({ max: 12, min: 1 });
+    const day = faker.number.int({ max: 28, min: 1 });
     const year =
       // disabled because we're generating a random year for testing.
       // eslint-disable-next-line @miovision/disallow-date/no-new-date
-      new Date().getUTCFullYear() + faker.datatype.number({ max: 5, min: 1 });
+      new Date().getUTCFullYear() + faker.number.int({ max: 5, min: 1 });
     return `${month}/${day}/${year}`;
   };
 
@@ -30,22 +30,22 @@ export const createTrialSession = (testData, overrides = {}) => {
   cy.get('#start-date-date').type(createFutureDate());
   cy.get('#start-time-hours')
     .clear()
-    .type(faker.datatype.number({ max: 11, min: 6 }));
+    .type(faker.number.int({ max: 11, min: 6 }));
   cy.get('#start-time-minutes')
     .clear()
     .type(faker.helpers.arrayElement(['00', '15', '30', '45']));
   cy.get('label[for="startTimeExtension-pm"]').click();
   cy.get('label[for="session-type-Hybrid"]').click();
-  cy.get('#max-cases').type(faker.datatype.number({ max: 100, min: 10 }));
+  cy.get('#max-cases').type(faker.number.int({ max: 100, min: 10 }));
 
   // location information
   cy.get('#inPerson-proceeding-label').click();
   cy.get('#trial-location').select(testData.preferredTrialCity);
   cy.get('#courthouse-name').type(faker.commerce.productName());
-  cy.get('#address1').type(faker.address.streetAddress());
-  cy.get('#city').type(faker.address.city());
-  cy.get('#state').select(faker.address.stateAbbr());
-  cy.get('#postal-code').type(faker.address.zipCode());
+  cy.get('#address1').type(faker.location.streetAddress());
+  cy.get('#city').type(faker.location.city());
+  cy.get('#state').select(faker.location.stateAbbr());
+  cy.get('#postal-code').type(faker.location.zipCode());
 
   // session assignments
   cy.get('#judgeId').select(testData.judgeName || 'Foley');
@@ -55,8 +55,8 @@ export const createTrialSession = (testData, overrides = {}) => {
 
   cy.get('#chambers-phone-number').type(faker.phone.number());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
-  cy.get('#court-reporter').type(faker.name.fullName());
-  cy.get('#irs-calendar-administrator').type(faker.name.fullName());
+  cy.get('#court-reporter').type(faker.person.fullName());
+  cy.get('#irs-calendar-administrator').type(faker.person.fullName());
   cy.get('#notes').type(faker.company.catchPhrase());
 
   cy.get('#submit-trial-session').click();

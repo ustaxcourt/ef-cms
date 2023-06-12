@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 export const gotoAdvancedSearch = () => {
   cy.get('a.advanced').click();
