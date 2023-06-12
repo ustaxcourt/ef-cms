@@ -1,6 +1,7 @@
 import {
   CASE_STATUSES,
   CASE_TYPES,
+  CHIEF_JUDGE,
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
@@ -48,10 +49,15 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     ...populatedFilters.caseTypes,
   ].length;
 
-  const judges = get(state.judges).map(judge => ({
-    label: judge.name,
-    value: judge.name,
-  }));
+  const judges: Object[] = get(state.judges)
+    .map(judge => ({
+      label: judge.name,
+      value: judge.name,
+    }))
+    .concat({ label: CHIEF_JUDGE, value: CHIEF_JUDGE })
+    .sort((a, b) => {
+      return applicationContext.getUtilities().compareStrings(a.label, b.label);
+    });
 
   const totalCases = get(state.customCaseInventory.totalCases);
   const pageCount = Math.ceil(totalCases / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
