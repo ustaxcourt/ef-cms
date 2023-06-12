@@ -19,6 +19,7 @@ export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportSta
       endDate: '',
       filingMethod: 'all',
       judges: [],
+      procedureType: 'all',
       startDate: '',
     },
     lastIdsOfPages: [{ pk: '', receivedAt: 0 }],

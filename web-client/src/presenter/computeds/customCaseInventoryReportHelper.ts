@@ -22,6 +22,11 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
 
   const cases = get(state.customCaseInventory.cases);
 
+  const formatDate = isoDateString =>
+    applicationContext
+      .getUtilities()
+      .formatDateString(isoDateString, FORMATS.MMDDYY);
+
   const reportData = cases.map(entry => {
     entry = addConsolidatedProperties({
       applicationContext,
@@ -54,11 +59,6 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
   const runReportButtonIsDisabled = !(
     populatedFilters.startDate && populatedFilters.endDate
   );
-
-  const formatDate = isoDateString =>
-    applicationContext
-      .getUtilities()
-      .formatDateString(isoDateString, FORMATS.MMDDYY);
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
