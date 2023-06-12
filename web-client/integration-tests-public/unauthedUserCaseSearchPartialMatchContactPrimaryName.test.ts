@@ -31,10 +31,10 @@ const getContactPrimary = name => ({
 
 const createdDocketNumbers = [];
 
-const firstName = `CoPriNa${faker.name.firstName()}`; // "Bob"
-const lastName = `CPNLast${faker.name.lastName()}`; // "Evans"
-const anotherFirstName = faker.name.firstName(); // "Jones"
-const middleName = faker.name.firstName(); // "Trisha"
+const firstName = `CoPriNa${faker.person.firstName()}`; // "Bob"
+const lastName = `CPNLast${faker.person.lastName()}`; // "Evans"
+const anotherFirstName = faker.person.firstName(); // "Jones"
+const middleName = faker.person.firstName(); // "Trisha"
 const similarName = `${firstName}bby`; // "Bobby"
 
 const searchTerm = `${firstName} ${lastName}`;
