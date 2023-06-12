@@ -10,13 +10,11 @@ export const setArchiveDraftDocumentAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { docketEntryId, docketNumber, documentTitle, redirectToCaseDetail } =
-    props;
+  const { docketEntryId, docketNumber, documentTitle } = props;
 
   store.set(state.archiveDraftDocument, {
     docketEntryId,
     docketNumber,
     documentTitle,
-    redirectToCaseDetail,
   });
 };

@@ -25,10 +25,10 @@ export const ModalDialog = ({
   title,
   useRunConfirmSequence = false,
 }: {
-  cancelLabel: string;
+  cancelLabel?: string;
   cancelLink?: boolean;
   cancelSequence: any;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   closeLink?: boolean;
   confirmHref?: string;

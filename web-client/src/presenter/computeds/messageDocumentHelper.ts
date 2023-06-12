@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
@@ -148,7 +149,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     isInternalUser &&
     caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    applicationContext.getUtilities().isServed(caseDocument) &&
+    DocketEntry.isServed(caseDocument) &&
     !docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
