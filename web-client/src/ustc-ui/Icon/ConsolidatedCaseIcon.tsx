@@ -7,7 +7,7 @@ export const ConsolidatedCaseIcon = ({
   showLeadCaseIcon,
 }: {
   inConsolidatedGroup: boolean;
-  consolidatedIconTooltipText: string;
+  consolidatedIconTooltipText: string | undefined;
   showLeadCaseIcon: boolean;
 }) => {
   return (
