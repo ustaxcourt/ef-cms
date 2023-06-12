@@ -62,12 +62,21 @@ export const getCasesByFilters = async ({
   }
 
   if (params.judges.length) {
-    const associatedJudgeFilters = {
-      terms: {
-        'associatedJudge.S': params.judges,
+    const shouldArray: Object[] = [];
+    params.judges.forEach(judge => {
+      const associatedJudgeFilters = {
+        match: {
+          'associatedJudge.S': judge,
+        },
+      };
+      shouldArray.push(associatedJudgeFilters);
+    });
+    const shouldObject: QueryDslQueryContainer = {
+      bool: {
+        should: shouldArray,
       },
     };
-    filters.push(associatedJudgeFilters);
+    filters.push(shouldObject);
   }
 
   if (params.filingMethod !== 'all') {

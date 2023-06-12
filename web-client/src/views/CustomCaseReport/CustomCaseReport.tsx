@@ -299,7 +299,6 @@ export const CustomCaseReport = connect(
                   name="judges"
                   options={customCaseInventoryReportHelper.judges}
                   placeholder="- Select one or more -"
-                  value={'Select one or more'}
                   onChange={inputValue => {
                     setCustomCaseInventoryReportFiltersSequence({
                       judges: {
