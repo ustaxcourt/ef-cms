@@ -345,7 +345,7 @@ export class Case extends JoiValidationEntity {
       },
       'Your STIN file size is empty',
     ],
-  };
+  } as const;
 
   getErrorToMessageMap() {
     return Case.VALIDATION_ERROR_MESSAGES;

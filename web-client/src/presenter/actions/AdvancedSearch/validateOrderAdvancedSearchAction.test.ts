@@ -3,8 +3,6 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateOrderAdvancedSearchAction } from './validateOrderAdvancedSearchAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('validateOrderAdvancedSearchAction', () => {
   let successStub;
   let errorStub;
@@ -17,6 +15,8 @@ describe('validateOrderAdvancedSearchAction', () => {
       error: errorStub,
       success: successStub,
     };
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('validates advanced order search successfully', async () => {
