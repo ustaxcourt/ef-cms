@@ -126,7 +126,7 @@ export const CustomCaseReport = connect(
               </div>
               <div className="usa-radio usa-radio__inline">
                 <input
-                  aria-describedby="petition-filing-method-radios"
+                  aria-describedby="case-procedure-type-radios"
                   checked={customCaseInventoryFilters.filingMethod === 'paper'}
                   className="usa-radio__input"
                   id="petitionFilingMethod-paper"
@@ -150,65 +150,65 @@ export const CustomCaseReport = connect(
               <div className="usa-radio usa-radio__inline">
                 <legend>Case procedure</legend>
                 <input
-                  aria-describedby="petition-filing-method-radios"
-                  checked={customCaseInventoryFilters.filingMethod === 'all'}
+                  aria-describedby="case-procedure-type-radios"
+                  checked={customCaseInventoryFilters.procedureType === 'all'}
                   className="usa-radio__input"
-                  id="petitionFilingMethod-all"
-                  name="filingMethod"
+                  id="caseProcedureType-all"
+                  name="procedureType"
                   type="radio"
                   onChange={() => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      filingMethod: 'all',
+                      procedureType: 'all',
                     });
                   }}
                 />
                 <label
                   className="usa-radio__label"
-                  htmlFor="petitionFilingMethod-all"
+                  htmlFor="caseProcedureType-all"
                 >
                   All
                 </label>
               </div>
               <div className="usa-radio usa-radio__inline">
                 <input
-                  aria-describedby="petition-filing-method-radios"
+                  aria-describedby="case-procedure-type-radios"
                   checked={
-                    customCaseInventoryFilters.filingMethod === 'electronic'
+                    customCaseInventoryFilters.procedureType === 'regular'
                   }
                   className="usa-radio__input"
-                  id="petitionFilingMethod-electronic"
-                  name="filingMethod"
+                  id="caseProcedureType-regular"
+                  name="procedureType"
                   type="radio"
                   onChange={() => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      filingMethod: 'electronic',
+                      procedureType: 'regular',
                     });
                   }}
                 />
                 <label
                   className="usa-radio__label"
-                  htmlFor="petitionFilingMethod-electronic"
+                  htmlFor="caseProcedureType-regular"
                 >
                   Regular
                 </label>
               </div>
               <div className="usa-radio usa-radio__inline">
                 <input
-                  aria-describedby="petition-filing-method-radios"
-                  checked={customCaseInventoryFilters.filingMethod === 'paper'}
+                  aria-describedby="case-procedure-type-radios"
+                  checked={customCaseInventoryFilters.procedureType === 'small'}
                   className="usa-radio__input"
-                  id="petitionFilingMethod-paper"
-                  name="filingMethod"
+                  id="caseProcedureType-small"
+                  name="procedureType"
                   type="radio"
                   onChange={() => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      filingMethod: 'paper',
+                      procedureType: 'small',
                     });
                   }}
                 />
                 <label
                   className="usa-radio__label"
-                  htmlFor="petitionFilingMethod-paper"
+                  htmlFor="caseProcedureType-small"
                 >
                   Small
                 </label>

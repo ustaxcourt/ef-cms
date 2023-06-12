@@ -39,6 +39,12 @@ export const setCustomCaseInventoryFiltersAction = ({
       props.filingMethod,
     );
   }
+  if (props.procedureType) {
+    store.set(
+      state.customCaseInventory.filters.procedureType,
+      props.procedureType,
+    );
+  }
   if (props.caseStatuses) {
     if (
       props.caseStatuses.action === 'add' &&

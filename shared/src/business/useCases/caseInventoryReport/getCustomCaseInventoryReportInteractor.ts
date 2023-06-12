@@ -2,6 +2,7 @@ import { CaseStatus, CaseType } from '../../entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
   CustomCaseInventorySearch,
+  CustomCaseProcedureTypes,
 } from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
@@ -15,6 +16,7 @@ export type CustomCaseInventoryReportFilters = {
   endDate: string;
   startDate: string;
   filingMethod: CustomCaseFilingMethods;
+  procedureType: CustomCaseProcedureTypes;
   judges: string[];
 };
 
