@@ -39,6 +39,12 @@ export const setCustomCaseInventoryFiltersAction = ({
       props.filingMethod,
     );
   }
+  if (props.highPriority) {
+    store.set(
+      state.customCaseInventory.filters.highPriority,
+      !get(state.customCaseInventory.filters.highPriority),
+    );
+  }
   if (props.procedureType) {
     store.set(
       state.customCaseInventory.filters.procedureType,

@@ -16,6 +16,7 @@ export type CustomCaseInventoryReportFilters = {
   endDate: string;
   startDate: string;
   filingMethod: CustomCaseFilingMethods;
+  highPriority: boolean;
   procedureType: CustomCaseProcedureTypes;
   judges: string[];
 };

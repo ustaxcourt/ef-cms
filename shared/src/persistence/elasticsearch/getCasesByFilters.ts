@@ -70,6 +70,15 @@ export const getCasesByFilters = async ({
     filters.push(filingMethodFilter);
   }
 
+  if (params.procedureType !== 'All') {
+    const procedureTypeFilter = {
+      terms: {
+        'procedureType.S': [params.procedureType],
+      },
+    };
+    filters.push(procedureTypeFilter);
+  }
+
   const searchResults = await applicationContext.getSearchClient().search({
     _source: source,
     body: {
