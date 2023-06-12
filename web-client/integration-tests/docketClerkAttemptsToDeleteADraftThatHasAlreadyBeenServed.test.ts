@@ -96,7 +96,6 @@ describe('Docket clerk attempts to delete a draft that has already been served',
     await cerebralTest.runSequence('archiveDraftDocumentModalSequence', {
       docketEntryId: cerebralTest.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
-      // documentTitle: docketClerk1.documentTitle, // Is this param required
     });
     await cerebralTest.runSequence('archiveDraftDocumentSequence');
     expect(cerebralTest.getState('modal.showModal')).toEqual(
