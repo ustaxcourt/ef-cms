@@ -151,14 +151,14 @@ export const CustomCaseReport = connect(
                 <legend>Case procedure</legend>
                 <input
                   aria-describedby="case-procedure-type-radios"
-                  checked={customCaseInventoryFilters.procedureType === 'all'}
+                  checked={customCaseInventoryFilters.procedureType === 'All'}
                   className="usa-radio__input"
                   id="caseProcedureType-all"
                   name="procedureType"
                   type="radio"
                   onChange={() => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      procedureType: 'all',
+                      procedureType: 'All',
                     });
                   }}
                 />
@@ -173,7 +173,7 @@ export const CustomCaseReport = connect(
                 <input
                   aria-describedby="case-procedure-type-radios"
                   checked={
-                    customCaseInventoryFilters.procedureType === 'regular'
+                    customCaseInventoryFilters.procedureType === 'Regular'
                   }
                   className="usa-radio__input"
                   id="caseProcedureType-regular"
@@ -181,7 +181,7 @@ export const CustomCaseReport = connect(
                   type="radio"
                   onChange={() => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      procedureType: 'regular',
+                      procedureType: 'Regular',
                     });
                   }}
                 />
@@ -195,14 +195,14 @@ export const CustomCaseReport = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="case-procedure-type-radios"
-                  checked={customCaseInventoryFilters.procedureType === 'small'}
+                  checked={customCaseInventoryFilters.procedureType === 'Small'}
                   className="usa-radio__input"
                   id="caseProcedureType-small"
                   name="procedureType"
                   type="radio"
                   onChange={() => {
                     setCustomCaseInventoryReportFiltersSequence({
-                      procedureType: 'small',
+                      procedureType: 'Small',
                     });
                   }}
                 />
@@ -411,13 +411,19 @@ export const CustomCaseReport = connect(
           <div className="usa-checkbox">
             <input
               aria-label="Select calendaring high priority"
+              checked={customCaseInventoryFilters.highPriority}
               className="usa-checkbox__input"
-              id="thing"
+              id="high-priority-checkbox"
               type="checkbox"
+              onChange={() => {
+                setCustomCaseInventoryReportFiltersSequence({
+                  highPriority: true,
+                });
+              }}
             />
             <label
               className="usa-checkbox__label"
-              htmlFor="thing"
+              htmlFor="high-priority-checkbox"
               id={'label-high-priority'}
             >
               Calendaring high priority

@@ -72,6 +72,7 @@ export const getCustomCaseInventoryReportInteractor = async (
 
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
+  params.judges = params.judges || [];
 
   new CustomCaseInventorySearch(params).validate();
 
