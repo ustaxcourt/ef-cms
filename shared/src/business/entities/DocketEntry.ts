@@ -197,7 +197,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenAt = rawDocketEntry.strickenAt;
     this.supportingDocument = rawDocketEntry.supportingDocument;
     this.trialLocation = rawDocketEntry.trialLocation;
-
     // only share the userId with an external user if it is the logged in user
     if (applicationContext.getCurrentUser().userId === rawDocketEntry.userId) {
       this.userId = rawDocketEntry.userId;
