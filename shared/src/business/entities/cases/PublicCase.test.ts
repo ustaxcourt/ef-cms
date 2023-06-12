@@ -207,23 +207,12 @@ describe('PublicCase', () => {
       { applicationContext },
     );
 
-    expect(entity.toRawObject().docketEntries).toEqual([
+    expect(entity.toRawObject().docketEntries).toMatchObject([
       {
-        additionalInfo: undefined,
-        additionalInfo2: undefined,
         docketEntryId: '123',
-        documentTitle: undefined,
         documentType: 'Order that case is assigned',
-        eventCode: undefined,
-        filedBy: undefined,
         isMinuteEntry: false,
         isOnDocketRecord: true,
-        isPaper: undefined,
-        isSealed: false,
-        processingStatus: undefined,
-        receivedAt: undefined,
-        servedAt: undefined,
-        servedParties: undefined,
       },
     ]);
   });

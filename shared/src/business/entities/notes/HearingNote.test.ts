@@ -1,4 +1,4 @@
-const { HearingNote } = require('./HearingNote');
+import { HearingNote } from './HearingNote';
 
 describe('HearingNote', () => {
   describe('validation', () => {
