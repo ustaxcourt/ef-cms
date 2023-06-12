@@ -1,17 +1,11 @@
-import { AddPrivatePractitionerFactory } from '../../entities/caseAssociation/AddPrivatePractitionerFactory';
+import { AddPrivatePractitioner } from '../../entities/caseAssociation/AddPrivatePractitioner';
 
-/**
- * validateAddPrivatePractitionerInteractor
- * @param {object} providers the providers object
- * @param {object} providers.counsel the practitioner to validate
- * @returns {object} errors
- */
 export const validateAddPrivatePractitionerInteractor = ({
   counsel,
 }: {
   counsel: any;
 }) => {
-  const errors = new AddPrivatePractitionerFactory(
+  const errors = new AddPrivatePractitioner(
     counsel,
   ).getFormattedValidationErrors();
 

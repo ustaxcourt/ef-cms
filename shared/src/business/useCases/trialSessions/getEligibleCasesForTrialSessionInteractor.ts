@@ -63,9 +63,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   let eligibleCasesFiltered = calendaredCases
     .concat(eligibleCases)
     .map(rawCase => {
-      return new EligibleCase(rawCase, { applicationContext })
-        .validate()
-        .toRawObject();
+      return new EligibleCase(rawCase).validate().toRawObject();
     });
 
   return eligibleCasesFiltered;

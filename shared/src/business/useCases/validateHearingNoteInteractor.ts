@@ -12,12 +12,7 @@ export const validateHearingNoteInteractor = (
   applicationContext: IApplicationContext,
   { note }: { note: string },
 ) => {
-  const errors = new HearingNote(
-    { note },
-    {
-      applicationContext,
-    },
-  ).getFormattedValidationErrors();
+  const errors = new HearingNote({ note }).getFormattedValidationErrors();
   if (!errors) return null;
   return errors;
 };
