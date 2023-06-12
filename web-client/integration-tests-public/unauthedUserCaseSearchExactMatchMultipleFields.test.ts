@@ -14,7 +14,10 @@ const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
-const [firstName, lastName] = [faker.name.firstName(), faker.name.lastName()];
+const [firstName, lastName] = [
+  faker.person.firstName(),
+  faker.person.lastName(),
+];
 
 const nameToSearchFor = `${firstName} ${lastName}`;
 

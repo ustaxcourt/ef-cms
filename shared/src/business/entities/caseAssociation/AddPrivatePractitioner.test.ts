@@ -22,6 +22,7 @@ describe('AddPrivatePractitioner', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
+
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
 
@@ -31,6 +32,7 @@ describe('AddPrivatePractitioner', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
+
       expect(entity.getFormattedValidationErrors()).toEqual({
         representing:
           AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.representing,
@@ -43,6 +45,7 @@ describe('AddPrivatePractitioner', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
+
       expect(entity.getFormattedValidationErrors()).toEqual({
         serviceIndicator:
           AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator[0]
