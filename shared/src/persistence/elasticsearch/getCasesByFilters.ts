@@ -61,6 +61,15 @@ export const getCasesByFilters = async ({
     filters.push(caseTypeFilters);
   }
 
+  if (params.judges.length) {
+    const associatedJudgeFilters = {
+      terms: {
+        'associatedJudge.S': params.judges,
+      },
+    };
+    filters.push(associatedJudgeFilters);
+  }
+
   if (params.filingMethod !== 'all') {
     const filingMethodFilter = {
       match: {

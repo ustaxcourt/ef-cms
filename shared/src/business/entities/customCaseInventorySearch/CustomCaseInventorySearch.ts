@@ -35,6 +35,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   public caseStatuses: CaseStatus[];
   public pageSize: number;
   public caseTypes: CaseType[];
+  public judges: string[];
   public procedureType: CustomCaseProcedureTypes;
   public filingMethod: CustomCaseFilingMethods;
   public highPriority: boolean;
@@ -52,6 +53,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     this.caseStatuses = rawProps.caseStatuses;
     this.pageSize = rawProps.pageSize;
     this.caseTypes = rawProps.caseTypes;
+    this.judges = rawProps.judges;
     this.filingMethod = rawProps.filingMethod;
     this.searchAfter = rawProps.searchAfter;
   }
@@ -96,6 +98,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
         .required(),
       highPriority: joi.boolean().required(),
+      judges: joi.array().items(joi.string()),
       pageSize: joi.number().required(),
       procedureType: joi
         .string()
