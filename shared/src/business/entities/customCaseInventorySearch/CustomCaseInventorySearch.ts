@@ -22,9 +22,9 @@ export type CustomCaseFilingMethods =
   (typeof CUSTOM_CASE_REPORT_FILING_METHODS)[number];
 
 export const CUSTOM_CASE_REPORT_PROCEDURE_TYPES = [
-  'all',
-  'regular',
-  'small',
+  'All',
+  'Regular',
+  'Small',
 ] as const;
 export type CustomCaseProcedureTypes =
   (typeof CUSTOM_CASE_REPORT_PROCEDURE_TYPES)[number];
@@ -35,7 +35,9 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
   public caseStatuses: CaseStatus[];
   public pageSize: number;
   public caseTypes: CaseType[];
+  public procedureType: CustomCaseProcedureTypes;
   public filingMethod: CustomCaseFilingMethods;
+  public highPriority: boolean;
   public searchAfter: {
     receivedAt: number;
     pk: string;
@@ -45,6 +47,8 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     super('CustomCaseInventorySearch');
     this.startDate = rawProps.startDate;
     this.endDate = rawProps.endDate;
+    this.highPriority = rawProps.highPriority;
+    this.procedureType = rawProps.procedureType;
     this.caseStatuses = rawProps.caseStatuses;
     this.pageSize = rawProps.pageSize;
     this.caseTypes = rawProps.caseTypes;
@@ -91,7 +95,12 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
         .required(),
+      highPriority: joi.boolean().required(),
       pageSize: joi.number().required(),
+      procedureType: joi
+        .string()
+        .valid(...CUSTOM_CASE_REPORT_PROCEDURE_TYPES)
+        .required(),
       searchAfter: joi
         .object()
         .keys({
