@@ -5,6 +5,11 @@ export const fetchPendingItems = async ({
   judge,
   page,
   unservableEventCodes,
+}: {
+  applicationContext: IApplicationContext;
+  judge?: string;
+  page?: number;
+  unservableEventCodes: typeof UNSERVABLE_EVENT_CODES;
 }) => {
   const caseSource = [
     'associatedJudge',
