@@ -15,6 +15,8 @@ describe('DateHandler', () => {
       FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
       LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
+      MDYY: '7/2/18',
+      MDYYYY: '7/2/2018',
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
       MMDDYYYY_DASHED: '07-02-2018',
