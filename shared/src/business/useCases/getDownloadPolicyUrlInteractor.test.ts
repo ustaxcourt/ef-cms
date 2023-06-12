@@ -442,23 +442,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
         }),
       ).resolves.toBeDefined();
     });
-
-    it('should throw an error when the document being viewed is a served Stipulated Decision', async () => {
-      mockCase.docketEntries[0] = {
-        ...baseDocketEntry,
-        documentType: 'Stipulated Decision',
-        eventCode: STIPULATED_DECISION_EVENT_CODE,
-        isOnDocketRecord: true,
-        servedAt: applicationContext.getUtilities().createISODateString(),
-      };
-
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time');
-    });
   });
 
   describe('when the user is a private practitioner associated with case', () => {

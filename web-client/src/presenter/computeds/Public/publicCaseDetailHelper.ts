@@ -16,6 +16,7 @@ export const formatDocketEntryOnDocketRecord = (
     BRIEF_EVENTCODES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
+    POLICY_DATE_IMPACTED_EVENTCODES,
   } = applicationContext.getConstants();
   const record = cloneDeep(entry);
 
@@ -32,20 +33,25 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  let filedByPractitionerAfterPolicyChange = false;
+  let filedByPractitioner: boolean = false;
+  let requiresPractitionerCheck: boolean = false;
+  let filedAfterPolicyChange: boolean = false;
   const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
     entry.eventCode,
   );
-  if (isDocketEntryBriefEventCode) {
-    const filedByPractitioner: boolean =
-      docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
-
-    const filedAfterPolicyChange =
-      record.filingDate >= visibilityPolicyDateFormatted;
-
-    filedByPractitionerAfterPolicyChange =
-      filedAfterPolicyChange && filedByPractitioner;
+  if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
+    filedAfterPolicyChange = record.filingDate >= visibilityPolicyDateFormatted;
+    if (isDocketEntryBriefEventCode) {
+      requiresPractitionerCheck = true;
+      filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+        entry.docketEntryId,
+      );
+    }
   }
+
+  const meetsPolicyChangeRequirements =
+    filedAfterPolicyChange &&
+    (requiresPractitionerCheck ? filedByPractitioner : true);
 
   let canTerminalUserSeeLink =
     record.isFileAttached &&
@@ -54,12 +60,12 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isStricken;
 
   let canPublicUserSeeLink =
-    (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
+    ((record.isCourtIssuedDocument && !record.isStipDecision) ||
+      meetsPolicyChangeRequirements) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
-    !record.isStipDecision &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 
