@@ -9,15 +9,13 @@ import {
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
   {
-    currentJudgesNames,
     endDate,
-    judgeName,
+    judgesSelection,
     startDate,
   }: {
-    judgeName: string;
     endDate: string;
     startDate: string;
-    currentJudgesNames: string[];
+    judgesSelection: string[];
   },
 ) => {
   const authorizedUser = await applicationContext.getCurrentUser();
@@ -26,14 +24,10 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // TODO: MOVE JUDGES SELECTION DATA MANIPULATION TO FE
-  let listOfJudgesForRequest = [judgeName];
   let totalCloseCaseCount: number = 0;
   let totalClosedDismissedCaseCount: number = 0;
 
-  if (judgeName === 'all') listOfJudgesForRequest = currentJudgesNames;
-
-  listOfJudgesForRequest.forEach(async judge => {
+  judgesSelection.forEach(async judge => {
     const searchEntity = new JudgeActivityReportSearch({
       endDate,
       judgeName: judge,

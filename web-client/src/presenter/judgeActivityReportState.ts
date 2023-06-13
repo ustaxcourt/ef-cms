@@ -6,6 +6,7 @@ import {
 export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
+  judgesSelection: string[];
   judgeName: string;
 };
 
@@ -48,6 +49,7 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
     judgeName: '',
+    judgesSelection: [],
     startDate: '',
   },
   judgeActivityReportData: {},

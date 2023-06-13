@@ -4,23 +4,20 @@ import { post } from '../requests';
 export const getCasesClosedByJudgeInteractor = (
   applicationContext,
   {
-    currentJudgesNames,
     endDate,
-    judgeName,
+    judgesSelection,
     startDate,
   }: {
     startDate: string;
     endDate: string;
-    judgeName: string;
-    currentJudgesNames: string[];
+    judgesSelection: string[];
   },
 ): Promise<CasesClosedType> => {
   return post({
     applicationContext,
     body: {
-      currentJudgesNames,
       endDate,
-      judgeName,
+      judgesSelection,
       startDate,
     },
     endpoint: '/judge-activity-report/closed-cases',

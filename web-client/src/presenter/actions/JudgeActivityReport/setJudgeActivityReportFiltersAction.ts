@@ -1,6 +1,7 @@
 import { state } from 'cerebral';
 
 export const setJudgeActivityReportFiltersAction = ({
+  get,
   props,
   store,
 }: ActionProps) => {
@@ -9,6 +10,20 @@ export const setJudgeActivityReportFiltersAction = ({
   const selectedJudge: string = props.judgeName;
 
   if (selectedJudge) {
+    if (selectedJudge === 'all') {
+      const currentJudgesInfo = get(state.judges);
+      const judgesSelection = currentJudgesInfo.map(judge => judge.name);
+
+      store.set(
+        state.judgeActivityReport.filters.judgesSelection,
+        judgesSelection,
+      );
+    } else {
+      store.set(state.judgeActivityReport.filters.judgesSelection, [
+        selectedJudge,
+      ]);
+    }
+
     store.set(state.judgeActivityReport.filters.judgeName, selectedJudge);
   }
   if (filterStartDate || filterStartDate === '') {
