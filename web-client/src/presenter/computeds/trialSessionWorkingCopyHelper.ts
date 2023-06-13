@@ -10,7 +10,12 @@ const compareCasesByPractitioner = (a, b) => {
   return aCount - bCount;
 };
 
-export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const trialSessionWorkingCopyHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { ALLOWLIST_FEATURE_FLAGS, TRIAL_STATUS_TYPES } =
     applicationContext.getConstants();
 

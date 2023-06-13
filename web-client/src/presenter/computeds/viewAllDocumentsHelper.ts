@@ -4,7 +4,12 @@ import {
 } from './internalTypesHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const viewAllDocumentsHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const viewAllDocumentsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CATEGORIES, CATEGORY_MAP } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 

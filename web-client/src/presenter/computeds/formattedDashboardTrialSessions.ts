@@ -8,7 +8,12 @@ export const formatSession = (session, applicationContext) => {
   return session;
 };
 
-export const formattedDashboardTrialSessions = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedDashboardTrialSessions = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
   const formatSessionFn = session => formatSession(session, applicationContext);

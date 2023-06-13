@@ -5,7 +5,8 @@ const throttledStatus = throttle(statusMessage => statusMessage, 3000, {
   leading: true,
 });
 
-export const fileUploadStatusHelper = get => {
+import { Get } from 'cerebral';
+export const fileUploadStatusHelper = (get: Get) => {
   const timeRemaining = get(state.fileUploadProgress.timeRemaining);
   const percentComplete = get(state.fileUploadProgress.percentComplete);
   const isUploading = get(state.fileUploadProgress.isUploading);

@@ -203,7 +203,12 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
  * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
-export const internalPetitionPartiesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const internalPetitionPartiesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { ALLOWLIST_FEATURE_FLAGS, PARTY_TYPES } =
     applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
