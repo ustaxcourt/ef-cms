@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { Button } from '../ustc-ui/Button/Button';
 import { ConfirmDeletePDFModal } from './ConfirmDeletePdfModal';
 import { ConfirmReplacePetitionModal } from './ConfirmReplacePetitionModal';
@@ -15,7 +16,8 @@ import { PreviewControls } from './PreviewControls';
 import { SelectScannerSourceModal } from './ScanBatchPreviewer/SelectScannerSourceModal';
 import { Tab, Tabs } from '../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 

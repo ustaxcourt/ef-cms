@@ -1,6 +1,7 @@
+import {} from 'cerebral';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const UnprioritizeCaseModal = connect(

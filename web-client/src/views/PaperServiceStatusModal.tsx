@@ -1,8 +1,9 @@
+import {} from 'cerebral';
 import { Focus } from '../ustc-ui/Focus/Focus';
 import { ModalDialog } from './ModalDialog';
 import { ProgressBar } from '../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PaperServiceStatusModal = connect(

@@ -1,6 +1,6 @@
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { formatSearchResultRecord } from './AdvancedSearch/advancedSearchHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
 export const formatPendingItem = (item, { applicationContext }) => {

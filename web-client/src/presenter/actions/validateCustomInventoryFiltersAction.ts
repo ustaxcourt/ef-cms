@@ -2,7 +2,7 @@ import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../../../shared/src/business
 import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { CustomCaseInventorySearch } from '../../../../shared/src/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Validates the judge activity report search form

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const orderTypesHelper = (get, applicationContext) => {
   const { ORDER_TYPES_MAP, USER_ROLES } = applicationContext.getConstants();

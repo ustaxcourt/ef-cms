@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const userContactEditProgressHelper = get => {
   const completedCases = get(state.userContactEditProgress.completedCases) || 0;

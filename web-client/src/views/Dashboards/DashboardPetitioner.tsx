@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { BigHeader } from '../BigHeader';
 import { CaseListTable } from '../CaseListTable';
 import { CaseSearchBox } from '../CaseSearchBox';
@@ -7,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const DashboardPetitioner = connect(

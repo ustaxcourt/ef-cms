@@ -1,10 +1,12 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const BeforeYouFileADocument = connect(

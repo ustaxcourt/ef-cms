@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
@@ -6,7 +7,8 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseDeadlines = connect(

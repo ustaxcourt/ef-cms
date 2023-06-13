@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
@@ -10,7 +11,8 @@ import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const EditDocketEntryMeta = connect(

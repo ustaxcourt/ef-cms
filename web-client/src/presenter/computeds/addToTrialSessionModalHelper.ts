@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatTrialSessionDisplayOptions = (
   trialSessions,

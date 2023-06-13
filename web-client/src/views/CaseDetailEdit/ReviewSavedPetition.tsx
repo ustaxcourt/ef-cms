@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
@@ -8,7 +9,8 @@ import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { OrdersNeededSummary } from '../StartCaseInternal/OrdersNeededSummary';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const ConfirmServeToIrsModal = () => (

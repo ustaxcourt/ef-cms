@@ -1,10 +1,12 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCases } from './CaseInformation/ConsolidatedCases';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { If } from '../../ustc-ui/If/If';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const CaseDetails = ({ caseDetail, caseDetailHelper }) => (

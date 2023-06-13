@@ -1,8 +1,9 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { If } from '../../ustc-ui/If/If';
 import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const SessionNotes = connect(

@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { AddressDisplay } from '../CaseDetail/AddressDisplay';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
@@ -7,7 +8,8 @@ import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const StartCaseStep5 = connect(

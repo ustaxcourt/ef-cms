@@ -1,8 +1,9 @@
+import {} from 'cerebral';
 import { BigHeader } from '../BigHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

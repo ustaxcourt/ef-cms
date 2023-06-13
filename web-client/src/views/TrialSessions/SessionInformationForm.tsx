@@ -1,7 +1,9 @@
+import {} from 'cerebral';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

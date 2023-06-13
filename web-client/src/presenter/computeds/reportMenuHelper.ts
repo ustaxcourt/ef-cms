@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const reportMenuHelper = get => {
   const currentPage = get(state.currentPage);

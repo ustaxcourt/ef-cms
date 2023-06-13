@@ -1,10 +1,11 @@
+import {} from 'cerebral';
 import { ArchiveDraftDocumentModal } from './ArchiveDraftDocumentModal';
 import { ConfirmEditModal } from './ConfirmEditModal';
 import { ConfirmRemoveSignatureModal } from '../Messages/ConfirmRemoveSignatureModal';
 import { DocketEntryHasAlreadyBeenServedModal } from './DocketEntryHasAlreadyBeenServedModal';
 import { DraftDocumentViewer } from '../DocketRecord/DraftDocumentViewer';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const DraftDocuments = connect(

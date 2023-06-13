@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { AddEditCalendarNoteModal } from './AddEditCalendarNoteModal';
 import { AddEditCaseNoteModal } from './AddEditCaseNoteModal';
 import { AddEditHearingNoteModal } from './AddEditHearingNoteModal';
@@ -16,7 +17,8 @@ import { UnblockFromTrialModal } from './UnblockFromTrialModal';
 import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
 import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 

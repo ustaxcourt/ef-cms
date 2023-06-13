@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
@@ -6,7 +7,7 @@ import { CaseSearchBox } from '../CaseSearchBox';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const DashboardPractitioner = connect(

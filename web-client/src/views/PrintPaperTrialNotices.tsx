@@ -1,8 +1,9 @@
+import {} from 'cerebral';
 import { Button } from '../ustc-ui/Button/Button';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PrintPaperTrialNotices = connect(

@@ -1,5 +1,5 @@
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the blocked cases and formats them and filters based on procedureType

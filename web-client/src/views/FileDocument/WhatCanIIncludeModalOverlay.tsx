@@ -1,10 +1,11 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { Overlay } from '../../ustc-ui/Overlay/Overlay';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const WhatCanIIncludeModalOverlay = connect(

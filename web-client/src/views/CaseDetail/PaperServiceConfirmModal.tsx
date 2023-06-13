@@ -1,7 +1,8 @@
+import {} from 'cerebral';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PaperServiceConfirmModal = connect(

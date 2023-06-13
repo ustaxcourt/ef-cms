@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
@@ -9,7 +10,8 @@ import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 export const CustomCaseReport = connect(

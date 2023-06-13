@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SelectDocumentWizardOverlay } from './SelectDocumentWizardOverlay';
@@ -8,7 +9,8 @@ import {
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/Utils/documentTypeSelectHelper';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CompleteDocumentTypeSection = connect(

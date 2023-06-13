@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { AddPrivatePractitionerModal } from './AddPrivatePractitionerModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
@@ -5,7 +6,8 @@ import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { PractitionerExistsModal } from './PractitionerExistsModal';
 import { RespondentCounsel } from './RespondentCounsel';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

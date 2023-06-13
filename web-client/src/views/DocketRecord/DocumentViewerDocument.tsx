@@ -1,10 +1,12 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { WorkItemAlreadyCompletedModal } from '../DocketEntryQc/WorkItemAlreadyCompletedModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

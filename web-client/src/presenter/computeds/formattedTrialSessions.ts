@@ -1,7 +1,7 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSession = (session, applicationContext) => {
   const { DATE_FORMATS } = applicationContext.getConstants();

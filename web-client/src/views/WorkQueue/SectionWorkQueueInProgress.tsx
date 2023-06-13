@@ -1,8 +1,10 @@
+import {} from 'cerebral';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
 

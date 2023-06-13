@@ -1,8 +1,9 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PrintPaperPetitionReceipt = connect(

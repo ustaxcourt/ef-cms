@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 // eslint-disable-next-line spellcheck/spell-checker
 /**

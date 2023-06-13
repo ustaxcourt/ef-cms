@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FilingPartiesForm } from '../FilingPartiesForm';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
@@ -11,7 +12,8 @@ import {
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/Utils/documentTypeSelectHelper';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const EditDocketEntryMetaFormDocument = connect(

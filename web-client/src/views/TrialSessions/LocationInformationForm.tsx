@@ -1,9 +1,11 @@
+import {} from 'cerebral';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InPersonProceedingForm } from './InPersonProceedingForm';
 import { RemoteProceedingForm } from './RemoteProceedingForm';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 import React from 'react';
 

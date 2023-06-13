@@ -1,5 +1,5 @@
 import { find, includes, omit, pick } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const setDocumentPropsFromFormAndBaseDocument = ({
   applicationContext,

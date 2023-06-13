@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDifferenceExplained } from '../CaseDifferenceExplained';
 import { CaseDifferenceModalOverlay } from './CaseDifferenceModalOverlay';
@@ -7,7 +8,8 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { ProcedureType } from './ProcedureType';
 import { TrialCity } from './TrialCity';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const StartCaseStep4 = connect(

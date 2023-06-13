@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const createOrderHelper = (get, applicationContext) => {
   const documentToEdit = get(state.documentToEdit);

@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { AddEditSessionNoteModal } from './AddEditSessionNoteModal';
 import { AddEditUserCaseNoteModal } from './AddEditUserCaseNoteModal';
 import { Button } from '../../ustc-ui/Button/Button';
@@ -11,7 +12,8 @@ import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionDetailHeader } from '../TrialSessionDetail/TrialSessionDetailHeader';
 import { WorkingCopySessionList } from './WorkingCopySessionList';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionWorkingCopy = connect(

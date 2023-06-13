@@ -1,5 +1,6 @@
+import {} from 'cerebral';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useState } from 'react';
 
 export const DeployedDate = connect(

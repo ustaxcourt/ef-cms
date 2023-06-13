@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { BigHeader } from './BigHeader';
 import { ErrorNotification } from './ErrorNotification';
 import { Hint } from '../ustc-ui/Hint/Hint';
@@ -5,7 +6,7 @@ import { LoginAndServiceEmailAddress } from './LoginAndServiceEmailAddress';
 import { MyContactInformation } from './MyContactInformation';
 import { SuccessNotification } from './SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { AddConsolidatedCaseModal } from '../AddConsolidatedCaseModal';
 import { Button } from '../../../ustc-ui/Button/Button';
 import { CaseDetails } from './CaseDetails';
@@ -9,7 +10,8 @@ import { SetForHearingModal } from '../SetForHearingModal';
 import { TrialInformation } from './TrialInformation';
 import { UnconsolidateCasesModal } from '../UnconsolidateCasesModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseInformationInternal = connect(

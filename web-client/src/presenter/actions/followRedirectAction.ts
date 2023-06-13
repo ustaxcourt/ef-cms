@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * follows the given redirectUrl, calling the success path, or default path if no redirectUrl

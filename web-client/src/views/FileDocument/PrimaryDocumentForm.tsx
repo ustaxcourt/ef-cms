@@ -1,3 +1,4 @@
+import {} from 'cerebral';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InclusionsForm } from './InclusionsForm';
@@ -5,7 +6,7 @@ import { ObjectionsForm } from './ObjectionsForm';
 import { StateDrivenFileInput } from './StateDrivenFileInput';
 import { WarningNotificationComponent } from '../../views/WarningNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
