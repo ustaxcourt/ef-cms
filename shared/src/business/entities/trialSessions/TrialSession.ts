@@ -16,6 +16,8 @@ import {
   TRIAL_LOCATION_MATCHER,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
+  TrialSessionProceedingType,
+  TrialSessionScope,
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
@@ -63,44 +65,44 @@ export type TCaseOrder = {
 };
 
 export class TrialSession extends JoiValidationEntity {
-  public address1: string;
-  public address2: string;
-  public alternateTrialClerkName: string;
-  public caseOrder: TCaseOrder[];
-  public chambersPhoneNumber: string;
-  public city: string;
-  public courtReporter: string;
-  public courthouseName: string;
-  public createdAt: string;
-  public estimatedEndDate: string;
-  public irsCalendarAdministrator: string;
+  public address1?: string;
+  public address2?: string;
+  public alternateTrialClerkName?: string;
+  public caseOrder?: TCaseOrder[];
+  public chambersPhoneNumber?: string;
+  public city?: string;
+  public courthouseName?: string;
+  public courtReporter?: string;
+  public createdAt?: string;
+  public dismissedAlertForNOTT?: boolean;
+  public estimatedEndDate?: string;
+  public irsCalendarAdministrator?: string;
   public isCalendared: boolean;
-  public isClosed: boolean;
-  public joinPhoneNumber: string;
-  public maxCases: number;
-  public meetingId: string;
-  public notes: string;
-  public noticeIssuedDate: string;
-  public password: string;
-  public postalCode: string;
-  public sessionScope: string;
+  public isClosed?: boolean;
+  public isStartDateWithinNOTTReminderRange?: boolean;
+  public joinPhoneNumber?: string;
+  public judge?: TJudge;
+  public maxCases?: number;
+  public meetingId?: string;
+  public notes?: string;
+  public noticeIssuedDate?: string;
+  public password?: string;
+  public postalCode?: string;
+  public proceedingType: TrialSessionProceedingType;
+  public sessionScope: TrialSessionScope;
+  public sessionStatus: string;
   public sessionType: string;
   public startDate: string;
-  public startTime: string;
-  public state: string;
-  public swingSession: boolean;
-  public swingSessionId: string;
+  public startTime?: string;
+  public state?: string;
+  public swingSession?: boolean;
+  public swingSessionId?: string;
   public term: string;
   public termYear: string;
-  public trialLocation: string;
-  public sessionStatus: string;
-  public proceedingType: string;
-  public trialSessionId: string;
-  public judge?: TJudge;
-  public trialClerk?: TTrialClerk;
-  public dismissedAlertForNOTT?: boolean;
-  public isStartDateWithinNOTTReminderRange?: boolean;
   public thirtyDaysBeforeTrialFormatted?: string;
+  public trialClerk?: TTrialClerk;
+  public trialLocation?: string;
+  public trialSessionId?: string;
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [

@@ -22,12 +22,12 @@ export type ThirtyDayNoticeOfTrialRequiredInfo = {
 };
 
 type TrialLocation = {
-  address1: string;
+  address1?: string;
   address2?: string;
-  city: string;
   courthouseName?: string;
-  postalCode: string;
-  state: string;
+  city?: string;
+  postalCode?: string;
+  state?: string;
 };
 
 const InPersonTrialLocationBox = ({
@@ -244,8 +244,8 @@ export const ThirtyDayNoticeOfTrial = ({
 
         {isRemote && (
           <RemoteTrialLocationBox
-            city={trialLocation.city}
-            state={trialLocation.state}
+            city={trialLocation.city!}
+            state={trialLocation.state!}
           />
         )}
 

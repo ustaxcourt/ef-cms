@@ -1,3 +1,4 @@
+import { Case } from '../../entities/cases/Case';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
 import { DocketEntry, getServedPartiesCode } from '../../entities/DocketEntry';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
@@ -15,7 +16,7 @@ import { createISODateString } from '../../utilities/DateHandler';
  * @param {object} providers.userId the user ID
  */
 export const createAndServeNoticeDocketEntry = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     additionalDocketEntryInfo = {},
     caseEntity,
@@ -23,6 +24,17 @@ export const createAndServeNoticeDocketEntry = async (
     newPdfDoc,
     noticePdf,
     userId,
+  }: {
+    additionalDocketEntryInfo?: any;
+    caseEntity: Case;
+    documentInfo: {
+      documentType: string;
+      documentTitle: string;
+      eventCode: string;
+    };
+    newPdfDoc: any;
+    noticePdf: Buffer;
+    userId: string;
   },
 ) => {
   const docketEntryId = applicationContext.getUniqueId();

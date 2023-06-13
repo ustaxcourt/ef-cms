@@ -424,6 +424,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     standingPretrialOrderForSmallCase: jest
       .fn()
       .mockImplementation(getFakeFile),
+    thirtyDayNoticeOfTrial: jest.fn().mockImplementation(getFakeFile),
     trialCalendar: jest.fn().mockImplementation(getFakeFile),
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
