@@ -1,5 +1,9 @@
+import {
+  batchGet,
+  getTableName,
+} from '../../../shared/src/persistence/dynamodbClientService';
 import { createApplicationContext } from '../applicationContext';
-import { getTableName } from '../../../shared/src/persistence/dynamodbClientService';
+import { uniq } from 'lodash';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 /**
@@ -28,32 +32,17 @@ async function putEventHistory(
     .promise();
 }
 
-/**
- *
- */
-async function hasRecordBeenProcessed(
+async function getEventHistories(
   applicationContext: IApplicationContext,
-  record: DynamoDBRecord,
+  records: DynamoDBRecord[],
 ) {
-  const { eventID } = record;
-  if (!eventID) return false;
-
-  const { Item: eventHistory } = await applicationContext
-    .getDocumentClient({
-      useMasterRegion: true,
-    })
-    .get({
-      Key: {
-        pk: `stream-event-id|${eventID}`,
-        sk: `stream-event-id|${eventID}`,
-      },
-      TableName: getTableName({
-        applicationContext,
-      }),
-    })
-    .promise();
-
-  return !!eventHistory;
+  return (await batchGet({
+    applicationContext,
+    keys: uniq(records.map(record => record.eventID)).map(eventID => ({
+      pk: `stream-event-id|${eventID}`,
+      sk: `stream-event-id|${eventID}`,
+    })),
+  })) as { pk: string; sk: string }[];
 }
 
 /**
@@ -70,18 +59,24 @@ export const processStreamRecordsLambda = async (
   const isStreamRecord = record =>
     record.dynamodb?.Keys?.pk.S?.startsWith('stream-event-id');
 
+  const recordsToCheck = event.Records.filter(
+    record => !isStreamRecord(record),
+  );
+
+  const allEventHistories = await getEventHistories(
+    applicationContext,
+    recordsToCheck,
+  );
+
   await Promise.all(
-    event.Records.filter(record => !isStreamRecord(record)).map(
-      async record => {
-        const isRecordProcessed = await hasRecordBeenProcessed(
-          applicationContext,
-          record,
-        );
-        if (!isRecordProcessed) {
-          recordsToProcess.push(record);
-        }
-      },
-    ),
+    recordsToCheck.map(record => {
+      const isRecordProcessed = !!allEventHistories.find(
+        history => history.pk === `stream-event-id|${record.eventID}`,
+      );
+      if (!isRecordProcessed) {
+        recordsToProcess.push(record);
+      }
+    }),
   );
 
   if (recordsToProcess.length > 0) {
