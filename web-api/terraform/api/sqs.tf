@@ -30,3 +30,18 @@ resource "aws_sqs_queue" "send_emails_dl_queue" {
   fifo_queue = true
 }
 
+resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
+  alarm_name          = "${var.environment}_${var.current_color} send emails dl queue check"
+  namespace           = "AWS/SQS"
+  metric_name         = "NumberOfMessagesSent"
+  comparison_operator = "GreaterThanThreshold"
+  statistic           = "Sum"
+  threshold           = 0
+  evaluation_periods  = 2
+  period              = 120
+
+  alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
+  insufficient_data_actions = [data.aws_sns_topic.system_health_alarms.arn]
+  ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
+}
+
