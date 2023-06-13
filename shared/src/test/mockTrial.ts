@@ -1,4 +1,5 @@
 import { MOCK_CASE } from './mockCase';
+import { RawTrialSession } from '../business/entities/trialSessions/TrialSession';
 import {
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -42,13 +43,15 @@ export const MOCK_TRIAL_REGULAR = {
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
 };
 
-export const MOCK_TRIAL_INPERSON = {
+export const MOCK_TRIAL_INPERSON: RawTrialSession = {
   address1: '123 Street Lane',
   caseOrder: [
     { docketNumber: MOCK_CASE.docketNumber },
     { docketNumber: '123-45' },
   ],
   city: 'Scottsburg',
+  entityName: 'TrialSession',
+  isCalendared: true,
   judge: {
     name: 'A Judge',
     userId: '55f4fc65-b33e-4c04-8561-3e56d533f386',
@@ -56,6 +59,8 @@ export const MOCK_TRIAL_INPERSON = {
   maxCases: 100,
   postalCode: '47130',
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+  sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+  sessionStatus: SESSION_STATUS_TYPES.open,
   sessionType: 'Regular',
   startDate: '3000-03-01T00:00:00.000Z',
   state: 'IN',

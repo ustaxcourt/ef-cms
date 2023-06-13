@@ -8,7 +8,7 @@ export const thirtyDayNoticeOfTrial = async ({
 }: {
   applicationContext: IApplicationContext;
   data: ThirtyDayNoticeOfTrialRequiredInfo;
-}) => {
+}): Promise<Buffer> => {
   const thirtyDayNoticeOfTrialTemplate = reactTemplateGenerator({
     componentName: 'ThirtyDayNoticeOfTrial',
     data,
