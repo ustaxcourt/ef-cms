@@ -15,8 +15,6 @@
     "baseUrl": "./",
     "paths": {
       "@web-client/*": ["web-client/src/*"]
-      // "@shared/*": ["shared/src/*"], // Bring into project when we can build with paths. Need to configure test configs, and bundlers.
-      // "@web-api/*": ["web-api/src/*"]
     }
   },
   "ts-node": {
