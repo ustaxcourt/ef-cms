@@ -1,3 +1,4 @@
+/* eslint-disable import/named */
 import { getSortedOptions } from '../../ustc-ui/Utils/selectSearchHelper';
 import React from 'react';
 import ReactSelect, {
@@ -18,20 +19,31 @@ export class SelectSearch extends React.Component<
     onInputChange?: Function;
     options?: OptionsOrGroups<any, GroupBase<any>> | undefined;
     placeholder?: string;
+    searchableOptions?: OptionsOrGroups<any, GroupBase<any>> | undefined;
     value?: any;
   },
-  { inputText: string }
+  {
+    selectOptions: OptionsOrGroups<any, GroupBase<any>> | undefined;
+    inputText: string;
+  }
 > {
   constructor(props) {
     super(props);
     this.state = {
       inputText: '',
+      selectOptions: props.options,
     };
   }
 
   handleOnInputChange(inputText, { action }) {
     if (action === 'input-change') {
+      // TODO: remove this.setState
       this.setState({ inputText });
+      if (inputText === '') {
+        this.setState({ selectOptions: this.props.options });
+      } else if (this.props.searchableOptions) {
+        this.setState({ selectOptions: this.props.searchableOptions });
+      }
     }
     if (typeof this.props.onInputChange === 'function') {
       this.props.onInputChange.apply(this, arguments);
@@ -46,11 +58,15 @@ export class SelectSearch extends React.Component<
       isClearable = true,
       name,
       onChange,
-      options,
       placeholder = '- Select -',
       value,
     } = this.props;
-    const sortedOptions = getSortedOptions(options, this.state.inputText);
+
+    let sortedOptions = getSortedOptions(
+      this.state.selectOptions,
+      this.state.inputText,
+    );
+
     const aria = {
       'aria-describedby': this.props['aria-describedby'],
       'aria-disabled': disabled || this.props['aria-disabled'],

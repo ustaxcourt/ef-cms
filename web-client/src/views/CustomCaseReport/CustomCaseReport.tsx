@@ -233,12 +233,14 @@ export const CustomCaseReport = connect(
                   placeholder="- Select one or more -"
                   value={'Select one or more'}
                   onChange={inputValue => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      caseStatuses: {
-                        action: 'add',
-                        caseStatus: inputValue.value,
-                      },
-                    });
+                    if (inputValue) {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        caseStatuses: {
+                          action: 'add',
+                          caseStatus: inputValue.value,
+                        },
+                      });
+                    }
                   }}
                 />
               </div>
@@ -259,12 +261,14 @@ export const CustomCaseReport = connect(
                   placeholder="- Select one or more -"
                   value="Select one or more"
                   onChange={inputValue => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      caseTypes: {
-                        action: 'add',
-                        caseType: inputValue.value,
-                      },
-                    });
+                    if (inputValue) {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        caseTypes: {
+                          action: 'add',
+                          caseType: inputValue.value,
+                        },
+                      });
+                    }
                   }}
                 />
               </div>
@@ -290,12 +294,14 @@ export const CustomCaseReport = connect(
                   placeholder="- Select one or more -"
                   value={'Select one or more'}
                   onChange={inputValue => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      judges: {
-                        action: 'add',
-                        judge: inputValue.value,
-                      },
-                    });
+                    if (inputValue) {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        judges: {
+                          action: 'add',
+                          judge: inputValue.value,
+                        },
+                      });
+                    }
                   }}
                 />
               </div>
@@ -314,14 +320,19 @@ export const CustomCaseReport = connect(
                   name="requestedPlaceOfTrial"
                   options={customCaseInventoryReportHelper.trialCitiesByState}
                   placeholder="- Select one or more -"
+                  searchableOptions={
+                    customCaseInventoryReportHelper.searchableTrialCities
+                  }
                   value="Select one or more"
                   onChange={inputValue => {
-                    setCustomCaseInventoryReportFiltersSequence({
-                      preferredTrialCities: {
-                        action: 'add',
-                        preferredTrialCity: inputValue.value,
-                      },
-                    });
+                    if (inputValue) {
+                      setCustomCaseInventoryReportFiltersSequence({
+                        preferredTrialCities: {
+                          action: 'add',
+                          preferredTrialCity: inputValue.value,
+                        },
+                      });
+                    }
                   }}
                 />
               </div>

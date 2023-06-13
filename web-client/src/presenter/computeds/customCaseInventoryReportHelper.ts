@@ -72,33 +72,35 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
 
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
 
+  const searchableTrialCities: any[] = [];
+
   const states: object[] = trialCities.reduce(
     (listOfStates: any[], cityStatePair) => {
       const existingState = listOfStates.find(
         trialState => trialState.label === cityStatePair.state,
       );
+      const cityOption = {
+        label: `${cityStatePair.city}, ${cityStatePair.state}`,
+        value: `${cityStatePair.city}, ${cityStatePair.state}`,
+      };
       if (existingState) {
-        existingState.options.push({
-          label: `${cityStatePair.city}, ${cityStatePair.state}`,
-          value: `${cityStatePair.city}, ${cityStatePair.state}`,
-        });
+        existingState.options.push(cityOption);
       } else {
         listOfStates.push({
           label: cityStatePair.state,
-          options: [
-            {
-              label: `${cityStatePair.city}, ${cityStatePair.state}`,
-              value: `${cityStatePair.city}, ${cityStatePair.state}`,
-            },
-          ],
+          options: [cityOption],
         });
       }
+      searchableTrialCities.push(cityOption);
       return listOfStates;
     },
     [],
   );
 
+  const activeTrialCities = states;
+
   return {
+    activeTrialCities,
     caseStatuses,
     caseTypes,
     cases: reportData,
@@ -106,8 +108,8 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     judges,
     pageCount,
     runReportButtonIsDisabled,
+    searchableTrialCities,
     today,
-    trialCities,
     trialCitiesByState: states,
   };
 };
