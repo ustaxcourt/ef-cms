@@ -61,6 +61,15 @@ export const getCasesByFilters = async ({
     filters.push(caseTypeFilters);
   }
 
+  if (params.preferredTrialCities.length) {
+    const preferredTrialCityFilters = {
+      terms: {
+        'preferredTrialCity.S': params.preferredTrialCities,
+      },
+    };
+    filters.push(preferredTrialCityFilters);
+  }
+
   if (params.judges.length) {
     const shouldArray: Object[] = [];
     params.judges.forEach(judge => {

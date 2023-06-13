@@ -16,9 +16,10 @@ export type CustomCaseInventoryReportFilters = {
   endDate: string;
   startDate: string;
   filingMethod: CustomCaseFilingMethods;
+  preferredTrialCities: Object[];
   highPriority: boolean;
   procedureType: CustomCaseProcedureTypes;
-  judges: string[];
+  judges: Object[];
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
@@ -73,6 +74,7 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
+  params.preferredTrialCities = params.preferredTrialCities || [];
 
   new CustomCaseInventorySearch(params).validate();
 
