@@ -46,7 +46,7 @@ import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 let docketClerkToken = null;
 let petitionsClerkToken = null;
@@ -108,7 +108,7 @@ describe('Petitions Clerk', () => {
           goToWizardStep3();
           completeWizardStep3(
             filingTypes.INDIVIDUAL,
-            `${faker.name.firstName()} ${faker.name.lastName()}`,
+            `${faker.person.firstName()} ${faker.person.lastName()}`,
           );
           goToWizardStep4();
           completeWizardStep4();
@@ -139,7 +139,7 @@ describe('Petitions Clerk', () => {
           goToWizardStep3();
           completeWizardStep3(
             filingTypes.INDIVIDUAL,
-            `${faker.name.firstName()} ${faker.name.lastName()}`,
+            `${faker.person.firstName()} ${faker.person.lastName()}`,
           );
           goToWizardStep4();
           completeWizardStep4();

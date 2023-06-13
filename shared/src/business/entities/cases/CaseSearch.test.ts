@@ -1,7 +1,5 @@
-const { CASE_SEARCH_MIN_YEAR } = require('../EntityConstants');
-const { CaseSearch } = require('./CaseSearch');
-
-const errorMessages = CaseSearch.VALIDATION_ERROR_MESSAGES;
+import { CASE_SEARCH_MIN_YEAR } from '../EntityConstants';
+import { CaseSearch } from './CaseSearch';
 
 describe('Case Search entity', () => {
   it('needs only a petitioner name to be valid', () => {
@@ -13,16 +11,19 @@ describe('Case Search entity', () => {
       yearFiledMax: undefined,
       yearFiledMin: CASE_SEARCH_MIN_YEAR,
     });
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
+
     expect(validationErrors).toEqual(null);
   });
 
   it('fails validation without a petitioner name', () => {
     const caseSearch = new CaseSearch({});
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
-    expect(validationErrors.petitionerName).toEqual(
-      errorMessages.petitionerName,
+    expect(validationErrors!.petitionerName).toEqual(
+      CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
     );
   });
 
@@ -31,6 +32,7 @@ describe('Case Search entity', () => {
       petitionerName: 'Solomon Grundy',
       yearFiledMin: 2000,
     });
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toEqual(null);
@@ -41,6 +43,7 @@ describe('Case Search entity', () => {
       petitionerName: 'Solomon Grundy',
       yearFiledMax: 2000,
     });
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toEqual(null);
@@ -52,6 +55,7 @@ describe('Case Search entity', () => {
       yearFiledMax: 2000,
       yearFiledMin: 2000,
     });
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toEqual(null);
@@ -63,6 +67,7 @@ describe('Case Search entity', () => {
       yearFiledMax: 2010,
       yearFiledMin: 2000,
     });
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toEqual(null);
@@ -74,8 +79,9 @@ describe('Case Search entity', () => {
       yearFiledMax: 2000,
       yearFiledMin: 2010,
     });
+
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
-    expect(validationErrors.yearFiledMax).toBeDefined();
+    expect(validationErrors!.yearFiledMax).toBeDefined();
   });
 });

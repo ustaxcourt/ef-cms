@@ -26,7 +26,6 @@ import {
 import {
   DocketEntry,
   getServedPartiesCode,
-  isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
@@ -781,7 +780,6 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
-      isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
       isTodayWithinGivenInterval,

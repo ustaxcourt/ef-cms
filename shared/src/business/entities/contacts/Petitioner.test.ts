@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../EntityConstants');
-const { getTextByCount } = require('../../utilities/getTextByCount');
-const { Petitioner } = require('./Petitioner');
+} from '../EntityConstants';
+import { Petitioner } from './Petitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('Petitioner', () => {
   const mockValidPetitioner = {
@@ -22,8 +20,8 @@ describe('Petitioner', () => {
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   };
 
-  it('should throw an error when applicationContext is not provided to the constructor', () => {
-    expect(() => new Petitioner(mockValidPetitioner, {})).toThrow(
+  it('should throw an error when applicationContext is not provided to the importructor', () => {
+    expect(() => new Petitioner(mockValidPetitioner, {} as any)).toThrow(
       'applicationContext must be defined',
     );
   });
