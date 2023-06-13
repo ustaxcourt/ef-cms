@@ -16,36 +16,31 @@ export const formatDocketEntryOnDocketRecord = (
     BRIEF_EVENTCODES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
+    POLICY_DATE_IMPACTED_EVENTCODES,
   } = applicationContext.getConstants();
   const record = cloneDeep(entry);
 
-  let filingsAndProceedingsWithAdditionalInfo = '';
-  if (record.documentTitle && record.additionalInfo) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
-  }
-  if (record.filingsAndProceedings) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
-  }
-  if (record.additionalInfo2) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
-  }
-
   const isServedDocument = !record.isNotServedDocument;
 
-  let filedByPractitionerAfterPolicyChange = false;
+  let filedByPractitioner: boolean = false;
+  let requiresPractitionerCheck: boolean = false;
+  let filedAfterPolicyChange: boolean = false;
   const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
     entry.eventCode,
   );
-  if (isDocketEntryBriefEventCode) {
-    const filedByPractitioner: boolean =
-      docketEntriesEFiledByPractitioner.includes(entry.docketEntryId);
-
-    const filedAfterPolicyChange =
-      record.filingDate >= visibilityPolicyDateFormatted;
-
-    filedByPractitionerAfterPolicyChange =
-      filedAfterPolicyChange && filedByPractitioner;
+  if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
+    filedAfterPolicyChange = record.filingDate >= visibilityPolicyDateFormatted;
+    if (isDocketEntryBriefEventCode) {
+      requiresPractitionerCheck = true;
+      filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+        entry.docketEntryId,
+      );
+    }
   }
+
+  const meetsPolicyChangeRequirements =
+    filedAfterPolicyChange &&
+    (requiresPractitionerCheck ? filedByPractitioner : true);
 
   let canTerminalUserSeeLink =
     record.isFileAttached &&
@@ -53,18 +48,13 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isSealed &&
     !record.isStricken;
 
-  if (isDocketEntryBriefEventCode) {
-    canTerminalUserSeeLink =
-      canTerminalUserSeeLink && filedByPractitionerAfterPolicyChange;
-  }
-
   let canPublicUserSeeLink =
-    (record.isCourtIssuedDocument || filedByPractitionerAfterPolicyChange) &&
+    ((record.isCourtIssuedDocument && !record.isStipDecision) ||
+      meetsPolicyChangeRequirements) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
-    !record.isStipDecision &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 
@@ -100,7 +90,6 @@ export const formatDocketEntryOnDocketRecord = (
     docketEntryId: record.docketEntryId,
     eventCode: record.eventCode,
     filedBy: record.filedBy,
-    filingsAndProceedingsWithAdditionalInfo,
     hasDocument: !record.isMinuteEntry,
     index: record.index,
     isPaper: record.isPaper,

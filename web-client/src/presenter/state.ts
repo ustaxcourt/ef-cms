@@ -70,6 +70,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialJudgeActivityReportState } from './judgeActivityReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -299,7 +300,6 @@ export const baseState = {
     },
   },
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
 
   docketRecordIndex: 0,
@@ -323,6 +323,8 @@ export const baseState = {
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  // needs its own object because it's present when other forms are on screen
+  judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeActivityReportData: {},
   judges: [],
   legacyAndCurrentJudges: [],
@@ -363,6 +365,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning

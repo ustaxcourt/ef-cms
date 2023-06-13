@@ -5,7 +5,7 @@ const {
 const {
   CaseAssociationRequestFactory,
 } = require('./CaseAssociationRequestFactory');
-const { OBJECTIONS_OPTIONS_MAP } = require('../entities/EntityConstants');
+import { OBJECTIONS_OPTIONS_MAP } from '../entities/EntityConstants';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 

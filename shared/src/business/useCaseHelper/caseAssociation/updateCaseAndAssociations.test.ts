@@ -405,7 +405,7 @@ describe('updateCaseAndAssociations', () => {
 
     it('the trial date has been updated', async () => {
       updatedCase.trialDate = '2021-01-02T05:22:16.001Z';
-      updatedCase.trialSessionId = faker.datatype.uuid();
+      updatedCase.trialSessionId = faker.string.uuid();
 
       await updateCaseAndAssociations({
         applicationContext,
@@ -422,7 +422,7 @@ describe('updateCaseAndAssociations', () => {
       const oldCase = {
         ...validMockCase,
         trialDate: '2021-01-02T05:22:16.001Z',
-        trialSessionId: faker.datatype.uuid(),
+        trialSessionId: faker.string.uuid(),
       };
 
       applicationContext
@@ -450,7 +450,7 @@ describe('updateCaseAndAssociations', () => {
           ...validMockCase,
           trialDate: '2021-01-02T05:22:16.001Z',
           trialLocation: 'Lubbock, Texas',
-          trialSessionId: faker.datatype.uuid(),
+          trialSessionId: faker.string.uuid(),
         },
       });
 
@@ -465,7 +465,7 @@ describe('updateCaseAndAssociations', () => {
         ...validMockCase,
         trialDate: '2021-01-02T05:22:16.001Z',
         trialLocation: 'Lubbock, Texas',
-        trialSessionId: faker.datatype.uuid(),
+        trialSessionId: faker.string.uuid(),
       };
 
       applicationContext

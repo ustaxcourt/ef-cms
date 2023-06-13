@@ -42,16 +42,18 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
 
   it('should retrieve opinions by the provided judge in the date range provided from persistence and return it to props', async () => {
     const { output } = await runAction(
-      getOpinionsForJudgeActivityReportAction,
+      getOpinionsForJudgeActivityReportAction as any,
       {
         modules: {
           presenter,
         },
         state: {
-          form: {
-            endDate: mockEndDate,
-            judgeName: mockJudgeName,
-            startDate: mockStartDate,
+          judgeActivityReport: {
+            filters: {
+              endDate: mockEndDate,
+              judgeName: mockJudgeName,
+              startDate: mockStartDate,
+            },
           },
         },
       },

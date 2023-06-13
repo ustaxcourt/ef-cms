@@ -1,4 +1,4 @@
-/* eslint-disable complexity */
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { state } from 'cerebral';
 
@@ -42,8 +42,6 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
 };
 
 export const getShowDocumentViewerLink = ({
-  filedAfterPolicyChange,
-  filedByPractitioner,
   hasDocument,
   isCourtIssuedDocument,
   isExternalUser,
@@ -57,6 +55,7 @@ export const getShowDocumentViewerLink = ({
   isStipDecision,
   isStricken,
   isUnservable,
+  meetsPolicyChangeRequirements,
   userHasAccessToCase,
   userHasNoAccessToDocument,
 }) => {
@@ -78,8 +77,7 @@ export const getShowDocumentViewerLink = ({
       if (isUnservable) return true;
       if (!isServed) return false;
     } else {
-      if (isServed && filedAfterPolicyChange && filedByPractitioner)
-        return true;
+      if (isServed && meetsPolicyChangeRequirements) return true;
       if (!userHasAccessToCase) return false;
       if (isInitialDocument) return true;
       if (!isServed) return false;
@@ -107,7 +105,7 @@ export const getShowEditDocketRecordEntry = ({
     entry && systemGeneratedEventCodes.includes(entry.eventCode);
   const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
   const hasServedCourtIssuedDocument =
-    hasCourtIssuedDocument && applicationContext.getUtilities().isServed(entry);
+    hasCourtIssuedDocument && DocketEntry.isServed(entry);
   const hasUnservableCourtIssuedDocument =
     entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
@@ -195,16 +193,20 @@ export const getFormattedDocketEntry = ({
     .includes(entry.documentType);
 
   let filedByPractitioner: boolean = false;
+  let requiresPractitionerCheck: boolean = false;
   if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
+    requiresPractitionerCheck = true;
     filedByPractitioner =
       formattedCase.docketEntriesEFiledByPractitioner.includes(
         entry.docketEntryId,
       );
   }
 
+  const meetsPolicyChangeRequirements =
+    filedAfterPolicyChange &&
+    (requiresPractitionerCheck ? filedByPractitioner : true);
+
   showDocumentLinks = getShowDocumentViewerLink({
-    filedAfterPolicyChange,
-    filedByPractitioner,
     hasDocument: entry.isFileAttached,
     isCourtIssuedDocument: entry.isCourtIssuedDocument,
     isExternalUser,
@@ -215,10 +217,11 @@ export const getFormattedDocketEntry = ({
     isSealed: entry.isSealed,
     isSealedToExternal:
       entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-    isServed: applicationContext.getUtilities().isServed(entry),
+    isServed: DocketEntry.isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
     isUnservable: formattedResult.isUnservable,
+    meetsPolicyChangeRequirements,
     userHasAccessToCase,
     userHasNoAccessToDocument: !userHasAccessToDocument,
   });
@@ -226,14 +229,6 @@ export const getFormattedDocketEntry = ({
   formattedResult.showDocumentViewerLink = !isExternalUser && showDocumentLinks;
 
   formattedResult.showLinkToDocument = isExternalUser && showDocumentLinks;
-
-  formattedResult.filingsAndProceedingsWithAdditionalInfo = '';
-  if (entry.filingsAndProceedings) {
-    formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.filingsAndProceedings}`;
-  }
-  if (entry.additionalInfo2) {
-    formattedResult.filingsAndProceedingsWithAdditionalInfo += ` ${entry.additionalInfo2}`;
-  }
 
   formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
     applicationContext,
