@@ -127,7 +127,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
-const helpers = {
+export const computeds = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
@@ -310,7 +310,7 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-  form: {},
+  form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -405,7 +405,7 @@ export const baseState = {
 };
 
 export const state = {
-  ...helpers,
+  ...computeds,
   ...baseState,
 };
 

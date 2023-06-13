@@ -534,7 +534,7 @@ import { validateUploadCorrespondenceDocumentSequence } from './sequences/valida
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
-const sequences = {
+export const presenterSequences = {
   addCaseToTrialSessionSequence,
   addPenaltyInputSequence,
   addStatisticToFormSequence,
@@ -1075,13 +1075,9 @@ export const presenter = {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
-  sequences,
+  sequences: presenterSequences,
   state,
 };
-
-declare global {
-  type Sequences = typeof sequences;
-}
 
 declare global {
   type ActionProps = {

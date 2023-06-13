@@ -11,7 +11,13 @@
     "types": ["jest", "node"],
     "target": "es6",
     "jsx": "react",
-    "strict": true
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@web-client/*": ["web-client/src/*"]
+      // "@shared/*": ["shared/src/*"], // Bring into project when we can build with paths. Need to configure test configs, and bundlers.
+      // "@web-api/*": ["web-api/src/*"]
+    }
   },
   "ts-node": {
     "files": true
@@ -21,6 +27,8 @@
     "./web-api/src/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
+    "./web-client/integration-tests/**/*",
+    "./web-client/integration-tests-public/**/*",
     "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts"
   ],
