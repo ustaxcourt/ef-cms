@@ -3,7 +3,6 @@ import { queryStringDecoder } from './queryStringDecoder';
 describe('queryStringDecoder', () => {
   beforeAll(() => {
     delete window.location;
-    // (window as any).location = {};
   });
 
   it('should return code, path, and token from hash', () => {
