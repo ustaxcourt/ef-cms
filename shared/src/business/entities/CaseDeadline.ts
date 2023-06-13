@@ -12,7 +12,6 @@ export class CaseDeadline extends JoiValidationEntity {
   public description: string;
   public docketNumber: string;
   public sortableDocketNumber: number;
-  // public entityName: string;
   public leadDocketNumber?: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
