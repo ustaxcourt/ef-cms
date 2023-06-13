@@ -5,35 +5,33 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { sortBy } from 'lodash';
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
   {
+    currentJudgesNames,
     endDate,
     judgeName,
     startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  }: {
+    judgeName: string;
+    endDate: string;
+    startDate: string;
+    currentJudgesNames: string[];
+  },
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  const authorizedUser = await applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  // TODO: MOVE JUDGES SELECTION DATA MANIPULATION TO FE
   let listOfJudgesForRequest = [judgeName];
   let totalCloseCaseCount: number = 0;
   let totalClosedDismissedCaseCount: number = 0;
 
-  if (judgeName === 'all') {
-    const users = await applicationContext
-      .getUseCases()
-      .getUsersInSectionInteractor(applicationContext, {
-        section: 'judge',
-      });
-
-    listOfJudgesForRequest = sortBy(users, 'name');
-  }
+  if (judgeName === 'all') listOfJudgesForRequest = currentJudgesNames;
 
   listOfJudgesForRequest.forEach(async judge => {
     const searchEntity = new JudgeActivityReportSearch({

@@ -9,13 +9,17 @@ import { state } from 'cerebral';
 export const getOrdersIssuedForJudgeActivityReportAction = async ({
   applicationContext,
   get,
+  props,
 }: ActionProps) => {
   const { endDate, judgeName, startDate } = get(
     state.judgeActivityReport.filters,
   );
+  const { currentJudgesNames } = props;
+
   const orders = await applicationContext
     .getUseCases()
     .getOrdersFiledByJudgeInteractor(applicationContext, {
+      currentJudgesNames,
       endDate,
       judgeName,
       startDate,

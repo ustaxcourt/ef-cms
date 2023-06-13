@@ -14,14 +14,21 @@ import { post } from '../requests';
 export const getOrdersFiledByJudgeInteractor = (
   applicationContext,
   {
+    currentJudgesNames,
     endDate,
     judgeName,
     startDate,
-  }: { startDate: string; endDate: string; judgeName: string },
+  }: {
+    startDate: string;
+    endDate: string;
+    judgeName: string;
+    currentJudgesNames: string[];
+  },
 ): Promise<OrdersAndOpinionTypes[]> => {
   return post({
     applicationContext,
     body: {
+      currentJudgesNames,
       endDate,
       judgeName,
       startDate,

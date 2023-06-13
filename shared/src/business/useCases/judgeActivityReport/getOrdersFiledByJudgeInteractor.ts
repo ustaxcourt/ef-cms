@@ -14,10 +14,16 @@ import { groupBy, orderBy, sortBy } from 'lodash';
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
   {
+    currentJudgesNames,
     endDate,
     judgeName,
     startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  }: {
+    judgeName: string;
+    endDate: string;
+    startDate: string;
+    currentJudgesNames: string[];
+  },
 ): Promise<OrdersAndOpinionTypes[]> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -27,14 +33,7 @@ export const getOrdersFiledByJudgeInteractor = async (
 
   let listOfJudgesForRequest = [judgeName];
 
-  if (judgeName === 'all') {
-    const judgeUsers = await applicationContext
-      .getUseCases()
-      .getUsersInSectionInteractor(applicationContext, {
-        section: 'judge',
-      });
-    listOfJudgesForRequest = sortBy(judgeUsers, 'name');
-  }
+  if (judgeName === 'all') listOfJudgesForRequest = currentJudgesNames;
 
   const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
   const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
