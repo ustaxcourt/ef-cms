@@ -3,12 +3,13 @@ import {
   CASE_TYPES,
   CHIEF_JUDGE,
   CUSTOM_CASE_INVENTORY_PAGE_SIZE,
+  TRIAL_CITIES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
-import { findIndex, sortBy } from 'lodash';
+import { sortBy } from 'lodash';
 import { state } from 'cerebral';
 
 export const customCaseInventoryReportHelper = (get, applicationContext) => {
@@ -69,42 +70,33 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
-  const { TRIAL_CITIES } = applicationContext.getConstants();
-
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
 
-  const getTrialLocationName = trialLocation =>
-    `${trialLocation.city}, ${trialLocation.state}`;
-
-  let states = [];
-
-  const convertCityTypeFromStringToArray = trialCities.map(trialLocation => {
-    return { ...trialLocation, city: [getTrialLocationName(trialLocation)] };
-  });
-
-  convertCityTypeFromStringToArray.forEach(loc => {
-    const foundIndexOfState = findIndex(states, { state: loc.state });
-    if (foundIndexOfState < 0) {
-      states.push({
-        cities: [...loc.city],
-        state: loc.state,
-      });
-    } else {
-      states[foundIndexOfState] = {
-        ...states[foundIndexOfState],
-        cities: [...states[foundIndexOfState].cities, ...loc.city],
-      };
-    }
-  });
-
-  states = states.map(obj => {
-    return {
-      label: obj.state,
-      options: obj.cities.map(city => {
-        return { label: city, value: city };
-      }),
-    };
-  });
+  const states: object[] = trialCities.reduce(
+    (listOfStates: any[], cityStatePair) => {
+      const existingState = listOfStates.find(
+        trialState => trialState.label === cityStatePair.state,
+      );
+      if (existingState) {
+        existingState.options.push({
+          label: `${cityStatePair.city}, ${cityStatePair.state}`,
+          value: `${cityStatePair.city}, ${cityStatePair.state}`,
+        });
+      } else {
+        listOfStates.push({
+          label: cityStatePair.state,
+          options: [
+            {
+              label: `${cityStatePair.city}, ${cityStatePair.state}`,
+              value: `${cityStatePair.city}, ${cityStatePair.state}`,
+            },
+          ],
+        });
+      }
+      return listOfStates;
+    },
+    [],
+  );
 
   return {
     caseStatuses,
@@ -115,6 +107,7 @@ export const customCaseInventoryReportHelper = (get, applicationContext) => {
     pageCount,
     runReportButtonIsDisabled,
     today,
+    trialCities,
     trialCitiesByState: states,
   };
 };

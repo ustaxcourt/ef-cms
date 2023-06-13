@@ -431,7 +431,7 @@ export const CustomCaseReport = connect(
               }}
             />
             <label
-              className="usa-checkbox__label"
+              className="usa-checkbox__label grid-col-2 tablet:grid-col-6"
               htmlFor="high-priority-checkbox"
               id={'label-high-priority'}
             >
