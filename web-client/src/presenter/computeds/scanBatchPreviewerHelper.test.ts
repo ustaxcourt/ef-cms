@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { scanBatchPreviewerHelper as scanBatchPreviewerHelperComputed } from './scanBatchPreviewerHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

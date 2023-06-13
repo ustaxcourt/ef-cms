@@ -1,5 +1,5 @@
 import { clearFormAssigneeIdAction } from './clearFormAssigneeIdAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearFormAssigneeIdAction', () => {
   it('should set the value of state.<form>.assigneeId to an empty string', async () => {

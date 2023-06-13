@@ -1,5 +1,5 @@
 import { docketEntryQcHelper as docketEntryQcHelperComputed } from './docketEntryQcHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const docketEntryQcHelper = withAppContextDecorator(

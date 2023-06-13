@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseCaptionForCaseInfoTabAction } from './getCaseCaptionForCaseInfoTabAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getCaseCaptionForCaseInfoTabAction', () => {
   const { CASE_CAPTION_POSTFIX, PARTY_TYPES } =

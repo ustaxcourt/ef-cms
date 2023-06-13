@@ -2,7 +2,7 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 import { applicationContext } from '../../applicationContext';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from './caseDetailSubnavHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseDetailSubnavHelper = withAppContextDecorator(

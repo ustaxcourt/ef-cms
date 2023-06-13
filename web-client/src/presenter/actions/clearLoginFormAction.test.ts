@@ -1,5 +1,5 @@
 import { clearLoginFormAction } from './clearLoginFormAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearLoginFormAction', () => {
   it('should reset the form state', async () => {

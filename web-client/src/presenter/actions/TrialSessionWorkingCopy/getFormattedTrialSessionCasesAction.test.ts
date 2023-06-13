@@ -1,6 +1,6 @@
 import { getFormattedTrialSessionCasesAction } from './getFormattedTrialSessionCasesAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getFormattedTrialSessionCasesAction', () => {
   it('should return an empty object if there are no formatted cases', async () => {
