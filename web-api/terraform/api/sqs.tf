@@ -32,6 +32,7 @@ resource "aws_sqs_queue" "send_emails_dl_queue" {
 
 resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
   alarm_name          = "${var.environment}_${var.current_color} send emails dl queue check"
+  alarm_description   = "Alarm that triggers when a message is sent to this dl queue: ${resource.send_emails_dl_queue.sqs_queue_name}"
   namespace           = "AWS/SQS"
   metric_name         = "NumberOfMessagesSent"
   comparison_operator = "GreaterThanThreshold"
@@ -40,8 +41,10 @@ resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
   evaluation_periods  = 2
   period              = 120
 
-  alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
-  insufficient_data_actions = [data.aws_sns_topic.system_health_alarms.arn]
-  ok_actions                = [data.aws_sns_topic.system_health_alarms.arn]
+  dimensions = {
+    "QueueName": resource.send_emails_dl_queue.sqs_queue_name
+  }
+
+  alarm_actions       = [data.aws_sns_topic.system_health_alarms.arn]
 }
 
