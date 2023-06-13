@@ -4,22 +4,13 @@ import {
   MAX_ELASTICSEARCH_PAGINATION,
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
+import { OrdersAndOpinionTypes } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { groupBy, orderBy } from 'lodash';
+import { groupBy, orderBy, sortBy } from 'lodash';
 
-/**
- * getOrdersFiledByJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the date to end the search for judge activity
- * @param {string} providers.judgeName the name of the judge
- * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {array} list of orders filed by the judge in the given date range, sorted alphabetically ascending by event code
- */
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
   {
@@ -27,21 +18,22 @@ export const getOrdersFiledByJudgeInteractor = async (
     judgeName,
     startDate,
   }: { judgeName: string; endDate: string; startDate: string },
-) => {
+): Promise<OrdersAndOpinionTypes[]> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch({
-    endDate,
-    judgeName,
-    startDate,
-  });
+  let listOfJudgesForRequest = [judgeName];
 
-  if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
+  if (judgeName === 'all') {
+    const judgeUsers = await applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor(applicationContext, {
+        section: 'judge',
+      });
+    listOfJudgesForRequest = sortBy(judgeUsers, 'name');
   }
 
   const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
@@ -49,18 +41,35 @@ export const getOrdersFiledByJudgeInteractor = async (
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  const { results } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodesToSearch,
-      endDate: searchEntity.endDate,
-      judge: searchEntity.judgeName,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: searchEntity.startDate,
-    });
+  const resultsOfAllOrdersByJudges = await Promise.all(
+    listOfJudgesForRequest.map(async judge => {
+      const searchEntity = new JudgeActivityReportSearch({
+        endDate,
+        judgeName: judge,
+        startDate,
+      });
 
-  let result = groupBy(results, 'eventCode');
+      if (!searchEntity.isValid()) {
+        throw new InvalidRequest();
+      }
+      return await applicationContext
+        .getPersistenceGateway()
+        .advancedDocumentSearch({
+          applicationContext,
+          documentEventCodes: orderEventCodesToSearch,
+          endDate: searchEntity.endDate,
+          judge,
+          overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
+          startDate: searchEntity.startDate,
+        });
+    }),
+  );
+
+  const totalOrders = resultsOfAllOrdersByJudges.flatMap(obj =>
+    obj.results.filter(item => typeof item === 'object'),
+  );
+
+  let result = groupBy(totalOrders, 'eventCode');
 
   const formattedResult = Object.entries(result).map(([key, value]) => {
     return {

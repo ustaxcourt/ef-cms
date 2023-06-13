@@ -5,6 +5,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { sortBy } from 'lodash';
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
@@ -20,34 +21,53 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch({
-    endDate,
-    judgeName,
-    startDate,
-  });
+  let listOfJudgesForRequest = [judgeName];
+  let totalCloseCaseCount: number = 0;
+  let totalClosedDismissedCaseCount: number = 0;
 
-  if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
+  if (judgeName === 'all') {
+    const users = await applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor(applicationContext, {
+        section: 'judge',
+      });
+
+    listOfJudgesForRequest = sortBy(users, 'name');
   }
 
-  const casesClosedByJudge = await applicationContext
-    .getPersistenceGateway()
-    .getCasesClosedByJudge({
-      applicationContext,
-      endDate: searchEntity.endDate,
-      judgeName: searchEntity.judgeName,
-      startDate: searchEntity.startDate,
+  listOfJudgesForRequest.forEach(async judge => {
+    const searchEntity = new JudgeActivityReportSearch({
+      endDate,
+      judgeName: judge,
+      startDate,
     });
 
-  const closedDismissedCaseCount = casesClosedByJudge.filter(
-    caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
-  ).length;
-  const closedCaseCount = casesClosedByJudge.filter(
-    caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
-  ).length;
+    if (!searchEntity.isValid()) {
+      throw new InvalidRequest();
+    }
+
+    const casesClosedByJudge = await applicationContext
+      .getPersistenceGateway()
+      .getCasesClosedByJudge({
+        applicationContext,
+        endDate: searchEntity.endDate,
+        judgeName: judge,
+        startDate: searchEntity.startDate,
+      });
+
+    const closedDismissedCaseCount: number = casesClosedByJudge.filter(
+      caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
+    ).length;
+    totalClosedDismissedCaseCount += closedDismissedCaseCount;
+
+    const closedCaseCount: number = casesClosedByJudge.filter(
+      caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
+    ).length;
+    totalCloseCaseCount += closedCaseCount;
+  });
 
   return {
-    [CASE_STATUS_TYPES.closed]: closedCaseCount,
-    [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
+    [CASE_STATUS_TYPES.closed]: totalCloseCaseCount,
+    [CASE_STATUS_TYPES.closedDismissed]: totalClosedDismissedCaseCount,
   };
 };
