@@ -1,13 +1,12 @@
-const {
-  InternalDocumentSearchResult,
-} = require('./InternalDocumentSearchResult');
+import { InternalDocumentSearchResult } from './InternalDocumentSearchResult';
 
 describe('Internal Document Search Result entity', () => {
   it('returns validation errors for required fields when no data is passed in', () => {
-    const searchResult = new InternalDocumentSearchResult();
+    const searchResult = new InternalDocumentSearchResult({});
+
     const validationErrors = searchResult.getFormattedValidationErrors();
 
-    expect(Object.keys(validationErrors)).toEqual([
+    expect(Object.keys(validationErrors!)).toEqual([
       'caseCaption',
       'docketEntryId',
       'docketNumber',
@@ -22,13 +21,16 @@ describe('Internal Document Search Result entity', () => {
       docketNumber: '12345-67',
       documentTitle: 'This is a matching document',
     });
+
     expect(searchResult).toMatchObject({
       caseCaption: 'This is a case caption',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
       docketNumber: '12345-67',
       documentTitle: 'This is a matching document',
     });
+
     const validationErrors = searchResult.getFormattedValidationErrors();
+
     expect(validationErrors).toBeNull();
   });
 
@@ -40,6 +42,7 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       isStricken: true,
     });
+
     const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
@@ -53,7 +56,7 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Order',
       eventCode: 'O', // O
-      isSealed: true, // the event code MUST be an opinion type
+      isDocketEntrySealed: true, // the event code MUST be an opinion type
     });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
@@ -68,8 +71,9 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
-      isSealed: true,
+      isDocketEntrySealed: true,
     });
+
     const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
@@ -83,8 +87,9 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
-      isSealed: true,
+      isDocketEntrySealed: true,
     });
+
     const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();
@@ -98,12 +103,14 @@ describe('Internal Document Search Result entity', () => {
       documentTitle: 'This is a matching document',
       documentType: 'Memorandum Opinion',
       eventCode: 'MOP',
+      isCaseSealed: false,
+      isDocketEntrySealed: true,
       isFileAttached: false,
-      isSealed: true,
       judge: null,
       numberOfPages: null,
       signedJudgeName: null,
     });
+
     const validationErrors = searchResult.getFormattedValidationErrors();
 
     expect(validationErrors).toBeNull();

@@ -1,23 +1,19 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../EntityConstants');
+import { Case } from './Case';
+import { DocketEntry } from '../DocketEntry';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocuments';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 
 describe('archiveDocketEntry', () => {
-  let caseRecord;
-  let docketEntryToArchive;
+  let caseRecord: Case;
+  let docketEntryToArchive: DocketEntry;
+
   beforeEach(() => {
-    docketEntryToArchive = {
-      archived: undefined,
-      docketEntryId: '79c29d3f-d292-482c-b722-388577154664',
-      documentType: 'Order',
-      eventCode: 'O',
-      filedBy: 'Test Petitioner',
-      role: ROLES.petitioner,
-      userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
-    };
+    docketEntryToArchive = new DocketEntry(cloneDeep(PENDING_DOCKET_ENTRY), {
+      applicationContext,
+    });
+    docketEntryToArchive.servedAt = undefined;
 
     caseRecord = new Case(
       {
@@ -30,20 +26,17 @@ describe('archiveDocketEntry', () => {
     );
   });
 
-  it('marks the docket entry as archived', () => {
-    caseRecord.archiveDocketEntry(docketEntryToArchive, {
-      applicationContext,
-    });
+  it('should mark the docket entry as archived', () => {
+    caseRecord.archiveDocketEntry(docketEntryToArchive);
+
     const archivedDocketEntry = caseRecord.archivedDocketEntries.find(
       d => d.docketEntryId === docketEntryToArchive.docketEntryId,
     );
-    expect(archivedDocketEntry.archived).toBeTruthy();
+    expect(archivedDocketEntry!.archived).toEqual(true);
   });
 
-  it('adds the provided docket entry to the case archivedDocketEntries', () => {
-    caseRecord.archiveDocketEntry(docketEntryToArchive, {
-      applicationContext,
-    });
+  it('should add the provided docket entry to the case archivedDocketEntries', () => {
+    caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
       caseRecord.archivedDocketEntries.find(
@@ -52,15 +45,30 @@ describe('archiveDocketEntry', () => {
     ).toBeDefined();
   });
 
-  it('removes the provided docket entry from the case docketEntries array', () => {
-    caseRecord.archiveDocketEntry(docketEntryToArchive, {
-      applicationContext,
-    });
+  it('should remove the provided docket entry from the case docketEntries array', () => {
+    caseRecord.archiveDocketEntry(docketEntryToArchive);
 
     expect(
       caseRecord.docketEntries.find(
         d => d.docketEntryId === docketEntryToArchive.docketEntryId,
       ),
     ).toBeUndefined();
+  });
+
+  it('should not allow a docket entry that has already been served to be archived', () => {
+    docketEntryToArchive.servedAt = '2014-02-01T05:00:00.000Z';
+
+    expect(() => caseRecord.archiveDocketEntry(docketEntryToArchive)).toThrow(
+      'Cannot archive docket entry that has already been served.',
+    );
+  });
+
+  it('should not allow a docket entry that is already on the docket record be archived', () => {
+    docketEntryToArchive.servedAt = undefined;
+    docketEntryToArchive.isOnDocketRecord = true;
+
+    expect(() => caseRecord.archiveDocketEntry(docketEntryToArchive)).toThrow(
+      'Cannot archive docket entry that has already been served.',
+    );
   });
 });
