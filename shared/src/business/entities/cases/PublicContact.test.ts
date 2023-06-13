@@ -1,4 +1,4 @@
-const { PublicContact } = require('./PublicContact');
+import { PublicContact } from './PublicContact';
 
 describe('PublicContact', () => {
   describe('validation', () => {

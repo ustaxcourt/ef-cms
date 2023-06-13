@@ -113,3 +113,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     return JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export type RawJudgeActivityReportSearch =
+  ExcludeMethods<JudgeActivityReportSearch>;

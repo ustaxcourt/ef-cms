@@ -7,13 +7,13 @@ import {
   ROLES,
   TRANSCRIPT_EVENT_CODE,
 } from '../EntityConstants';
+import { Case, isSealedCase } from './Case';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { PrivatePractitioner } from '../PrivatePractitioner';
-const { PublicContact } = require('./PublicContact');
-const { PublicDocketEntry } = require('./PublicDocketEntry');
-import { Case, isSealedCase } from './Case';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { PrivatePractitioner } from '../PrivatePractitioner';
+import { PublicContact } from './PublicContact';
+import { PublicDocketEntry } from './PublicDocketEntry';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { map } from 'lodash';
 import joi from 'joi';
@@ -101,10 +101,7 @@ export class PublicCase extends JoiValidationEntity {
       .filter(
         docketEntry => !docketEntry.isDraft && docketEntry.isOnDocketRecord,
       )
-      .map(
-        docketEntry =>
-          new PublicDocketEntry(docketEntry, { applicationContext }),
-      )
+      .map(docketEntry => new PublicDocketEntry(docketEntry))
       .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
   }
 

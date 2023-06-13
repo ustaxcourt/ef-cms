@@ -1,12 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   MAX_FILE_SIZE_BYTES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('./CaseExternal');
+} from '../EntityConstants';
+import { CaseExternal } from './CaseExternal';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
 
@@ -25,7 +23,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
+        caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
     it('does not require corporate disclosure if filing type not set', () => {
@@ -39,7 +37,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        petition.getFormattedValidationErrors().corporateDisclosureFile,
+        petition.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toBeUndefined();
     });
     it('does not require corporate disclosure if filing type not a business', () => {
@@ -54,7 +52,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFile,
+        caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
       ).toBeUndefined();
     });
     it('requires stinFile', () => {
@@ -69,7 +67,7 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors().stinFile).toEqual(
+      expect(caseExternal.getFormattedValidationErrors()!.stinFile).toEqual(
         VALIDATION_ERROR_MESSAGES.stinFile,
       );
     });
@@ -91,7 +89,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().petitionFileSize,
+        caseExternal.getFormattedValidationErrors()!.petitionFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[0].message);
     });
 
@@ -110,7 +108,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().petitionFileSize,
+        caseExternal.getFormattedValidationErrors()!.petitionFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
 
@@ -127,7 +125,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().petitionFileSize,
+        caseExternal.getFormattedValidationErrors()!.petitionFileSize,
       ).toBeUndefined();
     });
 
@@ -145,7 +143,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().petitionFileSize,
+        caseExternal.getFormattedValidationErrors()!.petitionFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
   });
@@ -165,7 +163,7 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
+      expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
         VALIDATION_ERROR_MESSAGES.stinFileSize[0].message,
       );
     });
@@ -184,7 +182,7 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
+      expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
         VALIDATION_ERROR_MESSAGES.stinFileSize[1],
       );
     });
@@ -202,7 +200,7 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().stinFileSize,
+        caseExternal.getFormattedValidationErrors()!.stinFileSize,
       ).toBeUndefined();
     });
 
@@ -219,7 +217,7 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
-      expect(caseExternal.getFormattedValidationErrors().stinFileSize).toEqual(
+      expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
         VALIDATION_ERROR_MESSAGES.stinFileSize[1],
       );
     });
@@ -241,7 +239,8 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors()!
+          .corporateDisclosureFileSize,
       ).toEqual(
         VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[0].message,
       );
@@ -262,7 +261,8 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors()!
+          .corporateDisclosureFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
     });
 
@@ -279,7 +279,8 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors()!
+          .corporateDisclosureFileSize,
       ).toBeUndefined();
     });
 
@@ -297,7 +298,8 @@ describe('CaseExternal entity', () => {
         { applicationContext },
       );
       expect(
-        caseExternal.getFormattedValidationErrors().corporateDisclosureFileSize,
+        caseExternal.getFormattedValidationErrors()!
+          .corporateDisclosureFileSize,
       ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
     });
   });
