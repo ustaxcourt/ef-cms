@@ -12,7 +12,7 @@ const isCaseDeadlineItem = item => {
 };
 
 export const migrateItems = async (items, documentClient) => {
-  const itemsAfter = [];
+  const itemsAfter: any[] = [];
 
   for (const item of items) {
     if (isCaseDeadlineItem(item)) {
