@@ -151,24 +151,6 @@ const InPersonParagraph2 = () => {
     </p>
   );
 };
-const StandaloneRemoteParagraph2 = () => {
-  return (
-    <p>
-      According to the Court’s records, petitioner(s) in this case is (are) not
-      represented by counsel. It is the responsibility of the person making a
-      remote appearance to access the remote proceeding from a location where he
-      or she can be clearly seen and heard. The parties shall access the remote
-      proceeding no later than <span className="text-bold"> 10 minutes </span>
-      before the start of the 1:00 PM ET calendar call. Petitioners should
-      identify themselves to the Trial Clerk (a Tax Court employee), giving
-      their name and docket number. Petitioners may enter the remote proceeding
-      <span className="text-bold"> as early as 12:00 PM ET </span> to enable a
-      discussion with Respondent’s counsel regarding any remaining matters
-      pertaining to the case and to learn what will be expected if the case is
-      to be tried.
-    </p>
-  );
-};
 const RemoteParagraph2 = () => {
   return (
     <p>
@@ -181,6 +163,24 @@ const RemoteParagraph2 = () => {
       identify themselves to the Trial Clerk (a Tax Court employee), giving
       their name and docket number. Petitioners may enter the remote proceeding
       <span className="text-bold"> as early as 9:00 AM </span> to enable a
+      discussion with Respondent’s counsel regarding any remaining matters
+      pertaining to the case and to learn what will be expected if the case is
+      to be tried.
+    </p>
+  );
+};
+const StandaloneRemoteParagraph2 = () => {
+  return (
+    <p>
+      According to the Court’s records, petitioner(s) in this case is (are) not
+      represented by counsel. It is the responsibility of the person making a
+      remote appearance to access the remote proceeding from a location where he
+      or she can be clearly seen and heard. The parties shall access the remote
+      proceeding no later than <span className="text-bold"> 10 minutes </span>
+      before the start of the 1:00 PM ET calendar call. Petitioners should
+      identify themselves to the Trial Clerk (a Tax Court employee), giving
+      their name and docket number. Petitioners may enter the remote proceeding
+      <span className="text-bold"> as early as 12:00 PM ET </span> to enable a
       discussion with Respondent’s counsel regarding any remaining matters
       pertaining to the case and to learn what will be expected if the case is
       to be tried.
@@ -211,6 +211,7 @@ export const ThirtyDayNoticeOfTrial = ({
     trialDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
+
   const isInPerson =
     proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
     scopeType === TRIAL_SESSION_SCOPE_TYPES.locationBased;
@@ -258,12 +259,12 @@ export const ThirtyDayNoticeOfTrial = ({
         {isInPerson && (
           <InPersonParagraph1 formattedTrialDate={formattedTrialDate} />
         )}
-        {isStandaloneRemote && <StandaloneRemoteParagraph1 />}
         {isRemote && <RemoteParagraph1 />}
+        {isStandaloneRemote && <StandaloneRemoteParagraph1 />}
 
         {isInPerson && <InPersonParagraph2 />}
-        {isStandaloneRemote && <StandaloneRemoteParagraph2 />}
         {isRemote && <RemoteParagraph2 />}
+        {isStandaloneRemote && <StandaloneRemoteParagraph2 />}
 
         <p>
           To learn if there is a free tax clinic that may be able to assist
