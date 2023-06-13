@@ -8,7 +8,6 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
-import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
 import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences, state } from 'cerebral';
@@ -303,20 +302,28 @@ export const CustomCaseReport = connect(
               <div className="grid-col">
                 <label
                   className="usa-label"
-                  htmlFor="case-type"
+                  htmlFor="trial-location"
                   id="case-type-label"
                 >
                   Requested place of trial{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
-                <select
-                  className="usa-select"
+                <SelectSearch
+                  aria-labelledby="case-type-label"
                   id="trial-location"
-                  name="trialLocation"
-                >
-                  <option value="">-- Select one or more--</option>
-                  <TrialCityOptions procedureType="All" />
-                </select>
+                  name="requestedPlaceOfTrial"
+                  options={customCaseInventoryReportHelper.trialCitiesByState}
+                  placeholder="- Select one or more -"
+                  value="Select one or more"
+                  onChange={inputValue => {
+                    setCustomCaseInventoryReportFiltersSequence({
+                      preferredTrialCities: {
+                        action: 'add',
+                        preferredTrialCity: inputValue.value,
+                      },
+                    });
+                  }}
+                />
               </div>
             </div>
           </div>
@@ -379,6 +386,27 @@ export const CustomCaseReport = connect(
                           judges: {
                             action: 'remove',
                             judge,
+                          },
+                        });
+                      }}
+                    />
+                  </span>
+                );
+              })}
+              {customCaseInventoryFilters.preferredTrialCities.map(city => {
+                return (
+                  <span className="blue-pill" key={city}>
+                    {city}
+                    <Icon
+                      aria-label={`remove ${city} selection`}
+                      className="margin-left-1 cursor-pointer"
+                      icon="times"
+                      size="1x"
+                      onClick={() => {
+                        setCustomCaseInventoryReportFiltersSequence({
+                          preferredTrialCities: {
+                            action: 'remove',
+                            city,
                           },
                         });
                       }}
