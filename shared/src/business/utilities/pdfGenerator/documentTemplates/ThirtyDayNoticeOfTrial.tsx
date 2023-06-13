@@ -1,3 +1,4 @@
+import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
 import { DocketHeader } from '../components/DocketHeader';
 import { FORMATS, formatDateString } from '../../DateHandler';
 import { PrimaryHeader } from '../components/PrimaryHeader';
@@ -200,16 +201,6 @@ const JudgeBox = ({ judgeName }: { judgeName: string }) => {
   );
 };
 
-const ClerkOfTheCourtSignature = () => {
-  return (
-    <p className="float-right width-third">
-      Stephanie A. Servoss
-      <br />
-      Clerk of the Court
-    </p>
-  );
-};
-
 export const ThirtyDayNoticeOfTrial = ({
   caseCaptionExtension,
   caseTitle,
@@ -290,6 +281,7 @@ export const ThirtyDayNoticeOfTrial = ({
           who have not already done so are encouraged to contact a tax clinic as
           soon as possible.
         </p>
+
         <ClerkOfTheCourtSignature />
       </div>
     </div>

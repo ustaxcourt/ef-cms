@@ -1,5 +1,6 @@
-import { DocketHeader } from '../components/DocketHeader.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
+import { DocketHeader } from '../components/DocketHeader';
+import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
 
 export const NoticeOfTrialIssued = ({
@@ -81,11 +82,7 @@ export const NoticeOfTrialIssued = ({
           result in dismissal of the case and entry of decision against you.
         </p>
 
-        <p className="float-right width-third">
-          Stephanie A. Servoss
-          <br />
-          Clerk of the Court
-        </p>
+        <ClerkOfTheCourtSignature />
       </div>
     </div>
   );
