@@ -32,6 +32,9 @@ async function putEventHistory(
     .promise();
 }
 
+/**
+ *
+ */
 async function getEventHistories(
   applicationContext: IApplicationContext,
   records: DynamoDBRecord[],
