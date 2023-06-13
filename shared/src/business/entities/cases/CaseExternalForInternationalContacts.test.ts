@@ -1,14 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('./CaseExternal');
-const { ContactFactory } = require('../contacts/ContactFactory');
+} from '../EntityConstants';
+import { CaseExternal } from './CaseExternal';
+import { ContactFactory } from '../contacts/ContactFactory';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const contactErrorMessages =
   ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
