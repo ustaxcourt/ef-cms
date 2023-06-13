@@ -9,20 +9,18 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { groupBy, orderBy, sortBy } from 'lodash';
+import { groupBy, orderBy } from 'lodash';
 
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
   {
-    currentJudgesNames,
     endDate,
-    judgeName,
+    judgesSelection,
     startDate,
   }: {
-    judgeName: string;
     endDate: string;
     startDate: string;
-    currentJudgesNames: string[];
+    judgesSelection: string[];
   },
 ): Promise<OrdersAndOpinionTypes[]> => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -31,17 +29,13 @@ export const getOrdersFiledByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let listOfJudgesForRequest = [judgeName];
-
-  if (judgeName === 'all') listOfJudgesForRequest = currentJudgesNames;
-
   const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
   const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
   const resultsOfAllOrdersByJudges = await Promise.all(
-    listOfJudgesForRequest.map(async judge => {
+    judgesSelection.map(async judge => {
       const searchEntity = new JudgeActivityReportSearch({
         endDate,
         judgeName: judge,
