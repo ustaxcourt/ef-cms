@@ -11,8 +11,8 @@ export class CaseDeadline extends JoiValidationEntity {
   public deadlineDate: string;
   public description: string;
   public docketNumber: string;
-  public sortableDocketNumber: string;
-  public entityName: string;
+  public sortableDocketNumber: number;
+  // public entityName: string;
   public leadDocketNumber?: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -31,12 +31,9 @@ export class CaseDeadline extends JoiValidationEntity {
     this.description = rawProps.description;
     this.docketNumber = rawProps.docketNumber;
     this.leadDocketNumber = rawProps.leadDocketNumber;
-    // TODO: why is this if statement here
-    if (this.docketNumber) {
-      this.sortableDocketNumber = Case.getSortableDocketNumber(
-        this.docketNumber,
-      );
-    }
+    this.sortableDocketNumber =
+      rawProps.sortableDocketNumber ||
+      Case.getSortableDocketNumber(this.docketNumber);
   }
 
   static VALIDATION_ERROR_MESSAGES = {
