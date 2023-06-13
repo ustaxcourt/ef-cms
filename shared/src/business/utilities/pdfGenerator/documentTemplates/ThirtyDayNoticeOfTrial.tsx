@@ -53,7 +53,6 @@ const InPersonTrialLocationBox = ({
     </div>
   );
 };
-
 const RemoteTrialLocationBox = ({
   city,
   state,
@@ -73,7 +72,6 @@ const RemoteTrialLocationBox = ({
     </div>
   );
 };
-
 const StandaloneRemoteTrialLocationBox = () => {
   return (
     <div className="info-box info-box-trial" id="trial-info">
@@ -103,7 +101,6 @@ const InPersonParagraph1 = ({
     </p>
   );
 };
-
 const RemoteParagraph1 = () => {
   return (
     <p>
@@ -121,7 +118,6 @@ const RemoteParagraph1 = () => {
     </p>
   );
 };
-
 const StandaloneRemoteParagraph1 = () => {
   return (
     <p>
