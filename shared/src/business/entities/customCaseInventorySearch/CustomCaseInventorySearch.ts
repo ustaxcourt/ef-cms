@@ -94,6 +94,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
       startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
     };
   }
+
   getErrorToMessageMap() {
     return CustomCaseInventorySearch.VALIDATION_ERROR_MESSAGES;
   }

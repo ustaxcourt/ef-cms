@@ -1,3 +1,4 @@
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
 import { state } from 'cerebral';
 
@@ -15,7 +16,6 @@ export const workQueueItemsAreEqual = (first, second) => {
 
 /**
  * formatDateIfToday
- *
  * @param {*} date the date to format
  * @param {*} applicationContext our UI application context
  * @param {*} now optional now value used for large tables to avoid recalculating
@@ -176,7 +176,7 @@ const getDocketEntryEditLink = ({
   if (
     formattedDocument.isCourtIssuedDocument &&
     !formattedDocument.isPaper &&
-    !applicationContext.getUtilities().isServed(formattedDocument) &&
+    !DocketEntry.isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {
     editLink = `/edit-court-issued?fromPage=${fromPage}`;
@@ -241,7 +241,7 @@ export const getWorkItemDocumentLink = ({
       }
     } else if (
       formattedDocketEntry.isPetition &&
-      !applicationContext.getUtilities().isServed(formattedDocketEntry)
+      !DocketEntry.isServed(formattedDocketEntry)
     ) {
       if (result.caseIsInProgress) {
         editLink = `${baseDocumentLink}/review`;

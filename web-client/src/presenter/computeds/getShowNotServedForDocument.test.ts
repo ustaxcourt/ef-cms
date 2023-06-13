@@ -2,7 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 
 describe('getShowNotServedForDocument', () => {
-  const docketEntryId = applicationContext.getUniqueId();
+  const docketEntryId = '155870c2-5b27-48ce-9aac-dd41305c7797';
 
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 

@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the blocked cases and formats them and filters based on procedureType
- *
  * @param {Function} get the cerebral get function used
  * for getting state.form.procedureType and state.blockedCases
  * @param {object} applicationContext the application context
@@ -44,7 +43,7 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
       .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(blockedCase => {
         const blockedCaseWithConsolidatedProperties = addConsolidatedProperties(
-          { applicationContext, caseObject: blockedCase },
+          { applicationContext, consolidatedObject: blockedCase },
         );
         return {
           ...setFormattedBlockDates(blockedCaseWithConsolidatedProperties),
