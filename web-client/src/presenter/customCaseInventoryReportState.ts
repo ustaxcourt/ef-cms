@@ -20,6 +20,7 @@ export const initialCustomCaseInventoryReportState: CustomCaseInventoryReportSta
       filingMethod: 'all',
       highPriority: false,
       judges: [],
+      preferredTrialCities: [],
       procedureType: 'All',
       startDate: '',
     },

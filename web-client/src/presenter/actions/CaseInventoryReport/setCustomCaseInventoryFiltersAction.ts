@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   CaseStatus,
   CaseType,
@@ -20,6 +21,10 @@ export const setCustomCaseInventoryFiltersAction = ({
     caseStatuses: { action: 'add' | 'remove'; caseStatus: CaseStatus };
     caseTypes: { action: 'add' | 'remove'; caseType: CaseType };
     judges: { action: 'add' | 'remove'; judge: string };
+    preferredTrialCities: {
+      action: 'add' | 'remove';
+      preferredTrialCity: string;
+    };
   };
   store: any;
 }) => {
@@ -39,12 +44,14 @@ export const setCustomCaseInventoryFiltersAction = ({
       props.filingMethod,
     );
   }
+
   if (props.highPriority) {
     store.set(
       state.customCaseInventory.filters.highPriority,
       !get(state.customCaseInventory.filters.highPriority),
     );
   }
+
   if (props.procedureType) {
     store.set(
       state.customCaseInventory.filters.procedureType,
@@ -94,6 +101,26 @@ export const setCustomCaseInventoryFiltersAction = ({
         caseType => caseType === props.judges.judge,
       );
       currentFilters.judges.splice(foundIndex, 1);
+      store.merge(state.customCaseInventory.filters, currentFilters);
+    }
+  }
+
+  if (props.preferredTrialCities) {
+    if (
+      props.preferredTrialCities.action === 'add' &&
+      !currentFilters.preferredTrialCities.includes(
+        props.preferredTrialCities.preferredTrialCity,
+      )
+    ) {
+      currentFilters.preferredTrialCities.push(
+        props.preferredTrialCities.preferredTrialCity,
+      );
+      store.merge(state.customCaseInventory.filters, currentFilters);
+    } else if (props.preferredTrialCities.action === 'remove') {
+      const foundIndex = currentFilters.preferredTrialCities.findIndex(
+        caseType => caseType === props.preferredTrialCities.preferredTrialCity,
+      );
+      currentFilters.preferredTrialCities.splice(foundIndex, 1);
       store.merge(state.customCaseInventory.filters, currentFilters);
     }
   }

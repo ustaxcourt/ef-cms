@@ -30,32 +30,34 @@ export type CustomCaseProcedureTypes =
   (typeof CUSTOM_CASE_REPORT_PROCEDURE_TYPES)[number];
 
 export class CustomCaseInventorySearch extends JoiValidationEntity {
-  public startDate: string;
-  public endDate: string;
   public caseStatuses: CaseStatus[];
-  public pageSize: number;
   public caseTypes: CaseType[];
-  public judges: string[];
-  public procedureType: CustomCaseProcedureTypes;
+  public endDate: string;
   public filingMethod: CustomCaseFilingMethods;
   public highPriority: boolean;
+  public judges: string[];
+  public pageSize: number;
+  public preferredTrialCities: string[];
+  public procedureType: CustomCaseProcedureTypes;
   public searchAfter: {
     receivedAt: number;
     pk: string;
   };
+  public startDate: string;
 
   constructor(rawProps) {
     super('CustomCaseInventorySearch');
-    this.startDate = rawProps.startDate;
-    this.endDate = rawProps.endDate;
-    this.highPriority = rawProps.highPriority;
-    this.procedureType = rawProps.procedureType;
     this.caseStatuses = rawProps.caseStatuses;
-    this.pageSize = rawProps.pageSize;
     this.caseTypes = rawProps.caseTypes;
-    this.judges = rawProps.judges;
+    this.endDate = rawProps.endDate;
     this.filingMethod = rawProps.filingMethod;
+    this.highPriority = rawProps.highPriority;
+    this.judges = rawProps.judges;
+    this.pageSize = rawProps.pageSize;
+    this.preferredTrialCities = rawProps.preferredTrialCities;
+    this.procedureType = rawProps.procedureType;
     this.searchAfter = rawProps.searchAfter;
+    this.startDate = rawProps.startDate;
   }
 
   static VALIDATION_ERROR_MESSAGES = {
@@ -100,6 +102,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
       highPriority: joi.boolean().required(),
       judges: joi.array().items(joi.string()),
       pageSize: joi.number().required(),
+      preferredTrialCities: joi.array().items(joi.string()),
       procedureType: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_PROCEDURE_TYPES)
