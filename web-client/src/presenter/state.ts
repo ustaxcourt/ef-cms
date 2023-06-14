@@ -310,7 +310,7 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-  form: {},
+  form: {} as Record<string, any>,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
