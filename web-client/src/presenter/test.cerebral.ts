@@ -1,8 +1,8 @@
-import { ClientState } from '@web-client/presenter/state';
 import {
   runAction as cerebralRunAction,
   runCompute as cerebralRunCompute,
 } from 'cerebral/test';
+import type { ClientState } from '@web-client/presenter/state';
 
 type fakeRunComputeType = <T>(
   someFunction: (get: any) => T,

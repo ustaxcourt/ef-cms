@@ -1079,6 +1079,8 @@ export const presenter = {
   state: initialState,
 };
 
+export type Sequences = typeof presenterSequences;
+
 declare global {
   type ActionProps = {
     applicationContext: ClientApplicationContext;
