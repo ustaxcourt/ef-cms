@@ -251,9 +251,9 @@ const helpers = {
   workQueueHelper,
 };
 
-type CaseDeadlineReportHelper = {
-  caseDeadlines: any[];
-  judgeFilter: any;
+type TCaseDeadlineReport = {
+  caseDeadlines: RawCaseDeadline[];
+  judgeFilter: string;
   totalCount: number;
   page: number;
 };
@@ -270,8 +270,8 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {} as CaseDeadlineReportHelper,
-  caseDetail: {} as TCase,
+  caseDeadlineReport: {} as TCaseDeadlineReport,
+  caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
