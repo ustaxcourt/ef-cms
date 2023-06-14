@@ -62,6 +62,7 @@ import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDoc
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
+import { closeModalAndRefetchCase } from './sequences/DocketEntry/closeModalAndRefetchCase';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
@@ -589,6 +590,7 @@ const sequences = {
   closeModalAndNavigateBackSequence,
   closeModalAndNavigateSequence,
   closeModalAndNavigateToMaintenanceSequence,
+  closeModalAndRefetchCase,
   closeModalAndReturnToCaseDetailDraftDocumentsSequence,
   closeModalAndReturnToCaseDetailSequence,
   closeModalAndReturnToDashboardSequence,

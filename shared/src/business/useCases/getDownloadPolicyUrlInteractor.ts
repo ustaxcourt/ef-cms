@@ -2,11 +2,12 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { Case, isUserPartOfGroup } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -14,7 +15,6 @@ import {
 } from '../../authorization/authorizationClientService';
 import { User } from '../entities/User';
 import { documentMeetsAgeRequirements } from '../utilities/getFormattedCaseDetail';
-import { isServed } from '../entities/DocketEntry';
 
 const UNAUTHORIZED_DOCUMENT_MESSAGE =
   'Unauthorized to view document at this time.';
@@ -48,7 +48,7 @@ const handleIrsSuperUser = ({
   key,
   petitionDocketEntry,
 }) => {
-  if (petitionDocketEntry && !isServed(petitionDocketEntry)) {
+  if (petitionDocketEntry && !DocketEntry.isServed(petitionDocketEntry)) {
     throw new UnauthorizedError(
       'Unauthorized to view case documents until the petition has been served.',
     );
@@ -69,12 +69,7 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
     docketEntryEntity.eventCode,
   );
 
-  if (!isServed(docketEntryEntity) && !isUnservable) {
-    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
-  } else if (
-    docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
-    !userAssociatedWithCase
-  ) {
+  if (!DocketEntry.isServed(docketEntryEntity) && !isUnservable) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {
     throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
@@ -203,8 +198,11 @@ export const getDownloadPolicyUrlInteractor = async (
       const selectedIsStin =
         docketEntryEntity.documentType ===
         INITIAL_DOCUMENT_TYPES.stin.documentType;
+      const hasPolicyDateImpactedEventCode =
+        POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntryEntity.eventCode);
       const unAuthorizedToViewNonCourtIssued =
-        selectedIsStin || !userAssociatedWithCase;
+        (selectedIsStin || !userAssociatedWithCase) &&
+        !hasPolicyDateImpactedEventCode;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });

@@ -1,106 +1,136 @@
-const joi = require('joi');
-const {
+import {
   ALL_EVENT_CODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
-} = require('../EntityConstants');
-const {
-  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
-} = require('../EntityValidationConstants');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+} from '../EntityConstants';
+import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
+import joi from 'joi';
 
-/**
- * PublicDocketEntry
- *
- * @param {object} rawDocketEntry the raw docket entry
- * @constructor
- */
-function PublicDocketEntry() {}
-PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
-  this.additionalInfo = rawDocketEntry.additionalInfo;
-  this.additionalInfo2 = rawDocketEntry.additionalInfo2;
-  this.attachments = rawDocketEntry.attachments;
-  this.certificateOfService = rawDocketEntry.certificateOfService;
-  this.certificateOfServiceDate = rawDocketEntry.certificateOfServiceDate;
-  this.docketEntryId = rawDocketEntry.docketEntryId;
-  this.docketNumber = rawDocketEntry.docketNumber;
-  this.documentTitle = rawDocketEntry.documentTitle;
-  this.documentType = rawDocketEntry.documentType;
-  this.eventCode = rawDocketEntry.eventCode;
-  this.filedBy = rawDocketEntry.filedBy;
-  this.filingDate = rawDocketEntry.filingDate;
-  this.freeText = rawDocketEntry.freeText;
-  this.index = rawDocketEntry.index;
-  this.isFileAttached = rawDocketEntry.isFileAttached;
-  this.isLegacyServed = rawDocketEntry.isLegacyServed;
-  this.isMinuteEntry = rawDocketEntry.isMinuteEntry;
-  this.isOnDocketRecord = rawDocketEntry.isOnDocketRecord;
-  this.isPaper = rawDocketEntry.isPaper;
-  this.isSealed = !!rawDocketEntry.isSealed;
-  this.isStricken = rawDocketEntry.isStricken;
-  this.lodged = rawDocketEntry.lodged;
-  this.numberOfPages = rawDocketEntry.numberOfPages;
-  this.objections = rawDocketEntry.objections;
-  this.processingStatus = rawDocketEntry.processingStatus;
-  this.receivedAt = rawDocketEntry.receivedAt;
-  this.sealedTo = rawDocketEntry.sealedTo;
-  this.servedAt = rawDocketEntry.servedAt;
-  this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
-};
+export class PublicDocketEntry extends JoiValidationEntity {
+  public additionalInfo?: string;
+  public additionalInfo2?: string;
+  public attachments?: boolean;
+  public certificateOfService?: boolean;
+  public certificateOfServiceDate?: string;
+  public docketEntryId?: string;
+  public docketNumber: string;
+  public documentTitle?: string;
+  public documentType?: string;
+  public eventCode?: string;
+  public filedBy?: string;
+  public filingDate: string;
+  public freeText?: string;
+  public index?: number;
+  public isFileAttached?: boolean;
+  public isLegacyServed?: boolean;
+  public isMinuteEntry?: boolean;
+  public isOnDocketRecord?: boolean;
+  public isPaper?: boolean;
+  public isSealed: boolean;
+  public isStricken?: boolean;
+  public lodged?: boolean;
+  public numberOfPages?: number;
+  public objections?: string;
+  public processingStatus?: string;
+  public receivedAt: string;
+  public sealedTo?: string;
+  public servedAt?: string;
+  public servedPartiesCode?: string;
 
-PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
-  additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
-  additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
-  attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
-  certificateOfService: DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
-  certificateOfServiceDate:
-    DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
-  createdAt: JoiValidationConstants.ISO_DATE.optional().description(
-    'When the Document was added to the system.',
-  ),
-  docketEntryId: JoiValidationConstants.UUID.optional(),
-  docketNumber: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketNumber,
-  documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
-  documentType: JoiValidationConstants.STRING.optional().description(
-    'The type of this document.',
-  ),
-  eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES).optional(),
-  filedBy: JoiValidationConstants.STRING.optional().allow('', null),
-  filingDate: JoiValidationConstants.ISO_DATE.max('now')
-    .required()
-    .description('Date that this Document was filed.'),
-  freeText: JoiValidationConstants.STRING.max(1000).optional(),
-  index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
-  isFileAttached: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isFileAttached,
-  isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,
-  isMinuteEntry: joi.boolean().optional(),
-  isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
-  isSealed: joi.boolean().required(),
-  isStricken: joi
-    .boolean()
-    .optional()
-    .description('Indicates the item has been removed from the docket record.'),
-  lodged: DOCKET_ENTRY_VALIDATION_RULE_KEYS.lodged,
-  numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
-  objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
-  processingStatus: JoiValidationConstants.STRING.optional(),
-  receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
-  sealedTo: JoiValidationConstants.STRING.when('isSealed', {
-    is: true,
-    otherwise: joi.optional().allow(null),
-    then: joi.valid(...Object.values(DOCKET_ENTRY_SEALED_TO_TYPES)).required(),
-  }).description("If sealed, the type of users who it's sealed from."),
-  servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
-  servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
-});
+  constructor(rawProps) {
+    super('PublicDocketEntry');
+    this.additionalInfo = rawProps.additionalInfo;
+    this.additionalInfo2 = rawProps.additionalInfo2;
+    this.attachments = rawProps.attachments;
+    this.certificateOfService = rawProps.certificateOfService;
+    this.certificateOfServiceDate = rawProps.certificateOfServiceDate;
+    this.docketEntryId = rawProps.docketEntryId;
+    this.docketNumber = rawProps.docketNumber;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.eventCode = rawProps.eventCode;
+    this.filedBy = rawProps.filedBy;
+    this.filingDate = rawProps.filingDate;
+    this.freeText = rawProps.freeText;
+    this.index = rawProps.index;
+    this.isFileAttached = rawProps.isFileAttached;
+    this.isLegacyServed = rawProps.isLegacyServed;
+    this.isMinuteEntry = rawProps.isMinuteEntry;
+    this.isOnDocketRecord = rawProps.isOnDocketRecord;
+    this.isPaper = rawProps.isPaper;
+    this.isSealed = !!rawProps.isSealed;
+    this.isStricken = rawProps.isStricken;
+    this.lodged = rawProps.lodged;
+    this.numberOfPages = rawProps.numberOfPages;
+    this.objections = rawProps.objections;
+    this.processingStatus = rawProps.processingStatus;
+    this.receivedAt = rawProps.receivedAt;
+    this.sealedTo = rawProps.sealedTo;
+    this.servedAt = rawProps.servedAt;
+    this.servedPartiesCode = rawProps.servedPartiesCode;
+  }
 
-joiValidationDecorator(
-  PublicDocketEntry,
-  PublicDocketEntry.VALIDATION_RULES,
-  {},
-);
+  static VALIDATION_RULES = {
+    additionalInfo: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo,
+    additionalInfo2: DOCKET_ENTRY_VALIDATION_RULE_KEYS.additionalInfo2,
+    attachments: DOCKET_ENTRY_VALIDATION_RULE_KEYS.attachments,
+    certificateOfService:
+      DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
+    certificateOfServiceDate:
+      DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
+    createdAt: JoiValidationConstants.ISO_DATE.optional().description(
+      'When the Document was added to the system.',
+    ),
+    docketEntryId: JoiValidationConstants.UUID.optional(),
+    docketNumber: DOCKET_ENTRY_VALIDATION_RULE_KEYS.docketNumber,
+    documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
+    documentType: JoiValidationConstants.STRING.optional().description(
+      'The type of this document.',
+    ),
+    eventCode: JoiValidationConstants.STRING.valid(
+      ...ALL_EVENT_CODES,
+    ).optional(),
+    filedBy: JoiValidationConstants.STRING.optional().allow('', null),
+    filingDate: JoiValidationConstants.ISO_DATE.max('now')
+      .required()
+      .description('Date that this Document was filed.'),
+    freeText: JoiValidationConstants.STRING.max(1000).optional(),
+    index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
+    isFileAttached: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isFileAttached,
+    isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,
+    isMinuteEntry: joi.boolean().optional(),
+    isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
+    isSealed: joi.boolean().required(),
+    isStricken: joi
+      .boolean()
+      .optional()
+      .description(
+        'Indicates the item has been removed from the docket record.',
+      ),
+    lodged: DOCKET_ENTRY_VALIDATION_RULE_KEYS.lodged,
+    numberOfPages: DOCKET_ENTRY_VALIDATION_RULE_KEYS.numberOfPages,
+    objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
+    processingStatus: JoiValidationConstants.STRING.optional(),
+    receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
+    sealedTo: JoiValidationConstants.STRING.when('isSealed', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi
+        .valid(...Object.values(DOCKET_ENTRY_SEALED_TO_TYPES))
+        .required(),
+    }).description("If sealed, the type of users who it's sealed from."),
+    servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
+    servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
+  } as const;
 
-module.exports = { PublicDocketEntry: validEntityDecorator(PublicDocketEntry) };
+  static VALIDATION_ERROR_MESSAGES = {} as const;
+
+  getValidationRules() {
+    return PublicDocketEntry.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return PublicDocketEntry.VALIDATION_ERROR_MESSAGES;
+  }
+}

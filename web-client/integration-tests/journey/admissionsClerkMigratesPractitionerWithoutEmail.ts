@@ -5,7 +5,7 @@ const { faker } = require('@faker-js/faker');
 
 const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 const axiosInstance = axios.create({
   headers: {
@@ -17,8 +17,8 @@ const axiosInstance = axios.create({
   timeout: 2000,
 });
 
-const mockUserId = faker.datatype.uuid();
-const mockBarNumber = `ZZ${faker.datatype.number({ max: 9999, min: 1000 })}`;
+const mockUserId = faker.string.uuid();
+const mockBarNumber = `ZZ${faker.number.int({ max: 9999, min: 1000 })}`;
 
 const practitionerWithoutEmail = {
   user: {
