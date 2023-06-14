@@ -11,8 +11,6 @@ import { VALIDATION_ERROR_MESSAGES } from '../externalDocument/ExternalDocumentI
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
-// documentWithConcatentatedPetitionerNames
-// documentWithObjections
 export class CaseAssociationRequestDocumentTypeB extends JoiValidationEntity {
   public attachments?: boolean;
   public certificateOfService: boolean;
