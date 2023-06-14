@@ -9,9 +9,15 @@ export const getAllFeatureFlagsAction = async ({
   applicationContext,
   store,
 }: ActionProps) => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext);
+  let featureFlags = {};
+
+  try {
+    featureFlags = await applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor(applicationContext);
+  } catch (e) {
+    console.error(e);
+  }
 
   store.set(state.featureFlags, featureFlags);
 };
