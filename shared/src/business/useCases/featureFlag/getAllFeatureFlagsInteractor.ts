@@ -1,13 +1,13 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
 
 /**
- * getFeatureFlagValueInteractor
+ * getAllFeatureFlagsInteractor
  *
  * @param {object} applicationContext the application context
  * @param {string} providers.featureFlag the feature flag to get the value for
  * @returns {boolean} true if result of the persistence method is 'true'; false otherwise
  */
-export const getFeatureFlagValueInteractor = async (
+export const getAllFeatureFlagsInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(

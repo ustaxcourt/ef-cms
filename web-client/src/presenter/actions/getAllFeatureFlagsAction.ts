@@ -14,7 +14,7 @@ export const getAllFeatureFlagsAction = async ({
   try {
     featureFlags = await applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor(applicationContext);
+      .getAllFeatureFlagsInteractor(applicationContext);
   } catch (e) {
     console.error(e);
   }

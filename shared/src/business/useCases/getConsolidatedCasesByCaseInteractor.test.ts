@@ -95,7 +95,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
     it('should return all full consolidated cases if the petitioner is part of the group', async () => {
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValueOnce(true);
+        .getAllFeatureFlagsInteractor.mockResolvedValueOnce(true);
       applicationContext.getCurrentUser.mockReturnValueOnce(petitionerUser);
       const mockCases = [
         {
@@ -134,7 +134,7 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
   it('should return all public consolidated cases if the petitioner is not associated with the group', async () => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockResolvedValueOnce(true);
+      .getAllFeatureFlagsInteractor.mockResolvedValueOnce(true);
 
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
