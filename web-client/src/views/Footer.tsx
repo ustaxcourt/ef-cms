@@ -1,33 +1,27 @@
 /* eslint-disable react/jsx-no-target-blank */
 import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
-import { Icon } from '../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
 
-const ScrollToTopButton = () => {
+function ScrollToTopButton() {
   return (
     <Button
-      link
-      className="usa-footer__primary-link inline-block text-left margin-top-1"
-      overrideMargin={true}
+      className="animated bounce-in-up"
+      icon="chevron-up"
+      id="return-to-top-btn"
+      noMargin={true}
+      overrideMargin="margin-right-0"
+      size="xs"
       onClick={e => {
         e.preventDefault();
         window.scrollTo(0, 0);
       }}
-    >
-      <Icon
-        aria-label="return to top"
-        className="margin-right-1"
-        icon={['fas', 'long-arrow-alt-up']}
-        size="1x"
-      />{' '}
-      Return to top
-    </Button>
+    ></Button>
   );
-};
+}
 
 export const Footer = connect(
   {
