@@ -36,7 +36,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValueOnce({
+      .advancedDocumentSearch.mockResolvedValue({
         results: [
           {
             documentType:
@@ -60,7 +60,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
+      .advancedDocumentSearch.mockResolvedValueOnce({
         results: [
           {
             documentType:

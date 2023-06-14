@@ -59,7 +59,7 @@ export const getOrdersFiledByJudgeInteractor = async (
   );
 
   const totalOrders = resultsOfAllOrdersByJudges.flatMap(obj =>
-    obj.results.filter(item => typeof item === 'object'),
+    (obj.results || []).filter(item => typeof item === 'object'),
   );
 
   let result = groupBy(totalOrders, 'eventCode');

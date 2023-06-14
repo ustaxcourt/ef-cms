@@ -37,7 +37,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
   it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
+      .advancedDocumentSearch.mockResolvedValueOnce({
         results: [
           {
             caseCaption: 'Samson Workman, Petitioner',
@@ -55,6 +55,31 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
             documentTitle: 'Summary Opinion for KitKats',
             documentType: 'Summary Opinion',
             eventCode: 'SOP',
+            signedJudgeName: 'Guy Fieri',
+          },
+        ],
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            caseCaption: 'James Bond, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '105-19',
+            documentTitle: 'T.C. Opinion for Rainy Skies',
+            documentType: 'T.C. Opinion',
+            eventCode: 'TCOP',
+            signedJudgeName: 'Guy Fieri',
+          },
+          {
+            caseCaption: 'Nelson Mandela, Petitioner',
+            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+            docketNumber: '106-19',
+            documentTitle: 'Memorandum Opinion Judge Fieri Flight to Africa',
+            documentType: 'Memorandum Opinion',
+            eventCode: 'MOP',
             signedJudgeName: 'Guy Fieri',
           },
         ],
@@ -86,13 +111,13 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     });
 
     expect(result).toEqual([
-      { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
+      { count: 1, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
       {
         count: 0,
         documentType: 'Order of Service of Transcript (Bench Opinion)',
         eventCode: 'OST',
       },
-      { count: 2, documentType: 'Summary Opinion', eventCode: 'SOP' },
+      { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
       { count: 2, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
     ]);
   });

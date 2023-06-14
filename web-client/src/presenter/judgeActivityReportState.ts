@@ -25,7 +25,7 @@ export type TrialSessionTypes = {
 
 export type OrdersAndOpinionTypes = {
   count: number;
-  documentType: string;
+  documentType: string | undefined;
   eventCode: string;
 };
 

@@ -52,7 +52,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
   );
 
   const totalOpinionResults = aggregatedOpinionsResults.flatMap(obj =>
-    obj.results.filter(item => typeof item === 'object'),
+    (obj.results || []).filter(item => typeof item === 'object'),
   );
 
   const result = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
