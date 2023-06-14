@@ -8,7 +8,8 @@
 .scannerwork/
 .terraform.lock.hcl
 .terraform/
-.vscode
+.vscode/*
+!.vscode/launch.json
 **/*_.js
 *.iml
 shared/src/business/utilities/htmlGenerator/index.scss

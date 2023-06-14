@@ -20,11 +20,7 @@ import {
 } from '../entities/cases/Case';
 import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
 import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
-import {
-  DocketEntry,
-  getServedPartiesCode,
-  isServed,
-} from '../entities/DocketEntry';
+import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
@@ -96,7 +92,6 @@ import {
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
-import { getFeatureFlagValueInteractor } from '../useCases/featureFlag/getFeatureFlagValueInteractor';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
 import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
@@ -302,10 +297,16 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isSealedCase: jest.fn().mockImplementation(isSealedCase),
-    isServed: jest.fn().mockImplementation(isServed),
+    isServed: jest.fn().mockImplementation(DocketEntry.isServed),
     isStandaloneRemoteSession: jest
       .fn()
       .mockImplementation(isStandaloneRemoteSession),
+    isStringISOFormatted: jest
+      .fn()
+      .mockImplementation(DateHandler.isStringISOFormatted),
+    isTodayWithinGivenInterval: jest
+      .fn()
+      .mockImplementation(DateHandler.isTodayWithinGivenInterval),
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
@@ -347,9 +348,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getFeatureFlagValueInteractor: jest
-      .fn()
-      .mockImplementation(getFeatureFlagValueInteractor),
+    getFeatureFlagValueInteractor: jest.fn().mockImplementation(() => false),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
@@ -467,6 +466,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getCasesByFilters: jest.fn(),
     getChambersSections: jest.fn().mockImplementation(getChambersSections),
     getChambersSectionsLabels: jest
       .fn()

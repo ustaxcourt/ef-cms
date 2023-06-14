@@ -13,8 +13,10 @@ describe('DateHandler', () => {
       FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
       LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',
+      MDYY: '7/2/18',
       MDYYYY: '7/2/2018',
       MDYYYY_DASHED: '7-2-2018',
+
       MMDDYY: '07/02/18',
       MMDDYYYY: '07/02/2018',
       MMDDYYYY_DASHED: '07-02-2018',
@@ -55,7 +57,7 @@ describe('DateHandler', () => {
 
     it('formats a date using pm (lowercase)', () => {
       const dateStringFormat = '2011-09-08T18:00:00.000Z';
-      const result = formatDateString(dateStringFormat, 'DATE_TIME_TZ');
+      const result = formatDateString(dateStringFormat, FORMATS.DATE_TIME_TZ);
       expect(result).toEqual('09/08/11 2:00 pm ET');
     });
   });
