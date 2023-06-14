@@ -10,9 +10,6 @@ import { SupportingDocumentInformationFactory } from '../externalDocument/Suppor
 import { VALIDATION_ERROR_MESSAGES } from '../externalDocument/ExternalDocumentInformationFactory';
 import joi from 'joi';
 
-// documentWithObjections
-// documentWithSupportingDocuments
-// documentWithAttachments
 export class CaseAssociationRequestDocumentTypeC extends JoiValidationEntity {
   public attachments: boolean;
   public certificateOfService: boolean;
@@ -105,7 +102,7 @@ export class CaseAssociationRequestDocumentTypeC extends JoiValidationEntity {
     scenario: 'Select a document',
   };
 
-  getDocumentTitle = petitioners => {
+  getDocumentTitle = () => {
     return this.documentTitleTemplate;
   };
 
