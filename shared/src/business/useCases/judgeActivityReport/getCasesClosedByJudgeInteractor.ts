@@ -27,36 +27,38 @@ export const getCasesClosedByJudgeInteractor = async (
   let totalCloseCaseCount: number = 0;
   let totalClosedDismissedCaseCount: number = 0;
 
-  judgesSelection.forEach(async judge => {
-    const searchEntity = new JudgeActivityReportSearch({
-      endDate,
-      judgeName: judge,
-      startDate,
-    });
-
-    if (!searchEntity.isValid()) {
-      throw new InvalidRequest();
-    }
-
-    const casesClosedByJudge = await applicationContext
-      .getPersistenceGateway()
-      .getCasesClosedByJudge({
-        applicationContext,
-        endDate: searchEntity.endDate,
+  await Promise.all(
+    judgesSelection.map(async judge => {
+      const searchEntity = new JudgeActivityReportSearch({
+        endDate,
         judgeName: judge,
-        startDate: searchEntity.startDate,
+        startDate,
       });
 
-    const closedDismissedCaseCount: number = casesClosedByJudge.filter(
-      caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
-    ).length;
-    totalClosedDismissedCaseCount += closedDismissedCaseCount;
+      if (!searchEntity.isValid()) {
+        throw new InvalidRequest();
+      }
 
-    const closedCaseCount: number = casesClosedByJudge.filter(
-      caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
-    ).length;
-    totalCloseCaseCount += closedCaseCount;
-  });
+      const casesClosedByJudge = await applicationContext
+        .getPersistenceGateway()
+        .getCasesClosedByJudge({
+          applicationContext,
+          endDate: searchEntity.endDate,
+          judgeName: judge,
+          startDate: searchEntity.startDate,
+        });
+
+      const closedDismissedCaseCount: number = casesClosedByJudge.filter(
+        caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
+      ).length;
+      totalClosedDismissedCaseCount += closedDismissedCaseCount;
+
+      const closedCaseCount: number = casesClosedByJudge.filter(
+        caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
+      ).length;
+      totalCloseCaseCount += closedCaseCount;
+    }),
+  );
 
   return {
     [CASE_STATUS_TYPES.closed]: totalCloseCaseCount,
