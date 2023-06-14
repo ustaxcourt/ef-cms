@@ -1,5 +1,6 @@
 import { state } from 'cerebral';
 
+// TODO: ADJUST LOGIC TO GET ALL JUDGES IDS AND PASS TO INTERACTOR
 export const getTrialSessionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,

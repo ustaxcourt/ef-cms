@@ -4,9 +4,10 @@ import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteract
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 describe('getOrdersFiledByJudgeInteractor', () => {
+  const judgesSelection = ['Colvin', 'Buch'];
   const mockValidRequest = {
     endDate: '03/21/2020',
-    judgeName: judgeUser.name,
+    judgesSelection,
     startDate: '02/12/2020',
   };
 
@@ -26,7 +27,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     await expect(
       getOrdersFiledByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgeName: judgeUser.name,
+        judgesSelection,
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
@@ -35,7 +36,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
+      .advancedDocumentSearch.mockResolvedValueOnce({
         results: [
           {
             documentType:
@@ -57,6 +58,23 @@ describe('getOrdersFiledByJudgeInteractor', () => {
         ],
       });
 
+    applicationContext
+      .getPersistenceGateway()
+      .advancedDocumentSearch.mockResolvedValue({
+        results: [
+          {
+            documentType:
+              'Order that the letter "R" is added to the Docket number',
+            eventCode: 'OAR',
+          },
+          {
+            documentType:
+              'Order that the letter "X" is deleted from the Docket number',
+            eventCode: 'ODX',
+          },
+        ],
+      });
+
     const result = await getOrdersFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
@@ -67,7 +85,17 @@ describe('getOrdersFiledByJudgeInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       endDate: '2020-03-22T03:59:59.999Z',
-      judge: mockValidRequest.judgeName,
+      judge: judgesSelection[0],
+      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
+      startDate: '2020-02-12T05:00:00.000Z',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[1][0],
+    ).toMatchObject({
+      endDate: '2020-03-22T03:59:59.999Z',
+      judge: judgesSelection[1],
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: '2020-02-12T05:00:00.000Z',
     });
@@ -80,6 +108,11 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       },
       {
         count: 1,
+        documentType: 'Order that the letter "R" is added to the Docket number',
+        eventCode: 'OAR',
+      },
+      {
+        count: 2,
         documentType:
           'Order that the letter "X" is deleted from the Docket number',
         eventCode: 'ODX',
