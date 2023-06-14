@@ -41,7 +41,7 @@ describe('addPaperFilingInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(Promise.resolve(true));
+      .getAllFeatureFlagsInteractor.mockReturnValue(Promise.resolve(true));
 
     applicationContext
       .getPersistenceGateway()

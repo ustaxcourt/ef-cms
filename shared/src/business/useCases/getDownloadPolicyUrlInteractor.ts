@@ -109,7 +109,7 @@ export const getDownloadPolicyUrlInteractor = async (
 ) => {
   const isConsolidatedGroupAccessEnabled = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
+    .getAllFeatureFlagsInteractor(applicationContext, {
       featureFlag:
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
     });

@@ -52,6 +52,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesByStatusAndByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
@@ -59,7 +60,6 @@ import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
@@ -437,6 +437,7 @@ const allUseCases = {
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
   generateTrialSessionPaperServicePdfInteractor,
+  getAllFeatureFlagsInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
@@ -459,7 +460,6 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
-  getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,

@@ -10,6 +10,6 @@ import { ALLOWLIST_FEATURE_FLAGS } from '../business/entities/EntityConstants';
 export const getChiefJudgeNameForSigningInteractor = applicationContext =>
   applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
+    .getAllFeatureFlagsInteractor(applicationContext, {
       featureFlag: ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key,
     });

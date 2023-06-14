@@ -1,8 +1,7 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getFeatureFlagValueInteractor } from './getFeatureFlagValueInteractor';
+import { getAllFeatureFlagsInteractor } from './getAllFeatureFlagsInteractor';
 
-describe('getFeatureFlagValueInteractor', () => {
+describe('getAllFeatureFlagsInteractor', () => {
   it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {
     const mockFeatureFlagValue = {
       current: true,
@@ -11,9 +10,7 @@ describe('getFeatureFlagValueInteractor', () => {
       .getPersistenceGateway()
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
-    const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
-    });
+    const result = await getAllFeatureFlagsInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway().getFeatureFlagValue,
@@ -27,9 +24,7 @@ describe('getFeatureFlagValueInteractor', () => {
       .getPersistenceGateway()
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
-    const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
-    });
+    const result = await getAllFeatureFlagsInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway().getFeatureFlagValue,
@@ -46,9 +41,7 @@ describe('getFeatureFlagValueInteractor', () => {
       .getPersistenceGateway()
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
-    const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key,
-    });
+    const result = await getAllFeatureFlagsInteractor(applicationContext);
 
     expect(result).toBe(mockFeatureFlagValue.current);
   });
@@ -57,9 +50,7 @@ describe('getFeatureFlagValueInteractor', () => {
     const mockFeatureFlagDenied = 'woopsies';
 
     await expect(
-      getFeatureFlagValueInteractor(applicationContext, {
-        featureFlag: mockFeatureFlagDenied,
-      }),
+      getAllFeatureFlagsInteractor(applicationContext),
     ).rejects.toThrow(
       `Unauthorized: ${mockFeatureFlagDenied} is not included in the allowlist`,
     );

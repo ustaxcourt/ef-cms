@@ -13,7 +13,7 @@ describe('getAllFeatureFlagsAction', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockResolvedValue(mockFeatureFlagsObject);
+      .getAllFeatureFlagsInteractormockResolvedValue(mockFeatureFlagsObject);
   });
 
   it('makes a call to retrieve all feature flags', async () => {
@@ -24,7 +24,7 @@ describe('getAllFeatureFlagsAction', () => {
       state: {},
     });
     expect(
-      applicationContext.getUseCases().getFeatureFlagValueInteractor,
+      applicationContext.getUseCases().getAllFeatureFlagsInteractor,
     ).toHaveBeenCalled();
   });
 

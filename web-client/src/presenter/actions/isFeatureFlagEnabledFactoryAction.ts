@@ -16,7 +16,7 @@ export const isFeatureFlagEnabledFactoryAction =
     if (isEmpty(featureFlags)) {
       featureFlags = await applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor(applicationContext);
+        .getAllFeatureFlagsInteractor(applicationContext);
 
       store.set(state.featureFlags, featureFlags);
     }

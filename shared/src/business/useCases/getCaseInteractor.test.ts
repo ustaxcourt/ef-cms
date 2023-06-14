@@ -466,7 +466,7 @@ describe('getCaseInteractor', () => {
       });
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockResolvedValue(true);
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue({

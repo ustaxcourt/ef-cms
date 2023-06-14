@@ -25,7 +25,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   it('returns 403 when the user is not authorized', async () => {
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentApplicationContext(user);
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
 
@@ -41,7 +41,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentApplicationContext(user);
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
 
@@ -87,7 +87,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   it('returns 404 when the entity GUID isn’t found', async () => {
     const user = MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'];
     const applicationContext = createSilentApplicationContext(user);
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
     const request = Object.assign({}, REQUEST_EVENT, {
@@ -147,7 +147,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   it('returns 500 on an unexpected error', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentApplicationContext(user);
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
     const request = Object.assign({}, REQUEST_EVENT, {
@@ -182,7 +182,7 @@ describe('getDocumentDownloadUrlLambda', () => {
       const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
       const applicationContext = createSilentApplicationContext(user);
 
-      applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+      applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(isFeatureFlagOn);
 

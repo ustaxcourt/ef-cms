@@ -755,7 +755,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockResolvedValue(true);
 
       applicationContext
         .getPersistenceGateway()

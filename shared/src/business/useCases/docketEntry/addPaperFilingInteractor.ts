@@ -60,7 +60,7 @@ export const addPaperFilingInteractor = async (
 
   const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
+    .getAllFeatureFlagsInteractor(applicationContext, {
       featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
     });
 

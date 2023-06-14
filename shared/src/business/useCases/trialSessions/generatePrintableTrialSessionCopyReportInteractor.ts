@@ -49,7 +49,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
 
   const areUpdatedTrialSessionTypesEnabled = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
+    .getAllFeatureFlagsInteractor(applicationContext, {
       featureFlag: ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key,
     });
 

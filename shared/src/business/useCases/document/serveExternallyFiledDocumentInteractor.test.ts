@@ -47,7 +47,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
+      .getAllFeatureFlagsInteractor.mockReturnValue(true);
 
     applicationContext
       .getUseCaseHelpers()
@@ -347,7 +347,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const mockMemberCaseDocketNumber = '999-15';
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
+      .getAllFeatureFlagsInteractor.mockReturnValue(false);
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',

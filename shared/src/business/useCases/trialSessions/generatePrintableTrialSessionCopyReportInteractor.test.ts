@@ -41,7 +41,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
+      .getAllFeatureFlagsInteractor.mockReturnValue(false);
   });
 
   beforeEach(() => {

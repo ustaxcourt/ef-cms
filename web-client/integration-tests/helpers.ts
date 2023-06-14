@@ -249,7 +249,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
+      getAllFeatureFlagsInteractor: (appContext, { featureFlag }) => {
         if (
           featureFlag ===
           ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
