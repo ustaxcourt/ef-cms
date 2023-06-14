@@ -1,5 +1,12 @@
 import { state } from 'cerebral';
 
+/**
+ * get case deadlines between start and end date and can be filtered by judge
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {function} providers.get the get function
+ * @returns {object} the case deadlines and total count of returned case deadlines
+ */
 export const getCaseDeadlinesAction = async ({
   applicationContext,
   get,
