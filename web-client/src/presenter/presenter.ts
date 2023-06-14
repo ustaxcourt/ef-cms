@@ -1082,7 +1082,7 @@ export const presenter = {
 export type Sequences = typeof presenterSequences;
 
 declare global {
-  type ActionProps = {
+  type ActionProps<Props = any> = {
     applicationContext: ClientApplicationContext;
     get: <T>(slice: T) => T;
     store: {
@@ -1090,7 +1090,7 @@ declare global {
       unset: (key: any) => void;
     };
     path: any;
-    props: any;
+    props: Props;
     router: any;
   };
 }
