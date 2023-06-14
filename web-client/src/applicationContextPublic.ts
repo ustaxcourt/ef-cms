@@ -3,6 +3,7 @@ import {
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -18,6 +19,7 @@ import {
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -45,6 +47,7 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
   formatDocketEntry,
@@ -118,6 +121,7 @@ const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_TABS,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -134,6 +138,7 @@ const frozenConstants = deepFreeze({
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   ORDER_EVENT_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   STIPULATED_DECISION_EVENT_CODE,
   TODAYS_ORDERS_SORT_DEFAULT,
@@ -199,6 +204,7 @@ const applicationContextPublic = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       openUrlInNewTab,
+      prepareDateFromString,
       sortDocketEntries,
     };
   },

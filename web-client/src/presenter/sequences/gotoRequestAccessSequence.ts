@@ -14,6 +14,7 @@ import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
+import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from '../actions/FileDocument/setIsExternalConsolidatedCaseGroupEnabledValueAction';
 import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
@@ -32,6 +33,7 @@ const gotoRequestAccess = startWebSocketConnectionSequenceDecorator([
   canRequestAccessAction,
   {
     proceed: [
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
       setDefaultFileDocumentFormValuesAction,
       runPathForUserRoleAction,
       {

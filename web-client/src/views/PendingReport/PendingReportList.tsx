@@ -1,6 +1,7 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -70,6 +71,7 @@ export const PendingReportList = connect(
         >
           <thead>
             <tr>
+              <th />
               <th aria-label="Docket Number">Docket No.</th>
               <th>Date Filed</th>
               <th>Case Title</th>
@@ -81,6 +83,15 @@ export const PendingReportList = connect(
           {formattedPendingItems.items.map(item => (
             <tbody key={`pending-item-${item.docketEntryId}`}>
               <tr className="pending-item-row">
+                <td>
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      item.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={item.inConsolidatedGroup}
+                    showLeadCaseIcon={item.inLeadCase}
+                  />
+                </td>
                 <td>
                   <CaseLink formattedCase={item} />
                 </td>
