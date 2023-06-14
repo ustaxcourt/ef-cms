@@ -24,6 +24,7 @@ import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
+import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -120,6 +121,7 @@ const pages = {
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
+  CustomCaseReport,
   DashboardChambers,
   DashboardInactive,
   DashboardIrsSuperuser,

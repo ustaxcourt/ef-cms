@@ -40,7 +40,7 @@ export const archiveDraftDocument = async (
     docketEntryId,
   });
 
-  caseEntity.archiveDocketEntry(docketEntryToArchive, { applicationContext });
+  caseEntity.archiveDocketEntry(docketEntryToArchive);
 
   const { workItem } = docketEntryToArchive;
 

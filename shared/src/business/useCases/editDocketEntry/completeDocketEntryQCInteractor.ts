@@ -139,7 +139,6 @@ const completeDocketEntryQC = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,

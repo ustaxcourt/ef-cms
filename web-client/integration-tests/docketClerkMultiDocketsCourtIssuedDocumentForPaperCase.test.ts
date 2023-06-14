@@ -51,7 +51,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, { overrides });
+  petitionsClerkCreatesNewCase(cerebralTest, overrides);
 
   it('add paper case docket number to tracked consolidated cases', () => {
     cerebralTest.consolidatedCases.push(cerebralTest.docketNumber);

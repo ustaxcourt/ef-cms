@@ -158,7 +158,6 @@ export const serveExternallyFiledDocument = async (
             isPendingService: isSubjectCase,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-            userId: user.userId,
           },
           { applicationContext },
         );

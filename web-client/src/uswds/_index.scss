@@ -1,0 +1,40 @@
+@use 'uswds-core' as * with (
+  $theme-show-notifications: false,
+  $theme-font-path: '../../node_modules/@uswds/uswds/dist/fonts',
+  $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
+  $theme-font-weight-semibold: 600
+);
+@forward 'uswds-global';
+@forward 'usa-date-picker';
+@forward 'usa-date-range-picker';
+@forward 'usa-accordion';
+@forward 'usa-alert';
+@forward 'usa-banner';
+@forward 'usa-button';
+@forward 'usa-character-count';
+@forward 'usa-checkbox';
+@forward 'usa-error-message';
+@forward 'usa-fieldset';
+@forward 'usa-footer';
+@forward 'usa-form';
+@forward 'usa-form-group';
+@forward 'usa-header';
+@forward 'usa-hint';
+@forward 'usa-input';
+@forward 'usa-label';
+@forward 'usa-legend';
+@forward 'usa-link';
+@forward 'usa-list';
+@forward 'usa-media-block';
+@forward 'usa-nav';
+@forward 'usa-pagination';
+@forward 'usa-radio';
+@forward 'usa-search';
+@forward 'usa-section';
+@forward 'usa-select';
+@forward 'usa-skipnav';
+@forward 'usa-table';
+@forward 'usa-tag';
+@forward 'usa-textarea';
+@forward 'usa-tooltip';
+@forward 'uswds-utilities';

@@ -40,6 +40,7 @@ import { deleteDeficiencyStatisticLambda } from './cases/deleteDeficiencyStatist
 import { deletePractitionerDocumentLambda } from './practitioners/deletePractitionerDocumentLambda';
 import { deleteTrialSessionLambda } from './trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './caseNote/deleteUserCaseNoteLambda';
+import { dismissNOTTReminderForTrialLambda } from './trialSessions/dismissNOTTReminderForTrialLambda';
 import { downloadPolicyUrlLambda } from './documents/downloadPolicyUrlLambda';
 import { editPaperFilingLambda } from './documents/editPaperFilingLambda';
 import { editPractitionerDocumentLambda } from './practitioners/editPractitionerDocumentLambda';
@@ -70,6 +71,7 @@ import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMes
 import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
 import { getConsolidatedCasesByCaseLambda } from './cases/getConsolidatedCasesByCaseLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
+import { getCustomCaseInventoryReportLambda } from './reports/getCustomCaseInventoryReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './documents/getDocumentContentsForDocketEntryLambda';
 import { getDocumentDownloadUrlLambda } from './documents/getDocumentDownloadUrlLambda';
 import { getDocumentQCInboxForSectionLambda } from './workitems/getDocumentQCInboxForSectionLambda';
@@ -181,6 +183,7 @@ import { validatePdfLambda } from './documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
 
+import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
 import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
@@ -723,6 +726,10 @@ app.get(
     lambdaWrapper(getCaseInventoryReportLambda),
   );
   app.get(
+    '/reports/custom-case-inventory-report',
+    lambdaWrapper(getCustomCaseInventoryReportLambda),
+  );
+  app.get(
     '/reports/printable-case-inventory-report',
     lambdaWrapper(generatePrintableCaseInventoryReportLambda),
   );
@@ -742,6 +749,10 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
+  );
+  app.post(
+    '/judge-activity-report/open-cases',
+    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
   );
 }
 
@@ -764,8 +775,8 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
  */
 {
   app.post(
-    '/trial-sessions/paper-service-pdf',
-    lambdaWrapper(generateTrialSessionPaperServicePdfLambda),
+    '/async/trial-sessions/paper-service-pdf',
+    lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
@@ -824,6 +835,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.put(
     '/async/trial-sessions',
     lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
+  );
+  app.put(
+    '/trial-sessions/dismiss-alert',
+    lambdaWrapper(dismissNOTTReminderForTrialLambda),
   );
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',

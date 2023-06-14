@@ -1,4 +1,4 @@
-import { DateTime, DurationLike } from 'luxon';
+import { DateTime, DurationLike, Interval } from 'luxon';
 import fedHolidays from '@18f/us-federal-holidays';
 
 export const FORMATS = {
@@ -8,6 +8,7 @@ export const FORMATS = {
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
+  MDYY: 'M/d/yy',
   MDYYYY: 'M/d/yyyy',
   MDYYYY_DASHED: 'M-d-yyyy',
   MMDDYY: 'MM/dd/yy',
@@ -38,6 +39,26 @@ export const PATTERNS = {
 };
 
 export const USTC_TZ = 'America/New_York';
+
+export const isStringISOFormatted = dateString => {
+  return DateTime.fromISO(dateString).isValid;
+};
+
+/**
+ * convert a given date or time provided in Eastern Time to a GMT luxon object
+ * @param {string} dateString a string representing a date/time in EST
+ * @param {string} inputFormat the format matching the incoming dateString
+ * @returns {string} an ISO-8601 timestamp with GMT+0
+ */
+export const prepareDateFromEST = (dateString, inputFormat) => {
+  const result = DateTime.fromFormat(dateString, inputFormat, {
+    zone: USTC_TZ,
+  })
+    .setZone(0)
+    .toISO();
+
+  return result;
+};
 
 /**
  * combines a ISO-formatted date stamp in UTC with a HH:mm time string in EST
@@ -159,48 +180,50 @@ export const createDateAtStartOfWeekEST = (
   return dateOutput;
 };
 
-export const createEndOfDayISO = ({
-  day,
-  month,
-  year,
-}: {
+export const createEndOfDayISO = (params?: {
   day: string;
   month: string;
   year: string;
 }): string => {
-  return DateTime.fromObject(
-    {
-      day: Number.parseInt(day),
-      month: Number.parseInt(month),
-      year: Number.parseInt(year),
-    },
-    { zone: USTC_TZ },
-  )
-    .set({ hour: 23, millisecond: 999, minute: 59, second: 59 })
-    .setZone('utc')
-    .toISO()!;
+  const dateObject = params
+    ? DateTime.fromObject(
+        {
+          day: Number(params.day),
+          month: Number(params.month),
+          year: Number(params.year),
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
+
+  return dateObject.endOf('day').setZone('utc').toISO();
 };
 
-export const createStartOfDayISO = ({
-  day,
-  month,
-  year,
-}: {
+export const createStartOfDayISO = (params?: {
   day: string;
   month: string;
   year: string;
 }): string => {
-  return DateTime.fromObject(
-    {
-      day: Number.parseInt(day),
-      month: Number.parseInt(month),
-      year: Number.parseInt(year),
-    },
-    { zone: USTC_TZ },
-  )
-    .startOf('day')
-    .setZone('utc')
-    .toISO()!;
+  const dateObject = params
+    ? DateTime.fromObject(
+        {
+          day: Number(params.day),
+          month: Number(params.month),
+          year: Number(params.year),
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
+
+  return dateObject.startOf('day').setZone('utc').toISO();
+};
+
+/**
+ * @param {object} options the date options containing year, month, day
+ * @returns {string} a formatted ISO date string
+ */
+export const createISODateStringFromObject = options => {
+  return DateTime.fromObject(options, { zone: USTC_TZ }).setZone('utc').toISO();
 };
 
 /**
@@ -520,4 +543,23 @@ export const getBusinessDateInFuture = ({
   }
 
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+};
+
+/**
+ * Returns whether or not the current date falls within the given date time range
+ * @param {string} intervalStartDate the interval start ISO date string
+ * @param {string} intervalEndDate the interval end ISO date string
+ * @returns {boolean} whether or not the current date falls within the given date time range
+ */
+export const isTodayWithinGivenInterval = ({
+  intervalEndDate,
+  intervalStartDate,
+}): boolean => {
+  const today = DateTime.now().setZone(USTC_TZ);
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDate,
+    intervalEndDate,
+  );
+
+  return dateRangeInterval.contains(today);
 };
