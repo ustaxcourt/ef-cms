@@ -4,14 +4,14 @@ import {
 } from 'cerebral/test';
 import type { ClientState } from '@web-client/presenter/state';
 
-type fakeRunComputeType = <T>(
-  someFunction: (get: any) => T,
-  fixtures: any,
+type FakeRunComputeType = <T>(
+  compute: (get: any) => T,
+  state: { state: any },
 ) => T;
-export const runCompute = cerebralRunCompute as unknown as fakeRunComputeType;
+export const runCompute = cerebralRunCompute as unknown as FakeRunComputeType;
 
-type fakeRunActionType = <T>(
+type FakeRunActionType = <T>(
   action: (actionProps: any) => Promise<T> | T,
-  fixtures: any,
+  fixtures: { modules?: { presenter: any }; props?: any; state?: any },
 ) => { state: ClientState; props: any; output: T };
-export const runAction = cerebralRunAction as unknown as fakeRunActionType;
+export const runAction = cerebralRunAction as unknown as FakeRunActionType;
