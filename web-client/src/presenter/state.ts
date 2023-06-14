@@ -404,16 +404,9 @@ export const baseState = {
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
-export const state = {
-  ...computeds,
+export const initialState = {
   ...baseState,
+  ...computeds,
 };
 
-declare global {
-  type State = typeof state & {
-    constants: ReturnType<typeof getConstants>;
-    modal: any;
-    screenMetadata: any;
-    featureFlags: any;
-  };
-}
+export type ClientState = typeof initialState;

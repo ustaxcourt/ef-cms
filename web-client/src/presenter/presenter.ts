@@ -196,6 +196,7 @@ import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequ
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
@@ -373,7 +374,6 @@ import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { sortTableSequence } from './sequences/sortTableSequence';
 import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
-import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
@@ -1076,7 +1076,7 @@ export const presenter = {
   ],
   providers: {},
   sequences: presenterSequences,
-  state,
+  state: initialState,
 };
 
 declare global {

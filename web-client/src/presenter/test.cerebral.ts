@@ -1,4 +1,4 @@
-import { ClientState } from './app.cerebral';
+import { ClientState } from '@web-client/presenter/state';
 import {
   runAction as cerebralRunAction,
   runCompute as cerebralRunCompute,
