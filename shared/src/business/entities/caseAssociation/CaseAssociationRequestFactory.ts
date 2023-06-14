@@ -1,4 +1,5 @@
 import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
+import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestDocumentTypeA } from './CaseAssociationRequestDocumentTypeA';
 import { CaseAssociationRequestDocumentTypeB } from './CaseAssociationRequestDocumentTypeB';
 import { CaseAssociationRequestDocumentTypeC } from './CaseAssociationRequestDocumentTypeC';
@@ -20,7 +21,6 @@ export function CaseAssociationRequestFactory(
     case 'Limited Entry of Appearance':
       return new CaseAssociationRequestDocumentTypeD(rawProps);
     default:
-      // TODO
-      return new CaseAssociationRequestDocumentTypeA(rawProps);
+      return new CaseAssociationRequestDocumentBase(rawProps);
   }
 }

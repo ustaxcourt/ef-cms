@@ -4,13 +4,13 @@ import {
   OBJECTIONS_OPTIONS,
   SCENARIOS,
 } from '../EntityConstants';
+import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
 import { VALIDATION_ERROR_MESSAGES } from '../externalDocument/ExternalDocumentInformationFactory';
 import joi from 'joi';
 
-export class CaseAssociationRequestDocumentTypeC extends JoiValidationEntity {
+export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestDocument {
   public attachments: boolean;
   public certificateOfService: boolean;
   public certificateOfServiceDate?: string;
