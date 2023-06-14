@@ -5,10 +5,9 @@ import { runAction } from 'cerebral/test';
 
 describe('getOrdersIssuedForJudgeActivityReportAction', () => {
   presenter.providers.applicationContext = applicationContext;
-
+  const judgesSelection = ['Colvin', 'Buch'];
   const mockStartDate = '02/20/2021';
   const mockEndDate = '03/03/2021';
-  const mockJudgeName = 'Sotomayor';
   const mockOrdersIssuedByJudge = [
     {
       count: 1,
@@ -39,7 +38,7 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
-              judgeName: mockJudgeName,
+              judgesSelection,
               startDate: mockStartDate,
             },
           },
@@ -52,7 +51,7 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeName: mockJudgeName,
+      judgesSelection,
       startDate: mockStartDate,
     });
     expect(output.orders).toBe(mockOrdersIssuedByJudge);

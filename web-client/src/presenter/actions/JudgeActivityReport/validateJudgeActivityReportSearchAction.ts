@@ -11,6 +11,7 @@ export const validateJudgeActivityReportSearchAction = ({
 
   let errors;
 
+  // TODO: refactor JudgeActivityReportSearch to take judgesSelection for validation
   judgesSelection.forEach(eachJudge => {
     errors = new JudgeActivityReportSearch({
       endDate,

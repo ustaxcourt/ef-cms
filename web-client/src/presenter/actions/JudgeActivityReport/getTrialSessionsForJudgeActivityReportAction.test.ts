@@ -23,7 +23,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       ]);
 
     const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction as any,
+      getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
           presenter,
@@ -56,7 +56,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       ]);
 
     const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction as any,
+      getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
           presenter,
