@@ -13,7 +13,7 @@
 
 This will host a local server at http://localhost:5000.
 
-### Running Unit Tests with Coverage
+### Running Unit Tests with Coveraged
 
 - `npm test`
 
