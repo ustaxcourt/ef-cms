@@ -1,14 +1,13 @@
-const { UserCaseNote } = require('./UserCaseNote');
-
-const errorMessages = UserCaseNote.VALIDATION_ERROR_MESSAGES;
+import { UserCaseNote } from './UserCaseNote';
 
 describe('UserCaseNote', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = new UserCaseNote({});
+
       expect(entity.getFormattedValidationErrors()).toEqual({
         docketNumber: '"docketNumber" is required',
-        notes: errorMessages.notes,
+        notes: UserCaseNote.VALIDATION_ERROR_MESSAGES.notes,
         userId: '"userId" is required',
       });
     });
@@ -19,6 +18,7 @@ describe('UserCaseNote', () => {
         notes: 'some notes',
         userId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
       });
+
       expect(entity.getFormattedValidationErrors()).toEqual(null);
     });
   });

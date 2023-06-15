@@ -42,6 +42,7 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -78,8 +79,10 @@ import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
+import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
+import { paperServiceStatusHelper } from './computeds/paperServiceStatusHelper';
 import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
@@ -168,6 +171,7 @@ const helpers = {
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
+  externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
   featureFlagHelper,
   fileDocumentHelper,
@@ -200,8 +204,10 @@ const helpers = {
   messageModalHelper,
   messagesHelper,
   myAccountHelper,
+  noticeStatusHelper,
   orderTypesHelper,
   paperDocketEntryHelper,
+  paperServiceStatusHelper,
   partiesInformationHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
@@ -264,6 +270,7 @@ export const baseState = {
   completeForm: {},
   // TODO: replace with state.form
   currentJudges: [],
+
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -294,6 +301,7 @@ export const baseState = {
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
+
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
@@ -310,6 +318,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   individualInProgressCount: 0,
@@ -324,8 +333,16 @@ export const baseState = {
     showModal: undefined, // the name of the modal to display
   },
   navigation: {},
+  noticeStatusState: {
+    casesProcessed: 0,
+    totalCases: 0,
+  },
   notifications: {},
   openCases: [],
+  paperServiceStatusState: {
+    pdfsAppended: 0,
+    totalPdfs: 0,
+  },
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
@@ -346,6 +363,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
