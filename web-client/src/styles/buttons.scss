@@ -262,7 +262,6 @@ table.ustc-table .ustc-button--unstyled {
 }
 
 .bounce-out-down {
-  display: none;
   animation-name: bounce-out-down;
 }
 
@@ -277,23 +276,20 @@ table.ustc-table .ustc-button--unstyled {
 }
 
 @keyframes bounce-out-down {
-  0% {
-     transform: scale(1);
+  20% {
+    transform: translate3d(0, 10px, 0) scaleY(0.985);
   }
 
-  25% {
-     transform: scale(.95);
-  }
-
-  50% {
-     opacity: 1;
-     transform: scale(1.1);
+  40%,
+  45% {
+    opacity: 1;
+    transform: translate3d(0, -20px, 0) scaleY(0.9);
   }
 
   100% {
-     opacity: 0;
-     transform: scale(.3);
-  } 
+    opacity: 0;
+    transform: translate3d(0, 2000px, 0) scaleY(3);
+  }
 } 
 
 @keyframes bounce-in-up {
