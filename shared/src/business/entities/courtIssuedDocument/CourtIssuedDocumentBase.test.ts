@@ -9,7 +9,6 @@ describe('CourtIssuedDocumentBase', () => {
         scenario: null,
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
@@ -20,7 +19,6 @@ describe('CourtIssuedDocumentBase', () => {
         scenario: null,
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
       });

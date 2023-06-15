@@ -7,6 +7,12 @@ import {
 import { JoiValidationEntity } from '../JoiValidationEntity';
 
 export abstract class CourtIssuedDocument extends JoiValidationEntity {
+  public attachments!: boolean;
+  public documentTitle?: string;
+  public documentType!: string;
+  public eventCode?: string;
+  public filingDate?: string;
+
   abstract getDocumentTitle(): string;
 }
 
@@ -46,7 +52,7 @@ export const VALIDATION_ERROR_MESSAGES = {
   judge: 'Select a judge',
   serviceStamp: 'Select a service stamp',
   trialLocation: 'Select a trial location',
-};
+} as const;
 
 export const ENTERED_AND_SERVED_EVENT_CODES = [
   'ODJ',

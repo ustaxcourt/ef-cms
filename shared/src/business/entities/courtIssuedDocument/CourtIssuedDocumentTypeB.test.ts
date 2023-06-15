@@ -64,7 +64,7 @@ describe('CourtIssuedDocumentTypeB', () => {
           scenario: 'Type B',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 

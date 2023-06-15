@@ -66,7 +66,7 @@ describe('CourtIssuedDocumentTypeG', () => {
           trialLocation: 'Seattle, Washington',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 
