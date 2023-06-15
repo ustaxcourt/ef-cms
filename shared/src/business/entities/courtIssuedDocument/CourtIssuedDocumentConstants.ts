@@ -1,10 +1,20 @@
-const deepFreeze = require('deep-freeze');
+import {
+  FORMATS,
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+} from '../../utilities/DateHandler';
+import { JoiValidationEntity } from '../JoiValidationEntity';
+
+export abstract class CourtIssuedDocument extends JoiValidationEntity {
+  abstract getDocumentTitle(): string;
+}
 
 /**
  * these are in a separate file from the entity so they can be used
  * in each of the sub-types without a circular dependency
  */
-const VALIDATION_ERROR_MESSAGES = {
+export const VALIDATION_ERROR_MESSAGES = {
   attachments: 'Enter selection for Attachments',
   date: [
     {
@@ -38,7 +48,7 @@ const VALIDATION_ERROR_MESSAGES = {
   trialLocation: 'Select a trial location',
 };
 
-const ENTERED_AND_SERVED_EVENT_CODES = [
+export const ENTERED_AND_SERVED_EVENT_CODES = [
   'ODJ',
   'OD',
   'ODD',
@@ -47,21 +57,18 @@ const ENTERED_AND_SERVED_EVENT_CODES = [
   'SDEC',
 ];
 
-const GENERIC_ORDER_DOCUMENT_TYPE = 'Order';
-const REPORT_PAMPHLET_DOCUMENT_TYPE = 'Tax Court Report Pamphlet';
+export const GENERIC_ORDER_DOCUMENT_TYPE = 'Order';
+export const REPORT_PAMPHLET_DOCUMENT_TYPE = 'Tax Court Report Pamphlet';
 
-const DOCUMENT_TYPES_REQUIRING_DESCRIPTION = [
+export const DOCUMENT_TYPES_REQUIRING_DESCRIPTION = [
   GENERIC_ORDER_DOCUMENT_TYPE,
   REPORT_PAMPHLET_DOCUMENT_TYPE,
 ];
 
-const SERVICE_STAMP_OPTIONS = ['Served', 'Entered and Served'];
+export const SERVICE_STAMP_OPTIONS = ['Served', 'Entered and Served'];
 
-module.exports = deepFreeze({
-  DOCUMENT_TYPES_REQUIRING_DESCRIPTION,
-  ENTERED_AND_SERVED_EVENT_CODES,
-  GENERIC_ORDER_DOCUMENT_TYPE,
-  REPORT_PAMPHLET_DOCUMENT_TYPE,
-  SERVICE_STAMP_OPTIONS,
-  VALIDATION_ERROR_MESSAGES,
-});
+export const yesterdayISO = calculateISODate({ howMuch: -1, units: 'days' });
+export const yesterdayFormatted = formatDateString(
+  createISODateString(yesterdayISO),
+  FORMATS.MMDDYYYY,
+);

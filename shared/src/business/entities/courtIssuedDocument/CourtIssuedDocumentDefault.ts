@@ -1,55 +1,57 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { UNSERVABLE_EVENT_CODES } = require('../EntityConstants');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
-
-const courtIssuedDocumentDecorator = (obj, rawObj) => {
-  obj.attachments = rawObj.attachments || false;
-  obj.documentTitle = rawObj.documentTitle;
-  obj.documentType = rawObj.documentType;
-  obj.eventCode = rawObj.eventCode;
-  obj.filingDate = rawObj.filingDate;
-};
-
-/**
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function CourtIssuedDocumentDefault() {}
-CourtIssuedDocumentDefault.prototype.init = function init(rawProps) {
-  courtIssuedDocumentDecorator(this, rawProps);
-};
-
-CourtIssuedDocumentDefault.prototype.getDocumentTitle = function () {
-  return this.documentTitle;
-};
-
-CourtIssuedDocumentDefault.schema = {
-  attachments: joi.boolean().required(),
-  documentTitle: JoiValidationConstants.STRING.optional(),
-  documentType: JoiValidationConstants.STRING.required(),
-  eventCode: JoiValidationConstants.STRING.optional(),
-  filingDate: joi.when('eventCode', {
-    is: joi
-      .exist()
-      .not(null)
-      .valid(...UNSERVABLE_EVENT_CODES),
-    otherwise: joi.optional().allow(null),
-    then: JoiValidationConstants.ISO_DATE.max('now').required(),
-  }),
-};
-
-joiValidationDecorator(
-  CourtIssuedDocumentDefault,
-  CourtIssuedDocumentDefault.schema,
+import {
+  CourtIssuedDocument,
   VALIDATION_ERROR_MESSAGES,
-);
+} from './CourtIssuedDocumentConstants';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
+import joi from 'joi';
 
-module.exports = {
-  CourtIssuedDocumentDefault: validEntityDecorator(CourtIssuedDocumentDefault),
-  courtIssuedDocumentDecorator,
-};
+export class CourtIssuedDocumentDefault extends CourtIssuedDocument {
+  public attachments: boolean;
+  public documentTitle?: string;
+  public documentType: string;
+  public eventCode?: string;
+  public filingDate?: string;
+
+  constructor(rawProps) {
+    super('CourtIssuedDocumentDefault');
+
+    this.attachments = rawProps.attachments || false;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.eventCode = rawProps.eventCode;
+    this.filingDate = rawProps.filingDate;
+  }
+
+  static VALIDATION_RULES = {
+    attachments: joi.boolean().required(),
+    documentTitle: JoiValidationConstants.STRING.optional(),
+    documentType: JoiValidationConstants.STRING.required(),
+    eventCode: JoiValidationConstants.STRING.optional(),
+    filingDate: joi.when('eventCode', {
+      is: joi
+        .exist()
+        .not(null)
+        .valid(...UNSERVABLE_EVENT_CODES),
+      otherwise: joi.optional().allow(null),
+      then: JoiValidationConstants.ISO_DATE.max('now').required(),
+    }),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+
+  getDocumentTitle() {
+    return this.documentTitle!;
+  }
+
+  getValidationRules() {
+    return CourtIssuedDocumentDefault.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return CourtIssuedDocumentDefault.VALIDATION_ERROR_MESSAGES;
+  }
+}
+
+export type RawCourtIssuedDocumentDefault =
+  ExcludeMethods<CourtIssuedDocumentDefault>;
