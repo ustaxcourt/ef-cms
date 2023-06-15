@@ -262,10 +262,12 @@ table.ustc-table .ustc-button--unstyled {
 }
 
 .bounce-out-down {
+  display: none;
   animation-name: bounce-out-down;
 }
 
 .bounce-in-up {
+  display: block;
   animation-name: bounce-in-up;
 }
 

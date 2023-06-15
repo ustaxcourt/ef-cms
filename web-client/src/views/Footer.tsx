@@ -3,13 +3,24 @@ import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
 import seal from '../images/ustc_seal.svg';
 
 function ScrollToTopButton() {
+  const [scroll, setScroll] = useState(false);
+  useEffect(() => {
+    window.document.addEventListener('scroll', () => {
+      setScroll(window.scrollY > 50);
+    });
+  }, []);
+
   return (
     <Button
-      className="animated bounce-in-up"
+      className={classNames(
+        'animated',
+        scroll ? 'bounce-in-up' : 'bounce-out-down',
+      )}
       icon="chevron-up"
       id="return-to-top-btn"
       noMargin={true}
