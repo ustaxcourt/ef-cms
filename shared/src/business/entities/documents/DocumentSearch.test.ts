@@ -1,11 +1,10 @@
-const { DATE_RANGE_SEARCH_OPTIONS } = require('../EntityConstants');
-const { DocumentSearch } = require('./DocumentSearch');
-
-const errorMessages = DocumentSearch.VALIDATION_ERROR_MESSAGES;
+import { DATE_RANGE_SEARCH_OPTIONS } from '../EntityConstants';
+import { DocumentSearch } from './DocumentSearch';
 
 describe('Document Search entity', () => {
   it('passes validation without a keyword', () => {
-    const orderSearch = new DocumentSearch();
+    const orderSearch = new DocumentSearch(undefined);
+
     const validationErrors = orderSearch.getFormattedValidationErrors();
 
     expect(validationErrors).toEqual(null);
@@ -19,8 +18,8 @@ describe('Document Search entity', () => {
 
     const validationErrors = documentSearch.getFormattedValidationErrors();
 
-    expect(validationErrors.chooseOneValue).toEqual(
-      errorMessages.chooseOneValue,
+    expect(validationErrors!['object.oxor']).toEqual(
+      'Enter either a Docket number or a Case name/Petitioner name, not both',
     );
   });
 
@@ -91,7 +90,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.endDate).toEqual('Enter a valid end date');
+      expect(validationErrors!.endDate).toEqual('Enter a valid end date');
     });
 
     it('should pass validation when a start date is provided without an end date', () => {
@@ -113,7 +112,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.startDate).toEqual('Enter a valid start date');
+      expect(validationErrors!.startDate).toEqual('Enter a valid start date');
     });
 
     it('should fail validation when the start date year is not provided', () => {
@@ -125,7 +124,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.startDate).toEqual('Enter a valid start date');
+      expect(validationErrors!.startDate).toEqual('Enter a valid start date');
     });
 
     it('should fail validation when the start date is in the future', () => {
@@ -136,7 +135,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.startDate).toEqual(
+      expect(validationErrors!.startDate).toEqual(
         'Start date cannot be in the future. Enter valid start date.',
       );
     });
@@ -150,7 +149,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.endDate).toEqual(
+      expect(validationErrors!.endDate).toEqual(
         'End date cannot be in the future. Enter valid end date.',
       );
     });
@@ -163,7 +162,7 @@ describe('Document Search entity', () => {
 
       const validationErrors = documentSearch.getFormattedValidationErrors();
 
-      expect(validationErrors.startDate).toEqual('Enter a valid start date');
+      expect(validationErrors!.startDate).toEqual('Enter a valid start date');
     });
   });
 });

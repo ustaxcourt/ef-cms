@@ -12,12 +12,7 @@ export const validateCalendarNoteInteractor = (
   applicationContext: IApplicationContext,
   { note }: { note: string },
 ) => {
-  const errors = new CalendarNote(
-    { note },
-    {
-      applicationContext,
-    },
-  ).getFormattedValidationErrors();
+  const errors = new CalendarNote({ note }).getFormattedValidationErrors();
   if (!errors) return null;
   return errors;
 };
