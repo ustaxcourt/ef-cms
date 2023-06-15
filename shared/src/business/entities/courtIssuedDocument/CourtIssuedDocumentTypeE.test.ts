@@ -54,7 +54,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       const date = calculateISODate({
         dateString: createISODateString(),
         howMuch: -5,
-        unit: 'days',
+        units: 'days',
       });
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
@@ -95,7 +95,7 @@ describe('CourtIssuedDocumentTypeE', () => {
           scenario: 'Type E',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 

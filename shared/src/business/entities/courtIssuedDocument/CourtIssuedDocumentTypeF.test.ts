@@ -38,7 +38,7 @@ describe('CourtIssuedDocumentTypeF', () => {
         scenario: 'Type F',
       });
 
-      expect(documentInstance.getFormattedValidationErrors().freeText).toEqual(
+      expect(documentInstance.getFormattedValidationErrors()!.freeText).toEqual(
         VALIDATION_ERROR_MESSAGES.freeText[1].message,
       );
     });
@@ -68,7 +68,7 @@ describe('CourtIssuedDocumentTypeF', () => {
           trialLocation: 'Seattle, Washington',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 
