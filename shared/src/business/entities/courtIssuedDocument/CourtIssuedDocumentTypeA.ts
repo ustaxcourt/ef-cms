@@ -5,7 +5,7 @@ import {
   SERVICE_STAMP_OPTIONS,
   VALIDATION_ERROR_MESSAGES,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentDefault } from './CourtIssuedDocumentDefault';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
@@ -33,7 +33,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
     this.serviceStamp = rawProps.serviceStamp;
   }
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentDefault.VALIDATION_RULES,
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).when('documentType', {
       is: joi.exist().valid(...DOCUMENT_TYPES_REQUIRING_DESCRIPTION),
       otherwise: joi.optional().allow(null),

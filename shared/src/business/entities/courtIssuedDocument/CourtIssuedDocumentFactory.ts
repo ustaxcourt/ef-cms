@@ -1,5 +1,5 @@
 import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentDefault } from './CourtIssuedDocumentDefault';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { CourtIssuedDocumentTypeA } from './CourtIssuedDocumentTypeA';
 import { CourtIssuedDocumentTypeB } from './CourtIssuedDocumentTypeB';
 import { CourtIssuedDocumentTypeC } from './CourtIssuedDocumentTypeC';
@@ -34,5 +34,5 @@ export function CourtIssuedDocumentFactory(
     }
   }
 
-  return new CourtIssuedDocumentDefault(documentMetadata);
+  return new CourtIssuedDocumentBase(documentMetadata);
 }
