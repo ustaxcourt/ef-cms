@@ -5,17 +5,16 @@ export const getTrialSessionsForJudgeActivityReportInteractor = (
   applicationContext,
   {
     endDate,
-    judgeId,
+    judgesSelection,
     startDate,
-  }: { startDate: string; endDate: string; judgeId: string },
-): Promise<TrialSessionTypes> => {
-  return post({
+  }: { startDate: string; endDate: string; judgesSelection: string[] },
+): Promise<TrialSessionTypes> =>
+  post({
     applicationContext,
     body: {
       endDate,
-      judgeId,
+      judgesSelection,
       startDate,
     },
     endpoint: '/judge-activity-report/trial-sessions',
   });
-};
