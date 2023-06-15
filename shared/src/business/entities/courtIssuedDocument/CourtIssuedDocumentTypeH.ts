@@ -2,7 +2,7 @@ import {
   CourtIssuedDocument,
   VALIDATION_ERROR_MESSAGES,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentDefault } from './CourtIssuedDocumentDefault';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -29,7 +29,7 @@ export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentDefault.VALIDATION_RULES,
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.max('now').required(),
     freeText: JoiValidationConstants.STRING.max(1000).required(),
   };

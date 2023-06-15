@@ -2,7 +2,7 @@ import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
 import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
-describe('CourtIssuedDocumentDefault', () => {
+describe('CourtIssuedDocumentBase', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory({

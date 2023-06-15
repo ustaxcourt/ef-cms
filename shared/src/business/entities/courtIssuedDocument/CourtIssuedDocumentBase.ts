@@ -6,7 +6,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
 import joi from 'joi';
 
-export class CourtIssuedDocumentDefault extends CourtIssuedDocument {
+export class CourtIssuedDocumentBase extends CourtIssuedDocument {
   public attachments: boolean;
   public documentTitle?: string;
   public documentType: string;
@@ -14,7 +14,7 @@ export class CourtIssuedDocumentDefault extends CourtIssuedDocument {
   public filingDate?: string;
 
   constructor(rawProps) {
-    super('CourtIssuedDocumentDefault');
+    super('CourtIssuedDocumentBase');
 
     this.attachments = rawProps.attachments || false;
     this.documentTitle = rawProps.documentTitle;
@@ -45,13 +45,13 @@ export class CourtIssuedDocumentDefault extends CourtIssuedDocument {
   }
 
   getValidationRules() {
-    return CourtIssuedDocumentDefault.VALIDATION_RULES;
+    return CourtIssuedDocumentBase.VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return CourtIssuedDocumentDefault.VALIDATION_ERROR_MESSAGES;
+    return CourtIssuedDocumentBase.VALIDATION_ERROR_MESSAGES;
   }
 }
 
-export type RawCourtIssuedDocumentDefault =
-  ExcludeMethods<CourtIssuedDocumentDefault>;
+export type RawCourtIssuedDocumentBase =
+  ExcludeMethods<CourtIssuedDocumentBase>;

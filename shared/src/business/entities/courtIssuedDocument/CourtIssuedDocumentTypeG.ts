@@ -2,7 +2,7 @@ import {
   CourtIssuedDocument,
   VALIDATION_ERROR_MESSAGES,
 } from './CourtIssuedDocumentConstants';
-import { CourtIssuedDocumentDefault } from './CourtIssuedDocumentDefault';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
@@ -31,7 +31,7 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
   }
 
   static VALIDATION_RULES = {
-    ...CourtIssuedDocumentDefault.VALIDATION_RULES,
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.required(),
     trialLocation: JoiValidationConstants.STRING.required(),
   };
