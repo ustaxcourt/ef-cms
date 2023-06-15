@@ -1,4 +1,4 @@
-import { CaseAssociationRequestDocumentTypeA } from './CaseAssociationRequestDocumentTypeA';
+import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestFactory } from './CaseAssociationRequestFactory';
 import { OBJECTIONS_OPTIONS_MAP } from '../EntityConstants';
 import {
@@ -22,7 +22,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .primaryDocumentFile,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
           .primaryDocumentFile,
       );
 
@@ -39,7 +39,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .certificateOfService,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
           .certificateOfService,
       );
 
@@ -56,7 +56,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentType,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
           .documentType[1],
       );
 
@@ -73,7 +73,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .documentTitleTemplate,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
           .documentTitleTemplate,
       );
 
@@ -91,7 +91,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .eventCode,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES.eventCode,
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
       );
 
       rawEntity.eventCode = 'P';
@@ -107,7 +107,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .scenario,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES.scenario,
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
       );
 
       rawEntity.scenario = 'Standard';
@@ -129,7 +129,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.certificateOfServiceDate,
         ).toEqual(
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
             .certificateOfServiceDate[1],
         );
 
@@ -154,7 +154,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.certificateOfServiceDate,
         ).toEqual(
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
             .certificateOfServiceDate[0].message,
         );
       });
@@ -173,7 +173,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.objections,
         ).toEqual(
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
             .objections,
         );
 
@@ -201,7 +201,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.attachments,
         ).toEqual(
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
             .attachments,
         );
 
@@ -220,7 +220,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.objections,
         ).toEqual(
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
             .objections,
         );
 
@@ -239,7 +239,7 @@ describe('CaseAssociationRequestFactory', () => {
             rawEntity,
           ).getFormattedValidationErrors()!.hasSupportingDocuments,
         ).toEqual(
-          CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
             .hasSupportingDocuments,
         );
 
@@ -266,7 +266,7 @@ describe('CaseAssociationRequestFactory', () => {
             ).getFormattedValidationErrors()!.supportingDocuments[0]
               .supportingDocument,
           ).toEqual(
-            CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+            CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
               .supportingDocument,
           );
 
@@ -289,7 +289,7 @@ describe('CaseAssociationRequestFactory', () => {
             ).getFormattedValidationErrors()!.supportingDocuments[0]
               .certificateOfServiceDate,
           ).toEqual(
-            CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES
+            CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
               .certificateOfServiceDate[1],
           );
 
@@ -310,7 +310,7 @@ describe('CaseAssociationRequestFactory', () => {
         CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
           .filers,
       ).toEqual(
-        CaseAssociationRequestDocumentTypeA.VALIDATION_ERROR_MESSAGES.filers,
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
       );
 
       rawEntity.filers = ['c41fdac6-cc16-4ca6-97fc-980ebb618dd5'];
