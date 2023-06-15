@@ -1,6 +1,6 @@
-const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { UNSERVABLE_EVENT_CODES } = require('../EntityConstants');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
+import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
 describe('CourtIssuedDocumentDefault', () => {
   describe('validation', () => {
