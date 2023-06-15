@@ -19,18 +19,27 @@ function ScrollToTopButton() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [scroll]);
 
+  const [bounceOutBtn, setBounceOutBtn] = useState(false);
+
+  const setBounceOutToTrue = () => {
+    setBounceOutBtn(true);
+  };
+
   return (
     <Button
+      aria-label="return to top"
       className={classNames(
         'animated',
-        scroll ? 'bounce-in-up' : 'bounce-out-down',
+        scroll ? 'bounce-in-up' : '',
+        bounceOutBtn ? 'bounce-out-down' : 'display-none',
       )}
       icon="chevron-up"
-      id="return-to-top-btn"
+      id="scroll-to-top-btn"
       noMargin={true}
       overrideMargin="margin-right-0"
       size="xs"
       onClick={() => {
+        setBounceOutToTrue();
         window.scrollTo({
           behavior: 'smooth',
           top: 0,

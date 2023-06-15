@@ -23,7 +23,7 @@ button:disabled {
     }
   }
 
-  &:not(.usa-button--unstyled, #return-to-top-btn) {
+  &:not(.usa-button--unstyled, #scroll-to-top-btn) {
     min-width: 132px;
   }
 
@@ -241,7 +241,7 @@ table.ustc-table .ustc-button--unstyled {
   padding-right: 10px;
 }
 
-#return-to-top-btn {
+#scroll-to-top-btn {
   position: fixed;
   z-index: 2001;
   right: 40px;
