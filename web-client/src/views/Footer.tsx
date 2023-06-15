@@ -30,11 +30,11 @@ function ScrollToTopButton() {
       aria-label="return to top"
       className={classNames(
         'animated',
+        'scroll-to-top',
         scroll ? 'bounce-in-up' : '',
         bounceOutBtn ? 'bounce-out-down' : 'display-none',
       )}
       icon="chevron-up"
-      id="scroll-to-top-btn"
       noMargin={true}
       overrideMargin="margin-right-0"
       size="xs"
