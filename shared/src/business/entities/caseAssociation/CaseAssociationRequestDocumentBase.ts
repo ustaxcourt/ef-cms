@@ -74,14 +74,11 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     eventCode: JoiValidationConstants.STRING.valid(
       ...ALL_EVENT_CODES,
     ).required(),
-    filers: joi
-      .array()
-      .items(JoiValidationConstants.UUID.required())
-      .when('partyIrsPractitioner', {
-        is: false,
-        otherwise: joi.optional(),
-        then: joi.required(),
-      }),
+    filers: joi.when('partyIrsPractitioner', {
+      is: true,
+      otherwise: joi.array().items(JoiValidationConstants.UUID).min(1),
+      then: joi.array().max(0),
+    }),
     hasSupportingDocuments: joi.boolean().optional(),
     objections: JoiValidationConstants.STRING.valid(
       ...OBJECTIONS_OPTIONS,
