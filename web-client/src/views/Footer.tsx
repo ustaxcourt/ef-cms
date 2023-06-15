@@ -9,11 +9,15 @@ import seal from '../images/ustc_seal.svg';
 
 function ScrollToTopButton() {
   const [scroll, setScroll] = useState(false);
+
   useEffect(() => {
-    window.document.addEventListener('scroll', () => {
+    const handleScroll = () => {
       setScroll(window.scrollY > 50);
-    });
-  }, []);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scroll]);
 
   return (
     <Button
