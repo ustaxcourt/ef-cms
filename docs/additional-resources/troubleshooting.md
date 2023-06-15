@@ -189,6 +189,14 @@ Solution:
 
 - When this is run for the first time on a new environment, the smoke tests may fail for up to an hour after the initial deploy due to the header security lambda redeploying to all edge locations. To resolve, wait an hour and rerun the smoke tests.
 
+Problem:
+
+- Practitioner Search: should be able to search for a practitioner by name failing on Circle
+
+Solution:
+
+- Ensure your environment is setup properly or switch to the environment using the [environment switcher](docs/additional-resources/environment-switcher.md) and then run the `./reindex-elasticsearch.sh` script.
+
 ## Unable to delete cognito user pool
 
 Problem:
