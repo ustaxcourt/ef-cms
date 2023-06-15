@@ -30,9 +30,11 @@ function ScrollToTopButton() {
       noMargin={true}
       overrideMargin="margin-right-0"
       size="xs"
-      onClick={e => {
-        e.preventDefault();
-        window.scrollTo(0, 0);
+      onClick={() => {
+        window.scrollTo({
+          behavior: 'smooth',
+          top: 0,
+        });
       }}
     ></Button>
   );
