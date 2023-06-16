@@ -1,7 +1,7 @@
 import { PARTY_VIEW_TABS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDefaultCaseDetailTabAction } from './setDefaultCaseDetailTabAction';
 
 describe('setDefaultCaseDetailTabAction', () => {

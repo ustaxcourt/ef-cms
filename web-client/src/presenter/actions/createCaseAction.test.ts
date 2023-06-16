@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { createCaseAction } from './createCaseAction';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('createCaseAction', () => {
   const errorStub = jest.fn();

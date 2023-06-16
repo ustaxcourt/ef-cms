@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /* sets props.searchResults on state.searchResults[advancedSearchTab]
  *

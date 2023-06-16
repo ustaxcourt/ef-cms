@@ -1,7 +1,12 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
 
-export const caseInventoryReportHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseInventoryReportHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     CASE_INVENTORY_PAGE_SIZE,
     CHIEF_JUDGE,

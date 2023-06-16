@@ -1,7 +1,12 @@
 import { showContactsHelper } from './showContactsHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const startCaseHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const startCaseHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CASE_TYPES_MAP, FILING_TYPES, PARTY_TYPES, USER_ROLES } =
     applicationContext.getConstants();
   const form = get(state.form);

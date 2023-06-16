@@ -1,5 +1,5 @@
 import { openFileUploadErrorModal } from './openFileUploadErrorModal';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('openFileUploadErrorModal', () => {
   it('sets state.modal.showModal to FileUploadErrorModal', async () => {

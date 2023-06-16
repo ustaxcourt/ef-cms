@@ -1,5 +1,5 @@
 import { getConstants } from '../../getConstants';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { sortableColumnHelper } from './sortableColumnHelper';
 
 const { ASCENDING, DESCENDING } = getConstants();

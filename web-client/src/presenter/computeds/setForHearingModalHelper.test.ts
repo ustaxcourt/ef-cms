@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { setForHearingModalHelper as setForHearingModalHelperComputed } from './setForHearingModalHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

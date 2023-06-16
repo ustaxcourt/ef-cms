@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const noticeStatusHelper = get => {
+import { Get } from 'cerebral';
+export const noticeStatusHelper = (get: Get) => {
   const { casesProcessed, totalCases } = get(state.noticeStatusState);
 
   return {

@@ -12,7 +12,7 @@ import {
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {

@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const documentViewerLinksHelper = get => {
+import { Get } from 'cerebral';
+export const documentViewerLinksHelper = (get: Get) => {
   const caseDetail = get(state.caseDetail);
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
 

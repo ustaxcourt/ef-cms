@@ -1,13 +1,21 @@
-import { state } from 'cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const formattedOpenCases = (get, applicationContext) => {
+export const formattedOpenCases = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.openCases);
   return cases.map(myCase => formatCase(applicationContext, myCase));
 };
 
-export const formattedClosedCases = (get, applicationContext) => {
+export const formattedClosedCases = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { formatCase } = applicationContext.getUtilities();
 
   const cases = get(state.closedCases);
@@ -70,7 +78,10 @@ const getCalendarDetailsForTrialSession = ({
   return { addedAt, note };
 };
 
-export const formattedCaseDetail = (get, applicationContext) => {
+export const formattedCaseDetail = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
 
   const { formatCase, setServiceIndicatorsForCase } =

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.progressIndicator.waitingForResponse to false and state.progressIndicator.waitingForResponseRequests to zero
