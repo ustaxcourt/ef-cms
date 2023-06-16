@@ -1,5 +1,5 @@
 import { combineContactErrors } from './validateAddPractitionerAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the add petitioner user form

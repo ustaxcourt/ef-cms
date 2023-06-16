@@ -1,5 +1,5 @@
 import { clearDropDownMenuStateAction } from './clearDropDownMenuStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearDropDownMenuStateAction', () => {
   it('unsets the given props.menuState', async () => {

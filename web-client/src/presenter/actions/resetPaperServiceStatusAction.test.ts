@@ -1,5 +1,5 @@
 import { resetPaperServiceStatusAction } from './resetPaperServiceStatusAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetPaperServiceStatusAction', () => {
   it('should reset the state for the current scanning session', async () => {

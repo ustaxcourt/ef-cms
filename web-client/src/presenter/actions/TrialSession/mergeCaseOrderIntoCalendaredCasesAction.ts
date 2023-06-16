@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * combines the caseOrder of the state.trailSession onto the state.trialSession.calendaredCases

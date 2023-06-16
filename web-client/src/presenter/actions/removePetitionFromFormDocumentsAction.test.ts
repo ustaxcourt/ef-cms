@@ -1,5 +1,5 @@
 import { removePetitionFromFormDocumentsAction } from './removePetitionFromFormDocumentsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('removePetitionFromFormDocumentsAction', () => {
   it('removes the Petition document from the form.docketEntries array', async () => {

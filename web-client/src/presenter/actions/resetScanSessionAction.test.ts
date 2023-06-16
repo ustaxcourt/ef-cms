@@ -1,5 +1,5 @@
 import { resetScanSessionAction } from './resetScanSessionAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetScanSessionAction', () => {
   it('should reset the state for the current scanning session', async () => {

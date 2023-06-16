@@ -3,7 +3,7 @@ import {
   initialFilingDocumentTabs,
   petitionQcHelper as petitionQcHelperComputed,
 } from './petitionQcHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('petitionQcHelper', () => {

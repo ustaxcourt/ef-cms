@@ -1,6 +1,6 @@
 import { aggregatePetitionerErrors } from '../validatePetitionFromPaperAction';
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the petition based on the current wizard step.

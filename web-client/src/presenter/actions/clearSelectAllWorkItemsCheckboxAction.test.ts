@@ -1,5 +1,5 @@
 import { clearSelectAllWorkItemsCheckboxAction } from './clearSelectAllWorkItemsCheckboxAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearSelectAllWorkItemsCheckboxAction', () => {
   it('should clear the state.workitemAllCheckbox', async () => {

@@ -1,7 +1,7 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { refreshExternalDocumentTitleFromEventCodeAction } from './refreshExternalDocumentTitleFromEventCodeAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 presenter.providers.applicationContext = applicationContextForClient;
 
 describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
