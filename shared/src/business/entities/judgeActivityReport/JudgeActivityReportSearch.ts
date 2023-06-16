@@ -14,16 +14,12 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
 
   public endDate: string;
   public startDate: string;
-  public judgeName: string;
-  public judgeId: string;
-
+  public judgesSelection: string[];
   protected tomorrow: string;
 
   constructor(rawProps) {
     super('JudgeActivityReportSearch');
-
-    this.judgeId = rawProps.judgeId;
-    this.judgeName = rawProps.judgeName;
+    this.judgesSelection = rawProps.judgesSelection;
     this.tomorrow = calculateISODate({
       howMuch: +1,
       units: 'days',
@@ -59,12 +55,10 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       ),
-    judgeId: joi
-      .optional()
-      .description('The userId of the judge to generate the report for'),
-    judgeName: joi
-      .optional()
-      .description('The last name of the judge to generate the report for'),
+    judgesSelection:
+      JoiValidationConstants.JUDGES_SELECTION.required().description(
+        'The last names OR ids of judges',
+      ),
     startDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .description(
@@ -91,6 +85,13 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
         message: 'Enter an end date.',
       },
       'Enter a valid end date.',
+    ],
+    judgesSelection: [
+      {
+        contains: 'is required',
+        message: 'Judges Selection is a required field',
+      },
+      'Judges Selection must contain at least a name of a judge',
     ],
     startDate: [
       {

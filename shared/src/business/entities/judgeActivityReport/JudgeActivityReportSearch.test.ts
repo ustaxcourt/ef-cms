@@ -115,5 +115,32 @@ describe('JudgeActivityReportSearch', () => {
         startDate: 'Enter a valid start date.',
       });
     });
+
+    it('should have validation errors when judgesSelection array is not provided', () => {
+      const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
+        endDate: '01/02/2000',
+        startDate: '01/02/2000',
+      });
+
+      expect(
+        judgeActivityReportSearchEntity.getFormattedValidationErrors(),
+      ).toMatchObject({
+        judgesSelection: 'Judges Selection is a required field',
+      });
+    });
+    it('should have validation errors when judgesSelection is an array is not provided', () => {
+      const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
+        endDate: '01/02/2000',
+        judgesSelection: [],
+        startDate: '01/02/2000',
+      });
+
+      expect(
+        judgeActivityReportSearchEntity.getFormattedValidationErrors(),
+      ).toMatchObject({
+        judgesSelection:
+          'Judges Selection must contain at least a name of a judge',
+      });
+    });
   });
 });
