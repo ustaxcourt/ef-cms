@@ -32,7 +32,7 @@
     "@opensearch-project/opensearch": "^2.2.1",
     "@uswds/uswds": "^3.5.0",
     "archiver": "^5.3.1",
-    "aws-sdk": "^2.1398.0",
+    "aws-sdk": "^2.1399.0",
     "axios": "^1.4.0",
     "broadcast-channel": "^5.1.0",
     "canvas": "^2.11.2",
@@ -246,6 +246,7 @@
     "socket.io-parser": "^4.2.3",
     "tap": "^16.3.4",
     "terser": "^5.14.2",
+    "trim-newlines": "5.0.0",
     "jsonwebtoken": "^9.0.0",
     "underscore": "^1.13.1"
   },
