@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const messageModalHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const messageModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
     CASE_SERVICES_SUPERVISOR_SECTION,

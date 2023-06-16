@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const docketEntryQcHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const docketEntryQcHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const { CONTACT_CHANGE_DOCUMENT_TYPES } = applicationContext.getConstants();

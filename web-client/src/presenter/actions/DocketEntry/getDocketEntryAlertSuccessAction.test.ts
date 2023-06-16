@@ -1,5 +1,5 @@
 import { getDocketEntryAlertSuccessAction } from './getDocketEntryAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocketEntryAlertSuccessAction', () => {
   it('should return alert object', async () => {

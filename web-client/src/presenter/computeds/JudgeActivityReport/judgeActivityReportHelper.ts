@@ -1,5 +1,5 @@
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { sum, sumBy } from 'lodash';
 
 interface IJudgeActivityReportHelper {

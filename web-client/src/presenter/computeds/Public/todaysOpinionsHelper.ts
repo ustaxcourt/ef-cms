@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const todaysOpinionsHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const todaysOpinionsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const todaysOpinions = get(state.todaysOpinions);
 
   const currentDate = applicationContext.getUtilities().createISODateString();

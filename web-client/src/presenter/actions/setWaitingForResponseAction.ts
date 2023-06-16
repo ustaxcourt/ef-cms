@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.progressIndicator.waitingForResponse to true which is used for showing the document upload or spinner

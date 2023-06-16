@@ -604,7 +604,7 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)({
+const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_MAP_429,
 });

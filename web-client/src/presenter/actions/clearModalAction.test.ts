@@ -1,5 +1,5 @@
 import { clearModalAction } from './clearModalAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearModalAction', () => {
   it('should unset the value of state.modal.showModal', async () => {

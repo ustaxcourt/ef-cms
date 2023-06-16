@@ -1,5 +1,5 @@
 import { publicAlertHelper } from './publicAlertHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('publicAlertHelper', () => {
   it('single message error alert', () => {

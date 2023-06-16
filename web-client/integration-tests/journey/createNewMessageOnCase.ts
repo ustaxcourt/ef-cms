@@ -2,7 +2,7 @@ import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
 import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const petitionsClerk1User = '4805d1ab-18d0-43ec-bafb-654e83405416';

@@ -1,5 +1,5 @@
 import { getFormValueDocumentAction } from './getFormValueDocumentAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 const fakeFile = {
   name: 'petition',

@@ -1,6 +1,6 @@
 import { getCaseMessagesForCase } from '../helpers';
 import { messageDocumentHelper as messageDocumentHelperComputed } from '../../src/presenter/computeds/messageDocumentHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsMessageWithCorrespondence = cerebralTest => {

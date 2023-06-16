@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const computeAdmissionsDate = ({ applicationContext, day, month, year }) => {
   const { DATE_FORMATS } = applicationContext.getConstants();

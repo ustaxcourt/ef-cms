@@ -1,5 +1,5 @@
 import { getUserContactEditCompleteAlertSuccessAction } from './getUserContactEditCompleteAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getUserContactEditCompleteAlertSuccessAction', () => {
   it('should return a success message', async () => {

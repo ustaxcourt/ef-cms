@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const userContactEditHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const userContactEditHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
 

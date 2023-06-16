@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * returns the yes path with file prop for the current document selected for scan, or the no path, otherwise
