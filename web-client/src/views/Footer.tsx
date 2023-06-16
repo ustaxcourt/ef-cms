@@ -6,7 +6,7 @@ import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
-import seal from '../images/ustc_seal.svg';
+const seal = require('../images/ustc_seal.svg') as string;
 
 function ScrollToTopButton() {
   const [scroll, setScroll] = useState(false);
