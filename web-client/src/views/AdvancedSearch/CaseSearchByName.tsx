@@ -13,10 +13,10 @@ export const CaseSearchByName = connect(
     advancedSearchHelper: state.advancedSearchHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
-    updateAdvancedOrderSearchFormValueSequence:
-      sequences.updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    updateCaseAdvancedSearchByNameFormValueSequence:
+      sequences.updateCaseAdvancedSearchByNameFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     validateCaseAdvancedSearchFormSequence:
@@ -30,12 +30,11 @@ export const CaseSearchByName = connect(
     clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
-    updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence,
+    updateCaseAdvancedSearchByNameFormValueSequence,
     usStates,
     usStatesOther,
     validateCaseAdvancedSearchFormSequence,
-    validateOrderSearchSequence,
     validationErrors,
   }) {
     return (
@@ -146,9 +145,9 @@ export const CaseSearchByName = connect(
 
             <div className="grid-row grid-gap margin-top-4">
               <SearchDateRangePickerComponent
-                formType="orderSearch"
-                updateSequence={updateAdvancedOrderSearchFormValueSequence}
-                validateSequence={validateOrderSearchSequence}
+                formType="caseSearchByName"
+                updateSequence={updateCaseAdvancedSearchByNameFormValueSequence}
+                validateSequence={validateCaseAdvancedSearchFormSequence}
               />
             </div>
 
