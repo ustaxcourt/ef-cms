@@ -569,7 +569,7 @@ const ReportTable = ({
                   <CaseLink formattedCase={entry} />
                 </td>
                 <td>{entry.receivedAt}</td>
-                <td>{entry.caseTitle}</td>
+                <td>{entry.caseCaption}</td>
                 <td>{entry.status}</td>
                 <td>{entry.caseType}</td>
                 <td>{entry.associatedJudge}</td>

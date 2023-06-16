@@ -38,10 +38,10 @@ export const customCaseInventoryReportHelper = (
   const reportData = cases.map(entry => {
     entry = addConsolidatedProperties({
       applicationContext,
-      caseObject: entry,
+      consolidatedObject: entry,
     });
 
-    entry.caseTitle = Case.getCaseTitle(entry.caseCaption);
+    entry.caseCaption = Case.getCaseTitle(entry.caseCaption);
     entry.receivedAt = formatDate(entry.receivedAt);
 
     return entry;
