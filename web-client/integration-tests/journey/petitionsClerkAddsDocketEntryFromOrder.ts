@@ -1,6 +1,6 @@
 import { formattedDocketEntries } from '../../src/presenter/computeds/formattedDocketEntries';
 import { getFormattedDocketEntriesForTest } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkAddsDocketEntryFromOrder = cerebralTest => {

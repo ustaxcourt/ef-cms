@@ -1,5 +1,5 @@
 import { DOCKET_SECTION } from '../../../../shared/src/business/entities/EntityConstants';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setSectionForWorkQueueAction } from './setSectionForWorkQueueAction';
 
 describe('setSectionForWorkQueueAction', () => {

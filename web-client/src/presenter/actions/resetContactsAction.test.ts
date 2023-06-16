@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { resetContactsAction } from './resetContactsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetContactsAction', () => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();

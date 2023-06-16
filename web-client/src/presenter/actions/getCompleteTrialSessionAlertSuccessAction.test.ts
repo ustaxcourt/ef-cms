@@ -1,5 +1,5 @@
 import { getCompleteTrialSessionAlertSuccessAction } from './getCompleteTrialSessionAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getCompleteTrialSessionAlertSuccessAction', () => {
   it('should return alertSuccess prop', async () => {

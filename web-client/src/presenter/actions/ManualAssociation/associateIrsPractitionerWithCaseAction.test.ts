@@ -2,7 +2,7 @@ import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/enti
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associateIrsPractitionerWithCaseAction } from './associateIrsPractitionerWithCaseAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 presenter.providers.applicationContext = applicationContextForClient;
 

@@ -1,5 +1,5 @@
 import { computeJudgeNameWithTitleAction } from './computeJudgeNameWithTitleAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeJudgeNameWithTitleAction', () => {
   it('fetches the given props.judge from state and returns the judge name with title', async () => {
