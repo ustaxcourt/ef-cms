@@ -1,7 +1,7 @@
 import { formatDateIfToday } from './formattedWorkQueue';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { orderBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const formatMessage = ({ applicationContext, caseDetail, message }) => {
   const formattedAttachments = applicationContext

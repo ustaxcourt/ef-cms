@@ -1,6 +1,6 @@
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];

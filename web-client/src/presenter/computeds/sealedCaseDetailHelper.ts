@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const sealedCaseDetailHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);

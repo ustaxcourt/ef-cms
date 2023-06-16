@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const menuHelper = get => {
   const isAccountMenuOpen = get(state.navigation.openMenu) === 'AccountMenu';

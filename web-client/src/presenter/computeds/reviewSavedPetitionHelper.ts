@@ -1,5 +1,5 @@
 import { formatStatistic } from './statisticsHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const ordersAndNoticesNeededCodes = {
   orderForCds: 'Order for Corporate Disclosure Statement',

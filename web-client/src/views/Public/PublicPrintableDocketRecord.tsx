@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { PdfPreview } from '../../ustc-ui/PdfPreview/PdfPreview';
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PublicPrintableDocketRecord = connect(

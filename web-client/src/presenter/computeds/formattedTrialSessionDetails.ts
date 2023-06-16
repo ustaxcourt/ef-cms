@@ -1,5 +1,5 @@
 import { isEmpty, isEqual } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formattedTrialSessionDetails = (get, applicationContext) => {
   const formattedTrialSession = applicationContext
