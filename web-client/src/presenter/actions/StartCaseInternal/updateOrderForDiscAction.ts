@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets state.form.orderForDisc based on the partyType and whether an DISC file has been uploaded

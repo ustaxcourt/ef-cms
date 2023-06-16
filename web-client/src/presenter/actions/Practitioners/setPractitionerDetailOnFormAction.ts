@@ -1,5 +1,5 @@
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets props.practitionerDetail on state.form

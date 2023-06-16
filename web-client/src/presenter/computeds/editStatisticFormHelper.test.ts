@@ -1,7 +1,7 @@
 import { CASE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { editStatisticFormHelper as editStatisticFormHelperComputed } from './editStatisticFormHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const editStatisticFormHelper = withAppContextDecorator(

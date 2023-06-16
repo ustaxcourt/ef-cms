@@ -4,7 +4,9 @@ import { DateInput } from '../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { StatisticsForm } from './StartCaseInternal/StatisticsForm';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const IRSNotice = connect(

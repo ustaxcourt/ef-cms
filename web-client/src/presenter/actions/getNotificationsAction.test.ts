@@ -2,7 +2,7 @@ import { DOCKET_SECTION } from '../../../../shared/src/business/entities/EntityC
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getNotificationsAction } from './getNotificationsAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getNotificationsAction', () => {
   beforeAll(() => {

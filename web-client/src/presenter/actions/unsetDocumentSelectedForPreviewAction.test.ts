@@ -1,4 +1,4 @@
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { unsetDocumentSelectedForPreviewAction } from './unsetDocumentSelectedForPreviewAction';
 
 describe('unsetDocumentSelectedForPreviewAction', () => {

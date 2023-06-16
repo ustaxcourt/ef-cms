@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
   let newErrorStatistics;

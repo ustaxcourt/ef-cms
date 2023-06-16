@@ -1,5 +1,5 @@
 import { getServeToIrsAlertSuccessAction } from './getServeToIrsAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getServeToIrsAlertSuccessAction', () => {
   it('should return alertSuccess prop', async () => {

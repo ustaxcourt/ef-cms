@@ -6,7 +6,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 jest.mock('./addToTrialSessionModalHelper.ts');
 

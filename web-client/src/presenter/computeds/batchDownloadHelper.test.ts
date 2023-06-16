@@ -1,5 +1,5 @@
 import { batchDownloadHelper } from './batchDownloadHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('batchDownloadHelper', () => {
   it('returns expected data when state.batchDownloads contains fileCount and totalFiles', () => {

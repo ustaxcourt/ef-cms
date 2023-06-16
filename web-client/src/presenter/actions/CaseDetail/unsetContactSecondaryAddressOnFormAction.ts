@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * unsets state.form.contactSecondary address fields and state.screenMetadata.petitionerAddresses
