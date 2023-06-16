@@ -344,7 +344,7 @@
     "shuffle-seed": "^1.1.6",
     "stream-browserify": "^3.0.0",
     "style-loader": "^3.3.3",
-    "stylelint": "^15.6.2",
+    "stylelint": "^15.7.0",
     "stylelint-config-idiomatic-order": "^9.0.0",
     "stylelint-config-standard": "^33.0.0",
     "stylelint-config-standard-scss": "^9.0.0",
