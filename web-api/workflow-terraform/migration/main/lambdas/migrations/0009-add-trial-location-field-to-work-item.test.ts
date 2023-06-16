@@ -166,7 +166,7 @@ describe('migrateItems', () => {
     ];
 
     const results = await migrateItems(mockItems, documentClientMock);
-    console.table(results);
+
     expect(results[1]).toEqual({
       caseStatus: CASE_STATUS_TYPES.calendared,
       docketNumber: MOCK_CASE_RECORD.docketNumber,
