@@ -117,7 +117,9 @@ export const SearchDateRangePickerComponent = connect(
             htmlFor="startDate-date-start"
             id="startDate-date-start-label"
           >
-            Start date{' '}
+            {formType === 'caseSearchByName'
+              ? 'Date filed start date'
+              : 'Start date'}
             <span className="usa-hint" id="startDate-date-start-hint">
               (MM/DD/YYYY)
             </span>
@@ -148,7 +150,9 @@ export const SearchDateRangePickerComponent = connect(
             htmlFor="endDate-date-end"
             id="endDate-date-end-label"
           >
-            End date{' '}
+            {formType === 'caseSearchByName'
+              ? 'Date filed end date'
+              : 'End date'}
             <span className="usa-hint" id="endDate-date-end-hint">
               (MM/DD/YYYY)
             </span>
