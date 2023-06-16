@@ -1,4 +1,4 @@
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { sessionAssignmentHelper } from './sessionAssignmentHelper';
 
 const trialClerks = [

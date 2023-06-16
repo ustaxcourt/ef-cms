@@ -1,5 +1,5 @@
 import { ActionError } from '../errors/ActionError';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { userMap } from '../../../../shared/src/test/mockUserTokenMap';
 import jwt from 'jsonwebtoken';
 

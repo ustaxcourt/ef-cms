@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets state.form.orderForCds based on the partyType and whether an CDS file has been uploaded

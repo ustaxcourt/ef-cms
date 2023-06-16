@@ -1,7 +1,7 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseSearchBoxHelper as caseSearchBoxHelperComputed } from './caseSearchBoxHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseSearchBoxHelper = withAppContextDecorator(

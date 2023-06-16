@@ -2,7 +2,7 @@ import {
   compute24HrTimeAndUpdateState,
   computeTermAndUpdateState,
 } from './computeTrialSessionFormDataAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * computes the trial session data based on user input for submission

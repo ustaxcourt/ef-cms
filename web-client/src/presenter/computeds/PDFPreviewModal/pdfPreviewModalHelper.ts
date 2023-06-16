@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const pdfPreviewModalHelper = get => {
+import { Get } from 'cerebral';
+export const pdfPreviewModalHelper = (get: Get) => {
   const currentPage = get(state.modal.pdfPreviewModal.currentPage);
   const error = get(state.modal.pdfPreviewModal.error);
   const totalPages = get(state.modal.pdfPreviewModal.totalPages);

@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getConsolidatedCasesByCaseAction } from './getConsolidatedCasesByCaseAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getConsolidatedCasesByCaseAction', () => {
   presenter.providers.applicationContext = applicationContext;
