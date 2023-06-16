@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTIES_CODES,
@@ -11,7 +12,7 @@ import {
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
 } from './publicCaseDetailHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('publicCaseDetailHelper', () => {

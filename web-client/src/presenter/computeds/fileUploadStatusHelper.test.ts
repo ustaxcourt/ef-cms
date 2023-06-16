@@ -1,5 +1,5 @@
 import { fileUploadStatusHelper } from './fileUploadStatusHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('fileUploadStatusHelper', () => {
   it('returns `Preparing Upload` for infinity time remaining', () => {

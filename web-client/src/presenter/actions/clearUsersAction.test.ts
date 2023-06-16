@@ -1,5 +1,5 @@
 import { clearUsersAction } from './clearUsersAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearUsersAction', () => {
   it('should clear the value of state.users', async () => {

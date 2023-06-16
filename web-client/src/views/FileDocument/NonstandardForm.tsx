@@ -4,7 +4,9 @@ import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { TrialCity } from '../StartCase/TrialCity';
 import { connect } from '@cerebral/react';
 import { get } from 'lodash';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 

@@ -1,5 +1,5 @@
 import { clearPDFStampDataAction } from './clearPDFStampDataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearPDFStampDataAction', () => {
   it('should set state.pdfForSigning.stampApplied to false', async () => {

@@ -1,6 +1,6 @@
 import { navigateToSectionDocumentQCAction } from './navigateToSectionDocumentQCAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('navigateToSectionDocumentQCAction', () => {
   let routeStub;

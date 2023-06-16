@@ -1,5 +1,5 @@
 import { getFormContactPrimaryAction } from './getFormContactPrimaryAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getFormContactPrimaryAction', () => {
   it('should return primary contact as a prop from the state', async () => {
