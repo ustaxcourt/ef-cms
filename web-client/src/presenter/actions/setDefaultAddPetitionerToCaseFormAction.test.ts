@@ -2,7 +2,7 @@ import { COUNTRY_TYPES } from '../../../../shared/src/business/entities/EntityCo
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDefaultAddPetitionerToCaseFormAction } from './setDefaultAddPetitionerToCaseFormAction';
 
 describe('setDefaultAddPetitionerToCaseFormAction', () => {

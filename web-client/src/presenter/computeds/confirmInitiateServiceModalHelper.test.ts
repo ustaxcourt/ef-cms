@@ -12,7 +12,7 @@ import {
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
 import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {

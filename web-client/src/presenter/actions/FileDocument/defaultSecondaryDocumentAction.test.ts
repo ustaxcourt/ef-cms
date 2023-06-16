@@ -1,5 +1,5 @@
 import { defaultSecondaryDocumentAction } from './defaultSecondaryDocumentAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('defaultSecondaryDocumentAction', () => {
   it('sets the default form values for a secondary document if the scenario is Nonstandard H', async () => {

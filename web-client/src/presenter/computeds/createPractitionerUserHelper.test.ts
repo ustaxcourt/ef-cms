@@ -1,6 +1,6 @@
 import { applicationContext } from '../../applicationContext';
 import { createPractitionerUserHelper as createPractitionerUserHelperComputed } from './createPractitionerUserHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const createPractitionerUserHelper = withAppContextDecorator(

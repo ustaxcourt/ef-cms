@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * returns the yes path when a primaryDocumentFile is set, or the no path otherwise

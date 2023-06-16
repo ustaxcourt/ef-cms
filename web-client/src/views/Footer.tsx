@@ -1,9 +1,10 @@
 /* eslint-disable react/jsx-no-target-blank */
+
 import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
 import { Icon } from '../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
 
