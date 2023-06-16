@@ -1,6 +1,6 @@
 import { gotoPrintTrialCalendarPreviewAction } from './gotoPrintTrialCalendarPreviewAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('gotoPrintTrialCalendarPreviewAction', () => {
   it('should set state.currentPage to PrintableTrialCalendar by default if no props are passed in', async () => {

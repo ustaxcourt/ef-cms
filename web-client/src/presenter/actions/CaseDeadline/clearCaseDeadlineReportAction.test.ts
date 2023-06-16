@@ -1,5 +1,5 @@
 import { clearCaseDeadlineReportAction } from './clearCaseDeadlineReportAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearCaseDeadlineReportAction', () => {
   it('sets state.caseDeadlineReport to an empty object', async () => {

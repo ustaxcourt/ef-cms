@@ -1,5 +1,5 @@
 import { documentSigningHelper } from './documentSigningHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('documentSigningHelper', () => {
   it('enables page navigation when signature is not applied', () => {

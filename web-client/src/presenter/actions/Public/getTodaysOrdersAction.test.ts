@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTodaysOrdersAction } from './getTodaysOrdersAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getTodaysOrdersAction', () => {
   beforeAll(() => {

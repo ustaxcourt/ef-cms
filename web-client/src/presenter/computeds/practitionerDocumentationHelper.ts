@@ -1,9 +1,14 @@
 import { getConstants } from '../../getConstants';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const { DESCENDING } = getConstants();
 
-export const practitionerDocumentationHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const practitionerDocumentationHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const permissions = get(state.permissions);
   const practitionerDocuments = get(state.practitionerDocuments) ?? [];
   const tableSort = get(state.tableSort);

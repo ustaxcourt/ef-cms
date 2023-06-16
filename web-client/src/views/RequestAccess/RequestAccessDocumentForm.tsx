@@ -8,7 +8,8 @@ import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
 import { TextView } from '../../ustc-ui/Text/TextView';
 import { WhatCanIIncludeModalOverlay } from '../FileDocument/WhatCanIIncludeModalOverlay';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

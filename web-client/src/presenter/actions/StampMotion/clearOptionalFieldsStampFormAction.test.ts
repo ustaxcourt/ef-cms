@@ -1,5 +1,5 @@
 import { clearOptionalFieldsStampFormAction } from '../StampMotion/clearOptionalFieldsStampFormAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearOptionalFieldsStampFormAction', () => {
   it('should unset contact address info on the form', async () => {

@@ -1,6 +1,6 @@
 import { isWorkItemAlreadyCompletedAction } from './isWorkItemAlreadyCompletedAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('isWorkItemAlreadyCompletedAction', () => {
   let mockYesPath;

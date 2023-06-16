@@ -5,7 +5,7 @@ import {
   ordersAndNoticesNeededCodes,
   reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed,
 } from './reviewSavedPetitionHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const { INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =

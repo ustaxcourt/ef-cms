@@ -1,5 +1,5 @@
 import { resetArchiveDraftDocumentAction } from './resetArchiveDraftDocumentAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetArchiveDraftDocumentAction', () => {
   it('unsets the properties within the archiveDraftDocument state object', async () => {

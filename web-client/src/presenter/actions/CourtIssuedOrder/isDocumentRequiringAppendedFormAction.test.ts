@@ -2,7 +2,7 @@ import { isDocumentRequiringAppendedFormAction } from './isDocumentRequiringAppe
 import { presenter } from '../../presenter-mock';
 
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('isDocumentRequiringAppendedFormAction', () => {
   let noStub;

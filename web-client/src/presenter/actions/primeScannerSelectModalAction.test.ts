@@ -1,6 +1,6 @@
 import { presenter } from '../presenter-mock';
 import { primeScannerSelectModalAction } from './primeScannerSelectModalAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('primeScannerSelectModalAction', () => {
   it('should set state.modal.scanner to the value of state.scanner.scannerSourceName', async () => {

@@ -5,7 +5,7 @@ import {
   mockPetitioners,
   simpleDocketEntries,
 } from './formattedCaseDetail.test';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedOpenCases', () => {

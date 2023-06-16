@@ -1,5 +1,5 @@
 import { defaultBatchDownloadStateAction } from './defaultBatchDownloadStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('defaultBatchDownloadStateAction', () => {
   it('should set state.allowRetry to false when allowRetry is undefined in props', async () => {

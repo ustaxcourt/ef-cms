@@ -1,5 +1,5 @@
 import { openPdfPreviewModalAction } from './openPdfPreviewModalAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('openPdfPreviewModalAction', () => {
   it('sets state.previewPdfFile to props.file and sets showModal to PDFPreviewModal', async () => {

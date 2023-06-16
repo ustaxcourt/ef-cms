@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const caseDeadlineReportHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseDeadlineReportHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();
 
   let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];

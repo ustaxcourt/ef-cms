@@ -1,6 +1,6 @@
 import { clearExistingDocumentAction } from './clearExistingDocumentAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearExistingDocumentAction', () => {
   it('should clear the document and set a flag', async () => {
