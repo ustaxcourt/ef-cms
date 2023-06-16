@@ -73,3 +73,5 @@ export const SelectSearch = connect(
     );
   },
 );
+
+SelectSearch.displayName = 'SelectSearch';
