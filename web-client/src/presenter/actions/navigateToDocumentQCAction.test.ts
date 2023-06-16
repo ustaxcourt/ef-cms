@@ -1,6 +1,6 @@
 import { navigateToDocumentQCAction } from './navigateToDocumentQCAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('navigateToDocumentQCAction', () => {
   const mockRouter = jest.fn();

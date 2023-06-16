@@ -1,6 +1,6 @@
 import { applicationContext } from '../../applicationContext';
 import { documentViewerLinksHelper as documentViewerLinksHelperComputed } from './documentViewerLinksHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
 describe('documentViewerLinksHelper', () => {

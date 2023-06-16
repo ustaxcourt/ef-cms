@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const trialSessionsSummaryHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const trialSessionsSummaryHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { role, userId } = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const chambersJudgeUser = get(state.judgeUser);

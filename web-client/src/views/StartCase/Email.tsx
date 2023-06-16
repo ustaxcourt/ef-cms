@@ -1,6 +1,7 @@
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const Email = connect(

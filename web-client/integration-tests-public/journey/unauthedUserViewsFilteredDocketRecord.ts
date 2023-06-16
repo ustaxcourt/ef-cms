@@ -1,6 +1,6 @@
 import { applicationContextPublic } from '../../src/applicationContextPublic';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../../src/presenter/computeds/Public/publicCaseDetailHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const unauthedUserViewsFilteredDocketRecord = cerebralTest => {

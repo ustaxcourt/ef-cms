@@ -1,3 +1,5 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -25,6 +27,9 @@ const config: Config = {
     presenter: { providers: { applicationContext: {} } },
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    prefix: '<rootDir>/../',
+  }),
   testEnvironment: 'jsdom',
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],

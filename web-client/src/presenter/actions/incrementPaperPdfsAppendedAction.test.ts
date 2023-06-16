@@ -1,6 +1,6 @@
 import { incrementPaperPdfsAppendedAction } from './incrementPaperPdfsAppendedAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('incrementPaperPdfsAppendedAction', () => {
   it('returns the yes path when form.contact.updatedEmail is defined', async () => {

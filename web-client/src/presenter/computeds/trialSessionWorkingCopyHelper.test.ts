@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

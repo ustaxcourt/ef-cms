@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.form with an empty contact object

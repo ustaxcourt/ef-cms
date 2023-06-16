@@ -1,6 +1,6 @@
 import { cancelDelayedLogoutAction } from './cancelDelayedLogoutAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('cancelDelayedLogoutAction', () => {
   it('removes the logout timer from state', async () => {

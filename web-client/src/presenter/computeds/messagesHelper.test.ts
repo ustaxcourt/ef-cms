@@ -5,7 +5,7 @@ import {
   docketClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { messagesHelper as messagesHelperComputed } from './messagesHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('messagesHelper', () => {

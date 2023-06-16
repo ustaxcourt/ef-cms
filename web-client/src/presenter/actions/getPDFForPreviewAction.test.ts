@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getPDFForPreviewAction } from './getPDFForPreviewAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPDFForPreviewAction', () => {
   beforeAll(() => {

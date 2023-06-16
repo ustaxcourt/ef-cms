@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the first correspondence document from the current case detail to set as the default viewerCorrespondenceToDisplay
