@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocketEntryQCAction } from './completeDocketEntryQCAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('completeDocketEntryQCAction', () => {
   const mockDocketEntryId = '123-456-789-abc';

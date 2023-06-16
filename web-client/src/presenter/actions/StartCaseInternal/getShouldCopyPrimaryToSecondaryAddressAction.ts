@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * gets the flag to indicate whether or not to use the same address as the primary contact
  * @param {object} providers the providers object

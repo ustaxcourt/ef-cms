@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  *  returns a callback function that sets isEditingDocketEntry on state
  * @param {string} isEditingDocketEntry the value of isEditingDocketEntry to be set

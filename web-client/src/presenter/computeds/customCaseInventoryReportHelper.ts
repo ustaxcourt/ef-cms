@@ -6,9 +6,14 @@ import {
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const customCaseInventoryReportHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const customCaseInventoryReportHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const cases = get(state.customCaseInventory.cases);
 
   const populatedFilters: CustomCaseInventoryReportFilters = get(

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the form's dates (split into month/day/year) based on the caseDetail provided in state.caseDetail

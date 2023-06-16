@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the currentViewMetadata.caseDetail.informationTab to a default value if it is not already set.

@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const printPaperServiceHelper = get => {
+import { Get } from 'cerebral';
+export const printPaperServiceHelper = (get: Get) => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   if (docketEntryId) {

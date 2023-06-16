@@ -1,6 +1,6 @@
 import { presenter } from '../../presenter-mock';
 import { primePropsForCanConsolidateAction } from './primePropsForCanConsolidateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('primePropsForCanConsolidateAction', () => {
   it('should update the props from state', async () => {
