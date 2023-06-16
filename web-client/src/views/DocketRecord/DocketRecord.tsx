@@ -44,7 +44,7 @@ export const DocketRecord = connect(
                   <span aria-hidden="true">No.</span>
                 </span>
               </th>
-              <th>Date</th>
+              <th>Filed Date</th>
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and Proceedings</th>
