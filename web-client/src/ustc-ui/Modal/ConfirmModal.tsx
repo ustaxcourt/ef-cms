@@ -2,7 +2,9 @@ import { BaseModal } from './BaseModal';
 import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 

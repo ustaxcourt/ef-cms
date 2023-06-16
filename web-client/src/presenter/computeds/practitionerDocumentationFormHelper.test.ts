@@ -1,7 +1,7 @@
 import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { practitionerDocumentationFormHelper as practitionerDocumentationFormHelperComputed } from './practitionerDocumentationFormHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('practitionerDocumentationFormHelper', () => {

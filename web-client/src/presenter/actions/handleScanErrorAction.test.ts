@@ -1,6 +1,6 @@
 import { handleScanErrorAction } from './handleScanErrorAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('handleScanErrorAction', () => {
   it('should show the EmptyHopperModal modal when no images could be acquired', async () => {

@@ -1,6 +1,6 @@
 import { preparePrintableFormattedCasesAction } from './preparePrintableFormattedCasesAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('preparePrintableFormattedCasesAction', () => {
   it('should concatenate formattedCase.consolidatedCases to after their lead case', async () => {

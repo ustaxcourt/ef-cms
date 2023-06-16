@@ -1,5 +1,5 @@
 import { getDeleteCorrespondenceDocumentAlertSuccessAction } from './getDeleteCorrespondenceDocumentAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDeleteCorrespondenceDocumentAlertSuccessAction', () => {
   it('should return alertSuccess prop', async () => {

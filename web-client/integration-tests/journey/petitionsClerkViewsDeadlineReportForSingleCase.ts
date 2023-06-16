@@ -3,7 +3,7 @@ import {
   prepareDateFromString,
 } from '../../../shared/src/business/utilities/DateHandler';
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from '../../src/presenter/computeds/caseDeadlineReportHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDeadlineReportHelper = withAppContextDecorator(

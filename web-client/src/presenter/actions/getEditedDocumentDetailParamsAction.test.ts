@@ -1,5 +1,5 @@
 import { getEditedDocumentDetailParamsAction } from './getEditedDocumentDetailParamsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getEditedDocumentDetailParamsAction', () => {
   it('gets the docketNumber and docketEntryId for the recently edited document', async () => {

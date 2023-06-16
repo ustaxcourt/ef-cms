@@ -1,6 +1,6 @@
 import { applicationContext } from '../../../applicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 const externalUserCasesHelper = withAppContextDecorator(
