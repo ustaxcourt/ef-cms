@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDefaultServiceIndicatorForPractitionerMatchesAction } from './getDefaultServiceIndicatorForPractitionerMatchesAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDefaultServiceIndicatorForPractitionerMatchesAction', () => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();

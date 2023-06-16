@@ -1,5 +1,5 @@
 import { openCaseInNewTabAction } from './openCaseInNewTabAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('openCaseInNewTabAction', () => {
   beforeAll(() => {

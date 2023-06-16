@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 import { setupPercentDone } from './createCaseFromPaperAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * invokes the filePetition useCase.
  * @param {object} providers the providers object

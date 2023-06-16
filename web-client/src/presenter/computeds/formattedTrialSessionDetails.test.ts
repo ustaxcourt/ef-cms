@@ -8,7 +8,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { chambersUser, judgeUser } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedTrialSessionDetails', () => {

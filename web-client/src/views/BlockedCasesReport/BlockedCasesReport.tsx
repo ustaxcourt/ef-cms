@@ -5,7 +5,7 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const BlockedCasesReport = connect(

@@ -1,6 +1,6 @@
 import { isCoversheetNeededAction } from './isCoversheetNeededAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('isCoversheetNeededAction', () => {
   const noStub = jest.fn();

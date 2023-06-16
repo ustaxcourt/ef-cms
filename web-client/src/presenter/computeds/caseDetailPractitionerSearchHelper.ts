@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const caseDetailPractitionerSearchHelper = get => {
+import { Get } from 'cerebral';
+export const caseDetailPractitionerSearchHelper = (get: Get) => {
   const caseDetail = get(state.caseDetail);
   const modalState = get(state.modal);
 

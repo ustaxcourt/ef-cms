@@ -1,4 +1,4 @@
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionsSummaryHelper } from '../../src/presenter/computeds/trialSessionsSummaryHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

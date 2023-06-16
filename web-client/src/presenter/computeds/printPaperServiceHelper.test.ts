@@ -1,5 +1,5 @@
 import { printPaperServiceHelper } from './printPaperServiceHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('printPaperServiceHelper', () => {
   it('should set documentTitle to the documentTitle if set', () => {

@@ -1,5 +1,5 @@
 import { GENERIC_ORDER_EVENT_CODE } from '../../../../../shared/src/business/entities/EntityConstants';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setEditOrderTitleDataOnModalAction } from './setEditOrderTitleDataOnModalAction';
 
 describe('setEditOrderTitleDataOnModalAction', () => {
