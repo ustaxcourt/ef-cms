@@ -64,7 +64,7 @@ describe('remove case from trial session', () => {
       caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      trialSessionId: mockTrialSession.trialSessionId,
     });
 
     expect(
@@ -73,7 +73,7 @@ describe('remove case from trial session', () => {
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
         .calls[0][0].trialSessionId,
-    ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
+    ).toEqual(mockTrialSession.trialSessionId);
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
@@ -81,7 +81,7 @@ describe('remove case from trial session', () => {
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
-      ...MOCK_TRIAL_INPERSON,
+      ...mockTrialSession,
       caseOrder: [
         {
           disposition: 'because',
