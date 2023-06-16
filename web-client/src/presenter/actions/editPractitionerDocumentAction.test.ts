@@ -2,7 +2,7 @@ import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { editPractitionerDocumentAction } from './editPractitionerDocumentAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('editPractitionerDocumentAction', () => {
   const practitionerDocumentFileId = '9e8ec196-28df-4fd8-b8cd-7b903f4f6330';

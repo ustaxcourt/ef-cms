@@ -3,7 +3,7 @@ import {
   STATUS_TYPES_MANUAL_UPDATE,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { updateCaseModalHelper as updateCaseModalHelperComputed } from './updateCaseModalHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
