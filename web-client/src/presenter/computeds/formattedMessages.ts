@@ -3,9 +3,14 @@ import {
   applyFiltersToMessages,
   getFormattedMessages,
 } from '../utilities/processFormattedMessages';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const formattedMessages = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedMessages = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const tableSort = get(state.tableSort);
 
   const { completedMessages, messages } = getFormattedMessages({

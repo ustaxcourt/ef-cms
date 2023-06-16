@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateCaseCheckboxAction } from './updateCaseCheckboxAction';
 
 describe('updateCaseCheckboxAction', () => {

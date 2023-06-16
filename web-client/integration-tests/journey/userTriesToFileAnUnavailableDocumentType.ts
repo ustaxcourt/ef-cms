@@ -1,5 +1,5 @@
 import { completeDocumentTypeSectionHelper as completeDocumentTypeSectionHelperComputed } from '../../src/presenter/computeds/completeDocumentTypeSectionHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const userTriesToFileAnUnavailableDocumentType = cerebralTest => {

@@ -1,5 +1,5 @@
 import { partiesInformationHelper } from '../../src/presenter/computeds/partiesInformationHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { viewCounselHelper } from '../../src/presenter/computeds/viewCounselHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

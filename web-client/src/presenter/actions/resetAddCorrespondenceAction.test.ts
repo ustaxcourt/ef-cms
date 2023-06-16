@@ -1,5 +1,5 @@
 import { resetAddCorrespondenceAction } from './resetAddCorrespondenceAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetAddCorrespondenceAction', () => {
   it('sets default properties on state for the Add Correspondence File page', async () => {

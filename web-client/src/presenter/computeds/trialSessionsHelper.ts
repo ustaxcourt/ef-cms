@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const trialSessionsHelper = get => {
+import { Get } from 'cerebral';
+export const trialSessionsHelper = (get: Get) => {
   const status = get(state.screenMetadata.trialSessionFilters.status);
   const tab =
     get(state.currentViewMetadata.trialSessions.tab) ||

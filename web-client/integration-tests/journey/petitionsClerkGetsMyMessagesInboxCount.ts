@@ -1,4 +1,4 @@
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../../src/presenter/computeds/workQueueHelper';
 

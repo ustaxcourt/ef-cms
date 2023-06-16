@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * Chooses which validation path the penalties form takes based on whether
  * the case is being started or a statistic edited

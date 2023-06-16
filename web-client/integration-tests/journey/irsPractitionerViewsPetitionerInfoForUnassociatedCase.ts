@@ -1,7 +1,7 @@
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../../src/presenter/computeds/caseDetailSubnavHelper';
 import { contactPrimaryFromState } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
