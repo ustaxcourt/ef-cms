@@ -1,5 +1,5 @@
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const filingPartiesFormHelper = (get, applicationContext) => {
   const { partyType } = get(state.caseDetail);

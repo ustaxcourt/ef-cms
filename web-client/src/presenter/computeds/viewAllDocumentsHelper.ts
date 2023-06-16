@@ -2,7 +2,7 @@ import {
   getDocumentTypesForSelect,
   getSortFunction,
 } from './internalTypesHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const viewAllDocumentsHelper = (get, applicationContext) => {
   const { CATEGORIES, CATEGORY_MAP } = applicationContext.getConstants();

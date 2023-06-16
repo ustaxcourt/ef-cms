@@ -1,5 +1,5 @@
 import { omitBy, partition, pickBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
   const aCount =

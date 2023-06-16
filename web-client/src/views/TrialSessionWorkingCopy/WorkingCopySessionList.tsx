@@ -3,7 +3,8 @@ import { CaseListRowTrialSession } from './CaseListRowTrialSession';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { without } from 'lodash';
 
 export const caseInventoryReportHelper = (get, applicationContext) => {

@@ -1,5 +1,5 @@
 import { flatten, orderBy, values } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const getDocumentTypesForSelect = typeMap => {
   let filteredTypeList = flatten(values(typeMap)).map(t => {

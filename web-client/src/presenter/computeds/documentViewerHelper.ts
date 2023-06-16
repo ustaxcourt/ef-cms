@@ -1,7 +1,8 @@
 /* eslint-disable complexity */
+
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
   const {

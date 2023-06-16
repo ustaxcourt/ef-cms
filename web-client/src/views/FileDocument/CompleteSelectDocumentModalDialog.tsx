@@ -1,7 +1,7 @@
 import { CompleteDocumentTypeSectionRemainder } from './CompleteDocumentTypeSectionRemainder';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CompleteSelectDocumentModalDialog = connect(

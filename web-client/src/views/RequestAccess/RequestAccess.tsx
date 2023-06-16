@@ -7,7 +7,8 @@ import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

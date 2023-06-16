@@ -1,6 +1,6 @@
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');

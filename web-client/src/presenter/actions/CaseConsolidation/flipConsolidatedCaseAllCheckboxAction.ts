@@ -1,5 +1,6 @@
 /* eslint-disable spellcheck/spell-checker */
-import { state } from 'cerebral';
+
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Negates consolidatedCaseAllCheckbox and:

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { throttle } from 'lodash';
 
 const throttledStatus = throttle(statusMessage => statusMessage, 3000, {

@@ -1,5 +1,5 @@
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const addTrialSessionInformationHelper = (get, applicationContext) => {
   const { SESSION_TYPES, TRIAL_SESSION_PROCEEDING_TYPES } =

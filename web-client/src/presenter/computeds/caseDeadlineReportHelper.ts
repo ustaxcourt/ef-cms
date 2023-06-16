@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const caseDeadlineReportHelper = (get, applicationContext) => {
   const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();

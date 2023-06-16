@@ -4,7 +4,7 @@ import {
 } from './internalTypesHelper';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);

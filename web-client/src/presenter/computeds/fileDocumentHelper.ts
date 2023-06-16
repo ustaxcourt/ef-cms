@@ -1,6 +1,6 @@
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const supportingDocumentFreeTextTypes = [
   'Affidavit in Support',

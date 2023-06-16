@@ -3,7 +3,7 @@ import {
   applyFiltersToMessages,
   getFormattedMessages,
 } from '../utilities/processFormattedMessages';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
   const tableSort = get(state.tableSort);
