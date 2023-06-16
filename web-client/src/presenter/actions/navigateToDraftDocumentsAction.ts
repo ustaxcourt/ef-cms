@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * changes the route to view the draft-documents of the docketNumber of props.docketNumber

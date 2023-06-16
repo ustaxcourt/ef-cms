@@ -5,7 +5,7 @@ import {
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filingPartiesFormHelper as filingPartiesFormHelperComputed } from './filingPartiesFormHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('filingPartiesFormHelper', () => {

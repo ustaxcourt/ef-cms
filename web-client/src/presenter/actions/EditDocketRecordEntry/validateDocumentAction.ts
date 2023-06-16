@@ -1,5 +1,5 @@
 import { isEmpty, omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the docket record.

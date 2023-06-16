@@ -9,7 +9,7 @@ import { partiesInformationHelper as partiesInformationHelperComputed } from '..
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('private practitioner views pending email journey', () => {

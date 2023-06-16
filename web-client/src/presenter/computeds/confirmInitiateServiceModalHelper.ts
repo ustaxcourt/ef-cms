@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { uniqBy } from 'lodash';
 
 /**
@@ -8,7 +8,12 @@ import { uniqBy } from 'lodash';
  * @param {object} applicationContext the application context
  * @returns {object} the computed values
  */
-export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const confirmInitiateServiceModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CONTACT_TYPE_TITLES, NON_MULTI_DOCKETABLE_EVENT_CODES, USER_ROLES } =
     applicationContext.getConstants();
   const { isCourtIssued } = applicationContext.getUtilities();

@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const paperDocketEntryHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const paperDocketEntryHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);

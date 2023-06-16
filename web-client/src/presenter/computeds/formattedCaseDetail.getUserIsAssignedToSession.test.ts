@@ -6,7 +6,7 @@ import {
   trialClerkUser,
 } from '../../../../shared/src/test/mockUsers';
 import { getUserIsAssignedToSession } from './formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 const JUDGES_CHAMBERS = applicationContext
   .getPersistenceGateway()

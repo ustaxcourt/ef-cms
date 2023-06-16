@@ -4,7 +4,7 @@ import { caseInventoryReportHelper as caseInventoryReportComputed } from '../src
 import { formattedPendingItems as formattedPendingItemsComputed } from '../src/presenter/computeds/formattedPendingItems';
 import { loginAs, setupTest } from './helpers';
 import { messageModalHelper as messageModalHelperComputed } from '../src/presenter/computeds/messageModalHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Petitions clerk verifies offboarded judge journey', () => {

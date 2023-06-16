@@ -5,7 +5,7 @@ import {
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { refreshElasticsearchIndex } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const judgeActivityReportHelper = withAppContextDecorator(

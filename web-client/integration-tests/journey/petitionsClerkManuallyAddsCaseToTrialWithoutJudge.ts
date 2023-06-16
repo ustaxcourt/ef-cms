@@ -1,5 +1,5 @@
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../../src/presenter/computeds/addToTrialSessionModalHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { wait } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

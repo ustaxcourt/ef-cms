@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * documentSigningHelper
@@ -6,7 +6,8 @@ import { state } from 'cerebral';
  * @param {*} get cerebral get function
  * @returns {object} object of document signature helper properties
  */
-export const documentSigningHelper = get => {
+import { Get } from 'cerebral';
+export const documentSigningHelper = (get: Get) => {
   const signatureData = get(state.pdfForSigning.signatureData);
   const currentPageNumber = get(state.pdfForSigning.pageNumber);
   const totalPages = get(state.pdfForSigning.pdfjsObj.numPages);

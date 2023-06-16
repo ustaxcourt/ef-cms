@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const paperServiceStatusHelper = get => {
+import { Get } from 'cerebral';
+export const paperServiceStatusHelper = (get: Get) => {
   const { pdfsAppended, totalPdfs } = get(state.paperServiceStatusState);
 
   return {
