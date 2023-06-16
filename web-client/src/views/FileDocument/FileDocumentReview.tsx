@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+
 import { Button } from '../../ustc-ui/Button/Button';
 import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
@@ -8,7 +9,8 @@ import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

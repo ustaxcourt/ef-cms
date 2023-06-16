@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const pdfSignerHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const pdfSignerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { PROPOSED_STIPULATED_DECISION_EVENT_CODE } =
     applicationContext.getConstants();
   const form = get(state.form);

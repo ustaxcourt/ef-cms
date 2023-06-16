@@ -1,7 +1,12 @@
 import { getScanModeLabel } from '../../utilities/getScanModeLabel';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const scanBatchPreviewerHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const scanBatchPreviewerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const selectedBatchIndex = get(state.scanner.selectedBatchIndex) || 0;
   const documentSelectedForScan = get(
     state.currentViewMetadata.documentSelectedForScan,

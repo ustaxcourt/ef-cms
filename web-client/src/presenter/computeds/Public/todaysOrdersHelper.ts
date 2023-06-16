@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const todaysOrdersHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const todaysOrdersHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { TODAYS_ORDERS_SORT_DEFAULT, TODAYS_ORDERS_SORTS } =
     applicationContext.getConstants();
 

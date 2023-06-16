@@ -1,5 +1,5 @@
 import { clearFormsAction } from './clearFormsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearFormsAction', () => {
   it('should clear state.form and state.completeForm', async () => {

@@ -1,5 +1,5 @@
 import { getAssignWorkItemsAlertSuccessAction } from './getAssignWorkItemsAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getAssignWorkItemsAlertSuccessAction', () => {
   it('should return a success message', async () => {

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.legacyAndCurrentJudges and state.judges based on the role of judges in props.user.

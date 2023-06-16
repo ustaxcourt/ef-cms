@@ -1,7 +1,7 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { TRIAL_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

@@ -1,5 +1,5 @@
 import { countryTypeUserContactChangeAction } from './countryTypeUserContactChangeAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('countryTypeUserContactChangeAction', () => {
   it('unsets address information when the countryType is changed', async () => {

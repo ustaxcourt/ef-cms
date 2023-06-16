@@ -1,4 +1,4 @@
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { stopShowValidationAction } from './stopShowValidationAction';
 
 describe('stopShowValidationAction', () => {
