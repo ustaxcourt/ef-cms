@@ -1,4 +1,5 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setJudgeActivityReportFiltersAction } from './setJudgeActivityReportFiltersAction';
@@ -8,23 +9,27 @@ presenter.providers.applicationContext = applicationContextForClient;
 describe('setJudgeActivityReportFiltersAction', () => {
   let filters;
   let judgesInState;
-  const judgesSelection = ['Colvin', 'Buch'];
+  let userSelectedJudge = 'Buch';
+  let allJudgesNames: string[];
+
   beforeEach(() => {
     filters = {
       endDate: '',
       judgeName: '',
-      judgesSelection,
+      judgesSelection: [],
       startDate: '',
     };
     judgesInState = [
+      judgeUser,
       {
+        ...judgeUser,
         name: 'Buch',
       },
-      {
-        name: 'Colvin',
-      },
     ];
+    userSelectedJudge = 'Buch';
+    allJudgesNames = (judgesInState || []).map(jdg => jdg.name);
   });
+
   it('should set state.judgeActivityReport.filters.startDate to an empty string if formatted props.startDate is an empty string', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
@@ -106,7 +111,7 @@ describe('setJudgeActivityReportFiltersAction', () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
-        judgeName: 'Buch',
+        judgeName: userSelectedJudge,
       },
       state: {
         judgeActivityReport: {
@@ -116,14 +121,16 @@ describe('setJudgeActivityReportFiltersAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.filters.judgeName).toEqual('Buch');
+    expect(result.state.judgeActivityReport.filters.judgeName).toEqual(
+      userSelectedJudge,
+    );
   });
 
-  it('should set state.judgeActivityReport.filters.judgesSelection to the single selection of judge', async () => {
+  it('should set state.judgeActivityReport.filters.judgesSelection to an array of the single selection of judge', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
-        judgeName: 'Buch',
+        judgeName: userSelectedJudge,
       },
       state: {
         judgeActivityReport: {
@@ -134,15 +141,15 @@ describe('setJudgeActivityReportFiltersAction', () => {
     });
 
     expect(result.state.judgeActivityReport.filters.judgesSelection).toEqual([
-      'Buch',
+      userSelectedJudge,
     ]);
   });
 
-  it('should set state.judgeActivityReport.filters.judgeName to "all" if all judges selection', async () => {
+  it('should set state.judgeActivityReport.filters.judgeName to "All Judges" for "All Judges" selection', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
-        judgeName: 'all',
+        judgeName: 'All Judges',
       },
       state: {
         judgeActivityReport: {
@@ -152,18 +159,17 @@ describe('setJudgeActivityReportFiltersAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.filters.judgeName).toEqual('all');
-    expect(result.state.judgeActivityReport.filters.judgesSelection).toEqual([
-      'Buch',
-      'Colvin',
-    ]);
+    expect(result.state.judgeActivityReport.filters.judgeName).toEqual(
+      'All Judges',
+    );
   });
 
   it('should set state.judgeActivityReport.filters.judgeName to all the current judges in state', async () => {
+    userSelectedJudge = 'All Judges';
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
-        judgeName: 'all',
+        judgeName: userSelectedJudge,
       },
       state: {
         judgeActivityReport: {
@@ -173,9 +179,8 @@ describe('setJudgeActivityReportFiltersAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.filters.judgesSelection).toEqual([
-      'Buch',
-      'Colvin',
-    ]);
+    expect(result.state.judgeActivityReport.filters.judgesSelection).toEqual(
+      allJudgesNames,
+    );
   });
 });
