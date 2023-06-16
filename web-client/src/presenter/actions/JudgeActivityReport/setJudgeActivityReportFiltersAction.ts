@@ -10,9 +10,11 @@ export const setJudgeActivityReportFiltersAction = ({
   const selectedJudge: string = props.judgeName;
 
   if (selectedJudge) {
-    if (selectedJudge === 'all') {
+    if (selectedJudge === 'All Judges') {
       const currentJudgesInfo = get(state.judges);
-      const judgesSelection = currentJudgesInfo.map(judge => judge.name);
+      const judgesSelection = (currentJudgesInfo || []).map(
+        judge => judge.name,
+      );
 
       store.set(
         state.judgeActivityReport.filters.judgesSelection,
