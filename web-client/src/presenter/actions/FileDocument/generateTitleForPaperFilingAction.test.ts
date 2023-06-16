@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateTitleForPaperFilingAction } from './generateTitleForPaperFilingAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generateTitleForPaperFilingAction', () => {
   const { generateExternalDocumentTitle } = applicationContext.getUtilities();

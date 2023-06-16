@@ -1,5 +1,5 @@
 import { menuHelper } from './menuHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('menuHelper', () => {
   it('should return false for each menu by default', () => {

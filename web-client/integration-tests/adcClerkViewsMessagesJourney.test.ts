@@ -9,7 +9,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { showSortableHeaders as showSortableHeadersComputed } from '../src/presenter/computeds/showSortableHeaders';
 import { withAppContextDecorator } from '../src/withAppContext';
 

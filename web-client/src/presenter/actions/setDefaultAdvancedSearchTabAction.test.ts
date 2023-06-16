@@ -1,7 +1,7 @@
 import { ADVANCED_SEARCH_TABS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setDefaultAdvancedSearchTabAction } from './setDefaultAdvancedSearchTabAction';
 
 describe('setDefaultAdvancedSearchTabAction', () => {

@@ -1,6 +1,7 @@
 // This is fine.
+
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const If = connect(function If(props) {
   const { bind, children, get, not } = props;

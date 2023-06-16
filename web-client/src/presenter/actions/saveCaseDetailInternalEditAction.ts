@@ -1,5 +1,5 @@
 import { setupPercentDone } from './createCaseFromPaperAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * takes the state.caseDetail and updates it via the updateCase use case.

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * used to choose the next path based off whether the path stated in the factory exists and is truthy
