@@ -6,7 +6,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { capitalize } from 'lodash';
 import { requestAccessHelper as requestAccessHelperComputed } from './requestAccessHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('requestAccessHelper', () => {

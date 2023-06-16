@@ -4,7 +4,7 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const blockedCasesReportHelper = withAppContextDecorator(

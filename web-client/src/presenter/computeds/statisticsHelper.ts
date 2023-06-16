@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatStatistic = ({
   applicationContext,
@@ -53,7 +53,12 @@ export const formatStatistic = ({
  * @param {object} applicationContext the application context
  * @returns {object} formatted statistics
  */
-export const statisticsHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const statisticsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { caseType, damages, docketNumber, litigationCosts, statistics } = get(
     state.caseDetail,
   );

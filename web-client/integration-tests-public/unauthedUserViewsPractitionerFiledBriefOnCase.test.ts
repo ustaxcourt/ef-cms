@@ -17,7 +17,7 @@ import { petitionsClerkAddsPractitionerToPrimaryContact } from '../integration-t
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerSearchesForCase } from '../integration-tests/journey/practitionerSearchesForCase';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../src/presenter/computeds/Public/publicCaseDetailHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { withAppContextDecorator } from '../src/withAppContext';

@@ -1,5 +1,5 @@
 import { clearWorkQueueAction } from './clearWorkQueueAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearWorkQueueAction', () => {
   it('should clear the value of state.workQueue', async () => {

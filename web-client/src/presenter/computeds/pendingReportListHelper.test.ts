@@ -1,6 +1,6 @@
 import { applicationContext } from '../../applicationContext';
 import { pendingReportListHelper } from './pendingReportListHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('pendingReportListHelper', () => {

@@ -1,5 +1,5 @@
 import { checkForNegativeValueAction } from './checkForNegativeValueAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('checkForNegativeValueAction', () => {
   let presenter;

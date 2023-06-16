@@ -1,5 +1,5 @@
 import { extractUserNotesFromCalendaredCasesAction } from './extractUserNotesFromCalendaredCasesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('extractUserNotesFromCalendaredCasesAction', () => {
   it('extracts user notes from calendared cases', async () => {
