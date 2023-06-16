@@ -1,6 +1,6 @@
 import { cloneDeep } from 'lodash';
 import { initialCustomCaseInventoryReportState } from '../customCaseInventoryReportState';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * resets the custom case inventory report to the initial state

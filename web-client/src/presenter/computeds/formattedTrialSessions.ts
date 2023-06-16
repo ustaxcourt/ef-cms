@@ -1,7 +1,7 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSession = (session, applicationContext) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
@@ -119,7 +119,12 @@ export const filterFormattedSessionsByStatus = trialTerms => {
   return filteredbyStatusType;
 };
 
-export const formattedTrialSessions = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedTrialSessions = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();

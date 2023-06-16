@@ -1,5 +1,5 @@
 import { clearSessionMetadataAction } from './clearSessionMetadataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearSessionMetadataAction', () => {
   it('should clear the value of state.sessionMetadata', async () => {

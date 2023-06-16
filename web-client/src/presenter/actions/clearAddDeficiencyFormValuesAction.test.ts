@@ -1,5 +1,5 @@
 import { clearAddDeficiencyFormValuesAction } from './clearAddDeficiencyFormValuesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearAddDeficiencyFormValuesAction', () => {
   it('sets the form to a default state if yearOrPeriod is changed', async () => {

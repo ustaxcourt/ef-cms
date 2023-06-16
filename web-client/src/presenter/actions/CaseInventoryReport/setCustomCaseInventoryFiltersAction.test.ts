@@ -5,7 +5,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCustomCaseInventoryFiltersAction } from './setCustomCaseInventoryFiltersAction';
 
 presenter.providers.applicationContext = applicationContext;

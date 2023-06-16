@@ -1,5 +1,5 @@
 import { resetAddPaperFilingAction } from './resetAddPaperFilingAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetAddPaperFilingAction', () => {
   it('sets default properties on state for the add docket entry form', async () => {

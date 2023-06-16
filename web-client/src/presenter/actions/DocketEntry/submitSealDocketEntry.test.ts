@@ -1,7 +1,7 @@
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitSealDocketEntryAction } from './submitSealDocketEntryAction';
 
 describe('submitSealDocketEntryAction', () => {

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CerebralTest, runCompute } from 'cerebral/test';
+import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
@@ -43,6 +43,7 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../shared/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';

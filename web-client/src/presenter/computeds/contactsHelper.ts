@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the contact view options based on partyType
@@ -9,7 +9,12 @@ import { state } from 'cerebral';
  * @returns {object} the contactPrimary and/or contactSecondary
  * view options
  */
-export const contactsHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const contactsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const form = get(state.form);
   const user = applicationContext.getCurrentUser();
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();

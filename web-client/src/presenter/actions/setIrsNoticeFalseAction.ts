@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * clears state.form.irsDate values and sets state.form.hasVerifiedIrsNotice to false

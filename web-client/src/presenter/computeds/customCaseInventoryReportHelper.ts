@@ -6,13 +6,18 @@ import {
   TRIAL_CITIES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
+import { Get } from 'cerebral';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { sortBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const customCaseInventoryReportHelper = (get, applicationContext) => {
+export const customCaseInventoryReportHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseStatuses = CASE_STATUSES.map(status => ({
     label: status,
     value: status,

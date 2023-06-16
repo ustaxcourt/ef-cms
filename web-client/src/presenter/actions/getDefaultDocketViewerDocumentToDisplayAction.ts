@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the first docket entry document from the current case detail to set as the default viewerDocumentToDisplay

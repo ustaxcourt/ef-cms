@@ -1,5 +1,5 @@
 import { getDeleteCorrespondenceDocumentAlertErrorAction } from './getDeleteCorrespondenceDocumentAlertErrorAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDeleteCorrespondenceDocumentAlertErrorAction', () => {
   it('should return alertError prop', async () => {

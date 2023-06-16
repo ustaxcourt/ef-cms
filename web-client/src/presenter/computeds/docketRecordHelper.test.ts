@@ -1,5 +1,5 @@
 import { docketRecordHelper } from './docketRecordHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('docketRecordHelper', () => {
   const mockDocketNumber = '111-11';
