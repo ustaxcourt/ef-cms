@@ -2,7 +2,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { uploadExternalDocumentsAction } from './uploadExternalDocumentsAction';
 
 describe('uploadExternalDocumentsAction', () => {

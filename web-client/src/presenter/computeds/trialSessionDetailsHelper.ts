@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const trialSessionDetailsHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const trialSessionDetailsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 

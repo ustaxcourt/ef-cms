@@ -1,5 +1,5 @@
 import { clearErrorAlertsAction } from './clearErrorAlertsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearErrorAlertsAction', () => {
   it('should clear state.alertError', async () => {

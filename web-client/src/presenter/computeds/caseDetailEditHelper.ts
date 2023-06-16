@@ -1,5 +1,5 @@
 import { showContactsHelper } from '../computeds/showContactsHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the case detail view options based on partyType
@@ -11,7 +11,12 @@ import { state } from 'cerebral';
  * @returns {object} partyTypes constant, showPrimary/SecondaryContact,
  * showCorporateDisclosureStatement, and corporateDisclosureStatementDocumentId
  */
-export const caseDetailEditHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseDetailEditHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const caseDetail = get(state.form);
   const showContacts = showContactsHelper(caseDetail.partyType, PARTY_TYPES);

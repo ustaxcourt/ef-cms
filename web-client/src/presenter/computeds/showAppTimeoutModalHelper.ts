@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const showAppTimeoutModalHelper = get => {
+import { Get } from 'cerebral';
+export const showAppTimeoutModalHelper = (get: Get) => {
   const appTimeoutModalName = 'AppTimeoutModal';
 
   const showModalState = get(state.modal.showModal);

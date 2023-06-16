@@ -1,7 +1,7 @@
 import { formatDateIfToday } from './formattedWorkQueue';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { orderBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const formatMessage = ({ applicationContext, caseDetail, message }) => {
   const formattedAttachments = applicationContext
@@ -25,7 +25,12 @@ const formatMessage = ({ applicationContext, caseDetail, message }) => {
   };
 };
 
-export const formattedMessageDetail = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedMessageDetail = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const messageDetail = get(state.messageDetail);
   const caseDetail = get(state.caseDetail);
   const isExpanded = get(state.isExpanded);

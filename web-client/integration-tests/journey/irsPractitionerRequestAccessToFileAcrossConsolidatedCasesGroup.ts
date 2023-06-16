@@ -1,7 +1,7 @@
 import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { externalConsolidatedCaseGroupHelper as externalConsolidatedCaseGroupHelperComputed } from '../../src/presenter/computeds/externalConsolidatedCaseGroupHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (

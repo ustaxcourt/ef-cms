@@ -1,6 +1,6 @@
 import { clearDraftDocumentViewerAction } from './clearDraftDocumentViewerAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearDraftDocumentViewerAction', () => {
   it('should unset state.draftDocumentViewerDocketEntryId so the viewer does not display an unexpected document', async () => {

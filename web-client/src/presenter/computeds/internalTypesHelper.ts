@@ -1,5 +1,5 @@
 import { flatten, orderBy, values } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const getDocumentTypesForSelect = typeMap => {
   let filteredTypeList = flatten(values(typeMap)).map(t => {
@@ -35,7 +35,12 @@ export const getSortFunction = searchText => {
   };
 };
 
-export const internalTypesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const internalTypesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { INTERNAL_CATEGORY_MAP, LODGED_EVENT_CODE } =
     applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';

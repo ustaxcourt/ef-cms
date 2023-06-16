@@ -94,7 +94,7 @@ import { UserContactEditProgress } from './UserContactEditProgress';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
