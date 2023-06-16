@@ -59,10 +59,10 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   {
-    judgeName,
+    judgesSelection,
     statuses,
   }: {
-    judgeName: string;
+    judgesSelection: string[];
     statuses: string[];
   },
 ) => {
@@ -72,16 +72,27 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const submittedAndCavCasesResults = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      judgeName,
-      statuses,
-    });
+  /*
+    TODO: ADD VALIDATION BEFORE PERSISTENCE CALL OF judgesSelection AND statuses
+  */
+
+  const totalSubmittedAndCavResults = (
+    await Promise.all(
+      judgesSelection.map(
+        async judgeName =>
+          await applicationContext
+            .getPersistenceGateway()
+            .getDocketNumbersByStatusAndByJudge({
+              applicationContext,
+              judgeName,
+              statuses,
+            }),
+      ),
+    )
+  ).flat();
 
   const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(async result => {
+    totalSubmittedAndCavResults.map(async result => {
       return await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({

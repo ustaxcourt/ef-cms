@@ -126,7 +126,7 @@ const mockSubmittedCaseWithOddOnDocketRecord = {
   status: CASE_STATUS_TYPES.submitted,
 };
 
-let mockCavLeadCase = {
+const mockCavLeadCase = {
   ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
   associatedJudge: judgeUser.name,
   caseStatusHistory: [
@@ -163,8 +163,9 @@ let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
 let expectedConsolidatedCasesGroupCountMap = {};
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
+  const judgesSelection = [judgeUser.name];
   const mockValidRequest = {
-    judgeName: judgeUser.name,
+    judgesSelection,
     statuses: ['Submitted', 'CAV'],
   };
 
@@ -184,6 +185,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   });
 
   it('should return an error when the search parameters are not valid', async () => {
+    // TODO: check validation for array of empty strings as invalid??
+
     await expect(
       getCasesByStatusAndByJudgeInteractor(applicationContext, {
         judgeName: judgeUser.name,
