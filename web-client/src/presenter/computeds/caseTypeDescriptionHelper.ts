@@ -9,7 +9,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} array of case types with descriptions
  */
-export const caseTypeDescriptionHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseTypeDescriptionHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const form = get(state.form);
   const {
     CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE,

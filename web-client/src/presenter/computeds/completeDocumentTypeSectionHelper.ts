@@ -6,7 +6,12 @@ import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const completeDocumentTypeSectionHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 

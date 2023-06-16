@@ -4,7 +4,12 @@ import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntr
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const documentViewerHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const documentViewerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,

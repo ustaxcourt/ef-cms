@@ -119,7 +119,12 @@ export const filterFormattedSessionsByStatus = trialTerms => {
   return filteredbyStatusType;
 };
 
-export const formattedTrialSessions = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedTrialSessions = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();

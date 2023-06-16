@@ -8,7 +8,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} object containing the view settings
  */
-export const startCaseInternalHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const startCaseInternalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { PARTY_TYPES, PAYMENT_STATUS } = applicationContext.getConstants();
   const partyType = get(state.form.partyType);
   const petitionPaymentStatus = get(state.form.petitionPaymentStatus);

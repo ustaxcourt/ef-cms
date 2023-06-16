@@ -265,7 +265,12 @@ export const getFormattedDocketEntry = ({
   return formattedResult;
 };
 
-export const formattedDocketEntries = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedDocketEntries = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
     .getUtilities()

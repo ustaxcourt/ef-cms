@@ -78,7 +78,12 @@ const compareTrialSessionEligibleCases = eligibleCases => {
   };
 };
 
-export const formattedEligibleCasesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedEligibleCasesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
   const { formatCaseForTrialSession, setConsolidationFlagsForDisplay } =
     applicationContext.getUtilities();

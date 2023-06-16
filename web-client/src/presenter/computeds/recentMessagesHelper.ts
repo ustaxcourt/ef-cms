@@ -2,7 +2,12 @@ import { getFormattedMessages } from '../utilities/processFormattedMessages';
 import { setTrialInformationOnMessage } from './formattedMessages';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const recentMessagesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const recentMessagesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { messages } = getFormattedMessages({
     applicationContext,
     messages: get(state.messages) || [],

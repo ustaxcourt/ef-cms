@@ -108,7 +108,12 @@ export const formatDocketEntryOnDocketRecord = (
   };
 };
 
-export const publicCaseDetailHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const publicCaseDetailHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     ALLOWLIST_FEATURE_FLAGS,
     MOTION_EVENT_CODES,

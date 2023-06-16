@@ -7,7 +7,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} apply stamp form helper fields
  */
-export const applyStampFormHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const applyStampFormHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
   const form = get(state.form);
   const pdfForSigning = get(state.pdfForSigning);

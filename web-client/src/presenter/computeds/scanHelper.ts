@@ -5,7 +5,12 @@ const getCaseDocumentByDocumentType = ({ documents, documentType }) => {
   return documents?.find(doc => doc.documentType === documentType);
 };
 
-export const scanHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const scanHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   // Master switch for the time being
   const scanFeatureEnabled = true;
 

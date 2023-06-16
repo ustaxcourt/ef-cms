@@ -23,7 +23,12 @@ export const initialFilingDocumentTabs = [
   },
 ];
 
-export const petitionQcHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const petitionQcHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
   const { isPaper } = get(state.form);
   const documents = get(state.caseDetail.docketEntries);
