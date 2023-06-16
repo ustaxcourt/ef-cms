@@ -5,12 +5,15 @@ import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 describe('getOrdersFiledByJudgeInteractor', () => {
   const judgesSelection = ['Colvin', 'Buch'];
-  const mockValidRequest = {
-    endDate: '03/21/2020',
-    judgesSelection,
-    startDate: '02/12/2020',
-  };
 
+  const mockStartDate = '2020-03-22T03:59:59.999Z';
+  const mockEndDate = '2020-03-23T03:59:59.999Z';
+
+  const mockValidRequest = {
+    endDate: mockEndDate,
+    judgesSelection,
+    startDate: mockStartDate,
+  };
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
   });
@@ -29,6 +32,14 @@ describe('getOrdersFiledByJudgeInteractor', () => {
         endDate: 'baddabingbaddaboom',
         judgesSelection,
         startDate: 'yabbadabbadoo',
+      }),
+    ).rejects.toThrow();
+
+    await expect(
+      getOrdersFiledByJudgeInteractor(applicationContext, {
+        endDate: mockEndDate,
+        judgesSelection: [],
+        startDate: mockStartDate,
       }),
     ).rejects.toThrow();
   });
@@ -84,20 +95,20 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      endDate: '2020-03-22T03:59:59.999Z',
+      endDate: mockEndDate,
       judge: judgesSelection[0],
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
+      startDate: mockStartDate,
     });
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[1][0],
     ).toMatchObject({
-      endDate: '2020-03-22T03:59:59.999Z',
+      endDate: mockEndDate,
       judge: judgesSelection[1],
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
+      startDate: mockStartDate,
     });
     expect(result).toEqual([
       { count: 2, documentType: 'Order', eventCode: 'O' },

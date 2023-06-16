@@ -20,93 +20,91 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       userId: '55555-f6cd-442c-a168-202db5876666',
     },
   ];
-  const judgesSelection = [
-    judgeUsers[0].userId,
-    judgeUsers[1].userId,
-    judgeUsers[2].userId,
-  ];
+
+  const mockStartDate = '2020-03-22T03:59:59.999Z';
+  const mockEndDate = '2020-03-23T03:59:59.999Z';
 
   const mockTrialSessionsForAllJudges = judgeUsers.map(jdg => {
     const mockRegularTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-02T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
-      startDate: '2020-03-01T00:00:00.000Z',
+      startDate: mockStartDate,
     };
 
     const mockMotionHearingTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-03T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
       sessionType: SESSION_TYPES.motionHearing,
-      startDate: '2020-03-02T00:00:00.000Z',
+      startDate: mockStartDate,
     };
 
     const mockSmallSwingTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-03T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
       sessionType: SESSION_TYPES.small,
-      startDate: '2020-03-02T00:00:00.000Z',
+      startDate: mockStartDate,
       swingSession: true,
       swingSessionId: '0875bab4-5bfe-4b3a-a62d-565d7d950bd9',
     };
 
     const mockHybridSwingTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-03T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
       sessionType: SESSION_TYPES.hybrid,
-      startDate: '2020-03-02T00:00:00.000Z',
+      startDate: mockStartDate,
       swingSession: true,
       swingSessionId: '0875bab4-5bfe-4b3a-a62d-565d7d950bd9',
     };
 
     const mockHybridNonSwingTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-03T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
       sessionType: SESSION_TYPES.hybrid,
-      startDate: '2020-03-02T00:00:00.000Z',
+      startDate: mockStartDate,
     };
 
     const mockHybridSmallSwingTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-03T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
       sessionType: SESSION_TYPES.hybridSmall,
-      startDate: '2020-03-02T00:00:00.000Z',
+      startDate: mockStartDate,
       swingSession: true,
       swingSessionId: '0875bab4-5bfe-4b3a-a62d-565d7d950bd9',
     };
 
     const mockHybridSmallNonSwingTrialSession = {
       ...MOCK_TRIAL_REGULAR,
-      endDate: '2020-03-03T00:00:00.000Z',
+      endDate: mockEndDate,
       judge: {
         name: jdg.name,
         userId: jdg.userId,
       },
       sessionType: SESSION_TYPES.hybridSmall,
-      startDate: '2020-03-02T00:00:00.000Z',
+      startDate: mockStartDate,
     };
 
     return [
@@ -120,10 +118,16 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     ];
   });
 
+  const judgesSelection = [
+    judgeUsers[0].userId,
+    judgeUsers[1].userId,
+    judgeUsers[2].userId,
+  ];
+
   const mockValidRequest = {
-    endDate: '04/01/2020',
+    endDate: mockEndDate,
     judgesSelection,
-    startDate: '01/01/2020',
+    startDate: mockStartDate,
   };
 
   const mockInvalidRequest = {
@@ -152,10 +156,21 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   });
 
   it('should throw an error when the search request is not valid', async () => {
+    const mockInvalidRequestWithInvalidJudgesSelection = {
+      ...mockValidRequest,
+      judgesSelection: [],
+    };
     await expect(
       getTrialSessionsForJudgeActivityReportInteractor(
         applicationContext,
         mockInvalidRequest,
+      ),
+    ).rejects.toThrow();
+
+    await expect(
+      getTrialSessionsForJudgeActivityReportInteractor(
+        applicationContext,
+        mockInvalidRequestWithInvalidJudgesSelection,
       ),
     ).rejects.toThrow();
   });

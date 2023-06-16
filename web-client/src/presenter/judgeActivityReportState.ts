@@ -10,6 +10,11 @@ export type JudgeActivityReportFilters = {
   judgeName: string;
 };
 
+export type JudgeActivityReportRequestType = Omit<
+  JudgeActivityReportFilters,
+  'judgeName'
+>;
+
 export type CasesClosedType = {
   [CASE_STATUS_TYPES.closed]: number;
   [CASE_STATUS_TYPES.closedDismissed]: number;

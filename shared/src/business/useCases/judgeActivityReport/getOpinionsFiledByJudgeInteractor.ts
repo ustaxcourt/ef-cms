@@ -4,6 +4,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportRequestType } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -13,11 +14,7 @@ import { orderBy } from 'lodash';
 
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgesSelection,
-    startDate,
-  }: { judgesSelection: string[]; endDate: string; startDate: string },
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,18 +22,18 @@ export const getOpinionsFiledByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const searchEntity = new JudgeActivityReportSearch({
+    endDate,
+    judgesSelection,
+    startDate,
+  });
+
+  if (!searchEntity.isValid()) {
+    throw new InvalidRequest();
+  }
+
   const aggregatedOpinionsResults = await Promise.all(
     judgesSelection.map(async eachJudge => {
-      const searchEntity = new JudgeActivityReportSearch({
-        endDate,
-        judgeName: eachJudge,
-        startDate,
-      });
-
-      if (!searchEntity.isValid()) {
-        throw new InvalidRequest();
-      }
-
       return await applicationContext
         .getPersistenceGateway()
         .advancedDocumentSearch({
@@ -44,7 +41,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
           documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
           endDate: searchEntity.endDate,
           isOpinionSearch: true,
-          judge: searchEntity.judgeName,
+          judge: eachJudge,
           overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
           startDate: searchEntity.startDate,
         });

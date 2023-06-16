@@ -24,10 +24,13 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
   const judgesSelection = ['Colvin', 'Samson'];
 
+  const mockStartDate = '02/12/2020';
+  const mockEndDate = '03/21/2020';
+
   const mockValidRequest = {
-    endDate: '03/21/2020',
+    endDate: mockEndDate,
     judgesSelection,
-    startDate: '02/12/2020',
+    startDate: mockStartDate,
   };
 
   beforeEach(() => {
@@ -54,8 +57,16 @@ describe('getCasesClosedByJudgeInteractor', () => {
     await expect(
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgesSelection,
+        judgesSelection: [],
         startDate: 'yabbadabbadoo',
+      }),
+    ).rejects.toThrow();
+
+    await expect(
+      getCasesClosedByJudgeInteractor(applicationContext, {
+        endDate: mockEndDate,
+        judgesSelection: [],
+        startDate: mockStartDate,
       }),
     ).rejects.toThrow();
   });

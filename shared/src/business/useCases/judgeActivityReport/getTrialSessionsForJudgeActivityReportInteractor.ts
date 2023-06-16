@@ -1,4 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportRequestType } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -11,20 +12,22 @@ import {
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
-  {
-    endDate,
-    judgesSelection,
-    startDate,
-  }: {
-    judgesSelection: string[];
-    endDate: string;
-    startDate: string;
-  },
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
 ) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
+  }
+
+  const searchEntity = new JudgeActivityReportSearch({
+    endDate,
+    judgesSelection,
+    startDate,
+  });
+
+  if (!searchEntity.isValid()) {
+    throw new InvalidRequest();
   }
 
   let totalRegular: number = 0;
@@ -35,16 +38,6 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   await Promise.all(
     judgesSelection.map(async judgeId => {
-      const searchEntity = new JudgeActivityReportSearch({
-        endDate,
-        judgeId,
-        startDate,
-      });
-
-      if (!searchEntity.isValid()) {
-        throw new InvalidRequest();
-      }
-
       const trialSessions = await applicationContext
         .getPersistenceGateway()
         .getTrialSessions({
@@ -53,7 +46,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
       const judgeSessionsInDateRange = trialSessions.filter(
         session =>
-          session.judge?.userId === searchEntity.judgeId &&
+          session.judge?.userId === judgeId &&
           session.startDate <= searchEntity.endDate &&
           session.startDate >= searchEntity.startDate,
       );

@@ -6,10 +6,13 @@ import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 describe('getOpinionsFiledByJudgeInteractor', () => {
   const judgesSelection = ['Colvin', 'Buch'];
 
+  const mockStartDate = '2020-03-22T03:59:59.999Z';
+  const mockEndDate = '2020-03-23T03:59:59.999Z';
+
   const mockValidRequest = {
-    endDate: '03/21/2020',
+    endDate: mockEndDate,
     judgesSelection,
-    startDate: '02/12/2020',
+    startDate: mockStartDate,
   };
 
   beforeEach(() => {
@@ -30,6 +33,14 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
         endDate: 'baddabingbaddaboom',
         judgesSelection,
         startDate: 'yabbadabbadoo',
+      }),
+    ).rejects.toThrow();
+
+    await expect(
+      getOpinionsFiledByJudgeInteractor(applicationContext, {
+        endDate: mockEndDate,
+        judgesSelection: [],
+        startDate: mockStartDate,
       }),
     ).rejects.toThrow();
   });
@@ -94,20 +105,20 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
-      endDate: '2020-03-22T03:59:59.999Z',
+      endDate: mockEndDate,
       judge: mockValidRequest.judgesSelection[0],
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
+      startDate: mockStartDate,
     });
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[1][0],
     ).toMatchObject({
-      endDate: '2020-03-22T03:59:59.999Z',
+      endDate: mockEndDate,
       judge: mockValidRequest.judgesSelection[1],
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
+      startDate: mockStartDate,
     });
 
     expect(result).toEqual([

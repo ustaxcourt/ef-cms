@@ -9,16 +9,11 @@ export const validateJudgeActivityReportSearchAction = ({
     state.judgeActivityReport.filters,
   );
 
-  let errors;
-
-  // TODO: refactor JudgeActivityReportSearch to take judgesSelection for validation
-  judgesSelection.forEach(eachJudge => {
-    errors = new JudgeActivityReportSearch({
-      endDate,
-      judgeName: eachJudge,
-      startDate,
-    }).getFormattedValidationErrors();
-  });
+  const errors = new JudgeActivityReportSearch({
+    endDate,
+    judgesSelection,
+    startDate,
+  }).getFormattedValidationErrors();
 
   if (errors) {
     return path.error({
