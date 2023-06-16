@@ -161,7 +161,8 @@ Sometimes we want to compute state using a combination of other state variables.
 ```javascript
 import {  } from 'cerebral'; import { state } from '@web-client/presenter/app.cerebral';
 
-export const menuHelper = get => {
+import { Get } from 'cerebral';
+export const menuHelper = (get: Get) => {
   const isAccountMenuOpen = get(state.navigation.openMenu) === 'AccountMenu';
   const isReportsMenuOpen = get(state.navigation.openMenu) === 'ReportsMenu';
   const isCaseDetailMenuOpen =

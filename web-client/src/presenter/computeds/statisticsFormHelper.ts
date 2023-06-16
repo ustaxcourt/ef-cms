@@ -7,7 +7,12 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} statistics form helper fields
  */
-export const statisticsFormHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const statisticsFormHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CASE_TYPES_MAP, PENALTY_TYPES } = applicationContext.getConstants();
   const form = get(state.form);
 

@@ -29,7 +29,12 @@ const getEConsentAttributesForContact = (
   return { eServiceConsentText, shouldDisplayEConsentText };
 };
 
-export const reviewSavedPetitionHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const reviewSavedPetitionHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   let irsNoticeDateFormatted;
 
   const {
