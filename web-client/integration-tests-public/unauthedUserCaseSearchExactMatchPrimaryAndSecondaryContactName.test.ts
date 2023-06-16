@@ -18,7 +18,7 @@ const testClient = setupTestClient();
 
 testClient.draftOrders = [];
 
-const firstName = faker.name.firstName();
+const firstName = faker.person.firstName();
 
 const baseContact = {
   address1: '734 Cowley Parkway',

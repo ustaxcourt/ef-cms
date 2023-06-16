@@ -1,38 +1,40 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { CONTACT_TYPES } = require('../EntityConstants');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { CONTACT_TYPES } from '../EntityConstants';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 
-/**
- * PublicContact
- * Represents the view of the public case.
- *
- * @param {object} rawContact the raw case data
- * @constructor
- */
-function PublicContact() {
-  this.entityName = 'PublicContact';
+export class PublicContact extends JoiValidationEntity {
+  public contactId: string;
+  public contactType?: string;
+  public name?: string;
+  public state?: string;
+
+  constructor(rawProps) {
+    super('PublicContact');
+
+    this.contactId = rawProps.contactId;
+    this.contactType = rawProps.contactType;
+    this.name = rawProps.name;
+    this.state = rawProps.state;
+  }
+
+  static VALIDATION_RULES = {
+    contactId: JoiValidationConstants.UUID.required(),
+    contactType: JoiValidationConstants.STRING.valid(
+      ...Object.values(CONTACT_TYPES),
+    ).optional(),
+    name: JoiValidationConstants.STRING.max(500).optional(),
+    state: JoiValidationConstants.STRING.optional(),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = {};
+
+  getValidationRules() {
+    return PublicContact.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return PublicContact.VALIDATION_ERROR_MESSAGES;
+  }
 }
 
-PublicContact.prototype.init = function init(rawContact) {
-  this.contactId = rawContact.contactId;
-  this.contactType = rawContact.contactType;
-  this.name = rawContact.name;
-  this.state = rawContact.state;
-};
-
-PublicContact.VALIDATION_RULES = joi.object().keys({
-  contactId: JoiValidationConstants.UUID.required(),
-  contactType: JoiValidationConstants.STRING.valid(
-    ...Object.values(CONTACT_TYPES),
-  ).optional(),
-  name: JoiValidationConstants.STRING.max(500).optional(),
-  state: JoiValidationConstants.STRING.optional(),
-});
-
-joiValidationDecorator(PublicContact, PublicContact.VALIDATION_RULES, {});
-
-module.exports = { PublicContact: validEntityDecorator(PublicContact) };
+export type RawPublicContact = ExcludeMethods<PublicContact>;
