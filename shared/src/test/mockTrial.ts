@@ -73,10 +73,7 @@ export const MOCK_TRIAL_INPERSON: RawTrialSession = {
 };
 
 export const MOCK_TRIAL_STANDALONE_REMOTE: RawTrialSession = {
-  caseOrder: [
-    { docketNumber: MOCK_CASE.docketNumber },
-    { docketNumber: '123-45' },
-  ],
+  caseOrder: [],
   chambersPhoneNumber: '1111111',
   entityName: 'TrialSession',
   isCalendared: true,
