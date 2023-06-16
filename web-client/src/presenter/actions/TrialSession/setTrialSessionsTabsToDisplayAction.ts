@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * sets the state.screenMetadata.showNewTab depending on the user role
  * @param {object} providers the providers object

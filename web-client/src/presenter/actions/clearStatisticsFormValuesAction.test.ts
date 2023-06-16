@@ -1,5 +1,5 @@
 import { clearStatisticsFormValuesAction } from './clearStatisticsFormValuesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearStatisticsFormValuesAction', () => {
   it('should unset statistics form values if props.key contains yearOrPeriod', async () => {

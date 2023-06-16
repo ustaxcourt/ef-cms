@@ -1,5 +1,5 @@
 import { cerebralBindSimpleSetStateAction } from './cerebralBindSimpleSetStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('cerebralBindSimpleSetStateAction', () => {
   it('sets state.props.key to props.value', async () => {

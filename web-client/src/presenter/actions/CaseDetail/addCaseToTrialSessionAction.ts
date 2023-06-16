@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls the addCaseToTrialSessionInteractor to add the case to the trial session

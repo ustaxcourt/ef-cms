@@ -1,5 +1,5 @@
 import { getDeletePractitionerDocumentAlertSuccessAction } from './getDeletePractitionerDocumentAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDeletePractitionerDocumentAlertSuccessAction', () => {
   it('should return alertSuccess prop', async () => {

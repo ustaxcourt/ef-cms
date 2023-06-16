@@ -2,7 +2,7 @@ import { DATE_RANGE_SEARCH_OPTIONS } from '../../../../../shared/src/business/en
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { resetAdvancedDocumentSearchDatesAction } from './resetAdvancedDocumentSearchDatesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetAdvancedDocumentSearchDatesAction', () => {
   presenter.providers.applicationContext = applicationContext;

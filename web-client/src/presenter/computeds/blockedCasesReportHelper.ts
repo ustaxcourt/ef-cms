@@ -1,5 +1,5 @@
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the blocked cases and formats them and filters based on procedureType
@@ -8,7 +8,12 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} {blockedCasesFormatted: *[], blockedCasesCount: number}
  */
-export const blockedCasesReportHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const blockedCasesReportHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const blockedCases = get(state.blockedCases);
   const procedureTypeFilter = get(state.form.procedureType);
 

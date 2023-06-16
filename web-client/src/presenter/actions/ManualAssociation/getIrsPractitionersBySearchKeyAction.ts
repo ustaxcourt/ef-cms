@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /* * Gets irsPractitioners whose name or barNumber match the searchKey
  *

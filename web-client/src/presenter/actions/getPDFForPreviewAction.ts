@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * given a docketNumber and docketEntryId, fetch a PDF from S3 and put into props stream.

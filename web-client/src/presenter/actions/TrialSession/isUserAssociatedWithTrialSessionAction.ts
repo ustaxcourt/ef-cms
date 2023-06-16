@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * used to determine if a judge, chambers user, or trial clerk user is associated with a trial session

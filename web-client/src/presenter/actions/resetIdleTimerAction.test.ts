@@ -1,5 +1,5 @@
 import { resetIdleTimerAction } from './resetIdleTimerAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 describe('resetIdleTimerAction', () => {
   it('resets the idle timer', async () => {
     const mock = jest.fn();

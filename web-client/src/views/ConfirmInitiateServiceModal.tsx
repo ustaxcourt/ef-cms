@@ -2,7 +2,9 @@ import { ConsolidatedCasesCheckboxes } from './ConsolidatedCasesCheckboxes';
 import { Hint } from '../ustc-ui/Hint/Hint';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const ConfirmInitiateServiceModal = connect(

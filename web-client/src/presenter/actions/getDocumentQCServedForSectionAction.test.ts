@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentQCServedForSectionAction } from './getDocumentQCServedForSectionAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocumentQCServedForSectionAction', () => {
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];

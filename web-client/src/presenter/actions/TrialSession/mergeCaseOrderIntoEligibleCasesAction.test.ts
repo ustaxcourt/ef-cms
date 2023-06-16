@@ -1,5 +1,5 @@
 import { mergeCaseOrderIntoEligibleCasesAction } from './mergeCaseOrderIntoEligibleCasesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('mergeCaseOrderIntoeligibleCasesAction', () => {
   it('should merge case order into associated eligible cases', async () => {

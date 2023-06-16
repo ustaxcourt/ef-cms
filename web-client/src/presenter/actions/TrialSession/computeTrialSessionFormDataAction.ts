@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const computeTermAndUpdateState = ({ month, year }, store) => {
   const selectedMonth = +month;

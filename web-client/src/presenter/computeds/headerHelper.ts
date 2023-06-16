@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const headerHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const headerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const userRole = user && user.role;
   const isLoggedIn = !!user;

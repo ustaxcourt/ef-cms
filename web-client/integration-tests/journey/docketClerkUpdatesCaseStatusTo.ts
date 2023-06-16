@@ -1,4 +1,4 @@
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { updateCaseModalHelper as updateCaseModalHelperComputed } from '../../src/presenter/computeds/updateCaseModalHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

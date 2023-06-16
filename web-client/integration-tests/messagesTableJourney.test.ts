@@ -3,7 +3,7 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { userSendsMessage } from './journey/userSendsMessage';
 import { withAppContextDecorator } from '../src/withAppContext';
 

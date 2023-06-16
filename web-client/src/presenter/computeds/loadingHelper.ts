@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const loadingHelper = get => {
+import { Get } from 'cerebral';
+export const loadingHelper = (get: Get) => {
   const currentPage = get(state.currentPage);
   const pageIsInterstitial = currentPage === 'Interstitial';
 

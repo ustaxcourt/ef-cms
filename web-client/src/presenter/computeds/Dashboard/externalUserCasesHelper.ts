@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const externalUserCasesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const externalUserCasesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { formatCase } = applicationContext.getUtilities();
 
   const openCases = get(state.openCases);

@@ -1,5 +1,5 @@
 import { getConstants } from '../../getConstants';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 const { ASCENDING, DESCENDING } = getConstants();
 
 /**

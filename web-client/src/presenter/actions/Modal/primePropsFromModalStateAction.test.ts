@@ -1,6 +1,6 @@
 import { presenter } from '../../presenter-mock';
 import { primePropsFromModalStateAction } from './primePropsFromModalStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('primePropsFromModalStateAction', () => {
   it('should update the props from state', async () => {
