@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const draftDocumentViewerHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const draftDocumentViewerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,

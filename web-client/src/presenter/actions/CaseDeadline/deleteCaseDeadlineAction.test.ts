@@ -2,7 +2,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseDeadlineAction } from './deleteCaseDeadlineAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('deleteCaseDeadlineAction', () => {
   const mockCaseDeadlineId = '5ee663e4-cdec-44e4-b312-add2b8f2432f';

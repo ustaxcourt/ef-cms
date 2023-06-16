@@ -1,5 +1,5 @@
 import { makeMap } from '../../computeds/makeMap';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * runs through all the calendared cases to recreate the userNotes mapping

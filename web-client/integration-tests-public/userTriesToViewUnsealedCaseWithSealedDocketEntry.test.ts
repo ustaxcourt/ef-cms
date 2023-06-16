@@ -17,7 +17,7 @@ import {
 } from '../integration-tests/helpers';
 import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../src/presenter/computeds/Public/publicCaseDetailHelper';
 import { setupTest as publicSetupTest } from './helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { withAppContextDecorator } from '../src/withAppContext';

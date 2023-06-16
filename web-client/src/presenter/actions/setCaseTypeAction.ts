@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  *  Collapses all disclosure case types into a single 'Disclosure' case type
  * @param {object} providers the providers object

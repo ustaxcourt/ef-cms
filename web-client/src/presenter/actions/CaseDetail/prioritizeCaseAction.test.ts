@@ -2,7 +2,7 @@ import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { prioritizeCaseAction } from './prioritizeCaseAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prioritizeCaseAction', () => {
   presenter.providers.applicationContext = applicationContext;

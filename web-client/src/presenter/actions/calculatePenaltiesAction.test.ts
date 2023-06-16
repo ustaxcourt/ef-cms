@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { calculatePenaltiesAction } from './calculatePenaltiesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('calculatePenaltiesAction', () => {
   const statisticId = applicationContext.getUniqueId();

@@ -2,7 +2,7 @@ import { PRACTITIONER_DOCUMENT_TYPES_MAP } from '../../../../shared/src/business
 import { applicationContext } from '../../applicationContext';
 import { getConstants } from '../../getConstants';
 import { practitionerDocumentationHelper as practitionerDocumentationHelperComputed } from './practitionerDocumentationHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const { ASCENDING, DESCENDING } = getConstants();
