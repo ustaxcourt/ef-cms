@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const orderTypesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const orderTypesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { ORDER_TYPES_MAP, USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const eventCode = get(state.modal.eventCode);

@@ -1,6 +1,7 @@
 import { connect } from '@cerebral/react';
 import { getView } from './viewFactory';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const ErrorNotification = getView('ErrorNotification');

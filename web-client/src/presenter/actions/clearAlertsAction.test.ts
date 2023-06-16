@@ -1,5 +1,5 @@
 import { clearAlertsAction } from './clearAlertsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearAlertsAction', () => {
   it('should save alertError and alertSuccess but clear validationErrors if state.saveAlertsForNavigation is true', async () => {

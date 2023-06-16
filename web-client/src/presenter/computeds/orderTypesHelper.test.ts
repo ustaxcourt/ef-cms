@@ -1,6 +1,6 @@
 import { applicationContext } from '../../applicationContext';
 import { orderTypesHelper as orderTypesHelperComputed } from './orderTypesHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const { USER_ROLES } = applicationContext.getConstants();

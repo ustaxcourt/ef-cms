@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.page which shows the docket record print preview (default, optional) and/or opens the document in a new tab (optional)

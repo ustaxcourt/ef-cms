@@ -1,5 +1,5 @@
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from './getDocketEntryAlertSuccessForConsolidatedGroupAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocketEntryAlertSuccessForConsolidatedGroupAction', () => {
   it('should return alert object', async () => {

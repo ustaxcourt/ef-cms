@@ -1,6 +1,6 @@
 import { incrementProcessedCasesAction } from './incrementProcessedCasesAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('incrementProcessedCasesAction', () => {
   it('returns the yes path when form.contact.updatedEmail is defined', async () => {

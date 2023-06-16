@@ -1,6 +1,6 @@
 import { BigHeader } from './BigHeader';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseSearchNoMatches = connect(
