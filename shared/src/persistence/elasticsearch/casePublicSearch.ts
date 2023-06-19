@@ -11,18 +11,18 @@ import { search } from './searchClient';
 export const casePublicSearch = async ({
   applicationContext,
   countryType,
+  endDate,
   petitionerName,
   petitionerState,
-  yearFiledMax,
-  yearFiledMin,
+  startDate,
 }) => {
   const { commonQuery, exactMatchesQuery } = aggregateCommonQueryParams({
     applicationContext,
     countryType,
+    endDate,
     petitionerName,
     petitionerState,
-    yearFiledMax,
-    yearFiledMin,
+    startDate,
   });
 
   const sourceFields = [
