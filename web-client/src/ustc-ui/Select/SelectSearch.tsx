@@ -51,6 +51,11 @@ export const SelectSearch = ({
     }
   }
 
+  function resetOptions() {
+    setInputText('');
+    setSelectOptions(options);
+  }
+
   let sortedOptions = getSortedOptions(selectOptions, inputText);
 
   return (
@@ -64,6 +69,7 @@ export const SelectSearch = ({
       options={sortedOptions}
       placeholder={placeholder}
       value={value}
+      onBlur={resetOptions}
       onChange={onChange}
       onInputChange={handleOnInputChange}
     />
