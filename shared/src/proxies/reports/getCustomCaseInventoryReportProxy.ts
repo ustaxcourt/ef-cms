@@ -1,6 +1,5 @@
 import { GetCaseInventoryReportRequest } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { get } from '../requests';
-import qs from 'qs';
 
 /**
  * getCaseInventoryReportInteractor
@@ -17,10 +16,9 @@ export const getCustomCaseInventoryReportInteractor = (
   applicationContext,
   filters: GetCaseInventoryReportRequest,
 ) => {
-  const queryString = qs.stringify(filters);
   return get({
     applicationContext,
-    endpoint: `/reports/custom-case-inventory-report?${queryString}`,
-    // params: filters,
+    endpoint: '/reports/custom-case-inventory-report',
+    params: filters,
   });
 };
