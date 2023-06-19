@@ -99,7 +99,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
         .required(),
-      highPriority: joi.boolean().required(),
+      highPriority: joi.boolean(),
       judges: joi.array().items(joi.string()),
       pageSize: joi.number().required(),
       preferredTrialCities: joi.array().items(joi.string()),
