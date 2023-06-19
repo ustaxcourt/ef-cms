@@ -106,8 +106,7 @@ export const getCasesByFilters = async ({
     filters.push(procedureTypeFilter);
   }
 
-  //TODO: figure out why boolean isn't being parsed back into boolean from string
-  if (params.highPriority === 'true') {
+  if (params.highPriority) {
     const procedureTypeFilter = {
       match: {
         'highPriority.BOOL': true,
