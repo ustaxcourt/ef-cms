@@ -5,6 +5,10 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 import { caseSearchFilter } from '../utilities/caseFilter';
+import {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} from '../utilities/DateHandler';
 
 /**
  * caseAdvancedSearchInteractor
@@ -17,19 +21,41 @@ export const caseAdvancedSearchInteractor = async (
   applicationContext: IApplicationContext,
   {
     countryType,
+    endDate,
     petitionerName,
     petitionerState,
-    yearFiledMax,
-    yearFiledMin,
+    startDate,
   }: {
     countryType: string;
     petitionerName: string;
     petitionerState: string;
-    yearFiledMax: string;
-    yearFiledMin: string;
+    endDate: string;
+    startDate: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
+  let searchStartDate;
+  let searchEndDate;
+
+  if (startDate) {
+    const [startMonth, startDay, startYear] = startDate.split('/');
+
+    searchStartDate = createStartOfDayISO({
+      day: startDay,
+      month: startMonth,
+      year: startYear,
+    });
+  }
+
+  if (endDate) {
+    const [endMonth, endDay, endYear] = endDate.split('/');
+
+    searchEndDate = createEndOfDayISO({
+      day: endDay,
+      month: endMonth,
+      year: endYear,
+    });
+  }
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ADVANCED_SEARCH)) {
     throw new UnauthorizedError('Unauthorized');
@@ -41,10 +67,10 @@ export const caseAdvancedSearchInteractor = async (
       applicationContext,
       searchTerms: {
         countryType,
+        endDate: searchEndDate,
         petitionerName,
         petitionerState,
-        yearFiledMax,
-        yearFiledMin,
+        startDate: searchStartDate,
       },
     });
 
