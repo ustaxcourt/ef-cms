@@ -1,6 +1,7 @@
 import { CaseStatus, CaseType } from '../../entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
+  CustomCaseInventorySearch,
   CustomCaseProcedureTypes,
 } from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
@@ -74,6 +75,8 @@ export const getCustomCaseInventoryReportInteractor = async (
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
+
+  new CustomCaseInventorySearch(params).validate();
 
   return await applicationContext.getPersistenceGateway().getCasesByFilters({
     applicationContext,
