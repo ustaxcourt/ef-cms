@@ -4,7 +4,7 @@ export const getCasesClosedByJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(
+  const { endDate, judgesSelection, startDate } = get(
     state.judgeActivityReport.filters,
   );
 
@@ -12,7 +12,7 @@ export const getCasesClosedByJudgeAction = async ({
     .getUseCases()
     .getCasesClosedByJudgeInteractor(applicationContext, {
       endDate,
-      judgeName,
+      judgesSelection,
       startDate,
     });
 

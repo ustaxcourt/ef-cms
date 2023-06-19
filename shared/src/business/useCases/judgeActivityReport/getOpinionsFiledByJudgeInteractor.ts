@@ -4,6 +4,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportRequestType } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -11,23 +12,9 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { orderBy } from 'lodash';
 
-/**
- * getOpinionsFiledByJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the date to end the search for judge activity
- * @param {string} providers.judgeName the name of the judge
- * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {array} list of opinions filed by the judge in the given date range, sorted alphabetically ascending by event code
- */
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -37,7 +24,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeName,
+    judgesSelection,
     startDate,
   });
 
@@ -45,20 +32,30 @@ export const getOpinionsFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { results } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      endDate: searchEntity.endDate,
-      isOpinionSearch: true,
-      judge: searchEntity.judgeName,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: searchEntity.startDate,
-    });
+  const aggregatedOpinionsResults = await Promise.all(
+    judgesSelection.map(async eachJudge => {
+      return await applicationContext
+        .getPersistenceGateway()
+        .advancedDocumentSearch({
+          applicationContext,
+          documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+          endDate: searchEntity.endDate,
+          isOpinionSearch: true,
+          judge: eachJudge,
+          overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
+          startDate: searchEntity.startDate,
+        });
+    }),
+  );
+
+  const totalOpinionResults = aggregatedOpinionsResults.flatMap(obj =>
+    (obj.results || []).filter(item => typeof item === 'object'),
+  );
 
   const result = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
-    const count = results.filter(res => res.eventCode === eventCode).length;
+    const count = totalOpinionResults.filter(
+      res => res.eventCode === eventCode,
+    ).length;
     return {
       count,
       documentType: COURT_ISSUED_EVENT_CODES.find(

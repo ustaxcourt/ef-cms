@@ -12,10 +12,10 @@ import { post } from '../requests';
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext,
   {
-    judgeName,
+    judgesSelection,
     statuses,
   }: {
-    judgeName: string;
+    judgesSelection: string[];
     statuses: string[];
   },
 ): Promise<{
@@ -25,7 +25,7 @@ export const getCasesByStatusAndByJudgeInteractor = (
   return post({
     applicationContext,
     body: {
-      judgeName,
+      judgesSelection,
       statuses,
     },
     endpoint: '/judge-activity-report/open-cases',

@@ -6,8 +6,14 @@ import {
 export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
+  judgesSelection: string[];
   judgeName: string;
 };
+
+export type JudgeActivityReportRequestType = Omit<
+  JudgeActivityReportFilters,
+  'judgeName'
+>;
 
 export type CasesClosedType = {
   [CASE_STATUS_TYPES.closed]: number;
@@ -48,6 +54,7 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
     judgeName: '',
+    judgesSelection: [],
     startDate: '',
   },
   judgeActivityReportData: {},

@@ -1,21 +1,19 @@
-import { TrialSessionTypes } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import {
+  JudgeActivityReportRequestType,
+  TrialSessionTypes,
+} from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 export const getTrialSessionsForJudgeActivityReportInteractor = (
   applicationContext,
-  {
-    endDate,
-    judgeId,
-    startDate,
-  }: { startDate: string; endDate: string; judgeId: string },
-): Promise<TrialSessionTypes> => {
-  return post({
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
+): Promise<TrialSessionTypes> =>
+  post({
     applicationContext,
     body: {
       endDate,
-      judgeId,
+      judgesSelection,
       startDate,
     },
     endpoint: '/judge-activity-report/trial-sessions',
   });
-};

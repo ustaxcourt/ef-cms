@@ -26,4 +26,5 @@ export const setJudgeLastNameOnJudgeActivityReportAction = ({
   }
 
   store.set(state.judgeActivityReport.filters.judgeName, judgeName);
+  store.set(state.judgeActivityReport.filters.judgesSelection, [judgeName]);
 };

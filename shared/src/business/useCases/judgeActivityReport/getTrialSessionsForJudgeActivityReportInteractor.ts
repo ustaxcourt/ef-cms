@@ -1,4 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportRequestType } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -11,15 +12,7 @@ import {
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
-  {
-    endDate,
-    judgeId,
-    startDate,
-  }: {
-    judgeId: string;
-    endDate: string;
-    startDate: string;
-  },
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -29,7 +22,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeId,
+    judgesSelection,
     startDate,
   });
 
@@ -37,80 +30,96 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     throw new InvalidRequest();
   }
 
-  const trialSessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({
-      applicationContext,
-    });
+  let totalRegular: number = 0;
+  let totalSmall: number = 0;
+  let totalHybrid: number = 0;
+  let totalSpecial: number = 0;
+  let totalMotionHearing: number = 0;
 
-  const judgeSessionsInDateRange = trialSessions.filter(
-    session =>
-      session.judge?.userId === searchEntity.judgeId &&
-      session.startDate <= searchEntity.endDate &&
-      session.startDate >= searchEntity.startDate,
+  await Promise.all(
+    judgesSelection.map(async judgeId => {
+      const trialSessions = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessions({
+          applicationContext,
+        });
+
+      const judgeSessionsInDateRange = trialSessions.filter(
+        session =>
+          session.judge?.userId === judgeId &&
+          session.startDate <= searchEntity.endDate &&
+          session.startDate >= searchEntity.startDate,
+      );
+
+      const smallNonSwingSessions = judgeSessionsInDateRange.filter(
+        session =>
+          isTypeOf(SESSION_TYPES.small)(session) &&
+          !isNew(session) &&
+          !isSwingSession(session),
+      ).length;
+
+      const smallSwingSessions =
+        judgeSessionsInDateRange.filter(
+          session =>
+            isTypeOf(SESSION_TYPES.small)(session) && isSwingSession(session),
+        ).length / 2;
+
+      const regularNonSwingSessions = judgeSessionsInDateRange.filter(
+        session =>
+          isTypeOf(SESSION_TYPES.regular)(session) &&
+          !isNew(session) &&
+          !isSwingSession(session),
+      ).length;
+
+      const regularSwingSessions =
+        judgeSessionsInDateRange.filter(
+          session =>
+            isTypeOf(SESSION_TYPES.regular)(session) &&
+            !isNew(session) &&
+            isSwingSession(session),
+        ).length / 2;
+
+      const hybridNonSwingSessions = judgeSessionsInDateRange.filter(
+        session =>
+          (isTypeOf(SESSION_TYPES.hybrid)(session) ||
+            isTypeOf(SESSION_TYPES.hybridSmall)(session)) &&
+          !isNew(session) &&
+          !isSwingSession(session),
+      ).length;
+
+      const hybridSwingSessions =
+        judgeSessionsInDateRange.filter(
+          session =>
+            (isTypeOf(SESSION_TYPES.hybrid)(session) ||
+              isTypeOf(SESSION_TYPES.hybridSmall)(session)) &&
+            !isNew(session) &&
+            isSwingSession(session),
+        ).length / 2;
+
+      const motionHearingSessions =
+        judgeSessionsInDateRange.filter(
+          session =>
+            isTypeOf(SESSION_TYPES.motionHearing)(session) && !isNew(session),
+        ).length / 2;
+
+      const specialSessions = judgeSessionsInDateRange.filter(session =>
+        isTypeOf(SESSION_TYPES.special)(session),
+      ).length;
+
+      totalRegular += regularSwingSessions + regularNonSwingSessions;
+      totalSmall += smallNonSwingSessions + smallSwingSessions;
+      totalHybrid += hybridSwingSessions + hybridNonSwingSessions;
+      totalSpecial += specialSessions;
+      totalMotionHearing += motionHearingSessions;
+    }),
   );
 
-  const smallNonSwingSessions = judgeSessionsInDateRange.filter(
-    session =>
-      isTypeOf(SESSION_TYPES.small)(session) &&
-      !isNew(session) &&
-      !isSwingSession(session),
-  ).length;
-
-  const smallSwingSessions =
-    judgeSessionsInDateRange.filter(
-      session =>
-        isTypeOf(SESSION_TYPES.small)(session) && isSwingSession(session),
-    ).length / 2;
-
-  const regularNonSwingSessions = judgeSessionsInDateRange.filter(
-    session =>
-      isTypeOf(SESSION_TYPES.regular)(session) &&
-      !isNew(session) &&
-      !isSwingSession(session),
-  ).length;
-
-  const regularSwingSessions =
-    judgeSessionsInDateRange.filter(
-      session =>
-        isTypeOf(SESSION_TYPES.regular)(session) &&
-        !isNew(session) &&
-        isSwingSession(session),
-    ).length / 2;
-
-  const hybridNonSwingSessions = judgeSessionsInDateRange.filter(
-    session =>
-      (isTypeOf(SESSION_TYPES.hybrid)(session) ||
-        isTypeOf(SESSION_TYPES.hybridSmall)(session)) &&
-      !isNew(session) &&
-      !isSwingSession(session),
-  ).length;
-
-  const hybridSwingSessions =
-    judgeSessionsInDateRange.filter(
-      session =>
-        (isTypeOf(SESSION_TYPES.hybrid)(session) ||
-          isTypeOf(SESSION_TYPES.hybridSmall)(session)) &&
-        !isNew(session) &&
-        isSwingSession(session),
-    ).length / 2;
-
-  const motionHearingSessions =
-    judgeSessionsInDateRange.filter(
-      session =>
-        isTypeOf(SESSION_TYPES.motionHearing)(session) && !isNew(session),
-    ).length / 2;
-
-  const specialSessions = judgeSessionsInDateRange.filter(session =>
-    isTypeOf(SESSION_TYPES.special)(session),
-  ).length;
-
   return {
-    [SESSION_TYPES.regular]: regularSwingSessions + regularNonSwingSessions,
-    [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
-    [SESSION_TYPES.hybrid]: hybridSwingSessions + hybridNonSwingSessions,
-    [SESSION_TYPES.special]: specialSessions,
-    [SESSION_TYPES.motionHearing]: motionHearingSessions,
+    [SESSION_TYPES.regular]: totalRegular,
+    [SESSION_TYPES.small]: totalSmall,
+    [SESSION_TYPES.hybrid]: totalHybrid,
+    [SESSION_TYPES.special]: totalSpecial,
+    [SESSION_TYPES.motionHearing]: totalMotionHearing,
   };
 };
 

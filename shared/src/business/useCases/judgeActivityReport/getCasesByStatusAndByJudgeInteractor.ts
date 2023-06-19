@@ -48,21 +48,13 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
   return caseRecordsToReturn;
 };
 
-/**
- * getCasesByStatusAndByJudgeInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judgeName the name of the judge
- * @param {array} providers.statuses statuses of cases for judge activity
- * @returns {object} errors (null if no errors)
- */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   {
-    judgeName,
+    judgesSelection,
     statuses,
   }: {
-    judgeName: string;
+    judgesSelection: string[];
     statuses: string[];
   },
 ) => {
@@ -72,16 +64,27 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const submittedAndCavCasesResults = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      judgeName,
-      statuses,
-    });
+  /*
+    TODO: ADD VALIDATION BEFORE PERSISTENCE CALL OF judgesSelection AND statuses
+  */
+
+  const totalSubmittedAndCavResults = (
+    await Promise.all(
+      judgesSelection.map(
+        async judgeName =>
+          await applicationContext
+            .getPersistenceGateway()
+            .getDocketNumbersByStatusAndByJudge({
+              applicationContext,
+              judgeName,
+              statuses,
+            }),
+      ),
+    )
+  ).flat();
 
   const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(async result => {
+    totalSubmittedAndCavResults.map(async result => {
       return await applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber({

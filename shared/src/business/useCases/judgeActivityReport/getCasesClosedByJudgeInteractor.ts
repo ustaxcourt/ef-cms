@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportRequestType } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -8,13 +9,9 @@ import {
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  const authorizedUser = await applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
@@ -22,7 +19,7 @@ export const getCasesClosedByJudgeInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeName,
+    judgesSelection,
     startDate,
   });
 
@@ -30,24 +27,34 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const casesClosedByJudge = await applicationContext
-    .getPersistenceGateway()
-    .getCasesClosedByJudge({
-      applicationContext,
-      endDate: searchEntity.endDate,
-      judgeName: searchEntity.judgeName,
-      startDate: searchEntity.startDate,
-    });
+  let totalCloseCaseCount: number = 0;
+  let totalClosedDismissedCaseCount: number = 0;
 
-  const closedDismissedCaseCount = casesClosedByJudge.filter(
-    caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
-  ).length;
-  const closedCaseCount = casesClosedByJudge.filter(
-    caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
-  ).length;
+  await Promise.all(
+    judgesSelection.map(async judge => {
+      const casesClosedByJudge = await applicationContext
+        .getPersistenceGateway()
+        .getCasesClosedByJudge({
+          applicationContext,
+          endDate: searchEntity.endDate,
+          judgeName: judge,
+          startDate: searchEntity.startDate,
+        });
+
+      const closedDismissedCaseCount: number = casesClosedByJudge.filter(
+        caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
+      ).length;
+      totalClosedDismissedCaseCount += closedDismissedCaseCount;
+
+      const closedCaseCount: number = casesClosedByJudge.filter(
+        caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
+      ).length;
+      totalCloseCaseCount += closedCaseCount;
+    }),
+  );
 
   return {
-    [CASE_STATUS_TYPES.closed]: closedCaseCount,
-    [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
+    [CASE_STATUS_TYPES.closed]: totalCloseCaseCount,
+    [CASE_STATUS_TYPES.closedDismissed]: totalClosedDismissedCaseCount,
   };
 };

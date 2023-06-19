@@ -8,8 +8,8 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
 
   const mockStartDate = '02/20/2021';
   const mockEndDate = '03/03/2021';
-  const mockJudgeName = 'Sotomayor';
-  const mockOpinionsFiledByJudge = [
+  const judgesSelection = ['Sotomayor', 'Colvin'];
+  const mockOpinionsFiledByJudges = [
     {
       count: 1,
       documentType: 'Memorandum Opinion',
@@ -36,13 +36,13 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
     applicationContext
       .getUseCases()
       .getOpinionsFiledByJudgeInteractor.mockReturnValue(
-        mockOpinionsFiledByJudge,
+        mockOpinionsFiledByJudges,
       );
   });
 
-  it('should retrieve opinions by the provided judge in the date range provided from persistence and return it to props', async () => {
+  it('should retrieve opinions from persistence using the provided judges selection and date range and return it to props', async () => {
     const { output } = await runAction(
-      getOpinionsForJudgeActivityReportAction as any,
+      getOpinionsForJudgeActivityReportAction,
       {
         modules: {
           presenter,
@@ -51,7 +51,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
-              judgeName: mockJudgeName,
+              judgesSelection,
               startDate: mockStartDate,
             },
           },
@@ -64,9 +64,9 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeName: mockJudgeName,
+      judgesSelection,
       startDate: mockStartDate,
     });
-    expect(output.opinions).toBe(mockOpinionsFiledByJudge);
+    expect(output.opinions).toBe(mockOpinionsFiledByJudges);
   });
 });

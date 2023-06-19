@@ -1,6 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -8,7 +9,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return it to props', async () => {
-    const mockJudgeName = 'Sotomayor';
+    const judgesSelection = [judgeUser.name];
     const mockReturnedCases = [
       {
         docketNumber: '101-22',
@@ -35,7 +36,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         state: {
           judgeActivityReport: {
             filters: {
-              judgeName: mockJudgeName,
+              judgesSelection,
             },
           },
         },
@@ -48,7 +49,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
           .getCasesByStatusAndByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject({
-      judgeName: mockJudgeName,
+      judgesSelection,
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
     });
     expect(output.submittedAndCavCasesByJudge).toBe(mockReturnedCases);

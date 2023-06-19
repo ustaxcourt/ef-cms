@@ -1,5 +1,7 @@
+import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -8,22 +10,36 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should return the trialSessions from the interactor when calling this action as a judge user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'judge',
-      userId: '123',
-    });
+  it('should return the aggregate of all the trialSessions types associated with a judge within the date range provided', async () => {
+    const judgesSelection = ['Sotomayor', 'Buch'];
+    const judgeUsers = [
+      judgeUser,
+      {
+        ...judgeUser,
+        judgeFullName: 'George Buch',
+        name: 'Buch',
+        userId: 'd3222-f6cd-442c-a168-202db587f16f',
+      },
+    ];
+    const mockStartDate = '2021-01-22T05:00:00.000Z';
+    const mockEndDate = '2021-01-24T04:59:59.999Z';
+
+    const aggregatedTrialSessionTypesCount = {
+      [SESSION_TYPES.regular]: 3,
+      [SESSION_TYPES.small]: 2,
+      [SESSION_TYPES.hybrid]: 4,
+      [SESSION_TYPES.special]: 5,
+      [SESSION_TYPES.motionHearing]: 6,
+    };
 
     applicationContext
       .getUseCases()
-      .getTrialSessionsForJudgeActivityReportInteractor.mockResolvedValue([
-        {
-          trialSessionId: 'abc',
-        },
-      ]);
+      .getTrialSessionsForJudgeActivityReportInteractor.mockResolvedValue({
+        trialSessions: aggregatedTrialSessionTypesCount,
+      });
 
     const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction as any,
+      getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
           presenter,
@@ -32,51 +48,29 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
         state: {
           judgeActivityReport: {
             filters: {
-              endDate: 'whatever',
-              startDate: 'whatever',
+              endDate: mockEndDate,
+              judgesSelection,
+              startDate: mockStartDate,
             },
           },
+          judges: judgeUsers,
         },
       },
     );
 
-    expect(result.output.trialSessions.length).toEqual(1);
-  });
-
-  it('should return the trialSessions from the interactor when calling this action as a chambers user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: 'chambers',
+    expect(
+      (
+        applicationContext.getUseCases()
+          .getTrialSessionsForJudgeActivityReportInteractor as jest.Mock
+      ).mock.calls[0][1],
+    ).toMatchObject({
+      endDate: mockEndDate,
+      judgesSelection: [judgeUsers[0].userId, judgeUsers[1].userId],
+      startDate: mockStartDate,
     });
-    applicationContext
-      .getUseCases()
-      .getTrialSessionsForJudgeActivityReportInteractor.mockResolvedValue([
-        {
-          trialSessionId: 'abc',
-        },
-      ]);
 
-    const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction as any,
-      {
-        modules: {
-          presenter,
-        },
-        props: {},
-        state: {
-          judgeActivityReport: {
-            filters: {
-              endDate: 'whatever',
-              startDate: 'whatever',
-            },
-          },
-          judgeUser: {
-            role: 'judge',
-            userId: '123',
-          },
-        },
-      },
-    );
-
-    expect(result.output.trialSessions.length).toEqual(1);
+    expect(result.output.trialSessions).toEqual({
+      trialSessions: aggregatedTrialSessionTypesCount,
+    });
   });
 });

@@ -6,6 +6,7 @@ import { validateJudgeActivityReportSearchAction } from './validateJudgeActivity
 describe('validateJudgeActivityReportSearchAction', () => {
   let mockSuccessPath;
   let mockErrorPath;
+  const judgesSelection = ['Colvin', 'Buch'];
 
   beforeAll(() => {
     mockSuccessPath = jest.fn();
@@ -19,13 +20,13 @@ describe('validateJudgeActivityReportSearchAction', () => {
   });
 
   it('should return the success path when the search critera are all valid', async () => {
-    await runAction(validateJudgeActivityReportSearchAction as any, {
+    await runAction(validateJudgeActivityReportSearchAction, {
       modules: { presenter },
       state: {
         judgeActivityReport: {
           filters: {
             endDate: '02/02/2022',
-            judgeName: 'Colvin',
+            judgesSelection,
             startDate: '02/01/2022',
           },
         },
@@ -36,13 +37,13 @@ describe('validateJudgeActivityReportSearchAction', () => {
   });
 
   it('should return the error path when the search critera are NOT valid', async () => {
-    await runAction(validateJudgeActivityReportSearchAction as any, {
+    await runAction(validateJudgeActivityReportSearchAction, {
       modules: { presenter },
       state: {
         judgeActivityReport: {
           filters: {
             endDate: undefined,
-            judgeName: 'Colvin',
+            judgesSelection,
             startDate: '02/01/2022',
           },
         },

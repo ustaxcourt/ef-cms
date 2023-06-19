@@ -22,10 +22,15 @@ describe('getCasesClosedByJudgeInteractor', () => {
     },
   ];
 
+  const judgesSelection = ['Colvin', 'Samson'];
+
+  const mockStartDate = '02/12/2020';
+  const mockEndDate = '03/21/2020';
+
   const mockValidRequest = {
-    endDate: '03/21/2020',
-    judgeName: judgeUser.name,
-    startDate: '02/12/2020',
+    endDate: mockEndDate,
+    judgesSelection,
+    startDate: mockStartDate,
   };
 
   beforeEach(() => {
@@ -52,21 +57,29 @@ describe('getCasesClosedByJudgeInteractor', () => {
     await expect(
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgeName: judgeUser.name,
+        judgesSelection: [],
         startDate: 'yabbadabbadoo',
+      }),
+    ).rejects.toThrow();
+
+    await expect(
+      getCasesClosedByJudgeInteractor(applicationContext, {
+        endDate: mockEndDate,
+        judgesSelection: [],
+        startDate: mockStartDate,
       }),
     ).rejects.toThrow();
   });
 
-  it('should return the cases closed organized by status', async () => {
+  it('should return the cases closed organized by status(es) for the selected judge(s)', async () => {
     const result = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
 
     expect(result).toEqual({
-      [CASE_STATUS_TYPES.closed]: 2,
-      [CASE_STATUS_TYPES.closedDismissed]: 3,
+      [CASE_STATUS_TYPES.closed]: 4,
+      [CASE_STATUS_TYPES.closedDismissed]: 6,
     });
   });
 });
