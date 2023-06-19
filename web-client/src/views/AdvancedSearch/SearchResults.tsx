@@ -20,7 +20,7 @@ export const SearchResults = connect(
     showMoreResultsSequence,
   }) {
     return (
-      <div aria-live="polite" className="margin-top-5">
+      <div aria-live="polite">
         {advancedSearchHelper.showSearchResults && (
           <>
             {advancedSearchHelper.showManyResultsMessage && (
@@ -108,7 +108,7 @@ export const SearchResults = connect(
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (
-          <div className="margin-top-6" id="no-search-results">
+          <div id="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <Hint wider>
               Tips for improving your search:
