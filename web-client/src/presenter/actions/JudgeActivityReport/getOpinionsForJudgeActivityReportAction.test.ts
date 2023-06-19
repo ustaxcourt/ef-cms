@@ -40,7 +40,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
       );
   });
 
-  it('should retrieve opinions by the provided judges selection and date range provided from persistence and return it to props', async () => {
+  it('should retrieve opinions from persistence using the provided judges selection and date range and return it to props', async () => {
     const { output } = await runAction(
       getOpinionsForJudgeActivityReportAction,
       {

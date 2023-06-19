@@ -128,7 +128,7 @@ describe('JudgeActivityReportSearch', () => {
         judgesSelection: 'Judges Selection is a required field',
       });
     });
-    it('should have validation errors when judgesSelection is an array is not provided', () => {
+    it('should have validation errors when judgesSelection, as an empty array, is provided', () => {
       const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
         endDate: '01/02/2000',
         judgesSelection: [],
@@ -139,7 +139,7 @@ describe('JudgeActivityReportSearch', () => {
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
         judgesSelection:
-          'Judges Selection must contain at least a name of a judge',
+          'Judges Selection must contain at least a name or id of a judge',
       });
     });
   });

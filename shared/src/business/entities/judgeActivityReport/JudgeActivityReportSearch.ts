@@ -91,7 +91,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
         contains: 'is required',
         message: 'Judges Selection is a required field',
       },
-      'Judges Selection must contain at least a name of a judge',
+      'Judges Selection must contain at least a name or id of a judge',
     ],
     startDate: [
       {

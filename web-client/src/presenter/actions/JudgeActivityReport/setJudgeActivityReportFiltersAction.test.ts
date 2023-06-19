@@ -164,7 +164,7 @@ describe('setJudgeActivityReportFiltersAction', () => {
     );
   });
 
-  it('should set state.judgeActivityReport.filters.judgeName to all the current judges in state', async () => {
+  it('should set state.judgeActivityReport.filters.judgesSelection to all the current judges in state', async () => {
     userSelectedJudge = 'All Judges';
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },

@@ -48,14 +48,6 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
   return caseRecordsToReturn;
 };
 
-/**
- * getCasesByStatusAndByJudgeInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judgeName the name of the judge
- * @param {array} providers.statuses statuses of cases for judge activity
- * @returns {object} errors (null if no errors)
- */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   {

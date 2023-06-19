@@ -71,7 +71,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the cases closed organized by status for the selected judges', async () => {
+  it('should return the cases closed organized by status(es) for the selected judge(s)', async () => {
     const result = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,

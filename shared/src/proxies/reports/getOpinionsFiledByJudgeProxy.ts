@@ -1,13 +1,12 @@
-import { OrdersAndOpinionTypes } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import {
+  JudgeActivityReportRequestType,
+  OrdersAndOpinionTypes,
+} from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 export const getOpinionsFiledByJudgeInteractor = (
   applicationContext,
-  {
-    endDate,
-    judgesSelection,
-    startDate,
-  }: { startDate: string; endDate: string; judgesSelection: string[] },
+  { endDate, judgesSelection, startDate }: JudgeActivityReportRequestType,
 ): Promise<OrdersAndOpinionTypes[]> => {
   return post({
     applicationContext,
