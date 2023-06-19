@@ -2,8 +2,10 @@ import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { ThirtyDayNoticeOfTrialRequiredInfo } from '../../utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 
@@ -37,59 +39,170 @@ describe('serveThirtyDayNoticeInteractor', () => {
     ).rejects.toThrow(new InvalidRequest('No trial Session Id provided'));
   });
 
-  it('should serve a NOTT 30 day notice on each case in a trial session', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(trialSession);
+  describe('Happy Path', () => {
+    const mockPdfUrl = 'www.blahdeebloop.com';
 
-    await serveThirtyDayNoticeInteractor(applicationContext, {
-      trialSessionId: trialSession.trialSessionId!,
+    let mockCase: RawCase;
+
+    beforeEach(() => {
+      applicationContext
+        .getUseCaseHelpers()
+        .saveFileAndGenerateUrl.mockResolvedValue({
+          fileId: '',
+          url: mockPdfUrl,
+        });
+
+      mockCase = cloneDeep(MOCK_CASE);
     });
 
-    const expectedThirtyDayNoticeInfo: ThirtyDayNoticeOfTrialRequiredInfo = {
-      caseCaptionExtension: expect.anything(),
-      caseTitle: expect.anything(),
-      docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
-      judgeName: trialSession.judge!.name,
-      proceedingType: trialSession.proceedingType,
-      scopeType: trialSession.sessionScope,
-      trialDate: trialSession.startDate,
-      trialLocation: {
-        address1: trialSession.address1!,
-        address2: trialSession.address2!,
-        city: trialSession.city!,
-        courthouseName: trialSession.courthouseName!,
-        postalCode: trialSession.postalCode!,
-        state: trialSession.state!,
-      },
-    };
-    expect(
-      applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
-    ).toHaveBeenCalledTimes(trialSession.caseOrder!.length);
-    expect(
-      applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      data: expectedThirtyDayNoticeInfo,
+    it('should serve a NOTT 30 day notice on each case in a trial session', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockResolvedValue(trialSession);
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      const expectedThirtyDayNoticeInfo: ThirtyDayNoticeOfTrialRequiredInfo = {
+        caseCaptionExtension: expect.anything(),
+        caseTitle: expect.anything(),
+        docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+        judgeName: trialSession.judge!.name,
+        proceedingType: trialSession.proceedingType,
+        scopeType: trialSession.sessionScope,
+        trialDate: trialSession.startDate,
+        trialLocation: {
+          address1: trialSession.address1!,
+          address2: trialSession.address2!,
+          city: trialSession.city!,
+          courthouseName: trialSession.courthouseName!,
+          postalCode: trialSession.postalCode!,
+          state: trialSession.state!,
+        },
+      };
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
+      ).toHaveBeenCalledTimes(trialSession.caseOrder!.length);
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
+      ).toHaveBeenCalledWith({
+        applicationContext: expect.anything(),
+        data: expectedThirtyDayNoticeInfo,
+      });
+      expect(
+        applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
+      ).toHaveBeenCalledTimes(trialSession.caseOrder!.length);
+      expect(
+        applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
+      ).toHaveBeenCalledWith(expect.anything(), {
+        caseEntity: expect.anything(),
+        documentInfo: {
+          documentTitle: '30 Day Notice of Trial on [Date] at [Place]',
+          documentType: '30-Day Notice of Trial',
+          eventCode: 'NOTT',
+        },
+        newPdfDoc: expect.anything(),
+        noticePdf: expect.anything(),
+        userId: petitionsClerkUser.userId,
+      });
     });
-    expect(
-      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
-    ).toHaveBeenCalledTimes(trialSession.caseOrder!.length);
-    expect(
-      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
-    ).toHaveBeenCalledWith(expect.anything(), {
-      caseEntity: expect.anything(),
-      documentInfo: {
-        documentTitle: '30 Day Notice of Trial on [Date] at [Place]',
-        documentType: '30-Day Notice of Trial',
-        eventCode: 'NOTT',
-      },
-      newPdfDoc: expect.anything(),
-      noticePdf: expect.anything(),
-      userId: docketClerkUser.userId,
+
+    it('should notify the user after processing each case in the trial session', async () => {
+      const expectedNotificationOrder = [
+        'paper_service_started',
+        'paper_service_updated',
+        'paper_service_updated',
+        'paper_service_complete',
+      ];
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockResolvedValue(trialSession);
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      const actualNotificationOrder = applicationContext
+        .getNotificationGateway()
+        .sendNotificationToUser.mock.calls.map(
+          mockCall => mockCall[0].message.action,
+        );
+      expect(actualNotificationOrder).toEqual(expectedNotificationOrder);
+    });
+
+    it('should generate a paper service PDF when at least one of the parties on a case in the trial session has requested paper service', async () => {
+      mockCase.privatePractitioners = [
+        {
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ];
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockResolvedValue(trialSession);
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
+      ).toHaveBeenCalledWith({
+        applicationContext: expect.anything(),
+        file: expect.anything(),
+        useTempBucket: true,
+      });
+      expect(
+        applicationContext.getNotificationGateway().sendNotificationToUser,
+      ).toHaveBeenCalledWith({
+        applicationContext: expect.anything(),
+        message: {
+          action: 'paper_service_complete',
+          pdfUrl: mockPdfUrl,
+        },
+        userId: petitionsClerkUser.userId,
+      });
+    });
+
+    it('should not generate a paper service pdf when all cases in the trial session have parties with electronic or no service preference', async () => {
+      mockCase.privatePractitioners = [];
+      mockCase.irsPractitioners = [];
+      mockCase.petitioners = [
+        {
+          ...mockCase.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+        },
+      ];
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockResolvedValue(trialSession);
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      expect(
+        applicationContext.getNotificationGateway().sendNotificationToUser,
+      ).toHaveBeenCalledWith({
+        applicationContext: expect.anything(),
+        message: {
+          action: 'paper_service_complete',
+          pdfUrl: undefined,
+        },
+        userId: petitionsClerkUser.userId,
+      });
     });
   });
 });
