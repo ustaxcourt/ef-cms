@@ -1,4 +1,7 @@
-import { COURT_ISSUED_EVENT_CODES } from '../../entities/EntityConstants';
+import {
+  COURT_ISSUED_EVENT_CODES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -38,6 +41,17 @@ export const serveThirtyDayNoticeInteractor = async (
     doc => doc.eventCode === 'NOTT',
   );
 
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'paper_service_started',
+      totalPdfs: trialSession.caseOrder.length, // make message identical when sent.
+    },
+    userId: currentUser.userId,
+  });
+
+  let pdfsAppended: number = 0;
+  let hasPaperService = false;
   for (const aCase of trialSession.caseOrder!) {
     const rawCase = await applicationContext
       .getPersistenceGateway()
@@ -87,5 +101,40 @@ export const serveThirtyDayNoticeInteractor = async (
         noticePdf,
         userId: currentUser.userId,
       });
+
+    pdfsAppended++;
+    hasPaperService =
+      hasPaperService ||
+      caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'paper_service_updated',
+        pdfsAppended,
+      },
+      userId: currentUser.userId,
+    });
   }
+
+  let pdfUrl: string | undefined = undefined;
+  if (hasPaperService) {
+    const paperServicePdfData = await paperServicePdf.save();
+    const { url } = await applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl({
+        applicationContext,
+        file: paperServicePdfData,
+        useTempBucket: true,
+      });
+    pdfUrl = url;
+  }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'paper_service_complete',
+      pdfUrl,
+    },
+    userId: currentUser.userId,
+  });
 };
