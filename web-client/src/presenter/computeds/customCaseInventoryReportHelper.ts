@@ -54,6 +54,8 @@ export const customCaseInventoryReportHelper = (
   const clearFiltersIsDisabled = ![
     ...populatedFilters.caseStatuses,
     ...populatedFilters.caseTypes,
+    ...populatedFilters.judges,
+    ...populatedFilters.preferredTrialCities,
   ].length;
 
   const judges: Object[] = get(state.judges)
