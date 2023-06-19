@@ -27,7 +27,7 @@ export const SelectSearch = ({
   id?: string;
   isClearable?: boolean;
   name?: string;
-  onChange?: (newValue: any, actionMeta: ActionMeta<any>) => void;
+  onChange: (newValue: any, actionMeta: ActionMeta<any>) => void;
   onInputChange?: Function;
   options?: OptionsOrGroups<any, GroupBase<any>> | undefined;
   placeholder?: string;
@@ -70,7 +70,10 @@ export const SelectSearch = ({
       placeholder={placeholder}
       value={value}
       onBlur={resetOptions}
-      onChange={onChange}
+      onChange={(newValue, actionMeta) => {
+        onChange(newValue, actionMeta);
+        resetOptions();
+      }}
       onInputChange={handleOnInputChange}
     />
   );
