@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
@@ -11,6 +12,7 @@ export const CaseSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
+    caseSearchByNameHelper: state.caseSearchByNameHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
     updateAdvancedSearchFormValueSequence:
@@ -27,6 +29,7 @@ export const CaseSearchByName = connect(
   function CaseSearchByName({
     advancedSearchForm,
     advancedSearchHelper,
+    caseSearchByNameHelper,
     clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
@@ -144,10 +147,22 @@ export const CaseSearchByName = connect(
             </div>
 
             <div className="grid-row grid-gap margin-top-4">
-              <SearchDateRangePickerComponent
-                formType="caseSearchByName"
-                updateSequence={updateCaseAdvancedSearchByNameFormValueSequence}
-                validateSequence={validateCaseAdvancedSearchFormSequence}
+              <DateRangePickerComponent
+                endDateErrorText={validationErrors.endDate}
+                endLabel="Case created end date"
+                endName="caseCreationEndDate"
+                endPickerCls={'grid-col-6 padding-left-2'}
+                endValue=""
+                formGroupCls={'margin-bottom-0'}
+                maxDate={caseSearchByNameHelper.today}
+                rangePickerCls={'grid-row '}
+                startDateErrorText={validationErrors.startDate}
+                startLabel="Case created start date"
+                startName="caseCreationStartDate"
+                startPickerCls={'grid-col-6 padding-right-2'}
+                startValue=""
+                onChangeEnd={}
+                onChangeStart={}
               />
             </div>
 
