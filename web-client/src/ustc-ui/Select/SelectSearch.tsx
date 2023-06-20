@@ -58,8 +58,16 @@ export const SelectSearch = ({
 
   let sortedOptions = getSortedOptions(selectOptions, inputText);
 
+  const aria = {
+    'aria-describedby': props['aria-describedby'],
+    'aria-disabled': disabled || props['aria-disabled'],
+    'aria-label': props['aria-label'],
+    'aria-labelledby': props['aria-labelledby'],
+  };
+
   return (
     <ReactSelect
+      {...aria}
       className={classNames('select-react-element', className)}
       classNamePrefix="select-react-element"
       id={id}
