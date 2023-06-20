@@ -1,4 +1,4 @@
-const { isLeadCase } = require('./Case');
+import { isLeadCase } from './Case';
 
 describe('isLeadCase', () => {
   const mockDocketNumber = '101-22';
