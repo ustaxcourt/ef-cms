@@ -12,6 +12,7 @@ export const DateRangePickerComponent = ({
   endValue,
   formGroupCls,
   maxDate,
+  omitFormGroupClass,
   onChangeEnd,
   onChangeStart,
   rangePickerCls,
@@ -33,6 +34,7 @@ export const DateRangePickerComponent = ({
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string;
+  omitFormGroupClass?: boolean;
   startName: string;
   startValue: string;
   maxDate?: string; // Must be in YYYY-MM-DD format
@@ -74,6 +76,11 @@ export const DateRangePickerComponent = ({
       startInput.dispatchEvent(backspaceEvent);
       startHiddenInput.dispatchEvent(backspaceEvent);
     }
+
+    if (startValue && startInput) {
+      startInput.value = startValue;
+      startHiddenInput.value = startValue;
+    }
   }, [startValue]);
 
   useEffect(() => {
@@ -93,6 +100,11 @@ export const DateRangePickerComponent = ({
       });
       endInput.dispatchEvent(backspaceEvent);
       endHiddenInput.dispatchEvent(backspaceEvent);
+    }
+
+    if (endValue && endInput) {
+      endInput.value = endValue;
+      endHiddenInput.value = endValue;
     }
   }, [endValue]);
 
@@ -116,7 +128,11 @@ export const DateRangePickerComponent = ({
   }, [startDateInputRef, endDateInputRef]);
 
   return (
-    <FormGroup className={formGroupCls} formGroupRef={dateRangePickerRef}>
+    <FormGroup
+      className={formGroupCls}
+      formGroupRef={dateRangePickerRef}
+      omitFormGroupClass={omitFormGroupClass}
+    >
       <div
         className={classNames('usa-date-range-picker', rangePickerCls)}
         data-max-date={maxDate}
