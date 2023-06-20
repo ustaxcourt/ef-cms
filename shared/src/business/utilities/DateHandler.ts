@@ -19,6 +19,7 @@ export const FORMATS = {
   SHORT_MONTH_DAY_YEAR: 'MMM d, yyyy',
   SORTABLE_CALENDAR: 'yyyy/MM/dd',
   TIME: 'hh:mm a',
+  TIME_24_HOUR: 'HH:mm',
   TIME_TZ: "h:mm a 'ET'",
   TRIAL_SORT_TAG: 'yyyyMMddHHmmss',
   TRIAL_TIME: 'yyyy-MM-dd H:mm',
