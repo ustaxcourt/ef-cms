@@ -43,7 +43,7 @@ export const submitCaseAssociationRequest = async (
     authorizedUser.role === ROLES.privatePractitioner;
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
-  if (isPrivatePractitioner) {
+  if (isPrivatePractitioner && filers) {
     return await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
