@@ -25,7 +25,7 @@ export class CaseSearch extends JoiValidationEntity {
 
   static JOI_VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'] as const;
 
-  static VALIDATION_RULES = {
+  static VALIDATION_RULES = joi.object().keys({
     countryType: JoiValidationConstants.STRING.valid(
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
@@ -34,8 +34,14 @@ export class CaseSearch extends JoiValidationEntity {
       .date()
       .iso()
       .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMATS)
-      .min(joi.ref('startDate'))
       .max('now')
+      .allow(null)
+      .optional()
+      .when('startDate', {
+        is: joi.exist(),
+        otherwise: joi.date().allow(null),
+        then: joi.date().min(joi.ref('startDate')).optional(),
+      })
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       ),
@@ -51,15 +57,17 @@ export class CaseSearch extends JoiValidationEntity {
       .max('now')
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-      ),
-  };
+      )
+      .allow(null)
+      .optional(),
+  });
 
   static VALIDATION_ERROR_MESSAGES = {
     endDate: [
       {
         contains: 'ref:startDate',
         message:
-          'End date cannot be prior to start sate. Enter a valid end date.',
+          'End date cannot be prior to start date. Enter a valid end date.',
       },
       {
         contains: 'must be in [MM/DD/YYYY] format',
