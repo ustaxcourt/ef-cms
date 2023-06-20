@@ -62,12 +62,15 @@ export const DateRangePickerComponent = ({
     const startInput = window.document.getElementById(
       `${startName}-date-start`,
     ) as HTMLInputElement;
+
     const startHiddenInput = window.document.querySelector(
-      `input[name="${startName}-date-start"]`,
+      `input[aria-describedby="${startName}-date-start-label ${startName}-date-start-hint"]`,
     ) as HTMLInputElement;
+
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
+      // This is used to force USWDS to update it's internal state
       const backspaceEvent = new CustomEvent('change', {
         bubbles: true,
         cancelable: true,
@@ -88,11 +91,12 @@ export const DateRangePickerComponent = ({
       `${endName}-date-end`,
     ) as HTMLInputElement;
     const endHiddenInput = window.document.querySelector(
-      `input[name="${endName}-date-end"]`,
+      `input[aria-describedby="${endName}-date-end-label ${endName}-date-end-hint"]`,
     ) as HTMLInputElement;
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';
+      // This is used to force USWDS to update it's internal state
       const backspaceEvent = new CustomEvent('change', {
         bubbles: true,
         cancelable: true,
