@@ -5,7 +5,7 @@
 - [install JDK 8](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html)
 - install Node dependencies: `npm install`
 
-## Optional prerequisites, if setting up a local dsandbox
+## Optional prerequisites, if setting up a local sandbox
 
 ### Starting The Server
 
