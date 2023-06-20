@@ -36,7 +36,7 @@ export const removeConsolidatedCases = async (
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const updateCasePromises = [];
+  const updateCasePromises: Promise<any>[] = [];
 
   const { leadDocketNumber } = caseToUpdate;
 
