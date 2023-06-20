@@ -1,4 +1,4 @@
-const { OrderWithoutBody } = require('./OrderWithoutBody');
+import { OrderWithoutBody } from './OrderWithoutBody';
 
 describe('OrderWithoutBody', () => {
   describe('validation', () => {
