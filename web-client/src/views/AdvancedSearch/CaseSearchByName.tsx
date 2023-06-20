@@ -2,7 +2,6 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -148,21 +147,32 @@ export const CaseSearchByName = connect(
 
             <div className="grid-row grid-gap margin-top-4">
               <DateRangePickerComponent
+                omitFormGroupClass
                 endDateErrorText={validationErrors.endDate}
-                endLabel="Case created end date"
+                endLabel="Date filed end date"
                 endName="caseCreationEndDate"
                 endPickerCls={'grid-col-6 padding-left-2'}
-                endValue=""
+                endValue={advancedSearchForm.caseSearchByName.endDate}
                 formGroupCls={'margin-bottom-0'}
                 maxDate={caseSearchByNameHelper.today}
-                rangePickerCls={'grid-row '}
+                rangePickerCls={'grid-row grid-gap-3'}
                 startDateErrorText={validationErrors.startDate}
-                startLabel="Case created start date"
+                startLabel="Date filed start date"
                 startName="caseCreationStartDate"
                 startPickerCls={'grid-col-6 padding-right-2'}
-                startValue=""
-                onChangeEnd={}
-                onChangeStart={}
+                startValue={advancedSearchForm.caseSearchByName.startDate}
+                onChangeEnd={e => {
+                  updateCaseAdvancedSearchByNameFormValueSequence({
+                    key: 'endDate',
+                    value: e.target.value,
+                  });
+                }}
+                onChangeStart={e => {
+                  updateCaseAdvancedSearchByNameFormValueSequence({
+                    key: 'startDate',
+                    value: e.target.value,
+                  });
+                }}
               />
             </div>
 

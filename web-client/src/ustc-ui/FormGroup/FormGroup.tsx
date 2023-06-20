@@ -3,8 +3,15 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const FormGroup = connect(function FormGroup(props) {
-  const { children, className, confirmationText, errorText, formGroupRef, id } =
-    props;
+  const {
+    children,
+    className,
+    confirmationText,
+    errorText,
+    formGroupRef,
+    id,
+    omitFormGroupClass,
+  } = props;
 
   let hasError = false;
   let hasConfirmation = !!confirmationText;
@@ -41,7 +48,7 @@ export const FormGroup = connect(function FormGroup(props) {
   return (
     <div
       className={classNames(
-        'usa-form-group',
+        !omitFormGroupClass && 'usa-form-group',
         hasConfirmation && 'ustc-form-group--confirmation',
         hasError && 'usa-form-group--error',
         className,

@@ -47,6 +47,7 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
@@ -196,6 +197,7 @@ const applicationContextPublic = {
       createISODateString,
       formatDateString,
       formatDocketEntry,
+      formatNow,
       getContactPrimary,
       getContactSecondary,
       getDescriptionDisplay,
