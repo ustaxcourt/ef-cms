@@ -27,6 +27,8 @@ describe('getDocument', () => {
 
     const result = await getDocument({
       applicationContext,
+      docketNumber,
+      key,
     } as any);
 
     expect((getPdfFromUrl as jest.Mock).mock.calls[0][0]).toMatchObject({
