@@ -66,8 +66,7 @@ export class CaseSearch extends JoiValidationEntity {
     endDate: [
       {
         contains: 'ref:startDate',
-        message:
-          'End date cannot be prior to start date. Enter a valid end date.',
+        message: 'End date cannot be prior to start date.',
       },
       {
         contains: 'must be in [MM/DD/YYYY] format',
@@ -75,7 +74,7 @@ export class CaseSearch extends JoiValidationEntity {
       },
       {
         contains: 'must be less than or equal to "now"',
-        message: 'End date cannot be in the future. Enter valid end date.',
+        message: 'End date cannot be in the future.',
       },
       'Enter a valid end date',
     ],
@@ -83,7 +82,7 @@ export class CaseSearch extends JoiValidationEntity {
     startDate: [
       {
         contains: 'must be less than or equal to "now"',
-        message: 'Start date cannot be in the future. Enter valid start date.',
+        message: 'Start date cannot be in the future.',
       },
       {
         contains: 'must be in [MM/DD/YYYY] format',
