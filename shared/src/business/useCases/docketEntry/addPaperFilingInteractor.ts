@@ -84,7 +84,7 @@ export const addPaperFiling = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
@@ -257,14 +257,18 @@ const saveWorkItem = async ({
   });
 };
 
-interface DocumentMetadata {
+type DocumentMetadata = {
   docketNumber: string;
   isFileAttached: boolean;
   documentTitle: string;
   documentType: string;
-  receivedAt: string;
-  mailingDate: string;
-}
+  eventCode: string;
+  filedBy: string;
+  isPaper: boolean;
+  receivedAt?: string;
+  mailingDate?: string;
+  category?: string;
+};
 
 export const determineEntitiesToLock = (
   _applicationContext: IApplicationContext,
