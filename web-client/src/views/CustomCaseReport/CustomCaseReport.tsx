@@ -281,8 +281,8 @@ export const CustomCaseReport = connect(
               <div className="grid-col margin-right-4">
                 <label
                   className="usa-label"
-                  htmlFor="case-status"
-                  id="case-status-label"
+                  htmlFor="judges"
+                  id="assigned-judge-label"
                 >
                   Assigned judge{' '}
                   <span className="optional-light-text">(optional)</span>
@@ -310,13 +310,13 @@ export const CustomCaseReport = connect(
                 <label
                   className="usa-label"
                   htmlFor="trial-location"
-                  id="case-type-label"
+                  id="requested-place-of-trial-label"
                 >
                   Requested place of trial{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
                 <SelectSearch
-                  aria-labelledby="case-type-label"
+                  aria-labelledby="requested-place-of-trial-label"
                   id="trial-location"
                   name="requestedPlaceOfTrial"
                   options={customCaseInventoryReportHelper.trialCitiesByState}
