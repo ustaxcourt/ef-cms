@@ -77,8 +77,8 @@ export const CustomCaseReport = connect(
               />
             </div>
           </div>
-          <div className="grid-row grid-col-8">
-            <div className="grid-col margin-right-4">
+          <div className="grid-row desktop:grid-col-8 tablet:grid-col-12">
+            <div className="desktop:grid-col desktop:margin-right-4 tablet:grid-col-6">
               <div className="usa-radio usa-radio__inline">
                 <legend>Petition filing method</legend>
                 <input
@@ -215,7 +215,7 @@ export const CustomCaseReport = connect(
               </div>
             </div>
           </div>
-          <div className="grid-col-8">
+          <div className="desktop:grid-col-8 tablet:grid-col-12">
             <div className="grid-row margin-top-4 margin-bottom-2">
               <div className="grid-col margin-right-4">
                 <label
@@ -276,7 +276,7 @@ export const CustomCaseReport = connect(
             </div>
           </div>
 
-          <div className="grid-col-8">
+          <div className="desktop:grid-col-8 tablet:grid-col-12">
             <div className="grid-row margin-top-4 margin-bottom-2">
               <div className="grid-col margin-right-4">
                 <label
@@ -443,7 +443,7 @@ export const CustomCaseReport = connect(
               }}
             />
             <label
-              className="usa-checkbox__label grid-col-2 tablet:grid-col-6"
+              className="usa-checkbox__label desktop:grid-col-2 tablet:grid-col-6"
               htmlFor="high-priority-checkbox"
               id={'label-high-priority'}
             >
