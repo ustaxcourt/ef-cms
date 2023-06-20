@@ -1,5 +1,5 @@
 import { clearViewerDocumentToDisplayAction } from './clearViewerDocumentToDisplayAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearViewerDocumentToDisplayAction', () => {
   it('should clear the viewerDocumentToDisplay and iframeSrc', async () => {

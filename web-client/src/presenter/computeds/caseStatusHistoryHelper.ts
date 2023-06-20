@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * a computed used for formatting the case status history table entries.
@@ -7,7 +7,12 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} array of case types with descriptions
  */
-export const caseStatusHistoryHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseStatusHistoryHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseStatusHistory = get(state.caseDetail.caseStatusHistory);
 
   return {

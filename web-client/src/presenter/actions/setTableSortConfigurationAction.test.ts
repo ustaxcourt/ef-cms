@@ -1,6 +1,6 @@
 import { getConstants } from '../../getConstants';
 
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTableSortConfigurationAction } from './setTableSortConfigurationAction';
 const { ASCENDING, DESCENDING } = getConstants();
 

@@ -1,7 +1,8 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { uniq } from 'lodash';
 
-export const publicAlertHelper = get => {
+import { Get } from 'cerebral';
+export const publicAlertHelper = (get: Get) => {
   const alertError = get(state.alertError) || {};
 
   return {

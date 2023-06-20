@@ -5,7 +5,7 @@ import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCrea
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Chambers dashboard', () => {

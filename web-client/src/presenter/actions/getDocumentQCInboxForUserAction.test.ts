@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentQCInboxForUserAction } from './getDocumentQCInboxForUserAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocumentQCInboxForUserAction', () => {
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];

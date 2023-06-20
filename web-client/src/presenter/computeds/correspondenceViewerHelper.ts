@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const correspondenceViewerHelper = get => {
+import { Get } from 'cerebral';
+export const correspondenceViewerHelper = (get: Get) => {
   const permissions = get(state.permissions);
   const docketNumber = get(state.caseDetail.docketNumber);
   const correspondenceId = get(
