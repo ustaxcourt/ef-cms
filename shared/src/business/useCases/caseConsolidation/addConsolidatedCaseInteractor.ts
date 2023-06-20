@@ -49,7 +49,7 @@ export const addConsolidatedCase = async (
     );
   }
 
-  let allCasesToConsolidate = [];
+  let allCasesToConsolidate: RawCase[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
@@ -83,7 +83,7 @@ export const addConsolidatedCase = async (
     return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
   });
 
-  const updateCasePromises = [];
+  const updateCasePromises: Promise<any>[] = [];
   casesToUpdate.forEach(caseInCasesToUpdate => {
     const caseEntity = new Case(caseInCasesToUpdate, { applicationContext });
     caseEntity.setLeadCase(newLeadCase.docketNumber);
