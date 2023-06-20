@@ -10,6 +10,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { Get } from 'cerebral';
+import { InputOption } from '@web-client/ustc-ui/Utils/types';
 import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { sortBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -58,7 +59,7 @@ export const customCaseInventoryReportHelper = (
     ...populatedFilters.preferredTrialCities,
   ].length;
 
-  const judges: Object[] = get(state.judges)
+  const judges = get(state.judges)
     .map(judge => ({
       label: judge.name,
       value: judge.name,
@@ -79,19 +80,19 @@ export const customCaseInventoryReportHelper = (
 
   const trialCities = sortBy(TRIAL_CITIES.ALL, ['state', 'city']);
 
-  const searchableTrialCities: any[] = [];
+  const searchableTrialCities: InputOption[] = [];
 
-  const states: object[] = trialCities.reduce(
-    (listOfStates: any[], cityStatePair) => {
+  const states: InputOption[] = trialCities.reduce(
+    (listOfStates: InputOption[], cityStatePair) => {
       const existingState = listOfStates.find(
         trialState => trialState.label === cityStatePair.state,
       );
-      const cityOption = {
+      const cityOption: InputOption = {
         label: `${cityStatePair.city}, ${cityStatePair.state}`,
         value: `${cityStatePair.city}, ${cityStatePair.state}`,
       };
       if (existingState) {
-        existingState.options.push(cityOption);
+        existingState.options?.push(cityOption);
       } else {
         listOfStates.push({
           label: cityStatePair.state,
@@ -104,10 +105,8 @@ export const customCaseInventoryReportHelper = (
     [],
   );
 
-  const activeTrialCities = states;
-
   return {
-    activeTrialCities,
+    activeTrialCities: states,
     caseStatuses,
     caseTypes,
     cases: reportData,
