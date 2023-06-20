@@ -10,6 +10,10 @@ describe('clearOptionalCustomCaseInventoryFilterAction', () => {
     );
     customCaseInventoryReportState.filters.caseStatuses = ['CAV'];
     customCaseInventoryReportState.filters.caseTypes = ['CDP (Lien/Levy)'];
+    customCaseInventoryReportState.filters.judges = ['Buch'];
+    customCaseInventoryReportState.filters.preferredTrialCities = [
+      'Detroit, Michigan',
+    ];
 
     const result = await runAction(
       clearOptionalCustomCaseInventoryFilterAction,
@@ -20,5 +24,9 @@ describe('clearOptionalCustomCaseInventoryFilterAction', () => {
 
     expect(result.state.customCaseInventory.filters.caseStatuses).toEqual([]);
     expect(result.state.customCaseInventory.filters.caseTypes).toEqual([]);
+    expect(result.state.customCaseInventory.filters.judges).toEqual([]);
+    expect(
+      result.state.customCaseInventory.filters.preferredTrialCities,
+    ).toEqual([]);
   });
 });
