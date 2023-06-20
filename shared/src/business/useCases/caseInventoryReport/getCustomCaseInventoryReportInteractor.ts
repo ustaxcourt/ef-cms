@@ -16,10 +16,10 @@ export type CustomCaseInventoryReportFilters = {
   endDate: string;
   startDate: string;
   filingMethod: CustomCaseFilingMethods;
-  preferredTrialCities: Object[];
+  preferredTrialCities: string[];
   highPriority?: boolean;
   procedureType: CustomCaseProcedureTypes;
-  judges: Object[];
+  judges: string[];
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
