@@ -9,7 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { cloneDeep } from 'lodash';
+import { cloneDeep, uniq } from 'lodash';
 import { withLocking } from '../../useCaseHelper/acquireLock';
 
 interface IEditPaperFilingRequest {
@@ -70,11 +70,11 @@ const getEditPaperFilingStrategy = ({
     return saveForLaterStrategy;
   }
 
-  if (consolidatedGroupDocketNumbers.length) {
+  if (consolidatedGroupDocketNumbers?.length) {
     return multiDocketServeStrategy;
   }
 
-  if (consolidatedGroupDocketNumbers.length === 0) {
+  if (consolidatedGroupDocketNumbers?.length === 0) {
     return singleDocketServeStrategy;
   }
 
@@ -150,7 +150,7 @@ const multiDocketServeStrategy = async ({
   });
 
   const consolidatedCaseRecords = await Promise.all(
-    request.consolidatedGroupDocketNumbers.map(consolidatedGroupDocketNumber =>
+    request.consolidatedGroupDocketNumbers!.map(consolidatedGroupDocketNumber =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber: consolidatedGroupDocketNumber,
@@ -500,15 +500,15 @@ export const determineEntitiesToLock = (
     documentMetadata,
   }: {
     consolidatedGroupDocketNumbers?: string[];
-    documentMetadata: object;
+    documentMetadata: {
+      docketNumber: string;
+    };
   },
 ) => ({
-  identifiers: [
-    ...new Set([
-      documentMetadata.docketNumber,
-      ...consolidatedGroupDocketNumbers,
-    ]),
-  ].map(item => `case|${item}`),
+  identifiers: uniq([
+    documentMetadata.docketNumber,
+    ...consolidatedGroupDocketNumbers,
+  ]).map(item => `case|${item}`),
   ttl: 900,
 });
 
