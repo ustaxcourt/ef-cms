@@ -47,7 +47,7 @@ export const getDocument = async ({
         Key: key,
       }).promise()
     ).Body;
-  } else {
+  } else if (docketNumber) {
     const url = await getDownloadPolicy({
       applicationContext,
       docketNumber,
