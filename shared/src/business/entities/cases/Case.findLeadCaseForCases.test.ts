@@ -1,4 +1,4 @@
-const { Case } = require('./Case');
+import { Case } from './Case';
 
 describe('findLeadCaseForCases', () => {
   it('Should return the case with the lowest docket number for cases filed in the same year', () => {

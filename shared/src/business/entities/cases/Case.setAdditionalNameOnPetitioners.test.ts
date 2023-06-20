@@ -1,14 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../EntityConstants');
-const { Case, getContactPrimary } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../EntityConstants';
+import { Case, getContactPrimary } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('setAdditionalNameOnPetitioners', () => {
   const mockSecondaryName = 'Test Secondary Name';

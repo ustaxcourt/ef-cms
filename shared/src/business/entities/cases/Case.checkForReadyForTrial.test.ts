@@ -1,16 +1,14 @@
-const {
+import {
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   CASE_STATUS_TYPES,
-} = require('../EntityConstants');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../EntityConstants';
+import { Case } from './Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   calculateISODate,
   prepareDateFromString,
-} = require('../../utilities/DateHandler');
-const { Case } = require('./Case');
+} from '../../utilities/DateHandler';
 
 describe('checkForReadyForTrial', () => {
   it('should not change the status if no answer docketEntries have been filed', () => {

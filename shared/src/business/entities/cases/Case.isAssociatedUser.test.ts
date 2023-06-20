@@ -1,14 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  INITIAL_DOCUMENT_TYPES,
-  PARTY_TYPES,
-  ROLES,
-} = require('../EntityConstants');
-const { Case, getContactPrimary, isAssociatedUser } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+import { Case, getContactPrimary, isAssociatedUser } from './Case';
+import { INITIAL_DOCUMENT_TYPES, PARTY_TYPES, ROLES } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isAssociatedUser', () => {
   let caseEntity;

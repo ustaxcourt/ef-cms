@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case, getContactPrimary } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case, getContactPrimary } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getPetitionerById', () => {
   it('returns petitioner with matching contactId from petitioners array', () => {

@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { calculateISODate } = require('../../utilities/DateHandler');
-const { Case } = require('./Case');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { calculateISODate } from '../../utilities/DateHandler';
 
 describe('shouldGenerateNoticesForCase', () => {
   it('checks if the case is eligible for service (true)', () => {

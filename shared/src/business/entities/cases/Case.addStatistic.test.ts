@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { Statistic } = require('../Statistic');
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { Statistic } from '../Statistic';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addStatistic', () => {
   it('should successfully add a statistic', () => {

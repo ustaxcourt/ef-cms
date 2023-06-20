@@ -1,7 +1,7 @@
-const { calculateISODate } = require('../../utilities/DateHandler');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { shouldGenerateNoticesForCase } = require('./Case');
+import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { calculateISODate } from '../../utilities/DateHandler';
+import { shouldGenerateNoticesForCase } from './Case';
 
 describe('shouldGenerateNoticesForCase', () => {
   it('should return the value of rawCase.shouldGenerateNotices when it is defined', () => {

@@ -1,12 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { CASE_STATUS_TYPES, CONTACT_TYPES } from '../EntityConstants';
+import { Case } from './Case';
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} = require('../../../test/mockCase');
-const { Case } = require('./Case');
-const { CASE_STATUS_TYPES, CONTACT_TYPES } = require('../EntityConstants');
+} from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('markAsSentToIRS', () => {
   it('updates case status to general docket not at issue', () => {

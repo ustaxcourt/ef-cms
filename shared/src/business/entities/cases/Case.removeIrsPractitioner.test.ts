@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { IrsPractitioner } = require('../IrsPractitioner');
+import { Case } from './Case';
+import { IrsPractitioner } from '../IrsPractitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('removeIrsPractitioner', () => {
   it('does not remove a practitioner if not found in irsPractitioners array', () => {
