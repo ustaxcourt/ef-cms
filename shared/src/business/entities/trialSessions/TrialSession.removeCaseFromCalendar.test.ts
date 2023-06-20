@@ -1,12 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
-} = require('../EntityConstants');
-const { TrialSession } = require('./TrialSession');
-const { VALID_TRIAL_SESSION } = require('./TrialSession.test');
+} from '../EntityConstants';
+import { TrialSession } from './TrialSession';
+import { VALID_TRIAL_SESSION } from './TrialSession.test';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('removeCaseFromCalendar', () => {
