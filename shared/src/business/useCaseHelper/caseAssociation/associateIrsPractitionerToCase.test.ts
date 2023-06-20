@@ -10,8 +10,7 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-
-import { MOCK_CASE } from '../../../test/mockCase.ts';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_USERS } from '../../../test/mockUsers';
 
 describe('associateIrsPractitionerToCase', () => {

@@ -54,7 +54,6 @@ export const updateCounselOnCase = async (
 
   if (userToUpdate.role === ROLES.privatePractitioner) {
     caseEntity.updatePrivatePractitioner({
-      representing: editableFields.representing,
       userId,
       ...editableFields,
     });
