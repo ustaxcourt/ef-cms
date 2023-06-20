@@ -1,4 +1,4 @@
-const { TrialSessionWorkingCopy } = require('./TrialSessionWorkingCopy');
+import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy';
 
 const VALID_TRIAL_SESSION_WORKING_COPY = {
   trialSessionId: 'b7d90c05-f6cd-442c-a168-202db587f16f',
