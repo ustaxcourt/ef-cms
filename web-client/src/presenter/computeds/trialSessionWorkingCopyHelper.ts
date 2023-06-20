@@ -1,5 +1,5 @@
 import { omitBy, partition, pickBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
   const aCount =
@@ -10,7 +10,12 @@ const compareCasesByPractitioner = (a, b) => {
   return aCount - bCount;
 };
 
-export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const trialSessionWorkingCopyHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { ALLOWLIST_FEATURE_FLAGS, TRIAL_STATUS_TYPES } =
     applicationContext.getConstants();
 

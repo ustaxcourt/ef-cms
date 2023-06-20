@@ -7,7 +7,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed, {

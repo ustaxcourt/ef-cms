@@ -1,5 +1,5 @@
 import { clearPreferredTrialCityAction } from './clearPreferredTrialCityAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearPreferredTrialCityAction', () => {
   it('should set state.form.preferredTrialCity to null', async () => {

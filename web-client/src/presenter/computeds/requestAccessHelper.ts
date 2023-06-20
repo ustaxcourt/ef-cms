@@ -1,8 +1,13 @@
 import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { getFilerParties } from './getFilerParties';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const requestAccessHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const requestAccessHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
   const caseDetail = get(state.caseDetail);

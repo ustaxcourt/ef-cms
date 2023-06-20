@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const practitionerDetailHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const practitionerDetailHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const practitionerDetail = get(state.practitionerDetail);
   const permissions = get(state.permissions);
   const user = get(state.user);

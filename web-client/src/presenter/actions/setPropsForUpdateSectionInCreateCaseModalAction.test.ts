@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setPropsForUpdateSectionInCreateCaseModalAction } from './setPropsForUpdateSectionInCreateCaseModalAction';
 
 const { PETITIONS_SECTION } = applicationContext.getConstants();

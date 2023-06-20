@@ -2,7 +2,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -27,7 +27,7 @@ export const PublicDocketRecord = connect(
                   <span aria-hidden="true">No.</span>
                 </span>
               </th>
-              <th>Date</th>
+              <th>Filed Date</th>
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and Proceedings</th>

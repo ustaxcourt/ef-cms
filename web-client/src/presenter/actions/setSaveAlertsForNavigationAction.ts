@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.saveAlertsForNavigation to true which is used for persisting alerts after navigation

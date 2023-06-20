@@ -1,5 +1,5 @@
 import { mergeCaseOrderIntoCalendaredCasesAction } from './mergeCaseOrderIntoCalendaredCasesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('mergeCaseOrderIntoCalendaredCasesAction', () => {
   it('should merge case order into associated calendared cases', async () => {

@@ -1,5 +1,5 @@
 import { showContactsHelper } from '../computeds/showContactsHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * clears primary and secondary contact in caseDetail depending on

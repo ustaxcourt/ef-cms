@@ -1,5 +1,5 @@
 import { practitionerSearchFormHelper } from './practitionerSearchFormHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('practitionerSearchFormHelper', () => {
   it('should set showAddPractitioner to true when user has the ADD_EDIT_PRACTITIONER_USER permission', () => {

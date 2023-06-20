@@ -1,7 +1,12 @@
 import { capitalize } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const messagesHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const messagesHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const userRole = user && user.role;

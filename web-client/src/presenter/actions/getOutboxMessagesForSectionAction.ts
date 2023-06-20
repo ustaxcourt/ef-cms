@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * fetches the outbox messages for the section
  * @param {object} applicationContext object that contains all the context specific methods

@@ -1,6 +1,6 @@
 import { applicationContext } from '../../applicationContext';
 import { pdfSignerHelper as pdfSignerHelperComputed } from './pdfSignerHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
 const pdfSignerHelper = withAppContextDecorator(

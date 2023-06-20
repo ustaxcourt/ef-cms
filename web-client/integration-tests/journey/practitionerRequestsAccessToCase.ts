@@ -2,7 +2,7 @@ import { CaseAssociationRequestFactory } from '../../../shared/src/business/enti
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
