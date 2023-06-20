@@ -8,7 +8,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 ## Library Update Steps
 
-1. `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
+1. `npm update --save`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
 2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
 
    > **Caveats to major updates**:
@@ -16,7 +16,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    > - `@fortawesome` packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
    > - Check [caveats](#caveats) for info on which packages are locked down, but might be available to upgrade now.
    >
-3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
+3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
 
    > **Why am I seeing a high severity `dicer` issue?**
    > If you see this warning, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue. Check [caveats](#caveats) for more info.
