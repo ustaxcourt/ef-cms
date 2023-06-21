@@ -46,21 +46,16 @@ describe('Petitions clerk', () => {
     goToCreateCase();
     closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm();
-    console.log('testData BEFORE  REVIEW CASE FUNCTION CALL', testData);
-
     goToReviewCase(testData);
-    console.log('testData AFTER REVIEW CASE FUNCTION CALL', testData);
-
     serveCaseToIrs();
     // waitForElasticsearch();
   });
-  goToCaseDetail(testData.createdPaperDocketNumber);
 });
 
 describe('Admission clerk', () => {
   before(async () => {
     const results = await getUserToken(
-      'admissionsclerk1@example.com',
+      'admissionsclerk@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
@@ -73,9 +68,6 @@ describe('Admission clerk', () => {
   // possibly create a new petitioner or generate a new user within the test (AND CLEAN UP)
 
   it('should add an email to the party on the case', () => {
-    // find the said case
-    console.log('testData WITH ADMISSIONS CLERK', testData);
-
     goToCaseDetail(testData.createdPaperDocketNumber);
 
     // go to edit petitioner and add an email
@@ -91,7 +83,7 @@ describe('Admission clerk', () => {
       'div.parties-card:contains("tempPetitioner@example.com (Pending)")',
     ).should('exist');
 
-    // use (perform) the coginito's AdminSetUserPassword with a known temp password
+    // use (perform) the cognito's AdminSetUserPassword with a known temp password
   });
 });
 
