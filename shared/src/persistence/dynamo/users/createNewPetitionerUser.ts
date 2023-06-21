@@ -35,35 +35,37 @@ export const createNewPetitionerUser = async ({
 }) => {
   const { userId } = user;
 
-  await applicationContext
-    .getCognito()
-    .adminCreateUser({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.pendingEmail,
-        },
-        {
-          Name: 'custom:role',
-          Value: ROLES.petitioner,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.pendingEmail,
-    })
-    .promise();
+  const userAttributes = {
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'email',
+        Value: user.pendingEmail,
+      },
+      {
+        Name: 'custom:role',
+        Value: ROLES.petitioner,
+      },
+      {
+        Name: 'name',
+        Value: user.name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: user.userId,
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: user.pendingEmail,
+  };
+  if (process.env.STAGE !== 'prod') {
+    userAttributes.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  }
+
+  await applicationContext.getCognito().adminCreateUser().promise();
 
   const newUser = await createUserRecords({
     applicationContext,

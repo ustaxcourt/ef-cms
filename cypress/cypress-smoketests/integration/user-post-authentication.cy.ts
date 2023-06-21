@@ -83,7 +83,7 @@ describe('Admission clerk', () => {
       'div.parties-card:contains("tempPetitioner@example.com (Pending)")',
     ).should('exist');
 
-    // use (perform) the coginito's AdminSetUserPassword with a known temp password
+    // use (perform) the cognito's AdminSetUserPassword with a known temp password
   });
 });
 
