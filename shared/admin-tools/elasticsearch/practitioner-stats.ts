@@ -15,7 +15,7 @@ const toDate = computeDate({ day: 1, month: 1, year: year + 1 });
 
 const getAllPractitioners = async ({
   applicationContext,
-}): Promise<Array<Object>> => {
+}): Promise<Array<any>> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
