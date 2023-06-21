@@ -62,6 +62,85 @@ commands:
             - node_modules
 
 jobs:
+  prepare-for-glue-job: # LOWER ENV ONLY
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Setup the Deploy Table for a Glue Job
+          command: |
+            ./scripts/setup-deploy-table-for-glue-job.sh
+      - run:
+          name: Delete all existing dynamodb tables and elasticsearch clusters
+          command: |
+            ./scripts/delete-all-persistence.sh
+
+  start-glue-job: # PROD ONLY
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Deploy Check Glue Job Run State Cron Lambda
+          command: |
+            npm run deploy:glue-cron -- $ENV
+      - run:
+          name: Determine Destination Environment
+          command: |
+            GLUE_DESTINATION_ENV="test" # TODO: read this from...somewhere???
+            echo "export GLUE_DESTINATION_ENV=${GLUE_DESTINATION_ENV}" >> $BASH_ENV
+      - run:
+          name: Setup Destination Table Var
+          command: |
+            GLUE_DESTINATION_TABLE_VERSION="alpha"
+            echo "export GLUE_DESTINATION_TABLE=efcms-${GLUE_DESTINATION_ENV}-${GLUE_DESTINATION_TABLE_VERSION}" >> $BASH_ENV
+      - run:
+          name: Start Glue Job
+          command: |
+            npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts "$GLUE_DESTINATION_TABLE"
+      - run:
+          name: Enable Check Glue Job Run State Cron
+          command: |
+            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
+
+  disable-glue-cron: # PROD ONLY
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Check Glue Job Run State Cron
+          command: |
+            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
+
   deploy:
     docker:
       - image: *efcms-docker-image
