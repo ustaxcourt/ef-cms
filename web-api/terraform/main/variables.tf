@@ -115,11 +115,16 @@ variable "green_node_version" {
 }
 
 variable "blue_use_layers" {
-  type = bool
+  type    = bool
   default = true
 }
 
 variable "green_use_layers" {
-  type = bool
+  type    = bool
   default = true
 }
+
+variable "default_account_pass" {
+  type = string
+}
+
