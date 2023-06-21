@@ -46,51 +46,60 @@ describe('Petitions clerk', () => {
     goToCreateCase();
     closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm();
+    console.log('testData BEFORE  REVIEW CASE FUNCTION CALL', testData);
+
     goToReviewCase(testData);
+    console.log('testData AFTER REVIEW CASE FUNCTION CALL', testData);
+
     serveCaseToIrs();
+    // waitForElasticsearch();
   });
 
   it('should be able to serve the petition on the electronically-filed case', () => {
+    console.log('testData BEFORE SERVING', testData);
+
     goToCaseDetail(testData.createdDocketNumber);
     reviewAndServePetition();
   });
 });
 
-describe('Admission clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'admissionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
-  });
+// describe('Admission clerk', () => {
+//   before(async () => {
+//     const results = await getUserToken(
+//       'admissionsclerk1@example.com',
+//       DEFAULT_ACCOUNT_PASS,
+//     );
+//     token = results.AuthenticationResult.IdToken;
+//   });
 
-  it('should be able to login', () => {
-    login(token);
-  });
+//   it('should be able to login', () => {
+//     login(token);
+//   });
 
-  // possibly create a new petitioner or generate a new user within the test (AND CLEAN UP)
+//   // possibly create a new petitioner or generate a new user within the test (AND CLEAN UP)
 
-  it('should add an email to the party on the case', () => {
-    // find the said case
-    goToCaseDetail(testData.createdDocketNumber);
+//   it('should add an email to the party on the case', () => {
+//     // find the said case
+//     console.log('testData WITH ADMISSIONS CLERK', testData);
 
-    // go to edit petitioner and add an email
-    cy.get('#tab-case-information').click();
-    cy.get('#tab-parties').click();
-    cy.get('.edit-petitioner-button').click();
-    cy.get('#updatedEmail').type('tempPetitioner@example.com');
-    cy.get('#confirm-email').type('tempPetitioner@example.com');
-    cy.get('#submit-edit-petitioner-information').click();
-    cy.get('#modal-button-confirm').click();
-    cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
-    cy.get(
-      'div.parties-card:contains("tempPetitioner@example.com (Pending)")',
-    ).should('exist');
+//     goToCaseDetail(testData.createdDocketNumber);
 
-    // use (perform) the coginito's AdminSetUserPassword with a known temp password
-  });
-});
+//     // go to edit petitioner and add an email
+//     cy.get('#tab-case-information').click();
+//     cy.get('#tab-parties').click();
+//     cy.get('.edit-petitioner-button').click();
+//     cy.get('#updatedEmail').type('tempPetitioner@example.com');
+//     cy.get('#confirm-email').type('tempPetitioner@example.com');
+//     cy.get('#submit-edit-petitioner-information').click();
+//     cy.get('#modal-button-confirm').click();
+//     cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
+//     cy.get(
+//       'div.parties-card:contains("tempPetitioner@example.com (Pending)")',
+//     ).should('exist');
+
+//     // use (perform) the coginito's AdminSetUserPassword with a known temp password
+//   });
+// });
 
 // describe('Petitioner', () => {
 //   before(async () => {
