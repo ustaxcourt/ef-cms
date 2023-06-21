@@ -100,15 +100,6 @@ export const aggregateCommonQueryParams = ({
         },
       },
     });
-  } else if (startDate) {
-    commonQuery.push({
-      range: {
-        'receivedAt.S': {
-          format: 'strict_date_optional_time',
-          gte: startDate,
-        },
-      },
-    });
   }
 
   commonQuery.push({ match: { 'entityName.S': 'Case' } });
