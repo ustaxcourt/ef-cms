@@ -279,11 +279,7 @@ export const CustomCaseReport = connect(
           <div className="desktop:grid-col-8 tablet:grid-col-12">
             <div className="grid-row margin-top-4 margin-bottom-2">
               <div className="grid-col margin-right-4">
-                <label
-                  className="usa-label"
-                  htmlFor="judges"
-                  id="assigned-judge-label"
-                >
+                <label className="usa-label" htmlFor="judges" id="judges-label">
                   Assigned judge{' '}
                   <span className="optional-light-text">(optional)</span>
                 </label>
