@@ -145,7 +145,7 @@ export const CaseSearchByName = connect(
               </div>
             </div>
 
-            <div className="grid-row grid-gap margin-top-4">
+            <div className="grid-row grid-gap margin-top-4 margin-bottom-2">
               <DateRangePickerComponent
                 omitFormGroupClass
                 endDateErrorText={validationErrors.endDate}
