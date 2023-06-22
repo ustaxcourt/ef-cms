@@ -163,10 +163,10 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
     });
 
     it('should dismiss the alert banner and verify that the alert no longer shows up for that trial session', async () => {
-      await cerebralTest.runSequence('showDismissThirtyDayAlertModalSequence');
+      await cerebralTest.runSequence('showThirtyDayNoticeModalSequence');
 
       expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'DismissThirtyDayNoticeAlertModal',
+        'ThirtyDayNoticeModal',
       );
 
       await cerebralTest.runSequence('dismissThirtyDayTrialAlertSequence');

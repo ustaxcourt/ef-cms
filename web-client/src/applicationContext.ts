@@ -265,6 +265,7 @@ import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEn
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
+import { serveThirtyDayNoticeInteractor } from '../../shared/src/proxies/trialSessions/serveThirtyDayNoticeProxy';
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setDocumentTitleFromStampDataInteractor } from '../../shared/src/business/useCases/stampMotion/setDocumentTitleFromStampDataInteractor';
 import { setForHearingInteractor } from '../../shared/src/proxies/trialSessions/setForHearingProxy';
@@ -525,6 +526,7 @@ const allUseCases = {
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
+  serveThirtyDayNoticeInteractor,
   setDocumentTitleFromStampDataInteractor,
   setForHearingInteractor,
   setItemInteractor,
