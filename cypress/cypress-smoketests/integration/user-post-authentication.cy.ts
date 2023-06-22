@@ -78,20 +78,25 @@ describe('Petitioner', () => {
   it('should confirm user', async () => {
     await confirmUser({ email: randomizedEmail });
   });
+
   it('should be able to login with new password', async () => {
     const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
     token = results.AuthenticationResult.IdToken;
     login(token);
   });
-  it('verifies that a NOCE was generated on their case', () => {
-    // find the said case
-    console.log('testData', testData);
-    goToCaseDetail(testData.createdPaperDocketNumber);
+
+  it('verifies that a Notice of Change of Email Address was generated on their case', () => {
+    cy.get('#docket-search-field')
+      .clear()
+      .type(testData.createdPaperDocketNumber);
+    cy.get('.usa-search-submit-text').click();
+    cy.get(
+      `.big-blue-header h1 a:contains("${testData.createdPaperDocketNumber}")`,
+    ).should('exist');
     cy.get('tbody:contains(NOCE)').should('exist');
     cy.get('#tab-case-information').click();
     cy.get('#tab-parties').click();
     cy.get('div.parties-card:contains((Pending))').should('not.exist');
-    // verify NOCE
   });
 });
 
