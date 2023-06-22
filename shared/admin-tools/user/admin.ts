@@ -1,4 +1,4 @@
-import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import {
   checkEnvVar,
   generatePassword,
@@ -11,38 +11,32 @@ const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 let cachedAuthToken;
 
 export const enableUser = async email => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
-  await cognito
-    .adminEnableUser({
-      UserPoolId,
-      Username: email,
-    })
-    .promise();
+  await cognito.adminEnableUser({
+    UserPoolId,
+    Username: email,
+  });
 };
 
 export const disableUser = async email => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
-  await cognito
-    .adminDisableUser({
-      UserPoolId,
-      Username: email,
-    })
-    .promise();
+  await cognito.adminDisableUser({
+    UserPoolId,
+    Username: email,
+  });
 };
 
 export const activateAdminAccount = async () => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
   try {
-    await cognito
-      .adminEnableUser({
-        UserPoolId,
-        Username: USTC_ADMIN_USER,
-      })
-      .promise();
+    await cognito.adminEnableUser({
+      UserPoolId,
+      Username: USTC_ADMIN_USER,
+    });
   } catch (err) {
     switch (err.code) {
       case 'UserNotFoundException':
@@ -59,31 +53,27 @@ export const activateAdminAccount = async () => {
 };
 
 export const deactivateAdminAccount = async () => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
-  await cognito
-    .adminDisableUser({
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    })
-    .promise();
+  await cognito.adminDisableUser({
+    UserPoolId,
+    Username: USTC_ADMIN_USER,
+  });
 };
 
 /**
  * This verifies that the USTC admin user is disabled in Cognito
  */
 export const verifyAdminUserDisabled = async ({ attempt }) => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId(cognito);
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId();
 
   try {
-    let result = await cognito
-      .adminGetUser({
-        UserPoolId,
-        Username: USTC_ADMIN_USER,
-      })
-      .promise();
+    let result = await cognito.adminGetUser({
+      UserPoolId,
+      Username: USTC_ADMIN_USER,
+    });
 
     if (result && result.Enabled === false) {
       console.log('USTC Admin user is disabled in verifyAdminUserDisabled.');
@@ -94,12 +84,10 @@ export const verifyAdminUserDisabled = async ({ attempt }) => {
       );
 
       const maxRetries = 3;
-      await cognito
-        .adminDisableUser({
-          UserPoolId,
-          Username: USTC_ADMIN_USER,
-        })
-        .promise();
+      await cognito.adminDisableUser({
+        UserPoolId,
+        Username: USTC_ADMIN_USER,
+      });
 
       if (attempt < maxRetries) {
         attempt++;
@@ -134,22 +122,20 @@ export const getAuthToken = async () => {
   );
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   const ClientId = await getClientId(UserPoolId);
 
   try {
-    const response = await cognito
-      .adminInitiateAuth({
-        AuthFlow: 'ADMIN_NO_SRP_AUTH',
-        AuthParameters: {
-          PASSWORD: USTC_ADMIN_PASS,
-          USERNAME: USTC_ADMIN_USER,
-        },
-        ClientId,
-        UserPoolId,
-      })
-      .promise();
+    const response = await cognito.adminInitiateAuth({
+      AuthFlow: 'ADMIN_NO_SRP_AUTH',
+      AuthParameters: {
+        PASSWORD: USTC_ADMIN_PASS!,
+        USERNAME: USTC_ADMIN_USER!,
+      },
+      ClientId,
+      UserPoolId,
+    });
     if (
       !response ||
       typeof response.AuthenticationResult.IdToken === 'undefined'
@@ -172,16 +158,14 @@ export const getAuthToken = async () => {
  * @param {String} providers.Username The username (email) of the Cognito user we are updating
  */
 const setPassword = async ({ Password, Permanent = false, Username }) => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
-  await cognito
-    .adminSetUserPassword({
-      Password,
-      Permanent,
-      UserPoolId,
-      Username,
-    })
-    .promise();
+  await cognito.adminSetUserPassword({
+    Password,
+    Permanent,
+    UserPoolId,
+    Username,
+  });
 };
 
 /**
@@ -230,15 +214,13 @@ export const createDawsonUser = async ({
 
 export const createAdminAccount = async () => {
   // does the user exist?
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   try {
-    let result = await cognito
-      .adminGetUser({
-        UserPoolId,
-        Username: USTC_ADMIN_USER,
-      })
-      .promise();
+    let result = await cognito.adminGetUser({
+      UserPoolId,
+      Username: USTC_ADMIN_USER,
+    });
     if (result) {
       console.log('Admin user already exists - not going to try to create it');
       return;
@@ -249,35 +231,31 @@ export const createAdminAccount = async () => {
       process.exit(1);
     }
   }
-  await cognito
-    .adminCreateUser({
-      MessageAction: 'SUPPRESS',
-      UserAttributes: [
-        {
-          Name: 'email',
-          Value: USTC_ADMIN_USER,
-        },
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'custom:role',
-          Value: 'admin',
-        },
-      ],
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    })
-    .promise();
+  await cognito.adminCreateUser({
+    MessageAction: 'SUPPRESS',
+    UserAttributes: [
+      {
+        Name: 'email',
+        Value: USTC_ADMIN_USER,
+      },
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'custom:role',
+        Value: 'admin',
+      },
+    ],
+    UserPoolId,
+    Username: USTC_ADMIN_USER,
+  });
 
-  await cognito
-    .adminSetUserPassword({
-      Password: USTC_ADMIN_PASS,
-      Permanent: true,
-      UserPoolId,
-      Username: USTC_ADMIN_USER,
-    })
-    .promise();
+  await cognito.adminSetUserPassword({
+    Password: USTC_ADMIN_PASS,
+    Permanent: true,
+    UserPoolId,
+    Username: USTC_ADMIN_USER,
+  });
   return true;
 };
