@@ -29,3 +29,4 @@ resource "aws_sqs_queue" "send_emails_dl_queue" {
   name       = "send_emails_dl_queue_${var.environment}_${var.current_color}.fifo"
   fifo_queue = true
 }
+
