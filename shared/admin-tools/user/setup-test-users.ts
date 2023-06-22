@@ -1,8 +1,8 @@
-const {
+import {
   activateAdminAccount,
   createDawsonUser,
   deactivateAdminAccount,
-} = require('./admin');
+} from './admin';
 
 const { DEFAULT_ACCOUNT_PASS, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
 
@@ -24,7 +24,11 @@ const baseUser = {
   suffix: '',
 };
 
-const createManyAccounts = async ([num, role, section]) => {
+const createManyAccounts = async ([num, role, section]: [
+  number,
+  string,
+  string,
+]) => {
   for (let i = 1; i <= num; i++) {
     const email =
       role === 'chambers'
@@ -50,7 +54,7 @@ const createManyAccounts = async ([num, role, section]) => {
  * Create Court Users
  */
 const setupCourtUsers = async () => {
-  const userSet = [
+  const userSet: Array<[number, string, string]> = [
     [10, 'adc', 'adc'],
     [10, 'admissionsclerk', 'admissions'],
     [10, 'clerkofcourt', 'clerkofcourt'],
