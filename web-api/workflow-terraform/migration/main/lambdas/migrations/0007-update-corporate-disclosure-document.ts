@@ -9,7 +9,7 @@ const isCase = item => {
 };
 
 export const migrateItems = items => {
-  const itemsAfter = [];
+  const itemsAfter: any[] = [];
 
   for (const item of items) {
     if (isDocketEntry(item)) {
