@@ -44,7 +44,7 @@ describe('Petitions clerk', () => {
 describe('Admission clerk', () => {
   before(async () => {
     const results = await getUserToken(
-      'admissionsclerk@example.com',
+      'admissionsclerk1@example.com',
       DEFAULT_ACCOUNT_PASS,
     );
     token = results.AuthenticationResult.IdToken;
