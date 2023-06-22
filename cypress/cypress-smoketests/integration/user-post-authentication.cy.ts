@@ -23,63 +23,71 @@ const testData = {};
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const randomizedEmail = `${faker.string.uuid()}@example.com`;
 
-describe('Petitions clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+if (!Cypress.env('SMOKETESTS_LOCAL')) {
+  describe('Petitions clerk', () => {
+    before(async () => {
+      const results = await getUserToken(
+        'petitionsclerk1@example.com',
+        DEFAULT_ACCOUNT_PASS,
+      );
+      token = results.AuthenticationResult.IdToken;
+    });
+
+    it('should be able to login', () => {
+      login(token);
+    });
+
+    it('should be able to create a case with paper service', () => {
+      goToMyDocumentQC();
+      goToCreateCase();
+      closeScannerSetupDialog();
+      fillInCreateCaseFromPaperForm();
+      goToReviewCase(testData);
+      serveCaseToIrs();
+    });
   });
 
-  it('should be able to login', () => {
-    login(token);
+  describe('Admission clerk', () => {
+    before(async () => {
+      const results = await getUserToken(
+        'admissionsclerk1@example.com',
+        DEFAULT_ACCOUNT_PASS,
+      );
+      token = results.AuthenticationResult.IdToken;
+    });
+
+    it('should be able to login', () => {
+      login(token);
+    });
+
+    // possibly create a new petitioner or generate a new user within the test (AND CLEAN UP)
+
+    it('should add an email to the party on the case', () => {
+      goToCaseDetail(testData.createdPaperDocketNumber);
+
+      editPetitionerEmail(randomizedEmail);
+    });
   });
 
-  it('should be able to create a case with paper service', () => {
-    goToMyDocumentQC();
-    goToCreateCase();
-    closeScannerSetupDialog();
-    fillInCreateCaseFromPaperForm();
-    goToReviewCase(testData);
-    serveCaseToIrs();
-  });
-});
+  describe('Petitioner', () => {
+    it('should confirm user', async () => {
+      await confirmUser({ email: randomizedEmail });
+    });
 
-describe('Admission clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'admissionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+    it('verify the email has changed', async () => {
+      const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
+      token = results.AuthenticationResult.IdToken;
+      login(token);
+      goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
+      verifyEmailChange();
+    });
   });
 
-  it('should be able to login', () => {
-    login(token);
+  // TODO: WRITE A DEVEX TASK TO CLEAN UP MOCK USERS CREATED FROM SMOKETESTS
+} else {
+  describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
+    it('should skip', () => {
+      expect(true).to.equal(true);
+    });
   });
-
-  // possibly create a new petitioner or generate a new user within the test (AND CLEAN UP)
-
-  it('should add an email to the party on the case', () => {
-    goToCaseDetail(testData.createdPaperDocketNumber);
-
-    editPetitionerEmail(randomizedEmail);
-  });
-});
-
-describe('Petitioner', () => {
-  it('should confirm user', async () => {
-    await confirmUser({ email: randomizedEmail });
-  });
-
-  it('verify the email has changed', async () => {
-    const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
-    token = results.AuthenticationResult.IdToken;
-    login(token);
-    goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
-    verifyEmailChange();
-  });
-});
-
-// TODO: WRITE A DEVEX TASK TO CLEAN UP MOCK USERS CREATED FROM SMOKETESTS
+}
