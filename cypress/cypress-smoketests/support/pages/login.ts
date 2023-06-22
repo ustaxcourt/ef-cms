@@ -18,14 +18,6 @@ const cognito = new AWS.CognitoIdentityServiceProvider({
 });
 
 export const confirmUser = async ({ email }) => {
-  // THESE LOGS ARE RETURNING 'UNDEFINED'
-  console.log(
-    'DEFAULT_ACCOUNT_PASS',
-    await Cypress.env('DEFAULT_ACCOUNT_PASS'),
-  );
-  console.log('DEPLOYING_COLOR', await Cypress.env('DEPLOYING_COLOR'));
-  console.log('Cypress keyID', await Cypress.env('CYPRESS_AWS_ACCESS_KEY_ID'));
-
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
