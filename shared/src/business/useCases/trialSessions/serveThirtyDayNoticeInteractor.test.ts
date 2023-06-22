@@ -6,10 +6,7 @@ import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { ThirtyDayNoticeOfTrialRequiredInfo } from '../../utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import {
-  docketClerkUser,
-  petitionsClerkUser,
-} from '../../../test/mockUsers';
+import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 
 describe('serveThirtyDayNoticeInteractor', () => {
@@ -58,7 +55,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       mockCase = cloneDeep(MOCK_CASE);
     });
 
-    it.only('should serve a 30 day notice of trial(NOTT) on any case in a trial session with at least 1 pro se petitioner', async () => {
+    it('should serve a 30 day notice of trial(NOTT) on any case in a trial session with at least 1 pro se petitioner', async () => {
       const caseWithRepresentedPetitioner = cloneDeep(mockCase);
       caseWithRepresentedPetitioner.privatePractitioners = [
         {
