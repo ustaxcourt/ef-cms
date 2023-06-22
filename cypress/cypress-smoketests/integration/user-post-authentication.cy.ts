@@ -11,6 +11,8 @@ import {
   serveCourtIssuedDocketEntry,
   uploadCourtIssuedDocPdf,
 } from '../support/pages/case-detail';
+import { confirmUser } from '../support/pages/login';
+import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import {
@@ -19,7 +21,6 @@ import {
   serveCaseToIrs,
 } from '../support/pages/create-paper-case';
 import { goToMyDocumentQC } from '../support/pages/document-qc';
-
 const { closeScannerSetupDialog, getUserToken, login } =
   getEnvironmentSpecificFunctions();
 
@@ -27,6 +28,7 @@ let token = null;
 const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
+const randomizedEmail = `${faker.string.uuid()}@example.com`;
 
 describe('Petitions clerk', () => {
   before(async () => {
@@ -48,7 +50,6 @@ describe('Petitions clerk', () => {
     fillInCreateCaseFromPaperForm();
     goToReviewCase(testData);
     serveCaseToIrs();
-    // waitForElasticsearch();
   });
 });
 
@@ -74,38 +75,37 @@ describe('Admission clerk', () => {
     cy.get('#tab-case-information').click();
     cy.get('#tab-parties').click();
     cy.get('.edit-petitioner-button').click();
-    cy.get('#updatedEmail').type('tempPetitioner@example.com');
-    cy.get('#confirm-email').type('tempPetitioner@example.com');
+    cy.get('#updatedEmail').type(randomizedEmail);
+    cy.get('#confirm-email').type(randomizedEmail);
     cy.get('#submit-edit-petitioner-information').click();
     cy.get('#modal-button-confirm').click();
     cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
-    cy.get(
-      'div.parties-card:contains("tempPetitioner@example.com (Pending)")',
-    ).should('exist');
-
-    // use (perform) the cognito's AdminSetUserPassword with a known temp password
+    cy.get(`div.parties-card:contains(${randomizedEmail} (Pending))`).should(
+      'exist',
+    );
   });
 });
 
-// describe('Petitioner', () => {
-//   before(async () => {
-//     const results = await getUserToken(
-//       'petitioner@example.com',
-//       DEFAULT_ACCOUNT_PASS, // this will be the temp password set (on 75)
-//     );
-//     token = results.AuthenticationResult.IdToken;
-//   });
+describe('Petitioner', () => {
+  // before(async () => {
+  //   const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
+  //   console.log('results', results);
+  //   token = results.AuthenticationResult.IdToken;
+  // });
+  // it('shoud confirm user', async () => {
+  //   await confirmUser({ email: randomizedEmail });
+  // });
+  // it('should be able to login with new password', async () => {
+  //   const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
+  //   token = results.AuthenticationResult.IdToken;
+  //   login(token);
+  // });
+  // it('verifies that a NOCE was generated on their case', () => {
+  //   // find the said case
+  //   console.log('testData', testData);
+  //   goToCaseDetail(testData.createdPaperDocketNumber);
+  //   // verify NOCE
+  // });
+});
 
-//   it('should be able to login with the temp token', () => {
-//     login(token);
-//   });
-
-//   it('should answer the challenge', () => {
-//     // cognito 'answer challenge' api to set the permanent password and login
-//   });
-
-//   it('verifies that a NOCE was generated on their case', () => {
-//     // find the said case
-//     // verify NOCE
-//   });
-// });
+// TODO: WRITE A DEVEX TASK TO CLEAN UP MOCK USERS CREATED FROM SMOKETESTS
