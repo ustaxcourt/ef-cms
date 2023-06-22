@@ -1,20 +1,8 @@
-import {
-  addDocketEntryForOrderAndSaveForLater,
-  addDocketEntryForOrderAndServePaper,
-  addDocketEntryForUploadedPdfAndServe,
-  addDocketEntryForUploadedPdfAndServePaper,
-  clickSaveUploadedPdfButton,
-  createOrder,
-  editAndSignOrder,
-  goToCaseDetail,
-  reviewAndServePetition,
-  serveCourtIssuedDocketEntry,
-  uploadCourtIssuedDocPdf,
-} from '../support/pages/case-detail';
 import { confirmUser } from '../support/pages/login';
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { goToCaseDetail } from '../support/pages/case-detail';
 import {
   goToCreateCase,
   goToReviewCase,
@@ -87,25 +75,23 @@ describe('Admission clerk', () => {
 });
 
 describe('Petitioner', () => {
-  // before(async () => {
-  //   const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
-  //   console.log('results', results);
-  //   token = results.AuthenticationResult.IdToken;
-  // });
-  // it('shoud confirm user', async () => {
-  //   await confirmUser({ email: randomizedEmail });
-  // });
-  // it('should be able to login with new password', async () => {
-  //   const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
-  //   token = results.AuthenticationResult.IdToken;
-  //   login(token);
-  // });
-  // it('verifies that a NOCE was generated on their case', () => {
-  //   // find the said case
-  //   console.log('testData', testData);
-  //   goToCaseDetail(testData.createdPaperDocketNumber);
-  //   // verify NOCE
-  // });
+  it('should confirm user', async () => {
+    await confirmUser({ email: randomizedEmail });
+  });
+  it('should be able to login with new password', async () => {
+    const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
+    token = results.AuthenticationResult.IdToken;
+    login(token);
+  });
+  it('verifies that a NOCE was generated on their case', () => {
+    // find the said case
+    console.log('testData', testData);
+    goToCaseDetail(testData.createdPaperDocketNumber);
+    cy.get('#tab-case-information').click();
+    cy.get('#tab-parties').click();
+    cy.get('div.parties-card:contains((Pending))').should('not.exist');
+    // verify NOCE
+  });
 });
 
 // TODO: WRITE A DEVEX TASK TO CLEAN UP MOCK USERS CREATED FROM SMOKETESTS
