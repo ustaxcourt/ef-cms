@@ -1,3 +1,4 @@
+import { InitiateAuthResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { confirmUser } from '../support/pages/login';
 import {
   editPetitionerEmail,
@@ -17,7 +18,7 @@ import { goToMyDocumentQC } from '../support/pages/document-qc';
 const { closeScannerSetupDialog, getUserToken, login } =
   getEnvironmentSpecificFunctions();
 
-let token = null;
+let token: string | undefined = undefined;
 const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
@@ -26,11 +27,11 @@ const randomizedEmail = `${faker.string.uuid()}@example.com`;
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('Petitions clerk', () => {
     before(async () => {
-      const results = await getUserToken(
+      const results: InitiateAuthResponse = await getUserToken(
         'petitionsclerk1@example.com',
         DEFAULT_ACCOUNT_PASS,
       );
-      token = results.AuthenticationResult.IdToken;
+      token = results.AuthenticationResult?.IdToken;
     });
 
     it('should be able to login', () => {
@@ -49,11 +50,11 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
   describe('Admission clerk', () => {
     before(async () => {
-      const results = await getUserToken(
+      const results: InitiateAuthResponse = await getUserToken(
         'admissionsclerk1@example.com',
         DEFAULT_ACCOUNT_PASS,
       );
-      token = results.AuthenticationResult.IdToken;
+      token = results.AuthenticationResult?.IdToken;
     });
 
     it('should be able to login', () => {
@@ -73,8 +74,11 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
     });
 
     it('verify the email has changed', async () => {
-      const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
-      token = results.AuthenticationResult.IdToken;
+      const results: InitiateAuthResponse = await getUserToken(
+        randomizedEmail,
+        DEFAULT_ACCOUNT_PASS,
+      );
+      token = results.AuthenticationResult?.IdToken;
       login(token);
       goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
       verifyEmailChange();
