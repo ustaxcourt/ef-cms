@@ -87,6 +87,7 @@ describe('Petitioner', () => {
     // find the said case
     console.log('testData', testData);
     goToCaseDetail(testData.createdPaperDocketNumber);
+    cy.get('tbody:contains(NOCE)').should('exist');
     cy.get('#tab-case-information').click();
     cy.get('#tab-parties').click();
     cy.get('div.parties-card:contains((Pending))').should('not.exist');
