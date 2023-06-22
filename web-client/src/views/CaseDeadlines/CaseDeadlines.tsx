@@ -2,6 +2,7 @@ import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { SuccessNotification } from '../SuccessNotification';
@@ -125,6 +126,10 @@ export const CaseDeadlines = connect(
                   <thead>
                     <tr>
                       <th>Due Date</th>
+                      <th
+                        aria-hidden="true"
+                        className="consolidated-case-column"
+                      ></th>
                       <th aria-label="docket number">Docket No.</th>
                       <th>Case Title</th>
                       <th>Description</th>
@@ -136,6 +141,15 @@ export const CaseDeadlines = connect(
                       <tr key={item.caseDeadlineId}>
                         <td className="smaller-column semi-bold">
                           {item.formattedDeadline}
+                        </td>
+                        <td className="consolidated-case-column">
+                          <ConsolidatedCaseIcon
+                            consolidatedIconTooltipText={
+                              item.consolidatedIconTooltipText
+                            }
+                            inConsolidatedGroup={item.inConsolidatedGroup}
+                            showLeadCaseIcon={item.inLeadCase}
+                          />
                         </td>
                         <td className="smaller-column semi-bold">
                           <CaseLink formattedCase={item} />
