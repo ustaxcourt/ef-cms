@@ -361,13 +361,13 @@ import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerC
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
-import { showDismissThirtyDayAlertModalSequence } from './sequences/showDismissThirtyDayAlertModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
+import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -886,13 +886,13 @@ export const presenterSequences = {
   setViewerDocumentToDisplaySequence,
   setViewerDraftDocumentToDisplaySequence,
   showCalculatePenaltiesModalSequence,
-  showDismissThirtyDayAlertModalSequence,
   showDocketRecordDetailModalSequence,
   showGenerateNoticesProgressSequence,
   showMoreClosedCasesSequence,
   showMoreOpenCasesSequence,
   showMoreResultsSequence,
   showPaperServiceProgressSequence,
+  showThirtyDayNoticeModalSequence,
   showViewPetitionerCounselModalSequence,
   signOutSequence,
   skipSigningOrderSequence,

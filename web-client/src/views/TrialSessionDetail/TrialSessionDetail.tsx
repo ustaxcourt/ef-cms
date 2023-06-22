@@ -2,7 +2,6 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { DismissThirtyDayNoticeAlertModal } from './DismissThirtyDayNoticeAlertModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
@@ -12,6 +11,7 @@ import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { ThirtyDayNoticeModal } from './ThirtyDayNoticeModal';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
 import {
@@ -28,17 +28,17 @@ export const TrialSessionDetail = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmModalSequence: sequences.openConfirmModalSequence,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
-    showDismissThirtyDayAlertModalSequence:
-      sequences.showDismissThirtyDayAlertModalSequence,
     showModal: state.modal.showModal,
+    showThirtyDayNoticeModalSequence:
+      sequences.showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
   function TrialSessionDetail({
     formattedTrialSessionDetails,
     openConfirmModalSequence,
     openSetCalendarModalSequence,
-    showDismissThirtyDayAlertModalSequence,
     showModal,
+    showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper,
   }) {
     return (
@@ -56,7 +56,7 @@ export const TrialSessionDetail = connect(
                 dismissText: 'Yes, served',
                 message: formattedTrialSessionDetails.alertMessageForNOTT,
               }}
-              dismissAlertSequence={showDismissThirtyDayAlertModalSequence}
+              dismissAlertSequence={showThirtyDayNoticeModalSequence}
               dismissable={trialSessionDetailsHelper.canDismissThirtyDayAlert}
               iconRight={false}
               messageNotBold={true}
@@ -204,9 +204,7 @@ export const TrialSessionDetail = connect(
             You will not be able to reopen this session.
           </ConfirmModal>
         )}
-        {showModal === 'DismissThirtyDayNoticeAlertModal' && (
-          <DismissThirtyDayNoticeAlertModal />
-        )}
+        {showModal === 'ThirtyDayNoticeModal' && <ThirtyDayNoticeModal />}
         {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
         {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
       </>
