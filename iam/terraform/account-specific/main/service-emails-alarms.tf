@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
-  alarm_name          = "${var.environment}_${var.current_color} send emails dl queue check"
+  alarm_name          = "${var.environment}_${var.deploying_color} send emails dl queue check"
   alarm_description   = "Alarm that triggers when a message is sent to this dl queue: ${aws_sqs_queue.send_emails_dl_queue.name}"
   namespace           = "AWS/SQS"
   metric_name         = "NumberOfMessagesSent"
