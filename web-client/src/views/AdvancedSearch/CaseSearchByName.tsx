@@ -150,7 +150,7 @@ export const CaseSearchByName = connect(
                 omitFormGroupClass
                 endDateErrorText={validationErrors.endDate}
                 endLabel="Date filed end date"
-                endName="caseCreationEndDate"
+                endName="caseSearchByNameEndDate"
                 endPickerCls={'desktop:grid-col-6 desktop:padding-left-2'}
                 endValue={advancedSearchForm.caseSearchByName.endDate}
                 formGroupCls={'margin-bottom-0'}
@@ -158,7 +158,7 @@ export const CaseSearchByName = connect(
                 rangePickerCls={'grid-row grid-gap-3 phone:grid-col-12'}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Date filed start date"
-                startName="caseCreationStartDate"
+                startName="caseSearchByNameStartDate"
                 startPickerCls={'desktop:grid-col-6 padding-right-2'}
                 startValue={advancedSearchForm.caseSearchByName.startDate}
                 onChangeEnd={e => {
