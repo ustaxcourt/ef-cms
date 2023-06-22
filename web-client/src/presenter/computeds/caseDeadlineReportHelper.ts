@@ -46,16 +46,33 @@ export const caseDeadlineReportHelper = (
         .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR);
   }
 
-  caseDeadlines = caseDeadlines.map(d => ({
-    ...d,
-    associatedJudgeFormatted: applicationContext
-      .getUtilities()
-      .getJudgeLastName(d.associatedJudge),
-    caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
-    formattedDeadline: applicationContext
-      .getUtilities()
-      .formatDateString(d.deadlineDate, 'MMDDYY'),
-  }));
+  caseDeadlines = caseDeadlines.map(d => {
+    const inConsolidatedGroup = !!d.leadDocketNumber;
+    const inLeadCase = d.leadDocketNumber === d.docketNumber;
+    let consolidatedIconTooltipText;
+
+    if (inConsolidatedGroup) {
+      if (inLeadCase) {
+        consolidatedIconTooltipText = 'Lead case';
+      } else {
+        consolidatedIconTooltipText = 'Consolidated case';
+      }
+    }
+
+    return {
+      ...d,
+      associatedJudgeFormatted: applicationContext
+        .getUtilities()
+        .getJudgeLastName(d.associatedJudge),
+      caseTitle: applicationContext.getCaseTitle(d.caseCaption || ''),
+      consolidatedIconTooltipText,
+      formattedDeadline: applicationContext
+        .getUtilities()
+        .formatDateString(d.deadlineDate, 'MMDDYY'),
+      inConsolidatedGroup,
+      inLeadCase,
+    };
+  });
 
   return {
     caseDeadlines,
