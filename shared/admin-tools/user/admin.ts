@@ -1,16 +1,16 @@
-const axios = require('axios');
-const { CognitoIdentityServiceProvider } = require('aws-sdk');
-const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
-const {
+import { CognitoIdentityServiceProvider } from 'aws-sdk';
+import {
   checkEnvVar,
   generatePassword,
   getClientId,
   getUserPoolId,
-} = require('../util');
+} from '../util';
+import axios from 'axios';
+const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
 let cachedAuthToken;
 
-const enableUser = async email => {
+export const enableUser = async email => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito
@@ -21,7 +21,7 @@ const enableUser = async email => {
     .promise();
 };
 
-const disableUser = async email => {
+export const disableUser = async email => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
   await cognito
@@ -32,10 +32,7 @@ const disableUser = async email => {
     .promise();
 };
 
-/**
- * This activates the admin user in Cognito so we can perform actions
- */
-const activateAdminAccount = async () => {
+export const activateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -61,10 +58,7 @@ const activateAdminAccount = async () => {
   }
 };
 
-/**
- * This disables the admin in Cognito for security
- */
-const deactivateAdminAccount = async () => {
+export const deactivateAdminAccount = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -79,7 +73,7 @@ const deactivateAdminAccount = async () => {
 /**
  * This verifies that the USTC admin user is disabled in Cognito
  */
-const verifyAdminUserDisabled = async ({ attempt }) => {
+export const verifyAdminUserDisabled = async ({ attempt }) => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId(cognito);
 
@@ -126,12 +120,7 @@ const verifyAdminUserDisabled = async ({ attempt }) => {
   }
 };
 
-/**
- * Get an authentication token for the admin account
- *
- * @returns {String} token to use for authentication
- */
-const getAuthToken = async () => {
+export const getAuthToken = async () => {
   if (cachedAuthToken) {
     return cachedAuthToken;
   }
@@ -204,7 +193,7 @@ const setPassword = async ({ Password, Permanent = false, Username }) => {
  * @param {String} providers.role The user's role
  * @param {String} providers.section The user's section at the Court
  */
-const createDawsonUser = async ({
+export const createDawsonUser = async ({
   deployingColorUrl,
   setPermanentPassword = false,
   user,
@@ -239,7 +228,7 @@ const createDawsonUser = async ({
   }
 };
 
-const createAdminAccount = async () => {
+export const createAdminAccount = async () => {
   // does the user exist?
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
@@ -292,12 +281,3 @@ const createAdminAccount = async () => {
     .promise();
   return true;
 };
-
-exports.createAdminAccount = createAdminAccount;
-exports.getAuthToken = getAuthToken;
-exports.activateAdminAccount = activateAdminAccount;
-exports.deactivateAdminAccount = deactivateAdminAccount;
-exports.createDawsonUser = createDawsonUser;
-exports.enableUser = enableUser;
-exports.disableUser = disableUser;
-exports.verifyAdminUserDisabled = verifyAdminUserDisabled;

@@ -108,7 +108,7 @@ jobs:
           name: Admin User Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.js
+              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
             else
               echo "skipping…"
             fi
