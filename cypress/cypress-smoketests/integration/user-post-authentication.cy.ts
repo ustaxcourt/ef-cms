@@ -60,8 +60,6 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
       login(token);
     });
 
-    // possibly create a new petitioner or generate a new user within the test (AND CLEAN UP)
-
     it('should add an email to the party on the case', () => {
       goToCaseDetail(testData.createdPaperDocketNumber);
 
@@ -82,8 +80,6 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
       verifyEmailChange();
     });
   });
-
-  // TODO: WRITE A DEVEX TASK TO CLEAN UP MOCK USERS CREATED FROM SMOKETESTS
 } else {
   describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
     it('should skip', () => {
