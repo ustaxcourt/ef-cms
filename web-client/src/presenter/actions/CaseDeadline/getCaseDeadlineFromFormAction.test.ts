@@ -47,6 +47,38 @@ describe('getCaseDeadlineFromFormAction', () => {
         caseDetail: {
           associatedJudge: mockJudge,
           docketNumber: mockDocketNumber,
+          leadDocketNumber: mockDocketNumber,
+        },
+        form: {
+          day: 5,
+          month: 2,
+          searchError: {},
+          year: 1993,
+        },
+      },
+    });
+
+    expect(result.output).toEqual({
+      associatedJudge: mockJudge,
+      deadlineDate: computedDateFromProps,
+      docketNumber: mockDocketNumber,
+      leadDocketNumber: mockDocketNumber,
+    });
+  });
+
+  it('returns a caseDeadline with props.computedDate and form values when props.computedDeadline is defined when case does not have a leadDocketNumber', async () => {
+    const result = await runAction(getCaseDeadlineFromFormAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedDate: computedDateFromProps,
+      },
+      state: {
+        caseDetail: {
+          associatedJudge: mockJudge,
+          docketNumber: mockDocketNumber,
+          leadDocketNumber: undefined,
         },
         form: {
           day: 5,
