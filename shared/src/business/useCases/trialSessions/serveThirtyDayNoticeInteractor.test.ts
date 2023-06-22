@@ -6,7 +6,10 @@ import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { ThirtyDayNoticeOfTrialRequiredInfo } from '../../utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
+import {
+  docketClerkUser,
+  petitionsClerkUser,
+} from '../../../test/mockUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 
 describe('serveThirtyDayNoticeInteractor', () => {
@@ -55,10 +58,23 @@ describe('serveThirtyDayNoticeInteractor', () => {
       mockCase = cloneDeep(MOCK_CASE);
     });
 
-    it('should serve a NOTT 30 day notice on each case in a trial session', async () => {
+    it.only('should serve a 30 day notice of trial(NOTT) on any case in a trial session with at least 1 pro se petitioner', async () => {
+      const caseWithRepresentedPetitioner = cloneDeep(mockCase);
+      caseWithRepresentedPetitioner.privatePractitioners = [
+        {
+          representing: [
+            caseWithRepresentedPetitioner.petitioners[0].contactId,
+          ],
+        },
+      ];
+      const caseWithProSePetitioner = cloneDeep(mockCase);
+      caseWithProSePetitioner.privatePractitioners = [];
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+        .getCaseByDocketNumber.mockResolvedValueOnce(
+          caseWithRepresentedPetitioner,
+        )
+        .mockResolvedValueOnce(caseWithProSePetitioner);
       applicationContext
         .getPersistenceGateway()
         .getTrialSessionById.mockResolvedValue(trialSession);
@@ -86,7 +102,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       };
       expect(
         applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
-      ).toHaveBeenCalledTimes(trialSession.caseOrder!.length);
+      ).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
       ).toHaveBeenCalledWith({
@@ -95,7 +111,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       });
       expect(
         applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
-      ).toHaveBeenCalledTimes(trialSession.caseOrder!.length);
+      ).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
       ).toHaveBeenCalledWith(expect.anything(), {
