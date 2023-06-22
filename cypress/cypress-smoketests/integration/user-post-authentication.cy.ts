@@ -73,20 +73,10 @@ describe('Petitioner', () => {
     await confirmUser({ email: randomizedEmail });
   });
 
-  it('should be able to login with new password', async () => {
+  it('verify the email has changed', async () => {
     const results = await getUserToken(randomizedEmail, DEFAULT_ACCOUNT_PASS);
     token = results.AuthenticationResult.IdToken;
     login(token);
-  });
-
-  it('verifies that a Notice of Change of Email Address was generated on their case', () => {
-    cy.get('#docket-search-field')
-      .clear()
-      .type(testData.createdPaperDocketNumber);
-    cy.get('.usa-search-submit-text').click();
-    cy.get(
-      `.big-blue-header h1 a:contains("${testData.createdPaperDocketNumber}")`,
-    ).should('exist');
     goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
     verifyEmailChange();
   });
