@@ -71,68 +71,74 @@ export const serveThirtyDayNoticeInteractor = async (
         applicationContext,
         docketNumber: aCase.docketNumber,
       });
+
     const caseEntity = new Case(rawCase, { applicationContext });
 
-    if(caseEntity.getPractitionersRepresenting()) {
-      // I need help. Take your time though. can we log off please?
-      // i have a lot to do
-      yeah
-      continue;
+    for (const petitioner of caseEntity.petitioners) {
+      if (
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+          petitioner.contactId,
+        )
+      ) {
+        const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
+          caseCaption: caseEntity.caseCaption,
+        });
+
+        const noticePdf = await applicationContext
+          .getDocumentGenerators()
+          .thirtyDayNoticeOfTrial({
+            applicationContext,
+            data: {
+              caseCaptionExtension,
+              caseTitle,
+              docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+              judgeName: trialSession.judge!.name,
+              proceedingType: trialSession.proceedingType,
+              scopeType: trialSession.sessionScope,
+              trialDate: trialSession.startDate,
+              trialLocation: {
+                address1: trialSession.address1,
+                address2: trialSession.address2,
+                city: trialSession.city,
+                courthouseName: trialSession.courthouseName,
+                postalCode: trialSession.postalCode,
+                state: trialSession.state,
+              },
+            },
+          });
+
+        await applicationContext
+          .getUseCaseHelpers()
+          .createAndServeNoticeDocketEntry(applicationContext, {
+            caseEntity,
+            documentInfo: {
+              documentTitle: thirtyDayNoticeDocumentInfo!.documentTitle,
+              documentType: thirtyDayNoticeDocumentInfo!.documentType,
+              eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+            },
+            newPdfDoc: paperServicePdf,
+            noticePdf,
+            userId: currentUser.userId,
+          });
+
+        pdfsAppended++;
+
+        hasPaperService =
+          hasPaperService ||
+          caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
+
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: 'paper_service_updated',
+              pdfsAppended,
+            },
+            userId: currentUser.userId,
+          });
+      }
     }
-
-    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
-      caseCaption: caseEntity.caseCaption,
-    });
-
-    const noticePdf = await applicationContext
-      .getDocumentGenerators()
-      .thirtyDayNoticeOfTrial({
-        applicationContext,
-        data: {
-          caseCaptionExtension,
-          caseTitle,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          judgeName: trialSession.judge!.name,
-          proceedingType: trialSession.proceedingType,
-          scopeType: trialSession.sessionScope,
-          trialDate: trialSession.startDate,
-          trialLocation: {
-            address1: trialSession.address1,
-            address2: trialSession.address2,
-            city: trialSession.city,
-            courthouseName: trialSession.courthouseName,
-            postalCode: trialSession.postalCode,
-            state: trialSession.state,
-          },
-        },
-      });
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .createAndServeNoticeDocketEntry(applicationContext, {
-        caseEntity,
-        documentInfo: {
-          documentTitle: thirtyDayNoticeDocumentInfo!.documentTitle,
-          documentType: thirtyDayNoticeDocumentInfo!.documentType,
-          eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
-        },
-        newPdfDoc: paperServicePdf,
-        noticePdf,
-        userId: currentUser.userId,
-      });
-
-    pdfsAppended++;
-    hasPaperService =
-      hasPaperService ||
-      caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'paper_service_updated',
-        pdfsAppended,
-      },
-      userId: currentUser.userId,
-    });
   }
 
   let pdfUrl: string | undefined = undefined;
