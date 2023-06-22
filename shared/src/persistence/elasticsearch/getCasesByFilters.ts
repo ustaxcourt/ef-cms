@@ -24,6 +24,7 @@ export const getCasesByFilters = async ({
     'caseCaption',
     'caseType',
     'docketNumber',
+    'leadDocketNumber',
     'preferredTrialCity',
     'receivedAt',
     'status',
@@ -60,6 +61,33 @@ export const getCasesByFilters = async ({
     filters.push(caseTypeFilters);
   }
 
+  if (params.preferredTrialCities.length) {
+    const preferredTrialCityFilters = {
+      terms: {
+        'preferredTrialCity.S': params.preferredTrialCities,
+      },
+    };
+    filters.push(preferredTrialCityFilters);
+  }
+
+  if (params.judges.length) {
+    const shouldArray: Object[] = [];
+    params.judges.forEach(judge => {
+      const associatedJudgeFilters = {
+        match: {
+          'associatedJudge.S': judge,
+        },
+      };
+      shouldArray.push(associatedJudgeFilters);
+    });
+    const shouldObject: QueryDslQueryContainer = {
+      bool: {
+        should: shouldArray,
+      },
+    };
+    filters.push(shouldObject);
+  }
+
   if (params.filingMethod !== 'all') {
     const filingMethodFilter = {
       match: {
@@ -67,6 +95,24 @@ export const getCasesByFilters = async ({
       },
     };
     filters.push(filingMethodFilter);
+  }
+
+  if (params.procedureType !== 'All') {
+    const procedureTypeFilter = {
+      terms: {
+        'procedureType.S': [params.procedureType],
+      },
+    };
+    filters.push(procedureTypeFilter);
+  }
+
+  if (params.highPriority) {
+    const procedureTypeFilter = {
+      match: {
+        'highPriority.BOOL': true,
+      },
+    };
+    filters.push(procedureTypeFilter);
   }
 
   const searchResults = await applicationContext.getSearchClient().search({

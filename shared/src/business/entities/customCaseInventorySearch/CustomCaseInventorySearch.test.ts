@@ -120,6 +120,36 @@ describe('CustomCaseInventorySearch', () => {
     ).toBeUndefined();
   });
 
+  it('should not allow procedure types that are not All, Regular, nor Small', () => {
+    const customCaseInventorySearch = new CustomCaseInventorySearch({
+      procedureType: 'Big',
+    });
+
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.procedureType,
+    ).toBeDefined();
+  });
+
+  it('should allow procedure types that are either All, Regular, nor Small', () => {
+    const customCaseInventorySearch = new CustomCaseInventorySearch({
+      procedureType: 'Regular',
+    });
+
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.procedureType,
+    ).toBeUndefined();
+  });
+
+  it('should not allow high priority to be undefined', () => {
+    const customCaseInventorySearch = new CustomCaseInventorySearch({
+      procedureType: 'Big',
+    });
+
+    expect(
+      customCaseInventorySearch.getFormattedValidationErrors()?.procedureType,
+    ).toBeDefined();
+  });
+
   it('should not have validation errors when searchAfter contains a pk and receivedAt value', () => {
     const customCaseInventorySearch = new CustomCaseInventorySearch({
       searchAfter: {
