@@ -334,6 +334,7 @@ import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDo
 import { serveDocumentCompleteSequence } from './sequences/serveDocumentCompleteSequence';
 import { serveDocumentErrorSequence } from './sequences/serveDocumentErrorSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
+import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -860,6 +861,7 @@ export const presenterSequences = {
   serveDocumentCompleteSequence,
   serveDocumentErrorSequence,
   servePaperFiledDocumentSequence,
+  serveThirtyDayNoticeOfTrialSequence,
   setCaseDetailPageTabSequence,
   setCaseDetailPrimaryTabSequence,
   setCaseTypeToDisplaySequence,

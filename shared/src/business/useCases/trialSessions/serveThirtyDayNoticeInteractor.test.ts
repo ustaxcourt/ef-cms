@@ -151,8 +151,9 @@ describe('serveThirtyDayNoticeInteractor', () => {
     });
 
     it('should generate a paper service PDF when at least one of the parties on a case in the trial session has requested paper service', async () => {
-      mockCase.privatePractitioners = [
+      mockCase.petitioners = [
         {
+          ...mockCase.petitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ];
@@ -180,6 +181,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext: expect.anything(),
         message: {
           action: 'paper_service_complete',
+          hasPaper: true,
           pdfUrl: mockPdfUrl,
         },
         userId: petitionsClerkUser.userId,

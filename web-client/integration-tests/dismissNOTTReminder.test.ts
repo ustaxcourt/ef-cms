@@ -10,7 +10,7 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionDetailsHelper } from '../src/presenter/computeds/trialSessionDetailsHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('petitions clerk views NOTT reminder on calendared trial session within 30-35 day range', () => {
+describe('Dismiss NOTT reminder on calendared trial session within 30-35 day range', () => {
   const cerebralTest = setupTest();
 
   const trialLocation = `Seattle, Washington, ${Date.now()}`;
@@ -39,21 +39,22 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
     cerebralTest.closeSocket();
   });
 
-  describe(`Create trial session with Small session type for '${trialLocation}'`, () => {
+  describe(`Docket clerk creates Small trial session in '${trialLocation}'`, () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(cerebralTest, overrides);
   });
 
-  describe('petitions clerk sets calendar for trial session', () => {
+  describe('Petitions clerk sets calendar for trial session', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkViewsNewTrialSession(cerebralTest);
     petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   });
 
-  describe('docket clerk views new trial session in trial session list', () => {
+  describe('Docket clerk views calendared trial session in trial session list', () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     it('should see the NOTT reminder icon on the trial session list', async () => {
       await cerebralTest.runSequence('gotoTrialSessionsSequence');
+
       expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
       const trialSessionFormatted: any = runCompute(
@@ -119,7 +120,7 @@ describe('petitions clerk views NOTT reminder on calendared trial session within
     });
   });
 
-  describe('petitions clerk views new trial session in trial session list', () => {
+  describe('Petitions clerk views calendared trial session in trial session list', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     it('should go to the created trial session', async () => {
       await cerebralTest.runSequence('gotoTrialSessionsSequence', {

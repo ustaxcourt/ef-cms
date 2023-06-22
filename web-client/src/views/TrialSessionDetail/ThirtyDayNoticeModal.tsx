@@ -7,8 +7,8 @@ export function ThirtyDayNoticeModal() {
       cancelLabel="Dismiss Reminder"
       confirmLabel="Yes, Serve"
       title="Serve 30 Day Notice?"
-      onCancelSequence="dismissModalSequence"
-      onConfirmSequence="dismissThirtyDayTrialAlertSequence"
+      onCancelSequence="dismissThirtyDayTrialAlertSequence"
+      onConfirmSequence="serveThirtyDayNoticeOfTrialSequence"
     >
       <p>
         The following document will be served on all parties:
