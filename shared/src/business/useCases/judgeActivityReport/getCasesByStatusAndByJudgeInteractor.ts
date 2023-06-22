@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { CavAndSubmittedCaseTypes } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -55,7 +56,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     statuses,
   }: {
     judgesSelection: string[];
-    statuses: string[];
+    statuses: CavAndSubmittedCaseTypes;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

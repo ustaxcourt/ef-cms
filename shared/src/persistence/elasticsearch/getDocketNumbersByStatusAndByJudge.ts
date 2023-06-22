@@ -1,3 +1,4 @@
+import { CavAndSubmittedCaseTypes } from 'shared/src/business/entities/EntityConstants';
 import { search } from './searchClient';
 
 /**
@@ -12,7 +13,11 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
   judgeName,
   statuses,
-}) => {
+}: {
+  statuses: CavAndSubmittedCaseTypes;
+  applicationContext: IApplicationContext;
+  judgeName: string;
+}): Promise<{ docketNumber: string }[]> => {
   const source = ['docketNumber'];
 
   const searchParameters = {
