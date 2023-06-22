@@ -1,8 +1,8 @@
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import joiDate from '@hapi/joi-date';
-import joiImported from 'joi';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
 
-const joi = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(joiDate);
 
 export class DeadlineSearch extends JoiValidationEntity {
   public startDate: string;
