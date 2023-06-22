@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.5.0
-define: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.5
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.5
 
 commands:
   npm-and-cypress-install:
@@ -62,7 +62,7 @@ commands:
             - node_modules
 
 jobs:
-  prepare-for-glue-job: # LOWER ENV ONLY
+  prepare-for-glue-job:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -77,15 +77,24 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Setup the Deploy Table for a Glue Job
+          name: Setup the deploy table for a glue job
           command: |
             ./scripts/setup-deploy-table-for-glue-job.sh
       - run:
           name: Delete all existing dynamodb tables and elasticsearch clusters
           command: |
             ./scripts/delete-all-persistence.sh
+      - run:
+          name: Kick off a deployment
+          command: |
+            VCS=<< pipeline.project.type >>
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}"
 
-  start-glue-job: # PROD ONLY
+  start-glue-job:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -104,25 +113,15 @@ jobs:
           command: |
             npm run deploy:glue-cron -- $ENV
       - run:
-          name: Determine Destination Environment
-          command: |
-            GLUE_DESTINATION_ENV="test" # TODO: read this from...somewhere???
-            echo "export GLUE_DESTINATION_ENV=${GLUE_DESTINATION_ENV}" >> $BASH_ENV
-      - run:
-          name: Setup Destination Table Var
-          command: |
-            GLUE_DESTINATION_TABLE_VERSION="alpha"
-            echo "export GLUE_DESTINATION_TABLE=efcms-${GLUE_DESTINATION_ENV}-${GLUE_DESTINATION_TABLE_VERSION}" >> $BASH_ENV
-      - run:
           name: Start Glue Job
           command: |
-            npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts "$GLUE_DESTINATION_TABLE"
+            npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts efcms-test-alpha
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |
             ./web-api/workflow-terraform/glue-cron/bin/enable.sh
 
-  disable-glue-cron: # PROD ONLY
+  disable-glue-cron:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -590,148 +589,70 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
       only:
         - prod
 
+build-and-deploy-defaults: &build-and-deploy-defaults
+  filters:
+    branches:
+      only:
+        - develop
+        - experimental1
+        - experimental2
+        - experimental3
+        - experimental4
+        - experimental5
+        - irs
+        - migration
+        - staging
+        - test
+
 workflows:
   version: 2
 
   build-and-deploy:
     jobs:
       - deploy:
-          filters:
-            branches:
-              only:
-                - test
-                - develop
-                - irs
-                - staging
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
+          <<: *build-and-deploy-defaults
       - migrate:
+          <<: *build-and-deploy-defaults
           requires:
             - deploy
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
       - wait-for-migration:
+          <<: *build-and-deploy-defaults
           type: approval
           requires:
             - migrate
       - prepare-for-reindex:
+          <<: *build-and-deploy-defaults
           requires:
             - wait-for-migration
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
       - wait-for-reindex:
+          <<: *build-and-deploy-defaults
           type: approval
           requires:
             - prepare-for-reindex
       - disable-reindex-cron:
+          <<: *build-and-deploy-defaults
           requires:
             - wait-for-reindex
       - smoketests:
+          <<: *build-and-deploy-defaults
           requires:
             - disable-reindex-cron
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
       - loadtests:
+          <<: *build-and-deploy-defaults
           requires:
             - smoketests
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
       - smoketests-readonly:
+          <<: *build-and-deploy-defaults
           requires:
             - loadtests
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
       - switch-colors:
+          <<: *build-and-deploy-defaults
           requires:
             - smoketests-readonly
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
       - cleanup:
+          <<: *build-and-deploy-defaults
           requires:
             - switch-colors
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
 
   build-and-deploy-with-context:
     jobs:
@@ -797,3 +718,29 @@ workflows:
           requires:
             - backup-source-dynamo-table
             - delete-api-mappings
+
+  prepare-test-env-for-glue-job:
+    when:
+      equal: [ prepare-test-env-for-glue-job-schedule, << pipeline.schedule.name >> ]
+    jobs:
+      - prepare-for-glue-job:
+          filters:
+            branches:
+              only:
+                - test
+
+  glue-to-test:
+    when:
+      equal: [ perform-glue-job-to-test-schedule, << pipeline.schedule.name >> ]
+    jobs:
+      - start-glue-job:
+          <<: *build-and-deploy-with-context-defaults
+      - wait-for-glue-job:
+          <<: *build-and-deploy-with-context-defaults
+          type: approval
+          requires:
+            - start-glue-job
+      - disable-glue-cron:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - wait-for-glue-job
