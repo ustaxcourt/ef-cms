@@ -304,7 +304,7 @@ jobs:
           name: 'Pa11y Smoke Tests'
           command: npm run test:pa11y:smoketests
       - store_artifacts:
-          path: /root/project/cypress-smoketests/videos/
+          path: /root/project/cypress/cypress-smoketests/videos/
 
   smoketests-readonly:
     docker:
