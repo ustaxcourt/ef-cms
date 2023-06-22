@@ -158,6 +158,7 @@ export const serveThirtyDayNoticeInteractor = async (
     applicationContext,
     message: {
       action: 'paper_service_complete',
+      hasPaper: hasPaperService,
       pdfUrl,
     },
     userId: currentUser.userId,
