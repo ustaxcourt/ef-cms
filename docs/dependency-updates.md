@@ -24,6 +24,9 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using
    getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
+
+   > **Why am I seeing a medium severity for `semver`?**(6/22/2023)
+   > Semver is the versioner used for npm itself and has > 250M downloads weekly. Semver 7.5.2 is a nested dependency for our packages and we must wait until a fix is pushed out. Considering the use of this package in npm itself I would expect a fix soon.
 4. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
