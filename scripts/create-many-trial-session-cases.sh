@@ -3,14 +3,15 @@
 # shellcheck disable=SC1073
 # shellcheck disable=SC2086
 
-trialSessionId="[PLACE TOKEN HERE]"
-token="[PLACE TOKEN HERE]"
-targetExperimentalEnvironment="[EXP OF CHOICE]"
-currentColor="[CURRENT COLOR OF EXP]"
+
+trialSessionId="[INSERT ID HERE]"
+token="[INSERT TOKEN HERE]"
+targetExperimentalEnvironment="[INSERT ENV HERE]"
+currentColor="[INSERT COLOR HERE]"
 hostName="api-${currentColor}.${targetExperimentalEnvironment}.ustc-case-mgmt.flexion.us"
 baseUrl="https://${hostName}"
-petitionFileId="[PLACE HERE]"
-numberOfCasesToCreate=200
+petitionFileId="[INSERT ID HERE]"
+numberOfCasesToCreate=5
 
 createCaseAndAddToTrialSession(){
   local docketNumber
@@ -27,8 +28,8 @@ createCaseAndAddToTrialSession(){
     -H 'sec-fetch-dest: empty' \
     -H 'sec-fetch-mode: cors' \
     -H 'sec-fetch-site: same-site' \
-    -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36' \
-    --data-raw '{"petitionFileId":"'${petitionFileId}'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Raven Serrano","address1":"287 South Green Hague Extension","address2":"Omnis nobis cupidita","address3":"Dolor architecto bea","city":"Labore ipsum a adip","postalCode":"22633","paperPetitionEmail":"tinyg@mailinator.com","hasConsentedToEService":true,"phone":"+1 (166) 579-9531","state":"WY"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":true,"statistics":[],"isPaper":true,"petitionFile":{},"petitionFileSize":3028,"partyType":"Petitioner","orderForCds":false,"caseCaption":"Raven Serrano, Petitioner","mailingDate":"asdf","petitionPaymentStatus":"Paid","orderForFilingFee":false,"paymentDateDay":"02","paymentDateMonth":"05","paymentDateYear":"2023","petitionPaymentMethod":"check","receivedAt":"2023-03-27T04:00:00.000Z","petitionPaymentDate":"2023-05-02T04:00:00.000Z","caseType":"Deficiency"}}' \
+    -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
+    --data-raw '{"petitionFileId":"'$petitionFileId'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Rachel Foreman","address1":"688 Green Nobel Road","address2":"Rerum atque facere q","address3":"Deleniti explicabo ","city":"In est tempor adipis","postalCode":"38854","phone":"+1 (266) 459-9362","state":"NJ"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":true,"statistics":[],"isPaper":true,"partyType":"Petitioner","orderForCds":false,"petitionFile":{},"petitionFileSize":3028,"caseCaption":"Rachel Foreman, Petitioner","mailingDate":"Test","petitionPaymentStatus":"Paid","orderForFilingFee":false,"paymentDateDay":"29","paymentDateMonth":"05","paymentDateYear":"2023","petitionPaymentMethod":"Check","caseType":"Other","receivedAt":"2023-05-28T04:00:00.000Z","petitionPaymentDate":"2023-05-29T04:00:00.000Z","petitionPaymentWaivedDate":null}}' \
     --compressed | jq -r '.docketNumber')
 
   echo "created case $docketNumber"
