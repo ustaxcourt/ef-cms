@@ -1,8 +1,13 @@
 import { confirmUser } from '../support/pages/login';
+import {
+  editPetitionerEmail,
+  goToCaseDetail,
+  verifyEmailChange,
+} from '../support/pages/case-detail';
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
-import { goToCaseDetail } from '../support/pages/case-detail';
+import { goToCaseDetailPetitioner } from '../support/pages/petitioner-dashboard';
 import {
   goToCreateCase,
   goToReviewCase,
@@ -59,18 +64,7 @@ describe('Admission clerk', () => {
   it('should add an email to the party on the case', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
 
-    // go to edit petitioner and add an email
-    cy.get('#tab-case-information').click();
-    cy.get('#tab-parties').click();
-    cy.get('.edit-petitioner-button').click();
-    cy.get('#updatedEmail').type(randomizedEmail);
-    cy.get('#confirm-email').type(randomizedEmail);
-    cy.get('#submit-edit-petitioner-information').click();
-    cy.get('#modal-button-confirm').click();
-    cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
-    cy.get(`div.parties-card:contains(${randomizedEmail} (Pending))`).should(
-      'exist',
-    );
+    editPetitionerEmail(randomizedEmail);
   });
 });
 
@@ -93,10 +87,8 @@ describe('Petitioner', () => {
     cy.get(
       `.big-blue-header h1 a:contains("${testData.createdPaperDocketNumber}")`,
     ).should('exist');
-    cy.get('tbody:contains(NOCE)').should('exist');
-    cy.get('#tab-case-information').click();
-    cy.get('#tab-parties').click();
-    cy.get('div.parties-card:contains((Pending))').should('not.exist');
+    goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
+    verifyEmailChange();
   });
 });
 
