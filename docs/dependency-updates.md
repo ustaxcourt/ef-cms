@@ -49,10 +49,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-#### puppeteer / puppeteer-core
-
-`puppeteer` and `puppeteer-core` have a major version update to ^19.x.x, but they need to stay at the same major version as `chrome-aws-lambda` (17.1.3). If we upgrade `puppeteer`, we see a `cannot read property 'prototype' of undefined` error. As of 02/27/23 `@sparticuz/chromium` provides an upgrade path for `@sparticuz/chromium` (now deprecated) which may allow `puppeteer` to finally be updated.
-
 #### s3rver
 
 Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver).
