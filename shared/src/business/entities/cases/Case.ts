@@ -1308,7 +1308,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} petitionerContactId the id of the petitioner
    * @returns {Object} the practitioner
    */
-  getPractitionersRepresenting(petitionerContactId) {
+  getPractitionersRepresenting(petitionerContactId: string) {
     return getPractitionersRepresenting(this, petitionerContactId);
   }
 
@@ -2174,8 +2174,8 @@ export const getPetitionerByEmail = function (rawCase, userEmail) {
  * @returns {Object} the practitioner
  */
 export const getPractitionersRepresenting = function (
-  rawCase,
-  petitionerContactId,
+  rawCase: RawCase,
+  petitionerContactId: string,
 ) {
   return rawCase.privatePractitioners.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),

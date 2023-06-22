@@ -35,6 +35,18 @@ export const serveThirtyDayNoticeInteractor = async (
       trialSessionId: request.trialSessionId,
     });
 
+  if (!trialSession.caseOrder?.length) {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'paper_service_complete',
+        pdfUrl: undefined,
+      },
+      userId: currentUser.userId,
+    });
+    return;
+  }
+
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();
   const thirtyDayNoticeDocumentInfo = COURT_ISSUED_EVENT_CODES.find(
@@ -45,7 +57,7 @@ export const serveThirtyDayNoticeInteractor = async (
     applicationContext,
     message: {
       action: 'paper_service_started',
-      totalPdfs: trialSession.caseOrder.length, // make message identical when sent.
+      totalPdfs: trialSession.caseOrder.length,
     },
     userId: currentUser.userId,
   });
@@ -60,6 +72,13 @@ export const serveThirtyDayNoticeInteractor = async (
         docketNumber: aCase.docketNumber,
       });
     const caseEntity = new Case(rawCase, { applicationContext });
+
+    if(caseEntity.getPractitionersRepresenting()) {
+      // I need help. Take your time though. can we log off please?
+      // i have a lot to do
+      yeah
+      continue;
+    }
 
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
       caseCaption: caseEntity.caseCaption,
