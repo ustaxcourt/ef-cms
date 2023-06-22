@@ -1,4 +1,5 @@
 import * as client from '../../dynamodbClientService';
+import { AdminCreateUserRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { ROLES } from '../../../business/entities/EntityConstants';
 
 const createUserRecords = async ({
@@ -35,7 +36,7 @@ export const createNewPetitionerUser = async ({
 }) => {
   const { userId } = user;
 
-  const input = {
+  const input: AdminCreateUserRequest = {
     UserAttributes: [
       {
         Name: 'email_verified',
@@ -68,7 +69,7 @@ export const createNewPetitionerUser = async ({
 
   await applicationContext.getCognito().adminCreateUser(input).promise();
 
-  const newUser = await createUserRecords({
+  const newUser: RawUser = await createUserRecords({
     applicationContext,
     newUser: user,
     userId,
