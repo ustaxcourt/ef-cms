@@ -30,7 +30,7 @@ describe('Schedule A Trial Session', () => {
     preferredTrialCity: trialLocation2,
     trialLocation: trialLocation2,
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

@@ -11,23 +11,27 @@ type CreateTrialSessionOverrides = {
   trialDay?: string;
   trialYear?: string;
   trialLocation?: string;
-  trialClerk?: string;
+  trialClerk?: { name: string; userId: string };
   isSwingSession?: boolean;
   trialMonth?: string;
   swingSessionId?: string;
+  judge?: any;
 };
 
 export const docketClerkCreatesATrialSession = (
   cerebralTest,
-  overrides: CreateTrialSessionOverrides = {
-    isSwingSession: false,
-    maxCases: 100,
-    sessionType: SESSION_TYPES.hybrid,
-    trialDay: '12',
-    trialLocation: 'Seattle, Washington',
-    trialMonth: '12',
-    trialYear: '2025',
-  },
+  {
+    isSwingSession = false,
+    judge = undefined,
+    maxCases = 100,
+    sessionType = SESSION_TYPES.hybrid,
+    swingSessionId = undefined,
+    trialClerk = undefined,
+    trialDay = '12',
+    trialLocation = 'Seattle, Washington',
+    trialMonth = '12',
+    trialYear = '2025',
+  }: CreateTrialSessionOverrides = {},
 ) => {
   return it('Docket clerk starts a trial session', async () => {
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');
@@ -47,12 +51,12 @@ export const docketClerkCreatesATrialSession = (
 
     /* eslint-disable sort-keys-fix/sort-keys-fix */
     const createTrialSessionForm = {
-      maxCases: overrides.maxCases,
+      maxCases,
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      sessionType: overrides.sessionType,
-      startDateDay: overrides.trialDay,
+      sessionType,
+      startDateDay: trialDay,
       startDateMonth: '13',
-      startDateYear: overrides.trialYear,
+      startDateYear: trialYear,
       estimatedEndDateMonth: '01',
       estimatedEndDateDay: '01',
       estimatedEndDateYear: '1995',
@@ -61,11 +65,11 @@ export const docketClerkCreatesATrialSession = (
       state: 'WA',
       postalCode: '98101',
       chambersPhoneNumber: '1234567890',
-      judge: overrides.judge || {
+      judge: judge || {
         name: 'Cohen',
         userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
       },
-      trialClerk: overrides.trialClerk,
+      trialClerk,
     };
 
     for (let [key, value] of Object.entries(createTrialSessionForm)) {
@@ -85,18 +89,18 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'startDateMonth',
-      value: overrides.trialMonth,
+      value: trialMonth,
     });
 
-    if (!overrides.trialMonth) {
+    if (!trialMonth) {
       expect(cerebralTest.getState('form.term')).toEqual('Fall');
     }
 
-    expect(cerebralTest.getState('form.termYear')).toEqual(overrides.trialYear);
+    expect(cerebralTest.getState('form.termYear')).toEqual(trialYear);
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
-      value: overrides.trialLocation,
+      value: trialLocation,
     });
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
@@ -113,12 +117,12 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'swingSession',
-      value: overrides.isSwingSession,
+      value: isSwingSession,
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'swingSessionId',
-      value: overrides.swingSessionId,
+      value: swingSessionId,
     });
 
     await cerebralTest.runSequence('validateTrialSessionSequence');

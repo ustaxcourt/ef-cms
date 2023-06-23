@@ -2,11 +2,11 @@ import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATr
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest } from './helpers';
 
-const cerebralTest = setupTest();
-
-const TRIAL_CITY = 'Washington, District of Columbia';
-
 describe('Migrate legacy cases that are ready for trial', () => {
+  const cerebralTest = setupTest();
+
+  const TRIAL_CITY = 'Washington, District of Columbia';
+
   // note: leaving commented code here for documentation reasons
   const SEEDED_DOCKET_NUMBER_UNBLOCKED = '150-12';
   // const SEEDED_DOCKET_NUMBER_BLOCKED = '151-12';
@@ -15,7 +15,6 @@ describe('Migrate legacy cases that are ready for trial', () => {
   const options = {
     maxCases: 100,
     preferredTrialCity: TRIAL_CITY,
-    sessionType: 'Hybrid',
     trialLocation: TRIAL_CITY,
   };
 

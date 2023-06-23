@@ -4,8 +4,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsNewTrialSession = (
   cerebralTest,
-  checkCase,
-  calendarNote,
+  checkCase?,
+  calendarNote?,
 ) => {
   return it('Docket Clerk Views a new trial session', async () => {
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {

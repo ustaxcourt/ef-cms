@@ -5,7 +5,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 export const petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases = (
   cerebralTest,
   expectedCount,
-  hybridFilter = null,
+  hybridFilter?: string,
 ) => {
   return it(`Petitions Clerk Views A Hybrid Trial Sessions with "${
     hybridFilter || 'All'

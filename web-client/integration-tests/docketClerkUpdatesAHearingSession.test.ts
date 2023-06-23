@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
@@ -8,23 +9,25 @@ import { loginAs, setupTest, uploadPetition } from './helpers';
 describe('Docket Clerk updates a hearing session', () => {
   const cerebralTest = setupTest();
 
+  cerebralTest.createdTrialSessions = [];
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  cerebralTest.createdTrialSessions = [];
-
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+    const { docketNumber } = await uploadPetition(cerebralTest);
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   const trialLocation = `Hartford, Connecticut, ${Date.now()}`;
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, {
-    sessionType: 'Motion/Hearing',
+    sessionType: SESSION_TYPES.motionHearing,
     trialLocation,
   });
   docketClerkViewsTrialSessionList(cerebralTest);

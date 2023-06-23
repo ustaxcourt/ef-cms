@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
@@ -45,7 +46,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
     docketClerkCreatesATrialSession(cerebralTest, {
-      sessionType: 'Motion/Hearing',
+      sessionType: SESSION_TYPES.motionHearing,
       trialLocation,
     });
     docketClerkViewsTrialSessionList(cerebralTest);

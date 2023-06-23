@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkVerifiesPetitionReceiptLength } from './journey/docketClerkVerifiesPetitionReceiptLength';
@@ -19,7 +20,7 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   const overrides = {
     maxCases: 2,
     preferredTrialCity: 'Los Angeles, California',
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     trialLocation: 'Los Angeles, California',
   };
 

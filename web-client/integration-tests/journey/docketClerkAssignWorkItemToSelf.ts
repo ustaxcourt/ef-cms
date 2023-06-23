@@ -7,7 +7,7 @@ const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkAssignWorkItemToSelf = (
   cerebralTest,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
   return it('Docket clerk assigns the selected work items to self', async () => {
     await refreshElasticsearchIndex();
