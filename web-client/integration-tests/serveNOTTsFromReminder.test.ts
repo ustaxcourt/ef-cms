@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
 import { loginAs, setupTest, waitForCondition } from './helpers';
@@ -20,7 +21,7 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialDay:
       currentDate.day.toString().length === 1
         ? '0' + currentDate.day
