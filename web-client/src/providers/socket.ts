@@ -28,7 +28,7 @@ export const socketProvider = ({ socketRouter }) => {
     const token = app.getState('token');
     const clientConnectionId = app.getState('clientConnectionId');
     if (!socket) {
-      return new Promise((resolve, reject) => {
+      return new Promise<void>((resolve, reject) => {
         try {
           socket = createWebSocketClient({ clientConnectionId, token });
 

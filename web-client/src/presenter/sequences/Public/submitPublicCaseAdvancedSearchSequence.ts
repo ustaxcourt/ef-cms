@@ -1,7 +1,7 @@
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../../actions/clearSearchTermAction';
-import { defaultCaseSearchDatesAction } from '@web-client/presenter/actions/defaultCaseSearchDatesAction';
+import { defaultCaseSearchDatesAction } from '@web-client/presenter/actions/AdvancedSearch/defaultCaseSearchDatesAction';
 import { setAdvancedSearchResultsAction } from '../../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
