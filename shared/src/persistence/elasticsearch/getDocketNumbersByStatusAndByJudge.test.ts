@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASE_STATUS } from 'shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { getDocketNumbersByStatusAndByJudge } from './getDocketNumbersByStatusAndByJudge';
 import { judgeUser } from '../../test/mockUsers';
@@ -5,7 +6,7 @@ import { judgeUser } from '../../test/mockUsers';
 describe('getDocketNumbersByStatusAndByJudge', () => {
   const mockValidRequest = {
     judgeName: judgeUser.name,
-    statuses: ['CAV', 'Submitted'],
+    statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
   it('should obtain all cases with a status of "Submitted" or "CAV" associated with the given judge', async () => {

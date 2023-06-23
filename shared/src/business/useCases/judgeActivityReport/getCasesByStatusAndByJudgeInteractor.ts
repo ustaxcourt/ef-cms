@@ -1,4 +1,6 @@
 import { Case } from '../../entities/cases/Case';
+import { CavAndSubmittedCaseTypes } from '../../entities/EntityConstants';
+import { JudgeActivityReportStatusSearch } from '../../entities/judgeActivityReport/JudgeActivityReportStatusSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -55,7 +57,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     statuses,
   }: {
     judgesSelection: string[];
-    statuses: string[];
+    statuses: CavAndSubmittedCaseTypes;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -64,9 +66,10 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  /*
-    TODO: ADD VALIDATION BEFORE PERSISTENCE CALL OF judgesSelection AND statuses
-  */
+  new JudgeActivityReportStatusSearch({
+    judgesSelection,
+    statuses,
+  }).validate();
 
   const totalSubmittedAndCavResults = (
     await Promise.all(

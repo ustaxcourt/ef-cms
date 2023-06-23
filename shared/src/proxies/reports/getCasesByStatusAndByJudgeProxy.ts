@@ -1,3 +1,4 @@
+import { CavAndSubmittedCaseTypes } from 'shared/src/business/entities/EntityConstants';
 import { consolidatedCasesGroupCountMapResponseType } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
@@ -16,7 +17,7 @@ export const getCasesByStatusAndByJudgeInteractor = (
     statuses,
   }: {
     judgesSelection: string[];
-    statuses: string[];
+    statuses: CavAndSubmittedCaseTypes;
   },
 ): Promise<{
   cases: RawCase;
