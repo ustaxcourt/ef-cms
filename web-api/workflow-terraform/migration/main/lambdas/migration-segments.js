@@ -100,6 +100,10 @@ exports.processItems = async (
   applicationContext,
   { documentClient, items, ranMigrations, segment },
 ) => {
+  items = items.filter(item => {
+    return !item.pk.startsWith('streams-event-id');
+  });
+
   try {
     items = await exports.migrateRecords(applicationContext, {
       documentClient,
