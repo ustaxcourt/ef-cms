@@ -57,11 +57,13 @@ export const casePublicSearchInteractor = async (
     .getPersistenceGateway()
     .casePublicSearch({
       applicationContext,
-      countryType,
-      endDate: searchEndDate,
-      petitionerName,
-      petitionerState,
-      startDate: searchStartDate,
+      searchTerms: {
+        countryType,
+        endDate: searchEndDate,
+        petitionerName,
+        petitionerState,
+        startDate: searchStartDate,
+      },
     });
 
   const unsealedFoundCases = (
