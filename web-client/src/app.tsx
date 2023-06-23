@@ -43,6 +43,7 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons/faClipboardList';
 import { faClock as faClockSolid } from '@fortawesome/free-solid-svg-icons/faClock';
@@ -280,6 +281,7 @@ const app = {
       faUserCheck,
       faUserFriends,
       faWrench,
+      faChevronUp,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {
