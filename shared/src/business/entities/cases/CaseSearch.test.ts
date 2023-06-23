@@ -1,4 +1,3 @@
-import { CASE_SEARCH_MIN_YEAR } from '../EntityConstants';
 import { CaseSearch } from './CaseSearch';
 
 describe('Case Search entity', () => {
@@ -6,10 +5,10 @@ describe('Case Search entity', () => {
     const caseSearch = new CaseSearch({ petitionerName: 'Solomon Grundy' });
     expect(caseSearch).toMatchObject({
       countryType: undefined,
+      endDate: undefined,
       petitionerName: 'Solomon Grundy',
       petitionerState: undefined,
-      yearFiledMax: undefined,
-      yearFiledMin: CASE_SEARCH_MIN_YEAR,
+      startDate: undefined,
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
@@ -27,10 +26,10 @@ describe('Case Search entity', () => {
     );
   });
 
-  it('is valid with only yearFiledMin', () => {
+  it('is valid with only startDate', () => {
     const caseSearch = new CaseSearch({
       petitionerName: 'Solomon Grundy',
-      yearFiledMin: 2000,
+      startDate: '06/01/2000',
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
@@ -38,10 +37,10 @@ describe('Case Search entity', () => {
     expect(validationErrors).toEqual(null);
   });
 
-  it('is valid with only yearFiledMax', () => {
+  it('is valid with only endDate', () => {
     const caseSearch = new CaseSearch({
+      endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
-      yearFiledMax: 2000,
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
@@ -49,11 +48,11 @@ describe('Case Search entity', () => {
     expect(validationErrors).toEqual(null);
   });
 
-  it('is valid when yearFiledMin == yearFiledMax', () => {
+  it('is valid when startDate == endDate', () => {
     const caseSearch = new CaseSearch({
+      endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
-      yearFiledMax: 2000,
-      yearFiledMin: 2000,
+      startDate: '06/01/2000',
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
@@ -61,11 +60,11 @@ describe('Case Search entity', () => {
     expect(validationErrors).toEqual(null);
   });
 
-  it('is valid when yearFiledMin < yearFiledMax', () => {
+  it('is valid when startDate < endDate', () => {
     const caseSearch = new CaseSearch({
+      endDate: '06/01/2010',
       petitionerName: 'Solomon Grundy',
-      yearFiledMax: 2010,
-      yearFiledMin: 2000,
+      startDate: '06/01/2000',
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
@@ -73,15 +72,15 @@ describe('Case Search entity', () => {
     expect(validationErrors).toEqual(null);
   });
 
-  it('is invalid when yearFiledMin > yearFiledMax', () => {
+  it('is invalid when startDate > endDate', () => {
     const caseSearch = new CaseSearch({
+      endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
-      yearFiledMax: 2000,
-      yearFiledMin: 2010,
+      startDate: '06/01/2010',
     });
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
 
-    expect(validationErrors!.yearFiledMax).toBeDefined();
+    expect(validationErrors!.endDate).toBeDefined();
   });
 });

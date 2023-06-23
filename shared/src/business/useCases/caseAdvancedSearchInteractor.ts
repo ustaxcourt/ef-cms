@@ -14,7 +14,7 @@ import {
  * caseAdvancedSearchInteractor
  *
  * @param {object} applicationContext the application context
- * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
+ * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, endDate, startDate
  * @returns {object} the case data
  */
 export const caseAdvancedSearchInteractor = async (

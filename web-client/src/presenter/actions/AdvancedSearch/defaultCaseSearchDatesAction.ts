@@ -1,10 +1,11 @@
-import { FORMATS } from 'shared/src/business/utilities/DateHandler';
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * defaults the start or end dates based on what is set when submitting the form
  * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store used for setting state.workItem
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.store the cerebral store used for setting state.advancedSearchForm.caseSearchByName
  */
 export const defaultCaseSearchDatesAction = ({
   applicationContext,

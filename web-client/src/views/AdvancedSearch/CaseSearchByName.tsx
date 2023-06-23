@@ -145,21 +145,21 @@ export const CaseSearchByName = connect(
               </div>
             </div>
 
-            <div className="grid-row grid-gap margin-top-4">
+            <div className="grid-row grid-gap margin-top-4 margin-bottom-2">
               <DateRangePickerComponent
                 omitFormGroupClass
                 endDateErrorText={validationErrors.endDate}
                 endLabel="Date filed end date"
-                endName="caseCreationEndDate"
-                endPickerCls={'grid-col-6 padding-left-2'}
+                endName="caseSearchByNameEndDate"
+                endPickerCls={'desktop:grid-col-6 desktop:padding-left-2'}
                 endValue={advancedSearchForm.caseSearchByName.endDate}
                 formGroupCls={'margin-bottom-0'}
                 maxDate={caseSearchByNameHelper.today}
-                rangePickerCls={'grid-row grid-gap-3'}
+                rangePickerCls={'grid-row grid-gap-3 phone:grid-col-12'}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Date filed start date"
-                startName="caseCreationStartDate"
-                startPickerCls={'grid-col-6 padding-right-2'}
+                startName="caseSearchByNameStartDate"
+                startPickerCls={'desktop:grid-col-6 padding-right-2'}
                 startValue={advancedSearchForm.caseSearchByName.startDate}
                 onChangeEnd={e => {
                   updateCaseAdvancedSearchByNameFormValueSequence({
