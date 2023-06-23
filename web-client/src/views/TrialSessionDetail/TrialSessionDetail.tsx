@@ -53,7 +53,7 @@ export const TrialSessionDetail = connect(
             <WarningNotificationComponent
               alertWarning={{
                 dismissIcon: 'paper-plane',
-                dismissText: 'Yes, served',
+                dismissText: 'Serve/Dismiss',
                 message: formattedTrialSessionDetails.alertMessageForNOTT,
               }}
               dismissAlertSequence={showThirtyDayNoticeModalSequence}
