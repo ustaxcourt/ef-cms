@@ -1,41 +1,49 @@
-const {
-  courtIssuedDocumentDecorator,
-  CourtIssuedDocumentDefault,
-} = require('./CourtIssuedDocumentDefault');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
-
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function CourtIssuedDocumentTypeC() {}
-CourtIssuedDocumentTypeC.prototype.init = function init(rawProps) {
-  courtIssuedDocumentDecorator(this, rawProps);
-  this.docketNumbers = rawProps.docketNumbers;
-};
-
-CourtIssuedDocumentTypeC.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.docketNumbers);
-};
-
-CourtIssuedDocumentTypeC.schema = {
-  ...CourtIssuedDocumentDefault.schema,
-  docketNumbers: JoiValidationConstants.STRING.max(500).required(),
-};
-
-joiValidationDecorator(
-  CourtIssuedDocumentTypeC,
-  CourtIssuedDocumentTypeC.schema,
+import {
+  CourtIssuedDocument,
   VALIDATION_ERROR_MESSAGES,
-);
+} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-module.exports = {
-  CourtIssuedDocumentTypeC: validEntityDecorator(CourtIssuedDocumentTypeC),
-};
+export class CourtIssuedDocumentTypeC extends CourtIssuedDocument {
+  public attachments: boolean;
+  public documentTitle?: string;
+  public documentType: string;
+  public eventCode?: string;
+  public filingDate?: string;
+  public docketNumbers?: string;
+
+  constructor(rawProps) {
+    super('CourtIssuedDocumentTypeC');
+
+    this.attachments = rawProps.attachments || false;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.eventCode = rawProps.eventCode;
+    this.filingDate = rawProps.filingDate;
+    this.docketNumbers = rawProps.docketNumbers;
+  }
+
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    docketNumbers: JoiValidationConstants.STRING.max(500).required(),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+
+  getDocumentTitle() {
+    return replaceBracketed(this.documentTitle, this.docketNumbers);
+  }
+
+  getValidationRules() {
+    return CourtIssuedDocumentTypeC.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return CourtIssuedDocumentTypeC.VALIDATION_ERROR_MESSAGES;
+  }
+}
+
+export type RawCourtIssuedDocumentTypeC =
+  ExcludeMethods<CourtIssuedDocumentTypeC>;
