@@ -100,7 +100,6 @@ import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/
 import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '../../persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '../../persistence/dynamo/helpers/incrementCounter';
-import { isStandaloneRemoteSession } from '../entities/trialSessions/TrialSession';
 import { putWorkItemInOutbox } from '../../persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '../../persistence/localStorage/removeItem';
@@ -301,9 +300,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isSealedCase: jest.fn().mockImplementation(isSealedCase),
     isServed: jest.fn().mockImplementation(DocketEntry.isServed),
-    isStandaloneRemoteSession: jest
-      .fn()
-      .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),

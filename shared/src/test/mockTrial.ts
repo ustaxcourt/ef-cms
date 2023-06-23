@@ -51,6 +51,7 @@ export const MOCK_TRIAL_INPERSON: RawTrialSession = {
     { docketNumber: MOCK_CASE.docketNumber },
     { docketNumber: '123-45' },
   ],
+  chambersPhoneNumber: '3609087782',
   city: 'Scottsburg',
   entityName: 'TrialSession',
   isCalendared: true,

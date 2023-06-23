@@ -65,7 +65,6 @@ import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenan
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
-import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
@@ -784,7 +783,6 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
-      isStandaloneRemoteSession,
       isStringISOFormatted,
       isTodayWithinGivenInterval,
       isUserIdRepresentedByPrivatePractitioner,
