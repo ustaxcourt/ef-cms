@@ -60,6 +60,7 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
   - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` ^0.3.1 is incompatible with s3rver which is why there's a patch in place to make it compatible.
 - How does the patch run?
   - This runs as part of the `npm postinstall` step.
+- As of 6/23/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813). Ignoring high security vulnerability as this is a dev dependency and not included in production code.
 
 ### pdfjs-dist
 
