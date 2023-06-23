@@ -203,12 +203,7 @@ export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.submitted,
 ] as const;
 
-export const CAV_AND_SUBMITTED_CASE_STATUS_TYPES = Object.values(
-  CAV_AND_SUBMITTED_CASE_STATUS,
-);
-
-export type CavAndSubmittedCaseTypes =
-  (typeof CAV_AND_SUBMITTED_CASE_STATUS_TYPES)[number];
+export type CavAndSubmittedCaseTypes = typeof CAV_AND_SUBMITTED_CASE_STATUS;
 
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,

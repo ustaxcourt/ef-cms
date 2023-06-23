@@ -1,3 +1,5 @@
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
+import { JudgeActivityReportStatusSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportStatusSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -12,13 +14,15 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   get,
 }: ActionProps) => {
   const { judgesSelection } = get(state.judgeActivityReport.filters);
-  const { CASE_STATUS_TYPES } = applicationContext.getConstants();
+  const statuses = CAV_AND_SUBMITTED_CASE_STATUS;
+
+  new JudgeActivityReportStatusSearch({ judgesSelection, statuses }).validate();
 
   const { cases, consolidatedCasesGroupCountMap } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judgesSelection,
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      statuses,
     });
 
   return {

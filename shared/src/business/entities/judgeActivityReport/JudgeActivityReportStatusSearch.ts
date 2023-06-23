@@ -1,8 +1,9 @@
+import { CavAndSubmittedCaseTypes } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 
 export class JudgeActivityReportStatusSearch extends JoiValidationEntity {
-  public statuses: string[];
+  public statuses: CavAndSubmittedCaseTypes;
   public judgesSelection: string[];
 
   constructor(rawProps) {

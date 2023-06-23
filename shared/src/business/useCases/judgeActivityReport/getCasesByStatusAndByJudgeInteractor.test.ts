@@ -1,8 +1,10 @@
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
+  CAV_AND_SUBMITTED_CASE_STATUS,
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  CavAndSubmittedCaseTypes,
   PARTY_TYPES,
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
@@ -164,9 +166,12 @@ let expectedConsolidatedCasesGroupCountMap = {};
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
   const judgesSelection = [judgeUser.name];
-  const mockValidRequest = {
+  const mockValidRequest: {
+    judgesSelection: string[];
+    statuses: CavAndSubmittedCaseTypes;
+  } = {
     judgesSelection,
-    statuses: ['Submitted', 'CAV'],
+    statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
   beforeEach(() => {
@@ -185,13 +190,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   });
 
   it('should return an error when the search parameters are not valid', async () => {
-    // TODO: check validation for array of empty strings as invalid??
-
     await expect(
-      getCasesByStatusAndByJudgeInteractor(applicationContext, {
-        judgeName: judgeUser.name,
-        statuses: [undefined],
-      }),
+      getCasesByStatusAndByJudgeInteractor(applicationContext, {} as any),
     ).rejects.toThrow();
   });
 

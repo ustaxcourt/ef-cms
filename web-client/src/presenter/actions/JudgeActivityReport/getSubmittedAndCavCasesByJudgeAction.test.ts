@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
@@ -50,7 +50,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       ).mock.calls[0][1],
     ).toMatchObject({
       judgesSelection,
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      statuses: expect.arrayContaining(CAV_AND_SUBMITTED_CASE_STATUS),
     });
     expect(output.submittedAndCavCasesByJudge).toBe(mockReturnedCases);
     expect(
