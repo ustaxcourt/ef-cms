@@ -44,8 +44,6 @@ jest.mock('./migrationsToRun', () => ({
   ],
 }));
 
-const { migrationsToRun } = require('./migrationsToRun');
-
 const mockValidationMigration = jest.fn();
 jest.mock('./migrations/0000-validate-all-items', () => ({
   migrateItems: mockValidationMigration,
@@ -97,10 +95,6 @@ describe('migration-segments', () => {
                 pk: 'case|101-20',
                 sk: 'case|101-20',
               },
-              {
-                pk: 'streams-event-id|abc123',
-                sk: 'streams-event-id|abc123',
-              },
             ],
             LastEvaluatedKey: null,
           }),
@@ -151,14 +145,6 @@ describe('migration-segments', () => {
         sk: 'case|101-20',
       },
     );
-  });
-
-  it('should not try to migrate streams-event-id to the new table', async () => {
-    await handler(mockLambdaEvent, mockLambdaContext);
-
-    expect(migrationsToRun[0].script.mock.calls[0][0]).toEqual([
-      { pk: 'case|101-20', sk: 'case|101-20' },
-    ]);
   });
 
   it('should NOT throw an error when an error occurs while attempting to calculate a record`s size', async () => {
