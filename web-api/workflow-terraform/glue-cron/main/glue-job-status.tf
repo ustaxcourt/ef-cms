@@ -1,4 +1,3 @@
-
 data "archive_file" "glue_job_status_zip" {
   type        = "zip"
   output_path = "${path.module}/lambdas/glue-job-status.js.zip"
