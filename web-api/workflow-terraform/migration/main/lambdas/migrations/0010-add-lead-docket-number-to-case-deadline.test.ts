@@ -66,7 +66,7 @@ describe('migrateItems', () => {
     expect(results).toEqual(mockNonConsolidatedCaseDeadlineItem);
   });
 
-  it('should modify CaseDeadline when the case has a leadDocketNumber, adding the case\'s property "leadDocketNUmber" to the CaseDeadline', async () => {
+  it('should modify CaseDeadline when the case has a leadDocketNumber, adding the case\'s property "leadDocketNumber" to the CaseDeadline', async () => {
     (queryFullCase as jest.Mock).mockResolvedValue({
       pk: `case|${MOCK_CONSOLIDATED_CASE_RECORD.docketNumber}`,
       sk: `case|${MOCK_CONSOLIDATED_CASE_RECORD.docketNumber}`,
@@ -75,7 +75,7 @@ describe('migrateItems', () => {
       MOCK_CONSOLIDATED_CASE_RECORD,
     );
 
-    const mockConsolidatedCaseDeadlineItem = [
+    const mockConsolidatedCaseDeadlineItemWithoutLeadDocketNumber = [
       {
         associatedJudge: MOCK_CONSOLIDATED_CASE_RECORD.associatedJudge,
         caseDeadLineId: '97a214a0-437d-461b-80a9-1cfd3d669690',
@@ -84,18 +84,26 @@ describe('migrateItems', () => {
         description: 'test',
         docketNumber: MOCK_CONSOLIDATED_CASE_RECORD.docketNumber,
         entityName: 'CaseDeadline',
-        leadDocketNumber: MOCK_CONSOLIDATED_CASE_RECORD.leadDocketNumber,
         pk: 'case-deadline|97a214a0-437d-461b-80a9-1cfd3d669690',
         sk: 'case-deadline|97a214a0-437d-461b-80a9-1cfd3d669690',
         sortableDocketNumber: 2018000101,
       },
     ];
 
+    const mockConsolidatedCaseDeadlineItemWithLeadDocketNumber = [
+      {
+        ...mockConsolidatedCaseDeadlineItemWithoutLeadDocketNumber[0],
+        leadDocketNumber: MOCK_CONSOLIDATED_CASE_RECORD.leadDocketNumber,
+      },
+    ];
+
     const results = await migrateItems(
-      mockConsolidatedCaseDeadlineItem,
+      mockConsolidatedCaseDeadlineItemWithoutLeadDocketNumber,
       documentClientMock,
     );
 
-    expect(results).toEqual(mockConsolidatedCaseDeadlineItem);
+    expect(results).toEqual(
+      mockConsolidatedCaseDeadlineItemWithLeadDocketNumber,
+    );
   });
 });
