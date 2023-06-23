@@ -112,6 +112,7 @@ import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
 import { templateHelper } from './computeds/templateHelper';
+import { thirtyDayNoticeModalHelper } from './computeds/thirtyDayNoticeModalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -237,6 +238,7 @@ export const computeds = {
   statisticsFormHelper,
   statisticsHelper,
   templateHelper,
+  thirtyDayNoticeModalHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,

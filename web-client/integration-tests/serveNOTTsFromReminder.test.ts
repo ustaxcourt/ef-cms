@@ -120,14 +120,14 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         'PrintPaperTrialNotices',
       );
 
-      // const trialSessionDetailsFormatted: any = runCompute(
-      //   withAppContextDecorator(formattedTrialSessionDetails),
-      //   {
-      //     state: cerebralTest.getState(),
-      //   },
-      // );
+      const trialSessionDetailsFormatted: any = runCompute(
+        withAppContextDecorator(formattedTrialSessionDetails),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
 
-      // expect(trialSessionDetailsFormatted.showAlertForNOTTReminder).toBe(false);
+      expect(trialSessionDetailsFormatted.showAlertForNOTTReminder).toBe(true);
     });
   });
 });

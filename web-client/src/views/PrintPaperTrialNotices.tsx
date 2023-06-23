@@ -29,7 +29,7 @@ export const PrintPaperTrialNotices = connect(
                 className="push-right margin-right-0 margin-top-6"
                 href={printPaperDoneUrl}
               >
-                Done
+                Printing Complete
               </Button>
             </div>
           </div>
