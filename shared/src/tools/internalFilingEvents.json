@@ -124,17 +124,6 @@
   ],
   "Appearance and Representation": [
     {
-      "documentTitle": "Designation of Counsel [Name] to Receive Service",
-      "documentType": "Designation of Counsel to Receive Service",
-      "category": "Appearance and Representation",
-      "eventCode": "DSC",
-      "scenario": "Nonstandard B",
-      "labelPreviousDocument": "",
-      "labelFreeText": "Name",
-      "labelFreeText2": "",
-      "ordinalField": ""
-    },
-    {
       "documentTitle": "Entry of Appearance",
       "documentType": "Entry of Appearance",
       "category": "Appearance and Representation",
