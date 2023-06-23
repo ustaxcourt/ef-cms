@@ -13,7 +13,7 @@ export const trialSessionDetailsHelper = (
     state.trialSession,
   );
   const permissions = get(state.permissions);
-  const canDismissThirtyDayAlert = permissions.DIMISS_NOTT_REMINDER;
+  const canDismissThirtyDayAlert = permissions.DISMISS_NOTT_REMINDER;
 
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
