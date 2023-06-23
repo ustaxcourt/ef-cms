@@ -1,8 +1,8 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const trialSessionHeaderHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -36,9 +36,9 @@ export const trialSessionHeaderHelper = (
     isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
 
   return {
-    isStandaloneSession: applicationContext
-      .getUtilities()
-      .isStandaloneRemoteSession(formattedTrialSession.sessionScope),
+    isStandaloneSession: TrialSession.isStandaloneRemote(
+      formattedTrialSession.sessionScope,
+    ),
     nameToDisplay: isTrialClerk
       ? currentUser.name
       : formattedTrialSession.formattedJudge,

@@ -128,6 +128,9 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
       );
 
       expect(trialSessionDetailsFormatted.showAlertForNOTTReminder).toBe(true);
+      expect(trialSessionDetailsFormatted.nottReminderAction).toBe(
+        'Yes, Dismiss',
+      );
     });
   });
 });

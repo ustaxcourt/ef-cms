@@ -146,32 +146,4 @@ describe('addTrialSessionInformationHelper', () => {
       ]);
     });
   });
-
-  describe('FEATURE_canDisplayStandaloneRemote', () => {
-    // FEATURE FLAG: standalone_remote_session
-    it('should return FEATURE_canDisplayStandaloneRemote true if standalone_remote_session feature flag is enabled', () => {
-      applicationContext.isFeatureEnabled.mockReturnValueOnce(true);
-
-      const result = runCompute(addTrialSessionInformationHelper, {
-        state: {
-          form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
-        },
-      });
-
-      expect(result.FEATURE_canDisplayStandaloneRemote).toEqual(true);
-    });
-
-    // FEATURE FLAG: standalone_remote_session
-    it('should NOT return FEATURE_canDisplayStandaloneRemote false if the standalone_remote_session feature flag is NOT enabled', () => {
-      applicationContext.isFeatureEnabled.mockReturnValueOnce(false);
-
-      const result = runCompute(addTrialSessionInformationHelper, {
-        state: {
-          form: { sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased },
-        },
-      });
-
-      expect(result.FEATURE_canDisplayStandaloneRemote).toEqual(false);
-    });
-  });
 });
