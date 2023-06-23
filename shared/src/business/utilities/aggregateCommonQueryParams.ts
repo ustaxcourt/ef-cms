@@ -21,9 +21,9 @@ export const aggregateCommonQueryParams = ({
   petitionerState,
   startDate,
 }) => {
-  const commonQuery = [];
-  const exactMatchesQuery = [];
-  const nonExactMatchesQuery = [];
+  const commonQuery: Record<string, any>[] = [];
+  const exactMatchesQuery: Record<string, any>[] = [];
+  const nonExactMatchesQuery: Record<string, any>[] = [];
 
   if (petitionerName) {
     const simplePetitionerQuery = removeAdvancedSyntaxSymbols(petitionerName);
