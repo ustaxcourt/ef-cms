@@ -113,17 +113,6 @@
   ],
   "Appearance and Representation": [
     {
-      "documentTitle": "Designation of Counsel [Name] to Receive Service",
-      "documentType": "Designation of Counsel to Receive Service",
-      "category": "Appearance and Representation",
-      "eventCode": "DSC",
-      "scenario": "Nonstandard B",
-      "labelPreviousDocument": "",
-      "labelFreeText": "Name",
-      "ordinalField": "",
-      "allowStamp": true
-    },
-    {
       "documentTitle": "Motion to Withdraw as Counsel",
       "documentType": "Motion to Withdraw as Counsel",
       "category": "Appearance and Representation",
