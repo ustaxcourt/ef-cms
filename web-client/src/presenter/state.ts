@@ -253,15 +253,8 @@ export const computeds = {
   workQueueHelper,
 };
 
-type TCaseDeadlineReport = {
-  caseDeadlines: RawCaseDeadline[];
-  judgeFilter: string;
-  totalCount: number;
-  page: number;
-};
-
 export const baseState = {
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   allJudges: [],
   archiveDraftDocument: {
@@ -272,7 +265,12 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {} as TCaseDeadlineReport,
+  caseDeadlineReport: {} as {
+    caseDeadlines: RawCaseDeadline[];
+    judgeFilter: string;
+    totalCount: number;
+    page: number;
+  },
   caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
