@@ -17,7 +17,7 @@ export const dismissNOTTReminderForTrialInteractor = async (
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.DIMISS_NOTT_REMINDER)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER)) {
     throw new UnauthorizedError('Unauthorized to dismiss NOTT reminder');
   }
 

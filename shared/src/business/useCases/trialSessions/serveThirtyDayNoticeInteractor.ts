@@ -20,7 +20,7 @@ export const serveThirtyDayNoticeInteractor = async (
 ): Promise<void> => {
   const currentUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(currentUser, ROLE_PERMISSIONS.DIMISS_NOTT_REMINDER)) {
+  if (!isAuthorized(currentUser, ROLE_PERMISSIONS.DISMISS_NOTT_REMINDER)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
