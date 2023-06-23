@@ -92,35 +92,40 @@ jobs:
       - npm-install
       - run:
           name: Setup Env
-          command: ./scripts/env/env-for-circle.sh
+          command: |
+            ./scripts/env/env-for-circle.sh
       - run:
           name: Setup the deploy table for a glue job
-          command: ./scripts/setup-deploy-table-for-glue-job.sh
+          command: |
+            ./scripts/setup-deploy-table-for-glue-job.sh
       - run:
           name: Delete all existing dynamodb tables and elasticsearch clusters
-          command: ./scripts/delete-all-persistence.sh
+          command: |
+            ./scripts/delete-all-persistence.sh
       - run:
           name: Kick off a deployment
           command: |
             VCS=<< pipeline.project.type >>
+            CIRCLE_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline" \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
               --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
+            echo "export CIRCLE_SLUG=${CIRCLE_SLUG}" >> $BASH_ENV
             echo "export PIPELINE_ID=${PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Wait for deployment to complete
           command: |
             PIPELINE_STATUS=$(curl --request GET \
-              --url "https://circleci.com/api/v2/pipeline/${PIPELINE_ID}/workflow?circle-token=$CIRCLE_TOKEN" \
+              --url "https://circleci.com/api/v2/pipeline/${PIPELINE_ID}/workflow" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" | jq -r '.items[].status')
             while [[ "$PIPELINE_STATUS" == "running" ]]; do
               echo "Pipeline ${PIPELINE_ID} is running"
               sleep 60
               PIPELINE_STATUS=$(curl --request GET \
-                --url "https://circleci.com/api/v2/pipeline/${PIPELINE_ID}/workflow?circle-token=$CIRCLE_TOKEN" \
+                --url "https://circleci.com/api/v2/pipeline/${PIPELINE_ID}/workflow" \
                 --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
                 --header "content-type: application/json" | jq -r '.items[].status')
             done
@@ -133,9 +138,8 @@ jobs:
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
-            VCS=<< pipeline.project.type >>
             curl --request POST \
-              --url "https://circleci.com/api/v2/project/${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}/pipeline" \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
               --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${CIRCLE_BRANCH}\"}}"
