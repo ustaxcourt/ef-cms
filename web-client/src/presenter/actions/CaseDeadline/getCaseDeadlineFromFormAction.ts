@@ -22,7 +22,9 @@ export const getCaseDeadlineFromFormAction = ({
       .createISODateString(props.computedDate);
   }
 
-  const { associatedJudge, docketNumber } = get(state.caseDetail);
+  const { associatedJudge, docketNumber, leadDocketNumber } = get(
+    state.caseDetail,
+  );
 
   const caseDeadline = omit(
     {
@@ -30,6 +32,7 @@ export const getCaseDeadlineFromFormAction = ({
       associatedJudge,
       deadlineDate,
       docketNumber,
+      leadDocketNumber,
     },
     ['day', 'month', 'year', 'searchError'],
   );
