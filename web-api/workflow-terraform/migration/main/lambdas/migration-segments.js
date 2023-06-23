@@ -43,6 +43,8 @@ const scanTableSegment = async (
     await dynamoDbDocumentClient
       .scan({
         ExclusiveStartKey: lastKey,
+        ExpressionAttributeValues: { ':prefix': 'streams-event-id' },
+        FilterExpression: 'NOT begins_with(pk, :prefix)',
         Segment: segment,
         TableName: process.env.SOURCE_TABLE,
         TotalSegments: totalSegments,
@@ -100,10 +102,6 @@ exports.processItems = async (
   applicationContext,
   { documentClient, items, ranMigrations, segment },
 ) => {
-  items = items.filter(item => {
-    return !item.pk.startsWith('streams-event-id');
-  });
-
   try {
     items = await exports.migrateRecords(applicationContext, {
       documentClient,
