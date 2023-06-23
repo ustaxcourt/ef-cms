@@ -4,7 +4,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import closeImg from '../../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
-import seal from '../../images/ustc_seal.svg';
+const seal = require('../../images/ustc_seal.svg') as string;
 
 const BetaBar = toggleBetaBarSequence => {
   return (
