@@ -57,7 +57,11 @@ export const getOpinionsFiledByJudgeInteractor = async (
       startDate: searchEntity.startDate,
     });
 
-  const result = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
+  const result: {
+    count: number;
+    documentType: string | undefined;
+    eventCode: string;
+  }[] = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
     const count = results.filter(res => res.eventCode === eventCode).length;
     return {
       count,
