@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -8,11 +9,7 @@ import {
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  { endDate, judgeName, startDate }: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
