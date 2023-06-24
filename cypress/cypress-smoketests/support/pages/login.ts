@@ -1,11 +1,12 @@
 import AWS from 'aws-sdk';
 
 const awsRegion = 'us-east-1';
-
 AWS.config = new AWS.Config();
-AWS.config.accessKeyId = Cypress.env('AWS_ACCESS_KEY_ID');
-AWS.config.secretAccessKey = Cypress.env('AWS_SECRET_ACCESS_KEY');
-AWS.config.sessionToken = Cypress.env('AWS_SESSION_TOKEN');
+AWS.config.credentials = {
+  accessKeyId: Cypress.env('AWS_ACCESS_KEY_ID'),
+  secretAccessKey: Cypress.env('AWS_SECRET_ACCESS_KEY'),
+  sessionToken: Cypress.env('AWS_SESSION_TOKEN'),
+};
 AWS.config.region = awsRegion;
 
 const ENV = Cypress.env('ENV');

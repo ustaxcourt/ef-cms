@@ -42,6 +42,10 @@ variable "blue_table_name" {
   type = string
 }
 
+variable "default_account_pass" {
+  type = string
+}
+
 variable "green_table_name" {
   type = string
 }
