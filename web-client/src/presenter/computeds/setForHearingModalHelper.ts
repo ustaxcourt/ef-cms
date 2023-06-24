@@ -1,10 +1,15 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { trialSessionsModalHelper } from './addToTrialSessionModalHelper';
 
-export const setForHearingModalHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const setForHearingModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseDetail = get(state.caseDetail);
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-  let excludedTrialSessionIds = [];
+  let excludedTrialSessionIds: String[] = [];
 
   if (caseDetail.trialSessionId) {
     excludedTrialSessionIds.push(caseDetail.trialSessionId);

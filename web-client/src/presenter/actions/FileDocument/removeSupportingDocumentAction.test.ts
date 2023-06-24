@@ -1,5 +1,5 @@
 import { removeSupportingDocumentAction } from './removeSupportingDocumentAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('removeSupportingDocumentAction', () => {
   it('removes an item from the list', async () => {

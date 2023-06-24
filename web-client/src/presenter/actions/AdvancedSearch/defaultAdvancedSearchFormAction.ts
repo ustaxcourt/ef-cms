@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * sets the default countryType on the advanced search form
  * @param {object} providers the providers object

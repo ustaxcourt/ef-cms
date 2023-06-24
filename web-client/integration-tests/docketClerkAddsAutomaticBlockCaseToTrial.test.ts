@@ -7,7 +7,7 @@ import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const formattedCaseDetail = withAppContextDecorator(

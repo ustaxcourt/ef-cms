@@ -9,7 +9,7 @@ import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '
 
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperCaseToIRS';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 const { faker } = require('@faker-js/faker');
 
@@ -57,21 +57,21 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
     const mockContactPrimary = {
       key: 'contactPrimary.name',
-      value: `${faker.name.firstName()} ${faker.name.lastName()}`,
+      value: `${faker.person.firstName()} ${faker.person.lastName()}`,
     };
 
     let formValues = [
       {
         key: 'receivedAtMonth',
-        value: faker.datatype.number({ max: 11, min: 1 }),
+        value: faker.number.int({ max: 11, min: 1 }),
       },
       {
         key: 'receivedAtDay',
-        value: faker.datatype.number({ max: 28, min: 1 }),
+        value: faker.number.int({ max: 28, min: 1 }),
       },
       {
         key: 'receivedAtYear',
-        value: faker.datatype.number({ max: 2021, min: 2001 }),
+        value: faker.number.int({ max: 2021, min: 2001 }),
       },
       {
         key: 'mailingDate',
@@ -144,7 +144,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       mockContactPrimary,
       {
         key: 'contactPrimary.address1',
-        value: faker.address.streetAddress(),
+        value: faker.location.streetAddress(),
       },
       {
         key: 'contactPrimary.city',
@@ -152,7 +152,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       },
       {
         key: 'contactPrimary.postalCode',
-        value: faker.address.zipCode(),
+        value: faker.location.zipCode(),
       },
       {
         key: 'contactPrimary.phone',

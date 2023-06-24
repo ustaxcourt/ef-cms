@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Takes the selected work items in the store and invoke the assignWorkItems so that the assignee is attached to each

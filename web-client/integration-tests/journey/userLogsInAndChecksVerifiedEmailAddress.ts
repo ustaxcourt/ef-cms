@@ -1,7 +1,7 @@
 import { contactPrimaryFromState, refreshElasticsearchIndex } from '../helpers';
 import { headerHelper as headerHelperComputed } from '../../src/presenter/computeds/headerHelper';
 
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const headerHelper = withAppContextDecorator(headerHelperComputed);

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTIES_CODES,
@@ -11,7 +12,7 @@ import {
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
 } from './publicCaseDetailHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('publicCaseDetailHelper', () => {
@@ -855,8 +856,6 @@ describe('publicCaseDetailHelper', () => {
       {
         ...baseDocketEntry,
         action: 'something',
-        additionalInfo: 'additionalInfo!',
-        additionalInfo2: 'additional info 2!',
         attachments: true,
         createdAt: '2018-11-21T20:49:28.192Z',
         description: 'first record',
@@ -879,11 +878,9 @@ describe('publicCaseDetailHelper', () => {
         action: 'something',
         createdAtFormatted: '11/21/18',
         description: 'first record',
-        descriptionDisplay: 'Petition',
+        descriptionDisplay: 'Petition (Attachment(s))',
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         eventCode: 'P',
-        filingsAndProceedingsWithAdditionalInfo:
-          ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
         servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,

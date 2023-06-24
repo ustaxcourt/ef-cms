@@ -26,7 +26,6 @@ import {
 import {
   DocketEntry,
   getServedPartiesCode,
-  isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
@@ -607,7 +606,7 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)({
+const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_MAP_429,
 });
@@ -783,7 +782,6 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
-      isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
       isTodayWithinGivenInterval,

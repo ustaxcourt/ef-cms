@@ -1,7 +1,7 @@
 /* eslint-disable complexity */
 
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
@@ -19,17 +19,6 @@ export const formatDocketEntryOnDocketRecord = (
     POLICY_DATE_IMPACTED_EVENTCODES,
   } = applicationContext.getConstants();
   const record = cloneDeep(entry);
-
-  let filingsAndProceedingsWithAdditionalInfo = '';
-  if (record.documentTitle && record.additionalInfo) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
-  }
-  if (record.filingsAndProceedings) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.filingsAndProceedings}`;
-  }
-  if (record.additionalInfo2) {
-    filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo2}`;
-  }
 
   const isServedDocument = !record.isNotServedDocument;
 
@@ -101,7 +90,6 @@ export const formatDocketEntryOnDocketRecord = (
     docketEntryId: record.docketEntryId,
     eventCode: record.eventCode,
     filedBy: record.filedBy,
-    filingsAndProceedingsWithAdditionalInfo,
     hasDocument: !record.isMinuteEntry,
     index: record.index,
     isPaper: record.isPaper,
@@ -120,7 +108,12 @@ export const formatDocketEntryOnDocketRecord = (
   };
 };
 
-export const publicCaseDetailHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const publicCaseDetailHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     ALLOWLIST_FEATURE_FLAGS,
     MOTION_EVENT_CODES,

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * update modal values for create order modal

@@ -1,5 +1,5 @@
 import { clearSearchResultsAction } from './clearSearchResultsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearSearchResultsAction', () => {
   it('clears searchResults and sets advancedSearchForm.currentPage to 1', async () => {

@@ -1,5 +1,5 @@
 import { resetNoticeStatusAction } from './resetNoticeStatusAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetNoticeStatusAction', () => {
   it('should reset the state for the current scanning session', async () => {

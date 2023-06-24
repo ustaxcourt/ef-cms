@@ -1,5 +1,5 @@
 import { pick } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * sets the state.screenMetadata.trialSessionFilters
  * @param {object} providers the providers object

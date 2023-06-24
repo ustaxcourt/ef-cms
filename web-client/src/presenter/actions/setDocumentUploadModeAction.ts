@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  *  returns a callback function that sets the value of state.currentViewMetadata.documentUploadMode
  * @param {string} documentUploadMode the value of documentUploadMode to be set

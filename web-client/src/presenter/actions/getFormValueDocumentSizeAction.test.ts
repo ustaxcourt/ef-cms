@@ -1,5 +1,5 @@
 import { getFormValueDocumentSizeAction } from './getFormValueDocumentSizeAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getFormValueDocumentSizeAction', () => {
   it('should return the document size key and file size as a key/value pair', async () => {

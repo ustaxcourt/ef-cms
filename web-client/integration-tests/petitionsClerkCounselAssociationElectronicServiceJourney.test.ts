@@ -14,7 +14,7 @@ import {
 } from './helpers';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Petitions Clerk Counsel Association Journey', () => {

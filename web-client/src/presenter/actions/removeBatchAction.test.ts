@@ -1,5 +1,5 @@
 import { removeBatchAction } from './removeBatchAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('removeBatchAction', () => {
   it('should set the batchIndex to 0 if the last item was deleted', async () => {
