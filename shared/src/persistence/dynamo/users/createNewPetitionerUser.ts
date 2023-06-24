@@ -1,4 +1,5 @@
 import * as client from '../../dynamodbClientService';
+import { AdminCreateUserRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { ROLES } from '../../../business/entities/EntityConstants';
 
 const createUserRecords = async ({
@@ -35,37 +36,40 @@ export const createNewPetitionerUser = async ({
 }) => {
   const { userId } = user;
 
-  await applicationContext
-    .getCognito()
-    .adminCreateUser({
-      UserAttributes: [
-        {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'email',
-          Value: user.pendingEmail,
-        },
-        {
-          Name: 'custom:role',
-          Value: ROLES.petitioner,
-        },
-        {
-          Name: 'name',
-          Value: user.name,
-        },
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      UserPoolId: process.env.USER_POOL_ID,
-      Username: user.pendingEmail,
-    })
-    .promise();
+  const input: AdminCreateUserRequest = {
+    UserAttributes: [
+      {
+        Name: 'email_verified',
+        Value: 'True',
+      },
+      {
+        Name: 'email',
+        Value: user.pendingEmail,
+      },
+      {
+        Name: 'custom:role',
+        Value: ROLES.petitioner,
+      },
+      {
+        Name: 'name',
+        Value: user.name,
+      },
+      {
+        Name: 'custom:userId',
+        Value: user.userId,
+      },
+    ],
+    UserPoolId: process.env.USER_POOL_ID,
+    Username: user.pendingEmail,
+  };
 
-  const newUser = await createUserRecords({
+  if (process.env.STAGE !== 'prod') {
+    input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
+  }
+
+  await applicationContext.getCognito().adminCreateUser(input).promise();
+
+  const newUser: RawUser = await createUserRecords({
     applicationContext,
     newUser: user,
     userId,
