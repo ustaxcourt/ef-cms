@@ -1,3 +1,4 @@
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
 /**
@@ -18,6 +19,14 @@ export const getCasesClosedByJudge = async ({
 }) => {
   const source = ['status'];
 
+  const filters: QueryDslQueryContainer[] = [];
+
+  if (judgeName !== 'All Judges') {
+    filters.push({
+      match_phrase: { 'associatedJudge.S': `${judgeName}` },
+    });
+  }
+
   const { results } = await search({
     applicationContext,
     searchParameters: {
@@ -35,11 +44,7 @@ export const getCasesClosedByJudge = async ({
                 },
               },
             ],
-            must: [
-              {
-                match_phrase: { 'associatedJudge.S': `${judgeName}` },
-              },
-            ],
+            must: filters,
           },
         },
         size: 10000,
@@ -48,8 +53,11 @@ export const getCasesClosedByJudge = async ({
     },
   });
 
+  const judgeNameForLog =
+    judgeName === 'All Judges' ? 'all judges' : `judge ${judgeName}`;
+
   applicationContext.logger.info(
-    `Found ${results.length} closed cases associated with judge ${judgeName}`,
+    `Found ${results.length} closed cases associated with ${judgeNameForLog}`,
   );
 
   return results;
