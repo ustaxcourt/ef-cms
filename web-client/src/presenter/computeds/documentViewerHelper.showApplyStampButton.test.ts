@@ -6,7 +6,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { petitionsClerkUser } from '../../../../shared/src/test/mockUsers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('documentViewerHelper.showApplyStampButton', () => {

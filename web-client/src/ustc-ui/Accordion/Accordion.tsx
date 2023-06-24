@@ -6,12 +6,14 @@ import {
 } from '../Utils/useCerebralState';
 import { map } from '../Utils/ElementChildren';
 import { pick, uniqueId } from 'lodash';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
 /**
- * AccordionItem: This is a strange hollow component that is being used in renderAccordianFactory + Accordian to make a styled component
+ * AccordionItem: This is a strange hollow component that is being used in renderAccordionFactory + Accordion to make a styled component
  */
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function AccordionItem(properties: {

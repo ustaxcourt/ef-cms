@@ -1,5 +1,5 @@
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../../src/presenter/computeds/formattedTrialSessionDetails';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

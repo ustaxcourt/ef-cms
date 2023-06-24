@@ -1,9 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateOrderAdvancedSearchAction } from './validateOrderAdvancedSearchAction';
-
-presenter.providers.applicationContext = applicationContext;
 
 describe('validateOrderAdvancedSearchAction', () => {
   let successStub;
@@ -17,6 +15,8 @@ describe('validateOrderAdvancedSearchAction', () => {
       error: errorStub,
       success: successStub,
     };
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('validates advanced order search successfully', async () => {

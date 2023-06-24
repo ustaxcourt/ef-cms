@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setNegativeValueConfirmationTextAction } from './setNegativeValueConfirmationTextAction';
 
 describe('setNegativeValueConfirmationTextAction', () => {

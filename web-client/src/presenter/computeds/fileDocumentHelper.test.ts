@@ -8,7 +8,7 @@ import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
 import { capitalize } from 'lodash';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {

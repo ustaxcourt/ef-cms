@@ -8,7 +8,7 @@ import {
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
 import { irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
 import { seedDatabase, seedFullDataset } from './utils/database';
 import { withAppContextDecorator } from '../src/withAppContext';

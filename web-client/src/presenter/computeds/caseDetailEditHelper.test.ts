@@ -4,7 +4,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { caseDetailEditHelper as caseDetailEditHelperComputed } from './caseDetailEditHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseDetailEditHelper = withAppContextDecorator(

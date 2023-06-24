@@ -1,7 +1,8 @@
 /* eslint-disable max-lines */
+
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedMessages as formattedMessagesComputed } from './formattedMessages';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedMessages', () => {

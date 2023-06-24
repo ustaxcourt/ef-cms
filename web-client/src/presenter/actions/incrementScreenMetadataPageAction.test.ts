@@ -1,6 +1,6 @@
 import { incrementScreenMetadataPageAction } from './incrementScreenMetadataPageAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('incrementScreenMetadataPageAction', () => {
   it('increments the value of screenMetadata.page by one and sets it on state', async () => {

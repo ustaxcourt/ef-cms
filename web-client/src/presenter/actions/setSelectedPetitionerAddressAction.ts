@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets state.form.contact address fields from props.caseDetail

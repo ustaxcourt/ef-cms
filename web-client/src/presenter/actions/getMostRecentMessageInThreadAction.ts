@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the most recent message from state.messageDetail

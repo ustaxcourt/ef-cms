@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const caseDetailSubnavHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseDetailSubnavHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const isInternalUser = applicationContext

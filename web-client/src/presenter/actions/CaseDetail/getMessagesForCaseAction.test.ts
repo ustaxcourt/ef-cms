@@ -1,7 +1,7 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getMessagesForCaseAction } from './getMessagesForCaseAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getMessagesForCaseAction', () => {
   const { PETITIONS_SECTION } = applicationContextForClient.getConstants();

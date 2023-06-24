@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { canRequestAccessAction } from './canRequestAccessAction';
 import { presenter } from '../../presenter';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('canRequestAccessAction', () => {
   const { USER_ROLES } = applicationContext.getConstants();

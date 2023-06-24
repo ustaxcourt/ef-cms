@@ -1,14 +1,12 @@
-const { CalendarNote } = require('./CalendarNote');
-const { getTextByCount } = require('../../utilities/getTextByCount');
-
-const { VALIDATION_ERROR_MESSAGES } = CalendarNote;
+import { CalendarNote } from './CalendarNote';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CalendarNote', () => {
   describe('validation', () => {
     it('should have error message for note field longer than 200 characters', () => {
       const entity = new CalendarNote({ note: getTextByCount(1001) });
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: VALIDATION_ERROR_MESSAGES.note,
+        note: CalendarNote.VALIDATION_ERROR_MESSAGES.note,
       });
     });
 

@@ -1,4 +1,4 @@
-import { DocketEntry, isServed } from './DocketEntry';
+import { DocketEntry } from './DocketEntry';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isServed', () => {
@@ -8,7 +8,7 @@ describe('isServed', () => {
       { applicationContext },
     );
 
-    expect(isServed(doc1)).toBeFalsy();
+    expect(DocketEntry.isServed(doc1)).toBeFalsy();
   });
 
   it('should return true when servedAt is defined', () => {
@@ -17,7 +17,7 @@ describe('isServed', () => {
       { applicationContext },
     );
 
-    expect(isServed(doc1)).toBeTruthy();
+    expect(DocketEntry.isServed(doc1)).toBeTruthy();
   });
 
   it('should return true when servedAt is undefined and isLegacyServed is true', () => {
@@ -26,6 +26,6 @@ describe('isServed', () => {
       { applicationContext },
     );
 
-    expect(isServed(doc1)).toBeTruthy();
+    expect(DocketEntry.isServed(doc1)).toBeTruthy();
   });
 });

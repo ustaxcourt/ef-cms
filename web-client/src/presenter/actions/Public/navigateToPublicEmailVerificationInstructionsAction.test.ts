@@ -1,6 +1,6 @@
 import { navigateToPublicEmailVerificationInstructionsAction } from './navigateToPublicEmailVerificationInstructionsAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 let externalRouteMock;
 const publicSiteUrlMock = 'example.com';

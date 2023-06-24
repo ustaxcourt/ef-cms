@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { generateDocketRecordPdfUrlAction } from './generateDocketRecordPdfUrlAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generateDocketRecordPdfUrlAction', () => {
   const mockPdfUrl = { url: 'www.example.com' };

@@ -1,5 +1,5 @@
 import { getMostRecentMessageInThreadAction } from './getMostRecentMessageInThreadAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getMostRecentMessageInThreadAction', () => {
   it('returns the most recent message by createdAt from state.messageDetail', async () => {

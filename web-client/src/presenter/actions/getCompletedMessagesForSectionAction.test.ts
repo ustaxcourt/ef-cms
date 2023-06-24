@@ -5,7 +5,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCompletedMessagesForSectionAction } from './getCompletedMessagesForSectionAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getCompletedMessagesForSectionAction', () => {
   const message = {

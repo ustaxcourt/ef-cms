@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { batchDownloadTrialSessionAction } from './batchDownloadTrialSessionAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('batchDownloadTrialSessionAction', () => {
   const pathSuccessStub = jest.fn();

@@ -3,7 +3,8 @@ import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 
 export const SignOrder = connect(

@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const messageModalHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const messageModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT,
     CASE_SERVICES_SUPERVISOR_SECTION,
@@ -20,7 +25,7 @@ export const messageModalHelper = (get, applicationContext) => {
       .getUtilities()
       .getFormattedCaseDetail({ applicationContext, caseDetail });
 
-  const documents = [];
+  const documents: RawDocketEntry[] = [];
   formattedDocketEntries.forEach(entry => {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;

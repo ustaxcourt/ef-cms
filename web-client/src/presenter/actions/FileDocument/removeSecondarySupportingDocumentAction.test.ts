@@ -1,5 +1,5 @@
 import { removeSecondarySupportingDocumentAction } from './removeSecondarySupportingDocumentAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('removeSecondarySupportingDocumentAction', () => {
   it('removes an item from the list', async () => {

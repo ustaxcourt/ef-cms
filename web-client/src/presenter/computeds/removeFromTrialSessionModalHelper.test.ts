@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { removeFromTrialSessionModalHelper as removeFromTrialSessionModalHelperComputed } from './removeFromTrialSessionModalHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('removeFromTrialSessionModalHelper', () => {

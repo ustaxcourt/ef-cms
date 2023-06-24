@@ -11,8 +11,6 @@ module.exports = {
   extends: [
     'eslint:recommended',
     'plugin:cypress/recommended',
-    'plugin:import/errors',
-    'plugin:import/warnings',
     'plugin:jest/recommended',
     'plugin:prettier/recommended',
     'plugin:promise/recommended',
@@ -96,7 +94,6 @@ module.exports = {
     complexity: ['warn', { max: 20 }], // todo: plugin default is 20; set to 'error'
     'eol-last': ['error', 'always'],
     'id-denylist': ['error', /* 'error', 'err', 'cb', 'callback',*/ 'test'],
-    'import/named': 'warn',
     'import/no-default-export': 'error',
     'import/no-named-as-default': 'off',
     'jest/expect-expect': 'off',

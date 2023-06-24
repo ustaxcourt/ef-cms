@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * combines the dates in the form with the caseDetails

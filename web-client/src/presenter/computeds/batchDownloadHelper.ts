@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const batchDownloadHelper = get => {
+import { Get } from 'cerebral';
+export const batchDownloadHelper = (get: Get) => {
   const fileCount = get(state.batchDownloads.fileCount) || 0;
   const totalFiles = get(state.batchDownloads.totalFiles) || 0;
 

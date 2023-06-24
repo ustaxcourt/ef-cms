@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * invokes the generate public docket record endpoint to get back the pdf url
  * @param {object} providers the providers object

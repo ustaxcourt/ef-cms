@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.screenMetadata.draftDocketEntryId based on the props.docketEntryId passed in

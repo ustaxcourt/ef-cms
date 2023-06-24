@@ -41,8 +41,7 @@ const main = () => {
   });
 
   for (let i = 0; i < numToCreate; i++) {
-    const preferredTrialCityObject =
-      TRIAL_CITIES.ALL[faker.datatype.number() % 74];
+    const preferredTrialCityObject = TRIAL_CITIES.ALL[faker.number.int() % 74];
 
     const preferredTrialCity =
       preferredTrialCityObject.city + ', ' + preferredTrialCityObject.state;
@@ -51,24 +50,24 @@ const main = () => {
     const randomlyGeneratedData = {
       petitionFileId,
       petitionMetadata: {
-        caseType: CASE_TYPES[faker.datatype.number() % 13],
+        caseType: CASE_TYPES[faker.number.int() % 13],
         contactPrimary: {
-          address1: faker.address.streetAddress(),
-          city: faker.address.city(),
+          address1: faker.location.streetAddress(),
+          city: faker.location.city(),
           countryType: COUNTRY_TYPES.DOMESTIC,
-          name: faker.name.fullName(),
+          name: faker.person.fullName(),
           phone: faker.phone.number(),
-          postalCode: faker.address.zipCode(),
-          state: faker.address.stateAbbr(),
+          postalCode: faker.location.zipCode(),
+          state: faker.location.stateAbbr(),
         },
         contactSecondary: {
-          address1: faker.address.streetAddress(),
-          city: faker.address.city(),
+          address1: faker.location.streetAddress(),
+          city: faker.location.city(),
           countryType: COUNTRY_TYPES.DOMESTIC,
-          name: faker.name.fullName(),
+          name: faker.person.fullName(),
           phone: faker.phone.number(),
-          postalCode: faker.address.zipCode(),
-          state: faker.address.stateAbbr(),
+          postalCode: faker.location.zipCode(),
+          state: faker.location.stateAbbr(),
         },
         countryType: COUNTRY_TYPES.DOMESTIC,
         filingType: 'Myself and my spouse',
@@ -76,7 +75,7 @@ const main = () => {
         partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity,
         privatePractitioners: [],
-        procedureType: PROCEDURE_TYPES[faker.datatype.number() % 2],
+        procedureType: PROCEDURE_TYPES[faker.number.int() % 2],
       },
       stinFileId,
     };

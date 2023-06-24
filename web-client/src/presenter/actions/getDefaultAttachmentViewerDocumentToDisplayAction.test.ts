@@ -1,5 +1,5 @@
 import { getDefaultAttachmentViewerDocumentToDisplayAction } from './getDefaultAttachmentViewerDocumentToDisplayAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
   it('returns state.messageViewerDocumentToDisplay when it is defined and props.documentId is defined', async () => {

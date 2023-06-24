@@ -1,6 +1,6 @@
 import { omit } from 'lodash';
 import { preparedDateToISOString } from '../../../utilities/preparedDateToISOString';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the trial session.

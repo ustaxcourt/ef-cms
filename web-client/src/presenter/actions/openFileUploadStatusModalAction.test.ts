@@ -1,5 +1,5 @@
 import { openFileUploadStatusModalAction } from './openFileUploadStatusModalAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('openFileUploadStatusModalAction', () => {
   it('sets state.modal.showModal to FileUploadStatusModal', async () => {

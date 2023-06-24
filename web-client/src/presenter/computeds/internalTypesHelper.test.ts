@@ -3,7 +3,7 @@ import {
   getSortFunction,
   internalTypesHelper as internalTypesHelperComputed,
 } from './internalTypesHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('internalTypesHelper', () => {

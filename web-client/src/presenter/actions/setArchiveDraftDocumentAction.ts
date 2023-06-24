@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets archive draft document state properties (docketEntryId, docketNumber, and documentTitle)
@@ -10,13 +10,11 @@ export const setArchiveDraftDocumentAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { docketEntryId, docketNumber, documentTitle, redirectToCaseDetail } =
-    props;
+  const { docketEntryId, docketNumber, documentTitle } = props;
 
   store.set(state.archiveDraftDocument, {
     docketEntryId,
     docketNumber,
     documentTitle,
-    redirectToCaseDetail,
   });
 };

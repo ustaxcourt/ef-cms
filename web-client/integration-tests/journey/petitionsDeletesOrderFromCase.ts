@@ -1,5 +1,5 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedCaseDetail = withAppContextDecorator(
@@ -18,7 +18,6 @@ export const petitionsDeletesOrderFromCase = cerebralTest => {
       docketEntryId: draftOrder.docketEntryId,
       docketNumber: draftOrder.docketNumber,
       documentTitle: draftOrder.documentTitle,
-      redirectToCaseDetail: true,
     });
 
     await cerebralTest.runSequence('archiveDraftDocumentSequence');
