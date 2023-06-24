@@ -1,8 +1,8 @@
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import {
-  STATUS_TYPES,
+  CASE_STATUS_TYPES,
   TRIAL_STATUS_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
@@ -37,7 +37,7 @@ describe('trial session working copy computed', () => {
     const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
-          STATUS_TYPES,
+          CASE_STATUS_TYPES,
           TRIAL_STATUS_TYPES,
         },
         trialSession: {
@@ -84,7 +84,7 @@ describe('trial session working copy computed', () => {
     const { formattedCases } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         constants: {
-          STATUS_TYPES,
+          CASE_STATUS_TYPES,
           TRIAL_STATUS_TYPES,
         },
         trialSession: {

@@ -1,9 +1,9 @@
-const {
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import {
   calculateISODate,
   createISODateString,
-} = require('../../utilities/DateHandler');
-const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+} from '../../utilities/DateHandler';
 
 describe('CourtIssuedDocumentTypeE', () => {
   describe('constructor', () => {
@@ -54,7 +54,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       const date = calculateISODate({
         dateString: createISODateString(),
         howMuch: -5,
-        unit: 'days',
+        units: 'days',
       });
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
@@ -95,7 +95,7 @@ describe('CourtIssuedDocumentTypeE', () => {
           scenario: 'Type E',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 

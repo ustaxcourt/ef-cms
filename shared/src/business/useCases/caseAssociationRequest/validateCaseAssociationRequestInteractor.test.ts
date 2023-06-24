@@ -11,9 +11,9 @@ describe('validateCaseAssociationRequest', () => {
       'documentTitleTemplate',
       'documentType',
       'eventCode',
+      'filers',
       'primaryDocumentFile',
       'scenario',
-      'filers',
     ]);
   });
 
