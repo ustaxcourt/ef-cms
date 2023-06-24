@@ -1,63 +1,70 @@
-const {
-  courtIssuedDocumentDecorator,
-  CourtIssuedDocumentDefault,
-} = require('./CourtIssuedDocumentDefault');
-const {
-  getStandaloneRemoteDocumentTitle,
-} = require('../../utilities/getStandaloneRemoteDocumentTitle');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../EntityConstants');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+import {
+  CourtIssuedDocument,
+  VALIDATION_ERROR_MESSAGES,
+} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
+import { getStandaloneRemoteDocumentTitle } from '../../utilities/getStandaloneRemoteDocumentTitle';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function CourtIssuedDocumentTypeG() {}
-CourtIssuedDocumentTypeG.prototype.init = function init(rawProps) {
-  courtIssuedDocumentDecorator(this, rawProps);
-  this.date = rawProps.date;
-  this.trialLocation = rawProps.trialLocation;
-};
+export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
+  public attachments: boolean;
+  public documentTitle?: string;
+  public documentType: string;
+  public eventCode?: string;
+  public filingDate?: string;
+  public date: string;
+  public trialLocation: string;
 
-CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
-  if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-    this.documentTitle = getStandaloneRemoteDocumentTitle({
-      documentTitle: this.documentTitle,
-    });
+  constructor(rawProps) {
+    super('CourtIssuedDocumentTypeG');
+
+    this.attachments = rawProps.attachments || false;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.eventCode = rawProps.eventCode;
+    this.filingDate = rawProps.filingDate;
+    this.date = rawProps.date;
+    this.trialLocation = rawProps.trialLocation;
+  }
+
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
+    date: JoiValidationConstants.ISO_DATE.required(),
+    trialLocation: JoiValidationConstants.STRING.required(),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
+
+  getDocumentTitle() {
+    if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      this.documentTitle = getStandaloneRemoteDocumentTitle({
+        documentTitle: this.documentTitle,
+      });
+
+      return replaceBracketed(
+        this.documentTitle,
+        formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
+      );
+    }
 
     return replaceBracketed(
       this.documentTitle,
       formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
+      this.trialLocation,
     );
   }
 
-  return replaceBracketed(
-    this.documentTitle,
-    formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
-    this.trialLocation,
-  );
-};
+  getValidationRules() {
+    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
+  }
 
-CourtIssuedDocumentTypeG.schema = {
-  ...CourtIssuedDocumentDefault.schema,
-  date: JoiValidationConstants.ISO_DATE.required(),
-  trialLocation: JoiValidationConstants.STRING.required(),
-};
+  getErrorToMessageMap() {
+    return CourtIssuedDocumentTypeG.VALIDATION_ERROR_MESSAGES;
+  }
+}
 
-joiValidationDecorator(
-  CourtIssuedDocumentTypeG,
-  CourtIssuedDocumentTypeG.schema,
-  VALIDATION_ERROR_MESSAGES,
-);
-
-module.exports = {
-  CourtIssuedDocumentTypeG: validEntityDecorator(CourtIssuedDocumentTypeG),
-};
+export type RawCourtIssuedDocumentTypeG =
+  ExcludeMethods<CourtIssuedDocumentTypeG>;
