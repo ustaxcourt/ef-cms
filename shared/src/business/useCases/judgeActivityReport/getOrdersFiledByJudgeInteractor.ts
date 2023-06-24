@@ -1,4 +1,8 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  JudgeActivityReportFilters,
+  OrdersAndOpinionTypes,
+} from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   MAX_ELASTICSEARCH_PAGINATION,
@@ -22,11 +26,7 @@ import { groupBy, orderBy } from 'lodash';
  */
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  { endDate, judgeName, startDate }: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -62,7 +62,9 @@ export const getOrdersFiledByJudgeInteractor = async (
 
   let result = groupBy(results, 'eventCode');
 
-  const formattedResult = Object.entries(result).map(([key, value]) => {
+  const formattedResult: Array<OrdersAndOpinionTypes> = Object.entries(
+    result,
+  ).map(([key, value]) => {
     return {
       count: value.length,
       documentType: value[0].documentType,
