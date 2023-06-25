@@ -21,6 +21,8 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     },
   ];
 
+  // TODO: ADD PAGE SIZE, SEARCH_AFTER PARAMS FOR PAGINATION
+
   if (params.judgeName !== 'All Judges') {
     filters.push({
       match_phrase: { 'associatedJudge.S': `${params.judgeName}` },
@@ -54,6 +56,6 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   return {
     foundCases: results,
     lastIdOfPage,
-    totalCount: total,
+    totalCount: total, // TODO: REMOVE TOTAL   COUNT AS SIZE OF CASES AFTER FILTERING IS SUFFICIENT (UNIT TEST)
   };
 };

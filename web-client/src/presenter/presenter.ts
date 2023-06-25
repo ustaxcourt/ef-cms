@@ -114,6 +114,7 @@ import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequ
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
+import { getCavAndSubmittedCasesForJudgesSequence } from './sequences/JudgeActivityReport/getCavAndSubmittedCasesForJudgesSequence';
 import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
@@ -640,6 +641,7 @@ const sequences = {
   generatePdfFromScanSessionSequence,
   getBlockedCasesByTrialLocationSequence,
   getCaseInventoryReportSequence,
+  getCavAndSubmittedCasesForJudgesSequence,
   getCustomCaseInventoryReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,

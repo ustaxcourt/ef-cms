@@ -10,21 +10,35 @@ import { state } from 'cerebral';
 export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
+  props,
+  store,
 }: ActionProps) => {
   const { judgeName } = get(state.judgeActivityReport.filters);
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
-  const { cases, consolidatedCasesGroupCountMap } = await applicationContext
-    .getUseCases()
-    .getCasesByStatusAndByJudgeInteractor(applicationContext, {
-      judgeName,
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
-    });
+  const { cases, consolidatedCasesGroupCountMap, lastIdOfPage, totalCount } =
+    await applicationContext
+      .getUseCases()
+      .getCasesByStatusAndByJudgeInteractor(applicationContext, {
+        judgeName,
+        statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      });
 
-  return {
-    consolidatedCasesGroupCountMap: new Map(
-      Object.entries(consolidatedCasesGroupCountMap),
-    ),
-    submittedAndCavCasesByJudge: cases,
-  };
+  store.set(
+    state.judgeActivityReport.lastIdsOfPages[props.selectedPage + 1],
+    lastIdOfPage.docketNumber,
+  );
+  store.set(state.judgeActivityReport.totalCases, totalCount);
+
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData
+      .consolidatedCasesGroupCountMap,
+    consolidatedCasesGroupCountMap,
+  );
+
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData
+      .submittedAndCavCasesByJudge,
+    cases,
+  );
 };

@@ -4,12 +4,15 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const JudgeActivityReport = connect(
   {
+    getCavAndSubmittedCasesForJudgesSequence:
+      sequences.getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
     judgeActivityReportFilters: state.judgeActivityReport.filters,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
@@ -21,6 +24,7 @@ export const JudgeActivityReport = connect(
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
+    getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReportData,
     judgeActivityReportFilters,
     judgeActivityReportHelper,
@@ -29,6 +33,7 @@ export const JudgeActivityReport = connect(
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
+    const [activePage, setActivePage] = useState(0);
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
@@ -176,6 +181,21 @@ export const JudgeActivityReport = connect(
 
     const progressDescription: () => JSX.Element = () => (
       <>
+        {/* TODO: WRAP AROUND LOGIC TO RENDER */}
+        <Paginator
+          breakClassName="hide"
+          forcePage={activePage}
+          marginPagesDisplayed={0}
+          // pageCount={customCaseInventoryReportHelper.pageCount}
+          pageCount={6}
+          pageRangeDisplayed={0}
+          onPageChange={pageChange => {
+            setActivePage(pageChange.selected);
+            getCavAndSubmittedCasesForJudgesSequence({
+              selectedPage: pageChange.selected,
+            });
+          }}
+        />
         <table
           aria-describedby="progressDescription"
           className="usa-table ustc-table"
@@ -310,6 +330,10 @@ export const JudgeActivityReport = connect(
                   disabled={judgeActivityReportHelper.isFormPristine}
                   onClick={() => {
                     submitJudgeActivityReportSequence();
+                    getCavAndSubmittedCasesForJudgesSequence({
+                      selectedPage: 0,
+                    });
+                    setActivePage(0);
                   }}
                 >
                   Run Report

@@ -4,14 +4,7 @@ export const setJudgeActivityReportDataAction = ({
   props,
   store,
 }: ActionProps) => {
-  const {
-    casesClosedByJudge,
-    consolidatedCasesGroupCountMap,
-    opinions,
-    orders,
-    submittedAndCavCasesByJudge,
-    trialSessions,
-  } = props;
+  const { casesClosedByJudge, opinions, orders, trialSessions } = props;
 
   store.set(
     state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
@@ -27,14 +20,4 @@ export const setJudgeActivityReportDataAction = ({
   );
 
   store.set(state.judgeActivityReport.judgeActivityReportData.orders, orders);
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData
-      .submittedAndCavCasesByJudge,
-    submittedAndCavCasesByJudge,
-  );
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData
-      .consolidatedCasesGroupCountMap,
-    consolidatedCasesGroupCountMap,
-  );
 };
