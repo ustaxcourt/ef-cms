@@ -86,14 +86,16 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const {
     foundCases: submittedAndCavCasesResults,
-    lastIdOfPage,
+    lastIdOfPage: lastCaseId,
     totalCount,
   } = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
-      judgeName: searchEntity.judgeName,
-      statuses: searchEntity.statuses,
+      params: {
+        judgeName: searchEntity.judgeName,
+        statuses: searchEntity.statuses,
+      },
     });
 
   const rawCaseRecords: RawCase[] = await Promise.all(
@@ -142,6 +144,18 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
+  // UNIT TEST!!
+  // clean up to set pagination info unnecessarily
+  const computedPaginationInfo = !filteredCaseRecords.length
+    ? {
+        ...lastCaseId,
+        docketNumber: 0,
+      }
+    : lastCaseId;
+
+  // UNIT TEST!!
+  const computedTotalCount = !filteredCaseRecords.length ? 0 : totalCount;
+
   return {
     cases: Case.validateRawCollection(filteredCaseRecords, {
       applicationContext,
@@ -149,7 +163,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
-    lastIdOfPage,
-    totalCount,
+    lastIdOfPage: computedPaginationInfo,
+    totalCount: computedTotalCount,
   };
 };

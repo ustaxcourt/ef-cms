@@ -48,11 +48,11 @@ export type JudgeActivityReportState = {
     opinions?: OrdersAndOpinionTypes[];
     orders?: OrdersAndOpinionTypes[];
     submittedAndCavCasesByJudge?: RawCase[];
-    lastIdsOfPages: {
-      docketNumber: number;
-    }[];
-    totalCases: number;
   };
+  lastIdsOfPages: {
+    docketNumber: number;
+  }[];
+  totalCases: number;
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
@@ -61,8 +61,7 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
     judgeName: '',
     startDate: '',
   },
-  judgeActivityReportData: {
-    lastIdsOfPages: [{ docketNumber: 0 }],
-    totalCases: 0,
-  },
+  judgeActivityReportData: {},
+  lastIdsOfPages: [{ docketNumber: 0 }],
+  totalCases: 0,
 };
