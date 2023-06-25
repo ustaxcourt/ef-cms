@@ -6,7 +6,8 @@ import {
 export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
-  judgeName: string;
+  judgeName?: string;
+  judgeId?: string;
 };
 
 export type CasesClosedType = {
