@@ -1,4 +1,4 @@
-import { consolidatedCasesGroupCountMapResponseType } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 /**
@@ -11,16 +11,14 @@ import { post } from '../requests';
  */
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext,
-  {
-    judgeName,
-    statuses,
-  }: {
-    judgeName: string;
-    statuses: string[];
-  },
+  { judgeName, statuses }: JudgeActivityReportCavAndSubmittedCasesRequestType,
 ): Promise<{
-  cases: RawCase;
-  consolidatedCasesGroupCountMap: consolidatedCasesGroupCountMapResponseType;
+  cases: RawCase[];
+  consolidatedCasesGroupCountMap: any;
+  lastIdOfPage: {
+    docketNumber: string;
+  };
+  totalCount: number;
 }> => {
   return post({
     applicationContext,

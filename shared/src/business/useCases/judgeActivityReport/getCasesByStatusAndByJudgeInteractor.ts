@@ -1,9 +1,11 @@
 import { Case } from '../../entities/cases/Case';
+import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportCaseStatusSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearchCaseStatusSearch';
+import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
 
 const getConsolidatedCaseGroupCountMap = (
   filteredCaseRecords,
@@ -58,37 +60,50 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
  */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
-  {
-    judgeName,
-    statuses,
-  }: {
-    judgeName: string;
-    statuses: string[];
-  },
-) => {
+  { judgeName, statuses }: JudgeActivityReportCavAndSubmittedCasesRequestType,
+): Promise<{
+  cases: RawCase[];
+  consolidatedCasesGroupCountMap: any;
+  lastIdOfPage: {
+    docketNumber: string;
+  };
+  totalCount: number;
+}> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const submittedAndCavCasesResults = await applicationContext
+  const searchEntity = new JudgeActivityReportCaseStatusSearch({
+    judgeName,
+    statuses,
+  });
+
+  if (!searchEntity.isValid()) {
+    throw new InvalidRequest();
+  }
+
+  const {
+    foundCases: submittedAndCavCasesResults,
+    lastIdOfPage,
+    totalCount,
+  } = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
-      judgeName,
-      statuses,
+      judgeName: searchEntity.judgeName,
+      statuses: searchEntity.statuses,
     });
 
   const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(async result => {
-      return await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
+    submittedAndCavCasesResults.map(
+      async result =>
+        await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
           applicationContext,
           docketNumber: result.docketNumber,
-        });
-    }),
+        }),
+    ),
   );
 
   // We need to filter out member cases returned from elasticsearch so we can get an accurate
@@ -134,5 +149,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
+    lastIdOfPage,
+    totalCount,
   };
 };

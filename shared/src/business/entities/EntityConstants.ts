@@ -198,6 +198,14 @@ export const CASE_STATUS_TYPES = {
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
 
+export const CAV_AND_SUBMITTED_CASE_STATUS = [
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.submitted,
+];
+
+export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
+  typeof CAV_AND_SUBMITTED_CASE_STATUS;
+
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
