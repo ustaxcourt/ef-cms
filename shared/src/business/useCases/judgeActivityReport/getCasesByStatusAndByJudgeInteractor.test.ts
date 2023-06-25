@@ -210,9 +210,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
+        foundCases: mockReturnedDocketNumbers,
+        lastCaseId: {
+          docketNumber: 12345,
+        },
+        totalCount: mockReturnedDocketNumbers.length,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -266,9 +270,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
+        foundCases: mockReturnedDocketNumbers,
+        lastCaseId: {
+          docketNumber: 12345,
+        },
+        totalCount: mockReturnedDocketNumbers.length,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -312,9 +320,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
+        foundCases: mockReturnedDocketNumbers,
+        lastCaseId: {
+          docketNumber: 12345,
+        },
+        totalCount: mockReturnedDocketNumbers.length,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -353,9 +365,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
+        foundCases: mockReturnedDocketNumbers,
+        lastCaseId: {
+          docketNumber: 12345,
+        },
+        totalCount: mockReturnedDocketNumbers.length,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -397,9 +413,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
+        foundCases: mockReturnedDocketNumbers,
+        lastCaseId: {
+          docketNumber: 12345,
+        },
+        totalCount: mockReturnedDocketNumbers.length,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -442,9 +462,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
+        foundCases: mockReturnedDocketNumbers,
+        lastCaseId: {
+          docketNumber: 12345,
+        },
+        totalCount: mockReturnedDocketNumbers.length,
+      });
 
     applicationContext
       .getPersistenceGateway()

@@ -1,5 +1,9 @@
 const joi = require('joi').extend(require('@hapi/joi-date'));
 import {
+  CAV_AND_SUBMITTED_CASE_STATUS,
+  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
+} from '../EntityConstants';
+import {
   FORMATS,
   calculateISODate,
   createEndOfDayISO,
@@ -16,6 +20,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public startDate: string;
   public judgeName: string;
   public judgeId: string;
+  public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
 
   protected tomorrow: string;
 
@@ -24,6 +29,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
 
     this.judgeId = rawProps.judgeId;
     this.judgeName = rawProps.judgeName;
+    this.statuses = rawProps.statuses;
     this.tomorrow = calculateISODate({
       howMuch: +1,
       units: 'days',
@@ -70,6 +76,11 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       ),
+    statuses: joi
+      .array()
+      .items(joi.string().valid(...CAV_AND_SUBMITTED_CASE_STATUS))
+      .optional()
+      .description('The userId of the judge to generate the report for'),
     tomorrow: JoiValidationConstants.STRING.optional().description(
       'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
     ),

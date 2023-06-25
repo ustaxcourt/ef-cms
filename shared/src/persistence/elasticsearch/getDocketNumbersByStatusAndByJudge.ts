@@ -1,33 +1,38 @@
-import { search } from './searchClient';
+import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import { formatResults } from './searchClient';
 
-/**
- * getDocketNumbersByStatusAndByJudge
- * @param {object} providers the providers object containing applicationContext
- * @param {string} providers.applicationContext application context
- * @param {string} providers.judgeName judge
- * @param {string} providers.statuses case statuses
- * @returns {array} array of docketNumbers with field based on source
- */
 export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
-  judgeName,
-  statuses,
-}) => {
+  params,
+}: {
+  applicationContext: IApplicationContext;
+  params: JudgeActivityReportCavAndSubmittedCasesRequestType;
+}): Promise<{
+  totalCount: number;
+  foundCases: { docketNumber: string }[];
+  lastIdOfPage: { docketNumber: number };
+}> => {
   const source = ['docketNumber'];
 
-  const searchParameters = {
+  const filters: QueryDslQueryContainer[] = [
+    {
+      terms: { 'status.S': params.statuses },
+    },
+  ];
+
+  if (params.judgeName !== 'All Judges') {
+    filters.push({
+      match_phrase: { 'associatedJudge.S': `${params.judgeName}` },
+    });
+  }
+
+  const searchResults = await applicationContext.getSearchClient().search({
     body: {
       _source: source,
       query: {
         bool: {
-          must: [
-            {
-              match_phrase: { 'associatedJudge.S': `${judgeName}` },
-            },
-            {
-              terms: { 'status.S': statuses },
-            },
-          ],
+          must: filters,
         },
       },
       size: 10000,
@@ -35,16 +40,20 @@ export const getDocketNumbersByStatusAndByJudge = async ({
       track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
     index: 'efcms-case',
+  });
+
+  const { results, total } = formatResults(searchResults.body);
+
+  const matchingCases: any[] = searchResults.body.hits.hits;
+  const lastCase = matchingCases?.[matchingCases.length - 1];
+
+  const lastIdOfPage = {
+    docketNumber: (lastCase?.sort[0] as number) || 0,
   };
 
-  const {
-    results,
-  }: { results: Array<{ docketNumber: string }>; total: number } = await search(
-    {
-      applicationContext,
-      searchParameters,
-    },
-  );
-
-  return results;
+  return {
+    foundCases: results,
+    lastIdOfPage,
+    totalCount: total,
+  };
 };

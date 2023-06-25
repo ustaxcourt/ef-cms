@@ -1,5 +1,6 @@
 import {
   CASE_STATUS_TYPES,
+  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
 
@@ -8,6 +9,11 @@ export type JudgeActivityReportFilters = {
   startDate: string;
   judgeName?: string;
   judgeId?: string;
+};
+
+export type JudgeActivityReportCavAndSubmittedCasesRequestType = {
+  statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
+  judgeName: string;
 };
 
 export type CasesClosedType = {
@@ -42,6 +48,10 @@ export type JudgeActivityReportState = {
     opinions?: OrdersAndOpinionTypes[];
     orders?: OrdersAndOpinionTypes[];
     submittedAndCavCasesByJudge?: RawCase[];
+    lastIdsOfPages: {
+      docketNumber: number;
+    }[];
+    totalCases: number;
   };
 };
 
@@ -51,5 +61,8 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
     judgeName: '',
     startDate: '',
   },
-  judgeActivityReportData: {},
+  judgeActivityReportData: {
+    lastIdsOfPages: [{ docketNumber: 0 }],
+    totalCases: 0,
+  },
 };
