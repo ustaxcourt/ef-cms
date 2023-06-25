@@ -5,8 +5,13 @@ import { getDocketNumbersByStatusAndByJudge } from './getDocketNumbersByStatusAn
 import { judgeUser } from '../../test/mockUsers';
 
 describe('getDocketNumbersByStatusAndByJudge', () => {
+  const requestPageSize = 100;
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
     judgeName: judgeUser.name,
+    searchAfter: {
+      docketNumber: judgeUser.userId,
+    },
+    size: requestPageSize,
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
@@ -31,9 +36,6 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
             sort: [2018011316],
           },
         ],
-        total: {
-          value: 2,
-        },
       },
     },
   };
@@ -49,8 +51,13 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     });
 
     expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.size,
-    ).toEqual(10000);
+      applicationContext.getSearchClient().search.mock.calls[0][0].size,
+    ).toEqual(requestPageSize);
+
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body
+        .search_after,
+    ).toEqual([judgeUser.userId]);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,
@@ -76,10 +83,9 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
           docketNumber: '11316-18',
         },
       ],
-      lastCaseId: {
+      lastIdOfPage: {
         docketNumber: 2018011316,
       },
-      totalCount: 2,
     });
   });
 
@@ -92,8 +98,12 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     });
 
     expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.size,
-    ).toEqual(10000);
+      applicationContext.getSearchClient().search.mock.calls[0][0].size,
+    ).toEqual(requestPageSize);
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body
+        .search_after,
+    ).toEqual([judgeUser.userId]);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,
