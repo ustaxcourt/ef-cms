@@ -14,6 +14,10 @@ export type JudgeActivityReportFilters = {
 export type JudgeActivityReportCavAndSubmittedCasesRequestType = {
   statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
   judgeName: string;
+  searchAfter: {
+    docketNumber: string;
+  };
+  size: number;
 };
 
 export type CasesClosedType = {
@@ -39,6 +43,11 @@ export type consolidatedCasesGroupCountMapResponseType = {
   [leadDocketNumber: string]: number;
 };
 
+export type CavAndSubmittedCaseResponseType = {
+  foundCases: { docketNumber: string }[];
+  lastIdOfPage: { docketNumber: number };
+};
+
 export type JudgeActivityReportState = {
   filters: JudgeActivityReportFilters;
   judgeActivityReportData: {
@@ -52,7 +61,6 @@ export type JudgeActivityReportState = {
   lastIdsOfPages: {
     docketNumber: number;
   }[];
-  totalCases: number;
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {

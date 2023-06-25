@@ -1,4 +1,7 @@
-import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import {
+  CavAndSubmittedCaseResponseType,
+  JudgeActivityReportCavAndSubmittedCasesRequestType,
+} from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
 
@@ -8,11 +11,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
 }: {
   applicationContext: IApplicationContext;
   params: JudgeActivityReportCavAndSubmittedCasesRequestType;
-}): Promise<{
-  totalCount: number;
-  foundCases: { docketNumber: string }[];
-  lastIdOfPage: { docketNumber: number };
-}> => {
+}): Promise<CavAndSubmittedCaseResponseType> => {
   const source = ['docketNumber'];
 
   const filters: QueryDslQueryContainer[] = [
@@ -21,8 +20,6 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     },
   ];
 
-  // TODO: ADD PAGE SIZE, SEARCH_AFTER PARAMS FOR PAGINATION
-
   if (params.judgeName !== 'All Judges') {
     filters.push({
       match_phrase: { 'associatedJudge.S': `${params.judgeName}` },
@@ -30,21 +27,22 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   }
 
   const searchResults = await applicationContext.getSearchClient().search({
+    _source: source,
     body: {
-      _source: source,
       query: {
         bool: {
           must: filters,
         },
       },
-      size: 10000,
+      search_after: [params.searchAfter.docketNumber],
       sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
-      track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
     index: 'efcms-case',
+    size: params.size,
+    track_total_hits: true,
   });
 
-  const { results, total } = formatResults(searchResults.body);
+  const { results } = formatResults(searchResults.body);
 
   const matchingCases: any[] = searchResults.body.hits.hits;
   const lastCase = matchingCases?.[matchingCases.length - 1];
@@ -56,6 +54,5 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   return {
     foundCases: results,
     lastIdOfPage,
-    totalCount: total, // TODO: REMOVE TOTAL   COUNT AS SIZE OF CASES AFTER FILTERING IS SUFFICIENT (UNIT TEST)
   };
 };
