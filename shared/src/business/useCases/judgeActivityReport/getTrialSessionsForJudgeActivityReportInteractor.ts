@@ -1,4 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -7,19 +8,12 @@ import {
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
+  TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
 } from '../../entities/EntityConstants';
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
-  {
-    endDate,
-    judgeId,
-    startDate,
-  }: {
-    judgeId: string;
-    endDate: string;
-    startDate: string;
-  },
+  { endDate, judgeId, startDate }: JudgeActivityReportFilters,
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -43,9 +37,16 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       applicationContext,
     });
 
-  const judgeSessionsInDateRange = trialSessions.filter(
+  const trialSessionsForSelectedJudge = trialSessions.filter(session => {
+    if (
+      searchEntity.judgeId !== TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION
+    )
+      return session.judge?.userId === searchEntity.judgeId;
+    else return session;
+  });
+
+  const judgeSessionsInDateRange = trialSessionsForSelectedJudge.filter(
     session =>
-      session.judge?.userId === searchEntity.judgeId &&
       session.startDate <= searchEntity.endDate &&
       session.startDate >= searchEntity.startDate,
   );

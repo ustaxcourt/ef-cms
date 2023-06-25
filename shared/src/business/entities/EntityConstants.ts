@@ -1542,3 +1542,6 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
+  'tempJudgeIdToRepresentAllJudgesSelection';
