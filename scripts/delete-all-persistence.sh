@@ -6,6 +6,9 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
+[[ "$ENV" == "prod" ]] && echo "This script is for lower environments only" && exit 1
+
+# shellcheck disable=SC1091
 source ./scripts/helpers/opensearch-domain-exists.sh
 
 VERSIONS="alpha beta"
