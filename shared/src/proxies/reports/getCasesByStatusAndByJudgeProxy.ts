@@ -11,19 +11,25 @@ import { post } from '../requests';
  */
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext,
-  { judgeName, statuses }: JudgeActivityReportCavAndSubmittedCasesRequestType,
+  {
+    judgeName,
+    pageSize,
+    searchAfter,
+    statuses,
+  }: JudgeActivityReportCavAndSubmittedCasesRequestType,
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;
   lastIdOfPage: {
     docketNumber: string;
   };
-  totalCount: number;
 }> => {
   return post({
     applicationContext,
     body: {
       judgeName,
+      pageSize,
+      searchAfter,
       statuses,
     },
     endpoint: '/judge-activity-report/open-cases',

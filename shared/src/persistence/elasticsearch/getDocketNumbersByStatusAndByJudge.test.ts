@@ -1,17 +1,19 @@
-import { CAV_AND_SUBMITTED_CASE_STATUS } from '../../business/entities/EntityConstants';
+import {
+  CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+  CAV_AND_SUBMITTED_CASE_STATUS,
+} from '../../business/entities/EntityConstants';
 import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { getDocketNumbersByStatusAndByJudge } from './getDocketNumbersByStatusAndByJudge';
 import { judgeUser } from '../../test/mockUsers';
 
 describe('getDocketNumbersByStatusAndByJudge', () => {
-  const requestPageSize = 100;
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
     judgeName: judgeUser.name,
+    pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
     searchAfter: {
-      docketNumber: judgeUser.userId,
+      docketNumber: 1234,
     },
-    size: requestPageSize,
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
@@ -52,12 +54,12 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(requestPageSize);
+    ).toEqual(CAV_AND_SUBMITTED_CASES_PAGE_SIZE);
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body
         .search_after,
-    ).toEqual([judgeUser.userId]);
+    ).toEqual([mockValidRequest.searchAfter.docketNumber]);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,
@@ -99,11 +101,11 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(requestPageSize);
+    ).toEqual(CAV_AND_SUBMITTED_CASES_PAGE_SIZE);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body
         .search_after,
-    ).toEqual([judgeUser.userId]);
+    ).toEqual([mockValidRequest.searchAfter.docketNumber]);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,
