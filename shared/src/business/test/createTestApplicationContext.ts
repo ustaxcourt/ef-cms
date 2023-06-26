@@ -96,6 +96,7 @@ import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '../utilities/getTextByCount';
+import { getTrialSessionById } from '../../persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '../../persistence/dynamo/workitems/getWorkItemById';
@@ -489,6 +490,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
+    getTrialSessionById: jest.fn().mockImplementation(getTrialSessionById),
     getTrialSessionJobStatusForCase: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
