@@ -151,15 +151,19 @@ export const CaseSearchByName = connect(
                 endDateErrorText={validationErrors.endDate}
                 endLabel="Date filed end date"
                 endName="caseSearchByNameEndDate"
-                endPickerCls={'desktop:grid-col-6 desktop:padding-left-2'}
+                endPickerCls={
+                  'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                }
                 endValue={advancedSearchForm.caseSearchByName.endDate}
                 formGroupCls={'margin-bottom-0'}
                 maxDate={caseSearchByNameHelper.today}
-                rangePickerCls={'grid-row grid-gap-3 phone:grid-col-12'}
+                rangePickerCls={'grid-row grid-gap-3'}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Date filed start date"
                 startName="caseSearchByNameStartDate"
-                startPickerCls={'desktop:grid-col-6 padding-right-2'}
+                startPickerCls={
+                  'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                }
                 startValue={advancedSearchForm.caseSearchByName.startDate}
                 onChangeEnd={e => {
                   updateCaseAdvancedSearchByNameFormValueSequence({
