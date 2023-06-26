@@ -1,3 +1,4 @@
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import AWS from 'aws-sdk';
 
 const awsRegion = 'us-east-1';
@@ -13,7 +14,7 @@ const ENV = Cypress.env('ENV');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 
@@ -21,51 +22,43 @@ export const confirmUser = async ({ email }) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
-  const initAuthResponse = await cognito
-    .adminInitiateAuth({
-      AuthFlow: 'ADMIN_NO_SRP_AUTH',
-      AuthParameters: {
-        PASSWORD: DEFAULT_ACCOUNT_PASS,
+  const initAuthResponse = await cognito.adminInitiateAuth({
+    AuthFlow: 'ADMIN_NO_SRP_AUTH',
+    AuthParameters: {
+      PASSWORD: DEFAULT_ACCOUNT_PASS,
+      USERNAME: email,
+    },
+    ClientId: clientId,
+    UserPoolId: userPoolId,
+  });
+
+  if (initAuthResponse.Session) {
+    await cognito.adminRespondToAuthChallenge({
+      ChallengeName: 'NEW_PASSWORD_REQUIRED',
+      ChallengeResponses: {
+        NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
         USERNAME: email,
       },
       ClientId: clientId,
+      Session: initAuthResponse.Session,
       UserPoolId: userPoolId,
-    })
-    .promise();
-
-  if (initAuthResponse.Session) {
-    await cognito
-      .adminRespondToAuthChallenge({
-        ChallengeName: 'NEW_PASSWORD_REQUIRED',
-        ChallengeResponses: {
-          NEW_PASSWORD: DEFAULT_ACCOUNT_PASS,
-          USERNAME: email,
-        },
-        ClientId: clientId,
-        Session: initAuthResponse.Session,
-        UserPoolId: userPoolId,
-      })
-      .promise();
+    });
   }
 };
 
 const getClientId = async userPoolId => {
-  const results = await cognito
-    .listUserPoolClients({
-      MaxResults: 60,
-      UserPoolId: userPoolId,
-    })
-    .promise();
+  const results = await cognito.listUserPoolClients({
+    MaxResults: 60,
+    UserPoolId: userPoolId,
+  });
   const clientId = results.UserPoolClients[0].ClientId;
   return clientId;
 };
 
 const getUserPoolId = async () => {
-  const results = await cognito
-    .listUserPools({
-      MaxResults: 50,
-    })
-    .promise();
+  const results = await cognito.listUserPools({
+    MaxResults: 50,
+  });
   const userPoolId = results.UserPools.find(
     pool => pool.Name === `efcms-${ENV}`,
   ).Id;
@@ -76,17 +69,15 @@ export const getUserToken = async (username, password) => {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
-  return cognito
-    .adminInitiateAuth({
-      AuthFlow: 'ADMIN_NO_SRP_AUTH',
-      AuthParameters: {
-        PASSWORD: password,
-        USERNAME: username,
-      },
-      ClientId: clientId,
-      UserPoolId: userPoolId,
-    })
-    .promise();
+  return cognito.adminInitiateAuth({
+    AuthFlow: 'ADMIN_NO_SRP_AUTH',
+    AuthParameters: {
+      PASSWORD: password,
+      USERNAME: username,
+    },
+    ClientId: clientId,
+    UserPoolId: userPoolId,
+  });
 };
 
 export const login = token => {

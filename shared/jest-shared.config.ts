@@ -26,14 +26,18 @@ const config: Config = {
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/../',
-  }),
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/../',
+    }),
+    uuid: require.resolve('uuid'),
+  },
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
+  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
   workerIdleMemoryLimit: '20%',

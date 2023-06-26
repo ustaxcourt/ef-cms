@@ -11,8 +11,9 @@
  *
  * $ npm run admin:become-user 432143213-4321-1234-4321-432143214321
  */
-const { checkEnvVar, getVersion } = require('../util');
-const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from 'aws-sdk';
+import { checkEnvVar, getVersion } from '../util';
 
 const { COGNITO_USER_EMAIL, COGNITO_USER_POOL, ENV } = process.env;
 
@@ -66,7 +67,7 @@ if (process.argv.length < 3) {
  */
 const lookupRoleForUser = async userId => {
   const dynamodb = new DynamoDB({ region: 'us-east-1' });
-  const version = await getVersion(ENV);
+  const version = await getVersion();
   const TableName = `efcms-${ENV}-${version}`;
   const data = await dynamodb
     .getItem({
@@ -89,7 +90,7 @@ const lookupRoleForUser = async userId => {
   if (!data) {
     throw new Error(`Could not find a user for ${userId}`);
   }
-  return data.Item.role.S;
+  return data.Item?.role.S;
 };
 
 (async () => {
@@ -113,12 +114,12 @@ const lookupRoleForUser = async userId => {
 
     console.log(params);
 
-    const cognitoidentityserviceprovider = new CognitoIdentityServiceProvider({
+    const cognitoidentityserviceprovider = new CognitoIdentityProvider({
       region: 'us-east-1',
     });
-    const result = await cognitoidentityserviceprovider
-      .adminUpdateUserAttributes(params)
-      .promise();
+    const result =
+      await cognitoidentityserviceprovider.adminUpdateUserAttributes(params);
+
     console.log(result);
     console.log('SUCCESS: Please log out and log back in again');
   } catch (err) {

@@ -1,10 +1,11 @@
-const { shuffle } = require('lodash');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { SecretsManager } from 'aws-sdk';
+import { checkEnvVar } from '../util';
+import { shuffle } from 'lodash';
 const { COGNITO_USER_POOL, ENV } = process.env;
-const { checkEnvVar } = require('../util');
-const { CognitoIdentityServiceProvider, SecretsManager } = require('aws-sdk');
 
 const secretsClient = new SecretsManager({ region: 'us-east-1' });
-const cognitoClient = new CognitoIdentityServiceProvider({
+const cognitoClient = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 
@@ -63,6 +64,9 @@ const loadSecrets = async environmentName => {
       SecretId: `${environmentName}_deploy`,
     })
     .promise();
+  if (!SecretString) {
+    throw new Error(`could not load secrets for ${environmentName}_deploy`);
+  }
   const secrets = JSON.parse(SecretString);
   console.log('✅ Retrieved secrets');
   return secrets;
@@ -89,14 +93,12 @@ const rotateSecrets = async environmentName => {
     USTC_ADMIN_PASS,
   });
 
-  await cognitoClient
-    .adminSetUserPassword({
-      Password: USTC_ADMIN_PASS,
-      Permanent: true,
-      UserPoolId: COGNITO_USER_POOL,
-      Username: secrets.USTC_ADMIN_USER,
-    })
-    .promise();
+  await cognitoClient.adminSetUserPassword({
+    Password: USTC_ADMIN_PASS,
+    Permanent: true,
+    UserPoolId: COGNITO_USER_POOL,
+    Username: secrets.USTC_ADMIN_USER,
+  });
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
   await secretsClient

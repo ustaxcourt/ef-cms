@@ -25,9 +25,12 @@ const config: Config = {
     },
   },
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>',
-  }),
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>',
+    }),
+    uuid: require.resolve('uuid'),
+  },
   testEnvironment: 'node',
   testMatch: ['**/scripts/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
