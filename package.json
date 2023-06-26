@@ -260,6 +260,7 @@
     "@faker-js/faker": "^8.0.2",
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
     "@sparticuz/chromium": "^114.0.0",
+    "@types/aws-lambda": "^8.10.115",
     "@types/jest": "^29.5.2",
     "@types/lodash": "^4.14.195",
     "@types/node": "^20.3.1",
