@@ -128,7 +128,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
-const helpers = {
+export const computeds = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
@@ -252,6 +252,13 @@ const helpers = {
   workQueueHelper,
 };
 
+type TCaseDeadlineReport = {
+  caseDeadlines: RawCaseDeadline[];
+  judgeFilter: string;
+  totalCount: number;
+  page: number;
+};
+
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -264,8 +271,8 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {},
-  caseDetail: {} as TCase,
+  caseDeadlineReport: {} as TCaseDeadlineReport,
+  caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
@@ -310,7 +317,7 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-  form: {},
+  form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -365,6 +372,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
@@ -405,16 +413,9 @@ export const baseState = {
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
-export const state = {
-  ...helpers,
+export const initialState = {
   ...baseState,
+  ...computeds,
 };
 
-declare global {
-  type State = typeof state & {
-    constants: ReturnType<typeof getConstants>;
-    modal: any;
-    screenMetadata: any;
-    featureFlags: any;
-  };
-}
+export type ClientState = typeof initialState;

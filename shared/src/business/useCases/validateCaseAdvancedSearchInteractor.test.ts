@@ -1,5 +1,4 @@
 import { CaseSearch } from '../entities/cases/CaseSearch';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { validateCaseAdvancedSearchInteractor } from './validateCaseAdvancedSearchInteractor';
 
 describe('validateCaseAdvancedSearchInteractor', () => {
@@ -15,10 +14,11 @@ describe('validateCaseAdvancedSearchInteractor', () => {
     jest.restoreAllMocks();
   });
 
-  it('should be able to set an item', async () => {
-    await validateCaseAdvancedSearchInteractor(applicationContext, {
+  it('should be able to set an item', () => {
+    validateCaseAdvancedSearchInteractor({
       caseSearch: {},
     });
+
     expect(validatorSpy.mock.calls.length).toEqual(1);
   });
 });

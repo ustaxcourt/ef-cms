@@ -1,6 +1,6 @@
-/* eslint-disable complexity */
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay: any[] = [];
@@ -105,7 +105,7 @@ export const getShowEditDocketRecordEntry = ({
     entry && systemGeneratedEventCodes.includes(entry.eventCode);
   const hasCourtIssuedDocument = entry && entry.isCourtIssuedDocument;
   const hasServedCourtIssuedDocument =
-    hasCourtIssuedDocument && applicationContext.getUtilities().isServed(entry);
+    hasCourtIssuedDocument && DocketEntry.isServed(entry);
   const hasUnservableCourtIssuedDocument =
     entry && UNSERVABLE_EVENT_CODES.includes(entry.eventCode);
 
@@ -217,7 +217,7 @@ export const getFormattedDocketEntry = ({
     isSealed: entry.isSealed,
     isSealedToExternal:
       entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-    isServed: applicationContext.getUtilities().isServed(entry),
+    isServed: DocketEntry.isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
     isUnservable: formattedResult.isUnservable,
@@ -265,7 +265,12 @@ export const getFormattedDocketEntry = ({
   return formattedResult;
 };
 
-export const formattedDocketEntries = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedDocketEntries = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
     .getUtilities()

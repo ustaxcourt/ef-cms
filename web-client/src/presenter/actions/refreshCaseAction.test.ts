@@ -2,7 +2,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { refreshCaseAction } from './refreshCaseAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('refreshCaseAction', () => {
   const DOCKET_NUMBER = '101-20';

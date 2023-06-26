@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const sessionAssignmentHelper = get => {
+import { Get } from 'cerebral';
+export const sessionAssignmentHelper = (get: Get) => {
   let formattedTrialClerks = get(state.trialClerks);
   formattedTrialClerks = [
     { name: 'Other', userId: 'Other' },

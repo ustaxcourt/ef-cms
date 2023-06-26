@@ -1,6 +1,12 @@
-import { state } from 'cerebral';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const filingPartiesFormHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const filingPartiesFormHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { partyType } = get(state.caseDetail);
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);
@@ -27,7 +33,7 @@ export const filingPartiesFormHelper = (get, applicationContext) => {
     'Application to Take Deposition',
   ];
 
-  const isServed = applicationContext.getUtilities().isServed(form);
+  const isServed = DocketEntry.isServed(form);
 
   const showSecondaryParty =
     partyType === PARTY_TYPES.petitionerSpouse ||

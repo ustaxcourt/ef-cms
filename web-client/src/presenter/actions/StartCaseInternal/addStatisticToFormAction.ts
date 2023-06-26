@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * adds a statistic with default yearOrPeriod to the state.form.statistics array

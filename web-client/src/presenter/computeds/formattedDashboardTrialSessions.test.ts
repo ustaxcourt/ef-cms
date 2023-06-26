@@ -7,7 +7,7 @@ import {
   formatSession,
   formattedDashboardTrialSessions as formattedDashboardTrialSessionsComputed,
 } from './formattedDashboardTrialSessions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const formattedDashboardTrialSessions = withAppContextDecorator(

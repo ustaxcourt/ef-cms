@@ -3,7 +3,7 @@ import {
   PENALTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { statisticsFormHelper as statisticsFormHelperComputed } from './statisticsFormHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

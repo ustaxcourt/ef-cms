@@ -1,5 +1,5 @@
 import { clearDueDateAction } from './clearDueDateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearDueDateAction', () => {
   it('should unset the due date on the form', async () => {

@@ -34,6 +34,7 @@ describe('pendingReport', () => {
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/03/20',
               formattedName: 'Order',
+              inConsolidatedGroup: true,
               status: 'closed',
             },
             {
@@ -42,6 +43,8 @@ describe('pendingReport', () => {
               docketNumberWithSuffix: '321-45S',
               formattedFiledDate: '03/23/20',
               formattedName: 'Order to Show Cause',
+              inConsolidatedGroup: true,
+              inLeadCase: true,
               status: 'closed',
             },
           ],

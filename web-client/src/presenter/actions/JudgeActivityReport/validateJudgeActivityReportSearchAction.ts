@@ -1,5 +1,5 @@
 import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateJudgeActivityReportSearchAction = ({
   get,

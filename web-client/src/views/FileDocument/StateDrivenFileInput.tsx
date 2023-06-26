@@ -3,7 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { cloneFile } from '../cloneFile';
 import { connect } from '@cerebral/react';
 import { limitFileSize } from '../limitFileSize';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const StateDrivenFileInput = connect(

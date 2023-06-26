@@ -1,12 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  CASE_TYPES_MAP,
-  COUNTRY_TYPES,
-  PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('./CaseExternal');
+import { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { CaseExternal } from './CaseExternal';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
   describe('for Corporation Contacts', () => {

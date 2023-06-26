@@ -1,5 +1,6 @@
 import { TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const getTrialSessionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,

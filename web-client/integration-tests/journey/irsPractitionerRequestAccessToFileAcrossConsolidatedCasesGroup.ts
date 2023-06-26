@@ -1,11 +1,8 @@
-import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
+import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
-import { contactPrimaryFromState } from '../helpers';
 import { externalConsolidatedCaseGroupHelper as externalConsolidatedCaseGroupHelperComputed } from '../../src/presenter/computeds/externalConsolidatedCaseGroupHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
 export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
   cerebralTest,
@@ -54,16 +51,12 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
       });
     }
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: `filersMap.${contactPrimary.contactId}`,
-      value: true,
-    });
-
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      primaryDocumentFile:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -79,7 +72,8 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .certificateOfServiceDate[1],
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -98,7 +92,8 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .certificateOfServiceDate[0].message,
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {

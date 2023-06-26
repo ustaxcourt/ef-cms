@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { clearCaseAssociationWizardDataAction } from './clearCaseAssociationWizardDataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearCaseAssociationWizardDataAction', () => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();

@@ -1,5 +1,5 @@
 import { getDocumentEditUrl } from '../utilities/getDocumentEditUrl';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * returns the editUrl as path for the document in props.docketEntryIdToEdit

@@ -6,7 +6,7 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
 export const JudgeActivityReport = connect(

@@ -1,7 +1,5 @@
-import { EditPetitionerCounselFactory } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounselFactory';
+import { EditPetitionerCounsel } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounsel';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
-
-const { VALIDATION_ERROR_MESSAGES } = EditPetitionerCounselFactory;
 
 export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
@@ -42,7 +40,8 @@ export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
     await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      representing: VALIDATION_ERROR_MESSAGES.representing,
+      representing:
+        EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

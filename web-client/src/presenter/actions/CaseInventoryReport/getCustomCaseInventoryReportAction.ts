@@ -3,7 +3,7 @@ import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportResponse,
 } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * get the case inventory report data

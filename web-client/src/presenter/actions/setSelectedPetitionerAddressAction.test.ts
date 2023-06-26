@@ -2,7 +2,7 @@ import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getContactPrimary } from '../../../../shared/src/business/entities/cases/Case';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setSelectedPetitionerAddressAction } from './setSelectedPetitionerAddressAction';
 
 describe('setSelectedPetitionerAddressAction', () => {

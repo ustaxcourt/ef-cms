@@ -1,5 +1,5 @@
 import { clearCaseDetailMenuAction } from './clearCaseDetailMenuAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearCaseDetailMenuAction', () => {
   it('clears state.navigation.caseDetailMenu', async () => {

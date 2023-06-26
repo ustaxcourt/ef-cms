@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -44,7 +45,7 @@ export const DocketRecord = connect(
                   <span aria-hidden="true">No.</span>
                 </span>
               </th>
-              <th>Date</th>
+              <th>Filed Date</th>
               <th className="center-column">Event</th>
               <th aria-hidden="true" className="icon-column" />
               <th>Filings and Proceedings</th>

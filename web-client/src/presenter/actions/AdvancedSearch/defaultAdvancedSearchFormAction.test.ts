@@ -2,7 +2,7 @@ import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/Entit
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('defaultAdvancedSearchFormAction', () => {
   presenter.providers.applicationContext = applicationContextForClient;

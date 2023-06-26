@@ -1,5 +1,5 @@
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Retrieves the cases with a status of CAV or Submitted by judge
@@ -32,7 +32,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 
   store.set(
     state.judgeActivityReport.lastIdsOfPages[props.selectedPage + 1],
-    lastIdOfPage.docketNumber,
+    lastIdOfPage,
   );
 
   store.set(

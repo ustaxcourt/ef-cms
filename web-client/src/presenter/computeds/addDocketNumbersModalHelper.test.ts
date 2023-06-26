@@ -1,5 +1,5 @@
 import { addDocketNumbersModalHelper } from './addDocketNumbersModalHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('addDocketNumbersModalHelper', () => {
   it('should display the proper modal text when addedDocketNumbers is defined with only 1 docket number', () => {

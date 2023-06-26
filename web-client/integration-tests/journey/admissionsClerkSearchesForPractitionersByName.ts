@@ -2,7 +2,7 @@ import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/Enti
 import { advancedSearchHelper } from '../../src/presenter/computeds/AdvancedSearch/advancedSearchHelper';
 import { formatNow } from '../../../shared/src/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {

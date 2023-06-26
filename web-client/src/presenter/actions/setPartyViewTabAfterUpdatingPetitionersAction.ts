@@ -1,5 +1,5 @@
 import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Sets the currentViewMetadata.partyViewTab view after updating petitioners on case.

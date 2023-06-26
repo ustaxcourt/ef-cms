@@ -6,14 +6,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * createCaseDeadlineInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseDeadline the case deadline data
- * @returns {CaseDeadline} the created case deadline
- */
 export const createCaseDeadlineInteractor = async (
   applicationContext: IApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },

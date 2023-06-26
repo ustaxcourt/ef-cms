@@ -62,6 +62,7 @@ import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDoc
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
+import { closeModalAndRefetchCase } from './sequences/DocketEntry/closeModalAndRefetchCase';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
@@ -196,6 +197,7 @@ import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequ
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
@@ -373,7 +375,6 @@ import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { sortTableSequence } from './sequences/sortTableSequence';
 import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
-import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
@@ -534,7 +535,7 @@ import { validateUploadCorrespondenceDocumentSequence } from './sequences/valida
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
-const sequences = {
+export const presenterSequences = {
   addCaseToTrialSessionSequence,
   addPenaltyInputSequence,
   addStatisticToFormSequence,
@@ -590,6 +591,7 @@ const sequences = {
   closeModalAndNavigateBackSequence,
   closeModalAndNavigateSequence,
   closeModalAndNavigateToMaintenanceSequence,
+  closeModalAndRefetchCase,
   closeModalAndReturnToCaseDetailDraftDocumentsSequence,
   closeModalAndReturnToCaseDetailSequence,
   closeModalAndReturnToDashboardSequence,
@@ -1075,16 +1077,14 @@ export const presenter = {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
-  sequences,
-  state,
+  sequences: presenterSequences,
+  state: initialState,
 };
 
-declare global {
-  type Sequences = typeof sequences;
-}
+export type Sequences = typeof presenterSequences;
 
 declare global {
-  type ActionProps = {
+  type ActionProps<Props = any> = {
     applicationContext: ClientApplicationContext;
     get: <T>(slice: T) => T;
     store: {
@@ -1092,7 +1092,7 @@ declare global {
       unset: (key: any) => void;
     };
     path: any;
-    props: any;
+    props: Props;
     router: any;
   };
 }

@@ -1,5 +1,4 @@
-import { ActionProps } from '../presenter';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * updates the petitioner information action

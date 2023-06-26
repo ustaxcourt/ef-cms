@@ -1,13 +1,4 @@
 import {
-  FORMATS,
-  calculateDifferenceInDays,
-  calculateISODate,
-  combineISOandEasternTime,
-  createISODateString,
-  formatDateString,
-} from './DateHandler';
-
-import {
   CASE_STATUS_TYPES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
@@ -18,10 +9,17 @@ import {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
-
 import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
+import {
+  FORMATS,
+  calculateDifferenceInDays,
+  calculateISODate,
+  combineISOandEasternTime,
+  createISODateString,
+  formatDateString,
+} from './DateHandler';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
-import { isServed } from '../entities/DocketEntry';
 
 export const TRANSCRIPT_AGE_DAYS_MIN = 90;
 export const documentMeetsAgeRequirements = doc => {
@@ -52,14 +50,14 @@ const computeIsInProgress = ({ formattedEntry }) => {
       !formattedEntry.isMinuteEntry &&
       !formattedEntry.isUnservable) ||
     (formattedEntry.isFileAttached === true &&
-      !isServed(formattedEntry) &&
+      !DocketEntry.isServed(formattedEntry) &&
       !formattedEntry.isUnservable)
   );
 };
 
 const computeIsNotServedDocument = ({ formattedEntry }) => {
   return (
-    !isServed(formattedEntry) &&
+    !DocketEntry.isServed(formattedEntry) &&
     !formattedEntry.isUnservable &&
     !formattedEntry.isMinuteEntry
   );
@@ -187,7 +185,6 @@ export const getFilingsAndProceedings = formattedDocketEntry => {
 
 /**
  * formats trial session fields for display
- *
  * @param {string} judgeName the name of the judge
  * @param {string} trialDate ISO-8601 GMT timestamp
  * @param {string} trialLocation location of the trial

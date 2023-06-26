@@ -3,7 +3,7 @@ import { CaseSearchByDocketNumber } from './CaseSearchByDocketNumber';
 import { CaseSearchByName } from './CaseSearchByName';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseSearchForm = connect(

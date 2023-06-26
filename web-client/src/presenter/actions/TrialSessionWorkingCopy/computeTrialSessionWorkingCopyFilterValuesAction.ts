@@ -1,5 +1,6 @@
 /* eslint-disable complexity */
-import { state } from 'cerebral';
+
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets state.trialSessionWorkCopy.filters based on the props.key

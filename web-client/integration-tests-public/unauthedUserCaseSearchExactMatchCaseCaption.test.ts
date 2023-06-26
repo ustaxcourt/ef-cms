@@ -14,7 +14,7 @@ const cerebralTest = setupTest();
 const testClient = setupTestClient();
 const { COUNTRY_TYPES } = applicationContext.getConstants();
 
-const updatedLastName = faker.name.lastName();
+const updatedLastName = faker.person.lastName();
 const createdDocketNumbers = [];
 
 const updateCaseCaption = (docketNumber, caseCaption) => {

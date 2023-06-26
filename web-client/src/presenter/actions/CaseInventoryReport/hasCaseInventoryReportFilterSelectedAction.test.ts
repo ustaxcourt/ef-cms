@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { hasCaseInventoryReportFilterSelectedAction } from './hasCaseInventoryReportFilterSelectedAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('hasCaseInventoryReportFilterSelectedAction', () => {
   const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();

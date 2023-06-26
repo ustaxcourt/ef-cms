@@ -1,5 +1,5 @@
 import { checkForActiveBatchesAction } from './checkForActiveBatchesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('checkForActiveBatchesAction', () => {
   let presenter;
