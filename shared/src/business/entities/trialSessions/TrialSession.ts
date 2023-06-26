@@ -384,7 +384,7 @@ export class TrialSession extends JoiValidationEntity {
         Small: 'S',
       }[sessionType] || 'H';
 
-    const formattedTrialCity = trialLocation.replace(/[\s.,]/g, '');
+    const formattedTrialCity = trialLocation?.replace(/[\s.,]/g, '');
 
     const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
 
