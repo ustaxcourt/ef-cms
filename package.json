@@ -21,7 +21,6 @@
     "@aws-sdk/node-http-handler": "^3.329.0",
     "@aws-sdk/protocol-http": "^3.329.0",
     "@aws-sdk/signature-v4": "^3.329.0",
-    "@aws-sdk/smithy-client": "^3.358.0",
     "@aws-sdk/types": "^3.342.0",
     "@cerebral/react": "4.2.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.36",
