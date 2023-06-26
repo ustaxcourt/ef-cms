@@ -4,7 +4,7 @@ import React from 'react';
 
 export const DismissThirtyDayNoticeModal = connect(
   {},
-  function DismissThirtyDayNoticeModal({}) {
+  function DismissThirtyDayNoticeModal() {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -14,8 +14,9 @@ export const DismissThirtyDayNoticeModal = connect(
         onConfirmSequence="dismissThirtyDayTrialAlertSequence"
       >
         <p>
-          Have all 30-day notices been sent out for this trial date? "Yes" will
-          dismiss the 30-day notice notifications for this trial session.
+          Have all 30-day notices been sent out for this trial date?
+          &quot;Yes&quot; will dismiss the 30-day notice notifications for this
+          trial session.
         </p>
       </ConfirmModal>
     );
