@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/client-glue';
 
 const glueClient = new GlueClient({ region: 'us-east-1' });
-const JobName = 'mock-emails';
+const JobName = 'mock_emails';
 
 export const FAILURE_STATES = ['ERROR', 'FAILED', 'STOPPED', 'TIMEOUT'];
 export const RUNNING_STATES = ['RUNNING', 'STARTING', 'STOPPING', 'WAITING'];
@@ -46,8 +46,8 @@ export const startGlueJob = async ({
 
   const startJobRunCommand = new StartJobRunCommand({
     Arguments: {
-      '--destination-table': destinationTable,
-      '--source-table': sourceTable,
+      '--destination_table': destinationTable,
+      '--source_table': sourceTable,
     },
     JobName,
   });
