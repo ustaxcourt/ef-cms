@@ -34,8 +34,8 @@ resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
   comparison_operator = "GreaterThanThreshold"
   statistic           = "Sum"
   threshold           = 0
-  evaluation_periods  = 2
-  period              = 120
+  evaluation_periods  = 1
+  period              = 300
 
   dimensions = {
     QueueName  = "send_emails_dl_queue_${var.environment}_${var.deploying_color}.fifo"
