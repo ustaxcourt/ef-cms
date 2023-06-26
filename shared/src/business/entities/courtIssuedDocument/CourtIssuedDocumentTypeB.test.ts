@@ -1,6 +1,6 @@
-const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { getTextByCount } = require('../../utilities/getTextByCount');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeB', () => {
   describe('constructor', () => {
@@ -64,7 +64,7 @@ describe('CourtIssuedDocumentTypeB', () => {
           scenario: 'Type B',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 
