@@ -110,7 +110,7 @@ describe('WorkItem', () => {
       expect(workItem.isValid()).toBe(true);
     });
 
-    it('should set properties on WorkItem that pertain to the Case when a Case entity is passed into the constructor', async () => {
+    it('should set properties on WorkItem that pertain to the Case when a Case entity is passed into the constructor', () => {
       aValidWorkItem.associatedJudge = 'This should be overwritten';
       aValidWorkItem.caseStatus = CASE_STATUS_TYPES.closed;
       aValidWorkItem.leadDocketNumber = '100-23';
