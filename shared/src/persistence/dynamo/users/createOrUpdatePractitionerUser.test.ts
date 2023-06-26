@@ -45,7 +45,7 @@ describe('createOrUpdatePractitionerUser', () => {
     barNumber: 'pt1234',
     email: 'test@example.com',
     name: 'Test Other',
-    role: ROLES.other,
+    role: 'other',
     section: 'other',
   };
 
