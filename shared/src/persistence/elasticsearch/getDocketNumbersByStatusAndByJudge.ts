@@ -34,7 +34,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
           must: filters,
         },
       },
-      search_after: [params.searchAfter.docketNumber],
+      search_after: [params.searchAfter],
       sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
     },
     index: 'efcms-case',
@@ -47,12 +47,11 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   const matchingCases: any[] = searchResults.body.hits.hits;
   const lastCase = matchingCases?.[matchingCases.length - 1];
 
-  const lastIdOfPage = {
-    docketNumber: (lastCase?.sort[0] as number) || 0,
-  };
+  const lastDocketNumberForCavAndSubmittedCasesSearch =
+    (lastCase?.sort[0] as number) || 0;
 
   return {
     foundCases: results,
-    lastIdOfPage,
+    lastDocketNumberForCavAndSubmittedCasesSearch,
   };
 };

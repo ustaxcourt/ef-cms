@@ -11,9 +11,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
     judgeName: judgeUser.name,
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-    searchAfter: {
-      docketNumber: 1234,
-    },
+    searchAfter: 1234,
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
@@ -59,7 +57,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body
         .search_after,
-    ).toEqual([mockValidRequest.searchAfter.docketNumber]);
+    ).toEqual([mockValidRequest.searchAfter]);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,
@@ -85,9 +83,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
           docketNumber: '11316-18',
         },
       ],
-      lastIdOfPage: {
-        docketNumber: 2018011316,
-      },
+      lastDocketNumberForCavAndSubmittedCasesSearch: 2018011316,
     });
   });
 
@@ -105,7 +101,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body
         .search_after,
-    ).toEqual([mockValidRequest.searchAfter.docketNumber]);
+    ).toEqual([mockValidRequest.searchAfter]);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,

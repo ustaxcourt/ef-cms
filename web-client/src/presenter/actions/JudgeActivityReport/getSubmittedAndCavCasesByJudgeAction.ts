@@ -20,19 +20,22 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
-  const { cases, consolidatedCasesGroupCountMap, lastIdOfPage } =
-    await applicationContext
-      .getUseCases()
-      .getCasesByStatusAndByJudgeInteractor(applicationContext, {
-        judgeName,
-        pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-        searchAfter,
-        statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
-      });
+  const {
+    cases,
+    consolidatedCasesGroupCountMap,
+    lastDocketNumberForCavAndSubmittedCasesSearch,
+  } = await applicationContext
+    .getUseCases()
+    .getCasesByStatusAndByJudgeInteractor(applicationContext, {
+      judgeName,
+      pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+      searchAfter,
+      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+    });
 
   store.set(
     state.judgeActivityReport.lastIdsOfPages[props.selectedPage + 1],
-    lastIdOfPage,
+    lastDocketNumberForCavAndSubmittedCasesSearch,
   );
 
   store.set(

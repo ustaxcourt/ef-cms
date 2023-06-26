@@ -7,18 +7,16 @@ import { applicationContextForClient as applicationContext } from '../../../../.
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
-// import { runAction } from '@web-client/presenter/test.cerebral';
-// runAction;
+import { runAction } from '@web-client/presenter/test.cerebral';
+
 describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
-  const lastIdOfPage = {
-    docketNumber: 1234,
-  };
+  const lastDocketNumberForCavAndSubmittedCasesSearch = 1234;
+
   const expectedRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
     judgeName: judgeUser.name,
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-    searchAfter: lastIdOfPage,
+    searchAfter: lastDocketNumberForCavAndSubmittedCasesSearch,
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
   const mockConsolidatedCasesGroupCount = { '101-22': 3 };
@@ -40,8 +38,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     mockCustomCaseReportResponse = {
       cases: mockReturnedCases,
       consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
-      lastIdOfPage: { docketNumber: 1234 },
-      totalCount: mockReturnedCases.length,
+      lastDocketNumberForCavAndSubmittedCasesSearch,
     };
 
     applicationContext
@@ -64,7 +61,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         state: {
           judgeActivityReport: {
             filters: expectedRequest,
-            lastIdsOfPages: [lastIdOfPage],
+            lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
           },
         },
       },
@@ -89,7 +86,8 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   it('should populate page ID tracking array when navigating to later pages', async () => {
     const page1SearchId = 123;
     const page2SearchId = 9001;
-    mockCustomCaseReportResponse.lastIdOfPage = { docketNumber: page2SearchId };
+    mockCustomCaseReportResponse.lastDocketNumberForCavAndSubmittedCasesSearch =
+      page2SearchId;
 
     await applicationContext
       .getUseCases()
@@ -112,16 +110,19 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
               judgeName: expectedRequest.judgeName,
             },
             judgeActivityReportData: {},
-            lastIdsOfPages: [lastIdOfPage, { docketNumber: page1SearchId }],
+            lastIdsOfPages: [
+              lastDocketNumberForCavAndSubmittedCasesSearch,
+              page1SearchId,
+            ],
           },
         },
       },
     );
 
     expect(result.state.judgeActivityReport.lastIdsOfPages).toMatchObject([
-      lastIdOfPage,
-      { docketNumber: page1SearchId },
-      { docketNumber: page2SearchId },
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+      page1SearchId,
+      page2SearchId,
     ]);
   });
 
@@ -159,7 +160,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
             judgeActivityReportData: {
               submittedAndCavCasesByJudge: undefined,
             },
-            lastIdsOfPages: [lastIdOfPage],
+            lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
           },
         },
       },
@@ -192,7 +193,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
             judgeActivityReportData: {
               consolidatedCasesGroupCountMap: undefined,
             },
-            lastIdsOfPages: [lastIdOfPage],
+            lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
           },
         },
       },

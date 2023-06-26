@@ -164,14 +164,13 @@ let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
 let expectedConsolidatedCasesGroupCountMap = {};
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
-  const lastIdOfPage = {
-    docketNumber: 12334,
-  };
+  const lastDocketNumberForCavAndSubmittedCasesSearch = 12334;
+
   const mockValidRequest = {
     judgeName: judgeUser.name,
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-    searchAfter: lastIdOfPage,
-    statuses: ['Submitted', 'CAV'],
+    searchAfter: lastDocketNumberForCavAndSubmittedCasesSearch,
+    statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
 
   beforeEach(() => {
@@ -218,7 +217,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue({
         foundCases: mockReturnedDocketNumbers,
-        lastIdOfPage,
+        lastDocketNumberForCavAndSubmittedCasesSearch,
       });
 
     applicationContext
@@ -252,7 +251,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.consolidatedCasesGroupCountMap).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
-    expect(result.lastIdOfPage).toEqual(lastIdOfPage);
+    expect(result.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+    );
   });
 
   it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the member case of consolidated cases and case with ODD)', async () => {
@@ -276,8 +277,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue({
         foundCases: mockReturnedDocketNumbers,
-        lastIdOfPage,
-        totalCount: mockReturnedDocketNumbers.length,
+        lastDocketNumberForCavAndSubmittedCasesSearch,
       });
 
     applicationContext
@@ -312,7 +312,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.consolidatedCasesGroupCountMap).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
-    expect(result.lastIdOfPage).toEqual(lastIdOfPage);
+    expect(result.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+    );
   });
 
   it('should return an array of 1 case and consolidatedCasesGroupMap (stripping out the case with served ODD and no consolidated cases)', async () => {
@@ -325,8 +327,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue({
         foundCases: mockReturnedDocketNumbers,
-        lastIdOfPage,
-        totalCount: mockReturnedDocketNumbers.length,
+        lastDocketNumberForCavAndSubmittedCasesSearch,
       });
 
     applicationContext
@@ -348,7 +349,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
-    expect(result.lastIdOfPage).toEqual(lastIdOfPage);
+    expect(result.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+    );
   });
 
   it('should return an array of 2 cases (one case containing an ODD in draft status) and consolidatedCasesGroupMap', async () => {
@@ -369,8 +372,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue({
         foundCases: mockReturnedDocketNumbers,
-        lastIdOfPage,
-        totalCount: mockReturnedDocketNumbers.length,
+        lastDocketNumberForCavAndSubmittedCasesSearch,
       });
 
     applicationContext
@@ -395,7 +397,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
-    expect(result.lastIdOfPage).toEqual(lastIdOfPage);
+    expect(result.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+    );
   });
 
   it('should return an array of 2 cases (one case containing an unserved ODD) and consolidatedCasesGroupMap', async () => {
@@ -416,8 +420,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue({
         foundCases: mockReturnedDocketNumbers,
-        lastIdOfPage,
-        totalCount: mockReturnedDocketNumbers.length,
+        lastDocketNumberForCavAndSubmittedCasesSearch,
       });
 
     applicationContext
@@ -442,7 +445,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
-    expect(result.lastIdOfPage).toEqual(lastIdOfPage);
+    expect(result.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+    );
   });
 
   it('should return an array of 2 cases (one case containing an ODD has been stricken) and consolidatedCasesGroupMap', async () => {
@@ -464,8 +469,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValue({
         foundCases: mockReturnedDocketNumbers,
-        lastIdOfPage,
-        totalCount: mockReturnedDocketNumbers.length,
+        lastDocketNumberForCavAndSubmittedCasesSearch,
       });
 
     applicationContext
@@ -490,6 +494,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
-    expect(result.lastIdOfPage).toEqual(lastIdOfPage);
+    expect(result.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
+      lastDocketNumberForCavAndSubmittedCasesSearch,
+    );
   });
 });

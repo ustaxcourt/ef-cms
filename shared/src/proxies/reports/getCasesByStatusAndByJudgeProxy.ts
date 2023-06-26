@@ -20,9 +20,7 @@ export const getCasesByStatusAndByJudgeInteractor = (
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;
-  lastIdOfPage: {
-    docketNumber: string;
-  };
+  lastDocketNumberForCavAndSubmittedCasesSearch: number;
 }> => {
   return post({
     applicationContext,
