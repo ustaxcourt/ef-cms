@@ -1,10 +1,7 @@
-export const goToCaseDetail = caseTitle => {
-  cy.get(`td:contains(${caseTitle})`)
-    .first()
-    .parent()
-    .find('a[href*="case-detail/"]')
-    .first()
-    .click();
+export const goToCaseDetailPetitioner = docketNumber => {
+  cy.get('#docket-search-field').clear().type(docketNumber);
+  cy.get('.usa-search-submit-text').click();
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
 };
 
 export const goToFileADocument = () => {
