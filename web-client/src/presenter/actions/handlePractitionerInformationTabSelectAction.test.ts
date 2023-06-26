@@ -1,6 +1,6 @@
 import { handlePractitionerInformationTabSelectAction } from './handlePractitionerInformationTabSelectAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('handlePractitionerInformationTabSelectAction', () => {
   let documentationStub;

@@ -1,15 +1,14 @@
-const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { UNSERVABLE_EVENT_CODES } = require('../EntityConstants');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
+import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
-describe('CourtIssuedDocumentDefault', () => {
+describe('CourtIssuedDocumentBase', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: null,
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
       });
     });
@@ -20,7 +19,6 @@ describe('CourtIssuedDocumentDefault', () => {
         scenario: null,
       });
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
         documentType: VALIDATION_ERROR_MESSAGES.documentType,
         filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
       });

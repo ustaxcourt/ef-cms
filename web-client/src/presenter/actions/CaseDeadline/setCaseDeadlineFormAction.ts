@@ -1,6 +1,6 @@
 import { find } from 'lodash';
 import { parseDateToMonthDayYear } from './parseDateToMonthDayYear';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * creates a case deadline

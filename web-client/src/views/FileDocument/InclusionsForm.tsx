@@ -2,7 +2,9 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 

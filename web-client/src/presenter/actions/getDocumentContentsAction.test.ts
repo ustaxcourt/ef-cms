@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocumentContentsAction } from './getDocumentContentsAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getDocumentContentsAction', () => {
   const mockDocketEntryId = '77ec46cd-c657-4558-ba13-9696a4a3d9b0';

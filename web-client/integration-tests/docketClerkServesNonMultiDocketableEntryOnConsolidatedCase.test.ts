@@ -6,7 +6,7 @@ import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/co
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsPaperFiledDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledDocketEntryAndSavesForLater';
 import { fakeFile } from '../integration-tests-public/helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { setupTest } from './helpers';
 import { withAppContextDecorator } from '../src/withAppContext';
 

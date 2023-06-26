@@ -1,6 +1,6 @@
 import { clearOpenClosedCasesCurrentPageAction } from './clearOpenClosedCasesCurrentPageAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearOpenClosedCasesCurrentPageAction', () => {
   it('should unset the closedCasesCurrentPage value on the state', async () => {

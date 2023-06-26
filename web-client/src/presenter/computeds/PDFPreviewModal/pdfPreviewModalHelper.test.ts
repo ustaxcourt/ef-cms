@@ -1,5 +1,5 @@
 import { pdfPreviewModalHelper } from './pdfPreviewModalHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('pdfPreviewModalHelper', () => {
   it('should disable left and right buttons', () => {

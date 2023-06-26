@@ -1,41 +1,36 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 
-/**
- * User's Case Note entity
- *
- * @param {object} rawProps the raw case note data
- * @constructor
- */
-function UserCaseNote() {
-  this.entityName = 'UserCaseNote';
+export class UserCaseNote extends JoiValidationEntity {
+  public docketNumber: string;
+  public userId: string;
+  public notes: string;
+
+  constructor(rawProps) {
+    super('UserCaseNote');
+
+    this.docketNumber = rawProps.docketNumber;
+    this.userId = rawProps.userId;
+    this.notes = rawProps.notes;
+  }
+
+  static VALIDATION_RULES = {
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
+    notes: JoiValidationConstants.STRING.required(),
+    userId: JoiValidationConstants.UUID.required(),
+  };
+
+  static VALIDATION_ERROR_MESSAGES = {
+    notes: 'Add note',
+  };
+
+  getValidationRules() {
+    return UserCaseNote.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return UserCaseNote.VALIDATION_ERROR_MESSAGES;
+  }
 }
 
-UserCaseNote.prototype.init = function init(rawProps) {
-  this.docketNumber = rawProps.docketNumber;
-  this.userId = rawProps.userId;
-  this.notes = rawProps.notes;
-};
-
-UserCaseNote.VALIDATION_ERROR_MESSAGES = {
-  notes: 'Add note',
-};
-
-UserCaseNote.schema = joi.object().keys({
-  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-  entityName: JoiValidationConstants.STRING.valid('UserCaseNote').required(),
-  notes: JoiValidationConstants.STRING.required(),
-  userId: JoiValidationConstants.UUID.required(),
-});
-
-joiValidationDecorator(
-  UserCaseNote,
-  UserCaseNote.schema,
-  UserCaseNote.VALIDATION_ERROR_MESSAGES,
-);
-
-module.exports = { UserCaseNote: validEntityDecorator(UserCaseNote) };
+export type RawUserCaseNote = ExcludeMethods<UserCaseNote>;

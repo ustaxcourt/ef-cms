@@ -1,3 +1,5 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -9,7 +11,7 @@ const config: Config = {
     '!src/applicationContextForTests.ts',
     '!src/**/getScannerMockInterface.ts',
     '!src/business/test/**/*.ts',
-    '!src/business/assetst*',
+    '!src/business/assets*',
     '!src/proxies/**/*.ts',
     '!src/tools/**/*.ts',
     '!src/test/**/*.ts',
@@ -24,6 +26,9 @@ const config: Config = {
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    prefix: '<rootDir>/../',
+  }),
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {

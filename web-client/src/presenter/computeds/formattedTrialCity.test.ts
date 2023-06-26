@@ -1,5 +1,5 @@
 import { getTrialCityName as getTrialCityNameComputed } from './formattedTrialCity';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('getTrialCityName', () => {
   it('returns the properlly formatted trial city name', () => {

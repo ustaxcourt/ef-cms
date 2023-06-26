@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.openCases and state.closedCases based on the props.openCaseList and props.closedCaseList passed in

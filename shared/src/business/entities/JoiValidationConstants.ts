@@ -1,12 +1,13 @@
-import deepFreeze from 'deep-freeze';
-const joi = require('joi').extend(require('@hapi/joi-date'));
-
 import {
   CAV_AND_SUBMITTED_CASE_STATUS,
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
 } from './EntityConstants';
+import joiDate from '@hapi/joi-date';
+import joiImported from 'joi';
+
+const joi = joiImported.extend(joiDate);
 
 // These are specific to joi and cannot be shared with luxon
 const DATE_FORMATS = {
@@ -17,7 +18,7 @@ const DATE_FORMATS = {
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 const STRING = joi.string().min(1);
 
-export const JoiValidationConstants = deepFreeze({
+export const JoiValidationConstants = Object.freeze({
   CASE_CAPTION: STRING.max(4700),
   DATE: joi.date().iso().format([DATE_FORMATS.YYYYMMDD]),
   DOCKET_NUMBER: STRING.regex(DOCKET_NUMBER_MATCHER),

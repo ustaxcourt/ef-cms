@@ -1,5 +1,5 @@
 import { formattedTrialSessionDetails } from '../../src/presenter/computeds/formattedTrialSessionDetails';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkViewsNewTrialSession = cerebralTest => {

@@ -9,7 +9,8 @@ import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField'
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -61,7 +62,7 @@ export const OpinionSearchForm = connect(
                 </div>
                 <FormGroup
                   className="advanced-search-panel full-width"
-                  errorText={validationErrors.chooseOneValue}
+                  errorText={validationErrors['object.oxor']}
                 >
                   <div className="margin-bottom-3 margin-top-3">
                     <DocketNumberSearchField
@@ -176,7 +177,7 @@ export const OpinionSearchForm = connect(
                       className={classNames(
                         'advanced-search-panel',
                         'full-width',
-                        validationErrors.chooseOneValue &&
+                        validationErrors['object.oxor'] &&
                           'usa-form-group--error',
                       )}
                     >
@@ -207,7 +208,7 @@ export const OpinionSearchForm = connect(
                       />
                     </FormGroup>
                     <span className="usa-error-message ">
-                      {validationErrors.chooseOneValue}
+                      {validationErrors['object.oxor']}
                     </span>
                   </div>
                 </div>

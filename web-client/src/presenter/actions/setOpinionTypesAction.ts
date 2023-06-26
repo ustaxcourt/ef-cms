@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.opinionDocumentTypes which is used for displaying the opinion document types on the advanced search form.

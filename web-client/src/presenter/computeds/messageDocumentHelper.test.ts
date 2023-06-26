@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -13,7 +14,7 @@ import {
 } from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHeperComputed } from './messageDocumentHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('messageDocumentHelper', () => {
