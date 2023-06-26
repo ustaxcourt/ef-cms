@@ -419,4 +419,52 @@ describe('judgeActivityReportHelper', () => {
       );
     });
   });
+
+  describe('pageCount and showPaginator', () => {
+    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map();
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '101-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '103-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '102-20',
+          },
+        ];
+      const result = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+      expect(result.pageCount).toBe(1);
+      expect(result.showPaginator).toBe(false);
+    });
+
+    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map();
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [];
+      const result = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+      expect(result.pageCount).toBe(0);
+      expect(result.showPaginator).toBe(false);
+    });
+  });
 });

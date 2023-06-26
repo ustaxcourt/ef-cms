@@ -181,21 +181,21 @@ export const JudgeActivityReport = connect(
 
     const progressDescription: () => JSX.Element = () => (
       <>
-        {/* TODO: WRAP AROUND LOGIC TO RENDER */}
-        <Paginator
-          breakClassName="hide"
-          forcePage={activePage}
-          marginPagesDisplayed={0}
-          // pageCount={customCaseInventoryReportHelper.pageCount}
-          pageCount={6}
-          pageRangeDisplayed={0}
-          onPageChange={pageChange => {
-            setActivePage(pageChange.selected);
-            getCavAndSubmittedCasesForJudgesSequence({
-              selectedPage: pageChange.selected,
-            });
-          }}
-        />
+        {judgeActivityReportHelper.showPaginator && (
+          <Paginator
+            breakClassName="hide"
+            forcePage={activePage}
+            marginPagesDisplayed={0}
+            pageCount={judgeActivityReportHelper.pageCount}
+            pageRangeDisplayed={0}
+            onPageChange={pageChange => {
+              setActivePage(pageChange.selected);
+              getCavAndSubmittedCasesForJudgesSequence({
+                selectedPage: pageChange.selected,
+              });
+            }}
+          />
+        )}
         <table
           aria-describedby="progressDescription"
           className="usa-table ustc-table"
@@ -249,6 +249,21 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
+        {judgeActivityReportHelper.showPaginator && (
+          <Paginator
+            breakClassName="hide"
+            forcePage={activePage}
+            marginPagesDisplayed={0}
+            pageCount={judgeActivityReportHelper.pageCount}
+            pageRangeDisplayed={0}
+            onPageChange={pageChange => {
+              setActivePage(pageChange.selected);
+              getCavAndSubmittedCasesForJudgesSequence({
+                selectedPage: pageChange.selected,
+              });
+            }}
+          />
+        )}
         {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
           <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
         )}
