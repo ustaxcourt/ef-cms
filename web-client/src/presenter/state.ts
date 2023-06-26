@@ -333,7 +333,7 @@ export const baseState = {
   // needs its own object because it's present when other forms are on screen
   judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeActivityReportData: {},
-  judges: [],
+  judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
