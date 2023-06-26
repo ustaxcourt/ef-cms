@@ -3,10 +3,10 @@ import {
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
 } from './EntityConstants';
-import joiDate from '@hapi/joi-date';
-import joiImported from 'joi';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
 
-const joi = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(joiDate);
 
 // These are specific to joi and cannot be shared with luxon
 const DATE_FORMATS = {
