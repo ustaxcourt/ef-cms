@@ -7,6 +7,7 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
 import { prepareDateFromString } from '../../shared/src/business/utilities/DateHandler';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { trialSessionDetailsHelper } from '../src/presenter/computeds/trialSessionDetailsHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Serve NOTTs from reminder on calendared trial session detail page', () => {
@@ -66,6 +67,8 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         docketNumber: docketNumberToAdd,
       });
 
+      console.log('docketNumberToAdd: ', docketNumberToAdd);
+
       await cerebralTest.runSequence('openAddToTrialModalSequence');
 
       console.log(docketNumberToAdd, cerebralTest.trialSessionId);
@@ -106,7 +109,7 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
       await cerebralTest.runSequence('showThirtyDayNoticeModalSequence');
 
       expect(cerebralTest.getState('modal.showModal')).toEqual(
-        'ThirtyDayNoticeModal',
+        'ServeThirtyDayNoticeModal',
       );
 
       await cerebralTest.runSequence('serveThirtyDayNoticeOfTrialSequence');
@@ -127,8 +130,15 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         },
       );
 
+      const trialSessionDetailsHelperComputed: any = runCompute(
+        withAppContextDecorator(trialSessionDetailsHelper),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
       expect(trialSessionDetailsFormatted.showAlertForNOTTReminder).toBe(true);
-      expect(trialSessionDetailsFormatted.nottReminderAction).toBe(
+      expect(trialSessionDetailsHelperComputed.nottReminderAction).toBe(
         'Yes, Dismiss',
       );
     });

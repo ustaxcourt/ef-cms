@@ -102,6 +102,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
@@ -112,7 +113,6 @@ import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
 import { templateHelper } from './computeds/templateHelper';
-import { thirtyDayNoticeModalHelper } from './computeds/thirtyDayNoticeModalHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
@@ -228,6 +228,7 @@ export const computeds = {
   scanBatchPreviewerHelper,
   scanHelper,
   sealedCaseDetailHelper,
+  serveThirtyDayNoticeModalHelper,
   sessionAssignmentHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
@@ -238,7 +239,6 @@ export const computeds = {
   statisticsFormHelper,
   statisticsHelper,
   templateHelper,
-  thirtyDayNoticeModalHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
   trialSessionHeaderHelper,

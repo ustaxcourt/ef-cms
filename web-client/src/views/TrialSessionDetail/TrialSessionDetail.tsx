@@ -2,16 +2,17 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { DismissThirtyDayNoticeModal } from './DismissThirtyDayNoticeModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
 import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
 import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
+import { ServeThirtyDayNoticeModal } from './ServeThirtyDayNoticeModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
-import { ThirtyDayNoticeModal } from './ThirtyDayNoticeModal';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
 import {
@@ -53,7 +54,7 @@ export const TrialSessionDetail = connect(
             <WarningNotificationComponent
               alertWarning={{
                 dismissIcon: 'paper-plane',
-                dismissText: 'Serve/Dismiss',
+                dismissText: trialSessionDetailsHelper.nottReminderAction,
                 message: formattedTrialSessionDetails.alertMessageForNOTT,
               }}
               dismissAlertSequence={showThirtyDayNoticeModalSequence}
@@ -63,7 +64,9 @@ export const TrialSessionDetail = connect(
               scrollToTop={false}
             />
           )}
+
           <TrialSessionInformation />
+
           {!formattedTrialSessionDetails.isCalendared && (
             <Tabs
               bind="trialSessionDetailsTab.caseList"
@@ -125,6 +128,7 @@ export const TrialSessionDetail = connect(
               </Tab>
             </Tabs>
           )}
+
           {formattedTrialSessionDetails.showOpenCases && (
             <div>
               <Tabs
@@ -191,6 +195,7 @@ export const TrialSessionDetail = connect(
             </Tabs>
           )}
         </section>
+
         {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
         {showModal == 'ConfirmModalDialog' && (
           <ConfirmModal
@@ -204,7 +209,12 @@ export const TrialSessionDetail = connect(
             You will not be able to reopen this session.
           </ConfirmModal>
         )}
-        {showModal === 'ThirtyDayNoticeModal' && <ThirtyDayNoticeModal />}
+        {showModal === 'ServeThirtyDayNoticeModal' && (
+          <ServeThirtyDayNoticeModal />
+        )}
+        {showModal === 'DismissThirtyDayNoticeModal' && (
+          <DismissThirtyDayNoticeModal />
+        )}
         {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
         {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
       </>
