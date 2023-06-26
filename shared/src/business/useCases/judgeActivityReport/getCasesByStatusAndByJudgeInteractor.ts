@@ -79,6 +79,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const searchEntity = new JudgeActivityReportCaseStatusSearch({
     judgeName,
+    pageSize,
+    searchAfter,
     statuses,
   });
 
@@ -95,8 +97,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       applicationContext,
       params: {
         judgeName: searchEntity.judgeName,
-        searchAfter,
-        size: pageSize,
+        pageSize: searchEntity.pageSize,
+        searchAfter: searchEntity.searchAfter,
         statuses: searchEntity.statuses,
       },
     });
