@@ -38,7 +38,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
       sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
     },
     index: 'efcms-case',
-    size: params.size,
+    size: params.pageSize,
     track_total_hits: true,
   });
 

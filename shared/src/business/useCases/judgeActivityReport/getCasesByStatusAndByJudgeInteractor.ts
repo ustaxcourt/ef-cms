@@ -60,14 +60,18 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
  */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
-  { judgeName, statuses }: JudgeActivityReportCavAndSubmittedCasesRequestType,
+  {
+    judgeName,
+    pageSize,
+    searchAfter,
+    statuses,
+  }: JudgeActivityReportCavAndSubmittedCasesRequestType,
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;
   lastIdOfPage: {
-    docketNumber: string;
+    docketNumber: number;
   };
-  totalCount: number;
 }> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -84,19 +88,18 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const {
-    foundCases: submittedAndCavCasesResults,
-    lastIdOfPage: lastCaseId,
-    totalCount,
-  } = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      params: {
-        judgeName: searchEntity.judgeName,
-        statuses: searchEntity.statuses,
-      },
-    });
+  const { foundCases: submittedAndCavCasesResults, lastIdOfPage } =
+    await applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge({
+        applicationContext,
+        params: {
+          judgeName: searchEntity.judgeName,
+          searchAfter,
+          size: pageSize,
+          statuses: searchEntity.statuses,
+        },
+      });
 
   const rawCaseRecords: RawCase[] = await Promise.all(
     submittedAndCavCasesResults.map(
@@ -144,17 +147,12 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
-  // UNIT TEST!!
-  // clean up to set pagination info unnecessarily
-  const computedPaginationInfo = !filteredCaseRecords.length
-    ? {
-        ...lastCaseId,
-        docketNumber: 0,
-      }
-    : lastCaseId;
-
-  // UNIT TEST!!
-  const computedTotalCount = !filteredCaseRecords.length ? 0 : totalCount;
+  const resetPaginationInfo =
+    filteredCaseRecords.length === 0
+      ? {
+          docketNumber: 0,
+        }
+      : lastIdOfPage;
 
   return {
     cases: Case.validateRawCollection(filteredCaseRecords, {
@@ -163,7 +161,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
-    lastIdOfPage: computedPaginationInfo,
-    totalCount: computedTotalCount,
+    lastIdOfPage: resetPaginationInfo,
   };
 };

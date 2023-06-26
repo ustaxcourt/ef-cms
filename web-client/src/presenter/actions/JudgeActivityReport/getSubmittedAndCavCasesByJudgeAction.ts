@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 /**
@@ -14,13 +15,18 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   store,
 }: ActionProps) => {
   const { judgeName } = get(state.judgeActivityReport.filters);
+  const lastIdsOfPages = get(state.judgeActivityReport.lastIdsOfPages);
+  const searchAfter = lastIdsOfPages[props.selectedPage];
+
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
-  const { cases, consolidatedCasesGroupCountMap, lastIdOfPage, totalCount } =
+  const { cases, consolidatedCasesGroupCountMap, lastIdOfPage } =
     await applicationContext
       .getUseCases()
       .getCasesByStatusAndByJudgeInteractor(applicationContext, {
         judgeName,
+        pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+        searchAfter,
         statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
       });
 
@@ -28,7 +34,6 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
     state.judgeActivityReport.lastIdsOfPages[props.selectedPage + 1],
     lastIdOfPage.docketNumber,
   );
-  store.set(state.judgeActivityReport.totalCases, totalCount);
 
   store.set(
     state.judgeActivityReport.judgeActivityReportData
