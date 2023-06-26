@@ -52,6 +52,10 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
+### puppeteer
+
+When updating puppeteer or puppeteer core in the project make sure to also match versions in web-api/runtimes/puppeteer/package.json as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
+
 #### s3rver
 
 Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver).
