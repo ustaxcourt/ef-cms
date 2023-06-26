@@ -1,11 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from '../test.cerebral';
-import { thirtyDayNoticeModalHelper as thirtyDayNoticeModalHelperComputed } from './thirtyDayNoticeModalHelper';
+import { serveThirtyDayNoticeModalHelper as serveThirtyDayNoticeModalHelperComputed } from './serveThirtyDayNoticeModalHelper';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
-describe('thirtyDayNoticeModalHelper', () => {
+describe('serveThirtyDayNoticeModalHelper', () => {
   const thirtyDayNoticeModalHelper = withAppContextDecorator(
-    thirtyDayNoticeModalHelperComputed,
+    serveThirtyDayNoticeModalHelperComputed,
     applicationContext,
   );
 

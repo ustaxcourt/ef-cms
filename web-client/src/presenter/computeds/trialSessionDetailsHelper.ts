@@ -9,11 +9,10 @@ export const trialSessionDetailsHelper = (
   const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 
-  const { eligibleCases, sessionType, trialSessionId } = get(
+  const { eligibleCases, hasNOTTBeenServed, sessionType, trialSessionId } = get(
     state.trialSession,
   );
   const permissions = get(state.permissions);
-  const canDismissThirtyDayAlert = permissions.DISMISS_NOTT_REMINDER;
 
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
@@ -40,11 +39,16 @@ export const trialSessionDetailsHelper = (
   const showSmallAndRegularQcComplete =
     Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
 
+  const nottReminderAction = hasNOTTBeenServed
+    ? 'Yes, Dismiss'
+    : 'Serve/Dismiss';
+
   return {
-    canDismissThirtyDayAlert,
+    canDismissThirtyDayAlert: permissions.DISMISS_NOTT_REMINDER,
     eligibleRegularCaseQcTotalCompleteCount,
     eligibleSmallCaseQcTotalCompleteCount,
     eligibleTotalCaseQcCompleteCount,
+    nottReminderAction,
     showQcComplete,
     showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
     showSmallAndRegularQcComplete,

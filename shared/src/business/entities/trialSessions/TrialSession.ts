@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import {
   FORMATS,
   createISODateString,
@@ -23,6 +24,8 @@ import {
 } from '../EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
+
+// TODO 9970: Can we reduce some complexity here? CalendaredTrialSession..?
 
 const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   100,
@@ -75,6 +78,7 @@ export class TrialSession extends JoiValidationEntity {
   public courtReporter?: string;
   public createdAt?: string;
   public dismissedAlertForNOTT?: boolean;
+  public hasNOTTBeenServed: boolean;
   public estimatedEndDate?: string;
   public irsCalendarAdministrator?: string;
   public isCalendared: boolean;
@@ -175,6 +179,7 @@ export class TrialSession extends JoiValidationEntity {
       estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
         .min(joi.ref('startDate'))
         .allow(null),
+      hasNOTTBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),
       isCalendared: joi.boolean().required(),
@@ -250,6 +255,7 @@ export class TrialSession extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
+
     this.address1 = rawSession.address1;
     this.address2 = rawSession.address2;
     this.alternateTrialClerkName = rawSession.alternateTrialClerkName;
@@ -280,6 +286,7 @@ export class TrialSession extends JoiValidationEntity {
     this.noticeIssuedDate = rawSession.noticeIssuedDate;
     this.password = rawSession.password;
     this.postalCode = rawSession.postalCode;
+    this.hasNOTTBeenServed = rawSession.hasNOTTBeenServed || false;
     this.sessionScope =
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;

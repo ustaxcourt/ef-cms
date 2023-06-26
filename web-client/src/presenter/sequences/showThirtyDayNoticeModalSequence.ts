@@ -1,5 +1,10 @@
+import { haveNOTTsBeenServedAction } from '../actions/TrialSession/haveNOTTsBeenServedAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const showThirtyDayNoticeModalSequence = [
-  setShowModalFactoryAction('ThirtyDayNoticeModal'),
+  haveNOTTsBeenServedAction,
+  {
+    no: [setShowModalFactoryAction('ServeThirtyDayNoticeModal')],
+    yes: [setShowModalFactoryAction('DismissThirtyDayNoticeModal')],
+  },
 ];

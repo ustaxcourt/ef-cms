@@ -8,6 +8,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
 export type ServeThirtyDayNoticeRequest = {
@@ -46,6 +47,10 @@ export const serveThirtyDayNoticeInteractor = async (
     });
     return;
   }
+
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();
@@ -153,6 +158,13 @@ export const serveThirtyDayNoticeInteractor = async (
       });
     pdfUrl = url;
   }
+
+  trialSessionEntity.hasNOTTBeenServed = true;
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

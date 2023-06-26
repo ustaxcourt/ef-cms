@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { TrialSession } from '../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -20,7 +21,7 @@ export const trialSessionHeaderHelper = (
     .getUtilities()
     .getFormattedTrialSessionDetails({
       applicationContext,
-      trialSession: get(state.trialSession),
+      trialSession,
     });
 
   const isTrialClerk = currentUser.role === USER_ROLES.trialClerk;

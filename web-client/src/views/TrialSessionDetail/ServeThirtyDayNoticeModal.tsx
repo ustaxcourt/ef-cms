@@ -3,11 +3,11 @@ import { connect } from '@cerebral/react';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const ThirtyDayNoticeModal = connect(
+export const ServeThirtyDayNoticeModal = connect(
   {
-    thirtyDayNoticeModalHelper: state.thirtyDayNoticeModalHelper,
+    serveThirtyDayNoticeModalHelper: state.serveThirtyDayNoticeModalHelper,
   },
-  function ThirtyDayNoticeModal({ thirtyDayNoticeModalHelper }) {
+  function ServeThirtyDayNoticeModal({ serveThirtyDayNoticeModalHelper }) {
     return (
       <ConfirmModal
         cancelLabel="Dismiss Reminder"
@@ -20,8 +20,8 @@ export const ThirtyDayNoticeModal = connect(
           The following document will be served on all parties:
           <span className="display-block text-bold margin-top-205">
             30 Day Notice of Trial on{' '}
-            {thirtyDayNoticeModalHelper.formattedStartDate} at{' '}
-            {thirtyDayNoticeModalHelper.trialLocation}
+            {serveThirtyDayNoticeModalHelper.formattedStartDate} at{' '}
+            {serveThirtyDayNoticeModalHelper.trialLocation}
           </span>
         </p>
       </ConfirmModal>
@@ -29,4 +29,4 @@ export const ThirtyDayNoticeModal = connect(
   },
 );
 
-ThirtyDayNoticeModal.displayName = 'ThirtyDayNoticeModal';
+ServeThirtyDayNoticeModal.displayName = 'ServeThirtyDayNoticeModal';
