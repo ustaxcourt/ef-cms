@@ -13,10 +13,13 @@ export type JudgeActivityReportFilters = {
 export type JudgeActivityReportCavAndSubmittedCasesRequestType = {
   statuses: string[];
   judgeName: string;
-  searchAfter: {
-    docketNumber: number;
-  };
+  searchAfter: number;
   pageSize: number;
+};
+
+export type CavAndSubmittedCaseResponseType = {
+  foundCases: { docketNumber: string }[];
+  lastDocketNumberForCavAndSubmittedCasesSearch: number;
 };
 
 export type CasesClosedType = {
@@ -42,11 +45,6 @@ export type consolidatedCasesGroupCountMapResponseType = {
   [leadDocketNumber: string]: number;
 };
 
-export type CavAndSubmittedCaseResponseType = {
-  foundCases: { docketNumber: string }[];
-  lastIdOfPage: { docketNumber: number };
-};
-
 export type JudgeActivityReportState = {
   filters: JudgeActivityReportFilters;
   judgeActivityReportData: {
@@ -57,9 +55,7 @@ export type JudgeActivityReportState = {
     orders?: OrdersAndOpinionTypes[];
     submittedAndCavCasesByJudge?: RawCase[];
   };
-  lastIdsOfPages: {
-    docketNumber: number;
-  }[];
+  lastIdsOfPages: number[];
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
@@ -69,5 +65,5 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
     startDate: '',
   },
   judgeActivityReportData: {},
-  lastIdsOfPages: [{ docketNumber: 0 }],
+  lastIdsOfPages: [0],
 };

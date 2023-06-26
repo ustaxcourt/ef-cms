@@ -69,9 +69,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;
-  lastIdOfPage: {
-    docketNumber: number;
-  };
+  lastDocketNumberForCavAndSubmittedCasesSearch: number;
 }> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -88,18 +86,20 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { foundCases: submittedAndCavCasesResults, lastIdOfPage } =
-    await applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge({
-        applicationContext,
-        params: {
-          judgeName: searchEntity.judgeName,
-          searchAfter,
-          size: pageSize,
-          statuses: searchEntity.statuses,
-        },
-      });
+  const {
+    foundCases: submittedAndCavCasesResults,
+    lastDocketNumberForCavAndSubmittedCasesSearch,
+  } = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByStatusAndByJudge({
+      applicationContext,
+      params: {
+        judgeName: searchEntity.judgeName,
+        searchAfter,
+        size: pageSize,
+        statuses: searchEntity.statuses,
+      },
+    });
 
   const rawCaseRecords: RawCase[] = await Promise.all(
     submittedAndCavCasesResults.map(
@@ -149,10 +149,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const resetPaginationInfo =
     filteredCaseRecords.length === 0
-      ? {
-          docketNumber: 0,
-        }
-      : lastIdOfPage;
+      ? 0
+      : lastDocketNumberForCavAndSubmittedCasesSearch;
 
   return {
     cases: Case.validateRawCollection(filteredCaseRecords, {
@@ -161,6 +159,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
-    lastIdOfPage: resetPaginationInfo,
+    lastDocketNumberForCavAndSubmittedCasesSearch: resetPaginationInfo,
   };
 };
