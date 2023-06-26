@@ -431,7 +431,6 @@ export const CustomCaseReport = connect(
               className="usa-checkbox__input"
               id="high-priority-checkbox"
               type="checkbox"
-              //TODO: reconsider this spaghetti
               onChange={() => {
                 setCustomCaseInventoryReportFiltersSequence({
                   highPriority: 'highPriority',
@@ -562,7 +561,11 @@ const ReportTable = ({
                   />
                 </td>
                 <td>
-                  <CaseLink formattedCase={entry} />
+                  <CaseLink
+                    formattedCase={entry}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                  />
                 </td>
                 <td>{entry.receivedAt}</td>
                 <td>{entry.caseCaption}</td>
@@ -573,7 +576,7 @@ const ReportTable = ({
                 <td>
                   {entry.highPriority && (
                     <Icon
-                      aria-label={`Case ${entry.docketNumber} has high-priority calendaring.`}
+                      aria-label={'High priority calendaring'}
                       className="margin-left-5 mini-success margin-top-1"
                       icon="check"
                       size="1x"
