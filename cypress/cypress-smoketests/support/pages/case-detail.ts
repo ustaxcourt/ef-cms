@@ -208,3 +208,24 @@ export const viewPrintableDocketRecord = () => {
       });
     });
 };
+
+export const editPetitionerEmail = emailAddress => {
+  cy.get('#tab-case-information').click();
+  cy.get('#tab-parties').click();
+  cy.get('.edit-petitioner-button').click();
+  cy.get('#updatedEmail').type(emailAddress);
+  cy.get('#confirm-email').type(emailAddress);
+  cy.get('#submit-edit-petitioner-information').click();
+  cy.get('#modal-button-confirm').click();
+  cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
+  cy.get(`div.parties-card:contains(${emailAddress} (Pending))`).should(
+    'exist',
+  );
+};
+
+export const verifyEmailChange = () => {
+  cy.get('tbody:contains(NOCE)').should('exist');
+  cy.get('#tab-case-information').click();
+  cy.get('#tab-parties').click();
+  cy.get('div.parties-card:contains((Pending))').should('not.exist');
+};
