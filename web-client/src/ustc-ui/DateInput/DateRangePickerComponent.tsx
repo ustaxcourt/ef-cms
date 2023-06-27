@@ -16,12 +16,14 @@ export const DateRangePickerComponent = ({
   onChangeEnd,
   onChangeStart,
   rangePickerCls,
+  showDateHint = false,
   startDateErrorText,
   startLabel,
   startName,
   startPickerCls,
   startValue,
 }: {
+  showDateHint?: boolean;
   endDateErrorText?: string;
   endLabel?: string;
   endName: string;
@@ -153,13 +155,14 @@ export const DateRangePickerComponent = ({
             >
               {startLabel || 'Start date'}{' '}
             </label>
+            {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
                 className="usa-input"
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
-                placeholder="MM/DD/YYYY"
+                placeholder={showDateHint ? '' : 'MM/DD/YYYY'}
                 ref={startDateInputRef}
                 type="text"
               />
@@ -179,13 +182,14 @@ export const DateRangePickerComponent = ({
             >
               {endLabel || 'End date'}{' '}
             </label>
+            {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
-                placeholder="MM/DD/YYYY"
+                placeholder={showDateHint ? '' : 'MM/DD/YYYY'}
                 ref={endDateInputRef}
                 type="text"
               />
