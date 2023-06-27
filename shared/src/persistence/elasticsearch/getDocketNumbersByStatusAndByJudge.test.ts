@@ -86,36 +86,4 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
       lastDocketNumberForCavAndSubmittedCasesSearch: 2018011316,
     });
   });
-
-  it('should make a persistence call to obtain all the cases for all judges with "Submitted" or "CAV" cases (no specified judge selection)', async () => {
-    mockValidRequest.judgeName = 'All Judges';
-
-    await getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      params: mockValidRequest,
-    });
-
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(CAV_AND_SUBMITTED_CASES_PAGE_SIZE);
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body
-        .search_after,
-    ).toEqual([mockValidRequest.searchAfter]);
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
-        .bool.must,
-    ).toMatchObject(
-      expect.not.arrayContaining([
-        {
-          terms: { 'status.S': mockValidRequest.statuses },
-        },
-        {
-          match_phrase: {
-            'associatedJudge.S': 'All Judges',
-          },
-        },
-      ]),
-    );
-  });
 });

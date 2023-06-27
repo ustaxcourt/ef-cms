@@ -50,7 +50,7 @@ describe('getCasesClosedByJudge', () => {
   it('should make a persistence call to obtain all closed cases for all judges within the selected date range', async () => {
     mockValidRequest = {
       ...mockValidRequest,
-      judgeName: 'All Judges',
+      judgeName: '',
     };
 
     applicationContext.getSearchClient().search.mockReturnValue({
