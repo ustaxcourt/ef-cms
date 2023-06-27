@@ -6,7 +6,6 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setNottServiceCompleteAction } from '../actions/TrialSession/setNottServiceCompleteAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { setPrintPaperDoneUrlAction } from '../actions/TrialSession/setPrintPaperDoneUrlAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
@@ -22,7 +21,6 @@ export const thirtyDayNoticePaperServiceCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
-      setPrintPaperDoneUrlAction,
       setCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
