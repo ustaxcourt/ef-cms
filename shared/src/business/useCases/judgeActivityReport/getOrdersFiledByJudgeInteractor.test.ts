@@ -6,8 +6,30 @@ import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 describe('getOrdersFiledByJudgeInteractor', () => {
   const mockValidRequest = {
     endDate: '03/21/2020',
-    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
     startDate: '02/12/2020',
+  };
+
+  const mockResults = {
+    results: [
+      {
+        documentType:
+          'Order that the letter "X" is deleted from the Docket number',
+        eventCode: 'ODX',
+      },
+      {
+        documentType: 'Order',
+        eventCode: 'O',
+      },
+      {
+        documentType: 'Order that the letter "L" is added to Docket number',
+        eventCode: 'OAL',
+      },
+      {
+        documentType: 'Order',
+        eventCode: 'O',
+      },
+    ],
   };
 
   beforeEach(() => {
@@ -26,7 +48,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     await expect(
       getOrdersFiledByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
@@ -35,27 +57,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
-        results: [
-          {
-            documentType:
-              'Order that the letter "X" is deleted from the Docket number',
-            eventCode: 'ODX',
-          },
-          {
-            documentType: 'Order',
-            eventCode: 'O',
-          },
-          {
-            documentType: 'Order that the letter "L" is added to Docket number',
-            eventCode: 'OAL',
-          },
-          {
-            documentType: 'Order',
-            eventCode: 'O',
-          },
-        ],
-      });
+      .advancedDocumentSearch.mockResolvedValue(mockResults);
 
     const result = await getOrdersFiledByJudgeInteractor(
       applicationContext,
@@ -67,7 +69,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       endDate: '2020-03-22T03:59:59.999Z',
-      judge: mockValidRequest.judgeName,
+      judge: judgeUser.name,
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: '2020-02-12T05:00:00.000Z',
     });
@@ -105,7 +107,9 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue([]);
+      .advancedDocumentSearch.mockResolvedValue({
+        results: mockResults,
+      });
 
     await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 

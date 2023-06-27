@@ -26,7 +26,7 @@ import { groupBy, orderBy } from 'lodash';
  */
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
-  { endDate, judgeName, startDate }: JudgeActivityReportFilters,
+  { endDate, judges, startDate }: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -36,7 +36,7 @@ export const getOrdersFiledByJudgeInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeName,
+    judges,
     startDate,
   });
 
@@ -49,18 +49,32 @@ export const getOrdersFiledByJudgeInteractor = async (
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  const { results } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodesToSearch,
-      endDate: searchEntity.endDate,
-      judge: searchEntity.judgeName,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: searchEntity.startDate,
-    });
+  let sortedResults: {
+    results: {
+      documentType: string;
+    };
+  }[][] = [];
 
-  let result = groupBy(results, 'eventCode');
+  if (searchEntity.judges.length) {
+    sortedResults = await Promise.all(
+      searchEntity.judges.map(async judge => {
+        const { results } = await applicationContext
+          .getPersistenceGateway()
+          .advancedDocumentSearch({
+            applicationContext,
+            documentEventCodes: orderEventCodesToSearch,
+            endDate: searchEntity.endDate,
+            judge,
+            overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
+            startDate: searchEntity.startDate,
+          });
+
+        return results;
+      }),
+    );
+  }
+
+  const result = groupBy(sortedResults.flat(), 'eventCode');
 
   const formattedResult: Array<OrdersAndOpinionTypes> = Object.entries(
     result,
