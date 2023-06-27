@@ -158,6 +158,7 @@ export const CaseSearchByName = connect(
                 formGroupCls={'margin-bottom-0'}
                 maxDate={caseSearchByNameHelper.today}
                 rangePickerCls={'grid-row grid-gap-3'}
+                showDateHint={true}
                 startDateErrorText={validationErrors.startDate}
                 startLabel="Date filed start date"
                 startName="caseSearchByNameStartDate"
