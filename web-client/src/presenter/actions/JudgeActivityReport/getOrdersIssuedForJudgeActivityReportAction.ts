@@ -10,14 +10,12 @@ export const getOrdersIssuedForJudgeActivityReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(
-    state.judgeActivityReport.filters,
-  );
+  const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
   const orders = await applicationContext
     .getUseCases()
     .getOrdersFiledByJudgeInteractor(applicationContext, {
       endDate,
-      judgeName,
+      judges,
       startDate,
     });
 
