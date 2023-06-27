@@ -1,3 +1,4 @@
+import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -397,6 +398,7 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  trialSession: {} as RawTrialSession,
   trialSessionJudge: {
     name: '',
   },
