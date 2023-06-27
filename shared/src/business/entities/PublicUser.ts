@@ -11,8 +11,8 @@ import { User } from './User';
 export class PublicUser extends JoiValidationEntity {
   public name: string;
   public role: string;
-  public judgeFullName: string;
-  public judgeTitle: string;
+  public judgeFullName?: string;
+  public judgeTitle?: string;
 
   constructor(rawUser) {
     super('PublicUser');
