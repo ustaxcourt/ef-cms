@@ -23,7 +23,7 @@ export const DateRangePickerComponent = ({
   startPickerCls,
   startValue,
 }: {
-  showDateHint: boolean;
+  showDateHint?: boolean;
   endDateErrorText?: string;
   endLabel?: string;
   endName: string;
@@ -155,7 +155,7 @@ export const DateRangePickerComponent = ({
             >
               {startLabel || 'Start date'}{' '}
             </label>
-            {showDateHint ? <span className="usa-hint">MM/DD/YYYY</span> : ''}
+            {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
@@ -182,7 +182,7 @@ export const DateRangePickerComponent = ({
             >
               {endLabel || 'End date'}{' '}
             </label>
-            {showDateHint ? <span className="usa-hint">MM/DD/YYYY</span> : ''}
+            {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
