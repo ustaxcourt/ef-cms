@@ -1,3 +1,4 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../../../shared/src/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
@@ -19,11 +20,18 @@ export const getCasesClosedByJudge = async ({
 }) => {
   const source = ['status'];
 
-  const filters: QueryDslQueryContainer[] = [];
+  const mustFilters: QueryDslQueryContainer[] = [];
+  const mustNotFilters: QueryDslQueryContainer[] = [];
 
   if (judgeName) {
-    filters.push({
+    mustFilters.push({
       match_phrase: { 'associatedJudge.S': `${judgeName}` },
+    });
+  }
+
+  if (judgeName === '') {
+    mustNotFilters.push({
+      match_phrase: { 'associatedJudge.S': 'Chief Judge' },
     });
   }
 
@@ -44,10 +52,11 @@ export const getCasesClosedByJudge = async ({
                 },
               },
             ],
-            must: filters,
+            must: mustFilters,
+            must_not: mustNotFilters,
           },
         },
-        size: 10000,
+        size: MAX_ELASTICSEARCH_PAGINATION,
       },
       index: 'efcms-case',
     },
