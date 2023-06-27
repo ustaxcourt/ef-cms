@@ -566,7 +566,6 @@ const ReportTable = ({
                     rel="noopener noreferrer"
                     target="_blank"
                   />
-                  <CaseLink formattedCase={entry} />
                 </td>
                 <td>{entry.receivedAt}</td>
                 <td>{entry.caseCaption}</td>
