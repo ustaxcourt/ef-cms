@@ -6,15 +6,11 @@ import { post } from '../requests';
 
 export const getOpinionsFiledByJudgeInteractor = (
   applicationContext,
-  { endDate, judgeName, startDate }: JudgeActivityReportFilters,
+  params: JudgeActivityReportFilters,
 ): Promise<OrdersAndOpinionTypes[]> => {
   return post({
     applicationContext,
-    body: {
-      endDate,
-      judgeName,
-      startDate,
-    },
+    body: params,
     endpoint: '/judge-activity-report/opinions',
   });
 };
