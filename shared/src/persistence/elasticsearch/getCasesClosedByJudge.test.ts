@@ -1,3 +1,4 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { getCasesClosedByJudge } from './getCasesClosedByJudge';
 import { judgeUser } from '../../test/mockUsers';
@@ -21,7 +22,7 @@ describe('getCasesClosedByJudge', () => {
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.size,
-    ).toEqual(10000);
+    ).toEqual(MAX_ELASTICSEARCH_PAGINATION);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
     ).toMatchObject({
@@ -43,11 +44,12 @@ describe('getCasesClosedByJudge', () => {
             },
           },
         ],
+        must_not: [],
       },
     });
   });
 
-  it('should make a persistence call to obtain all closed cases for all judges within the selected date range', async () => {
+  it('should make a persistence call to obtain all closed cases for no specified judge within the selected date range', async () => {
     mockValidRequest = {
       ...mockValidRequest,
       judgeName: '',
@@ -64,7 +66,7 @@ describe('getCasesClosedByJudge', () => {
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.size,
-    ).toEqual(10000);
+    ).toEqual(MAX_ELASTICSEARCH_PAGINATION);
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query,
     ).toMatchObject({
@@ -80,6 +82,13 @@ describe('getCasesClosedByJudge', () => {
           },
         ],
         must: [],
+        must_not: [
+          {
+            match_phrase: {
+              'associatedJudge.S': 'Chief Judge',
+            },
+          },
+        ],
       },
     });
   });
