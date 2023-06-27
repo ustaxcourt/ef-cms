@@ -12,6 +12,7 @@ export const DateRangePickerComponent = ({
   endValue,
   formGroupCls,
   maxDate,
+  omitFormGroupClass,
   onChangeEnd,
   onChangeStart,
   rangePickerCls,
@@ -33,6 +34,7 @@ export const DateRangePickerComponent = ({
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string;
+  omitFormGroupClass?: boolean;
   startName: string;
   startValue: string;
   maxDate?: string; // Must be in YYYY-MM-DD format
@@ -60,12 +62,15 @@ export const DateRangePickerComponent = ({
     const startInput = window.document.getElementById(
       `${startName}-date-start`,
     ) as HTMLInputElement;
+
     const startHiddenInput = window.document.querySelector(
-      `input[name="${startName}-date-start"]`,
+      `input[aria-describedby="${startName}-date-start-label ${startName}-date-start-hint"]`,
     ) as HTMLInputElement;
+
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
+      // This is used to force USWDS to update it's internal state
       const backspaceEvent = new CustomEvent('change', {
         bubbles: true,
         cancelable: true,
@@ -74,6 +79,11 @@ export const DateRangePickerComponent = ({
       startInput.dispatchEvent(backspaceEvent);
       startHiddenInput.dispatchEvent(backspaceEvent);
     }
+
+    if (startValue && startInput) {
+      startInput.value = startValue;
+      startHiddenInput.value = startValue;
+    }
   }, [startValue]);
 
   useEffect(() => {
@@ -81,11 +91,12 @@ export const DateRangePickerComponent = ({
       `${endName}-date-end`,
     ) as HTMLInputElement;
     const endHiddenInput = window.document.querySelector(
-      `input[name="${endName}-date-end"]`,
+      `input[aria-describedby="${endName}-date-end-label ${endName}-date-end-hint"]`,
     ) as HTMLInputElement;
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';
+      // This is used to force USWDS to update it's internal state
       const backspaceEvent = new CustomEvent('change', {
         bubbles: true,
         cancelable: true,
@@ -93,6 +104,11 @@ export const DateRangePickerComponent = ({
       });
       endInput.dispatchEvent(backspaceEvent);
       endHiddenInput.dispatchEvent(backspaceEvent);
+    }
+
+    if (endValue && endInput) {
+      endInput.value = endValue;
+      endHiddenInput.value = endValue;
     }
   }, [endValue]);
 
@@ -116,7 +132,11 @@ export const DateRangePickerComponent = ({
   }, [startDateInputRef, endDateInputRef]);
 
   return (
-    <FormGroup className={formGroupCls} formGroupRef={dateRangePickerRef}>
+    <FormGroup
+      className={formGroupCls}
+      formGroupRef={dateRangePickerRef}
+      omitFormGroupClass={omitFormGroupClass}
+    >
       <div
         className={classNames('usa-date-range-picker', rangePickerCls)}
         data-max-date={maxDate}
