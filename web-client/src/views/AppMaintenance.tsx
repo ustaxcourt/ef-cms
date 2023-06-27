@@ -1,7 +1,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import React from 'react';
-import seal from '../images/ustc_seal.svg';
+const seal = require('../images/ustc_seal.svg') as string;
 
 // eslint-disable-next-line @miovision/disallow-date/no-new-date
 const updateTime = `${new Date().toLocaleString('en-US', {
