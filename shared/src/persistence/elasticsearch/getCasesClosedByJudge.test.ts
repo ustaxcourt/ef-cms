@@ -6,7 +6,7 @@ import { judgeUser } from '../../test/mockUsers';
 describe('getCasesClosedByJudge', () => {
   let mockValidRequest = {
     endDate: '03/21/2020',
-    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
     startDate: '02/12/2020',
   };
 
@@ -40,19 +40,19 @@ describe('getCasesClosedByJudge', () => {
         must: [
           {
             match_phrase: {
-              'associatedJudge.S': 'Sotomayor',
+              'associatedJudge.S': judgeUser.name,
             },
           },
         ],
-        must_not: [],
       },
     });
   });
 
   it('should make a persistence call to obtain all closed cases for no specified judge within the selected date range', async () => {
+    const mockJudges = [judgeUser.name, 'Buch'];
     mockValidRequest = {
       ...mockValidRequest,
-      judgeName: '',
+      judges: mockJudges,
     };
 
     applicationContext.getSearchClient().search.mockReturnValue({
@@ -81,11 +81,15 @@ describe('getCasesClosedByJudge', () => {
             },
           },
         ],
-        must: [],
-        must_not: [
+        must: [
           {
             match_phrase: {
-              'associatedJudge.S': 'Chief Judge',
+              'associatedJudge.S': mockJudges[0],
+            },
+          },
+          {
+            match_phrase: {
+              'associatedJudge.S': mockJudges[1],
             },
           },
         ],

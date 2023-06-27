@@ -5,9 +5,9 @@ import { getOpinionsForJudgeActivityReportAction } from '../../actions/JudgeActi
 import { getOrdersIssuedForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getOrdersIssuedForJudgeActivityReportAction';
 import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
-import { resetJudgeNameForQueryAction } from '@web-client/presenter/actions/JudgeActivityReport/resetJudgeNameForQueryAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setJudgeActivityReportDataAction } from '../../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
+import { setJudgeLastNamesAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeLastNamesAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
@@ -28,7 +28,7 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       stopShowValidationAction,
       clearErrorAlertsAction,
       clearAlertsAction,
-      resetJudgeNameForQueryAction,
+      setJudgeLastNamesAction,
       parallel([
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,

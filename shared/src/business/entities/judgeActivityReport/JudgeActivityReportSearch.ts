@@ -1,10 +1,7 @@
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
-import {
-  CAV_AND_SUBMITTED_CASE_STATUS,
-  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
-} from '../EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '../EntityConstants';
 import {
   FORMATS,
   calculateISODate,
@@ -23,6 +20,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public judgeName: string;
   public judgeId: string;
   public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
+  public judges: string[];
 
   protected tomorrow: string;
 
@@ -32,6 +30,8 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.judgeId = rawProps.judgeId;
     this.judgeName = rawProps.judgeName;
     this.statuses = rawProps.statuses;
+    this.judges = rawProps.judges;
+
     this.tomorrow = calculateISODate({
       howMuch: +1,
       units: 'days',
@@ -73,16 +73,16 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     judgeName: joi
       .optional()
       .description('The last name of the judge to generate the report for'),
+    judges: joi
+      .array()
+      .items(joi.string())
+      .optional()
+      .description('The last names judges to generate report with'),
     startDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .description(
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       ),
-    statuses: joi
-      .array()
-      .items(joi.string().valid(...CAV_AND_SUBMITTED_CASE_STATUS))
-      .optional()
-      .description('The userId of the judge to generate the report for'),
     tomorrow: JoiValidationConstants.STRING.optional().description(
       'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
     ),

@@ -9,7 +9,7 @@ import {
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
-  { endDate, judgeName, startDate }: JudgeActivityReportFilters,
+  params: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -17,11 +17,7 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch({
-    endDate,
-    judgeName,
-    startDate,
-  });
+  const searchEntity = new JudgeActivityReportSearch(params);
 
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
@@ -32,7 +28,7 @@ export const getCasesClosedByJudgeInteractor = async (
     .getCasesClosedByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
-      judgeName: searchEntity.judgeName,
+      judges: searchEntity.judges,
       startDate: searchEntity.startDate,
     });
 

@@ -45,7 +45,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
   const mockValidRequest = {
     endDate: calculatedEndDate,
-    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
     startDate: calculatedStartDate,
   };
 
@@ -73,13 +73,13 @@ describe('getCasesClosedByJudgeInteractor', () => {
     await expect(
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
   });
 
-  it('should return the cases closed organized by status', async () => {
+  it('should return the cases closed organized by status for selected judges', async () => {
     const result = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
@@ -90,7 +90,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       endDate: calculatedEndDate,
-      judgeName: judgeUser.name,
+      judges: [judgeUser.name],
       startDate: calculatedStartDate,
     });
 
@@ -98,21 +98,5 @@ describe('getCasesClosedByJudgeInteractor', () => {
       [CASE_STATUS_TYPES.closed]: 2,
       [CASE_STATUS_TYPES.closedDismissed]: 3,
     });
-  });
-
-  it('should not make a call with a specified judge if fetching cases for all judges', async () => {
-    mockValidRequest.judgeName = 'All Judges';
-    await getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest);
-
-    expect(
-      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
-        .calls[0][0],
-    ).toMatchObject(
-      expect.objectContaining({
-        endDate: calculatedEndDate,
-        judgeName: '',
-        startDate: calculatedStartDate,
-      }),
-    );
   });
 });

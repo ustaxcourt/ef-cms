@@ -15,23 +15,18 @@ import { search } from './searchClient';
 export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
-  judgeName,
+  judges,
   startDate,
 }) => {
   const source = ['status'];
 
   const mustFilters: QueryDslQueryContainer[] = [];
-  const mustNotFilters: QueryDslQueryContainer[] = [];
 
-  if (judgeName) {
-    mustFilters.push({
-      match_phrase: { 'associatedJudge.S': `${judgeName}` },
-    });
-  }
-
-  if (judgeName === '') {
-    mustNotFilters.push({
-      match_phrase: { 'associatedJudge.S': 'Chief Judge' },
+  if (judges.length) {
+    judges.forEach(judge => {
+      mustFilters.push({
+        match_phrase: { 'associatedJudge.S': `${judge}` },
+      });
     });
   }
 
@@ -53,7 +48,6 @@ export const getCasesClosedByJudge = async ({
               },
             ],
             must: mustFilters,
-            must_not: mustNotFilters,
           },
         },
         size: MAX_ELASTICSEARCH_PAGINATION,
@@ -62,7 +56,8 @@ export const getCasesClosedByJudge = async ({
     },
   });
 
-  const judgeNameToLog = judgeName === '' ? 'all judges' : `judge ${judgeName}`;
+  const judgeNameToLog =
+    judges.length > 1 ? 'all judges' : `judge ${judges[0]}`;
 
   applicationContext.logger.info(
     `Found ${results.length} closed cases associated with ${judgeNameToLog}`,
