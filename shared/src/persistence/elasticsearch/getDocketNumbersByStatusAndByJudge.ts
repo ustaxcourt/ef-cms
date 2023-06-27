@@ -20,7 +20,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     },
   ];
 
-  if (params.judgeName !== 'All Judges') {
+  if (params.judgeName) {
     filters.push({
       match_phrase: { 'associatedJudge.S': `${params.judgeName}` },
     });

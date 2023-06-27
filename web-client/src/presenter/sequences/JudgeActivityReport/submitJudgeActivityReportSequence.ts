@@ -5,6 +5,7 @@ import { getOpinionsForJudgeActivityReportAction } from '../../actions/JudgeActi
 import { getOrdersIssuedForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getOrdersIssuedForJudgeActivityReportAction';
 import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
+import { resetJudgeNameForQueryAction } from '@web-client/presenter/actions/JudgeActivityReport/resetJudgeNameForQueryAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setJudgeActivityReportDataAction } from '../../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
@@ -27,6 +28,7 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       stopShowValidationAction,
       clearErrorAlertsAction,
       clearAlertsAction,
+      resetJudgeNameForQueryAction,
       parallel([
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,
