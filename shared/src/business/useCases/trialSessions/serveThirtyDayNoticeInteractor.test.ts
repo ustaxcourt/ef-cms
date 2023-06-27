@@ -129,7 +129,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         'paper_service_started',
         'paper_service_updated',
         'paper_service_updated',
-        'paper_service_complete',
+        'thirty_day_notice_paper_service_complete',
       ];
       applicationContext
         .getPersistenceGateway()
@@ -180,7 +180,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
         message: {
-          action: 'paper_service_complete',
+          action: 'thirty_day_notice_paper_service_complete',
           hasPaper: true,
           pdfUrl: mockPdfUrl,
         },
@@ -213,7 +213,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
         message: {
-          action: 'paper_service_complete',
+          action: 'thirty_day_notice_paper_service_complete',
           pdfUrl: undefined,
         },
         userId: petitionsClerkUser.userId,

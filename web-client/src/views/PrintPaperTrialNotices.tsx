@@ -2,14 +2,17 @@ import { Button } from '../ustc-ui/Button/Button';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PrintPaperTrialNotices = connect(
   {
-    printPaperDoneUrl: state.printPaperDoneUrl,
+    printPaperServiceForTrialCompleteSequence:
+      sequences.printPaperServiceForTrialCompleteSequence,
   },
-  function PrintPaperTrialNotices({ printPaperDoneUrl }) {
+  function PrintPaperTrialNotices({
+    printPaperServiceForTrialCompleteSequence,
+  }) {
     return (
       <>
         <div className="big-blue-header">
@@ -26,8 +29,8 @@ export const PrintPaperTrialNotices = connect(
             </div>
             <div className="grid-col-4">
               <Button
-                className="push-right margin-right-0 margin-top-6"
-                href={printPaperDoneUrl}
+                className="push-right margin-right-0 margin-top-2"
+                onClick={() => printPaperServiceForTrialCompleteSequence()}
               >
                 Printing Complete
               </Button>
