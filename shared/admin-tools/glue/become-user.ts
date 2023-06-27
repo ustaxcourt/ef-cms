@@ -114,11 +114,10 @@ const lookupRoleForUser = async userId => {
 
     console.log(params);
 
-    const cognitoidentityserviceprovider = new CognitoIdentityProvider({
+    const cognito = new CognitoIdentityProvider({
       region: 'us-east-1',
     });
-    const result =
-      await cognitoidentityserviceprovider.adminUpdateUserAttributes(params);
+    const result = await cognito.adminUpdateUserAttributes(params);
 
     console.log(result);
     console.log('SUCCESS: Please log out and log back in again');

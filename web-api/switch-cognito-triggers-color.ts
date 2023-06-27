@@ -1,5 +1,5 @@
-const AWS = require('aws-sdk');
-const { omit } = require('lodash');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { omit } from 'lodash';
 
 const check = (value, message) => {
   if (!value) {
@@ -15,7 +15,7 @@ check(EFCMS_DOMAIN, 'You must have EFCMS_DOMAIN set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 
