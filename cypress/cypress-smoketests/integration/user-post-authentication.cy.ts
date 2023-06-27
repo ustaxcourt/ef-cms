@@ -1,4 +1,4 @@
-import { InitiateAuthResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { type InitiateAuthResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { confirmUser } from '../support/pages/login';
 import {
   editPetitionerEmail,

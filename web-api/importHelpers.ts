@@ -1,10 +1,11 @@
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const jwt = require('jsonwebtoken');
-const localUsers = require('./storage/fixtures/seed/users.json');
-const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { getUserToken } from './storage/scripts/loadTest/loadTestHelpers';
+import AWS from 'aws-sdk';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import localUsers from './storage/fixtures/seed/users.json';
 
-const getToken = async () => {
+export const getToken = async () => {
   if (process.env.ENV === 'local') {
     const adminUser = localUsers.find(user => user.role === 'admin');
     const user = {
@@ -16,7 +17,7 @@ const getToken = async () => {
     return Promise.resolve(jwt.sign(user, 'secret'));
   }
 
-  const cognito = new AWS.CognitoIdentityServiceProvider({
+  const cognito = new CognitoIdentityProvider({
     region: process.env.REGION,
   });
 
@@ -28,7 +29,7 @@ const getToken = async () => {
   });
 };
 
-const getServices = async () => {
+export const getServices = async () => {
   const apigateway = new AWS.APIGateway({
     region: process.env.REGION,
   });
@@ -50,12 +51,6 @@ const getServices = async () => {
     }, {});
 };
 
-const readCsvFile = file => {
+export const readCsvFile = file => {
   return fs.readFileSync(file, 'utf8');
-};
-
-module.exports = {
-  getServices,
-  getToken,
-  readCsvFile,
 };
