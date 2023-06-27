@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOpinionsForJudgeActivityReportAction } from './getOpinionsForJudgeActivityReportAction';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -8,7 +9,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
 
   const mockStartDate = '02/20/2021';
   const mockEndDate = '03/03/2021';
-  const mockJudgeName = 'Sotomayor';
+  const mockJudgeName = judgeUser.name;
   const mockOpinionsFiledByJudge = [
     {
       count: 1,
@@ -51,7 +52,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
-              judgeName: mockJudgeName,
+              judges: [mockJudgeName],
               startDate: mockStartDate,
             },
           },
@@ -64,7 +65,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeName: mockJudgeName,
+      judges: [mockJudgeName],
       startDate: mockStartDate,
     });
     expect(output.opinions).toBe(mockOpinionsFiledByJudge);
