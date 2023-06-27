@@ -1,4 +1,6 @@
-const joi = require('joi').extend(require('@hapi/joi-date'));
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
+const joi: Root = joiImported.extend(joiDate);
 import {
   CAV_AND_SUBMITTED_CASE_STATUS,
   CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
