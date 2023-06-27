@@ -123,6 +123,10 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         'PrintPaperTrialNotices',
       );
 
+      await cerebralTest.runSequence(
+        'printPaperServiceForTrialCompleteSequence',
+      );
+
       const trialSessionDetailsFormatted: any = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {

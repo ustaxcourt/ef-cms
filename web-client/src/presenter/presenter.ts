@@ -290,6 +290,7 @@ import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeC
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
+import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -419,6 +420,7 @@ import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModal
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
+import { thirtyDayNoticePaperServiceCompleteSequence } from './sequences/thirtyDayNoticePaperServiceCompleteSequence';
 import { toggleAllWorkItemCheckboxChangeSequence } from './sequences/toggleAllWorkItemCheckboxChangeSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
@@ -817,6 +819,7 @@ export const presenterSequences = {
   openUnsealDocketEntryModalSequence,
   openUpdateCaseModalSequence,
   paperServiceCompleteSequence,
+  printPaperServiceForTrialCompleteSequence,
   printTrialCalendarSequence,
   prioritizeCaseSequence,
   redirectToLoginSequence,
@@ -945,6 +948,7 @@ export const presenterSequences = {
   submitUpdatePetitionerInformationFromModalSequence,
   submitUpdatePractitionerUserSequence,
   submitUpdateUserContactInformationSequence,
+  thirtyDayNoticePaperServiceCompleteSequence,
   toggleAllWorkItemCheckboxChangeSequence,
   toggleBetaBarSequence,
   toggleCaseDifferenceSequence,
