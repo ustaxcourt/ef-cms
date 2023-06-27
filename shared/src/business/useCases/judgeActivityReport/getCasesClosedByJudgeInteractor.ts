@@ -27,12 +27,15 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
+  const judgeNameToQuery =
+    searchEntity.judgeName === 'All Judges' ? '' : searchEntity.judgeName;
+
   const casesClosedByJudge = await applicationContext
     .getPersistenceGateway()
     .getCasesClosedByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
-      judgeName: searchEntity.judgeName,
+      judgeName: judgeNameToQuery,
       startDate: searchEntity.startDate,
     });
 

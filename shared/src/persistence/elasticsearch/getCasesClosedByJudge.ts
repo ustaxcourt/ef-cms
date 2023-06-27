@@ -21,7 +21,7 @@ export const getCasesClosedByJudge = async ({
 
   const filters: QueryDslQueryContainer[] = [];
 
-  if (judgeName !== 'All Judges') {
+  if (judgeName) {
     filters.push({
       match_phrase: { 'associatedJudge.S': `${judgeName}` },
     });
@@ -53,11 +53,10 @@ export const getCasesClosedByJudge = async ({
     },
   });
 
-  const judgeNameForLog =
-    judgeName === 'All Judges' ? 'all judges' : `judge ${judgeName}`;
+  const judgeNameToLog = judgeName === '' ? 'all judges' : `judge ${judgeName}`;
 
   applicationContext.logger.info(
-    `Found ${results.length} closed cases associated with ${judgeNameForLog}`,
+    `Found ${results.length} closed cases associated with ${judgeNameToLog}`,
   );
 
   return results;
