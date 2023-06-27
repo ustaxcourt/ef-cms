@@ -1,4 +1,5 @@
-import {
+const joi = require('joi');
+const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
@@ -6,12 +7,14 @@ import {
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
-} from '../EntityConstants';
-import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from 'shared/src/business/entities/JoiValidationEntity';
-import { cloneDeep } from 'lodash';
-import { formatPhoneNumber } from '/../utilities/formatPhoneNumber';
-import joi from 'joi';
+} = require('../EntityConstants');
+const {
+  joiValidationDecorator,
+  validEntityDecorator,
+} = require('../JoiValidationDecorator');
+const { cloneDeep } = require('lodash');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
+const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 const ContactFactory = {};
 
@@ -336,7 +339,6 @@ ContactFactory.createContacts = ({
       : undefined,
   };
 };
-
 
 /**
  * creates a contact entities with additional error mappings and validation if needed.
