@@ -180,40 +180,6 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('does a search for all judges (not containing matches for any signed judge name) when searching for opinions', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      isOpinionSearch: true,
-      judge: 'All Judges',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toMatchObject(
-      expect.not.arrayContaining([
-        expect.objectContaining({
-          bool: {
-            should: [
-              {
-                match: {
-                  'judge.S': 'All Judges',
-                },
-              },
-              {
-                match: {
-                  'signedJudgeName.S': {
-                    operator: 'and',
-                    query: 'All Judges',
-                  },
-                },
-              },
-            ],
-          },
-        }),
-      ]),
-    );
-  });
-
   it('does a search for a signed judge when searching for orders', async () => {
     await advancedDocumentSearch({
       applicationContext,
@@ -232,33 +198,6 @@ describe('advancedDocumentSearch', () => {
                 'signedJudgeName.S': {
                   operator: 'and',
                   query: 'Guy Fieri',
-                },
-              },
-            },
-          },
-        }),
-      ]),
-    );
-  });
-
-  it('does a search for all judges (not containing matches for any signed judge name) when searching for orders', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodes,
-      judge: 'All Judges',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toMatchObject(
-      expect.not.arrayContaining([
-        expect.objectContaining({
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'All Judges',
                 },
               },
             },

@@ -150,7 +150,7 @@ export const advancedDocumentSearch = async ({
     { terms: { 'eventCode.S': documentEventCodes } },
   ];
 
-  if (judge && judge !== 'All Judges') {
+  if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     if (isOpinionSearch) {
       const judgeFilter = getJudgeFilterForOpinionSearch({
