@@ -10,7 +10,7 @@ const config: Config = {
     '!jest-scripts.config.ts',
     '!coverage/**',
     '!set-maintenance-mode-locally.js',
-    '!data-import/judge/bulkImportJudgeUsers.js',
+    '!data-import/judge/bulkImportJudgeUsers.ts',
     '!irs-super-user.js',
     '!compareTypescriptErrors.ts',
   ],
