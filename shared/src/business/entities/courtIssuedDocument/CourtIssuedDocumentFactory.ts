@@ -1,20 +1,17 @@
-const { CourtIssuedDocumentDefault } = require('./CourtIssuedDocumentDefault');
-const { CourtIssuedDocumentTypeA } = require('./CourtIssuedDocumentTypeA');
-const { CourtIssuedDocumentTypeB } = require('./CourtIssuedDocumentTypeB');
-const { CourtIssuedDocumentTypeC } = require('./CourtIssuedDocumentTypeC');
-const { CourtIssuedDocumentTypeD } = require('./CourtIssuedDocumentTypeD');
-const { CourtIssuedDocumentTypeE } = require('./CourtIssuedDocumentTypeE');
-const { CourtIssuedDocumentTypeF } = require('./CourtIssuedDocumentTypeF');
-const { CourtIssuedDocumentTypeG } = require('./CourtIssuedDocumentTypeG');
-const { CourtIssuedDocumentTypeH } = require('./CourtIssuedDocumentTypeH');
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
+import { CourtIssuedDocumentTypeA } from './CourtIssuedDocumentTypeA';
+import { CourtIssuedDocumentTypeB } from './CourtIssuedDocumentTypeB';
+import { CourtIssuedDocumentTypeC } from './CourtIssuedDocumentTypeC';
+import { CourtIssuedDocumentTypeD } from './CourtIssuedDocumentTypeD';
+import { CourtIssuedDocumentTypeE } from './CourtIssuedDocumentTypeE';
+import { CourtIssuedDocumentTypeF } from './CourtIssuedDocumentTypeF';
+import { CourtIssuedDocumentTypeG } from './CourtIssuedDocumentTypeG';
+import { CourtIssuedDocumentTypeH } from './CourtIssuedDocumentTypeH';
 
-/**
- * Court Issued Document Factory entity
- *
- * @param {object} documentMetadata the document metadata
- * @constructor
- */
-function CourtIssuedDocumentFactory(documentMetadata) {
+export function CourtIssuedDocumentFactory(
+  documentMetadata,
+): CourtIssuedDocument {
   if (documentMetadata && documentMetadata.scenario) {
     const scenario = documentMetadata.scenario.toLowerCase().trim();
     switch (scenario) {
@@ -37,7 +34,5 @@ function CourtIssuedDocumentFactory(documentMetadata) {
     }
   }
 
-  return new CourtIssuedDocumentDefault(documentMetadata);
+  return new CourtIssuedDocumentBase(documentMetadata);
 }
-
-module.exports = { CourtIssuedDocumentFactory };
