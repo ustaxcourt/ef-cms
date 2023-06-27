@@ -1,4 +1,4 @@
-const { createAdminAccount, deactivateAdminAccount } = require('./admin');
+import { createAdminAccount, deactivateAdminAccount } from './admin';
 
 (async () => {
   console.log('== Creating Admin account');
