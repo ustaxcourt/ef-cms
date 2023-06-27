@@ -8,6 +8,7 @@ export type JudgeActivityReportFilters = {
   startDate: string;
   judgeName?: string;
   judgeId?: string;
+  judges?: string[];
 };
 
 export type JudgeActivityReportCavAndSubmittedCasesRequestType = {
@@ -62,6 +63,7 @@ export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
     judgeName: '',
+    judges: [],
     startDate: '',
   },
   judgeActivityReportData: {},
