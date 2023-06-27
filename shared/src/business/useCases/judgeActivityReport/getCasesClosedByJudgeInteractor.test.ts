@@ -1,5 +1,9 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} from '../../utilities/DateHandler';
 import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
@@ -22,10 +26,27 @@ describe('getCasesClosedByJudgeInteractor', () => {
     },
   ];
 
+  const mockEndDate = '03/21/2020';
+  const mockStartDate = '02/12/2020';
+
+  let [month, day, year] = mockStartDate.split('/');
+  const calculatedStartDate = createStartOfDayISO({
+    day,
+    month,
+    year,
+  });
+
+  [month, day, year] = mockEndDate.split('/');
+  const calculatedEndDate = createEndOfDayISO({
+    day,
+    month,
+    year,
+  });
+
   const mockValidRequest = {
-    endDate: '03/21/2020',
+    endDate: calculatedEndDate,
     judgeName: judgeUser.name,
-    startDate: '02/12/2020',
+    startDate: calculatedStartDate,
   };
 
   beforeEach(() => {
@@ -64,9 +85,34 @@ describe('getCasesClosedByJudgeInteractor', () => {
       mockValidRequest,
     );
 
+    expect(
+      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
+        .calls[0][0],
+    ).toMatchObject({
+      endDate: calculatedEndDate,
+      judgeName: judgeUser.name,
+      startDate: calculatedStartDate,
+    });
+
     expect(result).toEqual({
       [CASE_STATUS_TYPES.closed]: 2,
       [CASE_STATUS_TYPES.closedDismissed]: 3,
     });
+  });
+
+  it('should not make a call with a specified judge if fetching cases for all judges', async () => {
+    mockValidRequest.judgeName = 'All Judges';
+    await getCasesClosedByJudgeInteractor(applicationContext, mockValidRequest);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
+        .calls[0][0],
+    ).toMatchObject(
+      expect.objectContaining({
+        endDate: calculatedEndDate,
+        judgeName: '',
+        startDate: calculatedStartDate,
+      }),
+    );
   });
 });
