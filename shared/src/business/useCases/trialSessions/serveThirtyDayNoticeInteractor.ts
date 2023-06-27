@@ -40,7 +40,7 @@ export const serveThirtyDayNoticeInteractor = async (
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
-        action: 'paper_service_complete',
+        action: 'thirty_day_notice_paper_service_complete',
         pdfUrl: undefined,
       },
       userId: currentUser.userId,
