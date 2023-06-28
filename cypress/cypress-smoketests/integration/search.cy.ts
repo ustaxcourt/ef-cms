@@ -27,16 +27,16 @@ let testData = {};
 let token;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const { closeScannerSetupDialog, getUserToken, login } =
-  getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 describe('Create and serve a case to search for', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -55,12 +55,13 @@ describe('Create and serve a case to search for', () => {
 });
 
 describe('Case Advanced Search', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -79,12 +80,13 @@ describe('Case Advanced Search', () => {
 });
 
 describe('Practitioner Search', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -103,12 +105,13 @@ describe('Practitioner Search', () => {
 });
 
 describe('Opinion Search', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {

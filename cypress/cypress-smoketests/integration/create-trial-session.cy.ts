@@ -46,6 +46,8 @@ import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
+console.log('gg', DEFAULT_ACCOUNT_PASS);
+
 faker.seed(faker.number.int());
 
 let docketClerkToken = null;
@@ -54,37 +56,42 @@ const testData = {
   preferredTrialCity: 'Mobile, Alabama',
   trialSessionIds: [],
 };
+const { login } = getEnvironmentSpecificFunctions();
 
 let firstDocketNumber;
 let secondDocketNumber;
 const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
-  const { getUserToken, login } = getEnvironmentSpecificFunctions();
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      petitionsClerkToken = result.AuthenticationResult.IdToken;
+    });
+  });
 
-  before(async () => {
-    let result = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    petitionsClerkToken = result.AuthenticationResult.IdToken;
-    result = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    docketClerkToken = result.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      docketClerkToken = result.AuthenticationResult.IdToken;
+    });
   });
 
   describe('Petitioner creates cases', () => {
     let petitionerToken;
 
     describe('Petitioner', () => {
-      before(async () => {
-        const results = await getUserToken(
-          'petitioner1@example.com',
-          DEFAULT_ACCOUNT_PASS,
-        );
-        petitionerToken = results.AuthenticationResult.IdToken;
+      before(() => {
+        cy.task('getUserToken', {
+          email: 'petitioner1@example.com',
+          password: DEFAULT_ACCOUNT_PASS,
+        }).then(result => {
+          token = result.AuthenticationResult.IdToken;
+        });
       });
 
       it('should be able to login', () => {
