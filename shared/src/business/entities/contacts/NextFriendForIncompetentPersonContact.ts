@@ -1,4 +1,5 @@
 import { Contact } from './Contact';
+import { JoiValidationConstants } from '../JoiValidationConstants';
 
 export class NextFriendForIncompetentPersonContact extends Contact {
   constructor(
