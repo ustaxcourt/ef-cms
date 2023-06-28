@@ -1,10 +1,20 @@
-const { ContactFactory } = require('./ContactFactory');
+import { Contact } from './Contact';
 
-/**
- * returns the constructor used for creating the PetitionerCorporationContact entity
- */
-exports.getPetitionerCorporationContact = ContactFactory.createContactFactory({
-  additionalErrorMappings: {},
-  additionalValidation: {},
-  contactName: 'PetitionerCorporationContact',
-});
+export class PetitionerCorporationContact extends Contact {
+  constructor(
+    rawContact,
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ) {
+    super(rawContact, 'PetitionerCorporationContact', {
+      applicationContext,
+    });
+  }
+
+  getValidationRules() {
+    return super.getValidationRules();
+  }
+
+  getErrorToMessageMap() {
+    return super.getErrorToMessageMap();
+  }
+}
