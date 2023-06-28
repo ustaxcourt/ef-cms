@@ -17,6 +17,10 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  params.endDate = params.endDate || '';
+  params.judges = params.judges || [];
+  params.startDate = params.startDate || '';
+
   const searchEntity = new JudgeActivityReportSearch(params);
 
   if (!searchEntity.isValid()) {
