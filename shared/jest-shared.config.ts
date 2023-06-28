@@ -11,7 +11,7 @@ const config: Config = {
     '!src/applicationContextForTests.ts',
     '!src/**/getScannerMockInterface.ts',
     '!src/business/test/**/*.ts',
-    '!src/business/assetst*',
+    '!src/business/assets*',
     '!src/proxies/**/*.ts',
     '!src/tools/**/*.ts',
     '!src/test/**/*.ts',
