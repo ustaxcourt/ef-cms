@@ -1,14 +1,11 @@
-import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { contactSecondaryFromState } from '../helpers';
 
 export const practitionerRequestsPendingAccessToCase = (
   cerebralTest,
   fakeFile,
 ) => {
-  const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('Practitioner requests access to pending case', async () => {
     await cerebralTest.runSequence('gotoRequestAccessSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -17,12 +14,21 @@ export const practitionerRequestsPendingAccessToCase = (
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitleTemplate: VALIDATION_ERROR_MESSAGES.documentTitleTemplate,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      scenario: VALIDATION_ERROR_MESSAGES.scenario,
+      documentTitleTemplate:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .documentTitleTemplate,
+      documentType:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
+      eventCode:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
+      filers:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
+      primaryDocumentFile:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      scenario:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -44,9 +50,13 @@ export const practitionerRequestsPendingAccessToCase = (
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      filers: VALIDATION_ERROR_MESSAGES.filers,
-      objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
+      filers:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
+      objections:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.objections,
+      primaryDocumentFile:
+        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {

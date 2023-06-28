@@ -24,7 +24,7 @@ describe('Respondent requests access to a case', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
+    const { docketNumber } = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
         city: 'Amazing',
@@ -36,8 +36,10 @@ describe('Respondent requests access to a case', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    expect(docketNumber).toBeDefined();
+
+    cerebralTest.docketNumber = docketNumber;
   });
 
   loginAs(cerebralTest, 'irspractitioner@example.com');
