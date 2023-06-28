@@ -1,10 +1,9 @@
+import { Case, isLeadCase } from '../../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { Case, isLeadCase } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
@@ -60,9 +59,7 @@ export const addPaperFilingInteractor = async (
 
   const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext);
 
   if (!isCaseConsolidationFeatureOn || isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
@@ -83,7 +80,7 @@ export const addPaperFilingInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
@@ -112,7 +109,7 @@ export const addPaperFilingInteractor = async (
       { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+    const servedParties: any = aggregatePartiesForService(caseEntity);
 
     if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
@@ -171,6 +168,7 @@ export const addPaperFilingInteractor = async (
         .countPagesInDocument({
           applicationContext,
           docketEntryId,
+          documentBytes: undefined,
         });
     }
 
@@ -200,6 +198,7 @@ export const addPaperFilingInteractor = async (
         applicationContext,
         caseEntities,
         docketEntryId,
+        stampedPdf: undefined,
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
