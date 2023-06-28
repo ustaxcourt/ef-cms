@@ -44,16 +44,16 @@ const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const { closeScannerSetupDialog, getUserToken, login } =
-  getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitioner1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'petitioner1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -89,12 +89,13 @@ describe('Petitioner', () => {
 });
 
 describe('Petitions clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -117,12 +118,13 @@ describe('Petitions clerk', () => {
 });
 
 describe('Docket Clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {

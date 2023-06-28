@@ -1,5 +1,18 @@
 import { defineConfig } from 'cypress';
 
+import {
+  confirmUser,
+  getRestApi,
+  getUserToken,
+} from './cypress/cypress-smoketests/support/login';
+
+const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
+
+import {
+  getRestApi as getRestApiLocal,
+  getUserToken as getUserTokenLocal,
+} from './cypress/cypress-smoketests/support/pages/local-login';
+
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   chromeWebSecurity: false,
@@ -7,9 +20,19 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on) {
       on('task', {
+        confirmUser({ email }) {
+          return confirmUser({ email });
+        },
+        getRestApi() {
+          return CYPRESS_SMOKETESTS_LOCAL ? getRestApiLocal() : getRestApi();
+        },
+        getUserToken({ email, password }) {
+          return CYPRESS_SMOKETESTS_LOCAL
+            ? getUserTokenLocal(email)
+            : getUserToken(email, password);
+        },
         log(message) {
           console.log(message);
-
           return null;
         },
       });
