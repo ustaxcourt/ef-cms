@@ -12,7 +12,7 @@ import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
 export class User extends JoiValidationEntity {
-  public pendingEmailVerificationToken: string;
+  public pendingEmailVerificationToken?: string;
   public email: string;
   public name: string;
   public pendingEmail: string;
@@ -20,7 +20,7 @@ export class User extends JoiValidationEntity {
   public token: string;
   public userId: string;
   public isUpdatingInformation: string;
-  public contact: {
+  public contact?: {
     address1: string;
     address2: string;
     address3: string;
@@ -31,8 +31,8 @@ export class User extends JoiValidationEntity {
     postalCode: string;
     state: string;
   };
-  public judgeFullName: string;
-  public judgeTitle: string;
+  public judgeFullName?: string;
+  public judgeTitle?: string;
   public section: string;
 
   constructor(rawUser, { filtered = false } = {}) {
