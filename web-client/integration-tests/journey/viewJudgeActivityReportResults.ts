@@ -37,7 +37,7 @@ export const viewJudgeActivityReportResults = (
       selectedPage: 0,
     });
 
-    await wait(5000);
+    await wait(10000);
 
     const { progressDescriptionTableTotal } = runCompute(
       judgeActivityReportHelper as any,

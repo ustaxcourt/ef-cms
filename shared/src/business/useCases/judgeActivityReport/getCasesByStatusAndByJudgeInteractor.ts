@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportCaseStatusSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearchCaseStatusSearch';
@@ -60,12 +61,7 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
  */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
-  {
-    judges,
-    pageSize,
-    searchAfter,
-    statuses,
-  }: JudgeActivityReportCavAndSubmittedCasesRequestType,
+  params: JudgeActivityReportCavAndSubmittedCasesRequestType,
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;
@@ -77,12 +73,12 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportCaseStatusSearch({
-    judges,
-    pageSize,
-    searchAfter,
-    statuses,
-  });
+  params.judges = params.judges || [];
+  params.pageSize = params.pageSize || CAV_AND_SUBMITTED_CASES_PAGE_SIZE;
+  params.searchAfter = params.searchAfter || 0;
+  params.statuses = params.statuses || [];
+
+  const searchEntity = new JudgeActivityReportCaseStatusSearch(params);
 
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();

@@ -26,7 +26,7 @@ import { groupBy, orderBy } from 'lodash';
  */
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
-  { endDate, judges, startDate }: JudgeActivityReportFilters,
+  params: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -34,11 +34,11 @@ export const getOrdersFiledByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch({
-    endDate,
-    judges,
-    startDate,
-  });
+  params.endDate = params.endDate || '';
+  params.judges = params.judges || [];
+  params.startDate = params.startDate || '';
+
+  const searchEntity = new JudgeActivityReportSearch(params);
 
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
