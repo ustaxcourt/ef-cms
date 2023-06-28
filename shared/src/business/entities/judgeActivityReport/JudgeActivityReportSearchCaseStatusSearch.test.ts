@@ -7,7 +7,7 @@ import { JudgeActivityReportCaseStatusSearch } from './JudgeActivityReportSearch
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 
 describe('JudgeActivityReportCaseStatusSearch', () => {
-  it('should have validation errors when a judges name is not provided', () => {
+  it('should have validation errors when a judges array is not provided', () => {
     const judgeActivityReportSearchEntity =
       new JudgeActivityReportCaseStatusSearch({
         statuses: CAV_AND_SUBMITTED_CASE_STATUS,
@@ -16,14 +16,16 @@ describe('JudgeActivityReportCaseStatusSearch', () => {
     expect(
       judgeActivityReportSearchEntity.getFormattedValidationErrors(),
     ).toMatchObject({
-      judgeName: 'Judge name is a required field',
+      judges: 'Judge name is a required field',
+      pageSize: '"pageSize" is required',
+      searchAfter: '"searchAfter" is required',
     });
   });
 
   it('should have validation errors when statuses are not provided', () => {
     const judgeActivityReportSearchEntity =
       new JudgeActivityReportCaseStatusSearch({
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
       });
 
     expect(
@@ -36,7 +38,7 @@ describe('JudgeActivityReportCaseStatusSearch', () => {
   it('should have validation errors when searchAfter is not provided', () => {
     const judgeActivityReportSearchEntity =
       new JudgeActivityReportCaseStatusSearch({
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
         statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
       });
@@ -51,7 +53,7 @@ describe('JudgeActivityReportCaseStatusSearch', () => {
   it('should have validation errors when pageSize is not provided', () => {
     const judgeActivityReportSearchEntity =
       new JudgeActivityReportCaseStatusSearch({
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         searchAfter: 3,
         statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
       });
@@ -66,7 +68,7 @@ describe('JudgeActivityReportCaseStatusSearch', () => {
   it('should have not have validation errors when both judgeName and statuses are valid', () => {
     const judgeActivityReportSearchEntity =
       new JudgeActivityReportCaseStatusSearch({
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
         searchAfter: 3,
         statuses: CAV_AND_SUBMITTED_CASE_STATUS,

@@ -14,7 +14,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   const lastDocketNumberForCavAndSubmittedCasesSearch = 1234;
 
   const expectedRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
-    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
     searchAfter: lastDocketNumberForCavAndSubmittedCasesSearch,
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
@@ -107,7 +107,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         state: {
           judgeActivityReport: {
             filters: {
-              judgeName: expectedRequest.judgeName,
+              judges: [judgeUser.name],
             },
             judgeActivityReportData: {},
             lastIdsOfPages: [
@@ -155,7 +155,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         state: {
           judgeActivityReport: {
             filters: {
-              judgeName: expectedRequest.judgeName,
+              judges: [judgeUser.name],
             },
             judgeActivityReportData: {
               submittedAndCavCasesByJudge: undefined,
@@ -188,7 +188,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         state: {
           judgeActivityReport: {
             filters: {
-              judgeName: expectedRequest.judgeName,
+              judges: [judgeUser.name],
             },
             judgeActivityReportData: {
               consolidatedCasesGroupCountMap: undefined,
