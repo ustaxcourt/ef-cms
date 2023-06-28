@@ -2,6 +2,7 @@ import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -15,7 +16,7 @@ describe('removeCaseFromTrialInteractor', () => {
     mockUser = petitionsClerkUser;
     mockTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
 
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -47,7 +48,7 @@ describe('removeCaseFromTrialInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
       }),
-    ).rejects.toThrow();
+    ).rejects.toThrow(UnauthorizedError);
   });
 
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a calendared session', async () => {
