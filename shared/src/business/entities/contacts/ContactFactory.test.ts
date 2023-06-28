@@ -337,7 +337,7 @@ describe('ContactFactory', () => {
 
   describe('getContactConstructors', () => {
     it('should return an empty object if no partyType is given and case has not been served', () => {
-      const contactConstructor = ContactFactory.getContactConstructors({
+      const contactConstructor = ContactFactory.createContacts({
         partyType: undefined,
         status: CASE_STATUS_TYPES.new,
       });
