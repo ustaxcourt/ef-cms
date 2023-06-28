@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../support/pages/local-login';
 import {
   editPetitionerEmail,
   goToCaseDetail,
@@ -15,7 +16,7 @@ import {
 import { goToMyDocumentQC } from '../support/pages/document-qc';
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
-let token: string | undefined = undefined;
+let token: string;
 const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
@@ -24,7 +25,7 @@ const randomizedEmail = `${faker.string.uuid()}@example.com`;
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('Petitions clerk', () => {
     before(() => {
-      cy.task('getUserToken', {
+      cy.task<AuthenticationResult>('getUserToken', {
         email: 'petitionsclerk1@example.com',
         password: DEFAULT_ACCOUNT_PASS,
       }).then(result => {
@@ -48,7 +49,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
   describe('Admission clerk', () => {
     before(() => {
-      cy.task('getUserToken', {
+      cy.task<AuthenticationResult>('getUserToken', {
         email: 'admissionsclerk1@example.com',
         password: DEFAULT_ACCOUNT_PASS,
       }).then(result => {
@@ -73,7 +74,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
     });
 
     it('verify the email has changed', () => {
-      cy.task('getUserToken', {
+      cy.task<AuthenticationResult>('getUserToken', {
         email: randomizedEmail,
         password: DEFAULT_ACCOUNT_PASS,
       }).then(result => {

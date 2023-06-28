@@ -36,6 +36,7 @@ import {
   verifyOpenCaseOnTrialSession,
 } from '../support/pages/trial-sessions';
 
+import { AuthenticationResult } from '../support/pages/local-login';
 import { faker } from '@faker-js/faker';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import {
@@ -48,8 +49,8 @@ const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 faker.seed(faker.number.int());
 
-let docketClerkToken = null;
-let petitionsClerkToken = null;
+let docketClerkToken: string;
+let petitionsClerkToken: string;
 const testData = {
   preferredTrialCity: 'Mobile, Alabama',
   trialSessionIds: [],
@@ -62,7 +63,8 @@ const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
   before(() => {
-    cy.task('getUserToken', {
+    console.log('DEFAULT_ACCOUNT_PASS', DEFAULT_ACCOUNT_PASS);
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitionsclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -71,7 +73,7 @@ describe('Petitions Clerk', () => {
   });
 
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'docketclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -84,11 +86,11 @@ describe('Petitions Clerk', () => {
 
     describe('Petitioner', () => {
       before(() => {
-        cy.task('getUserToken', {
+        cy.task<AuthenticationResult>('getUserToken', {
           email: 'petitioner1@example.com',
           password: DEFAULT_ACCOUNT_PASS,
         }).then(result => {
-          token = result.AuthenticationResult.IdToken;
+          petitionerToken = result.AuthenticationResult.IdToken;
         });
       });
 

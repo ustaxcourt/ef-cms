@@ -15,6 +15,7 @@ import {
   submitPetition,
 } from '../support/pages/create-electronic-petition';
 
+import { AuthenticationResult } from '../support/pages/local-login';
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
@@ -28,14 +29,14 @@ import { goToMyDocumentQC } from '../support/pages/document-qc';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-let token = null;
+let token: string;
 let testData = { createdPaperDocketNumber: '' };
 
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitioner1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -77,7 +78,7 @@ describe('Petitioner', () => {
 
 describe('Private practitioner', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'privatePractitioner1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -118,7 +119,7 @@ describe('Private practitioner', () => {
 
 describe('Petitions clerk', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitionsclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {

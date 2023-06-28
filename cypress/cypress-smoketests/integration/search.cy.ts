@@ -11,6 +11,7 @@ import {
   searchOpinionByKeyword,
 } from '../support/pages/advanced-search';
 
+import { AuthenticationResult } from '../support/pages/local-login';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import { goToCaseDetail } from '../support/pages/case-detail';
@@ -24,14 +25,14 @@ import { waitForElasticsearch } from '../support/helpers';
 
 const barNumberToSearchBy = 'PT1234';
 let testData = {};
-let token;
+let token: string;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 describe('Create and serve a case to search for', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitionsclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -56,7 +57,7 @@ describe('Create and serve a case to search for', () => {
 
 describe('Case Advanced Search', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'docketclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -81,7 +82,7 @@ describe('Case Advanced Search', () => {
 
 describe('Practitioner Search', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'docketclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
@@ -106,7 +107,7 @@ describe('Practitioner Search', () => {
 
 describe('Opinion Search', () => {
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'docketclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {

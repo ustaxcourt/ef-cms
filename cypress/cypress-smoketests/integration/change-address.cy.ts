@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../support/pages/local-login';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 
 import {
@@ -12,10 +13,10 @@ const { login } = getEnvironmentSpecificFunctions();
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 describe('Private practitioner', () => {
-  let token = null;
+  let token: string;
 
   before(() => {
-    cy.task('getUserToken', {
+    cy.task<AuthenticationResult>('getUserToken', {
       email: 'privatePractitioner1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
     }).then(result => {
