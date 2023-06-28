@@ -1,3 +1,9 @@
+import {
+  CountryTypes,
+  STATE_NOT_AVAILABLE,
+  US_STATES,
+  US_STATES_OTHER,
+} from '../EntityConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 
@@ -9,7 +15,7 @@ export class Contact extends JoiValidationEntity {
   city: any;
   contactType: any;
   country: any;
-  countryType: any;
+  countryType: CountryTypes;
   email: any;
   inCareOf: any;
   isAddressSealed: any;
@@ -29,7 +35,6 @@ export class Contact extends JoiValidationEntity {
   constructor(
     rawContact,
     contactName: string,
-    { countryType }: { countryType: string },
     { applicationContext }: { applicationContext: IApplicationContext },
   ) {
     super(contactName);
@@ -62,13 +67,107 @@ export class Contact extends JoiValidationEntity {
     this.hasEAccess = rawContact.hasEAccess || undefined;
   }
 
-  static VALIDATION_RULES = {
-    
+  static SHARED_VALIDATION_MESSAGES = {
+    address1: 'Enter mailing address',
+    city: 'Enter city',
+    countryType: 'Enter country type',
+    name: 'Enter name',
+    paperPetitionEmail: 'Enter email address in format: yourname@example.com',
+    phone: 'Enter phone number',
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
+  static DOMESTIC_VALIDATION_MESSAGES = {
+    ...Contact.SHARED_VALIDATION_MESSAGES,
+    postalCode: [
+      {
+        contains: 'match',
+        message: 'Enter ZIP code',
+      },
+      'Enter ZIP code',
+    ],
+    state: 'Enter state',
+  };
 
-  getValidationRules() {}
+  static INTERNATIONAL_VALIDATION_MESSAGES = {
+    ...Contact.SHARED_VALIDATION_MESSAGES,
+    country: 'Enter a country',
+    postalCode: 'Enter ZIP code',
+  };
 
-  getErrorToMessageMap() {}
+  static SHARED_VALIDATION_RULES = {
+    address1: JoiValidationConstants.STRING.max(100).required(),
+    address2: JoiValidationConstants.STRING.max(100).optional(),
+    address3: JoiValidationConstants.STRING.max(100).optional(),
+    city: JoiValidationConstants.STRING.max(100).required(),
+    contactId: JoiValidationConstants.UUID.required().description(
+      'Unique contact ID only used by the system.',
+    ),
+    contactType: JoiValidationConstants.STRING.valid(
+      ...Object.values(CONTACT_TYPES),
+    ).required(),
+    email: JoiValidationConstants.EMAIL.when('hasEAccess', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
+    hasConsentedToEService: joi
+      .boolean()
+      .optional()
+      .description(
+        'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
+      ),
+    hasEAccess: joi
+      .boolean()
+      .optional()
+      .description(
+        'Flag that indicates if the contact has credentials to both the legacy and new system.',
+      ),
+    inCareOf: JoiValidationConstants.STRING.max(100).optional(),
+    isAddressSealed: joi.boolean().required(),
+    name: JoiValidationConstants.STRING.max(100).required(),
+    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+      .allow(null)
+      .description('Email provided by the petitioner on their petition form'),
+    phone: JoiValidationConstants.STRING.max(100).required(),
+    sealedAndUnavailable: joi.boolean().optional(),
+    secondaryName: JoiValidationConstants.STRING.max(100).optional(),
+    serviceIndicator: JoiValidationConstants.STRING.valid(
+      ...Object.values(SERVICE_INDICATOR_TYPES),
+    ).optional(),
+    title: JoiValidationConstants.STRING.max(100).optional(),
+  };
+
+  static DOMESTIC_VALIDATION_RULES = {
+    countryType: JoiValidationConstants.STRING.valid(
+      COUNTRY_TYPES.DOMESTIC,
+    ).required(),
+    ...Contact.SHARED_VALIDATION_RULES,
+    postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
+    state: JoiValidationConstants.STRING.valid(
+      ...Object.keys(US_STATES),
+      ...Object.keys(US_STATES_OTHER),
+      STATE_NOT_AVAILABLE,
+    ).required(),
+  };
+
+  static INTERNATIONAL_VALIDATION_RULES = {
+    country: JoiValidationConstants.STRING.max(500).required(),
+    countryType: JoiValidationConstants.STRING.valid(
+      COUNTRY_TYPES.INTERNATIONAL,
+    ).required(),
+    ...Contact.SHARED_VALIDATION_RULES,
+    postalCode: JoiValidationConstants.STRING.max(100).required(),
+  };
+
+  getValidationRules() {
+    return this.countryType === COUNTRY_TYPES.DOMESTIC
+      ? Contact.DOMESTIC_VALIDATION_RULES
+      : Contact.INTERNATIONAL_VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return this.countryType === COUNTRY_TYPES.DOMESTIC
+      ? Contact.DOMESTIC_VALIDATION_MESSAGES
+      : Contact.INTERNATIONAL_VALIDATION_MESSAGES;
+  }
 }

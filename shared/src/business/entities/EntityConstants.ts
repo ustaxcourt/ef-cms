@@ -1020,7 +1020,9 @@ export const ANSWER_CUTOFF_UNIT = 'day';
 export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
-};
+} as const;
+const CountryTypesArray = Object.values(COUNTRY_TYPES);
+export type CountryTypes = (typeof CountryTypesArray)[number];
 
 export const US_STATES = {
   AK: 'Alaska',
