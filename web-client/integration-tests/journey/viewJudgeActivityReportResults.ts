@@ -14,7 +14,7 @@ const judgeActivityReportHelper = withAppContextDecorator(
 
 export const viewJudgeActivityReportResults = (
   cerebralTest: any,
-  overrides: { startDate?: string; endDate?: string } = {},
+  overrides: { startDate?: string; endDate?: string; judgeName?: string } = {},
 ) => {
   return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
@@ -30,6 +30,10 @@ export const viewJudgeActivityReportResults = (
 
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
       endDate: overrides.endDate || currentDate,
+    });
+
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      judgeName: overrides.judgeName || 'Colvin',
     });
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');

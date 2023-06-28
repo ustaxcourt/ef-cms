@@ -80,8 +80,7 @@ describe('Judge activity report journey', () => {
   );
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-
-  viewJudgeActivityReportResults(cerebralTest);
+  viewJudgeActivityReportResults(cerebralTest, {});
   it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
     const progressDescriptionTableTotalAfter =
       cerebralTest.progressDescriptionTableTotal;
