@@ -14,7 +14,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   props,
   store,
 }: ActionProps) => {
-  const { judgeName } = get(state.judgeActivityReport.filters);
+  const { judges } = get(state.judgeActivityReport.filters);
   const lastIdsOfPages = get(state.judgeActivityReport.lastIdsOfPages);
   const searchAfter = lastIdsOfPages[props.selectedPage];
 
@@ -27,7 +27,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
-      judgeName,
+      judges,
       pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
       searchAfter,
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
