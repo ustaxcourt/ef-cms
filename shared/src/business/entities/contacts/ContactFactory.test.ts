@@ -335,44 +335,6 @@ describe('ContactFactory', () => {
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 
-  describe('getErrorToMessageMap', () => {
-    it('gets domestic error message map by default', () => {
-      const getErrorToMessageMap = ContactFactory.getErrorToMessageMap({});
-
-      expect(getErrorToMessageMap).toEqual(
-        ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES,
-      );
-    });
-
-    it('gets international error message map', () => {
-      const getErrorToMessageMap = ContactFactory.getErrorToMessageMap({
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-      });
-
-      expect(getErrorToMessageMap).toEqual(
-        ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES,
-      );
-    });
-  });
-
-  describe('getValidationObject', () => {
-    it('gets domestic validation object by default', () => {
-      const validationObject = ContactFactory.getValidationObject({});
-
-      expect(validationObject).toEqual(ContactFactory.domesticValidationObject);
-    });
-
-    it('gets international validation object', () => {
-      const validationObject = ContactFactory.getValidationObject({
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-      });
-
-      expect(validationObject).toEqual(
-        ContactFactory.internationalValidationObject,
-      );
-    });
-  });
-
   describe('getContactConstructors', () => {
     it('should return an empty object if no partyType is given and case has not been served', () => {
       const contactConstructor = ContactFactory.getContactConstructors({
