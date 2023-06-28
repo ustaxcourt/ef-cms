@@ -11,12 +11,7 @@ AWS.config.credentials = {
 };
 AWS.config.region = awsRegion;
 
-console.log(process.env.CYPRESS_AWS_ACCESS_KEY_ID);
-console.log(process.env.CYPRESS_ENV);
-console.log(process.env.CYPRESS_DEPLOYING_COLOR);
-console.log(process.env.CYPRESS_DEFAULT_ACCOUNT_PASS);
-
-const ENV = process.env.CYPRESS_ENV;
+const { ENV } = process.env;
 const DEPLOYING_COLOR = process.env.CYPRESS_DEPLOYING_COLOR;
 const DEFAULT_ACCOUNT_PASS = process.env.CYPRESS_DEFAULT_ACCOUNT_PASS;
 
