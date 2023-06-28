@@ -5,148 +5,151 @@ import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
-import { judgeViewsJudgeActivityReportPage } from './journey/judgeViewsJudgeActivityReport';
+import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { viewJudgeActivityReportResults } from './journey/viewJudgeActivityReportResults';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const judgeActivityReportHelper = withAppContextDecorator(
+  judgeActivityReportHelperComputed,
+);
 
 let progressDescriptionTableTotalBefore = 0;
-const selectedJudgeUsersForTesting = ['Colvin', 'Buch'];
 
-selectedJudgeUsersForTesting.forEach(selectedJudgeName => {
-  describe(`Judge activity report journey for ${selectedJudgeName}`, () => {
-    const cerebralTest = setupTest();
+describe('Judge activity report journey', () => {
+  const cerebralTest = setupTest();
 
-    afterAll(() => {
-      cerebralTest.closeSocket();
-    });
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    judgeViewsJudgeActivityReportPage(cerebralTest);
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  it('should disable the submit button on initial page load when form has not yet been completed', async () => {
+    await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
-    it('should display an error message when invalid dates are entered into the form', async () => {
-      await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+    const { isFormPristine, reportHeader } = runCompute(
+      judgeActivityReportHelper as any,
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(isFormPristine).toBe(true);
+    expect(reportHeader).toContain('Colvin');
+  });
+
+  it('should display an error message when invalid dates are entered into the form', async () => {
+    await cerebralTest.runSequence(
+      'selectDateRangeFromJudgeActivityReportSequence',
+      {
         startDate: '--_--',
-      });
+      },
+    );
 
-      await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+    await cerebralTest.runSequence(
+      'selectDateRangeFromJudgeActivityReportSequence',
+      {
         endDate: 'yabbadabaadooooo',
-      });
-
-      await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
-      expect(cerebralTest.getState('validationErrors')).toEqual({
-        endDate: 'Enter a valid end date.',
-        startDate: 'Enter a valid start date.',
-      });
-    });
-
-    viewJudgeActivityReportResults(cerebralTest, {
-      selectedJudgeName,
-    });
-    it('should set the progressDescriptionTableBeforeCount to test addition of CAV and submitted cases', () => {
-      progressDescriptionTableTotalBefore =
-        cerebralTest.progressDescriptionTableTotal;
-    });
-
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
-
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusTo(
-      cerebralTest,
-      CASE_STATUS_TYPES.cav,
-      selectedJudgeName,
+      },
     );
 
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusTo(
-      cerebralTest,
-      CASE_STATUS_TYPES.submitted,
-      selectedJudgeName,
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      endDate: 'Enter a valid end date.',
+      startDate: 'Enter a valid start date.',
+    });
+  });
+
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore + 2,
     );
+  });
 
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    viewJudgeActivityReportResults(cerebralTest, {
-      selectedJudgeName,
-    });
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
 
-    it('should increase progressDescriptionTableTotal by 2 for newly created "CAV" and "Submitted" cases', () => {
-      const progressDescriptionTableTotalAfter =
-        cerebralTest.progressDescriptionTableTotal;
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
 
-      expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore + 2,
-      );
-    });
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
 
-    viewJudgeActivityReportResults(cerebralTest, {
-      selectedJudgeName,
-    });
-    it('should set the progressDescriptionTableBeforeCount to test for a non-submitted case created', () => {
-      progressDescriptionTableTotalBefore =
-        cerebralTest.progressDescriptionTableTotal;
-    });
-
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
-
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    viewJudgeActivityReportResults(cerebralTest, {
-      selectedJudgeName,
-    });
-
-    it('should not increase progressDescriptionTableTotal for non-submitted or non-CAV cases  added', () => {
-      const progressDescriptionTableTotalAfter =
-        cerebralTest.progressDescriptionTableTotal;
-
-      expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore,
-      );
-    });
-
-    viewJudgeActivityReportResults(cerebralTest, {
-      selectedJudgeName,
-    });
-
-    it('should set the progressDescriptionTableBeforeCount to test for the addition of a Decision type on a case', () => {
-      progressDescriptionTableTotalBefore =
-        cerebralTest.progressDescriptionTableTotal;
-    });
-
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
-
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusTo(
-      cerebralTest,
-      CASE_STATUS_TYPES.submitted,
-      selectedJudgeName,
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore,
     );
-    docketClerkCreatesAnOrder(cerebralTest, {
-      documentTitle: 'Order and Decision',
-      eventCode: 'OAD',
-      expectedDocumentType: 'Order and Decision',
-    });
-    docketClerkViewsDraftOrder(cerebralTest);
-    docketClerkSignsOrder(cerebralTest);
-    docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, selectedJudgeName);
-    docketClerkServesDocument(cerebralTest, 0);
+  });
 
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    viewJudgeActivityReportResults(cerebralTest, {
-      selectedJudgeName,
-    });
-    it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
-      const progressDescriptionTableTotalAfter =
-        cerebralTest.progressDescriptionTableTotal;
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
 
-      expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore,
-      );
-    });
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order and Decision',
+    eventCode: 'OAD',
+    expectedDocumentType: 'Order and Decision',
+  });
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
+  docketClerkServesDocument(cerebralTest, 0);
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore,
+    );
   });
 });
