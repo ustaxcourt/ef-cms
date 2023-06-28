@@ -61,7 +61,7 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   {
-    judgeName,
+    judges,
     pageSize,
     searchAfter,
     statuses,
@@ -78,7 +78,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   }
 
   const searchEntity = new JudgeActivityReportCaseStatusSearch({
-    judgeName,
+    judges,
     pageSize,
     searchAfter,
     statuses,
@@ -96,7 +96,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
       params: {
-        judgeName: searchEntity.judgeName,
+        judges: searchEntity.judges,
         pageSize: searchEntity.pageSize,
         searchAfter: searchEntity.searchAfter,
         statuses: searchEntity.statuses,

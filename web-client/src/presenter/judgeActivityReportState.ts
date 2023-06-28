@@ -13,9 +13,9 @@ export type JudgeActivityReportFilters = {
 
 export type JudgeActivityReportCavAndSubmittedCasesRequestType = {
   statuses: string[];
-  judgeName: string;
   searchAfter: number;
   pageSize: number;
+  judges: string[];
 };
 
 export type CavAndSubmittedCaseResponseType = {
