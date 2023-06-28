@@ -41,19 +41,13 @@ describe('Judge activity report journey', () => {
   });
 
   it('should display an error message when invalid dates are entered into the form', async () => {
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '--_--',
-      },
-    );
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      startDate: '--_--',
+    });
 
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: 'yabbadabaadooooo',
-      },
-    );
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      endDate: 'yabbadabaadooooo',
+    });
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
