@@ -1,3 +1,9 @@
+export type AuthenticationResult = {
+  AuthenticationResult: {
+    IdToken: string;
+  };
+};
+
 export const getUserToken = async username => {
   if (username === 'migrator@example.com') {
     username =
