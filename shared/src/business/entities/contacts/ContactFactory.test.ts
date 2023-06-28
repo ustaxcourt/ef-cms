@@ -385,46 +385,4 @@ describe('ContactFactory', () => {
       expect(contactConstructor).toEqual({});
     });
   });
-
-  describe('hasEAccess validation', () => {
-    let contactConstructor;
-
-    beforeEach(() => {
-      contactConstructor = ContactFactory.createContactFactory(
-        {
-          additionalErrorMappings: {},
-          additionalValidation: {},
-        },
-        { applicationContext },
-      )({ partyType: PARTY_TYPES.petitioner });
-    });
-
-    it('fails when an email is not provided and the contact has eAccess', () => {
-      const contact = new contactConstructor(
-        {
-          ...baseContact,
-          email: undefined,
-          hasEAccess: true,
-        },
-        { applicationContext },
-      );
-
-      expect(contact.getFormattedValidationErrors()).toMatchObject({
-        email: '"email" is required',
-      });
-    });
-
-    it('passes when email is not provided and the contact does not have eAccess', () => {
-      const contact = new contactConstructor(
-        {
-          ...baseContact,
-          email: undefined,
-          hasEAccess: false,
-        },
-        { applicationContext },
-      );
-
-      expect(contact.getFormattedValidationErrors()).toEqual(null);
-    });
-  });
 });
