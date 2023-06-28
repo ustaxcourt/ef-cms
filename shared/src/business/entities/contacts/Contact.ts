@@ -1,36 +1,41 @@
 import {
+  CONTACT_TYPES,
+  COUNTRY_TYPES,
   CountryTypes,
+  SERVICE_INDICATOR_TYPES,
   STATE_NOT_AVAILABLE,
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
+import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import joi from 'joi';
 
 export class Contact extends JoiValidationEntity {
-  contactId: any;
-  address1: any;
-  address2: any;
-  address3: any;
-  city: any;
-  contactType: any;
-  country: any;
-  countryType: CountryTypes;
-  email: any;
-  inCareOf: any;
-  isAddressSealed: any;
-  sealedAndUnavailable: any;
-  paperPetitionEmail: any;
-  hasConsentedToEService: any;
-  name: any;
-  phone: any;
-  postalCode: any;
-  secondaryName: any;
-  serviceIndicator: any;
-  state: any;
-  title: any;
-  additionalName: any;
-  hasEAccess: any;
+  public contactId: string;
+  public address1: string;
+  public address2?: string;
+  public address3?: string;
+  public city: string;
+  public contactType: string;
+  public country?: string;
+  public countryType: CountryTypes;
+  public email?: string;
+  public inCareOf?: string;
+  public isAddressSealed: boolean;
+  public sealedAndUnavailable?: boolean;
+  public paperPetitionEmail?: string;
+  public hasConsentedToEService?: boolean;
+  public name: string;
+  public phone: string;
+  public postalCode: string;
+  public secondaryName?: string;
+  public serviceIndicator?: string;
+  public state?: string;
+  public title?: string;
+  public additionalName?: string;
+  public hasEAccess?: boolean;
 
   constructor(
     rawContact,
@@ -74,7 +79,7 @@ export class Contact extends JoiValidationEntity {
     name: 'Enter name',
     paperPetitionEmail: 'Enter email address in format: yourname@example.com',
     phone: 'Enter phone number',
-  };
+  } as const;
 
   static DOMESTIC_VALIDATION_MESSAGES = {
     ...Contact.SHARED_VALIDATION_MESSAGES,
@@ -86,13 +91,13 @@ export class Contact extends JoiValidationEntity {
       'Enter ZIP code',
     ],
     state: 'Enter state',
-  };
+  } as const;
 
   static INTERNATIONAL_VALIDATION_MESSAGES = {
     ...Contact.SHARED_VALIDATION_MESSAGES,
     country: 'Enter a country',
     postalCode: 'Enter ZIP code',
-  };
+  } as const;
 
   static SHARED_VALIDATION_RULES = {
     address1: JoiValidationConstants.STRING.max(100).required(),
@@ -135,7 +140,7 @@ export class Contact extends JoiValidationEntity {
       ...Object.values(SERVICE_INDICATOR_TYPES),
     ).optional(),
     title: JoiValidationConstants.STRING.max(100).optional(),
-  };
+  } as const;
 
   static DOMESTIC_VALIDATION_RULES = {
     countryType: JoiValidationConstants.STRING.valid(
@@ -148,7 +153,7 @@ export class Contact extends JoiValidationEntity {
       ...Object.keys(US_STATES_OTHER),
       STATE_NOT_AVAILABLE,
     ).required(),
-  };
+  } as const;
 
   static INTERNATIONAL_VALIDATION_RULES = {
     country: JoiValidationConstants.STRING.max(500).required(),
@@ -157,7 +162,7 @@ export class Contact extends JoiValidationEntity {
     ).required(),
     ...Contact.SHARED_VALIDATION_RULES,
     postalCode: JoiValidationConstants.STRING.max(100).required(),
-  };
+  } as const;
 
   getValidationRules() {
     return this.countryType === COUNTRY_TYPES.DOMESTIC
@@ -171,3 +176,5 @@ export class Contact extends JoiValidationEntity {
       : Contact.INTERNATIONAL_VALIDATION_MESSAGES;
   }
 }
+
+export type RawContact = ExcludeMethods<Contact>;

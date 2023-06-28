@@ -8,9 +8,8 @@ import {
   US_STATES_OTHER,
 } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from 'shared/src/business/entities/JoiValidationEntity';
 import { cloneDeep } from 'lodash';
-import { formatPhoneNumber } from '/../utilities/formatPhoneNumber';
+import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import joi from 'joi';
 
 const ContactFactory = {};
@@ -336,7 +335,6 @@ ContactFactory.createContacts = ({
       : undefined,
   };
 };
-
 
 /**
  * creates a contact entities with additional error mappings and validation if needed.
