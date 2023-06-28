@@ -8,11 +8,26 @@ import {
   US_STATES_OTHER,
 } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { NextFriendForIncompetentPersonContact } from './NextFriendForIncompetentPersonContact';
+import { NextFriendForMinorContact } from './NextFriendForMinorContact';
+import { PartnershipAsTaxMattersPartnerPrimaryContact } from './PartnershipAsTaxMattersPartnerContact';
+import { PartnershipBBAPrimaryContact } from './PartnershipBBAContact';
+import { PartnershipOtherThanTaxMattersPrimaryContact } from './PartnershipOtherThanTaxMattersContact';
+import { PetitionerConservatorContact } from './PetitionerConservatorContact';
+import { PetitionerCorporationContact } from './PetitionerCorporationContact';
+import { PetitionerCustodianContact } from './PetitionerCustodianContact';
+import { PetitionerDeceasedSpouseContact } from './PetitionerDeceasedSpouseContact';
+import { PetitionerEstateWithExecutorPrimaryContact } from './PetitionerEstateWithExecutorPrimaryContact';
+import { PetitionerGuardianContact } from './PetitionerGuardianContact';
+import { PetitionerIntermediaryContact } from './PetitionerIntermediaryContact';
+import { PetitionerPrimaryContact } from './PetitionerPrimaryContact';
+import { PetitionerSpouseContact } from './PetitionerSpouseContact';
+import { PetitionerTrustContact } from './PetitionerTrustContact';
+import { SurvivingSpouseContact } from './SurvivingSpouseContact';
 import { cloneDeep } from 'lodash';
-import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import joi from 'joi';
 
-const ContactFactory = {};
+const ContactFactory = {} as any;
 
 ContactFactory.SHARED_ERROR_MESSAGES = {
   address1: 'Enter mailing address',
@@ -142,148 +157,96 @@ ContactFactory.getErrorToMessageMap = ({
     : ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
 };
 
-/**
- * used for getting the contact constructors depending on the party type and contact type
- *
- * @param {object} options the options object
- * @param {string} options.partyType see the PARTY_TYPES map for a list of all valid partyTypes
- * @returns {object} (<string>:<Function>) the contact constructors map for the primary contact, secondary contact
- */
 ContactFactory.getContactConstructors = ({ partyType }) => {
-  const {
-    getNextFriendForIncompetentPersonContact,
-  } = require('./NextFriendForIncompetentPersonContact');
-  const {
-    getNextFriendForMinorContact,
-  } = require('./NextFriendForMinorContact');
-  const {
-    getPartnershipAsTaxMattersPartnerPrimaryContact,
-  } = require('./PartnershipAsTaxMattersPartnerContact');
-  const {
-    getPartnershipBBAPrimaryContact,
-  } = require('./PartnershipBBAContact');
-  const {
-    getPartnershipOtherThanTaxMattersPrimaryContact,
-  } = require('./PartnershipOtherThanTaxMattersContact');
-  const {
-    getPetitionerConservatorContact,
-  } = require('./PetitionerConservatorContact');
-  const {
-    getPetitionerCorporationContact,
-  } = require('./PetitionerCorporationContact');
-  const {
-    getPetitionerCustodianContact,
-  } = require('./PetitionerCustodianContact');
-  const {
-    getPetitionerDeceasedSpouseContact,
-  } = require('./PetitionerDeceasedSpouseContact');
-  const {
-    getPetitionerEstateWithExecutorPrimaryContact,
-  } = require('./PetitionerEstateWithExecutorPrimaryContact');
-  const {
-    getPetitionerGuardianContact,
-  } = require('./PetitionerGuardianContact');
-  const {
-    getPetitionerIntermediaryContact,
-  } = require('./PetitionerIntermediaryContact');
-  const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
-  const { getPetitionerSpouseContact } = require('./PetitionerSpouseContact');
-  const { getPetitionerTrustContact } = require('./PetitionerTrustContact');
-  const { getSurvivingSpouseContact } = require('./SurvivingSpouseContact');
-
-  const partyConstructorFetch = partyTypeValue => {
-    switch (partyTypeValue) {
-      case PARTY_TYPES.donor: // fall through
-      case PARTY_TYPES.transferee: // fall through
-      case PARTY_TYPES.petitioner:
-        return {
-          primary: getPetitionerPrimaryContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.conservator:
-        return {
-          primary: getPetitionerConservatorContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.corporation:
-        return {
-          primary: getPetitionerCorporationContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.custodian:
-        return {
-          primary: getPetitionerCustodianContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.estate:
-        return {
-          primary: getPetitionerEstateWithExecutorPrimaryContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.estateWithoutExecutor:
-        return {
-          primary: getPetitionerIntermediaryContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.guardian:
-        return {
-          primary: getPetitionerGuardianContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.nextFriendForIncompetentPerson:
-        return {
-          primary: getNextFriendForIncompetentPersonContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.nextFriendForMinor:
-        return {
-          primary: getNextFriendForMinorContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.partnershipAsTaxMattersPartner:
-        return {
-          primary: getPartnershipAsTaxMattersPartnerPrimaryContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.partnershipBBA:
-        return {
-          primary: getPartnershipBBAPrimaryContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.partnershipOtherThanTaxMatters:
-        return {
-          primary: getPartnershipOtherThanTaxMattersPrimaryContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.petitionerDeceasedSpouse:
-        return {
-          primary: getPetitionerPrimaryContact,
-          secondary: getPetitionerDeceasedSpouseContact,
-        };
-      case PARTY_TYPES.petitionerSpouse:
-        return {
-          primary: getPetitionerPrimaryContact,
-          secondary: getPetitionerSpouseContact,
-        };
-      case PARTY_TYPES.survivingSpouse:
-        return {
-          primary: getSurvivingSpouseContact,
-          secondary: null,
-        };
-      case PARTY_TYPES.trust:
-        return {
-          primary: getPetitionerTrustContact,
-          secondary: null,
-        };
-      default:
-        if (partyTypeValue) {
-          throw new Error(`Unrecognized party type "${partyTypeValue}"`);
-        }
-        return {};
-    }
-  };
-
-  return partyConstructorFetch(partyType);
+  switch (partyType) {
+    case PARTY_TYPES.donor:
+    case PARTY_TYPES.transferee:
+    case PARTY_TYPES.petitioner:
+      return {
+        primary: PetitionerPrimaryContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.conservator:
+      return {
+        primary: PetitionerConservatorContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.corporation:
+      return {
+        primary: PetitionerCorporationContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.custodian:
+      return {
+        primary: PetitionerCustodianContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.estate:
+      return {
+        primary: PetitionerEstateWithExecutorPrimaryContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.estateWithoutExecutor:
+      return {
+        primary: PetitionerIntermediaryContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.guardian:
+      return {
+        primary: PetitionerGuardianContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.nextFriendForIncompetentPerson:
+      return {
+        primary: NextFriendForIncompetentPersonContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.nextFriendForMinor:
+      return {
+        primary: NextFriendForMinorContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.partnershipAsTaxMattersPartner:
+      return {
+        primary: PartnershipAsTaxMattersPartnerPrimaryContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.partnershipBBA:
+      return {
+        primary: PartnershipBBAPrimaryContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.partnershipOtherThanTaxMatters:
+      return {
+        primary: PartnershipOtherThanTaxMattersPrimaryContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.petitionerDeceasedSpouse:
+      return {
+        primary: PetitionerPrimaryContact,
+        secondary: PetitionerDeceasedSpouseContact,
+      };
+    case PARTY_TYPES.petitionerSpouse:
+      return {
+        primary: PetitionerPrimaryContact,
+        secondary: PetitionerSpouseContact,
+      };
+    case PARTY_TYPES.survivingSpouse:
+      return {
+        primary: SurvivingSpouseContact,
+        secondary: null,
+      };
+    case PARTY_TYPES.trust:
+      return {
+        primary: PetitionerTrustContact,
+        secondary: null,
+      };
+    default:
+      if (partyType) {
+        throw new Error(`Unrecognized party type "${partyType}"`);
+      }
+      return {};
+  }
 };
 
 /**
@@ -303,30 +266,17 @@ ContactFactory.createContacts = ({
     partyType,
   });
 
-  const constructors = {
-    primary:
-      constructorMap.primary &&
-      constructorMap.primary({
-        countryType: (contactInfo.primary || {}).countryType,
-      }),
-    secondary:
-      constructorMap.secondary &&
-      constructorMap.secondary({
-        countryType: (contactInfo.secondary || {}).countryType,
-      }),
-  };
-
   return {
-    primary: constructors.primary
-      ? new constructors.primary(
+    primary: constructorMap.primary
+      ? new constructorMap.primary(
           { ...contactInfo.primary, contactType: CONTACT_TYPES.primary },
           {
             applicationContext,
           },
         )
       : {},
-    secondary: constructors.secondary
-      ? new constructors.secondary(
+    secondary: constructorMap.secondary
+      ? new constructorMap.secondary(
           { ...contactInfo.secondary, contactType: CONTACT_TYPES.secondary },
           {
             applicationContext,
@@ -334,85 +284,6 @@ ContactFactory.createContacts = ({
         )
       : undefined,
   };
-};
-
-/**
- * creates a contact entities with additional error mappings and validation if needed.
- *
- * @param {object} options the options object
- * @param {object} options.additionalErrorMappings the error mappings object for any custom error messages or for overwriting existing ones
- * @param {object} options.additionalValidation the joi validation object that defines additional validations on top of the generic country type ones
- * @returns {Function} the entity constructor function
- */
-ContactFactory.createContactFactory = ({
-  additionalErrorMappings,
-  additionalValidation,
-  contactName,
-}) => {
-  const ContactFactoryConstructor = ({ countryType }) => {
-    /**
-     * creates a contact entity
-     *
-     * @param {object} rawContact the options object
-     */
-    function GenericContactConstructor() {}
-    GenericContactConstructor.prototype.init = function init(
-      rawContact,
-      { applicationContext },
-    ) {
-      if (!applicationContext) {
-        throw new TypeError('applicationContext must be defined');
-      }
-
-      this.contactId = rawContact.contactId || applicationContext.getUniqueId();
-      this.address1 = rawContact.address1;
-      this.address2 = rawContact.address2 || undefined;
-      this.address3 = rawContact.address3 || undefined;
-      this.city = rawContact.city;
-      this.contactType = rawContact.contactType;
-      this.country = rawContact.country;
-      this.countryType = rawContact.countryType;
-      this.email = rawContact.email;
-      this.inCareOf = rawContact.inCareOf;
-      this.isAddressSealed = rawContact.isAddressSealed || false;
-      this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
-      this.paperPetitionEmail = rawContact.paperPetitionEmail;
-      this.hasConsentedToEService = rawContact.hasConsentedToEService;
-      this.name = rawContact.name;
-      this.phone = formatPhoneNumber(rawContact.phone);
-      this.postalCode = rawContact.postalCode;
-      this.secondaryName = rawContact.secondaryName;
-      this.serviceIndicator = rawContact.serviceIndicator;
-      this.state = rawContact.state;
-      this.title = rawContact.title;
-      this.additionalName = rawContact.additionalName;
-      this.hasEAccess = rawContact.hasEAccess || undefined;
-    };
-
-    GenericContactConstructor.contactName = () => contactName;
-
-    GenericContactConstructor.errorToMessageMap = {
-      ...ContactFactory.getErrorToMessageMap({ countryType }),
-      ...additionalErrorMappings,
-    };
-
-    GenericContactConstructor.VALIDATION_RULES = joi.object().keys({
-      ...ContactFactory.getValidationObject({ countryType }),
-      ...additionalValidation,
-    });
-
-    joiValidationDecorator(
-      GenericContactConstructor,
-      GenericContactConstructor.VALIDATION_RULES,
-      GenericContactConstructor.errorToMessageMap,
-    );
-
-    return validEntityDecorator(GenericContactConstructor);
-  };
-
-  ContactFactoryConstructor.contactName = contactName;
-
-  return ContactFactoryConstructor;
 };
 
 exports.ContactFactory = ContactFactory;

@@ -1,15 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('../cases/CaseExternal');
-const { ContactFactory } = require('./ContactFactory');
+} from '../EntityConstants';
+import { CaseExternal } from '../cases/CaseExternal';
+import { ContactFactory } from './ContactFactory';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ContactFactory', () => {
   const baseCaseExternal = {
