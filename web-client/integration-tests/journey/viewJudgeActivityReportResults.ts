@@ -14,38 +14,36 @@ const judgeActivityReportHelper = withAppContextDecorator(
 
 export const viewJudgeActivityReportResults = (
   cerebralTest: any,
-  {
-    selectedJudgeName,
-  }: {
-    selectedJudgeName?: string;
-  },
+  overrides: { startDate?: string; endDate?: string } = {},
 ) => {
-  return it('should submit the user-selected valid dates and a judge selection to display judge activity report results and Progress Description Table Results', async () => {
+  return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
       prepareDateFromString(),
       getConstants().DATE_FORMATS.MMDDYYYY,
     );
 
-    const startDate = '01/01/2020';
-
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      startDate,
-    });
+    await cerebralTest.runSequence(
+      'selectDateRangeFromJudgeActivityReportSequence',
+      {
+        startDate: (overrides.startDate as string) || '01/01/2020',
+      },
+    );
 
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      endDate: currentDate,
-    });
-
-    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      judgeName: selectedJudgeName,
-    });
+    await cerebralTest.runSequence(
+      'selectDateRangeFromJudgeActivityReportSequence',
+      {
+        endDate: overrides.endDate || currentDate,
+      },
+    );
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-
+    await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
+      selectedPage: 0,
+    });
     const { progressDescriptionTableTotal } = runCompute(
-      judgeActivityReportHelper,
+      judgeActivityReportHelper as any,
       {
         state: cerebralTest.getState(),
       },
@@ -54,9 +52,7 @@ export const viewJudgeActivityReportResults = (
     cerebralTest.progressDescriptionTableTotal = progressDescriptionTableTotal;
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(
-      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
-    ).toEqual({
+    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
       opinions: expect.anything(),
