@@ -9,7 +9,7 @@ import { judgeUser } from '../../test/mockUsers';
 
 describe('getDocketNumbersByStatusAndByJudge', () => {
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
-    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
     searchAfter: 1234,
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
@@ -58,18 +58,27 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
       applicationContext.getSearchClient().search.mock.calls[0][0].body
         .search_after,
     ).toEqual([mockValidRequest.searchAfter]);
+
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
         .bool.must,
     ).toMatchObject(
-      expect.objectContaining([
+      expect.arrayContaining([
         {
-          terms: { 'status.S': mockValidRequest.statuses },
-        },
-        {
-          match_phrase: {
-            'associatedJudge.S': `${judgeUser.name}`,
+          bool: {
+            should: [{ match_phrase: { 'associatedJudge.S': judgeUser.name } }],
           },
+        },
+      ]),
+    );
+
+    expect(
+      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
+        .bool.filter,
+    ).toMatchObject(
+      expect.arrayContaining([
+        {
+          terms: { 'status.S': CAV_AND_SUBMITTED_CASE_STATUS },
         },
       ]),
     );

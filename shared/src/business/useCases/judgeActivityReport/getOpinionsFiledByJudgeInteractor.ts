@@ -4,6 +4,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportFilters } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -23,11 +24,7 @@ import { orderBy } from 'lodash';
  */
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  { endDate, judges, startDate }: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -37,7 +34,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeName,
+    judges,
     startDate,
   });
 
@@ -45,24 +42,40 @@ export const getOpinionsFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { results } = await applicationContext
-    .getPersistenceGateway()
-    .advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      endDate: searchEntity.endDate,
-      isOpinionSearch: true,
-      judge: searchEntity.judgeName,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: searchEntity.startDate,
-    });
+  let sortedResults: Array<{
+    results: {
+      eventCode: string;
+    };
+  }>[] = [];
+
+  if (searchEntity.judges.length) {
+    sortedResults = await Promise.all(
+      searchEntity.judges.map(async judge => {
+        const { results } = await applicationContext
+          .getPersistenceGateway()
+          .advancedDocumentSearch({
+            applicationContext,
+            documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+            endDate: searchEntity.endDate,
+            isOpinionSearch: true,
+            judge,
+            overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
+            startDate: searchEntity.startDate,
+          });
+
+        return results;
+      }),
+    );
+  }
 
   const result: {
     count: number;
     documentType: string | undefined;
     eventCode: string;
   }[] = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
-    const count = results.filter(res => res.eventCode === eventCode).length;
+    const count = sortedResults
+      .flat()
+      .filter(res => res.eventCode === eventCode).length;
     return {
       count,
       documentType: COURT_ISSUED_EVENT_CODES.find(

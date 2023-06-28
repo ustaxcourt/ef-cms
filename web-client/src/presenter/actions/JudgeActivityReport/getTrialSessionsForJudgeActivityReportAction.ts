@@ -9,7 +9,7 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
     state.judgeActivityReport.filters,
   );
 
-  let userIdForRequest: string =
+  let judgeIdForRequest: string =
     TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION;
 
   if (judgeName !== 'All Judges') {
@@ -23,14 +23,14 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
       eachJudge => eachJudge.name === judgeName,
     );
 
-    userIdForRequest = userId;
+    judgeIdForRequest = userId;
   }
 
   const trialSessions = await applicationContext
     .getUseCases()
     .getTrialSessionsForJudgeActivityReportInteractor(applicationContext, {
       endDate,
-      judgeId: userIdForRequest,
+      judgeId: judgeIdForRequest,
       startDate,
     });
 

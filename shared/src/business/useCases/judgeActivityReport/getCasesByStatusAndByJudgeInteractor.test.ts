@@ -167,7 +167,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   const lastDocketNumberForCavAndSubmittedCasesSearch = 12334;
 
   const mockValidRequest = {
-    judgeName: judgeUser.name,
+    judges: [judgeUser.name],
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
     searchAfter: lastDocketNumberForCavAndSubmittedCasesSearch,
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
@@ -191,7 +191,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCasesByStatusAndByJudgeInteractor(applicationContext, {
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         statuses: [undefined],
       }),
     ).rejects.toThrow();

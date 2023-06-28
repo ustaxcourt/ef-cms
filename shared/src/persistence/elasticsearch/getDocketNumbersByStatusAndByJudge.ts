@@ -14,16 +14,29 @@ export const getDocketNumbersByStatusAndByJudge = async ({
 }): Promise<CavAndSubmittedCaseResponseType> => {
   const source = ['docketNumber'];
 
+  const mustFilters: QueryDslQueryContainer[] = [];
   const filters: QueryDslQueryContainer[] = [
     {
       terms: { 'status.S': params.statuses },
     },
   ];
 
-  if (params.judgeName) {
-    filters.push({
-      match_phrase: { 'associatedJudge.S': `${params.judgeName}` },
+  if (params.judges.length) {
+    const shouldArray: Object[] = [];
+    params.judges.forEach(judge => {
+      const associatedJudgeFilters = {
+        match_phrase: {
+          'associatedJudge.S': judge,
+        },
+      };
+      shouldArray.push(associatedJudgeFilters);
     });
+    const shouldObject: QueryDslQueryContainer = {
+      bool: {
+        should: shouldArray,
+      },
+    };
+    mustFilters.push(shouldObject);
   }
 
   const searchResults = await applicationContext.getSearchClient().search({
@@ -31,7 +44,8 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     body: {
       query: {
         bool: {
-          must: filters,
+          filter: filters,
+          must: mustFilters,
         },
       },
       search_after: [params.searchAfter],
