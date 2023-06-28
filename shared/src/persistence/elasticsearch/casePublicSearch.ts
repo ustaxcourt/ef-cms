@@ -5,24 +5,13 @@ import { search } from './searchClient';
 /**
  * casePublicSearch
  *
- * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
+ * @param {object} providers the providers object containing applicationContext, countryType, petitionerName, petitionerState, endDate, startDate
  * @returns {object} the case data
  */
-export const casePublicSearch = async ({
-  applicationContext,
-  countryType,
-  petitionerName,
-  petitionerState,
-  yearFiledMax,
-  yearFiledMin,
-}) => {
+export const casePublicSearch = async ({ applicationContext, searchTerms }) => {
   const { commonQuery, exactMatchesQuery } = aggregateCommonQueryParams({
     applicationContext,
-    countryType,
-    petitionerName,
-    petitionerState,
-    yearFiledMax,
-    yearFiledMin,
+    ...searchTerms,
   });
 
   const sourceFields = [
