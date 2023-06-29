@@ -1,15 +1,17 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validate case advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const validateCaseDocketNumberSearchAction = ({ get, path }) => {
+export const validateCaseDocketNumberSearchAction = ({
+  get,
+  path,
+}: ActionProps) => {
   const { docketNumber } = get(
     state.advancedSearchForm.caseSearchByDocketNumber,
   );

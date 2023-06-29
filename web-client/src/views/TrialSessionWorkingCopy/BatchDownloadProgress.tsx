@@ -1,6 +1,6 @@
 import { ProgressBar } from '../../ustc-ui/ProgressBar/ProgressBar';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 
 export const BatchDownloadProgress = connect(

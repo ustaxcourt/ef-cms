@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
-} = require('../../business/entities/EntityConstants');
-const { bulkIndexRecords } = require('./bulkIndexRecords');
+} from '../../business/entities/EntityConstants';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { bulkIndexRecords } from './bulkIndexRecords';
 
 describe('bulkIndexRecords', () => {
   const newImageRecord = {

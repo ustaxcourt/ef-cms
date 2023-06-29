@@ -23,6 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -52,13 +53,12 @@ export const needsNewCoversheet = ({
 
 /**
  * completeDocketEntryQCInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-export const completeDocketEntryQCInteractor = async (
+const completeDocketEntryQC = async (
   applicationContext: IApplicationContext,
   { entryMetadata }: { entryMetadata: any },
 ) => {
@@ -128,6 +128,7 @@ export const completeDocketEntryQCInteractor = async (
     pending: entryMetadata.pending,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
+    secondaryDocument: entryMetadata.secondaryDocument,
     serviceDate: entryMetadata.serviceDate,
   };
 
@@ -138,10 +139,11 @@ export const completeDocketEntryQCInteractor = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,
+        trialDate: caseEntity.trialDate,
+        trialLocation: caseEntity.trialLocation,
       },
     },
     { applicationContext, petitioners: caseToUpdate.petitioners },
@@ -375,3 +377,10 @@ export const completeDocketEntryQCInteractor = async (
     paperServicePdfUrl,
   };
 };
+
+export const completeDocketEntryQCInteractor = withLocking(
+  completeDocketEntryQC,
+  ({ entryMetadata }) =>
+    `complete-${entryMetadata.docketNumber}-${entryMetadata.docketEntryId}`,
+  new InvalidRequest('The document is currently being updated'),
+);

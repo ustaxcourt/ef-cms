@@ -1,4 +1,4 @@
-export const suggestSaveForLaterValidationAction = ({ props }) => {
+export const suggestSaveForLaterValidationAction = ({ props }: ActionProps) => {
   if (props.errors && props.errors.primaryDocumentFile) {
     return {
       errors: {

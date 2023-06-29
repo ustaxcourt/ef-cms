@@ -1,4 +1,4 @@
-exports.sendUpdatePetitionerCasesMessage = async ({
+export const sendUpdatePetitionerCasesMessage = async ({
   applicationContext,
   user,
 }) => {

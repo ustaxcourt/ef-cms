@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { addressLabelCoverSheet } = require('./addressLabelCoverSheet');
+import { addressLabelCoverSheet } from './addressLabelCoverSheet';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('addressLabelCoverSheet', () => {

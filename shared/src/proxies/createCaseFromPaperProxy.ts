@@ -1,4 +1,4 @@
-const { post } = require('./requests');
+import { post } from './requests';
 
 /**
  * createCaseProxy
@@ -12,7 +12,7 @@ const { post } = require('./requests');
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createCaseFromPaperInteractor = (
+export const createCaseFromPaperInteractor = (
   applicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,

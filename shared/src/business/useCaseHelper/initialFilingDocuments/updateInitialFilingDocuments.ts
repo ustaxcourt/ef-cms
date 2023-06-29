@@ -1,9 +1,9 @@
-const {
+import { DocketEntry } from '../../entities/DocketEntry';
+import {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
-} = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { omit } from 'lodash';
 
 const addNewInitialFilingToCase = ({
   applicationContext,
@@ -86,7 +86,7 @@ const deleteInitialFilingFromCase = async ({
  * @param {object} providers.caseToUpdate case to update
  * @returns {void}
  */
-exports.updateInitialFilingDocuments = async ({
+export const updateInitialFilingDocuments = async ({
   applicationContext,
   authorizedUser,
   caseEntity,

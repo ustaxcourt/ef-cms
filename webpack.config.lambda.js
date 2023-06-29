@@ -1,7 +1,11 @@
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  externals: ['aws-sdk', '@sparticuz/chrome-aws-lambda', 'pug'],
+  externals: {
+    '@sparticuz/chromium': 'commonjs @sparticuz/chromium',
+    'aws-crt': 'commonjs aws-crt',
+    'puppeteer-core': 'commonjs puppeteer-core',
+  },
   mode: 'production',
   module: {
     rules: [

@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * runTrialSessionPlanningReportInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {object} providers.year the year
  * @returns {Promise<*>} the promise of the api call
  */
-exports.runTrialSessionPlanningReportInteractor = (
+export const runTrialSessionPlanningReportInteractor = (
   applicationContext,
   { term, year },
 ) => {

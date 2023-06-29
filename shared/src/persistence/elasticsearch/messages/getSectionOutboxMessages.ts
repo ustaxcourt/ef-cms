@@ -1,8 +1,11 @@
-const { calculateISODate } = require('../../../business/utilities/DateHandler');
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
-const { search } = require('../searchClient');
+import { GET_PARENT_CASE } from '../helpers/searchClauses';
+import { calculateISODate } from '../../../business/utilities/DateHandler';
+import { search } from '../searchClient';
 
-exports.getSectionOutboxMessages = async ({ applicationContext, section }) => {
+export const getSectionOutboxMessages = async ({
+  applicationContext,
+  section,
+}) => {
   const filterDate = calculateISODate({ howMuch: -7 });
 
   const query = {

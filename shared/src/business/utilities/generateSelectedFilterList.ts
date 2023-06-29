@@ -1,6 +1,6 @@
-const { TRIAL_STATUS_TYPES } = require('../entities/EntityConstants');
+import { TRIAL_STATUS_TYPES } from '../entities/EntityConstants';
 
-const generateCaseStatus = (
+export const generateCaseStatus = (
   trialStatus,
   areUpdatedTrialSessionTypesEnabled,
 ) => {
@@ -21,11 +21,6 @@ const generateCaseStatus = (
   return foundTrialStatusFromConstant;
 };
 
-const isMemberCase = formattedCase => {
+export const isMemberCase = formattedCase => {
   return formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase;
-};
-
-module.exports = {
-  generateCaseStatus,
-  isMemberCase,
 };

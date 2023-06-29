@@ -1,4 +1,4 @@
-exports.BOUNCE_NOTIFICATION = {
+export const BOUNCE_NOTIFICATION = {
   bounce: {
     bounceSubType: 'General',
     bounceType: 'Permanent',

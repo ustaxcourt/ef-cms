@@ -1,14 +1,13 @@
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_USERS } from '../../test/mockUsers';
 import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  irsPractitionerUser,
+  petitionerUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '../../test/mockUsers';
 import { getConsolidatedCasesByCaseInteractor } from './getConsolidatedCasesByCaseInteractor';
-
-const docketClerkUser = MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
-const petitionsClerkUser = MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'];
-const petitionerUser = MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'];
-const privatePractitionerUser =
-  MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
-const irsPractitionerUser = MOCK_USERS['f7d90c05-f6cd-442c-a168-202db587f16f'];
 
 describe('getConsolidatedCasesByCaseInteractor', () => {
   beforeAll(() => {

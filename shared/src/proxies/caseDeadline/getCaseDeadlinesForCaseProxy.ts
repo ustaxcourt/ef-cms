@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getCaseDeadlinesForCaseInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.docketNumber the docket number of the case to get deadlines for
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCaseDeadlinesForCaseInteractor = (
+export const getCaseDeadlinesForCaseInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * fileExternalDocumentProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileExternalDocumentInteractor = (
+export const fileExternalDocumentInteractor = (
   applicationContext,
   { documentMetadata },
 ) => {

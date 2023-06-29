@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * updateCaseTrialSortTagsInteractor
@@ -8,7 +8,7 @@ const { put } = require('./requests');
  * @param {string} providers.docketNumber the docket number of the case to update the case trial sort tags
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCaseTrialSortTagsInteractor = (
+export const updateCaseTrialSortTagsInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

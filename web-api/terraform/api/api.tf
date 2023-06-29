@@ -9,11 +9,9 @@ resource "aws_lambda_function" "api_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
@@ -39,6 +37,9 @@ resource "aws_api_gateway_gateway_response" "large_payload" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "timeout" {
@@ -50,6 +51,9 @@ resource "aws_api_gateway_gateway_response" "timeout" {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
   }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
+  }
 }
 
 resource "aws_api_gateway_gateway_response" "default5xx" {
@@ -59,6 +63,9 @@ resource "aws_api_gateway_gateway_response" "default5xx" {
   response_parameters = {
     "gatewayresponse.header.Access-Control-Allow-Origin"  = "'*'"
     "gatewayresponse.header.Access-Control-Allow-Headers" = "'*'"
+  }
+  response_templates = {
+    "application/json" = "{\"message\":$context.error.messageString}"
   }
 }
 

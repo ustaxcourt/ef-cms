@@ -1,4 +1,8 @@
 import { Case } from '../../entities/cases/Case';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import {
@@ -6,11 +10,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  DOCUMENT_SERVED_MESSAGES,
-} = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
+import { omit } from 'lodash';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
@@ -167,6 +167,7 @@ export const fileAndServeCourtIssuedDocumentInteractor = async (
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
             scenario: form.scenario,
             serviceStamp: form.serviceStamp,
+            trialLocation: form.trialLocation,
             userId: user.userId,
           },
           { applicationContext },

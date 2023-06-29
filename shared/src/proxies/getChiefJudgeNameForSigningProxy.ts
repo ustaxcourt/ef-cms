@@ -1,6 +1,4 @@
-const {
-  ALLOWLIST_FEATURE_FLAGS,
-} = require('../business/entities/EntityConstants');
+import { ALLOWLIST_FEATURE_FLAGS } from '../business/entities/EntityConstants';
 
 /**
  * getChiefJudgeNameForSigningInteractor
@@ -9,7 +7,7 @@ const {
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getChiefJudgeNameForSigningInteractor = applicationContext =>
+export const getChiefJudgeNameForSigningInteractor = applicationContext =>
   applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Used for checking the current caseDetail and reloading if necessary.
@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {*} returns the next action in the sequence's path
  */
-export const shouldLoadCaseAction = ({ get, path, props }) => {
+export const shouldLoadCaseAction = ({ get, path, props }: ActionProps) => {
   // we might be in a wizard, looking at state, or we may need to fetch the case
   if (get(state.caseDetail.docketNumber) === props.docketNumber) {
     return path.ignore();

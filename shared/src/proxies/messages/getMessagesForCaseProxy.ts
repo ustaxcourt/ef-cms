@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getMessagesForCaseInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getMessagesForCaseInteractor = (
+export const getMessagesForCaseInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

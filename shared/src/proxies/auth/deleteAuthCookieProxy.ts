@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * deleteAuthCookieInteractor
@@ -7,7 +7,7 @@ const { remove } = require('../requests');
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteAuthCookieInteractor = applicationContext => {
+export const deleteAuthCookieInteractor = applicationContext => {
   return remove({
     applicationContext,
     endpoint: '/auth/login',

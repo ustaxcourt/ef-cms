@@ -9,10 +9,8 @@ import {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
 import { User } from '../entities/User';
-import {
-  applicationContext,
-  fakeData,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { fakeData } from '../test/getFakeFile';
 import { getContactPrimary } from '../entities/cases/Case';
 import { updateContactInteractor } from './updateContactInteractor';
 

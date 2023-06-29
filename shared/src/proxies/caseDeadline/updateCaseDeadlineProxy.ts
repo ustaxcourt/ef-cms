@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateCaseDeadlineInteractorProxy
@@ -8,7 +8,7 @@ const { put } = require('../requests');
  * @param {string} providers.caseDeadline the case deadline data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCaseDeadlineInteractor = (
+export const updateCaseDeadlineInteractor = (
   applicationContext,
   { caseDeadline },
 ) => {

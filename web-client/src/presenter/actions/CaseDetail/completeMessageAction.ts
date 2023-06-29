@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * completes a message thread
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const completeMessageAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const form = get(state.modal.form);
   const { mostRecentMessage } = props;
 

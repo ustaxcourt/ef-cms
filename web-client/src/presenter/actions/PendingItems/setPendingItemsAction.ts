@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Sets the pending items property in the state
@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for setting pendingItems
  * @param {object} providers.props the pendingItems to set
  */
-export const setPendingItemsAction = ({ get, props, store }) => {
+export const setPendingItemsAction = ({ get, props, store }: ActionProps) => {
   const pendingItems = get(state.pendingReports.pendingItems) || [];
   store.set(state.pendingReports.pendingItems, [
     ...pendingItems,

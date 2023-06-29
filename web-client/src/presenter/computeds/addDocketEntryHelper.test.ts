@@ -1,7 +1,7 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { addDocketEntryHelper as addDocketEntryHelperComputed } from './addDocketEntryHelper';
 import { applicationContext } from '../../applicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const state = {

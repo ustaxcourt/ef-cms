@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 
-exports.formatWorkItemResult = ({ caseMap, hit, sourceUnmarshalled }) => {
+export const formatWorkItemResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   const casePk = hit['_id'].split('_')[0];
   const docketNumber = casePk.replace('case|', '');
 

@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getCompletedUserInboxMessages,
-} = require('./getCompletedUserInboxMessages');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getCompletedUserInboxMessages } from './getCompletedUserInboxMessages';
 jest.mock('../searchClient');
-const { search } = require('../searchClient');
+import { search } from '../searchClient';
 
 describe('getCompletedUserInboxMessages', () => {
   it('should return results from the search client', async () => {

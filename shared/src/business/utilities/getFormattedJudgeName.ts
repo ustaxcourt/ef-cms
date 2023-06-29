@@ -1,6 +1,6 @@
-const { parseFullName } = require('parse-full-name');
+import { parseFullName } from 'parse-full-name';
 
-const formatJudgeName = name => {
+export const formatJudgeName = name => {
   if (!name) {
     return '';
   }
@@ -8,12 +8,7 @@ const formatJudgeName = name => {
   return name.replace(/^Judge\s+/, '');
 };
 
-const getJudgeLastName = name => {
+export const getJudgeLastName = name => {
   const { last: lastName } = parseFullName(name);
   return lastName;
-};
-
-module.exports = {
-  formatJudgeName,
-  getJudgeLastName,
 };

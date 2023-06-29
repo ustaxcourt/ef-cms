@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * validatePdfInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.key the key of the document to validate
  * @returns {Promise<*>} the promise of the api call
  */
-exports.validatePdfInteractor = (applicationContext, { key }) => {
+export const validatePdfInteractor = (applicationContext, { key }) => {
   return post({
     applicationContext,
     endpoint: `/documents/${key}/validate`,

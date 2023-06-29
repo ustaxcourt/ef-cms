@@ -1,5 +1,5 @@
-const React = require('react');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import React from 'react';
 
 export const PractitionerCaseList = ({
   barNumber,

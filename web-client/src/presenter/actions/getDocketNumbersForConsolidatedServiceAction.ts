@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets docket numbers of all checked consolidated cases for shared docket entry service
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
     applicationContext.getConstants();
   const { isLeadCase } = applicationContext.getUtilities();

@@ -1,6 +1,7 @@
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 
 export const AppTimeoutModal = connect(

@@ -1,5 +1,5 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const clearMaintenanceModeAction = ({ store }) => {
+export const clearMaintenanceModeAction = ({ store }: ActionProps) => {
   store.unset(state.maintenanceMode);
 };

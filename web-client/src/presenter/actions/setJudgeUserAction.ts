@@ -1,13 +1,12 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.judgeUser to the props.judgeUser passed in.
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.judgeUser
  * @param {object} providers.props the cerebral props object used for getting the props.judgeUser
  */
-export const setJudgeUserAction = ({ props, store }) => {
+export const setJudgeUserAction = ({ props, store }: ActionProps) => {
   if (props.judgeUser) {
     store.set(state.judgeUser, props.judgeUser);
   } else {

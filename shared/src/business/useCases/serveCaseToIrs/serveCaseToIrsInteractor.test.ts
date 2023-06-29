@@ -20,12 +20,9 @@ import {
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
 import { MOCK_CASE } from '../../../test/mockCase';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
-import { getFakeFile } from '../../test/getFakeFile';
+import { getFakeFile, testPdfDoc } from '../../test/getFakeFile';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 
 describe('serveCaseToIrsInteractor', () => {

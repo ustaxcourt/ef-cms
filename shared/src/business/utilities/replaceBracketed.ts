@@ -5,7 +5,7 @@
  * @param  {...any} values the values to replace the brackets
  * @returns {string|void} the template with the brackets replaced with replacement values
  */
-const replaceBracketed = (template, ...values) => {
+export const replaceBracketed = (template, ...values) => {
   if (!template) return;
   const bracketsMatcher = /\[.*?\]/;
   while (bracketsMatcher.test(template)) {
@@ -14,4 +14,3 @@ const replaceBracketed = (template, ...values) => {
   template = template.trim();
   return template;
 };
-exports.replaceBracketed = replaceBracketed;

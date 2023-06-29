@@ -15,7 +15,7 @@ const updateCaseEntityAndGenerateChange = async ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  rawCaseData: TCase;
+  rawCaseData: Case;
   user: RawUser;
 }) => {
   const caseEntity = new Case(rawCaseData, {
@@ -117,7 +117,6 @@ export const updateCasesForPetitioner = async ({
  * updatePetitionerCases
  * for the provided user, update their email address on all cases
  * where they are the contactPrimary or contactSecondary
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.user the user who is a primary or secondary contact on a case
@@ -144,7 +143,6 @@ export const updatePetitionerCases = async ({ applicationContext, user }) => {
  * where they are an IRS practitioner or private practitioner, sending an
  * update to the practitioner for each case updated, as well as a final email when
  * all case updates have been completed.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.user the user who is a primary or secondary contact on a case
@@ -234,7 +232,6 @@ export const updatePractitionerCases = async ({
  * this interactor is invoked when a petitioner logs into DAWSON
  * and changes their email to a different email address and clicks the
  * verify link that was sent to their new email address.
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email

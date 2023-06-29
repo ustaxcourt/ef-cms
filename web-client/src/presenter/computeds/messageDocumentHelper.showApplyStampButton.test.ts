@@ -9,7 +9,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { messageDocumentHelper as messageDocumentHelperComputed } from './messageDocumentHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('messageDocumentHelper.showApplyStampButton', () => {

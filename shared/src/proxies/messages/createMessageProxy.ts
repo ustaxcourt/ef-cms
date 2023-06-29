@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createMessageInteractor
@@ -12,7 +12,7 @@ const { post } = require('../requests');
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createMessageInteractor = (
+export const createMessageInteractor = (
   applicationContext,
   { attachments, docketNumber, message, subject, toSection, toUserId },
 ) => {

@@ -1,6 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const docketRecordHelper = get => {
+import { Get } from 'cerebral';
+export const docketRecordHelper = (get: Get) => {
   const permissions = get(state.permissions);
   const showPrintableDocketRecord = get(
     state.caseDetail.canAllowPrintableDocketRecord,

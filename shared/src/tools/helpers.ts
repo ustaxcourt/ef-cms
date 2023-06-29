@@ -1,6 +1,6 @@
-const { pick } = require('lodash');
+import { pick } from 'lodash';
 
-const gatherRecords = function gatherRecords(exportColumns, output) {
+export const gatherRecords = function gatherRecords(exportColumns, output) {
   return function () {
     let record;
     while ((record = this.read())) {
@@ -13,7 +13,7 @@ const gatherRecords = function gatherRecords(exportColumns, output) {
   };
 };
 
-const getCsvOptions = (csvColumns, overrides = {}) => {
+export const getCsvOptions = (csvColumns, overrides = {}) => {
   const defaultOptions = {
     columns: csvColumns,
     delimiter: ',',
@@ -26,11 +26,11 @@ const getCsvOptions = (csvColumns, overrides = {}) => {
   return Object.assign(defaultOptions, overrides);
 };
 
-const sortableTitle = title => {
+export const sortableTitle = title => {
   return whitespaceCleanup(title.toLowerCase());
 };
 
-const whitespaceCleanup = str => {
+export const whitespaceCleanup = str => {
   str = str.replace(/[\r\n\t\s]+/g, ' ');
   str = str.trim();
   return str;
@@ -42,7 +42,7 @@ const whitespaceCleanup = str => {
  * @param {number} ms The number of milliseconds to wait before resolving the promise
  * @returns {Promise} resolves itself after the specified number of ms
  */
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * To improve the success rate of retry attempts, this function is available to
@@ -52,13 +52,4 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
  * @param {number} retryCount how many times we have retried this task
  * @returns {Promise} resolves once the sleep timeout has elapsed
  */
-const backOff = retryCount => sleep(Math.pow(2, retryCount) * 100);
-
-module.exports = {
-  backOff,
-  gatherRecords,
-  getCsvOptions,
-  sleep,
-  sortableTitle,
-  whitespaceCleanup,
-};
+export const backOff = retryCount => sleep(Math.pow(2, retryCount) * 100);

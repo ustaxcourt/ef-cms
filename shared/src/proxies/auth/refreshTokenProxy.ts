@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * refreshTokenInteractor
@@ -7,7 +7,7 @@ const { post } = require('../requests');
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-exports.refreshTokenInteractor = applicationContext => {
+export const refreshTokenInteractor = applicationContext => {
   return post({
     applicationContext,
     endpoint: '/auth/refresh',

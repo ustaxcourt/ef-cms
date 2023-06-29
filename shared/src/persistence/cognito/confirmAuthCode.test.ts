@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { confirmAuthCode } = require('./confirmAuthCode');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { confirmAuthCode } from './confirmAuthCode';
 
 jest.mock('aws-sdk');
-const aws = require('aws-sdk');
+import aws from 'aws-sdk';
 
 describe('confirmAuthCode', () => {
   const mockAxios = {

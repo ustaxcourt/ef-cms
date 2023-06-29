@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * generatePrintableTrialSessionCopyReportAction
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { formattedCases, userHeading } = props;
 
   const showCaseNotes = get(state.modal.showCaseNotes);

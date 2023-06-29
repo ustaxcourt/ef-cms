@@ -1,7 +1,14 @@
-import { state } from 'cerebral';
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const addTrialSessionInformationHelper = (get, applicationContext) => {
-  const { TRIAL_SESSION_PROCEEDING_TYPES } = applicationContext.getConstants();
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const addTrialSessionInformationHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
+  const { SESSION_TYPES, TRIAL_SESSION_PROCEEDING_TYPES } =
+    applicationContext.getConstants();
 
   const { proceedingType, sessionScope } = get(state.form);
 
@@ -21,11 +28,15 @@ export const addTrialSessionInformationHelper = (get, applicationContext) => {
     proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote ||
     isStandaloneSession;
 
-  let sessionTypes = ['Regular', 'Small', 'Hybrid'];
+  let sessionTypes = Object.values(SESSION_TYPES);
 
-  if (!isStandaloneSession) {
-    sessionTypes = sessionTypes.concat(['Special', 'Motion/Hearing']);
+  if (isStandaloneSession) {
+    sessionTypes = sessionTypes.filter(type => {
+      return !['Special', 'Motion/Hearing'].includes(type);
+    });
   }
+
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
   return {
     FEATURE_canDisplayStandaloneRemote,
@@ -33,5 +44,6 @@ export const addTrialSessionInformationHelper = (get, applicationContext) => {
     isStandaloneSession,
     sessionTypes,
     title,
+    today,
   };
 };

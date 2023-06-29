@@ -1,6 +1,6 @@
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { omit } = require('lodash');
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { omit } from 'lodash';
 
 /**
  * fetchPendingItemsByDocketNumber
@@ -10,7 +10,7 @@ const { omit } = require('lodash');
  * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the pending items found
  */
-exports.fetchPendingItemsByDocketNumber = async ({
+export const fetchPendingItemsByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }) => {

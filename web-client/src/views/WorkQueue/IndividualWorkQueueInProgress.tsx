@@ -1,7 +1,7 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const IndividualWorkQueueInProgress = connect(
@@ -80,7 +80,9 @@ export const IndividualWorkQueueInProgress = connect(
                     </td>
                   )}
                   {workQueueHelper.showCaseStatusColumn && (
-                    <td className="message-queue-row">{item.caseStatus}</td>
+                    <td className="message-queue-row">
+                      {item.formattedCaseStatus}
+                    </td>
                   )}
                   {workQueueHelper.showProcessedByColumn && (
                     <td>{item.assigneeName}</td>

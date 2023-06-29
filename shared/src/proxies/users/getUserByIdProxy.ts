@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getUserInteractorById
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.userId the id of the user to retrieve
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUserByIdInteractor = ({ applicationContext, userId }) => {
+export const getUserByIdInteractor = ({ applicationContext, userId }) => {
   return get({
     applicationContext,
     endpoint: `/users/${userId}`,

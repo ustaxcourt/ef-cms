@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getBlockedCasesInteractor
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.trialLocation the trial location to filter the blocked cases by
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getBlockedCasesInteractor = (applicationContext, { trialLocation }) => {
+export const getBlockedCasesInteractor = (
+  applicationContext,
+  { trialLocation },
+) => {
   return get({
     applicationContext,
     endpoint: `/reports/blocked/${trialLocation}`,

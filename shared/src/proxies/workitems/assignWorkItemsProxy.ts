@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * getWorkItem
@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {string} providers.workItemId the id of the work item to assign
  * @returns {Promise<*>} the promise of the api call
  */
-exports.assignWorkItemsInteractor = (
+export const assignWorkItemsInteractor = (
   applicationContext,
   { assigneeId, assigneeName, workItemId },
 ) => {

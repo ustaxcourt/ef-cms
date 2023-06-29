@@ -1,6 +1,6 @@
 import { computeTrialSessionWorkingCopyFilterValuesAction } from './computeTrialSessionWorkingCopyFilterValuesAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeTrialSessionWorkingCopyFilterValuesAction', () => {
   it('should set all filters to true if props.key is filters.showAll and props.value is true', async () => {

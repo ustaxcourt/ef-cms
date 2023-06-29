@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
@@ -8,7 +8,7 @@ const { put } = require('../requests');
  * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateTrialSessionWorkingCopyInteractor = (
+export const updateTrialSessionWorkingCopyInteractor = (
   applicationContext,
   { trialSessionWorkingCopyToUpdate },
 ) => {

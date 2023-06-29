@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * setWorkItemAsReadInteractor
@@ -8,7 +8,10 @@ const { post } = require('../requests');
  * @param {string} providers.workItemId the id of the work item to set as read
  * @returns {Promise<*>} the promise of the api call
  */
-exports.setWorkItemAsReadInteractor = (applicationContext, { workItemId }) => {
+export const setWorkItemAsReadInteractor = (
+  applicationContext,
+  { workItemId },
+) => {
   return post({
     applicationContext,
     endpoint: `/work-items/${workItemId}/read`,

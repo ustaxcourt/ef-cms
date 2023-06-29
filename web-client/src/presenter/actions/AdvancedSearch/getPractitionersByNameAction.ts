@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /* gets practitioners matching the name
  *
@@ -10,7 +10,7 @@ import { state } from 'cerebral';
 export const getPractitionersByNameAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { practitionerName } = get(
     state.advancedSearchForm.practitionerSearchByName,
   );

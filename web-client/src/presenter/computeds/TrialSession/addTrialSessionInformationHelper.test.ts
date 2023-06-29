@@ -4,7 +4,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addTrialSessionInformationHelper as addTrialSessionInformationHelperComputed } from './addTrialSessionInformationHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('addTrialSessionInformationHelper', () => {
@@ -121,7 +121,12 @@ describe('addTrialSessionInformationHelper', () => {
         },
       });
 
-      expect(result.sessionTypes).toEqual(['Regular', 'Small', 'Hybrid']);
+      expect(result.sessionTypes).toEqual([
+        'Regular',
+        'Small',
+        'Hybrid',
+        'Hybrid-S',
+      ]);
     });
 
     it(`should include 'Special' and 'Motion/Hearing' when form.sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
@@ -135,6 +140,7 @@ describe('addTrialSessionInformationHelper', () => {
         'Regular',
         'Small',
         'Hybrid',
+        'Hybrid-S',
         'Special',
         'Motion/Hearing',
       ]);

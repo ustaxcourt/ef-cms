@@ -18,6 +18,10 @@ export const saveWorkItem = ({
   put({
     Item: {
       gsi1pk: `work-item|${workItem.workItemId}`,
+      gsi2pk:
+        workItem.assigneeId && !workItem.completedAt
+          ? `assigneeId|${workItem.assigneeId}`
+          : undefined,
       pk: `case|${workItem.docketNumber}`,
       sk: `work-item|${workItem.workItemId}`,
       ...workItem,

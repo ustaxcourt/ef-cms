@@ -1,8 +1,8 @@
-const {
+import {
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
-} = require('../entities/EntityConstants');
-const { getDocketNumberSuffix } = require('./getDocketNumberSuffix');
+} from '../entities/EntityConstants';
+import { getDocketNumberSuffix } from './getDocketNumberSuffix';
 
 describe('getDocketNumberSuffix', () => {
   it('returns W for Whistleblower caseType', () => {

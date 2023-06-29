@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { casePublicSearch } = require('./casePublicSearch');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { casePublicSearch } from './casePublicSearch';
 jest.mock('./searchClient');
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 describe('casePublicSearch', () => {
   it('returns results from an exact-matches query', async () => {

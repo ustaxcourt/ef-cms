@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { deleteRecord } = require('./deleteRecord');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { deleteRecord } from './deleteRecord';
 
 describe('deleteRecord', () => {
   it('calls searchClient.remove if indexName and recordId are passed in', async () => {

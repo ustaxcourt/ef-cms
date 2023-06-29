@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * unsealCaseInteractor
@@ -8,7 +8,7 @@ const { put } = require('./requests');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<object>} the updated case data
  */
-exports.unsealCaseInteractor = (applicationContext, { docketNumber }) => {
+export const unsealCaseInteractor = (applicationContext, { docketNumber }) => {
   return put({
     applicationContext,
     endpoint: `/case-meta/${docketNumber}/unseal`,

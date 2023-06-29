@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * initiates a rescan session for the given batch
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function getting state
@@ -18,7 +17,7 @@ export const rescanBatchAction = async ({
   path,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { scanMode } = props;
 
   store.set(state.scanner.isScanning, true);

@@ -1,14 +1,16 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * prepareUserBasedHeadingAction
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @returns {{userHeading: string}} the user-based heading as props
  */
-export const prepareUserBasedHeadingAction = ({ applicationContext, get }) => {
+export const prepareUserBasedHeadingAction = ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const currentUser = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const userRole = currentUser.role;

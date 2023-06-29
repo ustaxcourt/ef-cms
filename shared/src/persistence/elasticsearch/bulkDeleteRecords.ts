@@ -1,6 +1,6 @@
-const { getIndexNameForRecord } = require('./getIndexNameForRecord');
+import { getIndexNameForRecord } from './getIndexNameForRecord';
 
-exports.bulkDeleteRecords = async ({ applicationContext, records }) => {
+export const bulkDeleteRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
   const body = records

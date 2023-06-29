@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * archive correspondence document from a case.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -13,7 +12,7 @@ export const archiveCorrespondenceDocumentAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const correspondenceId = get(
     state.modal.correspondenceToDelete.correspondenceId,

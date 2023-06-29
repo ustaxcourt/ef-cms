@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  noticeOfChangeToInPersonProceeding,
-} = require('./noticeOfChangeToInPersonProceeding');
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfChangeToInPersonProceeding } from './noticeOfChangeToInPersonProceeding';
 
 describe('noticeOfChangeToInPersonProceeding', () => {
   generateAndVerifyPdfDiff({

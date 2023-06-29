@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * updateCaseContextInteractor
@@ -11,7 +11,7 @@ const { put } = require('./requests');
  * @param {object} providers.caseStatus the updated case status
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCaseContextInteractor = (
+export const updateCaseContextInteractor = (
   applicationContext,
   { associatedJudge, caseCaption, caseStatus, docketNumber },
 ) => {

@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateCounselOnCaseInteractor
@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {string} providers.userId the id of the user to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCounselOnCaseInteractor = (
+export const updateCounselOnCaseInteractor = (
   applicationContext,
   { docketNumber, userData, userId },
 ) => {

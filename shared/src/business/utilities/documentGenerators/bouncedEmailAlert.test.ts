@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { bouncedEmailAlert } = require('./bouncedEmailAlert');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { bouncedEmailAlert } from './bouncedEmailAlert';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('bouncedEmailAlert', () => {

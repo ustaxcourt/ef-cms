@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import {
   sendBulkTemplatedEmail,
   sendWithRetry,
-} = require('./sendBulkTemplatedEmail');
+} from './sendBulkTemplatedEmail';
 
 // testApplicationContext relies on getConstants.js -- not web-api's
 // https://trello.com/c/xi5TPQYl/908-getconstants-for-applicationcontext-is-markedly-different-for-testapplicationcontext

@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const { getSectionOutboxMessages } = require('./getSectionOutboxMessages');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getSectionOutboxMessages } from './getSectionOutboxMessages';
 jest.mock('../searchClient');
-const {
-  PETITIONS_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const { search } = require('../searchClient');
+import { PETITIONS_SECTION } from '../../../business/entities/EntityConstants';
+import { search } from '../searchClient';
 
 describe('getSectionOutboxMessages', () => {
   it('should return results from the search client', async () => {

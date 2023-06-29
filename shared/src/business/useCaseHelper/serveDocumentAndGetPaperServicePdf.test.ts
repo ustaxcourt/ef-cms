@@ -1,16 +1,13 @@
-const {
-  applicationContext,
-  testPdfDoc,
-} = require('../test/createTestApplicationContext');
-const {
+import { testPdfDoc } from '../test/getFakeFile';
+
+import { Case, getContactPrimary } from '../entities/cases/Case';
+import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} = require('../../test/mockCase');
-const {
-  serveDocumentAndGetPaperServicePdf,
-} = require('./serveDocumentAndGetPaperServicePdf');
-const { Case, getContactPrimary } = require('../entities/cases/Case');
-const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
+} from '../../test/mockCase';
+import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { serveDocumentAndGetPaperServicePdf } from './serveDocumentAndGetPaperServicePdf';
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
   let caseEntity;

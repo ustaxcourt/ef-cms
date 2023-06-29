@@ -1,5 +1,5 @@
-const qs = require('qs');
-const { get } = require('../requests');
+import { get } from '../requests';
+import qs from 'qs';
 
 /**
  * generatePrintablePendingReportInteractorProxy
@@ -10,7 +10,7 @@ const { get } = require('../requests');
  * @param {string} providers.judge the optional judge filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePrintablePendingReportInteractor = (
+export const generatePrintablePendingReportInteractor = (
   applicationContext,
   { docketNumber, judge },
 ) => {

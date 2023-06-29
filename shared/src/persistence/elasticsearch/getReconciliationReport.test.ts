@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getReconciliationReport } = require('./getReconciliationReport');
-const { PARTIES_CODES } = require('../../business/entities/EntityConstants');
+import { PARTIES_CODES } from '../../business/entities/EntityConstants';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getReconciliationReport } from './getReconciliationReport';
 jest.mock('./searchClient');
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 describe('getReconciliationReport', () => {
   it('should search for docket entries that were served between the provided date range and were served to either the respondent or both parties', async () => {

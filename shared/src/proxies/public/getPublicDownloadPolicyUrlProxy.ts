@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from '../requests';
 
 /**
  * getPublicDownloadPolicyUrlInteractor
@@ -9,7 +9,7 @@ const { get } = require('./requests');
  * @param {string} providers.key the key of the document to get
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPublicDownloadPolicyUrl = ({
+export const getPublicDownloadPolicyUrl = ({
   applicationContext,
   docketNumber,
   key,

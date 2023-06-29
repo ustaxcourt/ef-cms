@@ -7,7 +7,7 @@
  * @returns {Uint8Array} byte array of PDF
  */
 
-exports.generatePDFFromJPGs = async (applicationContext, { imgData }) => {
+export const generatePDFFromJPGs = async (applicationContext, { imgData }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.create();

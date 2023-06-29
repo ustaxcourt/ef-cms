@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  * orderPublicSearchInteractor
@@ -8,7 +8,7 @@ const { get } = require('./requests');
  * @param {string} providers.searchParams the search params (keyword or phrase)
  * @returns {Promise<*>} the promise of the api call
  */
-exports.orderPublicSearchInteractor = (
+export const orderPublicSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {

@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the categoryName on the state.form based on the categoryType selected
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
  */
@@ -10,7 +9,7 @@ export const computeCategoryNameAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const categoryType = get(state.form.categoryType);
   const location = get(state.form.location);
 

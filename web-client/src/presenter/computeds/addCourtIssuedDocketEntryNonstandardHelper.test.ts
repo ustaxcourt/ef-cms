@@ -1,6 +1,6 @@
 import { addCourtIssuedDocketEntryNonstandardHelper as addCourtIssuedDocketEntryNonstandardHelperComputed } from './addCourtIssuedDocketEntryNonstandardHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
@@ -151,6 +151,20 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
       showFreeText: true,
       showJudge: false,
       showTrialLocation: false,
+    });
+  });
+
+  it('should set dateLabel to "Trial date" when state.form.scenario is Type G', () => {
+    let testState = {
+      ...state,
+      form: { scenario: 'Type G' },
+    };
+
+    const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
+      state: testState,
+    });
+    expect(result).toMatchObject({
+      dateLabel: 'Trial date',
     });
   });
 

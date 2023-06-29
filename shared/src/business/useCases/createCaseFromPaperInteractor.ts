@@ -17,7 +17,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   user,
 }: {
   applicationContext: IApplicationContext;
-  caseToAdd: TCaseEntity;
+  caseToAdd: Case;
   docketEntryEntity: DocketEntry;
   user: RawUser;
 }) => {
@@ -40,8 +40,11 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,
+      trialDate: caseToAdd.trialDate,
+      trialLocation: caseToAdd.trialLocation,
     },
     { applicationContext },
+    caseToAdd,
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);

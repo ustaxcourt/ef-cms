@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateDeficiencyStatisticInteractor
@@ -17,7 +17,7 @@ const { put } = require('../requests');
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateDeficiencyStatisticInteractor = (
+export const updateDeficiencyStatisticInteractor = (
   applicationContext,
   {
     determinationDeficiencyAmount,

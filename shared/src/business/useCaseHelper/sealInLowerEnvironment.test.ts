@@ -1,7 +1,7 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
-const { sealInLowerEnvironment } = require('./sealInLowerEnvironment');
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { sealInLowerEnvironment } from './sealInLowerEnvironment';
 
 describe('sealInLowerEnvironment', () => {
   beforeAll(() => {

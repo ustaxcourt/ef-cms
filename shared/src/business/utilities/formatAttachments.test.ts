@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { formatAttachments } = require('./formatAttachments');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { formatAttachments } from './formatAttachments';
 
 describe('formatAttachments', () => {
   const mockDocketEntries = [

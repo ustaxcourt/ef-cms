@@ -24,6 +24,7 @@ import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
+import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -48,9 +49,11 @@ import { FileCompressionErrorModal } from './TrialSessionWorkingCopy/FileCompres
 import { FileDocumentWizard } from './FileDocument/FileDocumentWizard';
 import { FilePetitionSuccess } from './StartCase/FilePetitionSuccess';
 import { Footer } from './Footer';
+import { GenericErrorModal } from './GenericErrorModal';
 import { Header } from './Header/Header';
 import { IdleLogout } from './IdleLogout';
 import { Interstitial } from './Interstitial';
+import { JudgeActivityReport } from './JudgeActivityReport/JudgeActivityReport';
 import { Loading } from './Loading';
 import { LogIn } from './LogIn';
 import { MessageDetail } from './Messages/MessageDetail';
@@ -91,7 +94,7 @@ import { UserContactEditProgress } from './UserContactEditProgress';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
@@ -118,6 +121,7 @@ const pages = {
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
+  CustomCaseReport,
   DashboardChambers,
   DashboardInactive,
   DashboardIrsSuperuser,
@@ -142,6 +146,7 @@ const pages = {
   FilePetitionSuccess,
   IdleLogout,
   Interstitial,
+  JudgeActivityReport,
   Loading,
   LogIn,
   MessageDetail,
@@ -262,6 +267,7 @@ export const AppComponent = connect(
         )}
         {showModal === 'WebSocketErrorModal' && <WebSocketErrorModal />}
         {showModal === 'AppMaintenanceModal' && <AppMaintenanceModal />}
+        {showModal === 'GenericErrorModal' && <GenericErrorModal />}
       </>
     );
   },

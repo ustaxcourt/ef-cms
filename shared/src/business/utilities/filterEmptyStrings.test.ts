@@ -1,4 +1,4 @@
-const { filterEmptyStrings } = require('./filterEmptyStrings');
+import { filterEmptyStrings } from './filterEmptyStrings';
 
 describe('filterEmptyStrings', () => {
   it('filters empty strings out of an object', () => {

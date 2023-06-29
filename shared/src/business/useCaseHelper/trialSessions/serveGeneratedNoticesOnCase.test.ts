@@ -1,13 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  serveGeneratedNoticesOnCase,
-} = require('./serveGeneratedNoticesOnCase');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { getFakeFile, testPdfDoc } = require('../../test/getFakeFile');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { getFakeFile, testPdfDoc } from '../../test/getFakeFile';
+
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { serveGeneratedNoticesOnCase } from './serveGeneratedNoticesOnCase';
 
 describe('serveGeneratedNoticesOnCase', () => {
   const mockOpenCaseEntity = new Case(MOCK_CASE, { applicationContext });

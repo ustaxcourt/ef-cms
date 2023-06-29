@@ -7,7 +7,7 @@
  * @param {object} deconstructed.options optional content that modifies the template
  * @returns {string} hydrated HTML content in string form
  */
-const generateHTMLTemplateForPDF = async ({
+export const generateHTMLTemplateForPDF = async ({
   applicationContext,
   content,
   options = {},
@@ -38,8 +38,4 @@ const generateHTMLTemplateForPDF = async ({
   });
 
   return html;
-};
-
-module.exports = {
-  generateHTMLTemplateForPDF,
 };

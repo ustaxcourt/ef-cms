@@ -6,7 +6,8 @@ import { Hint } from '../../ustc-ui/Hint/Hint';
 import { SpousePermissionConfirmModal } from './SpousePermissionConfirmModal';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -402,9 +403,7 @@ export const StartCaseStep3 = connect(
                   >
                     Download Corporate Disclosure Statement (T.C. Form 6)
                   </Button>
-                  <span className="margin-top-0">
-                    if you haven’t already done so
-                  </span>
+                  <p className="margin-top-0">if you haven’t already done so</p>
                 </p>
                 <StateDrivenFileInput
                   aria-describedby="corporate-disclosure-file-label"

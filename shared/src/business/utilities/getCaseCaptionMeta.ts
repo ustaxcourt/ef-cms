@@ -1,5 +1,5 @@
-const { Case } = require('../entities/cases/Case');
-const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
+import { CASE_CAPTION_POSTFIX } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
 
 /**
  * Gets case caption parts from case data
@@ -8,7 +8,7 @@ const { CASE_CAPTION_POSTFIX } = require('../entities/EntityConstants');
  * @returns {object} case caption parts
  */
 
-const getCaseCaptionMeta = ({ caseCaption = '' }) => {
+export const getCaseCaptionMeta = ({ caseCaption = '' }) => {
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseCaptionExtension = caseCaption
     .replace(caseTitle, '')
@@ -25,5 +25,3 @@ const getCaseCaptionMeta = ({ caseCaption = '' }) => {
     caseTitle,
   };
 };
-
-module.exports = { getCaseCaptionMeta };

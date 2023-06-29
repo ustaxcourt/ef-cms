@@ -8,7 +8,7 @@ import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteract
 describe('updateDocketEntryMetaInteractor', () => {
   let mockDocketEntries;
 
-  const mockUserId = applicationContext.getUniqueId();
+  const mockUserId = 'c99dfb85-867d-436b-8b12-1fcb547d490a';
 
   const baseDocketEntry = {
     docketNumber: MOCK_CASE.docketNumber,

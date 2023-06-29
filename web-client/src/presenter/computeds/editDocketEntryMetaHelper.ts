@@ -1,8 +1,13 @@
 import { find } from 'lodash';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const editDocketEntryMetaHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const editDocketEntryMetaHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { eventCode, isStricken, strickenAt, strickenBy } = get(state.form);
 
   const caseDetail = get(state.caseDetail);

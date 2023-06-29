@@ -4,7 +4,7 @@
  * @param {object} copyFrom source pdf to copy pages from
  * @param {object} copyInto target pdf to append pages to
  */
-const copyPagesAndAppendToTargetPdf = async ({ copyFrom, copyInto }) => {
+export const copyPagesAndAppendToTargetPdf = async ({ copyFrom, copyInto }) => {
   const pagesToCopy = await copyInto.copyPages(
     copyFrom,
     copyFrom.getPageIndices(),
@@ -14,5 +14,3 @@ const copyPagesAndAppendToTargetPdf = async ({ copyFrom, copyInto }) => {
     copyInto.addPage(page);
   });
 };
-
-module.exports = { copyPagesAndAppendToTargetPdf };

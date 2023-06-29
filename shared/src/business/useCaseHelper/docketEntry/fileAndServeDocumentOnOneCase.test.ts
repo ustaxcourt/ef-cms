@@ -1,28 +1,23 @@
 /* eslint-disable max-lines */
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+
+import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
-  fileAndServeDocumentOnOneCase,
-} = require('./fileAndServeDocumentOnOneCase');
-const {
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} = require('../../../test/mockCase');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { docketClerkUser, judgeUser } = require('../../../test/mockUsers');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { WorkItem } from '../../entities/WorkItem';
+import { createISODateString } from '../../utilities/DateHandler';
+import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
@@ -372,6 +367,54 @@ describe('fileAndServeDocumentOnOneCase', () => {
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
+  });
+
+  it('should pass the caseEntity`s trialDate and trialLocation to the docketEntry`s work item when they exist', async () => {
+    mockCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        trialDate: '2021-01-02T05:22:16.001Z',
+        trialLocation: 'Lubbock, Texas',
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    mockDocketEntry = new DocketEntry(
+      {
+        docketEntryId: mockDocketEntryId,
+        docketNumber: mockCaseEntity.docketNumber,
+        documentType: 'Order',
+        eventCode: 'O',
+        judge: judgeUser.name,
+        numberOfPages: 1,
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: judgeUser.userId,
+        signedJudgeName: judgeUser.name,
+        workItem: undefined,
+      },
+      { applicationContext },
+    );
+
+    await fileAndServeDocumentOnOneCase({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      docketEntryEntity: mockDocketEntry,
+      subjectCaseDocketNumber: mockCaseEntity.docketNumber,
+      user: docketClerkUser,
+    });
+
+    const expectedDocketEntry = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        doc => doc.docketEntryId === mockDocketEntryId,
+      );
+
+    expect(expectedDocketEntry.workItem).toMatchObject({
+      trialDate: mockCaseEntity.trialDate,
+      trialLocation: mockCaseEntity.trialLocation,
+    });
   });
 
   it('should make a call to close the case and update trial session information when the docketEntry being filed is one of "ENTERED_AND_SERVED_EVENT_CODES"', async () => {

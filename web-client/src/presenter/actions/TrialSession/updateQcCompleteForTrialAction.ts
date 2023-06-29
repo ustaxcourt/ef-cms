@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * update the qc complete for trial value on a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -15,7 +14,7 @@ export const updateQcCompleteForTrialAction = async ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumber, qcCompleteForTrial } = props;
   const trialSessionId = get(state.trialSession.trialSessionId);
 

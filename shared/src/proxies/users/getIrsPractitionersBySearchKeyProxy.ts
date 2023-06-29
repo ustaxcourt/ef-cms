@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getIrsPractitionersBySearchKeyProxy
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} params.searchKey the search string entered by the user
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getIrsPractitionersBySearchKeyInteractor = (
+export const getIrsPractitionersBySearchKeyInteractor = (
   applicationContext,
   { searchKey },
 ) => {

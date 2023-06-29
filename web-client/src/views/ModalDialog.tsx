@@ -1,6 +1,6 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FocusLock } from '../ustc-ui/FocusLock/FocusLock';
-import React, { useEffect, useRef } from 'react';
+import React, { ReactNode, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import classNames from 'classnames';
 
@@ -24,6 +24,24 @@ export const ModalDialog = ({
   showButtons = true,
   title,
   useRunConfirmSequence = false,
+}: {
+  cancelLabel?: string;
+  cancelLink?: boolean;
+  cancelSequence: any;
+  children?: ReactNode;
+  className?: string;
+  closeLink?: boolean;
+  confirmHref?: string;
+  confirmLabel?: string;
+  confirmSequence: any;
+  confirmTarget?: string;
+  disableSubmit?: boolean;
+  message?: string;
+  preventCancelOnBlur?: boolean;
+  preventScrolling?: boolean;
+  showButtons?: boolean;
+  title: string;
+  useRunConfirmSequence?: boolean;
 }) => {
   preventCancelOnBlur = !!preventCancelOnBlur;
   preventScrolling = preventScrolling !== undefined ? preventScrolling : true;

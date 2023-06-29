@@ -1,9 +1,8 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets state.form.contact address fields from props.caseDetail
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -14,7 +13,7 @@ export const setSelectedPetitionerAddressAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = cloneDeep(get(state.caseDetail));
 
   const petitioner = applicationContext

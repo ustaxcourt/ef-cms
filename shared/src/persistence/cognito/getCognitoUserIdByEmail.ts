@@ -1,4 +1,7 @@
-exports.getCognitoUserIdByEmail = async ({ applicationContext, email }) => {
+export const getCognitoUserIdByEmail = async ({
+  applicationContext,
+  email,
+}) => {
   try {
     const userFromCognito = await applicationContext
       .getCognito()

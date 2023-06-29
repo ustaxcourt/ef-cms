@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the document to be edited from the current caseDetail
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const setDocumentToFormFromCorrespondenceAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { caseDetail, correspondenceId } = props;
 
   const documentToSet = applicationContext

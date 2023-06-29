@@ -3,11 +3,11 @@ import {
   CHIEF_JUDGE,
   CLOSED_CASE_STATUSES,
   DOCKET_NUMBER_SUFFIXES,
-  USER_ROLES,
+  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from './caseInventoryReportHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseInventoryReportHelper', () => {
@@ -27,7 +27,7 @@ describe('caseInventoryReportHelper', () => {
   );
 
   applicationContext.getCurrentUser = () => ({
-    role: USER_ROLES.docketClerk,
+    role: ROLES.docketClerk,
     userId: '5d66d122-8417-427b-9048-c1ba8ab1ea68',
   });
 

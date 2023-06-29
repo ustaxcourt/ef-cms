@@ -1,7 +1,7 @@
-const React = require('react');
-const { COUNTRY_TYPES } = require('../../../entities/EntityConstants');
-const { DocketHeader } = require('../components/DocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+import { COUNTRY_TYPES } from '../../../entities/EntityConstants';
+import { DocketHeader } from '../components/DocketHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import React from 'react';
 
 const renderTable = ({ data, label, options }) => {
   return (

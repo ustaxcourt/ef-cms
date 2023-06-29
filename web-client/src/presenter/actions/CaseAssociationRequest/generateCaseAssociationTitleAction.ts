@@ -1,27 +1,21 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Set document title.
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
- */
 export const generateCaseAssociationTitleAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const caseAssociationRequest = get(state.form);
   const { petitioners } = get(state.caseDetail);
 
   let documentTitle = applicationContext
     .getUseCases()
-    .generateCaseAssociationDocumentTitleInteractor(applicationContext, {
+    .generateCaseAssociationDocumentTitleInteractor({
       caseAssociationRequest,
       petitioners,
     });
+
   store.set(state.form.documentTitle, documentTitle);
 
   if (!isEmpty(caseAssociationRequest.supportingDocumentMetadata)) {

@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getTrialSessionDetailsInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.trialSessionId the id of the trial session to get the details
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getTrialSessionDetailsInteractor = (
+export const getTrialSessionDetailsInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {

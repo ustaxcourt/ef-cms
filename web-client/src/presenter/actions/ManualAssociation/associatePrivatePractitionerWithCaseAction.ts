@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * associates a practitioner with case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -13,7 +12,7 @@ export const associatePrivatePractitionerWithCaseAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const userId = get(state.modal.user.userId);
   const { representing, serviceIndicator } = get(state.modal);
   const docketNumber = get(state.caseDetail.docketNumber);

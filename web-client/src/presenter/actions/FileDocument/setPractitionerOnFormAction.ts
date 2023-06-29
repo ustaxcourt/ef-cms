@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the current user on state.form.practitioner if that user is a practitioner
@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const setPractitionerOnFormAction = ({ applicationContext, store }) => {
+export const setPractitionerOnFormAction = ({
+  applicationContext,
+  store,
+}: ActionProps) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 

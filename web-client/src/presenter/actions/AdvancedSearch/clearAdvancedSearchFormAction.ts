@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * clears the advanced search form based on the formType passed in via props
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const clearAdvancedSearchFormAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const {
     ADVANCED_SEARCH_OPINION_TYPES,
     COUNTRY_TYPES,

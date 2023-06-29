@@ -3,7 +3,8 @@ import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
@@ -112,23 +113,25 @@ SectionWorkQueueTable.Row = React.memo(
         <tr>
           {showSelectColumn && (
             <td className="message-select-control">
-              <input
-                aria-label="Select work item"
-                checked={item.selected}
-                className="usa-checkbox__input"
-                id={item.workItemId}
-                type="checkbox"
-                onChange={() => {
-                  selectWorkItemSequence({
-                    workItem: item,
-                  });
-                }}
-              />
-              <label
-                className="padding-top-05 usa-checkbox__label"
-                htmlFor={item.workItemId}
-                id={`label-${item.workItemId}`}
-              />
+              <div className="usa-checkbox">
+                <input
+                  aria-label="Select work item"
+                  checked={item.selected}
+                  className="usa-checkbox__input"
+                  id={item.workItemId}
+                  type="checkbox"
+                  onChange={() => {
+                    selectWorkItemSequence({
+                      workItem: item,
+                    });
+                  }}
+                />
+                <label
+                  className="padding-top-05 usa-checkbox__label"
+                  htmlFor={item.workItemId}
+                  id={`label-${item.workItemId}`}
+                />
+              </div>
             </td>
           )}
           <td className="consolidated-case-column">
@@ -178,7 +181,7 @@ SectionWorkQueueTable.Row = React.memo(
           {showFiledByColumn && (
             <td className="message-queue-row">{item.docketEntry.filedBy}</td>
           )}
-          <td className="message-queue-row">{item.caseStatus}</td>
+          <td className="message-queue-row">{item.formattedCaseStatus}</td>
           {showAssignedToColumn && (
             <td className="to message-queue-row">{item.assigneeName}</td>
           )}

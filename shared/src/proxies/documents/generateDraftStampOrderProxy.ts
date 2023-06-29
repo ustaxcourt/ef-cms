@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * generateDraftStampOrderInteractor
@@ -12,7 +12,7 @@ const { post } = require('../requests');
  * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generateDraftStampOrderInteractor = (
+export const generateDraftStampOrderInteractor = (
   applicationContext,
   {
     docketNumber,

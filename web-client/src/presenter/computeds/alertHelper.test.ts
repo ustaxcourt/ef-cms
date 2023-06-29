@@ -1,5 +1,5 @@
 import { alertHelper as alertHelperComputed } from './alertHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const alertHelper = withAppContextDecorator(alertHelperComputed, {

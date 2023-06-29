@@ -1,9 +1,8 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the respondent on the form for the edit counsel page
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.get the cerebral get function used for getting state.form
@@ -15,7 +14,7 @@ export const validateEditRespondentCounselAction = ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { SERVICE_INDICATOR_ERROR, SERVICE_INDICATOR_TYPES } =
     applicationContext.getConstants();
 

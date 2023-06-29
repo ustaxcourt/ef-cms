@@ -1,8 +1,8 @@
 import * as client from '../../dynamodbClientService';
+import { Case } from '../../../business/entities/cases/Case';
 
 /**
  * getCasesForUser
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.userId the userId to filter cases by
@@ -26,4 +26,4 @@ export const getCasesForUser = ({
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-  }) as unknown as Promise<TCase[]>;
+  }) as unknown as Promise<Case[]>;

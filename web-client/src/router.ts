@@ -51,7 +51,17 @@ const goto404 = app => {
 const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
 
 const ifHasAccess = (
-  { app, permissionToCheck, redirect = accessRedirects, skipMaintenanceCheck },
+  {
+    app,
+    permissionToCheck,
+    redirect = accessRedirects,
+    skipMaintenanceCheck,
+  }: {
+    app;
+    permissionToCheck?: string;
+    redirect?: any;
+    skipMaintenanceCheck?: boolean;
+  },
   cb,
 ) => {
   return function () {
@@ -1245,6 +1255,14 @@ const router = {
     );
 
     registerRoute(
+      '/reports/judge-activity-report',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Activity Report');
+        return app.getSequence('gotoJudgeActivityReportSequence')();
+      }),
+    );
+
+    registerRoute(
       '/reports/case-inventory-report',
       ifHasAccess({ app }, () => {
         setPageTitle('Case Inventory Report');
@@ -1257,6 +1275,14 @@ const router = {
       ifHasAccess({ app }, () => {
         setPageTitle('Case deadlines');
         return app.getSequence('gotoCaseDeadlineReportSequence')();
+      }),
+    );
+
+    registerRoute(
+      '/reports/custom-case',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Custom Case Report');
+        return app.getSequence('gotoCustomCaseReportSequence')();
       }),
     );
 

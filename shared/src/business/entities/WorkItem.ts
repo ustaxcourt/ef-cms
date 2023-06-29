@@ -30,20 +30,24 @@ export class WorkItem extends JoiValidationEntity {
   public sentBySection: string;
   public sentByUserId: string;
   public trialDate?: string;
+  public trialLocation?: string;
   public updatedAt: string;
   public workItemId: string;
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  constructor(rawWorkItem, { applicationContext }) {
+  constructor(rawWorkItem, { applicationContext }, caseEntity?: Case) {
     super('WorkItem');
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
-    this.associatedJudge = rawWorkItem.associatedJudge || CHIEF_JUDGE;
+    this.associatedJudge =
+      caseEntity && caseEntity.associatedJudge
+        ? caseEntity.associatedJudge
+        : rawWorkItem.associatedJudge || CHIEF_JUDGE;
     this.caseIsInProgress = rawWorkItem.caseIsInProgress;
-    this.caseStatus = rawWorkItem.caseStatus;
+    this.caseStatus = caseEntity ? caseEntity.status : rawWorkItem.caseStatus;
     this.caseTitle = rawWorkItem.caseTitle;
     this.completedAt = rawWorkItem.completedAt;
     this.completedBy = rawWorkItem.completedBy;
@@ -70,11 +74,16 @@ export class WorkItem extends JoiValidationEntity {
     ]);
 
     this.docketNumber = rawWorkItem.docketNumber;
-    this.leadDocketNumber = rawWorkItem.leadDocketNumber;
-    this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
+    this.leadDocketNumber = caseEntity
+      ? caseEntity.leadDocketNumber
+      : rawWorkItem.leadDocketNumber;
+    this.docketNumberWithSuffix = caseEntity
+      ? caseEntity.docketNumberWithSuffix
+      : rawWorkItem.docketNumberWithSuffix;
     this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||
+      caseEntity?.status === CASE_STATUS_TYPES.calendared ||
       rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
     this.isInitializeCase = rawWorkItem.isInitializeCase;
@@ -83,7 +92,10 @@ export class WorkItem extends JoiValidationEntity {
     this.sentBy = rawWorkItem.sentBy;
     this.sentBySection = rawWorkItem.sentBySection;
     this.sentByUserId = rawWorkItem.sentByUserId;
-    this.trialDate = rawWorkItem.trialDate;
+    this.trialDate = caseEntity ? caseEntity.trialDate : rawWorkItem.trialDate;
+    this.trialLocation = caseEntity
+      ? caseEntity.trialLocation
+      : rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
     this.workItemId =
       rawWorkItem.workItemId || applicationContext.getUniqueId();
@@ -91,7 +103,6 @@ export class WorkItem extends JoiValidationEntity {
 
   /**
    * Assign to a user
-   *
    * @param {object} props the props object
    * @param {string} props.assigneeId the user id of the user to assign the work item to
    * @param {string} props.assigneeName the name of the user to assign the work item to
@@ -146,7 +157,6 @@ export class WorkItem extends JoiValidationEntity {
 
   /**
    * marks the work item as read
-   *
    * @returns {WorkItem} the updated work item
    */
   markAsRead() {

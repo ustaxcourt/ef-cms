@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  * casePublicSearchInteractor
@@ -8,7 +8,10 @@ const { get } = require('./requests');
  * @param {string} providers.searchParams the search params (can include petitionerName, country, state, yearFiledMin, yearFiledMax)
  * @returns {Promise<*>} the promise of the api call
  */
-exports.casePublicSearchInteractor = (applicationContext, { searchParams }) => {
+export const casePublicSearchInteractor = (
+  applicationContext,
+  { searchParams },
+) => {
   return get({
     applicationContext,
     endpoint: '/public-api/search',

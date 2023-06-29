@@ -4,7 +4,6 @@ import { put } from '../../dynamodbClientService';
 
 /**
  * updateCase
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.caseToUpdate the case data to update
@@ -15,7 +14,7 @@ export const updateCase = async ({
   caseToUpdate,
 }: {
   applicationContext: IApplicationContext;
-  caseToUpdate: TCase;
+  caseToUpdate: Case;
 }) => {
   const setLeadCase = caseToUpdate.leadDocketNumber
     ? { gsi1pk: `case|${caseToUpdate.leadDocketNumber}` }

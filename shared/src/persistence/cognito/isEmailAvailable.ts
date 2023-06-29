@@ -1,6 +1,6 @@
-const { isUserAlreadyCreated } = require('../dynamo/users/createOrUpdateUser');
+import { isUserAlreadyCreated } from '../dynamo/users/createOrUpdateUser';
 
-exports.isEmailAvailable = async ({ applicationContext, email }) => {
+export const isEmailAvailable = async ({ applicationContext, email }) => {
   const inUse = await isUserAlreadyCreated({
     applicationContext,
     email,

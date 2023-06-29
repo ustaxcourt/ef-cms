@@ -1,4 +1,7 @@
-const case105_23: TCase & TDynamoRecord = {
+import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { TDynamoRecord } from '../../../shared/src/persistence/dynamo/dynamoTypes';
+
+const case105_23: Case & TDynamoRecord = {
   associatedJudge: 'Chief Judge',
   caseCaption: 'Armand Fulton, Petitioner',
   caseType: 'Disclosure',
@@ -167,7 +170,7 @@ const case105_23_place_of_trial: RawDocketEntry & TDynamoRecord = {
   userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const case106_23: TCase & TDynamoRecord = {
+const case106_23: Case & TDynamoRecord = {
   associatedJudge: 'Chief Judge',
   caseCaption: 'Thaddeus Nicholson, Petitioner',
   caseType: 'Interest Abatement',

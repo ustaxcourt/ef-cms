@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * completeMessageInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {Promise<*>} the promise of the api call
  */
-exports.completeMessageInteractor = (
+export const completeMessageInteractor = (
   applicationContext,
   { message, parentMessageId },
 ) => {

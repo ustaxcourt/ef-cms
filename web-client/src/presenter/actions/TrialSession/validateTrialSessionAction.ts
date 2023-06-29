@@ -1,10 +1,9 @@
 import { omit } from 'lodash';
 import { preparedDateToISOString } from '../../../utilities/preparedDateToISOString';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the trial session.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -16,7 +15,7 @@ export const validateTrialSessionAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const startDate = preparedDateToISOString(
     applicationContext,
     props.computedStartDate,

@@ -1,10 +1,9 @@
 import { find } from 'lodash';
 import { parseDateToMonthDayYear } from './parseDateToMonthDayYear';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * creates a case deadline
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -16,7 +15,7 @@ export const setCaseDeadlineFormAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDeadlines = get(state.caseDeadlines);
   const caseDeadline = find(caseDeadlines, {
     caseDeadlineId: props.caseDeadlineId,

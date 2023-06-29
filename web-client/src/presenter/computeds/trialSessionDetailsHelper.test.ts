@@ -1,10 +1,11 @@
 import {
   DOCKET_NUMBER_SUFFIXES,
+  HYBRID_SESSION_TYPES,
   SESSION_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionDetailsHelper as trialSessionDetailsHelperComputed } from './trialSessionDetailsHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -139,28 +140,28 @@ describe('trialSessionDetailsHelper', () => {
     expect(result.showQcComplete).toEqual(false);
   });
 
-  it('returns showSmallAndRegularQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is Hybrid', () => {
+  it('returns showSmallAndRegularQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is a Hybrid type', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
         permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {
           ...TRIAL_SESSION,
           eligibleCases: [],
-          sessionType: SESSION_TYPES.hybrid,
+          sessionType: HYBRID_SESSION_TYPES.hybrid,
         },
       },
     });
     expect(result.showSmallAndRegularQcComplete).toEqual(true);
   });
 
-  it('returns showSmallAndRegularQcComplete false if the user does not have TRIAL_SESSION_QC_COMPLETE permission and sessionType is Hybrid', () => {
+  it('returns showSmallAndRegularQcComplete false if the user does not have TRIAL_SESSION_QC_COMPLETE permission and sessionType is a Hybrid type', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
         permissions: { TRIAL_SESSION_QC_COMPLETE: false },
         trialSession: {
           ...TRIAL_SESSION,
           eligibleCases: [],
-          sessionType: SESSION_TYPES.hybrid,
+          sessionType: HYBRID_SESSION_TYPES.hybridSmall,
         },
       },
     });
@@ -179,5 +180,29 @@ describe('trialSessionDetailsHelper', () => {
       },
     });
     expect(result.showSmallAndRegularQcComplete).toEqual(false);
+  });
+
+  describe('canDismissThirtyDayAlert', () => {
+    it('should be true when the curent user has DIMISS_NOTT_REMINDER permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DIMISS_NOTT_REMINDER: true },
+          trialSession: TRIAL_SESSION,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toBe(true);
+    });
+
+    it('should be false when the curent user does NOT have DIMISS_NOTT_REMINDER permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DIMISS_NOTT_REMINDER: false },
+          trialSession: TRIAL_SESSION,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toBe(false);
+    });
   });
 });

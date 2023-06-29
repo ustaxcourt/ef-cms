@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the main filter start and end dates so that the table refreshes with filtered data.
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.filterStartDate and state.screenMetadata.filterEndDate
  */
@@ -10,7 +9,7 @@ export const updateDateRangeForDeadlinesAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   let startDate = get(state.screenMetadata.filterStartDateState);
   let endDate = get(state.screenMetadata.filterEndDateState);
 

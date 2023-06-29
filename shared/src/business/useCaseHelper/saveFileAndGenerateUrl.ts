@@ -7,7 +7,7 @@
  * @param {string} providers.file the file to save
  * @returns {string} the url to the file
  */
-exports.saveFileAndGenerateUrl = async ({
+export const saveFileAndGenerateUrl = async ({
   applicationContext,
   file,
   useTempBucket = false,

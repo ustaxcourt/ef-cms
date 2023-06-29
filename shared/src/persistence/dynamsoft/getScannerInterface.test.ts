@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getScannerInterface } = require('./getScannerInterface');
-const { SCAN_MODES } = require('../../business/entities/EntityConstants');
+import { SCAN_MODES } from '../../business/entities/EntityConstants';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getScannerInterface } from './getScannerInterface';
 
 describe('getScannerInterface', () => {
   let mockSources, mockScanCount, DWObject, Dynamsoft;

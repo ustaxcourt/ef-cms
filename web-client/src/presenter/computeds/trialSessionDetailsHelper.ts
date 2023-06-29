@@ -1,13 +1,19 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const trialSessionDetailsHelper = (get, applicationContext) => {
-  const { DOCKET_NUMBER_SUFFIXES, SESSION_TYPES } =
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const trialSessionDetailsHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
+  const { DOCKET_NUMBER_SUFFIXES, HYBRID_SESSION_TYPES } =
     applicationContext.getConstants();
 
   const { eligibleCases, sessionType, trialSessionId } = get(
     state.trialSession,
   );
   const permissions = get(state.permissions);
+  const canDismissThirtyDayAlert = permissions.DIMISS_NOTT_REMINDER;
 
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
@@ -32,9 +38,10 @@ export const trialSessionDetailsHelper = (get, applicationContext) => {
 
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
   const showSmallAndRegularQcComplete =
-    sessionType === SESSION_TYPES.hybrid && showQcComplete;
+    Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
 
   return {
+    canDismissThirtyDayAlert,
     eligibleRegularCaseQcTotalCompleteCount,
     eligibleSmallCaseQcTotalCompleteCount,
     eligibleTotalCaseQcCompleteCount,

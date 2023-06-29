@@ -1,8 +1,6 @@
-const {
-  MAX_SEARCH_CLIENT_RESULTS,
-} = require('../../business/entities/EntityConstants');
-const { IS_PRACTITIONER } = require('./helpers/searchClauses');
-const { search } = require('./searchClient');
+import { IS_PRACTITIONER } from './helpers/searchClauses';
+import { MAX_SEARCH_CLIENT_RESULTS } from '../../business/entities/EntityConstants';
+import { search } from './searchClient';
 
 /**
  * getPractitionersByName
@@ -12,7 +10,7 @@ const { search } = require('./searchClient');
  * @param {string} params.name the name to search by
  * @returns {*} the result
  */
-exports.getPractitionersByName = async ({ applicationContext, name }) => {
+export const getPractitionersByName = async ({ applicationContext, name }) => {
   const searchParameters = {
     body: {
       _source: ['admissionsStatus', 'barNumber', 'contact', 'name'],

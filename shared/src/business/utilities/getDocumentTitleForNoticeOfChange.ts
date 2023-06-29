@@ -1,7 +1,7 @@
-const {
+import {
   formatDocketEntry,
   getFilingsAndProceedings,
-} = require('./getFormattedCaseDetail');
+} from './getFormattedCaseDetail';
 
 /**
  * Gets document title based on documentTitle and additionalInfo fields
@@ -11,7 +11,7 @@ const {
  * @returns {object} the document title
  */
 
-const getDocumentTitleForNoticeOfChange = ({
+export const getDocumentTitleForNoticeOfChange = ({
   applicationContext,
   docketEntry,
 }) => {
@@ -29,5 +29,3 @@ const getDocumentTitleForNoticeOfChange = ({
 
   return documentTitle;
 };
-
-module.exports = { getDocumentTitleForNoticeOfChange };

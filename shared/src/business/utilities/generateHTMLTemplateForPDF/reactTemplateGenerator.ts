@@ -1,106 +1,47 @@
-require('regenerator-runtime');
-require('@babel/register')({
-  extensions: ['.tsx'],
-  presets: ['@babel/preset-react', '@babel/preset-env'],
-});
+import 'regenerator-runtime';
+import babelRegister from '@babel/register';
 
 // Documents
-const {
-  AddressLabelCoverSheet,
-} = require('../pdfGenerator/documentTemplates/AddressLabelCoverSheet.tsx');
-const {
-  CaseInventoryReport,
-} = require('../pdfGenerator/documentTemplates/CaseInventoryReport.tsx');
-const {
-  ChangeOfAddress,
-} = require('../pdfGenerator/documentTemplates/ChangeOfAddress.tsx');
-const {
-  CoverSheet,
-} = require('../pdfGenerator/documentTemplates/CoverSheet.tsx');
-const {
-  DatePrintedFooter,
-} = require('../pdfGenerator/components/DatePrintedFooter.tsx');
-const {
-  DateServedFooter,
-} = require('../pdfGenerator/components/DateServedFooter.tsx');
-const {
-  DocketRecord,
-} = require('../pdfGenerator/documentTemplates/DocketRecord.tsx');
-const {
-  GettingReadyForTrialChecklist,
-} = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.tsx');
-const {
-  NoticeOfChangeOfTrialJudge,
-} = require('../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge.tsx');
-const {
-  NoticeOfChangeToInPersonProceeding,
-} = require('../pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding');
-const {
-  NoticeOfChangeToRemoteProceeding,
-} = require('../pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding.tsx');
-const {
-  NoticeOfDocketChange,
-} = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.tsx');
-const {
-  NoticeOfReceiptOfPetition,
-} = require('../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition.tsx');
-const {
-  NoticeOfTrialIssued,
-} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssued.tsx');
-const {
-  NoticeOfTrialIssuedInPerson,
-} = require('../pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson.tsx');
-const {
-  PageMetaHeaderDocket,
-} = require('../pdfGenerator/components/PageMetaHeaderDocket.tsx');
-const {
-  PendingReport,
-} = require('../pdfGenerator/documentTemplates/PendingReport.tsx');
-const {
-  PractitionerCaseList,
-} = require('../pdfGenerator/documentTemplates/PractitionerCaseList.tsx');
-const {
-  PretrialMemorandum,
-} = require('../pdfGenerator/components/PretrialMemorandum.tsx');
-const {
-  PrintableTrialSessionWorkingCopyMetaHeader,
-} = require('../pdfGenerator/components/PrintableTrialSessionWorkingCopyMetaHeader.tsx');
-const {
-  PrintableWorkingCopySessionList,
-} = require('../pdfGenerator/documentTemplates/PrintableWorkingCopySessionList.tsx');
-const {
-  ReceiptOfFiling,
-} = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.tsx');
-const {
-  ReportsMetaHeader,
-} = require('../pdfGenerator/components/ReportsMetaHeader.tsx');
-const {
-  StandingPretrialOrder,
-} = require('../pdfGenerator/documentTemplates/StandingPretrialOrder.tsx');
-const {
-  StandingPretrialOrderForSmallCase,
-} = require('../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase.tsx');
-const {
-  TrialCalendar,
-} = require('../pdfGenerator/documentTemplates/TrialCalendar.tsx');
-const {
-  TrialSessionPlanningReport,
-} = require('../pdfGenerator/documentTemplates/TrialSessionPlanningReport.tsx');
-const { Order } = require('../pdfGenerator/documentTemplates/Order.tsx');
+import { AddressLabelCoverSheet } from '../pdfGenerator/documentTemplates/AddressLabelCoverSheet';
+import { CaseInventoryReport } from '../pdfGenerator/documentTemplates/CaseInventoryReport';
+import { ChangeOfAddress } from '../pdfGenerator/documentTemplates/ChangeOfAddress';
+import { CoverSheet } from '../pdfGenerator/documentTemplates/CoverSheet';
+import { DatePrintedFooter } from '../pdfGenerator/components/DatePrintedFooter';
+import { DateServedFooter } from '../pdfGenerator/components/DateServedFooter';
+import { DocketRecord } from '../pdfGenerator/documentTemplates/DocketRecord';
+import { GettingReadyForTrialChecklist } from '../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist';
+import { NoticeOfChangeOfTrialJudge } from '../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge';
+import { NoticeOfChangeToInPersonProceeding } from '../pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
+import { NoticeOfChangeToRemoteProceeding } from '../pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding';
+import { NoticeOfDocketChange } from '../pdfGenerator/documentTemplates/NoticeOfDocketChange';
+import { NoticeOfReceiptOfPetition } from '../pdfGenerator/documentTemplates/NoticeOfReceiptOfPetition';
+import { NoticeOfTrialIssued } from '../pdfGenerator/documentTemplates/NoticeOfTrialIssued';
+import { NoticeOfTrialIssuedInPerson } from '../pdfGenerator/documentTemplates/NoticeOfTrialIssuedInPerson';
+import { Order } from '../pdfGenerator/documentTemplates/Order';
+import { PageMetaHeaderDocket } from '../pdfGenerator/components/PageMetaHeaderDocket';
+import { PendingReport } from '../pdfGenerator/documentTemplates/PendingReport';
+import { PractitionerCaseList } from '../pdfGenerator/documentTemplates/PractitionerCaseList';
+import { PretrialMemorandum } from '../pdfGenerator/components/PretrialMemorandum';
+import { PrintableTrialSessionWorkingCopyMetaHeader } from '../pdfGenerator/components/PrintableTrialSessionWorkingCopyMetaHeader';
+import { PrintableWorkingCopySessionList } from '../pdfGenerator/documentTemplates/PrintableWorkingCopySessionList';
+import { ReceiptOfFiling } from '../pdfGenerator/documentTemplates/ReceiptOfFiling';
+import { ReportsMetaHeader } from '../pdfGenerator/components/ReportsMetaHeader';
+import { StandingPretrialOrder } from '../pdfGenerator/documentTemplates/StandingPretrialOrder';
+import { StandingPretrialOrderForSmallCase } from '../pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase';
+import { TrialCalendar } from '../pdfGenerator/documentTemplates/TrialCalendar';
+import { TrialSessionPlanningReport } from '../pdfGenerator/documentTemplates/TrialSessionPlanningReport';
 
 // Emails
-const {
-  BouncedEmailAlert,
-} = require('../emailGenerator/emailTemplates/BouncedEmailAlert.tsx');
-const {
-  DocumentService,
-} = require('../emailGenerator/emailTemplates/DocumentService.tsx');
-const {
-  PetitionService,
-} = require('../emailGenerator/emailTemplates/PetitionService.tsx');
+import { BouncedEmailAlert } from '../emailGenerator/emailTemplates/BouncedEmailAlert';
+import { DocumentService } from '../emailGenerator/emailTemplates/DocumentService';
+import { PetitionService } from '../emailGenerator/emailTemplates/PetitionService';
+import React from 'react';
+import ReactDOM from 'react-dom/server';
 
-const React = require('react');
-const ReactDOM = require('react-dom/server');
+babelRegister({
+  extensions: [''],
+  presets: ['@babel/preset-react', '@babel/preset-env'],
+});
 
 const components = {
   AddressLabelCoverSheet,
@@ -134,14 +75,19 @@ const components = {
   StandingPretrialOrderForSmallCase,
   TrialCalendar,
   TrialSessionPlanningReport,
-};
+} as const;
 
-const reactTemplateGenerator = ({ componentName, data = {} }) => {
+export const reactTemplateGenerator = ({
+  componentName,
+  data = {},
+}: {
+  componentName: keyof typeof components;
+  data: any;
+}) => {
+  const reactComponent: any = components[componentName];
   const componentTemplate = ReactDOM.renderToString(
-    React.createElement(components[componentName], data),
+    React.createElement(reactComponent, data),
   );
 
   return componentTemplate;
 };
-
-module.exports = { reactTemplateGenerator };

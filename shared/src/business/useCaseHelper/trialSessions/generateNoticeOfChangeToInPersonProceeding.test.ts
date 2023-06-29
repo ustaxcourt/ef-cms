@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generateNoticeOfChangeToInPersonProceeding,
-} = require('./generateNoticeOfChangeToInPersonProceeding');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateNoticeOfChangeToInPersonProceeding } from './generateNoticeOfChangeToInPersonProceeding';
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {
   const mockTrialSessionInformation = {

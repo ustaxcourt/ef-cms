@@ -1,9 +1,9 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const handleInvalidScannerSourceAction = async ({
   applicationContext,
   store,
-}) => {
+}: ActionProps) => {
   await applicationContext
     .getUseCases()
     .removeItemInteractor(applicationContext, {

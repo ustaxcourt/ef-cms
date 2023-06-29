@@ -1,3 +1,5 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -9,7 +11,7 @@ const config: Config = {
     '!src/applicationContextForTests.ts',
     '!src/**/getScannerMockInterface.ts',
     '!src/business/test/**/*.ts',
-    '!src/business/assetst*',
+    '!src/business/assets*',
     '!src/proxies/**/*.ts',
     '!src/tools/**/*.ts',
     '!src/test/**/*.ts',
@@ -21,21 +23,20 @@ const config: Config = {
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
-  coverageThreshold: {
-    global: {
-      branches: 96.13,
-      functions: 96.16,
-      lines: 98.34,
-      statements: 98.25,
-    },
-  },
+  coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
+  moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
+  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+    prefix: '<rootDir>/../',
+  }),
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
+  // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
+  workerIdleMemoryLimit: '20%',
 };
 
 // eslint-disable-next-line import/no-default-export

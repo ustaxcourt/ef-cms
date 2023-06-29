@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * add supporting document to form for either primary or secondary doc
@@ -9,7 +9,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const addSupportingDocumentToFormAction = ({ get, props, store }) => {
+export const addSupportingDocumentToFormAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const { type } = props;
 
   if (type === 'primary') {

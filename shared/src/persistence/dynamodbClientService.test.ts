@@ -1,9 +1,8 @@
-const {
-  applicationContext,
-} = require('../business/test/createTestApplicationContext');
-const {
+import { applicationContext } from '../business/test/createTestApplicationContext';
+import {
   batchDelete,
   batchGet,
+  remove as deleteObj,
   describeDeployTable,
   describeTable,
   get,
@@ -11,12 +10,11 @@ const {
   put,
   query,
   queryFull,
-  remove: deleteObj,
   scan,
   update,
   updateConsistent,
   updateToDeployTable,
-} = require('./dynamodbClientService');
+} from './dynamodbClientService';
 
 describe('dynamodbClientService', function () {
   const MOCK_ITEM = {

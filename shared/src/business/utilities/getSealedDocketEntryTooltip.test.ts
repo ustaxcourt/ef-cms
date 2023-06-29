@@ -1,8 +1,6 @@
-const {
-  getSealedDocketEntryTooltip,
-} = require('./getSealedDocketEntryTooltip');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DOCKET_ENTRY_SEALED_TO_TYPES } = require('../entities/EntityConstants');
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getSealedDocketEntryTooltip } from './getSealedDocketEntryTooltip';
 
 describe('getSealedDocketEntryTooltip', () => {
   it('returns "Sealed to the public" when the docket entry has been sealed to the public', () => {

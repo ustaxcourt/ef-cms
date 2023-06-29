@@ -1,9 +1,8 @@
 import { map } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * get the caseDetail pendingEmails attribute
- *
  * @param {object} providers.applicationContext the applicationContext
  * @param {function} providers.get the cerebral get
  * @returns {object} an object containing pending emails with their associated contactId
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getPendingEmailsOnCaseAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   let pendingEmails = {};
 
   const { irsPractitioners, petitioners, privatePractitioners } = get(

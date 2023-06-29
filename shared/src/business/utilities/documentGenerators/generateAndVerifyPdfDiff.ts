@@ -1,15 +1,12 @@
-const fs = require('fs');
-const path = require('path');
-const pixelmatch = require('pixelmatch');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const { fromPath } = require('pdf2pic');
-const { getChromiumBrowser } = require('../getChromiumBrowser');
-const { PNG } = require('pngjs');
+import { PNG } from 'pngjs';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fromPath } from 'pdf2pic';
+import { generatePdfFromHtmlHelper } from '../../useCaseHelper/generatePdfFromHtmlHelper';
+import { generatePdfFromHtmlInteractor } from '../../useCases/generatePdfFromHtmlInteractor';
+import { getChromiumBrowser } from '../getChromiumBrowser';
+import fs from 'fs';
+import path from 'path';
+import pixelmatch from 'pixelmatch';
 
 const convertPdfPageToImageFile = async ({ fileName, pageNumber }) => {
   const outputPath = './shared/test-output/document-generation';
@@ -62,19 +59,15 @@ export const generateAndVerifyPdfDiff = ({
   );
 
   beforeAll(() => {
-    fs.mkdirSync(testOutputPath, { recursive: true }, err => {
-      if (err) throw err;
-    });
+    fs.mkdirSync(testOutputPath, { recursive: true });
 
-    applicationContext.getChromiumBrowser.mockImplementation(
-      getChromiumBrowser,
-    );
+    applicationContext.getChromiumBrowser = getChromiumBrowser as any;
 
-    applicationContext
-      .getUseCases()
-      .generatePdfFromHtmlInteractor.mockImplementation(
-        generatePdfFromHtmlInteractor,
-      );
+    applicationContext.getUseCaseHelpers().generatePdfFromHtmlHelper =
+      generatePdfFromHtmlHelper;
+
+    applicationContext.getUseCases().generatePdfFromHtmlInteractor =
+      generatePdfFromHtmlInteractor as any;
 
     applicationContext.getUtilities().formatNow = () => '01/15/22';
   });

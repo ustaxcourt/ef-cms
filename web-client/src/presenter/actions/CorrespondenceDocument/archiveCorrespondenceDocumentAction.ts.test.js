@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentAction } from './archiveCorrespondenceDocumentAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('archiveCorrespondenceDocumentAction', () => {
   const successStub = jest.fn();

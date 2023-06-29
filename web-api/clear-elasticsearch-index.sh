@@ -17,4 +17,4 @@
 [ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
 [ -z "${ELASTICSEARCH_ENDPOINT}" ] && echo "You must have ELASTICSEARCH_ENDPOINT set in your environment" && exit 1
 
-npx ts-node ./web-api/delete-elasticsearch-index.js
+npx ts-node --transpile-only ./web-api/delete-elasticsearch-index.js

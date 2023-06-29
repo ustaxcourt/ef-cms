@@ -5,7 +5,7 @@
  * @param {string} pdfData the pdfData
  */
 
-const uploadToS3 = ({ applicationContext, pdfData, pdfName }) =>
+export const uploadToS3 = ({ applicationContext, pdfData, pdfName }) =>
   new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
@@ -29,7 +29,3 @@ const uploadToS3 = ({ applicationContext, pdfData, pdfName }) =>
       resolve();
     });
   });
-
-module.exports = {
-  uploadToS3,
-};

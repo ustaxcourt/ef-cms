@@ -1,6 +1,6 @@
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
-const getCognitoLoginUrl = () => {
+export const getCognitoLoginUrl = () => {
   if (process.env.COGNITO) {
     return 'https://auth-dev-flexion-efcms.auth.us-east-1.amazoncognito.com/login?response_type=code&client_id=6tu6j1stv5ugcut7dqsqdurn8q&redirect_uri=http%3A//localhost:1234/log-in';
   } else {
@@ -11,39 +11,32 @@ const getCognitoLoginUrl = () => {
   }
 };
 
-const getEnvironment = () => ({
+export const getEnvironment = () => ({
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   stage: process.env.STAGE || 'local',
 });
 
-const getPublicSiteUrl = () => {
+export const getPublicSiteUrl = () => {
   return process.env.PUBLIC_SITE_URL || 'http://localhost:5678';
 };
 
-const getUniqueId = () => {
+export const getUniqueId = () => {
   return uuidv4();
 };
 
-const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
+export const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
 
-module.exports = {
-  ERROR_MAP_429: {
-    'advanced-query-limiter': {
-      message: 'Please wait 1 minute before trying your search again',
-      title: 'Search is experiencing high traffic',
-    },
-    'ip-limiter': {
-      message: 'Please wait 1 minute before trying your search again.',
-      title: "You've reached your search limit",
-    },
-    'user-id-limiter': {
-      message: 'Please wait 1 minute before trying your search again',
-      title: 'Search is experiencing high traffic',
-    },
+export const ERROR_MAP_429 = {
+  'advanced-query-limiter': {
+    message: 'Please wait 1 minute before trying your search again',
+    title: 'Search is experiencing high traffic',
   },
-  clerkOfCourtNameForSigning,
-  getCognitoLoginUrl,
-  getEnvironment,
-  getPublicSiteUrl,
-  getUniqueId,
+  'ip-limiter': {
+    message: 'Please wait 1 minute before trying your search again.',
+    title: "You've reached your search limit",
+  },
+  'user-id-limiter': {
+    message: 'Please wait 1 minute before trying your search again',
+    title: 'Search is experiencing high traffic',
+  },
 };

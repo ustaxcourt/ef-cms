@@ -4,7 +4,13 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
 } from '../entities/EntityConstants';
-import { MOCK_PRACTITIONER, MOCK_USERS } from '../../test/mockUsers';
+import {
+  MOCK_PRACTITIONER,
+  docketClerkUser,
+  petitionerUser,
+  petitionsClerkUser,
+  privatePractitionerUser,
+} from '../../test/mockUsers';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 
@@ -51,9 +57,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       privatePractitioners: [],
     };
 
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'],
-    );
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
@@ -108,7 +112,7 @@ describe('generateDocketRecordPdfInteractor', () => {
 
   it('sets counsel name to `None` when there is no counsel representing the petitioner', async () => {
     const mockPractitionerOnCase = {
-      ...MOCK_PRACTITIONER,
+      ...privatePractitionerUser,
       representing: ['b4302f61-2cff-4a57-bacf-1f817ffbaf8d'],
     };
 
@@ -151,9 +155,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('throws an Unauthorized error for an unassociated user attempting to view a sealed case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'], //privatePractitioner
-    );
+    applicationContext.getCurrentUser.mockReturnValue(privatePractitionerUser);
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -193,9 +195,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an internal user attempting to view a sealed case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['c7d90c05-f6cd-442c-a168-202db587f16f'], //petitionsClerk
-    );
+    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -214,9 +214,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an external, associated user attempting to view a sealed case', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'], //petitioner
-    );
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
@@ -224,11 +222,31 @@ describe('generateDocketRecordPdfInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...caseDetail,
-        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f', //petitioner
+        userId: petitionerUser.userId,
       });
 
     const result = await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
+    } as any);
+
+    expect(result).toEqual(mockPdfUrlAndID);
+  });
+
+  it('returns a PDF url for an external, indirectly associated user attempting to view a sealed case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...caseDetail,
+        userId: petitionerUser.userId,
+      });
+
+    const result = await generateDocketRecordPdfInteractor(applicationContext, {
+      docketNumber: caseDetail.docketNumber,
+      isIndirectlyAssociated: true,
     } as any);
 
     expect(result).toEqual(mockPdfUrlAndID);

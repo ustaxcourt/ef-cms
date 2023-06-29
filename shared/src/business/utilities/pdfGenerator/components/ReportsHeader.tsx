@@ -1,4 +1,4 @@
-const React = require('react');
+import React from 'react';
 
 export const ReportsHeader = ({ subtitle, title }) => {
   return (

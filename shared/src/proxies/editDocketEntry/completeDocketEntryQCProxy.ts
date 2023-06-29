@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * completeDocketEntryQCInteractorProxy
@@ -8,7 +8,7 @@ const { put } = require('../requests');
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.completeDocketEntryQCInteractor = (
+export const completeDocketEntryQCInteractor = (
   applicationContext,
   { entryMetadata },
 ) => {

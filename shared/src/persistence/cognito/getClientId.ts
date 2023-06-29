@@ -1,6 +1,6 @@
-const AWS = require('aws-sdk');
+import AWS from 'aws-sdk';
 
-exports.getClientId = async ({ userPoolId }) => {
+export const getClientId = async ({ userPoolId }) => {
   const cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider(
     { region: 'us-east-1' },
   );

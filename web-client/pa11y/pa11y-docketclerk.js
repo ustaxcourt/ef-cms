@@ -2,8 +2,8 @@ module.exports = [
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/',
   {
     actions: [
-      'wait for td.message-select-control>label to be visible',
-      'click element td.message-select-control>label',
+      'wait for td.message-select-control .usa-checkbox>label to be visible',
+      'click element td.message-select-control .usa-checkbox>label',
       'wait for .action-section to be visible',
     ],
     notes: 'checks a11y of section queue tab panel',
@@ -291,5 +291,16 @@ module.exports = [
     notes:
       'checks a11y of ConfirmInitiatePaperFilingServiceModal on paper filing for a consolidated group',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19',
+  },
+  {
+    actions: [
+      'wait for table#custom-case-report-table to be visible',
+      'set field #caseCreationStartDate-date-start to 04/19/1980',
+      'set field #caseCreationEndDate-date-end to 04/19/2023',
+      'click element #run-custom-case-report',
+      'wait for #custom-case-report-table-body to be visible',
+    ],
+    notes: 'checks a11y of Custom Case Inventory Report',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/custom-case',
   },
 ];

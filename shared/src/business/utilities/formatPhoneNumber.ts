@@ -4,7 +4,7 @@
  * @param {string} phone the phone number to format
  * @returns {string|void} the formatted string
  */
-exports.formatPhoneNumber = function (phone) {
+export const formatPhoneNumber = function (phone) {
   if (!phone) return;
 
   if (phone.match(/^\d{10}$/)) {

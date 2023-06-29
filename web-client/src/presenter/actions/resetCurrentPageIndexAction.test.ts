@@ -1,5 +1,5 @@
 import { resetCurrentPageIndexAction } from './resetCurrentPageIndexAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetCurrentPageIndexAction', () => {
   it('resets the currentPageIndex back to 0', async () => {

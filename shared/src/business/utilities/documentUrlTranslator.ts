@@ -6,7 +6,7 @@
  * @param {object} applicationContext the application context
  * @returns {string} the translated URL
  */
-exports.documentUrlTranslator = ({
+export const documentUrlTranslator = ({
   applicationContext,
   documentUrl,
   useTempBucket,

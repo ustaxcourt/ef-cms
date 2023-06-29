@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * set the state for the delete user's notes modal
@@ -7,6 +7,9 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const setDeleteUserCaseNoteModalStateAction = ({ props, store }) => {
+export const setDeleteUserCaseNoteModalStateAction = ({
+  props,
+  store,
+}: ActionProps) => {
   store.set(state.modal.docketNumber, props.docketNumber);
 };

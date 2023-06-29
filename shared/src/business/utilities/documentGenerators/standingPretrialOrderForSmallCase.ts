@@ -1,10 +1,8 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { combineTwoPdfs } = require('./combineTwoPdfs');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { combineTwoPdfs } from './combineTwoPdfs';
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const standingPretrialOrderForSmallCase = async ({
+export const standingPretrialOrderForSmallCase = async ({
   applicationContext,
   data,
 }) => {
@@ -77,8 +75,4 @@ const standingPretrialOrderForSmallCase = async ({
     firstPdf: new Uint8Array(pdfWithHeader),
     secondPdf: new Uint8Array(pdfWithoutHeader),
   });
-};
-
-module.exports = {
-  standingPretrialOrderForSmallCase,
 };

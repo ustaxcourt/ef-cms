@@ -1,15 +1,13 @@
 import { navigateToDocumentQCAction } from './navigateToDocumentQCAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('navigateToDocumentQCAction', () => {
-  let routeStub;
+  const mockRouter = jest.fn();
 
   beforeAll(() => {
-    routeStub = jest.fn();
-
     presenter.providers.router = {
-      route: routeStub,
+      route: mockRouter,
     };
   });
 
@@ -20,6 +18,6 @@ describe('navigateToDocumentQCAction', () => {
       },
     });
 
-    expect(routeStub).toHaveBeenCalledWith('/document-qc/my/inbox');
+    expect(mockRouter).toHaveBeenCalledWith('/document-qc/my/inbox');
   });
 });

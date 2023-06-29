@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
-} = require('../../entities/EntityConstants');
-const { changeOfAddress, computeChangeOptions } = require('./changeOfAddress');
+import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { changeOfAddress, computeChangeOptions } from './changeOfAddress';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('changeOfAddress', () => {

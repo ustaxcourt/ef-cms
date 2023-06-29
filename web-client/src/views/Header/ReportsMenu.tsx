@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -10,7 +11,7 @@ export const ReportsMenu = connect(
       sequences.openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
-    pageIsReports: state.headerHelper.pageIsReports,
+    reportMenuHelper: state.reportMenuHelper,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     toggleMenuSequence: sequences.toggleMenuSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
@@ -19,7 +20,7 @@ export const ReportsMenu = connect(
     isExpanded,
     openCaseInventoryReportModalSequence,
     openTrialSessionPlanningModalSequence,
-    pageIsReports,
+    reportMenuHelper,
     resetHeaderAccordionsSequence,
     toggleMenuSequence,
     toggleMobileMenuSequence,
@@ -30,7 +31,7 @@ export const ReportsMenu = connect(
           aria-expanded={isExpanded}
           className={classNames(
             'usa-accordion__button usa-nav__link',
-            pageIsReports && 'usa-current',
+            reportMenuHelper.pageIsReports && 'usa-current',
           )}
           id="reports-btn"
           onClick={() => {
@@ -41,6 +42,19 @@ export const ReportsMenu = connect(
         </button>
         {isExpanded && (
           <ul className="usa-nav__submenu">
+            {reportMenuHelper.showActivityReport && (
+              <li className="usa-nav__submenu-item">
+                <a
+                  href="/reports/judge-activity-report"
+                  onClick={() => {
+                    resetHeaderAccordionsSequence();
+                    toggleMobileMenuSequence();
+                  }}
+                >
+                  Activity
+                </a>
+              </li>
+            )}
             <li className="usa-nav__submenu-item">
               <Button
                 link
@@ -53,6 +67,18 @@ export const ReportsMenu = connect(
               >
                 Case Inventory
               </Button>
+            </li>
+            <li className="usa-nav__submenu-item">
+              <a
+                href="/reports/custom-case"
+                id="custom-case-report-btn"
+                onClick={() => {
+                  resetHeaderAccordionsSequence();
+                  toggleMobileMenuSequence();
+                }}
+              >
+                Custom Case Report
+              </a>
             </li>
             <li className="usa-nav__submenu-item">
               <a

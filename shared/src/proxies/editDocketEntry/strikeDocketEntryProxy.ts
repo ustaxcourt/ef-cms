@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * strikeDocketEntryInteractor proxy
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {object} providers.docketEntryId the docketEntryId to be stricken
  * @returns {Promise<*>} the promise of the api call
  */
-exports.strikeDocketEntryInteractor = (
+export const strikeDocketEntryInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

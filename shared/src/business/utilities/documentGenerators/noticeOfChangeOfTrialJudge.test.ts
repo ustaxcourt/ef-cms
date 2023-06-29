@@ -1,12 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { noticeOfChangeOfTrialJudge } = require('./noticeOfChangeOfTrialJudge');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfChangeOfTrialJudge } from './noticeOfChangeOfTrialJudge';
 
 describe('noticeOfChangeOfTrialJudge', () => {
   generateAndVerifyPdfDiff({

@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * generatePrintableTrialSessionCopyReportInteractorProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketNumber the optional trialSessionId filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePrintableTrialSessionCopyReportInteractor = (
+export const generatePrintableTrialSessionCopyReportInteractor = (
   applicationContext,
   {
     filters,

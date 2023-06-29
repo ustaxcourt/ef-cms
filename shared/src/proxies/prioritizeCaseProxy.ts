@@ -1,4 +1,4 @@
-const { post } = require('./requests');
+import { post } from './requests';
 
 /**
  * prioritizeCaseInteractor
@@ -9,7 +9,7 @@ const { post } = require('./requests');
  * @param {object} providers.reason the reason the case was set as high priority
  * @returns {Promise<*>} the promise of the api call
  */
-exports.prioritizeCaseInteractor = (
+export const prioritizeCaseInteractor = (
   applicationContext,
   { docketNumber, reason },
 ) => {

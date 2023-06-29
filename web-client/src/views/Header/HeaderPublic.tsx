@@ -1,9 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import closeImg from '../../../../node_modules/uswds/dist/img/close.svg';
-import seal from '../../images/ustc_seal.svg';
+import closeImg from '../../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
+const seal = require('../../images/ustc_seal.svg') as string;
 
 const BetaBar = toggleBetaBarSequence => {
   return (
@@ -20,11 +21,7 @@ const BetaBar = toggleBetaBarSequence => {
               className="button-icon float-right"
               onClick={() => toggleBetaBarSequence()}
             >
-              <img
-                alt="close"
-                className="ustc-icon-square--small"
-                src={closeImg}
-              />
+              <img alt="close" src={closeImg} />
             </button>
           </div>
         </div>

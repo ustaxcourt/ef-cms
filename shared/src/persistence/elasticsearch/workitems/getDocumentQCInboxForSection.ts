@@ -1,7 +1,7 @@
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
-const { search } = require('../searchClient');
+import { GET_PARENT_CASE } from '../helpers/searchClauses';
+import { search } from '../searchClient';
 
-exports.getDocumentQCInboxForSection = async ({
+export const getDocumentQCInboxForSection = async ({
   applicationContext,
   judgeUserName,
   section,

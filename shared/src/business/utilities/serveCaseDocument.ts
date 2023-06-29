@@ -1,7 +1,4 @@
-const {
-  INITIAL_DOCUMENT_TYPES,
-  ROLES,
-} = require('../entities/EntityConstants');
+import { INITIAL_DOCUMENT_TYPES, ROLES } from '../entities/EntityConstants';
 
 /**
  *
@@ -10,7 +7,7 @@ const {
  * @param {string} initialDocumentTypeKey the initialDocumentTypeKey
  */
 
-const serveCaseDocument = async ({
+export const serveCaseDocument = async ({
   applicationContext,
   caseEntity,
   initialDocumentTypeKey,
@@ -53,8 +50,4 @@ const serveCaseDocument = async ({
       });
     }
   }
-};
-
-module.exports = {
-  serveCaseDocument,
 };

@@ -1,7 +1,7 @@
+import { DocketHeader } from '../components/DocketHeader.tsx';
 import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants';
-const React = require('react');
-const { DocketHeader } = require('../components/DocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import React from 'react';
 
 export const NoticeOfChangeOfTrialJudge = ({
   caseCaptionExtension,

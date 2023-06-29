@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateCourtIssuedDocketEntryProxy
@@ -8,7 +8,7 @@ const { put } = require('../requests');
  * @param {object} providers.documentMeta the document data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCourtIssuedDocketEntryInteractor = (
+export const updateCourtIssuedDocketEntryInteractor = (
   applicationContext,
   { documentMeta },
 ) => {

@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .header-public {
   @media only screen and (max-width: $large-screen) {
     margin-bottom: 44px;
@@ -26,17 +29,17 @@
         display: none;
       }
 
-      @media only screen and (max-width: 1150px) {
+      @media only screen and (width <= 1150px) {
         font-size: 26px;
         line-height: 2.8em;
       }
 
-      @media only screen and (max-width: 1000px) {
+      @media only screen and (width <= 1000px) {
         font-size: 18px;
         line-height: 4.3em;
       }
 
-      @media only screen and (max-width: 750px) {
+      @media only screen and (width <= 750px) {
         font-size: 14px;
         line-height: 5.3em;
       }

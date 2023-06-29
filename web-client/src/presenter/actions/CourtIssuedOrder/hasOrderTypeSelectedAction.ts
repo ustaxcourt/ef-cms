@@ -6,7 +6,7 @@
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
  * @returns {object} the path to execute
  */
-export const hasOrderTypeSelectedAction = ({ path, props }) => {
+export const hasOrderTypeSelectedAction = ({ path, props }: ActionProps) => {
   const { docketNumber, eventCode } = props;
   if (eventCode) {
     return path['proceed']();

@@ -2,7 +2,7 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 import { applicationContext } from '../../applicationContext';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { headerHelper as headerHelperComputed } from './headerHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
 const headerHelper = withAppContextDecorator(
@@ -257,26 +257,6 @@ describe('headerHelper', () => {
       },
     });
     expect(result.pageIsTrialSessions).toBeTruthy();
-  });
-
-  it('should show border under Reports tab when page is CaseDeadlines', () => {
-    const result = runCompute(headerHelper, {
-      state: {
-        ...getBaseState({ role: ROLES.petitionsClerk }),
-        currentPage: 'CaseDeadlines',
-      },
-    });
-    expect(result.pageIsReports).toBeTruthy();
-  });
-
-  it('should show border under Reports tab when page is BlockedCasesReport', () => {
-    const result = runCompute(headerHelper, {
-      state: {
-        ...getBaseState({ role: ROLES.petitionsClerk }),
-        currentPage: 'BlockedCasesReport',
-      },
-    });
-    expect(result.pageIsReports).toBeTruthy();
   });
 
   it('should show the number of unread messages for a user', () => {

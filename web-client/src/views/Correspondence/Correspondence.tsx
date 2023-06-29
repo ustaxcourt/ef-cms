@@ -3,7 +3,8 @@ import { CorrespondenceHeader } from './CorrespondenceHeader';
 import { CorrespondenceViewerCorrespondence } from './CorrespondenceViewerCorrespondence';
 import { DeleteCorrespondenceModal } from './DeleteCorrespondenceModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
 

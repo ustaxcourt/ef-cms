@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { documentServiceEmail } = require('./documentServiceEmail');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { documentServiceEmail } from './documentServiceEmail';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('documentServiceEmail', () => {

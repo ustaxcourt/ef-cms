@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createCourtIssuedOrderPdfFromHtmlInteractor
@@ -12,7 +12,7 @@ const { post } = require('../requests');
  * @param {string} providers.signatureText (optional) text to be used as the signatory of the document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createCourtIssuedOrderPdfFromHtmlInteractor = (
+export const createCourtIssuedOrderPdfFromHtmlInteractor = (
   applicationContext,
   {
     addedDocketNumbers,

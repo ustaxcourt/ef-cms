@@ -1,18 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CONTACT_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  updateInitialFilingDocuments,
-} = require('./updateInitialFilingDocuments');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+} from '../../entities/EntityConstants';
+import { Case, getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateInitialFilingDocuments } from './updateInitialFilingDocuments';
 
 describe('addNewInitialFilingToCase', () => {
   const mockRQT = {

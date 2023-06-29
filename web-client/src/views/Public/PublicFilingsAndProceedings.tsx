@@ -1,6 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -45,10 +47,6 @@ export const PublicFilingsAndProceedings = connect(
           </span>
 
           <span>{entry.signatory}</span>
-
-          <span className="filings-and-proceedings">
-            {entry.filingsAndProceedingsWithAdditionalInfo}
-          </span>
         </span>
 
         {entry.isStricken && <span> (STRICKEN)</span>}

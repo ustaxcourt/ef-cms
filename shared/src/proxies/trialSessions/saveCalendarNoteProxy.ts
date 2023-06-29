@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * saveCalendarNoteInteractor
@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {string} providers.trialSessionId the id of the trial session containing the case with the note
  * @returns {Promise<*>} the promise of the api call
  */
-exports.saveCalendarNoteInteractor = (
+export const saveCalendarNoteInteractor = (
   applicationContext,
   { calendarNote, docketNumber, trialSessionId },
 ) => {

@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../../../web-client/src/applicationContext');
-const { sortDocketEntries } = require('./getFormattedCaseDetail');
+import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { sortDocketEntries } from './getFormattedCaseDetail';
 
 describe('sortDocketEntries', () => {
   const getDateISO = () =>

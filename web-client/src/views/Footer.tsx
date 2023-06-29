@@ -1,33 +1,54 @@
 /* eslint-disable react/jsx-no-target-blank */
+
 import { Button } from '../ustc-ui/Button/Button';
 import { DeployedDate } from './DeployedDate';
-import { Icon } from '../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
-import React from 'react';
-import seal from '../images/ustc_seal.svg';
+import React, { useEffect, useState } from 'react';
+import classNames from 'classnames';
+const seal = require('../images/ustc_seal.svg') as string;
 
-const ScrollToTopButton = () => {
+function ScrollToTopButton() {
+  const [scroll, setScroll] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScroll(window.scrollY > 50);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [scroll]);
+
+  const [bounceOutBtn, setBounceOutBtn] = useState(false);
+
+  const setBounceOutToTrue = () => {
+    setBounceOutBtn(true);
+  };
+
   return (
     <Button
-      link
-      className="usa-footer__primary-link inline-block text-left margin-top-1"
-      overrideMargin={true}
-      onClick={e => {
-        e.preventDefault();
-        window.scrollTo(0, 0);
+      aria-label="return to top"
+      className={classNames(
+        'animated',
+        'scroll-to-top',
+        scroll ? 'bounce-in-up' : '',
+        bounceOutBtn ? 'bounce-out-down' : 'display-none',
+      )}
+      icon="chevron-up"
+      noMargin={true}
+      overrideMargin="margin-right-0"
+      size="xs"
+      onClick={() => {
+        setBounceOutToTrue();
+        window.scrollTo({
+          behavior: 'smooth',
+          top: 0,
+        });
       }}
-    >
-      <Icon
-        aria-label="return to top"
-        className="margin-right-1"
-        icon={['fas', 'long-arrow-alt-up']}
-        size="1x"
-      />{' '}
-      Return to top
-    </Button>
+    ></Button>
   );
-};
+}
 
 export const Footer = connect(
   {
@@ -53,7 +74,7 @@ export const Footer = connect(
                         </li>
                         <li className="usa-footer__primary-content">
                           <a
-                            className="usa-footer__primary-link usa-link--external"
+                            className="usa-footer__primary-link usa-link--external display-block"
                             href="https://www.ustaxcourt.gov/release_notes.html"
                             target="_blank"
                           >
@@ -62,7 +83,7 @@ export const Footer = connect(
                         </li>
                         <li className="usa-footer__primary-content">
                           <a
-                            className="usa-footer__primary-link usa-link--external"
+                            className="usa-footer__primary-link usa-link--external display-block"
                             href="https://ustaxcourt.gov/dawson.html"
                             target="_blank"
                           >

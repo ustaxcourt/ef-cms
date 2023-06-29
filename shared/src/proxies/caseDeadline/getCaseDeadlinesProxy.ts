@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getCaseDeadlinesInteractorProxy
@@ -9,7 +9,7 @@ const { get } = require('../requests');
  * @param {string} providers.startDate the start date
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getCaseDeadlinesInteractor = (
+export const getCaseDeadlinesInteractor = (
   applicationContext,
   { endDate, judge, page = 1, startDate },
 ) => {

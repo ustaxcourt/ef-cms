@@ -1,10 +1,10 @@
 /* eslint-disable complexity */
-import { state } from 'cerebral';
+
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets state.trialSessionWorkCopy.filters based on the props.key
  * and props.value passed in
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
@@ -15,7 +15,7 @@ export const computeTrialSessionWorkingCopyFilterValuesAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const filters = get(state.trialSessionWorkingCopy.filters);
 
   if (props.key) {

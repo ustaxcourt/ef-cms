@@ -1,4 +1,4 @@
-const { put } = require('./requests');
+import { put } from './requests';
 
 /**
  * updateContactInteractor
@@ -9,7 +9,7 @@ const { put } = require('./requests');
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateContactInteractor = (
+export const updateContactInteractor = (
   applicationContext,
   { contactInfo, docketNumber },
 ) => {

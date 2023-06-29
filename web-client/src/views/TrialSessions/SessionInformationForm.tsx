@@ -1,7 +1,8 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -84,6 +85,7 @@ export const SessionInformationForm = connect(
                 }
                 id="start-date"
                 label="Start date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'startDateDay',
                   month: 'startDateMonth',
@@ -203,12 +205,13 @@ export const SessionInformationForm = connect(
                 }
                 id="estimated-end-date"
                 label="Estimated end date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'estimatedEndDateDay',
                   month: 'estimatedEndDateMonth',
                   year: 'estimatedEndDateYear',
                 }}
-                optional="true"
+                optional={true}
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
                 useHintNoWrap={true}

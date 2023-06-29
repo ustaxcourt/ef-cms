@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { documentUrlTranslator } = require('./documentUrlTranslator');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { documentUrlTranslator } from './documentUrlTranslator';
 
 describe('documentUrlTranslator', () => {
   const documentUrl =

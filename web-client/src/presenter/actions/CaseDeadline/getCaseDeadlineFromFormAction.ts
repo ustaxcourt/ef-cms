@@ -1,9 +1,8 @@
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * compute a case deadline
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -14,7 +13,7 @@ export const getCaseDeadlineFromFormAction = ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   let deadlineDate;
 
   if (props.computedDate) {
@@ -23,7 +22,9 @@ export const getCaseDeadlineFromFormAction = ({
       .createISODateString(props.computedDate);
   }
 
-  const { associatedJudge, docketNumber } = get(state.caseDetail);
+  const { associatedJudge, docketNumber, leadDocketNumber } = get(
+    state.caseDetail,
+  );
 
   const caseDeadline = omit(
     {
@@ -31,6 +32,7 @@ export const getCaseDeadlineFromFormAction = ({
       associatedJudge,
       deadlineDate,
       docketNumber,
+      leadDocketNumber,
     },
     ['day', 'month', 'year', 'searchError'],
   );

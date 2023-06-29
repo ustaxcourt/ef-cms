@@ -1,9 +1,8 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * generate document titles for filing documents
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const generateTitleForPaperFilingAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const documentMetadata = cloneDeep(get(state.form));
 
   const { INTERNAL_DOCUMENTS_ARRAY } = applicationContext.getConstants();

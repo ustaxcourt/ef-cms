@@ -1,12 +1,4 @@
-const {
-  calculateDifferenceInDays,
-  calculateISODate,
-  combineISOandEasternTime,
-  createISODateString,
-  formatDateString,
-  FORMATS,
-} = require('./DateHandler');
-const {
+import {
   CASE_STATUS_TYPES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
@@ -16,13 +8,21 @@ const {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
-} = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
-const { cloneDeep, isEmpty, sortBy } = require('lodash');
-const { isServed } = require('../entities/DocketEntry');
+} from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
+import {
+  FORMATS,
+  calculateDifferenceInDays,
+  calculateISODate,
+  combineISOandEasternTime,
+  createISODateString,
+  formatDateString,
+} from './DateHandler';
+import { cloneDeep, isEmpty, sortBy } from 'lodash';
 
-const TRANSCRIPT_AGE_DAYS_MIN = 90;
-const documentMeetsAgeRequirements = doc => {
+export const TRANSCRIPT_AGE_DAYS_MIN = 90;
+export const documentMeetsAgeRequirements = doc => {
   const transcriptCodes = [
     TRANSCRIPT_EVENT_CODE,
     CORRECTED_TRANSCRIPT_EVENT_CODE,
@@ -50,20 +50,20 @@ const computeIsInProgress = ({ formattedEntry }) => {
       !formattedEntry.isMinuteEntry &&
       !formattedEntry.isUnservable) ||
     (formattedEntry.isFileAttached === true &&
-      !isServed(formattedEntry) &&
+      !DocketEntry.isServed(formattedEntry) &&
       !formattedEntry.isUnservable)
   );
 };
 
 const computeIsNotServedDocument = ({ formattedEntry }) => {
   return (
-    !isServed(formattedEntry) &&
+    !DocketEntry.isServed(formattedEntry) &&
     !formattedEntry.isUnservable &&
     !formattedEntry.isMinuteEntry
   );
 };
 
-const formatDocketEntry = (applicationContext, docketEntry) => {
+export const formatDocketEntry = (applicationContext, docketEntry) => {
   const formattedEntry = cloneDeep(docketEntry);
 
   formattedEntry.servedAtFormatted = formatDateString(
@@ -153,10 +153,6 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
     .getUtilities()
     .getDescriptionDisplay(formattedEntry);
 
-  if (formattedEntry.additionalInfo && !formattedEntry.addToCoversheet) {
-    formattedEntry.additionalInfoDisplay = `${formattedEntry.additionalInfo}`;
-  }
-
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
   }
@@ -164,7 +160,7 @@ const formatDocketEntry = (applicationContext, docketEntry) => {
   return formattedEntry;
 };
 
-const getFilingsAndProceedings = formattedDocketEntry => {
+export const getFilingsAndProceedings = formattedDocketEntry => {
   //filings and proceedings string
   //(C/S 04/17/2019) (Exhibit(s)) (Attachment(s)) (Objection) (Lodged)
   const filingsAndProceedingsArray = [
@@ -189,7 +185,6 @@ const getFilingsAndProceedings = formattedDocketEntry => {
 
 /**
  * formats trial session fields for display
- *
  * @param {string} judgeName the name of the judge
  * @param {string} trialDate ISO-8601 GMT timestamp
  * @param {string} trialLocation location of the trial
@@ -285,7 +280,7 @@ const formatTrialSessionScheduling = ({
   }
 };
 
-const formatCase = (applicationContext, caseDetail) => {
+export const formatCase = (applicationContext, caseDetail) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
@@ -472,7 +467,7 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 };
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
-const sortUndefined = (a, b) => {
+export const sortUndefined = (a, b) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
   }
@@ -482,7 +477,7 @@ const sortUndefined = (a, b) => {
   }
 };
 
-const sortDocketEntries = (docketEntries = [], sortByString = '') => {
+export const sortDocketEntries = (docketEntries = [], sortByString = '') => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
   const isReversed = sortByString.includes('Desc');
   docketEntries.sort(sortFunc);
@@ -493,7 +488,7 @@ const sortDocketEntries = (docketEntries = [], sortByString = '') => {
   return docketEntries.sort(sortUndefined);
 };
 
-const getFormattedCaseDetail = ({
+export const getFormattedCaseDetail = ({
   applicationContext,
   caseDetail,
   docketRecordSort,
@@ -511,15 +506,4 @@ const getFormattedCaseDetail = ({
   result.docketRecordSort = docketRecordSort;
 
   return result;
-};
-
-module.exports = {
-  TRANSCRIPT_AGE_DAYS_MIN,
-  documentMeetsAgeRequirements,
-  formatCase,
-  formatDocketEntry,
-  getFilingsAndProceedings,
-  getFormattedCaseDetail,
-  sortDocketEntries,
-  sortUndefined,
 };

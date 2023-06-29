@@ -1,10 +1,9 @@
 import { clone } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**
  * submit advanced search form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const submitOrderAdvancedSearchAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const searchParams = clone(get(state.advancedSearchForm.orderSearch));
 
   if (searchParams.docketNumber) {

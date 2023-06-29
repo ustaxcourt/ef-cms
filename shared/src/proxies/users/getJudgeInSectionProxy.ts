@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getJudgeInSectionInteractor
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.section the section to find the judge in
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getJudgeInSectionInteractor = (applicationContext, { section }) => {
+export const getJudgeInSectionInteractor = (
+  applicationContext,
+  { section },
+) => {
   return get({
     applicationContext,
     endpoint: `/sections/${section}/judge`,

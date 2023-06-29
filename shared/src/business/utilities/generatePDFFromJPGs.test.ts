@@ -1,8 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { generatePDFFromJPGs } = require('./generatePDFFromJPGs');
-const { PDFDocument } = require('pdf-lib');
+import { PDFDocument } from 'pdf-lib';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { generatePDFFromJPGs } from './generatePDFFromJPGs';
+import fs from 'fs';
+import path from 'path';
 const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 const testOutputPath = path.join(__dirname, '../../../test-output/');
 

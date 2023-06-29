@@ -1,7 +1,7 @@
-const { chunk } = require('lodash');
-const { getIndexNameForRecord } = require('./getIndexNameForRecord');
+import { chunk } from 'lodash';
+import { getIndexNameForRecord } from './getIndexNameForRecord';
 
-exports.bulkIndexRecords = async ({ applicationContext, records }) => {
+export const bulkIndexRecords = async ({ applicationContext, records }) => {
   const searchClient = applicationContext.getSearchClient();
 
   const CHUNK_SIZE = 50;

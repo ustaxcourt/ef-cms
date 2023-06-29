@@ -1,6 +1,6 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const createOrderAction = ({ applicationContext, get }) => {
+export const createOrderAction = ({ applicationContext, get }: ActionProps) => {
   let richText = get(state.form.richText) || '';
   let documentTitle = (get(state.form.documentTitle) || '').toUpperCase();
   richText = richText.replace(

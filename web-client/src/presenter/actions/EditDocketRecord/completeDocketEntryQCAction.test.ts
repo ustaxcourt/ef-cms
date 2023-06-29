@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocketEntryQCAction } from './completeDocketEntryQCAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('completeDocketEntryQCAction', () => {
   const mockDocketEntryId = '123-456-789-abc';
@@ -13,16 +13,27 @@ describe('completeDocketEntryQCAction', () => {
     docketNumber: '123-45',
   };
 
+  let errorMock;
+  let successMock;
+
   beforeAll(() => {
+    errorMock = jest.fn();
+    successMock = jest.fn();
+
     applicationContext
       .getUseCases()
       .completeDocketEntryQCInteractor.mockReturnValue({ caseDetail });
 
     presenter.providers.applicationContext = applicationContext;
+
+    presenter.providers.path = {
+      error: errorMock,
+      success: successMock,
+    };
   });
 
   it('should call completeDocketEntryQCInteractor and return caseDetail', async () => {
-    const result = await runAction(completeDocketEntryQCAction, {
+    await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
       },
@@ -34,13 +45,12 @@ describe('completeDocketEntryQCAction', () => {
         },
       },
     });
-
     expect(
       applicationContext.getUseCases().completeDocketEntryQCInteractor.mock
         .calls.length,
     ).toEqual(1);
 
-    expect(result.output).toEqual({
+    expect(successMock.mock.calls[0][0]).toEqual({
       alertSuccess: {
         message: "bob's burgers has been completed.",
         title: 'QC Completed',
@@ -61,7 +71,7 @@ describe('completeDocketEntryQCAction', () => {
       additionalInfo: 'More title information',
     };
 
-    const { output } = await runAction(completeDocketEntryQCAction, {
+    await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
       },
@@ -74,7 +84,7 @@ describe('completeDocketEntryQCAction', () => {
       },
     });
 
-    expect(output.alertSuccess.message).toEqual(
+    expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
       "bob's burgers More title information has been completed.",
     );
   });
@@ -86,7 +96,7 @@ describe('completeDocketEntryQCAction', () => {
       additionalInfo: 'More title information',
     };
 
-    const { output } = await runAction(completeDocketEntryQCAction, {
+    await runAction(completeDocketEntryQCAction, {
       modules: {
         presenter,
       },
@@ -102,7 +112,7 @@ describe('completeDocketEntryQCAction', () => {
       },
     });
 
-    expect(output.alertSuccess.message).toEqual(
+    expect(successMock.mock.calls[0][0].alertSuccess.message).toEqual(
       "bob's burgers More title information QC completed and message sent.",
     );
   });

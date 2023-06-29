@@ -1,10 +1,8 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { combineTwoPdfs } = require('./combineTwoPdfs');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { combineTwoPdfs } from './combineTwoPdfs';
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const standingPretrialOrder = async ({ applicationContext, data }) => {
+export const standingPretrialOrder = async ({ applicationContext, data }) => {
   const { caseCaptionExtension, caseTitle, docketNumberWithSuffix, trialInfo } =
     data;
 
@@ -72,8 +70,4 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     firstPdf: new Uint8Array(pretrialOrderPdf),
     secondPdf: new Uint8Array(checklistPdf),
   });
-};
-
-module.exports = {
-  standingPretrialOrder,
 };

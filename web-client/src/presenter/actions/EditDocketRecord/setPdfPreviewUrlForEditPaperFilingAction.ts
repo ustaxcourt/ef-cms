@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the pdfPreviewUrl for the attached document on the edit paper filing view
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const setPdfPreviewUrlForEditPaperFilingAction = async ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { docketEntryId } = props;
 

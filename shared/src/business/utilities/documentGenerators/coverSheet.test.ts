@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   JURISDICTIONAL_OPTIONS,
   MOTION_DISPOSITIONS,
   PARTY_TYPES,
-} = require('../../entities/EntityConstants');
-const { coverSheet } = require('./coverSheet');
-const { Stamp } = require('../../entities/Stamp');
+} from '../../entities/EntityConstants';
+import { Stamp } from '../../entities/Stamp';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { coverSheet } from './coverSheet';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('coverSheet', () => {

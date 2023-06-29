@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Sets the showCaseNotes flag for the printable trial session working copy
@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 
-export const setShowCaseNotesDefaultAction = ({ store }) => {
+export const setShowCaseNotesDefaultAction = ({ store }: ActionProps) => {
   store.set(state.modal['showCaseNotes'], true);
 };

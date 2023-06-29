@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  * getPractitionerDocumentInteractor
@@ -9,7 +9,7 @@ const { get } = require('./requests');
  * @param {string} providers.barNumber the bar number of the practitioner
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPractitionerDocumentInteractor = (
+export const getPractitionerDocumentInteractor = (
   applicationContext,
   { barNumber, practitionerDocumentFileId },
 ) => {

@@ -1,10 +1,15 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
-exports.fetchPendingItems = async ({
+export const fetchPendingItems = async ({
   applicationContext,
   judge,
   page,
   unservableEventCodes,
+}: {
+  applicationContext: IApplicationContext;
+  judge?: string;
+  page?: number;
+  unservableEventCodes: typeof UNSERVABLE_EVENT_CODES;
 }) => {
   const caseSource = [
     'associatedJudge',
@@ -12,6 +17,7 @@ exports.fetchPendingItems = async ({
     'docketNumber',
     'docketNumberSuffix',
     'status',
+    'leadDocketNumber',
   ];
   const docketEntrySource = [
     'docketEntryId',

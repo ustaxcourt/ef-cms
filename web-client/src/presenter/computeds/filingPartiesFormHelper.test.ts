@@ -2,9 +2,10 @@ import {
   AMICUS_BRIEF_EVENT_CODE,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { filingPartiesFormHelper as filingPartiesFormHelperComputed } from './filingPartiesFormHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('filingPartiesFormHelper', () => {
@@ -21,7 +22,7 @@ describe('filingPartiesFormHelper', () => {
 
   describe('isServed', () => {
     it('should be true when the docket entry has been served', () => {
-      applicationContext.getUtilities().isServed.mockReturnValue(true);
+      jest.spyOn(DocketEntry, 'isServed').mockReturnValue(true);
 
       const result = runCompute(filingPartiesFormHelper, {
         state: baseState,
@@ -31,7 +32,7 @@ describe('filingPartiesFormHelper', () => {
     });
 
     it('should be false when the docket entry has not been served', () => {
-      applicationContext.getUtilities().isServed.mockReturnValue(false);
+      jest.spyOn(DocketEntry, 'isServed').mockReturnValue(false);
 
       const result = runCompute(filingPartiesFormHelper, {
         state: baseState,

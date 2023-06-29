@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { uniqBy } from 'lodash';
 
 /**
@@ -8,7 +8,10 @@ import { uniqBy } from 'lodash';
  * @param {object} providers.get the cerebral get function
  * @param {Function} providers.store the cerebral store function
  */
-export const getAndSetPetitionersAddressAction = ({ get, store }) => {
+export const getAndSetPetitionersAddressAction = ({
+  get,
+  store,
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
 
   const petitionerAddresses = {};

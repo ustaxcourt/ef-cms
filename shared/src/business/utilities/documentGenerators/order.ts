@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const order = async ({ applicationContext, data }) => {
+export const order = async ({ applicationContext, data }) => {
   const {
     addedDocketNumbers,
     caseCaptionExtension,
@@ -52,8 +50,4 @@ const order = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  order,
 };

@@ -1,17 +1,17 @@
-exports.appendPaperServiceAddressPageToPdf = async ({
+export const appendPaperServiceAddressPageToPdf = async ({
   applicationContext,
   caseEntity,
   newPdfDoc,
   noticeDoc,
   servedParties,
 }) => {
-  const addressPages = await exports.getAddressPages({
+  const addressPages = await getAddressPages({
     applicationContext,
     caseEntity,
     servedParties,
   });
 
-  await exports.copyToNewPdf({
+  await copyToNewPdf({
     addressPages,
     applicationContext,
     newPdfDoc,
@@ -19,7 +19,7 @@ exports.appendPaperServiceAddressPageToPdf = async ({
   });
 };
 
-exports.getAddressPages = async ({
+export const getAddressPages = async ({
   applicationContext,
   caseEntity,
   servedParties,
@@ -39,7 +39,7 @@ exports.getAddressPages = async ({
   return addressPages;
 };
 
-exports.copyToNewPdf = async ({
+export const copyToNewPdf = async ({
   addressPages,
   applicationContext,
   newPdfDoc,

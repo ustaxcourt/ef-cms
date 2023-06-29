@@ -21,7 +21,7 @@ describe('trialSessionPlanningReport', () => {
             },
             {
               allCaseCount: 2,
-              previousTermsData: [[], [], []],
+              previousTermsData: [[], ['(HS) Colvin'], ['(H) Guy']],
               regularCaseCount: 1,
               smallCaseCount: 1,
               stateAbbreviation: 'AL',

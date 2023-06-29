@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * fileCourtIssuedDocketEntryProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} providers.documentMeta the document data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCourtIssuedDocketEntryInteractor = (
+export const fileCourtIssuedDocketEntryInteractor = (
   applicationContext,
   { docketNumbers, documentMeta, subjectDocketNumber },
 ) => {

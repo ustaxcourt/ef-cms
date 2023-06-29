@@ -1,22 +1,9 @@
 /* eslint-disable max-lines */
-const DateHandler = require('../utilities/DateHandler');
-const path = require('path');
-const sharedAppContext = require('../../sharedAppContext');
-const {
-  addDocketEntryForSystemGeneratedOrder,
-} = require('../useCaseHelper/addDocketEntryForSystemGeneratedOrder');
-const {
-  aggregatePartiesForService,
-} = require('../utilities/aggregatePartiesForService');
-const {
-  bulkDeleteRecords,
-} = require('../../persistence/elasticsearch/bulkDeleteRecords');
-const {
-  bulkIndexRecords,
-} = require('../../persistence/elasticsearch/bulkIndexRecords');
-const {
-  canAllowDocumentServiceForCase,
+import * as DateHandler from '../utilities/DateHandler';
+import * as pdfLib from 'pdf-lib';
+import {
   Case,
+  canAllowDocumentServiceForCase,
   caseHasServedDocketEntries,
   caseHasServedPetition,
   getContactPrimary,
@@ -26,203 +13,121 @@ const {
   getPetitionerById,
   getPractitionersRepresenting,
   isLeadCase,
+  isSealedCase,
   isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
-} = require('../entities/cases/Case');
-const {
-  combineTwoPdfs,
-} = require('../utilities/documentGenerators/combineTwoPdfs');
-const {
+} from '../entities/cases/Case';
+import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
+import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
+import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
+import {
+  ERROR_MAP_429,
+  getCognitoLoginUrl,
+  getPublicSiteUrl,
+  getUniqueId,
+} from '../../sharedAppContext';
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { abbreviateState } from '../utilities/abbreviateState';
+import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
+import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
+import {
   compareCasesByDocketNumber,
-} = require('../utilities/getFormattedTrialSessionDetails');
-const {
+  formatCase as formatCaseForTrialSession,
+  getFormattedTrialSessionDetails,
+} from '../utilities/getFormattedTrialSessionDetails';
+import {
   compareISODateStrings,
   compareStrings,
-} = require('../utilities/sortFunctions');
-const {
-  copyPagesAndAppendToTargetPdf,
-} = require('../utilities/copyPagesAndAppendToTargetPdf');
-const {
-  createCaseAndAssociations,
-} = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
-const {
-  createDocketNumber,
-} = require('../../persistence/dynamo/cases/docketNumberGenerator');
-const {
-  deleteRecord,
-} = require('../../persistence/elasticsearch/deleteRecord');
-const {
-  deleteWorkItem,
-} = require('../../persistence/dynamo/workitems/deleteWorkItem');
-const {
-  documentUrlTranslator,
-} = require('../../../src/business/utilities/documentUrlTranslator');
-const {
-  fakeData,
-  getFakeFile,
-  testInvalidPdfDoc,
-  testPdfDoc,
-} = require('./getFakeFile');
-const {
-  fileAndServeDocumentOnOneCase,
-} = require('../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase');
-const {
-  formatAttachments,
-} = require('../../../src/business/utilities/formatAttachments');
-const {
+} from '../utilities/sortFunctions';
+import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
+import { createCase } from '../../persistence/dynamo/cases/createCase';
+import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
+import { createDocketNumber } from '../../persistence/dynamo/cases/docketNumberGenerator';
+import { createMockDocumentClient } from './createMockDocumentClient';
+import { deleteRecord } from '../../persistence/elasticsearch/deleteRecord';
+import { deleteWorkItem } from '../../persistence/dynamo/workitems/deleteWorkItem';
+import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
+import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
+import { formatAttachments } from '../../../src/business/utilities/formatAttachments';
+import {
   formatCase,
   formatDocketEntry,
+  getFormattedCaseDetail,
   sortDocketEntries,
-} = require('../../../src/business/utilities/getFormattedCaseDetail');
-const {
-  formatCase: formatCaseForTrialSession,
-} = require('../utilities/getFormattedTrialSessionDetails');
-const {
+} from '../../../src/business/utilities/getFormattedCaseDetail';
+import { formatDollars } from '../utilities/formatDollars';
+import {
   formatJudgeName,
   getJudgeLastName,
-} = require('../../../src/business/utilities/getFormattedJudgeName');
-const {
-  formatPhoneNumber,
-} = require('../../../src/business/utilities/formatPhoneNumber');
-const {
-  generateAndServeDocketEntry,
-} = require('../useCaseHelper/service/createChangeItems');
-const {
-  generateNoticesForCaseTrialSessionCalendarInteractor,
-} = require('../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor');
-const {
+} from '../../../src/business/utilities/getFormattedJudgeName';
+import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
+import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
+import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
+import {
   getAddressPhoneDiff,
-} = require('../utilities/generateChangeOfAddressTemplate');
-const {
-  getAllWebSocketConnections,
-} = require('../../persistence/dynamo/notifications/getAllWebSocketConnections');
-const {
-  getCaseByDocketNumber,
-} = require('../../persistence/dynamo/cases/getCaseByDocketNumber');
-const {
-  getCaseDeadlinesByDocketNumber,
-} = require('../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber');
-const {
+  getDocumentTypeForAddressChange,
+} from '../utilities/generateChangeOfAddressTemplate';
+import { getAllWebSocketConnections } from '../../persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getCaseByDocketNumber } from '../../persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseDeadlinesByDocketNumber } from '../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
-} = require('../../persistence/dynamo/chambers/getJudgesChambers');
-const {
+} from '../../persistence/dynamo/chambers/getJudgesChambers';
+import { getConstants } from '../../../../web-client/src/getConstants';
+import { getCropBox } from '../../../src/business/utilities/getCropBox';
+import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
+import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
-} = require('../utilities/getWorkQueueFilters');
-const {
-  getDocumentQCInboxForSection: getDocumentQCInboxForSectionPersistence,
-} = require('../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection');
-const {
-  getDocumentTitleWithAdditionalInfo,
-} = require('../../../src/business/utilities/getDocumentTitleWithAdditionalInfo');
-const {
-  getDocumentTypeForAddressChange,
-} = require('../utilities/generateChangeOfAddressTemplate');
-const {
-  getFormattedCaseDetail,
-} = require('../utilities/getFormattedCaseDetail');
-const {
-  getFormattedPartiesNameAndTitle,
-} = require('../utilities/getFormattedPartiesNameAndTitle');
-const {
-  getFormattedTrialSessionDetails,
-} = require('../utilities/getFormattedTrialSessionDetails');
-const {
-  getSealedDocketEntryTooltip,
-} = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
-const {
-  getStampBoxCoordinates,
-} = require('../../../src/business/utilities/getStampBoxCoordinates');
-const {
-  getUserById: getUserByIdPersistence,
-} = require('../../persistence/dynamo/users/getUserById');
-const {
-  getWorkItemById: getWorkItemByIdPersistence,
-} = require('../../persistence/dynamo/workitems/getWorkItemById');
-const {
-  incrementCounter,
-} = require('../../persistence/dynamo/helpers/incrementCounter');
-const {
-  isStandaloneRemoteSession,
-} = require('../entities/trialSessions/TrialSession');
-const {
-  putWorkItemInOutbox,
-} = require('../../persistence/dynamo/workitems/putWorkItemInOutbox');
-const {
-  removeCounselFromRemovedPetitioner,
-} = require('../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
-const {
-  saveWorkItem,
-} = require('../../persistence/dynamo/workitems/saveWorkItem');
-const {
-  sealDocketEntryInteractor,
-} = require('../useCases/docketEntry/sealDocketEntryInteractor');
-const {
-  setConsolidationFlagsForDisplay,
-} = require('../utilities/setConsolidationFlagsForDisplay');
-const {
-  setNoticesForCalendaredTrialSessionInteractor,
-} = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
-const {
-  setServiceIndicatorsForCase,
-} = require('../utilities/setServiceIndicatorsForCase');
-const {
-  setupPdfDocument,
-} = require('../../../src/business/utilities/setupPdfDocument');
-const {
-  unsealDocketEntryInteractor,
-} = require('../useCases/docketEntry/unsealDocketEntryInteractor');
-const {
-  updateCaseAndAssociations,
-} = require('../useCaseHelper/caseAssociation/updateCaseAndAssociations');
-const {
-  updateCaseAutomaticBlock,
-} = require('../useCaseHelper/automaticBlock/updateCaseAutomaticBlock');
-const {
-  updateCaseCorrespondence,
-} = require('../../persistence/dynamo/correspondence/updateCaseCorrespondence');
-const {
-  updateDocketEntry,
-} = require('../../persistence/dynamo/documents/updateDocketEntry');
-const {
-  updateUserRecords,
-} = require('../../persistence/dynamo/users/updateUserRecords');
-const {
-  uploadDocumentAndMakeSafeInteractor,
-} = require('../useCases/uploadDocumentAndMakeSafeInteractor');
-const {
-  validatePenaltiesInteractor,
-} = require('../useCases/validatePenaltiesInteractor');
-const {
-  verifyCaseForUser,
-} = require('../../persistence/dynamo/cases/verifyCaseForUser');
-const { ConsolidatedCaseDTO } = require('../dto/cases/ConsolidatedCaseDTO');
-const { createCase } = require('../../persistence/dynamo/cases/createCase');
-const { createMockDocumentClient } = require('./createMockDocumentClient');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { ERROR_MAP_429 } = require('../../sharedAppContext');
-const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
-const { formatDollars } = require('../utilities/formatDollars');
-const { getConstants } = require('../../../../web-client/src/getConstants');
-const { getCropBox } = require('../../../src/business/utilities/getCropBox');
-const { getDescriptionDisplay } = require('../utilities/getDescriptionDisplay');
-const { getItem } = require('../../persistence/localStorage/getItem');
-const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
-const { getTextByCount } = require('../utilities/getTextByCount');
-const { getUserIdForNote } = require('../useCaseHelper/getUserIdForNote');
-const { isSealedCase } = require('../entities/cases/Case');
-const { removeItem } = require('../../persistence/localStorage/removeItem');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
-const { ROLES } = require('../entities/EntityConstants');
-const { sealCaseInteractor } = require('../useCases/sealCaseInteractor');
-const { serveCaseDocument } = require('../utilities/serveCaseDocument');
-const { setItem } = require('../../persistence/localStorage/setItem');
-const { setPdfFormFields } = require('../useCaseHelper/pdf/setPdfFormFields');
-const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
-const { User } = require('../entities/User');
+} from '../utilities/getWorkQueueFilters';
+import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFakeFile } from './getFakeFile';
+import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
+import { getItem } from '../../persistence/localStorage/getItem';
+import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
+import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
+import { getTextByCount } from '../utilities/getTextByCount';
+import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/users/getUserById';
+import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
+import { getWorkItemById as getWorkItemByIdPersistence } from '../../persistence/dynamo/workitems/getWorkItemById';
+import { incrementCounter } from '../../persistence/dynamo/helpers/incrementCounter';
+import { isStandaloneRemoteSession } from '../entities/trialSessions/TrialSession';
+import { putWorkItemInOutbox } from '../../persistence/dynamo/workitems/putWorkItemInOutbox';
+import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
+import { removeItem } from '../../persistence/localStorage/removeItem';
+import { replaceBracketed } from '../utilities/replaceBracketed';
+import { saveWorkItem } from '../../persistence/dynamo/workitems/saveWorkItem';
+import { sealCaseInteractor } from '../useCases/sealCaseInteractor';
+import { sealDocketEntryInteractor } from '../useCases/docketEntry/sealDocketEntryInteractor';
+import { serveCaseDocument } from '../utilities/serveCaseDocument';
+import { setConsolidationFlagsForDisplay } from '../utilities/setConsolidationFlagsForDisplay';
+import { setItem } from '../../persistence/localStorage/setItem';
+import { setNoticesForCalendaredTrialSessionInteractor } from '../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor';
+import { setPdfFormFields } from '../useCaseHelper/pdf/setPdfFormFields';
+import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
+import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocument';
+import { unsealDocketEntryInteractor } from '../useCases/docketEntry/unsealDocketEntryInteractor';
+import { updateCase } from '../../persistence/dynamo/cases/updateCase';
+import { updateCaseAndAssociations } from '../useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseAutomaticBlock } from '../useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseCorrespondence } from '../../persistence/dynamo/correspondence/updateCaseCorrespondence';
+import { updateDocketEntry } from '../../persistence/dynamo/documents/updateDocketEntry';
+import { updateUserRecords } from '../../persistence/dynamo/users/updateUserRecords';
+import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
+import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
+import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
+import path from 'path';
+import pug from 'pug';
+import sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -239,7 +144,7 @@ const appContextProxy = (initial = {}, makeMock = true) => {
   return makeMock ? jest.fn().mockReturnValue(proxied) : proxied;
 };
 
-const createTestApplicationContext = ({ user } = {}) => {
+export const createTestApplicationContext = ({ user } = {}) => {
   const emptyAppContextProxy = appContextProxy();
 
   const mockGetPdfJsReturnValue = {
@@ -279,6 +184,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUtilities = appContextProxy({
+    abbreviateState: jest.fn().mockImplementation(abbreviateState),
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
@@ -365,6 +271,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedTrialSessionDetails),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
+    getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
@@ -393,13 +300,16 @@ const createTestApplicationContext = ({ user } = {}) => {
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isSealedCase: jest.fn().mockImplementation(isSealedCase),
-    isServed: jest.fn().mockImplementation(isServed),
+    isServed: jest.fn().mockImplementation(DocketEntry.isServed),
     isStandaloneRemoteSession: jest
       .fn()
       .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
+    isTodayWithinGivenInterval: jest
+      .fn()
+      .mockImplementation(DateHandler.isTodayWithinGivenInterval),
     isUserIdRepresentedByPrivatePractitioner: jest
       .fn()
       .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
@@ -438,6 +348,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
+    getFeatureFlagValueInteractor: jest.fn().mockImplementation(() => false),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
@@ -530,6 +441,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetPersistenceGateway = appContextProxy({
+    acquireLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
@@ -540,6 +452,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
+    deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
@@ -552,6 +465,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCaseDeadlinesByDocketNumber: jest
       .fn()
       .mockImplementation(getCaseDeadlinesByDocketNumber),
+    getCasesByFilters: jest.fn(),
     getChambersSections: jest.fn().mockImplementation(getChambersSections),
     getChambersSectionsLabels: jest
       .fn()
@@ -633,7 +547,6 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const applicationContext = {
-    ...sharedAppContext,
     barNumberGenerator: {
       createBarNumber: jest.fn().mockReturnValue('CS20001'),
     },
@@ -667,6 +580,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       }),
     }),
     getCognitoClientId: jest.fn(),
+    getCognitoLoginUrl,
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
     getConstants: jest.fn().mockImplementation(() => {
@@ -717,16 +631,17 @@ const createTestApplicationContext = ({ user } = {}) => {
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
-    getNodeSass: jest.fn().mockReturnValue(require('sass')),
+    getNodeSass: jest.fn().mockReturnValue(sass),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
     getNotificationService: jest
       .fn()
       .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
-    getPdfLib: jest.fn().mockResolvedValue(require('pdf-lib')),
+    getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPug: jest.fn().mockReturnValue(require('pug')),
+    getPublicSiteUrl,
+    getPug: jest.fn().mockReturnValue(pug),
     getQuarantineBucketName: jest.fn().mockReturnValue('QuarantineBucketName'),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
@@ -735,7 +650,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
+    getUniqueId: jest.fn().mockImplementation(getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
@@ -753,7 +668,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   return applicationContext;
 };
 
-const applicationContext = createTestApplicationContext();
+export const applicationContext = createTestApplicationContext();
 
 /*
   If you receive an error when testing cerebral that says:
@@ -763,19 +678,11 @@ const applicationContext = createTestApplicationContext();
   applicationContext and adds ONLY the functions to the
   applicationContextForClient.
 */
-const applicationContextForClient = {};
+const intermediary = {};
 Object.entries(applicationContext).forEach(([key, value]) => {
   if (typeof value === 'function') {
-    applicationContextForClient[key] = value;
+    intermediary[key] = value;
   }
 });
-
-module.exports = {
-  applicationContext,
-  applicationContextForClient,
-  createTestApplicationContext,
-  fakeData,
-  getFakeFile,
-  testInvalidPdfDoc,
-  testPdfDoc,
-};
+export const applicationContextForClient =
+  intermediary as ClientApplicationContext;

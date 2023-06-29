@@ -38,10 +38,10 @@ npm run deploy:api "${ENV}"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
 
 # Indexing data
-npx ts-node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
+npx ts-node --transpile-only ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
 
 # Setting up users
-npx ts-node shared/admin-tools/user/setup-admin.js
+npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
 # shellcheck disable=SC1091
 . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
 

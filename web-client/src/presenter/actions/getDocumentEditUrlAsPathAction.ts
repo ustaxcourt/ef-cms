@@ -1,9 +1,8 @@
 import { getDocumentEditUrl } from '../utilities/getDocumentEditUrl';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * returns the editUrl as path for the document in props.docketEntryIdToEdit
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const getDocumentEditUrlAsPathAction = ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { caseDetail, docketEntryIdToEdit } = props;
   const parentMessageId = get(state.parentMessageId);
 

@@ -5,7 +5,7 @@ import {
   subtractISODates,
 } from '../../business/utilities/DateHandler';
 
-const { calculateTimeToLive } = require('./calculateTimeToLive');
+import { calculateTimeToLive } from './calculateTimeToLive';
 
 describe('calculateTimeToLive', () => {
   const now = createISODateString();

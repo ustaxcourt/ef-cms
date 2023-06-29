@@ -1,5 +1,5 @@
 import { sortBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatTrialSessionDisplayOptions = (
   trialSessions,
@@ -14,6 +14,9 @@ export const formatTrialSessionDisplayOptions = (
       case 'Small':
       case 'Hybrid':
         trialSession.sessionTypeFormatted = trialSession.sessionType.charAt(0);
+        break;
+      case 'Hybrid-S':
+        trialSession.sessionTypeFormatted = 'HS';
         break;
       case 'Special':
         trialSession.sessionTypeFormatted = 'SP';
@@ -125,7 +128,12 @@ export const trialSessionsModalHelper = ({
   };
 };
 
-export const addToTrialSessionModalHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const addToTrialSessionModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
   const trialSessionsFilter = trialSession =>
     [SESSION_STATUS_GROUPS.new, SESSION_STATUS_GROUPS.open].includes(

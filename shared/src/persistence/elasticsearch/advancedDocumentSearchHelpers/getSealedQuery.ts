@@ -1,4 +1,4 @@
-exports.getSealedQuery = () => {
+export const getSealedQuery = () => {
   const sealedDocumentMustNotQuery = [
     {
       term: { 'isSealed.BOOL': true },

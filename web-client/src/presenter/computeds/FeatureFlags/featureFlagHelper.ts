@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const featureFlagHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const featureFlagHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { role } = get(state.user);
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
 

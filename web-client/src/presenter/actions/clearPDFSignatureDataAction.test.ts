@@ -1,5 +1,5 @@
 import { clearPDFSignatureDataAction } from './clearPDFSignatureDataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearPDFSignatureDataAction', () => {
   it('Sets state.pdfForSigning.signatureData', async () => {

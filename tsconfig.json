@@ -10,7 +10,12 @@
     "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"],
     "target": "es6",
-    "jsx": "react"
+    "jsx": "react",
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@web-client/*": ["web-client/src/*"]
+    }
   },
   "ts-node": {
     "files": true
@@ -20,6 +25,9 @@
     "./web-api/src/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*",
+    "./web-client/integration-tests/**/*",
+    "./web-client/integration-tests-public/**/*",
+    "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts"
   ],
   "exclude": ["node_modules"]

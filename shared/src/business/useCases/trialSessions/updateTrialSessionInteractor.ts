@@ -132,13 +132,12 @@ const createWorkingCopyForNewUserOnSession = async ({
 
 /**
  * updateTrialSessionInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
  */
 export const updateTrialSessionInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   { trialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -169,6 +168,7 @@ export const updateTrialSessionInteractor = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
+    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     joinPhoneNumber: trialSession.joinPhoneNumber,
@@ -210,7 +210,7 @@ export const updateTrialSessionInteractor = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge.userId,
+      userId: updatedTrialSessionEntity.judge?.userId,
     });
   }
 
@@ -226,12 +226,11 @@ export const updateTrialSessionInteractor = async (
     await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk.userId,
+      userId: updatedTrialSessionEntity.trialClerk?.userId,
     });
   }
 
-  let pdfUrl = null;
-  let serviceInfo = null;
+  let hasPaper, pdfUrl;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     const calendaredCases = currentTrialSession.caseOrder.filter(
       c => !c.removedFromTrial,
@@ -250,13 +249,18 @@ export const updateTrialSessionInteractor = async (
       });
     }
 
-    serviceInfo = await applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf({
-        applicationContext,
-        document: paperServicePdfsCombined,
-      });
-    pdfUrl = serviceInfo.url;
+    hasPaper = !!paperServicePdfsCombined.getPageCount();
+    const paperServicePdfData = await paperServicePdfsCombined.save();
+
+    if (hasPaper) {
+      ({ url: pdfUrl } = await applicationContext
+        .getUseCaseHelpers()
+        .saveFileAndGenerateUrl({
+          applicationContext,
+          file: paperServicePdfData,
+          useTempBucket: true,
+        }));
+    }
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
@@ -277,7 +281,7 @@ export const updateTrialSessionInteractor = async (
     applicationContext,
     message: {
       action: 'update_trial_session_complete',
-      hasPaper: serviceInfo?.hasPaper,
+      hasPaper,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
     },

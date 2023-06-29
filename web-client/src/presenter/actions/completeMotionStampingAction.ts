@@ -1,9 +1,8 @@
 import { Stamp } from '../../../../shared/src/business/entities/Stamp';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * generates an action for completing motion stamping
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const completeMotionStampingAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const motionDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);

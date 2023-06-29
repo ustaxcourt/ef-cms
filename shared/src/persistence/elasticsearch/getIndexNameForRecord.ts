@@ -1,4 +1,4 @@
-const { isObject, isString } = require('lodash');
+import { isObject, isString } from 'lodash';
 
 const userEntityNames = [
   'User',
@@ -50,7 +50,7 @@ const isRecordOfType = (record, type) => {
  * @param {object} record the record object
  * @returns {object} the index the record belongs to
  */
-exports.getIndexNameForRecord = record => {
+export const getIndexNameForRecord = record => {
   let index = null;
 
   if (isRecordOfType(record, 'Case')) {

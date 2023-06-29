@@ -5,7 +5,10 @@
  * @param {object} providers.props the passed in props
  * @returns {object} the pdf file
  */
-export const getPdfFromUrlAction = async ({ applicationContext, props }) => {
+export const getPdfFromUrlAction = async ({
+  applicationContext,
+  props,
+}: ActionProps) => {
   return await applicationContext
     .getUseCases()
     .getPdfFromUrlInteractor(applicationContext, { pdfUrl: props.pdfUrl });

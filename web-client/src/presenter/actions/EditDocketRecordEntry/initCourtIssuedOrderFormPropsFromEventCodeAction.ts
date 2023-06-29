@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * set the state form props if a court issued event code is present
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.get the cerebral get method
@@ -12,7 +11,7 @@ export const initCourtIssuedOrderFormPropsFromEventCodeAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { COURT_ISSUED_EVENT_CODES } = applicationContext.getConstants();
 
   const eventCode = get(state.form.eventCode);
