@@ -53,7 +53,9 @@ export const viewJudgeActivityReportResults = (
     cerebralTest.progressDescriptionTableTotal = progressDescriptionTableTotal;
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-    expect(cerebralTest.getState('judgeActivityReportData')).toEqual({
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toEqual({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
       opinions: expect.anything(),
