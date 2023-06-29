@@ -110,9 +110,9 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext)[
+    ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key
+  ];
 
   if (!consolidateCaseDuplicateDocketEntries) {
     docketNumbers = [subjectCaseDocketNumber];

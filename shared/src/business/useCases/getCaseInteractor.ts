@@ -110,10 +110,9 @@ export const getCaseInteractor = async (
 ) => {
   const isConsolidatedGroupAccessEnabled = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext, {
-      featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext)[
+    ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
+  ];
 
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
