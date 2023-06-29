@@ -28,7 +28,7 @@ export const setSignatureNameForPdfSigningAction = async ({
   } else {
     nameForPdfSigning = await applicationContext
       .getUseCases()
-      .getChiefJudgeNameForSigningInteractor(applicationContext);
+      .getAllFeatureFlagsInteractor(applicationContext);
     nameForPdfSigning =
       nameForPdfSigning[ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key];
     nameForSigningLine2 = CHIEF_JUDGE;
