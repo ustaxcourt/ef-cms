@@ -165,15 +165,15 @@ export class Contact extends JoiValidationEntity {
   } as const;
 
   getValidationRules() {
-    return this.countryType === COUNTRY_TYPES.DOMESTIC
-      ? Contact.DOMESTIC_VALIDATION_RULES
-      : Contact.INTERNATIONAL_VALIDATION_RULES;
+    return this.countryType === COUNTRY_TYPES.INTERNATIONAL
+      ? Contact.INTERNATIONAL_VALIDATION_RULES
+      : Contact.DOMESTIC_VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return this.countryType === COUNTRY_TYPES.DOMESTIC
-      ? Contact.DOMESTIC_VALIDATION_MESSAGES
-      : Contact.INTERNATIONAL_VALIDATION_MESSAGES;
+    return this.countryType === COUNTRY_TYPES.INTERNATIONAL
+      ? Contact.INTERNATIONAL_VALIDATION_MESSAGES
+      : Contact.DOMESTIC_VALIDATION_MESSAGES;
   }
 }
 

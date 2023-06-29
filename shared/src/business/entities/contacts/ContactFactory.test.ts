@@ -335,14 +335,12 @@ describe('ContactFactory', () => {
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 
-  describe('getContactConstructors', () => {
-    it('should return an empty object if no partyType is given and case has not been served', () => {
-      const contactConstructor = ContactFactory.createContacts({
-        partyType: undefined,
-        status: CASE_STATUS_TYPES.new,
-      });
-
-      expect(contactConstructor).toEqual({});
+  it('should return an empty primary object if no partyType is given and case has not been served', () => {
+    const contacts = ContactFactory.createContacts({
+      partyType: undefined,
+      status: CASE_STATUS_TYPES.new,
     });
+
+    expect(contacts).toEqual({ primary: {}, secondary: null });
   });
 });
