@@ -140,7 +140,7 @@ export class ExternalDocumentBase extends ExternalDocument {
     ],
     supportingDocumentFreeText: 'Enter name',
     trialLocation: 'Select a preferred trial location.',
-  };
+  } as const;
 
   getDocumentTitle() {
     return this.documentTitle!;
