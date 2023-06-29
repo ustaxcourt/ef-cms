@@ -4,7 +4,13 @@ import classNames from 'classnames';
 const focusableChildren =
   'h1[tabindex], h2[tabindex], h3[tabindex], .focusable[tabindex]';
 
-export const Focus = ({ children, className }) => {
+export const Focus = ({
+  children,
+  className,
+}: {
+  children: any;
+  className?: string;
+}) => {
   const [focused, setFocused] = useState(false);
   const node = useRef(null);
 

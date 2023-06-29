@@ -1,4 +1,4 @@
-const { formatMessageResult } = require('./formatMessageResult');
+import { formatMessageResult } from './formatMessageResult';
 
 describe('formatMessageResult', () => {
   const mockMessageResult = {

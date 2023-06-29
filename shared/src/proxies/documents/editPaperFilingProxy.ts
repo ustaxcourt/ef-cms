@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * editPaperFilingProxy
@@ -12,7 +12,7 @@ const { put } = require('../requests');
  * @param {Boolean} providers.isSavingForLater true if saving for later, false otherwise
  * @returns {Promise<*>} the promise of the api call
  */
-exports.editPaperFilingInteractor = (
+export const editPaperFilingInteractor = (
   applicationContext,
   {
     clientConnectionId,

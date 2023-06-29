@@ -1,10 +1,10 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { UserCase } = require('../../entities/UserCase');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { UserCase } from '../../entities/UserCase';
 
 /**
  * addExistingUserToCase
@@ -17,7 +17,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {string} options.name the name of the user to update the case with
  * @returns {string} the contactId of the cognito user who matches the provided email
  */
-exports.addExistingUserToCase = async ({
+export const addExistingUserToCase = async ({
   applicationContext,
   caseEntity,
   contactId,

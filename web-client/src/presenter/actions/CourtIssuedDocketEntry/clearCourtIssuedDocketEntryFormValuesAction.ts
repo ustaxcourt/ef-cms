@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * clears values on the court-issued docket entry form if the event code was changed
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const clearCourtIssuedDocketEntryFormValuesAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const scenariosWhichIncludeFreeText = [
     'Type A',
     'Type B',

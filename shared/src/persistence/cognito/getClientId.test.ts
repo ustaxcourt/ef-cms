@@ -1,6 +1,6 @@
-const { getClientId } = require('./getClientId');
+import { getClientId } from './getClientId';
 jest.mock('aws-sdk');
-const aws = require('aws-sdk');
+import aws from 'aws-sdk';
 
 describe('getClientId', () => {
   const mockUserPoolId = 'us-east-1_Gg5RM8fn';

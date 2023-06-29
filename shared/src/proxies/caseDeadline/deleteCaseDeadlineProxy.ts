@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * deleteCaseDeadlineInteractorProxy
@@ -9,7 +9,7 @@ const { remove } = require('../requests');
  * @param {string} providers.docketNumber the docket number of the case containing the case deadline to remove
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteCaseDeadlineInteractor = (
+export const deleteCaseDeadlineInteractor = (
   applicationContext,
   { caseDeadlineId, docketNumber },
 ) => {

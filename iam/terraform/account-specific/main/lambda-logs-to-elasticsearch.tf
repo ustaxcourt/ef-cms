@@ -9,7 +9,7 @@ resource "aws_lambda_function" "logs_to_es" {
   function_name = "LogsToElasticSearch_info"
   handler       = "index.handler"
   role          = aws_iam_role.lambda_elasticsearch_execution_role.arn
-  runtime       = "nodejs16.x"
+  runtime       = "nodejs18.x"
 
   source_code_hash = "${filebase64sha256(data.archive_file.zip_logs_to_es_lambda.output_path)}-${aws_iam_role.lambda_elasticsearch_execution_role.name}"
 

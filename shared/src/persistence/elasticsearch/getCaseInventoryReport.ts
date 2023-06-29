@@ -1,4 +1,4 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 /**
  * getCaseInventoryReport
@@ -11,7 +11,7 @@ const { search } = require('./searchClient');
  * @param {string} providers.status the optional status filter
  * @returns {object} the items found and the total count
  */
-exports.getCaseInventoryReport = async ({
+export const getCaseInventoryReport = async ({
   applicationContext,
   associatedJudge,
   from = 0,
@@ -42,6 +42,9 @@ exports.getCaseInventoryReport = async ({
           must_not: [
             {
               term: { 'status.S': 'Closed' },
+            },
+            {
+              term: { 'status.S': 'Closed - Dismissed' },
             },
           ],
         },

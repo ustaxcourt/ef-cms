@@ -1,14 +1,15 @@
-const {
+import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} = require('../entities/EntityConstants');
-const {
+} from '../entities/EntityConstants';
+
+import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
-} = require('./getWorkQueueFilters');
+} from './getWorkQueueFilters';
 
 describe('getWorkQueueFilters', () => {
   describe('getDocQcSectionForUser', () => {

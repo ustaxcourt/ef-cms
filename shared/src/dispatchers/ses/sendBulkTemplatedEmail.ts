@@ -1,4 +1,4 @@
-const { backOff } = require('../../tools/helpers');
+import { backOff } from '../../tools/helpers';
 
 /**
  * calls SES.sendBulkTemplatedEmail
@@ -23,7 +23,7 @@ const { backOff } = require('../../tools/helpers');
  * @param {string} providers.templateName name of the SES template
  * @returns {void}
  */
-exports.sendBulkTemplatedEmail = async ({
+export const sendBulkTemplatedEmail = async ({
   applicationContext,
   defaultTemplateData,
   destinations,
@@ -60,7 +60,7 @@ exports.sendBulkTemplatedEmail = async ({
  * @param {object} providers.params the parameters to send to SES
  * @param {number} providers.retryCount the number of retries attempted
  */
-exports.sendWithRetry = async ({
+export const sendWithRetry = async ({
   applicationContext,
   params,
   retryCount = 0,
@@ -92,7 +92,7 @@ exports.sendWithRetry = async ({
   // exponential back-off
   await backOff(retryCount);
 
-  await exports.sendWithRetry({
+  await sendWithRetry({
     applicationContext,
     params: {
       ...params,

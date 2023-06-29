@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * generateTrialCalendarPdfInteractor (proxy)
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.trialSessionId the trial session number
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generateTrialCalendarPdfInteractor = (
+export const generateTrialCalendarPdfInteractor = (
   applicationContext,
   { trialSessionId },
 ) => {

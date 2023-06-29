@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * addCaseToTrialSessionInteractor
@@ -10,7 +10,7 @@ const { post } = require('../requests');
  * @param {object} providers.trialSessionId the trial session id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.addCaseToTrialSessionInteractor = (
+export const addCaseToTrialSessionInteractor = (
   applicationContext,
   { calendarNotes, docketNumber, trialSessionId },
 ) => {

@@ -1,14 +1,31 @@
 import { getSortedOptions } from '../../ustc-ui/Utils/selectSearchHelper';
 import React from 'react';
-import ReactSelect from 'react-select';
+import ReactSelect, {
+  ActionMeta,
+  GroupBase,
+  OptionsOrGroups,
+} from 'react-select';
 import classNames from 'classnames';
 
-export class SelectSearch extends React.Component {
+export class SelectSearch extends React.Component<
+  {
+    className?: string;
+    disabled?: boolean;
+    id?: string;
+    isClearable?: boolean;
+    name?: string;
+    onChange?: (newValue: any, actionMeta: ActionMeta<any>) => void;
+    onInputChange?: Function;
+    options?: OptionsOrGroups<any, GroupBase<any>> | undefined;
+    placeholder?: string;
+    value?: any;
+  },
+  { inputText: string }
+> {
   constructor(props) {
     super(props);
     this.state = {
       inputText: '',
-      options: [],
     };
   }
 

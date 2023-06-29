@@ -54,13 +54,13 @@ const mockLogger = {
   error: jest.fn(),
   info: jest.fn(),
 };
-const mockApplicationContext = {
-  logger: mockLogger,
-};
-jest.mock(
-  '../../../../src/applicationContext',
-  () => () => mockApplicationContext,
-);
+jest.mock('../../../../src/applicationContext', () => {
+  return {
+    createApplicationContext: () => ({
+      logger: mockLogger,
+    }),
+  };
+});
 const { handler } = require('./migration-segments');
 
 describe('migration-segments', () => {

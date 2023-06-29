@@ -3,10 +3,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { associateSwingTrialSessions } from './associateSwingTrialSessions';
-const {
-  petitionerUser,
-  petitionsClerkUser,
-} = require('../../../test/mockUsers');
+import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 const MOCK_TRIAL_SESSION = {
   ...MOCK_TRIAL_REGULAR,

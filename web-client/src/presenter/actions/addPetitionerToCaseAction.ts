@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * updates the petitioner information action
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral store used for getting state.form
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const addPetitionerToCaseAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
   const { docketNumber } = get(state.caseDetail);
   const { contact } = get(state.form);

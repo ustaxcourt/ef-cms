@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * fileCourtIssuedOrderProxy
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fileCourtIssuedOrderInteractor = (
+export const fileCourtIssuedOrderInteractor = (
   applicationContext,
   { documentMetadata, primaryDocumentFileId },
 ) => {

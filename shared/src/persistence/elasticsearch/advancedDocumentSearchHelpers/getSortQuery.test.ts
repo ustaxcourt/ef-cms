@@ -1,7 +1,5 @@
-const {
-  DOCUMENT_SEARCH_SORT,
-} = require('../../../business/entities/EntityConstants');
-const { getSortQuery } = require('./getSortQuery');
+import { DOCUMENT_SEARCH_SORT } from '../../../business/entities/EntityConstants';
+import { getSortQuery } from './getSortQuery';
 
 describe('getSortQuery', () => {
   it('sets sort to numberOfPages: asc when sortField is "DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC"', () => {

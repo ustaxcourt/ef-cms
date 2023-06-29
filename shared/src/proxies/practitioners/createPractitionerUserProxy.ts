@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createPractitionerUserInteractor
@@ -8,7 +8,10 @@ const { post } = require('../requests');
  * @param {string} providers.user the user data
  * @returns {Promise<object>} the created user data
  */
-exports.createPractitionerUserInteractor = (applicationContext, { user }) => {
+export const createPractitionerUserInteractor = (
+  applicationContext,
+  { user },
+) => {
   return post({
     applicationContext,
     body: { user },

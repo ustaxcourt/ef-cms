@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getUsersInSectionInteractor
@@ -8,7 +8,10 @@ const { get } = require('../requests');
  * @param {string} providers.section the section to get the users
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUsersInSectionInteractor = (applicationContext, { section }) => {
+export const getUsersInSectionInteractor = (
+  applicationContext,
+  { section },
+) => {
   return get({
     applicationContext,
     endpoint: `/sections/${section}/users`,

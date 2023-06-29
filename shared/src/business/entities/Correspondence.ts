@@ -3,9 +3,6 @@ import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 
-/**
- * Correspondence class
- */
 export class Correspondence extends JoiValidationEntity {
   public archived: boolean;
   public correspondenceId: string;
@@ -45,4 +42,8 @@ export class Correspondence extends JoiValidationEntity {
   getErrorToMessageMap() {
     return {};
   }
+}
+
+declare global {
+  type RawCorrespondence = ExcludeMethods<Correspondence>;
 }

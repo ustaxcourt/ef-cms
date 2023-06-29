@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets props.blockedCases on state.blockedCases
@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the props object
  * @param {Function} providers.store the cerebral store function
  */
-export const setBlockedCasesAction = ({ props, store }) => {
+export const setBlockedCasesAction = ({ props, store }: ActionProps) => {
   store.set(state.blockedCases, props.blockedCases);
 };

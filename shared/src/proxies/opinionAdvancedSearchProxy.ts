@@ -1,5 +1,5 @@
-const { get } = require('./requests');
-const { omit } = require('lodash');
+import { get } from './requests';
+import { omit } from 'lodash';
 
 /**
  * opinionAdvancedSearchInteractor
@@ -9,7 +9,7 @@ const { omit } = require('lodash');
  * @param {string} providers.searchParams the search params
  * @returns {Promise<*>} the promise of the api call
  */
-exports.opinionAdvancedSearchInteractor = (
+export const opinionAdvancedSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {

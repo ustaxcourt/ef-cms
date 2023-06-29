@@ -1,13 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generateNoticeOfDocketChangePdf,
-} = require('./generateNoticeOfDocketChangePdf');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateNoticeOfDocketChangePdf } from './generateNoticeOfDocketChangePdf';
 jest.mock('../../../authorization/authorizationClientService');
-const {
-  isAuthorized,
-} = require('../../../authorization/authorizationClientService');
+import { isAuthorized } from '../../../authorization/authorizationClientService';
 
 const docketChangeInfo = {
   caseCaptionWithPostfix:

@@ -1,19 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  reactTemplateGenerator,
-} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const {
-  sendIrsSuperuserPetitionEmail,
-} = require('./sendIrsSuperuserPetitionEmail');
-const { Case } = require('../../entities/cases/Case');
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import { sendIrsSuperuserPetitionEmail } from './sendIrsSuperuserPetitionEmail';
 jest.mock(
   '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator',
   () => ({

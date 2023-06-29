@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * unset the document to Edit state
@@ -6,6 +6,6 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const unsetDocumentToEditAction = ({ store }) => {
+export const unsetDocumentToEditAction = ({ store }: ActionProps) => {
   store.unset(state.documentToEdit);
 };

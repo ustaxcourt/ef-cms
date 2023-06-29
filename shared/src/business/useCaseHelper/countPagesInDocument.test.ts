@@ -1,8 +1,7 @@
-const {
-  applicationContext,
-  testPdfDoc,
-} = require('../test/createTestApplicationContext');
-const { countPagesInDocument } = require('./countPagesInDocument');
+import { testPdfDoc } from '../test/getFakeFile';
+
+import { applicationContext } from '../test/createTestApplicationContext';
+import { countPagesInDocument } from './countPagesInDocument';
 
 describe('countPagesInDocument', () => {
   beforeEach(() => {

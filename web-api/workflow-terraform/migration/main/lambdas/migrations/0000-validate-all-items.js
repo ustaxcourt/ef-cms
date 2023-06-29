@@ -1,4 +1,6 @@
-const createApplicationContext = require('../../../../../src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../../../src/applicationContext');
 const applicationContext = createApplicationContext({});
 
 const migrateItems = items => {

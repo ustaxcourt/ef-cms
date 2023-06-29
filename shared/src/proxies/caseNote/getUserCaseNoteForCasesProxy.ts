@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * getUserCaseNoteForCasesInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {Array<string>} providers.docketNumbers the docket numbers to get notes for
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUserCaseNoteForCasesInteractor = (
+export const getUserCaseNoteForCasesInteractor = (
   applicationContext,
   { docketNumbers },
 ) => {

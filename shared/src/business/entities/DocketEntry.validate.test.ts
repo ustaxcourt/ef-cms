@@ -243,6 +243,14 @@ describe('validate', () => {
         signedJudgeName: 'Dredd',
       },
     },
+    {
+      description:
+        'should pass validation when redactionAcknowledgement is undefined ',
+      docketEntry: {
+        ...A_VALID_DOCKET_ENTRY,
+        redactionAcknowledgement: undefined,
+      },
+    },
   ];
 
   validTests.forEach(item =>
@@ -422,6 +430,15 @@ describe('validate', () => {
         sealedTo: undefined,
       },
       expectValidationErrors: ['sealedTo'],
+    },
+    {
+      description:
+        'should fail validation when the redactionAcknowledgement is false',
+      docketEntry: {
+        ...A_VALID_DOCKET_ENTRY,
+        redactionAcknowledgement: false,
+      },
+      expectValidationErrors: ['redactionAcknowledgement'],
     },
   ];
 

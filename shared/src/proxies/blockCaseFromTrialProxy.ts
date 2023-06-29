@@ -1,4 +1,4 @@
-const { post } = require('./requests');
+import { post } from './requests';
 
 /**
  * blockCaseFromTrialInteractor
@@ -9,7 +9,7 @@ const { post } = require('./requests');
  * @param {object} providers.reason the reason the case was blocked
  * @returns {Promise<*>} the promise of the api call
  */
-exports.blockCaseFromTrialInteractor = (
+export const blockCaseFromTrialInteractor = (
   applicationContext,
   { docketNumber, reason },
 ) => {

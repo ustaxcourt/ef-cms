@@ -1,4 +1,4 @@
-const { getCropBox } = require('./getCropBox');
+import { getCropBox } from './getCropBox';
 
 describe('getCropBox', () => {
   let mockCropBoxValue;

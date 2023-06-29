@@ -5,7 +5,7 @@
  * @param {array} records an array of docketNumbers and/or docketEntryIds to seal
  * @returns {Promise<array>} the array of responses from the interactor
  */
-exports.sealInLowerEnvironment = async (applicationContext, records) => {
+export const sealInLowerEnvironment = async (applicationContext, records) => {
   const isCurrentColorActive = await applicationContext.isCurrentColorActive(
     applicationContext,
   );

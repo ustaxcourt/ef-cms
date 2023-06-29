@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateUserCaseNoteInteractorProxy
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {string} providers.notes the notes to add to the case for the user
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateUserCaseNoteInteractor = (
+export const updateUserCaseNoteInteractor = (
   applicationContext,
   { docketNumber, notes },
 ) => {

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * get the url of the pdf created from the passed in html string
@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the passed in props
  * @returns {object} pdfUrl
  */
-export const getPdfUrlAction = async ({ applicationContext, get, props }) => {
+export const getPdfUrlAction = async ({
+  applicationContext,
+  get,
+  props,
+}: ActionProps) => {
   const { contentHtml, documentTitle, signatureText } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
   const addedDocketNumbers = get(state.addedDocketNumbers);

@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createTrialSessionInteractor
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {object} providers.trialSession the trial session data
  * @returns {Promise<*>} the promise of the api call
  */
-exports.createTrialSessionInteractor = (
+export const createTrialSessionInteractor = (
   applicationContext,
   { trialSession },
 ) => {

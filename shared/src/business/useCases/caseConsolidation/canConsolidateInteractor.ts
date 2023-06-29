@@ -2,7 +2,6 @@ import { Case } from '../../entities/cases/Case';
 
 /**
  * canConsolidateInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseToConsolidate the case to consolidate with
@@ -14,7 +13,7 @@ export const canConsolidateInteractor = (
   {
     caseToConsolidate,
     currentCase,
-  }: { caseToConsolidate: TCase; currentCase: TCase },
+  }: { caseToConsolidate: Case; currentCase: Case },
 ) => {
   const caseEntity = new Case(currentCase, { applicationContext });
 

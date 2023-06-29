@@ -1,5 +1,5 @@
-const { AddIrsPractitioner } = require('./AddIrsPractitioner');
-const { SERVICE_INDICATOR_TYPES } = require('../EntityConstants');
+import { AddIrsPractitioner } from './AddIrsPractitioner';
+import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
 
 const errorMessages = AddIrsPractitioner.VALIDATION_ERROR_MESSAGES;
 

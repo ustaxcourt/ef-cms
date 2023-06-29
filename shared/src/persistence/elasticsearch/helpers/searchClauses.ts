@@ -1,12 +1,12 @@
-const { ROLES } = require('../../../business/entities/EntityConstants');
+import { ROLES } from '../../../business/entities/EntityConstants';
 
 // because searching for entityName matches is not sufficient!
-const IS_USER = [
+export const IS_USER = [
   { prefix: { 'pk.S': 'user|' } },
   { prefix: { 'sk.S': 'user|' } },
 ];
 
-const IS_PRACTITIONER = [
+export const IS_PRACTITIONER = [
   ...IS_USER,
   {
     terms: {
@@ -27,7 +27,7 @@ const IS_PRACTITIONER = [
     },
   },
 ];
-const GET_PARENT_CASE = {
+export const GET_PARENT_CASE = {
   has_parent: {
     inner_hits: {
       _source: {
@@ -43,10 +43,4 @@ const GET_PARENT_CASE = {
     parent_type: 'case',
     query: { match_all: {} },
   },
-};
-
-module.exports = {
-  GET_PARENT_CASE,
-  IS_PRACTITIONER,
-  IS_USER,
 };

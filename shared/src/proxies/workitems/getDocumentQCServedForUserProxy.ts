@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getDocumentQCServedForUserInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.userId the user to get the document qc served box
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getDocumentQCServedForUserInteractor = (
+export const getDocumentQCServedForUserInteractor = (
   applicationContext,
   { userId },
 ) => {

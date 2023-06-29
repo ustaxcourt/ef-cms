@@ -1,7 +1,5 @@
-const {
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
+import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
 /**
  * setNoticeOfChangeOfTrialJudge
@@ -14,7 +12,7 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {object} providers.newTrialSessionEntity the new trial session data
  * @param {object} providers.userId the user ID
  */
-exports.setNoticeOfChangeOfTrialJudge = async (
+export const setNoticeOfChangeOfTrialJudge = async (
   applicationContext,
   { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, userId },
 ) => {

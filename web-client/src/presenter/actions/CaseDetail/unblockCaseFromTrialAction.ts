@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls the unblockCaseFromTrialInteractor to remove the block on the case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const unblockCaseFromTrialAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const caseDetail = await applicationContext

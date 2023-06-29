@@ -11,7 +11,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda" {
   handler          = "cognito-authorizer.handler"
   source_code_hash = data.archive_file.zip_authorizer.output_base64sha256
 
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
 
   environment {
     variables = {
@@ -31,7 +31,7 @@ resource "aws_lambda_function" "cognito_authorizer_lambda_west" {
   handler          = "cognito-authorizer.handler"
   source_code_hash = data.archive_file.zip_authorizer.output_base64sha256
 
-  runtime = "nodejs16.x"
+  runtime = "nodejs18.x"
 
   environment {
     variables = {

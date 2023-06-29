@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets default start and end date for case deadlines report to today's date
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.store the store
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const setDefaultCaseDeadlinesReportDatesAction = ({
   applicationContext,
   store,
-}) => {
+}: ActionProps) => {
   const { day, month, year } = applicationContext
     .getUtilities()
     .deconstructDate(applicationContext.getUtilities().createISODateString());

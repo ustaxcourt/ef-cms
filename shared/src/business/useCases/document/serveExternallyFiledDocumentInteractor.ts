@@ -2,6 +2,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
@@ -136,19 +137,27 @@ export const serveExternallyFiledDocumentInteractor = async (
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseDocketNumber;
 
+        const isSimultaneousDocumentType =
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            originalSubjectDocketEntry.eventCode,
+          );
+
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
-            filingDate: applicationContext.getUtilities().createISODateString(),
+            ...(!isSimultaneousDocumentType && {
+              filingDate: applicationContext
+                .getUtilities()
+                .createISODateString(),
+            }),
             isDraft: false,
             isFileAttached: true,
             isOnDocketRecord: true,
             isPendingService: isSubjectCase,
             numberOfPages: numberOfPages + coversheetLength,
             processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-            userId: user.userId,
           },
           { applicationContext },
         );

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * loads the pdf for being used in preview modal
@@ -8,7 +8,12 @@ import { state } from 'cerebral';
  * @param {Function} providers.props the cerebral props object
  * @returns {Promise} promise which resolves if it successfully loads the pdf
  */
-export const loadPdfAction = ({ applicationContext, props, router, store }) => {
+export const loadPdfAction = ({
+  applicationContext,
+  props,
+  router,
+  store,
+}: ActionProps) => {
   const { file } = props;
   const isBase64Encoded = typeof file === 'string' && file.startsWith('data');
 

@@ -1,9 +1,8 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * populates the form with the necessary fields to so that the edit petitioner information page works.
- *
  * @param {object} providers the providers object
  * @param {Function} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const setupPetitionerContactInformationFormAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { contactId } = props;
 

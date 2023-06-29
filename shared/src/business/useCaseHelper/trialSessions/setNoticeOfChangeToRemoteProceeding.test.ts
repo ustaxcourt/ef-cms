@@ -1,18 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
-} = require('../../../test/mockTrial');
-const {
-  setNoticeOfChangeToRemoteProceeding,
-} = require('./setNoticeOfChangeToRemoteProceeding');
-const {
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../../test/mockTrial';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {
   const mockUserId = '85a5b1c8-1eed-44b6-932a-967af060597a';

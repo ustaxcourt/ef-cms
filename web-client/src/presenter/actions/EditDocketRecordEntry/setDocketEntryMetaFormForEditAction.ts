@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * update state form with docket record entry and document properties
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the props passed to this action
@@ -15,7 +14,7 @@ export const setDocketEntryMetaFormForEditAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
   const { deconstructDate } = applicationContext.getUtilities();

@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * takes a date from a docket entry and create separate form inputs
- *
  * @param {object} providers the providers object
  * @param {Function} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store used for setting the state.form
@@ -11,7 +10,7 @@ export const deconstructDatesToFormAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { deconstructDate } = applicationContext.getUtilities();
   const { docketEntry } = props;
   let formDate;

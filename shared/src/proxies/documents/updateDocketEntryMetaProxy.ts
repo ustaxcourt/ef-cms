@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateDocketEntryMetaProxy
@@ -10,7 +10,7 @@ const { put } = require('../requests');
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateDocketEntryMetaInteractor = (
+export const updateDocketEntryMetaInteractor = (
   applicationContext,
   { docketEntryMeta, docketNumber, docketRecordIndex },
 ) => {

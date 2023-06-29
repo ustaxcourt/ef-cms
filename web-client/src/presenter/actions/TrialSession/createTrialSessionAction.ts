@@ -1,10 +1,9 @@
 import { omit } from 'lodash';
 import { preparedDateToISOString } from '../../../utilities/preparedDateToISOString';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * create a trial session
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -16,7 +15,7 @@ export const createTrialSessionAction = async ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const startDate = preparedDateToISOString(
     applicationContext,
     props.computedStartDate,

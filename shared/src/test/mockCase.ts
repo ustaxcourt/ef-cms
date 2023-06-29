@@ -1,14 +1,16 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
+  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
-} = require('../business/entities/EntityConstants');
-const { MOCK_DOCUMENTS } = require('./mockDocuments');
+} from '../business/entities/EntityConstants';
+import { Case } from '../business/entities/cases/Case';
+import { MOCK_DOCUMENTS } from './mockDocuments';
 
-exports.MOCK_CASE = {
+export const MOCK_CASE: Case = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
@@ -19,10 +21,12 @@ exports.MOCK_CASE = {
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hasVerifiedIrsNotice: false,
   hearings: [],
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
+  petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
   petitioners: [
     {
       address1: '123 Main St',
@@ -31,9 +35,12 @@ exports.MOCK_CASE = {
       contactType: CONTACT_TYPES.primary,
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
+      entityName: 'Petitioner',
+      isAddressSealed: false,
       name: 'Test Petitioner',
       phone: '1234567',
       postalCode: '12345',
+      sealedAndUnavailable: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       state: 'TN',
       title: 'Executor',
@@ -42,12 +49,14 @@ exports.MOCK_CASE = {
   preferredTrialCity: 'Washington, District of Columbia',
   privatePractitioners: [],
   procedureType: 'Regular',
+  receivedAt: '2018-03-01T21:40:46.415Z',
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
+
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
 
-exports.MOCK_CASE_WITHOUT_PENDING = {
+export const MOCK_CASE_WITHOUT_PENDING = {
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: mockDocketEntriesWithoutStipDecision,
@@ -77,7 +86,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   status: CASE_STATUS_TYPES.new,
 };
 
-exports.MOCK_CASE_WITHOUT_NOTICE = {
+export const MOCK_CASE_WITHOUT_NOTICE = {
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '101-18',
   entityName: 'Case',
@@ -103,7 +112,7 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   status: CASE_STATUS_TYPES.new,
 };
 
-exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
+export const MOCK_CASE_WITH_SECONDARY_OTHERS = {
   caseCaption: 'Test Petitioner, Test Petitioner 2, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -207,7 +216,7 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   status: CASE_STATUS_TYPES.generalDocket,
 };
 
-exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -254,14 +263,14 @@ exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-exports.MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '110-19',
   entityName: 'Case',
   filingType: 'Myself',
-  leadDocketNumber: exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+  leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {
@@ -299,14 +308,14 @@ exports.MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-exports.MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
   docketNumber: '111-19',
   entityName: 'Case',
   filingType: 'Myself',
-  leadDocketNumber: exports.MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+  leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {
@@ -344,7 +353,7 @@ exports.MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-exports.MOCK_CASE_WITH_TRIAL_SESSION = {
+export const MOCK_CASE_WITH_TRIAL_SESSION = {
   archivedDocketEntries: [],
   associatedJudge: 'Judge Fieri',
   caseCaption: 'Test Petitioner, Petitioner',
@@ -383,7 +392,7 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
   trialTime: '10:00',
 };
 
-exports.MOCK_ELIGIBLE_CASE = {
+export const MOCK_ELIGIBLE_CASE = {
   caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
@@ -393,7 +402,7 @@ exports.MOCK_ELIGIBLE_CASE = {
   privatePractitioners: [],
 };
 
-exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
+export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
   caseCaption: 'Guy Fieri & Gordon Ramsay, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',

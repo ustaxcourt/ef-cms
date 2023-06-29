@@ -1,5 +1,5 @@
 import { getFormValueBarNumberAction } from './getFormValueBarNumberAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getFormValueBarNumberAction', () => {
   it('returns the barNumber from the advancedSearchForm state', async () => {

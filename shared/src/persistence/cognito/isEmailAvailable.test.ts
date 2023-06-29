@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { isEmailAvailable } = require('./isEmailAvailable');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { isEmailAvailable } from './isEmailAvailable';
 
 describe('isEmailAvailable', () => {
   const mockEmail = 'hello@example.com';

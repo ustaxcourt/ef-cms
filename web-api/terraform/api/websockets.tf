@@ -36,15 +36,13 @@ resource "aws_lambda_function" "websockets_connect_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
   }
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 }
 
 resource "aws_lambda_function" "websockets_default_lambda" {
@@ -58,15 +56,13 @@ resource "aws_lambda_function" "websockets_default_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
 
   environment {
     variables = var.lambda_environment
   }
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 }
 
 
@@ -81,15 +77,14 @@ resource "aws_lambda_function" "websockets_disconnect_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  runtime = "nodejs16.x"
+  runtime = var.node_version
+
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   environment {
     variables = var.lambda_environment
   }
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
 }
 
 resource "aws_apigatewayv2_integration" "websockets_connect_integration" {

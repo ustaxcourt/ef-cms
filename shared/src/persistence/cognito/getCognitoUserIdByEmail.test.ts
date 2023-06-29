@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getCognitoUserIdByEmail } = require('./getCognitoUserIdByEmail');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getCognitoUserIdByEmail } from './getCognitoUserIdByEmail';
 
 describe('getCognitoUserIdByEmail', () => {
   const mockEmail = 'hello@example.com';

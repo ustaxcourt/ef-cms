@@ -22,11 +22,12 @@ describe('updateTrialSessionInteractor should Generate Notices of', () => {
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
 
-    applicationContext.getUseCaseHelpers().savePaperServicePdf.mockReturnValue({
-      docketEntryId: '',
-      hasPaper: false,
-      url: 'www.example.com',
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .saveFileAndGenerateUrl.mockReturnValue({
+        fileId: 'f1501fb1-c2c8-4489-b28e-00212d45c93e',
+        url: 'www.example.com',
+      });
   });
 
   describe('In-Person Proceeding', () => {

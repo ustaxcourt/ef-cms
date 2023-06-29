@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { getPractitionersByName } = require('./getPractitionersByName');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getPractitionersByName } from './getPractitionersByName';
 jest.mock('./searchClient');
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
 describe('getPractitionersByName', () => {
   it('returns results from a single persistence query', async () => {

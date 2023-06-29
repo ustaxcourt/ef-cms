@@ -5,7 +5,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { getTrialCityName } from '../computeds/formattedTrialCity';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from './startCaseHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

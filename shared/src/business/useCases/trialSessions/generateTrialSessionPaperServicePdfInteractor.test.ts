@@ -28,9 +28,8 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
 
     applicationContext
       .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        docketEntryId: mockDocketEntryId,
-        hasPaper: true,
+      .saveFileAndGenerateUrl.mockResolvedValue({
+        fileId: mockDocketEntryId,
         url: mockPdfUrl,
       });
 
@@ -63,43 +62,28 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       applicationContext.getUtilities().copyPagesAndAppendToTargetPdf,
     ).toHaveBeenCalledTimes(trialNoticePdfsKeys.length);
 
-    const pdfDoc =
-      applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
-        .calls[0][0].document;
-    expect(pdfDoc.getPages().length).toBe(trialNoticePdfsKeys.length);
+    const bytes =
+      applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl.mock
+        .calls[0][0].file;
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const pdfDoc = await PDFDocument.load(bytes);
+    expect(pdfDoc.getPageCount()).toBe(trialNoticePdfsKeys.length);
   });
 
   it('should return paper service pdf related information', async () => {
-    const result = await generateTrialSessionPaperServicePdfInteractor(
-      applicationContext,
-      {
-        trialNoticePdfsKeys,
-      },
-    );
-
-    expect(result).toEqual({
-      docketEntryId: mockDocketEntryId,
-      hasPaper: true,
-      pdfUrl: mockPdfUrl,
+    await generateTrialSessionPaperServicePdfInteractor(applicationContext, {
+      trialNoticePdfsKeys,
     });
-  });
-
-  it('should return null when pdfUrl is undefined', async () => {
-    applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        docketEntryId: mockDocketEntryId,
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[2][0],
+    ).toMatchObject({
+      message: {
+        action: 'paper_service_complete',
+        docketEntryId: '99999',
         hasPaper: true,
-        url: undefined,
-      });
-
-    const result = await generateTrialSessionPaperServicePdfInteractor(
-      applicationContext,
-      {
-        trialNoticePdfsKeys,
+        pdfUrl: 'www.example.com',
       },
-    );
-
-    expect(result.pdfUrl).toBeNull();
+    });
   });
 });

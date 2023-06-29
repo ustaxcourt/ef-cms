@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
@@ -15,22 +16,22 @@ import {
   setupIconsToDisplay,
 } from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () =>
-  applicationContext.getUtilities().createISODateString();
-
-export const mockDocketEntry = {
-  createdAt: getDateISO(),
-  docketEntryId: '123',
-  documentTitle: 'Petition',
-  filedBy: 'Jessica Frase Marine',
-  filingDate: '2019-02-28T21:14:39.488Z',
-  isOnDocketRecord: true,
-};
-
 describe('formattedDocketEntries', () => {
+  const getDateISO = () =>
+    applicationContext.getUtilities().createISODateString();
+
+  const mockDocketEntry = {
+    createdAt: getDateISO(),
+    docketEntryId: '123',
+    documentTitle: 'Petition',
+    filedBy: 'Jessica Frase Marine',
+    filingDate: '2019-02-28T21:14:39.488Z',
+    isOnDocketRecord: true,
+  };
+
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 

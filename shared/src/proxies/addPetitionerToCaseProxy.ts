@@ -1,4 +1,4 @@
-const { post } = require('./requests');
+import { post } from './requests';
 
 /**
  * addPetitionerToCaseInteractor
@@ -10,7 +10,7 @@ const { post } = require('./requests');
  * @param {object} providers.contact the contact to add to the case
  * @returns {Promise<*>} the promise of the api call
  */
-exports.addPetitionerToCaseInteractor = (
+export const addPetitionerToCaseInteractor = (
   applicationContext,
   { caseCaption, contact, docketNumber },
 ) => {

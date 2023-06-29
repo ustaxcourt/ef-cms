@@ -1,5 +1,5 @@
-const qs = require('qs');
-const { get } = require('../requests');
+import { get } from '../requests';
+import qs from 'qs';
 
 /**
  * fetchPendingItemsProxy
@@ -9,7 +9,7 @@ const { get } = require('../requests');
  * @param {object} providers.judge the optional judge filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.fetchPendingItemsInteractor = (
+export const fetchPendingItemsInteractor = (
   applicationContext,
   { judge, page = 0 },
 ) => {

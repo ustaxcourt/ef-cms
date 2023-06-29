@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * createJudgeUserProxy
@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.user the user data
  * @returns {Promise<object>} the created user data
  */
-exports.createJudgeUserInteractor = ({ applicationContext, user }) => {
+export const createJudgeUserInteractor = ({ applicationContext, user }) => {
   return post({
     applicationContext,
     body: { user },

@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * checks if we are trying to save an unservable docket entry and returns different paths if so
- *
  * @param {object} applicationContext the applicationContext
  * @param {Function} path cerebral path function
  * @param {Function} get the cerebral state getter function
@@ -12,7 +11,7 @@ export const shouldSaveToConsolidatedGroupAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);

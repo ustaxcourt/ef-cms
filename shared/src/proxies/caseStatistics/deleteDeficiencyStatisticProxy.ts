@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * deleteDeficiencyStatisticInteractor
@@ -9,7 +9,7 @@ const { remove } = require('../requests');
  * @param {string} providers.statisticId the id of the statistic to update
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteDeficiencyStatisticInteractor = (
+export const deleteDeficiencyStatisticInteractor = (
   applicationContext,
   { docketNumber, statisticId },
 ) => {

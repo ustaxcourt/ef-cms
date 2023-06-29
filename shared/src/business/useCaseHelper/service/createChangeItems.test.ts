@@ -1,13 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { generateAndServeDocketEntry } = require('./createChangeItems');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateAndServeDocketEntry } from './createChangeItems';
 
 describe('generateAndServeDocketEntry', () => {
   let testCaseEntity;
@@ -191,7 +186,7 @@ describe('generateAndServeDocketEntry', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should pass the correct index to the coverSheet', async () => {
+  it('should pass the number of docket entries on the docket Record + 1 to the coverSheet', async () => {
     await generateAndServeDocketEntry({
       ...testArguments,
       caseEntity: new Case(

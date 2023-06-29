@@ -1,5 +1,5 @@
-const { getUniqueId } = require('../sharedAppContext');
-const { User } = require('../business/entities/User');
+import { User } from '../business/entities/User';
+import { getUniqueId } from '../sharedAppContext';
 
 const [email, role, section, name, judgeFullName, judgeTitle] =
   process.argv.slice(2);

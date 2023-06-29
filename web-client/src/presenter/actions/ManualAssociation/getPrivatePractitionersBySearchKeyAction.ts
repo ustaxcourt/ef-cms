@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /* * Gets privatePractitioners whose name or barNumber match the searchKey
  *
@@ -10,7 +10,7 @@ export const getPrivatePractitionersBySearchKeyAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const searchKey = get(state.form.practitionerSearch);
 
   const privatePractitioners = await applicationContext

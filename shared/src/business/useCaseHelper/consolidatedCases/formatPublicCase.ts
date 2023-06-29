@@ -1,14 +1,13 @@
+import { Case, isSealedCase } from '../../entities/cases/Case';
 import { PublicCase } from '../../entities/cases/PublicCase';
 import {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } from '../../utilities/caseFilter';
 import { decorateForCaseStatus } from '../../useCases/getCaseInteractor';
-import { isSealedCase } from '../../entities/cases/Case';
 
 /**
  * formatPublicCase takes a rawCase and formats to a public case
- *
  * @param {object} providers the providers object
  * @param {string} providers.applicationContext the applicationContext
  * @param {string} providers.docketNumber the docket number of the case to get
@@ -21,7 +20,7 @@ export const formatPublicCase = ({
   rawCaseRecord,
 }: {
   applicationContext: IApplicationContext;
-  rawCaseRecord?: TCase;
+  rawCaseRecord?: Case;
 }) => {
   if (isSealedCase(rawCaseRecord)) {
     rawCaseRecord = caseSealedFormatter(rawCaseRecord);

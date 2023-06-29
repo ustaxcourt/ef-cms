@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
-} = require('../../entities/EntityConstants');
-const { caseInventoryReport } = require('./caseInventoryReport');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { caseInventoryReport } from './caseInventoryReport';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
 
 describe('caseInventoryReport', () => {

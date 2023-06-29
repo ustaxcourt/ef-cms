@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the currentViewMetadata.caseDetail.informationTab to a default value if it is not already set.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.store the cerebral store used for setting the state.cases
@@ -14,7 +13,7 @@ export const setDefaultCaseDetailTabAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { PARTY_VIEW_TABS } = applicationContext.getConstants();
   const frozen = get(state.currentViewMetadata.caseDetail.frozen);
 

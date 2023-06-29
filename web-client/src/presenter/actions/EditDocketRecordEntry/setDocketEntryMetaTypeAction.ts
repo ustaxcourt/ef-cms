@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * set the edit type on screenMetadata
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the utility method
  * @param {object} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const setDocketEntryMetaTypeAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { docketEntryId, eventCode, isMinuteEntry } = get(state.form);
 
   const { COURT_ISSUED_EVENT_CODES, SYSTEM_GENERATED_DOCUMENT_TYPES } =

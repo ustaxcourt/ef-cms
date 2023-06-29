@@ -1,5 +1,7 @@
 const AWS = require('aws-sdk');
-const createApplicationContext = require('../../../../src/applicationContext');
+const {
+  createApplicationContext,
+} = require('../../../../src/applicationContext');
 const { createLogger } = require('../../../../src/createLogger');
 const { migrateRecords: migrations } = require('./migration-segments');
 

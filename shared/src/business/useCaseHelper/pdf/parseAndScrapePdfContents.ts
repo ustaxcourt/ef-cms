@@ -6,7 +6,7 @@
  * @param {string} providers.pdfBuffer the pdf buffer
  * @returns {object} the parsed and scraped pdf contents
  */
-exports.parseAndScrapePdfContents = async ({
+export const parseAndScrapePdfContents = async ({
   applicationContext,
   pdfBuffer,
 }) => {

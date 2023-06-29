@@ -1,7 +1,5 @@
-const {
-  MAX_ELASTICSEARCH_PAGINATION,
-} = require('../../business/entities/EntityConstants');
-const { search } = require('./searchClient');
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../business/entities/EntityConstants';
+import { search } from './searchClient';
 
 /**
  * getCasesByUserId
@@ -11,7 +9,7 @@ const { search } = require('./searchClient');
  * @param {string} providers.userId user id
  * @returns {array} array of docket numbers
  */
-exports.getCasesByUserId = async ({ applicationContext, userId }) => {
+export const getCasesByUserId = async ({ applicationContext, userId }) => {
   const source = ['docketNumber'];
 
   const { results, total } = await search({

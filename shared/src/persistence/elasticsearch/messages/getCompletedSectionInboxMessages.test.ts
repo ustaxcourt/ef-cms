@@ -1,14 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getCompletedSectionInboxMessages,
-} = require('./getCompletedSectionInboxMessages');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getCompletedSectionInboxMessages } from './getCompletedSectionInboxMessages';
 jest.mock('../searchClient');
-const {
-  PETITIONS_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const { search } = require('../searchClient');
+import { PETITIONS_SECTION } from '../../../business/entities/EntityConstants';
+import { search } from '../searchClient';
 
 describe('getCompletedSectionInboxMessages', () => {
   it('should return results from the search client', async () => {

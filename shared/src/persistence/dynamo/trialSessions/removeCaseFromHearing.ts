@@ -1,4 +1,4 @@
-const { remove } = require('../../dynamodbClientService');
+import { remove } from '../../dynamodbClientService';
 
 /**
  * removeCaseFromHearing

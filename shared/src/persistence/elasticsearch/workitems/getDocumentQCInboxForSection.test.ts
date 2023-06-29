@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../../business/test/createTestApplicationContext');
-const {
-  getDocumentQCInboxForSection,
-} = require('./getDocumentQCInboxForSection');
+import { applicationContext } from '../../../business/test/createTestApplicationContext';
+import { getDocumentQCInboxForSection } from './getDocumentQCInboxForSection';
 jest.mock('../searchClient');
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
-const { search } = require('../searchClient');
+import { GET_PARENT_CASE } from '../helpers/searchClauses';
+import { search } from '../searchClient';
 
 describe('getDocumentQCInboxForSection', () => {
   beforeAll(() => {

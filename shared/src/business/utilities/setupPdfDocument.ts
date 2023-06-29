@@ -1,4 +1,4 @@
-exports.setupPdfDocument = async ({ applicationContext, pdfData }) => {
+export const setupPdfDocument = async ({ applicationContext, pdfData }) => {
   const { PDFDocument, StandardFonts } = await applicationContext.getPdfLib();
   const pdfDoc = await PDFDocument.load(pdfData);
 

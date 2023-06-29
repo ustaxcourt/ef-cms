@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * creates the success alert object
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the cerebral props object
@@ -14,14 +13,20 @@ export const getFileExternalDocumentAlertSuccessAction = ({
   get,
   props,
   store,
-}) => {
-  const { NOTICE_EVENT_CODES } = applicationContext.getConstants();
+}: ActionProps) => {
+  const { DOCUMENT_SERVED_MESSAGES, NOTICE_EVENT_CODES } =
+    applicationContext.getConstants();
   const documentToEdit = get(state.documentToEdit);
   const isCreatingOrder = get(state.isCreatingOrder);
   const isCreatingNotice = NOTICE_EVENT_CODES.includes(props.eventCode);
+  const { fileAcrossConsolidatedGroup } = props;
+
+  const alertSuccessMessage = fileAcrossConsolidatedGroup
+    ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
+    : DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED;
 
   const alertSuccess = {
-    message: 'Document filed and is accessible from the Docket Record.',
+    message: alertSuccessMessage,
   };
 
   if (props.documentWithPendingAssociation) {

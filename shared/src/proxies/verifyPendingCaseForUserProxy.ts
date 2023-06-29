@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  *
@@ -8,7 +8,7 @@ const { get } = require('./requests');
  * @param {string} providers.userId the user id to verify
  * @returns {Promise<*>} the promise of the api call
  */
-exports.verifyPendingCaseForUserInteractor = (
+export const verifyPendingCaseForUserInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

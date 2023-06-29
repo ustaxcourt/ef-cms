@@ -1,7 +1,5 @@
-const {
-  TrialSessionWorkingCopy,
-} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 
 /**
  * createTrialSessionAndWorkingCopy
@@ -11,7 +9,7 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
  * @param {object} providers.trialSessionToAdd the trial session data
  * @returns {object} the created trial session
  */
-exports.createTrialSessionAndWorkingCopy = async ({
+export const createTrialSessionAndWorkingCopy = async ({
   applicationContext,
   trialSessionToAdd,
 }) => {

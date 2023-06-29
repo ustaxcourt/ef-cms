@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * updates a docket entry with the given court-issued document
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const updateCourtIssuedDocketEntryAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);

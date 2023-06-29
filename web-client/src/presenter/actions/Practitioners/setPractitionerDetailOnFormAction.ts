@@ -1,9 +1,8 @@
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets props.practitionerDetail on state.form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const setPractitionerDetailOnFormAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   store.set(state.form, props.practitionerDetail);
   store.set(state.form.originalEmail, props.practitionerDetail.email);
 

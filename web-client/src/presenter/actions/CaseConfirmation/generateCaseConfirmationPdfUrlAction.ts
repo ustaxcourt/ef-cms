@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * get the url from the case details
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {Function} providers.store the cerebral store function
@@ -12,7 +11,7 @@ export const generateCaseConfirmationPdfUrlAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntries = get(state.caseDetail.docketEntries);
 

@@ -1,9 +1,9 @@
-const {
+import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+} from '../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
-exports.stampDocumentForService = async ({
+export const stampDocumentForService = async ({
   applicationContext,
   documentToStamp,
   pdfData,

@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * generate document titles for filing documents
@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
  */
-export const generateTitleAction = ({ applicationContext, get, store }) => {
+export const generateTitleAction = ({
+  applicationContext,
+  get,
+  store,
+}: ActionProps) => {
   const documentMetadata = get(state.form);
   let documentTitle = applicationContext
     .getUtilities()

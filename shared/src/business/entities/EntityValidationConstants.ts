@@ -1,5 +1,6 @@
-const joi = require('joi');
-const {
+import joi from 'joi';
+
+import {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
   AMICUS_BRIEF_EVENT_CODE,
@@ -18,15 +19,16 @@ const {
   PARTIES_CODES,
   ROLES,
   SCENARIOS,
-} = require('./EntityConstants');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
+} from './EntityConstants';
+import { JoiValidationConstants } from './JoiValidationConstants';
+import { createEndOfDayISO } from '../utilities/DateHandler';
 
-const SERVICE_INDICATOR_ERROR = {
+export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
     'You cannot change from paper to electronic service. Select a valid service preference.',
 };
 
-const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
+export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   action: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
@@ -274,6 +276,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   qcAt: JoiValidationConstants.ISO_DATE.optional(),
   qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
+  redactionAcknowledgement: joi.boolean().optional().invalid(false),
   relationship: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_RELATIONSHIPS),
   ).optional(),
@@ -435,7 +438,8 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
     .description('The name of the user that sent the WorkItem'),
   sentBySection: JoiValidationConstants.STRING.optional(),
   sentByUserId: JoiValidationConstants.UUID.optional(),
-  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+  trialDate: joi.string().optional().allow(null),
+  trialLocation: joi.string().optional().allow(null),
   updatedAt: JoiValidationConstants.ISO_DATE.required(),
   workItemId: JoiValidationConstants.UUID.required(),
 };
@@ -458,20 +462,34 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
 
-// TODO: validate workItems in DocketEntry
-// DOCKET_ENTRY_VALIDATION_RULE_KEYS.workItem = joi
-//   .object()
-//   .keys(WORK_ITEM_VALIDATION_RULE_KEYS)
-//   .optional();
-
-module.exports = {
-  DOCKET_ENTRY_VALIDATION_RULE_KEYS,
-  DOCKET_ENTRY_VALIDATION_RULES: joi
-    .object()
-    .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),
-  OUTBOX_ITEM_VALIDATION_RULES: joi
-    .object()
-    .keys(OUTBOX_ITEM_VALIDATION_RULE_KEYS),
-  SERVICE_INDICATOR_ERROR,
-  WORK_ITEM_VALIDATION_RULES: joi.object().keys(WORK_ITEM_VALIDATION_RULE_KEYS),
+export const DATE_RANGE_VALIDATION_RULE_KEYS = {
+  endDate: joi.alternatives().conditional('startDate', {
+    is: JoiValidationConstants.ISO_DATE.exist().not(null),
+    otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+      .required()
+      .description('The end date search filter must be of valid date format'),
+    then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+      .min(joi.ref('startDate'))
+      .required()
+      .description(
+        'The end date search filter must be of valid date format and greater than or equal to the start date',
+      ),
+  }),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
 };
+
+export const DOCKET_ENTRY_VALIDATION_RULES = joi
+  .object()
+  .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS);
+
+export const OUTBOX_ITEM_VALIDATION_RULES = joi
+  .object()
+  .keys(OUTBOX_ITEM_VALIDATION_RULE_KEYS);
+
+export const WORK_ITEM_VALIDATION_RULES = joi
+  .object()
+  .keys(WORK_ITEM_VALIDATION_RULE_KEYS);

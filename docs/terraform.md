@@ -237,7 +237,7 @@ Here is an outline of what some of these files do at a high level:
     │   ├── migration-segments.js // the lambda used to process the dynamo segments
     │   ├── migration.js // the live migration process
     │   ├── migrations // contains all the migration scripts used for processing the dynamodb items
-    │   ├── migrationsToRun.js // a list of all the migration scripts we want to run
+    │   ├── migrationsToRun.ts // a list of all the migration scripts we want to run
     │   ├── utilities.js // contains all the utility functions used by the migration scripts
     ├── main.tf // main entry file
     ├── migration-segments.tf // the resources needed for the migration-segments lambda
@@ -363,7 +363,19 @@ Here are a few debugging tricks to help with commonly encountered situations.
 
 Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes - verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
 
-Then, use `terraform force-unlock` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
+1. Determine which terraform failed (e.g web-api, web-client, environment).
+2. Switch to the correct environment using your AWS creds.
+3. Switch to the correct terraform version (example: `tfswitch 1.4.5`).
+4. Navigate to `main` directory of the deployed terraform at fault (example `web-api/terraform/main`).
+5. Edit the deploy-app.sh to comment out ONLY the terraform plan and apply commands (not `terraform init`).
+```
+# terraform plan -out execution-plan
+# terraform apply -auto-approve execution-plan
+```
+6. Set up terraform for the specific environment in question by running the deploy-app.sh script (this will eventually run the `terraform init` command)  (example: `../bin/deploy-app.sh "$ENV"`). (Be sure to have Docker Desktop running!)
+7. Determine the lock ID that needs to be unlocked (lockID).
+8. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
+9. Uncomment the `terraform plan` and `apply` commands.
 
 ### Fixing Version Errors
 

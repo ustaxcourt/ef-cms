@@ -1,4 +1,4 @@
-const { put } = require('../requests');
+import { put } from '../requests';
 
 /**
  * updateCorrespondenceDocumentInteractor
@@ -9,7 +9,7 @@ const { put } = require('../requests');
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the promise of the api call
  */
-exports.updateCorrespondenceDocumentInteractor = (
+export const updateCorrespondenceDocumentInteractor = (
   applicationContext,
   { correspondenceId, documentMetadata },
 ) => {

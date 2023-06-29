@@ -1,3 +1,4 @@
+import { DocketEntryDynamoRecord } from '../../persistence/dynamo/dynamoTypes';
 import {
   FORMATS,
   PATTERNS,

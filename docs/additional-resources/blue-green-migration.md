@@ -105,7 +105,7 @@ The `east` table is master table, and if you delete these tables and recreate th
 ### Remove Record of Previous Migration
 
 1. Delete the Destination table [see instructions](#delete-the-destination-tables)
-2. Remove a migration script item from the environment's `efcms-<ENV>-deploy` DynamoDB table that is expected to migrate, from the `migrationsToRun.js` file. For example, if `migrationsToRun.js` includes a script called `0001-test-script.js`, delete that item from the DynamoDB table.
+2. Remove a migration script item from the environment's `efcms-<ENV>-deploy` DynamoDB table that is expected to migrate, from the `migrationsToRun.ts` file. For example, if `migrationsToRun.ts` includes a script called `0001-test-script.ts`, delete that item from the DynamoDB table.
 3. Kick off a CircleCI workflow, which will follow the steps above for Automated Migration Steps.
 
 ### Explicitly Configure Deploy Table

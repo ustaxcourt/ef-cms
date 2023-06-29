@@ -1,4 +1,4 @@
-const { formatWorkItemResult } = require('./formatWorkItemResult');
+import { formatWorkItemResult } from './formatWorkItemResult';
 
 describe('formatWorkItemResult', () => {
   const mockWorkItemResult = {

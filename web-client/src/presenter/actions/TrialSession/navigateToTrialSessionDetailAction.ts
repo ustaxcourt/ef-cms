@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * changes the route to view the trial sessions
@@ -13,7 +13,7 @@ export const navigateToTrialSessionDetailAction = async ({
   get,
   props,
   router,
-}) => {
+}: ActionProps) => {
   const trialSessionId = props.trialSessionId || get(state.trialSessionId);
   await router.route(`/trial-session-detail/${trialSessionId}`);
 };

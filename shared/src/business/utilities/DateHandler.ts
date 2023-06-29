@@ -1,13 +1,15 @@
-const fedHolidays = require('@18f/us-federal-holidays');
-const { DateTime } = require('luxon');
+import { DateTime, Interval } from 'luxon';
+import fedHolidays from '@18f/us-federal-holidays';
 
-const FORMATS = {
+export const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
   DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
+  MDYY: 'M/d/yy',
+  MDYYYY: 'M/d/yyyy',
   MMDDYY: 'MM/dd/yy',
   MMDDYYYY: 'MM/dd/yyyy',
   MMDDYYYY_DASHED: 'MM-dd-yyyy',
@@ -26,27 +28,28 @@ const FORMATS = {
   YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
   YYYYMMDD_NUMERIC: 'yyyyMMdd',
-};
+} as const;
+const FORMATS1 = Object.values(FORMATS);
+export type TimeFormats = (typeof FORMATS1)[number];
 
-const PATTERNS = {
+export const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
   YYYYMMDD: /^\d{4}-\d{1,2}-\d{1,2}$/,
 };
 
-const USTC_TZ = 'America/New_York';
+export const USTC_TZ = 'America/New_York';
 
-const isStringISOFormatted = dateString => {
+export const isStringISOFormatted = dateString => {
   return DateTime.fromISO(dateString).isValid;
 };
 
 /**
  * convert a given date or time provided in Eastern Time to a GMT luxon object
- *
  * @param {string} dateString a string representing a date/time in EST
  * @param {string} inputFormat the format matching the incoming dateString
  * @returns {string} an ISO-8601 timestamp with GMT+0
  */
-const prepareDateFromEST = (dateString, inputFormat) => {
+export const prepareDateFromEST = (dateString, inputFormat) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
   })
@@ -58,12 +61,11 @@ const prepareDateFromEST = (dateString, inputFormat) => {
 
 /**
  * combines a ISO-formatted date stamp in UTC with a HH:mm time string in EST
- *
  * @param {string} dateString ISO-formatted date stamp in UT
  * @param {string} timeString a HH:mm time string in EST
  * @returns {string} an ISO-8601 timestamp with GMT+0
  */
-const combineISOandEasternTime = (dateString, timeString) => {
+export const combineISOandEasternTime = (dateString, timeString) => {
   const [hour, minute] = timeString.split(':');
   const result = DateTime.fromISO(dateString, {
     zone: USTC_TZ,
@@ -81,7 +83,10 @@ const combineISOandEasternTime = (dateString, timeString) => {
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {luxon} a luxon object
  */
-const prepareDateFromString = (dateString, inputFormat) => {
+export const prepareDateFromString = (
+  dateString?: string,
+  inputFormat?: TimeFormats,
+) => {
   if (dateString === undefined) {
     dateString = createISODateString();
   }
@@ -114,7 +119,15 @@ const prepareDateFromString = (dateString, inputFormat) => {
   return result;
 };
 
-const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
+export const calculateISODate = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}) => {
   if (!howMuch) return dateString;
 
   return prepareDateFromString(dateString)
@@ -127,7 +140,7 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-const createISODateString = (dateString, inputFormat) => {
+export const createISODateString = (dateString?, inputFormat?) => {
   let result;
 
   if (!dateString) {
@@ -141,11 +154,10 @@ const createISODateString = (dateString, inputFormat) => {
 
 /**
  * createISODateAtStartOfDayEST
- *
  * @param {string} dateString a date string to be updated to ISO in USTC_TZ (ET)
  * @returns {string} the ISO formatted date set at midnight of today USTC_TZ (ET)
  */
-const createISODateAtStartOfDayEST = dateString => {
+export const createISODateAtStartOfDayEST = (dateString?: any) => {
   const dtObj = dateString
     ? DateTime.fromISO(dateString, { zone: USTC_TZ })
     : DateTime.now().setZone(USTC_TZ);
@@ -157,12 +169,11 @@ const createISODateAtStartOfDayEST = dateString => {
 
 /**
  * createDateAtStartOfWeekEST
- *
  * @param {string} dateString a date string to be updated to given format in USTC_TZ (ET)
  * @returns {string} the formatted date set at midnight of first Monday of
  *                   given week USTC_TZ (ET)
  */
-const createDateAtStartOfWeekEST = (dateString, format) => {
+export const createDateAtStartOfWeekEST = (dateString, format) => {
   const dtObj = dateString
     ? DateTime.fromISO(dateString, { zone: USTC_TZ })
     : DateTime.now().setZone(USTC_TZ);
@@ -176,25 +187,49 @@ const createDateAtStartOfWeekEST = (dateString, format) => {
   return dateOutput;
 };
 
-const createEndOfDayISO = ({ day, month, year }) => {
-  return DateTime.fromObject({ day, month, year }, { zone: USTC_TZ })
-    .set({ hour: 23, millisecond: 999, minute: 59, second: 59 })
-    .setZone('utc')
-    .toISO();
+export const createEndOfDayISO = (params?: {
+  day: string;
+  month: string;
+  year: string;
+}): string => {
+  const dateObject = params
+    ? DateTime.fromObject(
+        {
+          day: params.day,
+          month: params.month,
+          year: params.year,
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
+
+  return dateObject.endOf('day').setZone('utc').toISO();
 };
 
-const createStartOfDayISO = ({ day, month, year }) => {
-  return DateTime.fromObject({ day, month, year }, { zone: USTC_TZ })
-    .startOf('day')
-    .setZone('utc')
-    .toISO();
+export const createStartOfDayISO = (params?: {
+  day: string;
+  month: string;
+  year: string;
+}): string => {
+  const dateObject = params
+    ? DateTime.fromObject(
+        {
+          day: params.day,
+          month: params.month,
+          year: params.year,
+        },
+        { zone: USTC_TZ },
+      )
+    : DateTime.now().setZone(USTC_TZ);
+
+  return dateObject.startOf('day').setZone('utc').toISO();
 };
 
 /**
  * @param {object} options the date options containing year, month, day
  * @returns {string} a formatted ISO date string
  */
-const createISODateStringFromObject = options => {
+export const createISODateStringFromObject = options => {
   return DateTime.fromObject(options, { zone: USTC_TZ }).setZone('utc').toISO();
 };
 
@@ -203,7 +238,10 @@ const createISODateStringFromObject = options => {
  * @param {string} formatArg the desired formatting as specified by the luxon library
  * @returns {string|void} a formatted date string
  */
-const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
+export const formatDateString = (
+  dateString,
+  formatArg: TimeFormats = FORMATS.ISO,
+) => {
   if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
 
@@ -230,11 +268,8 @@ const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   return result;
 };
 
-const formatNow = formatStr => {
-  /*
-  Using `module.exports` to allow mocking in tests
-  */
-  const now = module.exports.createISODateString();
+export const formatNow = (formatStr: TimeFormats) => {
+  const now = createISODateString();
   return formatDateString(now, formatStr);
 };
 
@@ -245,7 +280,7 @@ const formatNow = formatStr => {
  * @param {boolean} options.exact whether to return the exact number of ms between a and b (default false)
  * @returns {number} difference between date a and date b
  */
-const dateStringsCompared = (a, b, options = { exact: false }) => {
+export const dateStringsCompared = (a, b, options = { exact: false }) => {
   const simpleDateLength = 10; // e.g. YYYY-MM-DD
 
   if (a.length == simpleDateLength || b.length == simpleDateLength) {
@@ -279,7 +314,7 @@ const dateStringsCompared = (a, b, options = { exact: false }) => {
  * @param {string} dateString date to be deconstructed
  * @returns {object} deconstructed date object
  */
-const deconstructDate = dateString => {
+export const deconstructDate = dateString => {
   if (PATTERNS.YYYYMMDD.test(dateString)) {
     const [year, month, day] = dateString.split('-').map(Number).map(String);
     return { day, month, year };
@@ -299,10 +334,9 @@ const deconstructDate = dateString => {
 /**
  * Creates an object representing the current calendar day
  * according to USTC_TZ timezone
- *
  * @returns {object} with date, month, and year
  */
-const getMonthDayYearInETObj = () => {
+export const getMonthDayYearInETObj = () => {
   const dtObj = DateTime.now().setZone(USTC_TZ);
   const result = {
     day: dtObj.toFormat('d'),
@@ -317,10 +351,14 @@ const getMonthDayYearInETObj = () => {
  * @param {string} formats the format to check against
  * @returns {boolean} if the date string is valid
  */
-const isValidDateString = (
+export const isValidDateString = (
   dateString,
   formats = ['MM-dd-yyyy', 'MM/dd/yyyy', 'M-d-yyyy', 'M/d/yyyy'],
 ) => {
+  if (!dateString) {
+    return false;
+  }
+
   if (Array.isArray(formats)) {
     return formats.some(format => {
       return DateTime.fromFormat(dateString, format).isValid;
@@ -335,12 +373,11 @@ const isValidDateString = (
  * When timeStamp1 is greater (more recent) than timeStamp2, the difference
  * will be positive. Time-stamps occurring on the same day will yield zero.
  * If timeStamp2 is greater than timeStamp1, the result will be negative.
- *
  * @param {string} timeStamp1 an ISO-8601 date string
  * @param {string} timeStamp2 an ISO-8601 date string
  * @returns {number} the difference between two days, rounded to the nearest integer
  */
-const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
+export const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
   const dt1 = DateTime.fromISO(timeStamp1, { zone: USTC_TZ })
     .set({
       hours: 12,
@@ -361,12 +398,11 @@ const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
  * properly casts a variety of inputs to a UTC ISOString
  * directly using the luxon library to inspect the formatting of the input
  * before sending to application context functions to be transformed
- *
  * @param {object} applicationContext the application context
  * @param {string} dateString the date string to cast to an ISO string
  * @returns {string} the ISO string.
  */
-const castToISO = dateString => {
+export const castToISO = dateString => {
   if (dateString === '') {
     return null;
   }
@@ -393,14 +429,13 @@ const castToISO = dateString => {
 /**
  * checks if the new date contains all expected parts and returns date as an
  * ISO string; otherwise, it returns null
- *
  * @param {object} applicationContext the application context*
  * @param {string} updatedDateString the new date string to verify
  * @returns {string} the updatedDateString if everything is correct.
  */
-const checkDate = updatedDateString => {
+export const checkDate = updatedDateString => {
   const hasAllDateParts = /.+-.+-.+/;
-  let result = null;
+  let result: string | null = null;
 
   // use unique characters in "undefined" ⬇
   if (updatedDateString.replace(/[-,undefi]/g, '') === '') {
@@ -416,7 +451,7 @@ const checkDate = updatedDateString => {
   return result;
 };
 
-const dateHasText = updatedDateString => {
+export const dateHasText = updatedDateString => {
   const letterMatcher = /[0-9]+$/;
   const dateParts = updatedDateString.split('-');
   return (
@@ -430,14 +465,13 @@ const dateHasText = updatedDateString => {
  * Attempts to format separate date components provided into a string
  * like YYYY-MM-DD, e.g. 2021-01-20 if any of day, month, or year are defined
  * otherwise, will return null.
- *
  * @param {object} deconstructed date object
  * @param {string} deconstructed.day two-digit calendar day
  * @param {string} deconstructed.month two-digit calendar month
  * @param {string} deconstructed.year four-digit calendar year
  * @returns {string} a date formatted as YYYY-MM-DD
  */
-const computeDate = ({ day, month, year }) => {
+export const computeDate = ({ day, month, year }) => {
   const inputProvided = day || month || year;
   if (!inputProvided) {
     return null;
@@ -456,11 +490,10 @@ const computeDate = ({ day, month, year }) => {
 
 /**
  * Formats date object into ISO string only if date is valid
- *
  * @param {object} date the date object containing year, month, day
  * @returns {string|void} a formatted ISO date string if date object is valid
  */
-const validateDateAndCreateISO = date => {
+export const validateDateAndCreateISO = date => {
   if (isValidDateString(`${date.month}-${date.day}-${date.year}`)) {
     return createISODateStringFromObject({
       day: date.day,
@@ -472,12 +505,11 @@ const validateDateAndCreateISO = date => {
 
 /**
  * Subtracts a specified amount of time from passed in ISO date
- *
  * @param {string} date the ISO date
  * @param {object} dateConfig time
  * @returns {string} a formatted ISO date string if date object is valid
  */
-const subtractISODates = (date, dateConfig) => {
+export const subtractISODates = (date, dateConfig) => {
   return DateTime.fromISO(date).minus(dateConfig).setZone('UTC').toISO();
 };
 
@@ -485,12 +517,11 @@ const subtractISODates = (date, dateConfig) => {
  * Returns startDate plus n numberOfDays
  * but if the return date results on a Saturday, Sunday, or Federal holiday,
  * it will be moved forward to the next business day
- *
  * @param {string} startDate the date to add days to
  * @param {number} numberOfDays number of days to add to startDate
  * @returns {string} a formatted MONTH_DAY_YEAR string if date object is valid
  */
-const getBusinessDateInFuture = ({
+export const getBusinessDateInFuture = ({
   numberOfDays,
   startDate,
   units = 'days',
@@ -522,31 +553,21 @@ const getBusinessDateInFuture = ({
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
 };
 
-module.exports = {
-  FORMATS,
-  PATTERNS,
-  calculateDifferenceInDays,
-  calculateISODate,
-  castToISO,
-  checkDate,
-  combineISOandEasternTime,
-  computeDate,
-  createDateAtStartOfWeekEST,
-  createEndOfDayISO,
-  createISODateAtStartOfDayEST,
-  createISODateString,
-  createISODateStringFromObject,
-  createStartOfDayISO,
-  dateStringsCompared,
-  deconstructDate,
-  formatDateString,
-  formatNow,
-  getBusinessDateInFuture,
-  getMonthDayYearInETObj,
-  isStringISOFormatted,
-  isValidDateString,
-  prepareDateFromEST,
-  prepareDateFromString,
-  subtractISODates,
-  validateDateAndCreateISO,
+/**
+ * Returns whether or not the current date falls within the given date time range
+ * @param {string} intervalStartDate the interval start ISO date string
+ * @param {string} intervalEndDate the interval end ISO date string
+ * @returns {boolean} whether or not the current date falls within the given date time range
+ */
+export const isTodayWithinGivenInterval = ({
+  intervalEndDate,
+  intervalStartDate,
+}): boolean => {
+  const today = DateTime.now().setZone(USTC_TZ);
+  const dateRangeInterval = Interval.fromDateTimes(
+    intervalStartDate,
+    intervalEndDate,
+  );
+
+  return dateRangeInterval.contains(today);
 };

@@ -7,14 +7,11 @@
 //   npm install -g  @babel/core @babel/node
 //   npx babel-node shared/src/business/utilities/createSignedDocumentsForInspection.js
 
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext: applicationContext,
-} = require('../../../../web-client/src/applicationContext');
-const {
-  generateSignedDocumentInteractor,
-} = require('../useCases/generateSignedDocumentInteractor');
+import fs from 'fs';
+
+import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { generateSignedDocumentInteractor } from '../useCases/generateSignedDocumentInteractor';
+import path from 'path';
 
 // see this for reference: shared/src/business/utilities/documentGenerators.test.js
 

@@ -1,15 +1,16 @@
 /* eslint-disable max-lines */
-const {
+import {
   applicationContext,
   applicationContextForClient,
-} = require('../../business/test/createTestApplicationContext');
-const {
+} from '../../business/test/createTestApplicationContext';
+
+import {
   BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
   TODAYS_ORDERS_SORTS,
-} = require('../../business/entities/EntityConstants');
-const { advancedDocumentSearch } = require('./advancedDocumentSearch');
-const { search } = require('./searchClient');
+} from '../../business/entities/EntityConstants';
+import { advancedDocumentSearch } from './advancedDocumentSearch';
+import { search } from './searchClient';
 jest.mock('./searchClient');
 
 describe('advancedDocumentSearch', () => {

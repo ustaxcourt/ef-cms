@@ -1,20 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments,
-} = require('./closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from './closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;

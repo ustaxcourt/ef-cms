@@ -1,5 +1,6 @@
 module.exports = [
   'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
+  'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/reports/judge-activity-report',
   'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/search',
   'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/search/no-matches',
   {

@@ -1,7 +1,5 @@
-const {
-  getDocumentTitleForNoticeOfChange,
-} = require('./getDocumentTitleForNoticeOfChange');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getDocumentTitleForNoticeOfChange } from './getDocumentTitleForNoticeOfChange';
 
 describe('getDocumentTitleForNoticeOfChange', () => {
   let docketEntry;

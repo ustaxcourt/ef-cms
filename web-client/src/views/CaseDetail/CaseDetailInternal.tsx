@@ -22,8 +22,9 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { UnsealCaseModal } from './UnsealCaseModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
-import React from 'react';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+import React, { useEffect } from 'react';
 
 export const CaseDetailInternal = connect(
   {
@@ -40,6 +41,10 @@ export const CaseDetailInternal = connect(
     showEditCase,
     showModal,
   }) {
+    useEffect(() => {
+      return () => clearViewerDocumentToDisplaySequence();
+    }, []);
+
     return (
       <>
         <CaseDetailHeader className="margin-bottom-0" />
@@ -56,9 +61,6 @@ export const CaseDetailInternal = connect(
             <Tabs
               bind="currentViewMetadata.caseDetail.docketRecordTab"
               className="classic-horizontal-header3 tab-border"
-              onSelect={tabName =>
-                clearViewerDocumentToDisplaySequence({ tabName })
-              }
             >
               <Tab
                 id="tab-docket-sub-record"

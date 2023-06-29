@@ -214,7 +214,6 @@ export class Practitioner extends User {
 
   /**
    * returns the full concatenated name for the given practitioner data
-   *
    * @param {object} practitionerData data to pull name parts from
    * @returns {string} the concatenated firstName, middleName, and lastName with suffix
    */
@@ -230,7 +229,6 @@ export class Practitioner extends User {
 
   /**
    * returns a default service indicator based on whether the presence of an email address
-   *
    * @param {object} practitionerData data where an email may exist
    * @returns {string} the service indicator for the given condition
    */

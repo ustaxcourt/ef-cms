@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Sets the total penalties amount from props on the statistic from the given index from props
- *
  * @param {object} providers the providers object
  * @param {object} providers.props the cerebral get function
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const setTotalPenaltiesAmountForStatisticAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { allPenalties, sumOfPenalties } = props;
   const { key, statisticIndex } = get(state.modal);
 

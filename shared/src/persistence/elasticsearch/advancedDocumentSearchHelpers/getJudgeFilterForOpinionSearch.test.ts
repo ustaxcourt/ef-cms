@@ -1,10 +1,8 @@
-const {
-  getJudgeFilterForOpinionSearch,
-} = require('./getJudgeFilterForOpinionSearch');
-const {
+import {
   OPINION_JUDGE_FIELD,
   ORDER_JUDGE_FIELD,
-} = require('../../../business/entities/EntityConstants');
+} from '../../../business/entities/EntityConstants';
+import { getJudgeFilterForOpinionSearch } from './getJudgeFilterForOpinionSearch';
 
 describe('getJudgeFilterForOpinionSearch', () => {
   it('does a search for both judge and signed judge since bench opinions are technically orders', () => {

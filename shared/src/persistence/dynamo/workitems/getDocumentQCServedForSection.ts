@@ -1,3 +1,4 @@
+import { OutboxDynamoRecord } from '../dynamoTypes';
 import { queryFull } from '../../dynamodbClientService';
 
 export const getDocumentQCServedForSection = ({

@@ -1,74 +1,67 @@
-const { getDescriptionDisplay } = require('./getDescriptionDisplay');
+import { getDescriptionDisplay } from './getDescriptionDisplay';
 
 describe('getDescriptionDisplay', () => {
   const documentTitle = 'doc title';
   const documentType = 'doc type';
   const description = 'doc description';
+  let baseDocketEntry;
 
-  let documentMetaData = {
-    documentTitle,
-  };
+  beforeEach(() => {
+    baseDocketEntry = {
+      documentTitle,
+    };
+  });
 
-  it('returns descriptionDisplay as documentTitle with no added information', () => {
-    const result = getDescriptionDisplay(documentMetaData);
+  it('should return descriptionDisplay as documentTitle with no added information', () => {
+    const result = getDescriptionDisplay(baseDocketEntry);
     expect(result).toEqual('doc title');
   });
 
-  it('returns descriptionDisplay as documentType with no added information', () => {
-    documentMetaData = {
-      ...documentMetaData,
+  it('should return descriptionDisplay as documentType with no added information', () => {
+    baseDocketEntry = {
+      ...baseDocketEntry,
       documentTitle: undefined,
       documentType,
     };
-    const result = getDescriptionDisplay(documentMetaData);
+    const result = getDescriptionDisplay(baseDocketEntry);
 
     expect(result).toEqual('doc type');
   });
 
-  it('returns descriptionDisplay as description with no added information', () => {
-    documentMetaData = {
-      ...documentMetaData,
+  it('should return descriptionDisplay as description with no added information', () => {
+    baseDocketEntry = {
+      ...baseDocketEntry,
       description,
       documentTitle: undefined,
       documentType: undefined,
     };
-    const result = getDescriptionDisplay(documentMetaData);
+    const result = getDescriptionDisplay(baseDocketEntry);
     expect(result).toEqual('doc description');
   });
 
-  it('returns descriptionDisplay as document title plus additionalInfo if addToCoversheet is true', () => {
-    documentMetaData = {
-      ...documentMetaData,
-      addToCoversheet: true,
+  it('should return descriptionDisplay as document title plus additionalInfo, filingsAndProceedings, and additionalInfo2', () => {
+    baseDocketEntry = {
+      ...baseDocketEntry,
       additionalInfo: 'superfulous text',
+      additionalInfo2: 'additional info 2!',
       documentTitle,
+      filingsAndProceedings: '(Attachment(s))',
     };
-    const result = getDescriptionDisplay(documentMetaData);
-    expect(result).toEqual('doc title superfulous text');
+    const result = getDescriptionDisplay(baseDocketEntry);
+    expect(result).toEqual(
+      'doc title superfulous text (Attachment(s)) additional info 2!',
+    );
   });
 
-  it('returns descriptionDisplay as document title with no additionalInfo if addToCoversheet is false', () => {
-    documentMetaData = {
-      ...documentMetaData,
+  it('should return descriptionDisplay as freeText and documentTitle if eventCode is OCS and freeText is available', () => {
+    baseDocketEntry = {
+      ...baseDocketEntry,
       addToCoversheet: false,
-      additionalInfo: 'superfulous text',
-      documentTitle,
-    };
-    const result = getDescriptionDisplay(documentMetaData);
-
-    expect(result).toEqual('doc title');
-  });
-
-  it('returns descriptionDisplay as freeText and documentTitle if eventCode is OCS and freeText is available', () => {
-    documentMetaData = {
-      ...documentMetaData,
-      addToCoversheet: false,
-      additionalInfo: 'superfulous text',
       documentTitle,
       eventCode: 'OCS',
       freeText: 'free text',
     };
-    const result = getDescriptionDisplay(documentMetaData);
+    const result = getDescriptionDisplay(baseDocketEntry);
 
     expect(result).toEqual('free text - doc title');
   });

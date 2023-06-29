@@ -9,7 +9,7 @@
  * @param {string} providers.docketEntryId the identifier of the Docket Entry that is being sealed
  * @returns {Promise} upon completion of notification delivery
  */
-exports.sendNotificationOfSealing = async (
+export const sendNotificationOfSealing = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

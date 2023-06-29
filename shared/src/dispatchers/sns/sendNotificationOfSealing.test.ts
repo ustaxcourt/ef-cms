@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const { sendNotificationOfSealing } = require('./sendNotificationOfSealing');
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { sendNotificationOfSealing } from './sendNotificationOfSealing';
 
 describe('send notification to notification service', () => {
   const OLD_ENV = process.env;

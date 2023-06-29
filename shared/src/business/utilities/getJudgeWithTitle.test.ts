@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getJudgeWithTitle } = require('./getJudgeWithTitle');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getJudgeWithTitle } from './getJudgeWithTitle';
 
 describe('getJudgeWithTitle', () => {
   const mockJudgeUserName = 'Judy';

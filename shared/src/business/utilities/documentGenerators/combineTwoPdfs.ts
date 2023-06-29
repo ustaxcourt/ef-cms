@@ -1,4 +1,4 @@
-exports.combineTwoPdfs = async ({
+export const combineTwoPdfs = async ({
   applicationContext,
   firstPdf,
   secondPdf,

@@ -1,11 +1,11 @@
-const {
-  isAuthorized,
+import { ROLES } from '../../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
-const { UserCase } = require('../../entities/UserCase');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
+import { UserCase } from '../../entities/UserCase';
 
 /**
  * createUserForContact
@@ -16,7 +16,7 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {string} options.name the name of the user to update the case with
  * @returns {Case} the updated case entity
  */
-exports.createUserForContact = async ({
+export const createUserForContact = async ({
   applicationContext,
   caseEntity,
   contactId,

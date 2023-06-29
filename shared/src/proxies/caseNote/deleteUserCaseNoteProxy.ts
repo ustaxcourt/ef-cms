@@ -1,4 +1,4 @@
-const { remove } = require('../requests');
+import { remove } from '../requests';
 
 /**
  * deleteUserCaseNoteInteractorProxy
@@ -8,7 +8,7 @@ const { remove } = require('../requests');
  * @param {string} providers.docketNumber the docket number to delete note from
  * @returns {Promise<*>} the promise of the api call
  */
-exports.deleteUserCaseNoteInteractor = (
+export const deleteUserCaseNoteInteractor = (
   applicationContext,
   { docketNumber },
 ) => {

@@ -1,8 +1,8 @@
-const {
+import {
   CONTACT_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const { aggregatePartiesForService } = require('./aggregatePartiesForService');
+} from '../entities/EntityConstants';
+import { aggregatePartiesForService } from './aggregatePartiesForService';
 
 describe('aggregatePartiesForService', () => {
   let mockCase;

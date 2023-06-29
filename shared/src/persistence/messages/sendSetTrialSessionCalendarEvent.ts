@@ -1,4 +1,4 @@
-exports.sendSetTrialSessionCalendarEvent = async ({
+export const sendSetTrialSessionCalendarEvent = async ({
   applicationContext,
   payload,
 }) => {

@@ -1,5 +1,5 @@
-const qs = require('qs');
-const { get } = require('../requests');
+import { get } from '../requests';
+import qs from 'qs';
 
 /**
  * getNotificationsInteractor
@@ -10,7 +10,7 @@ const { get } = require('../requests');
  * @param {string} providers.judgeUserId optional judge user id to filter on
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getNotificationsInteractor = (
+export const getNotificationsInteractor = (
   applicationContext,
   { caseServicesSupervisorData, judgeUserId },
 ) => {

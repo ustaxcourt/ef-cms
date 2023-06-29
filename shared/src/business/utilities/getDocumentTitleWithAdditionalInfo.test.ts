@@ -1,6 +1,4 @@
-const {
-  getDocumentTitleWithAdditionalInfo,
-} = require('./getDocumentTitleWithAdditionalInfo');
+import { getDocumentTitleWithAdditionalInfo } from './getDocumentTitleWithAdditionalInfo';
 
 describe('getDocumentTitleWithAdditionalInfo', () => {
   it('returns the original documentTitle when addToCoversheet is false', () => {

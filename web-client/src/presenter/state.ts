@@ -23,6 +23,7 @@ import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
 import { contactsHelper } from './computeds/contactsHelper';
@@ -30,6 +31,7 @@ import { correspondenceViewerHelper } from './computeds/correspondenceViewerHelp
 import { createMessageModalHelper } from './computeds/createMessageModalHelper';
 import { createOrderHelper } from './computeds/createOrderHelper';
 import { createPractitionerUserHelper } from './computeds/createPractitionerUserHelper';
+import { customCaseInventoryReportHelper } from './computeds/customCaseInventoryReportHelper';
 import { dashboardExternalHelper } from './computeds/dashboardExternalHelper';
 import { docketEntryQcHelper } from './computeds/docketEntryQcHelper';
 import { docketRecordHelper } from './computeds/docketRecordHelper';
@@ -40,6 +42,7 @@ import { draftDocumentViewerHelper } from './computeds/draftDocumentViewerHelper
 import { editDocketEntryMetaHelper } from './computeds/editDocketEntryMetaHelper';
 import { editPetitionerInformationHelper } from './computeds/editPetitionerInformationHelper';
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
+import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
@@ -66,16 +69,20 @@ import { getConstants } from '../getConstants';
 import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTypeHelper';
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
+import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
+import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
+import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
 import { paperDocketEntryHelper } from './computeds/paperDocketEntryHelper';
+import { paperServiceStatusHelper } from './computeds/paperServiceStatusHelper';
 import { partiesInformationHelper } from './computeds/partiesInformationHelper';
 import { pdfPreviewModalHelper } from './computeds/PDFPreviewModal/pdfPreviewModalHelper';
 import { pdfSignerHelper } from './computeds/pdfSignerHelper';
@@ -89,6 +96,7 @@ import { practitionerSearchFormHelper } from './computeds/practitionerSearchForm
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
+import { reportMenuHelper } from './computeds/reportMenuHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
@@ -119,7 +127,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
-const helpers = {
+export const computeds = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
@@ -152,6 +160,7 @@ const helpers = {
   createMessageModalHelper,
   createOrderHelper,
   createPractitionerUserHelper,
+  customCaseInventoryReportHelper,
   dashboardExternalHelper,
   docketEntryQcHelper,
   docketRecordHelper,
@@ -162,6 +171,7 @@ const helpers = {
   editDocketEntryMetaHelper,
   editPetitionerInformationHelper,
   editStatisticFormHelper,
+  externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
   featureFlagHelper,
   fileDocumentHelper,
@@ -187,14 +197,17 @@ const helpers = {
   headerHelper,
   internalPetitionPartiesHelper,
   internalTypesHelper,
+  judgeActivityReportHelper,
   loadingHelper,
   menuHelper,
   messageDocumentHelper,
   messageModalHelper,
   messagesHelper,
   myAccountHelper,
+  noticeStatusHelper,
   orderTypesHelper,
   paperDocketEntryHelper,
+  paperServiceStatusHelper,
   partiesInformationHelper,
   pdfPreviewModalHelper,
   pdfSignerHelper,
@@ -208,6 +221,7 @@ const helpers = {
   printPaperServiceHelper,
   recentMessagesHelper,
   removeFromTrialSessionModalHelper,
+  reportMenuHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
@@ -237,6 +251,13 @@ const helpers = {
   workQueueHelper,
 };
 
+type TCaseDeadlineReport = {
+  caseDeadlines: RawCaseDeadline[];
+  judgeFilter: string;
+  totalCount: number;
+  page: number;
+};
+
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -249,13 +270,14 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {},
-  caseDetail: {},
+  caseDeadlineReport: {} as TCaseDeadlineReport,
+  caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
   // TODO: replace with state.form
   currentJudges: [],
+
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -283,8 +305,10 @@ export const baseState = {
       tab: null,
     },
   },
+  customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
+
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
@@ -293,7 +317,7 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-  form: {},
+  form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -301,10 +325,12 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  judgeActivityReportData: {},
   judges: [],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
@@ -314,8 +340,16 @@ export const baseState = {
     showModal: undefined, // the name of the modal to display
   },
   navigation: {},
+  noticeStatusState: {
+    casesProcessed: 0,
+    totalCases: 0,
+  },
   notifications: {},
   openCases: [],
+  paperServiceStatusState: {
+    pdfsAppended: 0,
+    totalPdfs: 0,
+  },
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
@@ -326,6 +360,7 @@ export const baseState = {
     stampApplied: false,
     stampData: null,
   },
+  pdfPreviewUrl: '',
   pendingReports: {},
   permissions: null,
   practitionerDetail: {},
@@ -335,6 +370,7 @@ export const baseState = {
     waitingForResponse: false,
     waitingForResponseRequests: 0,
   },
+  saveAlertsForNavigation: false,
   scanner: {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
@@ -362,6 +398,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
@@ -374,7 +411,9 @@ export const baseState = {
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
-export const state = {
-  ...helpers,
+export const initialState = {
   ...baseState,
+  ...computeds,
 };
+
+export type ClientState = typeof initialState;

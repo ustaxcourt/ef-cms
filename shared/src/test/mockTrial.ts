@@ -1,10 +1,12 @@
-const {
+import { MOCK_CASE } from './mockCase';
+import { RawTrialSession } from '../business/entities/trialSessions/TrialSession';
+import {
+  SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} = require('../business/entities/EntityConstants');
-const { MOCK_CASE } = require('./mockCase');
+} from '../business/entities/EntityConstants';
 
-exports.MOCK_TRIAL_REMOTE = {
+export const MOCK_TRIAL_REMOTE = {
   chambersPhoneNumber: '1111111',
   joinPhoneNumber: '0987654321',
   judge: {
@@ -23,8 +25,9 @@ exports.MOCK_TRIAL_REMOTE = {
   trialSessionId: '48287e71-3754-4017-850d-476a663d1a8e',
 };
 
-exports.MOCK_TRIAL_REGULAR = {
+export const MOCK_TRIAL_REGULAR: RawTrialSession = {
   caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
+  entityName: 'TrialSession',
   isCalendared: false,
   judge: {
     name: 'Judge Yggdrasil',
@@ -32,6 +35,8 @@ exports.MOCK_TRIAL_REGULAR = {
   },
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+  sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+  sessionStatus: SESSION_STATUS_TYPES.open,
   sessionType: 'Regular',
   startDate: '2001-12-01T00:00:00.000Z',
   term: 'Fall',
@@ -40,13 +45,15 @@ exports.MOCK_TRIAL_REGULAR = {
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
 };
 
-exports.MOCK_TRIAL_INPERSON = {
+export const MOCK_TRIAL_INPERSON: RawTrialSession = {
   address1: '123 Street Lane',
   caseOrder: [
     { docketNumber: MOCK_CASE.docketNumber },
     { docketNumber: '123-45' },
   ],
   city: 'Scottsburg',
+  entityName: 'TrialSession',
+  isCalendared: false,
   judge: {
     name: 'A Judge',
     userId: '55f4fc65-b33e-4c04-8561-3e56d533f386',
@@ -54,6 +61,8 @@ exports.MOCK_TRIAL_INPERSON = {
   maxCases: 100,
   postalCode: '47130',
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+  sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+  sessionStatus: SESSION_STATUS_TYPES.new,
   sessionType: 'Regular',
   startDate: '3000-03-01T00:00:00.000Z',
   state: 'IN',
@@ -63,8 +72,11 @@ exports.MOCK_TRIAL_INPERSON = {
   trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
 };
 
-exports.MOCK_TRIAL_STANDALONE_REMOTE = {
+export const MOCK_TRIAL_STANDALONE_REMOTE: RawTrialSession = {
+  caseOrder: [],
   chambersPhoneNumber: '1111111',
+  entityName: 'TrialSession',
+  isCalendared: true,
   joinPhoneNumber: '0987654321',
   judge: {
     name: 'Chief Judge',
@@ -75,6 +87,7 @@ exports.MOCK_TRIAL_STANDALONE_REMOTE = {
   password: 'coolestPassword',
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
   sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+  sessionStatus: SESSION_STATUS_TYPES.open,
   sessionType: 'Regular',
   startDate: '2021-06-01T00:00:00.000Z',
   term: 'Fall',

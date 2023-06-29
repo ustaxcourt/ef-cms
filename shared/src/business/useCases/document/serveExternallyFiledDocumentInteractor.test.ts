@@ -1,16 +1,15 @@
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
 import { addCoverToPdf } from '../addCoverToPdf';
 import { docketClerkUser } from '../../../test/mockUsers';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -165,7 +164,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBeNull();
   });
 
-  it('should set the docket entry`s filing date to today', async () => {
+  it('should set the docket entry`s filing date to today when the document is not a simultaneous document type', async () => {
     const mockToday = '2018-03-01T05:00:00.000Z';
     applicationContext
       .getUtilities()
@@ -178,6 +177,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            eventCode: 'A',
             filingDate: 'abc',
           },
         ],
@@ -194,6 +194,35 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.filingDate,
     ).toBe(mockToday);
+  });
+
+  it('should retain the docket entry`s filing date when the document is a simultaneous document type', async () => {
+    const mockOriginalFilingDate = '1993/02/05';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+            filingDate: mockOriginalFilingDate,
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].docketEntryEntity.filingDate,
+    ).toBe(mockOriginalFilingDate);
   });
 
   it('should mark the docket entry as NOT a draft', async () => {

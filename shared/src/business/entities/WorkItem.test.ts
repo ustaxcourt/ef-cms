@@ -3,26 +3,30 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
 } from './EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
 import { WorkItem } from './WorkItem';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 
 describe('WorkItem', () => {
   describe('isValid', () => {
+    let aValidWorkItem;
+    beforeEach(() => {
+      aValidWorkItem = {
+        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+        assigneeName: 'bob',
+        caseStatus: CASE_STATUS_TYPES.new,
+        caseTitle: 'Johnny Joe Jacobson',
+        docketEntry: {},
+        docketNumber: '101-18',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        section: DOCKET_SECTION,
+        sentBy: 'bob',
+      };
+    });
+
     it('Creates a valid workitem', () => {
-      const workItem = new WorkItem(
-        {
-          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-          assigneeName: 'bob',
-          caseStatus: CASE_STATUS_TYPES.new,
-          caseTitle: 'Johnny Joe Jacobson',
-          docketEntry: {},
-          docketNumber: '101-18',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          section: DOCKET_SECTION,
-          sentBy: 'bob',
-        },
-        { applicationContext },
-      );
+      const workItem = new WorkItem(aValidWorkItem, { applicationContext });
       expect(workItem.isValid()).toBeTruthy();
     });
 
@@ -82,6 +86,60 @@ describe('WorkItem', () => {
         { applicationContext },
       );
       expect(workItem.isValid()).toBeTruthy();
+    });
+
+    it('should create a valid workitem when caseStatus is calendared', () => {
+      const workItem = new WorkItem(
+        {
+          assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+          assigneeName: 'bob',
+          caseStatus: CASE_STATUS_TYPES.calendared,
+          caseTitle: 'Johnny Joe Jacobson',
+          docketEntry: {},
+          docketNumber: '101-18',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          isRead: true,
+          section: DOCKET_SECTION,
+          sentBy: 'bob',
+          trialDate: '2018-11-21T20:49:28.192Z',
+          trialLocation: 'Fairbanks, Alaska',
+          workItemId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+        },
+        { applicationContext },
+      );
+      expect(workItem.isValid()).toBe(true);
+    });
+
+    it('should set properties on WorkItem that pertain to the Case when a Case entity is passed into the constructor', () => {
+      aValidWorkItem.associatedJudge = 'This should be overwritten';
+      aValidWorkItem.caseStatus = CASE_STATUS_TYPES.closed;
+      aValidWorkItem.leadDocketNumber = '100-23';
+      aValidWorkItem.docketNumberWithSuffix = '123-23';
+      aValidWorkItem.trialDate = 'This should be overwritten';
+      aValidWorkItem.trialLocation = 'This should be overwritten';
+      const mockCase = cloneDeep(MOCK_CASE);
+      mockCase.associatedJudge = 'Some Judge';
+      mockCase.status = CASE_STATUS_TYPES.generalDocket;
+      mockCase.leadDocketNumber = undefined;
+      mockCase.docketNumberWithSuffix = '123-23S';
+      mockCase.trialDate = '2018-11-21T20:49:28.192Z';
+      mockCase.trialLocation = 'Seattle, WA';
+
+      const workItem = new WorkItem(
+        aValidWorkItem,
+        { applicationContext },
+        mockCase,
+      );
+
+      expect(workItem.isValid()).toBeTruthy();
+      expect(workItem.associatedJudge).toBe(mockCase.associatedJudge);
+      expect(workItem.caseStatus).toBe(mockCase.status);
+      expect(workItem.leadDocketNumber).toBe(mockCase.leadDocketNumber);
+      expect(workItem.docketNumberWithSuffix).toBe(
+        mockCase.docketNumberWithSuffix,
+      );
+      expect(workItem.trialDate).toBe(mockCase.trialDate);
+      expect(workItem.trialLocation).toBe(mockCase.trialLocation);
     });
   });
 

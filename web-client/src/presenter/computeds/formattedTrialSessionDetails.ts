@@ -1,7 +1,12 @@
 import { isEmpty, isEqual } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const formattedTrialSessionDetails = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedTrialSessionDetails = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const formattedTrialSession = applicationContext
     .getUtilities()
     .getFormattedTrialSessionDetails({
@@ -12,9 +17,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
   if (formattedTrialSession) {
     const {
       DATE_FORMATS,
+      HYBRID_SESSION_TYPES,
       SESSION_STATUS_GROUPS,
       SESSION_STATUS_TYPES,
-      SESSION_TYPES,
       TRIAL_SESSION_SCOPE_TYPES,
       USER_ROLES,
     } = applicationContext.getConstants();
@@ -24,14 +29,23 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     formattedTrialSession.showOnlyClosedCases =
       formattedTrialSession.sessionStatus === SESSION_STATUS_GROUPS.closed;
 
+    formattedTrialSession.showAlertForNOTTReminder =
+      !formattedTrialSession.dismissedAlertForNOTT &&
+      formattedTrialSession.isStartDateWithinNOTTReminderRange;
+
+    if (formattedTrialSession.showAlertForNOTTReminder) {
+      formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due by ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;
+    }
+
     if (formattedTrialSession.chambersPhoneNumber) {
       formattedTrialSession.chambersPhoneNumber = applicationContext
         .getUtilities()
         .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
     }
 
-    formattedTrialSession.isHybridSession =
-      formattedTrialSession.sessionType === SESSION_TYPES.hybrid;
+    formattedTrialSession.isHybridSession = Object.values(
+      HYBRID_SESSION_TYPES,
+    ).includes(formattedTrialSession.sessionType);
 
     formattedTrialSession.disableHybridFilter =
       (formattedTrialSession.eligibleCases ?? []).length === 0;

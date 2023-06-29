@@ -1,4 +1,4 @@
-const getJudgeWithTitle = async ({
+export const getJudgeWithTitle = async ({
   applicationContext,
   judgeUserName,
   useFullName = false,
@@ -19,8 +19,4 @@ const getJudgeWithTitle = async ({
   const judgeName = useFullName ? foundJudge.judgeFullName : foundJudge.name;
 
   return `${foundJudge.judgeTitle} ${judgeName}`;
-};
-
-module.exports = {
-  getJudgeWithTitle,
 };

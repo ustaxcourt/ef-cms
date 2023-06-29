@@ -1,10 +1,8 @@
-import {
-  applicationContextForClient as applicationContext,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { loadPdfAction } from './loadPdfAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
+import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
 
 describe('loadPdfAction', () => {
   global.Blob = function () {};

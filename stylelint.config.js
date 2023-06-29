@@ -5,6 +5,7 @@ module.exports = {
     'stylelint-config-recommended',
   ],
   rules: {
+    'at-rule-no-unknown': null,
     'function-no-unknown': [
       true,
       {
@@ -14,6 +15,5 @@ module.exports = {
     'no-descending-specificity': null,
     'selector-class-pattern': null,
     'shorthand-property-no-redundant-values': null,
-    'string-quotes': 'single',
   },
 };

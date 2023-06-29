@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * updates a practitioner user from the given form data
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const updatePractitionerUserAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const user = get(state.form);
 
   try {

@@ -1,9 +1,9 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { cloneDeep, pick } = require('lodash');
-const { isAssociatedUser, isSealedCase } = require('../entities/cases/Case');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { cloneDeep, pick } from 'lodash';
+import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
@@ -25,7 +25,7 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'title',
 ];
 
-const caseSealedFormatter = caseRaw => {
+export const caseSealedFormatter = caseRaw => {
   return pick(caseRaw, CASE_ATTRIBUTE_WHITELIST);
 };
 
@@ -40,7 +40,7 @@ const caseSealedFormatter = caseRaw => {
  * @param {object} currentUser the current
  * @returns {object} reference to modified raw case detail
  */
-const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
+export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   const userCanViewSealedAddresses = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
@@ -70,7 +70,7 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   return formattedCase;
 };
 
-const caseSearchFilter = (searchResults, currentUser) => {
+export const caseSearchFilter = (searchResults, currentUser) => {
   return searchResults
     .filter(
       searchResult =>
@@ -85,10 +85,4 @@ const caseSearchFilter = (searchResults, currentUser) => {
     .map(filteredCase =>
       caseContactAddressSealedFormatter(filteredCase, currentUser),
     );
-};
-
-module.exports = {
-  caseContactAddressSealedFormatter,
-  caseSealedFormatter,
-  caseSearchFilter,
 };

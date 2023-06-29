@@ -1,7 +1,5 @@
-const {
-  CASE_STATUS_TYPES,
-} = require('../../business/entities/EntityConstants');
-const { search } = require('./searchClient');
+import { CASE_STATUS_TYPES } from '../../business/entities/EntityConstants';
+import { search } from './searchClient';
 
 /**
  * getReadyForTrialCases
@@ -10,7 +8,7 @@ const { search } = require('./searchClient');
  * @param {object} providers.applicationContext the application context
  * @returns {object} the cases that are ready for trial
  */
-exports.getReadyForTrialCases = async ({ applicationContext }) => {
+export const getReadyForTrialCases = async ({ applicationContext }) => {
   const { results } = await search({
     applicationContext,
     searchParameters: {

@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const pendingReport = async ({ applicationContext, data }) => {
+export const pendingReport = async ({ applicationContext, data }) => {
   const { pendingItems, subtitle } = data;
 
   const pendingReportTemplate = reactTemplateGenerator({
@@ -43,8 +41,4 @@ const pendingReport = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  pendingReport,
 };

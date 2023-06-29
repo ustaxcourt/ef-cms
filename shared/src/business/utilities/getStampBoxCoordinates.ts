@@ -1,4 +1,4 @@
-exports.getStampBoxCoordinates = ({
+export const getStampBoxCoordinates = ({
   bottomLeftBoxCoordinates,
   cropBox,
   pageHeight,

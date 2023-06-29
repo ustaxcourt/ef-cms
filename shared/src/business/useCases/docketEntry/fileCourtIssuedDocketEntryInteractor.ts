@@ -128,12 +128,14 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           hideFromPendingMessages: true,
           inProgress: true,
-          leadDocketNumber: caseEntity.leadDocketNumber,
           section: DOCKET_SECTION,
           sentBy: user.name,
           sentByUserId: user.userId,
+          trialDate: caseEntity.trialDate,
+          trialLocation: caseEntity.trialLocation,
         },
         { applicationContext },
+        caseEntity,
       );
 
       if (isUnservable) {

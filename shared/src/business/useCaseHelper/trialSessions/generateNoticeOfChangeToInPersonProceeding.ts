@@ -1,11 +1,11 @@
-const {
+import {
+  FORMATS,
   createISODateString,
   formatDateString,
-  FORMATS,
-} = require('../../utilities/DateHandler');
-const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
+} from '../../utilities/DateHandler';
+import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
 /**
  * generateNoticeOfChangeToInPersonProceeding
@@ -16,7 +16,7 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {string} providers.trialSessionInformation the trial session information
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfChangeToInPersonProceeding = async (
+export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext,
   { docketNumber, trialSessionInformation },
 ) => {

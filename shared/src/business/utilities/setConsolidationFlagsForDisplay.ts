@@ -1,6 +1,6 @@
-const { isLeadCase } = require('../entities/cases/Case');
+import { isLeadCase } from '../entities/cases/Case';
 
-exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
+export const setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
   const newCaseItem = { ...caseItem };
 
   newCaseItem.inConsolidatedGroup = newCaseItem.isLeadCase = false;

@@ -1,6 +1,6 @@
-const { describeTable } = require('../dynamodbClientService');
+import { describeTable } from '../dynamodbClientService';
 
-exports.getTableStatus = async ({ applicationContext }) => {
+export const getTableStatus = async ({ applicationContext }) => {
   const { Table } = await describeTable({ applicationContext });
   return Table.TableStatus;
 };

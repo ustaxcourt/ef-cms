@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * sets the state.todaysOrders based on props.todaysOrders
  *
@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the props object
  * @param {object} providers.store the store object
  */
-export const setTodaysOrdersAction = ({ get, props, store }) => {
+export const setTodaysOrdersAction = ({ get, props, store }: ActionProps) => {
   const currentResults = get(state.todaysOrders.results);
   const page = get(state.todaysOrders.page) || 1;
   let orderResults;

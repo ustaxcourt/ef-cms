@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
 describe('saveFileAndGenerateUrl', () => {
   it('saves the file to s3 and return the file ID and url to the file', async () => {

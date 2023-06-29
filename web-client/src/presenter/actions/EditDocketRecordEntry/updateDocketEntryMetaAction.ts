@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls use case to update docket entry meta
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const updateDocketEntryMetaAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketRecordEntry = get(state.form);
 

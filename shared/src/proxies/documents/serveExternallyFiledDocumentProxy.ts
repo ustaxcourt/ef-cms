@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -8,7 +8,10 @@ const { post } = require('../requests');
  * @param {object} providers.data the data being forwarded to the API call
  * @returns {Promise<*>} the promise of the api call
  */
-exports.serveExternallyFiledDocumentInteractor = (applicationContext, data) => {
+export const serveExternallyFiledDocumentInteractor = (
+  applicationContext,
+  data,
+) => {
   const { docketEntryId, subjectCaseDocketNumber } = data;
 
   return post({

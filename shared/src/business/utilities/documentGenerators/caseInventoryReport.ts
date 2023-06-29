@@ -1,9 +1,7 @@
-const {
-  reactTemplateGenerator,
-} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
+import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-const caseInventoryReport = async ({ applicationContext, data }) => {
+export const caseInventoryReport = async ({ applicationContext, data }) => {
   const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
     data;
 
@@ -46,8 +44,4 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
     });
 
   return pdf;
-};
-
-module.exports = {
-  caseInventoryReport,
 };

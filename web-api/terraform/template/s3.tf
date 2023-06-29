@@ -33,6 +33,15 @@ resource "aws_s3_bucket" "documents_us_east_1" {
       }
     }
   }
+
+  server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
@@ -91,6 +100,15 @@ resource "aws_s3_bucket" "documents_us_west_1" {
   tags = {
     environment = var.environment
   }
+
+  server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "block_documents_west" {
@@ -127,6 +145,15 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
 
     expiration {
       days = 1
+    }
+  }
+
+    server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
     }
   }
 }
@@ -167,6 +194,15 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
       days = 1
     }
   }
+
+    server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "block_temp_west" {
@@ -205,6 +241,15 @@ resource "aws_s3_bucket" "quarantine_us_east_1" {
       days = 7
     }
   }
+
+    server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
+    }
+  }
 }
 
 resource "aws_s3_bucket_public_access_block" "block_quarantine_east" {
@@ -241,6 +286,15 @@ resource "aws_s3_bucket" "quarantine_us_west_1" {
 
     expiration {
       days = 1
+    }
+  }
+  
+    server_side_encryption_configuration {
+    rule {
+      bucket_key_enabled = false
+      apply_server_side_encryption_by_default {
+          sse_algorithm = "AES256"
+      }
     }
   }
 }

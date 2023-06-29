@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the iframeSrc to the document download url for the document in state.docketEntryId
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const setDocumentToDisplayFromDocumentIdAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
 

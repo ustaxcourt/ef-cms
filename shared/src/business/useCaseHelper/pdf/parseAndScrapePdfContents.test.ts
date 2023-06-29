@@ -1,8 +1,7 @@
-const {
-  applicationContext,
-  getFakeFile,
-} = require('../../test/createTestApplicationContext');
-const { parseAndScrapePdfContents } = require('./parseAndScrapePdfContents');
+import { getFakeFile } from '../../test/getFakeFile';
+
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { parseAndScrapePdfContents } from './parseAndScrapePdfContents';
 
 describe('parseAndScrapePdfContents', () => {
   it('should parse pdf contents', async () => {

@@ -1,9 +1,8 @@
 import { omit } from 'lodash';
 import { setupPercentDone } from './createCaseFromPaperAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * invokes the filePetition useCase.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used for getting petition
@@ -16,7 +15,7 @@ export const createCaseAction = async ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { corporateDisclosureFile, petitionFile, stinFile } = get(state.form);
 
   const form = omit(

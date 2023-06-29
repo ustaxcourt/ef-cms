@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /* * Gets irsPractitioners whose name or barNumber match the searchKey
  *
@@ -10,7 +10,7 @@ export const getIrsPractitionersBySearchKeyAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const searchKey = get(state.form.respondentSearch);
 
   const irsPractitioners = await applicationContext

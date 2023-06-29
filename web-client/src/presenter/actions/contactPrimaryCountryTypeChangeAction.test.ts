@@ -1,5 +1,5 @@
 import { contactPrimaryCountryTypeChangeAction } from './contactPrimaryCountryTypeChangeAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('contactPrimaryCountryTypeChangeAction', () => {
   it('should clear contact info and validationErrors when changed', async () => {

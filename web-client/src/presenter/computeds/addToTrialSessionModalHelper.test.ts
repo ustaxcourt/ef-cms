@@ -1,6 +1,6 @@
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from './addToTrialSessionModalHelper';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('addToTrialSessionModalHelper', () => {
@@ -41,6 +41,14 @@ describe('addToTrialSessionModalHelper', () => {
       startDate: '2018-02-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '2',
+    },
+    {
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      sessionStatus: 'Open',
+      sessionType: 'Hybrid-S',
+      startDate: '2018-01-02T21:40:46.415Z',
+      trialLocation: 'Spokane, Washington',
+      trialSessionId: '8',
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
@@ -245,6 +253,12 @@ describe('addToTrialSessionModalHelper', () => {
           trialSessionId: '7',
         },
       ],
+      Washington: [
+        {
+          optionText: 'Spokane, Washington 01/02/18 (HS)',
+          trialSessionId: '8',
+        },
+      ],
     });
   });
 
@@ -264,6 +278,7 @@ describe('addToTrialSessionModalHelper', () => {
       'Remote',
       US_STATES.AL,
       US_STATES.ID,
+      US_STATES.WA,
     ]);
   });
 

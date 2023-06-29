@@ -1,9 +1,8 @@
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the correspondence document onto the case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -14,7 +13,7 @@ export const submitCorrespondenceAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   let caseDetail;
   const docketNumber = get(state.caseDetail.docketNumber);
   const { primaryDocumentFileId: correspondenceId } = props;

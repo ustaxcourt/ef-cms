@@ -5,7 +5,7 @@
  * @param {string} b the second date string to compare
  * @returns {number} the result of the comparison
  */
-const compareISODateStrings = (a, b) => {
+export const compareISODateStrings = (a, b) => {
   return compareStrings(a, b);
 };
 
@@ -16,7 +16,7 @@ const compareISODateStrings = (a, b) => {
  * @param {string} b the second string to compare
  * @returns {number} the result of the comparison
  */
-const compareStrings = (a, b) => {
+export const compareStrings = (a, b) => {
   let result;
   if (a < b) {
     result = -1;
@@ -26,9 +26,4 @@ const compareStrings = (a, b) => {
     result = 0;
   }
   return result;
-};
-
-module.exports = {
-  compareISODateStrings,
-  compareStrings,
 };

@@ -8,8 +8,10 @@
 .scannerwork/
 .terraform.lock.hcl
 .terraform/
-.vscode
+.vscode/*
+!.vscode/launch.json
 **/*_.js
+*.iml
 shared/src/business/utilities/htmlGenerator/index.scss
 /policy.json
 artillery/private-app-report.json
@@ -21,12 +23,8 @@ aws/lambdas/*.zip
 aws/lambdas/RotateInfoIndices/dist
 coverage/
 cypress/downloads
-cypress-smoketests/screenshots
-cypress-smoketests/videos
-cypress-integration/screenshots
-cypress-integration/videos
-cypress-readonly/screenshots
-cypress-readonly/videos
+cypress/**/screenshots
+cypress/**/videos
 dist-public/
 dist/
 gen.conf
@@ -71,3 +69,4 @@ bulk-import-log.txt
 metadata.json
 metadata-public.json
 stats.html
+other/

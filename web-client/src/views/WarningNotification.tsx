@@ -1,6 +1,7 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
 
@@ -9,8 +10,23 @@ export const WarningNotificationComponent =
     alertWarning,
     dismissable = true,
     dismissAlertSequence,
+    iconRight = true,
     messageNotBold = false,
     scrollToTop = true,
+  }: {
+    alertWarning: {
+      title?: string;
+      linkUrl?: string;
+      linkText?: string;
+      message: string;
+      dismissText?: string;
+      dismissIcon?: string;
+    };
+    dismissable?: boolean;
+    dismissAlertSequence?: Function;
+    messageNotBold?: boolean;
+    scrollToTop?: boolean;
+    iconRight?: boolean;
   }) {
     const notificationRef = useRef(null);
     const isMessageOnly =
@@ -36,7 +52,12 @@ export const WarningNotificationComponent =
             ref={notificationRef}
             role="alert"
           >
-            <div className="usa-alert__body">
+            <div
+              className={classNames(
+                'usa-alert__body',
+                alertWarning.dismissText && 'padding-right-6',
+              )}
+            >
               <div className="grid-container padding-x-0">
                 <div className="grid-row">
                   <div className="tablet:grid-col-10">
@@ -70,11 +91,11 @@ export const WarningNotificationComponent =
                       <Button
                         link
                         className="no-underline padding-0"
-                        icon="times-circle"
-                        iconRight={true}
+                        icon={alertWarning.dismissIcon || 'times-circle'}
+                        iconRight={iconRight}
                         onClick={() => dismissAlertSequence()}
                       >
-                        Clear
+                        {alertWarning.dismissText || 'Clear'}
                       </Button>
                     )}
                   </div>

@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const headerHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const headerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const userRole = user && user.role;
   const isLoggedIn = !!user;
@@ -20,8 +25,6 @@ export const headerHelper = (get, applicationContext) => {
     return !externalRoles.includes(role);
   };
 
-  const isBlockedCasesReport = currentPage.includes('BlockedCasesReport');
-  const isCaseDeadlines = currentPage.startsWith('CaseDeadline');
   const isDashboard = currentPage.startsWith('Dashboard');
   const isTrialSessions = currentPage.includes('TrialSession');
   const isWorkQueue = currentPage.startsWith('WorkQueue');
@@ -48,7 +51,6 @@ export const headerHelper = (get, applicationContext) => {
     pageIsHome,
     pageIsMessages,
     pageIsMyCases: isDashboard && isExternalUser,
-    pageIsReports: isCaseDeadlines || isBlockedCasesReport,
     pageIsTrialSessions: isTrialSessions && isInternalUser,
     showAccountMenu: isLoggedIn,
     showDocumentQC: isInternalUser && !isCaseServicesSupervisor,

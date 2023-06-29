@@ -1,11 +1,12 @@
 /**
  * Determines if a user's contact information is already being updated
- *
- *
  * @param {object} providers.path the cerebral path which is contains the next paths that can be invoked
  * @returns {object} continue path for the sequence
  */
-export const getCanEditContactInformationAction = ({ path, props }) => {
+export const getCanEditContactInformationAction = ({
+  path,
+  props,
+}: ActionProps) => {
   const { user } = props;
 
   if (user.isUpdatingInformation) {

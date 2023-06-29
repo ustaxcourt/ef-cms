@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../business/test/createTestApplicationContext');
-const {
-  MAX_ELASTICSEARCH_PAGINATION,
-} = require('../../business/entities/EntityConstants');
-const { getCasesByUserId } = require('./getCasesByUserId');
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../business/entities/EntityConstants';
+import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { getCasesByUserId } from './getCasesByUserId';
 
 describe('getCasesByUserId', () => {
   const userId = 'user-id-123';

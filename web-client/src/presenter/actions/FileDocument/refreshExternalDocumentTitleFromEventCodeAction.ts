@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Refresh External Document Title From Event Code
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.applicationContext the application context
@@ -12,7 +11,7 @@ export const refreshExternalDocumentTitleFromEventCodeAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { category, eventCode } = get(state.form);
   const {
     CATEGORY_MAP,

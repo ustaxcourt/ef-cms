@@ -1,13 +1,13 @@
-const {
-  caseContactAddressSealedFormatter,
-  caseSealedFormatter,
-  caseSearchFilter,
-} = require('./caseFilter');
-const {
+import {
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
-} = require('../entities/EntityConstants');
+} from '../entities/EntityConstants';
+import {
+  caseContactAddressSealedFormatter,
+  caseSealedFormatter,
+  caseSearchFilter,
+} from './caseFilter';
 
 describe('caseFilter', () => {
   it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {

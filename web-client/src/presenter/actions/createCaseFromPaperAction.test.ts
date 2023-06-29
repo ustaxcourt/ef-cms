@@ -5,7 +5,7 @@ import {
   setupPercentDone,
 } from './createCaseFromPaperAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 const { US_STATES } = applicationContext.getConstants();
 
@@ -28,13 +28,14 @@ describe('createCaseFromPaperAction', () => {
     applicationContext
       .getUseCases()
       .filePetitionFromPaperInteractor.mockReturnValue(MOCK_CASE);
+    const receivedAt = '2019-11-05';
 
     await runAction(createCaseFromPaperAction, {
       modules: {
         presenter,
       },
       props: {
-        receivedAt: '2019-11-05',
+        receivedAt,
       },
       state: {
         form: {
@@ -64,6 +65,10 @@ describe('createCaseFromPaperAction', () => {
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,
+        receivedAt: applicationContext
+          .getUtilities()
+          .prepareDateFromString(receivedAt)
+          .toISOString(),
       },
       requestForPlaceOfTrialFile: {},
       stinFile: {},
@@ -107,6 +112,7 @@ describe('createCaseFromPaperAction', () => {
       petitionFile: {},
       petitionMetadata: {
         ...MOCK_CASE,
+        receivedAt: null,
       },
       stinFile: {},
     });

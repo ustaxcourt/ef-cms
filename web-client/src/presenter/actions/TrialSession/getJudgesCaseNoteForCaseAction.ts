@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Fetches the judge's case note for a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getUserCaseNoteInteractor use case
  * @param {object} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getJudgesCaseNoteForCaseAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
   let userNote;

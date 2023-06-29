@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls interactor to unseal a docket entry
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const submitUnsealDocketEntryAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { docketEntryId } = get(state.modal);
   const { docketEntries, docketNumber } = get(state.caseDetail);
 

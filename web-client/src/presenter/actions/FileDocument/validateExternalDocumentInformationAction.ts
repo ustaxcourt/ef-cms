@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the document info form.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -14,7 +13,7 @@ export const validateExternalDocumentInformationAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const documentMetadata = get(state.form);
 
   const errors = applicationContext

@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * generatePrintableCaseInventoryReportInteractor
@@ -9,7 +9,7 @@ const { get } = require('../requests');
  * @param {string} providers.status the status to filter by
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePrintableCaseInventoryReportInteractor = (
+export const generatePrintableCaseInventoryReportInteractor = (
   applicationContext,
   { associatedJudge, status },
 ) => {

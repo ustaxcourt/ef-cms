@@ -1,9 +1,7 @@
-const classNames = require('classnames');
-const React = require('react');
-const {
-  CompressedDocketHeader,
-} = require('../components/CompressedDocketHeader.tsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.tsx');
+import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import React from 'react';
+import classNames from 'classnames';
 
 const RenderAddress = ({ contact, countryTypes }) => {
   const isInternational = contact.countryType === countryTypes.INTERNATIONAL;

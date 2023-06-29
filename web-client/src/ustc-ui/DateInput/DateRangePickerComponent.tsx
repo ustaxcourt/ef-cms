@@ -1,34 +1,48 @@
 import { FormGroup } from '../FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-import datePicker from '../../../../node_modules/uswds/src/js/components/date-picker';
-import dateRangePicker from '../../../../node_modules/uswds/src/js/components/date-range-picker';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
+import dateRangePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-range-picker/src';
 
 export const DateRangePickerComponent = ({
   endDateErrorText,
-  endDateOptional,
   endLabel,
   endName,
   endPickerCls,
   endValue,
+  formGroupCls,
+  maxDate,
   onChangeEnd,
   onChangeStart,
-  pickerSpacer,
   rangePickerCls,
-  showHint,
   startDateErrorText,
-  startDateOptional,
   startLabel,
   startName,
   startPickerCls,
   startValue,
+}: {
+  endDateErrorText?: string;
+  endLabel?: string;
+  endName: string;
+  endPickerCls?: string;
+  endValue: string;
+  formGroupCls?: string;
+  rangePickerCls?: string;
+  onChangeEnd: (event: CustomEvent) => void;
+  onChangeStart: (event: CustomEvent) => void;
+  startDateErrorText?: string;
+  startPickerCls?: string;
+  startLabel?: string;
+  startName: string;
+  startValue: string;
+  maxDate?: string; // Must be in YYYY-MM-DD format
 }) => {
   const dateRangePickerRef = useRef();
   const startDatePickerRef = useRef();
   const endDatePickerRef = useRef();
 
-  const startDateInputRef = useRef();
-  const endDateInputRef = useRef();
+  const startDateInputRef = useRef<HTMLInputElement>(null);
+  const endDateInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (
@@ -45,10 +59,10 @@ export const DateRangePickerComponent = ({
   useEffect(() => {
     const startInput = window.document.getElementById(
       `${startName}-date-start`,
-    );
+    ) as HTMLInputElement;
     const startHiddenInput = window.document.querySelector(
       `input[name="${startName}-date-start"]`,
-    );
+    ) as HTMLInputElement;
     if (!startValue && startInput) {
       startInput.value = '';
       startHiddenInput.value = '';
@@ -63,10 +77,12 @@ export const DateRangePickerComponent = ({
   }, [startValue]);
 
   useEffect(() => {
-    const endInput = window.document.getElementById(`${endName}-date-end`);
+    const endInput = window.document.getElementById(
+      `${endName}-date-end`,
+    ) as HTMLInputElement;
     const endHiddenInput = window.document.querySelector(
       `input[name="${endName}-date-end"]`,
-    );
+    ) as HTMLInputElement;
     if (!endValue && endInput) {
       endInput.value = '';
       endHiddenInput.value = '';
@@ -82,21 +98,29 @@ export const DateRangePickerComponent = ({
 
   useEffect(() => {
     if (startDateInputRef.current && endDateInputRef.current) {
-      window.document
-        .getElementById(`${endName}-date-end`)
-        .addEventListener('change', onChangeEnd);
-      window.document
-        .getElementById(`${startName}-date-start`)
-        .addEventListener('change', onChangeStart);
+      const dateEndInput = window.document.getElementById(
+        `${endName}-date-end`,
+      );
+      if (dateEndInput) {
+        dateEndInput.addEventListener('change', onChangeEnd);
+        dateEndInput.addEventListener('input', onChangeEnd);
+      }
+      const dateStartInput = window.document.getElementById(
+        `${startName}-date-start`,
+      );
+      if (dateStartInput) {
+        dateStartInput.addEventListener('change', onChangeStart);
+        dateStartInput.addEventListener('input', onChangeStart);
+      }
     }
   }, [startDateInputRef, endDateInputRef]);
 
-  const Spacer = pickerSpacer;
-  const displayHint = showHint !== undefined ? showHint : true;
-
   return (
-    <FormGroup formGroupRef={dateRangePickerRef}>
-      <div className={classNames('usa-date-range-picker', rangePickerCls)}>
+    <FormGroup className={formGroupCls} formGroupRef={dateRangePickerRef}>
+      <div
+        className={classNames('usa-date-range-picker', rangePickerCls)}
+        data-max-date={maxDate}
+      >
         <div className={startPickerCls}>
           <FormGroup
             errorText={startDateErrorText}
@@ -108,29 +132,20 @@ export const DateRangePickerComponent = ({
               id={`${startName}-date-start-label`}
             >
               {startLabel || 'Start date'}{' '}
-              {startDateOptional && (
-                <span className="usa-hint">(optional)</span>
-              )}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${startName}-date-start-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
                 className="usa-input"
                 id={`${startName}-date-start`}
                 name={`${startName}-date-start`}
+                placeholder="MM/DD/YYYY"
                 ref={startDateInputRef}
                 type="text"
               />
             </div>
           </FormGroup>
         </div>
-
-        {Spacer && <Spacer />}
 
         <div className={endPickerCls}>
           <FormGroup
@@ -143,19 +158,14 @@ export const DateRangePickerComponent = ({
               id={`${endName}-date-end-label`}
             >
               {endLabel || 'End date'}{' '}
-              {endDateOptional && <span className="usa-hint">(optional)</span>}
             </label>
-            {displayHint && (
-              <div className="usa-hint" id={`${endName}-date-end-hint`}>
-                MM/DD/YYYY
-              </div>
-            )}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
                 className="usa-input"
                 id={`${endName}-date-end`}
                 name={`${endName}-date-end`}
+                placeholder="MM/DD/YYYY"
                 ref={endDateInputRef}
                 type="text"
               />

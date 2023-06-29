@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Updates the case caption and case status
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const submitUpdateCaseModalAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { associatedJudge, caseCaption, caseStatus } = get(state.modal);
   let selectedAssociatedJudge = associatedJudge;
   const caseToUpdate = get(state.caseDetail);

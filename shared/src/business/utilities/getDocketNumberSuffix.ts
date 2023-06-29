@@ -1,7 +1,7 @@
-const {
+import {
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
-} = require('../entities/EntityConstants');
+} from '../entities/EntityConstants';
 
 /**
  * a function used for getting the suffix associated with a caseType and procedureType
@@ -11,7 +11,10 @@ const {
  * @param {string} providers.procedureType the procedure type of the case
  * @returns {string} the docket number suffix
  */
-exports.getDocketNumberSuffix = ({ caseType = '', procedureType = '' }) => {
+export const getDocketNumberSuffix = ({
+  caseType = '',
+  procedureType = '',
+}) => {
   switch (caseType) {
     case CASE_TYPES_MAP.disclosure:
       return DOCKET_NUMBER_SUFFIXES.DISCLOSURE;

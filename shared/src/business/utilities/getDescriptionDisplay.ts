@@ -2,18 +2,26 @@
  * returns a modified document title when adding new information to a previous document title
  * especially in the case of qc'ing a docket entry
  *
- * @param {string} documentMetaData name of the feature
+ * @param {Object} docketEntry name of the feature
  * @returns {string} document title after modification
  */
 
-const getDescriptionDisplay = docketEntry => {
+export const getDescriptionDisplay = docketEntry => {
   let descriptionDisplay =
     docketEntry.documentTitle ||
     docketEntry.description ||
     docketEntry.documentType;
 
-  if (docketEntry.additionalInfo && docketEntry.addToCoversheet) {
+  if (docketEntry.additionalInfo) {
     descriptionDisplay += ` ${docketEntry.additionalInfo}`;
+  }
+
+  if (docketEntry.filingsAndProceedings) {
+    descriptionDisplay += ` ${docketEntry.filingsAndProceedings}`;
+  }
+
+  if (docketEntry.additionalInfo2) {
+    descriptionDisplay += ` ${docketEntry.additionalInfo2}`;
   }
 
   if (docketEntry.eventCode === 'OCS' && docketEntry.freeText) {
@@ -21,8 +29,4 @@ const getDescriptionDisplay = docketEntry => {
   }
 
   return descriptionDisplay;
-};
-
-module.exports = {
-  getDescriptionDisplay,
 };

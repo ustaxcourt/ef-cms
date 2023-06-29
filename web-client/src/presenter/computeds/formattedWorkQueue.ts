@@ -1,5 +1,6 @@
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 const isDateToday = (date, applicationContext) => {
   const now = applicationContext.getUtilities().formatNow('MMDDYY');
@@ -15,7 +16,6 @@ export const workQueueItemsAreEqual = (first, second) => {
 
 /**
  * formatDateIfToday
- *
  * @param {*} date the date to format
  * @param {*} applicationContext our UI application context
  * @param {*} now optional now value used for large tables to avoid recalculating
@@ -80,6 +80,11 @@ export const formatWorkItem = ({
       consolidatedIconTooltipText = 'Consolidated case';
     }
   }
+
+  result.formattedCaseStatus = setFormattedCaseStatus({
+    applicationContext,
+    workItem: result,
+  });
 
   result.inConsolidatedGroup = inConsolidatedGroup;
   result.inLeadCase = inLeadCase;
@@ -171,7 +176,7 @@ const getDocketEntryEditLink = ({
   if (
     formattedDocument.isCourtIssuedDocument &&
     !formattedDocument.isPaper &&
-    !applicationContext.getUtilities().isServed(formattedDocument) &&
+    !DocketEntry.isServed(formattedDocument) &&
     !UNSERVABLE_EVENT_CODES.includes(formattedDocument.eventCode)
   ) {
     editLink = `/edit-court-issued?fromPage=${fromPage}`;
@@ -236,7 +241,7 @@ export const getWorkItemDocumentLink = ({
       }
     } else if (
       formattedDocketEntry.isPetition &&
-      !applicationContext.getUtilities().isServed(formattedDocketEntry)
+      !DocketEntry.isServed(formattedDocketEntry)
     ) {
       if (result.caseIsInProgress) {
         editLink = `${baseDocumentLink}/review`;
@@ -315,7 +320,12 @@ const memoizedFormatItemWithLink = memoize(
     JSON.stringify({ ...workItem, isSelected, workQueueToDisplay }),
 );
 
-export const formattedWorkQueue = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedWorkQueue = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const section = get(state.workQueueToDisplay.section);
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
@@ -402,4 +412,33 @@ export const formattedWorkQueue = (get, applicationContext) => {
   );
 
   return workQueue;
+};
+
+const setFormattedCaseStatus = ({ applicationContext, workItem }) => {
+  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
+    applicationContext.getConstants();
+  let formattedCaseStatus = workItem.caseStatus;
+
+  if (
+    workItem.caseStatus === STATUS_TYPES.calendared &&
+    workItem.trialLocation &&
+    workItem.trialDate
+  ) {
+    let formattedTrialLocation = '';
+    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      formattedTrialLocation = applicationContext
+        .getUtilities()
+        .abbreviateState(workItem.trialLocation ?? '');
+    } else {
+      formattedTrialLocation = workItem.trialLocation;
+    }
+
+    const formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(workItem.trialDate, 'MMDDYY');
+
+    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+  }
+
+  return formattedCaseStatus;
 };

@@ -1,15 +1,14 @@
-const {
+import { Case } from '../../entities/cases/Case';
+import {
+  DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { addCoverToPdf } = require('../../useCases/addCoverToPdf');
-const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../entities/EntityConstants';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { WorkItem } from '../../entities/WorkItem';
+import { addCoverToPdf } from '../../useCases/addCoverToPdf';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -23,7 +22,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.user the user object that includes userId, barNumber etc.
  * @returns {Promise<User[]>} the internal users
  */
-const createDocketEntryForChange = async ({
+export const createDocketEntryForChange = async ({
   applicationContext,
   caseEntity,
   docketMeta = {},
@@ -121,7 +120,7 @@ const createDocketEntryForChange = async ({
   };
 };
 
-const createWorkItemForChange = async ({
+export const createWorkItemForChange = async ({
   applicationContext,
   caseEntity,
   changeOfAddressDocketEntry,
@@ -143,8 +142,11 @@ const createWorkItemForChange = async ({
       section: DOCKET_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,
+      trialDate: caseEntity.trialDate,
+      trialLocation: caseEntity.trialLocation,
     },
     { applicationContext },
+    caseEntity,
   );
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
@@ -155,7 +157,7 @@ const createWorkItemForChange = async ({
   });
 };
 
-const generateAndServeDocketEntry = async ({
+export const generateAndServeDocketEntry = async ({
   applicationContext,
   barNumber,
   caseEntity,
@@ -220,10 +222,4 @@ const generateAndServeDocketEntry = async ({
   });
 
   return { caseEntity, changeOfAddressDocketEntry, url };
-};
-
-module.exports = {
-  createDocketEntryForChange,
-  createWorkItemForChange,
-  generateAndServeDocketEntry,
 };

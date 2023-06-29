@@ -1,4 +1,4 @@
-const { get } = require('./requests');
+import { get } from './requests';
 
 /**
  * calls a proxy to retrieve cases with the passed lead docket number
@@ -8,7 +8,7 @@ const { get } = require('./requests');
  * @param {object} providers.docketNumber the docket number to pass to the endpoint
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getConsolidatedCasesByCaseInteractor = (
+export const getConsolidatedCasesByCaseInteractor = (
   applicationContext,
   { docketNumber, pickFields },
 ) => {

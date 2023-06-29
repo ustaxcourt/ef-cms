@@ -126,6 +126,15 @@ describe('run trial session planning report', () => {
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '456',
         },
+        {
+          judge: { name: 'Judge Ashford' },
+          sessionType: 'Hybrid-S',
+          startDate: '2019-11-11T21:40:40.415Z',
+          term: 'fall',
+          termYear: '2019',
+          trialLocation: 'Mobile, Alabama',
+          trialSessionId: '888',
+        },
       ];
       user = {
         role: ROLES.petitionsClerk,
@@ -162,6 +171,14 @@ describe('run trial session planning report', () => {
         smallCaseCount: 2,
         stateAbbreviation: 'AL',
         trialCityState: 'Birmingham, Alabama',
+      });
+      expect(results.trialLocationData[1]).toMatchObject({
+        allCaseCount: 4,
+        previousTermsData: [['(HS) Ashford'], [], []],
+        regularCaseCount: 2,
+        smallCaseCount: 2,
+        stateAbbreviation: 'AL',
+        trialCityState: 'Mobile, Alabama',
       });
     });
   });

@@ -6,7 +6,7 @@
  * @param {object} providers.caseEntity the case entity to update
  * @returns {object} the updated case entity
  */
-exports.updateCaseAutomaticBlock = async ({
+export const updateCaseAutomaticBlock = async ({
   applicationContext,
   caseEntity,
 }) => {

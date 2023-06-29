@@ -42,6 +42,14 @@ resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
         {
             "Effect": "Allow",
             "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:Query"
+            ],
+            "Resource": "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
               "logs:CreateLogGroup",
               "logs:CreateLogStream",
               "logs:PutLogEvents"
@@ -84,6 +92,16 @@ resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
                 "sqs:DeleteQueue"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}_*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": [
+                "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:*",
+                "arn:aws:lambda:us-west-1:${data.aws_caller_identity.current.account_id}:function:*"
+            ],
             "Effect": "Allow"
         },
         {

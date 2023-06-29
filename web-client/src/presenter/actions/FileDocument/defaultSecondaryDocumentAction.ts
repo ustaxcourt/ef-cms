@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * default secondary document.
@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const defaultSecondaryDocumentAction = ({ get, store }) => {
+export const defaultSecondaryDocumentAction = ({ get, store }: ActionProps) => {
   const primaryDocumentScenario = get(state.form.scenario);
 
   if (primaryDocumentScenario === 'Nonstandard H') {

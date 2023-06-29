@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { sendEmailVerificationLink } = require('./sendEmailVerificationLink');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { sendEmailVerificationLink } from './sendEmailVerificationLink';
 
 describe('sendEmailVerificationLink', () => {
   it('should call applicationContext.getDispatchers().sendBulkTemplatedEmail with the provided pendingEmail and templateData', () => {

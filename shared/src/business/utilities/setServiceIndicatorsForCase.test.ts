@@ -1,16 +1,14 @@
-const {
+import {
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
+} from '../entities/EntityConstants';
+import {
   getContactPrimary,
   getContactSecondary,
   getPetitionerById,
-} = require('../entities/cases/Case');
-const {
-  setServiceIndicatorsForCase,
-} = require('./setServiceIndicatorsForCase');
+} from '../entities/cases/Case';
+import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 describe('setServiceIndicatorsForCases', () => {
   let baseCaseDetail;

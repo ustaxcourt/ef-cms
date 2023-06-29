@@ -1,4 +1,4 @@
-const { post } = require('../requests');
+import { post } from '../requests';
 
 /**
  * addCoversheetInteractor
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketEntryId the docket entry id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.addCoversheetInteractor = (
+export const addCoversheetInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

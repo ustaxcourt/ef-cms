@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Generates a printable receipt for document filing
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -15,8 +14,9 @@ export const generatePrintableFilingReceiptAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { documentsFiled } = props;
+  const { fileAcrossConsolidatedGroup } = get(state.form) || false;
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const filingReceiptUrl = await applicationContext
@@ -24,6 +24,7 @@ export const generatePrintableFilingReceiptAction = async ({
     .generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber,
       documentsFiled,
+      fileAcrossConsolidatedGroup,
     });
 
   return { printReceiptLink: filingReceiptUrl };

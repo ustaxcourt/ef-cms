@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getStatusOfVirusScanInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.key the key of the document to get the status of
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getStatusOfVirusScanInteractor = (applicationContext, { key }) => {
+export const getStatusOfVirusScanInteractor = (applicationContext, { key }) => {
   return get({
     applicationContext,
     endpoint: `/documents/${key}/virus-scan`,

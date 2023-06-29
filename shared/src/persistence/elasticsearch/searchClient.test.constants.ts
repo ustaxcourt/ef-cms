@@ -1,4 +1,4 @@
-exports.emptyResults = {
+export const emptyResults = {
   body: {
     _shards: {
       failed: 0,
@@ -19,7 +19,7 @@ exports.emptyResults = {
   },
 };
 
-exports.mockDocketEntrySearchResult = {
+export const mockDocketEntrySearchResult = {
   body: {
     _shards: {
       failed: 0,
@@ -81,7 +81,7 @@ exports.mockDocketEntrySearchResult = {
   },
 };
 
-exports.mockMessageSearchResult = {
+export const mockMessageSearchResult = {
   body: {
     _shards: {
       failed: 0,
@@ -143,7 +143,7 @@ exports.mockMessageSearchResult = {
   },
 };
 
-exports.mockWorkItemSearchResult = {
+export const mockWorkItemSearchResult = {
   body: {
     _shards: {
       failed: 0,
@@ -205,7 +205,7 @@ exports.mockWorkItemSearchResult = {
   },
 };
 
-exports.mockMalformedQueryResult = {
+export const mockMalformedQueryResult = {
   error: {
     reason: 'query malformed, empty clause found at [5:3]',
     root_cause: [
@@ -219,7 +219,7 @@ exports.mockMalformedQueryResult = {
   status: 400,
 };
 
-exports.mockNonexistentDocumentCountResult = {
+export const mockNonexistentDocumentCountResult = {
   body: {
     _shards: {
       failed: 0,
@@ -240,7 +240,7 @@ exports.mockNonexistentDocumentCountResult = {
   },
 };
 
-exports.openCasesReceivedOnJulyFourthSearchParameters = {
+export const openCasesReceivedOnJulyFourthSearchParameters = {
   body: {
     _source: ['docketNumber.S', 'receivedAt.S'],
     query: {
@@ -355,7 +355,7 @@ const mockOpenCasesReceivedOnJulyFourthSearchHits = [
   },
 ];
 
-exports.mockOpenCasesReceivedOnJulyFourthCountResult = {
+export const mockOpenCasesReceivedOnJulyFourthCountResult = {
   body: {
     _shards: {
       failed: 0,
@@ -367,7 +367,7 @@ exports.mockOpenCasesReceivedOnJulyFourthCountResult = {
   },
 };
 
-exports.mockOpenCasesReceivedOnJulyFourthSearchResults = {
+export const mockOpenCasesReceivedOnJulyFourthSearchResults = {
   body: {
     _shards: {
       failed: 0,
@@ -388,7 +388,7 @@ exports.mockOpenCasesReceivedOnJulyFourthSearchResults = {
   },
 };
 
-exports.mockOpenCasesReceivedOnJulyFourthSearchResult1 = {
+export const mockOpenCasesReceivedOnJulyFourthSearchResult1 = {
   body: {
     _shards: {
       failed: 0,
@@ -409,7 +409,7 @@ exports.mockOpenCasesReceivedOnJulyFourthSearchResult1 = {
   },
 };
 
-exports.mockOpenCasesReceivedOnJulyFourthSearchResult2 = {
+export const mockOpenCasesReceivedOnJulyFourthSearchResult2 = {
   body: {
     _shards: {
       failed: 0,
@@ -430,7 +430,7 @@ exports.mockOpenCasesReceivedOnJulyFourthSearchResult2 = {
   },
 };
 
-exports.mockOpenCasesReceivedOnJulyFourthFormattedResults = {
+export const mockOpenCasesReceivedOnJulyFourthFormattedResults = {
   body: {
     results: [
       {

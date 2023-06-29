@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the case detail note
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the getUseCaseForDocumentUpload use case
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const validateNoteOnCaseDetailAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const note = get(state.modal.notes);
 

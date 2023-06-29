@@ -1,9 +1,9 @@
-const {
+import {
   AUTHORIZATION_MAP,
-  isAuthorized,
   ROLE_PERMISSIONS,
-} = require('./authorizationClientService');
-const { ROLES } = require('../business/entities/EntityConstants');
+  isAuthorized,
+} from './authorizationClientService';
+import { ROLES } from '../business/entities/EntityConstants';
 
 describe('Authorization client service', () => {
   it('should return false when the user is undefined', () => {

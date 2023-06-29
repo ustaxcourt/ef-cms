@@ -5,7 +5,9 @@
  * @returns {Object} formattedCases
  */
 
-export const preparePrintableFormattedCasesAction = ({ props }) => {
+export const preparePrintableFormattedCasesAction = ({
+  props,
+}: ActionProps) => {
   let { formattedCases } = props;
   let temporaryFormattedCases = [];
 

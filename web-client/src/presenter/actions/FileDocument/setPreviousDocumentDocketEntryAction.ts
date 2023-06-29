@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the DocketEntry for the previousDocument and sets it in the form
@@ -7,7 +7,10 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store object
  */
-export const setPreviousDocumentDocketEntryAction = ({ get, store }) => {
+export const setPreviousDocumentDocketEntryAction = ({
+  get,
+  store,
+}: ActionProps) => {
   const form = get(state.form);
 
   const { docketEntries } = get(state.caseDetail);

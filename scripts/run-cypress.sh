@@ -80,7 +80,7 @@ else
   echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
 fi
 
-CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.js"
+CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.ts"
 echo "${CONFIG_FILE}"
 
 if [ -n "${INTEGRATION}" ]; then
@@ -88,12 +88,11 @@ if [ -n "${INTEGRATION}" ]; then
   export CYPRESS_TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1
   export CYPRESS_QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1
   export CYPRESS_DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1
-  export CYPRESS_S3_ENDPOINT=http://localhost:9000
+  export CYPRESS_S3_ENDPOINT=http://0.0.0.0:9000
   export CYPRESS_MASTER_DYNAMODB_ENDPOINT=http://localhost:8000
   export CYPRESS_SLS_DEPLOYMENT_BUCKET=noop
   export CYPRESS_AWS_ACCESS_KEY_ID=S3RVER
   export CYPRESS_AWS_SECRET_ACCESS_KEY=S3RVER
-  export CYPRESS_SKIP_CACHE_INVALIDATION=true
   export CYPRESS_CHECK_DEPLOY_DATE_INTERVAL=5000
 elif [ -n "${CYPRESS_SMOKETESTS_LOCAL}" ]; then
   export CYPRESS_BASE_URL="http://localhost:${PORT}"

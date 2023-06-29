@@ -1,11 +1,10 @@
-const { Case } = require('../../entities/cases/Case');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
-const { UserCase } = require('../../entities/UserCase');
+import { Case } from '../../entities/cases/Case';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { UserCase } from '../../entities/UserCase';
 
 /**
  * associatePrivatePractitionerToCase
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
@@ -14,12 +13,18 @@ const { UserCase } = require('../../entities/UserCase');
  * @param {object} providers.serviceIndicator the service indicator
  * @returns {Promise<*>} the updated case entity
  */
-exports.associatePrivatePractitionerToCase = async ({
+export const associatePrivatePractitionerToCase = async ({
   applicationContext,
   docketNumber,
   representing,
   serviceIndicator,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
+  serviceIndicator?: string;
+  user: RawUser;
+  representing: string[];
 }) => {
   const isAssociated = await applicationContext
     .getPersistenceGateway()

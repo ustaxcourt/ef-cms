@@ -1,13 +1,11 @@
-const {
-  addDocketEntryForSystemGeneratedOrder,
-} = require('./addDocketEntryForSystemGeneratedOrder');
-const {
+import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
-const { MOCK_CASE } = require('../../test/mockCase');
+} from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import { MOCK_CASE } from '../../test/mockCase';
+import { addDocketEntryForSystemGeneratedOrder } from './addDocketEntryForSystemGeneratedOrder';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { applicationContext });

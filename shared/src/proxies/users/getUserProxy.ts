@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getUserInteractor
@@ -7,7 +7,7 @@ const { get } = require('../requests');
  * @param {object} providers the providers object
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getUserInteractor = applicationContext => {
+export const getUserInteractor = applicationContext => {
   return get({
     applicationContext,
     endpoint: '/users',

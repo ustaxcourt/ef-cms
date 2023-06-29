@@ -7,7 +7,11 @@
  * @param {object} providers.props the cerebral store used for getting the props.value
  * @returns {object} the path to call based on the section value
  */
-export const isChambersPathAction = ({ applicationContext, path, props }) => {
+export const isChambersPathAction = ({
+  applicationContext,
+  path,
+  props,
+}: ActionProps) => {
   const { CHAMBERS_SECTION } = applicationContext.getConstants();
 
   if (props.value === CHAMBERS_SECTION) {

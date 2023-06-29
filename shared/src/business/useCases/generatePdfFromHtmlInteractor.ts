@@ -1,9 +1,8 @@
-import { headerFontFace } from './headerFontFace';
-import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
+import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
 /**
  * generatePdfFromHtmlInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case
@@ -29,55 +28,52 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter: string;
   },
 ) => {
-  let browser = null;
-  let result = null;
-
-  try {
-    browser = await applicationContext.getChromiumBrowser();
-    let page = await browser.newPage();
-
-    await page.setContent(contentHtml);
-
-    if (headerHtml === undefined) {
-      headerHtml = reactTemplateGenerator({
-        componentName: 'PageMetaHeaderDocket',
-        data: {
-          docketNumber,
-        },
-      });
-    }
-
-    const headerTemplate = `
-          <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${headerHtml}
-          </div>
-    `;
-
-    const footerTemplate = overwriteFooter
-      ? `${footerHtml || ''}`
-      : `
-          <div class="footer-default" style="font-size: 8px; font-family: sans-serif; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${footerHtml || ''}
-          </div>`;
-
-    result = await page.pdf({
-      displayHeaderFooter,
-      footerTemplate,
-      format: 'Letter',
-      headerTemplate: `<style>${headerFontFace}</style>${headerTemplate}`,
-      margin: {
-        bottom: '100px',
-        top: '80px',
-      },
-      printBackground: true,
+  const sendGenerateEvent = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key,
     });
-  } catch (error) {
-    applicationContext.logger.error(error);
-    throw error;
-  } finally {
-    if (browser !== null) {
-      await browser.close();
-    }
+
+  if (sendGenerateEvent) {
+    const { currentColor, region, stage } = applicationContext.environment;
+    const client = new LambdaClient({
+      region,
+    });
+    const command = new InvokeCommand({
+      FunctionName: `pdf_generator_${stage}_${currentColor}`,
+      InvocationType: 'RequestResponse',
+      Payload: Buffer.from(
+        JSON.stringify({
+          contentHtml,
+          displayHeaderFooter,
+          docketNumber,
+          footerHtml,
+          headerHtml,
+          overwriteFooter,
+        }),
+      ),
+    });
+    const response = await client.send(command);
+    const textDecoder = new TextDecoder('utf-8');
+    const responseStr = textDecoder.decode(response.Payload);
+    const key = JSON.parse(responseStr);
+    return await applicationContext.getPersistenceGateway().getDocument({
+      applicationContext,
+      key,
+      protocol: 'S3',
+      useTempBucket: true,
+    });
+  } else {
+    const ret = await applicationContext
+      .getUseCaseHelpers()
+      .generatePdfFromHtmlHelper(applicationContext, {
+        contentHtml,
+        displayHeaderFooter,
+        docketNumber,
+        footerHtml,
+        headerHtml,
+        overwriteFooter,
+      });
+    return ret;
   }
-  return result;
 };

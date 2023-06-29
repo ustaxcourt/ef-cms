@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * set the modal state
@@ -6,7 +6,9 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store function
  */
-export const setCreateMessageModalDialogModalStateAction = ({ store }) => {
+export const setCreateMessageModalDialogModalStateAction = ({
+  store,
+}: ActionProps) => {
   store.set(state.modal.validationErrors, {});
   store.set(state.modal.form, {
     attachments: [],

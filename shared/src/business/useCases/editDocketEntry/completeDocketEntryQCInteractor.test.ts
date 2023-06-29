@@ -6,15 +6,13 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   caseServicesSupervisorUser,
   docketClerkUser,
 } from '../../../test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -487,6 +485,11 @@ describe('completeDocketEntryQCInteractor', () => {
         hasOtherFilingParty: true,
         isPaper: true,
         otherFilingParty: 'Bert Brooks',
+        scenario: 'Nonstandard H',
+        secondaryDocument: {
+          documentType: 'Notice of Change of Address',
+          eventCode: 'A',
+        },
       },
     });
 
@@ -500,6 +503,10 @@ describe('completeDocketEntryQCInteractor', () => {
       freeText: 'Some text about this document',
       hasOtherFilingParty: true,
       otherFilingParty: 'Bert Brooks',
+      secondaryDocument: {
+        documentType: 'Notice of Change of Address',
+        eventCode: 'A',
+      },
     });
   });
 
@@ -588,5 +595,28 @@ describe('completeDocketEntryQCInteractor', () => {
         .workItem;
 
     expect(assignedWorkItem.section).toEqual(CASE_SERVICES_SUPERVISOR_SECTION);
+  });
+
+  it('throws the expected error if the lock is already acquired by another process', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      caseServicesSupervisorUser,
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .acquireLock.mockImplementation(() => {
+        const error: any = new Error('an error has occured');
+        error.code = 'ConditionalCheckFailedException';
+        return Promise.reject(error);
+      });
+
+    await expect(() =>
+      completeDocketEntryQCInteractor(applicationContext, {
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          selectedSection: undefined,
+        },
+      }),
+    ).rejects.toThrow('The document is currently being updated');
   });
 });

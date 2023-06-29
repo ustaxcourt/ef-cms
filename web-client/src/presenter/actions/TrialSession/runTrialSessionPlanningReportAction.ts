@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * get the pdf file and pdf blob url from the passed in htmlString
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @returns {object} the pdfUrl
@@ -10,7 +9,7 @@ import { state } from 'cerebral';
 export const runTrialSessionPlanningReportAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { term, year } = get(state.modal);
 
   const { url } = await applicationContext

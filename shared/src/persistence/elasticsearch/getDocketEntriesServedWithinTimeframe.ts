@@ -1,6 +1,6 @@
-const { search } = require('./searchClient');
+import { search } from './searchClient';
 
-exports.getDocketEntriesServedWithinTimeframe = async ({
+export const getDocketEntriesServedWithinTimeframe = async ({
   applicationContext,
   endTimestamp,
   startTimestamp,

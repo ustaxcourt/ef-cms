@@ -6,7 +6,7 @@
  * @param {string} providers.pendingEmail the pending email
  * @param {string} providers.pendingEmailVerificationToken the pending email
  */
-exports.sendEmailVerificationLink = async ({
+export const sendEmailVerificationLink = async ({
   applicationContext,
   pendingEmail,
   pendingEmailVerificationToken,

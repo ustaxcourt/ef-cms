@@ -1,8 +1,7 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * follows the given redirectUrl, calling the success path, or default path if no redirectUrl
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral method
  * @param {object} providers.path the next object in the path
@@ -10,7 +9,12 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object
  * @returns {Function} the path to take
  */
-export const followRedirectAction = async ({ get, path, router, store }) => {
+export const followRedirectAction = async ({
+  get,
+  path,
+  router,
+  store,
+}: ActionProps) => {
   const redirectUrl = get(state.redirectUrl);
 
   if (redirectUrl) {

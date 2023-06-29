@@ -1,4 +1,4 @@
-const { setPdfFormFields } = require('./setPdfFormFields');
+import { setPdfFormFields } from './setPdfFormFields';
 
 describe('setFields function', () => {
   const getTextMock = jest.fn();

@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getPractitionerByBarNumberInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.barNumber the bar number for the practitioner to fetch
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getPractitionerByBarNumberInteractor = (
+export const getPractitionerByBarNumberInteractor = (
   applicationContext,
   { barNumber },
 ) => {

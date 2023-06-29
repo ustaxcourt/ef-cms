@@ -1,8 +1,7 @@
 import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * submits the add deficiency statistics form
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.applicationContext the applicationContext
@@ -13,7 +12,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const {
     determinationDeficiencyAmount,
     determinationTotalPenalties,

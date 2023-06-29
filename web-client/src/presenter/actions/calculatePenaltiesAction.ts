@@ -1,13 +1,12 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Calculates penalties from the current calculate penalties modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @returns {number} total computed value from penalty values
  */
-export const calculatePenaltiesAction = ({ get }) => {
+export const calculatePenaltiesAction = ({ get }: ActionProps) => {
   let {
     penalties: currentPenalties,
     statisticIndex,

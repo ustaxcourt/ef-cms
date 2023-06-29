@@ -1,4 +1,4 @@
-const { formatDocketEntryResult } = require('./formatDocketEntryResult');
+import { formatDocketEntryResult } from './formatDocketEntryResult';
 
 describe('formatDocketEntryResult', () => {
   const mockDocketEntryResult = {

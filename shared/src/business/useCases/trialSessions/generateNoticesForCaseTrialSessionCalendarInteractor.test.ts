@@ -8,12 +8,9 @@ import {
   SERVICE_INDICATOR_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import {
-  applicationContext,
-  fakeData,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { combineTwoPdfs } from '../../utilities/documentGenerators/combineTwoPdfs';
+import { fakeData, testPdfDoc } from '../../test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
 

@@ -1,13 +1,12 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the page for a PDF for signing
- *
  * @param {object} providers the providers object
  * @param {Function} providers.props used for getting pageNumber
  * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.pageNumber
  */
-export const setPDFPageForSigningAction = ({ props, store }) => {
+export const setPDFPageForSigningAction = ({ props, store }: ActionProps) => {
   const { pageNumber } = props;
   store.set(state.pdfForSigning.pageNumber, pageNumber || 1);
 };

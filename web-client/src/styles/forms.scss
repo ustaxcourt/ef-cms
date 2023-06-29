@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .usa-form-group,
 .usa-fieldset {
   max-width: 30rem;
@@ -60,6 +63,11 @@ legend {
   /* little screens */
   @media only screen and (max-width: $medium-screen) {
     line-height: 1.1em;
+  }
+
+  &#redaction-acknowledgement-label {
+    max-width: 580px;
+    margin-top: 0;
   }
 }
 
@@ -562,6 +570,8 @@ label.ustc-upload {
 }
 
 .usa-date-picker {
+  min-width: 245px;
+
   * {
     animation: none;
   }

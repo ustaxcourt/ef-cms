@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { noticeOfDocketChange } = require('./noticeOfDocketChange');
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { noticeOfDocketChange } from './noticeOfDocketChange';
 
 describe('noticeOfDocketChange', () => {
   generateAndVerifyPdfDiff({

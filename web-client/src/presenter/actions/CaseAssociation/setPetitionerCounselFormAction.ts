@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * takes the petitioner counsel using the barNumber in props and puts onto the form
@@ -11,7 +11,11 @@ import { state } from 'cerebral';
  * @returns {object} props object
  */
 
-export const setPetitionerCounselFormAction = ({ get, props, store }) => {
+export const setPetitionerCounselFormAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { barNumber } = props;
 

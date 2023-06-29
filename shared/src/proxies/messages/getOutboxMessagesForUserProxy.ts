@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+import { get } from '../requests';
 
 /**
  * getOutboxMessagesForUserInteractor
@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.userId the user id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getOutboxMessagesForUserInteractor = (
+export const getOutboxMessagesForUserInteractor = (
   applicationContext,
   { userId },
 ) => {
