@@ -47,11 +47,12 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const areUpdatedTrialSessionTypesEnabled = await applicationContext
+  const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext)[
-    ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key
-  ];
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const areUpdatedTrialSessionTypesEnabled =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key];
 
   const pdf = await applicationContext
     .getDocumentGenerators()
