@@ -45,6 +45,8 @@ export const confirmUser = async ({ email }) => {
       UserPoolId: userPoolId,
     });
   }
+
+  return null;
 };
 
 const getClientId = async userPoolId => {

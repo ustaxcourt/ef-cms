@@ -16,7 +16,7 @@ import {
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
   chromeWebSecurity: false,
-  defaultCommandTimeout: 60000,
+  defaultCommandTimeout: 20000,
   e2e: {
     setupNodeEvents(on) {
       on('task', {
@@ -47,8 +47,8 @@ export default defineConfig({
   reporterOptions: {
     toConsole: true,
   },
-  requestTimeout: 60000,
-  retries: 4,
+  requestTimeout: 20000,
+  retries: 0,
   screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,

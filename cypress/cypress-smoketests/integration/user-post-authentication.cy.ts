@@ -63,23 +63,27 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
     it('should add an email to the party on the case', () => {
       goToCaseDetail(testData.createdPaperDocketNumber);
-
       editPetitionerEmail(randomizedEmail);
+    });
+
+    it('should confirm user', () => {
+      cy.task('confirmUser', { email: randomizedEmail });
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(5000); // give cognito time to update cases
     });
   });
 
   describe('Petitioner', () => {
-    it('should confirm user', () => {
-      cy.task('confirmUser', { email: randomizedEmail });
-    });
-
-    it('verify the email has changed', () => {
+    before(() => {
       cy.task<AuthenticationResult>('getUserToken', {
         email: randomizedEmail,
         password: DEFAULT_ACCOUNT_PASS,
       }).then(result => {
         token = result.AuthenticationResult?.IdToken;
       });
+    });
+
+    it('login as petitioner', () => {
       login(token);
       goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
       verifyEmailChange();
