@@ -1,52 +1,42 @@
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardJ() {}
+export class ExternalDocumentNonStandardJ extends ExternalDocument {
+  public freeText: any;
+  public freeText2: any;
 
-ExternalDocumentNonStandardJ.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.freeText = rawProps.freeText;
-  this.freeText2 = rawProps.freeText2;
-};
+  constructor(rawProps) {
+    super('ExternalDocumentNonStandardJ');
 
-ExternalDocumentNonStandardJ.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.freeText, this.freeText2);
-};
+    this.category = rawProps.category;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.freeText = rawProps.freeText;
+    this.freeText2 = rawProps.freeText2;
+  }
 
-ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    freeText: JoiValidationConstants.STRING.max(1000).required(),
+    freeText2: JoiValidationConstants.STRING.max(1000).required(),
+  };
 
-ExternalDocumentNonStandardJ.schema = {
-  ...baseExternalDocumentValidation,
-  freeText: JoiValidationConstants.STRING.max(1000).required(),
-  freeText2: JoiValidationConstants.STRING.max(1000).required(),
-};
+  static VALIDATION_ERROR_MESSAGES =
+    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardJ,
-  ExternalDocumentNonStandardJ.schema,
-  ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES,
-);
+  getValidationRules() {
+    return ExternalDocumentNonStandardJ.VALIDATION_RULES;
+  }
 
-module.exports = {
-  ExternalDocumentNonStandardJ: validEntityDecorator(
-    ExternalDocumentNonStandardJ,
-  ),
-};
+  getErrorToMessageMap() {
+    return ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getDocumentTitle(): string {
+    return replaceBracketed(this.documentTitle, this.freeText, this.freeText2);
+  }
+}
+
+export type RawExternalDocumentNonStandardJ =
+  ExcludeMethods<ExternalDocumentNonStandardJ>;
