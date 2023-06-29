@@ -10,9 +10,9 @@ import {
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
 import { Case, getContactPrimary, getContactSecondary } from './Case';
-import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { createContacts } from '../contacts/ContactFactory';
 import joi from 'joi';
 
 /**
@@ -57,7 +57,7 @@ export class CaseExternal extends JoiValidationEntity {
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
 
-    const contacts = ContactFactory.createContacts({
+    const contacts = createContacts({
       applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

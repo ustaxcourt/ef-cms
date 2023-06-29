@@ -1,7 +1,7 @@
 import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { CaseExternal } from './CaseExternal';
-import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { createContacts } from '../contacts/ContactFactory';
 import joi from 'joi';
 
 export class CaseExternalIncomplete extends JoiValidationEntity {
@@ -26,7 +26,7 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
 
-    const contacts = ContactFactory.createContacts({
+    const contacts = createContacts({
       applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

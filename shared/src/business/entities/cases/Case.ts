@@ -24,7 +24,6 @@ import {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
-import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
 import { DocketEntry } from '../DocketEntry';
@@ -50,6 +49,7 @@ import { UnprocessableEntityError } from '../../../errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
+import { createContacts } from '../contacts/ContactFactory';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
@@ -638,7 +638,6 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
     ).description('When the case fee was waived.'),
-    // Individual items are validated by the ContactFactory.
     petitioners: joi
       .array()
       .unique(
@@ -875,7 +874,7 @@ export class Case extends JoiValidationEntity {
 
   assignContacts({ applicationContext, rawCase }) {
     if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
-      const contacts = ContactFactory.createContacts({
+      const contacts = createContacts({
         applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
