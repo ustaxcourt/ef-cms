@@ -79,12 +79,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('closedCasesTotal', () => {
     it('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
-      const { closedCasesTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { closedCasesTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(closedCasesTotal).toBe(6);
     });
@@ -92,7 +89,7 @@ describe('judgeActivityReportHelper', () => {
 
   describe('isFormPristine', () => {
     it('should be true when startDate is not populated', () => {
-      const { isFormPristine } = runCompute(judgeActivityReportHelper as any, {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
@@ -109,7 +106,7 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should be true when endDate is not populated', () => {
-      const { isFormPristine } = runCompute(judgeActivityReportHelper as any, {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
@@ -126,7 +123,7 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should be false when both startDate and endDate are populated', () => {
-      const { isFormPristine } = runCompute(judgeActivityReportHelper as any, {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
@@ -145,12 +142,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('opinionsFiledTotal', () => {
     it('should be the sum of the values of opinions filed off state.judgeActivityReportData', () => {
-      const { opinionsFiledTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { opinionsFiledTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(opinionsFiledTotal).toBe(5);
     });
@@ -158,12 +152,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('ordersFiledTotal', () => {
     it('should be the sum of the values of orders filed off state.judgeActivityReportData', () => {
-      const { ordersFiledTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { ordersFiledTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(ordersFiledTotal).toBe(6);
     });
@@ -175,7 +166,7 @@ describe('judgeActivityReportHelper', () => {
         applicationContext.getUtilities().prepareDateFromString as jest.Mock
       ).mockReturnValue('2020-01-01');
 
-      const { reportHeader } = runCompute(judgeActivityReportHelper as any, {
+      const { reportHeader } = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
 
@@ -185,28 +176,22 @@ describe('judgeActivityReportHelper', () => {
 
   describe('showResultsTables', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
-      const { showResultsTables } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: {
-            judgeActivityReport: {
-              ...baseState.judgeActivityReport,
-              judgeActivityReportData: {},
-            },
+      const { showResultsTables } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            judgeActivityReportData: {},
           },
         },
-      );
+      });
 
       expect(showResultsTables).toBe(false);
     });
 
     it('should true when there are orders, opinions, trial sessions or cases for the specified judge', () => {
-      const { showResultsTables } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { showResultsTables } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(showResultsTables).toBe(true);
     });
@@ -215,7 +200,7 @@ describe('judgeActivityReportHelper', () => {
   describe('showSelectDateRangeText', () => {
     it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
       const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -226,7 +211,7 @@ describe('judgeActivityReportHelper', () => {
 
     it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
       const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: {
             judgeActivityReport: {
@@ -243,12 +228,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('trialSessionsHeldTotal', () => {
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
-      const { trialSessionsHeldTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(trialSessionsHeldTotal).toBe(3);
     });
@@ -257,7 +239,7 @@ describe('judgeActivityReportHelper', () => {
   describe('progressDescriptionTableTotal', () => {
     it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map();
+        {};
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         [
           {
@@ -283,7 +265,7 @@ describe('judgeActivityReportHelper', () => {
           },
         ];
       const { progressDescriptionTableTotal } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -328,12 +310,12 @@ describe('judgeActivityReportHelper', () => {
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+        { '101-20': 4 };
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -369,11 +351,11 @@ describe('judgeActivityReportHelper', () => {
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+        { '101-20': 4 };
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -397,7 +379,7 @@ describe('judgeActivityReportHelper', () => {
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+        { '101-20': 4 };
 
       mockSubmittedAndCavCasesByJudge.push({
         caseStatusHistory: [],
@@ -408,7 +390,7 @@ describe('judgeActivityReportHelper', () => {
         mockSubmittedAndCavCasesByJudge;
 
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -423,7 +405,7 @@ describe('judgeActivityReportHelper', () => {
   describe('pageCount and showPaginator', () => {
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map();
+        {};
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         [
           {
@@ -457,7 +439,7 @@ describe('judgeActivityReportHelper', () => {
 
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map();
+        {};
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         [];
       const result = runCompute(judgeActivityReportHelper, {
