@@ -14,7 +14,7 @@ export const getAllFeatureFlagsInteractor = async (
     (flag: any) => flag.key,
   );
 
-  let allFFS: any = {};
+  let allFeatureFlags: any = {};
   for (let featureFlagKey of allowlistFeatures) {
     const result = await applicationContext
       .getPersistenceGateway()
@@ -22,13 +22,13 @@ export const getAllFeatureFlagsInteractor = async (
 
     if (result) {
       if (typeof result.current === 'boolean') {
-        allFFS[featureFlagKey] = !!result.current;
+        allFeatureFlags[featureFlagKey] = !!result.current;
       } else {
-        allFFS[featureFlagKey] = result.current;
+        allFeatureFlags[featureFlagKey] = result.current;
       }
     } else {
-      allFFS[featureFlagKey] = false;
+      allFeatureFlags[featureFlagKey] = false;
     }
   }
-  return allFFS;
+  return allFeatureFlags;
 };
