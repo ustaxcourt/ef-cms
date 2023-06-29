@@ -1118,7 +1118,9 @@ export const PARTY_TYPES = {
   survivingSpouse: 'Surviving spouse',
   transferee: 'Transferee',
   trust: 'Trust',
-};
+} as const;
+const partyTypeArray = Object.values(PARTY_TYPES);
+export type PartyType = (typeof partyTypeArray)[number];
 
 export const BUSINESS_TYPES = {
   corporation: PARTY_TYPES.corporation,

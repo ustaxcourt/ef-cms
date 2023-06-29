@@ -1,4 +1,4 @@
-import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { CONTACT_TYPES, PARTY_TYPES, PartyType } from '../EntityConstants';
 import { NextFriendForIncompetentPersonContact } from './NextFriendForIncompetentPersonContact';
 import { NextFriendForMinorContact } from './NextFriendForMinorContact';
 import { PartnershipAsTaxMattersPartnerPrimaryContact } from './PartnershipAsTaxMattersPartnerContact';
@@ -17,7 +17,15 @@ import { PetitionerTrustContact } from './PetitionerTrustContact';
 import { SurvivingSpouseContact } from './SurvivingSpouseContact';
 
 export const ContactFactory = {
-  createContacts: ({ applicationContext, contactInfo, partyType }) => {
+  createContacts: ({
+    applicationContext,
+    contactInfo,
+    partyType,
+  }: {
+    applicationContext: IApplicationContext;
+    contactInfo: any;
+    partyType: PartyType;
+  }) => {
     switch (partyType) {
       case PARTY_TYPES.donor:
       case PARTY_TYPES.transferee:
