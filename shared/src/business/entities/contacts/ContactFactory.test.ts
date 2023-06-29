@@ -44,7 +44,7 @@ describe('ContactFactory', () => {
   };
 
   it('should throw an error if app context is not passed in', () => {
-    expect(() => new CaseExternal(baseCaseExternal, {})).toThrow();
+    expect(() => new CaseExternal(baseCaseExternal, {} as any)).toThrow();
   });
 
   describe('for Corporation Contacts', () => {
