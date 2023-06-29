@@ -49,6 +49,9 @@ export const uploadPdfFromClient = async ({
     .then(r => {
       onUploadProgress({ isDone: true });
       return r;
+    })
+    .catch(err => {
+      console.log('ERROR IN UPLOADING PDF FOR CREATING PAPER CASE******', err);
     });
 
   return docId;

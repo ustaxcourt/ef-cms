@@ -131,9 +131,15 @@ export const createCaseFromPaperAction = async ({
         stinFile,
         stinUploadProgress: progressFunctions.stin,
       });
+
+    console.log('CASE CREATED CORRECTLY', caseDetail);
   } catch (err) {
+    console.log('ERROR CREATING CASE', err);
+
     return path.error();
   }
+
+  console.log('CREATED CASE', caseDetail.docketNumber);
 
   return path.success({
     caseDetail,

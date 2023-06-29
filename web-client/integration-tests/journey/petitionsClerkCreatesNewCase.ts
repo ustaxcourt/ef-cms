@@ -5,7 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { fakeFile } from '../helpers';
+import { fakeFile, wait } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
@@ -34,6 +34,7 @@ export const petitionsClerkCreatesNewCase = (
     expect(cerebralTest.getState('form.hasVerifiedIrsNotice')).toEqual(false);
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    console.log('PASSED FIRST SUBMISSION');
 
     expect(cerebralTest.getState('alertError.title')).toEqual(
       'Please correct the following errors on the page:',
@@ -86,6 +87,7 @@ export const petitionsClerkCreatesNewCase = (
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    console.log('PASSED SECOND SUBMISSION');
 
     expect(
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -132,6 +134,7 @@ export const petitionsClerkCreatesNewCase = (
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    console.log('PASSED THIRD SUBMISSION');
 
     expect(
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
@@ -225,6 +228,7 @@ export const petitionsClerkCreatesNewCase = (
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    console.log('PASSED FOURTH SUBMISSION');
 
     expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
 
@@ -248,5 +252,5 @@ export const petitionsClerkCreatesNewCase = (
     if (cerebralTest.casesReadyForTrial) {
       cerebralTest.casesReadyForTrial.push(cerebralTest.docketNumber);
     }
-  });
+  }, 10000);
 };

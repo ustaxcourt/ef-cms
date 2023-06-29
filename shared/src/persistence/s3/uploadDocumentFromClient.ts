@@ -21,10 +21,15 @@ export const uploadDocumentFromClient = async ({
   onUploadProgress?: () => void;
 }) => {
   const docId = key || applicationContext.getUniqueId();
+  console.log('docId', docId);
+
   const policy = await getUploadPolicy({
     applicationContext,
     key: docId,
   });
+
+  console.log('policy', policy);
+
   await applicationContext.getPersistenceGateway().uploadPdfFromClient({
     applicationContext,
     file: document,
@@ -32,5 +37,7 @@ export const uploadDocumentFromClient = async ({
     onUploadProgress,
     policy,
   });
+  console.log('succesfully uploaded', docId);
+
   return docId;
 };

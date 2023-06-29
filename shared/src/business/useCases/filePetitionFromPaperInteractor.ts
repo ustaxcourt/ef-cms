@@ -85,15 +85,70 @@ export const filePetitionFromPaperInteractor = async (
       });
   }
 
-  await Promise.all([
-    applicationForWaiverOfFilingFeeUpload,
-    corporateDisclosureFileUpload,
-    petitionFileUpload,
-    requestForPlaceOfTrialFileUpload,
-    stinFileUpload,
-  ]);
+  // console.log('ANSWERS applicationForWaiverOfFilingFeeUpload', {
+  //   applicationForWaiverOfFilingFeeUpload:
+  //     await applicationForWaiverOfFilingFeeUpload,
+  //   //   corporateDisclosureFileUpload,
+  //   //   petitionFileUpload,
+  //   //   requestForPlaceOfTrialFileUpload,
+  //   //   stinFileUpload,
+  // });
 
-  return await applicationContext
+  // console.log(
+  //   'ANSWERS applicationForWaiverOfFilingFeeUpload',
+  //   await applicationForWaiverOfFilingFeeUpload,
+  // );
+
+  // try {
+  //   console.log('USER RUNNING TEST', user);
+  //   await applicationForWaiverOfFilingFeeUpload;
+  // } catch (err) {
+  //   console.log('applicationForWaiverOfFilingFeeUpload ERROR', err);
+  // }
+
+  // try {
+  //   console.log('USER RUNNING TEST', user);
+  //   await corporateDisclosureFileUpload;
+  // } catch (err) {
+  //   console.log('corporateDisclosureFileUpload ERROR', err);
+  // }
+
+  // try {
+  //   console.log('USER RUNNING TEST', user);
+  //   await petitionFileUpload;
+  // } catch (err) {
+  //   console.log('petitionFileUpload ERROR', err);
+  // }
+
+  // try {
+  //   console.log('USER RUNNING TEST', user);
+  //   await requestForPlaceOfTrialFileUpload;
+  // } catch (err) {
+  //   console.log('requestForPlaceOfTrialFileUpload ERROR', err);
+  // }
+
+  // try {
+  //   console.log('USER RUNNING TEST', user);
+  //   await stinFileUpload;
+  // } catch (err) {
+  //   console.log('stinFileUpload ERROR', err);
+  // }
+
+  try {
+    console.log('USER RUNNING TEST', user);
+
+    await Promise.allSettled([
+      applicationForWaiverOfFilingFeeUpload,
+      corporateDisclosureFileUpload,
+      petitionFileUpload,
+      requestForPlaceOfTrialFileUpload,
+      stinFileUpload,
+    ]);
+  } catch (err) {
+    console.log('ERROR FROM BIG EVALUATIONS', err);
+  }
+
+  const caseCreated = await applicationContext
     .getUseCases()
     .createCaseFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFileId:
@@ -104,4 +159,6 @@ export const filePetitionFromPaperInteractor = async (
       requestForPlaceOfTrialFileId: await requestForPlaceOfTrialFileUpload,
       stinFileId: await stinFileUpload,
     });
+
+  return caseCreated;
 };

@@ -4,7 +4,7 @@ import {
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import { refreshElasticsearchIndex, wait } from '../helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -14,26 +14,32 @@ const judgeActivityReportHelper = withAppContextDecorator(
 
 export const viewJudgeActivityReportResults = (
   cerebralTest: any,
-  overrides: { startDate?: string; endDate?: string; judgeName?: string } = {},
+  overrides?: { startDate?: string; endDate?: string; judgeName?: string },
 ) => {
-  return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
-    const currentDate = formatDateString(
-      prepareDateFromString(),
-      getConstants().DATE_FORMATS.MMDDYYYY,
-    );
+  const currentDate = formatDateString(
+    prepareDateFromString(),
+    getConstants().DATE_FORMATS.MMDDYYYY,
+  );
 
+  const defaults = {
+    endDate: currentDate,
+    judgeName: 'Colvin',
+    startDate: '01/01/2020',
+  };
+  overrides = Object.assign(defaults, overrides || {});
+  return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
     await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      startDate: (overrides.startDate as string) || '01/01/2020',
+      startDate: overrides.startDate,
     });
 
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      endDate: overrides.endDate || currentDate,
+      endDate: overrides.endDate,
     });
 
     await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
-      judgeName: overrides.judgeName || 'Colvin',
+      judgeName: overrides.judgeName,
     });
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
@@ -41,10 +47,8 @@ export const viewJudgeActivityReportResults = (
       selectedPage: 0,
     });
 
-    await wait(10000);
-
     const { progressDescriptionTableTotal } = runCompute(
-      judgeActivityReportHelper as any,
+      judgeActivityReportHelper,
       {
         state: cerebralTest.getState(),
       },

@@ -13,6 +13,8 @@ export const uploadDocumentAndMakeSafeInteractor = async (
     onUploadProgress,
   }: { document: any; key: string; onUploadProgress: () => void },
 ) => {
+  console.log('IN uploadDocumentAndMakeSafeInteractor******');
+
   const uploadedKey = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
@@ -21,6 +23,8 @@ export const uploadDocumentAndMakeSafeInteractor = async (
       key,
       onUploadProgress,
     });
+
+  console.log('UPLOAD LINK******', uploadedKey);
 
   await applicationContext
     .getUseCases()
