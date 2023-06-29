@@ -4,6 +4,12 @@ import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('isFeatureFlagEnabledFactoryAction', () => {
+  const mockFeatureFlagsObject = {
+    MOCK_FEATURE_FLAG_NAME: {
+      disabledMessage: 'The ability to perform this feature has been disabled.',
+      key: 'mock-key',
+    },
+  };
   let pathYesStub;
   let pathNoStub;
 
@@ -17,28 +23,27 @@ describe('isFeatureFlagEnabledFactoryAction', () => {
       yes: pathYesStub,
     };
 
-    applicationContext.getConstants.mockReturnValue({
-      ALLOWLIST_FEATURE_FLAGS: {
-        A_FEATURE: {
-          disabledMessage: 'this is turned off :(',
-          key: 'a-feature',
-        },
-      },
-    });
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockResolvedValue(mockFeatureFlagsObject);
   });
 
   it('should return path.yes() when the feature flag is turned on', async () => {
     await runAction(
-      isFeatureFlagEnabledFactoryAction({
-        disabledMessage: 'this is turned off :(',
-        key: 'goooDooBoo',
-      }),
+      isFeatureFlagEnabledFactoryAction(
+        mockFeatureFlagsObject.MOCK_FEATURE_FLAG_NAME,
+      ),
       {
         modules: {
           presenter,
         },
         props: {
           goooDooBoo: true,
+        },
+        state: {
+          featureFlags: {
+            mockFeatureFlagsObject,
+          },
         },
       },
     );
@@ -59,6 +64,9 @@ describe('isFeatureFlagEnabledFactoryAction', () => {
         props: {
           goooDooBoo: false,
         },
+        state: {
+          featureFlags: {},
+        },
       },
     );
 
@@ -68,36 +76,27 @@ describe('isFeatureFlagEnabledFactoryAction', () => {
     );
   });
 
-  it('should return path.no() as a default when the provided feature flag is not found in props', async () => {
-    await runAction(
-      isFeatureFlagEnabledFactoryAction({
-        disabledMessage: 'this is turned off :(',
-        key: 'goooDooBoo',
-      }),
+  it('should retrieve and set all feature flags from eprsistence when state.featureFlags is empty', async () => {
+    const result = await runAction(
+      isFeatureFlagEnabledFactoryAction(
+        mockFeatureFlagsObject.MOCK_FEATURE_FLAG_NAME,
+      ),
       {
         modules: {
           presenter,
         },
-        props: {},
+        props: {
+          goooDooBoo: true,
+        },
+        state: {
+          featureFlags: {},
+        },
       },
     );
 
-    expect(pathNoStub).toHaveBeenCalled();
-    expect(pathNoStub.mock.calls[0][0].alertWarning.message).toEqual(
-      'this is turned off :(',
-    );
-  });
-
-  it('should return path.no() as a default when no feature flag object is passed in', async () => {
-    await runAction(isFeatureFlagEnabledFactoryAction({}), {
-      modules: {
-        presenter,
-      },
-      props: {
-        goooDooBoo: true,
-      },
-    });
-
-    expect(pathNoStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().getAllFeatureFlagsInteractor,
+    ).toHaveBeenCalled();
+    expect(result.state.featureFlags).toEqual(mockFeatureFlagsObject);
   });
 });

@@ -13,7 +13,7 @@ describe('getAllFeatureFlagsAction', () => {
 
     applicationContext
       .getUseCases()
-      .getAllFeatureFlagsInteractormockResolvedValue(mockFeatureFlagsObject);
+      .getAllFeatureFlagsInteractor.mockResolvedValue(mockFeatureFlagsObject);
   });
 
   it('makes a call to retrieve all feature flags', async () => {
