@@ -90,7 +90,7 @@ export const judgeActivityReportHelper = (
 
   filteredSubmittedAndCavCasesByJudge.forEach(individualCase => {
     individualCase.formattedCaseCount =
-      consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
+      consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
       individualCase.consolidatedIconTooltipText = 'Lead case';
       individualCase.isLeadCase = true;
