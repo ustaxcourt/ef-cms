@@ -1,5 +1,6 @@
 export const goToCaseDetailPetitioner = docketNumber => {
-  cy.get('#docket-search-field').clear().type(docketNumber);
+  cy.get('#docket-search-field').clear();
+  cy.get('#docket-search-field').type(docketNumber);
   cy.get('.usa-search-submit-text').click();
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
 };
@@ -9,7 +10,8 @@ export const goToFileADocument = () => {
 };
 
 export const goToSelectDocumentType = () => {
-  cy.get('a[href*="/file-a-document"]').scrollIntoView().click();
+  cy.get('a[href*="/file-a-document"]').scrollIntoView();
+  cy.get('a[href*="/file-a-document"]').click();
 };
 
 export const goToFileYourDocument = () => {
