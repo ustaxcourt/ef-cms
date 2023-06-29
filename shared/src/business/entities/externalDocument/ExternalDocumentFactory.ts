@@ -30,10 +30,7 @@ export function ExternalDocumentFactory(documentMetadata) {
       case 'nonstandard g':
         return new ExternalDocumentNonStandardG(documentMetadata);
       case 'nonstandard h':
-        return new ExternalDocumentNonStandardH(
-          documentMetadata,
-          ExternalDocumentFactory,
-        );
+        return new ExternalDocumentNonStandardH(documentMetadata);
       case 'nonstandard i':
         return new ExternalDocumentNonStandardI(documentMetadata);
       case 'nonstandard j':

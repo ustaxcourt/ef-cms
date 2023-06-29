@@ -1,51 +1,48 @@
-const joi = require('joi');
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import joi from 'joi';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentStandard() {}
-ExternalDocumentStandard.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.selectedCases = rawProps.selectedCases;
-};
+export class ExternalDocumentStandard extends ExternalDocument {
+  public selectedCases: any;
 
-ExternalDocumentStandard.prototype.getDocumentTitle = function () {
-  return this.documentTitle;
-};
+  constructor(rawProps) {
+    super('ExternalDocumentStandard');
 
-ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+    this.category = rawProps.category;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.selectedCases = rawProps.selectedCases;
+  }
 
-ExternalDocumentStandard.schema = joi.object({
-  ...baseExternalDocumentValidation,
-  documentType: JoiValidationConstants.STRING.required().when('selectedCases', {
-    is: joi.array().min(1).required(),
-    then: JoiValidationConstants.STRING.invalid('Proposed Stipulated Decision'),
-  }),
-  selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
-});
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    documentType: JoiValidationConstants.STRING.required().when(
+      'selectedCases',
+      {
+        is: joi.array().min(1).required(),
+        then: JoiValidationConstants.STRING.invalid(
+          'Proposed Stipulated Decision',
+        ),
+      },
+    ),
+    selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
+  };
 
-joiValidationDecorator(
-  ExternalDocumentStandard,
-  ExternalDocumentStandard.schema,
-  ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES,
-);
+  static VALIDATION_ERROR_MESSAGES =
+    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
 
-module.exports = {
-  ExternalDocumentStandard: validEntityDecorator(ExternalDocumentStandard),
-};
+  getValidationRules() {
+    return ExternalDocumentStandard.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getDocumentTitle(): string {
+    return this.documentTitle!;
+  }
+}
+
+export type RawExternalDocumentStandard =
+  ExcludeMethods<ExternalDocumentStandard>;
