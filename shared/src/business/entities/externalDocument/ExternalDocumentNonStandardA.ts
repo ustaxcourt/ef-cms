@@ -1,61 +1,55 @@
-const joi = require('joi');
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
+import joi from 'joi';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardA() {}
+export class ExternalDocumentNonStandardA extends ExternalDocument {
+  public category: string;
+  public documentTitle?: string;
+  public documentType: string;
+  public previousDocument: any;
 
-ExternalDocumentNonStandardA.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.previousDocument = rawProps.previousDocument;
-};
+  constructor(rawProps) {
+    super('ExternalDocumentNonStandardA');
 
-ExternalDocumentNonStandardA.prototype.getDocumentTitle = function () {
-  return replaceBracketed(
-    this.documentTitle,
-    this.previousDocument
-      ? this.previousDocument.documentTitle ||
-          this.previousDocument.documentType
-      : '',
-  );
-};
+    this.category = rawProps.category;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.previousDocument = rawProps.previousDocument;
+  }
 
-ExternalDocumentNonStandardA.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    previousDocument: joi
+      .object()
+      .keys({
+        documentTitle: JoiValidationConstants.STRING.optional(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .required(),
+  };
 
-ExternalDocumentNonStandardA.schema = {
-  ...baseExternalDocumentValidation,
-  previousDocument: joi
-    .object()
-    .keys({
-      documentTitle: JoiValidationConstants.STRING.optional(),
-      documentType: JoiValidationConstants.STRING.required(),
-    })
-    .required(),
-};
+  static VALIDATION_ERROR_MESSAGES =
+    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardA,
-  ExternalDocumentNonStandardA.schema,
-  ExternalDocumentNonStandardA.VALIDATION_ERROR_MESSAGES,
-);
+  getValidationRules() {
+    return ExternalDocumentNonStandardA.VALIDATION_RULES;
+  }
 
-exports.ExternalDocumentNonStandardA = validEntityDecorator(
-  ExternalDocumentNonStandardA,
-);
+  getErrorToMessageMap() {
+    return ExternalDocumentNonStandardA.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getDocumentTitle(): string {
+    return replaceBracketed(
+      this.documentTitle,
+      this.previousDocument
+        ? this.previousDocument.documentTitle ||
+            this.previousDocument.documentType
+        : '',
+    );
+  }
+}
+
+export type RawExternalDocumentNonStandardA =
+  ExcludeMethods<ExternalDocumentNonStandardA>;
