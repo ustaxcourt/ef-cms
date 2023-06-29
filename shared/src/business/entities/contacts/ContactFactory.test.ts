@@ -6,8 +6,8 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { CaseExternal } from '../cases/CaseExternal';
+import { ContactFactory } from './ContactFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { createContacts } from './ContactFactory';
 
 describe('ContactFactory', () => {
   const baseCaseExternal = {
@@ -336,7 +336,7 @@ describe('ContactFactory', () => {
   });
 
   it('should return an empty primary object if no partyType is given and case has not been served', () => {
-    const contacts = createContacts({
+    const contacts = ContactFactory({
       partyType: undefined,
       status: CASE_STATUS_TYPES.new,
     });

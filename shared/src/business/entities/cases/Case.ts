@@ -24,6 +24,7 @@ import {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
+import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
 import { DocketEntry } from '../DocketEntry';
@@ -49,7 +50,6 @@ import { UnprocessableEntityError } from '../../../errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
-import { createContacts } from '../contacts/ContactFactory';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
@@ -874,7 +874,7 @@ export class Case extends JoiValidationEntity {
 
   assignContacts({ applicationContext, rawCase }) {
     if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
-      const contacts = createContacts({
+      const contacts = ContactFactory({
         applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
