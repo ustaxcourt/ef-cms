@@ -41,7 +41,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   store.set(
     state.judgeActivityReport.judgeActivityReportData
       .consolidatedCasesGroupCountMap,
-    consolidatedCasesGroupCountMap,
+    new Map(Object.entries(consolidatedCasesGroupCountMap)),
   );
 
   store.set(
