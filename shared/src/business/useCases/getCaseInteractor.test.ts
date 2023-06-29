@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -466,7 +467,10 @@ describe('getCaseInteractor', () => {
       });
       applicationContext
         .getUseCases()
-        .getAllFeatureFlagsInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockReturnValue({
+          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+            .key]: true,
+        });
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue({

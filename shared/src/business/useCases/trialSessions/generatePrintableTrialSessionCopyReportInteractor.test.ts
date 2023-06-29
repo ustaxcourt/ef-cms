@@ -1,6 +1,6 @@
+import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
 
@@ -41,7 +41,9 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getAllFeatureFlagsInteractor.mockReturnValue(false);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key]: false,
+      });
   });
 
   beforeEach(() => {
