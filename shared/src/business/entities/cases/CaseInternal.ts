@@ -7,12 +7,12 @@ import {
   ROLES,
 } from '../EntityConstants';
 import { Case, getContactPrimary, getContactSecondary } from './Case';
+import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Statistic } from '../Statistic';
-import { createContacts } from '../contacts/ContactFactory';
 import joi from 'joi';
 
 /**
@@ -129,7 +129,7 @@ export class CaseInternal extends JoiValidationEntity {
         )
       : [];
 
-    const contacts = createContacts({
+    const contacts = ContactFactory({
       applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawProps) || rawProps.contactPrimary,

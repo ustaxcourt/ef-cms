@@ -1,8 +1,8 @@
 import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { CaseExternal } from './CaseExternal';
+import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { createContacts } from '../contacts/ContactFactory';
 import joi from 'joi';
 
 /**
@@ -50,7 +50,7 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
 
     if (+this.wizardStep >= 3) {
-      const contacts = createContacts({
+      const contacts = ContactFactory({
         applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

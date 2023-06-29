@@ -1,5 +1,5 @@
+import { ContactFactory } from '../entities/contacts/ContactFactory';
 import { RawContact } from '../entities/contacts/Contact';
-import { createContacts } from '../entities/contacts/ContactFactory';
 import { isEmpty } from 'lodash';
 
 /**
@@ -24,7 +24,7 @@ export const validatePetitionerInformationFormInteractor = (
     partyType: string;
   },
 ) => {
-  const contacts = createContacts({
+  const contacts = ContactFactory({
     applicationContext,
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },
     partyType,

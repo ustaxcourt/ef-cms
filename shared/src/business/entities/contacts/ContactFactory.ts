@@ -16,7 +16,7 @@ import { PetitionerSpouseContact } from './PetitionerSpouseContact';
 import { PetitionerTrustContact } from './PetitionerTrustContact';
 import { SurvivingSpouseContact } from './SurvivingSpouseContact';
 
-export function createContacts({
+export function ContactFactory({
   applicationContext,
   contactInfo,
   partyType,
