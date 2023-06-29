@@ -14,6 +14,7 @@ export const searchForCaseByDocketNumber = docketNumber => {
 };
 
 export const enterPetitionerName = name => {
+  cy.waitUntilSettled();
   cy.get('input#petitioner-name').type(name);
 };
 
@@ -38,6 +39,7 @@ export const getKeywordInput = () => {
 };
 
 export const enterDocumentDocketNumber = docketNumber => {
+  cy.waitUntilSettled();
   cy.get('input#docket-number').type(docketNumber);
 };
 
