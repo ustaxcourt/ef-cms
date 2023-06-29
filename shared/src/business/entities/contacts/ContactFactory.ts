@@ -166,7 +166,10 @@ export const ContactFactory = {
         if (partyType) {
           throw new Error(`Unrecognized party type "${partyType}"`);
         }
-        return {};
+        return {
+          primary: {},
+          secondary: null,
+        };
     }
   },
 };
