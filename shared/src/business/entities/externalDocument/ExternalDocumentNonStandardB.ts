@@ -1,50 +1,39 @@
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardB() {}
+export class ExternalDocumentNonStandardB extends ExternalDocument {
+  public freeText: any;
 
-ExternalDocumentNonStandardB.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.freeText = rawProps.freeText;
-};
+  constructor(rawProps) {
+    super('ExternalDocumentNonStandardB');
 
-ExternalDocumentNonStandardB.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.freeText);
-};
+    this.category = rawProps.category;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.freeText = rawProps.freeText;
+  }
 
-ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    freeText: JoiValidationConstants.STRING.max(1000).required(),
+  };
 
-ExternalDocumentNonStandardB.schema = {
-  ...baseExternalDocumentValidation,
-  freeText: JoiValidationConstants.STRING.max(1000).required(),
-};
+  static VALIDATION_ERROR_MESSAGES =
+    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardB,
-  ExternalDocumentNonStandardB.schema,
-  ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES,
-);
+  getValidationRules() {
+    return ExternalDocumentNonStandardB.VALIDATION_RULES;
+  }
 
-module.exports = {
-  ExternalDocumentNonStandardB: validEntityDecorator(
-    ExternalDocumentNonStandardB,
-  ),
-};
+  getErrorToMessageMap() {
+    return ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getDocumentTitle(): string {
+    return replaceBracketed(this.documentTitle, this.freeText);
+  }
+}
+
+export type RawExternalDocumentNonStandardB =
+  ExcludeMethods<ExternalDocumentNonStandardB>;
