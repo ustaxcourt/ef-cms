@@ -5,10 +5,8 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('isFeatureFlagEnabledFactoryAction', () => {
   const mockFeatureFlagsObject = {
-    MOCK_FEATURE_FLAG_NAME: {
-      disabledMessage: 'The ability to perform this feature has been disabled.',
-      key: 'mock-key',
-    },
+    disabledMessage: 'thos feature has been disabled.',
+    key: 'mock-key',
   };
   let pathYesStub;
   let pathNoStub;
@@ -29,24 +27,16 @@ describe('isFeatureFlagEnabledFactoryAction', () => {
   });
 
   it('should return path.yes() when the feature flag is turned on', async () => {
-    await runAction(
-      isFeatureFlagEnabledFactoryAction(
-        mockFeatureFlagsObject.MOCK_FEATURE_FLAG_NAME,
-      ),
-      {
-        modules: {
-          presenter,
-        },
-        props: {
-          goooDooBoo: true,
-        },
-        state: {
-          featureFlags: {
-            mockFeatureFlagsObject,
-          },
+    await runAction(isFeatureFlagEnabledFactoryAction(mockFeatureFlagsObject), {
+      modules: {
+        presenter,
+      },
+      state: {
+        featureFlags: {
+          'mock-key': true,
         },
       },
-    );
+    });
 
     expect(pathYesStub).toHaveBeenCalled();
   });
@@ -78,9 +68,7 @@ describe('isFeatureFlagEnabledFactoryAction', () => {
 
   it('should retrieve and set all feature flags from eprsistence when state.featureFlags is empty', async () => {
     const result = await runAction(
-      isFeatureFlagEnabledFactoryAction(
-        mockFeatureFlagsObject.MOCK_FEATURE_FLAG_NAME,
-      ),
+      isFeatureFlagEnabledFactoryAction(mockFeatureFlagsObject),
       {
         modules: {
           presenter,
