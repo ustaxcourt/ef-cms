@@ -68,8 +68,6 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
     it('should confirm user', () => {
       cy.task('confirmUser', { email: randomizedEmail });
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(5000); // give cognito time to update cases
     });
   });
 
@@ -83,11 +81,21 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
       });
     });
 
-    it('login as petitioner', () => {
-      login(token);
-      goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
-      verifyEmailChange();
-    });
+    it(
+      'login as petitioner',
+      {
+        retries: {
+          openMode: 3,
+          runMode: 3,
+        },
+      },
+      () => {
+        cy.log('Running login');
+        login(token);
+        goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
+        verifyEmailChange();
+      },
+    );
   });
 } else {
   describe('we do not want this test to run locally, so we mock out a test to make it skip', () => {
