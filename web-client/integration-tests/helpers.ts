@@ -29,6 +29,7 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/present
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
+import { getAllFeatureFlagsInteractor } from '../../shared/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
@@ -249,21 +250,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getAllFeatureFlagsInteractor: () => ({
-        'chief-judge-name': 'Maurice B. Foley',
-        'consolidated-cases-add-docket-numbers': true,
-        'consolidated-cases-group-access-petitioner': true,
-        'document-visibility-policy-change-date': '2023-05-01',
-        'e-consent-fields-enabled-feature-flag': true,
-        'external-opinion-search-enabled': true,
-        'external-order-search-enabled': true,
-        'internal-opinion-search-enabled': true,
-        'internal-order-search-enabled': true,
-        'multi-docketable-paper-filings': true,
-        'redaction-acknowledgement-enabled': true,
-        'updated-trial-status-types': true,
-        'use-external-pdf-generation': false,
-      }),
+      getAllFeatureFlagsInteractor,
     }),
     getUtilities: () => ({
       calculateDifferenceInDays,
