@@ -4,9 +4,6 @@ import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardA extends ExternalDocument {
-  public category: string;
-  public documentTitle?: string;
-  public documentType: string;
   public previousDocument: any;
 
   constructor(rawProps) {
