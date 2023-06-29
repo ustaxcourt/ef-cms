@@ -30,9 +30,9 @@ export const generatePdfFromHtmlInteractor = async (
 ) => {
   const sendGenerateEvent = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext)[
+    ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
+  ];
 
   if (sendGenerateEvent) {
     const { currentColor, region, stage } = applicationContext.environment;
