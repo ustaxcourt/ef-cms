@@ -1,73 +1,64 @@
-const joi = require('joi');
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
+import joi from 'joi';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardC() {}
+export class ExternalDocumentNonStandardC extends ExternalDocument {
+  public freeText: any;
+  public previousDocument: any;
 
-ExternalDocumentNonStandardC.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.freeText = rawProps.freeText;
-  this.previousDocument = rawProps.previousDocument;
-};
+  constructor(rawProps) {
+    super('ExternalDocumentNonStandardC');
 
-ExternalDocumentNonStandardC.prototype.getDocumentTitle = function () {
-  return replaceBracketed(
-    this.documentTitle,
-    this.freeText,
-    this.previousDocument
-      ? this.previousDocument.documentTitle ||
-          this.previousDocument.documentType
-      : '',
-  );
-};
+    this.category = rawProps.category;
+    this.documentTitle = rawProps.documentTitle;
+    this.documentType = rawProps.documentType;
+    this.freeText = rawProps.freeText;
+    this.previousDocument = rawProps.previousDocument;
+  }
 
-ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-  freeText: [
-    { contains: 'is required', message: 'Enter name' },
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-    },
-  ],
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    freeText: JoiValidationConstants.STRING.max(1000).required(),
+    previousDocument: joi
+      .object()
+      .keys({
+        documentTitle: JoiValidationConstants.STRING.optional(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .required(),
+  };
 
-ExternalDocumentNonStandardC.schema = {
-  ...baseExternalDocumentValidation,
-  freeText: JoiValidationConstants.STRING.max(1000).required(),
-  previousDocument: joi
-    .object()
-    .keys({
-      documentTitle: JoiValidationConstants.STRING.optional(),
-      documentType: JoiValidationConstants.STRING.required(),
-    })
-    .required(),
-};
+  static VALIDATION_ERROR_MESSAGES = {
+    ...ExternalDocumentBase.VALIDATION_ERROR_MESSAGES,
+    freeText: [
+      { contains: 'is required', message: 'Enter name' },
+      {
+        contains: 'must be less than or equal to',
+        message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+      },
+    ],
+  };
 
-joiValidationDecorator(
-  validEntityDecorator(ExternalDocumentNonStandardC),
-  ExternalDocumentNonStandardC.schema,
-  ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES,
-);
+  getValidationRules() {
+    return ExternalDocumentNonStandardC.VALIDATION_RULES;
+  }
 
-module.exports = {
-  ExternalDocumentNonStandardC: validEntityDecorator(
-    ExternalDocumentNonStandardC,
-  ),
-};
+  getErrorToMessageMap() {
+    return ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getDocumentTitle(): string {
+    return replaceBracketed(
+      this.documentTitle,
+      this.freeText,
+      this.previousDocument
+        ? this.previousDocument.documentTitle ||
+            this.previousDocument.documentType
+        : '',
+    );
+  }
+}
+
+export type RawExternalDocumentNonStandardC =
+  ExcludeMethods<ExternalDocumentNonStandardC>;
