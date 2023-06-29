@@ -32,8 +32,6 @@ export const loginWithCodeSequence = [
           setUserAction,
           setUserPermissionsAction,
           getAllFeatureFlagsAction,
-          //getAllFeatureFlagsAction,
-          //setAllFeatureFlagsAction,
           navigateToPathAction,
         ],
         maintenanceOn: [navigateToMaintenanceAction],
