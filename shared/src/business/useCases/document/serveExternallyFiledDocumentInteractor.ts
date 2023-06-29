@@ -108,11 +108,12 @@ export const serveExternallyFiledDocumentInteractor = async (
   let caseEntities = [];
   const coversheetLength = 1;
 
-  const consolidateCaseDuplicateDocketEntries = await applicationContext
+  const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext)[
-    ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key
-  ];
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const consolidateCaseDuplicateDocketEntries =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key];
 
   if (!consolidateCaseDuplicateDocketEntries) {
     docketNumbers = [subjectCaseDocketNumber];
