@@ -2,8 +2,6 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { getUserToken } from './loadTestHelpers';
 import axios from 'axios';
 
-jest.mock('@aws-sdk/client-cognito-identity-provider');
-
 (async () => {
   const cognito = new CognitoIdentityProvider({
     region: 'us-east-1',
