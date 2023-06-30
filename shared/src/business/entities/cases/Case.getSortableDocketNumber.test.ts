@@ -1,4 +1,4 @@
-const { Case } = require('./Case');
+import { Case } from './Case';
 
 describe('getSortableDocketNumber', () => {
   it('should sort in the correct order', () => {

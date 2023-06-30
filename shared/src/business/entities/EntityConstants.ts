@@ -1020,7 +1020,9 @@ export const ANSWER_CUTOFF_UNIT = 'day';
 export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
-};
+} as const;
+const CountryTypesArray = Object.values(COUNTRY_TYPES);
+export type CountryTypes = (typeof CountryTypesArray)[number];
 
 export const US_STATES = {
   AK: 'Alaska',
@@ -1116,7 +1118,9 @@ export const PARTY_TYPES = {
   survivingSpouse: 'Surviving spouse',
   transferee: 'Transferee',
   trust: 'Trust',
-};
+} as const;
+const partyTypeArray = Object.values(PARTY_TYPES);
+export type PartyType = (typeof partyTypeArray)[number];
 
 export const BUSINESS_TYPES = {
   corporation: PARTY_TYPES.corporation,
