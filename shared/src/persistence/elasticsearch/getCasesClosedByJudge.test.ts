@@ -7,6 +7,7 @@ describe('getCasesClosedByJudge', () => {
   let mockValidRequest = {
     endDate: '03/21/2020',
     judges: [judgeUser.name],
+    pageSize: MAX_ELASTICSEARCH_PAGINATION,
     startDate: '02/12/2020',
   };
 

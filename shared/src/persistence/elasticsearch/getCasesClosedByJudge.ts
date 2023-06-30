@@ -16,6 +16,7 @@ export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
   judges,
+  pageSize,
   startDate,
 }) => {
   const source = ['status'];
@@ -50,7 +51,7 @@ export const getCasesClosedByJudge = async ({
             must: mustFilters,
           },
         },
-        size: MAX_ELASTICSEARCH_PAGINATION,
+        size: pageSize || MAX_ELASTICSEARCH_PAGINATION,
       },
       index: 'efcms-case',
     },
