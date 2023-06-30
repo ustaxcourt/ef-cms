@@ -1,9 +1,8 @@
 import { state } from 'cerebral';
 
 /**
- * Gets the value of a feature flag passed into the factory function
+ * Gets the value of all feature flags used in the system and sets them on state
  * @param {object} providers.applicationContext the application context
- * @returns {Function} the name and value of the feature flag
  */
 export const getAllFeatureFlagsAction = async ({
   applicationContext,
