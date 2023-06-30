@@ -1,4 +1,4 @@
-import { AuthenticationResult } from '../support/pages/local-login';
+import { AuthenticationResult } from '../../support/login-types';
 import {
   editPetitionerEmail,
   goToCaseDetail,

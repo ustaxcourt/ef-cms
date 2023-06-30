@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../../support/login-types';
 import {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -8,7 +9,6 @@ import {
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
 } from '../support/pages/case-detail';
-
 import {
   completeWizardStep1,
   completeWizardStep2,
@@ -25,7 +25,6 @@ import {
   hasIrsNotice,
   submitPetition,
 } from '../support/pages/create-electronic-petition';
-
 import {
   createTrialSession,
   goToCreateTrialSession,
@@ -35,8 +34,6 @@ import {
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
 } from '../support/pages/trial-sessions';
-
-import { AuthenticationResult } from '../support/pages/local-login';
 import { faker } from '@faker-js/faker';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import {

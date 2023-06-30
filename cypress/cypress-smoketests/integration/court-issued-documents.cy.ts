@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../../support/login-types';
 import {
   addDocketEntryForOrderAndSaveForLater,
   addDocketEntryForOrderAndServePaper,
@@ -11,7 +12,6 @@ import {
   serveCourtIssuedDocketEntry,
   uploadCourtIssuedDocPdf,
 } from '../support/pages/case-detail';
-
 import {
   completeWizardStep1,
   completeWizardStep2,
@@ -28,8 +28,6 @@ import {
   hasIrsNotice,
   submitPetition,
 } from '../support/pages/create-electronic-petition';
-
-import { AuthenticationResult } from '../support/pages/local-login';
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
