@@ -1,17 +1,12 @@
-import { defineConfig } from 'cypress';
-
 import {
   confirmUser,
-  getRestApi,
-  getUserToken,
+  getUserTokenWithRetry,
 } from './cypress/cypress-smoketests/support/login';
-
+import { defineConfig } from 'cypress';
+import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
-import {
-  getRestApi as getRestApiLocal,
-  getUserToken as getUserTokenLocal,
-} from './cypress/cypress-smoketests/support/pages/local-login';
+import { getUserToken as getUserTokenLocal } from './cypress/cypress-smoketests/support/pages/local-login';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -23,17 +18,13 @@ export default defineConfig({
         confirmUser({ email }) {
           return confirmUser({ email });
         },
-        getRestApi() {
-          return CYPRESS_SMOKETESTS_LOCAL ? getRestApiLocal() : getRestApi();
-        },
         getUserToken({ email, password }) {
           return CYPRESS_SMOKETESTS_LOCAL
             ? getUserTokenLocal(email)
-            : getUserToken(email, password);
+            : getUserTokenWithRetry(email, password);
         },
-        log(message) {
-          console.log(message);
-          return null;
+        waitForNoce({ docketNumber }: { docketNumber: string }) {
+          return waitForNoce({ docketNumber });
         },
       });
     },

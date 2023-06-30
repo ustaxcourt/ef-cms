@@ -1,5 +1,6 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import AWS from 'aws-sdk';
+import promiseRetry from 'promise-retry';
 
 const awsRegion = 'us-east-1';
 AWS.config = new AWS.Config();
@@ -68,7 +69,21 @@ const getUserPoolId = async () => {
   return userPoolId;
 };
 
-export const getUserToken = async (username, password) => {
+export const getUserTokenWithRetry = async (
+  username: string,
+  password: string,
+) => {
+  return promiseRetry(
+    retry => {
+      return getUserToken(password, username).catch(retry);
+    },
+    {
+      retries: 10,
+    },
+  );
+};
+
+async function getUserToken(password: string, username: string) {
   const userPoolId = await getUserPoolId();
   const clientId = await getClientId(userPoolId);
 
@@ -81,7 +96,7 @@ export const getUserToken = async (username, password) => {
     ClientId: clientId,
     UserPoolId: userPoolId,
   });
-};
+}
 
 export const getRestApi = async () => {
   let apigateway = new AWS.APIGateway({
