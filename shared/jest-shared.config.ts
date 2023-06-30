@@ -20,6 +20,7 @@ const config: Config = {
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/dynamo/**/*.ts',
     '!src/business/utilities/documentGenerators/*.ts',
+    '!shared/src/business/utilities/documentGenerators/constants/*.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
