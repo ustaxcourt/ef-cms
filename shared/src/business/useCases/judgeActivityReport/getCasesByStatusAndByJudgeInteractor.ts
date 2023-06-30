@@ -2,7 +2,7 @@ import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstant
 import { Case } from '../../entities/cases/Case';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportCaseStatusSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearchCaseStatusSearch';
-import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -61,7 +61,7 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
  */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
-  params: JudgeActivityReportCavAndSubmittedCasesRequestType,
+  params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;

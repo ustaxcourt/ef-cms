@@ -11,7 +11,14 @@ export type JudgeActivityReportFilters = {
   judges?: string[];
 };
 
-export type JudgeActivityReportCavAndSubmittedCasesRequestType = {
+export type JudgeActivityReportCasesClosedRequest = Pick<
+  JudgeActivityReportFilters,
+  'endDate' | 'startDate' | 'judges'
+> & {
+  pageSize: number;
+};
+
+export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
   searchAfter: number;
   pageSize: number;

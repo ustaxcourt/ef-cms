@@ -2,7 +2,7 @@ import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { JudgeActivityReportCavAndSubmittedCasesRequestType } from '../../judgeActivityReportState';
+import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../judgeActivityReportState';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
@@ -13,7 +13,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
   const lastDocketNumberForCavAndSubmittedCasesSearch = 1234;
 
-  const expectedRequest: JudgeActivityReportCavAndSubmittedCasesRequestType = {
+  const requestFilters: JudgeActivityReportCavAndSubmittedCasesRequest = {
     judges: [judgeUser.name],
     pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
     searchAfter: lastDocketNumberForCavAndSubmittedCasesSearch,
@@ -60,7 +60,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         },
         state: {
           judgeActivityReport: {
-            filters: expectedRequest,
+            filters: requestFilters,
             lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
           },
         },
@@ -72,7 +72,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         applicationContext.getUseCases()
           .getCasesByStatusAndByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
-    ).toMatchObject(expectedRequest);
+    ).toMatchObject(requestFilters);
     expect(
       result.state.judgeActivityReport.judgeActivityReportData
         .submittedAndCavCasesByJudge,

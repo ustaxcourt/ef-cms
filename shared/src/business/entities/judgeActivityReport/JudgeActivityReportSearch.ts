@@ -21,6 +21,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public judgeId: string;
   public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
   public judges: string[];
+  public pageSize: string;
 
   protected tomorrow: string;
 
@@ -31,6 +32,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.judgeName = rawProps.judgeName;
     this.statuses = rawProps.statuses;
     this.judges = rawProps.judges;
+    this.pageSize = rawProps.pageSize;
 
     this.tomorrow = calculateISODate({
       howMuch: +1,
@@ -78,6 +80,12 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .items(joi.string())
       .optional()
       .description('The last names judges to generate report with'),
+    pageSize: joi
+      .number()
+      .optional()
+      .description(
+        'The page size for getting aggregated judge activity report for closed cases, opinions, orders issued  and sessions held',
+      ),
     startDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .description(
