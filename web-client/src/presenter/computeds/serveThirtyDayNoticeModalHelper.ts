@@ -14,6 +14,6 @@ export const serveThirtyDayNoticeModalHelper = (
 
   return {
     formattedStartDate,
-    trialLocation,
+    trialLocation: trialLocation!,
   };
 };
