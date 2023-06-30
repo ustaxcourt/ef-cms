@@ -56,4 +56,5 @@ export default defineConfig({
   videosFolder: 'cypress/cypress-smoketests/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
+  watchForFileChanges: false,
 });

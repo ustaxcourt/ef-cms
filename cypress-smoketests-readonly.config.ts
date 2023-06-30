@@ -21,4 +21,5 @@ export default defineConfig({
   videosFolder: 'cypress/cypress-readonly/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
+  watchForFileChanges: false,
 });
