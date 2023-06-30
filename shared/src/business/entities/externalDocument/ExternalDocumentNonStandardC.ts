@@ -1,18 +1,15 @@
-import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
-export class ExternalDocumentNonStandardC extends ExternalDocument {
-  public freeText: any;
-  public previousDocument: any;
+export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
+  public freeText: string;
+  public previousDocument: { documentTitle?: string; documentType: string };
 
   constructor(rawProps) {
-    super('ExternalDocumentNonStandardC');
+    super(rawProps, 'ExternalDocumentNonStandardC');
 
-    this.category = rawProps.category;
-    this.documentTitle = rawProps.documentTitle;
-    this.documentType = rawProps.documentType;
     this.freeText = rawProps.freeText;
     this.previousDocument = rawProps.previousDocument;
   }
@@ -29,23 +26,21 @@ export class ExternalDocumentNonStandardC extends ExternalDocument {
       .required(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {
-    ...ExternalDocumentBase.VALIDATION_ERROR_MESSAGES,
-    freeText: [
-      { contains: 'is required', message: 'Enter name' },
-      {
-        contains: 'must be less than or equal to',
-        message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-      },
-    ],
-  };
-
   getValidationRules() {
     return ExternalDocumentNonStandardC.VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES;
+    return {
+      ...ExternalDocumentBase.VALIDATION_ERROR_MESSAGES,
+      freeText: [
+        { contains: 'is required', message: 'Enter name' },
+        {
+          contains: 'must be less than or equal to',
+          message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+        },
+      ],
+    };
   }
 
   getDocumentTitle(): string {

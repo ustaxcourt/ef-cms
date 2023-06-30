@@ -1,19 +1,16 @@
-import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
-export class ExternalDocumentNonStandardD extends ExternalDocument {
-  public previousDocument: any;
-  public serviceDate: any;
+export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
+  public previousDocument: { documentTitle?: string; documentType: string };
+  public serviceDate: string;
 
   constructor(rawProps) {
-    super('ExternalDocumentNonStandardD');
+    super(rawProps, 'ExternalDocumentNonStandardD');
 
-    this.category = rawProps.category;
-    this.documentTitle = rawProps.documentTitle;
-    this.documentType = rawProps.documentType;
     this.previousDocument = rawProps.previousDocument;
     this.serviceDate = rawProps.serviceDate;
   }
@@ -30,15 +27,8 @@ export class ExternalDocumentNonStandardD extends ExternalDocument {
     serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),
   };
 
-  static VALIDATION_ERROR_MESSAGES =
-    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return ExternalDocumentNonStandardD.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES;
   }
 
   getDocumentTitle(): string {
