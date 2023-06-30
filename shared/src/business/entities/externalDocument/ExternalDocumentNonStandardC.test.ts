@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardC } from './ExternalDocumentNonStandardC';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardC', () => {
@@ -10,17 +9,11 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        freeText:
-          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES.freeText[0]
-            .message,
+        category: externalDocumentC.getErrorToMessageMap().category,
+        documentType: externalDocumentC.getErrorToMessageMap().documentType[1],
+        freeText: externalDocumentC.getErrorToMessageMap().freeText[0].message,
         previousDocument:
-          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES
-            .previousDocument,
+          externalDocumentC.getErrorToMessageMap().previousDocument,
       });
     });
 
@@ -48,9 +41,7 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        freeText:
-          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES.freeText[1]
-            .message,
+        freeText: externalDocumentC.getErrorToMessageMap().freeText[1].message,
       });
     });
 
@@ -65,8 +56,7 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardC.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: externalDocumentC.getErrorToMessageMap().documentTitle,
       });
     });
   });
