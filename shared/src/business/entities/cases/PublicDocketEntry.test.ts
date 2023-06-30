@@ -1,5 +1,5 @@
-const { INITIAL_DOCUMENT_TYPES, PARTIES_CODES } = require('../EntityConstants');
-const { PublicDocketEntry } = require('./PublicDocketEntry');
+import { INITIAL_DOCUMENT_TYPES, PARTIES_CODES } from '../EntityConstants';
+import { PublicDocketEntry } from './PublicDocketEntry';
 
 describe('PublicDocketEntry', () => {
   it('should only have expected fields', () => {
@@ -46,20 +46,29 @@ describe('PublicDocketEntry', () => {
       certificateOfServiceDate: '2018-06-07',
       docketEntryId: 'testing',
       docketNumber: '123-20',
+      documentTitle: undefined,
       documentType: 'testing',
+      entityName: 'PublicDocketEntry',
       eventCode: 'testing',
       filedBy: 'testing',
+      filingDate: undefined,
+      freeText: undefined,
+      index: undefined,
       isFileAttached: true,
       isLegacyServed: true,
+      isMinuteEntry: undefined,
+      isOnDocketRecord: undefined,
       isPaper: true,
       isSealed: false,
+      isStricken: undefined,
       lodged: true,
+      numberOfPages: undefined,
       objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
       sealedTo: 'Public',
       servedAt: '2019-03-01T21:40:46.415Z',
-      servedPartiesCode: PARTIES_CODES.BOTH,
+      servedPartiesCode: 'B',
     });
   });
 

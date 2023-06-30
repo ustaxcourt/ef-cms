@@ -26,7 +26,7 @@ const baseContactSecondary = {
   state: 'CT',
 };
 
-const lastName = faker.name.lastName();
+const lastName = faker.person.lastName();
 const createdDocketNumbers = [];
 
 const searchTerm = `Bob ${lastName}`;

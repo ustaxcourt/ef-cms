@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from './caseDeadlineReportHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('caseDeadlineReportHelper', () => {
@@ -92,6 +92,52 @@ describe('caseDeadlineReportHelper', () => {
     );
     expect(result.caseDeadlines[2].associatedJudgeFormatted).toEqual('Rummy');
     expect(result.caseDeadlines[3].associatedJudgeFormatted).toEqual('Barney');
+  });
+
+  it('should format the caseDeadline with consolidated cases with correct icons and tool tips', () => {
+    const consolidatedCaseDeadlines = [
+      {
+        associatedJudge: 'Judge of Madea Rummy',
+        deadlineDate: '2019-08-21T04:00:00.000Z',
+        docketNumber: '101-19',
+        leadDocketNumber: '101-19',
+      },
+      {
+        associatedJudge: 'Not A Judge Barney',
+        deadlineDate: '2019-08-21T04:00:00.000Z',
+        docketNumber: '102-19',
+        leadDocketNumber: '101-19',
+      },
+      {
+        associatedJudge: 'In Training Judge Brandeis',
+        deadlineDate: '2019-08-24T04:00:00.000Z',
+        docketNumber: '103-19',
+      },
+    ];
+    const result = runCompute(caseDeadlineReportHelper, {
+      state: {
+        caseDeadlineReport: { caseDeadlines: consolidatedCaseDeadlines },
+        judges: [{ name: 'Carluzzo' }, { name: 'Buch' }],
+        screenMetadata: {
+          filterEndDate: '2019-08-21T12:59:59.000Z',
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
+      },
+    });
+
+    expect(result.caseDeadlines[0].inConsolidatedGroup).toEqual(true);
+    expect(result.caseDeadlines[0].inLeadCase).toEqual(true);
+    expect(result.caseDeadlines[0].consolidatedIconTooltipText).toEqual(
+      'Lead case',
+    );
+    expect(result.caseDeadlines[1].inConsolidatedGroup).toEqual(true);
+    expect(result.caseDeadlines[1].inLeadCase).toEqual(false);
+    expect(result.caseDeadlines[1].consolidatedIconTooltipText).toEqual(
+      'Consolidated case',
+    );
+    expect(result.caseDeadlines[2].inConsolidatedGroup).toEqual(false);
+    expect(result.caseDeadlines[2].inLeadCase).toEqual(false);
+    expect(result.caseDeadlines[2].consolidatedIconTooltipText).toBeUndefined();
   });
 
   describe('showLoadMoreButton', () => {

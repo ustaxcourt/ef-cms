@@ -2,7 +2,9 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { props, sequences, state } from 'cerebral';
+import { props } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -48,7 +50,6 @@ export const FilingsAndProceedings = connect(
             >
               {entry.descriptionDisplay}
             </Button>
-            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </NonMobile>
           <Mobile>
             <Button
@@ -65,7 +66,6 @@ export const FilingsAndProceedings = connect(
             >
               {entry.descriptionDisplay}
             </Button>
-            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </Mobile>
         </>
       );
@@ -88,8 +88,7 @@ export const FilingsAndProceedings = connect(
                 'margin-right-05',
               )}
             >
-              {entry.descriptionDisplay}{' '}
-              {!entry.addToCoversheet && entry.additionalInfoDisplay}
+              {entry.descriptionDisplay}
             </span>
           </>
         )}
@@ -122,7 +121,6 @@ export const FilingsAndProceedings = connect(
               )}
               {entry.descriptionDisplay}
             </Button>
-            {!entry.addToCoversheet && entry.additionalInfoDisplay}
           </>
         )}
 
@@ -130,16 +128,9 @@ export const FilingsAndProceedings = connect(
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
           {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
-          {entry.showDocumentDescriptionWithoutLink &&
-            !entry.addToCoversheet &&
-            entry.additionalInfoDisplay}
         </span>
 
         <span> {entry.signatory}</span>
-
-        <span className="filings-and-proceedings">
-          {entry.filingsAndProceedingsWithAdditionalInfo}
-        </span>
 
         {entry.isStricken && <span>(STRICKEN)</span>}
       </>

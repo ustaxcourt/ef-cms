@@ -26,7 +26,6 @@ import {
 import {
   DocketEntry,
   getServedPartiesCode,
-  isServed,
 } from '../../shared/src/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
@@ -53,6 +52,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { generatePrintableCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/generatePrintableCaseInventoryReportProxy';
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
+import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesByStatusAndByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
@@ -92,6 +92,7 @@ import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authen
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
 import {
+  calculateDifferenceInDays,
   calculateISODate,
   checkDate,
   computeDate,
@@ -443,6 +444,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesByStatusAndByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getChiefJudgeNameForSigningInteractor,
@@ -604,7 +606,7 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)({
+const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_MAP_429,
 });
@@ -717,6 +719,7 @@ const applicationContext = {
     return {
       abbreviateState,
       aggregatePartiesForService,
+      calculateDifferenceInDays,
       calculateISODate,
       canAllowDocumentServiceForCase,
       caseHasServedDocketEntries,
@@ -779,7 +782,6 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
-      isServed,
       isStandaloneRemoteSession,
       isStringISOFormatted,
       isTodayWithinGivenInterval,

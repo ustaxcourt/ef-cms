@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls the blockCaseFromTrialInteractor to add the block the case from being set for trial

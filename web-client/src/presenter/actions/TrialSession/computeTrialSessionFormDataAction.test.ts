@@ -1,5 +1,5 @@
 import { computeTrialSessionFormDataAction } from './computeTrialSessionFormDataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeTrialSessionFormDataAction', () => {
   let form;

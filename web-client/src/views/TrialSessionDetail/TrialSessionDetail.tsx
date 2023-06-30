@@ -6,7 +6,9 @@ import { DismissThirtyDayNoticeAlertModal } from './DismissThirtyDayNoticeAlertM
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
+import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
+import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
@@ -17,7 +19,8 @@ import {
   WarningNotificationComponent,
 } from '../WarningNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionDetail = connect(
@@ -204,6 +207,8 @@ export const TrialSessionDetail = connect(
         {showModal === 'DismissThirtyDayNoticeAlertModal' && (
           <DismissThirtyDayNoticeAlertModal />
         )}
+        {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
+        {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
       </>
     );
   },

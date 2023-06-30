@@ -62,6 +62,7 @@ import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDoc
 import { closeModalAndNavigateBackSequence } from './sequences/closeModalAndNavigateBackSequence';
 import { closeModalAndNavigateSequence } from './sequences/closeModalAndNavigateSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
+import { closeModalAndRefetchCase } from './sequences/DocketEntry/closeModalAndRefetchCase';
 import { closeModalAndReturnToCaseDetailDraftDocumentsSequence } from './sequences/closeModalAndReturnToCaseDetailDraftDocumentsSequence';
 import { closeModalAndReturnToCaseDetailSequence } from './sequences/closeModalAndReturnToCaseDetailSequence';
 import { closeModalAndReturnToDashboardSequence } from './sequences/closeModalAndReturnToDashboardSequence';
@@ -195,6 +196,7 @@ import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequ
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
@@ -287,6 +289,7 @@ import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTr
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
+import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -360,16 +363,17 @@ import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDr
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDismissThirtyDayAlertModalSequence } from './sequences/showDismissThirtyDayAlertModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
+import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
+import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
 import { sortTableSequence } from './sequences/sortTableSequence';
 import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
-import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
 import { submitAddConsolidatedCaseSequence } from './sequences/submitAddConsolidatedCaseSequence';
 import { submitAddDeficiencyStatisticsSequence } from './sequences/submitAddDeficiencyStatisticsSequence';
@@ -454,12 +458,14 @@ import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFil
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
+import { updateGenerateNoticesProgressSequence } from './sequences/updateGenerateNoticesProgressSequence';
 import { updateHearingNoteSequence } from './sequences/updateHearingNoteSequence';
 import { updateJudgesCaseNoteOnCaseDetailSequence } from './sequences/updateJudgesCaseNoteOnCaseDetailSequence';
 import { updateMessageModalAttachmentsSequence } from './sequences/updateMessageModalAttachmentsSequence';
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
+import { updatePaperServiceProgressSequence } from './sequences/updatePaperServiceProgressSequence';
 import { updatePartyViewTabSequence } from './sequences/updatePartyViewTabSequence';
 import { updatePetitionPaymentFormValueSequence } from './sequences/updatePetitionPaymentFormValueSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
@@ -528,7 +534,7 @@ import { validateUploadCorrespondenceDocumentSequence } from './sequences/valida
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
 
-const sequences = {
+export const presenterSequences = {
   addCaseToTrialSessionSequence,
   addPenaltyInputSequence,
   addStatisticToFormSequence,
@@ -584,6 +590,7 @@ const sequences = {
   closeModalAndNavigateBackSequence,
   closeModalAndNavigateSequence,
   closeModalAndNavigateToMaintenanceSequence,
+  closeModalAndRefetchCase,
   closeModalAndReturnToCaseDetailDraftDocumentsSequence,
   closeModalAndReturnToCaseDetailSequence,
   closeModalAndReturnToDashboardSequence,
@@ -808,6 +815,7 @@ const sequences = {
   openUnprioritizeCaseModalSequence,
   openUnsealDocketEntryModalSequence,
   openUpdateCaseModalSequence,
+  paperServiceCompleteSequence,
   printTrialCalendarSequence,
   prioritizeCaseSequence,
   redirectToLoginSequence,
@@ -880,9 +888,11 @@ const sequences = {
   showCalculatePenaltiesModalSequence,
   showDismissThirtyDayAlertModalSequence,
   showDocketRecordDetailModalSequence,
+  showGenerateNoticesProgressSequence,
   showMoreClosedCasesSequence,
   showMoreOpenCasesSequence,
   showMoreResultsSequence,
+  showPaperServiceProgressSequence,
   showViewPetitionerCounselModalSequence,
   signOutSequence,
   skipSigningOrderSequence,
@@ -973,12 +983,14 @@ const sequences = {
   updateFormValueAndCaseCaptionSequence,
   updateFormValueAndSecondaryContactInfoSequence,
   updateFormValueSequence,
+  updateGenerateNoticesProgressSequence,
   updateHearingNoteSequence,
   updateJudgesCaseNoteOnCaseDetailSequence,
   updateMessageModalAttachmentsSequence,
   updateModalFormValueSequence,
   updateModalValueSequence,
   updateOrderForDesignatingPlaceOfTrialSequence,
+  updatePaperServiceProgressSequence,
   updatePartyViewTabSequence,
   updatePetitionPaymentFormValueSequence,
   updateQcCompleteForTrialSequence,
@@ -1063,16 +1075,14 @@ export const presenter = {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
-  sequences,
-  state,
+  sequences: presenterSequences,
+  state: initialState,
 };
 
-declare global {
-  type Sequences = typeof sequences;
-}
+export type Sequences = typeof presenterSequences;
 
 declare global {
-  type ActionProps = {
+  type ActionProps<Props = any> = {
     applicationContext: ClientApplicationContext;
     get: <T>(slice: T) => T;
     store: {
@@ -1080,7 +1090,7 @@ declare global {
       unset: (key: any) => void;
     };
     path: any;
-    props: any;
+    props: Props;
     router: any;
   };
 }

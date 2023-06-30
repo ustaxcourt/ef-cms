@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { faker } from '@faker-js/faker';
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
@@ -56,7 +56,7 @@ export const addDocketEntryForOrderAndSaveForLater = attempt => {
   cy.get('#free-text').clear().type(` ${attempt}`);
   cy.get('#save-entry-button').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
-  cy.get(`button:contains("Order to Show Cause ${attempt}")`).click();
+  cy.get('button').contains(`Order to Show Cause ${attempt}`).click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('span:contains("Not served")').should('exist');
 };
@@ -207,4 +207,25 @@ export const viewPrintableDocketRecord = () => {
         expect(response.status).to.equal(200);
       });
     });
+};
+
+export const editPetitionerEmail = emailAddress => {
+  cy.get('#tab-case-information').click();
+  cy.get('#tab-parties').click();
+  cy.get('.edit-petitioner-button').click();
+  cy.get('#updatedEmail').type(emailAddress);
+  cy.get('#confirm-email').type(emailAddress);
+  cy.get('#submit-edit-petitioner-information').click();
+  cy.get('#modal-button-confirm').click();
+  cy.get('.modal-dialog', { timeout: 1000 }).should('not.exist');
+  cy.get(`div.parties-card:contains(${emailAddress} (Pending))`).should(
+    'exist',
+  );
+};
+
+export const verifyEmailChange = () => {
+  cy.get('tbody:contains(NOCE)').should('exist');
+  cy.get('#tab-case-information').click();
+  cy.get('#tab-parties').click();
+  cy.get('div.parties-card:contains((Pending))').should('not.exist');
 };

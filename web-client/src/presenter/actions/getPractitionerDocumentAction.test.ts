@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getPractitionerDocumentAction } from './getPractitionerDocumentAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPractitionerDocumentAction', () => {
   const practitionerDocumentFileId = '7bbc668b-ee3f-4624-afc1-3bcbd6fe49fc';

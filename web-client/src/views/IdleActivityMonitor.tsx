@@ -1,6 +1,7 @@
 import { AppTimeoutModal } from './AppTimeoutModal';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { useIdleTimer } from 'react-idle-timer';
 import React, { useEffect } from 'react';
 

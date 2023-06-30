@@ -2,7 +2,7 @@ import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/Entit
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseAssociationTitleAction } from './generateCaseAssociationTitleAction';
 import { presenter } from '../../presenter';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generateCaseAssociationTitleAction', () => {
   const mockDocumentTitle = 'The Duke of Ferdinand';

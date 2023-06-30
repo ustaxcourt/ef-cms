@@ -1,5 +1,5 @@
 import { applicationContextPublic } from '../../../applicationContextPublic';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { todaysOpinionsHelper as todaysOpinionsHelperComputed } from './todaysOpinionsHelper';
 import { withAppContextDecorator } from '../../../withAppContext';
 

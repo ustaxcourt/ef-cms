@@ -100,7 +100,7 @@ processChunks();
 
 localStreamsApp.listen(5005);
 
-// ************************ websockets-local *********************************
+// ************************ web-sockets-local *********************************
 const connections = {};
 
 const server = http.createServer((request, response) => {
@@ -128,6 +128,7 @@ const server = http.createServer((request, response) => {
 const PORT = 3011;
 
 server.listen(PORT, function () {
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
   console.log(new Date() + ` Server is listening on port ${PORT}`);
 });
 

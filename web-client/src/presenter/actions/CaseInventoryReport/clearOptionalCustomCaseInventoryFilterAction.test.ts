@@ -1,7 +1,7 @@
 import { clearOptionalCustomCaseInventoryFilterAction } from './clearOptionalCustomCaseInventoryFilterAction';
 import { cloneDeep } from 'lodash';
 import { initialCustomCaseInventoryReportState } from '../../customCaseInventoryReportState';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearOptionalCustomCaseInventoryFilterAction', () => {
   it('should set case statues and caseTypes to empty arrays', async () => {

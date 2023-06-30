@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCourtIssuedDocumentTitleAction } from './generateCourtIssuedDocumentTitleAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generateCourtIssuedDocumentTitleAction', () => {
   it('should call generateCourtIssuedDocumentTitle with correct data and set state.form.generatedDocumentTitle to what is returned', async () => {

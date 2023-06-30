@@ -5,7 +5,8 @@ import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const getCaseRow = ({
@@ -113,6 +114,7 @@ const getCaseRow = ({
         <tr className="notes-row">
           <td></td>
           <td></td>
+          <td></td>
           <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Calendar notes:</span>
             {formattedCase.calendarNotes}
@@ -124,39 +126,41 @@ const getCaseRow = ({
         <tr className="notes-row">
           <td></td>
           <td></td>
-          <td className="font-body-2xs" colSpan={4}>
+          <td></td>
+          <td className="font-body-2xs" colSpan={5}>
             <span className="text-bold margin-right-1">Notes:</span>
             <TextView
               bind={`trialSessionWorkingCopy.userNotes.${formattedCase.docketNumber}.notes`}
             />
           </td>
-          <td className="no-wrap text-align-right">
-            <Button
-              link
-              className="red-warning"
-              icon="trash"
-              onClick={() => {
-                trialSequences.openDeleteUserCaseNoteConfirmModalSequence({
-                  docketNumber: formattedCase.docketNumber,
-                });
-              }}
-            >
-              Delete Note
-            </Button>
-          </td>
-
-          <td className="no-wrap text-align-right">
-            <Button
-              link
-              icon="edit"
-              onClick={() => {
-                trialSequences.openAddEditUserCaseNoteModalFromListSequence({
-                  docketNumber: formattedCase.docketNumber,
-                });
-              }}
-            >
-              Edit Note
-            </Button>
+          <td>
+            <div>
+              <Button
+                link
+                icon="edit"
+                onClick={() => {
+                  trialSequences.openAddEditUserCaseNoteModalFromListSequence({
+                    docketNumber: formattedCase.docketNumber,
+                  });
+                }}
+              >
+                Edit Note
+              </Button>
+            </div>
+            <div>
+              <Button
+                link
+                className="red-warning"
+                icon="trash"
+                onClick={() => {
+                  trialSequences.openDeleteUserCaseNoteConfirmModalSequence({
+                    docketNumber: formattedCase.docketNumber,
+                  });
+                }}
+              >
+                Delete Note
+              </Button>
+            </div>
           </td>
         </tr>
       )}

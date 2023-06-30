@@ -82,7 +82,7 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay:
-        'Motion for Leave to File First Amended Petition some additional info',
+        'Motion for Leave to File First Amended Petition some additional info (C/S 01/01/11) (Attachment(s)) (Objection) (Lodged) some additional info pt 2',
     });
 
     const updatedDocument = formattedDocketEntriesOnDocketRecord.find(
