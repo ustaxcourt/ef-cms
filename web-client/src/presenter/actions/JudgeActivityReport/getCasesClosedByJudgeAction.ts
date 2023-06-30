@@ -1,4 +1,4 @@
-import { MAX_ELASTICSEARCH_PAGINATION } from 'shared/src/business/entities/EntityConstants';
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getCasesClosedByJudgeAction = async ({
