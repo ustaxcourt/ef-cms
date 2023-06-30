@@ -97,6 +97,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     ).toMatchObject({
       endDate: calculatedEndDate,
       judges: [judgeUser.name],
+      pageSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: calculatedStartDate,
     });
 

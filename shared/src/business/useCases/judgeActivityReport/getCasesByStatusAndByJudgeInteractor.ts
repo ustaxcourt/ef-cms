@@ -1,8 +1,8 @@
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportCaseStatusSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearchCaseStatusSearch';
 import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -78,8 +78,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   params.searchAfter = params.searchAfter || 0;
   params.statuses = params.statuses || [];
 
-  const searchEntity = new JudgeActivityReportCaseStatusSearch(params);
-
+  const searchEntity = new JudgeActivityReportSearch(params);
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
   }
