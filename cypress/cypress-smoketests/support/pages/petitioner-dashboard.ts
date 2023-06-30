@@ -1,4 +1,4 @@
-export const goToCaseDetailPetitioner = docketNumber => {
+export const goToCaseDetailPetitioner = (docketNumber: string) => {
   cy.get('#docket-search-field').clear();
   cy.get('#docket-search-field').type(docketNumber);
   cy.get('.usa-search-submit-text').click();

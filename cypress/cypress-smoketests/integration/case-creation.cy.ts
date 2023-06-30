@@ -30,7 +30,6 @@ import { goToMyDocumentQC } from '../support/pages/document-qc';
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token: string;
-let testData = { createdPaperDocketNumber: '' };
 
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
@@ -144,11 +143,7 @@ describe('Petitions clerk', () => {
     goToMyDocumentQC();
     goToCreateCase();
     fillInCreateCaseFromPaperForm();
-    goToReviewCase(testData);
+    goToReviewCase();
     serveCaseToIrs();
-    // TODO: docketNumber is undefined the first run of this test, consider moving
-    // these steps into another it block?
-    // goToCaseDetail(testData.createdPaperDocketNumber);
-    // viewPrintableDocketRecord();
   });
 });
