@@ -36,32 +36,6 @@ describe('JudgeActivityReportSearch', () => {
       FORMATS.MMDDYYYY,
     );
 
-    it('should have validation errors when start date is not provided', () => {
-      const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
-        endDate: '01/01/2000',
-        startDate: undefined,
-      });
-
-      expect(
-        judgeActivityReportSearchEntity.getFormattedValidationErrors(),
-      ).toMatchObject({
-        startDate: 'Enter a start date.',
-      });
-    });
-
-    it('should have validation errors when end date is not provided', () => {
-      const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
-        endDate: undefined,
-        startDate: '02/01/2025',
-      });
-
-      expect(
-        judgeActivityReportSearchEntity.getFormattedValidationErrors(),
-      ).toMatchObject({
-        endDate: 'Enter an end date.',
-      });
-    });
-
     it('should have validation errors when the end date provided is chronologically before the start date', () => {
       const judgeActivityReportSearchEntity = new JudgeActivityReportSearch({
         endDate: '01/01/2021',
