@@ -26,11 +26,13 @@ export const setSignatureNameForPdfSigningAction = async ({
     nameForPdfSigning = judgeUser.judgeFullName;
     nameForSigningLine2 = judgeUser.judgeTitle;
   } else {
-    nameForPdfSigning = await applicationContext
+    const featureFlags = await applicationContext
       .getUseCases()
       .getAllFeatureFlagsInteractor(applicationContext);
+
     nameForPdfSigning =
-      nameForPdfSigning[ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key];
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key];
+
     nameForSigningLine2 = CHIEF_JUDGE;
   }
 
