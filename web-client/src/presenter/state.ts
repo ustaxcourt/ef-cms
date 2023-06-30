@@ -262,7 +262,8 @@ type TCaseDeadlineReport = {
 };
 
 export const baseState = {
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {},
+  // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   allJudges: [],
   archiveDraftDocument: {
@@ -271,8 +272,10 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
-  batchDownloads: {}, // batch download of PDFs
+  assigneeId: null,
+  // used for assigning workItems in assignSelectedWorkItemsAction
+  batchDownloads: {},
+  // batch download of PDFs
   caseDeadlineReport: {} as TCaseDeadlineReport,
   caseDetail: {} as RawCase,
   closedCases: [],
@@ -334,6 +337,7 @@ export const baseState = {
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judgeActivityReportData: {},
+  judgeUser: {} as any,
   judges: [],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
@@ -402,7 +406,6 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
-
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
