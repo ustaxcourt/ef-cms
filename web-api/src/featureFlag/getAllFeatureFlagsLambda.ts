@@ -10,5 +10,5 @@ export const getAllFeatureFlagsLambda = event =>
   genericHandler(event, ({ applicationContext }) =>
     applicationContext
       .getUseCases()
-      .getAllFeatureFlagsInteractor(applicationContext, event.pathParameters),
+      .getAllFeatureFlagsInteractor(applicationContext),
   );
