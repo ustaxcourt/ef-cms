@@ -22,6 +22,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
   public judges: string[];
   public pageSize: string;
+  public searchAfter: number;
 
   protected tomorrow: string;
 
@@ -33,6 +34,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.statuses = rawProps.statuses;
     this.judges = rawProps.judges;
     this.pageSize = rawProps.pageSize;
+    this.searchAfter = rawProps.searchAfter;
 
     this.tomorrow = calculateISODate({
       howMuch: +1,
@@ -63,8 +65,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    endDate: JoiValidationConstants.ISO_DATE.required()
-      .less(joi.ref('tomorrow'))
+    endDate: JoiValidationConstants.ISO_DATE.less(joi.ref('tomorrow'))
       .min(joi.ref('startDate'))
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
@@ -78,19 +79,24 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     judges: joi
       .array()
       .items(joi.string())
-      .optional()
-      .description('The last names judges to generate report with'),
+      .description('The last names of judges to generate report for'),
     pageSize: joi
       .number()
       .optional()
       .description(
         'The page size for getting aggregated judge activity report for closed cases, opinions, orders issued  and sessions held',
       ),
-    startDate: JoiValidationConstants.ISO_DATE.max('now')
-      .required()
+    searchAfter: joi
+      .number()
       .description(
-        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        'The last docket number to be used to make the next set of calls per page number',
       ),
+    startDate: JoiValidationConstants.ISO_DATE.max('now').description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
+    statuses: JoiValidationConstants.JUDGES_STATUSES.optional().description(
+      'The CAV and Submitted case statuses associated with judges',
+    ),
     tomorrow: JoiValidationConstants.STRING.optional().description(
       'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
     ),

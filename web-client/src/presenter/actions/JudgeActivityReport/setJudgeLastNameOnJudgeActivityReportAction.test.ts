@@ -37,6 +37,6 @@ describe('setJudgeLastNameOnJudgeActivityReportAction', () => {
       },
     );
 
-    expect(state.judgeActivityReport.filters.judgeName).toBe('Colvin'); // TODO: Find way to extrapolate judges' name from chambers information
+    expect(state.judgeActivityReport.filters.judgeName).toBe('Colvin');
   });
 });

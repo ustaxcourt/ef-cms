@@ -1,4 +1,5 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setJudgeActivityReportFiltersAction } from './setJudgeActivityReportFiltersAction';
@@ -14,6 +15,9 @@ describe('setJudgeActivityReportFiltersAction', () => {
       startDate: '',
     };
   });
+  const testEndDate = '2019-05-17';
+  const testStartDate = '2019-05-14';
+
   it('should set state.judgeActivityReport.filters.startDate to an empty string if formatted props.startDate is an empty string', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
@@ -53,8 +57,6 @@ describe('setJudgeActivityReportFiltersAction', () => {
   });
 
   it('sets state.judgeActivityReport.filters.startDate to the formatted props.startDate', async () => {
-    const testStartDate = '2019-05-14';
-
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
@@ -72,8 +74,6 @@ describe('setJudgeActivityReportFiltersAction', () => {
     );
   });
   it('sets state.judgeActivityReport.filters.endDate to the formatted props.endDate', async () => {
-    const testEndDate = '2019-05-17';
-
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
@@ -95,7 +95,7 @@ describe('setJudgeActivityReportFiltersAction', () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
-        judgeName: 'Buch',
+        judgeName: judgeUser.name,
       },
       state: {
         judgeActivityReport: {
@@ -104,6 +104,8 @@ describe('setJudgeActivityReportFiltersAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.filters.judgeName).toEqual('Buch');
+    expect(result.state.judgeActivityReport.filters.judgeName).toEqual(
+      judgeUser.name,
+    );
   });
 });
