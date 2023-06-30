@@ -80,6 +80,83 @@ commands:
             - node_modules
 
 jobs:
+  delete-existing-data:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+      - run:
+          name: Setup the deploy table for a glue job
+          command: |
+            ./scripts/setup-deploy-table-for-glue-job.sh
+      - run:
+          name: Delete all existing dynamodb tables and elasticsearch clusters
+          command: |
+            ./scripts/delete-all-persistence.sh
+      - run:
+          name: Deploy Empty Documents S3 Bucket Lambda
+          command: |
+            npm run deploy:empty-s3-bucket-cron -- $ENV
+      - run:
+          name: Enable Empty Documents S3 Bucket Cron
+          command: |
+            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/enable.sh
+
+  redeploy-environment:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+      - run:
+          name: Disable Empty Documents S3 Bucket Cron
+          command: |
+            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/disable.sh
+      - run:
+          name: Destroy Empty Documents S3 Bucket Lambda
+          command: |
+            npm run destroy:empty-s3-bucket-cron -- $ENV
+      - run:
+          name: Kick off a deployment
+          command: |
+            CIRCLE_PIPELINE_ID=$(curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
+            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+      - run:
+          name: Deploy Wait for Workflow Cron Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+            npm run deploy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+
   initiate-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -94,55 +171,50 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-      - run:
-          name: Setup the deploy table for a glue job
-          command: |
-            ./scripts/setup-deploy-table-for-glue-job.sh
-      - run:
-          name: Delete all existing dynamodb tables and elasticsearch clusters
-          command: |
-            ./scripts/delete-all-persistence.sh
-      - run:
-          name: Kick off a deployment
-          command: |
             VCS=<< pipeline.project.type >>
-            CIRCLE_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
-            echo "export CIRCLE_SLUG=${CIRCLE_SLUG}" >> $BASH_ENV
-            echo "export PIPELINE_ID=${PIPELINE_ID}" >> $BASH_ENV
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
       - run:
-          name: Wait for deployment to complete
+          name: Disable Wait for Workflow Cron
           command: |
-            PIPELINE_STATUS=$(curl --request GET \
-              --url "https://circleci.com/api/v2/pipeline/${PIPELINE_ID}/workflow" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" | jq -r '.items[].status')
-            while [[ "$PIPELINE_STATUS" == "running" ]]; do
-              echo "Pipeline ${PIPELINE_ID} is running"
-              sleep 60
-              PIPELINE_STATUS=$(curl --request GET \
-                --url "https://circleci.com/api/v2/pipeline/${PIPELINE_ID}/workflow" \
-                --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-                --header "content-type: application/json" | jq -r '.items[].status')
-            done
-            if [[ "$PIPELINE_STATUS" == "success" ]]; then
-              echo "Pipeline ${PIPELINE_ID} completed successfully"
-            else
-              echo "Pipeline ${PIPELINE_ID} did not complete: ${PIPELINE_STATUS}"
-              exit 1
-            fi
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+      - run:
+          name: Destroy Wait for Workflow Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+            export CIRCLE_PIPELINE_ID=noop
+            npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Disable Dynamodb Streams
+          command: |
+            # ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+            echo "skipping..."
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
-            curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_SLUG}/pipeline" \
+            CIRCLE_PIPELINE_ID=$(curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}"
+              --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+      - run:
+          name: Deploy Sync S3 Buckets Cron Lambda
+          command: |
+            npm run deploy:sync-s3-buckets-cron -- $ENV
+      - run:
+          name: Enable Sync S3 Buckets Cron
+          command: |
+            ./web-api/workflow-terraform/sync-s3-buckets-cron/bin/enable.sh
+      - run:
+          name: Deploy Wait for Workflow Cron Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            npm run deploy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
 
   start-glue-job:
     docker:
@@ -177,7 +249,7 @@ jobs:
           command: |
             ./web-api/workflow-terraform/glue-cron/bin/enable.sh
 
-  disable-glue-cron:
+  finish-glue-job:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -195,6 +267,40 @@ jobs:
           name: Disable Check Glue Job Run State Cron
           command: |
             ./web-api/workflow-terraform/glue-cron/bin/disable.sh
+      - run:
+          name: Destroy Check Glue Job Run State Cron Lambda
+          command: |
+            npm run destroy:glue-cron -- $ENV
+
+  cleanup-glue-job:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+      - run:
+          name: Destroy Wait for Workflow Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            export CIRCLE_PIPELINE_ID=noop
+            npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Dynamodb Streams
+          command: |
+            # ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+            echo "skipping..."
 
   deploy:
     docker:
@@ -638,14 +744,14 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
-build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
+only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
         - prod
 
-build-and-deploy-defaults: &build-and-deploy-defaults
+only-deployed-lower-environments: &only-deployed-lower-environments
   filters:
     branches:
       only:
@@ -660,6 +766,12 @@ build-and-deploy-defaults: &build-and-deploy-defaults
         - staging
         - test
 
+only-test: &only-test
+  filters:
+    branches:
+      only:
+        - test
+
 workflows:
   version: 2
 
@@ -667,47 +779,47 @@ workflows:
     when: << pipeline.parameters.run_build_and_deploy >>
     jobs:
       - deploy:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
       - migrate:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - deploy
       - wait-for-migration:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           type: approval
           requires:
             - migrate
       - prepare-for-reindex:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - wait-for-migration
       - wait-for-reindex:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           type: approval
           requires:
             - prepare-for-reindex
       - disable-reindex-cron:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - wait-for-reindex
       - smoketests:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
       - loadtests:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - smoketests
       - smoketests-readonly:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - loadtests
       - switch-colors:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - smoketests-readonly
       - cleanup:
-          <<: *build-and-deploy-defaults
+          <<: *only-deployed-lower-environments
           requires:
             - switch-colors
 
@@ -715,64 +827,64 @@ workflows:
     when: << pipeline.parameters.run_build_and_deploy_with_context >>
     jobs:
       - deploy:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
       - migrate:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - deploy
       - wait-for-migration:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           type: approval
           requires:
             - migrate
       - prepare-for-reindex:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - wait-for-migration
       - wait-for-reindex:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           type: approval
           requires:
             - prepare-for-reindex
       - disable-reindex-cron:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - wait-for-reindex
       - loadtests:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - disable-reindex-cron
       - smoketests-readonly:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - loadtests
       - deploy-switch-colors-cron:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - smoketests-readonly
       - wait-for-switch:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           type: approval
           requires:
             - deploy-switch-colors-cron
       - disable-switch-colors-cron:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - wait-for-switch
       - switch-colors:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - disable-switch-colors-cron
       - backup-source-dynamo-table:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - switch-colors
       - delete-api-mappings:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - switch-colors
       - cleanup:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           requires:
             - backup-source-dynamo-table
             - delete-api-mappings
@@ -781,23 +893,53 @@ workflows:
     when:
       equal: [ glue-to-test-schedule, << pipeline.schedule.name >> ]
     jobs:
+      - delete-existing-data:
+          <<: *only-test
+      - wait-for-s3-bucket-to-empty:
+          <<: *only-test
+          type: approval
+          requires:
+            - delete-existing-data
+      - redeploy-environment:
+          <<: *only-test
+          requires:
+            - wait-for-s3-bucket-to-empty
+      - wait-for-deployment-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - redeploy-environment
       - initiate-glue-job:
-          filters:
-            branches:
-              only:
-                - test
+          <<: *only-test
+          requires:
+            - wait-for-deployment-workflow
+      - wait-for-glue-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-glue-job
+      - wait-for-s3-sync:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-glue-job
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
       - start-glue-job:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
       - wait-for-glue-job:
-          <<: *build-and-deploy-with-context-defaults
+          <<: *only-prod
           type: approval
           requires:
             - start-glue-job
-      - disable-glue-cron:
-          <<: *build-and-deploy-with-context-defaults
+      - finish-glue-job:
+          <<: *only-prod
           requires:
             - wait-for-glue-job
