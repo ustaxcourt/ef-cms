@@ -17,8 +17,7 @@ import { goToMyDocumentQC } from '../support/pages/document-qc';
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 let token: string;
-const testData = {};
-
+let createdCaseDocketNumber: string;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const randomizedEmail = `${faker.string.uuid()}@example.com`;
 
@@ -42,7 +41,9 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
       goToCreateCase();
       closeScannerSetupDialog();
       fillInCreateCaseFromPaperForm();
-      goToReviewCase(testData);
+      goToReviewCase().then(
+        createdDocket => (createdCaseDocketNumber = createdDocket),
+      );
       serveCaseToIrs();
     });
   });
@@ -62,7 +63,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
     });
 
     it('should add an email to the party on the case', () => {
-      goToCaseDetail(testData.createdPaperDocketNumber);
+      goToCaseDetail(createdCaseDocketNumber);
       editPetitionerEmail(randomizedEmail);
     });
 
@@ -82,17 +83,17 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
     });
 
     it(
-      'login as petitioner',
+      'Verifies Petitioner Email Change',
       {
         retries: {
-          openMode: 3,
+          openMode: 3, // This test is running three times as the email verification process is async and there is no convenient way to check when it is finished and NOCE has been docketed.
           runMode: 3,
         },
       },
       () => {
         cy.log('Running login');
         login(token);
-        goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
+        goToCaseDetailPetitioner(createdCaseDocketNumber);
         verifyEmailChange();
       },
     );

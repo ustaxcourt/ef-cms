@@ -46,6 +46,7 @@ const testData = {};
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+let createdPaperDocketNumber: string;
 
 describe('Petitioner', () => {
   before(() => {
@@ -108,7 +109,9 @@ describe('Petitions clerk', () => {
     goToCreateCase();
     closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm();
-    goToReviewCase(testData);
+    goToReviewCase().then(
+      docketNumber => (createdPaperDocketNumber = docketNumber),
+    );
     serveCaseToIrs();
   });
 
@@ -142,7 +145,7 @@ describe('Docket Clerk', () => {
   });
 
   it('should be able to create an order on the paper-filed case and serve it', () => {
-    createOrder(testData.createdPaperDocketNumber);
+    createOrder(createdPaperDocketNumber);
     editAndSignOrder();
     addDocketEntryForOrderAndServePaper();
   });
@@ -162,7 +165,7 @@ describe('Docket Clerk', () => {
   });
 
   it('should be able to upload a court-issued order pdf on the paper-filed case', () => {
-    goToCaseDetail(testData.createdPaperDocketNumber);
+    goToCaseDetail(createdPaperDocketNumber);
 
     uploadCourtIssuedDocPdf();
   });

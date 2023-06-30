@@ -27,10 +27,9 @@ const barNumberToSearchBy = 'PT1234';
 let testData = {};
 let token: string;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
-
-const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
-
+let createdPaperDocketNumber: string;
 describe('Create and serve a case to search for', () => {
+  const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
   before(() => {
     cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitionsclerk1@example.com',
@@ -49,7 +48,9 @@ describe('Create and serve a case to search for', () => {
     goToCreateCase();
     closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm(testData);
-    goToReviewCase(testData);
+    goToReviewCase().then(
+      docketNumber => (createdPaperDocketNumber = docketNumber),
+    );
     serveCaseToIrs();
     waitForElasticsearch();
   });
@@ -76,7 +77,7 @@ describe('Case Advanced Search', () => {
 
   it('should be able to search for case by docket number', () => {
     gotoAdvancedSearch();
-    searchByDocketNumber(testData.createdPaperDocketNumber);
+    searchByDocketNumber(createdPaperDocketNumber);
   });
 });
 
@@ -120,7 +121,7 @@ describe('Opinion Search', () => {
   });
 
   it('should create an opinion to search for', () => {
-    goToCaseDetail(testData.createdPaperDocketNumber);
+    goToCaseDetail(createdPaperDocketNumber);
     createOpinion();
     addDocketEntryAndServeOpinion(testData);
     waitForElasticsearch();
