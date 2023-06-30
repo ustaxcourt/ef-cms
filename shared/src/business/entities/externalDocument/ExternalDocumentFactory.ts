@@ -1,4 +1,4 @@
-import { ExternalDocument } from './ExternalDocumentBase';
+import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { ExternalDocumentNonStandardA } from './ExternalDocumentNonStandardA';
 import { ExternalDocumentNonStandardB } from './ExternalDocumentNonStandardB';
 import { ExternalDocumentNonStandardC } from './ExternalDocumentNonStandardC';
@@ -11,7 +11,9 @@ import { ExternalDocumentNonStandardI } from './ExternalDocumentNonStandardI';
 import { ExternalDocumentNonStandardJ } from './ExternalDocumentNonStandardJ';
 import { ExternalDocumentStandard } from './ExternalDocumentStandard';
 
-export function ExternalDocumentFactory(documentMetadata): ExternalDocument {
+export function ExternalDocumentFactory(
+  documentMetadata,
+): ExternalDocumentBase {
   if (documentMetadata && documentMetadata.scenario) {
     const scenario = documentMetadata.scenario.toLowerCase().trim();
 
