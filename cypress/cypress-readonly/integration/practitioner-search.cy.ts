@@ -1,14 +1,12 @@
 import { AuthenticationResult } from '../../support/login-types';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import { isValidRequest } from '../support/helpers';
+import { login } from '../support/pages/login';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Practitioner Search', () => {
-  const { login } = getEnvironmentSpecificFunctions();
-
   before(() => {
     cy.task<AuthenticationResult>('getUserToken', {
       email: 'testAdmissionsClerk@example.com',

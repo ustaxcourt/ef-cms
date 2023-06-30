@@ -1,14 +1,12 @@
 import { AuthenticationResult } from '../../support/login-types';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import { isValidRequest } from '../support/helpers';
+import { login } from '../support/pages/login';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Messages UI Smoketests', () => {
-  const { login } = getEnvironmentSpecificFunctions();
-
   before(() => {
     cy.intercept({
       hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
