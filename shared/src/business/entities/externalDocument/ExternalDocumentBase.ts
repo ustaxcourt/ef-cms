@@ -2,33 +2,13 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { MAX_FILE_SIZE_MB } from '../EntityConstants';
 
-// export const externalDocumentDecorator = (obj, rawObj) => {
-//   obj.category = rawObj.category;
-//   obj.documentTitle = rawObj.documentTitle;
-//   obj.documentType = rawObj.documentType;
-// };
-
-// export const baseExternalDocumentValidation = {
-//   category: JoiValidationConstants.STRING.required(),
-//   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional(),
-//   documentType: JoiValidationConstants.STRING.required(),
-// };
-
-export abstract class ExternalDocument extends JoiValidationEntity {
-  public category!: string;
-  public documentTitle?: string;
-  public documentType!: string;
-
-  abstract getDocumentTitle(): string;
-}
-
-export class ExternalDocumentBase extends ExternalDocument {
+export class ExternalDocumentBase extends JoiValidationEntity {
   public category: string;
   public documentTitle?: string;
   public documentType: string;
 
-  constructor(rawProps) {
-    super('ExternalDocumentBase');
+  constructor(rawProps, scenario: string) {
+    super(scenario);
 
     this.category = rawProps.category;
     this.documentTitle = rawProps.documentTitle;
@@ -142,16 +122,16 @@ export class ExternalDocumentBase extends ExternalDocument {
     trialLocation: 'Select a preferred trial location.',
   } as const;
 
-  getDocumentTitle() {
-    return this.documentTitle!;
-  }
-
   getValidationRules() {
     return ExternalDocumentBase.VALIDATION_RULES;
   }
 
-  getErrorToMessageMap() {
+  getErrorToMessageMap(): any {
     return ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getDocumentTitle() {
+    return this.documentTitle!;
   }
 }
 

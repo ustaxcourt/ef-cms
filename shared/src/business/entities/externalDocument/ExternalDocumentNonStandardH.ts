@@ -1,17 +1,14 @@
-import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import joi from 'joi';
 
-export class ExternalDocumentNonStandardH extends ExternalDocument {
+export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
   public secondaryDocument: any;
 
   constructor(rawProps) {
-    super('ExternalDocumentNonStandardH');
+    super(rawProps, 'ExternalDocumentNonStandardH');
 
-    this.category = rawProps.category;
-    this.documentTitle = rawProps.documentTitle;
-    this.documentType = rawProps.documentType;
     this.secondaryDocument = ExternalDocumentFactory(
       rawProps.secondaryDocument || {},
     );
@@ -23,15 +20,8 @@ export class ExternalDocumentNonStandardH extends ExternalDocument {
     secondaryDocumentFile: joi.object().optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES =
-    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return ExternalDocumentNonStandardH.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES;
   }
 
   getDocumentTitle(): string {

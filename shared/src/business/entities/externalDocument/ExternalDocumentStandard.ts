@@ -1,16 +1,13 @@
-import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import joi from 'joi';
 
-export class ExternalDocumentStandard extends ExternalDocument {
-  public selectedCases: any;
+export class ExternalDocumentStandard extends ExternalDocumentBase {
+  public selectedCases?: string[];
 
   constructor(rawProps) {
-    super('ExternalDocumentStandard');
+    super(rawProps, 'ExternalDocumentStandard');
 
-    this.category = rawProps.category;
-    this.documentTitle = rawProps.documentTitle;
-    this.documentType = rawProps.documentType;
     this.selectedCases = rawProps.selectedCases;
   }
 
@@ -28,19 +25,8 @@ export class ExternalDocumentStandard extends ExternalDocument {
     selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES =
-    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return ExternalDocumentStandard.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES;
-  }
-
-  getDocumentTitle(): string {
-    return this.documentTitle!;
   }
 }
 

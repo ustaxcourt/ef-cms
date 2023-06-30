@@ -1,19 +1,16 @@
-import { ExternalDocument, ExternalDocumentBase } from './ExternalDocumentBase';
+import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import { transformFormValueToTitleCaseOrdinal } from '../../utilities/transformFormValueToTitleCaseOrdinal';
 import joi from 'joi';
 
-export class ExternalDocumentNonStandardG extends ExternalDocument {
-  public ordinalValue: any;
-  public otherIteration: any;
+export class ExternalDocumentNonStandardG extends ExternalDocumentBase {
+  public ordinalValue: string;
+  public otherIteration?: number;
 
   constructor(rawProps) {
-    super('ExternalDocumentNonStandardG');
+    super(rawProps, 'ExternalDocumentNonStandardG');
 
-    this.category = rawProps.category;
-    this.documentTitle = rawProps.documentTitle;
-    this.documentType = rawProps.documentType;
     this.ordinalValue = rawProps.ordinalValue;
     this.otherIteration = rawProps.otherIteration;
   }
@@ -28,15 +25,8 @@ export class ExternalDocumentNonStandardG extends ExternalDocument {
     }),
   };
 
-  static VALIDATION_ERROR_MESSAGES =
-    ExternalDocumentBase.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return ExternalDocumentNonStandardG.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES;
   }
 
   getDocumentTitle(): string {
