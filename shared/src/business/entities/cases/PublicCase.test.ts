@@ -15,9 +15,14 @@ import { PublicCase } from './PublicCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactSecondary } from './Case';
 
-const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
-const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
 describe('PublicCase', () => {
+  const mockContactId = 'b430f7f9-06f3-4a25-915d-5f51adab2f29';
+  const mockContactIdSecond = '39a359e9-dde3-409e-b40e-77a4959b6f2c';
+
+  it('should throw an error when applicationContext is not provided to the constructor', () => {
+    expect(() => new PublicCase({}, {} as any)).toThrow(TypeError);
+  });
+
   describe('validation', () => {
     it('should validate when all information is provided and case is not sealed', () => {
       const entity = new PublicCase(
@@ -337,7 +342,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(rawCase, { applicationContext });
 
     expect(entity.irsPractitioners).toBeUndefined();
-    expect(entity.otherFilers).toBeUndefined();
     expect(entity.privatePractitioners).toBeUndefined();
     expect(entity.leadDocketNumber).toBeUndefined();
   });
@@ -545,7 +549,6 @@ describe('PublicCase', () => {
       const entity = new PublicCase(rawCase, { applicationContext });
 
       expect(entity.irsPractitioners).toBeUndefined();
-      expect(entity.otherFilers).toBeUndefined();
       expect(entity.privatePractitioners).toBeUndefined();
     });
   });
@@ -586,7 +589,6 @@ describe('PublicCase', () => {
     const entity = new PublicCase(rawCase, { applicationContext });
 
     expect(entity.irsPractitioners).toBeDefined();
-    expect(entity.otherFilers).toBeUndefined();
     expect(entity.privatePractitioners).toBeDefined();
     expect(entity.leadDocketNumber).toBeDefined();
   });

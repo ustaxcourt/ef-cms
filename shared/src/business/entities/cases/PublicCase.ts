@@ -38,6 +38,7 @@ export class PublicCase extends JoiValidationEntity {
   public petitioners: any[] | undefined;
   public irsPractitioners?: any[];
   public privatePractitioners: any;
+
   private _score?: string;
 
   constructor(
@@ -53,6 +54,7 @@ export class PublicCase extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
+
     this.entityName = 'PublicCase';
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
