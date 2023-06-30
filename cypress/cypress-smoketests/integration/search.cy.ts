@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../../support/login-types';
 import {
   addDocketEntryAndServeOpinion,
   createOpinion,
@@ -10,8 +11,6 @@ import {
   searchByPractitionerbarNumber,
   searchOpinionByKeyword,
 } from '../support/pages/advanced-search';
-
-import { AuthenticationResult } from '../support/pages/local-login';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import { goToCaseDetail } from '../support/pages/case-detail';

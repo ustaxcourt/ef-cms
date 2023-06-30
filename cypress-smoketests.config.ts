@@ -1,12 +1,11 @@
 import {
   confirmUser,
   getUserTokenWithRetry,
-} from './cypress/cypress-smoketests/support/login';
+} from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
+import { getUserToken as getUserTokenLocal } from './cypress/cypress-smoketests/support/pages/local-login';
 import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
 const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
-
-import { getUserToken as getUserTokenLocal } from './cypress/cypress-smoketests/support/pages/local-login';
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
