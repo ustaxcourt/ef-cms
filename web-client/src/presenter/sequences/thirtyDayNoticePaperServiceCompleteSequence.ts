@@ -1,7 +1,5 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getNoticeGenerationSuccessMessageAction } from '../actions/TrialSession/getNoticeGenerationSuccessMessageAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setNottServiceCompleteAction } from '../actions/TrialSession/setNottServiceCompleteAction';
@@ -15,15 +13,12 @@ export const thirtyDayNoticePaperServiceCompleteSequence = [
   clearModalStateAction,
   hasPaperAction,
   {
-    electronic: [
-      getNoticeGenerationSuccessMessageAction,
-      setAlertSuccessAction,
-    ],
+    electronic: [],
     paper: [
       setPdfPreviewUrlSequence,
-      setCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
+      setCurrentPageAction('PrintPaperTrialNotices'),
     ],
   },
 ];
