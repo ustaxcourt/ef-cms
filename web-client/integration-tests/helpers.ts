@@ -29,13 +29,11 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/present
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
-import { getAllFeatureFlagsInteractor } from '../../shared/src/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
-import { getFeatureFlagValue } from '../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
@@ -218,7 +216,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           url: 'http://example.com',
         };
       },
-      getFeatureFlagValue,
       getUserById,
       saveDocumentFromLambda,
       saveWorkItem,
@@ -252,7 +249,21 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getAllFeatureFlagsInteractor,
+      getAllFeatureFlagsInteractor: () => ({
+        'chief-judge-name': 'Maurice B. Foley',
+        'consolidated-cases-add-docket-numbers': true,
+        'consolidated-cases-group-access-petitioner': true,
+        'document-visibility-policy-change-date': '2023-05-01',
+        'e-consent-fields-enabled-feature-flag': true,
+        'external-opinion-search-enabled': true,
+        'external-order-search-enabled': true,
+        'internal-opinion-search-enabled': true,
+        'internal-order-search-enabled': true,
+        'multi-docketable-paper-filings': true,
+        'redaction-acknowledgement-enabled': true,
+        'updated-trial-status-types': true,
+        'use-external-pdf-generation': false,
+      }),
     }),
     getUtilities: () => ({
       calculateDifferenceInDays,
