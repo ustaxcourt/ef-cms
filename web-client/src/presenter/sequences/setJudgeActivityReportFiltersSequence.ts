@@ -6,8 +6,6 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateJudgeActivityReportSearchAction } from '../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
-// TODO: EXPLORE VALIDATING INPUT BEFORE SETTING IN STATE
-
 export const setJudgeActivityReportFiltersSequence = [
   setJudgeActivityReportFiltersAction,
   shouldValidateAction,

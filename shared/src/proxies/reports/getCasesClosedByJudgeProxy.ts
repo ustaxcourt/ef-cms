@@ -1,6 +1,6 @@
 import {
   CasesClosedType,
-  JudgeActivityReportFilters,
+  JudgeActivityReportCasesClosedRequest,
 } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
@@ -15,7 +15,7 @@ import { post } from '../requests';
  */
 export const getCasesClosedByJudgeInteractor = (
   applicationContext,
-  params: JudgeActivityReportFilters,
+  params: JudgeActivityReportCasesClosedRequest,
 ): Promise<CasesClosedType> => {
   return post({
     applicationContext,

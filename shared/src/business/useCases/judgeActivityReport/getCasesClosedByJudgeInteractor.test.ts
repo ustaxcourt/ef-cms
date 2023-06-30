@@ -1,4 +1,8 @@
-import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  MAX_ELASTICSEARCH_PAGINATION,
+} from '../../entities/EntityConstants';
+import { JudgeActivityReportCasesClosedRequest } from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,
@@ -43,9 +47,10 @@ describe('getCasesClosedByJudgeInteractor', () => {
     year,
   });
 
-  const mockValidRequest = {
+  const mockValidRequest: JudgeActivityReportCasesClosedRequest = {
     endDate: calculatedEndDate,
     judges: [judgeUser.name],
+    pageSize: MAX_ELASTICSEARCH_PAGINATION,
     startDate: calculatedStartDate,
   };
 
@@ -74,6 +79,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
         judges: [judgeUser.name],
+        pageSize: 0,
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();

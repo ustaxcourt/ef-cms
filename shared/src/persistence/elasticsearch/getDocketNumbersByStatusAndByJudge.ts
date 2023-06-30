@@ -1,6 +1,6 @@
 import {
   CavAndSubmittedCaseResponseType,
-  JudgeActivityReportCavAndSubmittedCasesRequestType,
+  JudgeActivityReportCavAndSubmittedCasesRequest,
 } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
@@ -10,7 +10,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: JudgeActivityReportCavAndSubmittedCasesRequestType;
+  params: JudgeActivityReportCavAndSubmittedCasesRequest;
 }): Promise<CavAndSubmittedCaseResponseType> => {
   const source = ['docketNumber'];
 
