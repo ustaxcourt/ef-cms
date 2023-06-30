@@ -28,8 +28,8 @@ let testData = {};
 let token: string;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 let createdPaperDocketNumber: string;
+const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 describe('Create and serve a case to search for', () => {
-  const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
   before(() => {
     cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitionsclerk1@example.com',

@@ -63,7 +63,6 @@ const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
   before(() => {
-    console.log('DEFAULT_ACCOUNT_PASS', DEFAULT_ACCOUNT_PASS);
     cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitionsclerk1@example.com',
       password: DEFAULT_ACCOUNT_PASS,
