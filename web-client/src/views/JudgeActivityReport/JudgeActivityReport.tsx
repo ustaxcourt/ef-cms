@@ -344,8 +344,7 @@ export const JudgeActivityReport = connect(
                   className="position-relative margin-bottom-35"
                   disabled={judgeActivityReportHelper.isFormPristine}
                   onClick={() => {
-                    submitJudgeActivityReportSequence();
-                    getCavAndSubmittedCasesForJudgesSequence({
+                    submitJudgeActivityReportSequence({
                       selectedPage: 0,
                     });
                     setActivePage(0);
