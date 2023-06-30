@@ -7,7 +7,6 @@ import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * archiveDraftDocumentInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which a document will be archived
@@ -40,7 +39,7 @@ export const archiveDraftDocumentInteractor = async (
     docketEntryId,
   });
 
-  caseEntity.archiveDocketEntry(docketEntryToArchive, { applicationContext });
+  caseEntity.archiveDocketEntry(docketEntryToArchive);
 
   const { workItem } = docketEntryToArchive;
 

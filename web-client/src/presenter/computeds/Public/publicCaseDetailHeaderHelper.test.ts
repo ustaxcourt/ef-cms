@@ -1,5 +1,5 @@
 import { publicCaseDetailHeaderHelper } from './publicCaseDetailHeaderHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 let state;
 describe('publicCaseDetailHeaderHelper', () => {

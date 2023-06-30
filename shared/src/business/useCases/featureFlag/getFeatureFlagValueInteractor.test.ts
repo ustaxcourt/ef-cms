@@ -12,7 +12,7 @@ describe('getFeatureFlagValueInteractor', () => {
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
     const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key,
     });
 
     expect(
@@ -28,7 +28,7 @@ describe('getFeatureFlagValueInteractor', () => {
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
 
     const result = await getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key,
     });
 
     expect(

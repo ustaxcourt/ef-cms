@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setMessageDetailViewerDocumentToDisplayAction } from './setMessageDetailViewerDocumentToDisplayAction';
 
 describe('setMessageDetailViewerDocumentToDisplayAction', () => {
@@ -69,6 +69,35 @@ describe('setMessageDetailViewerDocumentToDisplayAction', () => {
       documentId: '1234',
     });
     expect(result.state.iframeSrc).toEqual('www.example.com');
+  });
+
+  it('should set the messageViewerDocumentToDisplay to the first attachment if the messageViewerDocumentToDisplay documentId does not exist in attachments', async () => {
+    const result = await runAction(
+      setMessageDetailViewerDocumentToDisplayAction,
+      {
+        modules: {
+          presenter,
+        },
+        props: {
+          messageViewerDocumentToDisplay: { documentId: '5555' },
+          mostRecentMessage: { attachments: [{ documentId: '1234' }] },
+        },
+        state: {
+          caseDetail: {
+            archivedCorrespondences: [],
+            archivedDocketEntries: [],
+            correspondence: [],
+            docketEntries: [{ docketEntryId: '1234' }],
+            docketNumber: '123-45',
+          },
+          messageViewerDocumentToDisplay: null,
+        },
+      },
+    );
+
+    expect(result.state.messageViewerDocumentToDisplay).toEqual({
+      documentId: '1234',
+    });
   });
 
   it('does not set iframeSrc if props.messageViewerDocumentToDisplay is null', async () => {

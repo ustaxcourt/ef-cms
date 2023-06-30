@@ -1,5 +1,5 @@
 import { computeTrialSessionStartTimeAction } from './computeTrialSessionStartTimeAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeTrialSessionStartTimeAction', () => {
   it('should return a midnight start time in 12hr format', async () => {

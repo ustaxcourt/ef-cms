@@ -1,5 +1,5 @@
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * calls interactor to add a paper filing

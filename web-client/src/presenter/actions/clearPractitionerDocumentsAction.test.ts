@@ -1,5 +1,5 @@
 import { clearPractitionerDocumentsAction } from './clearPractitionerDocumentsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearPractitionerDocumentsAction', () => {
   it('should unset state.practitionerDetail to an empty object', async () => {

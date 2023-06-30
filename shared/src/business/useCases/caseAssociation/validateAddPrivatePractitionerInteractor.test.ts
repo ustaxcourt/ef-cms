@@ -7,7 +7,7 @@ describe('validateAddPrivatePractitionerInteractor', () => {
       counsel: {},
     });
 
-    expect(Object.keys(errors)).toEqual([
+    expect(Object.keys(errors!)).toEqual([
       'representing',
       'serviceIndicator',
       'user',

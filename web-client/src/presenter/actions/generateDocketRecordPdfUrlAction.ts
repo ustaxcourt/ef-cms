@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * get the pdf file and pdf blob url from the passed in htmlString
  * @param {object} providers the providers object
@@ -15,15 +15,22 @@ export const generateDocketRecordPdfUrlAction = async ({
   const docketRecordSort = get(
     state.sessionMetadata.docketRecordSort[caseDetail.docketNumber],
   );
+  const { isAssociated } = props;
 
-  const { isAssociated: shouldIncludePartyDetail } = props;
+  let includePartyDetail = false;
+  let isIndirectlyAssociated = false;
+  if (isAssociated) {
+    includePartyDetail = true;
+    isIndirectlyAssociated = true;
+  }
 
   const { url } = await applicationContext
     .getUseCases()
     .generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
       docketRecordSort,
-      includePartyDetail: shouldIncludePartyDetail,
+      includePartyDetail,
+      isIndirectlyAssociated,
     });
 
   return { pdfUrl: url };

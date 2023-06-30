@@ -1,4 +1,6 @@
-const joi = require('joi').extend(require('@hapi/joi-date'));
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
+const joi: Root = joiImported.extend(joiDate);
 import {
   FORMATS,
   calculateISODate,
@@ -113,3 +115,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     return JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export type RawJudgeActivityReportSearch =
+  ExcludeMethods<JudgeActivityReportSearch>;

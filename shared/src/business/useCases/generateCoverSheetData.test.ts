@@ -437,7 +437,22 @@ describe('generateCoverSheetData', () => {
     );
   });
 
-  it("should append consolidated group information to the coversheet when the document filed is a multi-docketable court-issued document and it's being filed on the lead case", async () => {
+  it('should not call formatConsolidatedCaseCoversheetData if the document is not in a case in a consolidated group', async () => {
+    await generateCoverSheetData({
+      applicationContext,
+      caseEntity: testingCaseData,
+      docketEntryEntity: {
+        ...testingCaseData.docketEntries[0],
+      },
+    } as any);
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .formatConsolidatedCaseCoversheetData,
+    ).not.toHaveBeenCalled();
+  });
+
+  it("should append consolidated group information to the coversheet when the document filed is a multi-docketable court-issued document and it's being filed in a case in a consolidated group", async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -456,7 +471,7 @@ describe('generateCoverSheetData', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed on a lead case', async () => {
+  it('should append consolidated group information to the coversheet when the document filed is a multi-docketable paper filing being filed in a case in a consolidated group', async () => {
     await generateCoverSheetData({
       applicationContext,
       caseEntity: {

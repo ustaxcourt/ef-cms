@@ -24,6 +24,20 @@ describe('CaseDeadline', () => {
           deadlineDate: '2019-03-01T21:42:29.073Z',
           description: 'One small step',
           docketNumber: DOCKET_NUMBER,
+          leadDocketNumber: DOCKET_NUMBER,
+        },
+        { applicationContext },
+      );
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual(null);
+    });
+
+    it('should be valid when all fields are present except for leadDocketNumber', () => {
+      const caseDeadline = new CaseDeadline(
+        {
+          associatedJudge: 'Judge Buch',
+          deadlineDate: '2019-03-01T21:42:29.073Z',
+          description: 'One small step',
+          docketNumber: DOCKET_NUMBER,
         },
         { applicationContext },
       );

@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+
 import { Address } from './StartCase/Address';
 import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
@@ -14,7 +15,8 @@ import { SealAddressModal } from './CaseDetail/SealAddressModal';
 import { ServiceIndicatorRadios } from './ServiceIndicatorRadios';
 import { WarningNotificationComponent } from './WarningNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const EditPetitionerInformationInternal = connect(

@@ -1,5 +1,5 @@
 import { clearAllDocumentsAccordionAction } from './clearAllDocumentsAccordionAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearAllDocumentsAccordionAction', () => {
   it('should set state.allDocumentsAccordion to empty string', async () => {

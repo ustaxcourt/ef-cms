@@ -8,7 +8,7 @@ import {
   petitionerUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const internalPetitionPartiesHelper = withAppContextDecorator(

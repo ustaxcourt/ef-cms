@@ -2,7 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { mockPetitioners } from './formattedCaseDetail.test';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('getCalendarDetailsForTrialSession', () => {

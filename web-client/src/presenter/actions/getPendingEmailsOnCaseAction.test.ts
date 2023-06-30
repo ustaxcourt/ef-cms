@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getPendingEmailsOnCaseAction } from './getPendingEmailsOnCaseAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPendingEmailsOnCaseAction', () => {
   const mockUserId = 'e14762ee-fc2f-4a9e-ba2c-2160469d2d04';

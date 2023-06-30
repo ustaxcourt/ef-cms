@@ -1,6 +1,6 @@
 import * as computeFile from './computeTrialSessionFormDataAction';
 import { computeSubmitTrialSessionDataAction } from './computeSubmitTrialSessionDataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeSubmitTrialSessionDataAction', () => {
   let form = {};

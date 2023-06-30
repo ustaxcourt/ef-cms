@@ -71,17 +71,19 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
   });
 
   it('should return paper service pdf related information', async () => {
-    const result = await generateTrialSessionPaperServicePdfInteractor(
-      applicationContext,
-      {
-        trialNoticePdfsKeys,
+    await generateTrialSessionPaperServicePdfInteractor(applicationContext, {
+      trialNoticePdfsKeys,
+    });
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[2][0],
+    ).toMatchObject({
+      message: {
+        action: 'paper_service_complete',
+        docketEntryId: '99999',
+        hasPaper: true,
+        pdfUrl: 'www.example.com',
       },
-    );
-
-    expect(result).toEqual({
-      docketEntryId: mockDocketEntryId,
-      hasPaper: true,
-      pdfUrl: mockPdfUrl,
     });
   });
 });

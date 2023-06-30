@@ -1,5 +1,5 @@
 import { get as _get, find } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * set the state for the add edit user's notes modal

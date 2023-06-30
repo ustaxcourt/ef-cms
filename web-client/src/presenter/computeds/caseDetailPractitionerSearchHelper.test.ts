@@ -2,7 +2,7 @@ import { ROLES } from '../../../../shared/src/business/entities/EntityConstants'
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailPractitionerSearchHelper as caseDetailPractitionerSearchHelperComputed } from './caseDetailPractitionerSearchHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseDetailPractitionerSearchHelper = withAppContextDecorator(

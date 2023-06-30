@@ -2,6 +2,8 @@ import { migrateItems } from './0000-validate-all-items';
 import { validUserCase } from '../../../../../../shared/src/business/entities/UserCase.test';
 
 describe('0000-validate-all-items', () => {
+  console.log = () => null;
+
   const entities = [
     {
       contactPrimary: {},

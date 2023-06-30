@@ -1,5 +1,5 @@
 import { clearSearchTermAction } from './clearSearchTermAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearSearchTermAction', () => {
   it('should clear the value of state.header.searchTerm', async () => {

@@ -1,5 +1,5 @@
 import { clearScansAction } from './clearScansAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearScansAction', () => {
   it('should clear the value of state.scanner.batches', async () => {

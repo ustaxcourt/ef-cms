@@ -1,30 +1,30 @@
 import { applicationContext } from '../business/test/createTestApplicationContext';
 import { sendNotificationToUser } from './sendNotificationToUser';
 
-const connections = [
-  {
-    endpoint: 'endpoint-01',
-    pk: 'connections-01',
-    sk: 'sk-01',
-  },
-  {
-    endpoint: 'endpoint-02',
-    pk: 'connections-02',
-    sk: 'sk-02',
-  },
-  {
-    endpoint: 'endpoint-03',
-    pk: 'connections-03',
-    sk: 'sk-03',
-  },
-  {
-    endpoint: 'endpoint-04',
-    pk: 'connections-04',
-    sk: 'sk-04',
-  },
-];
-
 describe('send websocket notification to browser', () => {
+  const connections = [
+    {
+      endpoint: 'endpoint-01',
+      pk: 'connections-01',
+      sk: 'sk-01',
+    },
+    {
+      endpoint: 'endpoint-02',
+      pk: 'connections-02',
+      sk: 'sk-02',
+    },
+    {
+      endpoint: 'endpoint-03',
+      pk: 'connections-03',
+      sk: 'sk-03',
+    },
+    {
+      endpoint: 'endpoint-04',
+      pk: 'connections-04',
+      sk: 'sk-04',
+    },
+  ];
+
   const postToConnection = jest
     .fn()
     .mockReturnValue({ promise: () => Promise.resolve('ok') });
@@ -41,6 +41,7 @@ describe('send websocket notification to browser', () => {
 
   it('should send notification to user', async () => {
     const mockMessage = 'hello, computer';
+
     await sendNotificationToUser({
       applicationContext,
       message: mockMessage,

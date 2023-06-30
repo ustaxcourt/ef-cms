@@ -59,6 +59,16 @@ resource "aws_iam_role_policy" "iam_cognito_post_authentication_lambda_policy" {
         },
         {
             "Action": [
+                "lambda:InvokeFunction"
+            ],
+            "Resource": [
+                "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:*",
+                "arn:aws:lambda:us-west-1:${data.aws_caller_identity.current.account_id}:function:*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
                 "ses:SendBulkTemplatedEmail"
             ],
             "Resource": [

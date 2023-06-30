@@ -17,7 +17,7 @@ const isOutboxItem = item => {
 };
 
 export const migrateItems = async (items, documentClient) => {
-  const itemsAfter = [];
+  const itemsAfter: (RawWorkItem | RawOutboxItem)[] = [];
 
   for (const item of items) {
     if (isWorkItem(item) && item.caseStatus === CASE_STATUS_TYPES.calendared) {

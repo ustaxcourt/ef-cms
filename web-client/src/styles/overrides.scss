@@ -1,4 +1,4 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .grid-container {
@@ -79,6 +79,22 @@ option:first-child {
 .ustc-unstyled-list {
   padding-left: 0;
   margin-top: 0;
+  list-style-type: none;
+
+  &.without-margins {
+    margin-bottom: 0;
+
+    li {
+      margin-bottom: 0;
+    }
+  }
+
+  li:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.ustc-unstyled-consolidated-case-list {
   list-style-type: none;
 
   &.without-margins {
@@ -368,4 +384,10 @@ input[type='file']::-webkit-file-upload-button {
 
 .border-none {
   border: none;
+}
+
+td.message-select-control {
+  .usa-checkbox {
+    padding-bottom: 5px;
+  }
 }

@@ -1,6 +1,6 @@
 import { find, orderBy } from 'lodash';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { supportingDocumentFreeTextTypes } from './fileDocumentHelper';
 
 const getInternalDocumentTypes = typeMap => {
@@ -25,7 +25,12 @@ export const getSupportingDocumentTypeList = categoryMap => {
   });
 };
 
-export const addDocketEntryHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const addDocketEntryHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     AMENDMENT_EVENT_CODES,
     INTERNAL_CATEGORY_MAP,

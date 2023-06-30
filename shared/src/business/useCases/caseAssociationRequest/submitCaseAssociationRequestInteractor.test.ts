@@ -101,10 +101,7 @@ describe('submitCaseAssociationRequest', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getUseCaseHelpers().associatePrivatePractitionerToCase,
     ).toHaveBeenCalled();
   });
 
@@ -141,10 +138,7 @@ describe('submitCaseAssociationRequest', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getUseCaseHelpers().associateIrsPractitionerToCase,
     ).toHaveBeenCalled();
   });
 });

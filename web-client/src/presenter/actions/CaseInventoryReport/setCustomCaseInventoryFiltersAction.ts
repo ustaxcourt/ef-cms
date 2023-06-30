@@ -3,7 +3,7 @@ import {
   CaseType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { CustomCaseInventoryReportFilters } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * @param {object} providers the providers object

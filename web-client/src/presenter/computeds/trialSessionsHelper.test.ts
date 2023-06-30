@@ -1,5 +1,5 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionsHelper as trialSessionsHelperComputed } from './trialSessionsHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 

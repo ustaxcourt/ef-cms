@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CerebralTest, runCompute } from 'cerebral/test';
+import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
@@ -27,6 +27,7 @@ import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
+import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
 import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
@@ -42,6 +43,7 @@ import {
 } from '../../shared/src/business/useCases/scannerMockFiles';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../shared/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
@@ -62,6 +64,7 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
+import { ALLOWLIST_FEATURE_FLAGS } from '../../shared/src/business/entities/EntityConstants';
 import {
   fakeData,
   getFakeFile,
@@ -118,6 +121,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     stage: process.env.STAGE || 'local',
   };
   const apiApplicationContext = {
+    environment: {
+      currentColor: 'blue',
+    },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getConstants: () => ({ MAX_SES_RETRIES: 6 }),
@@ -238,10 +244,23 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getUseCaseHelpers: () => ({
       countPagesInDocument,
       generateAndServeDocketEntry,
+      generatePdfFromHtmlHelper,
       sendServedPartiesEmails,
       updateCaseAndAssociations,
     }),
-    getUseCases: () => ({ generatePdfFromHtmlInteractor }),
+    getUseCases: () => ({
+      generatePdfFromHtmlInteractor,
+      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
+        if (
+          featureFlag ===
+          ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
+        ) {
+          return false;
+        } else {
+          return true;
+        }
+      },
+    }),
     getUtilities: () => ({
       calculateDifferenceInDays,
       calculateISODate,
@@ -992,6 +1011,20 @@ export const waitForCondition = async ({
 export const waitForLoadingComponentToHide = async ({
   cerebralTest,
   component = 'progressIndicator.waitingForResponse',
+  maxWait = 30000,
+  refreshInterval = 500,
+}) => {
+  const waitTime = await waitForCondition({
+    booleanExpressionCondition: () => !cerebralTest.getState(component),
+    maxWait,
+    refreshInterval,
+  });
+  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
+};
+
+export const waitForModalsToHide = async ({
+  cerebralTest,
+  component = 'modal.showModal',
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
