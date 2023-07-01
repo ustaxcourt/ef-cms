@@ -1,5 +1,5 @@
-resource "aws_iam_role" "empty_s3_bucket_role" {
-  name = "empty_s3_bucket_role_${var.environment}"
+resource "aws_iam_role" "s3_lambda_role" {
+  name = "s3_lambda_role_${var.environment}"
 
   assume_role_policy = <<EOF
 {
@@ -19,9 +19,9 @@ EOF
 }
 
 
-resource "aws_iam_role_policy" "empty_s3_bucket_policy" {
-  name = "empty_s3_bucket_policy_${var.environment}"
-  role = aws_iam_role.empty_s3_bucket_role.id
+resource "aws_iam_role_policy" "s3_lambda_policy" {
+  name = "s3_lambda_policy_${var.environment}"
+  role = aws_iam_role.s3_lambda_role.id
 
   policy = <<EOF
 {

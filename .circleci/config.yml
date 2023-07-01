@@ -203,6 +203,10 @@ jobs:
           command: |
             npm run deploy:sync-s3-buckets-cron -- $ENV
       - run:
+          name: Populate S3 Source Queue
+          command: |
+            npx ts-node --transpile-only ./web-api/workflow-terraform/sync-s3-buckets-cron/bin/populate-source-queue.ts
+      - run:
           name: Enable Sync S3 Buckets Cron
           command: |
             ./web-api/workflow-terraform/sync-s3-buckets-cron/bin/enable.sh
