@@ -83,26 +83,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  EXTERNAL_OPINION_SEARCH: {
-    disabledMessage:
-      'Opinion search has been temporarily disabled. Please try again later.',
-    key: 'external-opinion-search-enabled',
-  },
-  EXTERNAL_ORDER_SEARCH: {
-    disabledMessage:
-      'Order search has been temporarily disabled. Please try again later.',
-    key: 'external-order-search-enabled',
-  },
-  INTERNAL_OPINION_SEARCH: {
-    disabledMessage:
-      'Opinion search has been temporarily disabled. Please try again later.',
-    key: 'internal-opinion-search-enabled',
-  },
-  INTERNAL_ORDER_SEARCH: {
-    disabledMessage:
-      'Order search has been temporarily disabled. Please try again later.',
-    key: 'internal-order-search-enabled',
-  },
   MULTI_DOCKETABLE_PAPER_FILINGS: {
     disabledMessage:
       'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
