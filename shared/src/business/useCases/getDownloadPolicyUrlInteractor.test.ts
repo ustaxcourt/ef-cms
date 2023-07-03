@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
@@ -755,7 +756,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
     it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
       applicationContext
         .getUseCases()
-        .getAllFeatureFlagsInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockReturnValue({
+          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+            .key]: true,
+        });
 
       applicationContext
         .getPersistenceGateway()
