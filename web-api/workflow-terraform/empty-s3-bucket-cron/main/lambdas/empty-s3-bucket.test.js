@@ -135,4 +135,24 @@ describe('empty-s3-bucket', () => {
       iterations: 7,
     });
   });
+
+  it('does NOT approve the workflow if the lambda runs out of time before everything has been deleted', async () => {
+    mockContext.getRemainingTimeInMillis
+      .mockReturnValueOnce(875 * 1000)
+      .mockReturnValueOnce(1250);
+    getNextChunkOfObjects.mockReturnValueOnce(
+      Promise.resolve({
+        nextContinuationToken: uuidv4(),
+        objectsChunk: [{ Key: uuidv4() }, { Key: uuidv4() }, { Key: uuidv4() }],
+      }),
+    );
+    await handler({}, mockContext);
+    expect(getNextChunkOfObjects).toHaveBeenCalledTimes(1);
+    expect(getNextChunkOfObjectVersions).toHaveBeenCalledTimes(0);
+    expect(getNextChunkOfDeleteMarkers).toHaveBeenCalledTimes(0);
+    expect(approvePendingJob).toHaveBeenCalledTimes(0);
+    expect(mockContext.succeed).toHaveBeenCalledWith({
+      iterations: 1,
+    });
+  });
 });

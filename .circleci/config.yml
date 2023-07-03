@@ -187,8 +187,7 @@ jobs:
       - run:
           name: Disable Dynamodb Streams
           command: |
-            # ./shared/admin-tools/dynamodb/toggle-streams.sh --off
-            echo "skipping..."
+            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
       - run:
           name: Kick off the glue-to-lower-env workflow
           command: |
@@ -303,8 +302,7 @@ jobs:
       - run:
           name: Enable Dynamodb Streams
           command: |
-            # ./shared/admin-tools/dynamodb/toggle-streams.sh --on
-            echo "skipping..."
+            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
 
   deploy:
     docker:
