@@ -8,7 +8,7 @@ import {
   _Object,
 } from '@aws-sdk/client-s3';
 
-const s3Client = new S3Client({});
+const s3Client = new S3Client({ region: 'us-east-1' });
 const MaxKeys = 1000;
 
 export const getNextChunkOfObjects = async ({

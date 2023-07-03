@@ -1,7 +1,7 @@
 import { SQSClient, SendMessageBatchCommand } from '@aws-sdk/client-sqs';
 import { chunk } from 'lodash';
 
-const sqsClient = new SQSClient({});
+const sqsClient = new SQSClient({ region: 'us-east-1' });
 
 export const addToQueue = async ({
   messages,
