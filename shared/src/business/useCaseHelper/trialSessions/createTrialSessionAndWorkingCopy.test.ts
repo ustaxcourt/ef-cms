@@ -1,5 +1,5 @@
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createTrialSessionAndWorkingCopy } from './createTrialSessionAndWorkingCopy';
 
@@ -21,9 +21,10 @@ let trialSessionToAdd;
 
 describe('createTrialSessionAndWorkingCopy', () => {
   beforeEach(() => {
-    trialSessionToAdd = new TrialSession(trialSessionMetadata, {
+    trialSessionToAdd = TrialSessionFactory(
+      trialSessionMetadata,
       applicationContext,
-    });
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -84,20 +85,21 @@ describe('createTrialSessionAndWorkingCopy', () => {
       await expect(
         createTrialSessionAndWorkingCopy({
           applicationContext,
-          trialSessionToAdd: new TrialSession(
+          trialSessionToAdd: TrialSessionFactory(
             {
               trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
             },
-            { applicationContext },
+            applicationContext,
           ),
         }),
       ).rejects.toThrow('The TrialSession entity was invalid');
     });
 
     it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
-      const trialSessionToCreate = new TrialSession(trialSessionToAdd, {
+      const trialSessionToCreate = TrialSessionFactory(
+        trialSessionToAdd,
         applicationContext,
-      });
+      );
       delete trialSessionToCreate.trialSessionId;
 
       await expect(

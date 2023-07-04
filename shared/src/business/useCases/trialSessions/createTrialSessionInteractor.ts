@@ -1,24 +1,17 @@
 import {
+  NewTrialSession,
+  RawNewTrialSession,
+} from '../../entities/trialSessions/NewTrialSession';
+import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  RawTrialSession,
-  TrialSession,
-} from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * createTrialSessionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
- * @returns {object} the created trial session
- */
 export const createTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
-  { trialSession }: { trialSession: RawTrialSession },
+  { trialSession }: { trialSession: RawNewTrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -26,15 +19,16 @@ export const createTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessionToAdd = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  let trialSessionToAdd: OpenTrialSession | NewTrialSession =
+    new NewTrialSession(trialSession, {
+      applicationContext,
+    });
 
   if (
     ['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType) ||
     trialSessionToAdd.isStandaloneRemote()
   ) {
-    trialSessionToAdd.setAsCalendared();
+    trialSessionToAdd = trialSessionToAdd.setAsCalendared();
   }
 
   if (trialSessionToAdd.swingSession && trialSessionToAdd.swingSessionId) {

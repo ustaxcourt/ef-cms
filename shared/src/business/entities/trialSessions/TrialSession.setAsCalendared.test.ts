@@ -1,18 +1,16 @@
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { TrialSession } from './TrialSession';
+import { NewTrialSession } from './NewTrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('setAsCalendared', () => {
     it('should set a valid trial session entity as calendared upon request', () => {
-      const trialSession = new TrialSession(
+      const trialSession = new NewTrialSession(
         {
           ...MOCK_TRIAL_INPERSON,
           isCalendared: false,
         },
-        {
-          applicationContext,
-        },
+        { applicationContext },
       );
 
       trialSession.setAsCalendared();

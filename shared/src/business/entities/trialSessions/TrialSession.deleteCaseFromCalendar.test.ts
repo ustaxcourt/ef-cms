@@ -1,18 +1,16 @@
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { TrialSession } from './TrialSession';
+import { TrialSessionFactory } from './TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('deleteCaseFromCalendar', () => {
     it('should remove the expected case from the order', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [{ docketNumber: '678-90' }, { docketNumber: '123-45' }],
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       trialSession.deleteCaseFromCalendar({
@@ -23,14 +21,12 @@ describe('TrialSession entity', () => {
     });
 
     it('should remove the expected case from the order when there is only one entry', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [{ docketNumber: '123-45' }],
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       trialSession.deleteCaseFromCalendar({

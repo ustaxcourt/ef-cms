@@ -7,52 +7,50 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../EntityConstants';
 import { TrialSession } from './TrialSession';
+import { TrialSessionFactory } from './TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   it('should throw an error when applicationContext is not passed in', () => {
-    expect(() => new TrialSession({}, {} as any)).toThrow();
+    expect(() => TrialSessionFactory({}, {} as any)).toThrow();
   });
 
   describe('isValid', () => {
     it('should be true when a valid trial session is provided', () => {
-      const trialSession = new TrialSession(MOCK_TRIAL_REGULAR, {
+      const trialSession = TrialSessionFactory(
+        MOCK_TRIAL_REGULAR,
         applicationContext,
-      });
+      );
 
       expect(trialSession.isValid()).toBe(true);
     });
 
     it('should be true when a valid trial session with startDate in the past is provided', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           startDate: '2000-03-01T00:00:00.000Z',
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.isValid()).toBe(true);
     });
 
     it('should be false when an invalid sessionType is provided', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionType: 'Something Else',
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.isValid()).toBe(false);
     });
 
     it('should be false when an invalid docketNumber in caseOrder is provided', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           caseOrder: [
@@ -62,9 +60,7 @@ describe('TrialSession entity', () => {
           ],
           sessionType: 'Something Else',
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.isValid()).toBe(false);
@@ -73,7 +69,7 @@ describe('TrialSession entity', () => {
     describe('isCalendared === true', () => {
       describe('proceedingType === "In Person"', () => {
         it('should be valid when isCalendared is true, proceedingType is "In Person", and optional address fields are missing', () => {
-          const trialSession = new TrialSession(
+          const trialSession = TrialSessionFactory(
             {
               ...MOCK_TRIAL_REGULAR,
               address1: undefined,
@@ -83,9 +79,8 @@ describe('TrialSession entity', () => {
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
               state: undefined,
             },
-            {
-              applicationContext,
-            },
+
+            applicationContext,
           );
 
           expect(trialSession.isValid()).toBe(true);
@@ -93,7 +88,7 @@ describe('TrialSession entity', () => {
         });
 
         it('should be valid when isCalendared is true, proceedingType is In Person, and required address fields are defined', () => {
-          const trialSession = new TrialSession(
+          const trialSession = TrialSessionFactory(
             {
               ...MOCK_TRIAL_REGULAR,
               address1: '123 Flavor Ave',
@@ -103,9 +98,8 @@ describe('TrialSession entity', () => {
               proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
               state: 'TN',
             },
-            {
-              applicationContext,
-            },
+
+            applicationContext,
           );
 
           expect(trialSession.isValid()).toBe(true);
@@ -116,7 +110,7 @@ describe('TrialSession entity', () => {
       describe('proceedingType === "Remote"', () => {
         describe(`sessionScope === ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
           it('should be invalid when isCalendared is true and required proceeding information fields are missing', () => {
-            const trialSession = new TrialSession(
+            const trialSession = TrialSessionFactory(
               {
                 ...MOCK_TRIAL_REGULAR,
                 chambersPhoneNumber: undefined,
@@ -127,9 +121,8 @@ describe('TrialSession entity', () => {
                 proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
                 sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
               },
-              {
-                applicationContext,
-              },
+
+              applicationContext,
             );
 
             expect(trialSession.isValid()).toBe(false);
@@ -142,7 +135,7 @@ describe('TrialSession entity', () => {
           });
 
           it('should be valid when isCalendared is true and required proceeding information fields are defined', () => {
-            const trialSession = new TrialSession(
+            const trialSession = TrialSessionFactory(
               {
                 ...MOCK_TRIAL_REGULAR,
                 chambersPhoneNumber: '1111',
@@ -153,9 +146,8 @@ describe('TrialSession entity', () => {
                 proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
                 sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
               },
-              {
-                applicationContext,
-              },
+
+              applicationContext,
             );
 
             expect(trialSession.isValid()).toBe(true);
@@ -163,7 +155,7 @@ describe('TrialSession entity', () => {
           });
 
           it('should be valid when isCalendared is true, sessionType is "Special" and optional proceeding information fields are missing', () => {
-            const trialSession = new TrialSession(
+            const trialSession = TrialSessionFactory(
               {
                 ...MOCK_TRIAL_REGULAR,
                 chambersPhoneNumber: undefined,
@@ -175,9 +167,8 @@ describe('TrialSession entity', () => {
                 sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
                 sessionType: SESSION_TYPES.special,
               },
-              {
-                applicationContext,
-              },
+
+              applicationContext,
             );
 
             expect(trialSession.isValid()).toBe(true);
@@ -185,7 +176,7 @@ describe('TrialSession entity', () => {
           });
 
           it('should be valid when isCalendared is true, sessionType is Motion/Hearing and optional proceeding information fields are missing', () => {
-            const trialSession = new TrialSession(
+            const trialSession = TrialSessionFactory(
               {
                 ...MOCK_TRIAL_REGULAR,
                 chambersPhoneNumber: undefined,
@@ -197,9 +188,8 @@ describe('TrialSession entity', () => {
                 sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
                 sessionType: SESSION_TYPES.motionHearing,
               },
-              {
-                applicationContext,
-              },
+
+              applicationContext,
             );
 
             expect(trialSession.isValid()).toBe(true);
@@ -209,7 +199,7 @@ describe('TrialSession entity', () => {
 
         describe(`sessionScope === ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
           it('should be valid when isCalendared is true and optional proceeding information fields are missing', () => {
-            const trialSession = new TrialSession(
+            const trialSession = TrialSessionFactory(
               {
                 ...MOCK_TRIAL_REGULAR,
                 chambersPhoneNumber: undefined,
@@ -220,9 +210,8 @@ describe('TrialSession entity', () => {
                 proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
                 sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
               },
-              {
-                applicationContext,
-              },
+
+              applicationContext,
             );
 
             expect(trialSession.isValid()).toBe(true);
@@ -234,7 +223,7 @@ describe('TrialSession entity', () => {
 
     describe('proceedingType', () => {
       it('should be invalid when proceedingType is invalid', () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             address1: '123 Flavor Ave',
@@ -244,9 +233,8 @@ describe('TrialSession entity', () => {
             proceedingType: 'NOT A VALID TYPE',
             state: 'TN',
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(false);
@@ -256,7 +244,7 @@ describe('TrialSession entity', () => {
       });
 
       it('should be valid when proceedingType is "Remote"', () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             address1: '123 Flavor Ave',
@@ -266,16 +254,15 @@ describe('TrialSession entity', () => {
             proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
             state: 'TN',
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(true);
       });
 
       it('should be valid when proceedingType is "In Person"', () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             address1: '123 Flavor Ave',
@@ -285,16 +272,15 @@ describe('TrialSession entity', () => {
             proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
             state: 'TN',
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(true);
       });
 
       it('should be invalid when proceedingType is undefined', () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             address1: '123 Flavor Ave',
@@ -304,9 +290,8 @@ describe('TrialSession entity', () => {
             proceedingType: null,
             state: 'TN',
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(false);
@@ -318,30 +303,28 @@ describe('TrialSession entity', () => {
 
     describe('sessionScope', () => {
       it(`should make maxCases optional when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             maxCases: undefined,
             sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(true);
       });
 
       it(`should require maxCases when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             maxCases: undefined,
             sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(false);
@@ -351,30 +334,28 @@ describe('TrialSession entity', () => {
       });
 
       it(`should make trialLocation optional when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
             trialLocation: undefined,
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(true);
       });
 
       it(`should require trialLocation when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
-        const trialSession = new TrialSession(
+        const trialSession = TrialSessionFactory(
           {
             ...MOCK_TRIAL_REGULAR,
             sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
             trialLocation: undefined,
           },
-          {
-            applicationContext,
-          },
+
+          applicationContext,
         );
 
         expect(trialSession.isValid()).toBe(false);
@@ -387,20 +368,16 @@ describe('TrialSession entity', () => {
 
   describe('validate', () => {
     it('should do nothing when the trialSession is valid', () => {
-      const trialSession = new TrialSession(MOCK_TRIAL_REGULAR, {
+      const trialSession = TrialSessionFactory(
+        MOCK_TRIAL_REGULAR,
         applicationContext,
-      });
+      );
 
       expect(() => trialSession.validate()).not.toThrow();
     });
 
     it('should throw an error when the trialSession is invalid', () => {
-      const trialSession = new TrialSession(
-        {},
-        {
-          applicationContext,
-        },
-      );
+      const trialSession = TrialSessionFactory({}, applicationContext);
 
       expect(() => trialSession.validate()).toThrow();
     });
@@ -408,28 +385,24 @@ describe('TrialSession entity', () => {
 
   describe('isStandaloneRemote', () => {
     it(`should return false when the sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.isStandaloneRemote()).toEqual(false);
     });
 
     it(`should return true when the sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.isStandaloneRemote()).toEqual(true);
@@ -438,7 +411,7 @@ describe('TrialSession entity', () => {
 
   describe('proceedingType', () => {
     it(`should be ${TRIAL_SESSION_PROCEEDING_TYPES.remote} when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           address1: '123 Flavor Ave',
@@ -449,9 +422,7 @@ describe('TrialSession entity', () => {
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
           state: 'TN',
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.proceedingType).toBe(
@@ -462,11 +433,9 @@ describe('TrialSession entity', () => {
 
   describe('sessionScope', () => {
     it(`should default to ${TRIAL_SESSION_SCOPE_TYPES.locationBased} when sessionScope is undefined`, () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         { ...MOCK_TRIAL_REGULAR, sessionScope: undefined },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.sessionScope).toEqual(
@@ -477,15 +446,13 @@ describe('TrialSession entity', () => {
 
   describe('startTime', () => {
     it(`should default to "10:00" when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased} and startTime is not provided`, () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           startTime: undefined,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.startTime).toEqual('10:00');
@@ -494,15 +461,13 @@ describe('TrialSession entity', () => {
     it(`should be set to the provided value when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
       const mockStartTime = '12:00';
 
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           startTime: mockStartTime,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.startTime).toEqual(mockStartTime);
@@ -511,15 +476,13 @@ describe('TrialSession entity', () => {
     it(`should be set to "13:00" (1:00PM) when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
       const mockStartTime = '12:00';
 
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
           startTime: mockStartTime,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.startTime).toEqual('13:00');
@@ -528,15 +491,13 @@ describe('TrialSession entity', () => {
 
   describe('trialLocation', () => {
     it(`should be set to ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote} when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
           trialLocation: undefined,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.trialLocation).toBe(
@@ -547,16 +508,14 @@ describe('TrialSession entity', () => {
     it(`should be set to the provided trialLocation when sessionScope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
       const mockTrialLocation = 'Asgard';
 
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           trialLocation: mockTrialLocation,
         },
         // eslint-disable-next-line max-lines
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.trialLocation).toBe(mockTrialLocation);
@@ -572,14 +531,12 @@ describe('TrialSession entity', () => {
         ['days']: 34,
       });
 
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           estimatedEndDate: incorrectEstimatedEndDate,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(() => trialSession.validate()).toThrow();
@@ -590,14 +547,12 @@ describe('TrialSession entity', () => {
     });
 
     it('should be valid when estimatedEndDate is greater than or equal to the startDate', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           estimatedEndDate: MOCK_TRIAL_REGULAR.startDate,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.isValid()).toBe(true);
@@ -606,13 +561,11 @@ describe('TrialSession entity', () => {
 
   describe('dismissedAlertForNOTT', () => {
     it('should have a default value of false', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       expect(trialSession.dismissedAlertForNOTT).toBe(false);

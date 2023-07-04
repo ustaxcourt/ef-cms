@@ -1,10 +1,10 @@
+import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('./Case');
 const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('removeFromTrial', () => {
   it('removes the case from trial, unsetting trial details and setting status to general docket ready for trial', () => {
@@ -16,7 +16,7 @@ describe('removeFromTrial', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
+    const trialSession = TrialSessionFactory(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -27,7 +27,7 @@ describe('removeFromTrial', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      { applicationContext },
+      applicationContext,
     );
     const user = 'Petitions Clerk';
 
@@ -68,7 +68,7 @@ describe('removeFromTrial', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
+    const trialSession = TrialSessionFactory(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -79,7 +79,7 @@ describe('removeFromTrial', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      { applicationContext },
+      applicationContext,
     );
     caseToUpdate.setAsCalendared(trialSession);
 
@@ -105,7 +105,7 @@ describe('removeFromTrial', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
+    const trialSession = TrialSessionFactory(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -116,7 +116,7 @@ describe('removeFromTrial', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      { applicationContext },
+      applicationContext,
     );
     caseToUpdate.setAsCalendared(trialSession);
 

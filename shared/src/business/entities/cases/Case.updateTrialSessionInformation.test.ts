@@ -1,10 +1,10 @@
+import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('./Case');
 const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('../EntityConstants');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('updateTrialSessionInformation', () => {
   it('should not change the status of the case', () => {
@@ -47,7 +47,7 @@ describe('updateTrialSessionInformation', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
+    const trialSession = TrialSessionFactory(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -58,7 +58,7 @@ describe('updateTrialSessionInformation', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      { applicationContext },
+      applicationContext,
     );
     myCase.updateTrialSessionInformation(trialSession);
 
@@ -78,7 +78,7 @@ describe('updateTrialSessionInformation', () => {
         applicationContext,
       },
     );
-    const trialSession = new TrialSession(
+    const trialSession = TrialSessionFactory(
       {
         isCalendared: false,
         judge: { name: 'Judge Buch' },
@@ -89,7 +89,7 @@ describe('updateTrialSessionInformation', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      { applicationContext },
+      applicationContext,
     );
     myCase.setAsCalendared(trialSession);
 

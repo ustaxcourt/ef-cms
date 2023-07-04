@@ -1,13 +1,14 @@
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { TrialSession } from './TrialSession';
+import { TrialSessionFactory } from './TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('generateSortKeyPrefix', () => {
     it('should generate correct sort key prefix for a regular trial session', () => {
-      const trialSession = new TrialSession(MOCK_TRIAL_REGULAR, {
+      const trialSession = TrialSessionFactory(
+        MOCK_TRIAL_REGULAR,
         applicationContext,
-      });
+      );
 
       expect(trialSession.generateSortKeyPrefix()).toEqual(
         'BirminghamAlabama-R',
@@ -15,14 +16,13 @@ describe('TrialSession entity', () => {
     });
 
     it('should generate correct sort key prefix for a small trial session', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionType: 'Small',
         },
-        {
-          applicationContext,
-        },
+
+        applicationContext,
       );
 
       expect(trialSession.generateSortKeyPrefix()).toEqual(
@@ -31,14 +31,13 @@ describe('TrialSession entity', () => {
     });
 
     it('should generate correct sort key prefix for a hybrid trial session', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_REGULAR,
           sessionType: 'Hybrid',
         },
-        {
-          applicationContext,
-        },
+
+        applicationContext,
       );
 
       expect(trialSession.generateSortKeyPrefix()).toEqual(

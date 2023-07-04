@@ -1,19 +1,17 @@
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { TrialSession } from './TrialSession';
+import { TrialSessionFactory } from './TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('addCaseToCalendar', () => {
     it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [],
           sessionType: 'Hybrid',
         },
-        {
-          applicationContext,
-        },
+        applicationContext,
       );
 
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });
@@ -22,15 +20,14 @@ describe('TrialSession entity', () => {
     });
 
     it('should add case to calendar once', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [],
           sessionType: 'Hybrid',
         },
-        {
-          applicationContext,
-        },
+
+        applicationContext,
       );
 
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });

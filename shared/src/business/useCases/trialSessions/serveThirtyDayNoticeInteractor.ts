@@ -4,11 +4,11 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
 export type ServeThirtyDayNoticeRequest = {
@@ -48,9 +48,7 @@ export const serveThirtyDayNoticeInteractor = async (
     return;
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
-    applicationContext,
-  });
+  const trialSessionEntity = new OpenTrialSession(trialSession);
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();

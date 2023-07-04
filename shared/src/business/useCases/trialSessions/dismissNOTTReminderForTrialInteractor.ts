@@ -1,16 +1,10 @@
+import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * dismissNOTTReminderForTrialInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSessionId the trial session ID
- */
 export const dismissNOTTReminderForTrialInteractor = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
@@ -28,12 +22,10 @@ export const dismissNOTTReminderForTrialInteractor = async (
       trialSessionId,
     });
 
-  const updatedTrialSessionEntity: TrialSession = new TrialSession(
-    { ...currentTrialSession, dismissedAlertForNOTT: true },
-    {
-      applicationContext,
-    },
-  );
+  const updatedTrialSessionEntity = new OpenTrialSession({
+    ...currentTrialSession,
+    dismissedAlertForNOTT: true, // todo: add method for this
+  });
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

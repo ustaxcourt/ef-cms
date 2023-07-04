@@ -3,6 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -34,9 +35,10 @@ export const associateSwingTrialSessions = async (
       trialSessionId: swingSessionId,
     });
 
-  const swingSessionEntity = new TrialSession(swingTrialSession, {
+  const swingSessionEntity = TrialSessionFactory(
+    swingTrialSession,
     applicationContext,
-  });
+  );
 
   trialSessionEntity.setAsSwingSession(swingSessionId);
   swingSessionEntity.setAsSwingSession(trialSessionEntity.trialSessionId);
