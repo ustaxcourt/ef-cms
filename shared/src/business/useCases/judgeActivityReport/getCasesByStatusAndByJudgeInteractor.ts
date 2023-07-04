@@ -109,7 +109,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const formattedCaseRecords = rawCaseRecords.map(caseRecord => ({
     caseStatusHistory: caseRecord.caseStatusHistory,
-    consolidatedCases: [],
     docketEntries: caseRecord.docketEntries,
     docketNumber: caseRecord.docketNumber,
     leadDocketNumber: caseRecord.leadDocketNumber,
