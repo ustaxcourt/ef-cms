@@ -24,9 +24,9 @@ export const confirmInitiateServiceModalHelper = (
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
 
-  let { eventCode } = form;
+  let { eventCode, isPaper } = form;
   if (!eventCode) {
-    ({ eventCode } = formattedCaseDetail.docketEntries.find(
+    ({ eventCode, isPaper } = formattedCaseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
     ));
   }
@@ -34,7 +34,8 @@ export const confirmInitiateServiceModalHelper = (
   let showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
-    !isOnMessageDetailPage;
+    !isOnMessageDetailPage &&
+    isPaper;
 
   if (!isCourtIssued(eventCode)) {
     const { areMultiDocketablePaperFilingsEnabled } = get(

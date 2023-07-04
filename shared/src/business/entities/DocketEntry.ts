@@ -428,6 +428,7 @@ export class DocketEntry extends JoiValidationEntity {
     const isPractitionerAssociationDocumentType =
       PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(this.documentType);
 
+    // TODO: refactor to use SIMULTANEOUS_DOCUMENT_EVENT_CODES instead
     // if fully concatenated document title includes the word Simultaneous, do not auto-serve
     const isSimultaneous = (this.documentTitle || this.documentType).includes(
       'Simultaneous',
