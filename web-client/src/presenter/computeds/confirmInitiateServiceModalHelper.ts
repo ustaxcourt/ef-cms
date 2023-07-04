@@ -38,8 +38,7 @@ export const confirmInitiateServiceModalHelper = (
   let showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     !NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode) &&
-    !isOnMessageDetailPage &&
-    isPaper;
+    !isOnMessageDetailPage;
 
   if (!isCourtIssued(eventCode)) {
     const { areMultiDocketablePaperFilingsEnabled } = get(
