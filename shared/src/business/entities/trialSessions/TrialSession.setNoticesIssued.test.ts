@@ -1,11 +1,11 @@
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { TrialSession } from './TrialSession';
+import { TrialSessionFactory } from './TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('setNoticesIssued', () => {
     it('should set the noticeIssuedDate on the trial session', () => {
-      const trialSession = new TrialSession(
+      const trialSession = TrialSessionFactory(
         {
           ...MOCK_TRIAL_INPERSON,
           noticeIssuedDate: undefined,

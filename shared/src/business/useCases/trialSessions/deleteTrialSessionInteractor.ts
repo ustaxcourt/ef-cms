@@ -1,9 +1,9 @@
 import { Case } from '../../entities/cases/Case';
+import { NewTrialSession } from '../../entities/trialSessions/NewTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -35,7 +35,7 @@ export const deleteTrialSessionInteractor = async (
     throw new Error('trial session not found');
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
+  const trialSessionEntity = new NewTrialSession(trialSession, {
     applicationContext,
   });
 

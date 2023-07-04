@@ -2,7 +2,7 @@ import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
 } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity, eventCode }) => {
@@ -32,9 +32,10 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
           trialSessionId: caseEntity.trialSessionId,
         });
 
-      const trialSessionEntity = new TrialSession(trialSession, {
+      const trialSessionEntity = TrialSessionFactory(
+        trialSession,
         applicationContext,
-      });
+      );
 
       if (trialSessionEntity.isCalendared) {
         trialSessionEntity.removeCaseFromCalendar({

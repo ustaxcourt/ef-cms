@@ -4,7 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { TrialSession } from '../entities/trialSessions/TrialSession';
+import { TrialSessionFactory } from '../entities/trialSessions/TrialSessionFactory';
 import { UnauthorizedError } from '../../errors/errors';
 
 /**
@@ -72,9 +72,10 @@ export const updateCaseContextInteractor = async (
           trialSessionId: oldCase.trialSessionId,
         });
 
-      const trialSessionEntity = new TrialSession(trialSession, {
+      const trialSessionEntity = TrialSessionFactory(
+        trialSession,
         applicationContext,
-      });
+      );
 
       trialSessionEntity.removeCaseFromCalendar({
         disposition,

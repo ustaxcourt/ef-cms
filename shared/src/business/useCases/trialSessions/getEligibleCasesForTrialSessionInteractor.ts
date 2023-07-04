@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -43,9 +43,10 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       });
   }
 
-  const trialSessionEntity = new TrialSession(trialSession, {
+  const trialSessionEntity = TrialSessionFactory(
+    trialSession,
     applicationContext,
-  });
+  );
 
   trialSessionEntity.validate();
 

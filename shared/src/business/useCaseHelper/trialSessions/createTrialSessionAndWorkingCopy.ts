@@ -1,14 +1,6 @@
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 
-/**
- * createTrialSessionAndWorkingCopy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.trialSessionToAdd the trial session data
- * @returns {object} the created trial session
- */
 export const createTrialSessionAndWorkingCopy = async ({
   applicationContext,
   trialSessionToAdd,
@@ -52,7 +44,7 @@ export const createTrialSessionAndWorkingCopy = async ({
       });
   }
 
-  return new TrialSession(createdTrialSession, { applicationContext })
+  return TrialSessionFactory(createdTrialSession, applicationContext)
     .validate()
     .toRawObject();
 };

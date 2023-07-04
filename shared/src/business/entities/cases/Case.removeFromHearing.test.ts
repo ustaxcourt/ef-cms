@@ -1,13 +1,13 @@
+import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const { Case } = require('./Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('removeFromHearing', () => {
   it('removes the hearing from the case', () => {
-    const trialSessionHearing = new TrialSession(
+    const trialSessionHearing = TrialSessionFactory(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -18,7 +18,7 @@ describe('removeFromHearing', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      { applicationContext },
+      applicationContext,
     );
     const caseToUpdate = new Case(
       {
