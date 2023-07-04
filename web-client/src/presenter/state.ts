@@ -20,6 +20,7 @@ import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -70,6 +71,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialJudgeActivityReportState } from './judgeActivityReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -150,6 +152,7 @@ export const computeds = {
   caseInformationHelper,
   caseInventoryReportHelper,
   caseSearchBoxHelper,
+  caseSearchByNameHelper,
   caseSearchNoMatchesHelper,
   caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
@@ -251,15 +254,8 @@ export const computeds = {
   workQueueHelper,
 };
 
-type TCaseDeadlineReport = {
-  caseDeadlines: RawCaseDeadline[];
-  judgeFilter: string;
-  totalCount: number;
-  page: number;
-};
-
 export const baseState = {
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   allJudges: [],
   archiveDraftDocument: {
@@ -270,7 +266,12 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {} as TCaseDeadlineReport,
+  caseDeadlineReport: {} as {
+    caseDeadlines: RawCaseDeadline[];
+    judgeFilter: string;
+    totalCount: number;
+    page: number;
+  },
   caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
@@ -306,7 +307,6 @@ export const baseState = {
     },
   },
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
 
   docketRecordIndex: 0,
@@ -330,8 +330,10 @@ export const baseState = {
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
+  // needs its own object because it's present when other forms are on screen
+  judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeActivityReportData: {},
-  judges: [],
+  judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
