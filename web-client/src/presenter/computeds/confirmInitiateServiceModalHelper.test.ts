@@ -376,104 +376,146 @@ describe('confirmInitiateServiceModalHelper', () => {
 
     beforeEach(() => {
       baseState = cloneDeep({
-        state: {
-          featureFlagHelper: {
-            areMultiDocketablePaperFilingsEnabled: true,
-          },
+        featureFlagHelper: {
+          areMultiDocketablePaperFilingsEnabled: true,
+        },
+        form: {
+          eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+        },
+        formattedCaseDetail: MOCK_CASE,
+        modal: {
           form: {
-            eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
-            isPaper: true,
-          },
-          formattedCaseDetail: MOCK_CASE,
-          modal: {
-            form: {
-              consolidatedCasesToMultiDocketOn: [],
-            },
+            consolidatedCasesToMultiDocketOn: [],
           },
         },
       });
     });
 
     it('should be false when the docket entry is being filed on a consolidated case that is NOT the lead case', () => {
-      baseState.state.formattedCaseDetail.isLeadCase = false;
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            formattedCaseDetail: {
+              isLeadCase: false,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
     it('should be false when the the docket entry is NOT a document type that can be multi-docketed', () => {
-      baseState.state.form.eventCode = NON_MULTI_DOCKETABLE_EVENT_CODES[0];
-      baseState.state.formattedCaseDetail.isLeadCase = true;
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            form: {
+              eventCode: NON_MULTI_DOCKETABLE_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
     it('should be false when the docket entry is being served from a message', () => {
-      baseState.state.currentPage = 'MessageDetail';
-      baseState.state.formattedCaseDetail.isLeadCase = true;
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            currentPage: 'MessageDetail',
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
     it('should be false when the docket entry is a paper filing and the feature flag is off', () => {
-      baseState.state.formattedCaseDetail.isLeadCase = true;
-      baseState.state.featureFlagHelper.areMultiDocketablePaperFilingsEnabled =
-        false;
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            featureFlagHelper: {
+              areMultiDocketablePaperFilingsEnabled: false,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(false);
     });
 
     it('should be true when the docket entry is being filed on a lead case, and the docket entry is a document type that can be multi-docketed', () => {
-      baseState.state.formattedCaseDetail.isLeadCase = true;
-      baseState.state.form.eventCode = MULTI_DOCKET_FILING_EVENT_CODES[0];
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            form: {
+              eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(true);
     });
 
     it('should be true when the docket entry is being filed on a lead case, the docket entry is a paper filed, simultaneous document', () => {
-      baseState.state.formattedCaseDetail.isLeadCase = true;
-      baseState.state.form.eventCode = SIMULTANEOUS_DOCUMENT_EVENT_CODES[0];
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            form: {
+              eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+              isPaper: true,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(true);
     });
 
     it('should be false when the docket entry is being filed on a lead case, the docket entry is a simultaneous document that is NOT paper filed', () => {
-      baseState.state.formattedCaseDetail.isLeadCase = true;
-      baseState.state.form.eventCode = SIMULTANEOUS_DOCUMENT_EVENT_CODES[0];
-      baseState.state.form.isPaper = false;
-
       const { showConsolidatedCasesForService } = runCompute(
         confirmInitiateServiceModalHelper,
-        baseState,
+        {
+          state: {
+            ...baseState,
+            form: {
+              eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+              isPaper: false,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
       );
 
       expect(showConsolidatedCasesForService).toEqual(false);
@@ -483,6 +525,7 @@ describe('confirmInitiateServiceModalHelper', () => {
   describe('showPaperAlert', () => {
     let baseState;
     beforeEach(() => {
+      //todo: refactor to be more like the baseState above
       baseState = cloneDeep({
         state: {
           form: {
