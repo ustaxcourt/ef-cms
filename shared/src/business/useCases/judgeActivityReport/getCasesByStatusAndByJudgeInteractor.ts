@@ -1,5 +1,4 @@
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
@@ -108,11 +107,19 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
+  const formattedCaseRecords = rawCaseRecords.map(caseRecord => ({
+    caseStatusHistory: caseRecord.caseStatusHistory,
+    consolidatedCases: [],
+    docketEntries: caseRecord.docketEntries,
+    docketNumber: caseRecord.docketNumber,
+    leadDocketNumber: caseRecord.leadDocketNumber,
+  }));
+
   // We need to filter out member cases returned from elasticsearch so we can get an accurate
   // consolidated cases group count even when the case status of a member case does not match
   // the lead case status.
   const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
-    rawCaseRecords
+    formattedCaseRecords
       .filter(
         rawCaseRecord =>
           !rawCaseRecord.leadDocketNumber ||
@@ -150,9 +157,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       : lastDocketNumberForCavAndSubmittedCasesSearch;
 
   return {
-    cases: Case.validateRawCollection(filteredCaseRecords, {
-      applicationContext,
-    }),
+    cases: filteredCaseRecords,
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
