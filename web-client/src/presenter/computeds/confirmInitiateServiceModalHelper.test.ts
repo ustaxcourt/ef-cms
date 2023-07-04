@@ -8,6 +8,7 @@ import {
   NON_MULTI_DOCKETABLE_EVENT_CODES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { cloneDeep } from 'lodash';
@@ -381,6 +382,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           },
           form: {
             eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+            isPaper: true,
           },
           formattedCaseDetail: MOCK_CASE,
           modal: {
@@ -392,7 +394,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
     });
 
-    it('should be false when the docket entry is being filed on a consolidated case that is NOT the  lead case', () => {
+    it('should be false when the docket entry is being filed on a consolidated case that is NOT the lead case', () => {
       baseState.state.formattedCaseDetail.isLeadCase = false;
 
       const { showConsolidatedCasesForService } = runCompute(
@@ -450,6 +452,31 @@ describe('confirmInitiateServiceModalHelper', () => {
       );
 
       expect(showConsolidatedCasesForService).toEqual(true);
+    });
+
+    it('should be true when the docket entry is being filed on a lead case, the docket entry is a paper filed, simultaneous document', () => {
+      baseState.state.formattedCaseDetail.isLeadCase = true;
+      baseState.state.form.eventCode = SIMULTANEOUS_DOCUMENT_EVENT_CODES[0];
+
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
+        baseState,
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(true);
+    });
+
+    it('should be false when the docket entry is being filed on a lead case, the docket entry is a simultaneous document that is NOT paper filed', () => {
+      baseState.state.formattedCaseDetail.isLeadCase = true;
+      baseState.state.form.eventCode = SIMULTANEOUS_DOCUMENT_EVENT_CODES[0];
+      baseState.state.form.isPaper = false;
+
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
+        baseState,
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
     });
   });
 
