@@ -1,5 +1,13 @@
-import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  MAX_ELASTICSEARCH_PAGINATION,
+} from '../../entities/EntityConstants';
+import { JudgeActivityReportCasesClosedRequest } from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} from '../../utilities/DateHandler';
 import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
@@ -22,10 +30,28 @@ describe('getCasesClosedByJudgeInteractor', () => {
     },
   ];
 
-  const mockValidRequest = {
-    endDate: '03/21/2020',
-    judgeName: judgeUser.name,
-    startDate: '02/12/2020',
+  const mockEndDate = '03/21/2020';
+  const mockStartDate = '02/12/2020';
+
+  let [month, day, year] = mockStartDate.split('/');
+  const calculatedStartDate = createStartOfDayISO({
+    day,
+    month,
+    year,
+  });
+
+  [month, day, year] = mockEndDate.split('/');
+  const calculatedEndDate = createEndOfDayISO({
+    day,
+    month,
+    year,
+  });
+
+  const mockValidRequest: JudgeActivityReportCasesClosedRequest = {
+    endDate: calculatedEndDate,
+    judges: [judgeUser.name],
+    pageSize: MAX_ELASTICSEARCH_PAGINATION,
+    startDate: calculatedStartDate,
   };
 
   beforeEach(() => {
@@ -52,17 +78,28 @@ describe('getCasesClosedByJudgeInteractor', () => {
     await expect(
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
+        pageSize: 0,
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
   });
 
-  it('should return the cases closed organized by status', async () => {
+  it('should return the cases closed organized by status for selected judges', async () => {
     const result = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
+
+    expect(
+      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
+        .calls[0][0],
+    ).toMatchObject({
+      endDate: calculatedEndDate,
+      judges: [judgeUser.name],
+      pageSize: MAX_ELASTICSEARCH_PAGINATION,
+      startDate: calculatedStartDate,
+    });
 
     expect(result).toEqual({
       [CASE_STATUS_TYPES.closed]: 2,
