@@ -525,37 +525,44 @@ describe('confirmInitiateServiceModalHelper', () => {
   describe('showPaperAlert', () => {
     let baseState;
     beforeEach(() => {
-      //todo: refactor to be more like the baseState above
       baseState = cloneDeep({
-        state: {
-          form: {
-            eventCode: mockEventCode,
-          },
-          formattedCaseDetail: {
-            ...MOCK_CASE,
-            petitioners: [],
-          },
-          modal: {},
+        form: {
+          eventCode: mockEventCode,
         },
+        formattedCaseDetail: {
+          ...MOCK_CASE,
+          petitioners: [],
+        },
+        modal: {},
       });
     });
 
     it('should be true when there is at least one party being served that has paper service', () => {
-      baseState.state.formattedCaseDetail.petitioners = [
-        { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER },
-      ];
-
-      const result = runCompute(confirmInitiateServiceModalHelper, baseState);
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          ...baseState,
+          formattedCaseDetail: {
+            petitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER },
+            ],
+          },
+        },
+      });
 
       expect(result.showPaperAlert).toEqual(true);
     });
 
     it('should be false when none of the parties being served have paper service', () => {
-      baseState.state.formattedCaseDetail.petitioners = [
-        { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
-      ];
-
-      const result = runCompute(confirmInitiateServiceModalHelper, baseState);
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          ...baseState,
+          formattedCaseDetail: {
+            petitioners: [
+              { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
+            ],
+          },
+        },
+      });
 
       expect(result.showPaperAlert).toEqual(false);
     });
