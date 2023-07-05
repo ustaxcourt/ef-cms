@@ -1,4 +1,7 @@
-import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  PROCEDURE_TYPES_MAP,
+  SESSION_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
 import { loginAs, setupTest, waitForCondition } from './helpers';
@@ -13,7 +16,7 @@ import { withAppContextDecorator } from '../src/withAppContext';
 describe('Serve NOTTs from reminder on calendared trial session detail page', () => {
   const cerebralTest = setupTest();
 
-  const trialLocation = `Seattle, Washington, ${Date.now()}`;
+  const trialLocation = 'Los Angeles, California';
 
   const currentDate = prepareDateFromString().plus({
     ['days']: 30,
@@ -51,6 +54,7 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCase(cerebralTest, {
+      procedureType: PROCEDURE_TYPES_MAP.regular,
       shouldServe: true,
       trialLocation,
     });
@@ -67,11 +71,7 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         docketNumber: docketNumberToAdd,
       });
 
-      console.log('docketNumberToAdd: ', docketNumberToAdd);
-
       await cerebralTest.runSequence('openAddToTrialModalSequence');
-
-      console.log(docketNumberToAdd, cerebralTest.trialSessionId);
       await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'trialSessionId',
         value: cerebralTest.trialSessionId,
@@ -145,6 +145,19 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
       expect(trialSessionDetailsHelperComputed.nottReminderAction).toBe(
         'Yes, Dismiss',
       );
+    });
+
+    it('should verify that the NOTT has been added to the docket record', async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      const { docketEntries } = cerebralTest.getState('caseDetail');
+      const nottDocketEntry = docketEntries.find(
+        doc => doc.eventCode === 'NOTT',
+      );
+
+      expect(nottDocketEntry).toBeDefined();
     });
   });
 });
