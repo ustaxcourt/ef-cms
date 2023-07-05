@@ -49,7 +49,7 @@ export type OrdersAndOpinionTypes = {
   eventCode: string;
 };
 
-export type consolidatedCasesGroupCountMapResponseType = {
+export type ConsolidatedCasesGroupCountMapResponseType = {
   [leadDocketNumber: string]: number;
 };
 
@@ -58,7 +58,7 @@ export type JudgeActivityReportState = {
   judgeActivityReportData: {
     trialSessions?: TrialSessionTypes;
     casesClosedByJudge?: CasesClosedType;
-    consolidatedCasesGroupCountMap?: consolidatedCasesGroupCountMapResponseType;
+    consolidatedCasesGroupCountMap?: ConsolidatedCasesGroupCountMapResponseType;
     opinions?: OrdersAndOpinionTypes[];
     orders?: OrdersAndOpinionTypes[];
     submittedAndCavCasesByJudge?: RawCase[];
