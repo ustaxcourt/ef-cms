@@ -11,7 +11,8 @@ export const setSignatureNameForPdfSigningAction = async ({
   store,
 }: ActionProps) => {
   const user = applicationContext.getCurrentUser();
-  const { CHIEF_JUDGE } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
+    applicationContext.getConstants();
 
   let nameForPdfSigning;
   let nameForSigningLine2;
@@ -25,11 +26,16 @@ export const setSignatureNameForPdfSigningAction = async ({
     nameForPdfSigning = judgeUser.judgeFullName;
     nameForSigningLine2 = judgeUser.judgeTitle;
   } else {
-    nameForPdfSigning = await applicationContext
+    const featureFlags = await applicationContext
       .getUseCases()
-      .getChiefJudgeNameForSigningInteractor(applicationContext);
+      .getAllFeatureFlagsInteractor(applicationContext);
+
+    nameForPdfSigning =
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key];
+
     nameForSigningLine2 = CHIEF_JUDGE;
   }
+
   store.set(state.pdfForSigning.nameForSigning, nameForPdfSigning);
   store.set(state.pdfForSigning.nameForSigningLine2, nameForSigningLine2);
 };
