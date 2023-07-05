@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { flatten, orderBy, values } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -35,8 +37,6 @@ export const getSortFunction = searchText => {
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const internalTypesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

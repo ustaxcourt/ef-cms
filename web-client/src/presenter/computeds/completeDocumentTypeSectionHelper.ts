@@ -31,7 +31,7 @@ export const completeDocumentTypeSectionHelper = (
       docType =>
         !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
           docType.eventCode,
-        ),
+        ) && docType.eventCode !== 'DSC',
     );
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(
