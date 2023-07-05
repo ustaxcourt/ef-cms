@@ -157,7 +157,9 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
         doc => doc.eventCode === 'NOTT',
       );
 
-      expect(nottDocketEntry).toBeDefined();
+      expect(nottDocketEntry.documentTitle).toBe(
+        `30 Day Notice of Trial on ${overrides.trialMonth}-${overrides.trialDay}-${overrides.trialYear} at ${trialLocation}`,
+      );
     });
   });
 });
