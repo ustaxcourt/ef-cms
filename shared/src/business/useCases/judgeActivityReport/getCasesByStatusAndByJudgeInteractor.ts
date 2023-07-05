@@ -1,11 +1,27 @@
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstants';
+import {
+  ConsolidatedCasesGroupCountMapResponseType,
+  JudgeActivityReportCavAndSubmittedCasesRequest,
+} from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+
+export type CavAndSubmittedFilteredCasesType = {
+  caseStatusHistory: {
+    date: string;
+    changedBy: string;
+    updatedCaseStatus: string;
+  }[];
+  leadDocketNumber: string;
+  docketNumber: string;
+  caseCaption: string;
+  status: string;
+  petitioners: TPetitioner[];
+};
 
 const getConsolidatedCaseGroupCountMap = (
   filteredCaseRecords,
@@ -50,20 +66,12 @@ const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
   return caseRecordsToReturn;
 };
 
-/**
- * getCasesByStatusAndByJudgeInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judgeName the name of the judge
- * @param {array} providers.statuses statuses of cases for judge activity
- * @returns {object} errors (null if no errors)
- */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
-  cases: RawCase[];
-  consolidatedCasesGroupCountMap: any;
+  cases: CavAndSubmittedFilteredCasesType[];
+  consolidatedCasesGroupCountMap: ConsolidatedCasesGroupCountMapResponseType;
   lastDocketNumberForCavAndSubmittedCasesSearch: number;
 }> => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -107,18 +115,11 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
-  const formattedCaseRecords = rawCaseRecords.map(caseRecord => ({
-    caseStatusHistory: caseRecord.caseStatusHistory,
-    docketEntries: caseRecord.docketEntries,
-    docketNumber: caseRecord.docketNumber,
-    leadDocketNumber: caseRecord.leadDocketNumber,
-  }));
-
   // We need to filter out member cases returned from elasticsearch so we can get an accurate
   // consolidated cases group count even when the case status of a member case does not match
   // the lead case status.
   const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
-    formattedCaseRecords
+    rawCaseRecords
       .filter(
         rawCaseRecord =>
           !rawCaseRecord.leadDocketNumber ||
@@ -150,16 +151,26 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
-  const resetPaginationInfo =
-    filteredCaseRecords.length === 0
-      ? 0
-      : lastDocketNumberForCavAndSubmittedCasesSearch;
+  const formattedCaseRecords: CavAndSubmittedFilteredCasesType[] =
+    filteredCaseRecords.map(caseRecord => ({
+      caseCaption: caseRecord.caseCaption,
+      caseStatusHistory: caseRecord.caseStatusHistory || [],
+      docketNumber: caseRecord.docketNumber,
+      docketNumberWithSuffix: caseRecord.docketNumberWithSuffix,
+      leadDocketNumber: caseRecord.leadDocketNumber,
+      petitioners: caseRecord.petitioners,
+      status: caseRecord.status,
+    }));
+
+  const paginationInfo = filteredCaseRecords.length
+    ? lastDocketNumberForCavAndSubmittedCasesSearch
+    : 0;
 
   return {
-    cases: filteredCaseRecords,
+    cases: formattedCaseRecords,
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
-    lastDocketNumberForCavAndSubmittedCasesSearch: resetPaginationInfo,
+    lastDocketNumberForCavAndSubmittedCasesSearch: paginationInfo,
   };
 };
