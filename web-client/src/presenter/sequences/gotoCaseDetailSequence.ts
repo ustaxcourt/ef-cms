@@ -8,7 +8,6 @@ import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
@@ -26,7 +25,6 @@ import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTa
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
@@ -43,16 +41,6 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   setDocketEntryIdAction,
   showModalFromQueryAction,
   parallel([
-    [
-      getFeatureFlagFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
-      ),
-      setFeatureFlagFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
-      ),
-    ],
     [getTrialSessionsOnCaseAction, setTrialSessionsAction],
     [getJudgeForCurrentUserAction, setJudgeUserAction],
     [fetchUserNotificationsSequence],
@@ -94,22 +82,6 @@ export const gotoCaseDetailSequence = [
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
-  getFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-  ),
-  setFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-  ),
-  getFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key,
-  ),
-  setFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key,
-  ),
   getCaseAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,
