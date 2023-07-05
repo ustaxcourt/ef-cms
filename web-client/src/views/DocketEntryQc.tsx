@@ -72,7 +72,7 @@ export const DocketEntryQc = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-5">
-                <PrimaryDocumentForm />
+                <PrimaryDocumentForm useLegacyDocumentTypes={false} />
 
                 <div className="margin-top-5">
                   <Button
