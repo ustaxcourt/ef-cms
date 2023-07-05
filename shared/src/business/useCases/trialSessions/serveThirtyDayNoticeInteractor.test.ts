@@ -8,6 +8,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
+import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveThirtyDayNoticeInteractor', () => {
   let trialSession: RawTrialSession;
@@ -19,6 +20,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
     };
 
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mockResolvedValue(null);
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
@@ -45,14 +50,22 @@ describe('serveThirtyDayNoticeInteractor', () => {
     let mockCase: RawCase;
 
     beforeEach(() => {
+      mockCase = cloneDeep(MOCK_CASE);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockResolvedValue(trialSession);
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue(mockCase);
+
       applicationContext
         .getUseCaseHelpers()
         .saveFileAndGenerateUrl.mockResolvedValue({
           fileId: '',
           url: mockPdfUrl,
         });
-
-      mockCase = cloneDeep(MOCK_CASE);
     });
 
     it('should serve a 30 day notice of trial(NOTT) on any case in a trial session with at least 1 pro se petitioner', async () => {
@@ -72,9 +85,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
           caseWithRepresentedPetitioner,
         )
         .mockResolvedValueOnce(caseWithProSePetitioner);
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockResolvedValue(trialSession);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
         trialSessionId: trialSession.trialSessionId!,
@@ -131,12 +141,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
         'paper_service_updated',
         'thirty_day_notice_paper_service_complete',
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValue(mockCase);
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockResolvedValue(trialSession);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
         trialSessionId: trialSession.trialSessionId!,
@@ -157,12 +161,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValue(mockCase);
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockResolvedValue(trialSession);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
         trialSessionId: trialSession.trialSessionId!,
@@ -197,12 +195,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockResolvedValue(mockCase);
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockResolvedValue(trialSession);
 
       await serveThirtyDayNoticeInteractor(applicationContext, {
         trialSessionId: trialSession.trialSessionId!,
@@ -218,6 +210,40 @@ describe('serveThirtyDayNoticeInteractor', () => {
         },
         userId: petitionsClerkUser.userId,
       });
+    });
+
+    it('should append the clinic letter to the NOTT when the party on the case is not represented and trial location provides a clinic letter', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValue(true);
+      applicationContext
+        .getPersistenceGateway()
+        .getDocument.mockResolvedValue(testPdfDoc);
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalled();
+    });
+
+    it('should not append the clinic letter to the NOTT when the party on the case is not represented and trial location does not provide a clinic letter', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockResolvedValue(false);
+      applicationContext
+        .getPersistenceGateway()
+        .getDocument.mockResolvedValue(testPdfDoc);
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).not.toHaveBeenCalled();
     });
   });
 });
