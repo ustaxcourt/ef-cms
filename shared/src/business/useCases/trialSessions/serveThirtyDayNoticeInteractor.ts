@@ -10,6 +10,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
 
 export type ServeThirtyDayNoticeRequest = {
   trialSessionId: string;
@@ -79,6 +80,30 @@ export const serveThirtyDayNoticeInteractor = async (
 
     const caseEntity = new Case(rawCase, { applicationContext });
 
+    let clinicLetter;
+    const clinicLetterKey = getClinicLetterKey({
+      procedureType: caseEntity.procedureType,
+      trialLocation: trialSession.trialLocation,
+    });
+
+    const doesClinicLetterExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: clinicLetterKey,
+      });
+
+    if (doesClinicLetterExist) {
+      clinicLetter = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: clinicLetterKey,
+          protocol: 'S3',
+          useTempBucket: false,
+        });
+    }
+
     for (const petitioner of caseEntity.petitioners) {
       if (
         !caseEntity.isUserIdRepresentedByPrivatePractitioner(
@@ -89,7 +114,7 @@ export const serveThirtyDayNoticeInteractor = async (
           caseCaption: caseEntity.caseCaption,
         });
 
-        const noticePdf = await applicationContext
+        let noticePdf = await applicationContext
           .getDocumentGenerators()
           .thirtyDayNoticeOfTrial({
             applicationContext,
@@ -112,6 +137,14 @@ export const serveThirtyDayNoticeInteractor = async (
             },
           });
 
+        if (doesClinicLetterExist) {
+          noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
+            applicationContext,
+            firstPdf: noticePdf,
+            secondPdf: clinicLetter,
+          });
+        }
+
         await applicationContext
           .getUseCaseHelpers()
           .createAndServeNoticeDocketEntry(applicationContext, {
@@ -125,6 +158,11 @@ export const serveThirtyDayNoticeInteractor = async (
             noticePdf,
             userId: currentUser.userId,
           });
+
+        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+          applicationContext,
+          caseToUpdate: caseEntity,
+        });
 
         pdfsAppended++;
 
