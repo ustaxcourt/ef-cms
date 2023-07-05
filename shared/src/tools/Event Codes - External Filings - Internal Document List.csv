@@ -36,6 +36,7 @@ Certificate of Service [Document Name] [Date],Certificate of Service,Miscellaneo
 Civil Penalty Approval Form,Civil Penalty Approval Form,Miscellaneous,TRUE,TRUE,TRUE,CIVP,Standard,,,,,
 Computation for Entry of Decision,Computation for Entry of Decision,Decision,TRUE,TRUE,TRUE,COED,Standard,,,,,
 Declaration of [Name] in Support of [Document Name],Declaration in Support,Supporting Document,TRUE,TRUE,TRUE,DCL,Nonstandard C,,Which document is this declaration in support of?,Who signed this?,,
+Designation of Counsel [Name] to Receive Service,Designation of Counsel to Receive Service,Appearance and Representation,,,,DSC,Nonstandard B ,,,Name ,,
 Entry of Appearance ,Entry of Appearance ,Appearance and Representation,,,,EA,Standard ,,,,,
 Evidence,Evidence ,Miscellaneous,,,,EVID,Standard,,,,,
 Exhibit(s),Exhibit(s),Miscellaneous,TRUE,TRUE,TRUE,EXH,Standard,,,,,
