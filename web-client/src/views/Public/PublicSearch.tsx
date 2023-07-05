@@ -11,13 +11,11 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PublicSearch = connect(
   {
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
-    featureFlagHelper: state.featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence:
@@ -29,7 +27,6 @@ export const PublicSearch = connect(
   },
   function PublicSearch({
     advancedSearchTabChangeSequence,
-    featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
@@ -64,17 +61,7 @@ export const PublicSearch = connect(
               />
               <SearchResults />
             </Tab>
-            <Tab
-              disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
-              id="tab-order"
-              tabName="order"
-              title={
-                'Order' +
-                (featureFlagHelper.isOrderSearchEnabledForRole
-                  ? ''
-                  : ' (Coming Soon)')
-              }
-            >
+            <Tab id="tab-order" tabName="order" title={'Order'}>
               <SearchBoilerplateText formTypeText="an order" />
               <OrderSearchForm
                 submitAdvancedSearchSequence={
@@ -83,17 +70,7 @@ export const PublicSearch = connect(
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab
-              disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
-              id="tab-opinion"
-              tabName="opinion"
-              title={
-                'Opinion' +
-                (featureFlagHelper.isOpinionSearchEnabledForRole
-                  ? ''
-                  : ' (Coming Soon)')
-              }
-            >
+            <Tab id="tab-opinion" tabName="opinion" title={'Opinion'}>
               <SearchBoilerplateText
                 formTypeText="an opinion"
                 isOpinion="true"
