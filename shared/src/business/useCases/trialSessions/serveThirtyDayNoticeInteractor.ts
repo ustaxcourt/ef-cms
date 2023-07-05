@@ -3,6 +3,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -11,6 +12,7 @@ import {
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
 
 export type ServeThirtyDayNoticeRequest = {
   trialSessionId: string;
@@ -104,83 +106,85 @@ export const serveThirtyDayNoticeInteractor = async (
         });
     }
 
-    for (const petitioner of caseEntity.petitioners) {
-      if (
+    const hasProSePetitioner = caseEntity.petitioners.some(
+      petitioner =>
         !caseEntity.isUserIdRepresentedByPrivatePractitioner(
           petitioner.contactId,
-        )
-      ) {
-        const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
-          caseCaption: caseEntity.caseCaption,
-        });
+        ),
+    );
+    if (hasProSePetitioner) {
+      const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
+        caseCaption: caseEntity.caseCaption,
+      });
 
-        let noticePdf = await applicationContext
-          .getDocumentGenerators()
-          .thirtyDayNoticeOfTrial({
-            applicationContext,
-            data: {
-              caseCaptionExtension,
-              caseTitle,
-              docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-              judgeName: trialSession.judge!.name,
-              proceedingType: trialSession.proceedingType,
-              scopeType: trialSession.sessionScope,
-              trialDate: trialSession.startDate,
-              trialLocation: {
-                address1: trialSession.address1,
-                address2: trialSession.address2,
-                city: trialSession.city,
-                courthouseName: trialSession.courthouseName,
-                postalCode: trialSession.postalCode,
-                state: trialSession.state,
-              },
-            },
-          });
-
-        if (doesClinicLetterExist) {
-          noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
-            applicationContext,
-            firstPdf: noticePdf,
-            secondPdf: clinicLetter,
-          });
-        }
-
-        await applicationContext
-          .getUseCaseHelpers()
-          .createAndServeNoticeDocketEntry(applicationContext, {
-            caseEntity,
-            documentInfo: {
-              documentTitle: thirtyDayNoticeDocumentInfo!.documentTitle,
-              documentType: thirtyDayNoticeDocumentInfo!.documentType,
-              eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
-            },
-            newPdfDoc: paperServicePdf,
-            noticePdf,
-            userId: currentUser.userId,
-          });
-
-        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      let noticePdf = await applicationContext
+        .getDocumentGenerators()
+        .thirtyDayNoticeOfTrial({
           applicationContext,
-          caseToUpdate: caseEntity,
+          data: {
+            caseCaptionExtension,
+            caseTitle,
+            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+            judgeName: trialSession.judge!.name,
+            proceedingType: trialSession.proceedingType,
+            scopeType: trialSession.sessionScope,
+            trialDate: trialSession.startDate,
+            trialLocation: {
+              address1: trialSession.address1,
+              address2: trialSession.address2,
+              city: trialSession.city,
+              courthouseName: trialSession.courthouseName,
+              postalCode: trialSession.postalCode,
+              state: trialSession.state,
+            },
+          },
         });
 
-        pdfsAppended++;
-
-        hasPaperService =
-          hasPaperService ||
-          caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
-
-        await applicationContext
-          .getNotificationGateway()
-          .sendNotificationToUser({
-            applicationContext,
-            message: {
-              action: 'paper_service_updated',
-              pdfsAppended,
-            },
-            userId: currentUser.userId,
-          });
+      if (doesClinicLetterExist) {
+        noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
+          applicationContext,
+          firstPdf: noticePdf,
+          secondPdf: clinicLetter,
+        });
       }
+
+      await applicationContext
+        .getUseCaseHelpers()
+        .createAndServeNoticeDocketEntry(applicationContext, {
+          caseEntity,
+          documentInfo: {
+            documentTitle: replaceBracketed(
+              thirtyDayNoticeDocumentInfo!.documentTitle,
+              formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
+              trialSession.trialLocation,
+            ),
+            documentType: thirtyDayNoticeDocumentInfo!.documentType,
+            eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
+          },
+          newPdfDoc: paperServicePdf,
+          noticePdf,
+          userId: currentUser.userId,
+        });
+
+      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: caseEntity,
+      });
+
+      pdfsAppended++;
+
+      hasPaperService =
+        hasPaperService ||
+        caseEntity.hasPartyWithServiceType(SERVICE_INDICATOR_TYPES.SI_PAPER);
+
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: 'paper_service_updated',
+          pdfsAppended,
+        },
+        userId: currentUser.userId,
+      });
     }
   }
 
