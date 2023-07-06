@@ -132,10 +132,9 @@ export const serveThirtyDayNoticeInteractor = async (
             trialLocation: {
               address1: trialSession.address1,
               address2: trialSession.address2,
-              city: trialSession.city,
+              cityState: trialSession.trialLocation,
               courthouseName: trialSession.courthouseName,
               postalCode: trialSession.postalCode,
-              state: trialSession.state,
             },
           },
         });
