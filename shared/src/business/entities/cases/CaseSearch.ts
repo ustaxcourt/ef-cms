@@ -1,10 +1,10 @@
 import { COUNTRY_TYPES, US_STATES, US_STATES_OTHER } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import joiDate from '@hapi/joi-date';
-import joiImported from 'joi';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
 
-const joi = joiImported.extend(joiDate);
+const joi: Root = joiImported.extend(joiDate);
 
 export class CaseSearch extends JoiValidationEntity {
   petitionerName: string;
