@@ -53,7 +53,13 @@ export const internalTypesHelper = (
     .sort(getSortFunction(searchText))
     .filter(d => d.eventCode !== LODGED_EVENT_CODE);
 
+  const filteredInternalDocumentTypesForSelectSorted =
+    internalDocumentTypesForSelectSorted.filter(
+      option => option.eventCode !== 'DSC',
+    );
+
   return {
+    filteredInternalDocumentTypesForSelectSorted,
     internalDocumentTypesForSelect,
     internalDocumentTypesForSelectSorted,
   };
