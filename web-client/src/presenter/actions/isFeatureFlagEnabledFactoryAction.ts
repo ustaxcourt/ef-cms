@@ -1,3 +1,6 @@
+import { isEmpty } from 'lodash';
+import { state } from 'cerebral';
+
 /**
  * Returns the yes path if the specified feature flag is enabled, otherwise
  * returns the no path with the disabled message.
@@ -7,8 +10,18 @@
  */
 export const isFeatureFlagEnabledFactoryAction =
   featureFlagObject =>
-  ({ path, props }: ActionProps) => {
-    const featureFlagIsEnabled = props[featureFlagObject.key];
+  async ({ applicationContext, get, path, store }: ActionProps) => {
+    let featureFlags = get(state.featureFlags);
+
+    if (isEmpty(featureFlags)) {
+      featureFlags = await applicationContext
+        .getUseCases()
+        .getAllFeatureFlagsInteractor(applicationContext);
+
+      store.set(state.featureFlags, featureFlags);
+    }
+
+    const featureFlagIsEnabled = featureFlags[featureFlagObject.key];
 
     if (featureFlagIsEnabled) {
       return path.yes();
