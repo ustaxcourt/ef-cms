@@ -19,6 +19,46 @@ export const emptyResults = {
   },
 };
 
+export const mockCaseSearchResult = {
+  body: {
+    _shards: {
+      failed: 0,
+      skipped: 0,
+      successful: 1,
+      total: 1,
+    },
+    hits: {
+      hits: [
+        {
+          _id: 'case|101-23_case|101-23',
+          _index: 'efcms-case',
+          _score: null,
+          _source: {
+            associatedJudge: { S: 'Buch' },
+            caseCaption: { S: 'Justin Jefferson, Petitioner' },
+            caseType: { S: 'Whistleblower' },
+            docketNumber: { S: '101-23' },
+            isPaper: { BOOL: false },
+            preferredTrialCity: { S: 'Birmingham, Alabama' },
+            procedureType: { S: 'Regular' },
+            receivedAt: { S: '2023-03-13T22:23:32.843Z' },
+            status: { S: 'New' },
+          },
+          _type: '_doc',
+          sort: [1678746212843, 'case|101-23'],
+        },
+      ],
+      max_score: 1,
+      total: {
+        relation: 'eq',
+        value: 1,
+      },
+    },
+    timed_out: false,
+    took: 66,
+  },
+};
+
 export const mockDocketEntrySearchResult = {
   body: {
     _shards: {

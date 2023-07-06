@@ -1,50 +1,29 @@
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardE() {}
+export class ExternalDocumentNonStandardE extends ExternalDocumentBase {
+  public trialLocation: string;
 
-ExternalDocumentNonStandardE.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.trialLocation = rawProps.trialLocation;
-};
+  constructor(rawProps) {
+    super(rawProps, 'ExternalDocumentNonStandardE');
 
-ExternalDocumentNonStandardE.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.trialLocation);
-};
+    this.trialLocation = rawProps.trialLocation;
+  }
 
-ExternalDocumentNonStandardE.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    trialLocation: JoiValidationConstants.STRING.required(),
+  };
 
-ExternalDocumentNonStandardE.schema = {
-  ...baseExternalDocumentValidation,
-  trialLocation: JoiValidationConstants.STRING.required(),
-};
+  getValidationRules() {
+    return ExternalDocumentNonStandardE.VALIDATION_RULES;
+  }
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardE,
-  ExternalDocumentNonStandardE.schema,
-  ExternalDocumentNonStandardE.VALIDATION_ERROR_MESSAGES,
-);
+  getDocumentTitle(): string {
+    return replaceBracketed(this.documentTitle, this.trialLocation);
+  }
+}
 
-module.exports = {
-  ExternalDocumentNonStandardE: validEntityDecorator(
-    ExternalDocumentNonStandardE,
-  ),
-};
+export type RawExternalDocumentNonStandardE =
+  ExcludeMethods<ExternalDocumentNonStandardE>;
