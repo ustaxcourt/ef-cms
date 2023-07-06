@@ -1,10 +1,8 @@
+import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('setAsCalendared', () => {
   it('should set case as calendared with only judge and trialSessionId if the trial session is calendared', () => {

@@ -1,5 +1,5 @@
-const { caseHasServedPetition } = require('./Case');
-const { INITIAL_DOCUMENT_TYPES } = require('../EntityConstants');
+import { INITIAL_DOCUMENT_TYPES } from '../EntityConstants';
+import { caseHasServedPetition } from './Case';
 
 describe('caseHasServedPetition', () => {
   it('should return true if the case petition docket entry has isLegacyServed set to true', () => {

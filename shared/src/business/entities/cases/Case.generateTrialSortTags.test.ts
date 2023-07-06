@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { CASE_TYPES_MAP } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { CASE_TYPES_MAP } from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('generateTrialSortTags', () => {
   it('should generate sort tags for a regular case', () => {

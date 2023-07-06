@@ -19,11 +19,12 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter?: string;
   },
 ): Promise<Buffer> => {
-  const sendGenerateEvent = await applicationContext
+  const featureFlags = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const sendGenerateEvent =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key];
 
   if (sendGenerateEvent) {
     const { currentColor, region, stage } = applicationContext.environment;

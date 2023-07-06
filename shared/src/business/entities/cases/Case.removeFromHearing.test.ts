@@ -1,9 +1,7 @@
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('removeFromHearing', () => {
   it('removes the hearing from the case', () => {
