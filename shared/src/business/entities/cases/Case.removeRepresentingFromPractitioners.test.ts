@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
+import { Case } from './Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('removeRepresentingFromPractitioners', () => {
   it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {

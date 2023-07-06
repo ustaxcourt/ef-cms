@@ -1,5 +1,5 @@
-const { getTextByCount } = require('../../utilities/getTextByCount');
-const { Order } = require('./Order');
+import { Order } from './Order';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('Order', () => {
   describe('validation', () => {

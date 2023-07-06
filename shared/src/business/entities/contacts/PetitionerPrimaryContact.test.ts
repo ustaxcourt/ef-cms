@@ -1,16 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { CONTACT_TYPES, COUNTRY_TYPES } = require('../EntityConstants');
-const { getPetitionerPrimaryContact } = require('./PetitionerPrimaryContact');
+import { CONTACT_TYPES, COUNTRY_TYPES } from '../EntityConstants';
+import { PetitionerPrimaryContact } from './PetitionerPrimaryContact';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('Petition', () => {
   describe('for Petitioner Primary contact', () => {
     it('can validate primary contact name', () => {
-      const entityConstructor = getPetitionerPrimaryContact({
-        countryType: COUNTRY_TYPES.DOMESTIC,
-      });
-      const petition = new entityConstructor(
+      const petition = new PetitionerPrimaryContact(
         {
           address1: '123 Deming Way',
           city: 'Los Angeles',
