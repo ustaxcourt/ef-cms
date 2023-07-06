@@ -9,10 +9,8 @@ import { search } from './searchClient';
  * @returns {object} the case data
  */
 export const casePublicSearch = async ({ applicationContext, searchTerms }) => {
-  const { commonQuery, exactMatchesQuery } = aggregateCommonQueryParams({
-    applicationContext,
-    ...searchTerms,
-  });
+  const { commonQuery, exactMatchesQuery } =
+    aggregateCommonQueryParams(searchTerms);
 
   const sourceFields = [
     'caseCaption',

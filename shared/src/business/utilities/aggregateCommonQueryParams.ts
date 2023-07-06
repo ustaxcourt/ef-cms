@@ -6,7 +6,6 @@ export const removeAdvancedSyntaxSymbols = text => {
 /**
  * aggregateCommonQueryParams
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.countryType the country type to search cases by (domestic/international)
  * @param {string} providers.petitionerName the name of the petitioner to search cases by
  * @param {string} providers.petitionerState the state of the petitioner to search cases by
