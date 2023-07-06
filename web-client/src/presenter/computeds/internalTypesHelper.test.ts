@@ -162,10 +162,9 @@ describe('internalTypesHelper', () => {
         state: {},
       });
 
-      expect(result.internalDocumentTypesForSelect).toMatchObject(expected);
-      expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-        expected,
-      );
+      expect(
+        result.internalDocumentTypesForSelectWithLegacySorted,
+      ).toMatchObject(expected);
     });
 
     describe('when searchText is defined', () => {
@@ -183,9 +182,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
 
       it('and is not matching an event code', () => {
@@ -202,9 +201,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
 
       it('and matches the beginning of an eventCode', () => {
@@ -221,9 +220,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
 
       it('and matches an event code exactly', () => {
@@ -240,9 +239,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
     });
   });
@@ -260,7 +259,7 @@ describe('internalTypesHelper', () => {
       });
 
       const miscellaneousLodgedType =
-        result.internalDocumentTypesForSelectSorted.find(
+        result.internalDocumentTypesForSelectWithLegacySorted.find(
           d => d.eventCode === LODGED_EVENT_CODE,
         );
 

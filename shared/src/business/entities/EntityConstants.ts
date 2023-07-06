@@ -1429,7 +1429,6 @@ export const ALL_EVENT_CODES = flatten([
 ])
   .map(item => item.eventCode)
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
-  .concat(LEGACY_DOCUMENT_TYPES.map(item => item.eventCode))
   .sort();
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
@@ -1453,7 +1452,6 @@ export const ALL_DOCUMENT_TYPES_MAP = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
-    ...LEGACY_DOCUMENT_TYPES,
   ];
   return documentTypes;
 })();
