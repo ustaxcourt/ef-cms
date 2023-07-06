@@ -14,6 +14,8 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       endDate: '2022-02-01T17:21:05.483Z',
       filingMethod: 'all',
       pageSize: 100,
+      preferredTrialCities: ['Birmingham, Alabama'],
+      procedureType: 'All',
       searchAfter: { pk: '', receivedAt: 827493 },
       startDate: '2022-01-01T17:21:05.483Z',
     };
@@ -39,6 +41,7 @@ describe('getCustomCaseInventoryReportInteractor', () => {
       { missingField: 'endDate' },
       { missingField: 'startDate' },
       { missingField: 'filingMethod' },
+      { missingField: 'procedureType' },
     ];
 
     testCases.forEach(testCase => {
