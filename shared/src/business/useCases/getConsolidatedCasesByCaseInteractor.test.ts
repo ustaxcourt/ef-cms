@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -95,7 +96,10 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
     it('should return all full consolidated cases if the petitioner is part of the group', async () => {
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValueOnce(true);
+        .getAllFeatureFlagsInteractor.mockReturnValue({
+          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+            .key]: true,
+        });
       applicationContext.getCurrentUser.mockReturnValueOnce(petitionerUser);
       const mockCases = [
         {
@@ -132,10 +136,6 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
   });
 
   it('should return all public consolidated cases if the petitioner is not associated with the group', async () => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockResolvedValueOnce(true);
-
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     let cases = await getConsolidatedCasesByCaseInteractor(applicationContext, {

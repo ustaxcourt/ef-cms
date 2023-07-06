@@ -1,16 +1,27 @@
-const { ContactFactory } = require('./ContactFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { Contact } from './Contact';
+import { JoiValidationConstants } from '../JoiValidationConstants';
 
-/**
- * returns the constructor used for creating the PartnershipAsTaxMattersPartnerPrimaryContact entity
- */
-exports.getPartnershipAsTaxMattersPartnerPrimaryContact =
-  ContactFactory.createContactFactory({
-    additionalErrorMappings: {
-      secondaryName: 'Enter Tax Matters Partner name',
-    },
-    additionalValidation: {
+export class PartnershipAsTaxMattersPartnerPrimaryContact extends Contact {
+  constructor(
+    rawContact,
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ) {
+    super(rawContact, 'PartnershipAsTaxMattersPartnerPrimaryContact', {
+      applicationContext,
+    });
+  }
+
+  getValidationRules() {
+    return {
+      ...super.getValidationRules(),
       secondaryName: JoiValidationConstants.STRING.max(500).required(),
-    },
-    contactName: 'PartnershipAsTaxMattersPartnerPrimaryContact',
-  });
+    };
+  }
+
+  getErrorToMessageMap() {
+    return {
+      ...super.getErrorToMessageMap(),
+      econdaryName: 'Enter Tax Matters Partner name',
+    };
+  }
+}
