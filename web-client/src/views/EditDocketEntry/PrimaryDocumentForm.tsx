@@ -102,7 +102,7 @@ export const PrimaryDocumentForm = connect(
               id="document-type"
               name="eventCode"
               options={
-                internalTypesHelper.filteredInternalDocumentTypesForSelectSorted
+                internalTypesHelper.currentInternalDocumentTypesForSelectSorted
               }
               value={reactSelectValue({
                 documentTypes:
@@ -151,7 +151,7 @@ export const PrimaryDocumentForm = connect(
                 id="secondary-document-type"
                 name="secondaryDocument.eventCode"
                 options={
-                  internalTypesHelper.filteredInternalDocumentTypesForSelectSorted
+                  internalTypesHelper.currentInternalDocumentTypesForSelectSorted
                 }
                 value={reactSelectValue({
                   documentTypes:

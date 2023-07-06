@@ -37,11 +37,6 @@ export const PrimaryDocumentForm = connect(
     validateDocketEntrySequence,
     validationErrors,
   }) {
-    const dropdownOptions =
-      internalTypesHelper.internalDocumentTypesForSelectSorted.filter(
-        option => option.eventCode !== 'DSC',
-      );
-
     return (
       <>
         <div className="blue-container docket-entry-form">
@@ -130,9 +125,12 @@ export const PrimaryDocumentForm = connect(
               aria-label="document-type-label"
               id="document-type"
               name="eventCode"
-              options={dropdownOptions}
+              options={
+                internalTypesHelper.currentInternalDocumentTypesForSelectSorted
+              }
               value={reactSelectValue({
-                documentTypes: dropdownOptions,
+                documentTypes:
+                  internalTypesHelper.currentInternalDocumentTypesForSelectSorted,
                 selectedEventCode: form.eventCode,
               })}
               onChange={(inputValue, { action, name: inputName }) => {
@@ -176,9 +174,12 @@ export const PrimaryDocumentForm = connect(
                 id="secondary-document-type"
                 isClearable={true}
                 name="secondaryDocument.eventCode"
-                options={dropdownOptions}
+                options={
+                  internalTypesHelper.currentInternalDocumentTypesForSelectSorted
+                }
                 value={reactSelectValue({
-                  documentTypes: dropdownOptions,
+                  documentTypes:
+                    internalTypesHelper.currentInternalDocumentTypesForSelectSorted,
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}

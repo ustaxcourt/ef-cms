@@ -98,7 +98,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             id="document-type"
             name="eventCode"
             options={
-              internalTypesHelper.filteredInternalDocumentTypesForSelectSorted
+              internalTypesHelper.currentInternalDocumentTypesForSelectSorted
             }
             value={reactSelectValue({
               documentTypes:
@@ -147,7 +147,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               isClearable={true}
               name="secondaryDocument.eventCode"
               options={
-                internalTypesHelper.filteredInternalDocumentTypesForSelectSorted
+                internalTypesHelper.currentInternalDocumentTypesForSelectSorted
               }
               value={reactSelectValue({
                 documentTypes:
