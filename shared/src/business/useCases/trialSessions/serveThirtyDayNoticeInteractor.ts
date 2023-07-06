@@ -72,7 +72,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
   let pdfsAppended: number = 0;
   let hasPaperService = false;
-  for (const aCase of trialSession.caseOrder!) {
+  const lotsOPromises = trialSession.caseOrder.map(async aCase => {
     const rawCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
@@ -185,7 +185,9 @@ export const serveThirtyDayNoticeInteractor = async (
         userId: currentUser.userId,
       });
     }
-  }
+  });
+
+  await Promise.all(lotsOPromises);
 
   let pdfUrl: string | undefined = undefined;
   if (hasPaperService) {
