@@ -1,4 +1,4 @@
-const { Case } = require('./Case');
+import { Case } from './Case';
 
 describe('formatDocketNumber', () => {
   it('formats docket numbers with leading zeroes', () => {

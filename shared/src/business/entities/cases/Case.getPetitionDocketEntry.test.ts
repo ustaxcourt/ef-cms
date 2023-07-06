@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case, getPetitionDocketEntry } = require('./Case');
-const { INITIAL_DOCUMENT_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case, getPetitionDocketEntry } from './Case';
+import { INITIAL_DOCUMENT_TYPES } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getPetitionDocketEntry', () => {
   it('should get the petition docket entry by documentType', () => {

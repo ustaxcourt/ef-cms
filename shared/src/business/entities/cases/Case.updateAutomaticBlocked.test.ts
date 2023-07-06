@@ -1,12 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} = require('../../../test/mockCase');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../EntityConstants');
-const { Case } = require('./Case');
+import { AUTOMATIC_BLOCKED_REASONS } from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('updateAutomaticBlocked', () => {
   it('sets the case as automaticBlocked with a valid blocked reason', () => {
