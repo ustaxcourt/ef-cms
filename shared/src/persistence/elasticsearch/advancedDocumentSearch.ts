@@ -81,7 +81,7 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  let caseQueryParams = {
+  let caseQueryParams: any = {
     has_parent: {
       inner_hits: {
         _source: {

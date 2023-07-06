@@ -72,7 +72,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
   let pdfsAppended: number = 0;
   let hasPaperService = false;
-  for (const aCase of trialSession.caseOrder!) {
+  const generateNottForCases = trialSession.caseOrder.map(async aCase => {
     const rawCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
@@ -132,10 +132,9 @@ export const serveThirtyDayNoticeInteractor = async (
             trialLocation: {
               address1: trialSession.address1,
               address2: trialSession.address2,
-              city: trialSession.city,
+              cityState: trialSession.trialLocation,
               courthouseName: trialSession.courthouseName,
               postalCode: trialSession.postalCode,
-              state: trialSession.state,
             },
           },
         });
@@ -186,7 +185,9 @@ export const serveThirtyDayNoticeInteractor = async (
         userId: currentUser.userId,
       });
     }
-  }
+  });
+
+  await Promise.all(generateNottForCases);
 
   let pdfUrl: string | undefined = undefined;
   if (hasPaperService) {

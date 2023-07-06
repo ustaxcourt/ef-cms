@@ -1,11 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} = require('../../../test/mockCase');
-const { Case } = require('./Case');
+import { Case } from './Case';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('hasPendingItems', () => {
   it('should not show the case as having pending items if no docketEntries are pending', () => {
