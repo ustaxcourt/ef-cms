@@ -638,7 +638,6 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
     ).description('When the case fee was waived.'),
-    // Individual items are validated by the ContactFactory.
     petitioners: joi
       .array()
       .unique(
@@ -875,7 +874,7 @@ export class Case extends JoiValidationEntity {
 
   assignContacts({ applicationContext, rawCase }) {
     if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
-      const contacts = ContactFactory.createContacts({
+      const contacts = ContactFactory({
         applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

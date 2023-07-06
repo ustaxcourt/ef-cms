@@ -1,68 +1,47 @@
-const joi = require('joi');
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  transformFormValueToTitleCaseOrdinal,
-} = require('../../utilities/transformFormValueToTitleCaseOrdinal');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocumentBase } from './ExternalDocumentBase';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { transformFormValueToTitleCaseOrdinal } from '../../utilities/transformFormValueToTitleCaseOrdinal';
+import joi from 'joi';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardI() {}
+export class ExternalDocumentNonStandardI extends ExternalDocumentBase {
+  public freeText: string;
+  public ordinalValue: string;
+  public otherIteration?: number;
 
-ExternalDocumentNonStandardI.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.freeText = rawProps.freeText;
-  this.ordinalValue = rawProps.ordinalValue;
-  this.otherIteration = rawProps.otherIteration;
-};
+  constructor(rawProps) {
+    super(rawProps, 'ExternalDocumentNonStandardI');
 
-ExternalDocumentNonStandardI.prototype.getDocumentTitle = function () {
-  return replaceBracketed(
-    this.documentTitle,
-    this.ordinalValue === 'Other'
-      ? transformFormValueToTitleCaseOrdinal(this.otherIteration)
-      : transformFormValueToTitleCaseOrdinal(this.ordinalValue),
-    this.freeText,
-  );
-};
+    this.freeText = rawProps.freeText;
+    this.ordinalValue = rawProps.ordinalValue;
+    this.otherIteration = rawProps.otherIteration;
+  }
 
-ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    freeText: JoiValidationConstants.STRING.max(1000).required(),
+    ordinalValue: JoiValidationConstants.STRING.required(),
+    otherIteration: joi.when('ordinalValue', {
+      is: 'Other',
+      otherwise: joi.optional().allow(null),
+      then: joi.number().max(999).required(),
+    }),
+  };
 
-ExternalDocumentNonStandardI.schema = {
-  ...baseExternalDocumentValidation,
-  freeText: JoiValidationConstants.STRING.max(1000).required(),
-  ordinalValue: JoiValidationConstants.STRING.required(),
-  otherIteration: joi.when('ordinalValue', {
-    is: 'Other',
-    otherwise: joi.optional().allow(null),
-    then: joi.number().max(999).required(),
-  }),
-};
+  getValidationRules() {
+    return ExternalDocumentNonStandardI.VALIDATION_RULES;
+  }
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardI,
-  ExternalDocumentNonStandardI.schema,
-  ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES,
-);
+  getDocumentTitle(): string {
+    return replaceBracketed(
+      this.documentTitle,
+      this.ordinalValue === 'Other'
+        ? transformFormValueToTitleCaseOrdinal(this.otherIteration)
+        : transformFormValueToTitleCaseOrdinal(this.ordinalValue),
+      this.freeText,
+    );
+  }
+}
 
-module.exports = {
-  ExternalDocumentNonStandardI: validEntityDecorator(
-    ExternalDocumentNonStandardI,
-  ),
-};
+export type RawExternalDocumentNonStandardI =
+  ExcludeMethods<ExternalDocumentNonStandardI>;

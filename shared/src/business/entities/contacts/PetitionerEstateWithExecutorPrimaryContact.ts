@@ -1,18 +1,29 @@
-const { ContactFactory } = require('./ContactFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { Contact } from './Contact';
+import { JoiValidationConstants } from '../JoiValidationConstants';
 
-/**
- * returns the constructor used for creating the PetitionerEstateWithExecutorPrimaryContact entity
- */
-exports.getPetitionerEstateWithExecutorPrimaryContact =
-  ContactFactory.createContactFactory({
-    additionalErrorMappings: {
-      secondaryName: 'Enter name of executor/personal representative',
-      title: 'Enter title',
-    },
-    additionalValidation: {
+export class PetitionerEstateWithExecutorPrimaryContact extends Contact {
+  constructor(
+    rawContact,
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ) {
+    super(rawContact, 'PetitionerEstateWithExecutorPrimaryContact', {
+      applicationContext,
+    });
+  }
+
+  getValidationRules() {
+    return {
+      ...super.getValidationRules(),
       secondaryName: JoiValidationConstants.STRING.max(500).required(),
       title: JoiValidationConstants.STRING.max(100).optional(),
-    },
-    contactName: 'PetitionerEstateWithExecutorPrimaryContact',
-  });
+    };
+  }
+
+  getErrorToMessageMap() {
+    return {
+      ...super.getErrorToMessageMap(),
+      secondaryName: 'Enter name of executor/personal representative',
+      title: 'Enter title',
+    };
+  }
+}
