@@ -125,12 +125,10 @@ export const PrimaryDocumentForm = connect(
               aria-label="document-type-label"
               id="document-type"
               name="eventCode"
-              options={
-                internalTypesHelper.currentInternalDocumentTypesForSelectSorted
-              }
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               value={reactSelectValue({
                 documentTypes:
-                  internalTypesHelper.currentInternalDocumentTypesForSelectSorted,
+                  internalTypesHelper.internalDocumentTypesForSelectSorted,
                 selectedEventCode: form.eventCode,
               })}
               onChange={(inputValue, { action, name: inputName }) => {
@@ -175,11 +173,11 @@ export const PrimaryDocumentForm = connect(
                 isClearable={true}
                 name="secondaryDocument.eventCode"
                 options={
-                  internalTypesHelper.currentInternalDocumentTypesForSelectSorted
+                  internalTypesHelper.internalDocumentTypesForSelectSorted
                 }
                 value={reactSelectValue({
                   documentTypes:
-                    internalTypesHelper.currentInternalDocumentTypesForSelectSorted,
+                    internalTypesHelper.internalDocumentTypesForSelectSorted,
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}

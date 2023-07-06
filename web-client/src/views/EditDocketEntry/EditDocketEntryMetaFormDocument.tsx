@@ -97,12 +97,10 @@ export const EditDocketEntryMetaFormDocument = connect(
             aria-describedby="document-type-label"
             id="document-type"
             name="eventCode"
-            options={
-              internalTypesHelper.currentInternalDocumentTypesForSelectSorted
-            }
+            options={internalTypesHelper.internalDocumentTypesForSelectSorted}
             value={reactSelectValue({
               documentTypes:
-                internalTypesHelper.internalDocumentTypesForSelectSorted,
+                internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
               selectedEventCode: form.eventCode,
             })}
             onChange={(inputValue, { action, name: inputName }) => {
@@ -146,12 +144,10 @@ export const EditDocketEntryMetaFormDocument = connect(
               id="secondary-document-type"
               isClearable={true}
               name="secondaryDocument.eventCode"
-              options={
-                internalTypesHelper.currentInternalDocumentTypesForSelectSorted
-              }
+              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               value={reactSelectValue({
                 documentTypes:
-                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                  internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
                 selectedEventCode:
                   form.secondaryDocument && form.secondaryDocument.eventCode,
               })}
