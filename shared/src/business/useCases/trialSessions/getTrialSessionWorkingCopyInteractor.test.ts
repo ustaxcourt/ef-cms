@@ -1,43 +1,25 @@
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { MOCK_TRIAL_SESSION_WORKING_COPY } from '../../../test/mockTrialSessionWorkingCopy';
 import { ROLES } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  chambersUser,
+  judgeUser,
+  trialClerkUser,
+} from '../../../test/mockUsers';
 import { getTrialSessionWorkingCopyInteractor } from './getTrialSessionWorkingCopyInteractor';
 import { omit } from 'lodash';
-
-const MOCK_WORKING_COPY = {
-  sort: 'practitioner',
-  sortOrder: 'desc',
-  trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-  userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-};
 
 describe('Get trial session working copy', () => {
   let user;
 
   beforeEach(() => {
-    user = {
-      role: ROLES.judge,
-      userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-    };
+    user = judgeUser;
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        judge: {
-          name: 'Jake',
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialClerk: {
-          name: 'Joe',
-          userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-        },
-        trialLocation: 'Birmingham, Alabama',
-      });
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     applicationContext.getCurrentUser.mockImplementation(() => user);
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
@@ -47,14 +29,13 @@ describe('Get trial session working copy', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
+      .getTrialSessionWorkingCopy.mockResolvedValue(
+        MOCK_TRIAL_SESSION_WORKING_COPY,
+      );
 
     applicationContext
       .getUseCaseHelpers()
-      .getJudgeInSectionHelper.mockReturnValue({
-        role: ROLES.judge,
-        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-      });
+      .getJudgeInSectionHelper.mockReturnValue(judgeUser);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -65,7 +46,7 @@ describe('Get trial session working copy', () => {
 
     await expect(
       getTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        trialSessionId: MOCK_TRIAL_SESSION_WORKING_COPY.trialSessionId,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -74,12 +55,12 @@ describe('Get trial session working copy', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionWorkingCopy.mockResolvedValue(
-        omit(MOCK_WORKING_COPY, 'userId'),
+        omit(MOCK_TRIAL_SESSION_WORKING_COPY, 'userId'),
       );
 
     await expect(
       getTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        trialSessionId: MOCK_TRIAL_SESSION_WORKING_COPY.trialSessionId,
       }),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
@@ -88,10 +69,10 @@ describe('Get trial session working copy', () => {
     const result = await getTrialSessionWorkingCopyInteractor(
       applicationContext,
       {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        trialSessionId: MOCK_TRIAL_SESSION_WORKING_COPY.trialSessionId,
       },
     );
-    expect(result).toMatchObject(MOCK_WORKING_COPY);
+    expect(result).toMatchObject(MOCK_TRIAL_SESSION_WORKING_COPY);
   });
 
   it('does not return data if none is returned from persistence', async () => {
@@ -109,7 +90,7 @@ describe('Get trial session working copy', () => {
 
     await expect(
       getTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        trialSessionId: MOCK_TRIAL_SESSION_WORKING_COPY.trialSessionId,
       }),
     ).rejects.toThrow('Trial session working copy not found');
   });
@@ -126,7 +107,7 @@ describe('Get trial session working copy', () => {
     const result = await getTrialSessionWorkingCopyInteractor(
       applicationContext,
       {
-        trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        trialSessionId: MOCK_TRIAL_SESSION_WORKING_COPY.trialSessionId,
       },
     );
     expect(
@@ -135,7 +116,7 @@ describe('Get trial session working copy', () => {
     ).toMatchObject({
       userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
     });
-    expect(result).toMatchObject(MOCK_WORKING_COPY);
+    expect(result).toMatchObject(MOCK_TRIAL_SESSION_WORKING_COPY);
   });
 
   describe('conditionally creates a trial session working copy if it does not exist', () => {
@@ -145,56 +126,29 @@ describe('Get trial session working copy', () => {
         .getTrialSessionWorkingCopy.mockResolvedValue(undefined);
       applicationContext
         .getUseCaseHelpers()
-        .getJudgeInSectionHelper.mockReturnValue({
-          role: ROLES.judge,
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        });
+        .getJudgeInSectionHelper.mockReturnValue(judgeUser);
       applicationContext
         .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValue({
-          judge: {
-            name: 'Jake',
-            userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-          },
-          maxCases: 100,
-          sessionType: 'Regular',
-          startDate: '2025-03-01T00:00:00.000Z',
-          term: 'Fall',
-          termYear: '2025',
-          trialClerk: {
-            name: 'Joe',
-            userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-          },
-          trialLocation: 'Birmingham, Alabama',
-        });
+        .getTrialSessionById.mockReturnValue({ MOCK_TRIAL_INPERSON });
     });
 
     it('for current user who is a judge on this trial session with no assigned trial clerk', async () => {
       applicationContext
         .getPersistenceGateway()
         .getTrialSessionById.mockReturnValueOnce({
-          judge: {
-            name: 'Jake',
-            userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-          },
-          maxCases: 100,
-          sessionType: 'Regular',
-          startDate: '2025-03-01T00:00:00.000Z',
-          term: 'Fall',
-          termYear: '2025',
+          ...MOCK_TRIAL_INPERSON,
+          judge: judgeUser,
           trialClerk: undefined,
-          trialLocation: 'Birmingham, Alabama',
         });
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.judge,
-        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
-          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         },
       );
+
       expect(
         applicationContext.getPersistenceGateway().getTrialSessionById,
       ).toHaveBeenCalled();
@@ -204,7 +158,7 @@ describe('Get trial session working copy', () => {
       ).toHaveBeenCalled();
       expect(result).toMatchObject({
         entityName: 'TrialSessionWorkingCopy',
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       });
     });
 
@@ -212,16 +166,22 @@ describe('Get trial session working copy', () => {
       applicationContext
         .getUseCaseHelpers()
         .getJudgeInSectionHelper.mockReturnValueOnce(undefined);
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.trialClerk,
-        userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-      });
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockResolvedValue({
+          ...MOCK_TRIAL_INPERSON,
+          judge: undefined,
+          trialClerk: trialClerkUser,
+        });
+      applicationContext.getCurrentUser.mockReturnValue(trialClerkUser);
+
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
-          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         },
       );
+
       expect(
         applicationContext.getPersistenceGateway().getTrialSessionById,
       ).toHaveBeenCalled();
@@ -231,21 +191,26 @@ describe('Get trial session working copy', () => {
       ).toHaveBeenCalled();
       expect(result).toMatchObject({
         entityName: 'TrialSessionWorkingCopy',
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       });
     });
 
     it('for current user who is a chambers user whose associated judge is on this trial session', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        role: ROLES.chambers,
-        userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-      });
+      applicationContext.getCurrentUser.mockReturnValue(chambersUser);
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockReturnValue({
+          ...MOCK_TRIAL_INPERSON,
+          judge: judgeUser,
+        });
+
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
-          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
         },
       );
+
       expect(
         applicationContext.getPersistenceGateway().getTrialSessionById,
       ).toHaveBeenCalled();
@@ -255,7 +220,7 @@ describe('Get trial session working copy', () => {
       ).toHaveBeenCalled();
       expect(result).toMatchObject({
         entityName: 'TrialSessionWorkingCopy',
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       });
     });
   });

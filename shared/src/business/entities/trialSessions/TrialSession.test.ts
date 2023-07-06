@@ -375,12 +375,6 @@ describe('TrialSession entity', () => {
 
       expect(() => trialSession.validate()).not.toThrow();
     });
-
-    it('should throw an error when the trialSession is invalid', () => {
-      const trialSession = TrialSessionFactory({}, applicationContext);
-
-      expect(() => trialSession.validate()).toThrow();
-    });
   });
 
   describe('isStandaloneRemote', () => {

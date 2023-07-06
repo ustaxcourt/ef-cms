@@ -3,10 +3,8 @@ import {
   MOCK_ELIGIBLE_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '../../../test/mockCase';
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
@@ -15,16 +13,6 @@ import { getEligibleCasesForTrialSessionInteractor } from './getEligibleCasesFor
 describe('getEligibleCasesForTrialSessionInteractor', () => {
   let mockCurrentUser;
   let mockTrial;
-
-  const MOCK_TRIAL = {
-    maxCases: 100,
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
-    startDate: '2025-12-01T00:00:00.000Z',
-    term: 'Fall',
-    termYear: '2025',
-    trialLocation: 'Birmingham, Alabama',
-  };
 
   const MOCK_ASSOCIATED_CASE = {
     ...MOCK_CASE,
@@ -38,7 +26,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    mockTrial = MOCK_TRIAL;
+    mockTrial = MOCK_TRIAL_REMOTE;
 
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
@@ -92,7 +80,7 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     const mockEligibleCase = cloneDeep(MOCK_ELIGIBLE_CASE);
 
     mockTrial = {
-      ...MOCK_TRIAL,
+      ...MOCK_TRIAL_REMOTE,
       caseOrder: [
         {
           docketNumber: MOCK_ASSOCIATED_CASE.docketNumber,

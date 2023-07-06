@@ -18,6 +18,8 @@ import { Case, getContactPrimary } from './Case';
 import { Contact } from '../contacts/Contact';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { RawTrialSession } from '../trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import {
@@ -225,14 +227,10 @@ describe('Case entity', () => {
 
   describe('hearings', () => {
     it('sets associated hearings on the case hearings array, and make sure they are sorted by created date', () => {
-      const mockhearing1 = {
+      const mockhearing1: RawTrialSession = {
+        ...MOCK_TRIAL_REGULAR,
         createdAt: '2024-03-01T00:00:00.000Z',
-        maxCases: 100,
-        sessionType: 'Regular',
         startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
       };
       const mockhearing2 = {
         ...mockhearing1,

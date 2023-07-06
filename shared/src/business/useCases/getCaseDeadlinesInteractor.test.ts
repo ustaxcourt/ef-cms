@@ -7,6 +7,7 @@ import {
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_TRIAL_REMOTE } from '../../test/mockTrial';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getCaseDeadlinesInteractor } from './getCaseDeadlinesInteractor';
@@ -176,39 +177,8 @@ describe('getCaseDeadlinesInteractor', () => {
           docketNumber: '2000-20',
           hearings: [
             {
-              address1: '200 Second St NW',
-              caseOrder: [
-                {
-                  addedToSessionAt: '2020-12-23T14:21:54.970Z',
-                  calendarNotes: 'Remote Subpoena Hearing',
-                  docketNumber: '2000-20',
-                  isManuallyAdded: true,
-                },
-              ],
-              city: 'Washington',
-              courthouseName: 'US Tax Courthouse',
-              createdAt: '2020-12-23T14:20:52.766Z',
-              entityName: 'TrialSession',
-              isCalendared: true,
-              judge: {
-                name: 'Carluzzo',
-                userId: 'a22f4615-1234-4321-9284-30af3e22e715',
-              },
-              maxCases: '100',
-              postalCode: '20217',
-              // missing proceedingType; should throw an error!
-              sessionType: 'Special',
-              startDate: '2021-01-27T05:00:00.000Z',
-              startTime: '13:00',
-              state: 'DC',
-              term: 'Winter',
-              termYear: '2021',
-              trialClerk: {
-                name: 'Aisha Miller',
-                userId: '1e68fefe-asdf-fdsa-b08d-d806dd85c979',
-              },
-              trialLocation: 'Washington, District of Columbia',
-              trialSessionId: 'bac57bdb-1123-3321-81e3-b6fb6c337c3c',
+              ...MOCK_TRIAL_REMOTE,
+              proceedingType: undefined, // missing proceedingType; should throw an error!
             },
           ],
         },
