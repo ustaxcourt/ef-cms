@@ -1,6 +1,7 @@
-const assert = require('assert');
-const AWS = require('aws-sdk');
-const axios = require('axios');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import AWS from 'aws-sdk';
+import assert from 'assert';
+import axios from 'axios';
 
 const ENV = process.argv[2];
 const REGION = process.argv[3];
@@ -9,12 +10,12 @@ const DEFAULT_ACCOUNT_PASS = process.argv[5];
 
 if (!ENV || !REGION || !DEFAULT_ACCOUNT_PASS) {
   console.error(
-    "Missing required arguments: please invoke this script like so 'node smoke-tests ${ENV} ${REGION} ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}'",
+    "Missing required arguments: please invoke this script like so 'ts-node smoke-tests ${ENV} ${REGION} ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}'",
   );
   process.exit(1);
 }
 
-const cognito = new AWS.CognitoIdentityServiceProvider({
+const cognito = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
 

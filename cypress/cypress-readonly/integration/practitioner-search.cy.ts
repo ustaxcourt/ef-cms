@@ -1,25 +1,19 @@
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { AuthenticationResult } from '../../support/login-types';
 import { isValidRequest } from '../support/helpers';
+import { login } from '../support/pages/login';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Practitioner Search', () => {
-  let token;
-
-  const { getUserToken, login } = getEnvironmentSpecificFunctions();
-
-  before(async () => {
-    let result = await getUserToken(
-      'testAdmissionsClerk@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = result.AuthenticationResult.IdToken;
-  });
-
   before(() => {
-    login(token);
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'testAdmissionsClerk@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      login(result.AuthenticationResult.IdToken);
+    });
   });
 
   it('should do a practitioner search by name', () => {
