@@ -72,6 +72,7 @@ export const privatePractitionerUser = {
 };
 
 export const trialClerkUser = {
+  name: 'Tuna Turner',
   role: ROLES.trialClerk,
   section: TRIAL_CLERKS_SECTION,
   userId: '4b1bb9ca-c997-4356-9682-2bca88fb048d',
