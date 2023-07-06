@@ -1,27 +1,23 @@
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
+import { AuthenticationResult } from '../../support/login-types';
 import { isValidRequest } from '../support/helpers';
+import { login } from '../support/pages/login';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Trial Sessions UI Smoketests', () => {
-  let token;
-
-  const { getUserToken, login } = getEnvironmentSpecificFunctions();
-
-  before(async () => {
-    let result = await getUserToken(
-      'testAdmissionsClerk@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = result.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'testAdmissionsClerk@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      login(result.AuthenticationResult.IdToken);
+    });
   });
 
   describe('login and view the trial sessions page', () => {
     it('should fetch the open trial sessions upon navigation', () => {
-      login(token);
-
       cy.intercept({
         hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
         method: 'GET',
