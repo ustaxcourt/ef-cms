@@ -7,7 +7,7 @@ import {
 import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-const VALID_TRIAL_SESSION = {
+export const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
   maxCases: 100,
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,

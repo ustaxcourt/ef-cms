@@ -1,14 +1,27 @@
-const { ContactFactory } = require('./ContactFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-/**
- * returns the constructor used for creating the NextFriendForMinorContact entity
- */
-exports.getNextFriendForMinorContact = ContactFactory.createContactFactory({
-  additionalErrorMappings: {
-    secondaryName: 'Enter name of next friend',
-  },
-  additionalValidation: {
-    secondaryName: JoiValidationConstants.STRING.max(500).required(),
-  },
-  contactName: 'NextFriendForMinorContact',
-});
+import { Contact } from './Contact';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+
+export class NextFriendForMinorContact extends Contact {
+  constructor(
+    rawContact,
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ) {
+    super(rawContact, 'NextFriendForMinorContact', {
+      applicationContext,
+    });
+  }
+
+  getValidationRules() {
+    return {
+      ...super.getValidationRules(),
+      secondaryName: JoiValidationConstants.STRING.max(500).required(),
+    };
+  }
+
+  getErrorToMessageMap() {
+    return {
+      ...super.getErrorToMessageMap(),
+      secondaryName: 'Enter name of next friend',
+    };
+  }
+}
