@@ -181,6 +181,13 @@ export const createDawsonUser = async ({
   deployingColorUrl,
   setPermanentPassword = false,
   user,
+}: {
+  deployingColorUrl?: string;
+  setPermanentPassword?: boolean;
+  user: {
+    password?: string;
+    email: string;
+  };
 }) => {
   checkEnvVar(
     EFCMS_DOMAIN,
