@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { saveFileAndGenerateUrl } from './saveFileAndGenerateUrl';
 
@@ -15,6 +16,11 @@ export const serveDocumentAndGetPaperServicePdf = async ({
   caseEntities,
   docketEntryId,
   stampedPdf,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntities: Case[];
+  docketEntryId: string;
+  stampedPdf: any;
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
