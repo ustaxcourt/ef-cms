@@ -3,9 +3,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
-import { getConstants } from '../../getConstants';
 import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
-import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -15,7 +13,6 @@ import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
-import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -41,16 +38,6 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setAddedDocketNumbersAction,
   parallel([
     [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
-    [
-      getFeatureFlagFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key,
-      ),
-      setFeatureFlagFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key,
-      ),
-    ],
   ]),
   setCurrentPageAction('CreateOrder'),
 ]);
