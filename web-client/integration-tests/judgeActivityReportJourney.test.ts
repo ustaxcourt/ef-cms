@@ -30,7 +30,7 @@ describe('Judge activity report journey', () => {
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
 
     const { isFormPristine, reportHeader } = runCompute(
-      judgeActivityReportHelper as any,
+      judgeActivityReportHelper,
       {
         state: cerebralTest.getState(),
       },
@@ -41,19 +41,13 @@ describe('Judge activity report journey', () => {
   });
 
   it('should display an error message when invalid dates are entered into the form', async () => {
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        startDate: '--_--',
-      },
-    );
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      startDate: '--_--',
+    });
 
-    await cerebralTest.runSequence(
-      'selectDateRangeFromJudgeActivityReportSequence',
-      {
-        endDate: 'yabbadabaadooooo',
-      },
-    );
+    await cerebralTest.runSequence('setJudgeActivityReportFiltersSequence', {
+      endDate: 'yabbadabaadooooo',
+    });
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence');
 
@@ -86,8 +80,7 @@ describe('Judge activity report journey', () => {
   );
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-
-  viewJudgeActivityReportResults(cerebralTest);
+  viewJudgeActivityReportResults(cerebralTest, {});
   it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
     const progressDescriptionTableTotalAfter =
       cerebralTest.progressDescriptionTableTotal;

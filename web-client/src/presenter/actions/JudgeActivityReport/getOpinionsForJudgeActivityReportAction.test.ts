@@ -1,5 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOpinionsForJudgeActivityReportAction } from './getOpinionsForJudgeActivityReportAction';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -8,7 +9,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
 
   const mockStartDate = '02/20/2021';
   const mockEndDate = '03/03/2021';
-  const mockJudgeName = 'Sotomayor';
+  const mockJudgeName = judgeUser.name;
   const mockOpinionsFiledByJudge = [
     {
       count: 1,
@@ -42,16 +43,18 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
 
   it('should retrieve opinions by the provided judge in the date range provided from persistence and return it to props', async () => {
     const { output } = await runAction(
-      getOpinionsForJudgeActivityReportAction,
+      getOpinionsForJudgeActivityReportAction as any,
       {
         modules: {
           presenter,
         },
         state: {
-          form: {
-            endDate: mockEndDate,
-            judgeName: mockJudgeName,
-            startDate: mockStartDate,
+          judgeActivityReport: {
+            filters: {
+              endDate: mockEndDate,
+              judges: [mockJudgeName],
+              startDate: mockStartDate,
+            },
           },
         },
       },
@@ -62,7 +65,7 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeName: mockJudgeName,
+      judges: [mockJudgeName],
       startDate: mockStartDate,
     });
     expect(output.opinions).toBe(mockOpinionsFiledByJudge);
