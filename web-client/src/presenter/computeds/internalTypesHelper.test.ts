@@ -266,4 +266,24 @@ describe('internalTypesHelper', () => {
       expect(miscellaneousLodgedType).toBeUndefined();
     });
   });
+
+  describe('legacy document types', () => {
+    let LEGACY_DOCUMENT_TYPES;
+    beforeAll(() => {
+      ({ LEGACY_DOCUMENT_TYPES } = applicationContext.getConstants());
+    });
+
+    it('does not show any legacy document types in dropdown', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {},
+      });
+
+      const legacyType =
+        result.internalDocumentTypesForSelectWithLegacySorted.find(
+          d => d.eventCode === LEGACY_DOCUMENT_TYPES[0].eventCode,
+        );
+
+      expect(legacyType).toBeUndefined();
+    });
+  });
 });
