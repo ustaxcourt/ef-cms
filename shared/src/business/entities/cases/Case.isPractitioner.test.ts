@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} = require('../../../test/mockCase');
-const { Case } = require('./Case');
+import { Case } from './Case';
+import { MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isPractitioner', () => {
   it('returns true if the contactId is a privatePractitioner on the case', () => {

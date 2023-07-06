@@ -26,7 +26,7 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
     this.preferredTrialCity = rawCase.preferredTrialCity;
     this.procedureType = rawCase.procedureType;
 
-    const contacts = ContactFactory.createContacts({
+    const contacts = ContactFactory({
       applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { isSealedCase } = require('./Case');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { isSealedCase } from './Case';
 
 describe('isSealedCase', () => {
   it('returns false if isSealed is false', () => {

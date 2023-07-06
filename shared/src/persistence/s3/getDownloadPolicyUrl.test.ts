@@ -24,7 +24,6 @@ describe('getDownloadPolicyUrl', () => {
       applicationContext,
       filename: 'file.pdf',
       key: '123',
-      useTempBucket: false,
     });
 
     expect(result).toEqual({ url: 'http://localhost' });
@@ -41,6 +40,17 @@ describe('getDownloadPolicyUrl', () => {
 
     expect(result).toEqual({ url: 'http://localhost' });
     expect(applicationContext.getTempDocumentsBucketName).toHaveBeenCalled();
+  });
+
+  it('should return a URL intended for viewing inline in a web browser when filename has NOT been provided', async () => {
+    const result = await getDownloadPolicyUrl({
+      applicationContext,
+      filename: undefined,
+      key: '123',
+      useTempBucket: true,
+    });
+
+    expect(result).toEqual({ url: 'http://localhost' });
   });
 
   it('rejects if an error is thrown', async () => {

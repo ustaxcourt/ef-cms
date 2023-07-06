@@ -1,15 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../EntityConstants');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { Petitioner } = require('../contacts/Petitioner');
+} from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { Petitioner } from '../contacts/Petitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addPetitioner', () => {
   it('should add the petitioner to the petitioners array and return the updated case', () => {

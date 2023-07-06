@@ -2,12 +2,6 @@ import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { pick } from 'lodash';
 
-/**
- * constructor
- *
- * @param {object} rawDocketEntry the raw docket entry data
- * @constructor
- */
 export class ReconciliationReportEntry extends JoiValidationEntity {
   public caseCaption: string;
   public docketEntryId: string;
@@ -23,6 +17,7 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
 
   constructor(rawDocketEntry) {
     super('ReconciliationReportEntry');
+
     this.caseCaption = rawDocketEntry.caseCaption;
     this.docketEntryId = rawDocketEntry.docketEntryId;
     this.docketNumber = rawDocketEntry.docketNumber;
@@ -56,3 +51,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
     return {};
   }
 }
+
+export type RawReconciliationReportEntry =
+  ExcludeMethods<ReconciliationReportEntry>;
