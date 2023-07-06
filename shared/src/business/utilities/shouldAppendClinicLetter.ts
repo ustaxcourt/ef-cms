@@ -5,9 +5,9 @@ export const shouldAppendClinicLetter = async ({
   caseEntity,
   procedureType,
   trialSession,
-}) => {
+}): Promise<{ appendClinicLetter: boolean; clinicLetterKey: string }> => {
   let appendClinicLetter = false;
-  let clinicLetterKey;
+  let clinicLetterKey: string;
 
   // add clinic letter for ANY pro se petitioner
   for (let petitioner of caseEntity.petitioners) {

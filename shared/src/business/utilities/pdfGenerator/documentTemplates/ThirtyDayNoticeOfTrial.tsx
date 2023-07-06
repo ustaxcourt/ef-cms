@@ -25,18 +25,16 @@ type TrialLocation = {
   address1?: string;
   address2?: string;
   courthouseName?: string;
-  city?: string;
+  cityState?: string;
   postalCode?: string;
-  state?: string;
 };
 
 const InPersonTrialLocationBox = ({
   address1,
   address2,
-  city,
+  cityState,
   courthouseName,
   postalCode,
-  state,
 }: TrialLocation) => {
   return (
     <div className="info-box info-box-trial" id="trial-info">
@@ -46,27 +44,19 @@ const InPersonTrialLocationBox = ({
         <div>{address1}</div>
         {address2 && <div>{address2}</div>}
         <div>
-          {city}, {state} {postalCode}
+          {cityState} {postalCode}
         </div>
         <div className="text-bold">In Person</div>
       </div>
     </div>
   );
 };
-const RemoteTrialLocationBox = ({
-  city,
-  state,
-}: {
-  city: string;
-  state: string;
-}) => {
+const RemoteTrialLocationBox = ({ cityState }: { cityState: string }) => {
   return (
     <div className="info-box info-box-trial" id="trial-info">
       <div className="info-box-header">Trial At</div>
       <div className="info-box-content">
-        <div>
-          {city}, {state}
-        </div>
+        <div>{cityState}</div>
         <div className="text-bold">Remote Proceeding</div>
       </div>
     </div>
@@ -235,18 +225,14 @@ export const ThirtyDayNoticeOfTrial = ({
           <InPersonTrialLocationBox
             address1={trialLocation.address1}
             address2={trialLocation.address2}
-            city={trialLocation.city}
+            cityState={trialLocation.cityState}
             courthouseName={trialLocation.courthouseName}
             postalCode={trialLocation.postalCode}
-            state={trialLocation.state}
           />
         )}
 
         {isRemote && (
-          <RemoteTrialLocationBox
-            city={trialLocation.city!}
-            state={trialLocation.state!}
-          />
+          <RemoteTrialLocationBox cityState={trialLocation.cityState!} />
         )}
 
         {isStandaloneRemote && <StandaloneRemoteTrialLocationBox />}

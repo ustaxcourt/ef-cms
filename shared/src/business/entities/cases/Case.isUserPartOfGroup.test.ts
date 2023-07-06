@@ -1,4 +1,4 @@
-const { isUserPartOfGroup } = require('./Case');
+import { isUserPartOfGroup } from './Case';
 
 describe('isUserPartOfGroup', () => {
   it('should return true when the userId exists in the petitioners', () => {

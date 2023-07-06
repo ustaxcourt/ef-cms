@@ -338,7 +338,7 @@ export const baseState = {
   individualInboxCount: 0,
   judgeActivityReportData: {},
   judgeUser: {} as any,
-  judges: [],
+  judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,

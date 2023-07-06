@@ -1,10 +1,8 @@
+import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('removeFromTrialWithAssociatedJudge', () => {
   it('removes the case from trial, updating the associated judge if one is passed in', () => {

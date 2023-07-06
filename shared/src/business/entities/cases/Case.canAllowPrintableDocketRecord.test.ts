@@ -1,6 +1,6 @@
-const { canAllowPrintableDocketRecord } = require('./Case');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { canAllowPrintableDocketRecord } from './Case';
 
 describe('canAllowPrintableDocketRecord', () => {
   it('returns true if the rawCase.canAllowPrintableDocketRecord value is defined and true', () => {

@@ -1,25 +1,30 @@
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
-const { getTextByCount } = require('../../utilities/getTextByCount');
+import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentNonStandardI } from './ExternalDocumentNonStandardI';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardI', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentI = ExternalDocumentFactory({
         scenario: 'Nonstandard I',
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
-        ordinalValue: VALIDATION_ERROR_MESSAGES.ordinalValue,
+
+      expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
+        category:
+          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.category,
+        documentType:
+          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES
+            .documentType[1],
+        freeText:
+          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.freeText[0]
+            .message,
+        ordinalValue:
+          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.ordinalValue,
       });
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentI = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amendment to [anything]',
         documentType: 'Amendment [anything]',
@@ -27,11 +32,12 @@ describe('ExternalDocumentNonStandardI', () => {
         ordinalValue: 'First',
         scenario: 'Nonstandard I',
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+
+      expect(externalDocumentI.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when freeText is over 1000 characters', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentI = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amendment to [anything]',
         documentType: 'Amendment [anything]',
@@ -40,13 +46,15 @@ describe('ExternalDocumentNonStandardI', () => {
         scenario: 'Nonstandard I',
       });
 
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+      expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
+        freeText:
+          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.freeText[1]
+            .message,
       });
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentI = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: getTextByCount(3001),
         documentType: 'Amendment [anything]',
@@ -54,15 +62,17 @@ describe('ExternalDocumentNonStandardI', () => {
         ordinalValue: 'First',
         scenario: 'Nonstandard I',
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
-        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+
+      expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
+        documentTitle:
+          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.documentTitle,
       });
     });
   });
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentI = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amendment to [anything]',
         documentType: 'Amendment [anything]',
@@ -70,11 +80,14 @@ describe('ExternalDocumentNonStandardI', () => {
         ordinalValue: '1',
         scenario: 'Nonstandard I',
       });
-      expect(extDoc.getDocumentTitle()).toEqual('First Amendment to Test');
+
+      expect(externalDocumentI.getDocumentTitle()).toEqual(
+        'First Amendment to Test',
+      );
     });
 
     it('should generate title with an otherIteration defined when ordinalValue is "Other"', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentI = ExternalDocumentFactory({
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amendment to [anything]',
         documentType: 'Amendment [anything]',
@@ -83,7 +96,10 @@ describe('ExternalDocumentNonStandardI', () => {
         otherIteration: 50,
         scenario: 'Nonstandard I',
       });
-      expect(extDoc.getDocumentTitle()).toEqual('Fiftieth Amendment to Test');
+
+      expect(externalDocumentI.getDocumentTitle()).toEqual(
+        'Fiftieth Amendment to Test',
+      );
     });
   });
 });

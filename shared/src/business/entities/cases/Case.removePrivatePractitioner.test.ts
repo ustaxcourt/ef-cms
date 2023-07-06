@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { PrivatePractitioner } = require('../PrivatePractitioner');
+import { Case } from './Case';
+import { PrivatePractitioner } from '../PrivatePractitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('removePrivatePractitioner', () => {
   it('does not remove a practitioner if not found in the associated case privatePractioners array', () => {

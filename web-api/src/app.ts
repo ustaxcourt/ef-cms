@@ -59,6 +59,7 @@ import { generatePrintableFilingReceiptLambda } from './documents/generatePrinta
 import { generatePrintablePendingReportLambda } from './pendingItems/generatePrintablePendingReportLambda';
 import { generateTrialCalendarPdfLambda } from './trialSessions/generateTrialCalendarPdfLambda';
 import { generateTrialSessionPaperServicePdfLambda } from './trialSessions/generateTrialSessionPaperServicePdfLambda';
+import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
 import { getBlockedCasesLambda } from './reports/getBlockedCasesLambda';
 import { getCalendaredCasesForTrialSessionLambda } from './trialSessions/getCalendaredCasesForTrialSessionLambda';
 import { getCaseDeadlinesForCaseLambda } from './caseDeadline/getCaseDeadlinesForCaseLambda';
@@ -81,7 +82,6 @@ import { getDocumentQCInboxForUserLambda } from './workitems/getDocumentQCInboxF
 import { getDocumentQCServedForSectionLambda } from './workitems/getDocumentQCServedForSectionLambda';
 import { getDocumentQCServedForUserLambda } from './workitems/getDocumentQCServedForUserLambda';
 import { getEligibleCasesForTrialSessionLambda } from './trialSessions/getEligibleCasesForTrialSessionLambda';
-import { getFeatureFlagValueLambda } from './featureFlag/getFeatureFlagValueLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './messages/getInboxMessagesForSectionLambda';
 import { getInboxMessagesForUserLambda } from './messages/getInboxMessagesForUserLambda';
@@ -974,7 +974,7 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
 /**
  * feature-flag
  */
-app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 
 /**
  * Authentication/Authorization
