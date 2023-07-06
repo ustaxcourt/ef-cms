@@ -1,3 +1,4 @@
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
@@ -124,7 +125,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledWith(expect.anything(), {
         caseEntity: expect.anything(),
         documentInfo: {
-          documentTitle: '30 Day Notice of Trial on [Date] at [Place]',
+          documentTitle: `30 Day Notice of Trial on ${formatDateString(
+            trialSession.startDate,
+            FORMATS.MMDDYYYY_DASHED,
+          )} at ${trialSession.trialLocation}`,
           documentType: '30-Day Notice of Trial',
           eventCode: 'NOTT',
         },
