@@ -1,6 +1,7 @@
-const { verifyAdminUserDisabled } = require('./admin');
-jest.mock('aws-sdk');
-const aws = require('aws-sdk');
+jest.mock('uuid', () => 'eb7b7961-395d-4b4c-afc6-9ebcadaf0150');
+jest.mock('@aws-sdk/client-cognito-identity-provider');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { verifyAdminUserDisabled } from './admin';
 
 describe('verifyAdminUserDisabled', () => {
   const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
@@ -15,19 +16,13 @@ describe('verifyAdminUserDisabled', () => {
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
 
-    aws.CognitoIdentityServiceProvider.prototype = {
-      adminDisableUser: jest.fn().mockReturnValue({
-        promise: jest.fn().mockResolvedValue({}),
+    CognitoIdentityProvider.prototype = {
+      adminDisableUser: jest.fn().mockResolvedValue({}),
+      adminGetUser: jest.fn().mockResolvedValue({
+        Enabled: false,
       }),
-      adminGetUser: jest.fn().mockReturnValue({
-        promise: jest.fn().mockResolvedValue({
-          Enabled: false,
-        }),
-      }),
-      listUserPools: jest.fn().mockReturnValue({
-        promise: jest.fn().mockResolvedValue({
-          UserPools: [{ Id: 'asdfb', Name: `efcms-${process.env.ENV}` }],
-        }),
+      listUserPools: jest.fn().mockResolvedValue({
+        UserPools: [{ Id: 'asdfb', Name: `efcms-${process.env.ENV}` }],
       }),
     };
   });
@@ -49,12 +44,10 @@ describe('verifyAdminUserDisabled', () => {
   it('should exit and log an error if maxRetries is reached for calling adminDisableUser and user is not enabled', async () => {
     process.env.ENV = 'superfake';
 
-    aws.CognitoIdentityServiceProvider.prototype.adminGetUser = jest
+    CognitoIdentityProvider.prototype.adminGetUser = jest
       .fn()
-      .mockReturnValue({
-        promise: jest.fn().mockResolvedValue({
-          Enabled: true,
-        }),
+      .mockResolvedValue({
+        Enabled: true,
       });
 
     await verifyAdminUserDisabled({ attempt: 0 });
@@ -69,7 +62,7 @@ describe('verifyAdminUserDisabled', () => {
     process.env.ENV = 'superfake';
 
     const mockErrorMsg = 'error error read all about it';
-    aws.CognitoIdentityServiceProvider.prototype.adminGetUser = jest
+    CognitoIdentityProvider.prototype.adminGetUser = jest
       .fn()
       .mockImplementation(() => {
         throw new Error(mockErrorMsg);

@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker';
 
-export const fillInCreateCaseFromPaperForm = testData => {
+export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   const petitionerName = `${faker.person.firstName()} ${faker.person.lastName()}`;
   cy.get('#party-type').select('Petitioner');
   cy.get('#name').type(petitionerName);
