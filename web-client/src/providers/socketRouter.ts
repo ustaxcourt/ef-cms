@@ -125,6 +125,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
+      case 'fetch_opinions_complete':
+        await app.getSequence('fetchOrdersAndOpinionsForJudgesSequence')({
+          ...message,
+        });
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);

@@ -87,5 +87,13 @@ export const getOpinionsFiledByJudgeInteractor = async (
 
   const sortedResult = orderBy(result, 'eventCode', 'asc');
 
-  return sortedResult;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: params.clientConnectionId,
+    message: {
+      action: 'fetch_opinions_complete',
+      opinions: sortedResult,
+    },
+    userId: authorizedUser.userId,
+  });
 };
