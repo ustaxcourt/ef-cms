@@ -6,10 +6,8 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { CaseExternalInformationFactory } from './CaseExternalInformationFactory';
-import { ContactFactory } from '../contacts/ContactFactory';
+import { Contact } from '../contacts/Contact';
 import { applicationContext } from '../../test/createTestApplicationContext';
-
-const contactErrorMessages = ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES;
 
 describe('CaseExternalInformationFactory entity', () => {
   it('requires wizard step', () => {
@@ -388,14 +386,14 @@ describe('CaseExternalInformationFactory entity', () => {
       expect(caseExternal.getFormattedValidationErrors()!).toEqual({
         petitioners: [
           {
-            address1: contactErrorMessages.address1,
-            city: contactErrorMessages.city,
-            countryType: contactErrorMessages.countryType,
+            address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
+            city: Contact.DOMESTIC_VALIDATION_MESSAGES.city,
+            countryType: Contact.DOMESTIC_VALIDATION_MESSAGES.countryType,
             index: 0,
-            name: contactErrorMessages.name,
-            phone: contactErrorMessages.phone,
-            postalCode: contactErrorMessages.postalCode[1],
-            state: contactErrorMessages.state,
+            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
+            phone: Contact.DOMESTIC_VALIDATION_MESSAGES.phone,
+            postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[1],
+            state: Contact.DOMESTIC_VALIDATION_MESSAGES.state,
           },
         ],
       });
@@ -474,24 +472,24 @@ describe('CaseExternalInformationFactory entity', () => {
             .petitionFileSize[1],
         petitioners: [
           {
-            address1: contactErrorMessages.address1,
-            city: contactErrorMessages.city,
-            countryType: contactErrorMessages.countryType,
+            address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
+            city: Contact.DOMESTIC_VALIDATION_MESSAGES.city,
+            countryType: Contact.DOMESTIC_VALIDATION_MESSAGES.countryType,
             index: 0,
-            name: contactErrorMessages.name,
-            phone: contactErrorMessages.phone,
-            postalCode: contactErrorMessages.postalCode[1],
-            state: contactErrorMessages.state,
+            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
+            phone: Contact.DOMESTIC_VALIDATION_MESSAGES.phone,
+            postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[1],
+            state: Contact.DOMESTIC_VALIDATION_MESSAGES.state,
           },
           {
-            address1: contactErrorMessages.address1,
-            city: contactErrorMessages.city,
-            countryType: contactErrorMessages.countryType,
+            address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
+            city: Contact.DOMESTIC_VALIDATION_MESSAGES.city,
+            countryType: Contact.DOMESTIC_VALIDATION_MESSAGES.countryType,
             index: 1,
-            name: contactErrorMessages.name,
-            phone: contactErrorMessages.phone,
-            postalCode: contactErrorMessages.postalCode[1],
-            state: contactErrorMessages.state,
+            name: Contact.DOMESTIC_VALIDATION_MESSAGES.name,
+            phone: Contact.DOMESTIC_VALIDATION_MESSAGES.phone,
+            postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[1],
+            state: Contact.DOMESTIC_VALIDATION_MESSAGES.state,
           },
         ],
         preferredTrialCity:
