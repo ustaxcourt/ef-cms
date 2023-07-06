@@ -1,5 +1,6 @@
 import { CONTACT_TYPES } from '../entities/EntityConstants';
 import { Petitioner } from '../entities/contacts/Petitioner';
+import { RawContact } from '../entities/contacts/Contact';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { isEmpty } from 'lodash';
 
@@ -17,7 +18,7 @@ export const validatePetitionerInteractor = (
   {
     contactInfo,
     existingPetitioners,
-  }: { contactInfo: TContact; existingPetitioners: TPetitioner[] },
+  }: { contactInfo: RawContact; existingPetitioners: TPetitioner[] },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
