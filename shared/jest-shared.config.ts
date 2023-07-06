@@ -18,6 +18,7 @@ const config: Config = {
     '!src/**/*_.ts',
     '!src/persistence/sqs/deleteMessage.ts',
     '!src/persistence/sqs/getMessages.ts',
+    '!src/persistence/messages/*.ts',
     '!src/persistence/dynamo/**/*.ts',
     '!src/business/utilities/documentGenerators/*.ts',
   ],
