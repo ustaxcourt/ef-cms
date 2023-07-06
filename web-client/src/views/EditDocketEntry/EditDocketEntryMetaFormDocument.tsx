@@ -11,7 +11,6 @@ import {
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/Utils/documentTypeSelectHelper';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -24,7 +23,6 @@ export const EditDocketEntryMetaFormDocument = connect(
     internalTypesHelper: state.internalTypesHelper,
     updateDocketEntryMetaDocumentFormValueSequence:
       sequences.updateDocketEntryMetaDocumentFormValueSequence,
-    useLegacyDocumentTypes: props.useLegacyDocumentTypes,
     validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
   },
@@ -34,18 +32,9 @@ export const EditDocketEntryMetaFormDocument = connect(
     internalTypesHelper,
     OBJECTIONS_OPTIONS,
     updateDocketEntryMetaDocumentFormValueSequence,
-    useLegacyDocumentTypes = true,
     validateDocumentSequence,
     validationErrors,
   }) {
-    let dropdownOptions =
-      internalTypesHelper.internalDocumentTypesForSelectSorted;
-
-    if (!useLegacyDocumentTypes) {
-      dropdownOptions = dropdownOptions.filter(
-        option => option.eventCode !== 'DSC',
-      );
-    }
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
@@ -108,7 +97,9 @@ export const EditDocketEntryMetaFormDocument = connect(
             aria-describedby="document-type-label"
             id="document-type"
             name="eventCode"
-            options={dropdownOptions}
+            options={
+              internalTypesHelper.filteredInternalDocumentTypesForSelectSorted
+            }
             value={reactSelectValue({
               documentTypes:
                 internalTypesHelper.internalDocumentTypesForSelectSorted,
@@ -155,7 +146,9 @@ export const EditDocketEntryMetaFormDocument = connect(
               id="secondary-document-type"
               isClearable={true}
               name="secondaryDocument.eventCode"
-              options={dropdownOptions}
+              options={
+                internalTypesHelper.filteredInternalDocumentTypesForSelectSorted
+              }
               value={reactSelectValue({
                 documentTypes:
                   internalTypesHelper.internalDocumentTypesForSelectSorted,

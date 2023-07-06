@@ -62,9 +62,7 @@ export const EditDocketEntryMeta = connect(
                     <EditDocketEntryMetaFormCourtIssued />
                   )}
                   {editType === 'Document' && (
-                    <EditDocketEntryMetaFormDocument
-                      useLegacyDocumentTypes={false}
-                    />
+                    <EditDocketEntryMetaFormDocument />
                   )}
                   {editType === 'NoDocument' && (
                     <EditDocketEntryMetaFormNoDocument />
