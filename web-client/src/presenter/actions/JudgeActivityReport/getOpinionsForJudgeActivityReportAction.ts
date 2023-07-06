@@ -5,13 +5,14 @@ export const getOpinionsForJudgeActivityReportAction = async ({
   get,
 }: ActionProps) => {
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
-  const opinions = await applicationContext
+  const clientConnectionId = get(state.clientConnectionId);
+
+  await applicationContext
     .getUseCases()
     .getOpinionsFiledByJudgeInteractor(applicationContext, {
+      clientConnectionId,
       endDate,
       judges,
       startDate,
     });
-
-  return { opinions };
 };
