@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { TRIAL_SESSION_PROCEEDING_TYPES } = require('../EntityConstants');
-const { TrialSession } = require('./TrialSession');
-const { VALID_TRIAL_SESSION } = require('./TrialSession.test');
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../EntityConstants';
+import { TrialSession } from './TrialSession';
+import { VALID_TRIAL_SESSION } from './TrialSession.test';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('canSetAsCalendared', () => {

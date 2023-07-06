@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
+import { Case } from './Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getCaseConfirmationGeneratedPdfFileName', () => {
   it('generates the correct name for the case confirmation pdf', () => {
