@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('unsetAsBlocked', () => {
   it('unsets the case as blocked', () => {
