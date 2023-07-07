@@ -1,6 +1,8 @@
 {
-  "extends": "../tsconfig.json",
   "compilerOptions": {
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "strict": true,
     "noEmit": true,
     "target": "es5",
     "lib": ["es5", "dom"],
