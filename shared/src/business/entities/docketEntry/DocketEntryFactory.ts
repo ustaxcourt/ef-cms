@@ -184,7 +184,10 @@ function DocketEntryFactory(rawProps) {
   };
 
   const exDoc = ExternalDocumentFactory(rawProps);
-  const docketEntryExternalDocumentSchema = exDoc.getSchema();
+  const rules = exDoc.getValidationRules();
+  const docketEntryExternalDocumentSchema = rules.validate
+    ? rules
+    : joi.object().keys(rules);
 
   schema = schema.concat(docketEntryExternalDocumentSchema).concat(
     joi.object({

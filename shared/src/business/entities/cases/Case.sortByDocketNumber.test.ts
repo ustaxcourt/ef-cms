@@ -1,4 +1,4 @@
-const { Case } = require('./Case');
+import { Case } from './Case';
 
 describe('sortByDocketNumber', () => {
   it('Should return the cases as an array sorted by docket number for cases filed in the same year', () => {

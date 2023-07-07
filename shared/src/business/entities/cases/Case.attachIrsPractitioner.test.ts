@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { IrsPractitioner } = require('../IrsPractitioner');
+import { Case } from './Case';
+import { IrsPractitioner } from '../IrsPractitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('attachIrsPractitioner', () => {
   it('adds the user to the irsPractitioners', () => {

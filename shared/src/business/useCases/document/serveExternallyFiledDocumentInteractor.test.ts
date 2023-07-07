@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -47,7 +48,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: true,
+      });
 
     applicationContext
       .getUseCaseHelpers()
@@ -347,7 +350,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const mockMemberCaseDocketNumber = '999-15';
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: false,
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
