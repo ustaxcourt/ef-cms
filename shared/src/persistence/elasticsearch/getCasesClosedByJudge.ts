@@ -21,11 +21,11 @@ export const getCasesClosedByJudge = async ({
 }) => {
   const source = ['status'];
 
-  const mustFilters: QueryDslQueryContainer[] = [];
+  const shouldFilters: QueryDslQueryContainer[] = [];
 
   if (judges.length) {
     judges.forEach(judge => {
-      mustFilters.push({
+      shouldFilters.push({
         match_phrase: { 'associatedJudge.S': `${judge}` },
       });
     });
@@ -48,7 +48,8 @@ export const getCasesClosedByJudge = async ({
                 },
               },
             ],
-            must: mustFilters,
+            minimum_should_match: 1,
+            should: shouldFilters,
           },
         },
         size: pageSize || MAX_ELASTICSEARCH_PAGINATION,
