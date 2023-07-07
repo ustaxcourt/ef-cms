@@ -1,34 +1,21 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createTrialSessionAndWorkingCopy } from './createTrialSessionAndWorkingCopy';
 
-const DATE = '2018-11-21T20:49:28.192Z';
-
-const trialSessionMetadata = {
-  isCalendared: false,
-  judge: { name: 'Buch', userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0' },
-  maxCases: 100,
-  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-  sessionType: 'Hybrid',
-  startDate: DATE,
-  term: 'Fall',
-  termYear: '2018',
-  trialLocation: 'Chicago, Illinois',
-  trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-};
-let trialSessionToAdd;
-
 describe('createTrialSessionAndWorkingCopy', () => {
+  let trialSessionToAdd: TrialSession;
+
   beforeEach(() => {
     trialSessionToAdd = TrialSessionFactory(
-      trialSessionMetadata,
+      MOCK_TRIAL_INPERSON,
       applicationContext,
     );
 
     applicationContext
       .getPersistenceGateway()
-      .createTrialSession.mockReturnValue(trialSessionMetadata);
+      .createTrialSession.mockReturnValue(MOCK_TRIAL_INPERSON);
   });
 
   it('should create a trial session successfully', async () => {
@@ -82,33 +69,26 @@ describe('createTrialSessionAndWorkingCopy', () => {
 
   describe('validation', () => {
     it('should fail to migrate a trial session when the trial session metadata is invalid', async () => {
+      delete (trialSessionToAdd as any).sessionType;
+
       await expect(
         createTrialSessionAndWorkingCopy({
           applicationContext,
-          trialSessionToAdd: TrialSessionFactory(
-            {
-              trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-            },
-            applicationContext,
-          ),
+          trialSessionToAdd,
         }),
       ).rejects.toThrow('The TrialSession entity was invalid');
     });
 
     it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
-      const trialSessionToCreate = TrialSessionFactory(
-        trialSessionToAdd,
-        applicationContext,
-      );
-      delete trialSessionToCreate.trialSessionId;
+      delete (trialSessionToAdd as any).trialSessionId;
 
       await expect(
         createTrialSessionAndWorkingCopy({
           applicationContext,
-          trialSessionToAdd: trialSessionToCreate,
+          trialSessionToAdd,
         }),
       ).rejects.toThrow(
-        'The TrialSessionWorkingCopy entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',
+        'The TrialSession entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',
       );
     });
   });

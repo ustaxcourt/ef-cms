@@ -1,12 +1,17 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_STANDALONE_REMOTE } from '../../../test/mockTrial';
+import { TrialSession } from '../trialSessions/TrialSession';
 import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('removeFromTrial', () => {
-  it('removes the case from trial, unsetting trial details and setting status to general docket ready for trial', () => {
-    const caseToUpdate = new Case(
+  let caseToUpdate: Case;
+  let mockTrialSession: TrialSession;
+
+  beforeEach(() => {
+    caseToUpdate = new Case(
       {
         ...MOCK_CASE,
       },
@@ -14,26 +19,23 @@ describe('removeFromTrial', () => {
         applicationContext,
       },
     );
-    const trialSession = TrialSessionFactory(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
+
+    mockTrialSession = TrialSessionFactory(
+      MOCK_TRIAL_STANDALONE_REMOTE,
       applicationContext,
     );
+  });
+
+  it('removes the case from trial, unsetting trial details and setting status to general docket ready for trial', () => {
     const user = 'Petitions Clerk';
 
-    caseToUpdate.setAsCalendared(trialSession);
+    caseToUpdate.setAsCalendared(mockTrialSession);
 
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(caseToUpdate.trialDate).toBeTruthy();
-    expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+    expect(caseToUpdate.associatedJudge).toEqual(
+      MOCK_TRIAL_STANDALONE_REMOTE.judge!.name,
+    );
     expect(caseToUpdate.trialLocation).toBeTruthy();
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
@@ -58,32 +60,11 @@ describe('removeFromTrial', () => {
   });
 
   it('sets the case status to the given case status when provided', () => {
-    const caseToUpdate = new Case(
-      {
-        ...MOCK_CASE,
-      },
-      {
-        applicationContext,
-      },
-    );
-    const trialSession = TrialSessionFactory(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      applicationContext,
-    );
-    caseToUpdate.setAsCalendared(trialSession);
+    caseToUpdate.setAsCalendared(mockTrialSession);
 
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(caseToUpdate.trialDate).toBeTruthy();
-    expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+    expect(caseToUpdate.associatedJudge).toEqual(mockTrialSession.judge!.name);
     expect(caseToUpdate.trialLocation).toBeTruthy();
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();
@@ -95,32 +76,11 @@ describe('removeFromTrial', () => {
   });
 
   it('sets the case status along with the associated judge when provided', () => {
-    const caseToUpdate = new Case(
-      {
-        ...MOCK_CASE,
-      },
-      {
-        applicationContext,
-      },
-    );
-    const trialSession = TrialSessionFactory(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      applicationContext,
-    );
-    caseToUpdate.setAsCalendared(trialSession);
+    caseToUpdate.setAsCalendared(mockTrialSession);
 
     expect(caseToUpdate.status).toEqual(CASE_STATUS_TYPES.calendared);
     expect(caseToUpdate.trialDate).toBeTruthy();
-    expect(caseToUpdate.associatedJudge).toEqual('Judge Buch');
+    expect(caseToUpdate.associatedJudge).toEqual(mockTrialSession.judge!.name);
     expect(caseToUpdate.trialLocation).toBeTruthy();
     expect(caseToUpdate.trialSessionId).toBeTruthy();
     expect(caseToUpdate.trialTime).toBeTruthy();

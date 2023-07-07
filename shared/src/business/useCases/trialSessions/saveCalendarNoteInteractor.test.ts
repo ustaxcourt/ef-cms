@@ -2,29 +2,16 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
 } from '../../../test/mockCase';
-import {
-  ROLES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../entities/EntityConstants';
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
+import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
 
 describe('saveCalendarNotes', () => {
   let mockCurrentUser;
-  let mockTrialSession;
-  let mockCase;
-
-  const MOCK_TRIAL = {
-    caseOrder: [],
-    maxCases: 100,
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    sessionType: 'Regular',
-    startDate: '2025-12-01T00:00:00.000Z',
-    term: 'Fall',
-    termYear: '2025',
-    trialLocation: 'Birmingham, Alabama',
-    trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
-  };
+  let mockTrialSession: RawTrialSession;
+  let mockCase: RawCase;
 
   beforeEach(() => {
     mockCurrentUser = {
@@ -32,9 +19,8 @@ describe('saveCalendarNotes', () => {
       userId: '8675309b-18d0-43ec-bafb-654e83405411',
     };
 
-    mockTrialSession = { ...MOCK_TRIAL };
-
-    mockCase = { ...MOCK_CASE };
+    mockTrialSession = MOCK_TRIAL_REMOTE;
+    mockCase = MOCK_CASE;
 
     applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
     applicationContext
@@ -149,7 +135,7 @@ describe('saveCalendarNotes', () => {
       ...MOCK_CASE,
       hearings: [
         {
-          ...MOCK_TRIAL,
+          ...mockTrialSession,
           caseOrder: [
             {
               calendarNotes: 'just a hearing note',
@@ -185,7 +171,7 @@ describe('saveCalendarNotes', () => {
       ...MOCK_CASE,
       hearings: [
         {
-          ...MOCK_TRIAL,
+          ...mockTrialSession,
           caseOrder: [
             {
               calendarNotes: 'just a hearing note',
