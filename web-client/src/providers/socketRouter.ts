@@ -126,7 +126,10 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'fetch_opinions_complete':
-        await app.getSequence('fetchOrdersAndOpinionsForJudgesSequence')({
+      case 'fetch_orders_complete':
+        await app.getSequence(
+          'fetchOrdersAndOpinionsForJudgesCompleteSequence',
+        )({
           ...message,
         });
         break;
