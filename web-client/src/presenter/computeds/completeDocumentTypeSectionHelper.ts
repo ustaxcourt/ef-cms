@@ -20,10 +20,17 @@ export const completeDocumentTypeSectionHelper = (
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const { CATEGORY_MAP, NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES } =
-    applicationContext.getConstants();
+  const {
+    CATEGORY_MAP,
+    LEGACY_DOCUMENT_TYPES,
+    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);
+
+  const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
+    value => value.eventCode,
+  );
 
   returnData.documentTypesForSelectSorted = documentTypesForSelect
     .sort(getSortFunction(searchText))
@@ -31,7 +38,7 @@ export const completeDocumentTypeSectionHelper = (
       docType =>
         !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
           docType.eventCode,
-        ) && docType.eventCode !== 'DSC',
+        ) && legacyDocumentCodes.indexOf(docType.eventCode) === -1,
     );
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(
