@@ -129,7 +129,7 @@ export class CaseInternal extends JoiValidationEntity {
         )
       : [];
 
-    const contacts = ContactFactory.createContacts({
+    const contacts = ContactFactory({
       applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawProps) || rawProps.contactPrimary,

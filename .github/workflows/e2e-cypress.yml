@@ -37,8 +37,9 @@ jobs:
           ./wait-until-services.sh
           sleep 5
           npm run cypress:integration
-      - name: Store Logs
+      - name: Store Cypress Failure Videos
+        if: always()
         uses: actions/upload-artifact@v3
         with:
-          name: cypress-logs
-          path: /tmp/cypress
+          name: cypress-videos
+          path: ${{ github.workspace }}/cypress/cypress-integration/videos

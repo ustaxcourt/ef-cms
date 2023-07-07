@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { NewTrialSession } = require('./NewTrialSession');
-const { TRIAL_SESSION_PROCEEDING_TYPES } = require('../EntityConstants');
+import { NewTrialSession } from './NewTrialSession';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const VALID_TRIAL_SESSION = {
   maxCases: 100,

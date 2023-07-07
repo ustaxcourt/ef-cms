@@ -1,4 +1,6 @@
-const { CSV_HEADERS, init } = require('./bulkImportJudgeUsers.helpers');
+import { CSV_HEADERS, init } from './bulkImportJudgeUsers.helpers';
+import { readCsvFile } from '../../../web-api/importHelpers';
+import axios from 'axios';
 
 jest.mock('../../../web-api/importHelpers', () => ({
   getServices: jest.fn().mockResolvedValue({
@@ -8,9 +10,6 @@ jest.mock('../../../web-api/importHelpers', () => ({
   readCsvFile: jest.fn(),
 }));
 jest.mock('axios');
-
-const axios = require('axios');
-const { readCsvFile } = require('../../../web-api/importHelpers');
 
 let mockLegacyJudge;
 let mockCurrentJudge;
