@@ -1,5 +1,3 @@
-import { CASE_SEARCH_MIN_YEAR } from '../entities/EntityConstants';
-import { FORMATS, formatNow } from './DateHandler';
 export const removeAdvancedSyntaxSymbols = text => {
   const nonWordCharacters = /[-+\s[\]{}:?!*()<>=]+/gims;
   return text.replace(nonWordCharacters, ' ').trim();
@@ -8,24 +6,23 @@ export const removeAdvancedSyntaxSymbols = text => {
 /**
  * aggregateCommonQueryParams
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.countryType the country type to search cases by (domestic/international)
  * @param {string} providers.petitionerName the name of the petitioner to search cases by
  * @param {string} providers.petitionerState the state of the petitioner to search cases by
- * @param {string} providers.yearFiledMax the max year filed to search cases by
- * @param {string} providers.yearFiledMin the min year filed to search cases by
+ * @param {string} providers.endDate the end filed date to search cases by
+ * @param {string} providers.startDate the start filed date to search cases by
  * @returns {object} the case data
  */
 export const aggregateCommonQueryParams = ({
   countryType,
+  endDate,
   petitionerName,
   petitionerState,
-  yearFiledMax,
-  yearFiledMin,
+  startDate,
 }) => {
-  const commonQuery = [];
-  const exactMatchesQuery = [];
-  const nonExactMatchesQuery = [];
+  const commonQuery: Record<string, any>[] = [];
+  const exactMatchesQuery: Record<string, any>[] = [];
+  const nonExactMatchesQuery: Record<string, any>[] = [];
 
   if (petitionerName) {
     const simplePetitionerQuery = removeAdvancedSyntaxSymbols(petitionerName);
@@ -92,18 +89,13 @@ export const aggregateCommonQueryParams = ({
     });
   }
 
-  if (yearFiledMin || yearFiledMax) {
-    const yearMin = yearFiledMin ? yearFiledMin.trim() : CASE_SEARCH_MIN_YEAR;
-    const yearMax = yearFiledMax
-      ? yearFiledMax.trim()
-      : formatNow(FORMATS.YEAR);
-
+  if (endDate && startDate) {
     commonQuery.push({
       range: {
         'receivedAt.S': {
-          format: 'yyyy',
-          gte: `${yearMin}||/y`,
-          lte: `${yearMax}||/y`,
+          format: 'strict_date_optional_time',
+          gte: startDate,
+          lte: endDate,
         },
       },
     });
