@@ -17,7 +17,7 @@ export class OpenTrialSession extends TrialSession {
   public thirtyDaysBeforeTrialFormatted: string; // TODO: should be a computed property
 
   constructor(rawProps) {
-    super(rawProps);
+    super(rawProps, 'OpenTrialSession');
 
     const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
     const trialStartDateString = prepareDateFromString(
