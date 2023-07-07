@@ -88,5 +88,13 @@ export const getOrdersFiledByJudgeInteractor = async (
 
   const sortedResult = orderBy(formattedResult, 'eventCode', 'asc');
 
-  return sortedResult;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId: params.clientConnectionId,
+    message: {
+      action: 'fetch_orders_complete',
+      orders: sortedResult,
+    },
+    userId: authorizedUser.userId,
+  });
 };
