@@ -14,7 +14,7 @@ export const caseAdvancedSearch = async ({
   searchTerms,
 }) => {
   const { commonQuery, exactMatchesQuery, nonExactMatchesQuery } =
-    aggregateCommonQueryParams({ applicationContext, ...searchTerms });
+    aggregateCommonQueryParams(searchTerms);
 
   const source = [
     'caseCaption',

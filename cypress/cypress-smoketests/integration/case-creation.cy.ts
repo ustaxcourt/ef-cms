@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../../support/login-types';
 import {
   completeWizardStep1,
   completeWizardStep2,
@@ -14,7 +15,6 @@ import {
   hasIrsNotice,
   submitPetition,
 } from '../support/pages/create-electronic-petition';
-
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
@@ -28,19 +28,18 @@ import { goToMyDocumentQC } from '../support/pages/document-qc';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-let token = null;
-let testData = { createdPaperDocketNumber: '' };
+let token: string;
 
-const { closeScannerSetupDialog, getUserToken, login } =
-  getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitioner1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'petitioner1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -76,12 +75,13 @@ describe('Petitioner', () => {
 });
 
 describe('Private practitioner', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'privatePractitioner1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'privatePractitioner1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -116,12 +116,13 @@ describe('Private practitioner', () => {
 });
 
 describe('Petitions clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -141,11 +142,7 @@ describe('Petitions clerk', () => {
     goToMyDocumentQC();
     goToCreateCase();
     fillInCreateCaseFromPaperForm();
-    goToReviewCase(testData);
+    goToReviewCase();
     serveCaseToIrs();
-    // TODO: docketNumber is undefined the first run of this test, consider moving
-    // these steps into another it block?
-    // goToCaseDetail(testData.createdPaperDocketNumber);
-    // viewPrintableDocketRecord();
   });
 });

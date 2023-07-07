@@ -267,8 +267,8 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
-  batchDownloads: {}, // batch download of PDFs
+  assigneeId: null,
+  batchDownloads: {},
   caseDeadlineReport: {} as {
     caseDeadlines: RawCaseDeadline[];
     judgeFilter: string;
@@ -279,9 +279,7 @@ export const baseState = {
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
-  // TODO: replace with state.form
   currentJudges: [],
-
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -311,7 +309,6 @@ export const baseState = {
   },
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   docketEntryId: null,
-
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
@@ -328,7 +325,6 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   individualInProgressCount: 0,

@@ -3,17 +3,13 @@ export const goToCreateCase = () => {
   cy.get('.big-blue-header').should('exist');
 };
 
-export const goToReviewCase = testData => {
+export function goToReviewCase(): Cypress.Chainable<string> {
   cy.intercept('POST', '**/paper').as('postPaperCase');
   cy.get('button#submit-case').scrollIntoView().click();
-  cy.wait('@postPaperCase').then(({ response }) => {
-    expect(response.body).to.have.property('docketNumber');
-    if (testData) {
-      testData.createdPaperDocketNumber = response.body.docketNumber;
-    }
+  return cy.wait('@postPaperCase').then(({ response }) => {
+    return response?.body.docketNumber;
   });
-  cy.get('.big-blue-header').should('exist');
-};
+}
 
 export const saveCaseForLater = () => {
   cy.get('button:contains("Save for Later")').click();
