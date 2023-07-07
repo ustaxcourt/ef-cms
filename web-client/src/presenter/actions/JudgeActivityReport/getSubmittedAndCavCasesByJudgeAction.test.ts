@@ -49,23 +49,20 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   });
 
   it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return it to props', async () => {
-    const result = await runAction(
-      getSubmittedAndCavCasesByJudgeAction as any,
-      {
-        modules: {
-          presenter,
-        },
-        props: {
-          selectedPage: 0,
-        },
-        state: {
-          judgeActivityReport: {
-            filters: requestFilters,
-            lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
-          },
+    const result = await runAction(getSubmittedAndCavCasesByJudgeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: 0,
+      },
+      state: {
+        judgeActivityReport: {
+          filters: requestFilters,
+          lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
         },
       },
-    );
+    });
 
     expect(
       (
@@ -73,21 +70,16 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
           .getCasesByStatusAndByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject(requestFilters);
-    expect(
-      result.state.judgeActivityReport.judgeActivityReportData
-        .submittedAndCavCasesByJudge,
-    ).toBe(mockReturnedCases);
-    expect(
-      result.state.judgeActivityReport.judgeActivityReportData
-        .consolidatedCasesGroupCountMap,
-    ).toMatchObject({ '101-22': 3 });
+    expect(result.output.cases).toBe(mockReturnedCases);
+    expect(result.output.consolidatedCasesGroupCountMap).toMatchObject({
+      '101-22': 3,
+    });
   });
 
   it('should populate page ID tracking array when navigating to later pages', async () => {
     const page1SearchId = 123;
-    const page2SearchId = 9001;
     mockCustomCaseReportResponse.lastDocketNumberForCavAndSubmittedCasesSearch =
-      page2SearchId;
+      page1SearchId;
 
     await applicationContext
       .getUseCases()
@@ -116,10 +108,8 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.lastIdsOfPages).toMatchObject([
-      lastDocketNumberForCavAndSubmittedCasesSearch,
+    expect(result.output.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
       page1SearchId,
-      page2SearchId,
-    ]);
+    );
   });
 });
