@@ -38,7 +38,8 @@ describe('getCasesClosedByJudge', () => {
             },
           },
         ],
-        must: [
+        minimum_should_match: 1,
+        should: [
           {
             match_phrase: {
               'associatedJudge.S': judgeUser.name,
@@ -82,7 +83,8 @@ describe('getCasesClosedByJudge', () => {
             },
           },
         ],
-        must: [
+        minimum_should_match: 1,
+        should: [
           {
             match_phrase: {
               'associatedJudge.S': mockJudges[0],
