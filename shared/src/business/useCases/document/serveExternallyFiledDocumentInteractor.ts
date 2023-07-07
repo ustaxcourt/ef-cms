@@ -115,7 +115,15 @@ export const serveExternallyFiledDocumentInteractor = async (
   const consolidateCaseDuplicateDocketEntries =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key];
 
-  if (!consolidateCaseDuplicateDocketEntries) {
+  const subjectCaseIsSimultaneousDocType =
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+      originalSubjectDocketEntry.eventCode,
+    );
+
+  if (
+    !consolidateCaseDuplicateDocketEntries ||
+    subjectCaseIsSimultaneousDocType
+  ) {
     docketNumbers = [subjectCaseDocketNumber];
   } else {
     docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];
@@ -138,17 +146,12 @@ export const serveExternallyFiledDocumentInteractor = async (
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseDocketNumber;
 
-        const isSimultaneousDocumentType =
-          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            originalSubjectDocketEntry.eventCode,
-          );
-
         const docketEntryEntity = new DocketEntry(
           {
             ...originalSubjectDocketEntry,
             docketNumber: caseEntity.docketNumber,
             draftOrderState: null,
-            ...(!isSimultaneousDocumentType && {
+            ...(!subjectCaseIsSimultaneousDocType && {
               filingDate: applicationContext
                 .getUtilities()
                 .createISODateString(),
