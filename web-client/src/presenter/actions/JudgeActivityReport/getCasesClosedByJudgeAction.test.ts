@@ -20,7 +20,7 @@ describe('getCasesClosedByJudgeAction', () => {
       .getUseCases()
       .getCasesClosedByJudgeInteractor.mockReturnValue(mockCasesClosedByJudge);
 
-    const { output } = await runAction(getCasesClosedByJudgeAction as any, {
+    const result = await runAction(getCasesClosedByJudgeAction, {
       modules: {
         presenter,
       },
@@ -43,6 +43,10 @@ describe('getCasesClosedByJudgeAction', () => {
       judges: [mockJudgeName],
       startDate: mockStartDate,
     });
-    expect(output.casesClosedByJudge).toBe(mockCasesClosedByJudge);
+
+    expect(
+      result.state.judgeActivityReport.judgeActivityReportData
+        .casesClosedByJudge,
+    ).toMatchObject(mockCasesClosedByJudge);
   });
 });

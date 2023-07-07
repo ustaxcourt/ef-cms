@@ -95,29 +95,26 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         mockCustomCaseReportResponse,
       );
 
-    const result = await runAction(
-      getSubmittedAndCavCasesByJudgeAction as any,
-      {
-        modules: {
-          presenter,
-        },
-        props: {
-          selectedPage: 1,
-        },
-        state: {
-          judgeActivityReport: {
-            filters: {
-              judges: [judgeUser.name],
-            },
-            judgeActivityReportData: {},
-            lastIdsOfPages: [
-              lastDocketNumberForCavAndSubmittedCasesSearch,
-              page1SearchId,
-            ],
+    const result = await runAction(getSubmittedAndCavCasesByJudgeAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: 1,
+      },
+      state: {
+        judgeActivityReport: {
+          filters: {
+            judges: [judgeUser.name],
           },
+          judgeActivityReportData: {},
+          lastIdsOfPages: [
+            lastDocketNumberForCavAndSubmittedCasesSearch,
+            page1SearchId,
+          ],
         },
       },
-    );
+    });
 
     expect(result.state.judgeActivityReport.lastIdsOfPages).toMatchObject([
       lastDocketNumberForCavAndSubmittedCasesSearch,

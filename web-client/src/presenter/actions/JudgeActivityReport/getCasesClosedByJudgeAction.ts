@@ -4,6 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getCasesClosedByJudgeAction = async ({
   applicationContext,
   get,
+  store,
 }: ActionProps) => {
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
 
@@ -16,5 +17,8 @@ export const getCasesClosedByJudgeAction = async ({
       startDate,
     });
 
-  return { casesClosedByJudge };
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
+    casesClosedByJudge,
+  );
 };
