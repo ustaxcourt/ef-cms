@@ -1,4 +1,4 @@
-const { init } = require('./bulkImportJudgeUsers.helpers');
+import { init } from './bulkImportJudgeUsers.helpers';
 
 const main = async () => {
   const file = process.env.FILE_NAME;
