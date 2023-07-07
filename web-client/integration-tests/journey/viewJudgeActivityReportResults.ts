@@ -36,8 +36,7 @@ export const viewJudgeActivityReportResults = (
       judgeName: overrides.judgeName || 'Colvin',
     });
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-    await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
       selectedPage: 0,
     });
 
