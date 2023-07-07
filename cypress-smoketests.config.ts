@@ -1,4 +1,11 @@
+import {
+  confirmUser,
+  getUserTokenWithRetry,
+} from './cypress/support/cognito-login';
 import { defineConfig } from 'cypress';
+import { getUserToken as getUserTokenLocal } from './cypress/cypress-smoketests/support/pages/local-login';
+import { waitForNoce } from './cypress/cypress-smoketests/support/wait-for-noce';
+const { CYPRESS_SMOKETESTS_LOCAL } = process.env;
 
 // eslint-disable-next-line import/no-default-export
 export default defineConfig({
@@ -7,10 +14,16 @@ export default defineConfig({
   e2e: {
     setupNodeEvents(on) {
       on('task', {
-        log(message) {
-          console.log(message);
-
-          return null;
+        confirmUser({ email }) {
+          return confirmUser({ email });
+        },
+        getUserToken({ email, password }) {
+          return CYPRESS_SMOKETESTS_LOCAL
+            ? getUserTokenLocal(email)
+            : getUserTokenWithRetry(email, password);
+        },
+        waitForNoce({ docketNumber }: { docketNumber: string }) {
+          return waitForNoce({ docketNumber });
         },
       });
     },
@@ -25,7 +38,7 @@ export default defineConfig({
     toConsole: true,
   },
   requestTimeout: 60000,
-  retries: 4,
+  retries: 0,
   screenshotsFolder: 'cypress/cypress-smoketests/screenshots',
   video: true,
   videoCompression: 10,
@@ -33,4 +46,5 @@ export default defineConfig({
   videosFolder: 'cypress/cypress-smoketests/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
+  watchForFileChanges: false,
 });
