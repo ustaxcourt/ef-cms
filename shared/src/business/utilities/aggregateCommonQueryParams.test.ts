@@ -1,9 +1,4 @@
-import {
-  CASE_SEARCH_MIN_YEAR,
-  COUNTRY_TYPES,
-  US_STATES,
-} from '../entities/EntityConstants';
-import { FORMATS, formatNow } from './DateHandler';
+import { COUNTRY_TYPES, US_STATES } from '../entities/EntityConstants';
 import {
   aggregateCommonQueryParams,
   removeAdvancedSyntaxSymbols,
@@ -152,11 +147,11 @@ describe('aggregateCommonQueryParams', () => {
     });
   });
 
-  it('should include search params for yearFiledMin and yearFiledMax if present in query', () => {
+  it('should include search params for startDate and endDate if present in query', () => {
     const queryParams = {
       applicationContext,
-      yearFiledMax: '2017',
-      yearFiledMin: '2016',
+      endDate: '2020-12-11T15:25:55.006Z',
+      startDate: '2018-12-11T15:25:55.006Z',
     };
 
     const result = aggregateCommonQueryParams(queryParams);
@@ -165,9 +160,9 @@ describe('aggregateCommonQueryParams', () => {
         {
           range: {
             'receivedAt.S': {
-              format: 'yyyy',
-              gte: '2016||/y',
-              lte: '2017||/y',
+              format: 'strict_date_optional_time',
+              gte: queryParams.startDate,
+              lte: queryParams.endDate,
             },
           },
         },
@@ -178,11 +173,11 @@ describe('aggregateCommonQueryParams', () => {
     });
   });
 
-  it('should trim spaces from beginning and end of yearFiledMin and yearFiledMax if present in the query', () => {
+  it('should trim spaces from beginning and end of startDate and endDate if present in the query', () => {
     const queryParams = {
       applicationContext,
-      yearFiledMax: ' 2017 ',
-      yearFiledMin: '            2016',
+      endDate: ' 2020-12-11T15:25:55.006Z ',
+      startDate: '            2018-12-11T15:25:55.006Z',
     };
 
     const result = aggregateCommonQueryParams(queryParams);
@@ -192,59 +187,9 @@ describe('aggregateCommonQueryParams', () => {
         {
           range: {
             'receivedAt.S': {
-              format: 'yyyy',
-              gte: '2016||/y',
-              lte: '2017||/y',
-            },
-          },
-        },
-        { match: { 'entityName.S': 'Case' } },
-      ],
-      exactMatchesQuery: [],
-      nonExactMatchesQuery: [],
-    });
-  });
-
-  it('should include search params for yearFiledMin if present in query and default yearFiledMax if not present in query', () => {
-    const queryParams = {
-      applicationContext,
-      yearFiledMin: '2018',
-    };
-
-    const result = aggregateCommonQueryParams(queryParams);
-    expect(result).toMatchObject({
-      commonQuery: [
-        {
-          range: {
-            'receivedAt.S': {
-              format: 'yyyy',
-              gte: '2018||/y',
-              lte: `${formatNow(FORMATS.YEAR)}||/y`,
-            },
-          },
-        },
-        { match: { 'entityName.S': 'Case' } },
-      ],
-      exactMatchesQuery: [],
-      nonExactMatchesQuery: [],
-    });
-  });
-
-  it('should include search params for yearFiledMax if present in query and default yearFiledMin if not present in query', () => {
-    const queryParams = {
-      applicationContext,
-      yearFiledMax: '2019',
-    };
-
-    const result = aggregateCommonQueryParams(queryParams);
-    expect(result).toMatchObject({
-      commonQuery: [
-        {
-          range: {
-            'receivedAt.S': {
-              format: 'yyyy',
-              gte: `${CASE_SEARCH_MIN_YEAR}||/y`,
-              lte: '2019||/y',
+              format: 'strict_date_optional_time',
+              gte: queryParams.startDate,
+              lte: queryParams.endDate,
             },
           },
         },
