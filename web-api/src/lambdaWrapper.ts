@@ -16,7 +16,7 @@ export const lambdaWrapper = (lambda, options = {}) => {
     // a 204 response with no body immediately.  This was causing discrepancies between how these endpoints
     // ran locally and how they ran when deployed to an AWS environment.  We now turn this flag on
     // whenever we are not deployed in AWS to mimic how API gateway async endpoints work.
-    const shouldMimicApiGatewayAyncEndpoint =
+    const shouldMimicApiGatewayAsyncEndpoint =
       options.isAsync && process.env.NODE_ENV != 'production';
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
@@ -33,7 +33,7 @@ export const lambdaWrapper = (lambda, options = {}) => {
       queryStringParameters: req.query,
     };
 
-    if (shouldMimicApiGatewayAyncEndpoint) {
+    if (shouldMimicApiGatewayAsyncEndpoint) {
       // we return immediately before we try running the lambda because that is how
       // the api gateway works with async endpoints.
       res.status(204).send('');
@@ -45,7 +45,7 @@ export const lambdaWrapper = (lambda, options = {}) => {
       logger: req.locals.logger,
     });
 
-    if (shouldMimicApiGatewayAyncEndpoint) {
+    if (shouldMimicApiGatewayAsyncEndpoint) {
       // api gateway async endpoints do not care about the headers returned after we
       // run the lambda; therefore, we do nothing here.
       return;

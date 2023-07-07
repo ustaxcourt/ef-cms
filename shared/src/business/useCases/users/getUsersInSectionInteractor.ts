@@ -22,7 +22,7 @@ export const getUsersInSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUsers = await applicationContext
+  const rawUsers: User[] = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({
       applicationContext,

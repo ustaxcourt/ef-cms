@@ -1,15 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('../cases/CaseExternal');
-const { ContactFactory } = require('./ContactFactory');
+} from '../EntityConstants';
+import { CaseExternal } from '../cases/CaseExternal';
+import { ContactFactory } from './ContactFactory';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('ContactFactory', () => {
   const baseCaseExternal = {
@@ -46,7 +44,7 @@ describe('ContactFactory', () => {
   };
 
   it('should throw an error if app context is not passed in', () => {
-    expect(() => new CaseExternal(baseCaseExternal, {})).toThrow();
+    expect(() => new CaseExternal(baseCaseExternal, {} as any)).toThrow();
   });
 
   describe('for Corporation Contacts', () => {
@@ -337,94 +335,12 @@ describe('ContactFactory', () => {
     }).toThrow('Unrecognized party type "SOME INVALID PARTY TYPE"');
   });
 
-  describe('getErrorToMessageMap', () => {
-    it('gets domestic error message map by default', () => {
-      const getErrorToMessageMap = ContactFactory.getErrorToMessageMap({});
-
-      expect(getErrorToMessageMap).toEqual(
-        ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES,
-      );
+  it('should return an empty primary object if no partyType is given and case has not been served', () => {
+    const contacts = ContactFactory({
+      partyType: undefined,
+      status: CASE_STATUS_TYPES.new,
     });
 
-    it('gets international error message map', () => {
-      const getErrorToMessageMap = ContactFactory.getErrorToMessageMap({
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-      });
-
-      expect(getErrorToMessageMap).toEqual(
-        ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES,
-      );
-    });
-  });
-
-  describe('getValidationObject', () => {
-    it('gets domestic validation object by default', () => {
-      const validationObject = ContactFactory.getValidationObject({});
-
-      expect(validationObject).toEqual(ContactFactory.domesticValidationObject);
-    });
-
-    it('gets international validation object', () => {
-      const validationObject = ContactFactory.getValidationObject({
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-      });
-
-      expect(validationObject).toEqual(
-        ContactFactory.internationalValidationObject,
-      );
-    });
-  });
-
-  describe('getContactConstructors', () => {
-    it('should return an empty object if no partyType is given and case has not been served', () => {
-      const contactConstructor = ContactFactory.getContactConstructors({
-        partyType: undefined,
-        status: CASE_STATUS_TYPES.new,
-      });
-
-      expect(contactConstructor).toEqual({});
-    });
-  });
-
-  describe('hasEAccess validation', () => {
-    let contactConstructor;
-
-    beforeEach(() => {
-      contactConstructor = ContactFactory.createContactFactory(
-        {
-          additionalErrorMappings: {},
-          additionalValidation: {},
-        },
-        { applicationContext },
-      )({ partyType: PARTY_TYPES.petitioner });
-    });
-
-    it('fails when an email is not provided and the contact has eAccess', () => {
-      const contact = new contactConstructor(
-        {
-          ...baseContact,
-          email: undefined,
-          hasEAccess: true,
-        },
-        { applicationContext },
-      );
-
-      expect(contact.getFormattedValidationErrors()).toMatchObject({
-        email: '"email" is required',
-      });
-    });
-
-    it('passes when email is not provided and the contact does not have eAccess', () => {
-      const contact = new contactConstructor(
-        {
-          ...baseContact,
-          email: undefined,
-          hasEAccess: false,
-        },
-        { applicationContext },
-      );
-
-      expect(contact.getFormattedValidationErrors()).toEqual(null);
-    });
+    expect(contacts).toEqual({ primary: {}, secondary: null });
   });
 });
