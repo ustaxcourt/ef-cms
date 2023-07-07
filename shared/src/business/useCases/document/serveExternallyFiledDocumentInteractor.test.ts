@@ -370,6 +370,37 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(mockCase.docketNumber);
   });
 
+  it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
   it('should serve the docket entry on each case provided in the docketNumbers list when the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is enabled', async () => {
     const mockMemberCaseDocketNumber = '999-15';
     applicationContext
