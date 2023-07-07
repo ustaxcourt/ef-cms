@@ -8,7 +8,7 @@ export class NewTrialSession extends TrialSession {
   public trialClerkId?: string;
 
   constructor(rawSession: RawNewTrialSession, { applicationContext }) {
-    super(rawSession, 'NewTrialSession');
+    super(rawSession, { entityName: 'NewTrialSession' });
 
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
