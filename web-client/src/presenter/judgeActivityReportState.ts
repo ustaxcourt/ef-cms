@@ -9,6 +9,7 @@ export type JudgeActivityReportFilters = {
   judgeName?: string;
   judgeId?: string;
   judges?: string[];
+  clientConnectionId?: string;
 };
 
 export type JudgeActivityReportCasesClosedRequest = Pick<

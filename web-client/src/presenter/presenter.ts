@@ -105,7 +105,7 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
-import { fetchOrdersAndOpinionsForJudgesSequence } from './sequences/JudgeActivityReport/fetchOrdersAndOpinionsForJudgesSequence';
+import { fetchOrdersAndOpinionsForJudgesCompleteSequence } from './sequences/JudgeActivityReport/fetchOrdersAndOpinionsForJudgesCompleteSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
@@ -635,7 +635,7 @@ export const presenterSequences = {
   dismissThirtyDayTrialAlertSequence,
   editCorrespondenceDocumentSequence,
   editUploadCourtIssuedDocumentSequence,
-  fetchOrdersAndOpinionsForJudgesSequence,
+  fetchOrdersAndOpinionsForJudgesCompleteSequence,
   fetchUserNotificationsSequence,
   fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
   filterCaseDeadlinesByJudgeSequence,
