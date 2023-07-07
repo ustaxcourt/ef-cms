@@ -1,3 +1,4 @@
+import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedCaseDetail';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -74,9 +75,11 @@ describe('getCalendarDetailsForTrialSession', () => {
       docketNumber: '123-45',
       hearings: [
         {
+          ...MOCK_TRIAL_INPERSON,
           trialSessionId: '234',
         },
         {
+          ...MOCK_TRIAL_INPERSON,
           trialSessionId: '345',
         },
       ],
