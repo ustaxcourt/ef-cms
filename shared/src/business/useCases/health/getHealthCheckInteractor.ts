@@ -173,25 +173,29 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  const elasticSearchStatus = await getElasticSearchStatus({
-    applicationContext,
-  });
-
-  const dynamoStatus = await getDynamoStatus({ applicationContext });
-  const deployDynamoStatus = await getDeployDynamoStatus({
-    applicationContext,
-  });
-
-  const dynamsoftStatus = await getDynamsoftStatus({ applicationContext });
-
-  const s3BucketStatus = await getS3BucketStatus({ applicationContext });
-
-  const cognitoStatus = await getCognitoStatus({ applicationContext });
-
-  const emailServiceStatus = await getEmailServiceStatus({
-    applicationContext,
-  });
-
+  const [
+    elasticSearchStatus,
+    dynamoStatus,
+    deployDynamoStatus,
+    dynamsoftStatus,
+    s3BucketStatus,
+    cognitoStatus,
+    emailServiceStatus,
+  ] = await Promise.all([
+    getElasticSearchStatus({
+      applicationContext,
+    }),
+    getDynamoStatus({ applicationContext }),
+    getDeployDynamoStatus({
+      applicationContext,
+    }),
+    getDynamsoftStatus({ applicationContext }),
+    getS3BucketStatus({ applicationContext }),
+    getCognitoStatus({ applicationContext }),
+    getEmailServiceStatus({
+      applicationContext,
+    }),
+  ]);
   return {
     cognito: cognitoStatus,
     dynamo: {
