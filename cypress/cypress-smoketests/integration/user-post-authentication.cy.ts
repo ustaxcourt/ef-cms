@@ -1,5 +1,4 @@
-import { InitiateAuthResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
-import { confirmUser } from '../support/pages/login';
+import { AuthenticationResult } from '../../support/login-types';
 import {
   editPetitionerEmail,
   goToCaseDetail,
@@ -15,73 +14,49 @@ import {
   serveCaseToIrs,
 } from '../support/pages/create-paper-case';
 import { goToMyDocumentQC } from '../support/pages/document-qc';
-const { closeScannerSetupDialog, getUserToken, login } =
-  getEnvironmentSpecificFunctions();
-
-let token: string | undefined = undefined;
-const testData = {};
+const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const randomizedEmail = `${faker.string.uuid()}@example.com`;
 
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('Petitions clerk', () => {
-    before(async () => {
-      const results: InitiateAuthResponse = await getUserToken(
-        'petitionsclerk1@example.com',
-        DEFAULT_ACCOUNT_PASS,
-      );
-      token = results.AuthenticationResult?.IdToken;
-    });
-
-    it('should be able to login', () => {
-      login(token);
-    });
-
     it('should be able to create a case with paper service', () => {
+      cy.task<AuthenticationResult>('getUserToken', {
+        email: 'petitionsclerk1@example.com',
+        password: DEFAULT_ACCOUNT_PASS,
+      }).then(result => {
+        login(result.AuthenticationResult?.IdToken);
+      });
       goToMyDocumentQC();
       goToCreateCase();
       closeScannerSetupDialog();
       fillInCreateCaseFromPaperForm();
-      goToReviewCase(testData);
-      serveCaseToIrs();
-    });
-  });
+      goToReviewCase().then(docketNumber => {
+        serveCaseToIrs();
+        cy.task<AuthenticationResult>('getUserToken', {
+          email: 'admissionsclerk1@example.com',
+          password: DEFAULT_ACCOUNT_PASS,
+        }).then(result => {
+          login(result.AuthenticationResult?.IdToken);
+        });
+        goToCaseDetail(docketNumber);
+        editPetitionerEmail(randomizedEmail);
+        cy.task('confirmUser', { email: randomizedEmail });
 
-  describe('Admission clerk', () => {
-    before(async () => {
-      const results: InitiateAuthResponse = await getUserToken(
-        'admissionsclerk1@example.com',
-        DEFAULT_ACCOUNT_PASS,
-      );
-      token = results.AuthenticationResult?.IdToken;
-    });
+        cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
+          expect(isNOCECreated).to.equal(true);
+        });
 
-    it('should be able to login', () => {
-      login(token);
-    });
-
-    it('should add an email to the party on the case', () => {
-      goToCaseDetail(testData.createdPaperDocketNumber);
-
-      editPetitionerEmail(randomizedEmail);
-    });
-  });
-
-  describe('Petitioner', () => {
-    it('should confirm user', async () => {
-      await confirmUser({ email: randomizedEmail });
-    });
-
-    it('verify the email has changed', async () => {
-      const results: InitiateAuthResponse = await getUserToken(
-        randomizedEmail,
-        DEFAULT_ACCOUNT_PASS,
-      );
-      token = results.AuthenticationResult?.IdToken;
-      login(token);
-      goToCaseDetailPetitioner(testData.createdPaperDocketNumber);
-      verifyEmailChange();
+        cy.task<AuthenticationResult>('getUserToken', {
+          email: randomizedEmail,
+          password: DEFAULT_ACCOUNT_PASS,
+        }).then(result => {
+          login(result.AuthenticationResult?.IdToken);
+        });
+        goToCaseDetailPetitioner(docketNumber);
+        verifyEmailChange();
+      });
     });
   });
 } else {

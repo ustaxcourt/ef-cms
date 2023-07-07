@@ -11,7 +11,7 @@ const config: Config = {
     '!src/applicationContextForTests.ts',
     '!src/**/getScannerMockInterface.ts',
     '!src/business/test/**/*.ts',
-    '!src/business/assets*',
+    '!src/business/assets/*.ts',
     '!src/proxies/**/*.ts',
     '!src/tools/**/*.ts',
     '!src/test/**/*.ts',
@@ -20,21 +20,25 @@ const config: Config = {
     '!src/persistence/sqs/getMessages.ts',
     '!src/persistence/messages/*.ts',
     '!src/persistence/dynamo/**/*.ts',
-    '!src/business/utilities/documentGenerators/*.ts',
+    '!src/business/utilities/documentGenerators/**/*.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   maxWorkers: '50%',
   moduleFileExtensions: ['js', 'ts', 'tsx', 'jsx'],
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>/../',
-  }),
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/../',
+    }),
+    uuid: require.resolve('uuid'),
+  },
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
+  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
   workerIdleMemoryLimit: '20%',
