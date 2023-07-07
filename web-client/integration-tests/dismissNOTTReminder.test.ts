@@ -58,7 +58,7 @@ describe('Dismiss NOTT reminder on calendared trial session within 30-35 day ran
 
       expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
-      const trialSessionFormatted: any = runCompute(
+      const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessions),
         {
           state: cerebralTest.getState(),
