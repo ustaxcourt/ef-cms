@@ -35,6 +35,7 @@ import { TrialSessionPlanningReport } from '../pdfGenerator/documentTemplates/Tr
 import { BouncedEmailAlert } from '../emailGenerator/emailTemplates/BouncedEmailAlert';
 import { DocumentService } from '../emailGenerator/emailTemplates/DocumentService';
 import { PetitionService } from '../emailGenerator/emailTemplates/PetitionService';
+import { ThirtyDayNoticeOfTrial } from '../pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
@@ -73,6 +74,7 @@ const components = {
   ReportsMetaHeader,
   StandingPretrialOrder,
   StandingPretrialOrderForSmallCase,
+  ThirtyDayNoticeOfTrial,
   TrialCalendar,
   TrialSessionPlanningReport,
 } as const;

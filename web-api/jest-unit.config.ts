@@ -17,6 +17,7 @@ const config: Config = {
     '!src/app-public.{js,ts}',
     '!src/app-local.{js,ts}',
     '!src/app-public-local.{js,ts}',
+    '!src/getDocumentGenerators.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
