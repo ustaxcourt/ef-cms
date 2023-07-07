@@ -32,9 +32,9 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       parallel([
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,
+        getSubmittedAndCavCasesByJudgeAction,
         getOpinionsForJudgeActivityReportAction,
         getOrdersIssuedForJudgeActivityReportAction,
-        getSubmittedAndCavCasesByJudgeAction,
       ]),
     ],
   },
