@@ -1,20 +1,10 @@
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getTrialSessionsForJudgeInteractor } from './getTrialSessionsForJudgeInteractor';
 
-const MOCK_TRIAL_SESSION = {
-  maxCases: 100,
-  proceedingType: 'Remote',
-  sessionType: 'Regular',
-  startDate: '3000-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2009',
-  trialLocation: 'Birmingham, Alabama',
-};
-
-const JUDGE_ID = 'abc';
-
 describe('getTrialSessionsForJudgeInteractor', () => {
+  const JUDGE_ID = 'abc';
   it('throws error if user is unauthorized', async () => {
     applicationContext.getUniqueId.mockReturnValue(
       'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -35,9 +25,9 @@ describe('getTrialSessionsForJudgeInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessions.mockResolvedValue([
-        MOCK_TRIAL_SESSION,
+        MOCK_TRIAL_REMOTE,
         {
-          ...MOCK_TRIAL_SESSION,
+          ...MOCK_TRIAL_REMOTE,
           judge: {
             userId: JUDGE_ID,
           },

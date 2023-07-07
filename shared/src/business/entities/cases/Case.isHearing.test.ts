@@ -1,21 +1,13 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_STANDALONE_REMOTE } from '../../../test/mockTrial';
 import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isHearing', () => {
   it('checks if the given trialSessionId is a hearing (true)', () => {
     const trialSessionHearing = TrialSessionFactory(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
+      MOCK_TRIAL_STANDALONE_REMOTE,
       applicationContext,
     );
     const caseToUpdate = new Case(
@@ -35,16 +27,7 @@ describe('isHearing', () => {
 
   it('checks if the given trialSessionId is a hearing (false)', () => {
     const trialSessionHearing = TrialSessionFactory(
-      {
-        isCalendared: true,
-        judge: { name: 'Judge Buch' },
-        maxCases: 100,
-        sessionType: 'Regular',
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialLocation: 'Birmingham, Alabama',
-      },
+      MOCK_TRIAL_STANDALONE_REMOTE,
       applicationContext,
     );
     const caseToUpdate = new Case(

@@ -1,6 +1,7 @@
 import { ClosedTrialSession } from './ClosedTrialSession';
 import {
   FORMATS,
+  createISODateString,
   formatDateString,
   isTodayWithinGivenInterval,
   prepareDateFromString,
