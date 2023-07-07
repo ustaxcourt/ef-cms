@@ -1,17 +1,15 @@
-import {
-  CASE_SEARCH_MIN_YEAR,
-  COUNTRY_TYPES,
-  US_STATES,
-  US_STATES_OTHER,
-} from '../EntityConstants';
+import { COUNTRY_TYPES, US_STATES, US_STATES_OTHER } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import joi from 'joi';
+import joiDate from '@joi/date';
+import joiImported, { Root } from 'joi';
+
+const joi: Root = joiImported.extend(joiDate);
 
 export class CaseSearch extends JoiValidationEntity {
   petitionerName: string;
-  yearFiledMin?: string;
-  yearFiledMax?: number;
+  startDate?: string;
+  endDate?: string;
   petitionerState?: string;
   countryType?: string;
 
@@ -19,42 +17,79 @@ export class CaseSearch extends JoiValidationEntity {
     super('CaseSearch');
 
     this.petitionerName = rawProps.petitionerName;
-    this.yearFiledMin = rawProps.yearFiledMin || CASE_SEARCH_MIN_YEAR;
-    this.yearFiledMax = rawProps.yearFiledMax || undefined;
     this.petitionerState = rawProps.petitionerState || undefined;
     this.countryType = rawProps.countryType || undefined;
+    this.startDate = rawProps.startDate || undefined;
+    this.endDate = rawProps.endDate || undefined;
   }
 
-  static VALIDATION_RULES = {
+  static JOI_VALID_DATE_SEARCH_FORMATS = ['MM/DD/YYYY'] as const;
+
+  static VALIDATION_RULES = joi.object().keys({
     countryType: JoiValidationConstants.STRING.valid(
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
     ).optional(),
+    endDate: joi
+      .date()
+      .iso()
+      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMATS)
+      .max('now')
+      .allow(null)
+      .optional()
+      .when('startDate', {
+        is: joi.exist(),
+        otherwise: joi.date().allow(null),
+        then: joi.date().min(joi.ref('startDate')).optional(),
+      })
+      .description(
+        'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
+      ),
     petitionerName: JoiValidationConstants.STRING.max(500).required(),
     petitionerState: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),
       ...Object.keys(US_STATES_OTHER),
     ).optional(),
-    yearFiledMax: JoiValidationConstants.YEAR_MAX_CURRENT.min(
-      joi.ref('yearFiledMin'),
-    ).when('yearFiledMin', {
-      is: joi.number(),
-      otherwise: joi.number().min(1900),
-      then: joi.number().min(joi.ref('yearFiledMin')),
-    }),
-    yearFiledMin: JoiValidationConstants.YEAR_MAX_CURRENT,
-  };
+    startDate: joi
+      .date()
+      .iso()
+      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMATS)
+      .max('now')
+      .description(
+        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      )
+      .allow(null)
+      .optional(),
+  });
 
   static VALIDATION_ERROR_MESSAGES = {
-    petitionerName: 'Enter a name',
-    yearFiledMax: [
+    endDate: [
       {
-        contains: 'must be larger',
-        message: 'Enter an ending year which occurs after start year',
+        contains: 'ref:startDate',
+        message: 'End date cannot be prior to start date.',
       },
-      'Enter a valid ending year',
+      {
+        contains: 'must be in [MM/DD/YYYY] format',
+        message: 'Format date as MM/DD/YYYY',
+      },
+      {
+        contains: 'must be less than or equal to "now"',
+        message: 'End date cannot be in the future.',
+      },
+      'Enter a valid end date',
     ],
-    yearFiledMin: 'Enter a valid start year',
+    petitionerName: 'Enter a name',
+    startDate: [
+      {
+        contains: 'must be less than or equal to "now"',
+        message: 'Start date cannot be in the future.',
+      },
+      {
+        contains: 'must be in [MM/DD/YYYY] format',
+        message: 'Format date as MM/DD/YYYY',
+      },
+      'Enter a valid start date',
+    ],
   };
 
   getValidationRules() {

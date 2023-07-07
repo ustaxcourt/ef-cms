@@ -24,31 +24,31 @@ export const petitionsClerkAdvancedSearchForCase = cerebralTest => {
     });
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
-      key: 'yearFiledMin',
-      value: '1800',
+      key: 'startDate',
+      value: '12/1/00',
     });
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
-      key: 'yearFiledMax',
-      value: '2030',
+      key: 'endDate',
+      value: '2/15/2002',
     });
 
     await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      yearFiledMax: 'Enter a valid ending year',
-      yearFiledMin: 'Enter a valid start year',
+      endDate: 'Format date as MM/DD/YYYY',
+      startDate: 'Format date as MM/DD/YYYY',
     });
 
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
-      key: 'yearFiledMin',
-      value: '2001',
+      key: 'startDate',
+      value: '12/01/2000',
     });
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
-      key: 'yearFiledMax',
-      value: '2001',
+      key: 'endDate',
+      value: '02/15/2002',
     });
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByName',
