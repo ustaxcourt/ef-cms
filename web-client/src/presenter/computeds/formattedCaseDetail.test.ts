@@ -1,5 +1,6 @@
 import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   docketClerkUser,
@@ -135,12 +136,15 @@ describe('formattedCaseDetail', () => {
           docketNumber: '123-45',
           hearings: [
             {
+              ...MOCK_TRIAL_INPERSON,
               trialSessionId: '234',
             },
             {
+              ...MOCK_TRIAL_INPERSON,
               trialSessionId: '123',
             },
             {
+              ...MOCK_TRIAL_INPERSON,
               trialSessionId: '345',
             },
           ],
