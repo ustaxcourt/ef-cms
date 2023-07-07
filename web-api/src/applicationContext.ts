@@ -25,10 +25,13 @@ import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { Client } from '@opensearch-project/opensearch';
+import { ClosedTrialSession } from '../../shared/src/business/entities/trialSessions/ClosedTrialSession';
 import { Correspondence } from '../../shared/src/business/entities/Correspondence';
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
 import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
 import { Message } from '../../shared/src/business/entities/Message';
+import { NewTrialSession } from '../../shared/src/business/entities/trialSessions/NewTrialSession';
+import { OpenTrialSession } from '../../shared/src/business/entities/trialSessions/OpenTrialSession';
 import { Practitioner } from '../../shared/src/business/entities/Practitioner';
 import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
@@ -167,10 +170,13 @@ let notificationServiceCache;
 const entitiesByName = {
   Case,
   CaseDeadline,
+  ClosedTrialSession,
   Correspondence,
   DocketEntry,
   IrsPractitioner,
   Message,
+  NewTrialSession,
+  OpenTrialSession,
   Practitioner,
   PrivatePractitioner,
   TrialSession,
