@@ -1,14 +1,30 @@
+import { JudgeActivityReportFilters } from '@web-client/presenter/judgeActivityReportState';
 import { MAX_ELASTICSEARCH_PAGINATION } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 describe('getOpinionsFiledByJudgeInteractor', () => {
-  const mockValidRequest = {
-    endDate: '03/21/2020',
+  const mockClientConnectionID = 'clientConnnectionID';
+  const mockStartDate = '02/12/2020';
+  const mockEndDate = '03/21/2020';
+  const mockValidRequest: JudgeActivityReportFilters = {
+    clientConnectionId: mockClientConnectionID,
+    endDate: mockEndDate,
     judges: [judgeUser.name],
-    startDate: '02/12/2020',
+    startDate: mockStartDate,
   };
+
+  const mockSortedOpinionsResult = [
+    { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
+    {
+      count: 0,
+      documentType: 'Order of Service of Transcript (Bench Opinion)',
+      eventCode: 'OST',
+    },
+    { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
+    { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
+  ];
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
@@ -32,7 +48,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
+  it('should make a persistence call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
@@ -58,7 +74,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
         ],
       });
 
-    const result = await getOpinionsFiledByJudgeInteractor(
+    await getOpinionsFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -72,15 +88,17 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: '2020-02-12T05:00:00.000Z',
     });
-    expect(result).toEqual([
-      { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
-      {
-        count: 0,
-        documentType: 'Order of Service of Transcript (Bench Opinion)',
-        eventCode: 'OST',
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      clientConnectionId: mockValidRequest.clientConnectionId,
+      message: {
+        action: 'fetch_opinions_complete',
+        opinions: mockSortedOpinionsResult,
       },
-      { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
-      { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
-    ]);
+      userId: judgeUser.userId,
+    });
   });
 });
