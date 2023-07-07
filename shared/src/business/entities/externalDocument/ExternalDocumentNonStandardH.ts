@@ -1,59 +1,36 @@
-const joi = require('joi');
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocumentBase } from './ExternalDocumentBase';
+import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
+import joi from 'joi';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @param {ExternalDocumentFactory} ExternalDocumentFactory the factory for the secondary document
- * @constructor
- */
-function ExternalDocumentNonStandardH() {}
-ExternalDocumentNonStandardH.prototype.init = function init(
-  rawProps,
-  ExternalDocumentFactory,
-) {
-  externalDocumentDecorator(this, rawProps);
+export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
+  public secondaryDocument: any;
 
-  const { secondaryDocument } = rawProps;
-  this.secondaryDocument = ExternalDocumentFactory(secondaryDocument || {});
-};
+  constructor(rawProps) {
+    super(rawProps, 'ExternalDocumentNonStandardH');
 
-ExternalDocumentNonStandardH.prototype.getDocumentTitle = function () {
-  return replaceBracketed(
-    this.documentTitle,
-    this.secondaryDocument.getDocumentTitle(),
-  );
-};
+    this.secondaryDocument = ExternalDocumentFactory(
+      rawProps.secondaryDocument || {},
+    );
+  }
 
-ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    secondaryDocument: joi.object().required(),
+    secondaryDocumentFile: joi.object().optional(),
+  };
 
-ExternalDocumentNonStandardH.schema = {
-  ...baseExternalDocumentValidation,
-  secondaryDocument: joi.object().required(),
-  secondaryDocumentFile: joi.object().optional(),
-};
+  getValidationRules() {
+    return ExternalDocumentNonStandardH.VALIDATION_RULES;
+  }
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardH,
-  ExternalDocumentNonStandardH.schema,
-  ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES,
-);
+  getDocumentTitle(): string {
+    return replaceBracketed(
+      this.documentTitle,
+      this.secondaryDocument.getDocumentTitle(),
+    );
+  }
+}
 
-module.exports = {
-  ExternalDocumentNonStandardH: validEntityDecorator(
-    ExternalDocumentNonStandardH,
-  ),
-};
+export type RawExternalDocumentNonStandardH =
+  ExcludeMethods<ExternalDocumentNonStandardH>;

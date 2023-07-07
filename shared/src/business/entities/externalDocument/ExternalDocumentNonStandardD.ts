@@ -1,67 +1,47 @@
-const joi = require('joi');
-const {
-  baseExternalDocumentValidation,
-  externalDocumentDecorator,
-} = require('./ExternalDocumentBase');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+import { ExternalDocumentBase } from './ExternalDocumentBase';
+import { FORMATS, formatDateString } from '../../utilities/DateHandler';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
+import joi from 'joi';
 
-/**
- *
- * @param {object} rawProps the raw document data
- * @constructor
- */
-function ExternalDocumentNonStandardD() {}
+export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
+  public previousDocument: { documentTitle?: string; documentType: string };
+  public serviceDate: string;
 
-ExternalDocumentNonStandardD.prototype.init = function init(rawProps) {
-  externalDocumentDecorator(this, rawProps);
-  this.previousDocument = rawProps.previousDocument;
-  this.serviceDate = rawProps.serviceDate;
-};
+  constructor(rawProps) {
+    super(rawProps, 'ExternalDocumentNonStandardD');
 
-ExternalDocumentNonStandardD.prototype.getDocumentTitle = function () {
-  return replaceBracketed(
-    this.documentTitle,
-    this.previousDocument
-      ? this.previousDocument.documentTitle ||
-          this.previousDocument.documentType
-      : '',
-    formatDateString(this.serviceDate, FORMATS.MMDDYYYY_DASHED),
-  );
-};
+    this.previousDocument = rawProps.previousDocument;
+    this.serviceDate = rawProps.serviceDate;
+  }
 
-ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES = {
-  ...VALIDATION_ERROR_MESSAGES,
-};
+  static VALIDATION_RULES = {
+    ...ExternalDocumentBase.VALIDATION_RULES,
+    previousDocument: joi
+      .object()
+      .keys({
+        documentTitle: JoiValidationConstants.STRING.optional(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .required(),
+    serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),
+  };
 
-ExternalDocumentNonStandardD.schema = {
-  ...baseExternalDocumentValidation,
-  previousDocument: joi
-    .object()
-    .keys({
-      documentTitle: JoiValidationConstants.STRING.optional(),
-      documentType: JoiValidationConstants.STRING.required(),
-    })
-    .required(),
-  serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),
-};
+  getValidationRules() {
+    return ExternalDocumentNonStandardD.VALIDATION_RULES;
+  }
 
-joiValidationDecorator(
-  ExternalDocumentNonStandardD,
-  ExternalDocumentNonStandardD.schema,
-  ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES,
-);
+  getDocumentTitle(): string {
+    return replaceBracketed(
+      this.documentTitle,
+      this.previousDocument
+        ? this.previousDocument.documentTitle ||
+            this.previousDocument.documentType
+        : '',
+      formatDateString(this.serviceDate, FORMATS.MMDDYYYY_DASHED),
+    );
+  }
+}
 
-module.exports = {
-  ExternalDocumentNonStandardD: validEntityDecorator(
-    ExternalDocumentNonStandardD,
-  ),
-};
+export type RawExternalDocumentNonStandardD =
+  ExcludeMethods<ExternalDocumentNonStandardD>;
