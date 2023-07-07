@@ -185,6 +185,14 @@ export const CASE_STATUS_TYPES = {
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
 
+export const CAV_AND_SUBMITTED_CASE_STATUS = [
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.submitted,
+];
+
+export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
+  typeof CAV_AND_SUBMITTED_CASE_STATUS;
+
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
@@ -909,6 +917,7 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
@@ -1272,7 +1281,10 @@ export const SESSION_TYPES = {
   hybridSmall: 'Hybrid-S',
   special: 'Special',
   motionHearing: 'Motion/Hearing',
-};
+} as const;
+
+export const SESSION_TYPES_VALUES = Object.values(SESSION_TYPES);
+export type SESSIONS = (typeof SESSION_TYPES_VALUES)[number];
 
 export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
   'hybrid',
@@ -1433,6 +1445,7 @@ export const ALL_EVENT_CODES = flatten([
 ])
   .map(item => item.eventCode)
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
+  .concat(LEGACY_DOCUMENT_TYPES.map(item => item.eventCode))
   .sort();
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
@@ -1456,6 +1469,7 @@ export const ALL_DOCUMENT_TYPES_MAP = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
+    ...LEGACY_DOCUMENT_TYPES,
   ];
   return documentTypes;
 })();
@@ -1530,3 +1544,6 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
+  'tempJudgeIdToRepresentAllJudgesSelection';
