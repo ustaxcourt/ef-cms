@@ -34,7 +34,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
   });
 
   it('should call the interactor to set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types based on the selected judge id', async () => {
-    const result = await runAction(
+    const { output } = await runAction(
       getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
@@ -63,13 +63,11 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       startDate: mockStartDate,
     });
 
-    expect(
-      result.state.judgeActivityReport.judgeActivityReportData.trialSessions,
-    ).toMatchObject(trialSessionTypesResult);
+    expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
   });
 
   it('should set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types for all judges if no selected judge id is prescribed', async () => {
-    const result = await runAction(
+    const { output } = await runAction(
       getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
@@ -89,9 +87,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       },
     );
 
-    expect(
-      result.state.judgeActivityReport.judgeActivityReportData.trialSessions,
-    ).toMatchObject(trialSessionTypesResult);
+    expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
     expect(
       applicationContext.getUseCases()
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],

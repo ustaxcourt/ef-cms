@@ -44,9 +44,8 @@ describe('getCasesClosedByJudgeAction', () => {
       startDate: mockStartDate,
     });
 
-    expect(
-      result.state.judgeActivityReport.judgeActivityReportData
-        .casesClosedByJudge,
-    ).toMatchObject(mockCasesClosedByJudge);
+    expect(result.output.casesClosedByJudge).toMatchObject(
+      mockCasesClosedByJudge,
+    );
   });
 });
