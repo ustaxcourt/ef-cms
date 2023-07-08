@@ -1,17 +1,15 @@
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { getClientId } from './getClientId';
-jest.mock('aws-sdk');
-import aws from 'aws-sdk';
+
+jest.mock('@aws-sdk/client-cognito-identity-provider');
 
 describe('getClientId', () => {
   const mockUserPoolId = 'us-east-1_Gg5RM8fn';
 
   const expectedClientId = '82b35e7c-9830-4104-bb15-24a2eda7f84e';
-  aws.CognitoIdentityServiceProvider = jest.fn().mockReturnValue({
-    listUserPoolClients: jest.fn().mockReturnValue({
-      promise: () =>
-        Promise.resolve({
-          UserPoolClients: [{ ClientId: expectedClientId }],
-        }),
+  (CognitoIdentityProvider as jest.Mock).mockReturnValue({
+    listUserPoolClients: jest.fn().mockResolvedValue({
+      UserPoolClients: [{ ClientId: expectedClientId }],
     }),
   });
 

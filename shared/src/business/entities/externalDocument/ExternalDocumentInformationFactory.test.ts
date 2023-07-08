@@ -1,12 +1,12 @@
-const {
-  calculateISODate,
-  createISODateString,
-} = require('../../utilities/DateHandler');
-const {
+import {
   ExternalDocumentInformationFactory,
   VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
+} from './ExternalDocumentInformationFactory';
+import { OBJECTIONS_OPTIONS_MAP } from '../EntityConstants';
+import {
+  calculateISODate,
+  createISODateString,
+} from '../../utilities/DateHandler';
 
 describe('ExternalDocumentInformationFactory', () => {
   let baseDoc;

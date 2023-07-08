@@ -55,20 +55,20 @@ import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateD
 import joi from 'joi';
 
 export class Case extends JoiValidationEntity {
-  public associatedJudge: string;
-  public automaticBlocked: boolean;
+  public associatedJudge?: string;
+  public automaticBlocked?: boolean;
   public automaticBlockedDate?: string;
   public automaticBlockedReason?: string;
-  public blocked: boolean;
+  public blocked?: boolean;
   public blockedDate?: string;
   public blockedReason?: string;
   public caseStatusHistory: any[];
-  public caseNote: string;
-  public damages: string;
-  public highPriority: boolean;
+  public caseNote?: string;
+  public damages?: number;
+  public highPriority?: boolean;
   public highPriorityReason?: string;
-  public judgeUserId: string;
-  public litigationCosts: string;
+  public judgeUserId?: string;
+  public litigationCosts?: number;
   public qcCompleteForTrial: boolean;
   public noticeOfAttachments: boolean;
   public orderDesignatingPlaceOfTrial: boolean;
@@ -638,7 +638,6 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
     ).description('When the case fee was waived.'),
-    // Individual items are validated by the ContactFactory.
     petitioners: joi
       .array()
       .unique(
@@ -875,7 +874,7 @@ export class Case extends JoiValidationEntity {
 
   assignContacts({ applicationContext, rawCase }) {
     if (!rawCase.status || rawCase.status === CASE_STATUS_TYPES.new) {
-      const contacts = ContactFactory.createContacts({
+      const contacts = ContactFactory({
         applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

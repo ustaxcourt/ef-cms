@@ -27,6 +27,7 @@ module.exports = {
       rules: {
         'cypress/unsafe-to-chain-command': 'warn',
         'jest/expect-expect': 'off',
+        'jest/valid-describe-callback': 'off',
         'jest/valid-expect': 'off',
         'jest/valid-expect-in-promise': 'off',
         'no-underscore-dangle': 'off',
