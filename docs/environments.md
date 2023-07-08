@@ -165,7 +165,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 20. If the environment is a test environment, setup test users and judges so smoketests will pass:
     ```bash
-    node shared/admin-tools/user/setup-admin.js
+    ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
     ```
     ```bash
     . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"

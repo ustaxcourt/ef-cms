@@ -1,8 +1,8 @@
-const {
+import {
   POLICY_DATE_IMPACTED_EVENTCODES,
   TRANSCRIPT_EVENT_CODE,
-} = require('../EntityConstants');
-const { PublicCase } = require('./PublicCase');
+} from '../EntityConstants';
+import { PublicCase } from './PublicCase';
 
 describe('PublicCase isPrivateDocument', () => {
   it('should return true for a transcript document', () => {
