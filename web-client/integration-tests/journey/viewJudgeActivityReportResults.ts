@@ -55,8 +55,6 @@ export const viewJudgeActivityReportResults = (
     ).toEqual({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
       submittedAndCavCasesByJudge: expect.anything(),
       trialSessions: expect.anything(),
     });
