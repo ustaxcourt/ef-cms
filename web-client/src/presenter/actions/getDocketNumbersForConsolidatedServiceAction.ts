@@ -28,7 +28,7 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   let consolidatedCases;
   let docketNumbers = [];
   if (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCodeFromCaseDetail)) {
-    consolidatedCases = get(state.caseDetail.consolidatedCases);
+    consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
     docketNumbers = consolidatedCases.map(
       consolidatedCase => consolidatedCase.docketNumber,
     );
