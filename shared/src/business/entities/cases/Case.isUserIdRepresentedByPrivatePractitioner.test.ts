@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case, isUserIdRepresentedByPrivatePractitioner } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case, isUserIdRepresentedByPrivatePractitioner } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isUserIdRepresentedByPrivatePractitioner', () => {
   let caseEntity;

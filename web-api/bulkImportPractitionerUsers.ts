@@ -1,13 +1,14 @@
-const AWS = require('aws-sdk');
-const axios = require('axios');
-const fs = require('fs');
-const { formatRecord } = require('./bulkImportPractitionerUsers.helpers');
-const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
-const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
-const { parse } = require('csv-parse');
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { formatRecord } from './bulkImportPractitionerUsers.helpers';
+import { gatherRecords, getCsvOptions } from '../shared/src/tools/helpers';
+import { getUserToken } from './storage/scripts/loadTest/loadTestHelpers';
+import { parse } from 'csv-parse';
+import AWS from 'aws-sdk';
+import axios from 'axios';
+import fs from 'fs';
 
 const main = async () => {
-  const files = [];
+  const files: string[] = [];
   process.argv.forEach((val, index) => {
     if (index > 1) {
       files.push(val);
@@ -45,7 +46,7 @@ const main = async () => {
     return;
   }
 
-  const cognito = new AWS.CognitoIdentityServiceProvider({
+  const cognito = new CognitoIdentityProvider({
     region: process.env.REGION,
   });
   const apigateway = new AWS.APIGateway({
@@ -55,15 +56,15 @@ const main = async () => {
     .getRestApis({ limit: 200 })
     .promise();
 
-  const services = apis
+  const services = (apis ?? [])
     .filter(api =>
-      api.name.includes(
+      api.name?.includes(
         `gateway_api_${process.env.ENV}_${process.env.DEPLOYING_COLOR}`,
       ),
     )
     .reduce((obj, api) => {
       obj[
-        api.name.replace(`_${process.env.ENV}`, '')
+        api.name?.replace(`_${process.env.ENV}`, '')!
       ] = `https://${api.id}.execute-api.${process.env.REGION}.amazonaws.com/${process.env.ENV}`;
       return obj;
     }, {});

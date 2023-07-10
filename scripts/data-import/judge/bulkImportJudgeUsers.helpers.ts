@@ -1,16 +1,16 @@
-const axios = require('axios');
-const {
+import {
   gatherRecords,
   getCsvOptions,
-} = require('../../../shared/src/tools/helpers');
-const {
+} from '../../../shared/src/tools/helpers';
+import {
   getServices,
   getToken,
   readCsvFile,
-} = require('../../../web-api/importHelpers');
-const { parse } = require('csv-parse');
+} from '../../../web-api/importHelpers';
+import { parse } from 'csv-parse';
+import axios from 'axios';
 
-const CSV_HEADERS = [
+export const CSV_HEADERS = [
   'name',
   'judgeTitle',
   'judgeFullName',
@@ -19,7 +19,7 @@ const CSV_HEADERS = [
   'section',
 ];
 
-const init = async (csvFile, outputMap) => {
+export const init = async (csvFile, outputMap) => {
   const csvOptions = getCsvOptions(CSV_HEADERS);
   let output = [];
 
@@ -65,9 +65,4 @@ const init = async (csvFile, outputMap) => {
     });
   });
   await processCsv;
-};
-
-module.exports = {
-  CSV_HEADERS,
-  init,
 };

@@ -20,6 +20,7 @@ import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -151,6 +152,7 @@ export const computeds = {
   caseInformationHelper,
   caseInventoryReportHelper,
   caseSearchBoxHelper,
+  caseSearchByNameHelper,
   caseSearchNoMatchesHelper,
   caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
@@ -252,15 +254,8 @@ export const computeds = {
   workQueueHelper,
 };
 
-type TCaseDeadlineReport = {
-  caseDeadlines: RawCaseDeadline[];
-  judgeFilter: string;
-  totalCount: number;
-  page: number;
-};
-
 export const baseState = {
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   allJudges: [],
   archiveDraftDocument: {
@@ -271,7 +266,12 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {} as TCaseDeadlineReport,
+  caseDeadlineReport: {} as {
+    caseDeadlines: RawCaseDeadline[];
+    judgeFilter: string;
+    totalCount: number;
+    page: number;
+  },
   caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
@@ -333,7 +333,7 @@ export const baseState = {
   // needs its own object because it's present when other forms are on screen
   judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeActivityReportData: {},
-  judges: [],
+  judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,

@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
+import { defaultCaseSearchDatesAction } from '../actions/AdvancedSearch/defaultCaseSearchDatesAction';
 import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -13,6 +14,7 @@ import { validateCaseAdvancedSearchAction } from '../actions/AdvancedSearch/vali
 export const submitCaseAdvancedSearchSequence = [
   clearSearchTermAction,
   startShowValidationAction,
+  defaultCaseSearchDatesAction,
   validateCaseAdvancedSearchAction,
   {
     error: [
