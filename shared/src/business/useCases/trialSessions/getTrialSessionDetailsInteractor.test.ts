@@ -34,7 +34,9 @@ describe('Get trial session details', () => {
       getTrialSessionDetailsInteractor(applicationContext, {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
-    ).rejects.toThrow('The TrialSession entity was invalid');
+    ).rejects.toThrow(
+      'The OpenTrialSession entity was invalid. {"maxCases":"\'maxCases\' is required"}',
+    );
   });
 
   it('throws a not found error if persistence does not return any results', async () => {
