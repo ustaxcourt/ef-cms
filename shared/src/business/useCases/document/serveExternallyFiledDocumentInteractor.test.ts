@@ -8,9 +8,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
-import { addCoverToPdf } from '../addCoverToPdf';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -24,10 +22,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
-
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: testPdfDoc,
-    });
   });
 
   beforeEach(() => {
@@ -406,7 +400,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -424,23 +425,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
-
-    expect(addCoverToPdf).toHaveBeenCalled();
-  });
-
-  it('should save the pdf with coversheet attached to persistence', async () => {
-    const mockPdfWithCoversheet = { abc: '123' };
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: mockPdfWithCoversheet,
-    });
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -450,9 +442,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0].document,
-    ).toBe(mockPdfWithCoversheet);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should set isPendingService to truthy when filing the subject docket entry', async () => {
