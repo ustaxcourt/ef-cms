@@ -10,7 +10,7 @@ import {
 export const MOCK_TRIAL_REMOTE: RawTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '1111111',
-  entityName: 'TrialSession',
+  entityName: 'OpenTrialSession',
   hasNOTTBeenServed: false,
   isCalendared: true,
   joinPhoneNumber: '0987654321',
@@ -34,7 +34,7 @@ export const MOCK_TRIAL_REMOTE: RawTrialSession = {
 
 export const MOCK_TRIAL_REGULAR: RawTrialSession = {
   caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
-  entityName: 'TrialSession',
+  entityName: 'OpenTrialSession',
   hasNOTTBeenServed: false,
   isCalendared: false,
   judge: {
