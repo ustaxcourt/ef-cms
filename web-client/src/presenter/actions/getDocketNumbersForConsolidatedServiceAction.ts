@@ -11,25 +11,43 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { NON_MULTI_DOCKETABLE_EVENT_CODES } =
-    applicationContext.getConstants();
+  const {
+    NON_MULTI_DOCKETABLE_EVENT_CODES,
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  } = applicationContext.getConstants();
   const { isLeadCase } = applicationContext.getUtilities();
+  let { eventCode } = get(state.form);
 
-  const consolidatedCases =
-    get(state.modal.form.consolidatedCasesToMultiDocketOn) || [];
+  let eventCodeFromCaseDetail;
+  if (!eventCode) {
+    eventCodeFromCaseDetail = get(state.formattedCaseDetail).docketEntries.find(
+      doc => doc.docketEntryId === get(state.docketEntryId),
+    ).eventCode;
+  }
 
-  let docketNumbers = consolidatedCases
-    .filter(consolidatedCase => consolidatedCase.checked)
-    .filter(consolidatedCase => !isLeadCase(consolidatedCase))
-    .map(consolidatedCase => consolidatedCase.docketNumber);
+  let consolidatedCases;
+  let docketNumbers = [];
+  if (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCodeFromCaseDetail)) {
+    consolidatedCases = get(state.caseDetail.consolidatedCases);
+    docketNumbers = consolidatedCases.map(
+      consolidatedCase => consolidatedCase.docketNumber,
+    );
+  } else {
+    consolidatedCases =
+      get(state.modal.form.consolidatedCasesToMultiDocketOn) || [];
 
-  const caseDetail = get(state.caseDetail);
-  const { eventCode } = get(state.form);
-  if (
-    !isLeadCase(caseDetail) ||
-    NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)
-  ) {
-    docketNumbers = [];
+    docketNumbers = consolidatedCases
+      .filter(consolidatedCase => consolidatedCase.checked)
+      .filter(consolidatedCase => !isLeadCase(consolidatedCase))
+      .map(consolidatedCase => consolidatedCase.docketNumber);
+
+    const caseDetail = get(state.caseDetail);
+    if (
+      !isLeadCase(caseDetail) ||
+      NON_MULTI_DOCKETABLE_EVENT_CODES.includes(eventCode)
+    ) {
+      docketNumbers = [];
+    }
   }
 
   return { docketNumbers };

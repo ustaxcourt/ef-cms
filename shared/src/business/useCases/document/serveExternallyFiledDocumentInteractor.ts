@@ -11,7 +11,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { addCoverToPdf } from '../addCoverToPdf';
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -104,7 +103,6 @@ export const serveExternallyFiledDocumentInteractor = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let paperServiceResult;
-  let pdfWithCoversheet;
   let caseEntities = [];
   const coversheetLength = 1;
 
@@ -184,12 +182,13 @@ export const serveExternallyFiledDocumentInteractor = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
 
-    ({ pdfData: pdfWithCoversheet } = await addCoverToPdf({
-      applicationContext,
-      caseEntity: updatedSubjectCaseEntity,
-      docketEntryEntity: updatedSubjectDocketEntry,
-      pdfData,
-    }));
+    await applicationContext
+      .getUseCases()
+      .addCoversheetInteractor(applicationContext, {
+        caseEntity: updatedSubjectCaseEntity,
+        docketEntryId: updatedSubjectDocketEntry.docketEntryId,
+        docketNumber: updatedSubjectCaseEntity.docketNumber,
+      });
 
     paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -208,12 +207,6 @@ export const serveExternallyFiledDocumentInteractor = async (
         status: false,
       });
   }
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: pdfWithCoversheet,
-    key: docketEntryId,
-  });
 
   const successMessage =
     docketNumbers.length > 1
