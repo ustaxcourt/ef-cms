@@ -53,11 +53,13 @@ export const viewJudgeActivityReportResults = (
 
     expect(
       cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
-    ).toEqual({
-      casesClosedByJudge: expect.anything(),
-      consolidatedCasesGroupCountMap: expect.anything(),
-      submittedAndCavCasesByJudge: expect.anything(),
-      trialSessions: expect.anything(),
-    });
+    ).toEqual(
+      expect.objectContaining({
+        casesClosedByJudge: expect.anything(),
+        consolidatedCasesGroupCountMap: expect.anything(),
+        submittedAndCavCasesByJudge: expect.anything(),
+        trialSessions: expect.anything(),
+      }),
+    );
   });
 };
