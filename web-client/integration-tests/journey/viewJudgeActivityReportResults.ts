@@ -4,7 +4,10 @@ import {
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForExpectedItemToExist,
+} from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -40,6 +43,16 @@ export const viewJudgeActivityReportResults = (
       selectedPage: 0,
     });
 
+    await waitForExpectedItemToExist({
+      cerebralTest,
+      currentItem: 'judgeActivityReport.judgeActivityReportData.orders',
+    });
+
+    await waitForExpectedItemToExist({
+      cerebralTest,
+      currentItem: 'judgeActivityReport.judgeActivityReportData.opinions',
+    });
+
     const { progressDescriptionTableTotal } = runCompute(
       judgeActivityReportHelper,
       {
@@ -53,11 +66,24 @@ export const viewJudgeActivityReportResults = (
 
     expect(
       cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
-    ).toEqual({
-      casesClosedByJudge: expect.anything(),
-      consolidatedCasesGroupCountMap: expect.anything(),
-      submittedAndCavCasesByJudge: expect.anything(),
-      trialSessions: expect.anything(),
-    });
+    ).toEqual(
+      expect.objectContaining({
+        casesClosedByJudge: expect.anything(),
+        consolidatedCasesGroupCountMap: expect.anything(),
+        submittedAndCavCasesByJudge: expect.anything(),
+        trialSessions: expect.anything(),
+      }),
+    );
+
+    expect(
+      cerebralTest.getState(
+        'judgeActivityReport.judgeActivityReportData.orders',
+      ),
+    ).toBe(expect.anything());
+    expect(
+      cerebralTest.getState(
+        'judgeActivityReport.judgeActivityReportData.opinions',
+      ),
+    ).toBe(expect.anything());
   });
 };
