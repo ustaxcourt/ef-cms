@@ -2,6 +2,7 @@ import { CaseStatus, CaseType } from '../../entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
   CustomCaseInventorySearch,
+  CustomCaseProcedureTypes,
 } from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
@@ -15,6 +16,10 @@ export type CustomCaseInventoryReportFilters = {
   endDate: string;
   startDate: string;
   filingMethod: CustomCaseFilingMethods;
+  preferredTrialCities: string[];
+  highPriority?: boolean;
+  procedureType: CustomCaseProcedureTypes;
+  judges: string[];
 };
 
 export type GetCaseInventoryReportRequest = CustomCaseInventoryReportFilters & {
@@ -39,6 +44,7 @@ export type CaseInventory = Pick<
   | 'caseCaption'
   | 'caseType'
   | 'docketNumber'
+  | 'leadDocketNumber'
   | 'preferredTrialCity'
   | 'receivedAt'
   | 'status'
@@ -67,6 +73,8 @@ export const getCustomCaseInventoryReportInteractor = async (
 
   params.caseStatuses = params.caseStatuses || [];
   params.caseTypes = params.caseTypes || [];
+  params.judges = params.judges || [];
+  params.preferredTrialCities = params.preferredTrialCities || [];
 
   new CustomCaseInventorySearch(params).validate();
 

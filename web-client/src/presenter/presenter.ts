@@ -443,6 +443,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCalendarNoteSequence } from './sequences/updateCalendarNoteSequence';
+import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
@@ -970,6 +971,7 @@ export const presenterSequences = {
   updateAdvancedSearchFormValueSequence,
   updateBatchDownloadProgressSequence,
   updateCalendarNoteSequence,
+  updateCaseAdvancedSearchByNameFormValueSequence,
   updateCaseAssociationFormValueSequence,
   updateCaseCheckboxSequence,
   updateCaseDeadlineSequence,
