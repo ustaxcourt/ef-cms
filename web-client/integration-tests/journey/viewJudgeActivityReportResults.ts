@@ -4,10 +4,7 @@ import {
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import {
-  refreshElasticsearchIndex,
-  waitForExpectedItemToExist,
-} from '../helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -54,23 +51,11 @@ export const viewJudgeActivityReportResults = (
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await waitForExpectedItemToExist({
-      cerebralTest,
-      currentItem: 'judgeActivityReport.judgeActivityReportData.opinions',
-    });
-
-    await waitForExpectedItemToExist({
-      cerebralTest,
-      currentItem: 'judgeActivityReport.judgeActivityReportData.orders',
-    });
-
     expect(
       cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
     ).toEqual({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
       submittedAndCavCasesByJudge: expect.anything(),
       trialSessions: expect.anything(),
     });
