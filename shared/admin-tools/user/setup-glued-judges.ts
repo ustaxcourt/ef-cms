@@ -1,22 +1,18 @@
-const { requireEnvVars } = require('../util');
+import { requireEnvVars } from '../util';
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
   'REGION',
 ]);
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from 'aws-sdk';
+import { MAX_SEARCH_CLIENT_RESULTS } from '../../src/business/entities/EntityConstants';
+import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { getUserPoolId, getVersion } from '../util';
+import { search } from '../../src/persistence/elasticsearch/searchClient';
 
-const {
-  createApplicationContext,
-} = require('../../../web-api/src/applicationContext');
-const {
-  MAX_SEARCH_CLIENT_RESULTS,
-} = require('../../src/business/entities/EntityConstants');
-const { CognitoIdentityServiceProvider, DynamoDB } = require('aws-sdk');
-const { getUserPoolId, getVersion } = require('../util');
-const { search } = require('../../src/persistence/elasticsearch/searchClient');
-
-const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
 const dynamo = new DynamoDB({ region: process.env.REGION });
 
 /**
@@ -38,12 +34,10 @@ const createOrUpdateCognitoUser = async ({
 }) => {
   let userExists = false;
   try {
-    await cognito
-      .adminGetUser({
-        UserPoolId: userPoolId,
-        Username: email,
-      })
-      .promise();
+    await cognito.adminGetUser({
+      UserPoolId: userPoolId,
+      Username: email,
+    });
 
     userExists = true;
   } catch (err) {
@@ -54,34 +48,32 @@ const createOrUpdateCognitoUser = async ({
   }
   if (!userExists) {
     try {
-      await cognito
-        .adminCreateUser({
-          UserAttributes: [
-            {
-              Name: 'email_verified',
-              Value: 'True',
-            },
-            {
-              Name: 'email',
-              Value: email,
-            },
-            {
-              Name: 'custom:role',
-              Value: role,
-            },
-            {
-              Name: 'name',
-              Value: name,
-            },
-            {
-              Name: 'custom:userId',
-              Value: userId,
-            },
-          ],
-          UserPoolId: userPoolId,
-          Username: email,
-        })
-        .promise();
+      await cognito.adminCreateUser({
+        UserAttributes: [
+          {
+            Name: 'email_verified',
+            Value: 'True',
+          },
+          {
+            Name: 'email',
+            Value: email,
+          },
+          {
+            Name: 'custom:role',
+            Value: role,
+          },
+          {
+            Name: 'name',
+            Value: name,
+          },
+          {
+            Name: 'custom:userId',
+            Value: userId,
+          },
+        ],
+        UserPoolId: userPoolId,
+        Username: email,
+      });
     } catch (err) {
       console.error(`ERROR creating cognito user for ${name}:`, err);
     }
@@ -222,18 +214,16 @@ const updateCognitoUserId = async ({
   userPoolId,
 }) => {
   try {
-    await cognito
-      .adminUpdateUserAttributes({
-        UserAttributes: [
-          {
-            Name: 'custom:userId',
-            Value: gluedUserId,
-          },
-        ],
-        UserPoolId: userPoolId,
-        Username: bulkImportedUserId,
-      })
-      .promise();
+    await cognito.adminUpdateUserAttributes({
+      UserAttributes: [
+        {
+          Name: 'custom:userId',
+          Value: gluedUserId,
+        },
+      ],
+      UserPoolId: userPoolId,
+      Username: bulkImportedUserId,
+    });
     console.log(`Updated user attributes for login for ${name}`);
   } catch (err) {
     console.error(`ERROR updating custom:userId for ${name}:`, err);
@@ -272,13 +262,11 @@ const updateCognitoUserId = async ({
       userPoolId,
     });
 
-    await cognito
-      .adminSetUserPassword({
-        Password: process.env.DEFAULT_ACCOUNT_PASS,
-        Permanent: true,
-        UserPoolId: userPoolId,
-        Username: email,
-      })
-      .promise();
+    await cognito.adminSetUserPassword({
+      Password: process.env.DEFAULT_ACCOUNT_PASS,
+      Permanent: true,
+      UserPoolId: userPoolId,
+      Username: email,
+    });
   }
 })();

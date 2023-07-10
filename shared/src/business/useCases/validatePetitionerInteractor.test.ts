@@ -3,7 +3,7 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { Contact } from '../entities/contacts/Contact';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -68,8 +68,7 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toEqual({
       confirmEmail:
         UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-      postalCode:
-        ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.postalCode[0].message,
+      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
       serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
     });
   });
@@ -88,8 +87,7 @@ describe('validatePetitionerInteractor', () => {
     expect(errors).toEqual({
       confirmEmail:
         UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-      postalCode:
-        ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.postalCode[0].message,
+      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
     });
   });
 
@@ -109,8 +107,7 @@ describe('validatePetitionerInteractor', () => {
       confirmEmail:
         UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
       email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
-      postalCode:
-        ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.postalCode[0].message,
+      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
     });
   });
 

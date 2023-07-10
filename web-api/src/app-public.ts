@@ -55,8 +55,8 @@ app.use(logger());
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
+import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
 import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
-import { getFeatureFlagValueLambda } from './featureFlag/getFeatureFlagValueLambda';
 import { getHealthCheckLambda } from './health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
 import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
@@ -133,4 +133,4 @@ app.get(
   lambdaWrapper(getMaintenanceModeLambda),
 );
 
-app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));

@@ -4,7 +4,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { Contact } from '../entities/contacts/Contact';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validateAddPetitionerInteractor } from './validateAddPetitionerInteractor';
@@ -49,7 +49,7 @@ describe('validateAddPetitionerInteractor', () => {
     });
 
     expect(errors).toEqual({
-      address1: ContactFactory.DOMESTIC_VALIDATION_ERROR_MESSAGES.address1,
+      address1: Contact.DOMESTIC_VALIDATION_MESSAGES.address1,
       caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
     });
   });

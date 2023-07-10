@@ -1,6 +1,6 @@
-const { canAllowDocumentServiceForCase } = require('./Case');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { canAllowDocumentServiceForCase } from './Case';
 
 describe('canAllowDocumentServiceForCase', () => {
   it('returns true if the rawCase.canAllowDocumentService value is defined and true', () => {
