@@ -1,36 +1,43 @@
-import {
-  Case,
-  isUserIdRepresentedByPrivatePractitioner,
-} from '../entities/cases/Case';
+import { Case } from '../entities/cases/Case';
 import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 export const aggregatePartiesForService = (
-  rawCase: Case,
-  options?: { onlyProSePetitioners: boolean },
-) => {
+  rawCase: RawCase,
+  options: { onlyProSePetitioners: boolean } = { onlyProSePetitioners: false },
+): {
+  all: any[];
+  paper: any[];
+  electronic: Array<{ email: string; name: string }>;
+} => {
   const formattedCase = setServiceIndicatorsForCase(rawCase);
-  const parties = [
-    ...formattedCase.petitioners,
-    ...(options?.onlyProSePetitioners
-      ? []
-      : formattedCase.privatePractitioners),
-    ...(options?.onlyProSePetitioners ? [] : formattedCase.irsPractitioners),
-  ];
 
-  const aggregated = {
+  let allParties;
+
+  if (options.onlyProSePetitioners) {
+    allParties = formattedCase.petitioners.filter(
+      petitioner =>
+        !Case.isPetitionerRepresented(rawCase, petitioner.contactId),
+    );
+  } else {
+    allParties = [
+      ...formattedCase.petitioners,
+      ...formattedCase.privatePractitioners,
+      ...formattedCase.irsPractitioners,
+    ];
+  }
+
+  const aggregated: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{ email: string; name: string }>;
+  } = {
     all: [],
     electronic: [],
     paper: [],
   };
 
-  parties.forEach(party => {
-    if (
-      options?.onlyProSePetitioners &&
-      isUserIdRepresentedByPrivatePractitioner(rawCase, party.contactId)
-    ) {
-      return;
-    }
+  allParties.forEach(party => {
     if (
       party &&
       party.email &&

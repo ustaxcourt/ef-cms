@@ -14,7 +14,6 @@ import {
   getPractitionersRepresenting,
   isLeadCase,
   isSealedCase,
-  isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
 import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
@@ -299,6 +298,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
     isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
+    isPetitionerRepresented: jest
+      .fn()
+      .mockImplementation(Case.isPetitionerRepresented),
     isSealedCase: jest.fn().mockImplementation(isSealedCase),
     isServed: jest.fn().mockImplementation(DocketEntry.isServed),
     isStringISOFormatted: jest
@@ -307,9 +309,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isTodayWithinGivenInterval: jest
       .fn()
       .mockImplementation(DateHandler.isTodayWithinGivenInterval),
-    isUserIdRepresentedByPrivatePractitioner: jest
-      .fn()
-      .mockImplementation(isUserIdRepresentedByPrivatePractitioner),
     isUserPartOfGroup: jest.fn().mockImplementation(isUserPartOfGroup),
     isValidDateString: jest
       .fn()

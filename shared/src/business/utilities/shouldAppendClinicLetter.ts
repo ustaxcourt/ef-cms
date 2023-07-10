@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { getClinicLetterKey } from './getClinicLetterKey';
 
 export const shouldAppendClinicLetter = async ({
@@ -11,9 +12,7 @@ export const shouldAppendClinicLetter = async ({
 
   // add clinic letter for ANY pro se petitioner
   for (let petitioner of caseEntity.petitioners) {
-    if (
-      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
-    ) {
+    if (!Case.isPetitionerRepresented(caseEntity, petitioner.contactId)) {
       clinicLetterKey = getClinicLetterKey({
         procedureType,
         trialLocation: trialSession.trialLocation,

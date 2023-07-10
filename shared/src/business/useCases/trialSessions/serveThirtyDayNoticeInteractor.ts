@@ -106,9 +106,7 @@ export const serveThirtyDayNoticeInteractor = async (
 
     const hasProSePetitioner = caseEntity.petitioners.some(
       petitioner =>
-        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-          petitioner.contactId,
-        ),
+        !Case.isPetitionerRepresented(caseEntity, petitioner.contactId),
     );
     if (hasProSePetitioner) {
       const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta({
