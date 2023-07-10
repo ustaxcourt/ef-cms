@@ -1,18 +1,21 @@
+import {
+  Case,
+  isUserIdRepresentedByPrivatePractitioner,
+} from '../entities/cases/Case';
 import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
-/**
- * aggregatePartiesForService
- * @param {object} caseEntity the case entity with parties to be served
- * @returns {object} the aggregated contact information for all parties,
- * electronically-served parties, and paper-served parties
- */
-export const aggregatePartiesForService = caseEntity => {
-  const formattedCase = setServiceIndicatorsForCase(caseEntity);
+export const aggregatePartiesForService = (
+  rawCase: Case,
+  options?: { onlyProSePetitioners: boolean },
+) => {
+  const formattedCase = setServiceIndicatorsForCase(rawCase);
   const parties = [
     ...formattedCase.petitioners,
-    ...formattedCase.privatePractitioners,
-    ...formattedCase.irsPractitioners,
+    ...(options?.onlyProSePetitioners
+      ? []
+      : formattedCase.privatePractitioners),
+    ...(options?.onlyProSePetitioners ? [] : formattedCase.irsPractitioners),
   ];
 
   const aggregated = {
@@ -22,6 +25,12 @@ export const aggregatePartiesForService = caseEntity => {
   };
 
   parties.forEach(party => {
+    if (
+      options?.onlyProSePetitioners &&
+      isUserIdRepresentedByPrivatePractitioner(rawCase, party.contactId)
+    ) {
+      return;
+    }
     if (
       party &&
       party.email &&
