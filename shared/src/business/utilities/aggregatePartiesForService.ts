@@ -50,6 +50,7 @@ export const aggregatePartiesForService = (
       });
     }
   });
+
   aggregated.all = Array.prototype.concat(
     aggregated.electronic,
     aggregated.paper,
