@@ -17,24 +17,25 @@ describe('aggregatePartiesForService', () => {
 
   const PRIMARY_CONTACT_ID = 'c344c39f-6086-484b-998c-e93e9c7dcff5';
   const SECONDARY_CONTACT_ID = '09ecdf10-359c-4694-a5a8-d15d56796ce1';
+  const contactPrimary = {
+    contactId: PRIMARY_CONTACT_ID,
+    contactType: CONTACT_TYPES.primary,
+    email: 'contactprimary@example.com',
+    name: 'Contact Primary',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+  };
+
+  const contactSecondary = {
+    address1: 'Test Address',
+    city: 'Testville',
+    contactId: SECONDARY_CONTACT_ID,
+    contactType: CONTACT_TYPES.secondary,
+    name: 'Contact Secondary',
+    serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+    state: 'CA',
+  };
 
   beforeEach(() => {
-    const contactPrimary = {
-      contactId: PRIMARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.primary,
-      email: 'contactprimary@example.com',
-      name: 'Contact Primary',
-    };
-
-    const contactSecondary = {
-      address1: 'Test Address',
-      city: 'Testville',
-      contactId: SECONDARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.secondary,
-      name: 'Contact Secondary',
-      state: 'CA',
-    };
-
     irsPractitionerWithPaper = {
       contact: {
         address1: '123 IRS Way',
@@ -401,5 +402,24 @@ describe('aggregatePartiesForService', () => {
     );
 
     expect(otherFiler).toBeFalsy();
+  });
+
+  it('should only server pro se petitioners when "onlyProSePetitioners" is set to true', () => {
+    //setup data
+    //1 pet that is proSe
+    //1 pet that is not proSe
+    privatePractitioners[0].representing.push(contactPrimary.contactId);
+    contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
+
+    //mut
+    const result = aggregatePartiesForService(mockCase, {
+      onlyProSePetitioners: true,
+    });
+
+    //assertexpect
+    expect(result.all).toEqual([contactSecondary]);
+    expect(result.electronic).toEqual([]);
+    expect(result.paper).toEqual([contactSecondary]);
   });
 });
