@@ -27,6 +27,10 @@ export const getCustomCaseInventoryReportAction = async ({
     state.customCaseInventory.filters,
   );
 
+  if (!filterValues.highPriority) {
+    delete filterValues.highPriority;
+  }
+
   const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
   const formattedStartDate = applicationContext
     .getUtilities()
