@@ -7,7 +7,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-export const mockSortedOpinionsResult = [
+export const mockOpinionsFiledByJudge = [
   { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
   {
     count: 0,
@@ -105,11 +105,11 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       clientConnectionId: mockValidRequest.clientConnectionId,
       message: {
         action: 'fetch_opinions_complete',
-        opinions: mockSortedOpinionsResult,
+        opinions: mockOpinionsFiledByJudge,
       },
       userId: judgeUser.userId,
     });
 
-    expect(results).toEqual(mockSortedOpinionsResult);
+    expect(results).toEqual(mockOpinionsFiledByJudge);
   });
 });

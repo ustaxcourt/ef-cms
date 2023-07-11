@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOrdersIssuedForJudgeActivityReportAction } from './getOrdersIssuedForJudgeActivityReportAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
+import { mockOrdersIssuedByJudge } from 'shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor.test';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -13,21 +14,24 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
   const mockConnectionID = 'mockConnectionID';
 
   it('should retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
-    await runAction(getOrdersIssuedForJudgeActivityReportAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        clientConnectionId: mockConnectionID,
-        judgeActivityReport: {
-          filters: {
-            endDate: mockEndDate,
-            judges: [mockJudgeName],
-            startDate: mockStartDate,
+    const { output } = await runAction(
+      getOrdersIssuedForJudgeActivityReportAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          clientConnectionId: mockConnectionID,
+          judgeActivityReport: {
+            filters: {
+              endDate: mockEndDate,
+              judges: [mockJudgeName],
+              startDate: mockStartDate,
+            },
           },
         },
       },
-    });
+    );
 
     expect(
       applicationContext.getUseCases().getOrdersFiledByJudgeInteractor.mock
@@ -38,5 +42,6 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
       judges: [mockJudgeName],
       startDate: mockStartDate,
     });
+    expect(output.orders).toEqual(mockOrdersIssuedByJudge);
   });
 });

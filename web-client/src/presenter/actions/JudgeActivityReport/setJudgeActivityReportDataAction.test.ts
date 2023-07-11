@@ -15,7 +15,7 @@ describe('setJudgeActivityReportDataAction', () => {
     [CASE_STATUS_TYPES.closed]: 4,
     [CASE_STATUS_TYPES.closedDismissed]: 8,
   };
-  const mockIdForPage3 = 15;
+  const page3Id = 15;
   const mockTrialSessions = {
     [SESSION_TYPES.hybrid]: 0.5,
     [SESSION_TYPES.regular]: 1.5,
@@ -77,7 +77,7 @@ describe('setJudgeActivityReportDataAction', () => {
       props: {
         cases: mockCases,
         consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
-        lastDocketNumberForCavAndSubmittedCasesSearch: mockIdForPage3,
+        lastDocketNumberForCavAndSubmittedCasesSearch: page3Id,
         selectedPage: 1,
       },
       state: {
@@ -105,7 +105,7 @@ describe('setJudgeActivityReportDataAction', () => {
     expect(state.judgeActivityReport.lastIdsOfPages).toEqual([
       0,
       page2Id,
-      mockIdForPage3,
+      page3Id,
     ]);
   });
 });
