@@ -5,4 +5,5 @@ interface IApplicationContext {
   getUseCaseHelpers: IGetUseCaseHelpers;
   getUseCases: IGetUseCases;
   getUtilities: IGetUtilities;
+  getDocumentGenerators: IGetDocumentGenerators;
 }

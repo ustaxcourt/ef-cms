@@ -65,7 +65,6 @@ import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenan
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
-import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
@@ -264,6 +263,7 @@ import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEn
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
+import { serveThirtyDayNoticeInteractor } from '../../shared/src/proxies/trialSessions/serveThirtyDayNoticeProxy';
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setDocumentTitleFromStampDataInteractor } from '../../shared/src/business/useCases/stampMotion/setDocumentTitleFromStampDataInteractor';
 import { setForHearingInteractor } from '../../shared/src/proxies/trialSessions/setForHearingProxy';
@@ -329,7 +329,6 @@ import { validateEditPetitionerCounselInteractor } from '../../shared/src/busine
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateHearingNoteInteractor } from '../../shared/src/business/useCases/validateHearingNoteInteractor';
-import { validateJudgeActivityReportSearchInteractor } from '../../shared/src/business/useCases/judgeActivityReport/validateJudgeActivityReportSearchInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -523,6 +522,7 @@ const allUseCases = {
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
+  serveThirtyDayNoticeInteractor,
   setDocumentTitleFromStampDataInteractor,
   setForHearingInteractor,
   setItemInteractor,
@@ -581,7 +581,6 @@ const allUseCases = {
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateHearingNoteInteractor,
-  validateJudgeActivityReportSearchInteractor,
   validateNoteInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -780,7 +779,6 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
-      isStandaloneRemoteSession,
       isStringISOFormatted,
       isTodayWithinGivenInterval,
       isUserIdRepresentedByPrivatePractitioner,
