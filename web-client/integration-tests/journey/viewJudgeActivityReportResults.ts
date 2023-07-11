@@ -4,10 +4,7 @@ import {
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import {
-  refreshElasticsearchIndex,
-  waitForExpectedItemToExist,
-} from '../helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -41,16 +38,6 @@ export const viewJudgeActivityReportResults = (
 
     await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
       selectedPage: 0,
-    });
-
-    await waitForExpectedItemToExist({
-      cerebralTest,
-      currentItem: 'judgeActivityReport.judgeActivityReportData.orders',
-    });
-
-    await waitForExpectedItemToExist({
-      cerebralTest,
-      currentItem: 'judgeActivityReport.judgeActivityReportData.opinions',
     });
 
     const { progressDescriptionTableTotal } = runCompute(

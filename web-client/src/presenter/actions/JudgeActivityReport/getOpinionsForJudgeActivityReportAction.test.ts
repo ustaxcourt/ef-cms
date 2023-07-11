@@ -1,6 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOpinionsForJudgeActivityReportAction } from './getOpinionsForJudgeActivityReportAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
+import { mockSortedOpinionsResult } from '../../../../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor.test';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -12,8 +13,14 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
   const mockJudgeName = judgeUser.name;
   const mockConnectionID = 'mockConnectionID';
 
-  it('should make a call to retrieve opinions by the provided judge in the date range provided from persistence', async () => {
-    await runAction(getOpinionsForJudgeActivityReportAction, {
+  applicationContext
+    .getUseCases()
+    .getOpinionsFiledByJudgeInteractor.mockReturnValue(
+      mockSortedOpinionsResult,
+    );
+
+  it('should return opinions by the provided judge in the date range provided from persistence', async () => {
+    const results = await runAction(getOpinionsForJudgeActivityReportAction, {
       modules: {
         presenter,
       },
@@ -38,5 +45,9 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
       judges: [mockJudgeName],
       startDate: mockStartDate,
     });
+
+    expect(
+      results.state.judgeActivityReport.judgeActivityReportData.opinions,
+    ).toEqual(mockSortedOpinionsResult);
   });
 });
