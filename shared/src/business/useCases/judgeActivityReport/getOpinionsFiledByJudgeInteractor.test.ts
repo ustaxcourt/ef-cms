@@ -1,8 +1,22 @@
 import { JudgeActivityReportFilters } from '@web-client/presenter/judgeActivityReportState';
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../entities/EntityConstants';
+import {
+  MAX_ELASTICSEARCH_PAGINATION,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+} from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
+
+export const mockSortedOpinionsResult = [
+  { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
+  {
+    count: 0,
+    documentType: 'Order of Service of Transcript (Bench Opinion)',
+    eventCode: 'OST',
+  },
+  { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
+  { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
+];
 
 describe('getOpinionsFiledByJudgeInteractor', () => {
   const mockClientConnectionID = 'clientConnnectionID';
@@ -15,16 +29,28 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     startDate: mockStartDate,
   };
 
-  const mockSortedOpinionsResult = [
-    { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
-    {
-      count: 0,
-      documentType: 'Order of Service of Transcript (Bench Opinion)',
-      eventCode: 'OST',
-    },
-    { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
-    { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
-  ];
+  const mockOrdersResultFromPersistence = {
+    results: [
+      {
+        caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+        docketNumber: '103-19',
+        documentTitle: 'T.C. Opinion for More Candy',
+        documentType: 'T.C. Opinion',
+        eventCode: 'TCOP',
+        signedJudgeName: 'Guy Fieri',
+      },
+      {
+        caseCaption: 'Samson Workman, Petitioner',
+        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
+        docketNumber: '103-19',
+        documentTitle: 'Summary Opinion for KitKats',
+        documentType: 'Summary Opinion',
+        eventCode: 'SOP',
+        signedJudgeName: 'Guy Fieri',
+      },
+    ],
+  };
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
@@ -48,33 +74,14 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should make a persistence call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
+  it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
-        results: [
-          {
-            caseCaption: 'Samson Workman, Petitioner',
-            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-            docketNumber: '103-19',
-            documentTitle: 'T.C. Opinion for More Candy',
-            documentType: 'T.C. Opinion',
-            eventCode: 'TCOP',
-            signedJudgeName: 'Guy Fieri',
-          },
-          {
-            caseCaption: 'Samson Workman, Petitioner',
-            docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-            docketNumber: '103-19',
-            documentTitle: 'Summary Opinion for KitKats',
-            documentType: 'Summary Opinion',
-            eventCode: 'SOP',
-            signedJudgeName: 'Guy Fieri',
-          },
-        ],
-      });
+      .advancedDocumentSearch.mockResolvedValue(
+        mockOrdersResultFromPersistence,
+      );
 
-    await getOpinionsFiledByJudgeInteractor(
+    const results = await getOpinionsFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -83,7 +90,9 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
         .calls[0][0],
     ).toMatchObject({
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       endDate: '2020-03-22T03:59:59.999Z',
+      isOpinionSearch: true,
       judge: judgeUser.name,
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: '2020-02-12T05:00:00.000Z',
@@ -100,5 +109,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       },
       userId: judgeUser.userId,
     });
+
+    expect(results).toEqual(mockSortedOpinionsResult);
   });
 });

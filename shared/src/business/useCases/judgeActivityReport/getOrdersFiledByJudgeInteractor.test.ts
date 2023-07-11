@@ -3,6 +3,20 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
+export const mockSortedOrdersResult = [
+  { count: 2, documentType: 'Order', eventCode: 'O' },
+  {
+    count: 1,
+    documentType: 'Order that the letter "L" is added to Docket number',
+    eventCode: 'OAL',
+  },
+  {
+    count: 1,
+    documentType: 'Order that the letter "X" is deleted from the Docket number',
+    eventCode: 'ODX',
+  },
+];
+
 describe('getOrdersFiledByJudgeInteractor', () => {
   const mockClientConnectionID = 'clientConnnectionID';
   const mockValidRequest = {
@@ -34,21 +48,6 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     ],
   };
 
-  const mockSortedOrdersResult = [
-    { count: 2, documentType: 'Order', eventCode: 'O' },
-    {
-      count: 1,
-      documentType: 'Order that the letter "L" is added to Docket number',
-      eventCode: 'OAL',
-    },
-    {
-      count: 1,
-      documentType:
-        'Order that the letter "X" is deleted from the Docket number',
-      eventCode: 'ODX',
-    },
-  ];
-
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
   });
@@ -71,12 +70,15 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the orders, via websocket, filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
+  it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue(mockResults);
 
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+    const results = await getOrdersFiledByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -99,16 +101,21 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       },
       userId: judgeUser.userId,
     });
+
+    expect(results).toEqual(mockSortedOrdersResult);
   });
 
-  it('should return an empty list of orders, via websocket, when no matching orders for the judge in the date range provided', async () => {
+  it('should return an empty list of orders when there are no matching orders for the selected judge in the date range provided', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
         results: [],
       });
 
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+    const results = await getOrdersFiledByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -121,6 +128,8 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       },
       userId: judgeUser.userId,
     });
+
+    expect(results).toEqual([]);
   });
 
   it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {

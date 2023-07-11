@@ -57,6 +57,8 @@ export const viewJudgeActivityReportResults = (
       expect.objectContaining({
         casesClosedByJudge: expect.anything(),
         consolidatedCasesGroupCountMap: expect.anything(),
+        opinions: expect.anything(),
+        orders: expect.anything(),
         submittedAndCavCasesByJudge: expect.anything(),
         trialSessions: expect.anything(),
       }),
