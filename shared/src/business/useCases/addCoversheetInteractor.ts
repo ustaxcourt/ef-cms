@@ -110,8 +110,22 @@ export const addCoversheetInteractor = async (
         });
 
       if (consolidatedCaseDocketEntryEntity) {
-        // maybe do a conditional here to NOT set the process status completed unless subjectCase?
-        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        const { SIMULTANEOUS_DOCUMENT_EVENT_CODES } =
+          applicationContext.getConstants();
+        const isSimultaneousDocType =
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            consolidatedCaseDocketEntryEntity.eventCode,
+          );
+
+        if (
+          !isSimultaneousDocType ||
+          (isSimultaneousDocType &&
+            caseEntity &&
+            caseDocketNumber === docketNumber)
+        ) {
+          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        }
+
         consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
 
         const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
