@@ -69,7 +69,9 @@ describe('serveThirtyDayNoticeInteractor', () => {
         });
     });
 
-    it('should serve a 30 day notice of trial(NOTT) on any case in a trial session with at least 1 pro se petitioner', async () => {
+    // 30 Day Notice of Trial (NOTT) is served ONLY to pro-se petitioners because this notice helps inform pro-se petitioners when their trial is occurring, it does
+    // not apply to practitioners representing petitioners who are already familiar with court procedure.
+    it('should generate a 30 day notice of trial (NOTT) for any case in a trial session with at least 1 pro-se petitioner, serving to only the pro-se petitioners', async () => {
       const caseWithRepresentedPetitioner = cloneDeep(mockCase);
       caseWithRepresentedPetitioner.privatePractitioners = [
         {
@@ -133,6 +135,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         },
         newPdfDoc: expect.anything(),
         noticePdf: expect.anything(),
+        onlyProSePetitioners: true,
         userId: petitionsClerkUser.userId,
       });
     });

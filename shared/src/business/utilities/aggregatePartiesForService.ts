@@ -4,7 +4,7 @@ import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
 export const aggregatePartiesForService = (
   rawCase: RawCase,
-  options: { onlyProSePetitioners: boolean } = { onlyProSePetitioners: false },
+  options: { onlyProSePetitioners?: boolean } = { onlyProSePetitioners: false },
 ): {
   all: any[];
   paper: any[];
