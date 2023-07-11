@@ -1,4 +1,5 @@
 import { Case } from '../entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
@@ -110,7 +111,20 @@ export const addCoversheetInteractor = async (
         });
 
       if (consolidatedCaseDocketEntryEntity) {
-        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        const isSimultaneousDocType =
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            consolidatedCaseDocketEntryEntity.eventCode,
+          );
+
+        if (
+          !isSimultaneousDocType ||
+          (isSimultaneousDocType &&
+            caseEntity &&
+            caseDocketNumber === docketNumber)
+        ) {
+          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        }
+
         consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
 
         const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity

@@ -8,9 +8,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
-import { addCoverToPdf } from '../addCoverToPdf';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -24,10 +22,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
-
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: testPdfDoc,
-    });
   });
 
   beforeEach(() => {
@@ -370,12 +364,50 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).toBe(mockCase.docketNumber);
   });
 
+  it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
   it('should serve the docket entry on each case provided in the docketNumbers list when the MULTI_DOCKETABLE_PAPER_FILINGS feature flag is enabled', async () => {
     const mockMemberCaseDocketNumber = '999-15';
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -393,23 +425,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
-
-    expect(addCoverToPdf).toHaveBeenCalled();
-  });
-
-  it('should save the pdf with coversheet attached to persistence', async () => {
-    const mockPdfWithCoversheet = { abc: '123' };
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: mockPdfWithCoversheet,
-    });
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -419,9 +442,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0].document,
-    ).toBe(mockPdfWithCoversheet);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should set isPendingService to truthy when filing the subject docket entry', async () => {
