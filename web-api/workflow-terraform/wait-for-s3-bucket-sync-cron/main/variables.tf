@@ -14,10 +14,10 @@ variable "circle_machine_user_token" {
   type = string
 }
 
-variable "destination_bucket_name" {
+variable "s3_bucket_sync_queue_url" {
   type = string
 }
 
-variable "source_bucket_name" {
+variable "s3_bucket_sync_dl_queue_url" {
   type = string
 }

@@ -20,6 +20,14 @@ parameters:
     default: test
     type: string
 
+  run_empty_s3_bucket:
+    default: false
+    type: boolean
+
+  bucket_name:
+    default: ''
+    type: string
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -80,230 +88,6 @@ commands:
             - node_modules
 
 jobs:
-  delete-existing-data:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
-      - run:
-          name: Setup the deploy table for a glue job
-          command: |
-            ./scripts/setup-deploy-table-for-glue-job.sh
-      - run:
-          name: Delete all existing dynamodb tables and elasticsearch clusters
-          command: |
-            ./scripts/delete-all-persistence.sh
-      - run:
-          name: Deploy Empty Documents S3 Bucket Lambda
-          command: |
-            npm run deploy:empty-s3-bucket-cron -- $ENV
-      - run:
-          name: Enable Empty Documents S3 Bucket Cron
-          command: |
-            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/enable.sh
-
-  redeploy-environment:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
-            VCS=<< pipeline.project.type >>
-            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-      - run:
-          name: Disable Empty Documents S3 Bucket Cron
-          command: |
-            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/disable.sh
-      - run:
-          name: Destroy Empty Documents S3 Bucket Lambda
-          command: |
-            npm run destroy:empty-s3-bucket-cron -- $ENV
-      - run:
-          name: Kick off a deployment
-          command: |
-            CIRCLE_PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
-            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
-      - run:
-          name: Deploy Wait for Workflow Cron Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            npm run deploy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
-
-  initiate-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            VCS=<< pipeline.project.type >>
-            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-      - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Disable Dynamodb Streams
-          command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
-      - run:
-          name: Kick off the glue-to-lower-env workflow
-          command: |
-            CIRCLE_PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
-            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
-      - run:
-          name: Deploy Sync S3 Buckets Cron Lambda
-          command: |
-            npm run deploy:sync-s3-buckets-cron -- $ENV
-      - run:
-          name: Populate S3 Source Queue
-          command: |
-            npx ts-node --transpile-only ./web-api/workflow-terraform/sync-s3-buckets-cron/bin/populate-source-queue.ts
-      - run:
-          name: Enable Sync S3 Buckets Cron
-          command: |
-            ./web-api/workflow-terraform/sync-s3-buckets-cron/bin/enable.sh
-      - run:
-          name: Deploy Wait for Workflow Cron Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-            npm run deploy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
-
-  start-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            LOWER_ENV=<< pipeline.parameters.lower_env >>
-            if [[ -z "$LOWER_ENV" ]]; then
-              echo "Error: no lower environment was provided"
-              exit 1
-            fi
-            echo "export LOWER_ENV=${LOWER_ENV}" >> $BASH_ENV
-      - run:
-          name: Deploy Check Glue Job Run State Cron Lambda
-          command: |
-            npm run deploy:glue-cron -- $ENV
-      - run:
-          name: Start Glue Job
-          command: |
-            npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
-      - run:
-          name: Enable Check Glue Job Run State Cron
-          command: |
-            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
-
-  finish-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Check Glue Job Run State Cron
-          command: |
-            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
-      - run:
-          name: Destroy Check Glue Job Run State Cron Lambda
-          command: |
-            npm run destroy:glue-cron -- $ENV
-
-  cleanup-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Dynamodb Streams
-          command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
-
   deploy:
     docker:
       - image: *efcms-docker-image
@@ -746,12 +530,306 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
+  ######################## GLUE JOB: Jobs that run in a lower environment ########################
+
+  delete-existing-data:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+      - run:
+          name: Setup the deploy table for a glue job
+          command: |
+            ./scripts/setup-deploy-table-for-glue-job.sh
+      - run:
+          name: Delete all existing dynamodb tables and elasticsearch clusters
+          command: |
+            ./scripts/delete-all-persistence.sh
+
+  redeploy-environment:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+      - run:
+          name: Kick off a deployment
+          command: |
+            CIRCLE_PIPELINE_ID=$(curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
+            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+      - run:
+          name: Deploy Wait for Workflow Cron Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+            npm run deploy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+
+  initiate-glue-job:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+      - run:
+          name: Disable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+      - run:
+          name: Destroy Wait for Workflow Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+            export CIRCLE_PIPELINE_ID=noop
+            npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Disable Dynamodb Streams
+          command: |
+            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+      - run:
+          name: Kick off the glue-to-lower-env workflow
+          command: |
+            CIRCLE_PIPELINE_ID=$(curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+      - run:
+          name: Reset S3 Bucket Sync Flag
+          command: |
+            npx ts-node --transpile-only ./web-api/workflow-terraform/wait-for-s3-bucket-sync-cron/bin/reset-s3-bucket-sync-flag.ts
+      - run:
+          name: Deploy Sync S3 Buckets Lambda
+          command: |
+            npm run deploy:sync-s3-buckets -- $ENV
+            S3_BUCKET_SYNC_QUEUE_URL="$(terraform output -raw s3_bucket_sync_queue_url)"
+            echo "export S3_BUCKET_SYNC_QUEUE_URL=${S3_BUCKET_SYNC_QUEUE_URL}" >> $BASH_ENV
+            S3_BUCKET_SYNC_DL_QUEUE_URL="$(terraform output -raw s3_bucket_sync_dl_queue_url)"
+            echo "export S3_BUCKET_SYNC_DL_QUEUE_URL=${S3_BUCKET_SYNC_DL_QUEUE_URL}" >> $BASH_ENV
+      - run:
+          name: Populate S3 Sync Queue
+          command: |
+            npx ts-node --transpile-only ./web-api/workflow-terraform/sync-s3-buckets/bin/populate-queue.ts
+      - run:
+          name: Deploy Wait for Workflow Cron Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            npm run deploy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+      - run:
+          name: Deploy Wait for S3 Sync Lambda
+          command: |
+            npm run deploy:wait-for-s3-bucket-sync-cron -- $ENV
+      - run:
+          name: Enable Wait for S3 Sync Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-s3-bucket-sync-cron/bin/enable.sh
+
+  cleanup-glue-job:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Wait for S3 Sync Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-s3-bucket-sync-cron/bin/disable.sh
+      - run:
+          name: Destroy Wait for S3 Sync Lambda
+          command: |
+            npm run destroy:wait-for-s3-bucket-sync-cron -- $ENV
+      - run:
+          name: Disable Wait for Workflow Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+      - run:
+          name: Destroy Wait for Workflow Lambda
+          command: |
+            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+            export CIRCLE_PIPELINE_ID=noop
+            npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Enable Dynamodb Streams
+          command: |
+            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+
+  ######################## GLUE JOB: Jobs that run in prod ########################
+
+  start-glue-job:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            LOWER_ENV=<< pipeline.parameters.lower_env >>
+            if [[ -z "$LOWER_ENV" ]]; then
+              echo "Error: no lower environment was provided"
+              exit 1
+            fi
+            echo "export LOWER_ENV=${LOWER_ENV}" >> $BASH_ENV
+      - run:
+          name: Deploy Check Glue Job Run State Cron Lambda
+          command: |
+            npm run deploy:glue-cron -- $ENV
+      - run:
+          name: Start Glue Job
+          command: |
+            npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+      - run:
+          name: Enable Check Glue Job Run State Cron
+          command: |
+            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
+
+  finish-glue-job:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Disable Check Glue Job Run State Cron
+          command: |
+            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
+      - run:
+          name: Destroy Check Glue Job Run State Cron Lambda
+          command: |
+            npm run destroy:glue-cron -- $ENV
+
+  ######################## empty-s3-bucket workflow ########################
+
+  start-emptying-s3-bucket:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            BUCKET_NAME=<< pipeline.parameters.bucket_name >>
+            if [[ -z "$BUCKET_NAME" ]]; then
+              echo "Error: no bucket name was provided"
+              exit 1
+            fi
+            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
+      - run:
+          name: Deploy Empty S3 Bucket Lambda
+          command: |
+            npm run deploy:empty-s3-bucket-cron -- $ENV
+      - run:
+          name: Enable Empty Documents S3 Bucket Cron
+          command: |
+            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/enable.sh
+
+  finish-emptying-s3-bucket:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            BUCKET_NAME=<< pipeline.parameters.bucket_name >>
+            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
+      - run:
+          name: Disable Empty Documents S3 Bucket Cron
+          command: |
+            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/disable.sh
+      - run:
+          name: Destroy Empty Documents S3 Bucket Lambda
+          command: |
+            npm run destroy:empty-s3-bucket-cron -- $ENV
+
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
         - prod
+
+only-test: &only-test
+  filters:
+    branches:
+      only:
+        - test
 
 only-deployed-lower-environments: &only-deployed-lower-environments
   filters:
@@ -766,12 +844,6 @@ only-deployed-lower-environments: &only-deployed-lower-environments
         - irs
         - migration
         - staging
-        - test
-
-only-test: &only-test
-  filters:
-    branches:
-      only:
         - test
 
 workflows:
@@ -897,15 +969,10 @@ workflows:
     jobs:
       - delete-existing-data:
           <<: *only-test
-      - wait-for-s3-bucket-to-empty:
-          <<: *only-test
-          type: approval
-          requires:
-            - delete-existing-data
       - redeploy-environment:
           <<: *only-test
           requires:
-            - wait-for-s3-bucket-to-empty
+            - delete-existing-data
       - wait-for-deployment-workflow:
           <<: *only-test
           type: approval
@@ -920,7 +987,7 @@ workflows:
           type: approval
           requires:
             - initiate-glue-job
-      - wait-for-s3-sync:
+      - wait-for-s3-bucket-sync:
           <<: *only-test
           type: approval
           requires:
@@ -929,7 +996,7 @@ workflows:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
-            - wait-for-s3-sync
+            - wait-for-s3-bucket-sync
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
@@ -945,3 +1012,15 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-glue-job
+
+  empty-s3-bucket:
+    when: << pipeline.parameters.run_empty_s3_bucket >>
+    jobs:
+      - start-emptying-s3-bucket
+      - wait-for-s3-bucket-to-empty:
+          type: approval
+          requires:
+            - start-emptying-s3-bucket
+      - finish-emptying-s3-bucket:
+          requires:
+            - wait-for-s3-bucket-to-empty

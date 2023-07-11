@@ -43,6 +43,28 @@ resource "aws_iam_role_policy" "s3_lambda_policy" {
       "Effect": "Allow",
       "Action": "s3:*",
       "Resource": "*"
+    },
+    {
+      "Sid": "SQS",
+      "Effect": "Allow",
+      "Action": [
+        "sqs:GetQueueAttributes"
+      ],
+      "Resource": [
+        "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
+        "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*"
+      ]
+    },
+    {
+      "Sid": "DynamoDB",
+      "Effect": "Allow",
+      "Action": [
+        "dynamodb:GetItem",
+        "dynamodb:PutItem"
+      ],
+      "Resource": [
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-deploy-${var.environment}"
+      ]
     }
   ]
 }
