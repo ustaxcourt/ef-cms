@@ -1,6 +1,6 @@
-const { Case, getContactPrimary } = require('./Case');
-const { CONTACT_TYPES, PARTY_TYPES } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { Case, getContactPrimary } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('getCaseCaption', () => {
   it('gets the primary contact from the petitioners array', () => {

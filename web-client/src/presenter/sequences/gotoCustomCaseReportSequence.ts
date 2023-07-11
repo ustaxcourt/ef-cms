@@ -1,3 +1,4 @@
+import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetCustomCaseInventoryReportStateAction } from '../actions/resetCustomCaseInventoryReportStateAction';
@@ -7,6 +8,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 const gotoCustomCaseReport = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   resetCustomCaseInventoryReportStateAction,
+  getSetJudgesSequence,
   setCurrentPageAction('CustomCaseReport'),
 ]);
 

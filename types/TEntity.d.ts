@@ -72,33 +72,6 @@ type TDocumentMetaData = {
   correspondenceId: string;
 };
 
-type TContact = {
-  address1: string;
-  address2: string;
-  address3: string;
-  city: string;
-  confirmEmail: string;
-  contactId: string;
-  contactType: string;
-  countryType: string;
-  phone: string;
-  postalCode: string;
-  serviceIndicator: string;
-  state: string;
-  updatedEmail: string;
-  email: string;
-  title: string;
-  name: string;
-  contactPrimary: {
-    name: string;
-  };
-  contactSecondary: {
-    name: string;
-  };
-};
-
-type TError = TContact;
-
 type TPrintableTableFilters = {
   aBasisReached: boolean;
   continued: boolean;

@@ -48,6 +48,9 @@ module.exports = {
     'hasPendingItems.BOOL': {
       type: 'boolean',
     },
+    'highPriority.BOOL': {
+      type: 'boolean',
+    },
     'indexedTimestamp.N': {
       type: 'text',
     },
