@@ -96,6 +96,4 @@ export const getOpinionsFiledByJudgeInteractor = async (
     },
     userId: authorizedUser.userId,
   });
-
-  return sortedResult || [];
 };
