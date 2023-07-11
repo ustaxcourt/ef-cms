@@ -151,7 +151,7 @@ export const serveThirtyDayNoticeInteractor = async (
             documentTitle: replaceBracketed(
               thirtyDayNoticeDocumentInfo!.documentTitle,
               formatDateString(trialSession.startDate, FORMATS.MMDDYYYY_DASHED),
-              trialSession.trialLocation!,
+              trialSession.trialLocation,
             ),
             documentType: thirtyDayNoticeDocumentInfo!.documentType,
             eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
