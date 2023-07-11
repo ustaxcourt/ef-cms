@@ -117,6 +117,8 @@ else
   export CYPRESS_EFCMS_DOMAIN=$EFCMS_DOMAIN
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
   export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+  DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
+  export DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
 fi
 
 if [ -n "${OPEN}" ]; then

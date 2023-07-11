@@ -8,9 +8,12 @@ const config: Config = {
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
-  moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-    prefix: '<rootDir>',
-  }),
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>',
+    }),
+    uuid: require.resolve('uuid'), // https://github.com/microsoft/accessibility-insights-web/pull/5421
+  },
   testEnvironment: 'jsdom',
   testSequencer: `${__dirname}/jestSequencer.js`,
   transform: {

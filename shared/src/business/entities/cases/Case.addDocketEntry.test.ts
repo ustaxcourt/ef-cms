@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
+import { Case } from './Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addDocketEntry', () => {
   it('should throw when docket entry to be added to the docket record is a STIN', () => {
