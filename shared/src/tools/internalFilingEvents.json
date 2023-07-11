@@ -131,8 +131,8 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
-      "ordinalField": "",
-      "allowStamp": true
+      "labelFreeText2": "",
+      "ordinalField": ""
     },
     {
       "documentTitle": "Entry of Appearance",
