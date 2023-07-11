@@ -97,4 +97,6 @@ export const getOrdersFiledByJudgeInteractor = async (
     },
     userId: authorizedUser.userId,
   });
+
+  return sortedResult || [];
 };

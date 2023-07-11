@@ -9,11 +9,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getOrdersIssuedForJudgeActivityReportAction = async ({
   applicationContext,
   get,
+  store,
 }: ActionProps) => {
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
   const clientConnectionId = get(state.clientConnectionId);
 
-  await applicationContext
+  const orders = await applicationContext
     .getUseCases()
     .getOrdersFiledByJudgeInteractor(applicationContext, {
       clientConnectionId,
@@ -21,4 +22,6 @@ export const getOrdersIssuedForJudgeActivityReportAction = async ({
       judges,
       startDate,
     });
+
+  store.set(state.judgeActivityReport.judgeActivityReportData.orders, orders);
 };
