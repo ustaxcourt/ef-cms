@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOrdersIssuedForJudgeActivityReportAction } from './getOrdersIssuedForJudgeActivityReportAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
-import { mockOrdersIssuedByJudge } from 'shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor.test';
+import { mockOrdersIssuedByJudge } from '../../../../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor.test';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -12,6 +12,12 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
   const mockEndDate = '03/03/2021';
   const mockJudgeName = judgeUser.name;
   const mockConnectionID = 'mockConnectionID';
+
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .getOrdersFiledByJudgeInteractor.mockReturnValue(mockOrdersIssuedByJudge);
+  });
 
   it('should retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
     const { output } = await runAction(
