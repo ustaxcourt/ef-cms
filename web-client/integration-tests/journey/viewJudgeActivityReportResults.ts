@@ -4,7 +4,10 @@ import {
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -39,6 +42,8 @@ export const viewJudgeActivityReportResults = (
     await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
       selectedPage: 0,
     });
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     const { progressDescriptionTableTotal } = runCompute(
       judgeActivityReportHelper,

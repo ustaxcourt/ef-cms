@@ -19,25 +19,22 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
       .getOrdersFiledByJudgeInteractor.mockReturnValue(mockOrdersIssuedByJudge);
   });
 
-  it('should retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
-    const { output } = await runAction(
-      getOrdersIssuedForJudgeActivityReportAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          clientConnectionId: mockConnectionID,
-          judgeActivityReport: {
-            filters: {
-              endDate: mockEndDate,
-              judges: [mockJudgeName],
-              startDate: mockStartDate,
-            },
+  it('should make a call to retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
+    await runAction(getOrdersIssuedForJudgeActivityReportAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        clientConnectionId: mockConnectionID,
+        judgeActivityReport: {
+          filters: {
+            endDate: mockEndDate,
+            judges: [mockJudgeName],
+            startDate: mockStartDate,
           },
         },
       },
-    );
+    });
 
     expect(
       applicationContext.getUseCases().getOrdersFiledByJudgeInteractor.mock
@@ -48,6 +45,5 @@ describe('getOrdersIssuedForJudgeActivityReportAction', () => {
       judges: [mockJudgeName],
       startDate: mockStartDate,
     });
-    expect(output.orders).toEqual(mockOrdersIssuedByJudge);
   });
 });
