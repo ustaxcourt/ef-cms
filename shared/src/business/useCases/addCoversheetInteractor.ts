@@ -1,4 +1,5 @@
 import { Case } from '../entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
@@ -110,8 +111,6 @@ export const addCoversheetInteractor = async (
         });
 
       if (consolidatedCaseDocketEntryEntity) {
-        const { SIMULTANEOUS_DOCUMENT_EVENT_CODES } =
-          applicationContext.getConstants();
         const isSimultaneousDocType =
           SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
             consolidatedCaseDocketEntryEntity.eventCode,
