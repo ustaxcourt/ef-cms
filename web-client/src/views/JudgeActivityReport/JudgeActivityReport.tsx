@@ -4,30 +4,36 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
+import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
+import React, { useState } from 'react';
 
 export const JudgeActivityReport = connect(
   {
-    form: state.form,
-    judgeActivityReportData: state.judgeActivityReportData,
+    getCavAndSubmittedCasesForJudgesSequence:
+      sequences.getCavAndSubmittedCasesForJudgesSequence,
+    judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
+    judgeActivityReportFilters: state.judgeActivityReport.filters,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence:
-      sequences.selectDateRangeFromJudgeActivityReportSequence,
+    judgeActivityReportJudges: state.judges,
+    setJudgeActivityReportFiltersSequence:
+      sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
-    form,
+    getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReportData,
+    judgeActivityReportFilters,
     judgeActivityReportHelper,
-    selectDateRangeFromJudgeActivityReportSequence,
+    judgeActivityReportJudges,
+    setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
+    const [activePage, setActivePage] = useState(0);
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
@@ -175,6 +181,21 @@ export const JudgeActivityReport = connect(
 
     const progressDescription: () => JSX.Element = () => (
       <>
+        {judgeActivityReportHelper.showPaginator && (
+          <Paginator
+            breakClassName="hide"
+            forcePage={activePage}
+            marginPagesDisplayed={0}
+            pageCount={judgeActivityReportHelper.pageCount}
+            pageRangeDisplayed={0}
+            onPageChange={pageChange => {
+              setActivePage(pageChange.selected);
+              getCavAndSubmittedCasesForJudgesSequence({
+                selectedPage: pageChange.selected,
+              });
+            }}
+          />
+        )}
         <table
           aria-describedby="progressDescription"
           className="usa-table ustc-table"
@@ -182,7 +203,7 @@ export const JudgeActivityReport = connect(
           <caption id="progressDescription">
             <div className="grid-row display-flex flex-row flex-align-end">
               <div className="grid-col-9 table-caption-serif">
-                Progress Description
+                Submitted/CAV Cases
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
@@ -203,9 +224,9 @@ export const JudgeActivityReport = connect(
           </thead>
           <tbody>
             {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
-              (formattedCase, index) => {
+              formattedCase => {
                 return (
-                  <tr key={index}>
+                  <tr key={formattedCase.docketNumber}>
                     <td className="consolidated-case-column">
                       <ConsolidatedCaseIcon
                         consolidatedIconTooltipText={
@@ -228,6 +249,21 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
+        {judgeActivityReportHelper.showPaginator && (
+          <Paginator
+            breakClassName="hide"
+            forcePage={activePage}
+            marginPagesDisplayed={0}
+            pageCount={judgeActivityReportHelper.pageCount}
+            pageRangeDisplayed={0}
+            onPageChange={pageChange => {
+              setActivePage(pageChange.selected);
+              getCavAndSubmittedCasesForJudgesSequence({
+                selectedPage: pageChange.selected,
+              });
+            }}
+          />
+        )}
         {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
           <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
         )}
@@ -252,31 +288,66 @@ export const JudgeActivityReport = connect(
                   endDateErrorText={validationErrors.endDate}
                   endName="deadlineEnd"
                   endPickerCls={'grid-col-6 padding-left-2'}
-                  endValue={form.endDate}
+                  endValue={judgeActivityReportFilters.endDate}
                   formGroupCls={'margin-bottom-0'}
+                  maxDate={judgeActivityReportHelper.today}
                   rangePickerCls={'grid-row '}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}
-                  startValue={form.endDate}
+                  startValue=""
                   onChangeEnd={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       endDate: e.target.value,
                     });
                   }}
                   onChangeStart={e => {
-                    selectDateRangeFromJudgeActivityReportSequence({
+                    setJudgeActivityReportFiltersSequence({
                       startDate: e.target.value,
                     });
                   }}
                 />
               </div>
+              <div className="grid-col-auto margin-x-3">
+                <label
+                  className="usa-label"
+                  htmlFor="judge-selection"
+                  id="judge-selection-label"
+                >
+                  Judge
+                </label>
+                <select
+                  aria-describedby="judge-selection-label"
+                  aria-label="judge"
+                  className="usa-select select-left width-card-lg"
+                  name="associatedJudge"
+                  value={judgeActivityReportFilters.judgeName}
+                  onChange={e =>
+                    setJudgeActivityReportFiltersSequence({
+                      judgeName: e.target.value,
+                    })
+                  }
+                >
+                  <option key="all" value="All Judges">
+                    All Judges
+                  </option>
+                  {(judgeActivityReportJudges || []).map(judge => (
+                    <option key={judge.name} value={judge.name}>
+                      {judge.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               <div className="grid-col-auto display-flex flex-align-center">
                 <Button
                   className="position-relative margin-bottom-35"
                   disabled={judgeActivityReportHelper.isFormPristine}
                   onClick={() => {
-                    submitJudgeActivityReportSequence();
+                    submitJudgeActivityReportSequence({
+                      selectedPage: 0,
+                    });
+                    setActivePage(0);
                   }}
                 >
                   Run Report

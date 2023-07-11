@@ -1,28 +1,15 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportCasesClosedRequest } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 
-/**
- * getCasesClosedByJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the date to end the search for judge activity
- * @param {string} providers.judgeName the name of the judge
- * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {object} errors (null if no errors)
- */
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
-  {
-    endDate,
-    judgeName,
-    startDate,
-  }: { judgeName: string; endDate: string; startDate: string },
+  params: JudgeActivityReportCasesClosedRequest,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -30,11 +17,11 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const searchEntity = new JudgeActivityReportSearch({
-    endDate,
-    judgeName,
-    startDate,
-  });
+  params.endDate = params.endDate || '';
+  params.judges = params.judges || [];
+  params.startDate = params.startDate || '';
+
+  const searchEntity = new JudgeActivityReportSearch(params);
 
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
@@ -45,7 +32,8 @@ export const getCasesClosedByJudgeInteractor = async (
     .getCasesClosedByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
-      judgeName: searchEntity.judgeName,
+      judges: searchEntity.judges,
+      pageSize: searchEntity.pageSize,
       startDate: searchEntity.startDate,
     });
 
