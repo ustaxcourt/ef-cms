@@ -21,4 +21,4 @@ export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_s3_bucket_sync_queue_url=$S3_BUCKET_SYNC_QUEUE_URL
 export TF_VAR_s3_bucket_sync_dl_queue_url=$S3_BUCKET_SYNC_DL_QUEUE_URL
 
-../../../../shared/terraform/bin/init.sh wait-for-s3-sync-cron --build-lambda
+../../../../shared/terraform/bin/init.sh wait-for-s3-bucket-sync-cron --build-lambda
