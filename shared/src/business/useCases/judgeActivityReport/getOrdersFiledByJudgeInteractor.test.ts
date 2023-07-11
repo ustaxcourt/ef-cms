@@ -75,10 +75,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue(mockResults);
 
-    const results = await getOrdersFiledByJudgeInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -101,8 +98,6 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       },
       userId: judgeUser.userId,
     });
-
-    expect(results).toEqual(mockOrdersIssuedByJudge);
   });
 
   it('should return an empty list of orders when there are no matching orders for the selected judge in the date range provided', async () => {
@@ -112,10 +107,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
         results: [],
       });
 
-    const results = await getOrdersFiledByJudgeInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -128,8 +120,6 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       },
       userId: judgeUser.userId,
     });
-
-    expect(results).toEqual([]);
   });
 
   it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {

@@ -19,25 +19,22 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
       mockOpinionsFiledByJudge,
     );
 
-  it('should return opinions by the provided judge in the date range provided from persistence', async () => {
-    const { output } = await runAction(
-      getOpinionsForJudgeActivityReportAction,
-      {
-        modules: {
-          presenter,
-        },
-        state: {
-          clientConnectionId: mockConnectionID,
-          judgeActivityReport: {
-            filters: {
-              endDate: mockEndDate,
-              judges: [mockJudgeName],
-              startDate: mockStartDate,
-            },
+  it('should make a call to return opinions by the provided judge in the date range provided from persistence', async () => {
+    await runAction(getOpinionsForJudgeActivityReportAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        clientConnectionId: mockConnectionID,
+        judgeActivityReport: {
+          filters: {
+            endDate: mockEndDate,
+            judges: [mockJudgeName],
+            startDate: mockStartDate,
           },
         },
       },
-    );
+    });
 
     expect(
       applicationContext.getUseCases().getOpinionsFiledByJudgeInteractor.mock
@@ -48,6 +45,5 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
       judges: [mockJudgeName],
       startDate: mockStartDate,
     });
-    expect(output.opinions).toBe(mockOpinionsFiledByJudge);
   });
 });

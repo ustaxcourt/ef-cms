@@ -74,14 +74,14 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
+  it('should make a call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue(
         mockOrdersResultFromPersistence,
       );
 
-    const results = await getOpinionsFiledByJudgeInteractor(
+    await getOpinionsFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -109,7 +109,5 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       },
       userId: judgeUser.userId,
     });
-
-    expect(results).toEqual(mockOpinionsFiledByJudge);
   });
 });

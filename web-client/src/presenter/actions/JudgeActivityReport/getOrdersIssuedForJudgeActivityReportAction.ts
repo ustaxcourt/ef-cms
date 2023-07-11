@@ -13,7 +13,7 @@ export const getOrdersIssuedForJudgeActivityReportAction = async ({
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
   const clientConnectionId = get(state.clientConnectionId);
 
-  const orders = await applicationContext
+  await applicationContext
     .getUseCases()
     .getOrdersFiledByJudgeInteractor(applicationContext, {
       clientConnectionId,
@@ -21,6 +21,4 @@ export const getOrdersIssuedForJudgeActivityReportAction = async ({
       judges,
       startDate,
     });
-
-  return { orders };
 };
