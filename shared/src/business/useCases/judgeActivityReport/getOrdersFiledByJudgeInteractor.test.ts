@@ -3,7 +3,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-export const mockSortedOrdersResult = [
+export const mockOrdersIssuedByJudge = [
   { count: 2, documentType: 'Order', eventCode: 'O' },
   {
     count: 1,
@@ -97,12 +97,12 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       clientConnectionId: mockValidRequest.clientConnectionId,
       message: {
         action: 'fetch_orders_complete',
-        orders: mockSortedOrdersResult,
+        orders: mockOrdersIssuedByJudge,
       },
       userId: judgeUser.userId,
     });
 
-    expect(results).toEqual(mockSortedOrdersResult);
+    expect(results).toEqual(mockOrdersIssuedByJudge);
   });
 
   it('should return an empty list of orders when there are no matching orders for the selected judge in the date range provided', async () => {

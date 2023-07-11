@@ -9,6 +9,8 @@ export const setJudgeActivityReportDataAction = ({
     casesClosedByJudge,
     consolidatedCasesGroupCountMap,
     lastDocketNumberForCavAndSubmittedCasesSearch,
+    opinions,
+    orders,
     selectedPage,
     trialSessions,
   } = props;
@@ -22,6 +24,13 @@ export const setJudgeActivityReportDataAction = ({
     state.judgeActivityReport.judgeActivityReportData.trialSessions,
     trialSessions,
   );
+
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData.opinions,
+    opinions,
+  );
+
+  store.set(state.judgeActivityReport.judgeActivityReportData.orders, orders);
 
   store.set(
     state.judgeActivityReport.lastIdsOfPages[selectedPage + 1],
