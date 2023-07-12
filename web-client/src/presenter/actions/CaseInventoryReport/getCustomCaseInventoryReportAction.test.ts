@@ -7,7 +7,7 @@ import {
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCustomCaseInventoryReportAction } from './getCustomCaseInventoryReportAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getCustomCaseInventoryReportAction', () => {
   const lastCaseId = 8291;
@@ -34,8 +34,13 @@ describe('getCustomCaseInventoryReportAction', () => {
     caseTypes: ['Deficiency'],
     endDate: '05/14/2022',
     filingMethod: 'electronic',
+    highPriority: true,
+    judges: ['Colvin'],
+    preferredTrialCities: ['Jackson, Mississippi'],
+    procedureType: 'All',
     startDate: '05/10/2022',
   };
+
   const expectedRequest: GetCaseInventoryReportRequest = {
     ...filterValues,
     endDate: '2022-05-15T03:59:59.999Z',
@@ -88,7 +93,10 @@ describe('getCustomCaseInventoryReportAction', () => {
         mockCustomCaseReportResponse,
       );
     const page1SearchId = 123;
-    expectedRequest.searchAfter = page1SearchId;
+    const expectedRequestWithSearchAfter = {
+      ...expectedRequest,
+      searchAfter: page1SearchId,
+    };
 
     const result = await runAction(getCustomCaseInventoryReportAction, {
       modules: {
@@ -107,7 +115,7 @@ describe('getCustomCaseInventoryReportAction', () => {
 
     expect(
       applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), expectedRequest);
+    ).toHaveBeenCalledWith(expect.anything(), expectedRequestWithSearchAfter);
     expect(result.state.customCaseInventory.cases).toEqual(
       mockCustomCaseReportResponse.foundCases,
     );
@@ -119,5 +127,29 @@ describe('getCustomCaseInventoryReportAction', () => {
       page1SearchId,
       page2SearchId,
     ]);
+  });
+
+  it('should remove the high priority filter when the value is false', async () => {
+    await runAction(getCustomCaseInventoryReportAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        selectedPage: 0,
+      },
+      state: {
+        customCaseInventory: {
+          filters: { ...filterValues, highPriority: false },
+          lastIdsOfPages: [0],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getCustomCaseInventoryReportInteractor,
+    ).toHaveBeenCalledWith(expect.anything(), {
+      ...expectedRequest,
+      highPriority: undefined,
+    });
   });
 });

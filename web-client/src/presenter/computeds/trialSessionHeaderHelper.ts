@@ -1,7 +1,12 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const trialSessionHeaderHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const trialSessionHeaderHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const currentUser = applicationContext.getCurrentUser();

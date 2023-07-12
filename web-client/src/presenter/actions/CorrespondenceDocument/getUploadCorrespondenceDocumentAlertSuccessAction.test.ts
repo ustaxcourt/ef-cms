@@ -1,5 +1,5 @@
 import { getUploadCorrespondenceDocumentAlertSuccessAction } from './getUploadCorrespondenceDocumentAlertSuccessAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getUploadCorrespondenceDocumentAlertSuccessAction', () => {
   it('should return alertSuccess prop', async () => {

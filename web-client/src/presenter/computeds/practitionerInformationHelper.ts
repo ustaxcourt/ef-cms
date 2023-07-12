@@ -1,7 +1,9 @@
 /* eslint-disable complexity */
-import { state } from 'cerebral';
 
-export const practitionerInformationHelper = get => {
+import { state } from '@web-client/presenter/app.cerebral';
+
+import { Get } from 'cerebral';
+export const practitionerInformationHelper = (get: Get) => {
   const permissions = get(state.permissions);
 
   return {

@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
@@ -15,7 +16,7 @@ import {
   setupIconsToDisplay,
 } from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedDocketEntries', () => {

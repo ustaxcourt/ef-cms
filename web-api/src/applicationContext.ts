@@ -181,7 +181,7 @@ let dynamoCache = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
-let searchClientCache;
+let searchClientCache: Client;
 let notificationServiceCache;
 
 const entitiesByName = {

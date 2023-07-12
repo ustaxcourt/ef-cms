@@ -1,5 +1,5 @@
 import { hasPractitionerDetailAction } from './hasPractitionerDetailAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('hasPractitionerDetailAction', () => {
   let presenter;

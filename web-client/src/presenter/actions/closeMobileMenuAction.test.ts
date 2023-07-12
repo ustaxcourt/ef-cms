@@ -1,5 +1,5 @@
 import { closeMobileMenuAction } from './closeMobileMenuAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('closeMobileMenuAction', () => {
   it('should set the value of state.header.showMobileMenu to false', async () => {

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets currentViewMetadata.caseDetail.frozen to false (enables caseDetail tabs to be set again, or "unfreezes" them)

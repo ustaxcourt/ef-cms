@@ -1,5 +1,5 @@
 import { addSupportingDocumentToFormAction } from './addSupportingDocumentToFormAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('addSupportingDocumentToFormAction', () => {
   it('adds first primary supporting document to form', async () => {

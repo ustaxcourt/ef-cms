@@ -1,5 +1,5 @@
 import { clearCaseDeadlinesAction } from './clearCaseDeadlinesAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearCaseDeadlinesAction', () => {
   it('unsets state.caseDeadlineReport.caseDeadlines and state.caseDeadlineReport.page', async () => {

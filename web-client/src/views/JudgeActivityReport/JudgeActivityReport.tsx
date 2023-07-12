@@ -5,7 +5,8 @@ import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const JudgeActivityReport = connect(
@@ -254,8 +255,6 @@ export const JudgeActivityReport = connect(
                   endValue={form.endDate}
                   formGroupCls={'margin-bottom-0'}
                   rangePickerCls={'grid-row '}
-                  showHint={false}
-                  showPlaceholder={true}
                   startDateErrorText={validationErrors.startDate}
                   startName="deadlineStart"
                   startPickerCls={'grid-col-6 padding-right-2'}

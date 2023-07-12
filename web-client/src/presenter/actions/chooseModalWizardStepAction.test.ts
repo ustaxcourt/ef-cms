@@ -1,5 +1,5 @@
 import { chooseModalWizardStepAction } from './chooseModalWizardStepAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('chooseModalWizardStepAction', () => {
   it('should set state.modal.wizardStep to the passed in props.value', async () => {

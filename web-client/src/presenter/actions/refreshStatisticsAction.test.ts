@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { refreshStatisticsAction } from './refreshStatisticsAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('refreshStatisticsAction', () => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();

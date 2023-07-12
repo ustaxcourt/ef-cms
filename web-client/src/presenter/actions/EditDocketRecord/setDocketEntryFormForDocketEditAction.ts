@@ -1,5 +1,5 @@
 import { cloneDeep, omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the current docket entry data for edit

@@ -3,7 +3,7 @@ import {
   initialCustomCaseInventoryReportState,
 } from '../customCaseInventoryReportState';
 import { resetCustomCaseInventoryReportStateAction } from './resetCustomCaseInventoryReportStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetCustomCaseInventoryReportStateAction', () => {
   it('resets the customCaseInventory back to its default state', async () => {

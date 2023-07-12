@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * saves the court issued docket entry on all of the checked consolidated cases of the group.

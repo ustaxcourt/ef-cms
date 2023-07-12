@@ -1,7 +1,7 @@
 import { addStatisticToFormAction } from './addStatisticToFormAction';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('addStatisticToFormAction', () => {
   const statisticId = '8c35ffbb-773a-4a29-9868-329ffae4e065';

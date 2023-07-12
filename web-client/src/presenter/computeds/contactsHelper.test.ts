@@ -2,7 +2,7 @@ import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityCons
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import { privatePractitionerUser } from '../../../../shared/src/test/mockUsers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('contactsHelper', () => {

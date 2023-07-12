@@ -1,7 +1,7 @@
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('docket clerk updates docket entries', () => {

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * gets the edit statistic form helper fields
@@ -7,7 +7,12 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} edit statistic form helper fields
  */
-export const editStatisticFormHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const editStatisticFormHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);

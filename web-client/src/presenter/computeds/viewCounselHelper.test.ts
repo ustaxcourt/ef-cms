@@ -1,5 +1,5 @@
 import { applicationContext } from '../../applicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { viewCounselHelper as viewCounselHelperComputed } from './viewCounselHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 

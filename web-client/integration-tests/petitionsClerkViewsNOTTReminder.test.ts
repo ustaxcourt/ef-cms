@@ -6,7 +6,7 @@ import { loginAs, setupTest } from './helpers';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
 import { prepareDateFromString } from '../../shared/src/business/utilities/DateHandler';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionDetailsHelper } from '../src/presenter/computeds/trialSessionDetailsHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 

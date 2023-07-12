@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getFilterCurrentJudgeUsersAction } from './getFilterCurrentJudgeUsersAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getFilterCurrentJudgeUsersAction', () => {
   const { USER_ROLES } = applicationContext.getConstants();

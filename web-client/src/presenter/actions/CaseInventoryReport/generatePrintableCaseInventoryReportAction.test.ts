@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePrintableCaseInventoryReportAction } from './generatePrintableCaseInventoryReportAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generatePrintableCaseInventoryReportAction', () => {
   const { CHIEF_JUDGE, STATUS_TYPES } = applicationContext.getConstants();

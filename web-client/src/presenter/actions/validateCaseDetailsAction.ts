@@ -1,6 +1,6 @@
 import { aggregateStatisticsErrors } from './validatePetitionFromPaperAction';
 import { omit } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the edit case details inputs

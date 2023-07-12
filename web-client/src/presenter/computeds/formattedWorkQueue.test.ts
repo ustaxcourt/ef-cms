@@ -6,7 +6,7 @@ import {
 } from '../../../../shared/src/test/mockUsers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from './formattedWorkQueue';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedWorkQueue', () => {

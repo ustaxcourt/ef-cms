@@ -2,7 +2,7 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {

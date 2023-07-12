@@ -1,5 +1,5 @@
 import { partition } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Setting up itemized penalties on state

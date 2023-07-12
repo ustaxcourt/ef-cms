@@ -1,5 +1,5 @@
 import { clearConfirmationTextForCalculatePenaltiesModalAction } from './clearConfirmationTextForCalculatePenaltiesModalAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearConfirmationTextForCalculatePenaltiesModalAction', () => {
   it('should clear state.confirmationText.penalties', async () => {

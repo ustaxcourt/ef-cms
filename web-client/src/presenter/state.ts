@@ -20,6 +20,7 @@ import { caseDetailSubnavHelper } from './computeds/caseDetailSubnavHelper';
 import { caseInformationHelper } from './computeds/caseInformationHelper';
 import { caseInventoryReportHelper } from './computeds/caseInventoryReportHelper';
 import { caseSearchBoxHelper } from './computeds/caseSearchBoxHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
@@ -127,7 +128,7 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
-const helpers = {
+export const computeds = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
@@ -150,6 +151,7 @@ const helpers = {
   caseInformationHelper,
   caseInventoryReportHelper,
   caseSearchBoxHelper,
+  caseSearchByNameHelper,
   caseSearchNoMatchesHelper,
   caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
@@ -252,7 +254,7 @@ const helpers = {
 };
 
 export const baseState = {
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
   allJudges: [],
   archiveDraftDocument: {
@@ -263,8 +265,13 @@ export const baseState = {
   },
   assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
   batchDownloads: {}, // batch download of PDFs
-  caseDeadlineReport: {},
-  caseDetail: {} as TCase,
+  caseDeadlineReport: {} as {
+    caseDeadlines: RawCaseDeadline[];
+    judgeFilter: string;
+    totalCount: number;
+    page: number;
+  },
+  caseDetail: {} as RawCase,
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
@@ -310,7 +317,7 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-  form: {},
+  form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -324,7 +331,7 @@ export const baseState = {
   individualInProgressCount: 0,
   individualInboxCount: 0,
   judgeActivityReportData: {},
-  judges: [],
+  judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
@@ -404,16 +411,9 @@ export const baseState = {
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
 };
 
-export const state = {
-  ...helpers,
+export const initialState = {
   ...baseState,
+  ...computeds,
 };
 
-declare global {
-  type State = typeof state & {
-    constants: ReturnType<typeof getConstants>;
-    modal: any;
-    screenMetadata: any;
-    featureFlags: any;
-  };
-}
+export type ClientState = typeof initialState;

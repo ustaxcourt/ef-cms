@@ -1,9 +1,15 @@
 /* eslint-disable complexity */
+
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const messageDocumentHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const messageDocumentHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const viewerDocumentIdToDisplay = get(
     state.messageViewerDocumentToDisplay.documentId,
   );

@@ -8,7 +8,7 @@ import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { viewJudgeActivityReportResults } from './journey/viewJudgeActivityReportResults';
 import { withAppContextDecorator } from '../src/withAppContext';
 

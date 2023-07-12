@@ -1,5 +1,5 @@
 import { prepareFormAction } from './prepareFormAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('prepareFormAction', () => {
   it('sets sets an empty contactPrimary object on state.form', async () => {

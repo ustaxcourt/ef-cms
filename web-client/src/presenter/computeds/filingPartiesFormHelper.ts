@@ -1,7 +1,12 @@
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const filingPartiesFormHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const filingPartiesFormHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { partyType } = get(state.caseDetail);
   const validationErrors = get(state.validationErrors);
   const form = get(state.form);

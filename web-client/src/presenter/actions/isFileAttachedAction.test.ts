@@ -1,6 +1,6 @@
 import { isFileAttachedAction } from './isFileAttachedAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('isFileAttachedAction', () => {
   const mockPrimaryDocumentFile = 'a file';

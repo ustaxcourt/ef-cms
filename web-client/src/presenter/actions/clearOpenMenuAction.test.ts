@@ -1,5 +1,5 @@
 import { clearOpenMenuAction } from './clearOpenMenuAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearOpenMenuAction', () => {
   it('clears state.navigation.openMenu', async () => {

@@ -1,5 +1,5 @@
 import { paperServiceStatusHelper } from './paperServiceStatusHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('paperServiceStatusHelper', () => {
   it('should return all event codes for docketclerk', () => {

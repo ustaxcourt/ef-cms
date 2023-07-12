@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateCaseAdvancedSearchAction = ({
   applicationContext,
@@ -13,9 +13,7 @@ export const validateCaseAdvancedSearchAction = ({
       caseSearch,
     });
 
-  const isValid = isEmpty(errors);
-
-  if (isValid) {
+  if (isEmpty(errors)) {
     return path.success();
   } else {
     return path.error({

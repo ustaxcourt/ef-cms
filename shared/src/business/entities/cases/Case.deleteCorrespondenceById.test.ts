@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { Correspondence } = require('../Correspondence');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+import { Case } from './Case';
+import { Correspondence } from '../Correspondence';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('deleteCorrespondenceById', () => {
   const mockCorrespondence = new Correspondence({

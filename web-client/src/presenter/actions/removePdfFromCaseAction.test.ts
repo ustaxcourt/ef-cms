@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { removePdfFromCaseAction } from './removePdfFromCaseAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('removePdfFromCaseAction', () => {
   const mockDocketEntryId = '9de27a7d-7c6b-434b-803b-7655f82d5e07';

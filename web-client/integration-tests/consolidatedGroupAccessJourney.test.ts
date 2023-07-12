@@ -1,7 +1,7 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { loginAs, setupTest } from './helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { seedData } from './fixtures/consolidated-cases';
 import { seedDatabase, seedFullDataset } from './utils/database';
 import { withAppContextDecorator } from '../src/withAppContext';

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * clears the case inventory report data
@@ -9,4 +9,6 @@ import { state } from 'cerebral';
 export const clearOptionalCustomCaseInventoryFilterAction = ({ store }) => {
   store.set(state.customCaseInventory.filters.caseStatuses, []);
   store.set(state.customCaseInventory.filters.caseTypes, []);
+  store.set(state.customCaseInventory.filters.judges, []);
+  store.set(state.customCaseInventory.filters.preferredTrialCities, []);
 };

@@ -1,10 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setSignatureNameForPdfSigningAction } from './setSignatureNameForPdfSigningAction';
 
 describe('setSignatureNameForPdfSigningAction', () => {
-  const { CHIEF_JUDGE } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
+    applicationContext.getConstants();
 
   let user = {
     section: 'colvinChambers',
@@ -21,9 +22,9 @@ describe('setSignatureNameForPdfSigningAction', () => {
 
     applicationContext
       .getUseCases()
-      .getChiefJudgeNameForSigningInteractor.mockReturnValue(
-        'Maurice B. Foley',
-      );
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key]: 'Oscar the Grouch',
+      });
 
     applicationContext.getCurrentUser.mockReturnValue(user);
 
@@ -39,7 +40,7 @@ describe('setSignatureNameForPdfSigningAction', () => {
       },
     });
     expect(result.state.pdfForSigning.nameForSigning).toEqual(
-      'Maurice B. Foley',
+      'Oscar the Grouch',
     );
     expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(CHIEF_JUDGE);
   });

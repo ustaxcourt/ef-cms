@@ -1,5 +1,5 @@
 import { addPenaltyInputAction } from './addPenaltyInputAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('addPenaltyInputAction', () => {
   it('should add a new element to the penalties array', async () => {

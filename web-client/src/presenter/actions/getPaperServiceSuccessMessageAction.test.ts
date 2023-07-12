@@ -1,5 +1,5 @@
 import { getPaperServiceSuccessMessageAction } from './getPaperServiceSuccessMessageAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPaperServiceSuccessMessageAction', () => {
   it('returns the default paper service success alert when alertSuccess is not in state', async () => {

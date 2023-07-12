@@ -1,5 +1,5 @@
 import { headerHelper as headerHelperComputed } from '../../src/presenter/computeds/headerHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

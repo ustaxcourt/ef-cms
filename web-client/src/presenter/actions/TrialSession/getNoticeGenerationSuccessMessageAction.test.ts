@@ -1,5 +1,5 @@
 import { getNoticeGenerationSuccessMessageAction } from './getNoticeGenerationSuccessMessageAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getNoticeGenerationSuccessMessageAction', () => {
   it('gets notice generation success message for paper cases', async () => {
