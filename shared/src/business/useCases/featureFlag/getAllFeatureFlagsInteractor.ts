@@ -1,12 +1,8 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { isEmpty } from 'lodash';
 
-/**
- * getAllFeatureFlagsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {string} providers.featureFlag the feature flag to get the value for
- * @returns {boolean} true if result of the persistence method is 'true'; false otherwise
- */
+const allFeatureFlags = {};
+
 export const getAllFeatureFlagsInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
@@ -14,21 +10,28 @@ export const getAllFeatureFlagsInteractor = async (
     (flag: any) => flag.key,
   );
 
-  let allFeatureFlags: any = {};
-  for (let featureFlagKey of allowlistFeatures) {
-    const result = await applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue({ applicationContext, featureFlag: featureFlagKey });
+  if (isEmpty(allFeatureFlags)) {
+    await Promise.all(
+      allowlistFeatures.map(async featureFlagKey => {
+        const result = await applicationContext
+          .getPersistenceGateway()
+          .getFeatureFlagValue({
+            applicationContext,
+            featureFlag: featureFlagKey,
+          });
 
-    if (result) {
-      if (typeof result.current === 'boolean') {
-        allFeatureFlags[featureFlagKey] = !!result.current;
-      } else {
-        allFeatureFlags[featureFlagKey] = result.current;
-      }
-    } else {
-      allFeatureFlags[featureFlagKey] = false;
-    }
+        if (result) {
+          if (typeof result.current === 'boolean') {
+            allFeatureFlags[featureFlagKey] = !!result.current;
+          } else {
+            allFeatureFlags[featureFlagKey] = result.current;
+          }
+        } else {
+          allFeatureFlags[featureFlagKey] = false;
+        }
+      }),
+    );
   }
+
   return allFeatureFlags;
 };
