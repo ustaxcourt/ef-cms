@@ -41,6 +41,7 @@ import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetai
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
+import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
@@ -110,6 +111,7 @@ export const presenter = {
     updateAdvancedOpinionSearchFormValueSequence,
     updateAdvancedOrderSearchFormValueSequence,
     updateAdvancedSearchFormValueSequence,
+    updateCaseAdvancedSearchByNameFormValueSequence,
     updateDocketNumberSearchFormSequence,
     validateCaseAdvancedSearchFormSequence,
     validateCaseDocketNumberSearchFormSequence,

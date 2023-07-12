@@ -1,5 +1,5 @@
-const { Case } = require('./Case');
-const { CONTACT_TYPES, PARTY_TYPES } = require('../EntityConstants');
+import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
+import { Case } from './Case';
 
 describe('getCaseTitle', () => {
   it('party type Petitioner', () => {

@@ -1,5 +1,5 @@
 import { loadingHelper } from './loadingHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('headerHelper', () => {
   it('should return pageIsInterstitial false if state.currentPage is not Interstitial', () => {

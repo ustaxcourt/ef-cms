@@ -9,7 +9,6 @@ import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 
 export class PractitionerDocument extends JoiValidationEntity {
-  public entityName: string;
   public categoryType: string;
   public categoryName: string;
   public location: string;

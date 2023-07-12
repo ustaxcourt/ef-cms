@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getOrdersIssuedForJudgeActivityReportAction } from './getOrdersIssuedForJudgeActivityReportAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getOrdersIssuedForJudgeActivityReportAction', () => {
   presenter.providers.applicationContext = applicationContext;

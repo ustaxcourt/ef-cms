@@ -1,5 +1,5 @@
 import { cloneDeep } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * used for editing the petitioner information
@@ -8,7 +8,12 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} object containing the view settings
  */
-export const editPetitionerInformationHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const editPetitionerInformationHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { CONTACT_TYPES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
   const { contact } = cloneDeep(get(state.form));

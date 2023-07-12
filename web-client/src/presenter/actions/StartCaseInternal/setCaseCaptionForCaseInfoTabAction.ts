@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Sets the state.form.caseCaption to the props.caseCaption passed in.

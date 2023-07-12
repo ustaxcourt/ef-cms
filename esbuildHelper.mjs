@@ -41,7 +41,6 @@ const env = {
   SKIP_VIRUS_SCAN: process.env.SKIP_VIRUS_SCAN,
   STAGE: process.env.STAGE,
   USE_COGNITO_LOCAL: process.env.USE_COGNITO_LOCAL,
-  USTC_DEBUG: process.env.USTC_DEBUG,
   USTC_ENV: process.env.USTC_ENV,
   WS_URL: process.env.WS_URL,
 };

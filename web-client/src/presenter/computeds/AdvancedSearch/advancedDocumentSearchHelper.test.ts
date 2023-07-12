@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+
 import { ADVANCED_SEARCH_TABS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
@@ -6,7 +7,7 @@ import {
 } from './advancedDocumentSearchHelper';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('advancedDocumentSearchHelper', () => {

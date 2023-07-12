@@ -1,5 +1,5 @@
 import { formatStatistic } from './statisticsHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const ordersAndNoticesNeededCodes = {
   orderForCds: 'Order for Corporate Disclosure Statement',
@@ -29,7 +29,12 @@ const getEConsentAttributesForContact = (
   return { eServiceConsentText, shouldDisplayEConsentText };
 };
 
-export const reviewSavedPetitionHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const reviewSavedPetitionHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   let irsNoticeDateFormatted;
 
   const {

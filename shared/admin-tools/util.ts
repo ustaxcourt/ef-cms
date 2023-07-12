@@ -1,4 +1,5 @@
-import { CognitoIdentityServiceProvider, DynamoDB } from 'aws-sdk';
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import readline from 'readline';
 
 const { ENV } = process.env;
@@ -9,19 +10,17 @@ export const getVersion = async (): Promise<string> => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   const dynamodb = new DynamoDB({ region: 'us-east-1' });
-  const result = await dynamodb
-    .getItem({
-      Key: {
-        pk: {
-          S: 'source-table-version',
-        },
-        sk: {
-          S: 'source-table-version',
-        },
+  const result = await dynamodb.getItem({
+    Key: {
+      pk: {
+        S: 'source-table-version',
       },
-      TableName: `efcms-deploy-${ENV}`,
-    })
-    .promise();
+      sk: {
+        S: 'source-table-version',
+      },
+    },
+    TableName: `efcms-deploy-${ENV}`,
+  });
 
   if (
     !result ||
@@ -61,9 +60,7 @@ export const checkEnvVar = (
 };
 
 // Ascertain the Cognito User Pool based on the current environment
-export const getUserPoolId = async (
-  cognitoInstance: CognitoIdentityServiceProvider,
-): Promise<string | undefined> => {
+export const getUserPoolId = async (): Promise<string | undefined> => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   if (ENV) {
@@ -71,14 +68,10 @@ export const getUserPoolId = async (
       return UserPoolCache[ENV];
     }
 
-    const cognito =
-      cognitoInstance ||
-      new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-    const { UserPools } = await cognito
-      .listUserPools({
-        MaxResults: 50,
-      })
-      .promise();
+    const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+    const { UserPools } = await cognito.listUserPools({
+      MaxResults: 50,
+    });
     if (UserPools) {
       const userPool = UserPools.find(pool => pool.Name === `efcms-${ENV}`);
       if (userPool && userPool.Id) {
@@ -95,13 +88,11 @@ export const getUserPoolId = async (
 export const getClientId = async (
   userPoolId: string,
 ): Promise<string | undefined> => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-  const { UserPoolClients } = await cognito
-    .listUserPoolClients({
-      MaxResults: 60,
-      UserPoolId: userPoolId,
-    })
-    .promise();
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+  const { UserPoolClients } = await cognito.listUserPoolClients({
+    MaxResults: 60,
+    UserPoolId: userPoolId,
+  });
 
   if (UserPoolClients) {
     return UserPoolClients[0].ClientId;

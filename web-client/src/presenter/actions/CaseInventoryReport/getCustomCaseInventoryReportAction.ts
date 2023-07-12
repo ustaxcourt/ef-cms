@@ -3,7 +3,7 @@ import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportResponse,
 } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * get the case inventory report data
@@ -26,6 +26,10 @@ export const getCustomCaseInventoryReportAction = async ({
   const filterValues: CustomCaseInventoryReportFilters = get(
     state.customCaseInventory.filters,
   );
+
+  if (!filterValues.highPriority) {
+    delete filterValues.highPriority;
+  }
 
   const [startMonth, startDay, startYear] = filterValues.startDate.split('/');
   const formattedStartDate = applicationContext

@@ -1,5 +1,5 @@
 import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * submits the edit deficiency statistics form
  * @param {object} providers the providers object

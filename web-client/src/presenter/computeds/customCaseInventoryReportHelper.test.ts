@@ -6,7 +6,7 @@ import { CustomCaseInventoryReportState } from '../customCaseInventoryReportStat
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { customCaseInventoryReportHelper as customCaseInventoryReportHelperComputed } from './customCaseInventoryReportHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const customCaseInventoryReportHelper = withAppContextDecorator(
@@ -36,8 +36,16 @@ const cases = [
   },
 ];
 
+const mockJudges = [
+  { name: 'Judge Judy', role: 'judge' },
+  { name: 'Judge Mathis', role: 'judge' },
+  { name: 'Judge Currozo', role: 'judge' },
+];
+
 describe('customCaseInventoryReportHelper', () => {
   let defaultCustomCaseState: CustomCaseInventoryReportState;
+  let initialState;
+
   beforeEach(() => {
     defaultCustomCaseState = {
       cases: [],
@@ -46,10 +54,17 @@ describe('customCaseInventoryReportHelper', () => {
         caseTypes: [],
         endDate: '2024-03-01T00:00:00.000Z',
         filingMethod: 'all',
+        judges: [],
+        preferredTrialCities: [],
+        procedureType: 'All',
         startDate: '2018-03-01T00:00:00.000Z',
       },
       lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
       totalCases: 0,
+    };
+    initialState = {
+      customCaseInventory: defaultCustomCaseState,
+      judges: mockJudges,
     };
   });
 
@@ -57,7 +72,7 @@ describe('customCaseInventoryReportHelper', () => {
     defaultCustomCaseState.cases = cases;
 
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     expect(result.cases).toMatchObject([
@@ -80,7 +95,7 @@ describe('customCaseInventoryReportHelper', () => {
     ]);
   });
 
-  it('should generate cases with caseTitles', () => {
+  it('should generate cases with caseCaption', () => {
     const foundCases = [
       { ...cases[0], caseCaption: 'Bugs Bunny, Petitioner' },
       { ...cases[1], caseCaption: 'Daffy Duck' },
@@ -89,15 +104,15 @@ describe('customCaseInventoryReportHelper', () => {
     defaultCustomCaseState.cases = foundCases;
 
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     expect(result.cases).toMatchObject([
       {
-        caseTitle: 'Bugs Bunny',
+        caseCaption: 'Bugs Bunny',
       },
       {
-        caseTitle: 'Daffy Duck',
+        caseCaption: 'Daffy Duck',
       },
     ]);
   });
@@ -107,7 +122,7 @@ describe('customCaseInventoryReportHelper', () => {
     defaultCustomCaseState.filters.startDate = '';
 
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     expect(result.runReportButtonIsDisabled).toEqual(true);
@@ -117,27 +132,39 @@ describe('customCaseInventoryReportHelper', () => {
     defaultCustomCaseState.filters.endDate = 's';
     defaultCustomCaseState.filters.startDate = 's';
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     expect(result.runReportButtonIsDisabled).toEqual(false);
   });
 
-  it('should return true for clearFiltersIsDisabled when case status(es) or case type(s) selected are not selected', () => {
+  it('should return true for clearFiltersIsDisabled when no optional filters are selected', () => {
     defaultCustomCaseState.filters.caseTypes = [];
     defaultCustomCaseState.filters.caseStatuses = [];
+    defaultCustomCaseState.filters.judges = [];
+    defaultCustomCaseState.filters.preferredTrialCities = [];
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     expect(result.clearFiltersIsDisabled).toEqual(true);
   });
 
-  it('should return false for clearFiltersIsDisabled when case status(es) or case type(s) selected are selected', () => {
+  it('should return false for clearFiltersIsDisabled when case status(es) or case type(s) are selected', () => {
     defaultCustomCaseState.filters.caseTypes = ['CDP (Lien/Levy)'];
     defaultCustomCaseState.filters.caseStatuses = [];
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
+    });
+
+    expect(result.clearFiltersIsDisabled).toEqual(false);
+  });
+
+  it('should return false for clearFiltersIsDisabled when judges or preferred trial city are selected', () => {
+    defaultCustomCaseState.filters.judges = [];
+    defaultCustomCaseState.filters.preferredTrialCities = ['Mobile, Alabama'];
+    const result = runCompute(customCaseInventoryReportHelper, {
+      state: initialState,
     });
 
     expect(result.clearFiltersIsDisabled).toEqual(false);
@@ -147,7 +174,7 @@ describe('customCaseInventoryReportHelper', () => {
     defaultCustomCaseState.totalCases = 305;
 
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     const expectedPageCount = Math.ceil(305 / CUSTOM_CASE_INVENTORY_PAGE_SIZE);
@@ -159,7 +186,7 @@ describe('customCaseInventoryReportHelper', () => {
     applicationContext.getUtilities().formatNow.mockReturnValue(mockToday);
 
     const result = runCompute(customCaseInventoryReportHelper, {
-      state: { customCaseInventory: defaultCustomCaseState },
+      state: initialState,
     });
 
     expect(result.today).toEqual(mockToday);

@@ -1,7 +1,7 @@
 import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { statisticsFormHelper as statisticsFormHelperComputed } from '../src/presenter/computeds/statisticsFormHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 

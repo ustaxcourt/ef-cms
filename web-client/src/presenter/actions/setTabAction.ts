@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  *  returns a callback function that sets tab on state
  * @param {string} tab the value of tab to be set

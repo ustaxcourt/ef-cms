@@ -1,11 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
-} = require('../EntityConstants');
-const { Case } = require('./Case');
+import { CASE_STATUS_TYPES, DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
+import { Case } from './Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('updateDocketNumberRecord records suffix changes', () => {
   it('should create a notice of docket number change document when the suffix updates for an electronically created case', () => {
