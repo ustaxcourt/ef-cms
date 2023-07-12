@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props cerebral props
  * @param {object} providers.store the cerebral store used for setting the state
  */
-export const setDocumentIsRequiredAction = ({ get, props, store }) => {
+export const setDocumentIsRequiredAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const isFileAttached = get(state.form.isFileAttached);
   const { isSavingForLater } = props;
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);

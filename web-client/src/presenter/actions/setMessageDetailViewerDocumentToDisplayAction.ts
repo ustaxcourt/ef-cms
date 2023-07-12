@@ -47,7 +47,6 @@ const setAttachmentToDisplay = (
 
 /**
  * sets the message detail messageViewerDocumentToDisplay from props
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
@@ -58,7 +57,7 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { messageViewerDocumentToDisplay, mostRecentMessage } = props;
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;

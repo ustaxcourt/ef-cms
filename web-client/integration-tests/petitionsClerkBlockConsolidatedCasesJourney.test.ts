@@ -29,10 +29,8 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      procedureType: 'Regular',
-      trialLocation,
-    },
+    procedureType: 'Regular',
+    trialLocation,
   });
 
   it('creates lead case', () => {
@@ -47,10 +45,8 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      procedureType: 'Regular',
-      trialLocation,
-    },
+    procedureType: 'Regular',
+    trialLocation,
   });
 
   it('should set member case docket number', () => {

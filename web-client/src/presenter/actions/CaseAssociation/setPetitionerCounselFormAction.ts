@@ -11,7 +11,11 @@ import { state } from 'cerebral';
  * @returns {object} props object
  */
 
-export const setPetitionerCounselFormAction = ({ get, props, store }) => {
+export const setPetitionerCounselFormAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { barNumber } = props;
 

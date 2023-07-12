@@ -10,7 +10,6 @@ describe('generateDocketRecordPdfUrlAction', () => {
     applicationContext
       .getUseCases()
       .generateDocketRecordPdfInteractor.mockResolvedValue(mockPdfUrl);
-    global.window = global;
   });
 
   it('creates a pdf and returns an object URL', async () => {
@@ -38,7 +37,7 @@ describe('generateDocketRecordPdfUrlAction', () => {
     expect(result.output.pdfUrl).toBe(mockPdfUrl.url);
   });
 
-  it('should call the interactor including party details if props.isAssociated is true', async () => {
+  it('should call the interactor with includePartyDetail and isIndirectlyAssociated as true if props.isAssociated is true', async () => {
     await runAction(generateDocketRecordPdfUrlAction, {
       modules: {
         presenter,
@@ -63,11 +62,11 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
-        .calls[0][1].includePartyDetail,
-    ).toEqual(true);
+        .calls[0][1],
+    ).toMatchObject({ includePartyDetail: true, isIndirectlyAssociated: true });
   });
 
-  it('should call the interactor excluding party details if props.isAssociated is false', async () => {
+  it('should call the interactor with includePartyDetail and isIndirectlyAssociated as false if props.isAssociated is false', async () => {
     await runAction(generateDocketRecordPdfUrlAction, {
       modules: {
         presenter,
@@ -92,7 +91,10 @@ describe('generateDocketRecordPdfUrlAction', () => {
 
     expect(
       applicationContext.getUseCases().generateDocketRecordPdfInteractor.mock
-        .calls[0][1].includePartyDetail,
-    ).toEqual(false);
+        .calls[0][1],
+    ).toMatchObject({
+      includePartyDetail: false,
+      isIndirectlyAssociated: false,
+    });
   });
 });

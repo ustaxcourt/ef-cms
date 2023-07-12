@@ -3,7 +3,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
@@ -25,7 +25,7 @@ const formattedTrialSessions = withAppContextDecorator(
 );
 
 const getStartOfWeek = date => {
-  return prepareDateFromString(date).startOf('week').toFormat('DDD');
+  return prepareDateFromString(date, null).startOf('week').toFormat('DDD');
 };
 
 let nextYear;
@@ -46,7 +46,7 @@ const baseState = {
   judgeUser: testJudgeUser,
 };
 
-let TRIAL_SESSIONS_LIST = [];
+let TRIAL_SESSIONS_LIST: any[] = [];
 
 describe('formattedTrialSessions', () => {
   beforeAll(() => {
@@ -58,6 +58,7 @@ describe('formattedTrialSessions', () => {
     TRIAL_SESSIONS_LIST = [
       {
         caseOrder: [],
+        isCalendared: true,
         judge: { name: '1', userId: '1' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
@@ -71,6 +72,7 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        isCalendared: false,
         judge: { name: '2', userId: '2' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         sessionStatus: 'New',
@@ -84,6 +86,7 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        isCalendared: false,
         judge: { name: '3', userId: '3' },
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -97,6 +100,7 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        isCalendared: true,
         judge: { name: '4', userId: '4' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
@@ -109,6 +113,7 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        isCalendared: true,
         judge: { name: '5', userId: '5' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         sessionStatus: 'Open',
@@ -122,6 +127,7 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         estimatedEndDate: '2045-02-17T15:00:00.000Z',
+        isCalendared: true,
         judge: { name: '6', userId: '6' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionStatus: 'Open',
@@ -293,6 +299,7 @@ describe('formattedTrialSessions', () => {
         formattedEstimatedEndDate: undefined,
         formattedNoticeIssuedDate: '07/25/2019',
         formattedStartDate: '11/27/19',
+        isCalendared: false,
         judge: { name: '3', userId: '3' },
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: 'In Person',
@@ -312,10 +319,12 @@ describe('formattedTrialSessions', () => {
         formattedEstimatedEndDate: undefined,
         formattedNoticeIssuedDate: undefined,
         formattedStartDate: '11/25/19',
+        isCalendared: false,
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',
         sessionStatus: 'New',
         sessionType: SESSION_TYPES.small,
+        showAlertForNOTTReminder: undefined,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',

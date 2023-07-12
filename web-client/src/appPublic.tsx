@@ -1,5 +1,3 @@
-import './uswds.scss';
-// leave this comment here: it prevents eslint from auto-sorting these in the wrong order
 import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';

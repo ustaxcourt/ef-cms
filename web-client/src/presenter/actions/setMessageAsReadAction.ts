@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the given message as read
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const setMessageAsReadAction = async ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { messageToMarkRead } = props;
 
   await applicationContext

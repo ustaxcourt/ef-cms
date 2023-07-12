@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternalIncomplete } = require('./CaseExternalIncomplete');
+} from '../EntityConstants';
+import { CaseExternalIncomplete } from './CaseExternalIncomplete';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternalIncomplete entity', () => {
   describe('isValid', () => {

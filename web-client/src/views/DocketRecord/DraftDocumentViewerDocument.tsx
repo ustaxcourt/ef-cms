@@ -95,7 +95,6 @@ export const DraftDocumentViewerDocument = connect(
                     docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
                     docketNumber: caseDetail.docketNumber,
                     documentTitle: viewerDraftDocumentToDisplay.documentTitle,
-                    redirectToCaseDetail: true,
                   })
                 }
               >

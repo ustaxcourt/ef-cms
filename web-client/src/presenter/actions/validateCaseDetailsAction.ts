@@ -4,7 +4,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the edit case details inputs
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
@@ -17,7 +16,7 @@ export const validateCaseDetailsAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =

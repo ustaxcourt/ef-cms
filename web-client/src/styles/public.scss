@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .header-public {
   @media only screen and (max-width: $large-screen) {
     margin-bottom: 44px;

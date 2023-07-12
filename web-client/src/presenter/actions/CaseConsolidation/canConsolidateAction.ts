@@ -7,7 +7,11 @@
  * @param {object} providers.props the cerebral props object
  * @returns {object} the path to take next
  */
-export const canConsolidateAction = ({ applicationContext, path, props }) => {
+export const canConsolidateAction = ({
+  applicationContext,
+  path,
+  props,
+}: ActionProps) => {
   const { caseDetail, caseToConsolidate, confirmSelection } = props;
 
   if (!confirmSelection) {

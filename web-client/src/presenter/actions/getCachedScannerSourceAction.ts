@@ -9,7 +9,7 @@
 export const getCachedScannerSourceAction = async ({
   applicationContext,
   path,
-}) => {
+}: ActionProps) => {
   const scannerSourceName = await applicationContext
     .getPersistenceGateway()
     .getItem({

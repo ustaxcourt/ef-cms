@@ -1,6 +1,5 @@
 /**
  * update a user's case note
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -9,7 +8,7 @@
 export const updateUserCaseNoteAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumber, notes } = props;
 
   const userNote = await applicationContext

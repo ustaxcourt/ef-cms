@@ -1,6 +1,9 @@
 import { state } from 'cerebral';
 
-export const clearUserAction = async ({ applicationContext, store }) => {
+export const clearUserAction = async ({
+  applicationContext,
+  store,
+}: ActionProps) => {
   store.unset(state.user);
   store.unset(state.token);
   store.unset(state.permissions);

@@ -5,7 +5,10 @@
  * @param {object} providers.path the next object in the path (this is defined in the sequence right after this action is invoked)
  * @returns {*} returns the next action in the sequence's path
  */
-export const isTrialSessionCalendaredAction = ({ path, props }) => {
+export const isTrialSessionCalendaredAction = ({
+  path,
+  props,
+}: ActionProps) => {
   const { trialSession } = props;
 
   const isTrialSessionCalendared = trialSession && trialSession.isCalendared;

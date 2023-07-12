@@ -25,13 +25,12 @@ const computeAdmissionsDate = ({ applicationContext, day, month, year }) => {
 
 /**
  * computes admissions date from form date values
- *
  * @returns {Object} the computed date
  */
 export const getComputedAdmissionsDateAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   let formYear = get(state.form.year);
   let formMonth = get(state.form.month);
   let formDay = get(state.form.day);

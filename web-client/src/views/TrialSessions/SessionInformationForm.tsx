@@ -84,6 +84,7 @@ export const SessionInformationForm = connect(
                 }
                 id="start-date"
                 label="Start date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'startDateDay',
                   month: 'startDateMonth',
@@ -203,12 +204,13 @@ export const SessionInformationForm = connect(
                 }
                 id="estimated-end-date"
                 label="Estimated end date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'estimatedEndDateDay',
                   month: 'estimatedEndDateMonth',
                   year: 'estimatedEndDateYear',
                 }}
-                optional="true"
+                optional={true}
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
                 useHintNoWrap={true}

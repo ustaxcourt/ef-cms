@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set the modal state
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {object} providers.get the cerebral get method
@@ -14,7 +13,7 @@ export const setForwardMessageModalDialogModalStateAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { mostRecentMessage } = props;
   store.set(state.modal.validationErrors, {});
 

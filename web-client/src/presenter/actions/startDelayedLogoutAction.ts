@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Starts a delayed auto log-out
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function to retrieve state values
  * @param {object} providers.store the cerebral store object
@@ -11,7 +10,7 @@ export const startDelayedLogoutAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const oldTimer = get(state.logoutTimer);
   clearTimeout(oldTimer);
 

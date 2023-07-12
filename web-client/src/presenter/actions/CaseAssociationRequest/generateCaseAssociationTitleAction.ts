@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * Set document title.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const generateCaseAssociationTitleAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const caseAssociationRequest = get(state.form);
   const { petitioners } = get(state.caseDetail);
 

@@ -26,6 +26,7 @@ import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDock
 import { CreateNewAccountLocal } from './CreateNewAccountLocal';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
+import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -124,6 +125,7 @@ const pages = {
   CreateNewAccountLocal,
   CreateOrder,
   CreatePractitionerUser,
+  CustomCaseReport,
   DashboardChambers,
   DashboardInactive,
   DashboardIrsSuperuser,

@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 /**
  * used to determine whether to redirect to the print paper service screen or not after
  * serving a paper filing
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {Function} providers.get cerebral get function
@@ -16,7 +15,7 @@ export const getShouldGoToPaperServiceAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const { isSavingForLater } = props;
 
   if (isSavingForLater) {

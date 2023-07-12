@@ -53,7 +53,7 @@ export const Footer = connect(
                         </li>
                         <li className="usa-footer__primary-content">
                           <a
-                            className="usa-footer__primary-link usa-link--external"
+                            className="usa-footer__primary-link usa-link--external display-block"
                             href="https://www.ustaxcourt.gov/release_notes.html"
                             target="_blank"
                           >
@@ -62,7 +62,7 @@ export const Footer = connect(
                         </li>
                         <li className="usa-footer__primary-content">
                           <a
-                            className="usa-footer__primary-link usa-link--external"
+                            className="usa-footer__primary-link usa-link--external display-block"
                             href="https://ustaxcourt.gov/dawson.html"
                             target="_blank"
                           >

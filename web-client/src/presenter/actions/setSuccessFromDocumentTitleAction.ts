@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set the success message in props for successful document signing
- *
  * @param {object} params the params object
  * @param {Function} params.get the cerebral get function
  * @param {object} params.store the cerebral store
@@ -12,7 +11,7 @@ export const setSuccessFromDocumentTitleAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const isCreatingOrder = get(state.isCreatingOrder);
   if (isCreatingOrder) {
     store.unset(state.isCreatingOrder);

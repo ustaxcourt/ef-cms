@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.alertError based on any exceptions that occur in props.error
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext applicationContext
  * @param {object} providers.store the cerebral store used for setting the state.alertError
@@ -12,7 +11,7 @@ export const setSearchTimeoutAlertAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const responseCode =
     props.error?.responseCode || props.error?.originalError?.response?.status;
 

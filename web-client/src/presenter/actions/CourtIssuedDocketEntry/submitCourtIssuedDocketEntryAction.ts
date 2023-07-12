@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * creates a docket entry with the given court-issued document
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const submitCourtIssuedDocketEntryAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { docketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =

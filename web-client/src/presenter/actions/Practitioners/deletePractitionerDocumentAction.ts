@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * delete a practitioner document
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const deletePractitionerDocumentAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const practitionerDocumentFileId = get(
     state.modal.practitionerDocumentFileId,
   );

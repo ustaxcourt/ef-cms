@@ -32,9 +32,7 @@ describe('Blocking a Case', () => {
   };
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: { trialLocation },
-  });
+  petitionsClerkCreatesNewCase(cerebralTest, { trialLocation });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);

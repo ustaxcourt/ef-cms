@@ -1,6 +1,7 @@
 export class ConsolidatedCaseDTO {
   public caseCaption: string;
   public docketNumber: string;
+  public isSealed: boolean;
   public docketNumberWithSuffix: string;
   public entityName: string;
   public irsPractitioners: object[];
@@ -15,6 +16,7 @@ export class ConsolidatedCaseDTO {
     this.entityName = rawCase.entityName;
     this.irsPractitioners = rawCase.irsPractitioners;
     this.leadDocketNumber = rawCase.leadDocketNumber;
+    this.isSealed = rawCase.isSealed;
     this.petitioners = rawCase.petitioners;
     this.privatePractitioners = rawCase.privatePractitioners;
   }

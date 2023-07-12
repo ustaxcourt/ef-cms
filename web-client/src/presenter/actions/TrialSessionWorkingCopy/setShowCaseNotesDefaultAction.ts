@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 
-export const setShowCaseNotesDefaultAction = ({ store }) => {
+export const setShowCaseNotesDefaultAction = ({ store }: ActionProps) => {
   store.set(state.modal['showCaseNotes'], true);
 };

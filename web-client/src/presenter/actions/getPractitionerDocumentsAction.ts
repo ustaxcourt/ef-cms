@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * fetches all documents associated with the practitioner.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getPractitionerDetail use case
  * @param {object} providers.props the cerebral props object containing the props.barNumber
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const getPractitionerDocumentsAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { barNumber } = get(state.practitionerDetail);
 
   const practitionerDocuments = await applicationContext

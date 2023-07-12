@@ -2,7 +2,7 @@ export const validateScannerSourceAction = async ({
   applicationContext,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const scanner = await applicationContext.getScanner();
 
   if (

@@ -10,7 +10,7 @@ export const getPrivatePractitionersBySearchKeyAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const searchKey = get(state.form.practitionerSearch);
 
   const privatePractitioners = await applicationContext

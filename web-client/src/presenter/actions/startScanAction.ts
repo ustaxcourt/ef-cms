@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * starts scanning documents based on current data source
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the scanner API
  * @param {Function} providers.store the cerebral store object
@@ -14,7 +13,7 @@ export const startScanAction = async ({
   path,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { scanMode } = props;
 
   store.set(state.scanner.isScanning, true);

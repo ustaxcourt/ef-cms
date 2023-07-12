@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting values from the state
  * @param {object} providers.store the cerebral store used for setting the state.calendaredCases
  */
-export const extractUserNotesFromCalendaredCasesAction = ({ get, store }) => {
+export const extractUserNotesFromCalendaredCasesAction = ({
+  get,
+  store,
+}: ActionProps) => {
   const calendaredCases = get(state.trialSession.calendaredCases);
   let userNotes = [];
 

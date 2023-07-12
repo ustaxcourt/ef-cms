@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  */
-export const clearExistingDocumentAction = ({ get, store }) => {
+export const clearExistingDocumentAction = ({ get, store }: ActionProps) => {
   store.set(state.screenMetadata.documentReset, true);
   store.set(state.currentViewMetadata.documentUploadMode, 'scan');
   store.set(state.documentToEdit.docketEntryId, get(state.form.docketEntryId));

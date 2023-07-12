@@ -2,14 +2,17 @@ import { state } from 'cerebral';
 
 /**
  * removes the current form state for the scanned PDF
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store
  * @returns {object} the new documentUploadMode
  */
-export const removeScannedPdfAction = ({ applicationContext, get, store }) => {
+export const removeScannedPdfAction = ({
+  applicationContext,
+  get,
+  store,
+}: ActionProps) => {
   const docketEntryId = get(state.docketEntryId);
   const docketNumber = get(state.caseDetail.docketNumber);
   const documentSelectedForScan = get(

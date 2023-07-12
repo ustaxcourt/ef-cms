@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.form using the statistic from the caseDetail
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const setEditDeficiencyStatisticFormAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const statistics = get(state.caseDetail.statistics);
   const { statisticId } = props;
 

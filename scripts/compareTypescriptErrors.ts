@@ -15,7 +15,6 @@ import { spawnSync } from 'child_process';
  |   |   ├── compareTypescriptErrors.ts
 */
 
-// eslint-disable-next-line jsdoc/require-jsdoc
 function countTypescriptErrors(text: string): number {
   return (text.match(/: error TS/g) || []).length;
 }
@@ -65,7 +64,7 @@ const stagingCypressErrorCount = countTypescriptErrors(
 const stagingTotalErrors: number =
   stagingProjectErrorCount + stagingCypressErrorCount;
 
-console.log('Staging errors: ', stagingProjectErrorCount);
+console.log('Staging errors: ', stagingTotalErrors);
 console.log('Your branch errors: ', compareBranchTotalErrors);
 if (compareBranchTotalErrors > stagingTotalErrors) {
   console.log(

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * updates case caption and removes a petitioner from the case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context for getting constants
  * @param {Function} providers.get the cerebral get function used for getting state.modal
@@ -11,7 +10,7 @@ import { state } from 'cerebral';
 export const removePetitionerAndUpdateCaptionAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { CONTACT_TYPE_TITLES } = applicationContext.getConstants();
 
   const { docketNumber, petitioners } = get(state.caseDetail);

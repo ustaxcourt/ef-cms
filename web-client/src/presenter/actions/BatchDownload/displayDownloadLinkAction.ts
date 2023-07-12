@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {object} provider.props the props object
  * @param {object} provider.router the router object
  */
-export const displayDownloadLinkAction = ({ props, router, store }) => {
+export const displayDownloadLinkAction = ({
+  props,
+  router,
+  store,
+}: ActionProps) => {
   store.set(state.batchTrialSessionAllCasesDownloadUrl, props.url);
   router.openInNewTab(props.url, false);
 };

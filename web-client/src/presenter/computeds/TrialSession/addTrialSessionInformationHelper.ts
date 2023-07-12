@@ -1,3 +1,4 @@
+import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from 'cerebral';
 
 export const addTrialSessionInformationHelper = (get, applicationContext) => {
@@ -30,11 +31,14 @@ export const addTrialSessionInformationHelper = (get, applicationContext) => {
     });
   }
 
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
   return {
     FEATURE_canDisplayStandaloneRemote,
     displayRemoteProceedingForm,
     isStandaloneSession,
     sessionTypes,
     title,
+    today,
   };
 };

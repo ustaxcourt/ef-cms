@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the maintenance mode value for the public site
- *
  * @param {object} applicationContext object that contains all the context specific methods
  * @param {object} path the cerebral path object
  * @param {object} store the cerebral store
@@ -12,7 +11,7 @@ export const getMaintenanceModeForPublicAction = async ({
   applicationContext,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { data: maintenanceMode, headers } = await applicationContext
     .getUseCases()
     .getMaintenanceModePublicInteractor(applicationContext);

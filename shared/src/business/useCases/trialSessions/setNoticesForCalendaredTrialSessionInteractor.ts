@@ -14,7 +14,7 @@ const waitForJobToFinish = ({ applicationContext, jobId }) => {
           applicationContext,
           jobId,
         });
-      if (jobStatus.unfinishedCases === 0) {
+      if (jobStatus && jobStatus.unfinishedCases === 0) {
         clearInterval(interval);
         resolve(undefined);
       }
@@ -24,7 +24,6 @@ const waitForJobToFinish = ({ applicationContext, jobId }) => {
 
 /**
  * Generates notices for all calendared cases for the given trialSessionId
- *
  * @param {object} applicationContext the applicationContext
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
@@ -61,6 +60,15 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
 
     return;
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_start',
+      totalCases: calendaredCases.length,
+    },
+    userId: user.userId,
+  });
 
   const trialSession = await applicationContext
     .getPersistenceGateway()

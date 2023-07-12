@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store object
  */
-export const updateCaseCheckboxAction = ({ get, props, store }) => {
+export const updateCaseCheckboxAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   let consolidatedCases = get(
     state.modal.form.consolidatedCasesToMultiDocketOn,
   );

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * saves the court issued docket entry on all of the checked consolidated cases of the group.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumbers } = props;
   const { docketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);

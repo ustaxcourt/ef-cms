@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.get the cerebral get function
  */
-export const toggleWorkingCopySortAction = ({ get, props, store }) => {
+export const toggleWorkingCopySortAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const { sort } = props;
   const fromSort = get(state.trialSessionWorkingCopy.sort);
   const fromSortOrder = get(state.trialSessionWorkingCopy.sortOrder);

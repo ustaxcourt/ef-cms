@@ -81,6 +81,10 @@ variable "websockets_object" {
   type = any
 }
 
+variable "pdf_generation_object" {
+  type = any
+}
+
 variable "maintenance_notify_object" {
   type = any
 }
@@ -98,6 +102,10 @@ variable "streams_object" {
 }
 
 variable "public_object_hash" {
+  type = string
+}
+
+variable "pdf_generation_object_hash" {
   type = string
 }
 
@@ -192,4 +200,9 @@ variable "bounce_handler_object_hash" {
 
 variable "node_version" {
   type = string
+}
+
+variable "use_layers" {
+  type = bool
+  default = true
 }

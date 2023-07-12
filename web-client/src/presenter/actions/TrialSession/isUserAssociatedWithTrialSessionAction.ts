@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * used to determine if a judge, chambers user, or trial clerk user is associated with a trial session
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const isUserAssociatedWithTrialSessionAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const trialSession = get(state.trialSession);
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();

@@ -4,7 +4,6 @@ import { state } from 'cerebral';
  * gets the eventCode of the selected document from the caseDetail.docketEntries, then sets the
  * eventCode, documentType, documentTitle, and scenario on the form for the selected
  * document from the COURT_ISSUED_EVENT_CODES
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -16,7 +15,7 @@ export const setCourtIssuedDocumentInitialDataAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
 
   const docketEntry = docketEntries.find(

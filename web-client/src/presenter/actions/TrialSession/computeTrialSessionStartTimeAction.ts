@@ -1,4 +1,4 @@
-export const computeTrialSessionStartTimeAction = ({ props }) => {
+export const computeTrialSessionStartTimeAction = ({ props }: ActionProps) => {
   const startTimeArray = props.trialSession.startTime.split(':');
   let startTimeHours = startTimeArray[0];
   const startTimeMinutes = startTimeArray[1];

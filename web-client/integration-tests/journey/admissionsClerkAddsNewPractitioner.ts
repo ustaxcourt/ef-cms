@@ -5,7 +5,7 @@ export const admissionsClerkAddsNewPractitioner = (
   email = 'caroleBaskinH8r@example.com',
 ) => {
   return it('admissions clerk adds a new practitioner', async () => {
-    cerebralTest.fakeName = faker.name.fullName();
+    cerebralTest.fakeName = faker.person.fullName();
 
     await cerebralTest.runSequence('gotoCreatePractitionerUserSequence');
 

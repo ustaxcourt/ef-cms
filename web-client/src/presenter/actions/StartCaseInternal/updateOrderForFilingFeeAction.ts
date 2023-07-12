@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets state.form.orderForFilingFee based on the petitionPaymentStatus
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const updateOrderForFilingFeeAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   if (props.key === 'petitionPaymentStatus') {
     const { PAYMENT_STATUS } = applicationContext.getConstants();
     if (props.value === PAYMENT_STATUS.UNPAID) {

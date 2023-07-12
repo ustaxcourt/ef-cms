@@ -1,3 +1,6 @@
+@use "../uswds" as *;
+@use '../variables' as *;
+
 .modal-screen {
   position: fixed;
   z-index: 9500;

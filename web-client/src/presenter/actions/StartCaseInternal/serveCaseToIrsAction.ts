@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * calls proxy endpoint to serve a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -15,7 +14,7 @@ export const serveCaseToIrsAction = async ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
 
   const pdfUrl = await applicationContext

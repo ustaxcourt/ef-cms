@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Set document scenario.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const setSupportingDocumentScenarioAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { CATEGORY_MAP } = applicationContext.getConstants();
 
   const supportingDocuments = get(state.form.supportingDocuments);

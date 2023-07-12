@@ -55,7 +55,7 @@ export const OrderSearchForm = connect(
                 </div>
                 <FormGroup
                   className="advanced-search-panel full-width"
-                  errorText={validationErrors.chooseOneValue}
+                  errorText={validationErrors['object.oxor']}
                 >
                   <div className="margin-bottom-3 margin-top-3">
                     <DocketNumberSearchField
@@ -127,7 +127,7 @@ export const OrderSearchForm = connect(
                       className={classNames(
                         'advanced-search-panel',
                         'full-width',
-                        validationErrors.chooseOneValue &&
+                        validationErrors['object.oxor'] &&
                           'usa-form-group--error',
                       )}
                     >
@@ -157,7 +157,7 @@ export const OrderSearchForm = connect(
                       />
                     </FormGroup>
                     <span className="usa-error-message">
-                      {validationErrors.chooseOneValue}
+                      {validationErrors['object.oxor']}
                     </span>
                   </div>
                 </div>

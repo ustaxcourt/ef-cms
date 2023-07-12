@@ -7,6 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object containing the props.pdfUrl
  * @param {object} providers.store the cerebral store used for setting the state.pdfPreviewUrl
  */
-export const setPdfPreviewUrlAction = ({ props, store }) => {
+export const setPdfPreviewUrlAction = ({ props, store }: ActionProps) => {
   store.set(state.pdfPreviewUrl, props.pdfUrl);
 };

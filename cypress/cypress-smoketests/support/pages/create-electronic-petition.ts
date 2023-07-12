@@ -84,26 +84,26 @@ export const completeWizardStep3 = (filingType, petitionerName) => {
       .check({ force: true });
 
     cy.get('input#secondaryName').type(
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
+      `${faker.person.firstName()} ${faker.person.lastName()}`,
     );
     cy.get('input#secondaryInCareOf').type(
-      `${faker.name.firstName()} ${faker.name.lastName()}`,
+      `${faker.person.firstName()} ${faker.person.lastName()}`,
     );
   }
 
   cy.get('input#name').scrollIntoView().type(petitionerName);
   cy.get('input[name="contactPrimary.address1"]')
     .scrollIntoView()
-    .type(faker.address.streetAddress());
+    .type(faker.location.streetAddress());
   cy.get('input[name="contactPrimary.city"]')
     .scrollIntoView()
-    .type(faker.address.city());
+    .type(faker.location.city());
   cy.get('select[name="contactPrimary.state"]')
     .scrollIntoView()
-    .select(faker.address.stateAbbr());
+    .select(faker.location.stateAbbr());
   cy.get('input[name="contactPrimary.postalCode"]')
     .scrollIntoView()
-    .type(faker.address.zipCode());
+    .type(faker.location.zipCode());
   cy.get('input#phone').scrollIntoView().type(faker.phone.number());
 };
 

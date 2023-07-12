@@ -66,7 +66,7 @@ export const docketClerkEditsDocketEntryNonstandardB = cerebralTest => {
 
     const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
-      descriptionDisplay: 'Objection Some free text',
+      descriptionDisplay: 'Objection Some free text (Lodged)',
     });
 
     const updatedDocument = formattedDocketEntriesOnDocketRecord.find(

@@ -2,7 +2,6 @@ import { post } from '../requests';
 
 /**
  * generateTrialSessionPaperServicePdfInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.trialNoticePdfsKeys the trial notice PDF keys of calendared cases associated with the trial session
@@ -15,6 +14,6 @@ export const generateTrialSessionPaperServicePdfInteractor = (
   return post({
     applicationContext,
     body: { trialNoticePdfsKeys },
-    endpoint: '/trial-sessions/paper-service-pdf',
+    endpoint: '/async/trial-sessions/paper-service-pdf',
   });
 };

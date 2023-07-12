@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * updates petition fee payment information on a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {object} providers.get the cerebral store used for getting state.form
@@ -13,7 +12,7 @@ export const updateCaseDetailsAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
   const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =

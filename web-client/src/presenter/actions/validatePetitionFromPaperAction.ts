@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 import { state } from 'cerebral';
 
-export const aggregateStatisticsErrors = ({ errors, get }) => {
+export const aggregateStatisticsErrors = ({ errors, get }: ActionProps) => {
   let newErrorStatistics;
   let statisticsErrorMessages = [];
 
@@ -57,7 +57,6 @@ export const aggregatePetitionerErrors = ({ errors }) => {
 
 /**
  * validates the petition.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.get the cerebral get function used for getting state.form
@@ -70,7 +69,7 @@ export const validatePetitionFromPaperAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const { petitionPaymentDate, petitionPaymentWaivedDate, receivedAt } = props;
 
   const form = get(state.form);

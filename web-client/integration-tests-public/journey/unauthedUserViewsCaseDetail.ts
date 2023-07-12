@@ -62,7 +62,7 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
         }),
         expect.objectContaining({
           descriptionDisplay:
-            'Order of Dismissal Entered, Judge Buch for Something',
+            'Order of Dismissal Entered, Judge Buch for Something (Attachment(s))',
           hasDocument: true,
           servedPartiesCode: 'B',
           showDocumentDescriptionWithoutLink: false,
@@ -82,8 +82,8 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
             'Stipulated Decision Entered, Judge Ashford Anything',
           hasDocument: true,
           servedPartiesCode: 'B',
-          showDocumentDescriptionWithoutLink: true,
-          showLinkToDocument: false,
+          showDocumentDescriptionWithoutLink: false,
+          showLinkToDocument: true,
           showServed: true,
         }),
       ]),

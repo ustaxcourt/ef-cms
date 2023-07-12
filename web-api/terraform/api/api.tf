@@ -9,9 +9,7 @@ resource "aws_lambda_function" "api_lambda" {
   timeout          = "29"
   memory_size      = "3008"
 
-  layers = [
-    aws_lambda_layer_version.puppeteer_layer.arn
-  ]
+  layers = var.use_layers ? [aws_lambda_layer_version.puppeteer_layer.arn] : null
 
   runtime = var.node_version
 

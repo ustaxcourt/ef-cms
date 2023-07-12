@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object used for clearing scenario
  */
-export const clearWizardDataAction = ({ get, props, store }) => {
+export const clearWizardDataAction = ({ get, props, store }: ActionProps) => {
   let pickedDocument;
 
   switch (props.key) {

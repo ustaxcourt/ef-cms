@@ -24462,6 +24462,11 @@
     "pk": "chief-judge-name"
   },
   {
+    "sk": "document-visibility-policy-change-date",
+    "current": "2023-05-01",
+    "pk": "document-visibility-policy-change-date"
+  },
+  {
     "endpoint": "ws://localhost:3011",
     "clientConnectionId": "edbc99ff-2179-45c5-b8b7-a6c37c413afd",
     "sk": "connection|8218a248-790f-468c-aef9-f8503b62dd18",
@@ -35126,6 +35131,35 @@
     "pk": "user|dabbad0a-18d0-43ec-bafb-654e83405416",
     "userId": "dabbad0a-18d0-43ec-bafb-654e83405416",
     "email": "judgeurda@example.com"
+  },
+  {
+    "attachments": [
+      {
+        "documentId": "4796a931-14fb-43e6-948f-d2b67ce4c1cb"
+      }
+    ],
+    "isRepliedTo": false,
+    "caseStatus": "Calendared",
+    "fromUserId": "9d7d63b7-d7a5-4905-ba89-ef71bf30057f",
+    "subject": "Administrative Record",
+    "toSection": "petitions",
+    "gsi1pk": "message|1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "caseTitle": "Reuben Blair",
+    "isRead": false,
+    "messageId": "1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "message": "Could you please review this?",
+    "toUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "createdAt": "2023-06-02T21:15:50.105Z",
+    "entityName": "Message",
+    "parentMessageId": "1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "sk": "message|1d4c1fd9-5265-4e46-894f-b8426d3a6836",
+    "docketNumberWithSuffix": "103-20L",
+    "from": "Test Admissions Clerk",
+    "to": "Test Petitionsclerk",
+    "pk": "case|103-20",
+    "fromSection": "admissions",
+    "docketNumber": "103-20",
+    "isCompleted": false
   },
   {
     "judgeTitle": "Legacy Judge",

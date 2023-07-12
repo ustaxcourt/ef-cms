@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Determines if a printable filing receipt should be generated
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of true or false)
@@ -14,7 +13,7 @@ export const getShouldGeneratePrintableFilingReceiptAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   if (!get(state.documentToEdit) && props.documentsFiled) {
     return path.true();
   }

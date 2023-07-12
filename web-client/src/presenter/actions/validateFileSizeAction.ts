@@ -9,7 +9,11 @@ import { limitFileSize } from '../../views/limitFileSize';
  * @param {object} providers.props the cerebral store used for getting the props.file
  * @returns {object} path.valid or path.invalid
  */
-export const validateFileSizeAction = ({ applicationContext, path, props }) => {
+export const validateFileSizeAction = ({
+  applicationContext,
+  path,
+  props,
+}: ActionProps) => {
   const { MAX_FILE_SIZE_MB } = applicationContext.getConstants();
   const { file } = props;
 

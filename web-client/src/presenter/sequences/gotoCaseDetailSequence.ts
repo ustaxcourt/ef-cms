@@ -102,6 +102,14 @@ export const gotoCaseDetailSequence = [
     getConstants().ALLOWLIST_FEATURE_FLAGS
       .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
   ),
+  getFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS
+      .DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key,
+  ),
+  setFeatureFlagFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS
+      .DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key,
+  ),
   getCaseAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,

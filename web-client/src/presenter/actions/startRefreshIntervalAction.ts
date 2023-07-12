@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * starts the token refresh interval
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
  */
@@ -10,7 +9,7 @@ export const startRefreshIntervalAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const oldInterval = get(state.refreshTokenInterval);
 
   const refreshTokenRequest = async () => {

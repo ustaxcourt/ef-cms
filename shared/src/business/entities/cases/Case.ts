@@ -27,7 +27,7 @@ import {
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
-import { DocketEntry, isServed } from '../DocketEntry';
+import { DocketEntry } from '../DocketEntry';
 import {
   FORMATS,
   PATTERNS,
@@ -43,8 +43,10 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { PublicCase } from './PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
+import { UnprocessableEntityError } from '../../../errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
@@ -121,6 +123,7 @@ export class Case extends JoiValidationEntity {
   public correspondence: any[];
   public archivedCorrespondences: any[];
   public hasPendingItems: boolean;
+  public docketEntriesEFiledByPractitioner: string[];
 
   constructor(
     rawCase: any,
@@ -130,7 +133,7 @@ export class Case extends JoiValidationEntity {
       isNewCase = false,
     }: {
       applicationContext: IApplicationContext;
-      filtered: boolean;
+      filtered?: boolean;
       isNewCase?: boolean;
     },
   ) {
@@ -158,6 +161,8 @@ export class Case extends JoiValidationEntity {
     this.assignDocketEntries(params);
     this.assignHearings(params);
     this.assignPractitioners(params);
+    this.docketEntriesEFiledByPractitioner =
+      PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
     this.assignFieldsForAllUsers(params);
     if (isNewCase) {
       const changedBy = rawCase.isPaper
@@ -341,7 +346,7 @@ export class Case extends JoiValidationEntity {
       },
       'Your STIN file size is empty',
     ],
-  };
+  } as const;
 
   getErrorToMessageMap() {
     return Case.VALIDATION_ERROR_MESSAGES;
@@ -1002,19 +1007,16 @@ export class Case extends JoiValidationEntity {
     this.irsPractitioners.push(practitioner);
   }
 
-  /**
-   * archives a docket entry and adds it to the archivedDocketEntries array on the case
-   * @param {string} docketEntry the docketEntry to archive
-   */
-  archiveDocketEntry(docketEntry, { applicationContext }) {
-    const docketEntryToArchive = new DocketEntry(docketEntry, {
-      applicationContext,
-      petitioners: this.petitioners,
-    });
-    docketEntryToArchive.archive();
-    this.archivedDocketEntries.push(docketEntryToArchive);
+  archiveDocketEntry(docketEntry: DocketEntry) {
+    if (DocketEntry.isServed(docketEntry) || docketEntry.isOnDocketRecord) {
+      throw new UnprocessableEntityError(
+        'Cannot archive docket entry that has already been served.',
+      );
+    }
+    docketEntry.archive();
+    this.archivedDocketEntries.push(docketEntry);
     this.deleteDocketEntryById({
-      docketEntryId: docketEntryToArchive.docketEntryId,
+      docketEntryId: docketEntry.docketEntryId,
     });
   }
 
@@ -2074,7 +2076,9 @@ export const isLeadCase = rawCase =>
   rawCase.docketNumber === rawCase.leadDocketNumber;
 
 export const caseHasServedDocketEntries = rawCase => {
-  return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
+  return rawCase.docketEntries.some(docketEntry =>
+    DocketEntry.isServed(docketEntry),
+  );
 };
 
 /**
@@ -2187,7 +2191,7 @@ export const getPetitionDocketEntry = function (rawCase) {
 
 export const caseHasServedPetition = rawCase => {
   const petitionDocketEntry = getPetitionDocketEntry(rawCase);
-  return petitionDocketEntry && isServed(petitionDocketEntry);
+  return petitionDocketEntry && DocketEntry.isServed(petitionDocketEntry);
 };
 
 /**
@@ -2214,7 +2218,8 @@ export const isAssociatedUser = function ({ caseRaw, user }) {
     doc => doc.documentType === 'Petition',
   );
 
-  const isPetitionServed = petitionDocketEntry && isServed(petitionDocketEntry);
+  const isPetitionServed =
+    petitionDocketEntry && DocketEntry.isServed(petitionDocketEntry);
 
   return (
     isIrsPractitioner ||

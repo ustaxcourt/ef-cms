@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @returns {object} the props to update
  */
-export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({ get, props }) => {
+export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({
+  get,
+  props,
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { docketEntryId } = props;
 

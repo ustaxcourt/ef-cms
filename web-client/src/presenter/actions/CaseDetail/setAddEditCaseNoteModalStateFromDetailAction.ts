@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set the state for the add edit case notes modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -12,7 +11,7 @@ export const setAddEditCaseNoteModalStateFromDetailAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const { caseCaption, caseNote, docketNumber, docketNumberSuffix } = get(
     state.caseDetail,
   );

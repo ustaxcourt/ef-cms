@@ -1,10 +1,10 @@
+/* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedGroupCards } from './ExternalConsolidatedGroupCards';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
-import { FiledInMultiCasesReview } from './FiledInMultiCasesReview';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
-import { MultiDocumentPartiesFilingReview } from './MultiDocumentPartiesFilingReview';
 import { PDFPreviewButton } from '../PDFPreviewButton';
 import { WarningNotificationComponent } from '../WarningNotification';
 import { connect } from '@cerebral/react';
@@ -230,9 +230,7 @@ export const FileDocumentReview = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-1">
                       <div className="tablet:margin-bottom-0 margin-bottom-205">
-                        <label className="usa-label" htmlFor="primary-filing">
-                          {form.documentTitle}
-                        </label>
+                        <h3 className="usa-label">{form.documentTitle}</h3>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
                             <PDFPreviewButton
@@ -297,55 +295,29 @@ export const FileDocumentReview = connect(
             <div className="tablet:grid-col-5 margin-bottom-4">
               <div className="card height-full margin-bottom-0">
                 <div className="content-wrapper">
-                  {fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-                    <FiledInMultiCasesReview />
-                  )}
-                  {!fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-                    <>
-                      <h3 className="underlined">
-                        Parties Filing The Document(s)
-                      </h3>
-                      <div className="grid-row grid-gap">
-                        <div className="tablet:grid-col-12 margin-bottom-1">
-                          <label className="usa-label" htmlFor="filing-parties">
-                            Filing parties
-                          </label>
-                          <ul className="ustc-unstyled-list without-margins">
-                            {fileDocumentHelper.formattedFilingParties.map(
-                              party => (
-                                <li key={party}>{party}</li>
-                              ),
-                            )}
-                            {form.partyIrsPractitioner && <li>Respondent</li>}
-                          </ul>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {fileDocumentHelper.showMultiDocumentFilingPartyForm && (
-          <div className="grid-row grid-gap margin-bottom-5">
-            <div className="tablet:grid-col-12">
-              <div className="card height-full margin-bottom-0">
-                <div className="content-wrapper">
                   <h3 className="underlined">Parties Filing The Document(s)</h3>
                   <div className="grid-row grid-gap">
-                    <MultiDocumentPartiesFilingReview
-                      selectedCases={
-                        fileDocumentHelper.formattedSelectedCasesAsCase
-                      }
-                    />
+                    <div className="tablet:grid-col-12 margin-bottom-1">
+                      <h3 className="usa-label">Filing parties</h3>
+                      <ul className="ustc-unstyled-list without-margins">
+                        {fileDocumentHelper.formattedFilingParties.map(
+                          party => (
+                            <li key={party}>{party}</li>
+                          ),
+                        )}
+                        {form.partyIrsPractitioner && <li>Respondent</li>}
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        )}
+
+          {form.fileAcrossConsolidatedGroup && (
+            <ExternalConsolidatedGroupCards />
+          )}
+        </div>
 
         <div className="grid-row grid-gap margin-bottom-5">
           <div className="tablet:grid-col-12 bg-white submit-reminders">

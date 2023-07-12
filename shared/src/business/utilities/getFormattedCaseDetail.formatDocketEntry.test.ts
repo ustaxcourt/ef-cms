@@ -66,39 +66,6 @@ describe('formatDocketEntry', () => {
     expect(results.isCourtIssuedDocument).toBeFalsy();
   });
 
-  it('should append additional information to the hyperlinked descriptionDisplay when addToCoversheet is true', () => {
-    const result = formatDocketEntry(applicationContext, {
-      addToCoversheet: true,
-      additionalInfo: 'additional information',
-      createdAt: '2019-03-27T21:53:00.297Z',
-      docketEntryId: 'd-1-2-3',
-      documentTitle: 'desc',
-      documentType: 'Petition',
-      index: '1',
-      isOnDocketRecord: true,
-      servedAt: '2019-03-27T21:53:00.297Z',
-    });
-
-    expect(result.descriptionDisplay).toEqual('desc additional information');
-    expect(result.additionalInfoDisplay).toBeUndefined();
-  });
-
-  it('should not append additional information to the hyperlinked descriptionDisplay when addToCoversheet is undefined', () => {
-    const result = formatDocketEntry(applicationContext, {
-      additionalInfo: 'additional information',
-      createdAt: '2019-03-27T21:53:00.297Z',
-      docketEntryId: 'd-1-2-3',
-      documentTitle: 'desc',
-      documentType: 'Petition',
-      index: '1',
-      isOnDocketRecord: true,
-      servedAt: '2019-03-27T21:53:00.297Z',
-    });
-
-    expect(result.descriptionDisplay).toEqual('desc');
-    expect(result.additionalInfoDisplay).toEqual('additional information');
-  });
-
   it('should format certificate of service date', () => {
     const result = formatDocketEntry(applicationContext, {
       certificateOfServiceDate: '2019-04-27T21:53:00.297Z',

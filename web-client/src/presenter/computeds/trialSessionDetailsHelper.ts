@@ -8,6 +8,7 @@ export const trialSessionDetailsHelper = (get, applicationContext) => {
     state.trialSession,
   );
   const permissions = get(state.permissions);
+  const canDismissThirtyDayAlert = permissions.DIMISS_NOTT_REMINDER;
 
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
@@ -35,6 +36,7 @@ export const trialSessionDetailsHelper = (get, applicationContext) => {
     Object.values(HYBRID_SESSION_TYPES).includes(sessionType) && showQcComplete;
 
   return {
+    canDismissThirtyDayAlert,
     eligibleRegularCaseQcTotalCompleteCount,
     eligibleSmallCaseQcTotalCompleteCount,
     eligibleTotalCaseQcCompleteCount,

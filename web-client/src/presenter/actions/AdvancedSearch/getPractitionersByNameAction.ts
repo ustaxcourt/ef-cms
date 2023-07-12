@@ -10,7 +10,7 @@ import { state } from 'cerebral';
 export const getPractitionersByNameAction = async ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const { practitionerName } = get(
     state.advancedSearchForm.practitionerSearchByName,
   );

@@ -5,7 +5,6 @@ import { state } from 'cerebral';
  * updates the partyType, filingType, otherType, businessType,
  * contactPrimary, and/or contactSecondary depending on the
  * key/value pair passed in via props
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function used
@@ -19,7 +18,7 @@ export const updatePartyTypeAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   let partyType = '';
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 

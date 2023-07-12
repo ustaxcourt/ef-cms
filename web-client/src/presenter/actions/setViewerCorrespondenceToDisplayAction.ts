@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the viewerCorrespondenceToDisplay from props
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const setViewerCorrespondenceToDisplayAction = async ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { viewerCorrespondenceToDisplay } = props;
   const docketNumber = get(state.caseDetail.docketNumber);
 

@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get object
  * @param {object} providers.store the cerebral store object
  */
-export const setMultiDocketingCheckboxesAction = ({ get, props, store }) => {
+export const setMultiDocketingCheckboxesAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const consolidatedCases =
     props.consolidatedCases || get(state.caseDetail.consolidatedCases);
 

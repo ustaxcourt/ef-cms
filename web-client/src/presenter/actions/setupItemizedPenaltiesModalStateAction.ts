@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * Setting up itemized penalties on state
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props props passed through via cerebral
@@ -13,7 +12,7 @@ export const setupItemizedPenaltiesModalStateAction = ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { determinationTotalPenalties, irsTotalPenalties, penalties } = props;
   let itemizedPenalties = [];
 

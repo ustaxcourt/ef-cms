@@ -65,6 +65,7 @@ describe('getConsolidatedCasesByCaseAction', () => {
         'entityName',
         'irsPractitioners',
         'leadDocketNumber',
+        'isSealed',
         'petitioners',
         'privatePractitioners',
       ],

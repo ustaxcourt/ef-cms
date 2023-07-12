@@ -1,11 +1,10 @@
 import { Case, isSealedCase } from '../../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
-import { isPrivateDocument } from '../../entities/cases/PublicCase';
+import { PublicCase } from '../../entities/cases/PublicCase';
 
 /**
  * getPublicDownloadPolicyUrlInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case containing the document
@@ -46,7 +45,7 @@ export const getPublicDownloadPolicyUrlInteractor = async (
     );
   }
 
-  const isPrivate = isPrivateDocument(docketEntryEntity);
+  const isPrivate = PublicCase.isPrivateDocument(docketEntryEntity);
 
   if (!isTerminalUser && isPrivate) {
     throw new UnauthorizedError('Unauthorized to access private document');

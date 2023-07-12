@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * updates the current message form data's attachments field
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the get function to retrieve values from state
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const updateMessageModalAttachmentsAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { attachments } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
