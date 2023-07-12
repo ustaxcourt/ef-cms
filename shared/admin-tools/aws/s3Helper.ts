@@ -172,6 +172,32 @@ export const listAllObjectVersions = async ({
   return allObjectVersions;
 };
 
+export const listAllDeleteMarkers = async ({
+  Bucket,
+}: {
+  Bucket: string;
+}): Promise<ObjectVersion[]> => {
+  let allDeleteMarkers;
+  let hasMore = true;
+  let KeyMarker;
+
+  while (hasMore) {
+    const { deleteMarkersChunk, isTruncated, nextDeleteKeyMarker } =
+      await getNextChunkOfDeleteMarkers({
+        Bucket,
+        KeyMarker: KeyMarker || undefined,
+      });
+    hasMore = isTruncated || !!nextDeleteKeyMarker;
+    KeyMarker = nextDeleteKeyMarker;
+    if (deleteMarkersChunk && deleteMarkersChunk.length) {
+      allDeleteMarkers =
+        allDeleteMarkers?.concat(deleteMarkersChunk) || deleteMarkersChunk;
+    }
+  }
+
+  return allDeleteMarkers;
+};
+
 export const deleteObjects = async ({
   Bucket,
   Objects,
