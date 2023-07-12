@@ -4,13 +4,16 @@ const { ASCENDING, DESCENDING } = getConstants();
 
 /**
  * sets the default sort based on the section picked.
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.props the props passed to the sequence
  * @param {object} providers.store the cerebral store object
  */
-export const setDefaultTableSortAction = ({ get, props, store }) => {
+export const setDefaultTableSortAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const userRole = get(state.user.role);
   if (userRole !== 'adc') {
     store.unset(state.tableSort);

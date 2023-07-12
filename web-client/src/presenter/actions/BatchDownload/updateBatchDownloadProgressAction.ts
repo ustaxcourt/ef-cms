@@ -8,7 +8,11 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function used for getting state
  * @param {object} providers.props the cerebral props object
  */
-export const updateBatchDownloadProgressAction = ({ get, props, store }) => {
+export const updateBatchDownloadProgressAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const {
     action,
     entries,

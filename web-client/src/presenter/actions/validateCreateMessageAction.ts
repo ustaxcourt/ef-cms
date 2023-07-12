@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the create message modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.path the path to take if validation fails or not
@@ -13,7 +12,7 @@ export const validateCreateMessageAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const message = get(state.modal.form);
 
   const errors = applicationContext

@@ -2,13 +2,15 @@ import { state } from 'cerebral';
 
 /**
  * updates contact information
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {object} providers.get the cerebral store used for getting state.form
  * @returns {object} alertSuccess, docketNumber
  */
-export const updateContactAction = async ({ applicationContext, get }) => {
+export const updateContactAction = async ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const { contact, docketNumber } = get(state.form);
 
   const updatedCase = await applicationContext

@@ -8,7 +8,7 @@
 export const navigateToPublicEmailVerificationInstructionsAction = ({
   applicationContext,
   router,
-}) => {
+}: ActionProps) => {
   const publicSiteUrl = `${applicationContext.getPublicSiteUrl()}/email-verification-instructions`;
   router.externalRoute(publicSiteUrl);
 };

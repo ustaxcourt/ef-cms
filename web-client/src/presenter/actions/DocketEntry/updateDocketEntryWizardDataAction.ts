@@ -23,7 +23,6 @@ const setDocumentPropsFromFormAndBaseDocument = ({
 
 /**
  * clears data in the state.form based on which field is being updated
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -36,7 +35,7 @@ export const updateDocketEntryWizardDataAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
   let form;
   let supporting = get(state.screenMetadata.supporting);

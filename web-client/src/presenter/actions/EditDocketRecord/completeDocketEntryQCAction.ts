@@ -4,7 +4,6 @@ import { state } from 'cerebral';
 /**
  * resets the state.form which is used throughout the app for storing html form values
  * state.form is used throughout the app for storing html form values
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -16,7 +15,7 @@ export const completeDocketEntryQCAction = async ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumber, leadDocketNumber } = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);
   const { overridePaperServiceAddress, qcCompletionAndMessageFlag } = props;

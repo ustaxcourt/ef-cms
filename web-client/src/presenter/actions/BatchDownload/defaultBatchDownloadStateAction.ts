@@ -8,7 +8,10 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.props the cerebral props object
  */
-export const defaultBatchDownloadStateAction = ({ props, store }) => {
+export const defaultBatchDownloadStateAction = ({
+  props,
+  store,
+}: ActionProps) => {
   const { allowRetry } = props;
 
   store.set(state.batchDownloads, { allowRetry: !!allowRetry });

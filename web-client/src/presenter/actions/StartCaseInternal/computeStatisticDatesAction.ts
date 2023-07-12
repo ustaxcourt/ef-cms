@@ -20,7 +20,6 @@ export const combineLastDateOfPeriodFields = ({ applicationContext, form }) => {
 
 /**
  * computes the dates for the statistics array from the form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -30,7 +29,7 @@ export const computeStatisticDatesAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   let statistics = get(state.form.statistics) || [];
 
   statistics = statistics.map(statistic =>

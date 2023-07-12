@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * deletes the statistic from the case
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.applicationContext the applicationContext
@@ -13,7 +12,7 @@ export const deleteDeficiencyStatisticsAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const { lastDateOfPeriod, statisticId, year, yearOrPeriod } = get(state.form);
 

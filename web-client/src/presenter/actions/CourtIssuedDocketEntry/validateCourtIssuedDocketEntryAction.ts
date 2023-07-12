@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the court-issued docket entry form
- *
  * @param {object} providers the providers object
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
  * @param {object} providers.get the cerebral get function used for getting state.form
@@ -12,7 +11,7 @@ export const validateCourtIssuedDocketEntryAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { EVENT_CODES_REQUIRING_SIGNATURE } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const docketEntryId = get(state.docketEntryId);

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the maintenance mode value
- *
  * @param {object} applicationContext object that contains all the context specific methods
  * @param {object} get the cerebral get object
  * @param {object} path the cerebral path object
@@ -14,7 +13,7 @@ export const getMaintenanceModeAction = async ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   let maintenanceMode = get(state.maintenanceMode);
 
   maintenanceMode = await applicationContext

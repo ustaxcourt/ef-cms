@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * Sets the currentViewMetadata.partyViewTab view after updating petitioners on case.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const setPartyViewTabAfterUpdatingPetitionersAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { PARTY_VIEW_TABS } = applicationContext.getConstants();
   const { contactType } = props;
   const { petitioners } = props.caseDetail || get(state.caseDetail);

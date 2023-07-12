@@ -2,11 +2,12 @@ import { state } from 'cerebral';
 
 /**
  * used to clear contact fields when the countryType changes
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const contactPrimaryCountryTypeChangeAction = ({ store }) => {
+export const contactPrimaryCountryTypeChangeAction = ({
+  store,
+}: ActionProps) => {
   [
     'address1',
     'address2',

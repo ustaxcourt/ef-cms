@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets up props and state for the appropriate docket entry
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get method
  * @param {object} providers.props the cerebral props object
@@ -12,7 +11,7 @@ export const setDocketEntrySelectedFromMessageAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const { docketEntryId } = props;
 

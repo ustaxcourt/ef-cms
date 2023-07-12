@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * given a docketNumber and docketEntryId, fetch a PDF from S3 and put into props stream.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const getPDFForPreviewAction = async ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   store.set(state.modal.pdfPreviewModal, {});
   if (props.file.name) {
     return props;

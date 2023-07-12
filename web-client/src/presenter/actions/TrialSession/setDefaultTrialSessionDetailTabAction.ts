@@ -4,6 +4,8 @@ import { state } from 'cerebral';
  * @param { object } providers.get the cerebral get function used for getting state from store
  */
 
-export const setDefaultTrialSessionDetailTabAction = ({ store }) => {
+export const setDefaultTrialSessionDetailTabAction = ({
+  store,
+}: ActionProps) => {
   store.unset(state.trialSessionDetailsTab.calendaredCaseList);
 };

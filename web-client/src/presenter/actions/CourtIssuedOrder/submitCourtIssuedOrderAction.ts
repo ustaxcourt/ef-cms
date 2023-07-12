@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the court issued order onto the case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
@@ -13,7 +12,7 @@ export const submitCourtIssuedOrderAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   let caseDetail;
   const { docketNumber } = get(state.caseDetail);
   const { primaryDocumentFileId: docketEntryId } = props;

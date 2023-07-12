@@ -12,7 +12,7 @@ export const authenticateUserAction = async ({
   path,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { code, cognitoLocal } = props;
 
   const response = await applicationContext

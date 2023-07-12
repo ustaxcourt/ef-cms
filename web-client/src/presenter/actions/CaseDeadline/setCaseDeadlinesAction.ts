@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setCaseDeadlinesAction = ({ get, props, store }) => {
+export const setCaseDeadlinesAction = ({ get, props, store }: ActionProps) => {
   let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines);
   if (caseDeadlines) {
     caseDeadlines.push(...props.caseDeadlines);

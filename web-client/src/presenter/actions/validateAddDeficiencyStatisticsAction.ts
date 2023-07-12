@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validates the add deficiency statistic.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the validatePetition use case
  * @param {object} providers.get the cerebral get function used for getting state.form
@@ -14,7 +13,7 @@ export const validateAddDeficiencyStatisticsAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const form = get(state.form);
 
   const combinedForm = combineLastDateOfPeriodFields({

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * sets the state.trialSessionJudge based on the props.caseDetail passed in.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application contexts
  * @param {object} providers.store the cerebral store used for setting state.trialSessionJudge
@@ -12,7 +11,7 @@ export const setTrialSessionJudgeAction = async ({
   applicationContext,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { caseDetail } = props;
 
   if (caseDetail && caseDetail.trialSessionId) {

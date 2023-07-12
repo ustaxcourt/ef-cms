@@ -3,14 +3,16 @@ import qs from 'qs';
 
 /**
  *
- * changes the route to view the create order page for the state.caseDetail.docketNumber, state.modal).docketEntryId, state.modal).documentType, state.modal).documentTitle and state.modal.parentMessageId
- *
+ *changes the route to view the create order page for the state.caseDetail.docketNumber, state.modal).docketEntryId, state.modal).documentType, state.modal).documentTitle and state.modal.parentMessageId
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.router the riot.router object that is used for changing the route
  * @returns {Promise} async action
  */
-export const navigateToCreateOrderAction = async ({ get, router }) => {
+export const navigateToCreateOrderAction = async ({
+  get,
+  router,
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
 
   const {

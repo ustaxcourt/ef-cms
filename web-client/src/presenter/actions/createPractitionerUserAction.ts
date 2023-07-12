@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * creates a practitioner user from the given form data
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @param {Function} providers.get the cerebral get function
@@ -15,7 +14,7 @@ export const createPractitionerUserAction = async ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const practitioner = get(state.form);
   practitioner.admissionsDate = props.computedDate;
   practitioner.confirmEmail = undefined;

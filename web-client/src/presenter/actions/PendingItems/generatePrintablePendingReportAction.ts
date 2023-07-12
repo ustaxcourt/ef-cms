@@ -8,7 +8,7 @@
 export const generatePrintablePendingReportAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumberFilter, judgeFilter } = props;
 
   const params = {};

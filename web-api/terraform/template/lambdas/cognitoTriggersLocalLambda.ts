@@ -5,7 +5,7 @@ import { handler } from './cognito-triggers';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.cognitoTriggersLocalLambda = async event => {
+export const cognitoTriggersLocalLambda = async event => {
   const cognitoEvent = JSON.parse(event.body);
 
   cognitoEvent.request.userAttributes.sub =

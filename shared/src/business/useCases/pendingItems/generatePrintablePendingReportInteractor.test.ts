@@ -51,6 +51,14 @@ describe('generatePrintablePendingReportInteractor', () => {
       associatedJudge: 'Judge Alvin',
       docketNumber: '345-67',
       documentTitle: 'Test Document Title',
+      leadDocketNumber: '456-78',
+      receivedAt: '2020-03-03T12:00:00.000Z',
+    },
+    {
+      associatedJudge: 'Judge Buch',
+      docketNumber: '456-78',
+      documentTitle: 'Fear and Trembling',
+      leadDocketNumber: '456-78',
       receivedAt: '2020-03-03T12:00:00.000Z',
     },
   ];
@@ -140,6 +148,8 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentTitle: 'Test Document Best',
         formattedFiledDate: '02/04/22',
         formattedName: 'Test Document Best',
+        inConsolidatedGroup: false,
+        inLeadCase: false,
         receivedAt: '2022-02-04T12:00:00.000Z',
       },
       {
@@ -151,6 +161,8 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentTitle: 'Test Document Best',
         formattedFiledDate: '03/04/21',
         formattedName: 'Test Document Best',
+        inConsolidatedGroup: false,
+        inLeadCase: false,
         receivedAt: '2021-03-04T12:00:00.000Z',
       },
       {
@@ -162,6 +174,8 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentTitle: 'Test Document Best',
         formattedFiledDate: '03/04/20',
         formattedName: 'Test Document Best',
+        inConsolidatedGroup: false,
+        inLeadCase: false,
         receivedAt: '2020-03-04T12:00:00.000Z',
       },
       {
@@ -174,6 +188,8 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentTitle: 'Test Document Title',
         formattedFiledDate: '01/01/90',
         formattedName: 'Test Document Title',
+        inConsolidatedGroup: false,
+        inLeadCase: false,
         receivedAt: '1990-01-01T12:00:00.000Z',
       },
       {
@@ -186,6 +202,8 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentTitle: 'Test Document Title',
         formattedFiledDate: '01/01/99',
         formattedName: 'Test Document Title',
+        inConsolidatedGroup: false,
+        inLeadCase: false,
         receivedAt: '1999-01-01T12:00:00.000Z',
       },
       {
@@ -199,6 +217,8 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentType: 'Test Document Type',
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
+        inConsolidatedGroup: false,
+        inLeadCase: false,
         receivedAt: '2020-02-02T12:00:00.000Z',
       },
       {
@@ -210,6 +230,16 @@ describe('generatePrintablePendingReportInteractor', () => {
         documentTitle: 'Test Document Title',
         formattedFiledDate: '03/03/20',
         formattedName: 'Test Document Title',
+        inConsolidatedGroup: true,
+        receivedAt: '2020-03-03T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Buch',
+        docketNumber: '456-78',
+        documentTitle: 'Fear and Trembling',
+        inConsolidatedGroup: true,
+        inLeadCase: true,
+        leadDocketNumber: '456-78',
         receivedAt: '2020-03-03T12:00:00.000Z',
       },
     ]);

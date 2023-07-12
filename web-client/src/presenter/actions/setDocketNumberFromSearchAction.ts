@@ -20,7 +20,6 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
 
 /**
  * sets the docket number from the search form in props
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function used for getting state.header.searchTerm
  * @returns {object} the docketNumber provided in the search term
@@ -28,7 +27,7 @@ export const trimDocketNumberSearch = (applicationContext, searchTerm = '') => {
 export const setDocketNumberFromSearchAction = ({
   applicationContext,
   get,
-}) => {
+}: ActionProps) => {
   const searchTerm = get(state.header.searchTerm);
   const docketNumber = trimDocketNumberSearch(applicationContext, searchTerm);
   return {

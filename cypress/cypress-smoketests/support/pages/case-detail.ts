@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { faker } from '@faker-js/faker';
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');

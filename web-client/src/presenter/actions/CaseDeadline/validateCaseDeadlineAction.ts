@@ -2,7 +2,6 @@ import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
 
 /**
  * validates the petition.
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the use case
  * @param {object} providers.get the cerebral get function used for getting state.form
@@ -15,7 +14,7 @@ export const validateCaseDeadlineAction = ({
   get,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const caseDeadline = getCaseDeadlineFromFormAction({
     applicationContext,
     get,

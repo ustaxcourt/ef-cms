@@ -1,6 +1,9 @@
 import { state } from 'cerebral';
 
-export const setValidationErrorsByFlagAction = ({ props, store }) => {
+export const setValidationErrorsByFlagAction = ({
+  props,
+  store,
+}: ActionProps) => {
   if (props.fromModal) {
     store.set(state.modal.validationErrors, props.errors);
   } else {

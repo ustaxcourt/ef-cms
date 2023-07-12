@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.store the cerebral store function
  */
-export const unsetAddressOnFormAction = ({ store }) => {
+export const unsetAddressOnFormAction = ({ store }: ActionProps) => {
   store.unset(state.form.contact.address1);
   store.unset(state.form.contact.address2);
   store.unset(state.form.contact.address3);

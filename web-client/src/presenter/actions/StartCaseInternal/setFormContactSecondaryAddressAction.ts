@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props
  * @param {object} providers.store the cerebral store
  */
-export const setFormContactSecondaryAddressAction = ({ get, props, store }) => {
+export const setFormContactSecondaryAddressAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const { contact } = props;
 
   store.set(state.form.contactSecondary, {

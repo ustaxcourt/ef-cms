@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * removeSecondarySupportingDocumentAction
- *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store object
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const removeSecondarySupportingDocumentAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const { index } = props;
 
   const supportingDocuments =

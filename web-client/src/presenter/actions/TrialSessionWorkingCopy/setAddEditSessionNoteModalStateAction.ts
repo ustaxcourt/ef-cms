@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * set the state for the add edit notes modal
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
@@ -13,7 +12,7 @@ export const setAddEditSessionNoteModalStateAction = ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const currentUser = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const notes = get(state.trialSessionWorkingCopy.sessionNotes);

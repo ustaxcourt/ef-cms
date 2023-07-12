@@ -5,7 +5,9 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store object used for setting showModal
  * @returns {Promise} async action
  */
-export const closeFileUploadStatusModalAction = async ({ store }) => {
+export const closeFileUploadStatusModalAction = async ({
+  store,
+}: ActionProps) => {
   store.set(state.fileUploadProgress.percentComplete, 100);
   store.set(state.fileUploadProgress.timeRemaining, 0);
   store.set(state.fileUploadProgress.isUploading, false);

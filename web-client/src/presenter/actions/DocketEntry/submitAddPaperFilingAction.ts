@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * calls interactor to add a paper filing
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const submitAddPaperFilingAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumbers, isSavingForLater } = props;
   const { docketNumber } = get(state.caseDetail);
   const isFileAttachedNow = get(state.form.primaryDocumentFile);

@@ -1,3 +1,10 @@
+import {
+  FORMATS,
+  createISODateString,
+  formatDateString,
+  isTodayWithinGivenInterval,
+  prepareDateFromString,
+} from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
@@ -12,7 +19,6 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
-import { createISODateString } from '../../utilities/DateHandler';
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
@@ -90,8 +96,11 @@ export class TrialSession extends JoiValidationEntity {
   public sessionStatus: string;
   public proceedingType: string;
   public trialSessionId: string;
-  public judge: TJudge;
-  public trialClerk: TTrialClerk;
+  public judge?: TJudge;
+  public trialClerk?: TTrialClerk;
+  public dismissedAlertForNOTT?: boolean;
+  public isStartDateWithinNOTTReminderRange?: boolean;
+  public thirtyDaysBeforeTrialFormatted?: string;
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -158,6 +167,7 @@ export class TrialSession extends JoiValidationEntity {
         .allow('')
         .optional(),
       createdAt: JoiValidationConstants.ISO_DATE.optional(),
+      dismissedAlertForNOTT: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
       estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
@@ -255,6 +265,7 @@ export class TrialSession extends JoiValidationEntity {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
+    this.dismissedAlertForNOTT = rawSession.dismissedAlertForNOTT || false;
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
@@ -290,11 +301,17 @@ export class TrialSession extends JoiValidationEntity {
     this.trialSessionId =
       rawSession.trialSessionId || applicationContext.getUniqueId();
 
-    if (rawSession.judge && rawSession.judge.name) {
+    if (rawSession.judge?.name) {
       this.judge = {
         name: rawSession.judge.name,
         userId: rawSession.judge.userId,
       };
+    }
+
+    if (rawSession.isCalendared && rawSession.startDate) {
+      this.setNoticeOfTrialReminderAlert();
+    } else {
+      this.isStartDateWithinNOTTReminderRange = false;
     }
 
     if (rawSession.trialClerk && rawSession.trialClerk.name) {
@@ -357,7 +374,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * generate sort key prefix
-   *
    * @returns {string} the sort key prefix
    */
   generateSortKeyPrefix() {
@@ -376,8 +392,36 @@ export class TrialSession extends JoiValidationEntity {
   }
 
   /**
+   * sets the trial session's NOTT reminder flag and due date
+   */
+  setNoticeOfTrialReminderAlert() {
+    const formattedStartDate = formatDateString(this.startDate, FORMATS.MMDDYY);
+    const trialStartDateString: any = prepareDateFromString(
+      formattedStartDate,
+      FORMATS.MMDDYY,
+    );
+
+    this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
+      intervalEndDate: trialStartDateString.minus({
+        ['days']: 28, // luxon's interval end date is not inclusive
+      }),
+      intervalStartDate: trialStartDateString.minus({
+        ['days']: 34,
+      }),
+    });
+
+    const thirtyDaysBeforeTrialInclusive: any = trialStartDateString.minus({
+      ['days']: 29,
+    });
+
+    this.thirtyDaysBeforeTrialFormatted = formatDateString(
+      thirtyDaysBeforeTrialInclusive,
+      FORMATS.MMDDYY,
+    );
+  }
+
+  /**
    * set as calendared
-   *
    * @returns {TrialSession} the trial session entity
    */
   setAsCalendared() {
@@ -388,7 +432,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * add case to calendar
-   *
    * @param {object} caseEntity the case entity to add to the calendar
    * @returns {TrialSession} the trial session entity
    */
@@ -408,7 +451,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * manually add case to calendar
-   *
    * @param {object} caseEntity the case entity to add to the calendar
    * @param {string} calendarNotes calendar notes for the case
    * @returns {TrialSession} the trial session entity
@@ -426,7 +468,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * checks if a case is already on the session
-   *
    * @param {object} caseEntity the case entity to check if already on the case
    * @returns {boolean} if the case is already on the trial session
    */
@@ -438,7 +479,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * set case as removedFromTrial
-   *
    * @param {object} arguments the arguments object
    * @param {string} arguments.docketNumber the docketNumber of the case to remove from the calendar
    * @param {string} arguments.disposition the reason the case is being removed from the calendar
@@ -474,7 +514,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * removes the case totally from the trial session
-   *
    * @param {object} arguments the arguments object
    * @param {string} arguments.docketNumber the docketNumber of the case to remove from the calendar
    * @returns {TrialSession} the trial session entity
@@ -492,7 +531,6 @@ export class TrialSession extends JoiValidationEntity {
   /**
    * checks certain properties of the trial session for emptiness.
    * if one field is empty (via lodash.isEmpty), the method returns false
-   *
    * @returns {boolean} TRUE if can set as calendared (properties were all not empty), FALSE otherwise
    */
   canSetAsCalendared() {
@@ -501,7 +539,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * checks the trial session's proceedingType and returns true if it's remote
-   *
    * @returns {boolean} TRUE if the proceedingType is remote; false otherwise
    */
   isRemote() {
@@ -510,7 +547,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * Returns certain properties of the trial session that are empty as a list.
-   *
    * @returns {Array} A list of property names of the trial session that are empty
    */
   getEmptyFields() {
@@ -523,7 +559,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * Sets the notice issued date on the trial session
-   *
    * @returns {TrialSession} the trial session entity
    */
   setNoticesIssued() {
@@ -533,7 +568,6 @@ export class TrialSession extends JoiValidationEntity {
 
   /**
    * set as closed
-   *
    * @returns {TrialSession} the trial session entity
    */
   setAsClosed() {
@@ -544,7 +578,6 @@ export class TrialSession extends JoiValidationEntity {
 
 /**
  * Determines if the scope of the trial session is standalone remote
- *
  * @param {object} arguments.sessionScope the session scope
  * @returns {Boolean} if the scope is a standalone remote session
  */

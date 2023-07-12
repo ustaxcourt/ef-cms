@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * validates a trial session's eligibility to be calendared or not
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -13,7 +12,7 @@ export const canSetTrialSessionToCalendarAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const trialSession = get(state.trialSession);
   const { canSetAsCalendared, emptyFields, isRemote } = applicationContext
     .getUseCases()

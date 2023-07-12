@@ -1,13 +1,11 @@
 /* eslint-disable max-lines */
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} = require('../EntityConstants');
-const { isStandaloneRemoteSession, TrialSession } = require('./TrialSession');
+} from '../EntityConstants';
+import { TrialSession, isStandaloneRemoteSession } from './TrialSession';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 const VALID_TRIAL_SESSION = {
   chambersPhoneNumber: '1234567890',
@@ -593,6 +591,21 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.isValid()).toBe(true);
+    });
+  });
+
+  describe('dismissedAlertForNOTT', () => {
+    it('should have a default value of false', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.dismissedAlertForNOTT).toBe(false);
     });
   });
 });

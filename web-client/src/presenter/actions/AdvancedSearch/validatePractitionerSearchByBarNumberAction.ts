@@ -3,13 +3,15 @@ import { state } from 'cerebral';
 
 /**
  * validate practitioner search by bar number form
- *
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the next object in the path
  * @returns {Promise<*>} the success or error path
  */
-export const validatePractitionerSearchByBarNumberAction = ({ get, path }) => {
+export const validatePractitionerSearchByBarNumberAction = ({
+  get,
+  path,
+}: ActionProps) => {
   const { barNumber } = get(
     state.advancedSearchForm.practitionerSearchByBarNumber,
   );

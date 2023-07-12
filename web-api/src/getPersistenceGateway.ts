@@ -61,6 +61,7 @@ import {
   getDocketNumbersByUser,
 } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '../../shared/src/persistence/dynamo/cases/getCasesByDocketNumbers';
+import { getCasesByFilters } from '../../shared/src/persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from '../../shared/src/persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedByJudge } from '../../shared/src/persistence/elasticsearch/getCasesClosedByJudge';
@@ -73,6 +74,7 @@ import { getConfigurationItemValue } from '../../shared/src/persistence/dynamo/d
 import { getDeployTableStatus } from '../../shared/src/persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from '../../shared/src/persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from '../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
+import { getDocketNumbersByStatusAndByJudge } from '../../shared/src/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from '../../shared/src/persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from '../../shared/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -173,7 +175,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
    * Decorates the function to verify any entities passed have the isValid flag.
    * Should be used whenever a persistence method might be called by an interactor via lambda
    * when an entity's complete record is being created or updated.
-   *
    * @returns {Function} the original methods decorated
    */
   function decorate(method) {
@@ -304,6 +305,7 @@ const gatewayMethods = {
   getCaseMetadataWithCounsel,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
+  getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesForUser,
@@ -314,6 +316,7 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
+  getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,

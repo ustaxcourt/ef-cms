@@ -77,6 +77,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
     key: 'consolidated-cases-group-access-petitioner',
   },
+  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
+    key: 'document-visibility-policy-change-date',
+  },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
@@ -111,6 +114,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
+  },
+  USE_EXTERNAL_PDF_GENERATION: {
+    disabledMessage:
+      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
+    key: 'use-external-pdf-generation',
   },
 };
 
@@ -186,7 +194,9 @@ export const CASE_STATUS_TYPES = {
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
-};
+} as const;
+export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
+export type CaseStatus = (typeof CASE_STATUSES)[number];
 
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
@@ -203,6 +213,8 @@ export const DOCUMENT_RELATIONSHIPS = {
 
 export const DOCUMENT_SERVED_MESSAGES = {
   ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  EXTERNAL_ENTRY_ADDED:
+    'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
@@ -427,6 +439,31 @@ export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const SERIATIM_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const BRIEF_EVENTCODES = [
+  ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  ...SERIATIM_DOCUMENT_EVENT_CODES,
+];
+
+export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const SIGNED_DOCUMENT_TYPES = {
+  signedStipulatedDecision: {
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+  },
+};
+
+export const POLICY_DATE_IMPACTED_EVENTCODES = [
+  ...BRIEF_EVENTCODES,
+  AMICUS_BRIEF_EVENT_CODE,
+  SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -624,12 +661,11 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
 
-export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
-
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
+  ...POLICY_DATE_IMPACTED_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',
@@ -769,13 +805,6 @@ export const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Stipulated Decision',
 ).eventCode;
 
-export const SIGNED_DOCUMENT_TYPES = {
-  signedStipulatedDecision: {
-    documentType: 'Stipulated Decision',
-    eventCode: 'SDEC',
-  },
-};
-
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   {
     documentType: 'Entry of Appearance',
@@ -892,6 +921,8 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
   deficiency: 'Deficiency',
@@ -907,9 +938,10 @@ export const CASE_TYPES_MAP = {
   passport: 'Passport',
   whistleblower: 'Whistleblower',
   workerClassification: 'Worker Classification',
-};
+} as const;
 
 export const CASE_TYPES = Object.values(CASE_TYPES_MAP);
+export type CaseType = (typeof CASE_TYPES)[number];
 
 export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',

@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * generate document titles for filing documents
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const generateCourtIssuedDocumentTitleAction = ({
   get,
   props,
   store,
-}) => {
+}: ActionProps) => {
   const documentMetadata = get(state.form);
   const { computedDate, judgeWithTitle } = props;
   documentMetadata.date = computedDate;

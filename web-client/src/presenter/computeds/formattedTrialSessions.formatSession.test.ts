@@ -9,6 +9,7 @@ describe('formattedTrialSessions formatSession', () => {
   const mockTrialSessions = [
     {
       caseOrder: [],
+      isCalendared: true,
       judge: { name: '3', userId: '3' },
       noticeIssuedDate: '2019-07-25T15:00:00.000Z',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -48,6 +49,53 @@ describe('formattedTrialSessions formatSession', () => {
     expect(result).toMatchObject({
       formattedEstimatedEndDate: '02/17/45',
       formattedStartDate: '02/17/44',
+    });
+  });
+
+  describe('NOTT reminder', () => {
+    it('should set showAlertForNOTTReminder to true when the alert has not been previously dismissed and isStartDateWithinNOTTReminderRange is true', () => {
+      const session = formatSession(
+        {
+          ...mockTrialSessions[0],
+          dismissedAlertForNOTT: false,
+          isStartDateWithinNOTTReminderRange: true,
+          thirtyDaysBeforeTrialFormatted: '2/2/2022',
+        },
+        applicationContext,
+      );
+
+      expect(session.showAlertForNOTTReminder).toBe(true);
+      expect(session.alertMessageForNOTT).toEqual(
+        'The 30-day notice is due by 2/2/2022',
+      );
+    });
+
+    it('should set showAlertForNOTTReminder to false when the alert has been previously dismissed', () => {
+      const session = formatSession(
+        {
+          ...mockTrialSessions[0],
+          dismissedAlertForNOTT: true,
+          isStartDateWithinNOTTReminderRange: true,
+        },
+        applicationContext,
+      );
+
+      expect(session.showAlertForNOTTReminder).toBe(false);
+      expect(session.alertMessageForNOTT).toBeUndefined();
+    });
+
+    it('should set showAlertForNOTTReminder to false when isStartDateWithinNOTTReminderRange is false', () => {
+      const session = formatSession(
+        {
+          ...mockTrialSessions[0],
+          dismissedAlertForNOTT: true,
+          isStartDateWithinNOTTReminderRange: false,
+        },
+        applicationContext,
+      );
+
+      expect(session.showAlertForNOTTReminder).toBe(false);
+      expect(session.alertMessageForNOTT).toBeUndefined();
     });
   });
 });

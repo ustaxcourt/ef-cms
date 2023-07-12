@@ -11,7 +11,10 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store function
  */
-export const computeSubmitTrialSessionDataAction = ({ get, store }) => {
+export const computeSubmitTrialSessionDataAction = ({
+  get,
+  store,
+}: ActionProps) => {
   const form = get(state.form);
 
   computeTermAndUpdateState(

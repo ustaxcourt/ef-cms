@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Attempts to download all cases in a trial session
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext contains the batchDownloadTrialSessionInteractor method we will need from the getUseCases method
  * @param {object} providers.get the cerebral get function used for getting state
@@ -14,7 +13,7 @@ export const batchDownloadTrialSessionAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { trialSessionId } = get(state.trialSession);
 
   try {

@@ -2,13 +2,15 @@ import { state } from 'cerebral';
 
 /**
  * delete a case note from a case
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const deleteCaseNoteAction = async ({ applicationContext, get }) => {
+export const deleteCaseNoteAction = async ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const caseDetail = await applicationContext
     .getUseCases()

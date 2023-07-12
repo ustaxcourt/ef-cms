@@ -21,6 +21,7 @@ export const ROLE_PERMISSIONS = {
   COURT_ISSUED_DOCUMENT: 'COURT_ISSUED_DOCUMENT',
   CREATE_ORDER_DOCKET_ENTRY: 'CREATE_ORDER_DOCKET_ENTRY',
   CREATE_USER: 'CREATE_USER',
+  DIMISS_NOTT_REMINDER: 'DIMISS_NOTT_REMINDER',
   DOCKET_ENTRY: 'DOCKET_ENTRY',
   EDIT_CASE_DETAILS: 'EDIT_CASE_DETAILS',
   EDIT_COUNSEL_ON_CASE: 'EDIT_COUNSEL_ON_CASE',
@@ -212,6 +213,7 @@ const petitionsClerkPermissions = [
   ROLE_PERMISSIONS.START_PAPER_CASE,
   ROLE_PERMISSIONS.TRACKED_ITEMS,
   ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE,
+  ROLE_PERMISSIONS.DIMISS_NOTT_REMINDER,
 ];
 
 const irsPractitionerPermissions = [
@@ -310,7 +312,6 @@ export const AUTHORIZATION_MAP = {
 
 /**
  * Checks user permissions for an action
- *
  * @param {object} user the user to check for authorization
  * @param {string} action the action to verify if the user is authorized for
  * @param {string} owner the user id of the owner of the item to verify

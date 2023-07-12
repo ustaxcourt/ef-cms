@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * gets the first correspondence document from the current case detail to set as the default viewerCorrespondenceToDisplay
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get method
@@ -14,7 +13,7 @@ export const getDefaultViewerCorrespondenceToDisplayAction = ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { correspondenceId } = props;
   let viewerCorrespondenceToDisplay = null;
 

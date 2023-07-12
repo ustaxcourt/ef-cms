@@ -63,12 +63,15 @@ export const compute24HrTimeAndUpdateState = (
 
 /**
  * computes the trial session form data based on user input
- *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get function
  * @param {object} providers.store the cerebral store function
  */
-export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
+export const computeTrialSessionFormDataAction = ({
+  get,
+  props,
+  store,
+}: ActionProps) => {
   const form = get(state.form);
 
   computeTermAndUpdateState(

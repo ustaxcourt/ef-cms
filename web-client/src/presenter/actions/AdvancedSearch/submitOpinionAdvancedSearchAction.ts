@@ -4,7 +4,6 @@ import { trimDocketNumberSearch } from '../setDocketNumberFromSearchAction';
 
 /**
  * submit advanced search form to search for opinions
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
@@ -14,7 +13,7 @@ export const submitOpinionAdvancedSearchAction = async ({
   applicationContext,
   get,
   store,
-}) => {
+}: ActionProps) => {
   const searchParams = clone(get(state.advancedSearchForm.opinionSearch));
 
   if (searchParams.docketNumber) {

@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * validate the remove from trial session form
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context for getting constants
  * @param {Function} providers.get the cerebral get function used for getting state.modal
@@ -14,7 +13,7 @@ export const validateRemoveFromTrialSessionAction = ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { associatedJudge, caseStatus, disposition } = get(state.modal);
   const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
     applicationContext.getConstants();

@@ -3,7 +3,6 @@ import { state } from 'cerebral';
 
 /**
  * Validates petitioner information and redirects user to success or error path
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get helper function
@@ -16,7 +15,7 @@ export const validatePetitionerAction = ({
   get,
   path,
   store,
-}) => {
+}: ActionProps) => {
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
 

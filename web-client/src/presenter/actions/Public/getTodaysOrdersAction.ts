@@ -2,12 +2,14 @@ import { state } from 'cerebral';
 
 /**
  * gets today's orders
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the applicationContext
  * @returns {Promise} a list of today's order documents
  */
-export const getTodaysOrdersAction = async ({ applicationContext, get }) => {
+export const getTodaysOrdersAction = async ({
+  applicationContext,
+  get,
+}: ActionProps) => {
   const page = get(state.todaysOrders.page) || 1;
   const { TODAYS_ORDERS_SORT_DEFAULT } = applicationContext.getConstants();
   const todaysOrdersSort =

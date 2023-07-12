@@ -10,7 +10,7 @@ export const getIrsPractitionersBySearchKeyAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const searchKey = get(state.form.respondentSearch);
 
   const irsPractitioners = await applicationContext

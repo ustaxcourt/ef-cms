@@ -2,7 +2,6 @@ import { state } from 'cerebral';
 
 /**
  * Gets the url of the document for previewing
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get method
@@ -13,7 +12,7 @@ export const getDocumentUrlForPreviewAction = async ({
   applicationContext,
   get,
   props,
-}) => {
+}: ActionProps) => {
   const { docketNumber } = get(state.form);
   const { documentInS3 } = props;
 
