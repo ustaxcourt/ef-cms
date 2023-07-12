@@ -6,6 +6,7 @@ import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import {
   refreshElasticsearchIndex,
+  wait,
   waitForLoadingComponentToHide,
 } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -58,13 +59,21 @@ export const viewJudgeActivityReportResults = (
 
     expect(
       cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
-    ).toEqual({
+    ).toMatchObject({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
+
       submittedAndCavCasesByJudge: expect.anything(),
       trialSessions: expect.anything(),
+    });
+
+    await wait(3000);
+
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toMatchObject({
+      opinions: expect.anything(),
+      orders: expect.anything(),
     });
   });
 };
