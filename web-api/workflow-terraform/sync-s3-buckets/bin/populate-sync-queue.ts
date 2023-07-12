@@ -6,9 +6,9 @@ const destinationBucket = process.env.DESTINATION_BUCKET_NAME;
 const QueueUrl = process.env.S3_BUCKET_SYNC_QUEUE_URL;
 
 (async () => {
-  const queueEntries = await generateBucketSyncQueueEntries({
+  const messages = await generateBucketSyncQueueEntries({
     destinationBucket,
     sourceBucket,
   });
-  await addToQueue({ QueueUrl, messages: queueEntries });
+  await addToQueue({ QueueUrl, messages });
 })();

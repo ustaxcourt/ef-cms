@@ -641,14 +641,14 @@ jobs:
           name: Deploy Sync S3 Buckets Lambda
           command: |
             npm run deploy:sync-s3-buckets -- $ENV
-            S3_BUCKET_SYNC_QUEUE_URL="$(terraform output -raw s3_bucket_sync_queue_url)"
-            echo "export S3_BUCKET_SYNC_QUEUE_URL=${S3_BUCKET_SYNC_QUEUE_URL}" >> $BASH_ENV
-            S3_BUCKET_SYNC_DL_QUEUE_URL="$(terraform output -raw s3_bucket_sync_dl_queue_url)"
+            S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_sync_queue_url)"
+            echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
+            S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_sync_dl_queue_url)"
             echo "export S3_BUCKET_SYNC_DL_QUEUE_URL=${S3_BUCKET_SYNC_DL_QUEUE_URL}" >> $BASH_ENV
       - run:
           name: Populate S3 Sync Queue
           command: |
-            npx ts-node --transpile-only ./web-api/workflow-terraform/sync-s3-buckets/bin/populate-queue.ts
+            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/populate-sync-queue.ts
       - run:
           name: Deploy Wait for Workflow Cron Lambda
           command: |
@@ -987,7 +987,7 @@ workflows:
           type: approval
           requires:
             - initiate-glue-job
-      - wait-for-s3-bucket-sync:
+      - wait-for-s3-queue:
           <<: *only-test
           type: approval
           requires:
@@ -996,7 +996,7 @@ workflows:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
-            - wait-for-s3-bucket-sync
+            - wait-for-s3-queue
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
