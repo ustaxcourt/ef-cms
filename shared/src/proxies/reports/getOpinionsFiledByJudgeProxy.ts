@@ -11,6 +11,6 @@ export const getOpinionsFiledByJudgeInteractor = (
   return post({
     applicationContext,
     body: params,
-    endpoint: '/judge-activity-report/opinions',
+    endpoint: '/async/judge-activity-report/opinions',
   });
 };

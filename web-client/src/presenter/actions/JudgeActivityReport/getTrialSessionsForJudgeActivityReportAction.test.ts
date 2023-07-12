@@ -33,9 +33,9 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       );
   });
 
-  it('should call the interactor to return the trialSessions types with the selected judge id', async () => {
-    const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction as any,
+  it('should call the interactor to set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types based on the selected judge id', async () => {
+    const { output } = await runAction(
+      getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
           presenter,
@@ -54,7 +54,6 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       },
     );
 
-    expect(result.output.trialSessions).toMatchObject(trialSessionTypesResult);
     expect(
       applicationContext.getUseCases()
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
@@ -63,11 +62,13 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       judgeId: judgeUser.userId,
       startDate: mockStartDate,
     });
+
+    expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
   });
 
-  it('should return the trialSessions types for all judges if no selected judge id is prescribed', async () => {
-    const result = await runAction(
-      getTrialSessionsForJudgeActivityReportAction as any,
+  it('should set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types for all judges if no selected judge id is prescribed', async () => {
+    const { output } = await runAction(
+      getTrialSessionsForJudgeActivityReportAction,
       {
         modules: {
           presenter,
@@ -86,7 +87,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       },
     );
 
-    expect(result.output.trialSessions).toMatchObject(trialSessionTypesResult);
+    expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
     expect(
       applicationContext.getUseCases()
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],

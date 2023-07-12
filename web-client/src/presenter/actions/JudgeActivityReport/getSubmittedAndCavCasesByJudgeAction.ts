@@ -12,7 +12,6 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
   props,
-  store,
 }: ActionProps) => {
   const { judges } = get(state.judgeActivityReport.filters);
   const lastIdsOfPages = get(state.judgeActivityReport.lastIdsOfPages);
@@ -33,20 +32,9 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
     });
 
-  store.set(
-    state.judgeActivityReport.lastIdsOfPages[props.selectedPage + 1],
-    lastDocketNumberForCavAndSubmittedCasesSearch,
-  );
-
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData
-      .consolidatedCasesGroupCountMap,
-    consolidatedCasesGroupCountMap,
-  );
-
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData
-      .submittedAndCavCasesByJudge,
+  return {
     cases,
-  );
+    consolidatedCasesGroupCountMap,
+    lastDocketNumberForCavAndSubmittedCasesSearch,
+  };
 };

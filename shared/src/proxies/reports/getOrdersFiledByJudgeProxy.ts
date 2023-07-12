@@ -11,6 +11,6 @@ export const getOrdersFiledByJudgeInteractor = (
   return post({
     applicationContext,
     body: params,
-    endpoint: '/judge-activity-report/orders',
+    endpoint: '/async/judge-activity-report/orders',
   });
 };

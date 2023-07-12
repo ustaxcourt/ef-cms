@@ -3,8 +3,24 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
+export const mockOrdersIssuedByJudge = [
+  { count: 2, documentType: 'Order', eventCode: 'O' },
+  {
+    count: 1,
+    documentType: 'Order that the letter "L" is added to Docket number',
+    eventCode: 'OAL',
+  },
+  {
+    count: 1,
+    documentType: 'Order that the letter "X" is deleted from the Docket number',
+    eventCode: 'ODX',
+  },
+];
+
 describe('getOrdersFiledByJudgeInteractor', () => {
+  const mockClientConnectionID = 'clientConnnectionID';
   const mockValidRequest = {
+    clientConnectionId: mockClientConnectionID,
     endDate: '03/21/2020',
     judges: [judgeUser.name],
     startDate: '02/12/2020',
@@ -59,10 +75,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue(mockResults);
 
-    const result = await getOrdersFiledByJudgeInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -73,35 +86,40 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: '2020-02-12T05:00:00.000Z',
     });
-    expect(result).toEqual([
-      { count: 2, documentType: 'Order', eventCode: 'O' },
-      {
-        count: 1,
-        documentType: 'Order that the letter "L" is added to Docket number',
-        eventCode: 'OAL',
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      clientConnectionId: mockValidRequest.clientConnectionId,
+      message: {
+        action: 'fetch_orders_complete',
+        orders: mockOrdersIssuedByJudge,
       },
-      {
-        count: 1,
-        documentType:
-          'Order that the letter "X" is deleted from the Docket number',
-        eventCode: 'ODX',
-      },
-    ]);
+      userId: judgeUser.userId,
+    });
   });
 
-  it('should return an empty list when no matching orders for the judge in the date range provided are found', async () => {
+  it('should return an empty list of orders when there are no matching orders for the selected judge in the date range provided', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
         results: [],
       });
 
-    const result = await getOrdersFiledByJudgeInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
-    expect(result).toEqual([]);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      clientConnectionId: mockValidRequest.clientConnectionId,
+      message: {
+        action: 'fetch_orders_complete',
+        orders: [],
+      },
+      userId: judgeUser.userId,
+    });
   });
 
   it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {

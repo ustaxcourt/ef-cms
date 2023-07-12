@@ -10,12 +10,22 @@ import { setJudgeActivityReportDataAction } from './setJudgeActivityReportDataAc
 describe('setJudgeActivityReportDataAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set props.casesClosedByJudge on state', async () => {
-    const mockCasesClosedByJudge = {
-      [CASE_STATUS_TYPES.closed]: 1,
-      [CASE_STATUS_TYPES.closedDismissed]: 3,
-    };
+  const mockConsolidatedCasesGroupCount = { '101-22': 3 };
+  const mockCasesClosedByJudge = {
+    [CASE_STATUS_TYPES.closed]: 4,
+    [CASE_STATUS_TYPES.closedDismissed]: 8,
+  };
+  const page3Id = 15;
+  const mockTrialSessions = {
+    [SESSION_TYPES.hybrid]: 0.5,
+    [SESSION_TYPES.regular]: 1.5,
+    [SESSION_TYPES.motionHearing]: 2,
+  };
+  const page2Id = '2345';
 
+  const mockCases = [{ docketNumber: '101-20' }, { docketNumber: '102-20' }];
+
+  it('should set props.casesClosedByJudge on state.judgeActivityReport', async () => {
     const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
@@ -37,13 +47,7 @@ describe('setJudgeActivityReportDataAction', () => {
     ).toBe(mockCasesClosedByJudge);
   });
 
-  it('should set props.trialSessions on state', async () => {
-    const mockTrialSessions = {
-      [SESSION_TYPES.hybrid]: 0.5,
-      [SESSION_TYPES.regular]: 1.5,
-      [SESSION_TYPES.motionHearing]: 2,
-    };
-
+  it('should set props.trialSessions on state.judgeActivityReport', async () => {
     const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
@@ -65,83 +69,43 @@ describe('setJudgeActivityReportDataAction', () => {
     ).toBe(mockTrialSessions);
   });
 
-  it('should set props.opinions on state', async () => {
-    const mockOpinions = [
-      {
-        count: 1,
-        documentType: 'Memorandum Opinion',
-        eventCode: 'MOP',
-      },
-      {
-        count: 0,
-        documentType: 'S Opinion',
-        eventCode: 'SOP',
-      },
-      {
-        count: 0,
-        documentType: 'TC Opinion',
-        eventCode: 'TCOP',
-      },
-      {
-        count: 4,
-        documentType: 'Bench Opinion',
-        eventCode: 'OST',
-      },
-    ];
-
-    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
+  it('should set cav and submitted related cases data on state.judgeActivityReport', async () => {
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
       modules: {
         presenter,
       },
       props: {
-        opinions: mockOpinions,
+        cases: mockCases,
+        consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
+        lastDocketNumberForCavAndSubmittedCasesSearch: page3Id,
+        selectedPage: 1,
       },
       state: {
         judgeActivityReport: {
           judgeActivityReportData: {
-            opinions: undefined,
+            consolidatedCasesGroupCountMap: undefined,
+            lastDocketNumberForCavAndSubmittedCasesSearch: undefined,
+            submittedAndCavCasesByJudge: undefined,
           },
+          lastIdsOfPages: [0, page2Id],
         },
       },
     });
 
-    expect(state.judgeActivityReport.judgeActivityReportData.opinions).toBe(
-      mockOpinions,
-    );
-  });
+    expect(
+      state.judgeActivityReport.judgeActivityReportData
+        .submittedAndCavCasesByJudge,
+    ).toEqual(mockCases);
 
-  it('should set props.orders on state', async () => {
-    const mockOrdersIssuedByJudge = [
-      {
-        count: 1,
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      {
-        count: 5,
-        documentType: 'Order for Dismissal',
-        eventCode: 'ODS',
-      },
-    ];
+    expect(
+      state.judgeActivityReport.judgeActivityReportData
+        .consolidatedCasesGroupCountMap,
+    ).toEqual(mockConsolidatedCasesGroupCount);
 
-    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
-      modules: {
-        presenter,
-      },
-      props: {
-        orders: mockOrdersIssuedByJudge,
-      },
-      state: {
-        judgeActivityReport: {
-          judgeActivityReportData: {
-            orders: undefined,
-          },
-        },
-      },
-    });
-
-    expect(state.judgeActivityReport.judgeActivityReportData.orders).toBe(
-      mockOrdersIssuedByJudge,
-    );
+    expect(state.judgeActivityReport.lastIdsOfPages).toEqual([
+      0,
+      page2Id,
+      page3Id,
+    ]);
   });
 });

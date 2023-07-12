@@ -4,7 +4,11 @@ import {
 } from '../../../shared/src/business/utilities/DateHandler';
 import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  wait,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -36,10 +40,11 @@ export const viewJudgeActivityReportResults = (
       judgeName: overrides.judgeName || 'Colvin',
     });
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
-    await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
       selectedPage: 0,
     });
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     const { progressDescriptionTableTotal } = runCompute(
       judgeActivityReportHelper,
@@ -51,15 +56,24 @@ export const viewJudgeActivityReportResults = (
     cerebralTest.progressDescriptionTableTotal = progressDescriptionTableTotal;
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
     expect(
       cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
-    ).toEqual({
+    ).toMatchObject({
       casesClosedByJudge: expect.anything(),
       consolidatedCasesGroupCountMap: expect.anything(),
-      opinions: expect.anything(),
-      orders: expect.anything(),
+
       submittedAndCavCasesByJudge: expect.anything(),
       trialSessions: expect.anything(),
+    });
+
+    await wait(3000);
+
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toMatchObject({
+      opinions: expect.anything(),
+      orders: expect.anything(),
     });
   });
 };
