@@ -18,8 +18,8 @@ export const submitLocalLoginSequence = showProgressSequenceDecorator([
   getUserAction,
   setUserAction,
   setUserPermissionsAction,
-  getMaintenanceModeAction,
   getAllFeatureFlagsAction,
+  getMaintenanceModeAction,
   {
     maintenanceOff: [clearAlertsAction, navigateToPathAction],
     maintenanceOn: [navigateToMaintenanceAction],
