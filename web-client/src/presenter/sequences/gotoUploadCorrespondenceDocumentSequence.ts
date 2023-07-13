@@ -6,7 +6,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetAddCorrespondenceAction } from '../actions/resetAddCorrespondenceAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 

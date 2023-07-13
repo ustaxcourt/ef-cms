@@ -6,7 +6,7 @@ import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultTrialSessionFormValuesAction } from '../actions/setDefaultTrialSessionFormValuesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';

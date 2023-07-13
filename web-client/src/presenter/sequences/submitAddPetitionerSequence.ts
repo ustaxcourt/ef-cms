@@ -3,7 +3,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabFrozenAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPartyViewTabAfterUpdatingPetitionersAction } from '../actions/setPartyViewTabAfterUpdatingPetitionersAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';

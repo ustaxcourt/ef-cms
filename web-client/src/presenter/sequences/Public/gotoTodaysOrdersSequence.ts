@@ -1,5 +1,5 @@
 import { getTodaysOrdersAction } from '../../actions/Public/getTodaysOrdersAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { setTodaysOrdersAction } from '../../actions/Public/setTodaysOrdersAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 

@@ -1,5 +1,5 @@
 import { generatePrintablePendingReportAction } from '../actions/PendingItems/generatePrintablePendingReportAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTitleForGlobalReportFactoryAction } from '../actions/PendingItems/setTitleForGlobalReportFactoryAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';

@@ -6,7 +6,7 @@ import { getDocumentEditUrlAsPathAction } from '../actions/getDocumentEditUrlAsP
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setupConfirmWithPropsAction } from '../actions/setupConfirmWithPropsAction';

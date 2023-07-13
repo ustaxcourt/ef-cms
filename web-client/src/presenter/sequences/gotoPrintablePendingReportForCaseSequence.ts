@@ -1,7 +1,7 @@
 import { generatePrintablePendingReportAction } from '../actions/PendingItems/generatePrintablePendingReportAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTitleForGlobalReportFactoryAction } from '../actions/PendingItems/setTitleForGlobalReportFactoryAction';
 import { setupPropsForPrintablePendingReportAction } from '../actions/PendingItems/setupPropsForPrintablePendingReportAction';

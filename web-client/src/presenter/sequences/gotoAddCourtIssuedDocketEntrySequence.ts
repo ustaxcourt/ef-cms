@@ -9,7 +9,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsEditingDocketEntryAction } from '../actions/setIsEditingDocketEntryAction';

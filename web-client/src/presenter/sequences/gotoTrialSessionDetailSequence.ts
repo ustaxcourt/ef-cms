@@ -10,7 +10,7 @@ import { mergeCaseOrderIntoEligibleCasesAction } from '../actions/TrialSession/m
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultTrialSessionDetailTabAction } from '../actions/TrialSession/setDefaultTrialSessionDetailTabAction';
 import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';

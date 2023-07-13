@@ -16,7 +16,7 @@ import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';

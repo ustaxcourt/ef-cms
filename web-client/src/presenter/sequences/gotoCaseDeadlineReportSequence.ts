@@ -9,7 +9,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultCaseDeadlinesReportDatesAction } from '../actions/CaseDeadline/setDefaultCaseDeadlinesReportDatesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';

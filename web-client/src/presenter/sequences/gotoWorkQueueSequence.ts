@@ -10,7 +10,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';

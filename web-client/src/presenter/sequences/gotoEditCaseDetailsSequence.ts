@@ -1,7 +1,7 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setupEditPetitionDetailFormAction } from '../actions/setupEditPetitionDetailFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';

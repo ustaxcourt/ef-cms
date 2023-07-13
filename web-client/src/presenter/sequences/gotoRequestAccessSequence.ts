@@ -11,7 +11,7 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
 import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from '../actions/FileDocument/setIsExternalConsolidatedCaseGroupEnabledValueAction';

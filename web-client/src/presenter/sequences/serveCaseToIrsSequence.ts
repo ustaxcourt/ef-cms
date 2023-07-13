@@ -5,7 +5,7 @@ import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/ge
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIrsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';

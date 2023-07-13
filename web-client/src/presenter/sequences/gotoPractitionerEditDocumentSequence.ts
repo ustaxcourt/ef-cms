@@ -3,7 +3,7 @@ import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAct
 import { getPractitionerDocumentAction } from '../actions/getPractitionerDocumentAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setPractitionerDocumentFormForEditAction } from '../actions/Practitioners/setPractitionerDocumentFormForEditAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';

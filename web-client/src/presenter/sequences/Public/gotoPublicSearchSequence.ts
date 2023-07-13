@@ -3,7 +3,7 @@ import { defaultAdvancedSearchFormAction } from '../../actions/AdvancedSearch/de
 import { getOpinionTypesAction } from '../../actions/getOpinionTypesAction';
 import { getPublicJudgesAction } from '../../actions/Public/getPublicJudgesAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { setOpinionTypesAction } from '../../actions/setOpinionTypesAction';
 
 export const gotoPublicSearchSequence = [

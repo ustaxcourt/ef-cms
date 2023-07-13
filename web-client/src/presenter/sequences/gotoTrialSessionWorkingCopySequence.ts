@@ -16,7 +16,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCaseNotesOntoCalendaredCasesAction } from '../actions/TrialSession/setCaseNotesOntoCalendaredCasesAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopyValuesAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';

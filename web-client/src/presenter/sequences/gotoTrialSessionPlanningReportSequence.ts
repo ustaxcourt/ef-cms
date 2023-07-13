@@ -1,6 +1,6 @@
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoTrialSessionPlanningReport =

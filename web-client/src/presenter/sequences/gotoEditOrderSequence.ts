@@ -10,7 +10,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAddedDocketNumbersAction } from '../actions/setAddedDocketNumbersAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
