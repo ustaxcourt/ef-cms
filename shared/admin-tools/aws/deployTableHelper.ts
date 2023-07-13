@@ -13,11 +13,12 @@ export const putItem = async ({
 }: {
   env: string;
   key: string;
-  value: boolean;
+  value: boolean | string;
 }): Promise<boolean> => {
+  const current = typeof value === 'boolean' ? { BOOL: value } : { S: value };
   const putItemCommand = new PutItemCommand({
     Item: {
-      current: { BOOL: value },
+      current,
       pk: { S: key },
       sk: { S: key },
     },
@@ -39,7 +40,7 @@ export const getItem = async ({
 }: {
   env: string;
   key: string;
-}): Promise<boolean> => {
+}): Promise<boolean | string> => {
   const getItemCommand = new GetItemCommand({
     Key: {
       pk: { S: key },
@@ -51,11 +52,7 @@ export const getItem = async ({
   let flag = false;
   try {
     data = await dynamodbClient.send(getItemCommand);
-    if (
-      'Item' in data &&
-      'current' in data.Item &&
-      'BOOL' in data.Item.current
-    ) {
+    if ('Item' in data && 'current' in data.Item) {
       flag = data.Item.current.BOOL;
     }
   } catch (error) {

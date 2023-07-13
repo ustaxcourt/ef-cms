@@ -8,7 +8,7 @@ const {
 const {
   getItem,
   putItem,
-} = require('../../../../../shared/admin-tools/aws/dynamoDeployTableHelper');
+} = require('../../../../../shared/admin-tools/aws/deployTableHelper');
 const { handler } = require('./s3-bucket-sync-status');
 
 jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
@@ -18,13 +18,10 @@ jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
 jest.mock('../../../../../shared/admin-tools/aws/sqsHelper', () => ({
   countItemsInQueue: jest.fn(),
 }));
-jest.mock(
-  '../../../../../shared/admin-tools/aws/dynamoDeployTableHelper',
-  () => ({
-    getItem: jest.fn(),
-    putItem: jest.fn(),
-  }),
-);
+jest.mock('../../../../../shared/admin-tools/aws/deployTableHelper', () => ({
+  getItem: jest.fn(),
+  putItem: jest.fn(),
+}));
 
 const mockContext = {
   fail: jest.fn(),
