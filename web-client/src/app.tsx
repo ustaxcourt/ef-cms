@@ -147,9 +147,6 @@ const app = {
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
-    presenter.state.featureFlags = await applicationContext
-      .getUseCases()
-      .getAllFeatureFlagsInteractor(applicationContext);
 
     const shouldRefreshToken =
       !wasAppLoadedFromACognitoLogin(window.location.href) &&

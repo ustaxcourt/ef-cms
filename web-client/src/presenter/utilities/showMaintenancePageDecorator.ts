@@ -1,3 +1,4 @@
+import { getAllFeatureFlagsAction } from '../actions/getAllFeatureFlagsAction';
 import { getMaintenanceModeForPublicAction } from '../actions/getMaintenanceModeForPublicAction';
 import { gotoMaintenanceSequence } from '../sequences/gotoMaintenanceSequence';
 
@@ -6,7 +7,7 @@ export const showMaintenancePageDecorator = actionsList => {
     getMaintenanceModeForPublicAction,
     {
       maintenanceOff: [...actionsList],
-      maintenanceOn: [gotoMaintenanceSequence],
+      maintenanceOn: [getAllFeatureFlagsAction, gotoMaintenanceSequence],
     },
   ];
 
