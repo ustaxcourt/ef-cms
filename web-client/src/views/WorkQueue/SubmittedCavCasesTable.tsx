@@ -34,21 +34,6 @@ export const SubmittedCavCasesTable = connect(
       'Stayed',
     ];
 
-    //TODO !!! - Delete, this is testing data
-    judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge = [
-      ...judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge,
-      ...judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
-        x => ({
-          ...x,
-          daysElapsedSinceLastStatusChange:
-            x.daysElapsedSinceLastStatusChange + 1,
-          primaryIssue:
-            'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam dictum turpis nec massa pellentesque finibus. Sed eu placerat mi, vel congue mauris. Vestibulum efficitur semper nisl ac finibus. Vivamus sed lacinia libero. Integer tristique feugiat elit, eget laoreet nulla iaculis vitae. Ut ut quam feugiat, aliquet odio eu, vehicula neque. Suspendisse potenti. Nam nec nunc mauris. Aliquam erat volutpat. Nunc a metus vitae justo mollis malesuada. Mauris fermentum nulla sed risus luctus pulvinar. Proin vel risus mauris. Nam eu leo ut eros rutrum interdum. Nulla facilisi. Fusce consequat massa nec lacus tincidunt lobortis. Donec sit amet nisl sit amet arcu laoreet convallis vel a lacus.',
-        }),
-      ),
-    ];
-    //-------------------------
-
     const daysInStatusSortHandler = (
       caseA: { daysElapsedSinceLastStatusChange: number },
       caseB: { daysElapsedSinceLastStatusChange: number },
