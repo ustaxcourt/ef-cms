@@ -44,7 +44,7 @@ import React from 'react';
  * Instantiates the Cerebral app with React
  */
 const appPublic = {
-  initialize: async (applicationContext, debugTools) => {
+  initialize: (applicationContext, debugTools) => {
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
     };
