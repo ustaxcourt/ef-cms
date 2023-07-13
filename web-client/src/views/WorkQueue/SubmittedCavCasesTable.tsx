@@ -166,7 +166,7 @@ export const SubmittedCavCasesTable = connect(
                           }}
                         >
                           <div
-                            className="margin-top-1 margin-right-1"
+                            className="margin-top-1 margin-right-2"
                             style={{ flex: '0 0 auto' }}
                           >
                             <b>Primary Issue:</b>
@@ -175,7 +175,7 @@ export const SubmittedCavCasesTable = connect(
                             {formattedCase.primaryIssue}
                           </div>
                           <div
-                            className="margin-left-6"
+                            className="margin-left-6 margin-top-auto margin-bottom-auto"
                             style={{ flex: '0 0 auto' }}
                           >
                             {!formattedCase.primaryIssue && (
