@@ -6,8 +6,8 @@ export const showMaintenancePageDecorator = actionsList => {
   const wrappedActions = [
     getMaintenanceModeForPublicAction,
     {
-      maintenanceOff: [...actionsList],
-      maintenanceOn: [getAllFeatureFlagsAction, gotoMaintenanceSequence],
+      maintenanceOff: [getAllFeatureFlagsAction, ...actionsList],
+      maintenanceOn: [gotoMaintenanceSequence],
     },
   ];
 

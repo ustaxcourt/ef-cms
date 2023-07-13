@@ -26,12 +26,12 @@ export const loginWithCodeSequence = [
       setTokenAction,
       startRefreshIntervalAction,
       getMaintenanceModeAction,
-      getAllFeatureFlagsAction,
       {
         maintenanceOff: [
           getUserAction,
           setUserAction,
           setUserPermissionsAction,
+          getAllFeatureFlagsAction,
           navigateToPathAction,
         ],
         maintenanceOn: [navigateToMaintenanceAction],
