@@ -20,7 +20,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
@@ -30,6 +29,7 @@ import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setPendingEmailsOnCaseAction } from '../actions/setPendingEmailsOnCaseAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
@@ -48,13 +48,13 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
     [getMessagesForCaseAction],
     [getPendingEmailsOnCaseAction, setPendingEmailsOnCaseAction],
   ]),
-  setCurrentPageAction('CaseDetailInternal'),
+  setupCurrentPageAction('CaseDetailInternal'),
 ]);
 
 const gotoCaseDetailExternal = startWebSocketConnectionSequenceDecorator([
   getCaseAssociationAction,
   setCaseAssociationAction,
-  setCurrentPageAction('CaseDetail'),
+  setupCurrentPageAction('CaseDetail'),
 ]);
 
 const gotoCaseDetailExternalPractitioners =
@@ -63,7 +63,7 @@ const gotoCaseDetailExternalPractitioners =
     setCaseAssociationAction,
     getPendingEmailsOnCaseAction,
     setPendingEmailsOnCaseAction,
-    setCurrentPageAction('CaseDetail'),
+    setupCurrentPageAction('CaseDetail'),
   ]);
 
 const gotoCaseDetailInternalWithNotes =
@@ -75,7 +75,7 @@ const gotoCaseDetailInternalWithNotes =
   ]);
 
 export const gotoCaseDetailSequence = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
   clearModalAction,

@@ -8,15 +8,15 @@ import { navigateToDashboardAction } from '../actions/navigateToDashboardAction'
 import { openCaseInventoryReportModalSequence } from './openCaseInventoryReportModalSequence';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoCaseInventoryReport = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
   getSetJudgesSequence,
-  setCurrentPageAction('CaseInventoryReport'),
+  setupCurrentPageAction('CaseInventoryReport'),
 ];
 
 const gotoDashboardWithModal = [

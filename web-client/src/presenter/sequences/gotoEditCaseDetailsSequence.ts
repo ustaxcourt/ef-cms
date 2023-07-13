@@ -1,18 +1,18 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setupEditPetitionDetailFormAction } from '../actions/setupEditPetitionDetailFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 export const gotoEditCaseDetailsSequence =
   startWebSocketConnectionSequenceDecorator([
-    setCurrentPageAction('Interstitial'),
+    setupCurrentPageAction('Interstitial'),
     clearFormAction,
     getCaseAction,
     setCaseAction,
     stopShowValidationAction,
     setupEditPetitionDetailFormAction,
-    setCurrentPageAction('EditCaseDetails'),
+    setupCurrentPageAction('EditCaseDetails'),
   ]);

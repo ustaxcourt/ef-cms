@@ -8,14 +8,14 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultFilersMapAction } from '../actions/setDefaultFilersMapAction';
 import { setWizardStepAction } from '../actions/setWizardStepAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
@@ -31,7 +31,7 @@ const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
     yes: [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
   },
   setWizardStepAction('SelectDocumentType'),
-  setCurrentPageAction('FileDocumentWizard'),
+  setupCurrentPageAction('FileDocumentWizard'),
 ]);
 
 export const gotoFileDocumentSequence = [

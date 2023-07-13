@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setCurrentPageAction } from './setupCurrentPageAction';
+import { setupCurrentPageAction } from './setupCurrentPageAction';
 
-describe('setCurrentPageAction', () => {
+describe('setupCurrentPageAction', () => {
   const featureFlagObject = {
     'consolidated-cases-add-docket-numbers': true,
     'consolidated-cases-group-access-petitioner': true,
@@ -21,7 +21,7 @@ describe('setCurrentPageAction', () => {
   });
 
   it('should set the current page', async () => {
-    const result = await runAction(setCurrentPageAction('testPage'), {
+    const result = await runAction(setupCurrentPageAction('testPage'), {
       modules: {
         presenter,
       },
@@ -35,7 +35,7 @@ describe('setCurrentPageAction', () => {
   });
 
   it('should fetch and set feature flags in state when they do not yet exist', async () => {
-    const result = await runAction(setCurrentPageAction('testPage'), {
+    const result = await runAction(setupCurrentPageAction('testPage'), {
       modules: {
         presenter,
       },
@@ -53,7 +53,7 @@ describe('setCurrentPageAction', () => {
   });
 
   it('should NOT fetch and set feature flags in state when they already exist in state', async () => {
-    const result = await runAction(setCurrentPageAction('testPage'), {
+    const result = await runAction(setupCurrentPageAction('testPage'), {
       modules: {
         presenter,
       },

@@ -9,13 +9,13 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultCaseDeadlinesReportDatesAction } from '../actions/CaseDeadline/setDefaultCaseDeadlinesReportDatesAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoCaseDeadlineReport = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScreenMetadataAction,
   closeMobileMenuAction,
@@ -30,7 +30,7 @@ const gotoCaseDeadlineReport = startWebSocketConnectionSequenceDecorator([
       setCaseDeadlinesAction,
     ],
   ]),
-  setCurrentPageAction('CaseDeadlines'),
+  setupCurrentPageAction('CaseDeadlines'),
 ]);
 
 export const gotoCaseDeadlineReportSequence = [

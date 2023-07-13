@@ -1,7 +1,7 @@
 import { generateCaseConfirmationPdfUrlAction } from '../actions/CaseConfirmation/generateCaseConfirmationPdfUrlAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
@@ -11,6 +11,6 @@ export const gotoPrintableCaseConfirmationSequence =
       getCaseAction,
       setCaseAction,
       generateCaseConfirmationPdfUrlAction,
-      setCurrentPageAction('PrintableDocketRecord'),
+      setupCurrentPageAction('PrintableDocketRecord'),
     ]),
   );

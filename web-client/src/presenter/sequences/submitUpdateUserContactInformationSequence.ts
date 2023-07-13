@@ -1,8 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
@@ -15,7 +15,7 @@ export const submitUpdateUserContactInformationSequence = [
     error: [setValidationErrorsAction, setValidationAlertErrorsAction],
     success: [
       setWaitingForResponseAction,
-      setCurrentPageAction('Interstitial'),
+      setupCurrentPageAction('Interstitial'),
       updateUserContactInformationAction,
     ],
   },

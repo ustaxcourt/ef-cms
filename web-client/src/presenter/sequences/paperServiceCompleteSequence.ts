@@ -6,10 +6,10 @@ import { hasPaperAction } from '../actions/hasPaperAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setPrintPaperDoneUrlAction } from '../actions/TrialSession/setPrintPaperDoneUrlAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { shouldRefreshCaseAction } from '../actions/shouldRefreshCaseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
@@ -31,7 +31,7 @@ export const paperServiceCompleteSequence = [
     paper: [
       setPdfPreviewUrlSequence,
       setPrintPaperDoneUrlAction,
-      setCurrentPageAction('PrintPaperTrialNotices'),
+      setupCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
     ],

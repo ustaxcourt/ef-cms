@@ -9,16 +9,16 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
 import { setTrialSessionsTabsToDisplayAction } from '../actions/TrialSession/setTrialSessionsTabsToDisplayAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
@@ -33,7 +33,7 @@ const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
   ]),
   setTrialSessionsFiltersAction,
   setTrialSessionsTabsToDisplayAction,
-  setCurrentPageAction('TrialSessions'),
+  setupCurrentPageAction('TrialSessions'),
 ]);
 
 export const gotoTrialSessionsSequence = [

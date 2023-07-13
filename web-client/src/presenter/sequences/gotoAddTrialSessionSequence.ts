@@ -6,15 +6,15 @@ import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultTrialSessionFormValuesAction } from '../actions/setDefaultTrialSessionFormValuesAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoAddTrialSession = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
@@ -27,7 +27,7 @@ const gotoAddTrialSession = [
     ],
   ]),
   setDefaultTrialSessionFormValuesAction,
-  setCurrentPageAction('AddTrialSession'),
+  setupCurrentPageAction('AddTrialSession'),
 ];
 
 export const gotoAddTrialSessionSequence = [
