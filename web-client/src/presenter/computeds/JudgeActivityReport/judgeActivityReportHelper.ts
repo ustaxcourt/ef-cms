@@ -1,3 +1,4 @@
+import { FORMATS } from 'shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 import { sum, sumBy } from 'lodash';
 
@@ -90,7 +91,14 @@ export const judgeActivityReportHelper = (
       individualCase.inConsolidatedGroup = true;
     }
 
-    individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+    individualCase.caseStatusHistory
+      .sort((a, b) => a.date - b.date)
+      .map(
+        csh =>
+          (csh.formattedDate = applicationContext
+            .getUtilities()
+            .formatDateString(csh.date, FORMATS.MMDDYY)),
+      );
 
     const newestCaseStatusChangeIndex =
       individualCase.caseStatusHistory.length - 1;
