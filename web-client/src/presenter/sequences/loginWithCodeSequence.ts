@@ -1,6 +1,5 @@
 import { authenticateUserAction } from '../actions/authenticateUserAction';
 import { decodeTokenAction } from '../actions/decodeTokenAction';
-import { getAllFeatureFlagsAction } from '../actions/getAllFeatureFlagsAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getUserAction } from '../actions/getUserAction';
 import { navigateToMaintenanceAction } from '../actions/navigateToMaintenanceAction';
@@ -31,7 +30,6 @@ export const loginWithCodeSequence = [
           getUserAction,
           setUserAction,
           setUserPermissionsAction,
-          getAllFeatureFlagsAction,
           navigateToPathAction,
         ],
         maintenanceOn: [navigateToMaintenanceAction],
