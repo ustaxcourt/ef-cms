@@ -12,7 +12,7 @@ export const setCurrentPageAction =
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store used for setting the state.currentPage
    */
-  async ({ get, store }: ActionProps) => {
+  async ({ applicationContext, get, store }: ActionProps) => {
     if (!get(state.featureFlags)) {
       const featureFlags = await applicationContext
         .getUseCases()
