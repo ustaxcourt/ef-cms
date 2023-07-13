@@ -16,13 +16,13 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
 import { setCaseNotesOntoCalendaredCasesAction } from '../actions/TrialSession/setCaseNotesOntoCalendaredCasesAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultWorkingCopyValuesAction } from '../actions/TrialSessionWorkingCopy/setDefaultWorkingCopyValuesAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTrialSessionWorkingCopyAction';
 import { setUsersAction } from '../actions/setUsersAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 const { USER_ROLES } = getConstants();
@@ -47,13 +47,13 @@ const checkUserAssociationAndProceed = [
           extractUserNotesFromCalendaredCasesAction,
         ],
       },
-      setCurrentPageAction('TrialSessionWorkingCopy'),
+      setupCurrentPageAction('TrialSessionWorkingCopy'),
     ],
   },
 ];
 
 const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearErrorAlertsAction,
   setTrialSessionIdAction,
   getTrialSessionDetailsAction,

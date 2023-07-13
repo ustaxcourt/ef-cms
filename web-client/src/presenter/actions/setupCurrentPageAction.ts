@@ -5,7 +5,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {string} page the name of the page to set
  * @returns {Promise} async action
  */
-export const setCurrentPageAction =
+export const setupCurrentPageAction =
   page =>
   /**
    * sets the state.currentPage based on the scoped page

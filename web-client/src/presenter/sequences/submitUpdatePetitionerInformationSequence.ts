@@ -1,13 +1,13 @@
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { updatePetitionerInformationAction } from '../actions/updatePetitionerInformationAction';
 
 export const submitUpdatePetitionerInformationSequence = [
   updatePetitionerInformationAction,
   setSaveAlertsForNavigationAction,
   setAlertSuccessAction,
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   navigateToCaseDetailCaseInformationActionFactory('parties'),
 ];

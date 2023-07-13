@@ -10,16 +10,16 @@ import { mergeCaseOrderIntoEligibleCasesAction } from '../actions/TrialSession/m
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCalendaredCasesOnTrialSessionAction } from '../actions/TrialSession/setCalendaredCasesOnTrialSessionAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultTrialSessionDetailTabAction } from '../actions/TrialSession/setDefaultTrialSessionDetailTabAction';
 import { setEligibleCasesOnTrialSessionAction } from '../actions/TrialSession/setEligibleCasesOnTrialSessionAction';
 import { setTrialSessionDetailsAction } from '../actions/TrialSession/setTrialSessionDetailsAction';
 import { setTrialSessionIdAction } from '../actions/TrialSession/setTrialSessionIdAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   setDefaultTrialSessionDetailTabAction,
   clearErrorAlertsAction,
   setTrialSessionIdAction,
@@ -43,7 +43,7 @@ const gotoTrialSessionDetails = startWebSocketConnectionSequenceDecorator([
     ],
     [getUsersInSectionAction({}), setUsersByKeyAction('sectionUsers')],
   ]),
-  setCurrentPageAction('TrialSessionDetail'),
+  setupCurrentPageAction('TrialSessionDetail'),
 ]);
 
 export const gotoTrialSessionDetailSequence = [

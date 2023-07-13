@@ -1,9 +1,9 @@
 import { cancelUploadsAction } from '../actions/cancelUploadsAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 
 export const cancelFileUploadSequence = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   cancelUploadsAction,
   clearModalAction,
 ];

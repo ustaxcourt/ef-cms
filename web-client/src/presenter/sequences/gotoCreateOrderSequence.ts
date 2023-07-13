@@ -10,9 +10,9 @@ import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
@@ -33,7 +33,7 @@ export const gotoCreateOrderSequence = [
         proceed: [
           unsetDocumentToEditAction,
           clearModalAction,
-          setCurrentPageAction('Interstitial'),
+          setupCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           clearFormAction,
           setCreateOrderModalDataOnFormAction,
@@ -45,7 +45,7 @@ export const gotoCreateOrderSequence = [
               setConsolidatedCasesForCaseAction,
             ],
           ]),
-          setCurrentPageAction('CreateOrder'),
+          setupCurrentPageAction('CreateOrder'),
         ],
       },
     ]),

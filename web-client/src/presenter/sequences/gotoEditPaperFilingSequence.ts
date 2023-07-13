@@ -6,18 +6,18 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setFromPageAction } from '../actions/setFromPageAction';
 import { setPdfPreviewUrlForEditPaperFilingAction } from '../actions/EditDocketRecord/setPdfPreviewUrlForEditPaperFilingAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setupEditPaperFilingAction } from '../actions/setupEditPaperFilingAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoEditPaperFiling = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearScansAction,
   clearFormAction,
   clearScreenMetadataAction,
@@ -31,7 +31,7 @@ export const gotoEditPaperFiling = [
   updateDocketEntryWizardDataAction,
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
-  setCurrentPageAction('PaperFiling'),
+  setupCurrentPageAction('PaperFiling'),
 ];
 
 export const gotoEditPaperFilingSequence = [

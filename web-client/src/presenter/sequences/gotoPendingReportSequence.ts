@@ -8,18 +8,18 @@ import { getSetJudgesSequence } from './getSetJudgesSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoPendingReport = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
   clearPendingReportsAction,
   parallel([fetchUserNotificationsSequence, getSetJudgesSequence]),
-  setCurrentPageAction('PendingReport'),
+  setupCurrentPageAction('PendingReport'),
 ]);
 
 export const gotoPendingReportSequence = [

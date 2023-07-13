@@ -1,6 +1,6 @@
 import { getShouldRedirectToFilePetitionSuccessAction } from '../actions/getShouldRedirectToFilePetitionSuccessAction';
 import { navigateToDashboardAction } from '../actions/navigateToDashboardAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoFilePetitionSuccessSequence =
@@ -8,6 +8,6 @@ export const gotoFilePetitionSuccessSequence =
     getShouldRedirectToFilePetitionSuccessAction,
     {
       no: navigateToDashboardAction,
-      yes: setCurrentPageAction('FilePetitionSuccess'),
+      yes: setupCurrentPageAction('FilePetitionSuccess'),
     },
   ]);

@@ -2,7 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setMessageIdAction } from '../actions/setMessageIdAction';
 import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
@@ -10,10 +9,11 @@ import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningActio
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoSignOrderSequence = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   setRedirectUrlAction,
   getCaseAction,
   setCaseAction,
@@ -25,5 +25,5 @@ export const gotoSignOrderSequence = startWebSocketConnectionSequenceDecorator([
   setPDFForSigningAction,
   setPDFPageForSigningAction,
   setParentMessageIdAction,
-  setCurrentPageAction('SignOrder'),
+  setupCurrentPageAction('SignOrder'),
 ]);
