@@ -780,15 +780,29 @@ jobs:
               echo "Error: no bucket name was provided"
               exit 1
             fi
-            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
+            echo "export SOURCE_BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
       - run:
-          name: Deploy Empty S3 Bucket Lambda
+          name: Deploy Process S3 Queue Lambda
           command: |
-            npm run deploy:empty-s3-bucket-cron -- $ENV
+            npm run deploy:process-s3-queue -- $ENV
+            S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
+            echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
+            S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
+            echo "export S3_BUCKET_DL_QUEUE_URL=${S3_BUCKET_DL_QUEUE_URL}" >> $BASH_ENV
       - run:
-          name: Enable Empty Documents S3 Bucket Cron
+          name: Populate S3 Bucket Truncation Queue
           command: |
-            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/enable.sh
+            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/populate-truncation-queue.ts
+            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/reset-s3-queue-is-empty-flag.ts
+      - run:
+          name: Deploy Wait for S3 Truncation Lambda
+          command: |
+            export EMPTYING_BUCKET=1
+            npm run deploy:wait-for-s3-queue-cron -- $ENV
+      - run:
+          name: Enable Wait for S3 Truncation Cron
+          command: |
+            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/enable.sh
 
   finish-emptying-s3-bucket:
     docker:
@@ -805,15 +819,15 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             BUCKET_NAME=<< pipeline.parameters.bucket_name >>
-            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
+            echo "export SOURCE_BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
       - run:
-          name: Disable Empty Documents S3 Bucket Cron
+          name: Disable Wait for S3 Truncation Cron
           command: |
-            ./web-api/workflow-terraform/empty-s3-bucket-cron/bin/disable.sh
+            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/disable.sh
       - run:
-          name: Destroy Empty Documents S3 Bucket Lambda
+          name: Destroy Wait for S3 Truncation Lambda
           command: |
-            npm run destroy:empty-s3-bucket-cron -- $ENV
+            npm run destroy:wait-for-s3-queue-cron -- $ENV
 
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>

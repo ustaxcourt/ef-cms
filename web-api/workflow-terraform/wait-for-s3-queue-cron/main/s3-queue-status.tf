@@ -24,6 +24,8 @@ resource "aws_lambda_function" "s3_queue_status_lambda" {
       CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
       S3_BUCKET_QUEUE_URL       = var.s3_bucket_queue_url
       S3_BUCKET_DL_QUEUE_URL    = var.s3_bucket_dl_queue_url
+      BUCKET_NAME               = var.bucket_name
+      EMPTYING_BUCKET           = var.emptying_bucket
     }
   }
 }
