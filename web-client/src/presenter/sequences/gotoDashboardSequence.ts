@@ -6,6 +6,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
+import { getSubmittedAndCavCasesByJudgeAction } from '../actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -18,6 +19,8 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
+import { setJudgeActivityReportDataAction } from '../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
+import { setJudgeLastNameOnFormAction } from '../actions/JudgeActivityReport/setJudgeLastNameOnFormAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
@@ -73,6 +76,9 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
+                  setJudgeLastNameOnFormAction,
+                  getSubmittedAndCavCasesByJudgeAction,
+                  setJudgeActivityReportDataAction,
                   setCurrentPageAction('DashboardChambers'),
                 ],
                 general: [navigateToSectionDocumentQCAction],
@@ -91,6 +97,9 @@ const goToDashboard = [
                   getMessages,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
+                  setJudgeLastNameOnFormAction,
+                  getSubmittedAndCavCasesByJudgeAction,
+                  setJudgeActivityReportDataAction,
                   setCurrentPageAction('DashboardJudge'),
                 ],
                 petitioner: [
