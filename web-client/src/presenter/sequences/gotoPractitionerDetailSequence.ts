@@ -2,7 +2,7 @@ import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setInitialTableSortAction } from '../actions/setInitialTableSortAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setTabFromPropsAction } from '../actions/setTabFromPropsAction';

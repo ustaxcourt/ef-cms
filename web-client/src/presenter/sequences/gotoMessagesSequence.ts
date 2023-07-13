@@ -13,7 +13,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';

@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setCurrentPageAction } from './setCurrentPageAction';
+import { setCurrentPageAction } from './setupCurrentPageAction';
 
 describe('setCurrentPageAction', () => {
   const featureFlagObject = {

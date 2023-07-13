@@ -4,7 +4,7 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { getUserPendingEmailAction } from '../actions/getUserPendingEmailAction';
 import { isInternalUserAction } from '../actions/isInternalUserAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setUserPendingEmailAction } from '../actions/setUserPendingEmailAction';
 import { setupPetitionerContactInformationFormAction } from '../actions/setupPetitionerContactInformationFormAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';

@@ -2,7 +2,7 @@ import { clearModalStateAction } from '../../actions/clearModalStateAction';
 import { generatePublicDocketRecordPdfUrlAction } from '../../actions/Public/generatePublicDocketRecordPdfUrlAction';
 import { getPublicCaseAction } from '../../actions/Public/getPublicCaseAction';
 import { setCaseAction } from '../../actions/setCaseAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { setPdfPreviewUrlSequence } from '../setPdfPreviewUrlSequence';
 import { setShowModalFactoryAction } from '../../actions/setShowModalFactoryAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';

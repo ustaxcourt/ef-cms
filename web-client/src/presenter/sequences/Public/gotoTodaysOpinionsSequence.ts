@@ -1,5 +1,5 @@
 import { getTodaysOpinionsAction } from '../../actions/Public/getTodaysOpinionsAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { setTodaysOpinionsAction } from '../../actions/Public/setTodaysOpinionsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 

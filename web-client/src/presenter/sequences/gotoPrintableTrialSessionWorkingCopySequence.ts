@@ -3,7 +3,7 @@ import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialS
 import { getFormattedTrialSessionCasesAction } from '../actions/TrialSessionWorkingCopy/getFormattedTrialSessionCasesAction';
 import { preparePrintableFormattedCasesAction } from '../actions/TrialSessionWorkingCopy/preparePrintableFormattedCasesAction';
 import { prepareUserBasedHeadingAction } from '../actions/TrialSessionWorkingCopy/prepareUserBasedHeadingAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';

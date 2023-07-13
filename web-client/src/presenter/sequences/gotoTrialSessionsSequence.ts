@@ -9,7 +9,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';

@@ -5,7 +5,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getConstants } from '../../getConstants';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
 import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';

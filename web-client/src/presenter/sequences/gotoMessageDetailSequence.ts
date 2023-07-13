@@ -9,7 +9,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';

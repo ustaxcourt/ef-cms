@@ -5,7 +5,7 @@ import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeActio
 import { clearUserAction } from '../actions/clearUserAction';
 import { deleteAuthCookieAction } from '../actions/deleteAuthCookieAction';
 import { navigateToCognitoAction } from '../actions/navigateToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/stopWebSocketConnectionAction';
 
 export const signOutSequence = [

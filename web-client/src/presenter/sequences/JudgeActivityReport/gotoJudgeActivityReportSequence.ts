@@ -5,7 +5,7 @@ import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataActi
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { setJudgeLastNameOnFormAction } from '../../actions/JudgeActivityReport/setJudgeLastNameOnFormAction';
 import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
