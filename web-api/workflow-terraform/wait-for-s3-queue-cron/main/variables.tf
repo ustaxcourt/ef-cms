@@ -21,3 +21,12 @@ variable "s3_bucket_queue_url" {
 variable "s3_bucket_dl_queue_url" {
   type = string
 }
+
+variable "bucket_name" {
+  type = string
+}
+
+variable "emptying_bucket" {
+  type = number
+  default = 0
+}
