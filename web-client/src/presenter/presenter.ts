@@ -222,6 +222,7 @@ import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumb
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
+import { openAddEditPrimaryIssueModalSequence } from './sequences/openAddEditPrimaryIssueModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
@@ -749,6 +750,7 @@ export const presenterSequences = {
   openAddEditCalendarNoteModalSequence,
   openAddEditCaseNoteModalSequence,
   openAddEditHearingNoteModalSequence,
+  openAddEditPrimaryIssueModalSequence,
   openAddEditSessionNoteModalSequence,
   openAddEditUserCaseNoteModalFromDetailSequence,
   openAddEditUserCaseNoteModalFromListSequence,

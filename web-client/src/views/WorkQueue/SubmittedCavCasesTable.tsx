@@ -2,8 +2,10 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateInput } from '@web-client/ustc-ui/DateInput/DateInput';
 import { connect } from '@cerebral/react';
+import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { AddEditPrimaryIssueModal } from '../TrialSessionWorkingCopy/AddEditPrimaryIssueModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 import classNames from 'classnames';
@@ -11,9 +13,16 @@ import classNames from 'classnames';
 export const SubmittedCavCasesTable = connect(
   {
     judgeActivityReportHelper: state.judgeActivityReportHelper,
+    openAddEditPrimaryIssueModalSequence:
+      sequences.openAddEditPrimaryIssueModalSequence,
+    showModal: state.modal.showModal,
   },
 
-  function SubmittedCavCasesTable({ judgeActivityReportHelper }) {
+  function SubmittedCavCasesTable({
+    judgeActivityReportHelper,
+    openAddEditPrimaryIssueModalSequence,
+    showModal,
+  }) {
     const StatusOfMatter = [
       'Awaiting Consideration',
       'Awaiting Supplemental Briefs',
@@ -96,7 +105,6 @@ export const SubmittedCavCasesTable = connect(
             {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
               .sort(daysInStatusSortHandler)
               .map(formattedCase => {
-                console.log('formattedCase', formattedCase);
                 return (
                   <React.Fragment key={`info-${formattedCase.docketNumber}`}>
                     <tr>
@@ -184,7 +192,9 @@ export const SubmittedCavCasesTable = connect(
                                 className="float-right"
                                 icon="plus-circle"
                                 onClick={() => {
-                                  console.log('add clicked');
+                                  openAddEditPrimaryIssueModalSequence({
+                                    case: formattedCase,
+                                  });
                                 }}
                               >
                                 Add Issue
@@ -203,7 +213,9 @@ export const SubmittedCavCasesTable = connect(
                                     link
                                     icon="edit"
                                     onClick={() => {
-                                      console.log('edit click');
+                                      openAddEditPrimaryIssueModalSequence({
+                                        case: formattedCase,
+                                      });
                                     }}
                                   >
                                     Edit Issue
@@ -233,6 +245,9 @@ export const SubmittedCavCasesTable = connect(
           </tbody>
           <tbody></tbody>
         </table>
+        {showModal === 'AddEditPrimaryIssueModal' && (
+          <AddEditPrimaryIssueModal />
+        )}
       </React.Fragment>
     );
   },
