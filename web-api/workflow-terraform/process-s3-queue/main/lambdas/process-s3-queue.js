@@ -6,7 +6,7 @@ const {
   deleteObjects,
 } = require('../../../../../shared/admin-tools/aws/s3Helper');
 
-const QueueUrl = process.env.S3_BUCKET_SYNC_DL_QUEUE_URL;
+const QueueUrl = process.env.S3_BUCKET_DL_QUEUE_URL;
 
 exports.handler = async (event, context) => {
   if (!event || !('action' in event) || !event.action) {

@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 mkdir -p ./lambdas/dist
-touch ./lambdas/dist/s3-bucket-sync-status.js
+touch ./lambdas/dist/s3-queue-status.js
 
 # shellcheck disable=SC1091
 source ../bin/deploy-init.sh

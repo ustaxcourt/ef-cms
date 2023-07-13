@@ -634,17 +634,17 @@ jobs:
               --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
-          name: Reset S3 Bucket Sync Flag
+          name: Reset S3 Queue is Empty Flag
           command: |
-            npx ts-node --transpile-only ./web-api/workflow-terraform/wait-for-s3-bucket-sync-cron/bin/reset-s3-bucket-sync-flag.ts
+            npx ts-node --transpile-only ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/reset-s3-queue-is-empty-flag.ts
       - run:
-          name: Deploy Sync S3 Buckets Lambda
+          name: Deploy Process S3 Queue Lambda
           command: |
-            npm run deploy:sync-s3-buckets -- $ENV
-            S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_sync_queue_url)"
+            npm run deploy:process-s3-queue -- $ENV
+            S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
             echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
-            S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_sync_dl_queue_url)"
-            echo "export S3_BUCKET_SYNC_DL_QUEUE_URL=${S3_BUCKET_SYNC_DL_QUEUE_URL}" >> $BASH_ENV
+            S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
+            echo "export S3_BUCKET_DL_QUEUE_URL=${S3_BUCKET_DL_QUEUE_URL}" >> $BASH_ENV
       - run:
           name: Populate S3 Sync Queue
           command: |
@@ -661,11 +661,11 @@ jobs:
       - run:
           name: Deploy Wait for S3 Sync Lambda
           command: |
-            npm run deploy:wait-for-s3-bucket-sync-cron -- $ENV
+            npm run deploy:wait-for-s3-queue-cron -- $ENV
       - run:
           name: Enable Wait for S3 Sync Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-s3-bucket-sync-cron/bin/enable.sh
+            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/enable.sh
 
   cleanup-glue-job:
     docker:
@@ -684,11 +684,11 @@ jobs:
       - run:
           name: Disable Wait for S3 Sync Cron
           command: |
-            ./web-api/workflow-terraform/wait-for-s3-bucket-sync-cron/bin/disable.sh
+            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/disable.sh
       - run:
           name: Destroy Wait for S3 Sync Lambda
           command: |
-            npm run destroy:wait-for-s3-bucket-sync-cron -- $ENV
+            npm run destroy:wait-for-s3-queue-cron -- $ENV
       - run:
           name: Disable Wait for Workflow Cron
           command: |
@@ -987,7 +987,7 @@ workflows:
           type: approval
           requires:
             - initiate-glue-job
-      - wait-for-s3-queue:
+      - wait-for-s3-queue-to-process:
           <<: *only-test
           type: approval
           requires:
@@ -996,7 +996,7 @@ workflows:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
-            - wait-for-s3-queue
+            - wait-for-s3-queue-to-process
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>

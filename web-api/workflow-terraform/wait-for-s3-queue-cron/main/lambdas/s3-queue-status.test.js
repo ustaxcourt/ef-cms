@@ -9,7 +9,7 @@ const {
   getItem,
   putItem,
 } = require('../../../../../shared/admin-tools/aws/deployTableHelper');
-const { handler } = require('./s3-bucket-sync-status');
+const { handler } = require('./s3-queue-status');
 
 jest.mock('../../../../../shared/admin-tools/circleci/circleci-helper', () => ({
   approvePendingJob: jest.fn(),
@@ -28,7 +28,7 @@ const mockContext = {
   succeed: jest.fn(),
 };
 
-describe('s3-bucket-sync-status', () => {
+describe('s3-queue-status', () => {
   console.log = () => null;
   console.error = () => null;
 
@@ -42,7 +42,7 @@ describe('s3-bucket-sync-status', () => {
     expect(approvePendingJob).not.toHaveBeenCalled();
     expect(cancelWorkflow).not.toHaveBeenCalled();
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      s3BucketSyncDlQueueCount: -1,
+      s3DlQueueCount: -1,
     });
   });
 
@@ -52,7 +52,7 @@ describe('s3-bucket-sync-status', () => {
     expect(approvePendingJob).not.toHaveBeenCalled();
     expect(cancelWorkflow).toHaveBeenCalledTimes(1);
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      s3BucketSyncDlQueueCount: 1,
+      s3DlQueueCount: 1,
     });
   });
 
@@ -64,8 +64,8 @@ describe('s3-bucket-sync-status', () => {
     expect(approvePendingJob).not.toHaveBeenCalled();
     expect(cancelWorkflow).not.toHaveBeenCalled();
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      s3BucketSyncDlQueueCount: 0,
-      s3BucketSyncQueueCount: -1,
+      s3DlQueueCount: 0,
+      s3QueueCount: -1,
     });
   });
 
@@ -77,8 +77,8 @@ describe('s3-bucket-sync-status', () => {
     expect(approvePendingJob).not.toHaveBeenCalled();
     expect(cancelWorkflow).not.toHaveBeenCalled();
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      s3BucketSyncDlQueueCount: 0,
-      s3BucketSyncQueueCount: 55,
+      s3DlQueueCount: 0,
+      s3QueueCount: 55,
     });
   });
 
@@ -94,13 +94,13 @@ describe('s3-bucket-sync-status', () => {
     expect(putItem).toHaveBeenCalledTimes(1);
     expect(putItem).toHaveBeenCalledWith({
       env: undefined,
-      key: 's3-bucket-sync-queue-is-not-empty',
+      key: 's3-queue-is-empty',
       value: true,
     });
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      s3BucketSyncDlQueueCount: 0,
-      s3BucketSyncQueueCount: 0,
-      s3BucketSyncQueueIsEmptyFlag: false,
+      s3DlQueueCount: 0,
+      s3QueueCount: 0,
+      s3QueueIsEmptyFlag: false,
     });
   });
 
@@ -115,9 +115,9 @@ describe('s3-bucket-sync-status', () => {
     expect(getItem).toHaveBeenCalledTimes(1);
     expect(putItem).not.toHaveBeenCalled();
     expect(mockContext.succeed).toHaveBeenCalledWith({
-      s3BucketSyncDlQueueCount: 0,
-      s3BucketSyncQueueCount: 0,
-      s3BucketSyncQueueIsEmptyFlag: true,
+      s3DlQueueCount: 0,
+      s3QueueCount: 0,
+      s3QueueIsEmptyFlag: true,
     });
   });
 });

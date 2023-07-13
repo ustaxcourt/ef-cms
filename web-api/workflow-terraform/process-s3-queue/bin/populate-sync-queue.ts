@@ -3,7 +3,7 @@ import { generateBucketSyncQueueEntries } from '../main/utilities/generate-sync-
 
 const sourceBucket = process.env.SOURCE_BUCKET_NAME;
 const destinationBucket = process.env.DESTINATION_BUCKET_NAME;
-const QueueUrl = process.env.S3_BUCKET_SYNC_QUEUE_URL;
+const QueueUrl = process.env.S3_BUCKET_QUEUE_URL;
 
 (async () => {
   const messages = await generateBucketSyncQueueEntries({
