@@ -17,16 +17,16 @@ resource "aws_lambda_function" "process_s3_queue_lambda" {
 
   environment {
     variables = {
-      STAGE                       = var.environment
-      NODE_ENV                    = "production"
-      AWS_ACCOUNT_ID              = data.aws_caller_identity.current.account_id
-      CIRCLE_WORKFLOW_ID          = var.circle_workflow_id
-      CIRCLE_MACHINE_USER_TOKEN   = var.circle_machine_user_token
-      BUCKET_SHORT_NAME           = var.bucket_short_name
-      DESTINATION_BUCKET_NAME     = var.destination_bucket_name
-      SOURCE_BUCKET_NAME          = var.source_bucket_name
-      S3_BUCKET_QUEUE_URL    = aws_sqs_queue.s3_bucket_queue.id
-      S3_BUCKET_DL_QUEUE_URL = aws_sqs_queue.s3_bucket_dl_queue.id
+      STAGE                     = var.environment
+      NODE_ENV                  = "production"
+      AWS_ACCOUNT_ID            = data.aws_caller_identity.current.account_id
+      CIRCLE_WORKFLOW_ID        = var.circle_workflow_id
+      CIRCLE_MACHINE_USER_TOKEN = var.circle_machine_user_token
+      BUCKET_SHORT_NAME         = var.bucket_short_name
+      DESTINATION_BUCKET_NAME   = var.destination_bucket_name
+      SOURCE_BUCKET_NAME        = var.source_bucket_name
+      S3_BUCKET_QUEUE_URL       = aws_sqs_queue.s3_bucket_queue.id
+      S3_BUCKET_DL_QUEUE_URL    = aws_sqs_queue.s3_bucket_dl_queue.id
     }
   }
 }

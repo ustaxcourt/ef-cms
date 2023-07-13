@@ -12,7 +12,7 @@ resource "aws_lambda_function" "wait_for_workflow_lambda" {
   source_code_hash = data.archive_file.wait_for_workflow_zip.output_base64sha256
 
   runtime     = "nodejs18.x"
-  timeout     = "15"
+  timeout     = "29"
   memory_size = "768"
 
   environment {

@@ -570,7 +570,6 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
@@ -610,6 +609,8 @@ jobs:
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+            # TODO: set SOURCE_BUCKET_NAME to prod's documents bucket - read from secrets?
+            echo "export DESTINATION_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
           name: Disable Wait for Workflow Cron
           command: |
