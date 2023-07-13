@@ -8,7 +8,7 @@ const {
 const {
   getItem,
   putItem,
-} = require('../../../../../shared/admin-tools/aws/dynamoDeployTableHelper');
+} = require('../../../../../shared/admin-tools/aws/deployTableHelper');
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
