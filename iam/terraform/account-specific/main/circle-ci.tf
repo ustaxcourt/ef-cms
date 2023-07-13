@@ -309,7 +309,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "glue:StartJobRun"
       ],
       "Resource": [
-        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*",
+        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
       ],
       "Effect": "Allow"
     }

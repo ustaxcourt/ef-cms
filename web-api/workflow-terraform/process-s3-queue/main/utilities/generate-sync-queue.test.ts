@@ -4,7 +4,7 @@ import {
   listAllObjectVersions,
   listAllObjects,
 } from '../../../../../shared/admin-tools/aws/s3Helper';
-const { v4: uuidv4 } = require('uuid');
+import { v4 as uuidv4 } from 'uuid';
 
 jest.mock('../../../../../shared/admin-tools/aws/s3Helper', () => {
   const s3Helper = jest.requireActual(
