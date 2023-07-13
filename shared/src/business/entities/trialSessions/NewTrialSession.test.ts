@@ -1,90 +1,72 @@
+import { MOCK_NEW_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { NewTrialSession } from './NewTrialSession';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
-const VALID_TRIAL_SESSION = {
-  maxCases: 100,
-  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-  sessionType: 'Regular',
-  startDate: '2025-03-01T00:00:00.000Z',
-  term: 'Fall',
-  termYear: '2025',
-  trialLocation: 'Birmingham, Alabama',
-};
-
 describe('NewTrialSession entity', () => {
-  describe('isValid', () => {
-    it('should throw an error if app context is not passed in', () => {
-      expect(() => new NewTrialSession({}, {})).toThrow();
-    });
+  it('should throw an error when application context is not passed in to the constructor', () => {
+    expect(
+      () => new NewTrialSession(MOCK_NEW_TRIAL_REMOTE, {} as any),
+    ).toThrow();
+  });
 
-    it('creates a valid trial session', () => {
-      const trialSession = new NewTrialSession(VALID_TRIAL_SESSION, {
+  describe('isValid', () => {
+    it('should return true when the trial session has all required and valid data', () => {
+      const trialSession = new NewTrialSession(MOCK_NEW_TRIAL_REMOTE, {
         applicationContext,
       });
-      expect(trialSession.isValid()).toBeTruthy();
+
+      expect(trialSession.isValid()).toEqual(true);
     });
 
-    it('creates an invalid trial session with startDate in the past', () => {
+    it('should be false when the trial session start date is in the past', () => {
       const trialSession = new NewTrialSession(
         {
-          ...VALID_TRIAL_SESSION,
+          ...MOCK_NEW_TRIAL_REMOTE,
           startDate: '2000-03-01T00:00:00.000Z',
         },
         { applicationContext },
       );
-      expect(trialSession.isValid()).toBeFalsy();
+
+      expect(trialSession.isValid()).toEqual(false);
     });
 
-    it('creates an invalid trial session with invalid sessionType', () => {
+    it('should be false when the trial session type is not valid', () => {
       const trialSession = new NewTrialSession(
         {
-          ...VALID_TRIAL_SESSION,
+          ...MOCK_NEW_TRIAL_REMOTE,
           sessionType: 'Something Else',
         },
         { applicationContext },
       );
-      expect(trialSession.isValid()).toBeFalsy();
+
+      expect(trialSession.isValid()).toEqual(false);
     });
   });
 
   describe('validate', () => {
-    it('should do nothing if valid', () => {
-      let error;
-      try {
-        const trialSession = new NewTrialSession(VALID_TRIAL_SESSION, {
-          applicationContext,
-        });
-        trialSession.validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).not.toBeDefined();
+    it('should do nothing when the trial session is valid', () => {
+      const trialSession = new NewTrialSession(MOCK_NEW_TRIAL_REMOTE, {
+        applicationContext,
+      });
+
+      expect(() => trialSession.validate()).not.toThrow();
     });
 
-    it('should throw an error on invalid documents', () => {
-      let error;
-      try {
-        const trialSession = new NewTrialSession({}, { applicationContext });
-        trialSession.validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).toBeDefined();
+    it('should throw an error when the trial session is invalid', () => {
+      const trialSession = new NewTrialSession({} as any, {
+        applicationContext,
+      });
+
+      expect(() => trialSession.validate()).toThrow();
     });
 
-    it('should throw an error on when a valid alternateTrialClerkName is not provided and only when "Other" is selected', () => {
-      let error;
-      try {
-        const trialSession = new NewTrialSession(
-          { ...VALID_TRIAL_SESSION, trialClerkId: 'Other' },
-          { applicationContext },
-        );
-        trialSession.validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).toBeDefined();
+    it('should throw an error when a valid alternateTrialClerkName is not provided and only when "Other" is selected', () => {
+      const trialSession = new NewTrialSession(
+        { ...MOCK_NEW_TRIAL_REMOTE, trialClerkId: 'Other' },
+        { applicationContext },
+      );
+
+      expect(() => trialSession.validate()).toThrow();
     });
   });
 });

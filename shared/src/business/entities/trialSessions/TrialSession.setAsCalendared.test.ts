@@ -1,5 +1,5 @@
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { VALID_TRIAL_SESSION } from './TrialSession.test';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
@@ -7,14 +7,16 @@ describe('TrialSession entity', () => {
     it('should set a valid trial session entity as calendared upon request', () => {
       const trialSession = new TrialSession(
         {
-          ...VALID_TRIAL_SESSION,
-          sessionType: 'Hybrid',
+          ...MOCK_TRIAL_INPERSON,
+          isCalendared: false,
         },
         {
           applicationContext,
         },
       );
+
       trialSession.setAsCalendared();
+
       expect(trialSession.isCalendared).toEqual(true);
     });
   });

@@ -120,4 +120,29 @@ describe('getDocketNumbersForConsolidatedServiceAction', () => {
       docketNumbers: [MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber],
     });
   });
+
+  it('should return an empty list when the docket entry is multi-docketable, being filed on a lead case, but form.consolidatedCasesToMultiDocketOn is undefined', async () => {
+    const { output } = await runAction(
+      getDocketNumbersForConsolidatedServiceAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            docketNumber: MOCK_CASE_WITH_SECONDARY_OTHERS.docketNumber,
+            leadDocketNumber: MOCK_CASE.docketNumber,
+          },
+          form: {
+            eventCode: 'A',
+          },
+          modal: {
+            form: {},
+          },
+        },
+      },
+    );
+
+    expect(output.docketNumbers).toEqual([]);
+  });
 });

@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsHearingNote } from './journey/docketClerkEditsHearingNote';
@@ -20,14 +21,14 @@ describe('trial hearings journey', () => {
   const overrides1 = {
     maxCases: 3,
     preferredTrialCity: trialLocation1,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation: trialLocation1,
   };
   const trialLocation2 = `Biloxi, Mississippi, ${Date.now()}`;
   const overrides2 = {
     maxCases: 3,
     preferredTrialCity: trialLocation2,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation: trialLocation2,
   };
 
