@@ -634,10 +634,6 @@ jobs:
               --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
-          name: Reset S3 Queue is Empty Flag
-          command: |
-            npx ts-node --transpile-only ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/reset-s3-queue-is-empty-flag.ts
-      - run:
           name: Deploy Process S3 Queue Lambda
           command: |
             npm run deploy:process-s3-queue -- $ENV
@@ -649,6 +645,7 @@ jobs:
           name: Populate S3 Sync Queue
           command: |
             npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/populate-sync-queue.ts
+            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/reset-s3-queue-is-empty-flag.ts
       - run:
           name: Deploy Wait for Workflow Cron Lambda
           command: |
