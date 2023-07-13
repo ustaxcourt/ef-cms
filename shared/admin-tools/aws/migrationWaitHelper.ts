@@ -4,7 +4,7 @@ import {
 } from '@aws-sdk/client-cloudwatch';
 import { DateTime } from 'luxon';
 import { countItemsInQueue } from './sqsHelper';
-import { getItem, putItem } from './dynamoDeployTableHelper';
+import { getItem, putItem } from './deployTableHelper';
 
 const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
 const env = process.env.STAGE;
@@ -43,9 +43,9 @@ export const putMigrationQueueIsEmptyFlag = (
   return Promise.resolve(false);
 };
 
-export const getMigrationQueueIsEmptyFlag = (): Promise<boolean> => {
+export const getMigrationQueueIsEmptyFlag = async (): Promise<boolean> => {
   if (env) {
-    return getItem({ env, key });
+    return (await getItem({ env, key })) as boolean;
   }
-  return Promise.resolve(false);
+  return false;
 };

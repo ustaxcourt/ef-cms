@@ -5,7 +5,7 @@ const {
   copyObjects,
   deleteObjects,
 } = require('../../../../../shared/admin-tools/aws/s3Helper');
-const { handler } = require('./sync-s3-buckets');
+const { handler } = require('./process-s3-queue');
 const { v4: uuidv4 } = require('uuid');
 
 jest.mock('../../../../../shared/admin-tools/aws/sqsHelper', () => ({
@@ -21,7 +21,7 @@ const mockContext = {
   succeed: jest.fn(),
 };
 
-describe('sync-s3-buckets', () => {
+describe('process-s3-queue', () => {
   console.log = () => null;
   console.error = () => null;
 

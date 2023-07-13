@@ -12,41 +12,41 @@ const {
 
 const apiToken = process.env.CIRCLE_MACHINE_USER_TOKEN;
 const workflowId = process.env.CIRCLE_WORKFLOW_ID;
-const syncQueueUrl = process.env.S3_BUCKET_SYNC_QUEUE_URL;
-const syncDlQueueUrl = process.env.S3_BUCKET_SYNC_DL_QUEUE_URL;
+const queueUrl = process.env.S3_BUCKET_QUEUE_URL;
+const dlQueueUrl = process.env.S3_BUCKET_DL_QUEUE_URL;
 const env = process.env.STAGE;
-const key = 's3-bucket-sync-queue-is-not-empty';
-const jobName = 'wait-for-s3-bucket-sync';
+const key = 's3-queue-is-empty';
+const jobName = 'wait-for-s3-queue-to-process';
 
 exports.handler = async (input, context) => {
-  const results = { s3BucketSyncDlQueueCount: 0 };
+  const results = { s3DlQueueCount: 0 };
 
-  results.s3BucketSyncDlQueueCount = await countItemsInQueue({
-    QueueUrl: syncDlQueueUrl,
+  results.s3DlQueueCount = await countItemsInQueue({
+    QueueUrl: dlQueueUrl,
   });
-  if (results.s3BucketSyncDlQueueCount === -1) {
+  if (results.s3DlQueueCount === -1) {
     return succeed({ context, results });
   }
-  if (results.s3BucketSyncDlQueueCount > 0) {
+  if (results.s3DlQueueCount > 0) {
     await cancelWorkflow({ apiToken, workflowId });
     return succeed({ context, results });
   }
 
   // it's possible the queue has caught up but there are still events being processed
   // don't approve the job if this is the first consecutive time the queue is empty
-  results.s3BucketSyncQueueCount = await countItemsInQueue({
-    QueueUrl: syncQueueUrl,
+  results.s3QueueCount = await countItemsInQueue({
+    QueueUrl: queueUrl,
   });
-  if (results.s3BucketSyncQueueCount === -1) {
+  if (results.s3QueueCount === -1) {
     return succeed({ context, results });
   }
-  if (results.s3BucketSyncQueueCount > 0) {
+  if (results.s3QueueCount > 0) {
     await putItem({ env, key, value: false });
     return succeed({ context, results });
   }
 
-  results.s3BucketSyncQueueIsEmptyFlag = await getItem({ env, key });
-  if (!results.s3BucketSyncQueueIsEmptyFlag) {
+  results.s3QueueIsEmptyFlag = await getItem({ env, key });
+  if (!results.s3QueueIsEmptyFlag) {
     await putItem({ env, key, value: true });
   } else {
     await approvePendingJob({ apiToken, jobName, workflowId });

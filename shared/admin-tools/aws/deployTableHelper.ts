@@ -48,15 +48,24 @@ export const getItem = async ({
     },
     TableName: `efcms-deploy-${env}`,
   });
-  let data;
-  let flag = false;
+  let value;
   try {
-    data = await dynamodbClient.send(getItemCommand);
-    if ('Item' in data && 'current' in data.Item) {
-      flag = data.Item.current.BOOL;
+    const result = await dynamodbClient.send(getItemCommand);
+    if ('Item' in result && result.Item && 'current' in result.Item) {
+      if (
+        'BOOL' in result.Item.current &&
+        typeof result.Item.current.BOOL === 'boolean'
+      ) {
+        value = result.Item.current.BOOL;
+      } else if (
+        'S' in result.Item.current &&
+        typeof result.Item.current.S === 'string'
+      ) {
+        value = result.Item.current.S;
+      }
     }
   } catch (error) {
     console.log(error);
   }
-  return flag;
+  return typeof value === 'undefined' ? false : value;
 };

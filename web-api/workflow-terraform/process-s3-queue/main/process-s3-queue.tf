@@ -1,15 +1,15 @@
-data "archive_file" "sync_s3_buckets_zip" {
+data "archive_file" "process_s3_queue_zip" {
   type        = "zip"
-  output_path = "${path.module}/lambdas/sync-s3-buckets.js.zip"
+  output_path = "${path.module}/lambdas/process-s3-queue.js.zip"
   source_dir  = "${path.module}/lambdas/dist/"
 }
 
-resource "aws_lambda_function" "sync_s3_buckets_lambda" {
-  filename         = data.archive_file.sync_s3_buckets_zip.output_path
-  function_name    = "sync_s3_buckets_lambda_${var.environment}"
+resource "aws_lambda_function" "process_s3_queue_lambda" {
+  filename         = data.archive_file.process_s3_queue_zip.output_path
+  function_name    = "process_s3_queue_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_lambda_role_${var.environment}"
-  handler          = "sync-s3-buckets.handler"
-  source_code_hash = data.archive_file.sync_s3_buckets_zip.output_base64sha256
+  handler          = "process-s3-queue.handler"
+  source_code_hash = data.archive_file.process_s3_queue_zip.output_base64sha256
 
   runtime     = "nodejs18.x"
   timeout     = "900"
@@ -25,14 +25,14 @@ resource "aws_lambda_function" "sync_s3_buckets_lambda" {
       BUCKET_SHORT_NAME           = var.bucket_short_name
       DESTINATION_BUCKET_NAME     = var.destination_bucket_name
       SOURCE_BUCKET_NAME          = var.source_bucket_name
-      S3_BUCKET_SYNC_QUEUE_URL    = aws_sqs_queue.s3_bucket_sync_queue.id
-      S3_BUCKET_SYNC_DL_QUEUE_URL = aws_sqs_queue.s3_bucket_sync_dl_queue.id
+      S3_BUCKET_QUEUE_URL    = aws_sqs_queue.s3_bucket_queue.id
+      S3_BUCKET_DL_QUEUE_URL = aws_sqs_queue.s3_bucket_dl_queue.id
     }
   }
 }
 
-resource "aws_lambda_event_source_mapping" "sync_s3_buckets_mapping" {
-  event_source_arn = aws_sqs_queue.s3_bucket_sync_queue.arn
-  function_name    = aws_lambda_function.sync_s3_buckets_lambda.arn
+resource "aws_lambda_event_source_mapping" "process_s3_queue_mapping" {
+  event_source_arn = aws_sqs_queue.s3_bucket_queue.arn
+  function_name    = aws_lambda_function.process_s3_queue_lambda.arn
   batch_size       = 1
 }
