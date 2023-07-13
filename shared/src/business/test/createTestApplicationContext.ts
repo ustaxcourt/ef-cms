@@ -348,7 +348,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getAllFeatureFlagsInteractor: jest.fn().mockImplementation(() => false),
+    getAllFeatureFlagsInteractor: jest.fn().mockImplementation(() => {}),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
