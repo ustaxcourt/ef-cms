@@ -5,11 +5,11 @@ import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeActio
 import { clearUserAction } from '../actions/clearUserAction';
 import { deleteAuthCookieAction } from '../actions/deleteAuthCookieAction';
 import { navigateToCognitoAction } from '../actions/navigateToCognitoAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/stopWebSocketConnectionAction';
 
 export const signOutSequence = [
-  setupCurrentPageAction('Interstitial'),
+  setCurrentPageAction('Interstitial'),
   stopWebSocketConnectionAction,
   broadcastLogoutAction,
   deleteAuthCookieAction,
