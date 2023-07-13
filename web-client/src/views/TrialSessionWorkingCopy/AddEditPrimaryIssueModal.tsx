@@ -8,8 +8,9 @@ import React from 'react';
 export const AddEditPrimaryIssueModal = connect(
   {
     modal: state.modal,
+    validationErrors: state.validationErrors,
   },
-  function AddEditSessionNoteModal({ modal }) {
+  function AddEditSessionNoteModal({ modal, validationErrors }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -18,10 +19,13 @@ export const AddEditPrimaryIssueModal = connect(
         preventCancelOnBlur={true}
         title="Add/Edit Primary Issue"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateWorkingCopySessionNoteSequence"
+        onConfirmSequence="updateCasePrimaryIssueSequence"
       >
         <h5 className="margin-bottom-4">{modal.heading}</h5>
-        <FormGroup className="margin-bottom-2">
+        <FormGroup
+          className="margin-bottom-2"
+          errorText={validationErrors.notes || validationErrors.caseNote}
+        >
           <label className="usa-label" htmlFor="case-notes">
             {modal.notesLabel}
           </label>
