@@ -2,21 +2,14 @@ import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const AddEditPrimaryIssueModal = connect(
   {
     modal: state.modal,
-    validateNoteSequence: sequences.validateNoteSequence,
-    validationErrors: state.validationErrors,
   },
-  function AddEditSessionNoteModal({
-    modal,
-    validateNoteSequence,
-    validationErrors,
-  }) {
+  function AddEditSessionNoteModal({ modal }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -28,10 +21,7 @@ export const AddEditPrimaryIssueModal = connect(
         onConfirmSequence="updateWorkingCopySessionNoteSequence"
       >
         <h5 className="margin-bottom-4">{modal.heading}</h5>
-        <FormGroup
-          className="margin-bottom-2"
-          errorText={validationErrors.notes}
-        >
+        <FormGroup className="margin-bottom-2">
           <label className="usa-label" htmlFor="case-notes">
             {modal.notesLabel}
           </label>
@@ -39,9 +29,6 @@ export const AddEditPrimaryIssueModal = connect(
             aria-label="notes"
             bind="modal.notes"
             id="case-notes"
-            onChange={() => {
-              validateNoteSequence();
-            }}
           />
         </FormGroup>
       </ConfirmModal>
