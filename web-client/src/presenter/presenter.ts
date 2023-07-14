@@ -263,6 +263,7 @@ import { openCreateMessageModalSequence } from './sequences/openCreateMessageMod
 import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOrderChooseTypeModalSequence';
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
+import { openDeleteCasePrimaryIssueSequence } from './sequences/openDeleteCasePrimaryIssueSequence';
 import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
@@ -792,6 +793,7 @@ export const presenterSequences = {
   openCreateOrderChooseTypeModalSequence,
   openDeleteCaseDeadlineModalSequence,
   openDeleteCaseNoteConfirmModalSequence,
+  openDeleteCasePrimaryIssueSequence,
   openDeletePractitionerDocumentConfirmModalSequence,
   openDeleteSessionNoteConfirmModalSequence,
   openDeleteUserCaseNoteConfirmModalSequence,

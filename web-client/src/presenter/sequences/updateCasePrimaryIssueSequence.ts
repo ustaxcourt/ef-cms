@@ -1,12 +1,12 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { fetchUpdatedCasePrimaryIssueFromModalStateAction } from '../actions/TrialSessionWorkingCopy/fetchUpdatedCasePrimaryIssueFromModalStateAction';
+import { fetchUpdatedCasePrimaryIssueFromModalStateAction } from '../actions/CaseWorksheet/fetchUpdatedCasePrimaryIssueFromModalStateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateCasePrimaryIssueInDbAction } from '../actions/TrialSession/updateCaseWithUpdatedPrimaryIssueAction';
-import { updateCasePrimaryIssueInStatection } from '../actions/TrialSessionWorkingCopy/updateCasePrimaryIssueAction';
+import { updateCasePrimaryIssueInDbAction } from '../actions/CaseWorksheet/updateCaseWithUpdatedPrimaryIssueAction';
+import { updateCasePrimaryIssueInStatection } from '../actions/CaseWorksheet/updateCasePrimaryIssueAction';
 import { validatePrimaryIssueAction } from '../actions/validatePrimaryIssueAction';
 
 export const updateCasePrimaryIssueSequence = [
