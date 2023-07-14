@@ -1,9 +1,9 @@
 import { clearLoginFormAction } from '../actions/clearLoginFormAction';
 import { clearSessionMetadataAction } from '../actions/clearSessionMetadataAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 
 export const gotoLoginSequence = [
   clearLoginFormAction,
   clearSessionMetadataAction,
-  setupCurrentPageAction('LogIn'),
+  setCurrentPageAction('LogIn'),
 ];
