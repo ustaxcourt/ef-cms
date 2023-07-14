@@ -1,7 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
- * generates an action for setting the page
+ * generates an action for grabbing feature flags if needed and setting the current page
  * @param {string} page the name of the page to set
  * @returns {Promise} async action
  */

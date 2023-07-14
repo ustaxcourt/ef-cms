@@ -1,11 +1,11 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
+import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoMaintenanceSequence =
   startWebSocketConnectionSequenceDecorator([
     clearAlertsAction,
     clearScreenMetadataAction,
-    setupCurrentPageAction('AppMaintenance'),
+    setCurrentPageAction('AppMaintenance'),
   ]);

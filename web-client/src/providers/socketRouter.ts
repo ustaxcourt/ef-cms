@@ -22,6 +22,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'thirty_day_notice_paper_service_complete':
+        await app.getSequence('thirtyDayNoticePaperServiceCompleteSequence')(
+          message,
+        );
+        break;
       case 'notice_generation_start':
         await app.getSequence('showGenerateNoticesProgressSequence')({
           ...message,
@@ -123,6 +128,14 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         await app.getSequence('serveDocumentErrorSequence')({
           ...message,
           showModal: 'WorkItemAlreadyCompletedModal',
+        });
+        break;
+      case 'fetch_opinions_complete':
+      case 'fetch_orders_complete':
+        await app.getSequence(
+          'fetchOrdersAndOpinionsForJudgesCompleteSequence',
+        )({
+          ...message,
         });
         break;
     }

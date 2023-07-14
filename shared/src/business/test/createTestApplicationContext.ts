@@ -96,11 +96,11 @@ import { getItem } from '../../persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '../utilities/getTextByCount';
+import { getTrialSessionById } from '../../persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
 import { getWorkItemById as getWorkItemByIdPersistence } from '../../persistence/dynamo/workitems/getWorkItemById';
 import { incrementCounter } from '../../persistence/dynamo/helpers/incrementCounter';
-import { isStandaloneRemoteSession } from '../entities/trialSessions/TrialSession';
 import { putWorkItemInOutbox } from '../../persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
 import { removeItem } from '../../persistence/localStorage/removeItem';
@@ -301,9 +301,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isSealedCase: jest.fn().mockImplementation(isSealedCase),
     isServed: jest.fn().mockImplementation(DocketEntry.isServed),
-    isStandaloneRemoteSession: jest
-      .fn()
-      .mockImplementation(isStandaloneRemoteSession),
     isStringISOFormatted: jest
       .fn()
       .mockImplementation(DateHandler.isStringISOFormatted),
@@ -420,6 +417,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     standingPretrialOrderForSmallCase: jest
       .fn()
       .mockImplementation(getFakeFile),
+    thirtyDayNoticeOfTrial: jest.fn().mockImplementation(getFakeFile),
     trialCalendar: jest.fn().mockImplementation(getFakeFile),
     trialSessionPlanningReport: jest.fn().mockImplementation(getFakeFile),
   };
@@ -492,6 +490,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getPractitionerDocuments: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
+    getTrialSessionById: jest.fn().mockImplementation(getTrialSessionById),
     getTrialSessionJobStatusForCase: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
