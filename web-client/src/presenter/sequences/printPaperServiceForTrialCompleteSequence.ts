@@ -1,8 +1,8 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { sequence } from 'cerebral';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 
 export const printPaperServiceForTrialCompleteSequence = sequence([
   clearAlertsAction,
-  setCurrentPageAction('TrialSessionDetail'),
+  setupCurrentPageAction('TrialSessionDetail'),
 ]);
