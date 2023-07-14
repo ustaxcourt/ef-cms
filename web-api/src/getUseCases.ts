@@ -178,6 +178,7 @@ import { unsealDocketEntryInteractor } from '../../shared/src/business/useCases/
 import { updateCaseContextInteractor } from '../../shared/src/business/useCases/updateCaseContextInteractor';
 import { updateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor';
 import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/updateCaseDetailsInteractor';
+import { updateCasePrimaryIssueInteractor } from '../../shared/src/business/useCases/caseNote/updateCasePrimaryIssueInteractor';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor';
 import { updateContactInteractor } from '../../shared/src/business/useCases/updateContactInteractor';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor';
@@ -379,6 +380,7 @@ const useCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
+  updateCasePrimaryIssueInteractor,
   updateCaseTrialSortTagsInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
