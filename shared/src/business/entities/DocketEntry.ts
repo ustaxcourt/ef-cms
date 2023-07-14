@@ -8,7 +8,6 @@ import {
   PARTIES_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   ROLES,
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
@@ -429,8 +428,9 @@ export class DocketEntry extends JoiValidationEntity {
     const isPractitionerAssociationDocumentType =
       PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES.includes(this.documentType);
 
-    const isSimultaneous = SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-      this.eventCode,
+    // if fully concatenated document title includes the word Simultaneous, do not auto-serve
+    const isSimultaneous = (this.documentTitle || this.documentType).includes(
+      'Simultaneous',
     );
 
     return (

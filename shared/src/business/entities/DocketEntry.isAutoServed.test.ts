@@ -49,12 +49,26 @@ describe('isAutoServed', () => {
     expect(docketEntry.isAutoServed()).toBeTruthy();
   });
 
-  it('should return false if the documentType is an external document and the document is a Simultaneous Document', () => {
+  it('should return false if the documentType is an external document and the document title includes "Simultaneous" as these could be modified simultaneous briefs, not directly simultaneous', () => {
     const docketEntry = new DocketEntry(
       {
         ...A_VALID_DOCKET_ENTRY,
+        documentTitle: 'Second Amended Simultaneous Reply Brief',
         documentType: EXTERNAL_DOCUMENT_TYPES[0],
-        eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        eventCode: 'AMAT',
+      },
+      { applicationContext, petitioners: MOCK_PETITIONERS },
+    );
+
+    expect(docketEntry.isAutoServed()).toBeFalsy();
+  });
+
+  it('should return false if the document type includes "Simultaneous"', () => {
+    const docketEntry = new DocketEntry(
+      {
+        ...A_VALID_DOCKET_ENTRY,
+        documentType: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        eventCode: 'SIAB',
       },
       { applicationContext, petitioners: MOCK_PETITIONERS },
     );
