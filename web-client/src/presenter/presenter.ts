@@ -449,6 +449,7 @@ import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequen
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
+import { updateCasePrimaryIssueSequence } from './sequences/updateCasePrimaryIssueSequence';
 import { updateChambersInCreateMessageModalSequence } from './sequences/updateChambersInCreateMessageModalSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
@@ -976,6 +977,7 @@ export const presenterSequences = {
   updateCaseDetailsSequence,
   updateCaseNoteSequence,
   updateCasePartyTypeSequence,
+  updateCasePrimaryIssueSequence,
   updateChambersInCreateMessageModalSequence,
   updateCourtIssuedDocketEntryFormValueSequence,
   updateCreateOrderModalFormValueSequence,

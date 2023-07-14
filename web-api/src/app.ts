@@ -188,6 +188,7 @@ import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLamb
 import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
 import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
 import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
+import { updateCasePrimaryIssueLambda } from './trialSessions/updateCasePrimaryIssueLambda';
 import cors from 'cors';
 import express from 'express';
 
@@ -832,6 +833,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
   );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
+  app.post(
+    '/update-case-primary-issue/:docketNumber',
+    lambdaWrapper(updateCasePrimaryIssueLambda),
+  );
   app.put(
     '/async/trial-sessions',
     lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),

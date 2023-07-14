@@ -286,6 +286,7 @@ import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocket
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
+import { updateCasePrimaryIssueInteractor } from 'shared/src/proxies/trialSessions/updateCasePrimaryIssueProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
@@ -341,6 +342,7 @@ import { validatePetitionInteractor } from '../../shared/src/business/useCases/v
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
+import { validatePrimaryIssueInteractor } from 'shared/src/business/useCases/caseNote/validatePrimaryIssueInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
 import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
@@ -540,6 +542,7 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
+  updateCasePrimaryIssueInteractor,
   updateCaseTrialSortTagsInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
@@ -593,6 +596,7 @@ const allUseCases = {
   validatePetitionerInformationFormInteractor,
   validatePetitionerInteractor,
   validatePractitionerInteractor,
+  validatePrimaryIssueInteractor,
   validateSearchDeadlinesInteractor,
   validateStampInteractor,
   validateStartCaseWizardInteractor,

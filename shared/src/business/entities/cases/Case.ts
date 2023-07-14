@@ -103,6 +103,7 @@ export class Case extends JoiValidationEntity {
   public status: string;
   public sortableDocketNumber: number;
   public trialDate?: string;
+  public primaryIssue?: string;
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
@@ -658,6 +659,9 @@ export class Case extends JoiValidationEntity {
       )
       .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
+    primaryIssue: JoiValidationConstants.STRING.optional().description(
+      'Primary Issue for case.',
+    ),
     privatePractitioners: joi
       .array()
       .items(PrivatePractitioner.VALIDATION_RULES)
@@ -789,6 +793,7 @@ export class Case extends JoiValidationEntity {
       rawCase.sortableDocketNumber ||
       Case.getSortableDocketNumber(rawCase.docketNumber);
     this.trialDate = rawCase.trialDate;
+    this.primaryIssue = rawCase.primaryIssue;
     this.trialLocation = rawCase.trialLocation;
     this.trialSessionId = rawCase.trialSessionId;
     this.trialTime = rawCase.trialTime;
