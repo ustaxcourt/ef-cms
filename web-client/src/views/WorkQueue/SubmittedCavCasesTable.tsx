@@ -7,6 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { DeletePrimaryIssueModal } from '../CaseWorksheet/DeletePrimaryIssueModal';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -240,6 +241,8 @@ export const SubmittedCavCasesTable = connect(
         {showModal === 'AddEditPrimaryIssueModal' && (
           <AddEditPrimaryIssueModal />
         )}
+
+        {showModal === 'DeletePrimaryIssueModal' && <DeletePrimaryIssueModal />}
       </React.Fragment>
     );
   },
