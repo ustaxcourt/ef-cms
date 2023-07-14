@@ -10,9 +10,9 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
-    "@sparticuz/chromium": "^114.0.0",
+    "@sparticuz/chromium": "112.0.2",
     "pug": "^3.0.2",
-    "puppeteer-core": "20.7.3",
+    "puppeteer-core": "19.8.5",
     "sass": "^1.49.7"
   },
   "overrides": {
