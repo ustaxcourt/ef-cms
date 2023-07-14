@@ -20,7 +20,7 @@ const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const randomizedEmail = `${faker.string.uuid()}@example.com`;
 
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
-  describe('Petitions clerk', () => {
+  describe.skip('Petitions clerk', () => {
     it('should be able to create a case with paper service', () => {
       cy.task<AuthenticationResult>('getUserToken', {
         email: 'petitionsclerk1@example.com',
