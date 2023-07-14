@@ -5,7 +5,7 @@ import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { AddEditPrimaryIssueModal } from '../TrialSessionWorkingCopy/AddEditPrimaryIssueModal';
+import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 import classNames from 'classnames';
@@ -15,12 +15,15 @@ export const SubmittedCavCasesTable = connect(
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     openAddEditPrimaryIssueModalSequence:
       sequences.openAddEditPrimaryIssueModalSequence,
+    openDeleteCasePrimaryIssueSequence:
+      sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
   },
 
   function SubmittedCavCasesTable({
     judgeActivityReportHelper,
     openAddEditPrimaryIssueModalSequence,
+    openDeleteCasePrimaryIssueSequence,
     showModal,
   }) {
     const StatusOfMatter = [
@@ -212,6 +215,10 @@ export const SubmittedCavCasesTable = connect(
                                     className="red-warning"
                                     icon="trash"
                                     onClick={() => {
+                                      openDeleteCasePrimaryIssueSequence({
+                                        docketNumber:
+                                          formattedCase.docketNumber,
+                                      });
                                       console.log('trash click');
                                     }}
                                   >
