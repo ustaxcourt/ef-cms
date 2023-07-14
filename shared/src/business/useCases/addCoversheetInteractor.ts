@@ -53,7 +53,10 @@ export const addCoversheetInteractor = async (
       .promise();
     pdfData = Body;
   } catch (err) {
-    err.message = `${err.message} docket entry id is ${docketEntryId}`;
+    applicationContext.logger.error(
+      `Failed to get document for docket entry id ${docketEntryId} `,
+      err,
+    );
     throw err;
   }
 
