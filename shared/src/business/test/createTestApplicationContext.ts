@@ -683,5 +683,10 @@ Object.entries(applicationContext).forEach(([key, value]) => {
     intermediary[key] = value;
   }
 });
+interface TestClientApplicationContext extends ClientApplicationContext {
+  getUseCases: typeof applicationContext.getUseCases;
+  getPersistenceGateway: typeof applicationContext.getPersistenceGateway;
+}
+
 export const applicationContextForClient =
-  intermediary as ClientApplicationContext;
+  intermediary as TestClientApplicationContext;
