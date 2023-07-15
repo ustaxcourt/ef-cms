@@ -6,7 +6,7 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateCasePrimaryIssueInDbAction } from '../actions/CaseWorksheet/updateCaseWithUpdatedPrimaryIssueAction';
-import { updateCasePrimaryIssueInStatection } from '../actions/CaseWorksheet/updateCasePrimaryIssueAction';
+import { updateCasePrimaryIssueInStateAction } from '../actions/CaseWorksheet/updateCasePrimaryIssueInStateAction';
 import { validatePrimaryIssueAction } from '../actions/validatePrimaryIssueAction';
 
 export const updateCasePrimaryIssueSequence = [
@@ -18,7 +18,7 @@ export const updateCasePrimaryIssueSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       fetchUpdatedCasePrimaryIssueFromModalStateAction,
-      updateCasePrimaryIssueInStatection,
+      updateCasePrimaryIssueInStateAction,
       updateCasePrimaryIssueInDbAction,
       clearModalStateAction,
     ]),
