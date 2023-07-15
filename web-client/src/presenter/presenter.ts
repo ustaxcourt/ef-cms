@@ -89,6 +89,7 @@ import { createMessageSequence } from './sequences/createMessageSequence';
 import { deleteCalendarNoteSequence } from './sequences/deleteCalendarNoteSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
+import { deleteCasePrimaryIssueSequence } from './sequences/deleteCasePrimaryIssueSequence';
 import { deleteCorrespondenceDocumentSequence } from './sequences/deleteCorrespondenceDocumentSequence';
 import { deleteDeficiencyStatisticsSequence } from './sequences/deleteDeficiencyStatisticsSequence';
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
@@ -621,6 +622,7 @@ export const presenterSequences = {
   deleteCalendarNoteSequence,
   deleteCaseDeadlineSequence,
   deleteCaseNoteSequence,
+  deleteCasePrimaryIssueSequence,
   deleteCorrespondenceDocumentSequence,
   deleteDeficiencyStatisticsSequence,
   deleteJudgesCaseNoteFromCaseDetailSequence,
