@@ -7,7 +7,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const updateCasePrimaryIssueInStatection = ({
+export const updateCasePrimaryIssueInStateAction = ({
   get,
   props,
   store,
