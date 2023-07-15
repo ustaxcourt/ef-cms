@@ -286,7 +286,7 @@ import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocket
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
-import { updateCasePrimaryIssueInteractor } from 'shared/src/proxies/trialSessions/updateCasePrimaryIssueProxy';
+import { updateCasePrimaryIssueInteractor } from 'shared/src/proxies/caseWorksheet/updateCasePrimaryIssueProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
