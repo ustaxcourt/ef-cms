@@ -637,7 +637,8 @@ jobs:
       - run:
           name: Deploy Process S3 Queue Lambda
           command: |
-            npm run deploy:process-s3-queue -- $ENV
+            cd web-api/workflow-terraform/process-s3-queue/main
+            ../bin/deploy-app.sh
             S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
             echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
             S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
@@ -697,6 +698,10 @@ jobs:
             export APPROVAL_JOB_NAME=wait-for-glue-workflow
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
+      - run:
+          name: Destroy Process S3 Queue Lambda
+          command: |
+            npm run destroy:process-s3-queue -- $ENV
       - run:
           name: Enable Dynamodb Streams
           command: |
@@ -785,7 +790,8 @@ jobs:
       - run:
           name: Deploy Process S3 Queue Lambda
           command: |
-            npm run deploy:process-s3-queue -- $ENV
+            cd web-api/workflow-terraform/process-s3-queue/main
+            ../bin/deploy-app.sh
             S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
             echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
             S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
@@ -829,6 +835,10 @@ jobs:
           name: Destroy Wait for S3 Truncation Lambda
           command: |
             npm run destroy:wait-for-s3-queue-cron -- $ENV
+      - run:
+          name: Destroy Process S3 Queue Lambda
+          command: |
+            npm run destroy:process-s3-queue -- $ENV
 
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>

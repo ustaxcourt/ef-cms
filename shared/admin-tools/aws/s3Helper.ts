@@ -19,7 +19,6 @@ const MaxKeys = 1000;
 //   'RequestTimeout',
 //   'ServiceUnavailable',
 //   'SlowDown',
-//   'TemporaryRedirect',
 // ];
 
 export const getNextChunkOfObjects = async ({
