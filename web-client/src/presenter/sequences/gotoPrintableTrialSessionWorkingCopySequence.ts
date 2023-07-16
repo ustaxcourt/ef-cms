@@ -3,14 +3,14 @@ import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialS
 import { getFormattedTrialSessionCasesAction } from '../actions/TrialSessionWorkingCopy/getFormattedTrialSessionCasesAction';
 import { preparePrintableFormattedCasesAction } from '../actions/TrialSessionWorkingCopy/preparePrintableFormattedCasesAction';
 import { prepareUserBasedHeadingAction } from '../actions/TrialSessionWorkingCopy/prepareUserBasedHeadingAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
-    setCurrentPageAction('Interstitial'),
+    setupCurrentPageAction('Interstitial'),
     setRedirectUrlAction,
     clearModalAction,
     getFormattedTrialSessionCasesAction,
@@ -18,5 +18,5 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     prepareUserBasedHeadingAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
-    setCurrentPageAction('PrintableTrialSessionWorkingCopyPreviewPage'),
+    setupCurrentPageAction('PrintableTrialSessionWorkingCopyPreviewPage'),
   ]);
