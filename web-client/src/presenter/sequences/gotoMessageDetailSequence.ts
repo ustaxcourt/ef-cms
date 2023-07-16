@@ -9,19 +9,19 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultIsExpandedAction } from '../actions/setDefaultIsExpandedAction';
 import { setMessageAction } from '../actions/setMessageAction';
 import { setMessageAsReadAction } from '../actions/setMessageAsReadAction';
 import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
 const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
   showProgressSequenceDecorator([
-    setCurrentPageAction('Interstitial'),
+    setupCurrentPageAction('Interstitial'),
     closeMobileMenuAction,
     clearErrorAlertsAction,
     getCaseAction,
@@ -34,7 +34,7 @@ const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
     setMessageDetailViewerDocumentToDisplayAction,
     setDefaultIsExpandedAction,
     setCaseDetailPageTabActionGenerator('messages'),
-    setCurrentPageAction('MessageDetail'),
+    setupCurrentPageAction('MessageDetail'),
     getShouldMarkMessageAsReadAction,
     {
       markRead: [setMessageAsReadAction],
