@@ -246,7 +246,8 @@
     "tap": "^16.3.4",
     "terser": "^5.14.2",
     "jsonwebtoken": "^9.0.0",
-    "underscore": "^1.13.1"
+    "underscore": "^1.13.1",
+    "stylelint": "^15.8.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.22.5",
