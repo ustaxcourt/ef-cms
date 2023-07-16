@@ -220,7 +220,6 @@ export const SubmittedCavCasesTable = connect(
                                         docketNumber:
                                           formattedCase.docketNumber,
                                       });
-                                      console.log('trash click');
                                     }}
                                   >
                                     Delete Issue
