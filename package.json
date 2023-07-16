@@ -31,7 +31,7 @@
     "@opensearch-project/opensearch": "^2.3.0",
     "@uswds/uswds": "^3.5.0",
     "archiver": "^5.3.1",
-    "aws-sdk": "^2.1403.0",
+    "aws-sdk": "^2.1415.0",
     "axios": "^1.4.0",
     "broadcast-channel": "^5.1.0",
     "canvas": "^2.11.2",
