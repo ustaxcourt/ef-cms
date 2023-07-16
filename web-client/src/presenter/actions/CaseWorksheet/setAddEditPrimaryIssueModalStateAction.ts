@@ -15,7 +15,7 @@ export const setAddEditPrimaryIssueModalStateAction = ({
   const { docketNumber, primaryIssue } = props.case;
   const petitioners = props.case.petitioners.map(p => p.entityName).join();
   const headingString = `Docket ${docketNumber}: ${petitioners}`;
-  store.set(state.modal.case, props.case);
+  store.set(state.modal.docketNumber, props.case.docketNumber);
   store.set(state.modal.heading, headingString);
   store.set(state.modal.notes, primaryIssue);
 };
