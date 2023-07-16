@@ -13,15 +13,15 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setSectionForMessageBoxAction } from '../actions/setSectionForMessageBoxAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const goToMessages = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   resetCacheKeyAction,
   closeMobileMenuAction,
   clearScreenMetadataAction,
@@ -43,7 +43,7 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
       setMessagesAction,
     ],
   ]),
-  setCurrentPageAction('Messages'),
+  setupCurrentPageAction('Messages'),
 ]);
 
 export const gotoMessagesSequence = [
