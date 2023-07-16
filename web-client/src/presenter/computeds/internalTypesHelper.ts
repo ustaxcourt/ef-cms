@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { flatten, orderBy, values } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -35,13 +37,11 @@ export const getSortFunction = searchText => {
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const internalTypesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const { INTERNAL_CATEGORY_MAP, LODGED_EVENT_CODE } =
+  const { INTERNAL_CATEGORY_MAP, LEGACY_DOCUMENT_TYPES, LODGED_EVENT_CODE } =
     applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
 
@@ -49,12 +49,23 @@ export const internalTypesHelper = (
     INTERNAL_CATEGORY_MAP,
   );
 
-  const internalDocumentTypesForSelectSorted = internalDocumentTypesForSelect
-    .sort(getSortFunction(searchText))
-    .filter(d => d.eventCode !== LODGED_EVENT_CODE);
+  const internalDocumentTypesForSelectWithLegacySorted =
+    internalDocumentTypesForSelect
+      .sort(getSortFunction(searchText))
+      .filter(d => d.eventCode !== LODGED_EVENT_CODE);
+
+  const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
+    value => value.eventCode,
+  );
+
+  const internalDocumentTypesForSelectSorted =
+    internalDocumentTypesForSelectWithLegacySorted.filter(
+      documentType =>
+        legacyDocumentCodes.indexOf(documentType.eventCode) === -1,
+    );
 
   return {
-    internalDocumentTypesForSelect,
     internalDocumentTypesForSelectSorted,
+    internalDocumentTypesForSelectWithLegacySorted,
   };
 };
