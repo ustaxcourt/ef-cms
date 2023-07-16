@@ -1,4 +1,5 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { deleteCasePrimaryIssueInDBAction } from '../actions/CaseWorksheet/deleteCasePrimaryIssueInDBAction';
 import { deleteCasePrimaryIssueInStateAction } from '../actions/CaseWorksheet/deleteCasePrimaryIssueInStateAction';
 import { getCaseDocketNumberFromModal } from '../actions/CaseWorksheet/getCaseDocketNumberFromModal';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -6,6 +7,6 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 export const deleteCasePrimaryIssueSequence = showProgressSequenceDecorator([
   getCaseDocketNumberFromModal,
   deleteCasePrimaryIssueInStateAction,
-  // deleteCasePrimaryIssueInDBAction,
+  deleteCasePrimaryIssueInDBAction,
   clearModalStateAction,
 ]);
