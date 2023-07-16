@@ -11,7 +11,7 @@ export const fetchUpdatedCasePrimaryIssueFromModalStateAction = ({
   get,
 }: ActionProps) => {
   return {
-    docketNumber: get(state.modal.case.docketNumber),
+    docketNumber: get(state.modal.docketNumber),
     primaryIssue: get(state.modal.notes),
   };
 };
