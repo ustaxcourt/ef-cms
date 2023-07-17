@@ -76,9 +76,7 @@ describe('createTrialSessionAndWorkingCopy', () => {
           applicationContext,
           trialSessionToAdd,
         }),
-      ).rejects.toThrow(
-        'The OpenTrialSession entity was invalid. {"sessionType":"\'sessionType\' is required"}',
-      );
+      ).rejects.toThrow('The TrialSession entity was invalid');
     });
 
     it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
@@ -90,7 +88,7 @@ describe('createTrialSessionAndWorkingCopy', () => {
           trialSessionToAdd,
         }),
       ).rejects.toThrow(
-        'The OpenTrialSession entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',
+        'The TrialSession entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',
       );
     });
   });
