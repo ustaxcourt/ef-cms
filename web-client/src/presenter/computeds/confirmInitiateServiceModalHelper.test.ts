@@ -380,6 +380,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           areMultiDocketablePaperFilingsEnabled: true,
         },
         form: {
+          documentTitle: 'Answer',
           eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
         },
         formattedCaseDetail: MOCK_CASE,
@@ -469,6 +470,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           state: {
             ...baseState,
             form: {
+              documentTitle: 'Answer',
               eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
             },
             formattedCaseDetail: {
@@ -508,7 +510,30 @@ describe('confirmInitiateServiceModalHelper', () => {
           state: {
             ...baseState,
             form: {
+              documentTitle: 'Simultaneous Answering Memorandum Brief',
               eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+              isPaper: false,
+            },
+            formattedCaseDetail: {
+              isLeadCase: true,
+            },
+          },
+        },
+      );
+
+      expect(showConsolidatedCasesForService).toEqual(false);
+    });
+
+    it('should be false when the docket entry is being filed on a lead case, the docket entry has "simultaneous" in the document title and is NOT paper filed', () => {
+      const { showConsolidatedCasesForService } = runCompute(
+        confirmInitiateServiceModalHelper,
+        {
+          state: {
+            ...baseState,
+            form: {
+              documentTitle:
+                'Motion for Leave to File Simultaneous Answering Memorandum Brief',
+              eventCode: 'AMAT',
               isPaper: false,
             },
             formattedCaseDetail: {
