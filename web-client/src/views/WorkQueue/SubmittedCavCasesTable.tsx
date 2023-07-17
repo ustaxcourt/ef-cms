@@ -235,8 +235,14 @@ export const SubmittedCavCasesTable = connect(
                 );
               })}
           </tbody>
-          <tbody></tbody>
         </table>
+        {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
+          .length === 0 && (
+          <div>
+            There are no cases with a status of &quot;Submitted&quot; or
+            &quot;CAV&quot;
+          </div>
+        )}
         {showModal === 'AddEditPrimaryIssueModal' && (
           <AddEditPrimaryIssueModal />
         )}
