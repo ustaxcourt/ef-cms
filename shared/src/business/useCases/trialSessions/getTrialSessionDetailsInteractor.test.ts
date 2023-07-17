@@ -47,7 +47,7 @@ describe('Get trial session details', () => {
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
     ).rejects.toThrow(
-      `Trial session ${MOCK_TRIAL_REMOTE.trialSessionId} was not found.`,
+      'Trial session 208a959f-9526-4db5-b262-e58c476a4604 was not found.',
     );
   });
 
