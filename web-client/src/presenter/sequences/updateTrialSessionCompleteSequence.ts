@@ -5,10 +5,10 @@ import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const updateTrialSessionCompleteSequence = [
@@ -25,7 +25,7 @@ export const updateTrialSessionCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
-      setCurrentPageAction('PrintPaperTrialNotices'),
+      setupCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
     ],
