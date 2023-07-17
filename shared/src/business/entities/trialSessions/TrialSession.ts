@@ -160,6 +160,7 @@ export class TrialSession extends JoiValidationEntity {
     courtReporter: JoiValidationConstants.STRING.max(100).optional(),
     courthouseName: JoiValidationConstants.STRING.max(100).allow('').optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
+    entityName: JoiValidationConstants.STRING.valid('TrialSession').required(),
     estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
       .min(joi.ref('startDate'))
       .allow(null),
@@ -230,8 +231,8 @@ export class TrialSession extends JoiValidationEntity {
     trialSessionId: JoiValidationConstants.UUID.required(),
   };
 
-  constructor(rawSession, entityName: string) {
-    super(entityName);
+  constructor(rawSession) {
+    super('TrialSession');
 
     this.address1 = rawSession.address1;
     this.address2 = rawSession.address2;
