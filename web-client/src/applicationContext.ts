@@ -19,7 +19,6 @@ import {
   isClosed,
   isLeadCase,
   isSealedCase,
-  isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
@@ -781,7 +780,6 @@ const applicationContext = {
       isSealedCase,
       isStringISOFormatted,
       isTodayWithinGivenInterval,
-      isUserIdRepresentedByPrivatePractitioner,
       isUserPartOfGroup,
       isValidDateString,
       openUrlInNewTab,
