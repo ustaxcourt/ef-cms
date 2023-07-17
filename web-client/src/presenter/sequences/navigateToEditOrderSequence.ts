@@ -6,10 +6,10 @@ import { getDocumentEditUrlAsPathAction } from '../actions/getDocumentEditUrlAsP
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { removeSignatureAction } from '../actions/removeSignatureAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setupConfirmWithPropsAction } from '../actions/setupConfirmWithPropsAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 
@@ -17,7 +17,7 @@ export const navigateToEditOrderSequence = [
   setupConfirmWithPropsAction,
   unsetDocumentToEditAction,
   clearModalAction,
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   getCaseAction,
