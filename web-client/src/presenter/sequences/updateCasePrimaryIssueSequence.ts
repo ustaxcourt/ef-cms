@@ -5,7 +5,7 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updateCasePrimaryIssueInDbAction } from '../actions/CaseWorksheet/updateCaseWithUpdatedPrimaryIssueAction';
+import { updateCasePrimaryIssueInDbAction } from '../actions/CaseWorksheet/updateCasePrimaryIssueInDbAction';
 import { updateCasePrimaryIssueInStateAction } from '../actions/CaseWorksheet/updateCasePrimaryIssueInStateAction';
 import { validatePrimaryIssueAction } from '../actions/validatePrimaryIssueAction';
 
