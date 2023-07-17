@@ -61,7 +61,7 @@ export const MOCK_TRIAL_INPERSON: RawTrialSession = {
   ],
   chambersPhoneNumber: '3609087782',
   city: 'Scottsburg',
-  entityName: 'OpenTrialSession',
+  entityName: 'TrialSession',
   hasNOTTBeenServed: false,
   isCalendared: false,
   judge: {
