@@ -52,7 +52,4 @@ describe('updateCasePrimaryIssueInteractor', () => {
 
     expect(results.primaryIssue).toEqual(TEST_PRIMARY_ISSUE);
   });
-
-	it('should throw validations error when primary issue is not a string', () => {});
-
 });
