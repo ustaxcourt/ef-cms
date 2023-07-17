@@ -1,9 +1,9 @@
-import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 import { isEmpty, isEqual } from 'lodash';
 
@@ -60,12 +60,14 @@ export const closeTrialSessionInteractor = async (
     throw new Error('Trial session cannot be closed with open cases');
   }
 
-  const trialSessionEntity = new OpenTrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
-  const closedTrialSession = trialSessionEntity.setAsClosed();
+  trialSessionEntity.setAsClosed();
 
   return await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
-    trialSessionToUpdate: closedTrialSession.validate().toRawObject(),
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 };

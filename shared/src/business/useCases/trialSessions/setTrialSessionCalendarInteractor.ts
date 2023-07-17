@@ -1,11 +1,10 @@
 import { Case } from '../../entities/cases/Case';
-import { NewTrialSession } from '../../entities/trialSessions/NewTrialSession';
-import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 import { partition } from 'lodash';
 
@@ -18,10 +17,10 @@ import { partition } from 'lodash';
  */
 const removeManuallyAddedCaseFromTrialSession = ({
   applicationContext,
-  calendaredTrialSession,
   caseRecord,
+  trialSessionEntity,
 }) => {
-  calendaredTrialSession.deleteCaseFromCalendar({
+  trialSessionEntity.deleteCaseFromCalendar({
     docketNumber: caseRecord.docketNumber,
   });
 
@@ -59,13 +58,13 @@ export const setTrialSessionCalendarInteractor = async (
       trialSessionId,
     });
 
-  const trialSessionEntity = new NewTrialSession(trialSession, {
+  const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
   });
 
   trialSessionEntity.validate();
 
-  const calendaredTrialSession = trialSessionEntity.setAsCalendared();
+  trialSessionEntity.setAsCalendared();
 
   //get cases that have been manually added so we can set them as calendared
   const manuallyAddedCases = await applicationContext
@@ -85,7 +84,7 @@ export const setTrialSessionCalendarInteractor = async (
     );
 
   let eligibleCasesLimit =
-    calendaredTrialSession.maxCases + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
+    trialSessionEntity.maxCases + TRIAL_SESSION_ELIGIBLE_CASES_BUFFER;
 
   eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
@@ -95,7 +94,7 @@ export const setTrialSessionCalendarInteractor = async (
       .getEligibleCasesForTrialSession({
         applicationContext,
         limit: eligibleCasesLimit,
-        skPrefix: calendaredTrialSession.generateSortKeyPrefix(),
+        skPrefix: trialSessionEntity.generateSortKeyPrefix(),
       })
   )
     .filter(
@@ -105,7 +104,7 @@ export const setTrialSessionCalendarInteractor = async (
     )
     .splice(
       0,
-      calendaredTrialSession.maxCases - manuallyAddedQcCompleteCases.length,
+      trialSessionEntity.maxCases - manuallyAddedQcCompleteCases.length,
     );
 
   /**
@@ -116,7 +115,7 @@ export const setTrialSessionCalendarInteractor = async (
   const setManuallyAddedCaseAsCalendared = caseRecord => {
     const caseEntity = new Case(caseRecord, { applicationContext });
 
-    caseEntity.setAsCalendared(calendaredTrialSession);
+    caseEntity.setAsCalendared(trialSessionEntity);
 
     return Promise.all([
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
@@ -140,8 +139,8 @@ export const setTrialSessionCalendarInteractor = async (
   const setTrialSessionCalendarForEligibleCase = caseRecord => {
     const caseEntity = new Case(caseRecord, { applicationContext });
 
-    caseEntity.setAsCalendared(calendaredTrialSession);
-    calendaredTrialSession.addCaseToCalendar(caseEntity);
+    caseEntity.setAsCalendared(trialSessionEntity);
+    trialSessionEntity.addCaseToCalendar(caseEntity);
 
     return Promise.all([
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems({
@@ -167,8 +166,8 @@ export const setTrialSessionCalendarInteractor = async (
     ...manuallyAddedQcIncompleteCases.map(caseRecord =>
       removeManuallyAddedCaseFromTrialSession({
         applicationContext,
-        calendaredTrialSession,
         caseRecord,
+        trialSessionEntity,
       }),
     ),
     ...manuallyAddedQcCompleteCases.map(setManuallyAddedCaseAsCalendared),
@@ -179,8 +178,10 @@ export const setTrialSessionCalendarInteractor = async (
     .getPersistenceGateway()
     .updateTrialSession({
       applicationContext,
-      trialSessionToUpdate: calendaredTrialSession.validate().toRawObject(),
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
     });
 
-  return new OpenTrialSession(updatedTrialSession).validate().toRawObject();
+  return new TrialSession(updatedTrialSession, { applicationContext })
+    .validate()
+    .toRawObject();
 };

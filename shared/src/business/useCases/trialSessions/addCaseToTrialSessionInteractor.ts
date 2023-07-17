@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -50,10 +50,9 @@ export const addCaseToTrialSessionInteractor = async (
 
   const caseEntity = new Case(caseDetails, { applicationContext });
 
-  const trialSessionEntity = TrialSessionFactory(
-    trialSession,
+  const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
-  );
+  });
 
   if (caseEntity.isCalendared()) {
     throw new Error('The case is already calendared');

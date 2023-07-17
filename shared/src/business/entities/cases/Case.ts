@@ -45,7 +45,7 @@ import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from './PublicCase';
 import { Statistic } from '../Statistic';
-import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
+import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
@@ -861,7 +861,7 @@ export class Case extends JoiValidationEntity {
   assignHearings({ applicationContext, rawCase }) {
     if (Array.isArray(rawCase.hearings)) {
       this.hearings = rawCase.hearings
-        .map(hearing => TrialSessionFactory(hearing, applicationContext))
+        .map(hearing => new TrialSession(hearing, { applicationContext }))
         .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
     } else {
       this.hearings = [];

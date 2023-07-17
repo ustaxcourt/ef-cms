@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
 import { get } from 'lodash';
@@ -191,9 +191,11 @@ export const updateTrialSessionInteractor = async (
     trialLocation: trialSession.trialLocation,
   };
 
-  const updatedTrialSessionEntity = TrialSessionFactory(
+  const updatedTrialSessionEntity = new TrialSession(
     { ...currentTrialSession, ...editableFields },
-    applicationContext,
+    {
+      applicationContext,
+    },
   );
 
   const shouldCreateWorkingCopyForNewJudge =

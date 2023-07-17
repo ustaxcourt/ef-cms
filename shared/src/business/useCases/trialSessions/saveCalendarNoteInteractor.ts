@@ -2,7 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -41,10 +41,9 @@ export const saveCalendarNoteInteractor = async (
     }
   });
 
-  const rawTrialSessionEntity = TrialSessionFactory(
-    trialSession,
+  const rawTrialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
-  )
+  })
     .validate()
     .toRawObject();
 

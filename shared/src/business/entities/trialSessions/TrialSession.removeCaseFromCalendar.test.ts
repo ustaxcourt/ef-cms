@@ -3,18 +3,20 @@ import {
   MOCK_TRIAL_STANDALONE_REMOTE,
 } from '../../../test/mockTrial';
 import { SESSION_STATUS_GROUPS } from '../EntityConstants';
-import { TrialSessionFactory } from './TrialSessionFactory';
+import { TrialSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('removeCaseFromCalendar', () => {
     it('should set case on calendar to removedFromTrial with removedFromTrialDate and disposition', () => {
-      const trialSession = TrialSessionFactory(
+      const trialSession = new TrialSession(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [],
         },
-        applicationContext,
+        {
+          applicationContext,
+        },
       );
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });
       trialSession.addCaseToCalendar({ docketNumber: '234-45' });
@@ -38,12 +40,14 @@ describe('TrialSession entity', () => {
     });
 
     it('should not modify case calendar if docketNumber is not in caseOrder', () => {
-      const trialSession = TrialSessionFactory(
+      const trialSession = new TrialSession(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [],
         },
-        applicationContext,
+        {
+          applicationContext,
+        },
       );
       trialSession.addCaseToCalendar({ docketNumber: '123-45' });
       trialSession.addCaseToCalendar({ docketNumber: '234-45' });
@@ -63,12 +67,14 @@ describe('TrialSession entity', () => {
   });
 
   it('should set the sessionStatus to closed when all cases on the session are removed', () => {
-    const trialSession = TrialSessionFactory(
+    const trialSession = new TrialSession(
       {
         ...MOCK_TRIAL_INPERSON,
         caseOrder: [],
       },
-      applicationContext,
+      {
+        applicationContext,
+      },
     );
     trialSession.addCaseToCalendar({ docketNumber: '123-45' });
     expect(trialSession.caseOrder!.length).toEqual(1);
@@ -84,12 +90,14 @@ describe('TrialSession entity', () => {
   });
 
   it('should keep the status as open when the session is standalone remote, even after removing all cases', () => {
-    const trialSession = TrialSessionFactory(
+    const trialSession = new TrialSession(
       {
         ...MOCK_TRIAL_STANDALONE_REMOTE,
         caseOrder: [],
       },
-      applicationContext,
+      {
+        applicationContext,
+      },
     );
     trialSession.addCaseToCalendar({ docketNumber: '123-45' });
     expect(trialSession.caseOrder!.length).toEqual(1);
