@@ -230,10 +230,7 @@ export class TrialSession extends JoiValidationEntity {
     trialSessionId: JoiValidationConstants.UUID.required(),
   };
 
-  constructor(
-    rawSession,
-    { entityName = 'TrialSession' }: { entityName: string },
-  ) {
+  constructor(rawSession, entityName: string) {
     super(entityName);
 
     this.address1 = rawSession.address1;
