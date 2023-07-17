@@ -7,7 +7,7 @@ describe('deleteCasePrimaryIssueInStateAction', () => {
   presenter.providers.applicationContext = applicationContext;
   const TEST_DOCKET_NUMBER = '999-99';
 
-  it('should set props.casesClosedByJudge on state', async () => {
+  it("should update the submitted/cav case's primary issue to null", async () => {
     const submittedAndCavCasesByJudge = [
       { docketNumber: '1', primaryIssue: 'primaryIssue1' },
       { docketNumber: TEST_DOCKET_NUMBER, primaryIssue: 'primaryIssue2' },
