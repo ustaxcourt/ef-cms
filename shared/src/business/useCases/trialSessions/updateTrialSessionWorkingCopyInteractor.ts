@@ -2,10 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  RawTrialSessionWorkingCopy,
-  TrialSessionWorkingCopy,
-} from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**

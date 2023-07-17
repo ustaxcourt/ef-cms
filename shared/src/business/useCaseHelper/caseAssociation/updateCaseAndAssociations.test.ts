@@ -6,12 +6,12 @@ import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   DOCKET_NUMBER_SUFFIXES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { CaseDeadline } from '../../entities/CaseDeadline';
 import { MOCK_CASE } from '../../../../src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
-import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { MOCK_WORK_ITEM } from '../../../test/mockWorkItem';
 import { Message } from '../../entities/Message';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -20,6 +20,29 @@ import { faker } from '@faker-js/faker';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 
 describe('updateCaseAndAssociations', () => {
+  const MOCK_TRIAL_SESSION = {
+    address1: '123 Street Lane',
+    caseOrder: [
+      { docketNumber: MOCK_CASE.docketNumber },
+      { docketNumber: '123-45' },
+    ],
+    city: 'Scottsburg',
+    judge: {
+      name: 'A Judge',
+      userId: '55f4fc65-b33e-4c04-8561-3e56d533f386',
+    },
+    maxCases: 100,
+    postalCode: '47130',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    sessionType: 'Regular',
+    startDate: '3000-03-01T00:00:00.000Z',
+    state: 'IN',
+    term: 'Fall',
+    termYear: '3000',
+    trialLocation: 'Birmingham, Alabama',
+    trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  };
+
   let updateCaseMock = jest.fn();
   let validMockCase;
 
@@ -188,17 +211,15 @@ describe('updateCaseAndAssociations', () => {
     const caseToUpdate = {
       ...validMockCase,
       docketNumber,
-      hearings: [
-        { ...MOCK_TRIAL_INPERSON, trialSessionId: trialSessionIds[0] },
-      ],
+      hearings: [{ ...MOCK_TRIAL_SESSION, trialSessionId: trialSessionIds[0] }],
     };
     const oldCase = {
       ...validMockCase,
       docketNumber,
       hearings: [
-        { ...MOCK_TRIAL_INPERSON, trialSessionId: trialSessionIds[0] },
-        { ...MOCK_TRIAL_INPERSON, trialSessionId: trialSessionIds[1] },
-        { ...MOCK_TRIAL_INPERSON, trialSessionId: trialSessionIds[2] },
+        { ...MOCK_TRIAL_SESSION, trialSessionId: trialSessionIds[0] },
+        { ...MOCK_TRIAL_SESSION, trialSessionId: trialSessionIds[1] },
+        { ...MOCK_TRIAL_SESSION, trialSessionId: trialSessionIds[2] },
       ],
     };
 
