@@ -3,7 +3,7 @@ import { TrialSession } from './TrialSession';
 
 export class ClosedTrialSession extends TrialSession {
   constructor(rawSession: RawClosedTrialSession) {
-    super(rawSession, 'ClosedTrialSession');
+    super(rawSession);
 
     this.sessionStatus = SESSION_STATUS_TYPES.closed;
   }

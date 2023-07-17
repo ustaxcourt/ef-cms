@@ -31,9 +31,7 @@ describe('getTrialSessionsInteractor', () => {
 
     await expect(
       getTrialSessionsInteractor(applicationContext),
-    ).rejects.toThrow(
-      'The OpenTrialSession entity was invalid. {"maxCases":"\'maxCases\' is required"}',
-    );
+    ).rejects.toThrow('The TrialSession entity was invalid.');
   });
 
   it('should return a list of validated trial sessions', async () => {
