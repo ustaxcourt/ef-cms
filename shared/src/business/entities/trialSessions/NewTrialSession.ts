@@ -10,10 +10,6 @@ export class NewTrialSession extends TrialSession {
   constructor(rawSession: RawNewTrialSession, { applicationContext }) {
     super(rawSession);
 
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
-
     this.trialClerkId = rawSession.trialClerkId;
     this.trialSessionId =
       rawSession.trialSessionId || applicationContext.getUniqueId();

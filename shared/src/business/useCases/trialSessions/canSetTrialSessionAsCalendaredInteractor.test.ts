@@ -1,13 +1,24 @@
-import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
 
+const MOCK_TRIAL = {
+  maxCases: 100,
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+  sessionType: 'Regular',
+  startDate: '2025-12-01T00:00:00.000Z',
+  term: 'Fall',
+  termYear: '2025',
+  trialLocation: 'Birmingham, Alabama',
+};
+
+let user;
+
 describe('canSetTrialSessionAsCalendaredInteractor', () => {
-  let user;
   beforeEach(() => {
     applicationContext.getCurrentUser.mockImplementation(() => user);
   });
@@ -20,7 +31,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
     expect(() =>
       canSetTrialSessionAsCalendaredInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL_INPERSON,
+        trialSession: MOCK_TRIAL as RawTrialSession,
       }),
     ).toThrow('Unauthorized');
   });
@@ -36,15 +47,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
     const result = canSetTrialSessionAsCalendaredInteractor(
       applicationContext,
       {
-        trialSession: {
-          ...MOCK_TRIAL_INPERSON,
-          address1: undefined,
-          chambersPhoneNumber: undefined,
-          city: undefined,
-          judge: undefined,
-          postalCode: undefined,
-          state: undefined,
-        },
+        trialSession: MOCK_TRIAL as RawTrialSession,
       },
     );
 
@@ -74,17 +77,14 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
       applicationContext,
       {
         trialSession: {
-          ...MOCK_TRIAL_INPERSON,
+          ...MOCK_TRIAL,
           chambersPhoneNumber: '1234567890',
           joinPhoneNumber: '099987654321',
-          judge: {
-            name: 'Bootsy Collins',
-            userId: '60ed4968-cd19-41f2-9ac5-5f577f7def1a',
-          },
+          judge: { name: 'Bootsy Collins' },
           meetingId: '4',
           password: '42',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        },
+        } as RawTrialSession,
       },
     );
 
