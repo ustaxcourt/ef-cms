@@ -1,5 +1,6 @@
-import { DocketHeader } from '../components/DocketHeader.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
+import { DocketHeader } from '../components/DocketHeader';
+import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
 
 export const NoticeOfTrialIssuedInPerson = ({
@@ -70,11 +71,7 @@ export const NoticeOfTrialIssuedInPerson = ({
           given detailed instructions for accessing your remote proceeding.
         </p>
 
-        <p className="float-right width-third">
-          Stephanie A. Servoss
-          <br />
-          Clerk of the Court
-        </p>
+        <ClerkOfTheCourtSignature />
       </div>
     </div>
   );

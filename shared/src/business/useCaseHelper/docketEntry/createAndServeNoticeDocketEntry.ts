@@ -1,28 +1,31 @@
+import { Case } from '../../entities/cases/Case';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
 import { DocketEntry, getServedPartiesCode } from '../../entities/DocketEntry';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { createISODateString } from '../../utilities/DateHandler';
 
-/**
- * createAndServeNoticeDocketEntry
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseEntity the case data
- * @param {object} providers.documentInfo information on the document being served
- * @param {object} providers.newPdfDoc the new PDF contents to be appended
- * @param {object} providers.noticePdf the notice pdf being served
- * @param {object} providers.userId the user ID
- */
 export const createAndServeNoticeDocketEntry = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     additionalDocketEntryInfo = {},
     caseEntity,
     documentInfo,
     newPdfDoc,
     noticePdf,
+    onlyProSePetitioners,
     userId,
+  }: {
+    additionalDocketEntryInfo?: any;
+    caseEntity: Case;
+    documentInfo: {
+      documentType: string;
+      documentTitle: string;
+      eventCode: string;
+    };
+    newPdfDoc: any;
+    noticePdf: Buffer;
+    userId: string;
+    onlyProSePetitioners?: boolean;
   },
 ) => {
   const docketEntryId = applicationContext.getUniqueId();
@@ -33,7 +36,9 @@ export const createAndServeNoticeDocketEntry = async (
     key: docketEntryId,
   });
 
-  const servedParties = aggregatePartiesForService(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntity, {
+    onlyProSePetitioners,
+  });
 
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()

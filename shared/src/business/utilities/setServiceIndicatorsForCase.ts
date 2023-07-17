@@ -1,5 +1,5 @@
+import { Case } from '../entities/cases/Case';
 import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
-import { isUserIdRepresentedByPrivatePractitioner } from '../entities/cases/Case';
 
 /**
  * sets the service indicators for parties on the given case
@@ -11,12 +11,7 @@ export const setServiceIndicatorsForCase = caseDetail => {
 
   petitioners?.forEach(petitioner => {
     if (!petitioner.serviceIndicator) {
-      if (
-        isUserIdRepresentedByPrivatePractitioner(
-          caseDetail,
-          petitioner.contactId,
-        )
-      ) {
+      if (Case.isPetitionerRepresented(caseDetail, petitioner.contactId)) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
       } else {
         const serviceIsPaper = !petitioner.email;

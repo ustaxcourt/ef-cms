@@ -16,13 +16,14 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 describe('JUDGE and ADC DOC QC: Work Item Filtering', () => {
   const cerebralTest = setupTest();
 
+  cerebralTest.createdCases = [];
+
+  let judgeDocketSectionQCInboxCountBefore;
+  let adcDocketSectionQCInboxCountBefore;
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  cerebralTest.createdCases = [];
-  let judgeDocketSectionQCInboxCountBefore;
-  let adcDocketSectionQCInboxCountBefore;
 
   loginAs(cerebralTest, 'judgecohen@example.com');
   it("Get judge's document qc section inbox before", async () => {

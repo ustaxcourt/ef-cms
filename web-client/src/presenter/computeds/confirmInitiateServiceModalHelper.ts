@@ -14,8 +14,12 @@ export const confirmInitiateServiceModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const { CONTACT_TYPE_TITLES, NON_MULTI_DOCKETABLE_EVENT_CODES, USER_ROLES } =
-    applicationContext.getConstants();
+  const {
+    CONTACT_TYPE_TITLES,
+    NON_MULTI_DOCKETABLE_EVENT_CODES,
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const { isCourtIssued } = applicationContext.getUtilities();
 
   const docketEntryId = get(state.docketEntryId);
@@ -24,9 +28,9 @@ export const confirmInitiateServiceModalHelper = (
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
 
-  let { eventCode } = form;
+  let { eventCode, isPaper } = form;
   if (!eventCode) {
-    ({ eventCode } = formattedCaseDetail.docketEntries.find(
+    ({ eventCode, isPaper } = formattedCaseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
     ));
   }
@@ -43,6 +47,11 @@ export const confirmInitiateServiceModalHelper = (
 
     showConsolidatedCasesForService =
       showConsolidatedCasesForService && areMultiDocketablePaperFilingsEnabled;
+
+    if (SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode)) {
+      showConsolidatedCasesForService =
+        showConsolidatedCasesForService && isPaper;
+    }
   }
 
   const confirmationText = showConsolidatedCasesForService
