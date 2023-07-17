@@ -1,14 +1,14 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { getUserAction } from '../actions/getUserAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setUserOnFormAction } from '../actions/setUserOnFormAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoUserContactEditSequence =
   startWebSocketConnectionSequenceDecorator([
-    setCurrentPageAction('Interstitial'),
+    setupCurrentPageAction('Interstitial'),
     clearFormAction,
     getUserAction,
     setUserOnFormAction,
-    setCurrentPageAction('UserContactEdit'),
+    setupCurrentPageAction('UserContactEdit'),
   ]);

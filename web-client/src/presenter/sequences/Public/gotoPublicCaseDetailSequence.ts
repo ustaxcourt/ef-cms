@@ -1,9 +1,9 @@
 import { getPublicCaseAction } from '../../actions/Public/getPublicCaseAction';
 import { setCaseAction } from '../../actions/setCaseAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
+import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 
 export const gotoPublicCaseDetailSequence = [
   getPublicCaseAction,
   setCaseAction,
-  setCurrentPageAction('PublicCaseDetail'),
+  setupCurrentPageAction('PublicCaseDetail'),
 ];
