@@ -12,7 +12,12 @@ describe('replaceBracketed', () => {
   });
 
   it('does nothing on empty input', () => {
-    const results = replaceBracketed('[]', false as any);
+    const results = replaceBracketed('[]', false);
     expect(results).toEqual('');
+  });
+
+  it('returns undefined if first argument is undefined', () => {
+    const results = replaceBracketed(undefined);
+    expect(results).not.toBeDefined();
   });
 });
