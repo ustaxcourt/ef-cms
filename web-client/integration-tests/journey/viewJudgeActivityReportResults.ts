@@ -6,6 +6,7 @@ import { getConstants } from '../../src/getConstants';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import {
   refreshElasticsearchIndex,
+  wait,
   waitForLoadingComponentToHide,
 } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -67,7 +68,7 @@ export const viewJudgeActivityReportResults = (
       }),
     );
 
-    await waitForLoadingComponentToHide({ cerebralTest });
+    await wait(3000);
 
     expect(
       cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
