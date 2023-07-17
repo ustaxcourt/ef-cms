@@ -39,6 +39,14 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
 
     expect(cerebralTest.getState('currentPage')).toBe('CreateOrder');
 
+    expect(cerebralTest.getState('featureFlags')).toMatchObject({
+      'consolidated-cases-add-docket-numbers': expect.anything(),
+      'consolidated-cases-group-access-petitioner': expect.anything(),
+      'document-visibility-policy-change-date': expect.anything(),
+      'e-consent-fields-enabled-feature-flag': expect.anything(),
+      'multi-docketable-paper-filings': expect.anything(),
+    });
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',
       value: 'Some order content',
