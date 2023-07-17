@@ -3,9 +3,9 @@ import { getNoticeGenerationSuccessMessageAction } from '../actions/TrialSession
 import { hasPaperAction } from '../actions/hasPaperAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const paperServiceCompleteSequence = [
@@ -19,7 +19,7 @@ export const paperServiceCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
-      setCurrentPageAction('PrintPaperTrialNotices'),
+      setupCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
     ],

@@ -344,7 +344,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getAllFeatureFlagsInteractor: jest.fn().mockImplementation(() => false),
+    getAllFeatureFlagsInteractor: jest.fn().mockReturnValue({}),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
@@ -682,5 +682,10 @@ Object.entries(applicationContext).forEach(([key, value]) => {
     intermediary[key] = value;
   }
 });
+interface TestClientApplicationContext extends ClientApplicationContext {
+  getUseCases: typeof applicationContext.getUseCases;
+  getPersistenceGateway: typeof applicationContext.getPersistenceGateway;
+}
+
 export const applicationContextForClient =
-  intermediary as ClientApplicationContext;
+  intermediary as TestClientApplicationContext;
