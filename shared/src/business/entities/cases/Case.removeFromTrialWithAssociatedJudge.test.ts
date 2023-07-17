@@ -1,8 +1,10 @@
-import { CASE_STATUS_TYPES } from '../EntityConstants';
-import { Case } from './Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
-import { applicationContext } from '../../test/createTestApplicationContext';
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const { Case } = require('./Case');
+const { CASE_STATUS_TYPES } = require('../EntityConstants');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('removeFromTrialWithAssociatedJudge', () => {
   it('removes the case from trial, updating the associated judge if one is passed in', () => {
@@ -14,7 +16,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
         applicationContext,
       },
     );
-    const trialSession = TrialSessionFactory(
+    const trialSession = new TrialSession(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -25,7 +27,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      applicationContext,
+      { applicationContext },
     );
     caseToUpdate.setAsCalendared(trialSession);
 
@@ -54,7 +56,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
         applicationContext,
       },
     );
-    const trialSession = TrialSessionFactory(
+    const trialSession = new TrialSession(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -65,7 +67,7 @@ describe('removeFromTrialWithAssociatedJudge', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      applicationContext,
+      { applicationContext },
     );
     caseToUpdate.setAsCalendared(trialSession);
 

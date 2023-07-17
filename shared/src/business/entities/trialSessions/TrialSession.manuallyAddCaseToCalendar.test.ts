@@ -2,7 +2,6 @@ import { Case } from '../cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { TrialSessionFactory } from './TrialSessionFactory';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
@@ -13,12 +12,14 @@ describe('TrialSession entity', () => {
     let trialSession: TrialSession;
 
     beforeEach(() => {
-      trialSession = TrialSessionFactory(
+      trialSession = new TrialSession(
         {
           ...MOCK_TRIAL_INPERSON,
           caseOrder: [],
         },
-        applicationContext,
+        {
+          applicationContext,
+        },
       );
     });
 

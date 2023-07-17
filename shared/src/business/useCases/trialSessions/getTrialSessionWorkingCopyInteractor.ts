@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { User } from '../../entities/User';
 
@@ -64,10 +64,9 @@ export const getTrialSessionWorkingCopyInteractor = async (
         applicationContext,
         trialSessionId,
       });
-    const trialSessionEntity = TrialSessionFactory(
-      trialSessionDetails,
+    const trialSessionEntity = new TrialSession(trialSessionDetails, {
       applicationContext,
-    );
+    });
 
     const canCreateWorkingCopy =
       (trialSessionEntity.trialClerk &&

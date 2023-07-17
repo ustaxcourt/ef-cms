@@ -4,8 +4,10 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '../../entities/trialSessions/TrialSession';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { copyPagesAndAppendToTargetPdf } from '../../utilities/copyPagesAndAppendToTargetPdf';
 import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
@@ -359,10 +361,9 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
       status: 'processing',
     });
 
-  const trialSessionEntity = TrialSessionFactory(
-    trialSession,
+  const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
-  );
+  });
 
   const caseRecord = await applicationContext
     .getPersistenceGateway()

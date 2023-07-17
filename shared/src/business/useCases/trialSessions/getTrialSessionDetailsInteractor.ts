@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 
 /**
  * getTrialSessionDetailsInteractor
@@ -32,10 +32,9 @@ export const getTrialSessionDetailsInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const trialSessionEntity = TrialSessionFactory(
-    trialSessionDetails,
+  const trialSessionEntity = new TrialSession(trialSessionDetails, {
     applicationContext,
-  ).validate();
+  }).validate();
 
   return trialSessionEntity.toRawObject();
 };

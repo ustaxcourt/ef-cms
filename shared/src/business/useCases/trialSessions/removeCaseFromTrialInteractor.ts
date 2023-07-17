@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 export const removeCaseFromTrialInteractor = async (
@@ -35,10 +35,9 @@ export const removeCaseFromTrialInteractor = async (
       trialSessionId,
     });
 
-  const trialSessionEntity = TrialSessionFactory(
-    trialSession,
+  const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
-  );
+  });
 
   if (trialSessionEntity.isCalendared) {
     trialSessionEntity.removeCaseFromCalendar({ disposition, docketNumber });

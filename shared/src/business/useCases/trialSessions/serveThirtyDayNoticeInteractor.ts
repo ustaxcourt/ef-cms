@@ -5,11 +5,11 @@ import {
 import { Case } from '../../entities/cases/Case';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -51,7 +51,9 @@ export const serveThirtyDayNoticeInteractor = async (
     return;
   }
 
-  const trialSessionEntity = new OpenTrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServicePdf = await PDFDocument.create();

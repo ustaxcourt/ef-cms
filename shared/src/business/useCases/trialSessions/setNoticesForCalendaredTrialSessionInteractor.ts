@@ -1,8 +1,8 @@
-import { OpenTrialSession } from '../../entities/trialSessions/OpenTrialSession';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
 const waitForJobToFinish = ({ applicationContext, jobId }) => {
@@ -77,7 +77,9 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       trialSessionId,
     });
 
-  const trialSessionEntity = new OpenTrialSession(trialSession);
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
   const trialSessionProcessingStatus = await applicationContext
     .getPersistenceGateway()

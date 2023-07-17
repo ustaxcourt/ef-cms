@@ -1,6 +1,6 @@
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { TrialSessionFactory } from '../../entities/trialSessions/TrialSessionFactory';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { associateSwingTrialSessions } from './associateSwingTrialSessions';
 import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -34,10 +34,9 @@ describe('associateSwingTrialSessions', () => {
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_SESSION_FOR_ASSOCIATION);
 
-    mockCurrentTrialSessionEntity = TrialSessionFactory(
-      MOCK_TRIAL_SESSION,
+    mockCurrentTrialSessionEntity = new TrialSession(MOCK_TRIAL_SESSION, {
       applicationContext,
-    );
+    });
   });
 
   it('throws an error if user is unauthorized to associate swing sessions', async () => {

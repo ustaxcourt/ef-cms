@@ -1,8 +1,10 @@
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../EntityConstants';
-import { Case } from './Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { TrialSessionFactory } from '../trialSessions/TrialSessionFactory';
-import { applicationContext } from '../../test/createTestApplicationContext';
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const { Case } = require('./Case');
+const { CASE_STATUS_TYPES, CHIEF_JUDGE } = require('../EntityConstants');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { TrialSession } = require('../trialSessions/TrialSession');
 
 describe('setAsCalendared', () => {
   it('should set case as calendared with only judge and trialSessionId if the trial session is calendared', () => {
@@ -29,7 +31,7 @@ describe('setAsCalendared', () => {
         applicationContext,
       },
     );
-    const trialSession = TrialSessionFactory(
+    const trialSession = new TrialSession(
       {
         isCalendared: true,
         judge: { name: 'Judge Buch' },
@@ -40,7 +42,7 @@ describe('setAsCalendared', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      applicationContext,
+      { applicationContext },
     );
     myCase.setAsCalendared(trialSession);
 
@@ -61,7 +63,7 @@ describe('setAsCalendared', () => {
         applicationContext,
       },
     );
-    const trialSession = TrialSessionFactory(
+    const trialSession = new TrialSession(
       {
         isCalendared: false,
         judge: { name: 'Judge Buch' },
@@ -72,7 +74,7 @@ describe('setAsCalendared', () => {
         termYear: '2025',
         trialLocation: 'Birmingham, Alabama',
       },
-      applicationContext,
+      { applicationContext },
     );
     myCase.setAsCalendared(trialSession);
 

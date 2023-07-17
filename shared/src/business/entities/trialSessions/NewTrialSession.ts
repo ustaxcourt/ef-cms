@@ -1,19 +1,14 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { OpenTrialSession } from './OpenTrialSession';
-import { SESSION_STATUS_TYPES } from '../EntityConstants';
 import { TrialSession } from './TrialSession';
 import joi from 'joi';
 
 export class NewTrialSession extends TrialSession {
-  public trialClerkId?: string;
+  public trialClerkId: string;
 
   constructor(rawSession: RawNewTrialSession, { applicationContext }) {
-    super(rawSession);
+    super(rawSession, { applicationContext });
 
     this.trialClerkId = rawSession.trialClerkId;
-    this.trialSessionId =
-      rawSession.trialSessionId || applicationContext.getUniqueId();
-    this.sessionStatus = SESSION_STATUS_TYPES.new;
   }
 
   getErrorToMessageMap() {
@@ -26,7 +21,7 @@ export class NewTrialSession extends TrialSession {
 
   getValidationRules() {
     return {
-      ...TrialSession.VALIDATION_RULES,
+      ...TrialSession.validationRules.COMMON,
       alternateTrialClerkName: joi.when('trialClerkId', {
         is: 'Other',
         otherwise: joi.optional(),
@@ -34,12 +29,6 @@ export class NewTrialSession extends TrialSession {
       }),
       startDate: JoiValidationConstants.ISO_DATE.min('now').required(),
     };
-  }
-
-  setAsCalendared(): OpenTrialSession {
-    this.isCalendared = true;
-    this.sessionStatus = SESSION_STATUS_TYPES.open;
-    return new OpenTrialSession(this);
   }
 }
 
