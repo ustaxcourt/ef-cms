@@ -352,7 +352,7 @@ export const MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE = {
   status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
 };
 
-export const MOCK_CASE_WITH_TRIAL_SESSION: RawCase = {
+export const MOCK_CASE_WITH_TRIAL_SESSION = {
   archivedDocketEntries: [],
   associatedJudge: 'Judge Fieri',
   caseCaption: 'Test Petitioner, Petitioner',

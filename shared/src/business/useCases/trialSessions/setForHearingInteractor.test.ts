@@ -64,10 +64,7 @@ describe('setForHearingInteractor', () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
       hearings: [
-        {
-          ...MOCK_TRIAL_REMOTE,
-          trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
-        },
+        { trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId },
       ],
     };
 

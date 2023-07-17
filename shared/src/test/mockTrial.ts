@@ -8,7 +8,6 @@ import {
 } from '../business/entities/EntityConstants';
 
 export const MOCK_TRIAL_REMOTE: RawTrialSession = {
-  caseOrder: [],
   chambersPhoneNumber: '1111111',
   entityName: 'TrialSession',
   hasNOTTBeenServed: false,
