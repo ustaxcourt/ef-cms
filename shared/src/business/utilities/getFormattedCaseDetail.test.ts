@@ -1,6 +1,5 @@
 import { CASE_STATUS_TYPES, PAYMENT_STATUS } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../test/mockTrial';
 import { MOCK_USERS } from '../../test/mockUsers';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { formatCase, getFormattedCaseDetail } from './getFormattedCaseDetail';
@@ -277,7 +276,16 @@ describe('getFormattedCaseDetail', () => {
     it('should format hearing details if the case has associated hearings', () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
-        hearings: [MOCK_TRIAL_INPERSON],
+        hearings: [
+          {
+            judge: {
+              name: 'Judge Dredd',
+            },
+            startDate: '2011-11-11T05:00:00.000Z',
+            startTime: '10:00',
+            trialLocation: 'Megacity One',
+          },
+        ],
         status: CASE_STATUS_TYPES.calendared,
         trialDate: '2011-11-11T05:00:00.000Z',
         trialLocation: 'Boise, Idaho',
@@ -290,9 +298,15 @@ describe('getFormattedCaseDetail', () => {
         formattedTrialDate: '11/11/11',
         hearings: [
           {
-            formattedAssociatedJudge: MOCK_TRIAL_INPERSON.judge!.name,
-            formattedTrialCity: MOCK_TRIAL_INPERSON.trialLocation!,
-            formattedTrialDate: '02/28/00',
+            formattedAssociatedJudge: 'Judge Dredd',
+            formattedTrialCity: 'Megacity One',
+            formattedTrialDate: '11/11/11 10:00 am',
+            judge: {
+              name: 'Judge Dredd',
+            },
+            startDate: '2011-11-11T05:00:00.000Z',
+            startTime: '10:00',
+            trialLocation: 'Megacity One',
           },
         ],
         showTrialCalendared: true,

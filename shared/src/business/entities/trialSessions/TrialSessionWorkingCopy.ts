@@ -98,5 +98,7 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
     };
   }
 }
-export type RawTrialSessionWorkingCopy =
-  ExcludeMethods<TrialSessionWorkingCopy>;
+
+declare global {
+  type RawTrialSessionWorkingCopy = ExcludeMethods<TrialSessionWorkingCopy>;
+}

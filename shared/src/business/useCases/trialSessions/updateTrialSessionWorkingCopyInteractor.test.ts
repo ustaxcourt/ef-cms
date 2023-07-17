@@ -1,23 +1,22 @@
 import { ROLES } from '../../entities/EntityConstants';
-import { RawTrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { omit } from 'lodash';
 import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
 
+let user;
+
+const MOCK_WORKING_COPY = {
+  caseMetadata: {
+    '101-19': { trialStatus: 'dismissed' },
+  },
+  sort: 'practitioner',
+  sortOrder: 'desc',
+  trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+  userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+};
+
 describe('Update trial session working copy', () => {
-  let user;
-
-  const MOCK_WORKING_COPY = {
-    caseMetadata: {
-      '101-19': { trialStatus: 'dismissed' },
-    },
-    sort: 'practitioner',
-    sortOrder: 'desc',
-    trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-  };
-
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
     applicationContext.getCurrentUser.mockImplementation(() => user);
