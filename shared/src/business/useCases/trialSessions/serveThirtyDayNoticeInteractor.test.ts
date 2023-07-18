@@ -22,6 +22,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
+    applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
+
     applicationContext
       .getUseCaseHelpers()
       .updateCaseAndAssociations.mockResolvedValue(null);
@@ -96,6 +98,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       const expectedThirtyDayNoticeInfo: ThirtyDayNoticeOfTrialRequiredInfo = {
         caseCaptionExtension: expect.anything(),
         caseTitle: expect.anything(),
+        dateServed: '02/23/2023',
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
         judgeName: trialSession.judge!.name,
         proceedingType: trialSession.proceedingType,
