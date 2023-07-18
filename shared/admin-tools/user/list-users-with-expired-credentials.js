@@ -3,12 +3,13 @@ const { IAM } = require('aws-sdk');
 
 const iamClient = new IAM({ region: 'us-east-1' });
 const month = DateTime.now().quarter * 3 - 2;
-export const startOfCurrentQuarter = () => {
+export const getStartOfCurrentQuarter = () => {
   return DateTime.fromObject({
     month,
     year: DateTime.now().year,
   });
 };
+const startOfCurrentQuarter = getStartOfCurrentQuarter();
 
 /**
  * cycle through all of the users in the current AWS account and check the age of their credentials
