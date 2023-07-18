@@ -166,7 +166,7 @@
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
     "reset-cases": "./clear-env.sh",
-    "secrets:check": "node shared/admin-tools/user/list-users-with-expired-credentials.js",
+    "secrets:check": "npx ts-node --transpile-only shared/admin-tools/user/list-users-with-expired-credentials.ts",
     "secrets:rotate-circleci": "./shared/admin-tools/user/rotate-circleci-secrets.sh",
     "secrets:rotate-environment": "ts-node shared/admin-tools/user/rotate-environment-secrets.ts",
     "seed:db": "./seed-dynamo.sh",
