@@ -149,6 +149,10 @@ export const serveThirtyDayNoticeInteractor = async (
       await applicationContext
         .getUseCaseHelpers()
         .createAndServeNoticeDocketEntry(applicationContext, {
+          additionalDocketEntryInfo: {
+            date: trialSession.startDate,
+            trialLocation: trialSession.trialLocation,
+          },
           caseEntity,
           documentInfo: {
             documentTitle: replaceBracketed(

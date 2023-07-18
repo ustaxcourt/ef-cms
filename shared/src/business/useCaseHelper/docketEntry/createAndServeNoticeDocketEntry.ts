@@ -1,5 +1,8 @@
 import { Case } from '../../entities/cases/Case';
-import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
+import {
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  PARTIES_CODES,
+} from '../../entities/EntityConstants';
 import { DocketEntry, getServedPartiesCode } from '../../entities/DocketEntry';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { createISODateString } from '../../utilities/DateHandler';
@@ -60,7 +63,9 @@ export const createAndServeNoticeDocketEntry = async (
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       servedAt: createISODateString(),
       servedParties: servedParties.all,
-      servedPartiesCode: getServedPartiesCode(servedParties.all),
+      servedPartiesCode: onlyProSePetitioners
+        ? PARTIES_CODES.PETITIONER
+        : getServedPartiesCode(servedParties.all),
       userId,
       ...additionalDocketEntryInfo,
     },
