@@ -17,7 +17,6 @@ import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeActivityReportDataAction } from '../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setJudgeLastNameOnFormAction } from '../actions/JudgeActivityReport/setJudgeLastNameOnFormAction';
@@ -28,6 +27,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -38,7 +38,7 @@ const proceedToMessages = [navigateToMessagesAction];
 const getMessages = [getInboxMessagesForUserAction, setMessagesAction];
 
 const goToDashboard = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
@@ -79,19 +79,19 @@ const goToDashboard = [
                   setJudgeLastNameOnFormAction,
                   getSubmittedAndCavCasesByJudgeAction,
                   setJudgeActivityReportDataAction,
-                  setCurrentPageAction('DashboardChambers'),
+                  setupCurrentPageAction('DashboardChambers'),
                 ],
                 general: [navigateToSectionDocumentQCAction],
                 inactivePractitioner: [
-                  setCurrentPageAction('DashboardInactive'),
+                  setupCurrentPageAction('DashboardInactive'),
                 ],
                 irsPractitioner: [
                   setDefaultCaseTypeToDisplayAction,
                   getOpenAndClosedCasesForUserAction,
                   setCasesAction,
-                  setCurrentPageAction('DashboardRespondent'),
+                  setupCurrentPageAction('DashboardRespondent'),
                 ],
-                irsSuperuser: [setCurrentPageAction('DashboardIrsSuperuser')],
+                irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
                 judge: [
                   setMessageInboxPropsAction,
                   getMessages,
@@ -100,19 +100,19 @@ const goToDashboard = [
                   setJudgeLastNameOnFormAction,
                   getSubmittedAndCavCasesByJudgeAction,
                   setJudgeActivityReportDataAction,
-                  setCurrentPageAction('DashboardJudge'),
+                  setupCurrentPageAction('DashboardJudge'),
                 ],
                 petitioner: [
                   setDefaultCaseTypeToDisplayAction,
                   getOpenAndClosedCasesForUserAction,
                   setCasesAction,
-                  setCurrentPageAction('DashboardPetitioner'),
+                  setupCurrentPageAction('DashboardPetitioner'),
                 ],
                 privatePractitioner: [
                   setDefaultCaseTypeToDisplayAction,
                   getOpenAndClosedCasesForUserAction,
                   setCasesAction,
-                  setCurrentPageAction('DashboardPractitioner'),
+                  setupCurrentPageAction('DashboardPractitioner'),
                 ],
               },
             ],

@@ -3,16 +3,16 @@ import { defaultAdvancedSearchFormAction } from '../../actions/AdvancedSearch/de
 import { getOpinionTypesAction } from '../../actions/getOpinionTypesAction';
 import { getPublicJudgesAction } from '../../actions/Public/getPublicJudgesAction';
 import { setAllAndCurrentJudgesAction } from '../../actions/setAllAndCurrentJudgesAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../../actions/setOpinionTypesAction';
+import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 
 export const gotoPublicSearchSequence = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearAlertsAction,
   defaultAdvancedSearchFormAction,
   getPublicJudgesAction,
   setAllAndCurrentJudgesAction,
   getOpinionTypesAction,
   setOpinionTypesAction,
-  setCurrentPageAction('PublicSearch'),
+  setupCurrentPageAction('PublicSearch'),
 ];
