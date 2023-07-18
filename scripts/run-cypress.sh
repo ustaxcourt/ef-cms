@@ -39,7 +39,7 @@ NON_PUBLIC=app-
 BROWSER=edge
 
 # Get the options
-while getopts ":chloprs" option; do
+while getopts ":chloprsw" option; do
    case $option in
       c) # run against currently deployed color
          CURRENT=true
@@ -67,6 +67,10 @@ while getopts ":chloprs" option; do
       s) # run the smoketests
          unset INTEGRATION
          SMOKETESTS=-smoketests
+         ;;
+      w) # run smoketests after color switch
+         unset INTEGRATION
+         SMOKETESTS=-smoketests-after-color-switch
          ;;
      \?) # Invalid option
          echo "An unsupported option was used. Run with the -h option to see supported options."

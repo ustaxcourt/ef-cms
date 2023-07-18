@@ -345,6 +345,29 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress-readonly/videos/
 
+  smoketests-after-color-switch:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: 'Cypress Smoke Tests'
+          command: npm run cypress:smoketests-after-color-switch
+      - store_artifacts:
+          path: /root/project/cypress/cypress-smoketests-after-color-switch/videos/
+
   loadtests:
     docker:
       - image: *efcms-docker-image
@@ -640,6 +663,22 @@ workflows:
       - cleanup:
           requires:
             - switch-colors
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - smoketests-after-color-switch:
+          requires:
+            - cleanup
           filters:
             branches:
               only:
