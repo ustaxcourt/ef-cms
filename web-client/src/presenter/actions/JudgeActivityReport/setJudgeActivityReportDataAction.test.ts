@@ -10,12 +10,22 @@ import { setJudgeActivityReportDataAction } from './setJudgeActivityReportDataAc
 describe('setJudgeActivityReportDataAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should set props.casesClosedByJudge on state', async () => {
-    const mockCasesClosedByJudge = {
-      [CASE_STATUS_TYPES.closed]: 1,
-      [CASE_STATUS_TYPES.closedDismissed]: 3,
-    };
+  const mockConsolidatedCasesGroupCount = { '101-22': 3 };
+  const mockCasesClosedByJudge = {
+    [CASE_STATUS_TYPES.closed]: 4,
+    [CASE_STATUS_TYPES.closedDismissed]: 8,
+  };
+  const page3Id = 15;
+  const mockTrialSessions = {
+    [SESSION_TYPES.hybrid]: 0.5,
+    [SESSION_TYPES.regular]: 1.5,
+    [SESSION_TYPES.motionHearing]: 2,
+  };
+  const page2Id = '2345';
 
+  const mockCases = [{ docketNumber: '101-20' }, { docketNumber: '102-20' }];
+
+  it('should set props.casesClosedByJudge on state.judgeActivityReport', async () => {
     const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
@@ -24,24 +34,20 @@ describe('setJudgeActivityReportDataAction', () => {
         casesClosedByJudge: mockCasesClosedByJudge,
       },
       state: {
-        judgeActivityReportData: {
-          casesClosedByJudge: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            casesClosedByJudge: undefined,
+          },
         },
       },
     });
 
-    expect(state.judgeActivityReportData.casesClosedByJudge).toBe(
-      mockCasesClosedByJudge,
-    );
+    expect(
+      state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
+    ).toBe(mockCasesClosedByJudge);
   });
 
-  it('should set props.trialSessions on state', async () => {
-    const mockTrialSessions = {
-      [SESSION_TYPES.hybrid]: 0.5,
-      [SESSION_TYPES.regular]: 1.5,
-      [SESSION_TYPES.motionHearing]: 2,
-    };
-
+  it('should set props.trialSessions on state.judgeActivityReport', async () => {
     const { state } = await runAction(setJudgeActivityReportDataAction as any, {
       modules: {
         presenter,
@@ -50,138 +56,56 @@ describe('setJudgeActivityReportDataAction', () => {
         trialSessions: mockTrialSessions,
       },
       state: {
-        judgeActivityReportData: {
-          trialSessions: undefined,
-        },
-      },
-    });
-
-    expect(state.judgeActivityReportData.trialSessions).toBe(mockTrialSessions);
-  });
-
-  it('should set props.opinions on state', async () => {
-    const mockOpinions = [
-      {
-        count: 1,
-        documentType: 'Memorandum Opinion',
-        eventCode: 'MOP',
-      },
-      {
-        count: 0,
-        documentType: 'S Opinion',
-        eventCode: 'SOP',
-      },
-      {
-        count: 0,
-        documentType: 'TC Opinion',
-        eventCode: 'TCOP',
-      },
-      {
-        count: 4,
-        documentType: 'Bench Opinion',
-        eventCode: 'OST',
-      },
-    ];
-
-    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
-      modules: {
-        presenter,
-      },
-      props: {
-        opinions: mockOpinions,
-      },
-      state: {
-        judgeActivityReportData: {
-          opinions: undefined,
-        },
-      },
-    });
-
-    expect(state.judgeActivityReportData.opinions).toBe(mockOpinions);
-  });
-
-  it('should set props.orders on state', async () => {
-    const mockOrdersIssuedByJudge = [
-      {
-        count: 1,
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      {
-        count: 5,
-        documentType: 'Order for Dismissal',
-        eventCode: 'ODS',
-      },
-    ];
-
-    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
-      modules: {
-        presenter,
-      },
-      props: {
-        orders: mockOrdersIssuedByJudge,
-      },
-      state: {
-        judgeActivityReportData: {
-          orders: undefined,
-        },
-      },
-    });
-
-    expect(state.judgeActivityReportData.orders).toBe(mockOrdersIssuedByJudge);
-  });
-
-  it('should set props.submittedAndCavCasesByJudge on state', async () => {
-    const mockSubmittedAndCavCasesByJudge = [
-      {
-        docketNumber: '101-22',
-        leadDocketNumber: '101-22',
-        status: 'Submitted',
-      },
-      { docketNumber: '111-11', status: 'Submitted' },
-      { docketNumber: '134-21', status: 'CAV' },
-    ];
-
-    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
-      modules: {
-        presenter,
-      },
-      props: {
-        submittedAndCavCasesByJudge: mockSubmittedAndCavCasesByJudge,
-      },
-      state: {
-        judgeActivityReportData: {
-          submittedAndCavCasesByJudge: undefined,
-        },
-      },
-    });
-
-    expect(state.judgeActivityReportData.submittedAndCavCasesByJudge).toBe(
-      mockSubmittedAndCavCasesByJudge,
-    );
-  });
-
-  it('should set props.submittedAndCavCasesByJudge on state', async () => {
-    const mockConsolidatedCasesGroupCountMap = new Map([['101-22', 5]]);
-
-    const { state } = await runAction(setJudgeActivityReportDataAction as any, {
-      modules: {
-        presenter,
-      },
-      props: {
-        consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCountMap,
-      },
-      state: {
-        judgeActivityReportData: {
-          consolidatedCasesGroupCountMap: undefined,
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            trialSessions: undefined,
+          },
         },
       },
     });
 
     expect(
-      Object.fromEntries(
-        state.judgeActivityReportData.consolidatedCasesGroupCountMap,
-      ),
-    ).toMatchObject(Object.fromEntries(mockConsolidatedCasesGroupCountMap));
+      state.judgeActivityReport.judgeActivityReportData.trialSessions,
+    ).toBe(mockTrialSessions);
+  });
+
+  it('should set cav and submitted related cases data on state.judgeActivityReport', async () => {
+    const { state } = await runAction(setJudgeActivityReportDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        cases: mockCases,
+        consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
+        lastDocketNumberForCavAndSubmittedCasesSearch: page3Id,
+        selectedPage: 1,
+      },
+      state: {
+        judgeActivityReport: {
+          judgeActivityReportData: {
+            consolidatedCasesGroupCountMap: undefined,
+            lastDocketNumberForCavAndSubmittedCasesSearch: undefined,
+            submittedAndCavCasesByJudge: undefined,
+          },
+          lastIdsOfPages: [0, page2Id],
+        },
+      },
+    });
+
+    expect(
+      state.judgeActivityReport.judgeActivityReportData
+        .submittedAndCavCasesByJudge,
+    ).toEqual(mockCases);
+
+    expect(
+      state.judgeActivityReport.judgeActivityReportData
+        .consolidatedCasesGroupCountMap,
+    ).toEqual(mockConsolidatedCasesGroupCount);
+
+    expect(state.judgeActivityReport.lastIdsOfPages).toEqual([
+      0,
+      page2Id,
+      page3Id,
+    ]);
   });
 });

@@ -1,3 +1,5 @@
+import { MAX_ELASTICSEARCH_PAGINATION } from '../../../../shared/src/business/entities/EntityConstants';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
 /**
@@ -13,10 +15,21 @@ import { search } from './searchClient';
 export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
-  judgeName,
+  judges,
+  pageSize,
   startDate,
 }) => {
   const source = ['status'];
+
+  const shouldFilters: QueryDslQueryContainer[] = [];
+
+  if (judges.length) {
+    judges.forEach(judge => {
+      shouldFilters.push({
+        match_phrase: { 'associatedJudge.S': `${judge}` },
+      });
+    });
+  }
 
   const { results } = await search({
     applicationContext,
@@ -35,21 +48,21 @@ export const getCasesClosedByJudge = async ({
                 },
               },
             ],
-            must: [
-              {
-                match_phrase: { 'associatedJudge.S': `${judgeName}` },
-              },
-            ],
+            minimum_should_match: 1,
+            should: shouldFilters,
           },
         },
-        size: 10000,
+        size: pageSize || MAX_ELASTICSEARCH_PAGINATION,
       },
       index: 'efcms-case',
     },
   });
 
+  const judgeNameToLog =
+    judges.length > 1 ? 'all judges' : `judge ${judges[0]}`;
+
   applicationContext.logger.info(
-    `Found ${results.length} closed cases associated with judge ${judgeName}`,
+    `Found ${results.length} closed cases associated with ${judgeNameToLog}`,
   );
 
   return results;

@@ -10,7 +10,7 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('judgeActivityReportHelper', () => {
   let mockJudgeActivityReport;
-  let mockForm;
+  let judgeActivityReportFilters;
   let baseState;
 
   const judgeActivityReportHelper = withAppContextDecorator(
@@ -65,24 +65,23 @@ describe('judgeActivityReportHelper', () => {
       },
     };
 
-    mockForm = {
+    judgeActivityReportFilters = {
       judgeName: judgeUser.name,
     };
 
     baseState = {
-      form: mockForm,
-      judgeActivityReportData: mockJudgeActivityReport,
+      judgeActivityReport: {
+        filters: judgeActivityReportFilters,
+        judgeActivityReportData: mockJudgeActivityReport,
+      },
     };
   });
 
   describe('closedCasesTotal', () => {
     it('should be the sum of the values of cases closed off state.judgeActivityReportData', () => {
-      const { closedCasesTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { closedCasesTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(closedCasesTotal).toBe(6);
     });
@@ -90,13 +89,15 @@ describe('judgeActivityReportHelper', () => {
 
   describe('isFormPristine', () => {
     it('should be true when startDate is not populated', () => {
-      const { isFormPristine } = runCompute(judgeActivityReportHelper as any, {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
-          ...baseState,
-          form: {
-            ...mockForm,
-            endDate: '01/02/2020',
-            startDate: undefined,
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            filters: {
+              ...judgeActivityReportFilters,
+              endDate: '01/02/2020',
+              startDate: '',
+            },
           },
         },
       });
@@ -105,13 +106,15 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should be true when endDate is not populated', () => {
-      const { isFormPristine } = runCompute(judgeActivityReportHelper as any, {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
-          ...baseState,
-          form: {
-            ...mockForm,
-            endDate: undefined,
-            startDate: '01/02/2020',
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            filters: {
+              ...judgeActivityReportFilters,
+              endDate: '',
+              startDate: '01/02/2020',
+            },
           },
         },
       });
@@ -120,13 +123,15 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should be false when both startDate and endDate are populated', () => {
-      const { isFormPristine } = runCompute(judgeActivityReportHelper as any, {
+      const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
-          ...baseState,
-          form: {
-            ...mockForm,
-            endDate: '01/02/2020',
-            startDate: '01/02/2020',
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
+            filters: {
+              ...judgeActivityReportFilters,
+              endDate: '01/02/2020',
+              startDate: '01/02/2020',
+            },
           },
         },
       });
@@ -137,12 +142,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('opinionsFiledTotal', () => {
     it('should be the sum of the values of opinions filed off state.judgeActivityReportData', () => {
-      const { opinionsFiledTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { opinionsFiledTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(opinionsFiledTotal).toBe(5);
     });
@@ -150,12 +152,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('ordersFiledTotal', () => {
     it('should be the sum of the values of orders filed off state.judgeActivityReportData', () => {
-      const { ordersFiledTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { ordersFiledTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(ordersFiledTotal).toBe(6);
     });
@@ -167,7 +166,7 @@ describe('judgeActivityReportHelper', () => {
         applicationContext.getUtilities().prepareDateFromString as jest.Mock
       ).mockReturnValue('2020-01-01');
 
-      const { reportHeader } = runCompute(judgeActivityReportHelper as any, {
+      const { reportHeader } = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
 
@@ -177,26 +176,22 @@ describe('judgeActivityReportHelper', () => {
 
   describe('showResultsTables', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
-      const { showResultsTables } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: {
-            form: mockForm,
+      const { showResultsTables } = runCompute(judgeActivityReportHelper, {
+        state: {
+          judgeActivityReport: {
+            ...baseState.judgeActivityReport,
             judgeActivityReportData: {},
           },
         },
-      );
+      });
 
       expect(showResultsTables).toBe(false);
     });
 
     it('should true when there are orders, opinions, trial sessions or cases for the specified judge', () => {
-      const { showResultsTables } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { showResultsTables } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(showResultsTables).toBe(true);
     });
@@ -205,7 +200,7 @@ describe('judgeActivityReportHelper', () => {
   describe('showSelectDateRangeText', () => {
     it('should be false when the form has been submitted (there are orders, opinions, trial sessions and cases for the specified judge)', () => {
       const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -216,11 +211,13 @@ describe('judgeActivityReportHelper', () => {
 
     it('should true when form has NOT been submitted (there are orders, opinions, trial sessions or cases for the specified judge)', () => {
       const { showSelectDateRangeText } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: {
-            form: mockForm,
-            judgeActivityReportData: {},
+            judgeActivityReport: {
+              ...baseState.judgeActivityReport,
+              judgeActivityReportData: {},
+            },
           },
         },
       );
@@ -231,12 +228,9 @@ describe('judgeActivityReportHelper', () => {
 
   describe('trialSessionsHeldTotal', () => {
     it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
-      const { trialSessionsHeldTotal } = runCompute(
-        judgeActivityReportHelper as any,
-        {
-          state: baseState,
-        },
-      );
+      const { trialSessionsHeldTotal } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
       expect(trialSessionsHeldTotal).toBe(3);
     });
@@ -244,33 +238,34 @@ describe('judgeActivityReportHelper', () => {
 
   describe('progressDescriptionTableTotal', () => {
     it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map();
-      baseState.judgeActivityReportData.submittedAndCavCasesByJudge = [
-        {
-          caseStatusHistory: [
-            { date: '2022-02-15T05:00:00.000Z' },
-            { date: '2022-02-16T05:00:00.000Z' },
-          ],
-          docketNumber: '101-20',
-        },
-        {
-          caseStatusHistory: [
-            { date: '2022-02-15T05:00:00.000Z' },
-            { date: '2022-02-16T05:00:00.000Z' },
-          ],
-          docketNumber: '103-20',
-        },
-        {
-          caseStatusHistory: [
-            { date: '2022-02-15T05:00:00.000Z' },
-            { date: '2022-02-16T05:00:00.000Z' },
-          ],
-          docketNumber: '102-20',
-        },
-      ];
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        {};
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '101-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '103-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '102-20',
+          },
+        ];
       const { progressDescriptionTableTotal } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -314,13 +309,13 @@ describe('judgeActivityReportHelper', () => {
         .mockReturnValue(10)
         .mockReturnValueOnce(5);
 
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
-      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        { '101-20': 4 };
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -355,12 +350,12 @@ describe('judgeActivityReportHelper', () => {
         .mockReturnValue(10)
         .mockReturnValueOnce(5);
 
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
-      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        { '101-20': 4 };
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -383,19 +378,19 @@ describe('judgeActivityReportHelper', () => {
         .mockReturnValue(10)
         .mockReturnValueOnce(5);
 
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        { '101-20': 4 };
 
       mockSubmittedAndCavCasesByJudge.push({
         caseStatusHistory: [],
         docketNumber: '215-11',
       });
 
-      baseState.judgeActivityReportData.submittedAndCavCasesByJudge =
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper as any,
+        judgeActivityReportHelper,
         {
           state: baseState,
         },
@@ -404,6 +399,54 @@ describe('judgeActivityReportHelper', () => {
       expect(filteredSubmittedAndCavCasesByJudge.length).toBe(
         mockSubmittedAndCavCasesByJudge.length - 1,
       );
+    });
+  });
+
+  describe('pageCount and showPaginator', () => {
+    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        {};
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '101-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '103-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '102-20',
+          },
+        ];
+      const result = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+      expect(result.pageCount).toBe(1);
+      expect(result.showPaginator).toBe(false);
+    });
+
+    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        {};
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [];
+      const result = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+      expect(result.pageCount).toBe(0);
+      expect(result.showPaginator).toBe(false);
     });
   });
 });
