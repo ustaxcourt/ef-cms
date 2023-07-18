@@ -9,7 +9,6 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setFromPageAction } from '../actions/setFromPageAction';
@@ -17,12 +16,13 @@ import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocket
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTabAction } from '../actions/setTabAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   setFromPageAction,
   clearScansAction,
@@ -42,7 +42,7 @@ export const gotoDocketEntryQc = startWebSocketConnectionSequenceDecorator([
   },
   setQCWorkItemIdToMarkAsReadIfNeededAction,
   setTabAction('Document Info'),
-  setCurrentPageAction('DocketEntryQc'),
+  setupCurrentPageAction('DocketEntryQc'),
   getShouldMarkReadAction,
   {
     markRead: [setWorkItemAsReadAction],
