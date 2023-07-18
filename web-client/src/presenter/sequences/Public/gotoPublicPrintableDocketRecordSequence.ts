@@ -2,9 +2,9 @@ import { clearModalStateAction } from '../../actions/clearModalStateAction';
 import { generatePublicDocketRecordPdfUrlAction } from '../../actions/Public/generatePublicDocketRecordPdfUrlAction';
 import { getPublicCaseAction } from '../../actions/Public/getPublicCaseAction';
 import { setCaseAction } from '../../actions/setCaseAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from '../setPdfPreviewUrlSequence';
 import { setShowModalFactoryAction } from '../../actions/setShowModalFactoryAction';
+import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 
 export const gotoPublicPrintableDocketRecordSequence =
@@ -15,5 +15,5 @@ export const gotoPublicPrintableDocketRecordSequence =
     generatePublicDocketRecordPdfUrlAction,
     setPdfPreviewUrlSequence,
     setShowModalFactoryAction('OpenPrintableDocketRecordModal'),
-    setCurrentPageAction('PublicCaseDetail'),
+    setupCurrentPageAction('PublicCaseDetail'),
   ]);
