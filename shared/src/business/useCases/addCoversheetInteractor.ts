@@ -117,6 +117,9 @@ export const addCoversheetInteractor = async (
         const isSimultaneousDocType =
           SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
             consolidatedCaseDocketEntryEntity.eventCode,
+          ) ||
+          consolidatedCaseDocketEntryEntity.documentTitle.includes(
+            'Simultaneous',
           );
 
         if (
