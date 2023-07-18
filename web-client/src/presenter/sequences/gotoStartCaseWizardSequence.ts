@@ -5,11 +5,11 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getConstants } from '../../getConstants';
 import { prepareFormAction } from '../actions/StartCase/prepareFormAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultStartCaseInternalFormAction } from '../actions/StartCaseInternal/setDefaultStartCaseInternalFormAction';
 import { setDocumentSelectedForScanAction } from '../actions/setDocumentSelectedForScanAction';
 import { setDocumentUploadModeAction } from '../actions/setDocumentUploadModeAction';
 import { setStartInternalCaseDefaultTabAction } from '../actions/StartCaseInternal/setStartInternalCaseDefaultTabAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
@@ -21,12 +21,12 @@ const gotoStartCaseInternal = [
   setDefaultStartCaseInternalFormAction,
   setDocumentUploadModeAction('scan'),
   setDocumentSelectedForScanAction('petitionFile'),
-  setCurrentPageAction('StartCaseInternal'),
+  setupCurrentPageAction('StartCaseInternal'),
 ];
 
 const gotoStartCaseExternal = [
   chooseStartCaseWizardStepAction,
-  setCurrentPageAction('StartCaseWizard'),
+  setupCurrentPageAction('StartCaseWizard'),
 ];
 
 export const gotoStartCaseWizardSequence =

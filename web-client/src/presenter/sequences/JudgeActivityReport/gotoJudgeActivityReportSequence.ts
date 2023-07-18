@@ -5,13 +5,13 @@ import { clearScreenMetadataAction } from '../../actions/clearScreenMetadataActi
 import { closeMobileMenuAction } from '../../actions/closeMobileMenuAction';
 import { isLoggedInAction } from '../../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../../actions/setCurrentPageAction';
 import { setJudgeLastNameOnFormAction } from '../../actions/JudgeActivityReport/setJudgeLastNameOnFormAction';
+import { setupCurrentPageAction } from '../../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 
 const gotoJudgeActivityReport = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   stopShowValidationAction,
   clearScreenMetadataAction,
@@ -19,7 +19,7 @@ const gotoJudgeActivityReport = [
   clearFormAction,
   clearJudgeActivityReportResultAction,
   setJudgeLastNameOnFormAction,
-  setCurrentPageAction('JudgeActivityReport'),
+  setupCurrentPageAction('JudgeActivityReport'),
 ];
 
 export const gotoJudgeActivityReportSequence = [

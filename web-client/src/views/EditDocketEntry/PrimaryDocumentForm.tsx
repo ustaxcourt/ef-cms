@@ -11,8 +11,7 @@ import {
   onInputChange,
   reactSelectValue,
 } from '../../ustc-ui/Utils/documentTypeSelectHelper';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const PrimaryDocumentForm = connect(
@@ -105,7 +104,7 @@ export const PrimaryDocumentForm = connect(
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               value={reactSelectValue({
                 documentTypes:
-                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                  internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
                 selectedEventCode: form.eventCode,
               })}
               onChange={(inputValue, { action, name: inputName }) => {
@@ -154,7 +153,7 @@ export const PrimaryDocumentForm = connect(
                 }
                 value={reactSelectValue({
                   documentTypes:
-                    internalTypesHelper.internalDocumentTypesForSelectSorted,
+                    internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
                   selectedEventCode:
                     form.secondaryDocument && form.secondaryDocument.eventCode,
                 })}

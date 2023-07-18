@@ -10,12 +10,12 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAddedDocketNumbersAction } from '../actions/setAddedDocketNumbersAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
@@ -25,7 +25,7 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   unsetDocumentToEditAction,
   clearModalAction,
   setDefaultTabStateAction,
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   getCaseAction,
@@ -39,7 +39,7 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   parallel([
     [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
   ]),
-  setCurrentPageAction('CreateOrder'),
+  setupCurrentPageAction('CreateOrder'),
 ]);
 
 export const gotoEditOrderSequence = [

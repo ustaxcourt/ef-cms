@@ -5,13 +5,13 @@ import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { parallel } from 'cerebral';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
-    setCurrentPageAction('Interstitial'),
+    setupCurrentPageAction('Interstitial'),
     clearScreenMetadataAction,
     closeMobileMenuAction,
     defaultAdvancedSearchFormAction,
@@ -22,5 +22,5 @@ export const gotoAdvancedSearchSequence =
       ],
       [getOpinionTypesAction, setOpinionTypesAction],
     ]),
-    setCurrentPageAction('AdvancedSearch'),
+    setupCurrentPageAction('AdvancedSearch'),
   ]);
