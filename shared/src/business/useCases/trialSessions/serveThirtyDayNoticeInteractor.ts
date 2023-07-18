@@ -65,7 +65,7 @@ export const serveThirtyDayNoticeInteractor = async (
     applicationContext,
     message: {
       action: 'paper_service_started',
-      totalPdfs: trialSession.caseOrder.length,
+      totalPdfs: trialSession.caseOrder.length + 100,
     },
     userId: currentUser.userId,
   });
@@ -122,6 +122,7 @@ export const serveThirtyDayNoticeInteractor = async (
           data: {
             caseCaptionExtension,
             caseTitle,
+            dateServed: applicationContext.getUtilities().formatNow('MM/dd/yy'),
             docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
             judgeName: trialSession.judge!.name,
             proceedingType: trialSession.proceedingType,
