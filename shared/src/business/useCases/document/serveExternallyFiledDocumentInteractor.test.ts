@@ -27,7 +27,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   beforeEach(() => {
     mockCase = {
       ...MOCK_CASE,
-      docketEntries: [{ docketEntryId: mockDocketEntryId }],
+      docketEntries: [
+        { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
+      ],
     };
 
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
@@ -143,6 +145,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             draftOrderState: 'abc',
           },
         ],
@@ -174,6 +177,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             eventCode: 'A',
             filingDate: 'abc',
           },
@@ -230,6 +234,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             isDraft: true,
           },
         ],
@@ -256,6 +261,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             isFileAttached: false,
           },
         ],
@@ -282,6 +288,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             isOnDocketRecord: false,
           },
         ],
@@ -322,6 +329,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             processingStatus: 'abc',
           },
         ],
@@ -374,7 +382,39 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
+  it('should only serve the docket entry on the subjectCase when the subject docket entry has a simultaneous document title', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'Simultaneous doc title',
           },
         ],
       });
@@ -405,6 +445,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
           },
         ],
       });
@@ -430,6 +471,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
           },
         ],
       });

@@ -343,4 +343,61 @@ describe('addCoversheetInteractor', () => {
       processingStatus: mockProcessingStatus,
     });
   });
+
+  it('should not update the processing status of a non-subject case, simultaneous document title docket entry entity on a consolidated case', async () => {
+    const mockProcessingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING;
+    const mockConsolidatedCaseNonSubjectCase = '102-20';
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          documentNumber: 2,
+        },
+      ],
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentTitle: 'Super Duper Simultaneous but not really',
+            documentType: 'Answer',
+            processingStatus: mockProcessingStatus,
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      });
+
+    await addCoversheetInteractor(applicationContext, {
+      caseEntity: new Case(
+        {
+          ...testingCaseData,
+          documentTitle: 'Super Duper Simultaneous but not really',
+        },
+        { applicationContext },
+      ),
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+    } as any);
+
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        processingStatus: call[0].document.processingStatus,
+      }));
+
+    const firstCase = calls.find(
+      call => call.docketNumber === mockConsolidatedCaseNonSubjectCase,
+    );
+
+    expect(firstCase).toMatchObject({
+      docketNumber: mockConsolidatedCaseNonSubjectCase,
+      processingStatus: mockProcessingStatus,
+    });
+  });
 });
