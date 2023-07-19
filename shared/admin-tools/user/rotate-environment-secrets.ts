@@ -1,10 +1,14 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { SecretsManager } from 'aws-sdk';
+import {
+  GetSecretValueCommand,
+  PutSecretValueCommand,
+  SecretsManagerClient,
+} from '@aws-sdk/client-secrets-manager';
 import { checkEnvVar } from '../util';
 import { shuffle } from 'lodash';
 const { COGNITO_USER_POOL, ENV } = process.env;
 
-const secretsClient = new SecretsManager({ region: 'us-east-1' });
+const secretsClient = new SecretsManagerClient({ region: 'us-east-1' });
 const cognitoClient = new CognitoIdentityProvider({
   region: 'us-east-1',
 });
@@ -59,11 +63,10 @@ const makeNewPassword = () => {
  * @returns {Object} the current key-value pairs that comprise of the secrets for the specified environment
  */
 const loadSecrets = async environmentName => {
-  const { SecretString } = await secretsClient
-    .getSecretValue({
-      SecretId: `${environmentName}_deploy`,
-    })
-    .promise();
+  const getSecretValueCommand = new GetSecretValueCommand({
+    SecretId: `${environmentName}_deploy`,
+  });
+  const { SecretString } = await secretsClient.send(getSecretValueCommand);
   if (!SecretString) {
     throw new Error(`could not load secrets for ${environmentName}_deploy`);
   }
@@ -101,16 +104,15 @@ const rotateSecrets = async environmentName => {
   });
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
-  await secretsClient
-    .putSecretValue({
-      SecretId: `${ENV}_deploy`,
-      SecretString: JSON.stringify({
-        ...secrets,
-        DEFAULT_ACCOUNT_PASS,
-        USTC_ADMIN_PASS,
-      }),
-    })
-    .promise();
+  const putSecretValueCommand = new PutSecretValueCommand({
+    SecretId: `${ENV}_deploy`,
+    SecretString: JSON.stringify({
+      ...secrets,
+      DEFAULT_ACCOUNT_PASS,
+      USTC_ADMIN_PASS,
+    }),
+  });
+  await secretsClient.send(putSecretValueCommand);
   console.log('✅ Secrets updated');
 };
 
