@@ -196,7 +196,21 @@ export const getHealthCheckInteractor = async (
       applicationContext,
     }),
   ]);
+
+  const allChecksHealthy = [
+    ...Object.values(s3BucketStatus),
+    elasticSearchStatus,
+    dynamoStatus,
+    deployDynamoStatus,
+    dynamsoftStatus,
+    cognitoStatus,
+    emailServiceStatus,
+  ].every(status => {
+    return status === true;
+  });
+
   return {
+    allChecksHealthy: allChecksHealthy ? 'pass' : 'fail',
     cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,
