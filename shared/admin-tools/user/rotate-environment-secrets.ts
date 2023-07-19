@@ -22,13 +22,7 @@ checkEnvVar(
   'You must specify a COGNITO_USER_POOL in your local environment',
 );
 
-/**
- * Generate a strong password
- *
- * @param {Number} passwordLength number of characters in the password string
- * @returns {String} a randomly generated password
- */
-const makeNewPassword = () => {
+const makeNewPassword = (): string => {
   const getRandomChar = charSet =>
     charSet.charAt(Math.floor(Math.random() * charSet.length));
 
@@ -56,13 +50,7 @@ const makeNewPassword = () => {
   return shuffle(result.split('')).join('');
 };
 
-/**
- * Fetch the current secrets for the specified environment
- *
- * @param {String} environmentName the name of the environment for which to lookup secrets
- * @returns {Object} the current key-value pairs that comprise of the secrets for the specified environment
- */
-const loadSecrets = async environmentName => {
+const loadSecrets = async (environmentName: string): Promise<any> => {
   const getSecretValueCommand = new GetSecretValueCommand({
     SecretId: `${environmentName}_deploy`,
   });
@@ -75,12 +63,7 @@ const loadSecrets = async environmentName => {
   return secrets;
 };
 
-/**
- * Initiates the process of rotating an environments secrets
- *
- * @param {String} environmentName the name of the environment whose secrets to rotate
- */
-const rotateSecrets = async environmentName => {
+const rotateSecrets = async (environmentName: string): Promise<void> => {
   console.log(`Rotating secrets for Environment: ${environmentName}\n`);
 
   const secrets = await loadSecrets(environmentName);
