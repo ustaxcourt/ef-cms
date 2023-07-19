@@ -133,10 +133,6 @@ variable "blue_use_layers" {
   type = string
 }
 
-variable "status_health_check_west_id" {
-  type = string
-}
-
-variable "status_health_check_east_id" {
+variable "status_health_check_id" {
   type = string
 }
