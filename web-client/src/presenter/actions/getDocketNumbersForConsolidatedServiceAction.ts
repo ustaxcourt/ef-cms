@@ -25,16 +25,19 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     .filter(consolidatedCase => !isLeadCase(consolidatedCase))
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
+  const { eventCode } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketEntries } = caseDetail;
-  const docketEntryId = get(state.docketEntryId);
-  const { eventCode } = get(state.form);
 
-  const isSimultaneousDocType =
-    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-    docketEntries
-      .find(d => d.docketEntryId === docketEntryId)
-      .documentTitle.includes('Simultaneous');
+  let isSimultaneousDocType = false;
+  if (Array.isArray(docketEntries)) {
+    isSimultaneousDocType = checkIfDocumentIsSimultaneous({
+      SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+      docketEntries,
+      eventCode,
+      get,
+    });
+  }
 
   if (
     !isLeadCase(caseDetail) ||
@@ -45,4 +48,23 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   }
 
   return { docketNumbers };
+};
+
+const checkIfDocumentIsSimultaneous = ({
+  docketEntries,
+  eventCode,
+  get,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+}) => {
+  const subjectDocketEntry = docketEntries.find(
+    d => d.docketEntryId === docketEntryId,
+  );
+
+  const docketEntryId = get(state.docketEntryId);
+
+  let isSimultaneousDocType =
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
+    subjectDocketEntry?.documentTitle?.includes('Simultaneous');
+
+  return isSimultaneousDocType;
 };
