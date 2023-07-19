@@ -3,6 +3,7 @@ import {
   IAMClient,
   ListAccessKeysCommand,
   ListUsersCommand,
+  User,
 } from '@aws-sdk/client-iam';
 
 const iamClient = new IAMClient({ region: 'us-east-1' });
@@ -22,7 +23,9 @@ const startOfCurrentQuarter = getStartOfCurrentQuarter(DateTime.now());
 const checkUsers = async (): Promise<string> => {
   const listUsersCommand = new ListUsersCommand({ MaxItems });
   const { Users } = await iamClient.send(listUsersCommand);
-  await Promise.all(Users.map(checkCredentialsForUser));
+  if (Users && Users.length) {
+    await Promise.all(Users.map(checkCredentialsForUser));
+  }
   return 'done';
 };
 
@@ -32,20 +35,18 @@ const checkUsers = async (): Promise<string> => {
  * @param {object} providers che providers array
  * @param {string} providers.UserName the unique identifier of the user to lookup
  */
-const checkCredentialsForUser = async ({
-  UserName,
-}: {
-  UserName: string;
-}): Promise<void> => {
+const checkCredentialsForUser = async ({ UserName }: User): Promise<void> => {
   const listAccessKeysCommand = new ListAccessKeysCommand({ UserName });
   const { AccessKeyMetadata } = await iamClient.send(listAccessKeysCommand);
 
-  const hasExpired =
-    AccessKeyMetadata.map(({ CreateDate }) =>
-      DateTime.fromJSDate(CreateDate),
-    ).filter(
-      dateObj => dateObj.startOf('day') < startOfCurrentQuarter.startOf('day'),
-    ).length > 0;
+  const hasExpired = AccessKeyMetadata
+    ? AccessKeyMetadata.map(({ CreateDate }) =>
+        DateTime.fromJSDate(CreateDate),
+      ).filter(
+        dateObj =>
+          dateObj.startOf('day') < startOfCurrentQuarter.startOf('day'),
+      ).length > 0
+    : false;
 
   if (hasExpired) {
     console.log(`❗ ${UserName} has keys that are expired`);
