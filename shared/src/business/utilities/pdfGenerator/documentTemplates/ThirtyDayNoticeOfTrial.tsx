@@ -17,6 +17,7 @@ export type ThirtyDayNoticeOfTrialRequiredInfo = {
   trialLocation: TrialLocation;
   trialDate: string;
   judgeName: string;
+  dateServed: string;
   proceedingType: TrialSessionProceedingType;
   scopeType: TrialSessionScope;
 };

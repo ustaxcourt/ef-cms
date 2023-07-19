@@ -122,6 +122,7 @@ export const serveThirtyDayNoticeInteractor = async (
           data: {
             caseCaptionExtension,
             caseTitle,
+            dateServed: applicationContext.getUtilities().formatNow('MM/dd/yy'),
             docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
             judgeName: trialSession.judge!.name,
             proceedingType: trialSession.proceedingType,
@@ -148,6 +149,10 @@ export const serveThirtyDayNoticeInteractor = async (
       await applicationContext
         .getUseCaseHelpers()
         .createAndServeNoticeDocketEntry(applicationContext, {
+          additionalDocketEntryInfo: {
+            date: trialSession.startDate,
+            trialLocation: trialSession.trialLocation,
+          },
           caseEntity,
           documentInfo: {
             documentTitle: replaceBracketed(

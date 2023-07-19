@@ -19,12 +19,24 @@ export const thirtyDayNoticeOfTrial = async ({
     content: thirtyDayNoticeOfTrialTemplate,
   });
 
+  let footerHtml = '';
+  if (data.dateServed) {
+    footerHtml = reactTemplateGenerator({
+      componentName: 'DateServedFooter',
+      data: {
+        dateServed: data.dateServed,
+      },
+    });
+  }
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
+      footerHtml,
+      headerHtml: '',
     });
 
   return pdf;
