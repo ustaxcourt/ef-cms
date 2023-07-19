@@ -34,7 +34,6 @@ export const getCasesClosedByJudge = async ({
 
   const { aggregations } = await search({
     applicationContext,
-    formatBody: false,
     searchParameters: {
       body: {
         _source: source,

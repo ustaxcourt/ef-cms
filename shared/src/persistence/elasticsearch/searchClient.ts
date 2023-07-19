@@ -8,6 +8,7 @@ const CHUNK_SIZE = 10000;
 
 export const formatResults = body => {
   const total = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
   const results = get(body, 'hits.hits', []).map(hit => {
@@ -41,16 +42,13 @@ export const formatResults = body => {
   });
 
   return {
+    aggregations,
     results,
     total,
   };
 };
 
-export const search = async ({
-  applicationContext,
-  formatBody = true,
-  searchParameters,
-}) => {
+export const search = async ({ applicationContext, searchParameters }) => {
   let body;
   try {
     ({ body } = await applicationContext
@@ -60,7 +58,7 @@ export const search = async ({
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');
   }
-  return formatBody ? formatResults(body) : body;
+  return formatResults(body);
 };
 
 export const searchAll = async ({ applicationContext, searchParameters }) => {
