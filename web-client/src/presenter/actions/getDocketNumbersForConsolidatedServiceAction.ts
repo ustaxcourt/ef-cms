@@ -37,8 +37,8 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     );
     isSimultaneousDocType =
       SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-        subjectDocketEntry.eventCode,
-      ) || subjectDocketEntry.documentTitle?.includes('Simultaneous');
+        subjectDocketEntry?.eventCode,
+      ) || subjectDocketEntry?.documentTitle.includes('Simultaneous');
   }
 
   if (
