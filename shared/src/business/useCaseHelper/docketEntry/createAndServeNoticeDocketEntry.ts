@@ -81,5 +81,6 @@ export const createAndServeNoticeDocketEntry = async (
     noticeDocketEntryEntity: noticeDocketEntry,
     noticeDocumentPdfData: noticePdf,
     servedParties,
+    skipEmailToIrs: onlyProSePetitioners,
   });
 };
