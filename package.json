@@ -251,6 +251,7 @@
   },
   "devDependencies": {
     "@aws-sdk/client-iam": "^3.370.0",
+    "@aws-sdk/client-secrets-manager": "^3.370.0",
     "@babel/cli": "^7.22.5",
     "@babel/core": "^7.22.5",
     "@babel/eslint-parser": "^7.22.5",
