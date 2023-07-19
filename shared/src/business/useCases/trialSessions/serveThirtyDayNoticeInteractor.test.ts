@@ -127,6 +127,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
       expect(
         applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
       ).toHaveBeenCalledWith(expect.anything(), {
+        additionalDocketEntryInfo: {
+          date: expect.anything(),
+          trialLocation: expect.anything(),
+        },
         caseEntity: expect.anything(),
         documentInfo: {
           documentTitle: `30 Day Notice of Trial on ${formatDateString(
