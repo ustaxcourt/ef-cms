@@ -46,7 +46,11 @@ export const formatResults = body => {
   };
 };
 
-export const search = async ({ applicationContext, searchParameters }) => {
+export const search = async ({
+  applicationContext,
+  formatBody = true,
+  searchParameters,
+}) => {
   let body;
   try {
     ({ body } = await applicationContext
@@ -56,7 +60,7 @@ export const search = async ({ applicationContext, searchParameters }) => {
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');
   }
-  return formatResults(body);
+  return formatBody ? formatResults(body) : body;
 };
 
 export const searchAll = async ({ applicationContext, searchParameters }) => {

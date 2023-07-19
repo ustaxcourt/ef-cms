@@ -37,15 +37,17 @@ export const getCasesClosedByJudgeInteractor = async (
       startDate: searchEntity.startDate,
     });
 
-  const closedDismissedCaseCount = casesClosedByJudge.filter(
-    caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
-  ).length;
-  const closedCaseCount = casesClosedByJudge.filter(
-    caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
-  ).length;
+  return casesClosedByJudge;
 
-  return {
-    [CASE_STATUS_TYPES.closed]: closedCaseCount,
-    [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
-  };
+  // const closedDismissedCaseCount = casesClosedByJudge.filter(
+  //   caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
+  // ).length;
+  // const closedCaseCount = casesClosedByJudge.filter(
+  //   caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
+  // ).length;
+
+  // return {
+  //   [CASE_STATUS_TYPES.closed]: closedCaseCount,
+  //   [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
+  // };
 };
