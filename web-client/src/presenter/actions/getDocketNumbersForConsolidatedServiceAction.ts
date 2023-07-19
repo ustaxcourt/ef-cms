@@ -31,12 +31,14 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
 
   let isSimultaneousDocType = false;
   if (Array.isArray(docketEntries)) {
-    isSimultaneousDocType = checkIfDocumentIsSimultaneous({
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-      docketEntries,
-      eventCode,
-      get,
-    });
+    const docketEntryId = get(state.docketEntryId);
+    const subjectDocketEntry = docketEntries.find(
+      d => d.docketEntryId === docketEntryId,
+    );
+    isSimultaneousDocType =
+      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+        subjectDocketEntry.eventCode,
+      ) || subjectDocketEntry.documentTitle?.includes('Simultaneous');
   }
 
   if (
@@ -48,23 +50,4 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   }
 
   return { docketNumbers };
-};
-
-const checkIfDocumentIsSimultaneous = ({
-  docketEntries,
-  eventCode,
-  get,
-  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-}) => {
-  const subjectDocketEntry = docketEntries.find(
-    d => d.docketEntryId === docketEntryId,
-  );
-
-  const docketEntryId = get(state.docketEntryId);
-
-  let isSimultaneousDocType =
-    SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
-    subjectDocketEntry?.documentTitle?.includes('Simultaneous');
-
-  return isSimultaneousDocType;
 };
