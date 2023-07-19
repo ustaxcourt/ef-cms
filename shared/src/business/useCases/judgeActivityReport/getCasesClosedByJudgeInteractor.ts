@@ -1,6 +1,5 @@
-import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportCasesClosedRequest } from '../../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -9,7 +8,7 @@ import {
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
-  params: JudgeActivityReportCasesClosedRequest,
+  params: JudgeActivityReportFilters,
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -27,27 +26,12 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const casesClosedByJudge = await applicationContext
+  return await applicationContext
     .getPersistenceGateway()
     .getCasesClosedByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
       judges: searchEntity.judges,
-      pageSize: searchEntity.pageSize,
       startDate: searchEntity.startDate,
     });
-
-  return casesClosedByJudge;
-
-  // const closedDismissedCaseCount = casesClosedByJudge.filter(
-  //   caseItem => caseItem.status === CASE_STATUS_TYPES.closedDismissed,
-  // ).length;
-  // const closedCaseCount = casesClosedByJudge.filter(
-  //   caseItem => caseItem.status === CASE_STATUS_TYPES.closed,
-  // ).length;
-
-  // return {
-  //   [CASE_STATUS_TYPES.closed]: closedCaseCount,
-  //   [CASE_STATUS_TYPES.closedDismissed]: closedDismissedCaseCount,
-  // };
 };
