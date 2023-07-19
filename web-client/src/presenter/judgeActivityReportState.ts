@@ -12,13 +12,6 @@ export type JudgeActivityReportFilters = {
   clientConnectionId?: string;
 };
 
-export type JudgeActivityReportCasesClosedRequest = Pick<
-  JudgeActivityReportFilters,
-  'endDate' | 'startDate' | 'judges'
-> & {
-  pageSize: number;
-};
-
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
   searchAfter: number;

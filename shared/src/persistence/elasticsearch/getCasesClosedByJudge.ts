@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { CasesClosedType } from '@web-client/presenter/judgeActivityReportState';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
@@ -17,9 +18,8 @@ export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
   judges,
-  pageSize,
   startDate,
-}) => {
+}): Promise<CasesClosedType> => {
   const source = ['status'];
 
   const shouldFilters: QueryDslQueryContainer[] = [];
@@ -67,15 +67,20 @@ export const getCasesClosedByJudge = async ({
     },
   });
 
-  const results: CasesClosedType = aggregations.closed_cases.buckets.reduce(
-    (bucketObj, item) => {
+  const computedAggregatedClosedCases =
+    aggregations.closed_cases.buckets.reduce((bucketObj, item) => {
       return {
         ...bucketObj,
         [item.key]: item.doc_count,
       };
-    },
-    {},
-  );
+    }, {});
+
+  const results: CasesClosedType = aggregations.closed_cases.buckets.length
+    ? computedAggregatedClosedCases
+    : {
+        [CASE_STATUS_TYPES.closed]: 0,
+        [CASE_STATUS_TYPES.closedDismissed]: 0,
+      };
 
   const totalNumberOfClosedCases = sum(Object.values(results));
 
