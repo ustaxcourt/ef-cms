@@ -241,7 +241,7 @@ resource "aws_route53_health_check" "status_health_check_west" {
   request_interval   = "30"
   count              = var.enable_health_checks
   invert_healthcheck = false
-  search_string      = "false"                                      # Search for any JSON property returning "false"
+  search_string      = "pass"                                      # Search for any JSON property returning "false"
   regions            = ["us-west-1", "us-west-2", "ap-northeast-1"] # Minimum of three regions required
 }
 
@@ -254,6 +254,6 @@ resource "aws_route53_health_check" "status_health_check_east" {
   request_interval   = "30"
   count              = var.enable_health_checks
   invert_healthcheck = false
-  search_string      = "false"                                 # Search for any JSON property returning "false"
+  search_string      = "pass"                                 # Search for any JSON property returning "false"
   regions            = ["us-east-1", "sa-east-1", "eu-west-1"] # Minimum of three regions required
 }

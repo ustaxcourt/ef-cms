@@ -9,6 +9,7 @@ describe('getHealthCheckAction', () => {
   });
 
   it('should retrieve the application health', async () => {
+    //TODO: update
     const mockHealth = {
       clamAV: false,
       cognito: false,
