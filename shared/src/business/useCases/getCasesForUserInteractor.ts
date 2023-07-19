@@ -123,10 +123,9 @@ export const getCasesForUserInteractor = async (
       applicationContext,
       userId,
     })
-  ).map(
-    aCase =>
-      ({ ...aCase, isRequestingUserAssociated: true } as TAssociatedCase),
-  );
+  ).map(aCase => {
+    return { ...aCase, isRequestingUserAssociated: true } as TAssociatedCase;
+  });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
