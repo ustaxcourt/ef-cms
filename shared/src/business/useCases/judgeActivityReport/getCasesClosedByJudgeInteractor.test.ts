@@ -1,8 +1,8 @@
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import {
-  CASE_STATUS_TYPES,
-  MAX_ELASTICSEARCH_PAGINATION,
-} from '../../entities/EntityConstants';
-import { JudgeActivityReportCasesClosedRequest } from '@web-client/presenter/judgeActivityReportState';
+  CasesClosedType,
+  JudgeActivityReportFilters,
+} from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,
@@ -12,23 +12,10 @@ import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteract
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 describe('getCasesClosedByJudgeInteractor', () => {
-  const mockClosedCases = [
-    {
-      status: CASE_STATUS_TYPES.closed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closedDismissed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closedDismissed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closedDismissed,
-    },
-  ];
+  const mockReturnedCloseCases: CasesClosedType = {
+    [CASE_STATUS_TYPES.closed]: 3,
+    [CASE_STATUS_TYPES.closedDismissed]: 2,
+  };
 
   const mockEndDate = '03/21/2020';
   const mockStartDate = '02/12/2020';
@@ -47,10 +34,9 @@ describe('getCasesClosedByJudgeInteractor', () => {
     year,
   });
 
-  const mockValidRequest: JudgeActivityReportCasesClosedRequest = {
+  const mockValidRequest: JudgeActivityReportFilters = {
     endDate: calculatedEndDate,
     judges: [judgeUser.name],
-    pageSize: MAX_ELASTICSEARCH_PAGINATION,
     startDate: calculatedStartDate,
   };
 
@@ -63,7 +49,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesClosedByJudge.mockResolvedValue(mockClosedCases);
+      .getCasesClosedByJudge.mockResolvedValue(mockReturnedCloseCases);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -79,7 +65,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
         judges: [judgeUser.name],
-        pageSize: 0,
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
@@ -97,13 +82,9 @@ describe('getCasesClosedByJudgeInteractor', () => {
     ).toMatchObject({
       endDate: calculatedEndDate,
       judges: [judgeUser.name],
-      pageSize: MAX_ELASTICSEARCH_PAGINATION,
       startDate: calculatedStartDate,
     });
 
-    expect(result).toEqual({
-      [CASE_STATUS_TYPES.closed]: 2,
-      [CASE_STATUS_TYPES.closedDismissed]: 3,
-    });
+    expect(result).toEqual(mockReturnedCloseCases);
   });
 });
