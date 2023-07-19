@@ -716,7 +716,7 @@ module "api-east-blue" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
-  status_health_check_id         = var.status_health_check_west_id
+  status_health_check_id         = var.status_health_check_east_id
 
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
