@@ -65,7 +65,7 @@ export const serveThirtyDayNoticeInteractor = async (
     applicationContext,
     message: {
       action: 'paper_service_started',
-      totalPdfs: trialSession.caseOrder.length + 100,
+      totalPdfs: trialSession.caseOrder.length,
     },
     userId: currentUser.userId,
   });
