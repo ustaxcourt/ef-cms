@@ -116,7 +116,7 @@ export const serveExternallyFiledDocumentInteractor = async (
   const subjectCaseIsSimultaneousDocType =
     SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
       originalSubjectDocketEntry.eventCode,
-    );
+    ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
   if (
     !consolidateCaseDuplicateDocketEntries ||
