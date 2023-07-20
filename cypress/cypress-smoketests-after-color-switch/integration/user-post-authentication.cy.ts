@@ -3,17 +3,18 @@ import {
   editPetitionerEmail,
   goToCaseDetail,
   verifyEmailChange,
-} from '../support/pages/case-detail';
+} from '../../cypress-smoketests/support/pages/case-detail';
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
-import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
-import { goToCaseDetailPetitioner } from '../support/pages/petitioner-dashboard';
+import { getEnvironmentSpecificFunctions } from '../../cypress-smoketests/support/pages/environment-specific-factory';
+import { goToCaseDetailPetitioner } from '../../cypress-smoketests/support/pages/petitioner-dashboard';
 import {
   goToCreateCase,
   goToReviewCase,
   serveCaseToIrs,
-} from '../support/pages/create-paper-case';
-import { goToMyDocumentQC } from '../support/pages/document-qc';
+} from '../../cypress-smoketests/support/pages/create-paper-case';
+import { goToMyDocumentQC } from '../../cypress-smoketests/support/pages/document-qc';
+
 const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
