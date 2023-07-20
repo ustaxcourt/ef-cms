@@ -1,7 +1,10 @@
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
-import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '../EntityConstants';
+import {
+  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
+  VALIDATION_ERROR_MESSAGES,
+} from '../EntityConstants';
 import {
   FORMATS,
   calculateISODate,
@@ -106,12 +109,11 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     endDate: [
       {
         contains: 'ref:startDate',
-        message:
-          'End date cannot be prior to Start Date. Enter a valid end date.',
+        message: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE,
       },
       {
         contains: 'ref:tomorrow',
-        message: 'End date cannot be in the future. Enter a valid date.',
+        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE,
       },
       {
         contains: 'is required',

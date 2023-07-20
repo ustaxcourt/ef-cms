@@ -218,6 +218,13 @@ export const DOCUMENT_SERVED_MESSAGES = {
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
 
+export const VALIDATION_ERROR_MESSAGES = {
+  END_DATE_IN_THE_FUTURE_MESSAGE:
+    'End date cannot be in the future. Enter a valid date.',
+  END_DATE_PRIOR_TO_START_DATE:
+    'End date cannot be prior to Start Date. Enter a valid end date.',
+};
+
 export const DOCUMENT_SEARCH_SORT = {
   FILING_DATE_ASC: 'FILING_DATE_ASC',
   FILING_DATE_DESC: 'FILING_DATE_DESC',
