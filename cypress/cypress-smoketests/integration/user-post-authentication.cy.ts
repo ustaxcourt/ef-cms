@@ -19,7 +19,7 @@ const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const randomizedEmail = `${faker.string.uuid()}@example.com`;
 
-if (!Cypress.env('SMOKETESTS_LOCAL') && Cypress.env('MIGRATE') !== 'true') {
+if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
   describe('Petitions clerk', () => {
     it('should be able to create a case with paper service', () => {
       cy.task<AuthenticationResult>('getUserToken', {
