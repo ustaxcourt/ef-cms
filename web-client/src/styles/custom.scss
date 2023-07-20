@@ -345,7 +345,9 @@ select[disabled] {
     padding: 30px;
     border: 1px solid color($theme-color-primary);
     margin-bottom: 2rem;
-    box-shadow: 0 4px 4px rgb(0 0 0 / 15%), inset 0 4px 4px rgb(0 0 0 / 15%);
+    box-shadow:
+      0 4px 4px rgb(0 0 0 / 15%),
+      inset 0 4px 4px rgb(0 0 0 / 15%);
   }
 
   .usa-banner__button-text {
@@ -1246,7 +1248,9 @@ hr.lighter {
   #sign-pdf-canvas {
     display: block;
     margin: auto;
-    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    box-shadow:
+      0 4px 8px 0 rgb(0 0 0 / 20%),
+      0 6px 20px 0 rgb(0 0 0 / 19%);
   }
 }
 
@@ -2128,4 +2132,12 @@ button.change-scanner-button {
   &:hover {
     color: $color-white;
   }
+}
+
+.run-report-adjusted-margin-after-prior-date-error {
+  margin-top: -1.9rem;
+}
+
+.run-report-adjusted-margin-after-end-date-in-the-future-error {
+  margin-top: -0.6rem;
 }

@@ -12,6 +12,7 @@ module.exports = {
         ignoreFunctions: ['units'],
       },
     ],
+    'media-query-no-invalid': null,
     'no-descending-specificity': null,
     'selector-class-pattern': null,
     'shorthand-property-no-redundant-values': null,

@@ -74,6 +74,9 @@ describe('judgeActivityReportHelper', () => {
         filters: judgeActivityReportFilters,
         judgeActivityReportData: mockJudgeActivityReport,
       },
+      validationErrors: {
+        endDate: undefined,
+      },
     };
   });
 
@@ -91,6 +94,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be true when startDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
@@ -108,6 +112,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be true when endDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
@@ -125,6 +130,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be false when both startDate and endDate are populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
@@ -178,6 +184,7 @@ describe('judgeActivityReportHelper', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
       const { showResultsTables } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             judgeActivityReportData: {},
@@ -214,6 +221,7 @@ describe('judgeActivityReportHelper', () => {
         judgeActivityReportHelper,
         {
           state: {
+            ...baseState,
             judgeActivityReport: {
               ...baseState.judgeActivityReport,
               judgeActivityReportData: {},
@@ -447,6 +455,95 @@ describe('judgeActivityReportHelper', () => {
       });
       expect(result.pageCount).toBe(0);
       expect(result.showPaginator).toBe(false);
+    });
+  });
+
+  describe('reAlignRunReportButtonAfterEndDateInTheFutureError', () => {
+    it('should be return true if there is a validation error message for entering prior dates for end date', () => {
+      baseState.validationErrors = {
+        endDate:
+          'End date cannot be prior to Start Date. Enter a valid end date.',
+      };
+      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(true);
+    });
+
+    it('should be return false if there is a validation error message for entering prior dates for end date', () => {
+      baseState.validationErrors = {
+        endDate: 'Some random message.',
+      };
+      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(false);
+    });
+
+    it('should be return undefined if there are no validation messages for end date', () => {
+      baseState.validationErrors = {
+        endDate: undefined,
+      };
+      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(undefined);
+    });
+  });
+
+  describe('reAlignRunReportButtonAfterEndDateInTheFutureError', () => {
+    it('should be return true if there is a validation error message for entering prior dates for end date', () => {
+      baseState.validationErrors = {
+        endDate: 'End date cannot be in the future. Enter a valid date.',
+      };
+      const { reAlignRunReportButtonAfterEndDateInTheFutureError } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(reAlignRunReportButtonAfterEndDateInTheFutureError).toEqual(true);
+    });
+
+    it('should be return false if there is a validation error message for entering prior dates for end date', () => {
+      baseState.validationErrors = {
+        endDate: 'Some random message.',
+      };
+      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(false);
+    });
+
+    it('should be return undefined if there are no validation messages for end date', () => {
+      baseState.validationErrors = {
+        endDate: undefined,
+      };
+      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(undefined);
     });
   });
 });

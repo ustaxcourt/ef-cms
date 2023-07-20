@@ -17,6 +17,8 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
+  reAlignRunReportButtonAfterPriorDateError: boolean;
+  reAlignRunReportButtonAfterEndDateInTheFutureError: boolean;
 }
 
 export const judgeActivityReportHelper = (
@@ -35,6 +37,8 @@ export const judgeActivityReportHelper = (
     submittedAndCavCasesByJudge = [],
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
+
+  const { endDate: endDateErrorMessage } = get(state.validationErrors);
 
   let closedCasesTotal: number = 0,
     trialSessionsHeldTotal: number = 0,
@@ -124,6 +128,16 @@ export const judgeActivityReportHelper = (
       CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   );
 
+  const reAlignRunReportButtonAfterPriorDateError =
+    endDateErrorMessage &&
+    endDateErrorMessage ===
+      'End date cannot be prior to Start Date. Enter a valid end date.';
+
+  const reAlignRunReportButtonAfterEndDateInTheFutureError =
+    endDateErrorMessage &&
+    endDateErrorMessage ===
+      'End date cannot be in the future. Enter a valid date.';
+
   return {
     closedCasesTotal,
     filteredSubmittedAndCavCasesByJudge,
@@ -132,6 +146,8 @@ export const judgeActivityReportHelper = (
     ordersFiledTotal,
     pageCount,
     progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
+    reAlignRunReportButtonAfterEndDateInTheFutureError,
+    reAlignRunReportButtonAfterPriorDateError,
     reportHeader,
     showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,
