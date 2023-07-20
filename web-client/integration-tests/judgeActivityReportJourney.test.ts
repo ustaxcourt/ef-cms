@@ -49,7 +49,9 @@ describe('Judge activity report journey', () => {
       endDate: 'yabbadabaadooooo',
     });
 
-    await cerebralTest.runSequence('submitJudgeActivityReportSequence');
+    await cerebralTest.runSequence('submitJudgeActivityReportSequence', {
+      selectedPage: 0,
+    });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       endDate: 'Enter a valid end date.',
