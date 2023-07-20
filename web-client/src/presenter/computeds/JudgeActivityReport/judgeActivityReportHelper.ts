@@ -17,8 +17,7 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
-  reAlignRunReportButtonAfterPriorDateError: boolean;
-  reAlignRunReportButtonAfterEndDateInTheFutureError: boolean;
+  computedMarginTop: string;
 }
 
 export const judgeActivityReportHelper = (
@@ -130,26 +129,35 @@ export const judgeActivityReportHelper = (
       CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   );
 
-  const reAlignRunReportButtonAfterPriorDateError =
+  const reAlignRunReportButtonAfterPriorDateError: boolean =
     endDateErrorMessage &&
     endDateErrorMessage ===
       VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE;
 
-  const reAlignRunReportButtonAfterEndDateInTheFutureError =
+  const reAlignRunReportButtonAfterEndDateInTheFutureError: boolean =
     endDateErrorMessage &&
     endDateErrorMessage ===
       VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE;
 
+  let computedMarginTop = '0';
+
+  if (reAlignRunReportButtonAfterPriorDateError) {
+    computedMarginTop = '-1.9';
+  }
+
+  if (reAlignRunReportButtonAfterEndDateInTheFutureError) {
+    computedMarginTop = '-0.6';
+  }
+
   return {
     closedCasesTotal,
+    computedMarginTop,
     filteredSubmittedAndCavCasesByJudge,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
     ordersFiledTotal,
     pageCount,
     progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
-    reAlignRunReportButtonAfterEndDateInTheFutureError,
-    reAlignRunReportButtonAfterPriorDateError,
     reportHeader,
     showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,
