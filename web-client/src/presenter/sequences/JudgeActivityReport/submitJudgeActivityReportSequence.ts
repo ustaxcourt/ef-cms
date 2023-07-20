@@ -6,17 +6,19 @@ import { getOrdersIssuedForJudgeActivityReportAction } from '../../actions/Judge
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
+import { resetJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/resetJudgeActivityReportDataAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setJudgeLastNamesAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeLastNamesAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
+import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
 import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
-export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
+export const submitJudgeActivityReportSequence = [
+  resetJudgeActivityReportDataAction,
   startShowValidationAction,
   validateJudgeActivityReportSearchAction,
   {
@@ -26,18 +28,19 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       setValidationAlertErrorsAction,
     ],
     success: [
+      setWaitingForResponseAction,
       stopShowValidationAction,
       clearErrorAlertsAction,
       clearAlertsAction,
       setJudgeLastNamesAction,
+      getOpinionsForJudgeActivityReportAction,
+      getOrdersIssuedForJudgeActivityReportAction,
       parallel([
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,
         getSubmittedAndCavCasesByJudgeAction,
-        getOpinionsForJudgeActivityReportAction,
-        getOrdersIssuedForJudgeActivityReportAction,
       ]),
       setJudgeActivityReportDataAction,
     ],
   },
-]);
+];

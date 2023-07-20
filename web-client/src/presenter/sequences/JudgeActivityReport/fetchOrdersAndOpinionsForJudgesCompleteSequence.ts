@@ -1,7 +1,12 @@
+import { checkJudgeActivityReportOpinionsAndOrdersIsSetAction } from '../../actions/JudgeActivityReport/checkJudgeActivityReportOpinionsAndOrdersIsSetAction';
 import { setJudgeActivityReportOrdersAndOpinionsDataAction } from '../../actions/JudgeActivityReport/setJudgeActivityReportOrdersAndOpinionsDataAction';
-import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
+import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
 
-export const fetchOrdersAndOpinionsForJudgesCompleteSequence =
-  showProgressSequenceDecorator([
-    setJudgeActivityReportOrdersAndOpinionsDataAction,
-  ]);
+export const fetchOrdersAndOpinionsForJudgesCompleteSequence = [
+  setJudgeActivityReportOrdersAndOpinionsDataAction,
+  checkJudgeActivityReportOpinionsAndOrdersIsSetAction,
+  {
+    no: [],
+    yes: [unsetWaitingForResponseAction],
+  },
+];
