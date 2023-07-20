@@ -6,16 +6,6 @@ import {
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * removeCaseFromTrialInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to remove from trial
- * @param {string} providers.disposition the reason the case is being removed from trial
- * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
- * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
- */
 export const removeCaseFromTrialInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -33,6 +23,7 @@ export const removeCaseFromTrialInteractor = async (
   },
 ) => {
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
