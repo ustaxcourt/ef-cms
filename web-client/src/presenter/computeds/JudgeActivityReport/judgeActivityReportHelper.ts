@@ -40,6 +40,8 @@ export const judgeActivityReportHelper = (
 
   const { endDate: endDateErrorMessage } = get(state.validationErrors);
 
+  const { VALIDATION_ERROR_MESSAGES } = applicationContext.getConstants();
+
   let closedCasesTotal: number = 0,
     trialSessionsHeldTotal: number = 0,
     opinionsFiledTotal: number = 0,
@@ -131,12 +133,12 @@ export const judgeActivityReportHelper = (
   const reAlignRunReportButtonAfterPriorDateError =
     endDateErrorMessage &&
     endDateErrorMessage ===
-      'End date cannot be prior to Start Date. Enter a valid end date.';
+      VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE;
 
   const reAlignRunReportButtonAfterEndDateInTheFutureError =
     endDateErrorMessage &&
     endDateErrorMessage ===
-      'End date cannot be in the future. Enter a valid date.';
+      VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE;
 
   return {
     closedCasesTotal,
