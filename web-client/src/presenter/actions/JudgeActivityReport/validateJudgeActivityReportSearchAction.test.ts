@@ -50,8 +50,8 @@ describe('validateJudgeActivityReportSearchAction', () => {
     expect(mockSuccessPath).toHaveBeenCalled();
   });
 
-  it('should return the error path when the search critera are NOT valid', async () => {
-    await runAction(validateJudgeActivityReportSearchAction as any, {
+  it('should return the error path when the search critera are NOT valid and reset state.judgeActivityReport.judgeActivityReportData', async () => {
+    const result = await runAction(validateJudgeActivityReportSearchAction, {
       modules: { presenter },
       state: {
         judgeActivityReport: {
@@ -71,5 +71,8 @@ describe('validateJudgeActivityReportSearchAction', () => {
       },
       errors: expect.anything(),
     });
+    expect(result.state.judgeActivityReport.judgeActivityReportData).toEqual(
+      {},
+    );
   });
 });
