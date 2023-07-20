@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
+  VALIDATION_ERROR_MESSAGES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
@@ -461,8 +462,7 @@ describe('judgeActivityReportHelper', () => {
   describe('reAlignRunReportButtonAfterEndDateInTheFutureError', () => {
     it('should be return true if there is a validation error message for entering prior dates for end date', () => {
       baseState.validationErrors = {
-        endDate:
-          'End date cannot be prior to Start Date. Enter a valid end date.',
+        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE,
       };
       const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
         judgeActivityReportHelper,
@@ -506,7 +506,7 @@ describe('judgeActivityReportHelper', () => {
   describe('reAlignRunReportButtonAfterEndDateInTheFutureError', () => {
     it('should be return true if there is a validation error message for entering prior dates for end date', () => {
       baseState.validationErrors = {
-        endDate: 'End date cannot be in the future. Enter a valid date.',
+        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE,
       };
       const { reAlignRunReportButtonAfterEndDateInTheFutureError } = runCompute(
         judgeActivityReportHelper,
