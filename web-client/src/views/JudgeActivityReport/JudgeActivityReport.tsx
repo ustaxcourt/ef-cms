@@ -340,16 +340,10 @@ export const JudgeActivityReport = connect(
               </div>
 
               <div
-                className={`grid-col-auto display-flex flex-align-center ${
-                  judgeActivityReportHelper.reAlignRunReportButtonAfterPriorDateError
-                    ? 'run-report-adjusted-margin-after-prior-date-error'
-                    : ''
-                }
-                ${
-                  judgeActivityReportHelper.reAlignRunReportButtonAfterEndDateInTheFutureError
-                    ? 'run-report-adjusted-margin-after-end-date-in-the-future-error'
-                    : ''
-                }`}
+                className={'grid-col-auto display-flex flex-align-center'}
+                style={{
+                  marginTop: `${judgeActivityReportHelper.computedMarginTop}rem`,
+                }}
               >
                 <Button
                   className="position-relative margin-bottom-35"
