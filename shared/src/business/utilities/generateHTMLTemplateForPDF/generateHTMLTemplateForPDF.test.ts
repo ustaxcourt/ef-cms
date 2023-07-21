@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jest-environment-node-single-context
+ */
+
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateHTMLTemplateForPDF } from './generateHTMLTemplateForPDF';
 
