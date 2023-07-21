@@ -17,7 +17,6 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
-  computedMarginTop: number;
 }
 
 export const judgeActivityReportHelper = (
@@ -36,10 +35,6 @@ export const judgeActivityReportHelper = (
     submittedAndCavCasesByJudge = [],
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
-
-  const { endDate: endDateErrorMessage } = get(state.validationErrors);
-
-  const { VALIDATION_ERROR_MESSAGES } = applicationContext.getConstants();
 
   let closedCasesTotal: number = 0,
     trialSessionsHeldTotal: number = 0,
@@ -129,29 +124,8 @@ export const judgeActivityReportHelper = (
       CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   );
 
-  const reAlignRunReportButtonAfterPriorDateError: boolean =
-    endDateErrorMessage &&
-    endDateErrorMessage ===
-      VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE;
-
-  const reAlignRunReportButtonAfterEndDateInTheFutureError: boolean =
-    endDateErrorMessage &&
-    endDateErrorMessage ===
-      VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE;
-
-  let computedMarginTop = 0;
-
-  if (reAlignRunReportButtonAfterPriorDateError) {
-    computedMarginTop = -1.9;
-  }
-
-  if (reAlignRunReportButtonAfterEndDateInTheFutureError) {
-    computedMarginTop = -0.6;
-  }
-
   return {
     closedCasesTotal,
-    computedMarginTop,
     filteredSubmittedAndCavCasesByJudge,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
