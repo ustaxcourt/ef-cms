@@ -340,9 +340,9 @@ export const JudgeActivityReport = connect(
               </div>
 
               <div
-                className={'grid-col-auto display-flex flex-align-center'}
+                className="grid-col-auto flex-align-center"
                 style={{
-                  marginTop: `${judgeActivityReportHelper.computedMarginTop}rem`,
+                  marginTop: '2.4rem',
                 }}
               >
                 <Button

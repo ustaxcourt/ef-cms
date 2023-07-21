@@ -1,7 +1,6 @@
 import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
-  VALIDATION_ERROR_MESSAGES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
@@ -456,41 +455,6 @@ describe('judgeActivityReportHelper', () => {
       });
       expect(result.pageCount).toBe(0);
       expect(result.showPaginator).toBe(false);
-    });
-  });
-
-  describe('computedMarginTop', () => {
-    let adjustedMarginTop = 0;
-    it('should have a default of 0 if there is a validation error messages for entering prior dates for end date', () => {
-      const { computedMarginTop } = runCompute(judgeActivityReportHelper, {
-        state: baseState,
-      });
-
-      expect(computedMarginTop).toEqual(adjustedMarginTop);
-    });
-    it('should equal -1.9 if there is a validation error messages for entering prior dates for end date', () => {
-      baseState.validationErrors = {
-        endDate:
-          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
-      };
-      adjustedMarginTop = -1.9;
-      const { computedMarginTop } = runCompute(judgeActivityReportHelper, {
-        state: baseState,
-      });
-
-      expect(computedMarginTop).toEqual(adjustedMarginTop);
-    });
-
-    it('should equal -0.6 if there is a validation error messages for entering future dates for end dates', () => {
-      baseState.validationErrors = {
-        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
-      };
-      adjustedMarginTop = -0.6;
-      const { computedMarginTop } = runCompute(judgeActivityReportHelper, {
-        state: baseState,
-      });
-
-      expect(computedMarginTop).toEqual(adjustedMarginTop);
     });
   });
 });
