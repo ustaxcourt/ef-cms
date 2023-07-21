@@ -140,7 +140,3 @@ variable "status_health_check_west_id" {
 variable "status_health_check_east_id" {
   type = string
 }
-
-# variable "status_health_check_id" {
-#   type = string
-# }
