@@ -129,7 +129,8 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       },
       {
         contains: 'must be less than or equal to',
-        message: 'Start date cannot be in the future. Enter a valid date.',
+        message:
+          VALIDATION_ERROR_MESSAGES.START_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       },
       'Enter a valid start date.',
     ],
