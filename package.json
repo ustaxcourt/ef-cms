@@ -276,7 +276,7 @@
     "@vendia/serverless-express": "^4.10.4",
     "adm-zip": "^0.5.10",
     "ajv": "^8.12.0",
-    "artillery": "^2.0.0-33",
+    "artillery": "2.0.0-34",
     "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "autoprefixer": "^10.4.14",
     "axios-retry": "^3.5.1",
