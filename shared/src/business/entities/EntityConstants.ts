@@ -219,9 +219,9 @@ export const DOCUMENT_SERVED_MESSAGES = {
 };
 
 export const VALIDATION_ERROR_MESSAGES = {
-  END_DATE_IN_THE_FUTURE_MESSAGE:
+  END_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
     'End date cannot be in the future. Enter a valid date.',
-  END_DATE_PRIOR_TO_START_DATE:
+  END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE:
     'End date cannot be prior to Start Date. Enter a valid end date.',
 };
 

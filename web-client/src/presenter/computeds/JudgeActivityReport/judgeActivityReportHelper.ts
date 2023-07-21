@@ -17,7 +17,7 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
-  computedMarginTop: string;
+  computedMarginTop: number;
 }
 
 export const judgeActivityReportHelper = (
@@ -132,21 +132,21 @@ export const judgeActivityReportHelper = (
   const reAlignRunReportButtonAfterPriorDateError: boolean =
     endDateErrorMessage &&
     endDateErrorMessage ===
-      VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE;
+      VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE;
 
   const reAlignRunReportButtonAfterEndDateInTheFutureError: boolean =
     endDateErrorMessage &&
     endDateErrorMessage ===
-      VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE;
+      VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE;
 
-  let computedMarginTop = '0';
+  let computedMarginTop = 0;
 
   if (reAlignRunReportButtonAfterPriorDateError) {
-    computedMarginTop = '-1.9';
+    computedMarginTop = -1.9;
   }
 
   if (reAlignRunReportButtonAfterEndDateInTheFutureError) {
-    computedMarginTop = '-0.6';
+    computedMarginTop = -0.6;
   }
 
   return {
