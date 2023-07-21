@@ -109,11 +109,12 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     endDate: [
       {
         contains: 'ref:startDate',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE,
+        message:
+          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
       },
       {
         contains: 'ref:tomorrow',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE,
+        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       },
       {
         contains: 'is required',

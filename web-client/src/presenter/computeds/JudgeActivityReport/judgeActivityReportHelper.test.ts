@@ -459,91 +459,38 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
-  describe('reAlignRunReportButtonAfterEndDateInTheFutureError', () => {
-    it('should be return true if there is a validation error message for entering prior dates for end date', () => {
-      baseState.validationErrors = {
-        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE,
-      };
-      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
+  describe('computedMarginTop', () => {
+    let adjustedMarginTop = 0;
+    it('should have a default of 0 if there is a validation error messages for entering prior dates for end date', () => {
+      const { computedMarginTop } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
-      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(true);
+      expect(computedMarginTop).toEqual(adjustedMarginTop);
+    });
+    it('should equal -1.9 if there is a validation error messages for entering prior dates for end date', () => {
+      baseState.validationErrors = {
+        endDate:
+          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
+      };
+      adjustedMarginTop = -1.9;
+      const { computedMarginTop } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+
+      expect(computedMarginTop).toEqual(adjustedMarginTop);
     });
 
-    it('should be return false if there is a validation error message for entering prior dates for end date', () => {
+    it('should equal -0.6 if there is a validation error messages for entering future dates for end dates', () => {
       baseState.validationErrors = {
-        endDate: 'Some random message.',
+        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       };
-      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
+      adjustedMarginTop = -0.6;
+      const { computedMarginTop } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
 
-      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(false);
-    });
-
-    it('should be return undefined if there are no validation messages for end date', () => {
-      baseState.validationErrors = {
-        endDate: undefined,
-      };
-      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(undefined);
-    });
-  });
-
-  describe('reAlignRunReportButtonAfterEndDateInTheFutureError', () => {
-    it('should be return true if there is a validation error message for entering prior dates for end date', () => {
-      baseState.validationErrors = {
-        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_MESSAGE,
-      };
-      const { reAlignRunReportButtonAfterEndDateInTheFutureError } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(reAlignRunReportButtonAfterEndDateInTheFutureError).toEqual(true);
-    });
-
-    it('should be return false if there is a validation error message for entering prior dates for end date', () => {
-      baseState.validationErrors = {
-        endDate: 'Some random message.',
-      };
-      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(false);
-    });
-
-    it('should be return undefined if there are no validation messages for end date', () => {
-      baseState.validationErrors = {
-        endDate: undefined,
-      };
-      const { reAlignRunReportButtonAfterPriorDateError } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(reAlignRunReportButtonAfterPriorDateError).toEqual(undefined);
+      expect(computedMarginTop).toEqual(adjustedMarginTop);
     });
   });
 });
