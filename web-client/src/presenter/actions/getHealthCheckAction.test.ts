@@ -9,8 +9,8 @@ describe('getHealthCheckAction', () => {
   });
 
   it('should retrieve the application health', async () => {
-    //TODO: update
     const mockHealth = {
+      allChecksHealthy: 'pass',
       clamAV: false,
       cognito: false,
       dynamo: { efcms: true, efcmsDeploy: false },
