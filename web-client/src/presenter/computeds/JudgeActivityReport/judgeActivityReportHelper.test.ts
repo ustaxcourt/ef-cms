@@ -74,6 +74,9 @@ describe('judgeActivityReportHelper', () => {
         filters: judgeActivityReportFilters,
         judgeActivityReportData: mockJudgeActivityReport,
       },
+      validationErrors: {
+        endDate: undefined,
+      },
     };
   });
 
@@ -91,6 +94,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be true when startDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
@@ -108,6 +112,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be true when endDate is not populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
@@ -125,6 +130,7 @@ describe('judgeActivityReportHelper', () => {
     it('should be false when both startDate and endDate are populated', () => {
       const { isFormPristine } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
@@ -178,6 +184,7 @@ describe('judgeActivityReportHelper', () => {
     it('should false when there are no orders, opinions, trial sessions and cases for the specified judge', () => {
       const { showResultsTables } = runCompute(judgeActivityReportHelper, {
         state: {
+          ...baseState,
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             judgeActivityReportData: {},
@@ -214,6 +221,7 @@ describe('judgeActivityReportHelper', () => {
         judgeActivityReportHelper,
         {
           state: {
+            ...baseState,
             judgeActivityReport: {
               ...baseState.judgeActivityReport,
               judgeActivityReportData: {},

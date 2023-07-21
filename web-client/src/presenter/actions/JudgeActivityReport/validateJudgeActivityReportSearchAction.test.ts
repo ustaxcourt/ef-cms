@@ -51,7 +51,7 @@ describe('validateJudgeActivityReportSearchAction', () => {
   });
 
   it('should return the error path when the search critera are NOT valid', async () => {
-    await runAction(validateJudgeActivityReportSearchAction as any, {
+    await runAction(validateJudgeActivityReportSearchAction, {
       modules: { presenter },
       state: {
         judgeActivityReport: {
