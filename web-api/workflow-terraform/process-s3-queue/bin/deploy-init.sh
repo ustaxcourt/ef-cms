@@ -2,12 +2,15 @@
 
 ENVIRONMENT=$1
 
-[ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
-[ -z "${SOURCE_BUCKET_NAME}" ] && echo "You must set SOURCE_BUCKET_NAME as an environment variable" && exit 1
-[ -z "${REGION}" ] && REGION="us-east-1"
+[ -z "$ENVIRONMENT" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
+[ -z "$BUCKET_SHORT_NAME" ] && BUCKET_SHORT_NAME=documents
+[ -z "$REGION" ] && REGION="us-east-1"
 
-BUCKET_NAME_WITHOUT_EFCMS_DOMAIN="${SOURCE_BUCKET_NAME//${EFCMS_DOMAIN}-/}"
-BUCKET_SHORT_NAME="${BUCKET_NAME_WITHOUT_EFCMS_DOMAIN//-${ENV}-${REGION}/}"
+if [[ -z "$BUCKET_NAME" ]]; then
+  [ -z "$SOURCE_BUCKET_NAME" ] && echo "You must set SOURCE_BUCKET_NAME as an environment variable" && exit 1
+else
+  SOURCE_BUCKET_NAME="$BUCKET_NAME"
+fi
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"

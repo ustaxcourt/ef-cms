@@ -48,7 +48,10 @@ resource "aws_iam_role_policy" "s3_lambda_policy" {
       "Sid": "SQS",
       "Effect": "Allow",
       "Action": [
-        "sqs:GetQueueAttributes"
+        "sqs:DeleteMessage",
+        "sqs:GetQueueAttributes",
+        "sqs:ReceiveMessage",
+        "sqs:SendMessageBatch"
       ],
       "Resource": [
         "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*"

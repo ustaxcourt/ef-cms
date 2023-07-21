@@ -43,7 +43,7 @@ resource "aws_iam_role_policy" "glue_job_status_policy" {
         "glue:GetJobRuns"
       ],
       "Resource": [
-        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*",
+        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
       ],
       "Effect": "Allow"
     }

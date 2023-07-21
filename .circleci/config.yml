@@ -546,7 +546,6 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            echo "export DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
           name: Setup the deploy table for a glue job
           command: |
@@ -606,6 +605,7 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
@@ -638,7 +638,7 @@ jobs:
           name: Deploy Process S3 Queue Lambda
           command: |
             cd web-api/workflow-terraform/process-s3-queue/main
-            ../bin/deploy-app.sh
+            ../bin/deploy-app.sh $ENV
             S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
             echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
             S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
@@ -782,11 +782,8 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             BUCKET_NAME=<< pipeline.parameters.bucket_name >>
-            if [[ -z "$BUCKET_NAME" ]]; then
-              echo "Error: no bucket name was provided"
-              exit 1
-            fi
-            echo "export SOURCE_BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
+            [ -z "$BUCKET_NAME" ] && echo "Error: missing bucket_name parameter" && exit 1
+            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
       - run:
           name: Deploy Process S3 Queue Lambda
           command: |
@@ -826,7 +823,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
             BUCKET_NAME=<< pipeline.parameters.bucket_name >>
-            echo "export SOURCE_BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
+            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
       - run:
           name: Disable Wait for S3 Truncation Cron
           command: |
