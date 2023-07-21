@@ -4,7 +4,7 @@ import {
   formatDateString,
 } from '../../utilities/DateHandler';
 import { JudgeActivityReportSearch } from './JudgeActivityReportSearch';
-
+import { VALIDATION_ERROR_MESSAGES } from '../EntityConstants';
 describe('JudgeActivityReportSearch', () => {
   describe('constructor', () => {
     it('should convert startDate to an ISO datetime representing the beginning of the day, EDT', () => {
@@ -46,7 +46,7 @@ describe('JudgeActivityReportSearch', () => {
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
         endDate:
-          'End date cannot be prior to Start Date. Enter a valid end date.',
+          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
       });
     });
 
@@ -59,7 +59,8 @@ describe('JudgeActivityReportSearch', () => {
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        startDate: 'Start date cannot be in the future. Enter a valid date.',
+        startDate:
+          VALIDATION_ERROR_MESSAGES.START_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       });
     });
 
@@ -72,7 +73,7 @@ describe('JudgeActivityReportSearch', () => {
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: 'End date cannot be in the future. Enter a valid date.',
+        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       });
     });
 
