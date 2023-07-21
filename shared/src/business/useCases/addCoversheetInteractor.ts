@@ -1,4 +1,5 @@
 import { Case } from '../entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../entities/EntityConstants';
 import { addCoverToPdf } from './addCoverToPdf';
 
 /**
@@ -52,7 +53,10 @@ export const addCoversheetInteractor = async (
       .promise();
     pdfData = Body;
   } catch (err) {
-    err.message = `${err.message} docket entry id is ${docketEntryId}`;
+    applicationContext.logger.error(
+      `Failed to get document for docket entry id ${docketEntryId} `,
+      err,
+    );
     throw err;
   }
 
@@ -110,7 +114,23 @@ export const addCoversheetInteractor = async (
         });
 
       if (consolidatedCaseDocketEntryEntity) {
-        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        const isSimultaneousDocType =
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            consolidatedCaseDocketEntryEntity.eventCode,
+          ) ||
+          consolidatedCaseDocketEntryEntity.documentTitle?.includes(
+            'Simultaneous',
+          );
+
+        if (
+          !isSimultaneousDocType ||
+          (isSimultaneousDocType &&
+            caseEntity &&
+            caseDocketNumber === docketNumber)
+        ) {
+          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        }
+
         consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
 
         const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
