@@ -110,7 +110,7 @@ export const SessionInformationForm = connect(
                 <FormGroup errorText={validationErrors.startTime}>
                   <fieldset className="start-time usa-fieldset margin-bottom-0">
                     <legend className="usa-legend" id="start-time-legend">
-                      Time <span className="usa-hint">(optional)</span>
+                      Time
                     </legend>
                     <div className="ustc-time-of-day">
                       <div className="usa-form-group ustc-time-of-day--hour">
