@@ -9,6 +9,7 @@ import {
   ORDER_EVENT_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  isDocumentBriefType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
@@ -28,40 +29,38 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  let filedByPractitioner: boolean = false;
-  let requiresPractitionerCheck: boolean = false;
-  let filedAfterPolicyChange: boolean = false;
-  const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
-    entry.eventCode,
-  );
+  let filedByPractitioner = false;
+  let meetsPolicyChangeRequirements = false;
   const isAmmemendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
     entry.eventCode,
   );
-  filedAfterPolicyChange = record.filingDate >= visibilityPolicyDateFormatted;
+  const filedAfterPolicyChange =
+    record.filingDate >= visibilityPolicyDateFormatted;
+  let shouldCheckPolicyDate = false;
 
-  if (isAmmemendment && filedAfterPolicyChange) {
-    if (
-      entry.previousDocument.documentType ===
-      'Seriatim Answering Memorandum Brief' // We need to check for any of the previous documents in 10076 story
-    ) {
-      requiresPractitionerCheck = true;
-      filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-        entry.docketEntryId,
-      );
-    }
-  }
   if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
+    let isDocketEntryBriefEventCode;
+    shouldCheckPolicyDate = true;
+
+    if (isAmmemendment) {
+      isDocketEntryBriefEventCode = isDocumentBriefType(
+        entry.previousDocument.documentType,
+      );
+    } else {
+      isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
+    }
     if (isDocketEntryBriefEventCode) {
-      requiresPractitionerCheck = true;
       filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
         entry.docketEntryId,
       );
+      meetsPolicyChangeRequirements =
+        filedAfterPolicyChange && filedByPractitioner;
     }
   }
 
-  const meetsPolicyChangeRequirements =
-    filedAfterPolicyChange &&
-    (requiresPractitionerCheck ? filedByPractitioner : true);
+  // const meetsPolicyChangeRequirements =
+  //   filedAfterPolicyChange &&
+  //   (requiresPractitionerCheck ? filedByPractitioner : true);
 
   let canTerminalUserSeeLink =
     record.isFileAttached &&
@@ -71,14 +70,13 @@ export const formatDocketEntryOnDocketRecord = (
 
   let canPublicUserSeeLink =
     ((record.isCourtIssuedDocument && !record.isStipDecision) ||
-      meetsPolicyChangeRequirements) &&
+      (shouldCheckPolicyDate && meetsPolicyChangeRequirements)) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
-
   const canDisplayDocumentLink = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
