@@ -1534,3 +1534,12 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const isDocumentBriefType = (documentType: string) => {
+  const documents = [
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+  ];
+  return !!documents.find(document => document.documentType === documentType)
+    ?.eventCode;
+};

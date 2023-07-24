@@ -256,6 +256,28 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should show document link for an amended brief when the docket entry was filed after the visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filingDate: '2050-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          previousDocument: {
+            docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
+            documentTitle: 'Seriatim Answering Memorandum Brief',
+            documentType: 'Seriatim Answering Memorandum Brief',
+          },
+        },
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
+
+      expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should NOT show document link for a non brief type entry', () => {
       const result: any = formatDocketEntryOnDocketRecord(
         applicationContextPublic,
         {
@@ -267,7 +289,32 @@ describe('publicCaseDetailHelper', () => {
             isCourtIssuedDocument: false,
             isNotServedDocument: false,
             previousDocument: {
-              docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
+              docketEntryId: baseDocketEntry.docketEntryId,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+            },
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should NOT show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'AMAT',
+            filingDate: '2050-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+            previousDocument: {
+              docketEntryId: baseDocketEntry.docketEntryId,
               documentTitle: 'Seriatim Answering Memorandum Brief',
               documentType: 'Seriatim Answering Memorandum Brief',
             },
@@ -277,7 +324,7 @@ describe('publicCaseDetailHelper', () => {
         },
       );
 
-      expect(result.showLinkToDocument).toBe(true);
+      expect(result.showLinkToDocument).toBe(false);
     });
   });
 
