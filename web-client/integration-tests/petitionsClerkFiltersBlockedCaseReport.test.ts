@@ -39,11 +39,8 @@ const createAndBlockCase = (
 
 describe('Blocking a Case', () => {
   const cerebralTest = setupTest();
-  const blockedCases = [];
 
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
+  const blockedCases = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();
