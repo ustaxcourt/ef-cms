@@ -21,7 +21,6 @@ export const getSesStatus = async ({
   const sesHealth = SendDataPoints.slice(0, numberOfDataPoints).every(
     ({ Rejects }) => Rejects === 0,
   );
-
   cache.set(cacheKey, sesHealth);
 
   applicationContext.logger.info(
