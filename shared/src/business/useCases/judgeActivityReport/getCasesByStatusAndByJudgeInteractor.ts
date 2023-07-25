@@ -54,7 +54,7 @@ const hasUnwantedDocketEntryEventCode = docketEntries => {
   });
 };
 
-export const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
+const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
   const caseRecordsToReturn: Array<any> = [];
 
   caseRecords.forEach(individualCaseRecord => {
