@@ -13,6 +13,10 @@ assignees: ''
 ./relative/path/to/testfile.test.ts
 ```
 
+## Readout of the failure
+
+Include any helpful output from the failure(s) here.
+
 ## Workflows of Failrure(s)
 
 Paste any CircleCI or Github Actions runs where this test failed
