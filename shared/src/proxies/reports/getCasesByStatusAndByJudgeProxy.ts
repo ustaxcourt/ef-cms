@@ -15,7 +15,7 @@ export const getCasesByStatusAndByJudgeInteractor = (
 ): Promise<{
   cases: RawCase[];
   consolidatedCasesGroupCountMap: any;
-  lastDocketNumberForCavAndSubmittedCasesSearch: number;
+  totalCount: number;
 }> => {
   return post({
     applicationContext,

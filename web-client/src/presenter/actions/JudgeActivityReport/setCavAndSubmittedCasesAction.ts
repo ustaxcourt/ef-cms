@@ -1,26 +1,11 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setJudgeActivityReportDataAction = ({
-  props,
-  store,
-}: ActionProps) => {
+export const setCavAndSubmittedCasesAction = ({ props, store }) => {
   const {
     cases: submittedAndCavCasesByJudge,
-    casesClosedByJudge,
     consolidatedCasesGroupCountMap,
     totalCountForSubmittedAndCavCases,
-    trialSessions,
   } = props;
-
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
-    casesClosedByJudge,
-  );
-
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData.trialSessions,
-    trialSessions,
-  );
 
   store.set(
     state.judgeActivityReport.judgeActivityReportData
