@@ -130,7 +130,7 @@ export const SubmittedCavCasesTable = connect(
                           }}
                         />
                       </td>
-                      <td>
+                      <td colSpan={2}>
                         {/* TODO: update persistence on change */}
                         <select
                           className={classNames(
@@ -149,28 +149,22 @@ export const SubmittedCavCasesTable = connect(
                       </td>
                     </tr>
                     <tr className="wip-submitted-cav-cases-primary-issue-row">
-                      <td colSpan={3}></td>
-                      <td colSpan={6}>
-                        <div
-                          style={{
-                            display: 'flex',
-                            height: 'fit-content',
-                            width: '100%',
-                          }}
-                        >
-                          <div
-                            className="margin-top-1 margin-right-2"
-                            style={{ flex: '0 0 auto' }}
-                          >
+                      <td className="grid-container" colSpan={12}>
+                        <div className="grid-row">
+                          <div className="grid-col-1" />
+                          <div className="grid-col-1">
                             <b>Primary Issue:</b>
                           </div>
-                          <div className="margin-top-1" style={{ flex: '1' }}>
+                          <div
+                            className="grid-col-8"
+                            style={{
+                              paddingLeft: '12px',
+                              paddingRight: '12px',
+                            }}
+                          >
                             {formattedCase.primaryIssue}
                           </div>
-                          <div
-                            className="margin-left-6 margin-top-auto margin-bottom-auto"
-                            style={{ flex: '0 0 auto' }}
-                          >
+                          <div className="grid-col-1">
                             {!formattedCase.primaryIssue && (
                               <Button
                                 link
@@ -187,12 +181,7 @@ export const SubmittedCavCasesTable = connect(
                             )}
 
                             {formattedCase.primaryIssue && (
-                              <div
-                                style={{
-                                  display: 'grid',
-                                  gridTemplateRows: 'auto auto',
-                                }}
-                              >
+                              <div className="grid">
                                 <div>
                                   <Button
                                     link
