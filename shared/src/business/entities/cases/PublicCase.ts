@@ -6,6 +6,7 @@ import {
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
+  isDocumentBriefType,
 } from '../EntityConstants';
 import { Case, isSealedCase } from './Case';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -111,28 +112,39 @@ export class PublicCase extends JoiValidationEntity {
     return Case.VALIDATION_ERROR_MESSAGES;
   }
 
-  static isPrivateDocument(documentEntity) {
+  static isPrivateDocument(
+    docketEntry: any,
+    visibilityChangeDate: string,
+  ): boolean {
+    if (docketEntry.isStricken) return true;
+    if (docketEntry.eventCode === TRANSCRIPT_EVENT_CODE) return true;
+    if (!docketEntry.isOnDocketRecord) return true;
+
     const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-    const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
+    const filedAfterPolicyChange =
+      docketEntry.filingDate >= visibilityChangeDate;
+
     const hasPolicyDateImpactedEventCode =
-      POLICY_DATE_IMPACTED_EVENTCODES.includes(documentEntity.eventCode);
-    const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
-    const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
+      POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntry.eventCode);
+    const isOrder = orderDocumentTypes.includes(docketEntry.documentType);
     const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
       ({ eventCode }) => eventCode,
-    ).includes(documentEntity.eventCode);
-    const documentIsStricken = !!documentEntity.isStricken;
+    ).includes(docketEntry.eventCode);
 
-    const isPublicDocumentType =
-      (isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode) &&
-      !isTranscript &&
-      !documentIsStricken;
+    let isPublicDocumentType =
+      isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode;
 
-    return (
-      (isPublicDocumentType && !isDocumentOnDocketRecord) ||
-      !isPublicDocumentType
-    );
+    const isAmendmentToABrief =
+      ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
+        docketEntry.eventCode,
+      ) && isDocumentBriefType(docketEntry.previousDocument.documentType);
+
+    if (isAmendmentToABrief) {
+      isPublicDocumentType = filedAfterPolicyChange;
+    }
+
+    return !isPublicDocumentType;
   }
 
   static getDocketEntriesEFiledByPractitioner(rawCase) {

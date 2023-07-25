@@ -3,6 +3,7 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../EntityConstants';
 import { PublicCase } from './PublicCase';
+import { createISODateString } from '../../utilities/DateHandler';
 
 describe('PublicCase isPrivateDocument', () => {
   it('should return true for a transcript document', () => {
@@ -71,6 +72,31 @@ describe('PublicCase isPrivateDocument', () => {
       isOnDocketRecord: true,
       isStricken: true,
     });
+    expect(isPrivate).toEqual(true);
+  });
+
+  it('should return true when the docket entry is an amended brief that was filed before the docket entry visibility policy date change', () => {
+    const visibilityChangeDate = createISODateString(
+      '2023-08-01',
+      'yyyy-MM-dd',
+    );
+
+    const isPrivate = PublicCase.isPrivateDocument(
+      {
+        docketEntryId: '1451c228-49d6-44a9-ac02-d797be308661',
+        documentType: 'Amended',
+        eventCode: 'AMAT',
+        filingDate: '2000-12-02T05:00:00.000Z',
+        isOnDocketRecord: true,
+        isStricken: false,
+        previousDocument: {
+          docketEntryId: '2a389787-91d2-41ba-9c6e-2a13440a928b',
+          documentType: 'Seriatim Answering Brief',
+        },
+      },
+      visibilityChangeDate,
+    );
+
     expect(isPrivate).toEqual(true);
   });
 });
