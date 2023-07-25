@@ -213,7 +213,7 @@ resource "aws_route53_health_check" "ui_health_check" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "status_health_check_east" {
-  alarm_name          = "${var.dns_domain} health check endpoint"
+  alarm_name          = "${var.dns_domain} east health check endpoint"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
@@ -233,7 +233,7 @@ resource "aws_cloudwatch_metric_alarm" "status_health_check_east" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "status_health_check_west" {
-  alarm_name          = "${var.dns_domain} health check endpoint"
+  alarm_name          = "${var.dns_domain} west health check endpoint"
   namespace           = "AWS/Route53"
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
