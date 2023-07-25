@@ -5,7 +5,7 @@ export const getSesStatus = async ({
 }: {
   applicationContext: IApplicationContext;
 }) => {
-  const cache = new NodeCache({ checkperiod: 120, stdTTL: 300 });
+  const cache = new NodeCache({ checkperiod: 180, stdTTL: 300 });
   const cacheKey = 'SES_health';
 
   const cachedResponse = cache.get(cacheKey);
