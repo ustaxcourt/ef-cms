@@ -13,6 +13,8 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
   const mockEndDate = '2022-04-13';
   const mockStartDate = '12/12/1923';
+  const mockTotalCountOfSubmittedAndCavCases = 15;
+  const pageNumber = 0;
 
   const judgeActivityReportStateFilters = {
     endDate: mockEndDate,
@@ -21,16 +23,15 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     startDate: mockStartDate,
   };
 
-  const requestFilters: JudgeActivityReportCavAndSubmittedCasesRequest = {
-    judges: [judgeUser.name],
-    pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-    statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
-  };
+  const getCasesByStatusAndByJudgeRequestParams: JudgeActivityReportCavAndSubmittedCasesRequest =
+    {
+      judges: [judgeUser.name],
+      pageNumber,
+      pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+    };
 
   const mockConsolidatedCasesGroupCount = { '101-22': 3 };
-
-  const pageNumber = 0;
-  const mockTotalCountOfSubmittedAndCavCases = 15;
 
   let mockReturnedCases;
   let mockCustomCaseReportResponse;
@@ -79,7 +80,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         applicationContext.getUseCases()
           .getCasesByStatusAndByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
-    ).toMatchObject({ ...requestFilters, pageNumber });
+    ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);
     expect(result.output.consolidatedCasesGroupCountMap).toMatchObject({
       '101-22': 3,
