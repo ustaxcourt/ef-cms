@@ -1,13 +1,12 @@
 import NodeCache from 'node-cache';
+const cache = new NodeCache({ checkperiod: 180, stdTTL: 300 });
+const cacheKey = 'SES_health';
 
 export const getSesStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
 }) => {
-  const cache = new NodeCache({ checkperiod: 180, stdTTL: 300 });
-  const cacheKey = 'SES_health';
-
   const cachedResponse = cache.get(cacheKey);
   if (cachedResponse) {
     applicationContext.logger.info('Returning SES health status from cache');
