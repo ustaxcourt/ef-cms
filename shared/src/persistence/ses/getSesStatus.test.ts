@@ -15,6 +15,7 @@ describe('getSesStatus', () => {
             }),
         }),
       }),
+      logger: { error: () => true, info: () => true },
     };
 
     const status = await getSesStatus({
@@ -38,6 +39,7 @@ describe('getSesStatus', () => {
             }),
         }),
       }),
+      logger: { error: () => true, info: () => true },
     };
 
     const status = await getSesStatus({
