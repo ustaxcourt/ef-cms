@@ -258,7 +258,7 @@ resource "aws_route53_health_check" "status_health_check_west" {
   type               = "HTTPS_STR_MATCH"
   resource_path      = "/public-api/health"
   failure_threshold  = "3"
-  request_interval   = "60"
+  request_interval   = "30"
   count              = var.enable_health_checks
   invert_healthcheck = false
   search_string      = "pass"                                       # Search for a JSON property returning "pass"; fail check if not present
@@ -271,7 +271,7 @@ resource "aws_route53_health_check" "status_health_check_east" {
   type               = "HTTPS_STR_MATCH"
   resource_path      = "/public-api/health"
   failure_threshold  = "3"
-  request_interval   = "60"
+  request_interval   = "30"
   count              = var.enable_health_checks
   invert_healthcheck = false
   search_string      = "pass"                                  # Search for a JSON property returning "pass"; fail check if not present
