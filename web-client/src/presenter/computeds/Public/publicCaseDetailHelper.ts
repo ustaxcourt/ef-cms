@@ -31,7 +31,7 @@ export const formatDocketEntryOnDocketRecord = (
 
   let filedByPractitioner = false;
   let meetsPolicyChangeRequirements = false;
-  const isAmmemendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
+  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
     entry.eventCode,
   );
   const filedAfterPolicyChange =
@@ -42,26 +42,48 @@ export const formatDocketEntryOnDocketRecord = (
     let isDocketEntryBriefEventCode;
     shouldCheckPolicyDate = true;
 
-    if (isAmmemendment) {
+    if (isAmendment) {
       isDocketEntryBriefEventCode = isDocumentBriefType(
         entry.previousDocument.documentType,
       );
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+          entry.docketEntryId,
+        );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else {
+        meetsPolicyChangeRequirements = false;
+      }
     } else {
       isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+          entry.docketEntryId,
+        );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
+      }
     }
-    if (isDocketEntryBriefEventCode) {
-      filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-        entry.docketEntryId,
-      );
-      meetsPolicyChangeRequirements =
-        filedAfterPolicyChange && filedByPractitioner;
-    }
+
+    // if (isDocketEntryBriefEventCode) {
+    //   filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+    //     entry.docketEntryId,
+    //   );
+    //   meetsPolicyChangeRequirements =
+    //     filedAfterPolicyChange && filedByPractitioner;
+    // } else {
+    //   meetsPolicyChangeRequirements = filedAfterPolicyChange && [].includes(entry.previousDocument);
+    // }
   }
 
   // const meetsPolicyChangeRequirements =
   //   filedAfterPolicyChange &&
   //   (requiresPractitionerCheck ? filedByPractitioner : true);
-
   let canTerminalUserSeeLink =
     record.isFileAttached &&
     isServedDocument &&
