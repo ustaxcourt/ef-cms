@@ -33,6 +33,7 @@ export const judgeActivityReportHelper = (
     opinions,
     orders,
     submittedAndCavCasesByJudge = [],
+    totalCountForSubmittedAndCavCases,
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
 
@@ -119,9 +120,9 @@ export const judgeActivityReportHelper = (
     );
   });
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
   const pageCount = Math.ceil(
-    filteredSubmittedAndCavCasesByJudge.length /
-      CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+    totalCountForSubmittedAndCavCases / CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   );
 
   return {
@@ -131,7 +132,7 @@ export const judgeActivityReportHelper = (
     opinionsFiledTotal,
     ordersFiledTotal,
     pageCount,
-    progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
+    progressDescriptionTableTotal: totalCountForSubmittedAndCavCases,
     reportHeader,
     showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,

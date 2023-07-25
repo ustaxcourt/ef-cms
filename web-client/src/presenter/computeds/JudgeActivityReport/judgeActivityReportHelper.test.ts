@@ -13,6 +13,8 @@ describe('judgeActivityReportHelper', () => {
   let judgeActivityReportFilters;
   let baseState;
 
+  const mockTotalCountForSubmittedAndCavCases = 15;
+
   const judgeActivityReportHelper = withAppContextDecorator(
     judgeActivityReportHelperComputed,
     { ...applicationContext },
@@ -248,6 +250,8 @@ describe('judgeActivityReportHelper', () => {
     it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
         {};
+      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
+        mockTotalCountForSubmittedAndCavCases;
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         [
           {
@@ -279,7 +283,9 @@ describe('judgeActivityReportHelper', () => {
         },
       );
 
-      expect(progressDescriptionTableTotal).toBe(3);
+      expect(progressDescriptionTableTotal).toBe(
+        mockTotalCountForSubmittedAndCavCases,
+      );
     });
   });
 
@@ -411,9 +417,11 @@ describe('judgeActivityReportHelper', () => {
   });
 
   describe('pageCount and showPaginator', () => {
-    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+    it('should return a pageCount of 1 and showPaginator as false for single page display', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
         {};
+      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
+        mockTotalCountForSubmittedAndCavCases;
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         [
           {
@@ -445,16 +453,39 @@ describe('judgeActivityReportHelper', () => {
       expect(result.showPaginator).toBe(false);
     });
 
-    it('should be the sum of the values of trialSessions off state.judgeActivityReportData', () => {
+    it('should return a pageCount of 2 and showPaginator as true for multi-paginated page display', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
         {};
+      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases = 115;
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        [];
+        [
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '101-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '103-20',
+          },
+          {
+            caseStatusHistory: [
+              { date: '2022-02-15T05:00:00.000Z' },
+              { date: '2022-02-16T05:00:00.000Z' },
+            ],
+            docketNumber: '102-20',
+          },
+        ];
       const result = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
-      expect(result.pageCount).toBe(0);
-      expect(result.showPaginator).toBe(false);
+      expect(result.pageCount).toBe(2);
+      expect(result.showPaginator).toBe(true);
     });
   });
 });
