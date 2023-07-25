@@ -97,9 +97,9 @@ All of our code API in Dawson is written in Node.js and deployed to Lambda.  We 
 
 ## API Gateway
 
-API Gateway is a service you can use to define REST routes and point those paths to execute various AWS resources.  Our main use case in Dawson is to point these REST routes to a mono lambda to execute some Node.js code and process the users request.  API Gateway requires a lot of additional setup just to allow a request to hit a lambda function, including defining a route, an intergration request, integration response, REST methods, etc.  Most of this setup can be found here `web-api/terraform/api/api.tf`.  We also had to create separate routes and paths for our async and auth endpoints due to how API Gateway configuration works.
+API Gateway is a service you can use to define REST routes and point those paths to execute various AWS resources.  Our main use case in Dawson is to point these REST routes to a mono lambda to execute some Node.js code and process the users request.  API Gateway requires a lot of additional setup just to allow a request to hit a lambda function, including defining a route, an integration request, integration response, REST methods, etc.  Most of this setup can be found here `web-api/terraform/api/api.tf`.  We also had to create separate routes and paths for our async and auth endpoints due to how API Gateway configuration works.
 
-API Gateway has a default timeout of 30 seconds.  That means if your lambda executes longer than 30 seconds, api gateway will throw an exception.  We sometimes have tasks which take longer than 30 seconds, such as setting a trial session.  Because of this, we created a `/async` endpoint which has a different intergration request and response to allow longer running lambda (up to 15 minutes if needed).
+API Gateway has a default timeout of 30 seconds.  That means if your lambda executes longer than 30 seconds, api gateway will throw an exception.  We sometimes have tasks which take longer than 30 seconds, such as setting a trial session.  Because of this, we created a `/async` endpoint which has a different integration request and response to allow longer running lambda (up to 15 minutes if needed).
 
 ## Route53
 

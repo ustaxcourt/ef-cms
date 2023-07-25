@@ -1,5 +1,18 @@
 /* eslint-disable complexity */
 
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  BRIEF_EVENTCODES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  EVENT_CODES_VISIBLE_TO_PUBLIC,
+  MOTION_EVENT_CODES,
+  ORDER_EVENT_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  isDocumentBriefType,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -12,35 +25,51 @@ export const formatDocketEntryOnDocketRecord = (
     visibilityPolicyDateFormatted,
   },
 ) => {
-  const {
-    BRIEF_EVENTCODES,
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
-    POLICY_DATE_IMPACTED_EVENTCODES,
-  } = applicationContext.getConstants();
   const record = cloneDeep(entry);
 
   const isServedDocument = !record.isNotServedDocument;
 
-  let filedByPractitioner: boolean = false;
-  let requiresPractitionerCheck: boolean = false;
-  let filedAfterPolicyChange: boolean = false;
-  const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
+  let filedByPractitioner = false;
+  let meetsPolicyChangeRequirements = false;
+  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
     entry.eventCode,
   );
+  const filedAfterPolicyChange =
+    record.filingDate >= visibilityPolicyDateFormatted;
+  let shouldCheckPolicyDate = false;
+
   if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    filedAfterPolicyChange = record.filingDate >= visibilityPolicyDateFormatted;
-    if (isDocketEntryBriefEventCode) {
-      requiresPractitionerCheck = true;
-      filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-        entry.docketEntryId,
+    let isDocketEntryBriefEventCode;
+    shouldCheckPolicyDate = true;
+
+    if (isAmendment) {
+      isDocketEntryBriefEventCode = isDocumentBriefType(
+        entry.previousDocument.documentType,
       );
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+          entry.docketEntryId,
+        );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else {
+        meetsPolicyChangeRequirements = false;
+      }
+    } else {
+      isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+          entry.docketEntryId,
+        );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
+      }
     }
   }
-
-  const meetsPolicyChangeRequirements =
-    filedAfterPolicyChange &&
-    (requiresPractitionerCheck ? filedByPractitioner : true);
 
   let canTerminalUserSeeLink =
     record.isFileAttached &&
@@ -50,14 +79,13 @@ export const formatDocketEntryOnDocketRecord = (
 
   let canPublicUserSeeLink =
     ((record.isCourtIssuedDocument && !record.isStipDecision) ||
-      meetsPolicyChangeRequirements) &&
+      (shouldCheckPolicyDate && meetsPolicyChangeRequirements)) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
-
   const canDisplayDocumentLink = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
@@ -108,18 +136,10 @@ export const formatDocketEntryOnDocketRecord = (
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const {
-    ALLOWLIST_FEATURE_FLAGS,
-    MOTION_EVENT_CODES,
-    ORDER_EVENT_CODES,
-    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-  } = applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
   const isTerminalUser = get(state.isTerminalUser);
   const { docketRecordFilter } = get(state.sessionMetadata);

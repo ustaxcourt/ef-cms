@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTIES_CODES,
@@ -8,12 +7,99 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
+import { formatDocketEntry } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
 } from './publicCaseDetailHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
+const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
+  addToCoversheet: false,
+  attachments: false,
+  createdAt: '2023-07-25T15:32:03.506Z',
+  date: null,
+  docketEntryId: 'bf0b82b0-f21b-4cab-90b6-0d5281ae25f4',
+  docketNumber: '103-23',
+  documentContentsId: 'eee1d0fe-67bd-4285-bfb1-48e81786bbe1',
+  documentIdBeforeSignature: '989fd903-e579-4c73-b4ea-f20d06c39a35',
+  documentTitle: 'Stipulated Decision Entered, Judge Ashford Anything',
+  documentType: 'Stipulated Decision',
+  draftOrderState: null,
+  editState:
+    '{"eventCode":"SDEC","documentType":"Stipulated Decision","documentTitle":"Stipulated Decision Entered, [Judge Name] [Anything]","scenario":"Type B","isOrder":true,"closesAndDismissesCase":true,"requiresSignature":true,"attachments":false,"date":null,"judgeWithTitle":"Judge Ashford","generatedDocumentTitle":"Stipulated Decision Entered, Judge Ashford Anything","judge":"Ashford","freeText":"Anything","docketEntryId":"bf0b82b0-f21b-4cab-90b6-0d5281ae25f4","docketNumber":"103-23","filersMap":{},"lodged":false}',
+  entityName: 'DocketEntry',
+  eventCode: 'SDEC',
+  filers: [],
+  filingDate: '2024-07-25T15:32:04.219Z',
+  freeText: 'Anything',
+  index: 7,
+  isDraft: false,
+  isFileAttached: true,
+  isMinuteEntry: false,
+  isOnDocketRecord: true,
+  isPendingService: false,
+  isStricken: false,
+  judge: 'Ashford',
+  numberOfPages: 1,
+  pending: false,
+  processingStatus: 'complete',
+  receivedAt: '2023-07-25T04:00:00.000Z',
+  relationship: 'primaryDocument',
+  scenario: 'Type B',
+  servedAt: '2023-07-25T15:32:04.219Z',
+  servedParties: [
+    {
+      email: 'petitioner@example.com',
+      name: 'Mona Schultz',
+    },
+    {
+      name: 'Aliens, Dude',
+    },
+  ],
+  servedPartiesCode: 'B',
+  signedAt: '2023-07-25T15:32:03.506Z',
+  signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+  signedJudgeName: 'Maurice B. Foley',
+  stampData: {},
+  userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+  workItem: {
+    assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    assigneeName: 'Test Docketclerk',
+    associatedJudge: 'Chief Judge',
+    caseStatus: 'Closed',
+    caseTitle: 'Mona Schultz & Aliens, Dude',
+    completedAt: '2023-07-25T15:32:04.220Z',
+    completedBy: 'Test Docketclerk',
+    completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    completedMessage: 'completed',
+    createdAt: '2023-07-25T15:32:03.737Z',
+    docketEntry: {
+      createdAt: '2023-07-25T15:32:03.506Z',
+      docketEntryId: 'bf0b82b0-f21b-4cab-90b6-0d5281ae25f4',
+      documentTitle: 'Stipulated Decision Entered, Judge Ashford Anything',
+      documentType: 'Stipulated Decision',
+      eventCode: 'SDEC',
+      isFileAttached: true,
+      receivedAt: '2023-07-25T04:00:00.000Z',
+      servedAt: '2023-07-25T15:32:04.219Z',
+      userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+    docketNumber: '103-23',
+    docketNumberWithSuffix: '103-23L',
+    entityName: 'WorkItem',
+    hideFromPendingMessages: true,
+    highPriority: false,
+    section: 'docket',
+    sentBy: 'Test Docketclerk',
+    sentBySection: 'docket',
+    sentByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
+    trialDate: null,
+    trialLocation: null,
+    updatedAt: '2023-07-25T15:32:03.737Z',
+    workItemId: 'e142cd9f-cd77-458d-abeb-960bfdfb559c',
+  },
+});
 
 describe('publicCaseDetailHelper', () => {
   let state;
@@ -224,6 +310,117 @@ describe('publicCaseDetailHelper', () => {
           },
           isTerminalUser: false,
           visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should NOT show document link for an amended brief when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'AMAT',
+            filingDate: '2020-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+            previousDocument: {
+              docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
+              documentTitle: 'Seriatim Answering Memorandum Brief',
+              documentType: 'Seriatim Answering Memorandum Brief',
+            },
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should show document link for an amended brief when the docket entry was filed after the visibility policy date (8/1/2023) by a practitioner on the case', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filingDate: '2050-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          previousDocument: {
+            docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
+            documentTitle: 'Seriatim Answering Memorandum Brief',
+            documentType: 'Seriatim Answering Memorandum Brief',
+          },
+        },
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
+
+      expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should NOT show document link for an amendment docket entry when the previous docket entry is NOT a brief', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'AMAT',
+            filingDate: '2050-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+            previousDocument: {
+              docketEntryId: baseDocketEntry.docketEntryId,
+              documentTitle: 'Petition',
+              documentType: 'Petition',
+            },
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should show document link for a Stipulated Decision (SDEC)', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: stipDecisionDocument,
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+        },
+      );
+
+      expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should NOT show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
+      const result: any = formatDocketEntryOnDocketRecord(
+        applicationContextPublic,
+        {
+          docketEntriesEFiledByPractitioner: [],
+          entry: {
+            ...baseDocketEntry,
+            eventCode: 'AMAT',
+            filingDate: '2050-05-16T00:00:00.000-04:00',
+            isCourtIssuedDocument: false,
+            isNotServedDocument: false,
+            previousDocument: {
+              docketEntryId: baseDocketEntry.docketEntryId,
+              documentTitle: 'Seriatim Answering Memorandum Brief',
+              documentType: 'Seriatim Answering Memorandum Brief',
+            },
+          },
+          isTerminalUser: false,
+          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
         },
       );
 
