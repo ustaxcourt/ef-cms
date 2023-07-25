@@ -54,7 +54,7 @@ const hasUnwantedDocketEntryEventCode = docketEntries => {
   });
 };
 
-const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
+export const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
   const caseRecordsToReturn: Array<any> = [];
 
   caseRecords.forEach(individualCaseRecord => {
@@ -72,7 +72,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
   consolidatedCasesGroupCountMap: ConsolidatedCasesGroupCountMapResponseType;
-  lastDocketNumberForCavAndSubmittedCasesSearch: number;
+  totalCount: number;
 }> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -81,26 +81,21 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   }
 
   params.judges = params.judges || [];
-  params.pageSize = params.pageSize || CAV_AND_SUBMITTED_CASES_PAGE_SIZE;
-  params.searchAfter = params.searchAfter || 0;
   params.statuses = params.statuses || [];
+  params.pageNumber = params.pageNumber || 0;
+  params.pageSize = params.pageSize || CAV_AND_SUBMITTED_CASES_PAGE_SIZE;
 
   const searchEntity = new JudgeActivityReportSearch(params);
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
   }
 
-  const {
-    foundCases: submittedAndCavCasesResults,
-    lastDocketNumberForCavAndSubmittedCasesSearch,
-  } = await applicationContext
+  const { foundCases: submittedAndCavCasesResults } = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
       params: {
         judges: searchEntity.judges,
-        pageSize: searchEntity.pageSize,
-        searchAfter: searchEntity.searchAfter,
         statuses: searchEntity.statuses,
       },
     });
@@ -162,15 +157,22 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       status: caseRecord.status,
     }));
 
-  const paginationInfo = filteredCaseRecords.length
-    ? lastDocketNumberForCavAndSubmittedCasesSearch
-    : 0;
+  const itemOffset =
+    (searchEntity.pageNumber * searchEntity.pageSize) %
+    formattedCaseRecords.length;
+
+  const endOffset = itemOffset + searchEntity.pageSize;
+
+  const formattedCaseRecordsForDisplay = formattedCaseRecords.slice(
+    itemOffset,
+    endOffset,
+  );
 
   return {
-    cases: formattedCaseRecords,
+    cases: formattedCaseRecordsForDisplay,
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
-    lastDocketNumberForCavAndSubmittedCasesSearch: paginationInfo,
+    totalCount: formattedCaseRecords.length,
   };
 };

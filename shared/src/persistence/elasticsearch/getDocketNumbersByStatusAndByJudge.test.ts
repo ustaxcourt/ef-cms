@@ -1,6 +1,6 @@
 import {
-  CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   CAV_AND_SUBMITTED_CASE_STATUS,
+  MAX_ELASTICSEARCH_PAGINATION,
 } from '../../business/entities/EntityConstants';
 import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
@@ -10,8 +10,6 @@ import { judgeUser } from '../../test/mockUsers';
 describe('getDocketNumbersByStatusAndByJudge', () => {
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
     judges: [judgeUser.name],
-    pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-    searchAfter: 1234,
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
@@ -52,12 +50,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(CAV_AND_SUBMITTED_CASES_PAGE_SIZE);
-
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body
-        .search_after,
-    ).toEqual([mockValidRequest.searchAfter]);
+    ).toEqual(MAX_ELASTICSEARCH_PAGINATION);
 
     expect(
       applicationContext.getSearchClient().search.mock.calls[0][0].body.query
@@ -92,7 +85,6 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
           docketNumber: '11316-18',
         },
       ],
-      lastDocketNumberForCavAndSubmittedCasesSearch: 2018011316,
     });
   });
 });

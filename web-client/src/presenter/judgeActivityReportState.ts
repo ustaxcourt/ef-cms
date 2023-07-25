@@ -14,14 +14,13 @@ export type JudgeActivityReportFilters = {
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
-  searchAfter: number;
-  pageSize: number;
   judges: string[];
+  pageNumber?: number;
+  pageSize?: number;
 };
 
 export type CavAndSubmittedCaseResponseType = {
   foundCases: { docketNumber: string }[];
-  lastDocketNumberForCavAndSubmittedCasesSearch: number;
 };
 
 export type CasesClosedType = {
