@@ -78,15 +78,9 @@ export const SubmittedCavCasesTable = connect(
               <th>No. of Cases</th>
               <th>Petitioner(s)</th>
               <th>Case Status</th>
-              <th>
-                Days in
-                <br /> Status
-              </th>
+              <th>Days in Status</th>
               <th>Status Date</th>
-              <th>
-                Final Brief
-                <br /> Due Date
-              </th>
+              <th>Final Brief Due Date</th>
               <th>Status of Matter</th>
             </tr>
           </thead>
@@ -123,7 +117,9 @@ export const SubmittedCavCasesTable = connect(
                         {getSubmittedOrCAVDate(formattedCase.caseStatusHistory)}
                       </td>
                       <td>
+                        {/* TODO: wire up / figure out the saving */}
                         <DateInput
+                          className={'margin-bottom-0'}
                           id={`final-brief-due-date-${formattedCase.docketNumber}`}
                           label={''}
                           showDateHint={false}
@@ -135,11 +131,11 @@ export const SubmittedCavCasesTable = connect(
                         />
                       </td>
                       <td>
+                        {/* TODO: update persistence on change */}
                         <select
                           className={classNames(
                             'usa-select',
                             'inline-select',
-                            'width-180',
                             'select-left',
                             'margin-left-1pt5rem',
                           )}
