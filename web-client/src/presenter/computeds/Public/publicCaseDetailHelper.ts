@@ -69,21 +69,8 @@ export const formatDocketEntryOnDocketRecord = (
         meetsPolicyChangeRequirements = filedAfterPolicyChange;
       }
     }
-
-    // if (isDocketEntryBriefEventCode) {
-    //   filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-    //     entry.docketEntryId,
-    //   );
-    //   meetsPolicyChangeRequirements =
-    //     filedAfterPolicyChange && filedByPractitioner;
-    // } else {
-    //   meetsPolicyChangeRequirements = filedAfterPolicyChange && [].includes(entry.previousDocument);
-    // }
   }
 
-  // const meetsPolicyChangeRequirements =
-  //   filedAfterPolicyChange &&
-  //   (requiresPractitionerCheck ? filedByPractitioner : true);
   let canTerminalUserSeeLink =
     record.isFileAttached &&
     isServedDocument &&
