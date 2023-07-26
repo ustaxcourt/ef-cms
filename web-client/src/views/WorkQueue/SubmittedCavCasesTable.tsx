@@ -19,6 +19,7 @@ export const SubmittedCavCasesTable = connect(
     openDeleteCasePrimaryIssueSequence:
       sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
+    submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
   },
 
   function SubmittedCavCasesTable({
@@ -26,6 +27,7 @@ export const SubmittedCavCasesTable = connect(
     openAddEditPrimaryIssueModalSequence,
     openDeleteCasePrimaryIssueSequence,
     showModal,
+    submittedCavCasesTableHelper,
   }) {
     const StatusOfMatter = [
       'Awaiting Consideration',
@@ -37,33 +39,6 @@ export const SubmittedCavCasesTable = connect(
       'Submitted to Reporter',
       'Stayed',
     ];
-
-    const daysInStatusSortHandler = (
-      caseA: { daysElapsedSinceLastStatusChange: number },
-      caseB: { daysElapsedSinceLastStatusChange: number },
-    ) => {
-      if (
-        caseA.daysElapsedSinceLastStatusChange <
-        caseB.daysElapsedSinceLastStatusChange
-      )
-        return 1;
-      if (
-        caseA.daysElapsedSinceLastStatusChange >
-        caseB.daysElapsedSinceLastStatusChange
-      )
-        return -1;
-      return 0;
-    };
-
-    const getSubmittedOrCAVDate = (
-      caseStatusHistory: { updatedCaseStatus: string; formattedDate: string }[],
-    ): string | undefined => {
-      console.log(caseStatusHistory);
-      return caseStatusHistory.find(statusHistory =>
-        ['Submitted', 'CAV'].includes(statusHistory.updatedCaseStatus),
-      )?.formattedDate;
-    };
-
     return (
       <React.Fragment>
         <table
@@ -95,7 +70,7 @@ export const SubmittedCavCasesTable = connect(
           </thead>
           <tbody>
             {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
-              .sort(daysInStatusSortHandler)
+              .sort(submittedCavCasesTableHelper.daysInStatusSortHandler)
               .map(formattedCase => {
                 return (
                   <React.Fragment key={`info-${formattedCase.docketNumber}`}>
@@ -123,7 +98,9 @@ export const SubmittedCavCasesTable = connect(
                       <td>{formattedCase.status}</td>
                       <td>{formattedCase.daysElapsedSinceLastStatusChange}</td>
                       <td>
-                        {getSubmittedOrCAVDate(formattedCase.caseStatusHistory)}
+                        {submittedCavCasesTableHelper.getSubmittedOrCAVDate(
+                          formattedCase.caseStatusHistory,
+                        )}
                       </td>
                       <td>
                         {/* TODO: wire up / figure out the saving */}
