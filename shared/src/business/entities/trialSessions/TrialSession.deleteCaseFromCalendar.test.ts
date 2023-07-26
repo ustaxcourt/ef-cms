@@ -1,5 +1,5 @@
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { VALID_TRIAL_SESSION } from './TrialSession.test';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
@@ -7,7 +7,7 @@ describe('TrialSession entity', () => {
     it('should remove the expected case from the order', () => {
       const trialSession = new TrialSession(
         {
-          ...VALID_TRIAL_SESSION,
+          ...MOCK_TRIAL_INPERSON,
           caseOrder: [{ docketNumber: '678-90' }, { docketNumber: '123-45' }],
         },
         {
@@ -25,7 +25,7 @@ describe('TrialSession entity', () => {
     it('should remove the expected case from the order when there is only one entry', () => {
       const trialSession = new TrialSession(
         {
-          ...VALID_TRIAL_SESSION,
+          ...MOCK_TRIAL_INPERSON,
           caseOrder: [{ docketNumber: '123-45' }],
         },
         {

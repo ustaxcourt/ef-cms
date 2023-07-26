@@ -5,6 +5,11 @@ export const DocketHeader = ({
   caseTitle,
   docketNumberWithSuffix,
   documentTitle,
+}: {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  documentTitle: string;
 }) => {
   return (
     <div id="docket-header">

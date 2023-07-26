@@ -1,51 +1,53 @@
+import { Case } from '../cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { TrialSession } from './TrialSession';
-import { VALID_TRIAL_SESSION } from './TrialSession.test';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('TrialSession entity', () => {
   describe('manuallyAddCaseToCalendar', () => {
+    const mockCaseEntity = new Case(MOCK_CASE, { applicationContext });
     const dateRegex = /^\d*-\d*-\d*T\d*:\d*:\d*.\d*Z$/g;
 
-    it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {
-      const trialSession = new TrialSession(
+    let trialSession: TrialSession;
+
+    beforeEach(() => {
+      trialSession = new TrialSession(
         {
-          ...VALID_TRIAL_SESSION,
-          sessionType: 'Hybrid',
+          ...MOCK_TRIAL_INPERSON,
+          caseOrder: [],
         },
         {
           applicationContext,
         },
       );
-      const mockCaseEntity = { docketNumber: '123-45' };
-      trialSession.manuallyAddCaseToCalendar({ caseEntity: mockCaseEntity });
+    });
 
-      expect(trialSession.caseOrder[0]).toEqual({
+    it('should add case to calendar of valid trial session when provided a raw case entity with a docketNumber', () => {
+      trialSession.manuallyAddCaseToCalendar({
+        calendarNotes: undefined,
+        caseEntity: mockCaseEntity,
+      });
+
+      expect(trialSession.caseOrder![0]).toEqual({
         addedToSessionAt: expect.stringMatching(dateRegex),
-        docketNumber: '123-45',
+        docketNumber: mockCaseEntity.docketNumber,
         isManuallyAdded: true,
       });
     });
 
     it('should add case to calendar and include calendarNotes when they are provided', () => {
-      const trialSession = new TrialSession(
-        {
-          ...VALID_TRIAL_SESSION,
-          sessionType: 'Hybrid',
-        },
-        {
-          applicationContext,
-        },
-      );
-      const mockCaseEntity = { docketNumber: '123-45' };
+      const mockCalendarNotes = 'Test';
+
       trialSession.manuallyAddCaseToCalendar({
-        calendarNotes: 'Test',
+        calendarNotes: mockCalendarNotes,
         caseEntity: mockCaseEntity,
       });
 
-      expect(trialSession.caseOrder[0]).toEqual({
+      expect(trialSession.caseOrder![0]).toEqual({
         addedToSessionAt: expect.stringMatching(dateRegex),
-        calendarNotes: 'Test',
-        docketNumber: '123-45',
+        calendarNotes: mockCalendarNotes,
+        docketNumber: mockCaseEntity.docketNumber,
         isManuallyAdded: true,
       });
     });
