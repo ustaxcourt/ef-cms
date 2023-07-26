@@ -57,11 +57,9 @@ export const formatDocketEntryOnDocketRecord = (
   );
   const filedAfterPolicyChange =
     record.filingDate >= visibilityPolicyDateFormatted;
-  let shouldCheckPolicyDate = false;
 
   if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
     let isDocketEntryBriefEventCode;
-    shouldCheckPolicyDate = true;
     const docType = entry.rootDocument.documentType;
 
     if (isAmendment) {
@@ -101,13 +99,14 @@ export const formatDocketEntryOnDocketRecord = (
 
   let canPublicUserSeeLink =
     ((record.isCourtIssuedDocument && !record.isStipDecision) ||
-      (shouldCheckPolicyDate && meetsPolicyChangeRequirements)) &&
+      meetsPolicyChangeRequirements) &&
     record.isFileAttached &&
     isServedDocument &&
     !record.isStricken &&
     !record.isTranscript &&
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+
   const canDisplayDocumentLink = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
