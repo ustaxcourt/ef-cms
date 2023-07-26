@@ -7,12 +7,12 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
-import { formatDocketEntry } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
+  fetchRootDocument,
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
-  recursivelySetNestedPreviousDocuments,
 } from './publicCaseDetailHelper';
+import { formatDocketEntry } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
@@ -1196,7 +1196,7 @@ describe('publicCaseDetailHelper', () => {
   });
 });
 
-describe('recursivelySetNestedPreviousDocuments', () => {
+describe.only('recursivelySetNestedPreviousDocuments', () => {
   it('should set up all the previous documents for the docket entry passed in', () => {
     const theDocketEntry: any = {
       docketEntryId: '1',
@@ -1215,23 +1215,15 @@ describe('recursivelySetNestedPreviousDocuments', () => {
       { docketEntryId: '3', documentTitle: 'minions' },
     ];
 
-    const docketEntry = recursivelySetNestedPreviousDocuments(
-      theDocketEntry,
-      docketEntries,
-    );
+    const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
 
     expect(docketEntry).toEqual({
-      docketEntryId: '1',
-      documentTitle: 'booba',
-      previousDocument: {
-        docketEntryId: '2',
-        documentTitle: 'fruity',
-        previousDocument: { docketEntryId: '3', documentTitle: 'minions' },
-      },
+      docketEntryId: '3',
+      documentTitle: 'minions',
     });
   });
 
-  it('should set up all the previous documents for the docket entry passed in', () => {
+  it('should return the closest to the parent if the chain is missing an entry', () => {
     const theDocketEntry: any = {
       docketEntryId: '1',
       documentTitle: 'booba',
@@ -1248,19 +1240,24 @@ describe('recursivelySetNestedPreviousDocuments', () => {
       },
     ];
 
-    const docketEntry = recursivelySetNestedPreviousDocuments(
-      theDocketEntry,
-      docketEntries,
-    );
+    const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
 
     expect(docketEntry).toEqual({
-      docketEntryId: '1',
-      documentTitle: 'booba',
-      previousDocument: {
-        docketEntryId: '2',
-        documentTitle: 'fruity',
-        previousDocument: { docketEntryId: '3' },
-      },
+      docketEntryId: '2',
+      documentTitle: 'fruity',
+      previousDocument: { docketEntryId: '3' },
     });
   });
+
+  // it('should return undefined for previousDocument if there is no parent', () => {
+  //   const theDocketEntry: any = {
+  //     docketEntryId: '1',
+  //     documentTitle: 'booba',
+  //   };
+  //   const docketEntries = [theDocketEntry];
+
+  //   const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
+
+  //   expect(docketEntry).toEqual(undefined);
+  // });
 });

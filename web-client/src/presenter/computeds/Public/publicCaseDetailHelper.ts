@@ -16,14 +16,10 @@ import { Get } from 'cerebral';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type RawDocketEntryPreviousDocumentRecursive = RawDocketEntry & {
-  previousDocument?: RawDocketEntry;
-};
-
-export const recursivelySetNestedPreviousDocuments = (
+export const fetchRootDocument = (
   entry: RawDocketEntry,
   docketEntries: RawDocketEntry[],
-): RawDocketEntryPreviousDocumentRecursive | RawDocketEntry => {
+): RawDocketEntry => {
   const { previousDocument } = entry;
   if (!previousDocument) return entry;
 
@@ -33,13 +29,7 @@ export const recursivelySetNestedPreviousDocuments = (
 
   if (!previousEntry) return entry;
 
-  return {
-    ...entry,
-    previousDocument: recursivelySetNestedPreviousDocuments(
-      previousEntry,
-      docketEntries,
-    ),
-  };
+  return fetchRootDocument(previousEntry, docketEntries);
 };
 
 export const formatDocketEntryOnDocketRecord = (
@@ -197,9 +187,9 @@ export const publicCaseDetailHelper = (
     .toISO();
 
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords
-    .map((entry, _, array) =>
-      recursivelySetNestedPreviousDocuments(entry, array),
-    )
+    .map((entry: any, _, array) => {
+      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
+    })
     .map(entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
         docketEntriesEFiledByPractitioner:
