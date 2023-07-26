@@ -47,12 +47,16 @@ export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
-};
+} as const;
+const TRIAL_PROCEEDINGS = Object.values(TRIAL_SESSION_PROCEEDING_TYPES);
+export type TrialSessionProceedingType = (typeof TRIAL_PROCEEDINGS)[number];
 
 export const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
-};
+} as const;
+const TRIAL_SESSION_SCOPES = Object.values(TRIAL_SESSION_SCOPE_TYPES);
+export type TrialSessionScope = (typeof TRIAL_SESSION_SCOPES)[number];
 
 export const JURISDICTIONAL_OPTIONS = {
   restoredToDocket: 'The case is restored to the general docket',
@@ -1272,7 +1276,9 @@ export const SESSION_TYPES = {
   hybridSmall: 'Hybrid-S',
   special: 'Special',
   motionHearing: 'Motion/Hearing',
-};
+} as const;
+const TRIAL_SESSION_TYPES = Object.values(SESSION_TYPES);
+export type TrialSessionTypes = (typeof TRIAL_SESSION_TYPES)[number];
 
 export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
   'hybrid',

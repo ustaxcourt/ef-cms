@@ -17,3 +17,4 @@ export EFCMS_DOMAIN=localhost
 export ELASTICSEARCH_HOST=localhost
 export ELASTICSEARCH_ENDPOINT=http://localhost:9200
 export DYNAMODB_ENDPOINT=http://localhost:8000
+export IRS_SUPERUSER_EMAIL=irs-superuser@example.com
