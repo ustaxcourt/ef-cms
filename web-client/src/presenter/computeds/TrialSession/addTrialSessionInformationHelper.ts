@@ -1,8 +1,9 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
+import { Get } from 'cerebral';
+import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const addTrialSessionInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -12,13 +13,7 @@ export const addTrialSessionInformationHelper = (
 
   const { proceedingType, sessionScope } = get(state.form);
 
-  // FEATURE FLAG: standalone_remote_session
-  const FEATURE_canDisplayStandaloneRemote =
-    applicationContext.isFeatureEnabled('standalone_remote_session');
-
-  const isStandaloneSession = applicationContext
-    .getUtilities()
-    .isStandaloneRemoteSession(sessionScope);
+  const isStandaloneSession = TrialSession.isStandaloneRemote(sessionScope);
 
   const title = isStandaloneSession
     ? 'Remote Proceeding Information'
@@ -39,7 +34,6 @@ export const addTrialSessionInformationHelper = (
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
   return {
-    FEATURE_canDisplayStandaloneRemote,
     displayRemoteProceedingForm,
     isStandaloneSession,
     sessionTypes,

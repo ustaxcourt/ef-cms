@@ -1,6 +1,7 @@
 import {
   COUNTRY_TYPES,
   PARTY_TYPES,
+  SESSION_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { checkWorkitemOnCalendaredCase } from './journey/checkWorkitemOnCalendaredCase';
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
@@ -32,13 +33,11 @@ describe('Docket Clerk Document QC Journey', () => {
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
-    trialDate: {
-      day: '20',
-      month: '01',
-      year: '2040',
-    },
+    sessionType: SESSION_TYPES.small,
+    trialDay: '20',
     trialLocation,
+    trialMonth: '01',
+    trialYear: '2040',
   };
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -88,9 +87,9 @@ describe('Docket Clerk Document QC Journey', () => {
   checkWorkitemOnCalendaredCase(
     cerebralTest,
     {
-      day: overrides.trialDate.day,
-      month: overrides.trialDate.month,
-      year: overrides.trialDate.year,
+      day: overrides.trialDay,
+      month: overrides.trialMonth,
+      year: overrides.trialYear,
     },
     trialLocation,
   );
