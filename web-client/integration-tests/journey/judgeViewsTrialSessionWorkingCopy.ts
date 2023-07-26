@@ -5,8 +5,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const judgeViewsTrialSessionWorkingCopy = (
   cerebralTest,
-  checkCase,
-  calendarNote,
+  checkCase?,
+  calendarNote?,
   expectedNumberOfCasesOnTrialSession = 1,
 ) => {
   const { DOCKET_SECTION } = applicationContext.getConstants();

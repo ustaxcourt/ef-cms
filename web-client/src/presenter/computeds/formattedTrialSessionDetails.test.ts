@@ -1,6 +1,7 @@
 import {
   HYBRID_SESSION_TYPES,
   SESSION_STATUS_GROUPS,
+  SESSION_STATUS_TYPES,
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -502,6 +503,26 @@ describe('formattedTrialSessionDetails', () => {
 
       expect(result.showAlertForNOTTReminder).toBe(false);
       expect(result.alertMessageForNOTT).toBeUndefined();
+    });
+
+    it('should set showAlertForNOTTReminder to false when the trial session has been closed', () => {
+      mockTrialSession = {
+        ...TRIAL_SESSION,
+        sessionStatus: SESSION_STATUS_TYPES.closed,
+      };
+
+      const { showAlertForNOTTReminder } = runCompute(
+        formattedTrialSessionDetails,
+        {
+          state: {
+            trialSession: {
+              ...mockTrialSession,
+            },
+          },
+        },
+      );
+
+      expect(showAlertForNOTTReminder).toBe(false);
     });
   });
 });
