@@ -6,10 +6,10 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
+import { BindedSelect } from '@web-client/ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DeletePrimaryIssueModal } from '../CaseWorksheet/DeletePrimaryIssueModal';
 import React from 'react';
-import classNames from 'classnames';
 
 export const SubmittedCavCasesTable = connect(
   {
@@ -81,7 +81,9 @@ export const SubmittedCavCasesTable = connect(
               <th>Days in Status</th>
               <th>Status Date</th>
               <th>Final Brief Due Date</th>
-              <th>Status of Matter</th>
+              <th>
+                <label htmlFor="status-of-matter">Status of Matter</label>
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -132,20 +134,19 @@ export const SubmittedCavCasesTable = connect(
                       </td>
                       <td colSpan={2}>
                         {/* TODO: update persistence on change */}
-                        <select
-                          className={classNames(
-                            'usa-select',
-                            'inline-select',
-                            'select-left',
-                            'margin-left-1pt5rem',
-                          )}
+                        <BindedSelect
+                          aria-describedby="status-of-matter"
+                          bind=""
+                          id="status-of-matter-dropdown"
+                          name="statusOfMatter"
                         >
+                          <option value="">- Select -</option>
                           {StatusOfMatter.map(from => (
                             <option key={from} value={from}>
                               {from}
                             </option>
                           ))}
-                        </select>
+                        </BindedSelect>
                       </td>
                     </tr>
                     <tr className="wip-submitted-cav-cases-primary-issue-row">
