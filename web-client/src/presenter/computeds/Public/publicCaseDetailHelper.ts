@@ -39,6 +39,11 @@ export const formatDocketEntryOnDocketRecord = (
     entry,
     isTerminalUser,
     visibilityPolicyDateFormatted,
+  }: {
+    docketEntriesEFiledByPractitioner: string[];
+    entry: RawDocketEntry & { rootDocument: any };
+    isTerminalUser: boolean;
+    visibilityPolicyDateFormatted: string; // ISO Date String
   },
 ) => {
   const record = cloneDeep(entry);
@@ -57,11 +62,10 @@ export const formatDocketEntryOnDocketRecord = (
   if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
     let isDocketEntryBriefEventCode;
     shouldCheckPolicyDate = true;
+    const docType = entry.rootDocument.documentType;
 
     if (isAmendment) {
-      isDocketEntryBriefEventCode = isDocumentBriefType(
-        entry.previousDocument.documentType,
-      );
+      isDocketEntryBriefEventCode = isDocumentBriefType(docType);
 
       if (isDocketEntryBriefEventCode) {
         filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
@@ -69,7 +73,7 @@ export const formatDocketEntryOnDocketRecord = (
         );
         meetsPolicyChangeRequirements =
           filedAfterPolicyChange && filedByPractitioner;
-      } else if (entry.previousDocument.documentType === 'Amicus Brief') {
+      } else if (docType === 'Amicus Brief') {
         meetsPolicyChangeRequirements = filedAfterPolicyChange;
       } else {
         meetsPolicyChangeRequirements = false;
