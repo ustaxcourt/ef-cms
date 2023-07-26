@@ -1,9 +1,7 @@
 import { getSesStatus } from './getSesStatus';
 import NodeCache from 'node-cache';
 
-// const mockNodeCache = new NodeCache();
 jest.mock('node-cache');
-// mockNodeCache.get.mockReturnValue(true);
 
 describe('getSesStatus', () => {
   beforeEach(() => {
