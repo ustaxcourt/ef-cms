@@ -1,6 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setCavAndSubmittedCasesAction = ({ props, store }) => {
+export const setCavAndSubmittedCasesAction = ({
+  props,
+  store,
+}: ActionProps) => {
   const {
     cases: submittedAndCavCasesByJudge,
     consolidatedCasesGroupCountMap,

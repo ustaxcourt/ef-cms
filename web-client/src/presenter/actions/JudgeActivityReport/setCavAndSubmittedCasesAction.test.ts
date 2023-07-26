@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setJudgeActivityReportDataAction } from './setJudgeActivityReportDataAction';
+import { setCavAndSubmittedCasesAction } from './setCavAndSubmittedCasesAction';
 
-describe('setJudgeActivityReportDataAction', () => {
+describe('setCavAndSubmittedCasesAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   const mockConsolidatedCasesGroupCount = { '101-20': 3 };
@@ -11,7 +11,7 @@ describe('setJudgeActivityReportDataAction', () => {
   const mockCases = [{ docketNumber: '101-20' }, { docketNumber: '102-20' }];
 
   it('should set cav and submitted related cases data on state.judgeActivityReport', async () => {
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
+    const { state } = await runAction(setCavAndSubmittedCasesAction, {
       modules: {
         presenter,
       },
@@ -24,8 +24,8 @@ describe('setJudgeActivityReportDataAction', () => {
         judgeActivityReport: {
           judgeActivityReportData: {
             consolidatedCasesGroupCountMap: undefined,
-            lastDocketNumberForCavAndSubmittedCasesSearch: undefined,
             submittedAndCavCasesByJudge: undefined,
+            totalCountForSubmittedAndCavCases: undefined,
           },
         },
       },
