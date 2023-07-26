@@ -148,6 +148,7 @@ describe('publicCaseDetailHelper', () => {
       const mockSealedDocketEntry = {
         ...baseDocketEntry,
         isSealed: true,
+        rootDocument: { documentType: 'Petition' },
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         sealedToTooltip: undefined,
       };
@@ -166,6 +167,7 @@ describe('publicCaseDetailHelper', () => {
       const mockDocketEntry = {
         ...baseDocketEntry,
         isSealed: false,
+        rootDocument: { documentType: 'Petition' },
         sealedToTooltip: undefined,
       };
 
@@ -183,6 +185,7 @@ describe('publicCaseDetailHelper', () => {
       const mockDocketEntry = {
         ...baseDocketEntry,
         isSealed: false,
+        rootDocument: { documentType: 'Petition' },
       };
 
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
@@ -198,7 +201,11 @@ describe('publicCaseDetailHelper', () => {
     it('should not display the document link when the entry is stricken and the user is the terminal user', () => {
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
         docketEntriesEFiledByPractitioner: [],
-        entry: { ...baseDocketEntry, isStricken: true },
+        entry: {
+          ...baseDocketEntry,
+          isStricken: true,
+          rootDocument: { documentType: 'Petition' },
+        },
         isTerminalUser: true,
         visibilityPolicyDateFormatted: '',
       });
@@ -214,6 +221,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
         isTerminalUser: true,
         visibilityPolicyDateFormatted: '2010-05-16T00:00:00.000-04:00',
@@ -230,6 +238,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
         isTerminalUser: true,
         visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
@@ -247,6 +256,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2030-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
         isTerminalUser: false,
         visibilityPolicyDateFormatted: '2020-05-16T00:00:00.000-04:00',
@@ -265,6 +275,7 @@ describe('publicCaseDetailHelper', () => {
           isCourtIssuedDocument: true,
           isNotServedDocument: false,
           isStipDecision: true,
+          rootDocument: { documentType: 'Petition' },
         },
         isTerminalUser: false,
         visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
@@ -282,6 +293,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2030-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
         isTerminalUser: false,
         visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
@@ -299,7 +311,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2020-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
             documentTitle: 'Seriatim Answering Memorandum Brief',
             documentType: 'Seriatim Answering Memorandum Brief',
@@ -321,7 +333,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2050-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
             documentTitle: 'Seriatim Answering Memorandum Brief',
             documentType: 'Seriatim Answering Memorandum Brief',
@@ -343,7 +355,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2050-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: baseDocketEntry.docketEntryId,
             documentTitle: 'Petition',
             documentType: 'Petition',
@@ -359,7 +371,10 @@ describe('publicCaseDetailHelper', () => {
     it('should show document link for a Stipulated Decision (SDEC)', () => {
       const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
         docketEntriesEFiledByPractitioner: [],
-        entry: stipDecisionDocument,
+        entry: {
+          ...stipDecisionDocument,
+          rootDocument: { documentType: 'Petition' },
+        },
         isTerminalUser: false,
         visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
       });
@@ -376,7 +391,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2050-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: baseDocketEntry.docketEntryId,
             documentTitle: 'Seriatim Answering Memorandum Brief',
             documentType: 'Seriatim Answering Memorandum Brief',
@@ -398,7 +413,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2050-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: baseDocketEntry.docketEntryId,
             documentTitle: 'Amicus Brief',
             documentType: 'Amicus Brief',
@@ -420,7 +435,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2050-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: baseDocketEntry.docketEntryId,
             documentTitle: 'Amicus Brief',
             documentType: 'Amicus Brief',
@@ -1194,9 +1209,112 @@ describe('publicCaseDetailHelper', () => {
       },
     ]);
   });
+
+  describe('Root Previous Documents', () => {
+    it('should show a link when the current document is a multi level ammendment whose root document is a brief', () => {
+      state.caseDetail.docketEntriesEFiledByPractitioner = [
+        '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
+        '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
+        '8e3ae16b-dc29-433f-878a-7a0534c39919',
+        'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
+        'b22fd1a0-56cb-4873-bb4f-50df3a65da3f',
+      ];
+      state.caseDetail.docketEntries = [
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          docketEntryId: 'b22fd1a0-56cb-4873-bb4f-50df3a65da3f',
+          docketNumber: '103-20',
+          documentTitle:
+            'Redacted First Supplement to Seriatim Answering Brief',
+          documentType: 'Redacted',
+          entityName: 'PublicDocketEntry',
+          eventCode: 'REDC',
+          filedBy: 'Petr. Reuben Blair',
+          filingDate: '2024-07-26T15:27:03.890Z',
+          index: 9,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 2,
+          previousDocument: {
+            docketEntryId: 'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
+            documentTitle: 'First Supplement to Seriatim Answering Brief',
+            documentType: 'Supplement',
+          },
+          processingStatus: 'complete',
+          receivedAt: '2023-07-26T04:00:00.000Z',
+          servedAt: '2023-07-26T15:27:03.893Z',
+          servedPartiesCode: 'B',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          docketEntryId: 'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
+          docketNumber: '103-20',
+          documentTitle: 'First Supplement to Seriatim Answering Brief',
+          documentType: 'Supplement',
+          entityName: 'PublicDocketEntry',
+          eventCode: 'SUPM',
+          filedBy: 'Petr. Reuben Blair',
+          filingDate: '2024-07-26T15:26:33.586Z',
+          index: 8,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 2,
+          previousDocument: {
+            docketEntryId: '8e3ae16b-dc29-433f-878a-7a0534c39919',
+            documentTitle: 'Seriatim Answering Brief',
+            documentType: 'Seriatim Answering Brief',
+          },
+          processingStatus: 'complete',
+          receivedAt: '2023-07-26T04:00:00.000Z',
+          servedAt: '2023-07-26T15:26:33.591Z',
+          servedPartiesCode: 'B',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          docketEntryId: '8e3ae16b-dc29-433f-878a-7a0534c39919',
+          docketNumber: '103-20',
+          documentTitle: 'Seriatim Answering Brief',
+          documentType: 'Seriatim Answering Brief',
+          entityName: 'PublicDocketEntry',
+          eventCode: 'SEAB',
+          filedBy: 'Petr. Reuben Blair',
+          filingDate: '2024-07-26T15:25:33.548Z',
+          index: 7,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 2,
+          processingStatus: 'complete',
+          receivedAt: '2023-07-26T04:00:00.000Z',
+          servedAt: '2023-07-26T15:25:33.550Z',
+          servedPartiesCode: 'B',
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(true);
+    });
+  });
 });
 
-describe.only('recursivelySetNestedPreviousDocuments', () => {
+describe('recursivelySetNestedPreviousDocuments', () => {
   it('should set up all the previous documents for the docket entry passed in', () => {
     const theDocketEntry: any = {
       docketEntryId: '1',
