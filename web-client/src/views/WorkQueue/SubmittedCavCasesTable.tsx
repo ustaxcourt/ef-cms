@@ -58,6 +58,7 @@ export const SubmittedCavCasesTable = connect(
     const getSubmittedOrCAVDate = (
       caseStatusHistory: { updatedCaseStatus: string; formattedDate: string }[],
     ): string | undefined => {
+      console.log(caseStatusHistory);
       return caseStatusHistory.find(statusHistory =>
         ['Submitted', 'CAV'].includes(statusHistory.updatedCaseStatus),
       )?.formattedDate;
@@ -80,9 +81,15 @@ export const SubmittedCavCasesTable = connect(
               <th>Case Status</th>
               <th>Days in Status</th>
               <th>Status Date</th>
-              <th>Final Brief Due Date</th>
               <th>
-                <label htmlFor="status-of-matter">Status of Matter</label>
+                <label htmlFor="final-brief-due-date-date-picker">
+                  Final Brief Due Date
+                </label>
+              </th>
+              <th>
+                <label htmlFor="status-of-matter-dropdown">
+                  Status of Matter
+                </label>
               </th>
             </tr>
           </thead>
@@ -122,8 +129,7 @@ export const SubmittedCavCasesTable = connect(
                         {/* TODO: wire up / figure out the saving */}
                         <DateInput
                           className={'margin-bottom-0'}
-                          id={`final-brief-due-date-${formattedCase.docketNumber}`}
-                          label={''}
+                          id={'final-brief-due-date-date-picker'}
                           showDateHint={false}
                           values={{
                             day: '',

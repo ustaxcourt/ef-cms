@@ -320,3 +320,5 @@ export const JudgeActivityReport = connect(
     );
   },
 );
+
+JudgeActivityReport.displayName = 'JudgeActivityReport';

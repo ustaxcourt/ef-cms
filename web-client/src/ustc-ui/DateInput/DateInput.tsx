@@ -36,7 +36,7 @@ export const DateInput = ({
   };
   id: string;
   hintText?: string | undefined;
-  label: string;
+  label?: string;
   placeholder?: string;
   showDateHint?: boolean;
   titleHintText?: string;
