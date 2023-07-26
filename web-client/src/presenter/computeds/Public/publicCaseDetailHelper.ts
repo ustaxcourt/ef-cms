@@ -16,6 +16,32 @@ import { Get } from 'cerebral';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+type RawDocketEntryPreviousDocumentRecursive = RawDocketEntry & {
+  previousDocument?: RawDocketEntry;
+};
+
+export const recursivelySetNestedPreviousDocuments = (
+  entry: RawDocketEntry,
+  docketEntries: RawDocketEntry[],
+): RawDocketEntryPreviousDocumentRecursive | RawDocketEntry => {
+  const { previousDocument } = entry;
+  if (!previousDocument) return entry;
+
+  const previousEntry = docketEntries.find(
+    e => e.docketEntryId === previousDocument.docketEntryId,
+  );
+
+  if (!previousEntry) return entry;
+
+  return {
+    ...entry,
+    previousDocument: recursivelySetNestedPreviousDocuments(
+      previousEntry,
+      docketEntries,
+    ),
+  };
+};
+
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   {
@@ -53,6 +79,8 @@ export const formatDocketEntryOnDocketRecord = (
         );
         meetsPolicyChangeRequirements =
           filedAfterPolicyChange && filedByPractitioner;
+      } else if (entry.previousDocument.documentType === 'Amicus Brief') {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
       } else {
         meetsPolicyChangeRequirements = false;
       }
@@ -168,8 +196,11 @@ export const publicCaseDetailHelper = (
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
 
-  let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
-    entry => {
+  let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords
+    .map((entry, _, array) =>
+      recursivelySetNestedPreviousDocuments(entry, array),
+    )
+    .map(entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
         docketEntriesEFiledByPractitioner:
           publicCase.docketEntriesEFiledByPractitioner,
@@ -177,8 +208,7 @@ export const publicCaseDetailHelper = (
         isTerminalUser,
         visibilityPolicyDateFormatted,
       });
-    },
-  );
+    });
 
   if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
     formattedDocketEntriesOnDocketRecord =
