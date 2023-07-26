@@ -53,7 +53,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### artillery
-As of July 19, 2023, `artillery` version `2.0.0-35` requires `node` version `18.16.1` but Cypress has not published an updated Docker image supporting that version of node. [Current version is `18.16.0`](https://hub.docker.com/r/cypress/browsers/tags?page=1).
+As of July 26, 2023, `artillery` version `2.0.0-35` requires `node` version `18.16.1` but Cypress has not published an updated Docker image supporting that version of node. [Current version is `18.16.0`](https://hub.docker.com/r/cypress/browsers/tags?page=1).
 
 ### puppeteer
 
