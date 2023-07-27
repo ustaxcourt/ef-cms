@@ -16,7 +16,7 @@ describe('Docket Clerk Creates A Trial', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, {
-    swingSession: true,
+    isSwingSession: true,
     swingSessionId: previouslyCreatedTrialSessionId,
     trialLocation: 'Peoria, Illinois',
   });
@@ -26,9 +26,8 @@ describe('Docket Clerk Creates A Trial', () => {
   });
   docketClerkEditsTrialSession(cerebralTest);
 
-  const trialLocation = `San Diego, California, ${Date.now()}`;
   docketClerkCreatesARemoteTrialSession(cerebralTest, {
-    trialLocation,
+    trialLocation: `San Diego, California, ${Date.now()}`,
   });
   docketClerkViewsTrialSessionList(cerebralTest);
 

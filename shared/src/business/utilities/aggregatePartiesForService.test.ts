@@ -1,38 +1,64 @@
 import {
-  CONTACT_TYPES,
-  SERVICE_INDICATOR_TYPES,
-} from '../entities/EntityConstants';
+  MOCK_CONTACT_PRIMARY,
+  MOCK_CONTACT_SECONDARY,
+} from '../../test/mockContact';
+import { RawContact } from '../entities/contacts/Contact';
+import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
 import { aggregatePartiesForService } from './aggregatePartiesForService';
 
 describe('aggregatePartiesForService', () => {
   let mockCase;
-  let irsPractitioners;
-  let privatePractitioners;
+
+  let contactPrimary: RawContact;
+  let contactSecondary: RawContact;
+
+  let privatePractitionerWithPaper;
+  let privatePractitionerWithEmail;
 
   let irsPractitionerWithPaper;
-  let privatePractitionerWithPaper;
-
-  let otherFilers;
-  let otherPetitioners;
-
-  const PRIMARY_CONTACT_ID = 'c344c39f-6086-484b-998c-e93e9c7dcff5';
-  const SECONDARY_CONTACT_ID = '09ecdf10-359c-4694-a5a8-d15d56796ce1';
+  let irsPractitionerWithEmail;
 
   beforeEach(() => {
-    const contactPrimary = {
-      contactId: PRIMARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.primary,
-      email: 'contactprimary@example.com',
-      name: 'Contact Primary',
+    contactPrimary = {
+      ...MOCK_CONTACT_PRIMARY,
+      serviceIndicator: undefined,
     };
 
-    const contactSecondary = {
-      address1: 'Test Address',
-      city: 'Testville',
-      contactId: SECONDARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.secondary,
-      name: 'Contact Secondary',
-      state: 'CA',
+    contactSecondary = {
+      ...MOCK_CONTACT_SECONDARY,
+      serviceIndicator: undefined,
+    };
+
+    privatePractitionerWithEmail = {
+      email: 'practitionerone@example.com',
+      name: 'Practitioner One',
+      representing: [],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+      userId: 'p1',
+    };
+
+    privatePractitionerWithPaper = {
+      contact: {
+        address1: 'Suite 111 1st Floor',
+        address2: '123 Main Street',
+        address3: null,
+        city: 'Somewhere',
+        country: undefined,
+        countryType: 'domestic',
+        phone: '1234567890',
+        postalCode: '48839',
+        state: 'TN',
+      },
+      name: 'Practitioner Three',
+      representing: [],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      userId: 'p3',
+    };
+
+    irsPractitionerWithEmail = {
+      email: 'respondentone@example.com',
+      name: 'Respondent One',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     };
 
     irsPractitionerWithPaper = {
@@ -53,353 +79,162 @@ describe('aggregatePartiesForService', () => {
       userId: 'r3',
     };
 
-    irsPractitioners = [
-      {
-        email: 'respondentone@example.com',
-        name: 'Respondent One',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
-      {
-        email: 'respondenttwo@example.com',
-        name: 'Respondent Two',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      },
-      irsPractitionerWithPaper,
-    ];
-
-    privatePractitionerWithPaper = {
-      contact: {
-        address1: 'Suite 111 1st Floor',
-        address2: '123 Main Street',
-        address3: null,
-        city: 'Somewhere',
-        country: undefined,
-        countryType: 'domestic',
-        phone: '1234567890',
-        postalCode: '48839',
-        state: 'TN',
-      },
-      name: 'Practitioner Three',
-      representing: [],
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      userId: 'p3',
-    };
-
-    privatePractitioners = [
-      {
-        email: 'practitionerone@example.com',
-        name: 'Practitioner One',
-        representing: [],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'p1',
-      },
-      {
-        email: 'practitionertwo@example.com',
-        name: 'Practitioner Two',
-        representing: [],
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-        userId: 'p2',
-      },
-      privatePractitionerWithPaper,
-    ];
-
-    otherFilers = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: '9836050f-a423-47bb-943b-a5661fe08a6b',
-        contactType: CONTACT_TYPES.participant,
-        countryType: 'domestic',
-        email: 'petitioner@example.com',
-        inCareOf: 'Myself',
-        name: 'Test Petitioner3',
-        phone: '1234567',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        state: 'TN',
-        title: 'Tax Matters Partner',
-      },
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: '8746050f-a423-47bb-943b-a5661fe08a6b',
-        contactType: CONTACT_TYPES.intervenor,
-        countryType: 'domestic',
-        email: 'petitioner@example.com',
-        inCareOf: 'Myself',
-        name: 'Test Petitioner4',
-        phone: '1234567',
-        postalCode: '12345',
-        state: 'TN',
-        title: 'Tax Matters Partner',
-      },
-    ];
-
-    otherPetitioners = [
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: '6536050f-a423-47bb-943b-a5661fe08a6b',
-        contactType: CONTACT_TYPES.otherPetitioner,
-        countryType: 'domestic',
-        email: 'petitioner5@example.com',
-        inCareOf: 'Myself',
-        name: 'Test Petitioner5',
-        phone: '1234567',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        state: 'TN',
-        title: 'Tax Matters Partner',
-      },
-      {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: '5446050f-a423-47bb-943b-a5661fe08a6b',
-        contactType: CONTACT_TYPES.otherPetitioner,
-        countryType: 'domestic',
-        email: 'petitioner6@example.com',
-        inCareOf: 'Myself',
-        name: 'Test Petitioner6',
-        phone: '1234567',
-        postalCode: '12345',
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-        state: 'TN',
-        title: 'Tax Matters Partner',
-      },
-    ];
-
     mockCase = {
-      irsPractitioners,
+      irsPractitioners: [irsPractitionerWithEmail, irsPractitionerWithPaper],
       petitioners: [contactPrimary, contactSecondary],
-      privatePractitioners,
+      privatePractitioners: [
+        privatePractitionerWithEmail,
+        privatePractitionerWithPaper,
+      ],
     };
   });
 
-  it('should serve an unrepresented primary and secondary contact by paper if filed by paper', () => {
-    mockCase.petitioners = [
-      { ...mockCase.petitioners[0], email: null },
-      mockCase.petitioners[1],
-    ];
+  it('should serve an unrepresented primary and secondary contact by paper when neither party has provided an email on their account', () => {
+    contactPrimary.email = undefined;
+    contactSecondary.email = undefined;
+    mockCase.petitioners = [contactPrimary, contactSecondary];
+    mockCase.privatePractitioners = [];
 
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
       all: [
-        { email: 'practitionerone@example.com', name: 'Practitioner One' },
-        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
         { email: 'respondentone@example.com', name: 'Respondent One' },
-        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
-        { name: 'Contact Primary' },
-        {
-          address1: 'Test Address',
-          city: 'Testville',
-          name: 'Contact Secondary',
-          state: 'CA',
-        },
-        {
-          ...privatePractitionerWithPaper,
-          ...privatePractitionerWithPaper.contact,
-        },
+        contactPrimary,
+        contactSecondary,
         { ...irsPractitionerWithPaper, ...irsPractitionerWithPaper.contact },
       ],
       electronic: [
-        { email: 'practitionerone@example.com', name: 'Practitioner One' },
-        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
         { email: 'respondentone@example.com', name: 'Respondent One' },
-        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
       paper: [
-        { name: 'Contact Primary' },
-        {
-          address1: 'Test Address',
-          city: 'Testville',
-          name: 'Contact Secondary',
-          state: 'CA',
-        },
-        {
-          ...privatePractitionerWithPaper,
-          ...privatePractitionerWithPaper.contact,
-        },
+        contactPrimary,
+        contactSecondary,
         { ...irsPractitionerWithPaper, ...irsPractitionerWithPaper.contact },
       ],
     });
   });
 
-  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper if filed electronically', () => {
+  it('should serve an unrepresented primary contact electronically and an unrepresented secondary contact by paper when the primary contact has provided an email and the secondary contact has not', () => {
+    contactPrimary.email = 'contact_primary@email.com';
+    contactSecondary.email = undefined;
+    mockCase.petitioners = [contactPrimary, contactSecondary];
+    mockCase.privatePractitioners = [];
+
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
       all: [
-        { email: 'contactprimary@example.com', name: 'Contact Primary' },
-        { email: 'practitionerone@example.com', name: 'Practitioner One' },
-        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        { email: contactPrimary.email, name: contactPrimary.name },
         { email: 'respondentone@example.com', name: 'Respondent One' },
-        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
-        {
-          address1: 'Test Address',
-          city: 'Testville',
-          name: 'Contact Secondary',
-          state: 'CA',
-        },
-        {
-          ...privatePractitionerWithPaper,
-          ...privatePractitionerWithPaper.contact,
-        },
+        contactSecondary,
         { ...irsPractitionerWithPaper, ...irsPractitionerWithPaper.contact },
       ],
       electronic: [
-        { email: 'contactprimary@example.com', name: 'Contact Primary' },
-        { email: 'practitionerone@example.com', name: 'Practitioner One' },
-        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        { email: contactPrimary.email, name: contactPrimary.name },
         { email: 'respondentone@example.com', name: 'Respondent One' },
-        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
       paper: [
-        {
-          address1: 'Test Address',
-          city: 'Testville',
-          name: 'Contact Secondary',
-          state: 'CA',
-        },
-        {
-          ...privatePractitionerWithPaper,
-          ...privatePractitionerWithPaper.contact,
-        },
+        contactSecondary,
         { ...irsPractitionerWithPaper, ...irsPractitionerWithPaper.contact },
       ],
     });
   });
 
-  it('should not serve the primary contact electronically or by paper if represented by counsel, but should serve the secondary contact by paper', () => {
-    mockCase.privatePractitioners[0].representing = [PRIMARY_CONTACT_ID];
+  it('should not serve the primary contact electronically or by paper when they are represented by counsel and should serve the secondary contact by paper when they are not represented', () => {
+    contactSecondary.email = undefined;
+    mockCase.petitioners = [contactPrimary, contactSecondary];
+    privatePractitionerWithEmail.representing = [contactPrimary.contactId];
+    mockCase.privatePractitioners = [privatePractitionerWithEmail];
+
     const result = aggregatePartiesForService(mockCase);
 
     expect(result).toMatchObject({
       all: [
-        { email: 'practitionerone@example.com', name: 'Practitioner One' },
-        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        {
+          email: privatePractitionerWithEmail.email,
+          name: privatePractitionerWithEmail.name,
+        },
         { email: 'respondentone@example.com', name: 'Respondent One' },
-        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
-        {
-          address1: 'Test Address',
-          city: 'Testville',
-          name: 'Contact Secondary',
-          state: 'CA',
-        },
-        {
-          ...privatePractitionerWithPaper,
-          ...privatePractitionerWithPaper.contact,
-        },
+        contactSecondary,
         { ...irsPractitionerWithPaper, ...irsPractitionerWithPaper.contact },
       ],
       electronic: [
-        { email: 'practitionerone@example.com', name: 'Practitioner One' },
-        { email: 'practitionertwo@example.com', name: 'Practitioner Two' },
+        {
+          email: privatePractitionerWithEmail.email,
+          name: privatePractitionerWithEmail.name,
+        },
         { email: 'respondentone@example.com', name: 'Respondent One' },
-        { email: 'respondenttwo@example.com', name: 'Respondent Two' },
       ],
       paper: [
-        {
-          address1: 'Test Address',
-          city: 'Testville',
-          name: 'Contact Secondary',
-          state: 'CA',
-        },
-        {
-          ...privatePractitionerWithPaper,
-          ...privatePractitionerWithPaper.contact,
-        },
+        contactSecondary,
         { ...irsPractitionerWithPaper, ...irsPractitionerWithPaper.contact },
       ],
     });
   });
 
   it('should serve all practitioners with an email address electronically', () => {
+    mockCase.privatePractitioners = [
+      privatePractitionerWithEmail,
+      privatePractitionerWithPaper,
+    ];
+    mockCase.irsPractitioners = [
+      irsPractitionerWithPaper,
+      irsPractitionerWithEmail,
+    ];
+    mockCase.petitioners = [];
+
     const result = aggregatePartiesForService(mockCase);
 
-    const foundPrivatePractitionerWithPaper = result.electronic.find(
-      user => user.userId === privatePractitionerWithPaper.userId,
-    );
-
-    const foundIrsPractitionerWithPaper = result.electronic.find(
-      user => user.userId === irsPractitionerWithPaper.userId,
-    );
-
-    expect(result.electronic.length).toEqual(5);
-    expect(foundPrivatePractitionerWithPaper).toBeFalsy();
-    expect(foundIrsPractitionerWithPaper).toBeFalsy();
+    expect(result.electronic.length).toEqual(2);
   });
 
   it('should serve all practitioners without an email address by paper', () => {
+    mockCase.privatePractitioners = [
+      privatePractitionerWithEmail,
+      privatePractitionerWithPaper,
+    ];
+    mockCase.irsPractitioners = [
+      irsPractitionerWithPaper,
+      irsPractitionerWithEmail,
+    ];
+    mockCase.petitioners = [];
+
     const result = aggregatePartiesForService(mockCase);
 
-    const foundPrivatePractitionerWithPaper = result.paper.find(
-      user => user.userId === privatePractitionerWithPaper.userId,
-    );
-
-    const foundIrsPractitionerWithPaper = result.paper.find(
-      user => user.userId === irsPractitionerWithPaper.userId,
-    );
-
-    expect(result.paper.length).toEqual(3);
-    expect(foundPrivatePractitionerWithPaper).toBeTruthy();
-    expect(foundIrsPractitionerWithPaper).toBeTruthy();
+    expect(result.paper.length).toEqual(2);
   });
 
-  it('should serve any otherPetitioners by paper ONLY if their serviceIndicator is set to paper', () => {
-    const result = aggregatePartiesForService({
-      ...mockCase,
-      petitioners: [
-        ...mockCase.petitioners,
-        ...otherFilers,
-        ...otherPetitioners,
-      ],
-    });
+  it('should not serve a party on the case when their serviceIndicator is set to none', () => {
+    contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+    mockCase.petitioners = [contactPrimary, contactSecondary];
 
-    const otherPetitioner1 = result.paper.find(
-      p => p.contactId === otherPetitioners[0].contactId,
-    );
-    const otherPetitioner2 = result.paper.find(
-      p => p.contactId === otherPetitioners[1].contactId,
-    );
-    expect(otherPetitioner1).toBeTruthy();
-    expect(otherPetitioner2).toBeFalsy();
+    const result = aggregatePartiesForService(mockCase);
+
+    expect(result.all).not.toContainEqual({
+      email: contactSecondary.email,
+      name: contactSecondary.name,
+    });
+    expect(result.paper).not.toContainEqual(contactSecondary);
+    expect(result.electronic).not.toContainEqual({
+      email: contactSecondary.email,
+      name: contactSecondary.name,
+    });
   });
 
-  it('should serve any otherFilers by paper if their serviceIndicator is set to paper', () => {
-    const result = aggregatePartiesForService({
-      ...mockCase,
-      petitioners: [
-        ...mockCase.petitioners,
-        ...otherFilers,
-        ...otherPetitioners,
-      ],
+  it('should only serve pro se petitioners when "onlyProSePetitioners" is set to true', () => {
+    privatePractitionerWithEmail.representing = [contactPrimary.contactId];
+    mockCase.privatePractitioners = [privatePractitionerWithEmail];
+    contactPrimary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+    contactSecondary.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_PAPER;
+    mockCase.petitioners = [contactPrimary, contactSecondary];
+
+    const result = aggregatePartiesForService(mockCase, {
+      onlyProSePetitioners: true,
     });
 
-    const otherFiler = result.paper.find(
-      p => p.contactId === otherFilers[0].contactId,
-    );
-
-    expect(otherFiler).toBeTruthy();
-  });
-
-  it('should not serve any otherFilers by paper if their serviceIndicator is set to none', () => {
-    const result = aggregatePartiesForService({
-      ...mockCase,
-      petitioners: [
-        ...mockCase.petitioners,
-        {
-          ...otherFilers[0],
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-        },
-        ...otherPetitioners,
-      ],
-    });
-
-    const otherFiler = result.paper.find(
-      p => p.contactId === otherFilers[0].contactId,
-    );
-
-    expect(otherFiler).toBeFalsy();
+    expect(result.all).toEqual([contactSecondary]);
+    expect(result.electronic).toEqual([]);
+    expect(result.paper).toEqual([contactSecondary]);
   });
 });
