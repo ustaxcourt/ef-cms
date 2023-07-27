@@ -24462,6 +24462,11 @@
     "pk": "chief-judge-name"
   },
   {
+    "sk": "use-external-pdf-generation",
+    "current": false,
+    "pk": "use-external-pdf-generation"
+  },
+  {
     "sk": "document-visibility-policy-change-date",
     "current": "2023-05-01",
     "pk": "document-visibility-policy-change-date"
@@ -24602,16 +24607,6 @@
     "pk": "email-undefined"
   },
   {
-    "sk": "external-opinion-search-enabled",
-    "current": true,
-    "pk": "external-opinion-search-enabled"
-  },
-  {
-    "sk": "external-order-search-enabled",
-    "current": true,
-    "pk": "external-order-search-enabled"
-  },
-  {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|IP1111"
   },
@@ -24622,16 +24617,6 @@
   {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|TEST INACTIVE PRACTITIONER"
-  },
-  {
-    "sk": "internal-opinion-search-enabled",
-    "current": true,
-    "pk": "internal-opinion-search-enabled"
-  },
-  {
-    "sk": "internal-order-search-enabled",
-    "current": true,
-    "pk": "internal-order-search-enabled"
   },
   {
     "sk": "ip-limiter-document-search-ip-limiter|localhost",

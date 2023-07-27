@@ -5,7 +5,6 @@ import * as barNumberGenerator from '../../shared/src/persistence/dynamo/users/b
 import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
-import { addressLabelCoverSheet } from '../../shared/src/business/utilities/documentGenerators/addressLabelCoverSheet';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
@@ -38,16 +37,12 @@ import { User } from '../../shared/src/business/entities/User';
 import { UserCase } from '../../shared/src/business/entities/UserCase';
 import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
 import { WorkItem } from '../../shared/src/business/entities/WorkItem';
-import { caseInventoryReport } from '../../shared/src/business/utilities/documentGenerators/caseInventoryReport';
-import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import {
   clerkOfCourtNameForSigning,
   getEnvironment,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
-import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import { createLogger } from './createLogger';
-import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
 import { fallbackHandler } from './fallbackHandler';
@@ -55,24 +50,13 @@ import {
   getChromiumBrowser,
   getChromiumBrowserAWS,
 } from '../../shared/src/business/utilities/getChromiumBrowser';
+import { getDocumentGenerators } from './getDocumentGenerators';
 import { getPersistenceGateway } from './getPersistenceGateway';
 import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
 import { isCurrentColorActive } from '../../shared/src/persistence/dynamo/helpers/isCurrentColorActive';
-import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
-import { noticeOfChangeToInPersonProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding';
-import { noticeOfChangeToRemoteProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding';
-import { noticeOfDocketChange } from '../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange';
-import { noticeOfReceiptOfPetition } from '../../shared/src/business/utilities/documentGenerators/noticeOfReceiptOfPetition';
-import { noticeOfTrialIssued } from '../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssued';
-import { noticeOfTrialIssuedInPerson } from '../../shared/src/business/utilities/documentGenerators/noticeOfTrialIssuedInPerson';
-import { order } from '../../shared/src/business/utilities/documentGenerators/order';
-import { pendingReport } from '../../shared/src/business/utilities/documentGenerators/pendingReport';
-import { practitionerCaseList } from '../../shared/src/business/utilities/documentGenerators/practitionerCaseList';
-import { printableWorkingCopySessionList } from '../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList';
-import { receiptOfFiling } from '../../shared/src/business/utilities/documentGenerators/receiptOfFiling';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
 import { scan } from '../../shared/src/persistence/dynamodbClientService';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
@@ -83,10 +67,6 @@ import { sendNotificationToUser } from '../../shared/src/notifications/sendNotif
 import { sendSetTrialSessionCalendarEvent } from '../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from '../../shared/src/dispatchers/slack/sendSlackNotification';
 import { sendUpdatePetitionerCasesMessage } from '../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage';
-import { standingPretrialOrder } from '../../shared/src/business/utilities/documentGenerators/standingPretrialOrder';
-import { standingPretrialOrderForSmallCase } from '../../shared/src/business/utilities/documentGenerators/standingPretrialOrderForSmallCase';
-import { trialCalendar } from '../../shared/src/business/utilities/documentGenerators/trialCalendar';
-import { trialSessionPlanningReport } from '../../shared/src/business/utilities/documentGenerators/trialSessionPlanningReport';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
 const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
@@ -181,7 +161,7 @@ let dynamoCache = {};
 let s3Cache;
 let sesCache;
 let sqsCache;
-let searchClientCache;
+let searchClientCache: Client;
 let notificationServiceCache;
 
 const entitiesByName = {
@@ -326,29 +306,7 @@ export const createApplicationContext = (
       sendSlackNotification,
     }),
     getDocumentClient,
-    getDocumentGenerators: () => ({
-      addressLabelCoverSheet,
-      caseInventoryReport,
-      changeOfAddress,
-      coverSheet,
-      docketRecord,
-      noticeOfChangeOfTrialJudge,
-      noticeOfChangeToInPersonProceeding,
-      noticeOfChangeToRemoteProceeding,
-      noticeOfDocketChange,
-      noticeOfReceiptOfPetition,
-      noticeOfTrialIssued,
-      noticeOfTrialIssuedInPerson,
-      order,
-      pendingReport,
-      practitionerCaseList,
-      printableWorkingCopySessionList,
-      receiptOfFiling,
-      standingPretrialOrder,
-      standingPretrialOrderForSmallCase,
-      trialCalendar,
-      trialSessionPlanningReport,
-    }),
+    getDocumentGenerators,
     getDocumentsBucketName: () => {
       return environment.documentsBucketName;
     },

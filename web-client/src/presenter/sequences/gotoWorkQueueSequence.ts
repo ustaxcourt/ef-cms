@@ -10,16 +10,16 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setSectionForWorkQueueAction } from '../actions/setSectionForWorkQueueAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUsersAction } from '../actions/setUsersAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
 const { DOCKET_SECTION, PETITIONS_SECTION, USER_ROLES } = getConstants();
 
 const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
@@ -66,7 +66,7 @@ const goToWorkQueue = startWebSocketConnectionSequenceDecorator([
     ],
     chooseWorkQueueSequence,
   ]),
-  setCurrentPageAction('WorkQueue'),
+  setupCurrentPageAction('WorkQueue'),
 ]);
 
 export const gotoWorkQueueSequence = [

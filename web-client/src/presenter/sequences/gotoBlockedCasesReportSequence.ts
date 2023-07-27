@@ -6,16 +6,16 @@ import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoBlockedCasesReport = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
   closeMobileMenuAction,
   clearErrorAlertsAction,
-  setCurrentPageAction('BlockedCasesReport'),
+  setupCurrentPageAction('BlockedCasesReport'),
 ]);
 
 export const gotoBlockedCasesReportSequence = [

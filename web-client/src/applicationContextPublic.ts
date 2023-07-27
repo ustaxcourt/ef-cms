@@ -47,6 +47,7 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
@@ -54,11 +55,11 @@ import {
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
+import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
-import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getItem } from '../../shared/src/persistence/localStorage/getItem';
@@ -93,12 +94,12 @@ const ADVANCED_SEARCH_TABS = {
 const allUseCases = {
   casePublicSearchInteractor,
   generatePublicDocketRecordPdfInteractor,
+  getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
-  getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
   getItemInteractor,
   getMaintenanceModePublicInteractor,
@@ -196,6 +197,7 @@ const applicationContextPublic = {
       createISODateString,
       formatDateString,
       formatDocketEntry,
+      formatNow,
       getContactPrimary,
       getContactSecondary,
       getDescriptionDisplay,

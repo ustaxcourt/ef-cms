@@ -1,9 +1,9 @@
 import { getHealthCheckAction } from '../actions/getHealthCheckAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setHealthCheckAction } from '../actions/setHealthCheckAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 
 export const gotoHealthCheckSequence = [
   getHealthCheckAction,
   setHealthCheckAction,
-  setCurrentPageAction('HealthCheck'),
+  setupCurrentPageAction('HealthCheck'),
 ];

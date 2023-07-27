@@ -1,8 +1,8 @@
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { applicationContext } from '../../business/test/createTestApplicationContext';
 import { refreshToken } from './refreshToken';
 
-jest.mock('aws-sdk');
-import aws from 'aws-sdk';
+jest.mock('@aws-sdk/client-cognito-identity-provider');
 
 describe('refreshToken', () => {
   const expectedToken = '123';
@@ -16,16 +16,13 @@ describe('refreshToken', () => {
 
   beforeEach(() => {
     const expectedClientId = '82b35e7c-9830-4104-bb15-24a2eda7f84e';
-    aws.CognitoIdentityServiceProvider = jest.fn().mockReturnValue({
-      listUserPoolClients: jest.fn().mockReturnValue({
-        promise: () =>
-          Promise.resolve({
-            UserPoolClients: [{ ClientId: expectedClientId }],
-          }),
+    (CognitoIdentityProvider as jest.Mock).mockReturnValue({
+      listUserPoolClients: jest.fn().mockResolvedValue({
+        UserPoolClients: [{ ClientId: expectedClientId }],
       }),
     });
 
-    applicationContext.getHttpClient = () => mockAxios;
+    (applicationContext as any).getHttpClient = () => mockAxios;
   });
 
   it('returns the first clientId from the list of user pool clients', async () => {

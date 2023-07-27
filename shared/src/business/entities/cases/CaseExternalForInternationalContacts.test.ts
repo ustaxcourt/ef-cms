@@ -5,11 +5,8 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { CaseExternal } from './CaseExternal';
-import { ContactFactory } from '../contacts/ContactFactory';
+import { Contact } from '../contacts/Contact';
 import { applicationContext } from '../../test/createTestApplicationContext';
-
-const contactErrorMessages =
-  ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
 
 describe('CaseExternal', () => {
   describe('for (international) Contacts', () => {
@@ -45,7 +42,12 @@ describe('CaseExternal', () => {
         { applicationContext },
       );
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        petitioners: [{ country: contactErrorMessages.country, index: 0 }],
+        petitioners: [
+          {
+            country: Contact.INTERNATIONAL_VALIDATION_MESSAGES.country,
+            index: 0,
+          },
+        ],
       });
     });
 
