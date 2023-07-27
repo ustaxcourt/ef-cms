@@ -7,8 +7,8 @@ import { updateOrderForDesignatingPlaceOfTrialAction } from '../actions/updateOr
 
 export const removeScannedPdfSequence = [
   removeScannedPdfAction,
-  ...setDocumentUploadModeSequence,
-  ...clearModalSequence,
+  setDocumentUploadModeSequence,
+  clearModalSequence,
   getFormValueDocumentAction,
   updateOrderForDesignatingPlaceOfTrialAction,
   updateOrderForCdsAction,

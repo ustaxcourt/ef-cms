@@ -221,15 +221,13 @@ const generateNoticeOfReceipt = async ({
   }
 
   let clinicLetter;
-  const isPrimaryContactProSe =
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      contactPrimary.contactId,
-    );
+  const isPrimaryContactProSe = !Case.isPetitionerRepresented(
+    caseEntity,
+    contactPrimary.contactId,
+  );
   const isSecondaryContactProSe =
     !!contactSecondary &&
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      contactSecondary.contactId,
-    );
+    !Case.isPetitionerRepresented(caseEntity, contactSecondary.contactId);
 
   if (
     shouldIncludeClinicLetter(

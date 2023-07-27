@@ -144,10 +144,10 @@ export const updateContactInteractor = async (
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const isContactRepresented =
-      caseEntity.isUserIdRepresentedByPrivatePractitioner(
-        contactInfo.contactId,
-      );
+    const isContactRepresented = Case.isPetitionerRepresented(
+      caseEntity,
+      contactInfo.contactId,
+    );
 
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
