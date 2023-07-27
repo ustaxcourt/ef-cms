@@ -1,15 +1,6 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
-/**
- * generatePdfFromHtmlInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.contentHtml the html content for the pdf
- * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
- * @returns {Buffer} the pdf as a binary buffer
- */
 export const generatePdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -21,13 +12,13 @@ export const generatePdfFromHtmlInteractor = async (
     overwriteFooter,
   }: {
     contentHtml: string;
-    displayHeaderFooter: boolean;
-    docketNumber: string;
-    footerHtml: string;
-    headerHtml: string;
-    overwriteFooter: string;
+    displayHeaderFooter?: boolean;
+    docketNumber?: string;
+    footerHtml?: string;
+    headerHtml?: string;
+    overwriteFooter?: string;
   },
-) => {
+): Promise<Buffer> => {
   const featureFlags = await applicationContext
     .getUseCases()
     .getAllFeatureFlagsInteractor(applicationContext);

@@ -10,19 +10,15 @@ import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkM
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('Adds automatic block case to trial', () => {
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
+  const cerebralTest = setupTest();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+  const caseDetailHeaderHelper = withAppContextDecorator(
+    caseDetailHeaderHelperComputed,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
