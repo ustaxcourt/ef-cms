@@ -30,7 +30,7 @@ describe('trialSessionHeaderHelper', () => {
 
   const baseState = { trialSession: {} };
 
-  let mockFormattedTrialSession = {
+  let mockFormattedTrialSession: any = {
     formattedJudge: 'Trial Judge',
     sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
   };
@@ -53,24 +53,17 @@ describe('trialSessionHeaderHelper', () => {
   });
 
   describe('isStandaloneSession', () => {
-    it('should be set to the result of a call to applicationContext.getUtilities().isStandaloneRemoteSession', () => {
-      const mockIsStandaloneSession = true;
-      applicationContext
-        .getUtilities()
-        .isStandaloneRemoteSession.mockReturnValue(mockIsStandaloneSession);
+    it('should be true when the trial session scope is `Standalone Remote`', () => {
       mockFormattedTrialSession = {
         ...mockFormattedTrialSession,
-        sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
       };
 
       const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
         state: baseState,
       });
 
-      expect(
-        applicationContext.getUtilities().isStandaloneRemoteSession,
-      ).toHaveBeenCalledWith(mockFormattedTrialSession.sessionScope);
-      expect(isStandaloneSession).toEqual(mockIsStandaloneSession);
+      expect(isStandaloneSession).toEqual(true);
     });
   });
 
