@@ -20,6 +20,8 @@ export const SubmittedCavCasesTable = connect(
       sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
     submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
+    updateSubmittedCavCaseDetailSequence:
+      sequences.updateSubmittedCavCaseDetailSequence,
   },
 
   function SubmittedCavCasesTable({
@@ -28,6 +30,7 @@ export const SubmittedCavCasesTable = connect(
     openDeleteCasePrimaryIssueSequence,
     showModal,
     submittedCavCasesTableHelper,
+    updateSubmittedCavCaseDetailSequence,
   }) {
     const StatusOfMatter = [
       'Awaiting Consideration',
@@ -72,6 +75,10 @@ export const SubmittedCavCasesTable = connect(
             {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
               .sort(submittedCavCasesTableHelper.daysInStatusSortHandler)
               .map(formattedCase => {
+                console.log(
+                  'in submittedtable.tsx',
+                  judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge,
+                );
                 return (
                   <React.Fragment key={`info-${formattedCase.docketNumber}`}>
                     <tr>
@@ -113,6 +120,9 @@ export const SubmittedCavCasesTable = connect(
                             month: '',
                             year: '',
                           }}
+                          onChange={updateSubmittedCavCaseDetailSequence({
+                            finalBriefDueDate: { ...values },
+                          })}
                         />
                       </td>
                       <td colSpan={2}>
@@ -122,6 +132,11 @@ export const SubmittedCavCasesTable = connect(
                           bind=""
                           id="status-of-matter-dropdown"
                           name="statusOfMatter"
+                          onChange={e => {
+                            updateSubmittedCavCaseDetailSequence({
+                              statusOfMatter: e,
+                            });
+                          }}
                         >
                           <option value="">- Select -</option>
                           {StatusOfMatter.map(from => (
@@ -135,8 +150,7 @@ export const SubmittedCavCasesTable = connect(
                     <tr className="wip-submitted-cav-cases-primary-issue-row">
                       <td className="grid-container" colSpan={12}>
                         <div className="grid-row">
-                          <div className="grid-col-1" />
-                          <div className="grid-col-1">
+                          <div className="grid-col-3 text-right">
                             <b>Primary Issue:</b>
                           </div>
                           <div
