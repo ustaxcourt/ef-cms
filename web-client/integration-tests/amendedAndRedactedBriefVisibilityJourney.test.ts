@@ -16,36 +16,36 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
 
   describe('Unassociated petitioner', () => {
     const expectedDocketRecordVisibility = {
-      1: false,
-      2: false,
-      3: false,
-      4: false,
-      5: true,
-      6: true,
-      7: false,
-      8: true,
-      9: false,
-      10: true,
-      11: false,
-      12: true,
-      13: false,
-      14: true,
-      15: false,
-      16: false,
-      17: true,
-      18: true,
-      19: false,
-      20: true,
-      21: true,
-      22: false,
-      23: true,
-      24: true,
-      25: true,
-      26: false,
-      27: false,
-      28: false,
-      29: false,
-      30: false,
+      1: { eventCode: 'P', showLinkToDocument: false },
+      2: { eventCode: 'RQT', showLinkToDocument: false },
+      3: { eventCode: 'NOTR', showLinkToDocument: false },
+      4: { eventCode: 'AMAT', showLinkToDocument: false },
+      5: { eventCode: 'SIAB', showLinkToDocument: true },
+      6: { eventCode: 'SIAM', showLinkToDocument: true },
+      7: { eventCode: 'SIOB', showLinkToDocument: false },
+      8: { eventCode: 'AMAT', showLinkToDocument: true },
+      9: { eventCode: 'AMAT', showLinkToDocument: false },
+      10: { eventCode: 'REDC', showLinkToDocument: true },
+      11: { eventCode: 'MISCL', showLinkToDocument: false },
+      12: { eventCode: 'SEAB', showLinkToDocument: true },
+      13: { eventCode: 'SESB', showLinkToDocument: false },
+      14: { eventCode: 'REDC', showLinkToDocument: true },
+      15: { eventCode: 'NODC', showLinkToDocument: false },
+      16: { eventCode: 'SIAB', showLinkToDocument: false },
+      17: { eventCode: 'AMAT', showLinkToDocument: true },
+      18: { eventCode: 'AMAT', showLinkToDocument: true },
+      19: { eventCode: 'REDC', showLinkToDocument: false },
+      20: { eventCode: 'SEOB', showLinkToDocument: true },
+      21: { eventCode: 'AMAT', showLinkToDocument: true },
+      22: { eventCode: 'AMBR', showLinkToDocument: false },
+      23: { eventCode: 'AMBR', showLinkToDocument: true },
+      24: { eventCode: 'AMAT', showLinkToDocument: true },
+      25: { eventCode: 'AMAT', showLinkToDocument: true },
+      26: { eventCode: 'SIMB', showLinkToDocument: false },
+      27: { eventCode: 'M014', showLinkToDocument: false },
+      28: { eventCode: 'MISCL', showLinkToDocument: false },
+      29: { eventCode: 'AMAT', showLinkToDocument: false },
+      30: { eventCode: 'REPL', showLinkToDocument: false },
     };
 
     loginAs(cerebralTest, 'petitioner1@example.com');
@@ -65,9 +65,10 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       const { formattedDocketEntriesOnDocketRecord } =
         formattedDocketEntriesHelperResult;
 
-      for (const [docketEntryIndex, isLinked] of Object.entries(
-        expectedDocketRecordVisibility,
-      )) {
+      for (const [
+        docketEntryIndex,
+        { eventCode, showLinkToDocument },
+      ] of Object.entries(expectedDocketRecordVisibility)) {
         const found = formattedDocketEntriesOnDocketRecord.find(
           entry => entry.index === +docketEntryIndex,
         );
@@ -78,43 +79,44 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
           );
         }
 
-        expect(found.showLinkToDocument).toBe(isLinked);
+        expect(found.showLinkToDocument).toBe(showLinkToDocument);
+        expect(found.eventCode).toBe(eventCode);
       }
     });
   });
 
   describe('Associated private practitioner', () => {
     const expectedDocketRecordVisibility = {
-      1: true,
-      2: false,
-      3: true,
-      4: true,
-      5: true,
-      6: true,
-      7: true,
-      8: true,
-      9: false,
-      10: true,
-      11: true,
-      12: true,
-      13: false,
-      14: true,
-      15: true,
-      16: false,
-      17: true,
-      18: true,
-      19: true,
-      20: true,
-      21: true,
-      22: true,
-      23: true,
-      24: true,
-      25: true,
-      26: false,
-      27: true,
-      28: true,
-      29: true,
-      30: true,
+      1: { eventCode: 'P', showLinkToDocument: true },
+      2: { eventCode: 'RQT', showLinkToDocument: false },
+      3: { eventCode: 'NOTR', showLinkToDocument: true },
+      4: { eventCode: 'AMAT', showLinkToDocument: true },
+      5: { eventCode: 'SIAB', showLinkToDocument: true },
+      6: { eventCode: 'SIAM', showLinkToDocument: true },
+      7: { eventCode: 'SIOB', showLinkToDocument: true },
+      8: { eventCode: 'AMAT', showLinkToDocument: true },
+      9: { eventCode: 'AMAT', showLinkToDocument: false },
+      10: { eventCode: 'REDC', showLinkToDocument: true },
+      11: { eventCode: 'MISCL', showLinkToDocument: true },
+      12: { eventCode: 'SEAB', showLinkToDocument: true },
+      13: { eventCode: 'SESB', showLinkToDocument: false },
+      14: { eventCode: 'REDC', showLinkToDocument: true },
+      15: { eventCode: 'NODC', showLinkToDocument: true },
+      16: { eventCode: 'SIAB', showLinkToDocument: false },
+      17: { eventCode: 'AMAT', showLinkToDocument: true },
+      18: { eventCode: 'AMAT', showLinkToDocument: true },
+      19: { eventCode: 'REDC', showLinkToDocument: true },
+      20: { eventCode: 'SEOB', showLinkToDocument: true },
+      21: { eventCode: 'AMAT', showLinkToDocument: true },
+      22: { eventCode: 'AMBR', showLinkToDocument: true },
+      23: { eventCode: 'AMBR', showLinkToDocument: true },
+      24: { eventCode: 'AMAT', showLinkToDocument: true },
+      25: { eventCode: 'AMAT', showLinkToDocument: true },
+      26: { eventCode: 'SIMB', showLinkToDocument: false },
+      27: { eventCode: 'M014', showLinkToDocument: true },
+      28: { eventCode: 'MISCL', showLinkToDocument: true },
+      29: { eventCode: 'AMAT', showLinkToDocument: true },
+      30: { eventCode: 'REPL', showLinkToDocument: true },
     };
 
     loginAs(cerebralTest, 'privatepractitioner1@example.com');
@@ -134,9 +136,10 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       const { formattedDocketEntriesOnDocketRecord } =
         formattedDocketEntriesHelperResult;
 
-      for (const [docketEntryIndex, isLinked] of Object.entries(
-        expectedDocketRecordVisibility,
-      )) {
+      for (const [
+        docketEntryIndex,
+        { eventCode, showLinkToDocument },
+      ] of Object.entries(expectedDocketRecordVisibility)) {
         const found = formattedDocketEntriesOnDocketRecord.find(
           entry => entry.index === +docketEntryIndex,
         );
@@ -147,7 +150,8 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
           );
         }
 
-        expect(found.showLinkToDocument).toBe(isLinked);
+        expect(found.showLinkToDocument).toBe(showLinkToDocument);
+        expect(found.eventCode).toBe(eventCode);
       }
     });
   });
