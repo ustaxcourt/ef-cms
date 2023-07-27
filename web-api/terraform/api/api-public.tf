@@ -223,7 +223,6 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
   type           = "A"
   zone_id        = var.zone_id
   set_identifier = "api_public_${var.region}_${var.current_color}"
-  health_check_id = var.status_health_check_id
 
   alias {
     name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
