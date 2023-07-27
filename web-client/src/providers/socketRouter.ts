@@ -22,6 +22,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'thirty_day_notice_paper_service_complete':
+        await app.getSequence('thirtyDayNoticePaperServiceCompleteSequence')(
+          message,
+        );
+        break;
       case 'notice_generation_start':
         await app.getSequence('showGenerateNoticesProgressSequence')({
           ...message,

@@ -1307,7 +1307,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} petitionerContactId the id of the petitioner
    * @returns {Object} the practitioner
    */
-  getPractitionersRepresenting(petitionerContactId) {
+  getPractitionersRepresenting(petitionerContactId: string) {
     return getPractitionersRepresenting(this, petitionerContactId);
   }
 
@@ -1892,13 +1892,10 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  /**
-   * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
-   * @param {String} userId the id of the user
-   * @returns {boolean} if the userId has a privatePractitioner associated with them
-   */
-  isUserIdRepresentedByPrivatePractitioner(userId) {
-    return isUserIdRepresentedByPrivatePractitioner(this, userId);
+  static isPetitionerRepresented(rawCase, userId: string): boolean {
+    return !!rawCase.privatePractitioners?.find(practitioner =>
+      practitioner.representing.find(id => id === userId),
+    );
   }
 
   /**
@@ -2173,8 +2170,8 @@ export const getPetitionerByEmail = function (rawCase, userEmail) {
  * @returns {Object} the practitioner
  */
 export const getPractitionersRepresenting = function (
-  rawCase,
-  petitionerContactId,
+  rawCase: RawCase,
+  petitionerContactId: string,
 ) {
   return rawCase.privatePractitioners.filter(practitioner =>
     practitioner.representing.includes(petitionerContactId),
@@ -2450,18 +2447,4 @@ const generateCaptionFromContacts = ({
       break;
   }
   return caseCaption;
-};
-
-/**
- * checks all the practitioners on the case to see if there is a privatePractitioner associated with the userId
- * @param {String} userId the id of the user
- * @returns {boolean} if the userId has a privatePractitioner associated with them
- */
-export const isUserIdRepresentedByPrivatePractitioner = function (
-  rawCase,
-  userId,
-) {
-  return !!rawCase.privatePractitioners?.find(practitioner =>
-    practitioner.representing.find(id => id === userId),
-  );
 };

@@ -367,15 +367,16 @@ Cancelling a Terraform run before it completes often results in a locked state f
 2. Switch to the correct environment using your AWS creds.
 3. Switch to the correct terraform version (example: `tfswitch 1.4.5`).
 4. Navigate to `main` directory of the deployed terraform at fault (example `web-api/terraform/main`).
-5. Edit the deploy-app.sh to comment out ONLY the terraform plan and apply commands (not `terraform init`).
+5. Edit the deploy-app.sh by commenting out both the terraform `plan` and `apply` commands (not `terraform init`).
 ```
 # terraform plan -out execution-plan
 # terraform apply -auto-approve execution-plan
 ```
-6. Set up terraform for the specific environment in question by running the deploy-app.sh script (this will eventually run the `terraform init` command)  (example: `../bin/deploy-app.sh "$ENV"`). (Be sure to have Docker Desktop running!)
-7. Determine the lock ID that needs to be unlocked (lockID).
-8. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
-9. Uncomment the `terraform plan` and `apply` commands.
+6. Start up Docker Desktop if you don't have it running already.
+7. Set up terraform for the specific environment in question by running the deploy-app.sh script (this will eventually run the `terraform init` command)  (example: `../bin/deploy-app.sh "$ENV"`). 
+8. Determine the lock ID that needs to be unlocked (lockID).
+9. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
+10. Uncomment the `terraform plan` and `apply` commands.
 
 ### Fixing Version Errors
 
