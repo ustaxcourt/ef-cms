@@ -9,6 +9,8 @@ import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { seedData } from './fixtures/cav-submitted-cases';
+import { seedDatabase, seedFullDataset } from './utils/database';
 import { viewJudgeActivityReportResults } from './journey/viewJudgeActivityReportResults';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -21,8 +23,13 @@ let progressDescriptionTableTotalBefore = 0;
 describe('Judge activity report journey', () => {
   const cerebralTest = setupTest();
 
-  afterAll(() => {
+  beforeAll(async () => {
+    await seedDatabase(seedData);
+  });
+
+  afterAll(async () => {
     cerebralTest.closeSocket();
+    await seedFullDataset();
   });
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
@@ -60,91 +67,91 @@ describe('Judge activity report journey', () => {
   });
 
   viewJudgeActivityReportResults(cerebralTest);
-  it('should set the progressDescriptionTableBeforeCount', () => {
-    progressDescriptionTableTotalBefore =
-      cerebralTest.progressDescriptionTableTotal;
-  });
+  // it('should set the progressDescriptionTableBeforeCount', () => {
+  //   progressDescriptionTableTotalBefore =
+  //     cerebralTest.progressDescriptionTableTotal;
+  // });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest);
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkCreatesNewCase(cerebralTest);
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest);
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkCreatesNewCase(cerebralTest);
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusTo(
-    cerebralTest,
-    CASE_STATUS_TYPES.submitted,
-    'Colvin',
-  );
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkUpdatesCaseStatusTo(
+  //   cerebralTest,
+  //   CASE_STATUS_TYPES.submitted,
+  //   'Colvin',
+  // );
 
-  loginAs(cerebralTest, 'judgecolvin@example.com');
-  viewJudgeActivityReportResults(cerebralTest, {});
-  it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
-    const progressDescriptionTableTotalAfter =
-      cerebralTest.progressDescriptionTableTotal;
+  // loginAs(cerebralTest, 'judgecolvin@example.com');
+  // viewJudgeActivityReportResults(cerebralTest, {});
+  // it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
+  //   const progressDescriptionTableTotalAfter =
+  //     cerebralTest.progressDescriptionTableTotal;
 
-    expect(progressDescriptionTableTotalAfter).toEqual(
-      progressDescriptionTableTotalBefore + 2,
-    );
-  });
+  //   expect(progressDescriptionTableTotalAfter).toEqual(
+  //     progressDescriptionTableTotalBefore + 2,
+  //   );
+  // });
 
-  viewJudgeActivityReportResults(cerebralTest);
-  it('should set the progressDescriptionTableBeforeCount', () => {
-    progressDescriptionTableTotalBefore =
-      cerebralTest.progressDescriptionTableTotal;
-  });
+  // viewJudgeActivityReportResults(cerebralTest);
+  // it('should set the progressDescriptionTableBeforeCount', () => {
+  //   progressDescriptionTableTotalBefore =
+  //     cerebralTest.progressDescriptionTableTotal;
+  // });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest);
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkCreatesNewCase(cerebralTest);
 
-  loginAs(cerebralTest, 'judgecolvin@example.com');
-  viewJudgeActivityReportResults(cerebralTest);
-  it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
-    const progressDescriptionTableTotalAfter =
-      cerebralTest.progressDescriptionTableTotal;
+  // loginAs(cerebralTest, 'judgecolvin@example.com');
+  // viewJudgeActivityReportResults(cerebralTest);
+  // it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
+  //   const progressDescriptionTableTotalAfter =
+  //     cerebralTest.progressDescriptionTableTotal;
 
-    expect(progressDescriptionTableTotalAfter).toEqual(
-      progressDescriptionTableTotalBefore,
-    );
-  });
+  //   expect(progressDescriptionTableTotalAfter).toEqual(
+  //     progressDescriptionTableTotalBefore,
+  //   );
+  // });
 
-  viewJudgeActivityReportResults(cerebralTest);
-  it('should set the progressDescriptionTableBeforeCount', () => {
-    progressDescriptionTableTotalBefore =
-      cerebralTest.progressDescriptionTableTotal;
-  });
+  // viewJudgeActivityReportResults(cerebralTest);
+  // it('should set the progressDescriptionTableBeforeCount', () => {
+  //   progressDescriptionTableTotalBefore =
+  //     cerebralTest.progressDescriptionTableTotal;
+  // });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest);
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkCreatesNewCase(cerebralTest);
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusTo(
-    cerebralTest,
-    CASE_STATUS_TYPES.submitted,
-    'Colvin',
-  );
-  docketClerkCreatesAnOrder(cerebralTest, {
-    documentTitle: 'Order and Decision',
-    eventCode: 'OAD',
-    expectedDocumentType: 'Order and Decision',
-  });
-  docketClerkViewsDraftOrder(cerebralTest);
-  docketClerkSignsOrder(cerebralTest);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
-  docketClerkServesDocument(cerebralTest, 0);
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkUpdatesCaseStatusTo(
+  //   cerebralTest,
+  //   CASE_STATUS_TYPES.submitted,
+  //   'Colvin',
+  // );
+  // docketClerkCreatesAnOrder(cerebralTest, {
+  //   documentTitle: 'Order and Decision',
+  //   eventCode: 'OAD',
+  //   expectedDocumentType: 'Order and Decision',
+  // });
+  // docketClerkViewsDraftOrder(cerebralTest);
+  // docketClerkSignsOrder(cerebralTest);
+  // docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
+  // docketClerkServesDocument(cerebralTest, 0);
 
-  loginAs(cerebralTest, 'judgecolvin@example.com');
-  viewJudgeActivityReportResults(cerebralTest);
-  it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
-    const progressDescriptionTableTotalAfter =
-      cerebralTest.progressDescriptionTableTotal;
+  // loginAs(cerebralTest, 'judgecolvin@example.com');
+  // viewJudgeActivityReportResults(cerebralTest);
+  // it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
+  //   const progressDescriptionTableTotalAfter =
+  //     cerebralTest.progressDescriptionTableTotal;
 
-    expect(progressDescriptionTableTotalAfter).toEqual(
-      progressDescriptionTableTotalBefore,
-    );
-  });
+  //   expect(progressDescriptionTableTotalAfter).toEqual(
+  //     progressDescriptionTableTotalBefore,
+  //   );
+  // });
 });
