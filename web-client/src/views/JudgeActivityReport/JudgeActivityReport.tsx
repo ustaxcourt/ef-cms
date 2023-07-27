@@ -339,12 +339,7 @@ export const JudgeActivityReport = connect(
                 </select>
               </div>
 
-              <div
-                className="grid-col-auto flex-align-center"
-                style={{
-                  marginTop: '2.4rem',
-                }}
-              >
+              <div className="grid-col-auto flex-align-center margin-top-2pt4rem margin-left-2">
                 <Button
                   className="position-relative margin-bottom-35"
                   disabled={judgeActivityReportHelper.isFormPristine}

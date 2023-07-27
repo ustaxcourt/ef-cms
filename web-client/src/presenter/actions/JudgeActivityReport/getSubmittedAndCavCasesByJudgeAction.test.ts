@@ -11,14 +11,26 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
-  const lastDocketNumberForCavAndSubmittedCasesSearch = 1234;
+  const mockEndDate = '2022-04-13';
+  const mockStartDate = '12/12/1923';
+  const mockTotalCountOfSubmittedAndCavCases = 15;
+  const pageNumber = 0;
 
-  const requestFilters: JudgeActivityReportCavAndSubmittedCasesRequest = {
+  const judgeActivityReportStateFilters = {
+    endDate: mockEndDate,
+    judgeName: judgeUser.name,
     judges: [judgeUser.name],
-    pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-    searchAfter: lastDocketNumberForCavAndSubmittedCasesSearch,
-    statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+    startDate: mockStartDate,
   };
+
+  const getCasesByStatusAndByJudgeRequestParams: JudgeActivityReportCavAndSubmittedCasesRequest =
+    {
+      judges: [judgeUser.name],
+      pageNumber,
+      pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+    };
+
   const mockConsolidatedCasesGroupCount = { '101-22': 3 };
 
   let mockReturnedCases;
@@ -38,7 +50,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     mockCustomCaseReportResponse = {
       cases: mockReturnedCases,
       consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
-      lastDocketNumberForCavAndSubmittedCasesSearch,
+      totalCount: mockTotalCountOfSubmittedAndCavCases,
     };
 
     applicationContext
@@ -54,12 +66,11 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         presenter,
       },
       props: {
-        selectedPage: 0,
+        selectedPage: pageNumber,
       },
       state: {
         judgeActivityReport: {
-          filters: requestFilters,
-          lastIdsOfPages: [lastDocketNumberForCavAndSubmittedCasesSearch],
+          filters: judgeActivityReportStateFilters,
         },
       },
     });
@@ -69,47 +80,13 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
         applicationContext.getUseCases()
           .getCasesByStatusAndByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
-    ).toMatchObject(requestFilters);
+    ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);
     expect(result.output.consolidatedCasesGroupCountMap).toMatchObject({
       '101-22': 3,
     });
-  });
-
-  it('should populate page ID tracking array when navigating to later pages', async () => {
-    const page1SearchId = 123;
-    mockCustomCaseReportResponse.lastDocketNumberForCavAndSubmittedCasesSearch =
-      page1SearchId;
-
-    await applicationContext
-      .getUseCases()
-      .getCustomCaseInventoryReportInteractor.mockResolvedValueOnce(
-        mockCustomCaseReportResponse,
-      );
-
-    const result = await runAction(getSubmittedAndCavCasesByJudgeAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        selectedPage: 1,
-      },
-      state: {
-        judgeActivityReport: {
-          filters: {
-            judges: [judgeUser.name],
-          },
-          judgeActivityReportData: {},
-          lastIdsOfPages: [
-            lastDocketNumberForCavAndSubmittedCasesSearch,
-            page1SearchId,
-          ],
-        },
-      },
-    });
-
-    expect(result.output.lastDocketNumberForCavAndSubmittedCasesSearch).toEqual(
-      page1SearchId,
+    expect(result.output.totalCountForSubmittedAndCavCases).toEqual(
+      mockTotalCountOfSubmittedAndCavCases,
     );
   });
 });
