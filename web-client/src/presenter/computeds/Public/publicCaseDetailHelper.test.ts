@@ -7,11 +7,12 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
-import { formatDocketEntry } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import {
+  fetchRootDocument,
   formatDocketEntryOnDocketRecord,
   publicCaseDetailHelper as publicCaseDetailHelperComputed,
 } from './publicCaseDetailHelper';
+import { formatDocketEntry } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
@@ -147,19 +148,17 @@ describe('publicCaseDetailHelper', () => {
       const mockSealedDocketEntry = {
         ...baseDocketEntry,
         isSealed: true,
+        rootDocument: { documentType: 'Petition' },
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         sealedToTooltip: undefined,
       };
 
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [],
-          entry: mockSealedDocketEntry,
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '',
-        },
-      );
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: mockSealedDocketEntry,
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '',
+      });
 
       expect(result.sealedToTooltip).toBe('Sealed to the public');
     });
@@ -168,18 +167,16 @@ describe('publicCaseDetailHelper', () => {
       const mockDocketEntry = {
         ...baseDocketEntry,
         isSealed: false,
+        rootDocument: { documentType: 'Petition' },
         sealedToTooltip: undefined,
       };
 
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [],
-          entry: mockDocketEntry,
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '',
-        },
-      );
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: mockDocketEntry,
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '',
+      });
 
       expect(result.sealedToTooltip).toBe(undefined);
     });
@@ -188,155 +185,141 @@ describe('publicCaseDetailHelper', () => {
       const mockDocketEntry = {
         ...baseDocketEntry,
         isSealed: false,
+        rootDocument: { documentType: 'Petition' },
       };
 
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [],
-          entry: mockDocketEntry,
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '',
-        },
-      );
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: mockDocketEntry,
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '',
+      });
 
       expect(result.isSealed).toBe(mockDocketEntry.isSealed);
     });
 
     it('should not display the document link when the entry is stricken and the user is the terminal user', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [],
-          entry: { ...baseDocketEntry, isStricken: true },
-          isTerminalUser: true,
-          visibilityPolicyDateFormatted: '',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: {
+          ...baseDocketEntry,
+          isStricken: true,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: true,
+        visibilityPolicyDateFormatted: '',
+      });
 
       expect(result.showLinkToDocument).toBe(false);
     });
 
     it('should show document link for a policy date impacted document for the terminal user when filed by practitioner after policy change date', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-          },
-          isTerminalUser: true,
-          visibilityPolicyDateFormatted: '2010-05-16T00:00:00.000-04:00',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: true,
+        visibilityPolicyDateFormatted: '2010-05-16T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(true);
     });
 
     it('should show document link for brief for the terminal user when filed by practitioner before policy change date', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-          },
-          isTerminalUser: true,
-          visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: true,
+        visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(true);
     });
 
     it('should show document link for a policy date impacted document when filed by practitioner after policy change date for the public user and is not a court issued document', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
-            filingDate: '2030-05-16T00:00:00.000-04:00',
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-          },
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2020-05-16T00:00:00.000-04:00',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+          filingDate: '2030-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2020-05-16T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(true);
     });
 
     it('should NOT show document link for a policy date impacted, court-issued stip decision when filed before policy change date for the public user', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: STIPULATED_DECISION_EVENT_CODE,
-            filingDate: '2030-05-16T00:00:00.000-04:00',
-            isCourtIssuedDocument: true,
-            isNotServedDocument: false,
-            isStipDecision: true,
-          },
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: STIPULATED_DECISION_EVENT_CODE,
+          filingDate: '2030-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: true,
+          isNotServedDocument: false,
+          isStipDecision: true,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(false);
     });
 
     it('should not show document link for a policy date impacted document when filed by practitioner before policy change date for the public user and is not a court issued document', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
-            filingDate: '2030-05-16T00:00:00.000-04:00',
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-          },
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+          filingDate: '2030-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(false);
     });
 
     it('should NOT show document link for an amended brief when the docket entry was filed before visibility policy date (8/1/2023) by a practitioner on the case', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: 'AMAT',
-            filingDate: '2020-05-16T00:00:00.000-04:00',
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-            previousDocument: {
-              docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
-              documentTitle: 'Seriatim Answering Memorandum Brief',
-              documentType: 'Seriatim Answering Memorandum Brief',
-            },
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filingDate: '2020-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: {
+            docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
+            documentTitle: 'Seriatim Answering Memorandum Brief',
+            documentType: 'Seriatim Answering Memorandum Brief',
           },
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(false);
     });
@@ -350,7 +333,7 @@ describe('publicCaseDetailHelper', () => {
           filingDate: '2050-05-16T00:00:00.000-04:00',
           isCourtIssuedDocument: false,
           isNotServedDocument: false,
-          previousDocument: {
+          rootDocument: {
             docketEntryId: 'e86b58a8-aeb3-460e-af4b-3a31b6bae864',
             documentTitle: 'Seriatim Answering Memorandum Brief',
             documentType: 'Seriatim Answering Memorandum Brief',
@@ -364,73 +347,111 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should NOT show document link for an amendment docket entry when the previous docket entry is NOT a brief', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: 'AMAT',
-            filingDate: '2050-05-16T00:00:00.000-04:00',
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-            previousDocument: {
-              docketEntryId: baseDocketEntry.docketEntryId,
-              documentTitle: 'Petition',
-              documentType: 'Petition',
-            },
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filingDate: '2050-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: {
+            docketEntryId: baseDocketEntry.docketEntryId,
+            documentTitle: 'Petition',
+            documentType: 'Petition',
           },
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(false);
     });
 
     it('should show document link for a Stipulated Decision (SDEC)', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [],
-          entry: stipDecisionDocument,
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: {
+          ...stipDecisionDocument,
+          rootDocument: { documentType: 'Petition' },
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(true);
     });
 
     it('should NOT show a document link for an amended brief entry when the document was not filed by a practitioner on the case', () => {
-      const result: any = formatDocketEntryOnDocketRecord(
-        applicationContextPublic,
-        {
-          docketEntriesEFiledByPractitioner: [],
-          entry: {
-            ...baseDocketEntry,
-            eventCode: 'AMAT',
-            filingDate: '2050-05-16T00:00:00.000-04:00',
-            isCourtIssuedDocument: false,
-            isNotServedDocument: false,
-            previousDocument: {
-              docketEntryId: baseDocketEntry.docketEntryId,
-              documentTitle: 'Seriatim Answering Memorandum Brief',
-              documentType: 'Seriatim Answering Memorandum Brief',
-            },
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filingDate: '2050-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: {
+            docketEntryId: baseDocketEntry.docketEntryId,
+            documentTitle: 'Seriatim Answering Memorandum Brief',
+            documentType: 'Seriatim Answering Memorandum Brief',
           },
-          isTerminalUser: false,
-          visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
         },
-      );
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
 
       expect(result.showLinkToDocument).toBe(false);
+    });
+
+    it('should show a document link for an amended amicus brief when the document was filed after the visibility policy date (8/1/2023)', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'AMAT',
+          filingDate: '2050-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: {
+            docketEntryId: baseDocketEntry.docketEntryId,
+            documentTitle: 'Amicus Brief',
+            documentType: 'Amicus Brief',
+          },
+        },
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
+
+      expect(result.showLinkToDocument).toBe(true);
+    });
+
+    it('should show a document link for a redacted amicus brief when the document was filed after the visibility policy date (8/1/2023)', () => {
+      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+        docketEntriesEFiledByPractitioner: [],
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'REDC',
+          filingDate: '2050-05-16T00:00:00.000-04:00',
+          isCourtIssuedDocument: false,
+          isNotServedDocument: false,
+          rootDocument: {
+            docketEntryId: baseDocketEntry.docketEntryId,
+            documentTitle: 'Amicus Brief',
+            documentType: 'Amicus Brief',
+          },
+        },
+        isTerminalUser: false,
+        visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+      });
+
+      expect(result.showLinkToDocument).toBe(true);
     });
   });
 
   describe('printableDocketRecord', () => {
     it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
             canAllowPrintableDocketRecord: true,
@@ -446,7 +467,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should not show printable docket record button if canAllowPrintableDocketRecord is false', () => {
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail: {
             canAllowPrintableDocketRecord: false,
@@ -464,7 +485,7 @@ describe('publicCaseDetailHelper', () => {
 
   describe('formattedDocketEntriesOnDocketRecord', () => {
     it('should return the formattedDocketEntriesOnDocketRecord as an array', () => {
-      const result: any = runCompute(publicCaseDetailHelper, { state });
+      const result = runCompute(publicCaseDetailHelper, { state });
       expect(
         Array.isArray(result.formattedDocketEntriesOnDocketRecord),
       ).toBeTruthy();
@@ -483,7 +504,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, { state });
+      const result = runCompute(publicCaseDetailHelper, { state });
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
@@ -505,7 +526,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, { state });
+      const result = runCompute(publicCaseDetailHelper, { state });
 
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
@@ -527,7 +548,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'PMT',
         },
       ];
-      const result: any = runCompute(publicCaseDetailHelper, { state });
+      const result = runCompute(publicCaseDetailHelper, { state });
 
       expect(
         result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
@@ -595,7 +616,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, { state });
+      const result = runCompute(publicCaseDetailHelper, { state });
 
       expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
         {
@@ -660,7 +681,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, { state });
+      const result = runCompute(publicCaseDetailHelper, { state });
 
       expect(
         result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
@@ -734,7 +755,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: { ...state, isTerminalUser: true },
       });
 
@@ -860,7 +881,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: { ...state, isTerminalUser: false },
       });
 
@@ -944,7 +965,7 @@ describe('publicCaseDetailHelper', () => {
         },
       ];
 
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: { ...state, isTerminalUser: true },
       });
 
@@ -994,7 +1015,7 @@ describe('publicCaseDetailHelper', () => {
     };
 
     it('should ONLY show order type docket entries when "Orders" has been selected as the filter', () => {
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail,
           sessionMetadata: {
@@ -1010,7 +1031,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should ONLY show motion type docket entries when "Motions" has been selected as the filter', () => {
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail,
           sessionMetadata: {
@@ -1026,7 +1047,7 @@ describe('publicCaseDetailHelper', () => {
     });
 
     it('should show all docket entries when "All documents" has been selected as the filter', () => {
-      const result: any = runCompute(publicCaseDetailHelper, {
+      const result = runCompute(publicCaseDetailHelper, {
         state: {
           caseDetail,
           sessionMetadata: {
@@ -1044,7 +1065,7 @@ describe('publicCaseDetailHelper', () => {
 
   it('should indicate when a case is sealed', () => {
     state.caseDetail.isSealed = true;
-    const result: any = runCompute(publicCaseDetailHelper, { state });
+    const result = runCompute(publicCaseDetailHelper, { state });
     expect(result.formattedCaseDetail.isCaseSealed).toBeTruthy();
   });
 
@@ -1068,7 +1089,7 @@ describe('publicCaseDetailHelper', () => {
       },
     ];
 
-    const result: any = runCompute(publicCaseDetailHelper, { state });
+    const result = runCompute(publicCaseDetailHelper, { state });
 
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -1148,7 +1169,7 @@ describe('publicCaseDetailHelper', () => {
       },
     ];
 
-    const result: any = runCompute(publicCaseDetailHelper, { state });
+    const result = runCompute(publicCaseDetailHelper, { state });
 
     expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
@@ -1188,4 +1209,173 @@ describe('publicCaseDetailHelper', () => {
       },
     ]);
   });
+
+  describe('Root Previous Documents', () => {
+    it('should show a link when the current document is a multi level ammendment whose root document is a brief', () => {
+      state.caseDetail.docketEntriesEFiledByPractitioner = [
+        '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
+        '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
+        '8e3ae16b-dc29-433f-878a-7a0534c39919',
+        'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
+        'b22fd1a0-56cb-4873-bb4f-50df3a65da3f',
+      ];
+      state.caseDetail.docketEntries = [
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          docketEntryId: 'b22fd1a0-56cb-4873-bb4f-50df3a65da3f',
+          docketNumber: '103-20',
+          documentTitle:
+            'Redacted First Supplement to Seriatim Answering Brief',
+          documentType: 'Redacted',
+          entityName: 'PublicDocketEntry',
+          eventCode: 'REDC',
+          filedBy: 'Petr. Reuben Blair',
+          filingDate: '2024-07-26T15:27:03.890Z',
+          index: 9,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 2,
+          previousDocument: {
+            docketEntryId: 'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
+            documentTitle: 'First Supplement to Seriatim Answering Brief',
+            documentType: 'Supplement',
+          },
+          processingStatus: 'complete',
+          receivedAt: '2023-07-26T04:00:00.000Z',
+          servedAt: '2023-07-26T15:27:03.893Z',
+          servedPartiesCode: 'B',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          docketEntryId: 'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
+          docketNumber: '103-20',
+          documentTitle: 'First Supplement to Seriatim Answering Brief',
+          documentType: 'Supplement',
+          entityName: 'PublicDocketEntry',
+          eventCode: 'SUPM',
+          filedBy: 'Petr. Reuben Blair',
+          filingDate: '2024-07-26T15:26:33.586Z',
+          index: 8,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 2,
+          previousDocument: {
+            docketEntryId: '8e3ae16b-dc29-433f-878a-7a0534c39919',
+            documentTitle: 'Seriatim Answering Brief',
+            documentType: 'Seriatim Answering Brief',
+          },
+          processingStatus: 'complete',
+          receivedAt: '2023-07-26T04:00:00.000Z',
+          servedAt: '2023-07-26T15:26:33.591Z',
+          servedPartiesCode: 'B',
+        },
+        {
+          attachments: false,
+          certificateOfService: false,
+          certificateOfServiceDate: null,
+          docketEntryId: '8e3ae16b-dc29-433f-878a-7a0534c39919',
+          docketNumber: '103-20',
+          documentTitle: 'Seriatim Answering Brief',
+          documentType: 'Seriatim Answering Brief',
+          entityName: 'PublicDocketEntry',
+          eventCode: 'SEAB',
+          filedBy: 'Petr. Reuben Blair',
+          filingDate: '2024-07-26T15:25:33.548Z',
+          index: 7,
+          isFileAttached: true,
+          isMinuteEntry: false,
+          isOnDocketRecord: true,
+          isSealed: false,
+          isStricken: false,
+          numberOfPages: 2,
+          processingStatus: 'complete',
+          receivedAt: '2023-07-26T04:00:00.000Z',
+          servedAt: '2023-07-26T15:25:33.550Z',
+          servedPartiesCode: 'B',
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toEqual(true);
+    });
+  });
+});
+
+describe('recursivelySetNestedPreviousDocuments', () => {
+  it('should set up all the previous documents for the docket entry passed in', () => {
+    const theDocketEntry: any = {
+      docketEntryId: '1',
+      documentTitle: 'booba',
+      previousDocument: {
+        docketEntryId: '2',
+      },
+    };
+    const docketEntries = [
+      theDocketEntry,
+      {
+        docketEntryId: '2',
+        documentTitle: 'fruity',
+        previousDocument: { docketEntryId: '3' },
+      },
+      { docketEntryId: '3', documentTitle: 'minions' },
+    ];
+
+    const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
+
+    expect(docketEntry).toEqual({
+      docketEntryId: '3',
+      documentTitle: 'minions',
+    });
+  });
+
+  it('should return the closest to the parent if the chain is missing an entry', () => {
+    const theDocketEntry: any = {
+      docketEntryId: '1',
+      documentTitle: 'booba',
+      previousDocument: {
+        docketEntryId: '2',
+      },
+    };
+    const docketEntries = [
+      theDocketEntry,
+      {
+        docketEntryId: '2',
+        documentTitle: 'fruity',
+        previousDocument: { docketEntryId: '3' },
+      },
+    ];
+
+    const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
+
+    expect(docketEntry).toEqual({
+      docketEntryId: '2',
+      documentTitle: 'fruity',
+      previousDocument: { docketEntryId: '3' },
+    });
+  });
+
+  // it('should return undefined for previousDocument if there is no parent', () => {
+  //   const theDocketEntry: any = {
+  //     docketEntryId: '1',
+  //     documentTitle: 'booba',
+  //   };
+  //   const docketEntries = [theDocketEntry];
+
+  //   const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
+
+  //   expect(docketEntry).toEqual(undefined);
+  // });
 });
