@@ -1,4 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import {
+  CASE_TYPES_MAP,
+  SESSION_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -8,26 +11,21 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
-const cerebralTest = setupTest();
-const { CASE_TYPES_MAP } = applicationContext.getConstants();
-
 describe('Trial Session Eligible Cases - Both small and regular cases get scheduled to the trial session that’s a hybrid session', () => {
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
-
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  const cerebralTest = setupTest();
 
   const trialLocation = `Despacito, Texas, ${Date.now()}`;
   const overrides = {
     maxCases: 2,
     preferredTrialCity: trialLocation,
-    sessionType: 'Hybrid',
+    sessionType: SESSION_TYPES.hybrid,
     trialLocation,
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   describe(`Create trial session with Hybrid session type for '${trialLocation}' with max case count = 2`, () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
