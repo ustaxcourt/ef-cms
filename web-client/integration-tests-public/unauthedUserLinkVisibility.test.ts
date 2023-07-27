@@ -59,14 +59,20 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
 
       const { formattedDocketEntriesOnDocketRecord } = publicCaseDetail;
 
-      for (const [index, value] of Object.entries(
+      for (const [docketEntryIndex, isLinked] of Object.entries(
         expectedDocketRecordVisibility,
       )) {
         const found = formattedDocketEntriesOnDocketRecord.find(
-          entry => entry.index === +index,
+          entry => entry.index === +docketEntryIndex,
         );
 
-        expect(found?.showLinkToDocument).toBe(value);
+        if (!found) {
+          console.log(
+            `count not find a docket entry with index ${docketEntryIndex} on case`,
+          );
+        }
+
+        expect(found?.showLinkToDocument).toBe(isLinked);
       }
     });
   });
