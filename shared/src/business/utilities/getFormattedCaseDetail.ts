@@ -467,7 +467,10 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 };
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
-export const sortUndefined = (a, b) => {
+export const sortUndefined = (
+  a: { createdAtFormatted: string },
+  b: { createdAtFormatted: string },
+) => {
   if (a.createdAtFormatted && !b.createdAtFormatted) {
     return -1;
   }
@@ -477,7 +480,10 @@ export const sortUndefined = (a, b) => {
   }
 };
 
-export const sortDocketEntries = (docketEntries = [], sortByString = '') => {
+export const sortDocketEntries = (
+  docketEntries: (RawDocketEntry & { createdAtFormatted: string })[] = [],
+  sortByString = '',
+) => {
   const sortFunc = getDocketRecordSortFunc(sortByString);
   const isReversed = sortByString.includes('Desc');
   docketEntries.sort(sortFunc);
@@ -486,24 +492,4 @@ export const sortDocketEntries = (docketEntries = [], sortByString = '') => {
     return docketEntries.reverse().sort(sortUndefined);
   }
   return docketEntries.sort(sortUndefined);
-};
-
-export const getFormattedCaseDetail = ({
-  applicationContext,
-  caseDetail,
-  docketRecordSort,
-}) => {
-  const result = {
-    ...applicationContext
-      .getUtilities()
-      .setServiceIndicatorsForCase(caseDetail),
-    ...formatCase(applicationContext, caseDetail),
-  };
-  result.formattedDocketEntries = sortDocketEntries(
-    result.formattedDocketEntries,
-    docketRecordSort,
-  );
-  result.docketRecordSort = docketRecordSort;
-
-  return result;
 };
