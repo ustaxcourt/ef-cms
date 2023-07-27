@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CONTACT_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../EntityConstants');
-const { Case, getContactPrimary } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../EntityConstants';
+import { Case, getContactPrimary } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('hasPartyWithServiceType', () => {
   it('should return true if contactPrimary service indicator is paper', () => {

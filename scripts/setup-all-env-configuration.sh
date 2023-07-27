@@ -10,10 +10,6 @@
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-./scripts/dynamo/setup-internal-order-search-flag.sh
-./scripts/dynamo/setup-external-order-search-flag.sh
-./scripts/dynamo/setup-internal-opinion-search-flag.sh
-./scripts/dynamo/setup-external-opinion-search-flag.sh
 ./scripts/dynamo/setup-document-search-limiter-limits.sh
 ./scripts/dynamo/setup-terminal-ip-allowlist.sh
 ./scripts/dynamo/setup-maintenance-mode-flag.sh

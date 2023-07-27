@@ -290,6 +290,7 @@ import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeC
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
+import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToLoginSequence } from './sequences/redirectToLoginSequence';
@@ -334,6 +335,7 @@ import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDo
 import { serveDocumentCompleteSequence } from './sequences/serveDocumentCompleteSequence';
 import { serveDocumentErrorSequence } from './sequences/serveDocumentErrorSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
+import { serveThirtyDayNoticeOfTrialSequence } from './sequences/serveThirtyDayNoticeOfTrialSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
 import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimaryTabSequence';
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
@@ -361,13 +363,13 @@ import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerC
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
-import { showDismissThirtyDayAlertModalSequence } from './sequences/showDismissThirtyDayAlertModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showGenerateNoticesProgressSequence } from './sequences/showGenerateNoticesProgressSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
 import { showMoreOpenCasesSequence } from './sequences/showMoreOpenCasesSequence';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
+import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -418,6 +420,7 @@ import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModal
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
 import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
+import { thirtyDayNoticePaperServiceCompleteSequence } from './sequences/thirtyDayNoticePaperServiceCompleteSequence';
 import { toggleAllWorkItemCheckboxChangeSequence } from './sequences/toggleAllWorkItemCheckboxChangeSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleCaseDifferenceSequence } from './sequences/toggleCaseDifferenceSequence';
@@ -441,6 +444,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCalendarNoteSequence } from './sequences/updateCalendarNoteSequence';
+import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
@@ -816,6 +820,7 @@ export const presenterSequences = {
   openUnsealDocketEntryModalSequence,
   openUpdateCaseModalSequence,
   paperServiceCompleteSequence,
+  printPaperServiceForTrialCompleteSequence,
   printTrialCalendarSequence,
   prioritizeCaseSequence,
   redirectToLoginSequence,
@@ -860,6 +865,7 @@ export const presenterSequences = {
   serveDocumentCompleteSequence,
   serveDocumentErrorSequence,
   servePaperFiledDocumentSequence,
+  serveThirtyDayNoticeOfTrialSequence,
   setCaseDetailPageTabSequence,
   setCaseDetailPrimaryTabSequence,
   setCaseTypeToDisplaySequence,
@@ -886,13 +892,13 @@ export const presenterSequences = {
   setViewerDocumentToDisplaySequence,
   setViewerDraftDocumentToDisplaySequence,
   showCalculatePenaltiesModalSequence,
-  showDismissThirtyDayAlertModalSequence,
   showDocketRecordDetailModalSequence,
   showGenerateNoticesProgressSequence,
   showMoreClosedCasesSequence,
   showMoreOpenCasesSequence,
   showMoreResultsSequence,
   showPaperServiceProgressSequence,
+  showThirtyDayNoticeModalSequence,
   showViewPetitionerCounselModalSequence,
   signOutSequence,
   skipSigningOrderSequence,
@@ -943,6 +949,7 @@ export const presenterSequences = {
   submitUpdatePetitionerInformationFromModalSequence,
   submitUpdatePractitionerUserSequence,
   submitUpdateUserContactInformationSequence,
+  thirtyDayNoticePaperServiceCompleteSequence,
   toggleAllWorkItemCheckboxChangeSequence,
   toggleBetaBarSequence,
   toggleCaseDifferenceSequence,
@@ -966,6 +973,7 @@ export const presenterSequences = {
   updateAdvancedSearchFormValueSequence,
   updateBatchDownloadProgressSequence,
   updateCalendarNoteSequence,
+  updateCaseAdvancedSearchByNameFormValueSequence,
   updateCaseAssociationFormValueSequence,
   updateCaseCheckboxSequence,
   updateCaseDeadlineSequence,

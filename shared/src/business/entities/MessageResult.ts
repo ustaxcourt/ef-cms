@@ -1,11 +1,7 @@
+import { JoiValidationConstants } from './JoiValidationConstants';
 import { Message } from './Message';
-
-const joi = require('joi');
-const {
-  TRIAL_CITY_STRINGS,
-  TRIAL_LOCATION_MATCHER,
-} = require('./EntityConstants');
-const { JoiValidationConstants } = require('./JoiValidationConstants');
+import { TRIAL_CITY_STRINGS, TRIAL_LOCATION_MATCHER } from './EntityConstants';
+import joi from 'joi';
 
 /**
  * constructor

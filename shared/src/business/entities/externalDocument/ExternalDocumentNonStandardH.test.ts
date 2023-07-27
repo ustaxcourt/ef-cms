@@ -1,27 +1,32 @@
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
-const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
-const { getTextByCount } = require('../../utilities/getTextByCount');
+import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { ExternalDocumentNonStandardH } from './ExternalDocumentNonStandardH';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardH', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentH = ExternalDocumentFactory({
         scenario: 'Nonstandard H',
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
-        category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+
+      expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
+        category:
+          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
+        documentType:
+          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
+            .documentType[1],
         secondaryDocument: {
-          category: VALIDATION_ERROR_MESSAGES.category,
-          documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+          category:
+            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
+          documentType:
+            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
+              .documentType[1],
         },
       });
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentH = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle: 'Motion for Leave to File [Document Name]',
         documentType: 'Motion for Leave to File',
@@ -32,11 +37,12 @@ describe('ExternalDocumentNonStandardH', () => {
           documentType: 'Application for Waiver of Filing Fee',
         },
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+
+      expect(externalDocumentH.getFormattedValidationErrors()).toEqual(null);
     });
 
     it('should have error messages for nonstandard secondary document', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentH = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle: 'Motion for Leave to File [Document Name]',
         documentType: 'Motion for Leave to File',
@@ -45,18 +51,24 @@ describe('ExternalDocumentNonStandardH', () => {
           scenario: 'Nonstandard A',
         },
       });
-      expect(() => extDoc.validate()).toThrow();
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
+
+      expect(() => externalDocumentH.validate()).toThrow();
+      expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
-          category: VALIDATION_ERROR_MESSAGES.category,
-          documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-          previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
+          category:
+            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
+          documentType:
+            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
+              .documentType[1],
+          previousDocument:
+            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
+              .previousDocument,
         },
       });
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentH = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle: getTextByCount(3001),
         documentType: 'Motion for Leave to File',
@@ -67,14 +79,16 @@ describe('ExternalDocumentNonStandardH', () => {
           documentType: 'Application for Waiver of Filing Fee',
         },
       });
-      expect(extDoc.getFormattedValidationErrors()).toEqual({
-        documentTitle: VALIDATION_ERROR_MESSAGES.documentTitle,
+
+      expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
+        documentTitle:
+          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.documentTitle,
       });
     });
   });
 
   it('should be valid when all nonstandard secondary document fields are present', () => {
-    const extDoc = ExternalDocumentFactory({
+    const externalDocumentH = ExternalDocumentFactory({
       category: 'Motion',
       documentTitle: 'Motion for Leave to File [Document Name]',
       documentType: 'Motion for Leave to File',
@@ -87,13 +101,14 @@ describe('ExternalDocumentNonStandardH', () => {
         scenario: 'Nonstandard A',
       },
     });
-    expect(() => extDoc.validate()).not.toThrow();
-    expect(extDoc.getFormattedValidationErrors()).toEqual(null);
+
+    expect(() => externalDocumentH.validate()).not.toThrow();
+    expect(externalDocumentH.getFormattedValidationErrors()).toEqual(null);
   });
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const extDoc = ExternalDocumentFactory({
+      const externalDocumentH = ExternalDocumentFactory({
         category: 'Motion',
         documentTitle: 'Motion for Leave to File [Document Name]',
         documentType: 'Motion for Leave to File',
@@ -106,7 +121,8 @@ describe('ExternalDocumentNonStandardH', () => {
           scenario: 'Nonstandard A',
         },
       });
-      expect(extDoc.getDocumentTitle()).toEqual(
+
+      expect(externalDocumentH.getDocumentTitle()).toEqual(
         'Motion for Leave to File Brief in Support of Petition',
       );
     });

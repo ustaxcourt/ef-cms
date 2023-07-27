@@ -118,7 +118,7 @@ Here is an example of a signOutSequence in our application:
 
 ```javascript
 export const signOutSequence = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopWebSocketConnectionAction,
   broadcastLogoutAction,
   deleteAuthCookieAction,

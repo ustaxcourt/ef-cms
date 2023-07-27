@@ -8,7 +8,6 @@ import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getConstants } from '../../getConstants';
-import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
@@ -21,17 +20,16 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
 import { setPendingEmailsOnCaseAction } from '../actions/setPendingEmailsOnCaseAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
@@ -43,16 +41,6 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   setDocketEntryIdAction,
   showModalFromQueryAction,
   parallel([
-    [
-      getFeatureFlagFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
-      ),
-      setFeatureFlagFactoryAction(
-        getConstants().ALLOWLIST_FEATURE_FLAGS
-          .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key,
-      ),
-    ],
     [getTrialSessionsOnCaseAction, setTrialSessionsAction],
     [getJudgeForCurrentUserAction, setJudgeUserAction],
     [fetchUserNotificationsSequence],
@@ -60,13 +48,13 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
     [getMessagesForCaseAction],
     [getPendingEmailsOnCaseAction, setPendingEmailsOnCaseAction],
   ]),
-  setCurrentPageAction('CaseDetailInternal'),
+  setupCurrentPageAction('CaseDetailInternal'),
 ]);
 
 const gotoCaseDetailExternal = startWebSocketConnectionSequenceDecorator([
   getCaseAssociationAction,
   setCaseAssociationAction,
-  setCurrentPageAction('CaseDetail'),
+  setupCurrentPageAction('CaseDetail'),
 ]);
 
 const gotoCaseDetailExternalPractitioners =
@@ -75,7 +63,7 @@ const gotoCaseDetailExternalPractitioners =
     setCaseAssociationAction,
     getPendingEmailsOnCaseAction,
     setPendingEmailsOnCaseAction,
-    setCurrentPageAction('CaseDetail'),
+    setupCurrentPageAction('CaseDetail'),
   ]);
 
 const gotoCaseDetailInternalWithNotes =
@@ -87,29 +75,13 @@ const gotoCaseDetailInternalWithNotes =
   ]);
 
 export const gotoCaseDetailSequence = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   clearScreenMetadataAction,
   clearFormAction,
   clearModalAction,
   closeMobileMenuAction,
   setDefaultCaseDetailTabAction,
   setIsPrimaryTabAction,
-  getFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-  ),
-  setFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key,
-  ),
-  getFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key,
-  ),
-  setFeatureFlagFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key,
-  ),
   getCaseAction,
   setCaseAction,
   getConsolidatedCasesByCaseAction,

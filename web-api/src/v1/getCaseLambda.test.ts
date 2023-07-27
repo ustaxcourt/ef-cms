@@ -61,7 +61,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentApplicationContext(user);
 
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
 
@@ -91,7 +91,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = { role: 'roleWithNoPermissions' };
     const applicationContext = createSilentApplicationContext(user);
 
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
 
@@ -128,7 +128,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentApplicationContext(user);
 
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
 
@@ -158,7 +158,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
     const applicationContext = createSilentApplicationContext(user);
 
-    applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+    applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
       .fn()
       .mockResolvedValue(true);
 
@@ -189,7 +189,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
       const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
       const applicationContext = createSilentApplicationContext(user);
 
-      applicationContext.getUseCases().getFeatureFlagValueInteractor = jest
+      applicationContext.getUseCases().getAllFeatureFlagsInteractor = jest
         .fn()
         .mockResolvedValue(isFeatureFlagOn);
 

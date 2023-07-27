@@ -1,5 +1,5 @@
 import * as client from '../../dynamodbClientService';
-import { AdminCreateUserRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { type AdminCreateUserRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { ROLES } from '../../../business/entities/EntityConstants';
 
 const createUserRecords = async ({
