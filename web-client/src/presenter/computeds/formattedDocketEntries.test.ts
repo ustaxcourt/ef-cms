@@ -298,6 +298,49 @@ describe('formattedDocketEntries', () => {
     expect(amat.showLinkToDocument).toEqual(false);
   });
 
+  it('should show document link for an amendment docket entry when the previous docket entry is a brief and filed after visibility policy change date', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              eventCode: 'AMAT',
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isFileAttached: true,
+              previousDocument: {
+                docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
+                documentTitle: 'Seriatim Answering Brief',
+                documentType: 'Seriatim Answering Brief',
+              },
+              servedAt: '2050-05-16T00:00:00.000-04:01',
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
+              documentType: 'Seriatim Answering Brief',
+              eventCode: 'SEAB',
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isFileAttached: true,
+              servedAt: '2050-05-16T00:00:00.000-04:01',
+            },
+          ],
+          docketEntriesEFiledByPractitioner: [mockDocketEntry.docketEntryId],
+        },
+      },
+    });
+
+    const amat = result.formattedDocketEntriesOnDocketRecord.find(
+      document => document.docketEntryId === mockDocketEntry.docketEntryId,
+    );
+
+    expect(amat.showLinkToDocument).toEqual(true);
+  });
+
   describe('sorts docket records', () => {
     let sortedCaseDetail;
 

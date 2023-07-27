@@ -1,20 +1,21 @@
-import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
-import { loginAs, setupTest } from './helpers';
+import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../src/presenter/computeds/Public/publicCaseDetailHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { setTerminalUserIps } from '../integration-tests/helpers';
+import { setupTest } from './helpers';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Amended And Redacted Brief Visibility Journey', () => {
   const cerebralTest = setupTest();
 
-  const formattedDocketEntries = withAppContextDecorator(
-    formattedDocketEntriesComputed,
+  const publicCaseDetailHelper = withAppContextDecorator(
+    publicCaseDetailHelperComputed,
   );
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
-  describe('Unassociated petitioner', () => {
+  describe('Unauthorized Public User', () => {
     const expectedDocketRecordVisibility = {
       1: { eventCode: 'P', showLinkToDocument: false },
       2: { eventCode: 'RQT', showLinkToDocument: false },
@@ -48,44 +49,32 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       30: { eventCode: 'REPL', showLinkToDocument: false },
     };
 
-    loginAs(cerebralTest, 'petitioner1@example.com');
-
     it('view case detail', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
         docketNumber: '105-23',
       });
 
-      const formattedDocketEntriesHelperResult = runCompute(
-        formattedDocketEntries,
-        {
-          state: cerebralTest.getState(),
-        },
+      const publicCaseDetail = runCompute(publicCaseDetailHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      const { formattedDocketEntriesOnDocketRecord } = publicCaseDetail;
+
+      const actualDocketRecordVisibility = {};
+      formattedDocketEntriesOnDocketRecord.forEach(docketEntry => {
+        actualDocketRecordVisibility[docketEntry.index] = {
+          eventCode: docketEntry.eventCode,
+          showLinkToDocument: docketEntry.showLinkToDocument,
+        };
+      });
+
+      expect(actualDocketRecordVisibility).toEqual(
+        expectedDocketRecordVisibility,
       );
-
-      const { formattedDocketEntriesOnDocketRecord } =
-        formattedDocketEntriesHelperResult;
-
-      for (const [
-        docketEntryIndex,
-        { eventCode, showLinkToDocument },
-      ] of Object.entries(expectedDocketRecordVisibility)) {
-        const found = formattedDocketEntriesOnDocketRecord.find(
-          entry => entry.index === +docketEntryIndex,
-        );
-
-        if (!found) {
-          console.log(
-            `count not find a docket entry with index ${docketEntryIndex} on case`,
-          );
-        }
-
-        expect(found.showLinkToDocument).toBe(showLinkToDocument);
-        expect(found.eventCode).toBe(eventCode);
-      }
     });
   });
 
-  describe('Associated private practitioner', () => {
+  describe('Terminal User', () => {
     const expectedDocketRecordVisibility = {
       1: { eventCode: 'P', showLinkToDocument: true },
       2: { eventCode: 'RQT', showLinkToDocument: false },
@@ -93,7 +82,7 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       4: { eventCode: 'AMAT', showLinkToDocument: true },
       5: { eventCode: 'SIAB', showLinkToDocument: true },
       6: { eventCode: 'SIAM', showLinkToDocument: true },
-      7: { eventCode: 'SIOB', showLinkToDocument: true },
+      7: { eventCode: 'SIOB', showLinkToDocument: false },
       8: { eventCode: 'AMAT', showLinkToDocument: true },
       9: { eventCode: 'AMAT', showLinkToDocument: false },
       10: { eventCode: 'REDC', showLinkToDocument: true },
@@ -105,7 +94,7 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       16: { eventCode: 'SIAB', showLinkToDocument: false },
       17: { eventCode: 'AMAT', showLinkToDocument: true },
       18: { eventCode: 'AMAT', showLinkToDocument: true },
-      19: { eventCode: 'REDC', showLinkToDocument: true },
+      19: { eventCode: 'REDC', showLinkToDocument: false },
       20: { eventCode: 'SEOB', showLinkToDocument: true },
       21: { eventCode: 'AMAT', showLinkToDocument: true },
       22: { eventCode: 'AMBR', showLinkToDocument: true },
@@ -119,40 +108,36 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
       30: { eventCode: 'REPL', showLinkToDocument: true },
     };
 
-    loginAs(cerebralTest, 'privatepractitioner1@example.com');
+    beforeAll(async () => {
+      await setTerminalUserIps(['localhost']);
+    });
+
+    afterAll(async () => {
+      await setTerminalUserIps([]);
+    });
 
     it('view case detail', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
         docketNumber: '105-23',
       });
 
-      const formattedDocketEntriesHelperResult = runCompute(
-        formattedDocketEntries,
-        {
-          state: cerebralTest.getState(),
-        },
+      const publicCaseDetail = runCompute(publicCaseDetailHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      const { formattedDocketEntriesOnDocketRecord } = publicCaseDetail;
+
+      const actualDocketRecordVisibility = {};
+      formattedDocketEntriesOnDocketRecord.forEach(docketEntry => {
+        actualDocketRecordVisibility[docketEntry.index] = {
+          eventCode: docketEntry.eventCode,
+          showLinkToDocument: docketEntry.showLinkToDocument,
+        };
+      });
+
+      expect(actualDocketRecordVisibility).toEqual(
+        expectedDocketRecordVisibility,
       );
-
-      const { formattedDocketEntriesOnDocketRecord } =
-        formattedDocketEntriesHelperResult;
-
-      for (const [
-        docketEntryIndex,
-        { eventCode, showLinkToDocument },
-      ] of Object.entries(expectedDocketRecordVisibility)) {
-        const found = formattedDocketEntriesOnDocketRecord.find(
-          entry => entry.index === +docketEntryIndex,
-        );
-
-        if (!found) {
-          console.log(
-            `count not find a docket entry with index ${docketEntryIndex} on case`,
-          );
-        }
-
-        expect(found.showLinkToDocument).toBe(showLinkToDocument);
-        expect(found.eventCode).toBe(eventCode);
-      }
     });
   });
 });
