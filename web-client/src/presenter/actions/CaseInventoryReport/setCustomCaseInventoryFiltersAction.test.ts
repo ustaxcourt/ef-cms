@@ -335,7 +335,7 @@ describe('setCustomCaseInventoryFiltersAction', () => {
       ]);
     });
 
-    it('should negate the high priority when pass in as props', async () => {
+    it('should negate the highPriority filter when passed in as props', async () => {
       const result = await runAction(setCustomCaseInventoryFiltersAction, {
         modules: { presenter },
         props: {
