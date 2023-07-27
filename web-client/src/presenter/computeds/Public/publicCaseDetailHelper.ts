@@ -41,7 +41,7 @@ export const formatDocketEntryOnDocketRecord = (
     visibilityPolicyDateFormatted,
   }: {
     docketEntriesEFiledByPractitioner: string[];
-    entry: RawDocketEntry & { rootDocument: any };
+    entry: any & { rootDocument: any };
     isTerminalUser: boolean;
     visibilityPolicyDateFormatted: string; // ISO Date String
   },
