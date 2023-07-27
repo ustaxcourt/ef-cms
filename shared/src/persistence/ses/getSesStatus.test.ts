@@ -1,6 +1,12 @@
 import { getSesStatus } from './getSesStatus';
+import NodeCache from 'node-cache';
+
+jest.mock('node-cache');
 
 describe('getSesStatus', () => {
+  beforeEach(() => {
+    NodeCache.get = jest.fn().mockReturnValue(undefined);
+  });
   it('should pass when no rejects have occurred', async () => {
     const applicationContext: any = {
       getEmailClient: () => ({
@@ -15,12 +21,12 @@ describe('getSesStatus', () => {
             }),
         }),
       }),
+      logger: { error: () => true, info: () => true },
     };
 
     const status = await getSesStatus({
       applicationContext,
     });
-
     expect(status).toBeTruthy();
   });
 
@@ -38,6 +44,7 @@ describe('getSesStatus', () => {
             }),
         }),
       }),
+      logger: { error: () => true, info: () => true },
     };
 
     const status = await getSesStatus({
