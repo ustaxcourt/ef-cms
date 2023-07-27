@@ -493,3 +493,23 @@ export const sortDocketEntries = (
   }
   return docketEntries.sort(sortUndefined);
 };
+
+export const getFormattedCaseDetail = ({
+  applicationContext,
+  caseDetail,
+  docketRecordSort,
+}) => {
+  const result = {
+    ...applicationContext
+      .getUtilities()
+      .setServiceIndicatorsForCase(caseDetail),
+    ...formatCase(applicationContext, caseDetail),
+  };
+  result.formattedDocketEntries = sortDocketEntries(
+    result.formattedDocketEntries,
+    docketRecordSort,
+  );
+  result.docketRecordSort = docketRecordSort;
+
+  return result;
+};
