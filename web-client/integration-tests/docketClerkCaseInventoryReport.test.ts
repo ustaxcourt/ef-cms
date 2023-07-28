@@ -143,7 +143,6 @@ describe('case inventory report journey', () => {
   it('should navigate to the case inventory report and check for new case', async () => {
     await refreshElasticsearchIndex();
 
-    //New (+1 from initial)
     await cerebralTest.runSequence('openCaseInventoryReportModalSequence');
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
@@ -160,7 +159,6 @@ describe('case inventory report journey', () => {
   });
 
   it('should get the updated new case inventory count for Judge Colvin', async () => {
-    //New, Judge Colvin (same as initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
@@ -175,7 +173,6 @@ describe('case inventory report journey', () => {
   });
 
   it('should get the updated calendared case inventory count for Judge Colvin', async () => {
-    //Calendared, Judge Colvin (+1 from initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.calendared,
@@ -190,7 +187,6 @@ describe('case inventory report journey', () => {
   });
 
   it('should get the updated total calendared case inventory count', async () => {
-    //Calendared (+1 from initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: '',
@@ -205,7 +201,6 @@ describe('case inventory report journey', () => {
   });
 
   it('should get the updated total case inventory count for Judge Colvin', async () => {
-    //Judge Colvin (+1 from initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
