@@ -69,6 +69,7 @@ import { sendSlackNotification } from '../../shared/src/dispatchers/slack/sendSl
 import { sendUpdatePetitionerCasesMessage } from '../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
+import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
 const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -533,3 +534,11 @@ export const createApplicationContext = (
     },
   };
 };
+
+export type IServerApplicationContext = ReturnType<
+  typeof createApplicationContext
+>;
+
+export type IMergeContext =
+  | IServerApplicationContext
+  | ClientApplicationContext;
