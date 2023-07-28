@@ -1,4 +1,7 @@
+const config = require('./webpack.config.lambda');
+
 module.exports = {
+  ...config,
   devtool: false,
   entry: './aws/lambdas/RotateInfoIndices/src/index.js',
   mode: 'production',
