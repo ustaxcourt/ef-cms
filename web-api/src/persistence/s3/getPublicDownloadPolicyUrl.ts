@@ -11,7 +11,7 @@ export const getPublicDownloadPolicyUrl = ({
 }: {
   applicationContext: IApplicationContext;
   key: string;
-}) => {
+}): Promise<{ url: string }> => {
   return new Promise((resolve, reject) => {
     applicationContext.getStorageClient().getSignedUrl(
       'getObject',

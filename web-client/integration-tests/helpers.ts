@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import * as client from '../../shared/src/persistence/dynamodbClientService';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
@@ -58,7 +59,6 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios from 'axios';
@@ -328,8 +328,6 @@ export const getCaseMessagesForCase = cerebralTest => {
   });
 };
 
-const client = require('../../shared/src/persistence/dynamodbClientService');
-
 export const getConnectionsByUserId = userId => {
   return client.query({
     ExpressionAttributeNames: {
@@ -373,6 +371,17 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
       current: isEnabled,
       pk: `${keyPrefix}-opinion-search-enabled`,
       sk: `${keyPrefix}-opinion-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
+export const setTerminalUserIps = (ips: string[]) => {
+  return client.put({
+    Item: {
+      ips,
+      pk: 'allowed-terminal-ips',
+      sk: 'allowed-terminal-ips',
     },
     applicationContext,
   });
