@@ -218,6 +218,7 @@ resource "aws_api_gateway_domain_name" "api_public_custom" {
   }
 }
 
+
 resource "aws_route53_record" "api_public_route53_regional_record" {
   name           = aws_api_gateway_domain_name.api_public_custom.domain_name
   type           = "A"
