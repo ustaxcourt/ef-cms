@@ -4,6 +4,7 @@ import {
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
+  MINUTE_ENTRIES_MAP,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PARTIES_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
@@ -539,8 +540,23 @@ export class DocketEntry extends JoiValidationEntity {
     };
   }
 
+  static isMinuteEntry(rawDocketEntry: RawDocketEntry): boolean {
+    const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
+      key => MINUTE_ENTRIES_MAP[key].eventCode,
+    );
+
+    return MINUTE_ENTRIES_EVENT_CODES.includes(rawDocketEntry.eventCode);
+  }
+
   static isServed(rawDocketEntry: RawDocketEntry): boolean {
     return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
+  }
+
+  static isUnservable(rawDocketEntry: RawDocketEntry): boolean {
+    return (
+      DocketEntry.isMinuteEntry(rawDocketEntry) ||
+      UNSERVABLE_EVENT_CODES.includes(rawDocketEntry.eventCode)
+    );
   }
 }
 

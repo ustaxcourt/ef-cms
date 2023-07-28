@@ -574,6 +574,10 @@ export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
   DOCKET_RECORD_FILTER_OPTIONS,
   ['exhibits'],
 );
+export const FILTER_OPTIONS = Object.values(
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+);
+export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
 // TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {

@@ -5,7 +5,7 @@ import {
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
 import { MOCK_USERS } from '../../../test/mockUsers';
-import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocuments';
+import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
