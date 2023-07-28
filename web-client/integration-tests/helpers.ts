@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import * as client from '../../shared/src/persistence/dynamodbClientService';
+import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
