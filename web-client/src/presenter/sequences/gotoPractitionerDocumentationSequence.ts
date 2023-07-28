@@ -3,10 +3,10 @@ import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAct
 import { getPractitionerDocumentsAction } from '../actions/getPractitionerDocumentsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setPractitionerDocumentsAction } from '../actions/setPractitionerDocumentsAction';
 import { setTabFromPropsAction } from '../actions/setTabFromPropsAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
@@ -21,7 +21,7 @@ export const gotoPractitionerDocumentationSequence = [
         setPractitionerDetailAction,
         getPractitionerDocumentsAction,
         setPractitionerDocumentsAction,
-        setCurrentPageAction('PractitionerInformation'),
+        setupCurrentPageAction('PractitionerInformation'),
       ]),
       unauthorized: [redirectToCognitoAction],
     },

@@ -1,9 +1,13 @@
 import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from './DocketEntry.test';
 import { DocketEntry } from './DocketEntry';
+import {
+  EXTERNAL_DOCUMENT_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+} from './EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('isAutoServed', () => {
-  it('should return true if the documentType is an external document and the documentTitle does not contain Simultaneous', () => {
+  it('should return true if the documentType is an external document and the document is not a Simultaneous Document', () => {
     const docketEntry = new DocketEntry(
       {
         ...A_VALID_DOCKET_ENTRY,
@@ -16,7 +20,7 @@ describe('isAutoServed', () => {
     expect(docketEntry.isAutoServed()).toBeTruthy();
   });
 
-  it('should return true if the documentType is a practitioner association document and the documentTitle does not contain Simultaneous', () => {
+  it('should return true if the documentType is a practitioner association document and the document is not a Simultaneous Document', () => {
     const docketEntry = new DocketEntry(
       {
         ...A_VALID_DOCKET_ENTRY,
@@ -45,11 +49,13 @@ describe('isAutoServed', () => {
     expect(docketEntry.isAutoServed()).toBeTruthy();
   });
 
-  it('should return false if the documentType is an external document and the documentTitle contains Simultaneous', () => {
+  it('should return false if the documentType is an external document and the document title includes "Simultaneous" as these could be modified simultaneous briefs, not directly simultaneous', () => {
     const docketEntry = new DocketEntry(
       {
         ...A_VALID_DOCKET_ENTRY,
-        documentTitle: 'Amended Simultaneous Memoranda of Law',
+        documentTitle: 'Second Amended Simultaneous Reply Brief',
+        documentType: EXTERNAL_DOCUMENT_TYPES[0],
+        eventCode: 'AMAT',
       },
       { applicationContext, petitioners: MOCK_PETITIONERS },
     );
@@ -57,11 +63,12 @@ describe('isAutoServed', () => {
     expect(docketEntry.isAutoServed()).toBeFalsy();
   });
 
-  it('should return false if the documentType is an external document and the documentType contains Simultaneous', () => {
+  it('should return false if the document type includes "Simultaneous"', () => {
     const docketEntry = new DocketEntry(
       {
         ...A_VALID_DOCKET_ENTRY,
-        documentType: 'Amended Simultaneous Memoranda of Law',
+        documentType: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        eventCode: 'SIAB',
       },
       { applicationContext, petitioners: MOCK_PETITIONERS },
     );

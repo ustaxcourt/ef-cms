@@ -71,6 +71,8 @@ import { getCaseDeadlinesLambda } from './caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './cases/getCaseLambda';
+import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
+import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
@@ -94,6 +96,8 @@ import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda
 import { getMessageThreadLambda } from './messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './messages/getMessagesForCaseLambda';
 import { getNotificationsLambda } from './users/getNotificationsLambda';
+import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
+import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
 import { getOutboxMessagesForSectionLambda } from './messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './messages/getOutboxMessagesForUserLambda';
 import { getPractitionerByBarNumberLambda } from './practitioners/getPractitionerByBarNumberLambda';
@@ -105,6 +109,7 @@ import { getPrivatePractitionersBySearchKeyLambda } from './users/getPrivatePrac
 import { getStatusOfVirusScanLambda } from './documents/getStatusOfVirusScanLambda';
 import { getTrialSessionDetailsLambda } from './trialSessions/getTrialSessionDetailsLambda';
 import { getTrialSessionWorkingCopyLambda } from './trialSessions/getTrialSessionWorkingCopyLambda';
+import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
 import { getTrialSessionsForJudgeLambda } from './trialSessions/getTrialSessionsForJudgeLambda';
 import { getTrialSessionsLambda } from './trialSessions/getTrialSessionsLambda';
 import { getUploadPolicyLambda } from './documents/getUploadPolicyLambda';
@@ -144,6 +149,7 @@ import { sealDocketEntryLambda } from './documents/sealDocketEntryLambda';
 import { serveCaseToIrsLambda } from './cases/serveCaseToIrsLambda';
 import { serveCourtIssuedDocumentLambda } from './cases/serveCourtIssuedDocumentLambda';
 import { serveExternallyFiledDocumentLambda } from './documents/serveExternallyFiledDocumentLambda';
+import { serveThirtyDayNoticeLambda } from './trialSessions/serveThirtyDayNoticeLambda';
 import { set } from 'lodash';
 import { setForHearingLambda } from './trialSessions/setForHearingLambda';
 import { setMessageAsReadLambda } from './messages/setMessageAsReadLambda';
@@ -186,12 +192,6 @@ import { getReconciliationReportLambda as v2GetReconciliationReportLambda } from
 import { validatePdfLambda } from './documents/validatePdfLambda';
 import { verifyPendingCaseForUserLambda } from './cases/verifyPendingCaseForUserLambda';
 import { verifyUserPendingEmailLambda } from './users/verifyUserPendingEmailLambda';
-
-import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
-import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
-import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
-import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
-import { getTrialSessionsForJudgeActivityReportLambda } from './reports/getTrialSessionsForJudgeActivityReportLambda';
 import cors from 'cors';
 import express from 'express';
 
@@ -836,6 +836,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
   );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
+  app.post(
+    '/async/trial-sessions/serve-thirty-day-notice',
+    lambdaWrapper(serveThirtyDayNoticeLambda, { isAsync: true }),
+  );
   app.put(
     '/async/trial-sessions',
     lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
