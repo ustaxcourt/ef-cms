@@ -48,7 +48,7 @@ describe('Petitioner creates new account', () => {
     });
   });
 
-  it('petitioner follows verfication link to confirm new account', async () => {
+  it('petitioner follows verification link to confirm new account', async () => {
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: expectedVerificationLink,
     });
