@@ -1,5 +1,4 @@
 /* eslint-disable complexity */
-
 import {
   ALLOWLIST_FEATURE_FLAGS,
   BRIEF_EVENTCODES,
@@ -13,7 +12,6 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const getMeetsPolicyChangeRequirements = (
@@ -21,6 +19,10 @@ const getMeetsPolicyChangeRequirements = (
   visibilityPolicyDateFormatted: string,
   docketEntriesEFiledByPractitioner: string[],
 ) => {
+  if (!POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
+    return false;
+  }
+
   const filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
     entry.docketEntryId,
   );
@@ -30,10 +32,6 @@ const getMeetsPolicyChangeRequirements = (
   );
   const filedAfterPolicyChange =
     entry.filingDate >= visibilityPolicyDateFormatted;
-
-  if (!POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    return false;
-  }
 
   if (isAmendment) {
     const originalDocType = entry.rootDocument.documentType;
@@ -85,9 +83,7 @@ export const formatDocketEntryOnDocketRecord = (
     visibilityPolicyDateFormatted: string; // ISO Date String
   },
 ) => {
-  const record = cloneDeep(entry);
-
-  const isServedDocument = !record.isNotServedDocument;
+  const isServed = !entry.isNotServedDocument;
 
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
     entry,
@@ -95,69 +91,55 @@ export const formatDocketEntryOnDocketRecord = (
     docketEntriesEFiledByPractitioner,
   );
 
-  let canTerminalUserSeeLink =
-    record.isFileAttached &&
-    isServedDocument &&
-    !record.isSealed &&
-    !record.isStricken;
+  const canTerminalUserSeeLink =
+    entry.isFileAttached && isServed && !entry.isSealed && !entry.isStricken;
 
-  let canPublicUserSeeLink =
-    ((record.isCourtIssuedDocument && !record.isStipDecision) ||
+  const canPublicUserSeeLink =
+    ((entry.isCourtIssuedDocument && !entry.isStipDecision) ||
       meetsPolicyChangeRequirements) &&
-    record.isFileAttached &&
-    isServedDocument &&
-    !record.isStricken &&
-    !record.isTranscript &&
-    !record.isSealed &&
-    EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
+    entry.isFileAttached &&
+    isServed &&
+    !entry.isStricken &&
+    !entry.isTranscript &&
+    !entry.isSealed &&
+    EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode) &&
+    entry.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-  const canDisplayDocumentLink = isTerminalUser
+  const showLinkToDocument = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
 
-  const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
-
-  let showLinkToDocument = canDisplayDocumentLink;
-
-  if (!isTerminalUser) {
-    showLinkToDocument =
-      canDisplayDocumentLink &&
-      record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-  }
-
-  if (record.isSealed) {
-    record.sealedToTooltip = applicationContext
+  if (entry.isSealed) {
+    entry.sealedToTooltip = applicationContext
       .getUtilities()
-      .getSealedDocketEntryTooltip(applicationContext, record);
+      .getSealedDocketEntryTooltip(applicationContext, entry);
   }
-
-  record.descriptionDisplay = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(record);
 
   return {
-    action: record.action,
-    createdAtFormatted: record.createdAtFormatted,
-    description: record.description,
-    descriptionDisplay: record.descriptionDisplay,
-    docketEntryId: record.docketEntryId,
-    eventCode: record.eventCode,
-    filedBy: record.filedBy,
-    hasDocument: !record.isMinuteEntry,
-    index: record.index,
-    isPaper: record.isPaper,
-    isSealed: record.isSealed,
-    isStricken: record.isStricken,
-    numberOfPages: record.numberOfPages || 0,
+    action: entry.action,
+    createdAtFormatted: entry.createdAtFormatted,
+    description: entry.description,
+    descriptionDisplay: applicationContext
+      .getUtilities()
+      .getDescriptionDisplay(entry),
+    docketEntryId: entry.docketEntryId,
+    eventCode: entry.eventCode,
+    filedBy: entry.filedBy,
+    hasDocument: !entry.isMinuteEntry,
+    index: entry.index,
+    isPaper: entry.isPaper,
+    isSealed: entry.isSealed,
+    isStricken: entry.isStricken,
+    numberOfPages: entry.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
-    sealedToTooltip: record.sealedToTooltip,
-    servedAtFormatted: record.servedAtFormatted,
-    servedPartiesCode: record.servedPartiesCode,
-    showDocumentDescriptionWithoutLink,
+    sealedToTooltip: entry.sealedToTooltip,
+    servedAtFormatted: entry.servedAtFormatted,
+    servedPartiesCode: entry.servedPartiesCode,
+    showDocumentDescriptionWithoutLink: !showLinkToDocument,
     showLinkToDocument,
-    showNotServed: record.isNotServedDocument,
-    showServed: record.isStatusServed,
-    signatory: record.signatory,
+    showNotServed: entry.isNotServedDocument,
+    showServed: entry.isStatusServed,
+    signatory: entry.signatory,
   };
 };
 
