@@ -14,13 +14,13 @@ export const updateSubmittedCavCaseDetailInStateAction = ({
 
   console.log('before:', submittedAndCavCasesByJudge);
 
-  // if (finalBriefDueDate) {
-  //   store.set(
-  //     state.judgeActivityReportData.submittedAndCavCasesByJudge
-  //       .finalBriefDueDate,
-  //     finalBriefDueDate,
-  //   );
-  // }
+  if (finalBriefDueDate) {
+    store.set(
+      state.judgeActivityReportData.submittedAndCavCasesByJudge[0]
+        .finalBriefDueDate,
+      finalBriefDueDate,
+    );
+  }
 
   if (statusOfMatter) {
     store.set(

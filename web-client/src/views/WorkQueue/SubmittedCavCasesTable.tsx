@@ -116,9 +116,11 @@ export const SubmittedCavCasesTable = connect(
                             month: '',
                             year: '',
                           }}
-                          onChange={updateSubmittedCavCaseDetailSequence({
-                            finalBriefDueDate: e,
-                          })}
+                          onChange={() => {
+                            updateSubmittedCavCaseDetailSequence({
+                              finalBriefDueDate: 'thing',
+                            });
+                          }}
                         />
                       </td>
                       <td colSpan={2}>
