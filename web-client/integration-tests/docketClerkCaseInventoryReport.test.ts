@@ -19,8 +19,21 @@ describe('case inventory report journey', () => {
     cerebralTest.closeSocket();
   });
 
-  const initialCaseInventoryCounts = {};
-  const createdDocketNumbers = [];
+  const initialCaseInventoryCounts: {
+    calendared: number | undefined;
+    calendaredColvin: number | undefined;
+    colvin: number | undefined;
+    new: number | undefined;
+    newColvin: number | undefined;
+  } = {
+    calendared: undefined,
+    calendaredColvin: undefined,
+    colvin: undefined,
+    new: undefined,
+    newColvin: undefined,
+  };
+
+  const createdDocketNumbers: string[] = [];
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   it('cache the initial case inventory counts', async () => {
@@ -127,7 +140,7 @@ describe('case inventory report journey', () => {
     await cerebralTest.runSequence('addCaseToTrialSessionSequence');
   });
 
-  it('get the updated case inventory counts', async () => {
+  it('should navigate to the case inventory report and check for new case', async () => {
     await refreshElasticsearchIndex();
 
     //New (+1 from initial)
@@ -137,49 +150,61 @@ describe('case inventory report journey', () => {
       value: CASE_STATUS_TYPES.new,
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
-    let updatedCaseInventoryCount = cerebralTest.getState(
+    const updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
 
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.new + 1,
     );
+  });
+
+  it('should get the updated new case inventory count for Judge Colvin', async () => {
     //New, Judge Colvin (same as initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: 'Colvin',
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = cerebralTest.getState(
+    const updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.newColvin,
     );
+  });
+
+  it('should get the updated calendared case inventory count for Judge Colvin', async () => {
     //Calendared, Judge Colvin (+1 from initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'status',
       value: CASE_STATUS_TYPES.calendared,
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = cerebralTest.getState(
+    const updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.calendaredColvin + 1,
     );
+  });
+
+  it('should get the updated total calendared case inventory count', async () => {
     //Calendared (+1 from initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
       value: '',
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = cerebralTest.getState(
+    const updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
       initialCaseInventoryCounts.calendared + 1,
     );
+  });
+
+  it('should get the updated total case inventory count for Judge Colvin', async () => {
     //Judge Colvin (+1 from initial)
     await cerebralTest.runSequence('updateScreenMetadataSequence', {
       key: 'associatedJudge',
@@ -190,7 +215,7 @@ describe('case inventory report journey', () => {
       value: '',
     });
     await cerebralTest.runSequence('submitCaseInventoryReportModalSequence');
-    updatedCaseInventoryCount = cerebralTest.getState(
+    const updatedCaseInventoryCount = cerebralTest.getState(
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
