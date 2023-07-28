@@ -16,6 +16,45 @@ import { Get } from 'cerebral';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
+const getMeetsPolicyChangeRequirements = (
+  entry: RawDocketEntry & { rootDocument: RawDocketEntry },
+  visibilityPolicyDateFormatted: string,
+  docketEntriesEFiledByPractitioner: string[],
+) => {
+  const filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+    entry.docketEntryId,
+  );
+
+  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
+    entry.eventCode,
+  );
+  const filedAfterPolicyChange =
+    entry.filingDate >= visibilityPolicyDateFormatted;
+
+  if (!POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
+    return false;
+  }
+
+  if (isAmendment) {
+    const originalDocType = entry.rootDocument.documentType;
+
+    if (isDocumentBriefType(originalDocType)) {
+      return filedAfterPolicyChange && filedByPractitioner;
+    }
+    if (originalDocType === 'Amicus Brief') {
+      return filedAfterPolicyChange;
+    }
+    return false;
+  }
+
+  const isDocketEntryBrief = BRIEF_EVENTCODES.includes(entry.eventCode);
+
+  if (isDocketEntryBrief) {
+    return filedAfterPolicyChange && filedByPractitioner;
+  }
+  return filedAfterPolicyChange;
+};
+
 export const fetchRootDocument = (
   entry: RawDocketEntry,
   docketEntries: RawDocketEntry[],
@@ -50,46 +89,11 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  let filedByPractitioner = false;
-  let meetsPolicyChangeRequirements = false;
-  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
-    entry.eventCode,
+  const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
+    entry,
+    visibilityPolicyDateFormatted,
+    docketEntriesEFiledByPractitioner,
   );
-  const filedAfterPolicyChange =
-    record.filingDate >= visibilityPolicyDateFormatted;
-
-  if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    let isDocketEntryBriefEventCode;
-    const docType = entry.rootDocument.documentType;
-
-    if (isAmendment) {
-      isDocketEntryBriefEventCode = isDocumentBriefType(docType);
-
-      if (isDocketEntryBriefEventCode) {
-        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-          entry.docketEntryId,
-        );
-        meetsPolicyChangeRequirements =
-          filedAfterPolicyChange && filedByPractitioner;
-      } else if (docType === 'Amicus Brief') {
-        meetsPolicyChangeRequirements = filedAfterPolicyChange;
-      } else {
-        meetsPolicyChangeRequirements = false;
-      }
-    } else {
-      isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
-
-      if (isDocketEntryBriefEventCode) {
-        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-          entry.docketEntryId,
-        );
-        meetsPolicyChangeRequirements =
-          filedAfterPolicyChange && filedByPractitioner;
-      } else {
-        meetsPolicyChangeRequirements = filedAfterPolicyChange;
-      }
-    }
-  }
 
   let canTerminalUserSeeLink =
     record.isFileAttached &&
