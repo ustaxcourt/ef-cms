@@ -8,7 +8,7 @@ const getDownloadPolicy = async ({
   applicationContext: IApplicationContext;
   docketNumber: string;
   key: string;
-}) => {
+}): Promise<string> => {
   const {
     data: { url },
   } = await applicationContext
@@ -28,32 +28,16 @@ export const getDocument = async ({
   applicationContext,
   docketNumber,
   key,
-  protocol,
-  useTempBucket = false,
 }: {
   applicationContext: IApplicationContext;
-  docketNumber?: string;
+  docketNumber: string;
   key: string;
-  protocol?: string;
-  useTempBucket?: boolean;
-}) => {
-  if (protocol === 'S3') {
-    const S3 = applicationContext.getStorageClient();
-    return (
-      await S3.getObject({
-        Bucket: useTempBucket
-          ? applicationContext.getTempDocumentsBucketName()
-          : applicationContext.getDocumentsBucketName(),
-        Key: key,
-      }).promise()
-    ).Body;
-  } else {
-    const url = await getDownloadPolicy({
-      applicationContext,
-      docketNumber,
-      key,
-    });
+}): Promise<Blob> => {
+  const url = await getDownloadPolicy({
+    applicationContext,
+    docketNumber,
+    key,
+  });
 
-    return await getPdfFromUrl({ applicationContext, url });
-  }
+  return await getPdfFromUrl({ applicationContext, url });
 };

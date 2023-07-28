@@ -7,9 +7,9 @@ import {
 import { calculateTimeToLive } from './calculateTimeToLive';
 
 const mockNow = '2022-02-01T05:00:00.000Z';
-jest.mock('../../business/utilities/DateHandler', () => {
+jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
-    '../../business/utilities/DateHandler',
+    '@shared/business/utilities/DateHandler',
   );
   return {
     __esModule: true,

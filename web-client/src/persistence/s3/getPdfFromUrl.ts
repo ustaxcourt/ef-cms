@@ -4,7 +4,7 @@ export const getPdfFromUrl = async ({
 }: {
   applicationContext: IApplicationContext;
   url: string;
-}) => {
+}): Promise<Blob> => {
   const { data: fileBlob } = await applicationContext.getHttpClient()({
     method: 'GET',
     responseType: 'blob',
