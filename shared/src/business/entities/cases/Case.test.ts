@@ -17,7 +17,7 @@ import {
 import { Case, getContactPrimary } from './Case';
 import { Contact } from '../contacts/Contact';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import {

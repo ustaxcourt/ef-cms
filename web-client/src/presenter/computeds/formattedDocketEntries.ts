@@ -2,12 +2,11 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import {
-  POLICY_DATE_IMPACTED_EVENTCODES,
-  isDocumentBriefType,
-} from '../../../../shared/src/business/entities/EntityConstants';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
-import { fetchRootDocument } from './Public/publicCaseDetailHelper';
+import {
+  fetchRootDocument,
+  getMeetsPolicyChangeRequirements,
+} from './Public/publicCaseDetailHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -141,14 +140,13 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
-  filedAfterPolicyChange,
   formattedCase,
   isExternalUser,
   permissions,
   userAssociatedWithCase,
+  visibilityPolicyDateFormatted,
 }) => {
   const {
-    BRIEF_EVENTCODES,
     DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
@@ -200,47 +198,11 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
-  let filedByPractitioner = false;
-  let meetsPolicyChangeRequirements = false;
-
-  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
-    entry.eventCode,
+  const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
+    entry,
+    visibilityPolicyDateFormatted,
+    formattedCase.docketEntriesEFiledByPractitioner,
   );
-
-  if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    let isDocketEntryBriefEventCode;
-    const docType = entry.rootDocument.documentType;
-
-    if (isAmendment) {
-      isDocketEntryBriefEventCode = isDocumentBriefType(docType);
-
-      if (isDocketEntryBriefEventCode) {
-        filedByPractitioner =
-          formattedCase.docketEntriesEFiledByPractitioner.includes(
-            entry.docketEntryId,
-          );
-        meetsPolicyChangeRequirements =
-          filedAfterPolicyChange && filedByPractitioner;
-      } else if (docType === 'Amicus Brief') {
-        meetsPolicyChangeRequirements = filedAfterPolicyChange;
-      } else {
-        meetsPolicyChangeRequirements = false;
-      }
-    } else {
-      isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
-
-      if (isDocketEntryBriefEventCode) {
-        filedByPractitioner =
-          formattedCase.docketEntriesEFiledByPractitioner.includes(
-            entry.docketEntryId,
-          );
-        meetsPolicyChangeRequirements =
-          filedAfterPolicyChange && filedByPractitioner;
-      } else {
-        meetsPolicyChangeRequirements = filedAfterPolicyChange;
-      }
-    }
-  }
 
   showDocumentLinks = getShowDocumentViewerLink({
     hasDocument: entry.isFileAttached,
@@ -374,18 +336,15 @@ export const formattedDocketEntries = (
       return { ...entry, rootDocument: fetchRootDocument(entry, array) };
     })
     .map(entry => {
-      const filedAfterPolicyChange =
-        entry.filingDate >= visibilityPolicyDateFormatted;
-
       return getFormattedDocketEntry({
         applicationContext,
         docketNumber,
         entry,
-        filedAfterPolicyChange,
         formattedCase: result,
         isExternalUser,
         permissions,
         userAssociatedWithCase,
+        visibilityPolicyDateFormatted,
       });
     });
 

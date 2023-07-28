@@ -7,14 +7,16 @@ import {
   MOTION_EVENT_CODES,
   ORDER_EVENT_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
+  PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   isDocumentBriefType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const getMeetsPolicyChangeRequirements = (
+export const getMeetsPolicyChangeRequirements = (
   entry: RawDocketEntry & { rootDocument: RawDocketEntry },
   visibilityPolicyDateFormatted: string,
   docketEntriesEFiledByPractitioner: string[],
@@ -83,7 +85,8 @@ export const formatDocketEntryOnDocketRecord = (
     visibilityPolicyDateFormatted: string; // ISO Date String
   },
 ) => {
-  const isServed = !entry.isNotServedDocument;
+  const isServed =
+    DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
     entry,
@@ -143,20 +146,51 @@ export const formatDocketEntryOnDocketRecord = (
   };
 };
 
+const filterDocketEntries = (
+  docketEntries: any[],
+  filter: PUBLIC_DOCKET_RECORD_FILTER,
+) => {
+  switch (filter) {
+    case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions:
+      return docketEntries.filter(entry =>
+        MOTION_EVENT_CODES.includes(entry.eventCode),
+      );
+    case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders:
+      return docketEntries.filter(entry =>
+        ORDER_EVENT_CODES.includes(entry.eventCode),
+      );
+    case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments:
+    default:
+      return docketEntries;
+  }
+};
+
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const publicCase = get(state.caseDetail);
+  const {
+    canAllowPrintableDocketRecord,
+    docketEntries,
+    docketEntriesEFiledByPractitioner,
+    isSealed,
+  } = get(state.caseDetail);
+
   const isTerminalUser = get(state.isTerminalUser);
+
   const { docketRecordFilter } = get(state.sessionMetadata);
 
-  const formatCaseDetail = caseToFormat => ({
-    ...caseToFormat,
-    isCaseSealed: !!caseToFormat.isSealed,
-  });
+  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+    ],
+  );
+  const visibilityPolicyDateFormatted = applicationContext
+    .getUtilities()
+    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
+    .toISO();
 
-  const formattedDocketRecordsWithDocuments = publicCase.docketEntries.map(d =>
+  const formattedDocketRecordsWithDocuments = docketEntries.map(d =>
     applicationContext.getUtilities().formatDocketEntry(applicationContext, d),
   );
 
@@ -164,53 +198,27 @@ export const publicCaseDetailHelper = (
     .getUtilities()
     .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
 
-  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
-    ],
-  );
-
-  const visibilityPolicyDateFormatted = applicationContext
-    .getUtilities()
-    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
-    .toISO();
-
   let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords
     .map((entry: any, _, array) => {
       return { ...entry, rootDocument: fetchRootDocument(entry, array) };
     })
     .map(entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
-        docketEntriesEFiledByPractitioner:
-          publicCase.docketEntriesEFiledByPractitioner,
+        docketEntriesEFiledByPractitioner,
         entry,
         isTerminalUser,
         visibilityPolicyDateFormatted,
       });
     });
 
-  if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
-    formattedDocketEntriesOnDocketRecord =
-      formattedDocketEntriesOnDocketRecord.filter(entry =>
-        ORDER_EVENT_CODES.includes(entry.eventCode),
-      );
-  } else if (
-    docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions
-  ) {
-    formattedDocketEntriesOnDocketRecord =
-      formattedDocketEntriesOnDocketRecord.filter(entry =>
-        MOTION_EVENT_CODES.includes(entry.eventCode),
-      );
-  }
-
-  const formattedCaseDetail = formatCaseDetail(publicCase);
-
-  const showPrintableDocketRecord =
-    formattedCaseDetail.canAllowPrintableDocketRecord;
+  formattedDocketEntriesOnDocketRecord = filterDocketEntries(
+    formattedDocketEntriesOnDocketRecord,
+    docketRecordFilter,
+  );
 
   return {
-    formattedCaseDetail,
     formattedDocketEntriesOnDocketRecord,
-    showPrintableDocketRecord,
+    isCaseSealed: !!isSealed,
+    showPrintableDocketRecord: canAllowPrintableDocketRecord,
   };
 };

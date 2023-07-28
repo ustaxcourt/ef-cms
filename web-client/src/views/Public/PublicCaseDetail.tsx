@@ -7,13 +7,13 @@ import React from 'react';
 
 export const PublicCaseDetail = connect(
   {
-    formattedCaseDetail: state.publicCaseDetailHelper.formattedCaseDetail,
+    isCaseSealed: state.publicCaseDetailHelper.isCaseSealed,
   },
-  function PublicCaseDetail({ formattedCaseDetail }) {
+  function PublicCaseDetail({ isCaseSealed }) {
     return (
       <>
         <PublicCaseDetailHeader />
-        {!formattedCaseDetail.isCaseSealed && (
+        {!isCaseSealed && (
           <>
             <PublicCaseDetailSubnavTabs />
             <section className="usa-section grid-container">
@@ -22,7 +22,7 @@ export const PublicCaseDetail = connect(
           </>
         )}
 
-        {formattedCaseDetail.isCaseSealed && (
+        {isCaseSealed && (
           <>
             <div className="grid-container">
               <p className="margin-top-5 margin-bottom-5">
