@@ -1,5 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 
 /**
  * Navigate to the local page for creating a new account
@@ -7,5 +7,5 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
  */
 export const goToCreateAccountLocalSequence = [
   clearFormAction,
-  setCurrentPageAction('CreateNewAccountLocal'),
+  setupCurrentPageAction('CreateNewAccountLocal'),
 ];
