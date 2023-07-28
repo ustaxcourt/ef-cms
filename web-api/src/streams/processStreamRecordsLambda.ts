@@ -1,7 +1,4 @@
-import {
-  batchGet,
-  getTableName,
-} from '../../../shared/src/persistence/dynamodbClientService';
+import { batchGet, getTableName } from '../persistence/dynamodbClientService';
 import { createApplicationContext } from '../applicationContext';
 import { uniq } from 'lodash';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
