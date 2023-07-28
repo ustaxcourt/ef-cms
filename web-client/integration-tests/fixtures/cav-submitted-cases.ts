@@ -85,8 +85,8 @@ const rqtDocketEntry = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const submittedRawCases: RawCase[] = [];
-const cavRawCases: RawCase[] = [];
+const submittedRawCases = [];
+const cavRawCases = [];
 const rqtRawDocketEntries = [];
 
 const formatNumber = numberSuffix =>
@@ -196,11 +196,115 @@ const colvinChambers = {
 };
 
 export const seedData = [
-  ...submittedRawCases,
-  ...cavRawCases,
-  ...rqtRawDocketEntries,
+  // ...submittedRawCases,
+  // ...cavRawCases,
+  // ...rqtRawDocketEntries,
   judgeColvinUser,
   docketclerk,
   petitionsClerk,
   colvinChambers,
-];
+  // {
+  //   entityName: 'User',
+  //   email: 'judgecolvin@example.com',
+  //   judgeFullName: 'John O. Colvin',
+  //   judgeTitle: 'Judge',
+  //   name: 'Colvin',
+  //   pk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+  //   role: 'judge',
+  //   section: 'colvinsChambers',
+  //   sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+  //   userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+  // },
+  {
+    email: 'judgeashford@example.com',
+    entityName: 'User',
+    judgeFullName: 'Tamara W. Ashford',
+    judgeTitle: 'Judge',
+    name: 'Ashford',
+    pk: 'user|dabbad01-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'ashfordsChambers',
+    sk: 'user|dabbad01-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    email: 'judgebuch@example.com',
+    entityName: 'User',
+    judgeFullName: 'Ronald L. Buch',
+    judgeTitle: 'Judge',
+    name: 'Buch',
+    pk: 'user|dabbad02-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'buchsChambers',
+    sk: 'user|dabbad02-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    email: 'judgecarluzzo@example.com',
+    entityName: 'User',
+    judgeFullName: 'Lewis R. Carluzzo',
+    judgeTitle: 'Chief Special Trial Judge',
+    name: 'Carluzzo',
+    pk: 'user|dabbad03-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'carluzzosChambers',
+    sk: 'user|dabbad03-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    email: 'judgecohen@example.com',
+    entityName: 'User',
+    judgeFullName: 'Mary Ann Cohen',
+    judgeTitle: 'Judge',
+    name: 'Cohen',
+    pk: 'user|dabbad04-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'cohensChambers',
+    sk: 'user|dabbad04-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    email: 'judgegustafson@example.com',
+    entityName: 'User',
+    judgeFullName: 'David Gustafson',
+    judgeTitle: 'Judge',
+    name: 'Gustafson',
+    pk: 'user|dabbad05-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'gustafsonsChambers',
+    sk: 'user|dabbad05-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    email: 'judgepugh@example.com',
+    entityName: 'User',
+    judgeFullName: 'Cary Douglas Pugh',
+    judgeTitle: 'Judge',
+    name: 'Pugh',
+    pk: 'user|dabbad06-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'pughsChambers',
+    sk: 'user|dabbad06-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad06-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    email: 'judgeurda@example.com',
+    entityName: 'User',
+    judgeFullName: 'Patrick J. Urda',
+    judgeTitle: 'Judge',
+    name: 'Urda',
+    pk: 'user|dabbad0a-18d0-43ec-bafb-654e83405416',
+    role: 'judge',
+    section: 'urdasChambers',
+    sk: 'user|dabbad0a-18d0-43ec-bafb-654e83405416',
+    userId: 'dabbad0a-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    pk: 'section|colvinsChambers',
+    sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+  },
+  {
+    pk: 'section|judge',
+    sk: 'user|dabbad00-18d0-43ec-bafb-654e83405416',
+  },
+].concat(submittedRawCases, cavRawCases, rqtRawDocketEntries);
