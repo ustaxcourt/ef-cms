@@ -14,7 +14,7 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const getMeetsPolicyChangeRequirements = (
+export const getMeetsPolicyChangeRequirements = (
   entry: RawDocketEntry & { rootDocument: RawDocketEntry },
   visibilityPolicyDateFormatted: string,
   docketEntriesEFiledByPractitioner: string[],
