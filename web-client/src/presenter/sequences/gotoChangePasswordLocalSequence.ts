@@ -1,5 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 
 /**
  * Navigate to the local page for creating new password when required by cognito, locally
@@ -7,5 +7,5 @@ import { setCurrentPageAction } from '../actions/setCurrentPageAction';
  */
 export const gotoChangePasswordLocalSequence = [
   clearFormAction,
-  setCurrentPageAction('ChangePasswordLocal'),
+  setupCurrentPageAction('ChangePasswordLocal'),
 ];
