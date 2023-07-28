@@ -2,6 +2,7 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
   BRIEF_EVENTCODES,
+  COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   MOTION_EVENT_CODES,
@@ -9,21 +10,26 @@ import {
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  STIPULATED_DECISION_EVENT_CODE,
   isDocumentBriefType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getMeetsPolicyChangeRequirements = (
   entry: RawDocketEntry & { rootDocument: RawDocketEntry },
-  visibilityPolicyDateFormatted: string,
+  visibilityPolicyDate: string,
   docketEntriesEFiledByPractitioner: string[],
 ) => {
   if (!POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
     return false;
   }
+
+  const visibilityPolicyDateFormatted =
+    prepareDateFromString(visibilityPolicyDate).toISO();
 
   const filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
     entry.docketEntryId,
@@ -77,20 +83,44 @@ export const formatDocketEntryOnDocketRecord = (
     docketEntriesEFiledByPractitioner,
     entry,
     isTerminalUser,
-    visibilityPolicyDateFormatted,
+    visibilityPolicyDate,
   }: {
     docketEntriesEFiledByPractitioner: string[];
     entry: any & { rootDocument: any };
     isTerminalUser: boolean;
-    visibilityPolicyDateFormatted: string; // ISO Date String
+    visibilityPolicyDate: string; // ISO Date String
   },
 ) => {
   const isServed =
     DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
+  ///
+  const isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
+    ({ eventCode }) => eventCode,
+  ).includes(entry.eventCode);
+
+  let createdAtFormatted;
+  if (
+    isCourtIssuedDocument &&
+    !DocketEntry.isServed(entry) &&
+    !DocketEntry.isUnservable(entry) &&
+    entry.isOnDocketRecord
+  ) {
+    entry.createdAtFormatted = undefined;
+  } else if (entry.isOnDocketRecord) {
+    createdAtFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(entry.filingDate, 'MMDDYY');
+  } else {
+    createdAtFormatted = applicationContext
+      .getUtilities()
+      .formatDateString(entry.createdAt, 'MMDDYY');
+  }
+  ///
+
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
     entry,
-    visibilityPolicyDateFormatted,
+    visibilityPolicyDate,
     docketEntriesEFiledByPractitioner,
   );
 
@@ -98,7 +128,8 @@ export const formatDocketEntryOnDocketRecord = (
     entry.isFileAttached && isServed && !entry.isSealed && !entry.isStricken;
 
   const canPublicUserSeeLink =
-    ((entry.isCourtIssuedDocument && !entry.isStipDecision) ||
+    ((isCourtIssuedDocument &&
+      entry.eventCode !== STIPULATED_DECISION_EVENT_CODE) ||
       meetsPolicyChangeRequirements) &&
     entry.isFileAttached &&
     isServed &&
@@ -120,7 +151,7 @@ export const formatDocketEntryOnDocketRecord = (
 
   return {
     action: entry.action,
-    createdAtFormatted: entry.createdAtFormatted,
+    createdAtFormatted,
     description: entry.description,
     descriptionDisplay: applicationContext
       .getUtilities()
@@ -128,6 +159,7 @@ export const formatDocketEntryOnDocketRecord = (
     docketEntryId: entry.docketEntryId,
     eventCode: entry.eventCode,
     filedBy: entry.filedBy,
+    filingDate: entry.filingDate,
     hasDocument: !entry.isMinuteEntry,
     index: entry.index,
     isPaper: entry.isPaper,
@@ -140,8 +172,8 @@ export const formatDocketEntryOnDocketRecord = (
     servedPartiesCode: entry.servedPartiesCode,
     showDocumentDescriptionWithoutLink: !showLinkToDocument,
     showLinkToDocument,
-    showNotServed: entry.isNotServedDocument,
-    showServed: entry.isStatusServed,
+    showNotServed: !DocketEntry.isServed(entry),
+    showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
   };
 };
@@ -180,25 +212,13 @@ export const publicCaseDetailHelper = (
 
   const { docketRecordFilter } = get(state.sessionMetadata);
 
-  const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
+  const visibilityPolicyDate = get(
     state.featureFlags[
       ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ],
   );
-  const visibilityPolicyDateFormatted = applicationContext
-    .getUtilities()
-    .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
-    .toISO();
 
-  const formattedDocketRecordsWithDocuments = docketEntries.map(d =>
-    applicationContext.getUtilities().formatDocketEntry(applicationContext, d),
-  );
-
-  const sortedFormattedDocketRecords = applicationContext
-    .getUtilities()
-    .sortDocketEntries(formattedDocketRecordsWithDocuments, 'byDate');
-
-  let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords
+  let formattedDocketEntriesOnDocketRecord = docketEntries
     .map((entry: any, _, array) => {
       return { ...entry, rootDocument: fetchRootDocument(entry, array) };
     })
@@ -207,12 +227,16 @@ export const publicCaseDetailHelper = (
         docketEntriesEFiledByPractitioner,
         entry,
         isTerminalUser,
-        visibilityPolicyDateFormatted,
+        visibilityPolicyDate,
       });
     });
 
+  const sortedFormattedDocketRecords = applicationContext
+    .getUtilities()
+    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, 'byDate');
+
   formattedDocketEntriesOnDocketRecord = filterDocketEntries(
-    formattedDocketEntriesOnDocketRecord,
+    sortedFormattedDocketRecords,
     docketRecordFilter,
   );
 
