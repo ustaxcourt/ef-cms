@@ -79,7 +79,7 @@ import {
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
-} from '../../persistence/dynamo/chambers/getJudgesChambers';
+} from '../../../../web-client/src/business/chambers/getJudgesChambers';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -91,8 +91,8 @@ import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
-import { getItem } from '../../persistence/localStorage/getItem';
-import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
+import { getItem } from '@web-client/persistence/localStorage/getItem';
+import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '../utilities/getTextByCount';
 import { getTrialSessionById } from '../../persistence/dynamo/trialSessions/getTrialSessionById';
@@ -102,15 +102,15 @@ import { getWorkItemById as getWorkItemByIdPersistence } from '../../persistence
 import { incrementCounter } from '../../persistence/dynamo/helpers/incrementCounter';
 import { putWorkItemInOutbox } from '../../persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
-import { removeItem } from '../../persistence/localStorage/removeItem';
-import { replaceBracketed } from '../utilities/replaceBracketed';
+import { removeItem } from '@web-client/persistence/localStorage/removeItem';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { saveWorkItem } from '../../persistence/dynamo/workitems/saveWorkItem';
 import { sealCaseInteractor } from '../useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from '../useCases/docketEntry/sealDocketEntryInteractor';
 import { serveCaseDocument } from '../utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '../utilities/setConsolidationFlagsForDisplay';
-import { setItem } from '../../persistence/localStorage/setItem';
-import { setNoticesForCalendaredTrialSessionInteractor } from '../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor';
+import { setItem } from '@web-client/persistence/localStorage/setItem';
+import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setPdfFormFields } from '../useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocument';

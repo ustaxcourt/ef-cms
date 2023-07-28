@@ -1,6 +1,6 @@
-import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocument } from './getDocument';
-import { getPdfFromUrl } from './getPdfFromUrl';
+import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 
 const BLOB_DATA = 'abc';
 jest.mock('./getPdfFromUrl', () => ({

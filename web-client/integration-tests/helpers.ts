@@ -34,7 +34,7 @@ import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCa
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
 import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
-import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
 import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
 import {
