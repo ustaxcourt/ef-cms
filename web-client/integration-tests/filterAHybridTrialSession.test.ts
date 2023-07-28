@@ -13,10 +13,6 @@ import { petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases } from './j
 describe('Filter A Hybrid Trial Session', () => {
   const cerebralTest = setupTest();
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
-
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
   const overrides = {
     preferredTrialCity: trialLocation,
@@ -25,12 +21,18 @@ describe('Filter A Hybrid Trial Session', () => {
   const caseId = 0;
   const caseCount = 4;
 
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
   const makeCaseReadyForTrial = (testSession, id, caseOverrides) => {
     loginAs(testSession, 'petitioner@example.com');
     it(`Create case ${id}`, async () => {
-      const caseDetail = await uploadPetition(testSession, caseOverrides);
-      expect(caseDetail.docketNumber).toBeDefined();
-      testSession.docketNumber = caseDetail.docketNumber;
+      const { docketNumber } = await uploadPetition(testSession, caseOverrides);
+
+      expect(docketNumber).toBeDefined();
+
+      testSession.docketNumber = docketNumber;
     });
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');
