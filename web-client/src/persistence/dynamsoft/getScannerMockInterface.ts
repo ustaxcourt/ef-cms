@@ -1,4 +1,7 @@
-import { image1, image2 } from '../../business/useCases/scannerMockFiles';
+import {
+  image1,
+  image2,
+} from '../../../../shared/src/business/useCases/scannerMockFiles';
 
 let scanBuffer = [];
 
