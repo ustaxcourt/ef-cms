@@ -1,7 +1,7 @@
 import { getPractitionerDetailAction } from '../actions/getPractitionerDetailAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setPractitionerDetailOnFormAction } from '../actions/Practitioners/setPractitionerDetailOnFormAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoEditPractitionerUserSequence =
@@ -9,5 +9,5 @@ export const gotoEditPractitionerUserSequence =
     getPractitionerDetailAction,
     setPractitionerDetailAction,
     setPractitionerDetailOnFormAction,
-    setCurrentPageAction('EditPractitionerUser'),
+    setupCurrentPageAction('EditPractitionerUser'),
   ]);

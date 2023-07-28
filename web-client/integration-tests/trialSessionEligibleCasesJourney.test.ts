@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CHIEF_JUDGE,
+  SESSION_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
@@ -19,10 +20,10 @@ describe('Trial Session Eligible Cases Journey', () => {
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation,
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

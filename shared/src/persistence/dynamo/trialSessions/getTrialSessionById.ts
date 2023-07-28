@@ -1,3 +1,4 @@
+import { RawTrialSession } from '../../../business/entities/trialSessions/TrialSession';
 import { get } from '../../dynamodbClientService';
 
 export const getTrialSessionById = ({
@@ -6,7 +7,7 @@ export const getTrialSessionById = ({
 }: {
   applicationContext: IApplicationContext;
   trialSessionId: string;
-}) =>
+}): Promise<RawTrialSession> =>
   get({
     Key: {
       pk: `trial-session|${trialSessionId}`,

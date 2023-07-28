@@ -1,27 +1,43 @@
+import { Case } from '../entities/cases/Case';
 import { SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
 import { setServiceIndicatorsForCase } from './setServiceIndicatorsForCase';
 
-/**
- * aggregatePartiesForService
- * @param {object} caseEntity the case entity with parties to be served
- * @returns {object} the aggregated contact information for all parties,
- * electronically-served parties, and paper-served parties
- */
-export const aggregatePartiesForService = caseEntity => {
-  const formattedCase = setServiceIndicatorsForCase(caseEntity);
-  const parties = [
-    ...formattedCase.petitioners,
-    ...formattedCase.privatePractitioners,
-    ...formattedCase.irsPractitioners,
-  ];
+export const aggregatePartiesForService = (
+  rawCase: RawCase,
+  options: { onlyProSePetitioners?: boolean } = { onlyProSePetitioners: false },
+): {
+  all: any[];
+  paper: any[];
+  electronic: Array<{ email: string; name: string }>;
+} => {
+  const formattedCase = setServiceIndicatorsForCase(rawCase);
 
-  const aggregated = {
+  let allParties;
+
+  if (options.onlyProSePetitioners) {
+    allParties = formattedCase.petitioners.filter(
+      petitioner =>
+        !Case.isPetitionerRepresented(rawCase, petitioner.contactId),
+    );
+  } else {
+    allParties = [
+      ...formattedCase.petitioners,
+      ...formattedCase.privatePractitioners,
+      ...formattedCase.irsPractitioners,
+    ];
+  }
+
+  const aggregated: {
+    all: any[];
+    paper: any[];
+    electronic: Array<{ email: string; name: string }>;
+  } = {
     all: [],
     electronic: [],
     paper: [],
   };
 
-  parties.forEach(party => {
+  allParties.forEach(party => {
     if (
       party &&
       party.email &&
@@ -41,6 +57,7 @@ export const aggregatePartiesForService = caseEntity => {
       });
     }
   });
+
   aggregated.all = Array.prototype.concat(
     aggregated.electronic,
     aggregated.paper,

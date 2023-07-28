@@ -13,10 +13,9 @@ import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petiti
 describe('Docket Clerk Views Trial Session Tabs', () => {
   const cerebralTest = setupTest();
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
+  cerebralTest.casesReadyForTrial = [];
 
+  const createdDocketNumbers = [];
   const caseCount = 2;
   const trialLocation = `Albuquerque, New Mexico, ${Date.now()}`;
   const overrides = {
@@ -24,9 +23,9 @@ describe('Docket Clerk Views Trial Session Tabs', () => {
     trialLocation,
   };
 
-  cerebralTest.casesReadyForTrial = [];
-
-  const createdDocketNumbers = [];
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   const makeCaseReadyForTrial = (testSession, id, caseOverrides) => {
     loginAs(testSession, 'petitioner@example.com');

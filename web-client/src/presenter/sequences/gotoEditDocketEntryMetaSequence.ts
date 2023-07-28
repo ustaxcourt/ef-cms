@@ -13,18 +13,18 @@ import { initCourtIssuedOrderFormPropsFromEventCodeAction } from '../actions/Edi
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultEditDocketEntryMetaTabAction } from '../actions/setDefaultEditDocketEntryMetaTabAction';
 import { setDocketEntryMetaFormForEditAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaFormForEditAction';
 import { setDocketEntryMetaTypeAction } from '../actions/EditDocketRecordEntry/setDocketEntryMetaTypeAction';
 import { setUsersByKeyAction } from '../actions/setUsersByKeyAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDocketEntryWizardDataAction } from '../actions/DocketEntry/updateDocketEntryWizardDataAction';
 
 export const gotoEditDocketEntryMeta =
   startWebSocketConnectionSequenceDecorator([
-    setCurrentPageAction('Interstitial'),
+    setupCurrentPageAction('Interstitial'),
     stopShowValidationAction,
     clearScansAction,
     clearFormAction,
@@ -48,7 +48,7 @@ export const gotoEditDocketEntryMeta =
       noDocument: [],
     },
     setDefaultEditDocketEntryMetaTabAction,
-    setCurrentPageAction('EditDocketEntryMeta'),
+    setupCurrentPageAction('EditDocketEntryMeta'),
   ]);
 
 export const gotoEditDocketEntryMetaSequence = [
