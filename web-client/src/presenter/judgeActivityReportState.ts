@@ -10,6 +10,7 @@ export type JudgeActivityReportFilters = {
   judgeId?: string;
   judges?: string[];
   clientConnectionId?: string;
+  judgeNameToDisplayForHeader?: string;
 };
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
