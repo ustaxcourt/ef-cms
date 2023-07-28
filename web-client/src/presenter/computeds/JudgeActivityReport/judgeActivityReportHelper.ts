@@ -23,7 +23,7 @@ export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeName, startDate } = get(
+  const { endDate, judgeNameToDisplayForHeader, startDate } = get(
     state.judgeActivityReport.filters,
   );
 
@@ -75,7 +75,7 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader: string = `${judgeName} ${currentDate}`;
+  const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
