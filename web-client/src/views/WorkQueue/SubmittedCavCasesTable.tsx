@@ -75,10 +75,6 @@ export const SubmittedCavCasesTable = connect(
             {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
               .sort(submittedCavCasesTableHelper.daysInStatusSortHandler)
               .map(formattedCase => {
-                console.log(
-                  'in submittedtable.tsx',
-                  judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge,
-                );
                 return (
                   <React.Fragment key={`info-${formattedCase.docketNumber}`}>
                     <tr>
@@ -121,7 +117,7 @@ export const SubmittedCavCasesTable = connect(
                             year: '',
                           }}
                           onChange={updateSubmittedCavCaseDetailSequence({
-                            finalBriefDueDate: { ...values },
+                            finalBriefDueDate: e,
                           })}
                         />
                       </td>
