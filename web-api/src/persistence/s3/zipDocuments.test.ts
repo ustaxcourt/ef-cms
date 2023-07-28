@@ -5,12 +5,13 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { zipDocuments } from './zipDocuments';
 import fs from 'fs';
 import path from 'path';
-const testAssetsPath = path.join(__dirname, '../../../test-assets/');
 
 describe('zipDocuments', () => {
-  const testAsset = name => {
-    return fs.readFileSync(testAssetsPath + name);
-  };
+  const samplePdfPath = path.join(
+    __dirname,
+    '../../../../shared/test-assets/sample.pdf',
+  );
+  const samplePdf = fs.readFileSync(samplePdfPath);
 
   beforeAll(() => {
     const s3ClientMock = {
@@ -25,7 +26,7 @@ describe('zipDocuments', () => {
     const zipProcess = zipDocuments({
       applicationContext,
       extraFileNames: ['Test File Non - S3'],
-      extraFiles: [testAsset('sample.pdf')],
+      extraFiles: [samplePdf],
       fileNames: ['Test File 1', 'Test File 2'],
       s3Ids: ['123', '456'],
       zipName: 'TestZip.zip',

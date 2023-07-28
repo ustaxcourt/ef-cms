@@ -1,7 +1,7 @@
 import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { incrementCounter } from './dynamo/helpers/incrementCounter';
 import { updateConsistent } from './dynamodbClientService';
-jest.mock('../../../shared/src/persistence/dynamodbClientService');
+jest.mock('@web-api/persistence/dynamodbClientService');
 
 describe('awsDynamoPersistence', function () {
   beforeEach(() => {

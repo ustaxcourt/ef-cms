@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash';
 
-const getAssociatedJudge = (theCase, caseAndCaseItems) => {
+export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
   if (theCase && theCase.judgeUserId) {
     const associatedJudgeId = caseAndCaseItems.find(
       item => item.sk === `user|${theCase.judgeUserId}`,
@@ -11,30 +11,31 @@ const getAssociatedJudge = (theCase, caseAndCaseItems) => {
   }
 };
 
-const isArchivedCorrespondenceItem = item =>
+export const isArchivedCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && item.archived;
 
-const isArchivedDocketEntryItem = item =>
+export const isArchivedDocketEntryItem = item =>
   item.sk.startsWith('docket-entry|') && item.archived;
 
-const isCaseItem = item => item.sk.startsWith('case|');
+export const isCaseItem = item => item.sk.startsWith('case|');
 
-const isCorrespondenceItem = item =>
+export const isCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && !item.archived;
 
-const isDocketEntryItem = item =>
+export const isDocketEntryItem = item =>
   item.sk.startsWith('docket-entry|') && !item.archived;
 
-const isWorkItemItem = item => item.sk.startsWith('work-item|');
+export const isWorkItemItem = item => item.sk.startsWith('work-item|');
 
-const isHearingItem = item => item.sk.startsWith('hearing|');
+export const isHearingItem = item => item.sk.startsWith('hearing|');
 
-const isIrsPractitionerItem = item => item.sk.startsWith('irsPractitioner|');
+export const isIrsPractitionerItem = item =>
+  item.sk.startsWith('irsPractitioner|');
 
-const isPrivatePractitionerItem = item =>
+export const isPrivatePractitionerItem = item =>
   item.sk.startsWith('privatePractitioner|');
 
-const aggregateCaseItems = caseAndCaseItems => {
+export const aggregateCaseItems = caseAndCaseItems => {
   let archivedCorrespondences = [];
   let archivedDocketEntries = [];
   let caseRecords = [];
@@ -104,18 +105,4 @@ const aggregateCaseItems = caseAndCaseItems => {
     irsPractitioners,
     privatePractitioners,
   };
-};
-
-export {
-  aggregateCaseItems,
-  getAssociatedJudge,
-  isArchivedDocketEntryItem,
-  isArchivedCorrespondenceItem,
-  isCaseItem,
-  isCorrespondenceItem,
-  isDocketEntryItem,
-  isHearingItem,
-  isIrsPractitionerItem,
-  isPrivatePractitionerItem,
-  isWorkItemItem,
 };
