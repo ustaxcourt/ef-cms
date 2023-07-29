@@ -106,7 +106,6 @@ export const SubmittedCavCasesTable = connect(
                         )}
                       </td>
                       <td>
-                        {/* TODO: wire up / figure out the saving */}
                         <DateInput
                           className={'margin-bottom-0'}
                           id={'final-brief-due-date-date-picker'}
@@ -118,13 +117,13 @@ export const SubmittedCavCasesTable = connect(
                           }}
                           onChange={() => {
                             updateSubmittedCavCaseDetailSequence({
+                              // TODO: fix this
                               finalBriefDueDate: 'thing',
                             });
                           }}
                         />
                       </td>
                       <td colSpan={2}>
-                        {/* TODO: update persistence on change */}
                         <BindedSelect
                           aria-describedby="status-of-matter"
                           bind=""
