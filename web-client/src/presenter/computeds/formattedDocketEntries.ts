@@ -1,5 +1,13 @@
+/* eslint-disable complexity */
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { Get } from 'cerebral';
+import {
+  POLICY_DATE_IMPACTED_EVENTCODES,
+  isDocumentBriefType,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { documentMeetsAgeRequirements } from '../../../../shared/src/business/utilities/getFormattedCaseDetail';
+import { fetchRootDocument } from './Public/publicCaseDetailHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
@@ -192,19 +200,47 @@ export const getFormattedDocketEntry = ({
     .map(k => INITIAL_DOCUMENT_TYPES[k].documentType)
     .includes(entry.documentType);
 
-  let filedByPractitioner: boolean = false;
-  let requiresPractitionerCheck: boolean = false;
-  if (BRIEF_EVENTCODES.includes(entry.eventCode)) {
-    requiresPractitionerCheck = true;
-    filedByPractitioner =
-      formattedCase.docketEntriesEFiledByPractitioner.includes(
-        entry.docketEntryId,
-      );
-  }
+  let filedByPractitioner = false;
+  let meetsPolicyChangeRequirements = false;
 
-  const meetsPolicyChangeRequirements =
-    filedAfterPolicyChange &&
-    (requiresPractitionerCheck ? filedByPractitioner : true);
+  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
+    entry.eventCode,
+  );
+
+  if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
+    let isDocketEntryBriefEventCode;
+    const docType = entry.rootDocument.documentType;
+
+    if (isAmendment) {
+      isDocketEntryBriefEventCode = isDocumentBriefType(docType);
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner =
+          formattedCase.docketEntriesEFiledByPractitioner.includes(
+            entry.docketEntryId,
+          );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else if (docType === 'Amicus Brief') {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
+      } else {
+        meetsPolicyChangeRequirements = false;
+      }
+    } else {
+      isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner =
+          formattedCase.docketEntriesEFiledByPractitioner.includes(
+            entry.docketEntryId,
+          );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
+      }
+    }
+  }
 
   showDocumentLinks = getShowDocumentViewerLink({
     hasDocument: entry.isFileAttached,
@@ -265,8 +301,6 @@ export const getFormattedDocketEntry = ({
   return formattedResult;
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedDocketEntries = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -335,21 +369,25 @@ export const formattedDocketEntries = (
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
 
-  docketEntriesFormatted = docketEntriesFormatted.map(entry => {
-    const filedAfterPolicyChange =
-      entry.filingDate >= visibilityPolicyDateFormatted;
+  docketEntriesFormatted = docketEntriesFormatted
+    .map((entry: any, _, array) => {
+      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
+    })
+    .map(entry => {
+      const filedAfterPolicyChange =
+        entry.filingDate >= visibilityPolicyDateFormatted;
 
-    return getFormattedDocketEntry({
-      applicationContext,
-      docketNumber,
-      entry,
-      filedAfterPolicyChange,
-      formattedCase: result,
-      isExternalUser,
-      permissions,
-      userAssociatedWithCase,
+      return getFormattedDocketEntry({
+        applicationContext,
+        docketNumber,
+        entry,
+        filedAfterPolicyChange,
+        formattedCase: result,
+        isExternalUser,
+        permissions,
+        userAssociatedWithCase,
+      });
     });
-  });
 
   result.formattedDocketEntriesOnDocketRecord = docketEntriesFormatted.filter(
     d => d.isOnDocketRecord,
