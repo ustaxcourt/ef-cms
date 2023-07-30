@@ -19,16 +19,15 @@ export const head = async ({ applicationContext, endpoint, params }) => {
     .then(response => response.data);
 };
 
-/**
- *
- *get
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.endpoint the endpoint to call
- * @param {object} providers.params the params to send to the endpoint
- * @returns {Promise<*>} the response body data
- */
-const internalGet = async ({ applicationContext, endpoint, params }) => {
+const internalGet = async ({
+  applicationContext,
+  endpoint,
+  params,
+}: {
+  applicationContext: any;
+  endpoint: string;
+  params?: any;
+}) => {
   const response = await getResponse({
     applicationContext,
     endpoint,
