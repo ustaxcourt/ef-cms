@@ -1,5 +1,8 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  InvalidRequest,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
