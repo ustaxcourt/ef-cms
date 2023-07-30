@@ -22,7 +22,6 @@ const config: Config = {
   coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   globals: {
-    File() {},
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
