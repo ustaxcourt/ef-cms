@@ -1,5 +1,8 @@
 import { MOCK_CASE } from '../../../test/mockCase';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { getContactPrimary } from '../../entities/cases/Case';
