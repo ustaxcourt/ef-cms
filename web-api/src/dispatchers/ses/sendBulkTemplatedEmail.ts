@@ -1,4 +1,4 @@
-import { backOff } from '../../tools/helpers';
+import { backOff } from '../../../../shared/src/tools/helpers';
 
 /**
  * calls SES.sendBulkTemplatedEmail

@@ -1,4 +1,4 @@
-import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { sendSlackNotification } from './sendSlackNotification';
 
 describe('sendSlackNotification', () => {

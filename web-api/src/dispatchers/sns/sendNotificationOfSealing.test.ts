@@ -1,4 +1,4 @@
-import { applicationContext } from '../../business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { sendNotificationOfSealing } from './sendNotificationOfSealing';
 
 describe('send notification to notification service', () => {
