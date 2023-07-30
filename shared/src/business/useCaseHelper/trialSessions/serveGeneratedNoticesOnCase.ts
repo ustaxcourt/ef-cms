@@ -16,12 +16,14 @@ export const serveGeneratedNoticesOnCase = async ({
   noticeDocketEntryEntity,
   noticeDocumentPdfData,
   servedParties,
+  skipEmailToIrs = false,
 }) => {
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,
     docketEntryId: noticeDocketEntryEntity.docketEntryId,
     servedParties,
+    skipEmailToIrs,
   });
 
   if (servedParties.paper.length > 0) {

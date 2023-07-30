@@ -1,5 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 export const caseDetailHeaderHelper = (
@@ -28,12 +29,7 @@ export const caseDetailHeaderHelper = (
     .isSealedCase(caseDetail);
 
   const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner =>
-    applicationContext
-      .getUtilities()
-      .isUserIdRepresentedByPrivatePractitioner(
-        caseDetail,
-        petitioner.contactId,
-      ),
+    Case.isPetitionerRepresented(caseDetail, petitioner.contactId),
   );
 
   let showRequestAccessToCaseButton = false;
