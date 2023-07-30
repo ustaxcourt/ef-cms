@@ -8,7 +8,7 @@ const config: Config = {
   maxWorkers: 1, // because generating pdf is a heavy test, we are locking this to 1 to reduce load on the ci/cd runners
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
-      prefix: '<rootDir>/../',
+      prefix: '<rootDir>/../../../../../',
     }),
     uuid: require.resolve('uuid'),
   },
