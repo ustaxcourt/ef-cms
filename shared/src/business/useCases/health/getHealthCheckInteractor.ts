@@ -1,3 +1,6 @@
+import NodeCache from 'node-cache';
+const cache = new NodeCache({ checkperiod: 180, stdTTL: 300 });
+
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
@@ -173,52 +176,66 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  const [
-    elasticSearchStatus,
-    dynamoStatus,
-    deployDynamoStatus,
-    dynamsoftStatus,
-    s3BucketStatus,
-    cognitoStatus,
-    emailServiceStatus,
-  ] = await Promise.all([
-    getElasticSearchStatus({
-      applicationContext,
-    }),
-    getDynamoStatus({ applicationContext }),
-    getDeployDynamoStatus({
-      applicationContext,
-    }),
-    getDynamsoftStatus({ applicationContext }),
-    getS3BucketStatus({ applicationContext }),
-    getCognitoStatus({ applicationContext }),
-    getEmailServiceStatus({
-      applicationContext,
-    }),
-  ]);
+  const start = Date.now();
+  const cacheKey = 'all_checks_service_status';
+  if (cache.get(cacheKey)) {
+    console.log('Cache has value, returning early: ', cache.get(cacheKey));
+    console.log('Time for cache fetch: ', Date.now() - start);
+    return cache.get(cacheKey);
+  } else {
+    console.log('Cache miss: ');
+    const [
+      elasticSearchStatus,
+      dynamoStatus,
+      deployDynamoStatus,
+      dynamsoftStatus,
+      s3BucketStatus,
+      cognitoStatus,
+      emailServiceStatus,
+    ] = await Promise.all([
+      getElasticSearchStatus({
+        applicationContext,
+      }),
+      getDynamoStatus({ applicationContext }),
+      getDeployDynamoStatus({
+        applicationContext,
+      }),
+      getDynamsoftStatus({ applicationContext }),
+      getS3BucketStatus({ applicationContext }),
+      getCognitoStatus({ applicationContext }),
+      getEmailServiceStatus({
+        applicationContext,
+      }),
+    ]);
 
-  const allChecksHealthy = [
-    ...Object.values(s3BucketStatus),
-    elasticSearchStatus,
-    dynamoStatus,
-    deployDynamoStatus,
-    dynamsoftStatus,
-    cognitoStatus,
-    emailServiceStatus,
-  ].every(status => {
-    return status === true;
-  });
+    const allChecksHealthy = [
+      ...Object.values(s3BucketStatus),
+      elasticSearchStatus,
+      dynamoStatus,
+      deployDynamoStatus,
+      dynamsoftStatus,
+      cognitoStatus,
+      emailServiceStatus,
+    ].every(status => {
+      return status === true;
+    });
 
-  return {
-    allChecksHealthy: allChecksHealthy ? 'pass' : 'fail',
-    cognito: cognitoStatus,
-    dynamo: {
-      efcms: dynamoStatus,
-      efcmsDeploy: deployDynamoStatus,
-    },
-    dynamsoft: dynamsoftStatus,
-    elasticsearch: elasticSearchStatus,
-    emailService: emailServiceStatus,
-    s3: s3BucketStatus,
-  };
+    const healthChecks = {
+      allChecksHealthy: allChecksHealthy ? 'pass' : 'fail',
+      cognito: cognitoStatus,
+      dynamo: {
+        efcms: dynamoStatus,
+        efcmsDeploy: deployDynamoStatus,
+      },
+      dynamsoft: dynamsoftStatus,
+      elasticsearch: elasticSearchStatus,
+      emailService: emailServiceStatus,
+      s3: s3BucketStatus,
+    };
+    cache.set(cacheKey, healthChecks);
+
+    console.log('Setting cache: ', healthChecks);
+    console.log('Time to fetch all health checks: ', Date.now() - start);
+    return healthChecks;
+  }
 };
