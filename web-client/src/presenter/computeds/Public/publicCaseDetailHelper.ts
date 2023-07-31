@@ -116,6 +116,10 @@ export const formatDocketEntryOnDocketRecord = (
       .getUtilities()
       .formatDateString(entry.createdAt, 'MMDDYY');
   }
+
+  if (entry.lodged) {
+    entry.eventCode = 'MISCL';
+  }
   ///
 
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
