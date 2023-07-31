@@ -27,6 +27,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { addDocketEntryForSystemGeneratedOrder } from '@shared/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
@@ -145,7 +146,6 @@ const appContextProxy = (initial = {}, makeMock = true) => {
 };
 
 const createTestApplicationContext = () => {
-  const user = {};
   const emptyAppContextProxy = appContextProxy();
 
   const mockGetPdfJsReturnValue = {
@@ -576,13 +576,11 @@ const createTestApplicationContext = () => {
       };
     }),
     getCurrentUser: jest.fn().mockImplementation(() => {
-      return new User(
-        user || {
-          name: 'richard',
-          role: ROLES.petitioner,
-          userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-      );
+      return new User({
+        name: 'richard',
+        role: ROLES.petitioner,
+        userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+      });
     }),
     getCurrentUserPermissions: jest.fn(),
     getCurrentUserToken: () => {
@@ -650,27 +648,3 @@ const createTestApplicationContext = () => {
 
 export const applicationContextForClient: ClientApplicationContext =
   createTestApplicationContext();
-
-// /*
-//   If you receive an error when testing cerebral that says:
-//   `The property someProperty passed to Provider is not a method`
-//   it is because the cerebral testing framework expects all objects on the
-//   applicationContext to be functions.  The code below walks the original
-//   applicationContext and adds ONLY the functions to the
-//   applicationContextForClient.
-// */
-// const intermediary = {};
-// Object.entries(applicationContext).forEach(([key, value]) => {
-//   if (typeof value === 'function') {
-//     intermediary[key] = value;
-//   } else {
-//     pinkLog('Not a function!', key);
-//   }
-// });
-// interface TestClientApplicationContext extends ClientApplicationContext {
-//   getUseCases: typeof applicationContext.getUseCases;
-//   getPersistenceGateway: typeof applicationContext.getPersistenceGateway;
-// }
-
-// export const applicationContextForClient =
-//   intermediary as TestClientApplicationContext;

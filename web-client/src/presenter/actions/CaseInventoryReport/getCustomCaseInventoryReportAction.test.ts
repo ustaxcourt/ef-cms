@@ -4,7 +4,7 @@ import {
   GetCaseInventoryReportRequest,
   GetCaseInventoryReportResponse,
 } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCustomCaseInventoryReportAction } from './getCustomCaseInventoryReportAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
