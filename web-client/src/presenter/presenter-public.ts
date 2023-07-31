@@ -3,7 +3,6 @@ import { InvalidRequestError } from './errors/InvalidRequestError';
 import { NotFoundError } from './errors/NotFoundError';
 import { ServerInvalidResponseError } from './errors/ServerInvalidResponseError';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
-import { baseState } from './state-public';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
@@ -20,6 +19,7 @@ import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/goto
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
+import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
@@ -118,5 +118,5 @@ export const presenter = {
     validateOpinionSearchSequence,
     validateOrderSearchSequence,
   },
-  state: baseState,
+  state: initialPublicState,
 };
