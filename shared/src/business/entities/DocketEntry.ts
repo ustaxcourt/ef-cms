@@ -440,10 +440,6 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
-  /**
-   * Determines if the docket entry is a court issued document
-   * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
-   */
   isCourtIssued() {
     return DocketEntry.isCourtIssued(this.eventCode);
   }
