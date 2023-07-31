@@ -22,7 +22,6 @@ import {
 } from '../utilities/DateHandler';
 
 export class DocketEntry extends JoiValidationEntity {
-  public entityName: string;
   public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;
@@ -84,17 +83,17 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenAt?: string;
   public trialLocation?: string;
   public supportingDocument?: string;
-  public userId: string;
+  public userId?: string;
   public privatePractitioners?: any[];
   public servedParties?: any[];
   public signedAt?: string;
-  public draftOrderState: object;
-  public stampData: object;
+  public draftOrderState?: object;
+  public stampData!: object;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
   public judgeUserId?: string;
-  public pending: boolean;
+  public pending?: boolean;
   public previousDocument?: {
     docketEntryId: string;
     documentTitle: string;
@@ -124,6 +123,7 @@ export class DocketEntry extends JoiValidationEntity {
     },
   ) {
     super('DocketEntry');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }

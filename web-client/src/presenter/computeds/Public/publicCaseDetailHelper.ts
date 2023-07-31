@@ -199,10 +199,16 @@ const filterDocketEntries = (
   }
 };
 
+export interface IPublicCaseDetailHelper {
+  formattedDocketEntriesOnDocketRecord: any[];
+  isCaseSealed: boolean;
+  showPrintableDocketRecord: boolean;
+}
+
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): IPublicCaseDetailHelper => {
   const {
     canAllowPrintableDocketRecord,
     docketEntries,

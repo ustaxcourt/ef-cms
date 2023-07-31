@@ -12,7 +12,7 @@ import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
 
-const helpers = {
+const computeds = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
@@ -27,8 +27,7 @@ const helpers = {
   todaysOrdersHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {},
   advancedSearchTab: 'case',
   commonUI: {
@@ -60,3 +59,10 @@ export const state = {
   user: {},
   validationErrors: {},
 };
+
+export const initialPublicState = {
+  ...baseState,
+  ...computeds,
+};
+
+export type PublicClientState = typeof initialPublicState;

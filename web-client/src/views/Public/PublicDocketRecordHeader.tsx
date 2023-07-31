@@ -3,26 +3,29 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { statePublic as state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
+const props = {
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
+    state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  docketNumber: state.caseDetail.docketNumber,
+  gotoPublicPrintableDocketRecordSequence:
+    sequences.gotoPublicPrintableDocketRecordSequence,
+  publicCaseDetailHelper:
+    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
+  showModal: state.modal.showModal,
+};
+
 export const PublicDocketRecordHeader = connect(
-  {
-    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
-      state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-    docketNumber: state.caseDetail.docketNumber,
-    gotoPublicPrintableDocketRecordSequence:
-      sequences.gotoPublicPrintableDocketRecordSequence,
-    publicCaseDetailHelper: state.publicCaseDetailHelper,
-    showModal: state.modal.showModal,
-  },
-  function PublicDocketRecordHeader({
+  props,
+  function ({
     docketNumber,
     gotoPublicPrintableDocketRecordSequence,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
     showModal,
-  }) {
+  }: typeof props) {
     return (
       <React.Fragment>
         <div className="title">
