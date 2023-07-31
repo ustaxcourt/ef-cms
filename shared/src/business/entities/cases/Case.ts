@@ -111,7 +111,7 @@ export class Case extends JoiValidationEntity {
   public noticeOfTrialDate: string;
   public docketNumberWithSuffix: string;
   public canAllowDocumentService: string;
-  public canAllowPrintableDocketRecord: string;
+  public canAllowPrintableDocketRecord!: boolean;
   public archivedDocketEntries: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed: boolean;
