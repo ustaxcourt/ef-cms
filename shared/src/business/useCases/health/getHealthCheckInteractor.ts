@@ -1,6 +1,3 @@
-import NodeCache from 'node-cache';
-const cache = new NodeCache({ checkperiod: 180, stdTTL: 300 });
-
 const regionEast = 'us-east-1';
 const regionWest = 'us-west-1';
 
@@ -12,7 +9,7 @@ const handleAxiosTimeout = axios => {
   return source;
 };
 
-const getElasticSearchStatus = async ({ applicationContext }) => {
+export const getElasticSearchStatus = async ({ applicationContext }) => {
   try {
     await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
       applicationContext,
@@ -25,7 +22,7 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
   return true;
 };
 
-const getDynamoStatus = async ({ applicationContext }) => {
+export const getDynamoStatus = async ({ applicationContext }) => {
   try {
     const dynamoStatus = await applicationContext
       .getPersistenceGateway()
@@ -37,7 +34,7 @@ const getDynamoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getDeployDynamoStatus = async ({ applicationContext }) => {
+export const getDeployDynamoStatus = async ({ applicationContext }) => {
   try {
     const deployDynamoStatus = await applicationContext
       .getPersistenceGateway()
@@ -49,7 +46,7 @@ const getDeployDynamoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getDynamsoftStatus = async ({ applicationContext }) => {
+export const getDynamsoftStatus = async ({ applicationContext }) => {
   const axios = applicationContext.getHttpClient();
 
   const source = handleAxiosTimeout(axios);
@@ -73,7 +70,10 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   }
 };
 
-const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
+export const checkS3BucketsStatus = async ({
+  applicationContext,
+  bucketName,
+}) => {
   try {
     await applicationContext
       .getStorageClient()
@@ -90,7 +90,7 @@ const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
   }
 };
 
-const getS3BucketStatus = async ({ applicationContext }) => {
+export const getS3BucketStatus = async ({ applicationContext }) => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
   const currentColor = process.env.CURRENT_COLOR;
   const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`;
@@ -129,7 +129,7 @@ const getS3BucketStatus = async ({ applicationContext }) => {
   return bucketStatus;
 };
 
-const getCognitoStatus = async ({ applicationContext }) => {
+export const getCognitoStatus = async ({ applicationContext }) => {
   const axios = applicationContext.getHttpClient();
 
   const source = handleAxiosTimeout(axios);
@@ -156,7 +156,7 @@ const getCognitoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getEmailServiceStatus = async ({ applicationContext }) => {
+export const getEmailServiceStatus = async ({ applicationContext }) => {
   try {
     return await applicationContext
       .getPersistenceGateway()
@@ -167,75 +167,51 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
   }
 };
 
-/**
- * getHealthCheckInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {object} contains the status of all our different services
- */
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  const start = Date.now();
-  const cacheKey = 'all_checks_service_status';
-  if (cache.get(cacheKey)) {
-    console.log('Cache has value, returning early: ', cache.get(cacheKey));
-    console.log('Time for cache fetch: ', Date.now() - start);
-    return cache.get(cacheKey);
-  } else {
-    console.log('Cache miss: ');
-    const [
-      elasticSearchStatus,
-      dynamoStatus,
-      deployDynamoStatus,
-      dynamsoftStatus,
-      s3BucketStatus,
-      cognitoStatus,
-      emailServiceStatus,
-    ] = await Promise.all([
-      getElasticSearchStatus({
-        applicationContext,
-      }),
-      getDynamoStatus({ applicationContext }),
-      getDeployDynamoStatus({
-        applicationContext,
-      }),
-      getDynamsoftStatus({ applicationContext }),
-      getS3BucketStatus({ applicationContext }),
-      getCognitoStatus({ applicationContext }),
-      getEmailServiceStatus({
-        applicationContext,
-      }),
-    ]);
+  console.log('getHealthCheckInteractor 1: ');
+  const applicationHealth = await applicationContext
+    .getPersistenceGateway()
+    .getStoredApplicationHealth(applicationContext);
 
-    const allChecksHealthy = [
-      ...Object.values(s3BucketStatus),
-      elasticSearchStatus,
-      dynamoStatus,
-      deployDynamoStatus,
-      dynamsoftStatus,
-      cognitoStatus,
-      emailServiceStatus,
-    ].every(status => {
-      return status === true;
-    });
+  console.log('getHealthCheckInteractor allChecksHealthy: ', applicationHealth);
+  const cacheTtl = 30 * 1000;
 
-    const healthChecks = {
-      allChecksHealthy: allChecksHealthy ? 'pass' : 'fail',
-      cognito: cognitoStatus,
-      dynamo: {
-        efcms: dynamoStatus,
-        efcmsDeploy: deployDynamoStatus,
-      },
-      dynamsoft: dynamsoftStatus,
-      elasticsearch: elasticSearchStatus,
-      emailService: emailServiceStatus,
-      s3: s3BucketStatus,
-    };
-    cache.set(cacheKey, healthChecks);
-
-    console.log('Setting cache: ', healthChecks);
-    console.log('Time to fetch all health checks: ', Date.now() - start);
-    return healthChecks;
+  if (
+    !applicationHealth ||
+    Date.now() - applicationHealth.timeStamp > cacheTtl
+  ) {
+    console.log(
+      'getHealthCheckInteractor going to fetch and set health check: ',
+    );
+    // intentionally not awaiting async useCase
+    applicationContext
+      .getUseCases()
+      .getHealthCheckAndSetCache(applicationContext);
   }
+  console.log('getHealthCheckInteractor finished: ', Date.now());
+  return {
+    allChecksHealthy: applicationHealth.allChecksHealthy ? 'pass' : 'fail',
+    cognito: true,
+    dynamo: {
+      efcms: true,
+      efcmsDeploy: true,
+    },
+    dynamsoft: true,
+    elasticsearch: true,
+    emailService: true,
+    s3: {
+      app: true,
+      appFailover: true,
+      eastDocuments: true,
+      eastQuarantine: true,
+      eastTempDocuments: true,
+      public: true,
+      publicFailover: true,
+      westDocuments: true,
+      westQuarantine: true,
+      westTempDocuments: true,
+    },
+  };
 };

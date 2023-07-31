@@ -45,7 +45,7 @@ else
   exitCode=$?
 
   if [ "${exitCode}" != 0 ]; then                   
-    echo "Seed data is invalid!". 1>&2 && exit 1
+    echo "Failed to seed data!". 1>&2 && exit 1
   fi
 fi
 

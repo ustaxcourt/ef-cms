@@ -57,6 +57,7 @@ import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
 import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
+import { getHealthCheckAndSetCacheLambda } from './health/getHealthCheckAndSetCacheLambda';
 import { getHealthCheckLambda } from './health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
 import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
@@ -127,7 +128,10 @@ app.get(
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
-
+app.post(
+  '/async/public-api/health-check-cache',
+  lambdaWrapper(getHealthCheckAndSetCacheLambda, { isAsync: true }),
+);
 app.get(
   '/public-api/maintenance-mode',
   lambdaWrapper(getMaintenanceModeLambda),

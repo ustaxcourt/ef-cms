@@ -91,6 +91,7 @@ import { getDocumentQCServedForSectionInteractor } from '../../shared/src/busine
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCServedForUserInteractor';
 import { getDownloadPolicyUrlInteractor } from '../../shared/src/business/useCases/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
+import { getHealthCheckAndSetCache } from '../../shared/src/business/useCases/health/getHealthCheckAndSetCache';
 import { getHealthCheckInteractor } from '../../shared/src/business/useCases/health/getHealthCheckInteractor';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getInboxMessagesForSectionInteractor';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getInboxMessagesForUserInteractor';
@@ -293,6 +294,7 @@ const useCases = {
   getDocumentQCServedForUserInteractor,
   getDownloadPolicyUrlInteractor,
   getEligibleCasesForTrialSessionInteractor,
+  getHealthCheckAndSetCache,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
