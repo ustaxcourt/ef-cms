@@ -188,7 +188,7 @@ export const getHealthCheckInteractor = async (
     // intentionally not awaiting async useCase
     applicationContext
       .getUseCases()
-      .getHealthCheckAndSetCache(applicationContext);
+      .getHealthCheckAndSetCacheProxy(applicationContext);
   }
   console.log('getHealthCheckInteractor finished: ', Date.now());
   return {
