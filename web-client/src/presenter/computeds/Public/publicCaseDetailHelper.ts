@@ -15,6 +15,7 @@ import {
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import { getFilingsAndProceedings } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -116,6 +117,8 @@ export const formatDocketEntryOnDocketRecord = (
   if (entry.lodged) {
     entry.eventCode = 'MISCL';
   }
+
+  entry.filingsAndProceedings = getFilingsAndProceedings(entry);
   ///
 
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
