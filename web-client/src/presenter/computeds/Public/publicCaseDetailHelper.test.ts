@@ -1439,7 +1439,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
         action: 'something',
         createdAtFormatted: '11/21/18',
         description: 'first record',
-        descriptionDisplay: 'Petition',
+        descriptionDisplay: 'Petition (Attachment(s))',
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         eventCode: 'P',
         index: 4,
