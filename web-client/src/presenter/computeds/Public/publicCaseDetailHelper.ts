@@ -2,7 +2,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
   BRIEF_EVENTCODES,
-  COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   MOTION_EVENT_CODES,
@@ -94,14 +93,11 @@ export const formatDocketEntryOnDocketRecord = (
   const isServed =
     DocketEntry.isServed(entry) || DocketEntry.isUnservable(entry);
 
-  ///
-  const isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
-    ({ eventCode }) => eventCode,
-  ).includes(entry.eventCode);
+  const isCourtIssued = DocketEntry.isCourtIssued(entry.eventCode);
 
   let createdAtFormatted;
   if (
-    isCourtIssuedDocument &&
+    isCourtIssued &&
     !DocketEntry.isServed(entry) &&
     !DocketEntry.isUnservable(entry) &&
     entry.isOnDocketRecord
@@ -132,8 +128,7 @@ export const formatDocketEntryOnDocketRecord = (
     entry.isFileAttached && isServed && !entry.isSealed && !entry.isStricken;
 
   const canPublicUserSeeLink =
-    ((isCourtIssuedDocument &&
-      entry.eventCode !== STIPULATED_DECISION_EVENT_CODE) ||
+    ((isCourtIssued && entry.eventCode !== STIPULATED_DECISION_EVENT_CODE) ||
       meetsPolicyChangeRequirements) &&
     entry.isFileAttached &&
     isServed &&
