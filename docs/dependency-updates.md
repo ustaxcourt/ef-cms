@@ -25,8 +25,6 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using
    getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-   > **Why am I seeing a medium severity for `semver`?**(6/22/2023)
-   > Semver is the versioner used for npm itself and has > 250M downloads weekly. Semver 7.5.2 is a nested dependency for our packages and we must wait until a fix is pushed out. Considering the use of this package in npm itself I would expect a fix soon.
 4. Check if there are updates to either of the following in the main `Dockerfile`. Changing the `Dockerfile` requires publishing a new ECR image which is used as the docker image in CircleCI.
 
     - `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
@@ -53,7 +51,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 ### artillery
-As of July 19, 2023, `artillery` version `2.0.0-35` requires `node` version `18.16.1` but Cypress has not published an updated Docker image supporting that version of node. [Current version is `18.16.0`](https://hub.docker.com/r/cypress/browsers/tags?page=1).
+As of July 26, 2023, `artillery` version `2.0.0-35` requires `node` version `18.16.1` but Cypress has not published an updated Docker image supporting that version of node. [Current version is `18.16.0`](https://hub.docker.com/r/cypress/browsers/tags?page=1).
 
 ### puppeteer
 
@@ -69,7 +67,7 @@ Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.c
   - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` ^0.3.1 is incompatible with s3rver which is why there's a patch in place to make it compatible.
 - How does the patch run?
   - This runs as part of the `npm postinstall` step.
-- As of 6/23/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813). Ignoring high security vulnerability as this is a dev dependency and not included in production code.
+- As of 7/26/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813). Ignoring high security vulnerability as this is a dev dependency and not included in production code.
 
 ### pdfjs-dist
 
