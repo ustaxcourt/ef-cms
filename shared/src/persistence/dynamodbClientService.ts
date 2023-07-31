@@ -228,6 +228,29 @@ export const getFromDeployTable = params => {
 };
 
 /**
+ *
+ * @param {object} applicationContext the applicationContext
+ * @param {TDynamoRecord} item the dynamo record to write
+ * @returns {object} the item that was put
+ */
+export const putInDeployTable = (
+  applicationContext: IApplicationContext,
+  item: TDynamoRecord,
+) => {
+  return applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .put({
+      Item: item,
+      TableName: getDeployTableName({
+        applicationContext,
+      }),
+    })
+    .promise();
+};
+
+/**
  * GET for aws-sdk dynamodb client
  *
  * @param {object} params the params to update

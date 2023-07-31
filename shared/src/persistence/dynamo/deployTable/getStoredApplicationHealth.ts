@@ -1,10 +1,10 @@
-import * as client from '../../dynamodbClientService';
 import { StoredApplicationHealth } from './setStoredApplicationHealth';
+import { getFromDeployTable } from '../../dynamodbClientService';
 
 export const getStoredApplicationHealth = async (
   applicationContext: IApplicationContext,
 ): Promise<StoredApplicationHealth> => {
-  const result = await client.get({
+  const result = await getFromDeployTable({
     Key: {
       pk: 'healthCheckValue',
       sk: 'healthCheckValue',
