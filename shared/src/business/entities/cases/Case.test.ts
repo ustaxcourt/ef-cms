@@ -111,7 +111,7 @@ describe('Case entity', () => {
     });
   });
   it('should throw an error if app context is not passed in', () => {
-    expect(() => new Case({}, {})).toThrow();
+    expect(() => new Case({}, {} as any)).toThrow();
   });
 
   it('defaults the orders to false', () => {
