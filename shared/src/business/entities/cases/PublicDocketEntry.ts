@@ -37,6 +37,11 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public sealedTo?: string;
   public servedAt?: string;
   public servedPartiesCode?: string;
+  public previousDocument?: {
+    docketEntryId: string;
+    documentTitle: string;
+    documentType: string;
+  };
 
   constructor(rawProps) {
     super('PublicDocketEntry');
@@ -69,6 +74,13 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.sealedTo = rawProps.sealedTo;
     this.servedAt = rawProps.servedAt;
     this.servedPartiesCode = rawProps.servedPartiesCode;
+    if (rawProps.previousDocument) {
+      this.previousDocument = {
+        docketEntryId: rawProps.previousDocument.docketEntryId,
+        documentTitle: rawProps.previousDocument.documentTitle,
+        documentType: rawProps.previousDocument.documentType,
+      };
+    }
   }
 
   static VALIDATION_RULES = {
