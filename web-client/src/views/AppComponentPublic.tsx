@@ -16,7 +16,7 @@ import { TodaysOpinions } from './Public/TodaysOpinions';
 import { TodaysOrders } from './Public/TodaysOrders';
 import { UsaBanner } from './UsaBanner';
 import { connect } from '@cerebral/react';
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import { useScript } from '../utilities/useScript';
 import React, { useEffect } from 'react';
 

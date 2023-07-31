@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -12,19 +13,21 @@ const props = {
   docketNumber: state.caseDetail.docketNumber,
   gotoPublicPrintableDocketRecordSequence:
     sequences.gotoPublicPrintableDocketRecordSequence,
-  publicCaseDetailHelper: state.publicCaseDetailHelper,
+  publicCaseDetailHelper:
+    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
+
   showModal: state.modal.showModal,
 };
 
 export const PublicDocketRecordHeader = connect(
   props,
-  function PublicDocketRecordHeader({
+  function ({
     docketNumber,
     gotoPublicPrintableDocketRecordSequence,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
     showModal,
-  }) {
+  }: typeof props) {
     return (
       <React.Fragment>
         <div className="title">
