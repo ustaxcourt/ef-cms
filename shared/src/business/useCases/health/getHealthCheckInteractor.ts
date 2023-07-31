@@ -192,7 +192,7 @@ export const getHealthCheckInteractor = async (
   }
   console.log('getHealthCheckInteractor finished: ', Date.now());
   return {
-    allChecksHealthy: applicationHealth.allChecksHealthy ? 'pass' : 'fail',
+    allChecksHealthy: applicationHealth?.allChecksHealthy ? 'pass' : 'fail',
     cognito: true,
     dynamo: {
       efcms: true,

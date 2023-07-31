@@ -1,4 +1,4 @@
-import * as client from '../../dynamodbClientService';
+import { putInDeployTable } from '../../dynamodbClientService';
 
 export type StoredApplicationHealth = {
   allChecksHealthy: boolean;
@@ -9,15 +9,12 @@ export const setStoredApplicationHealth = async (
   applicationContext: IApplicationContext,
   allChecksHealthy: boolean,
 ): Promise<void> => {
-  await client.put({
-    Item: {
-      data: {
-        allChecksHealthy,
-        timeStamp: Date.now(),
-      },
-      pk: 'healthCheckValue',
-      sk: 'healthCheckValue',
+  await putInDeployTable(applicationContext, {
+    data: {
+      allChecksHealthy,
+      timeStamp: Date.now(),
     },
-    applicationContext,
+    pk: 'healthCheckValue',
+    sk: 'healthCheckValue',
   });
 };
