@@ -1,8 +1,8 @@
 import { post } from '../requests';
 
-export const getHealthCheckAndSetCache = applicationContext => {
+export const getHealthCheckAndSetCacheProxy = applicationContext => {
   return post({
     applicationContext,
-    endpoint: '/public-api/health-check-cache',
+    endpoint: '/async/public-api/health-check-cache',
   });
 };
