@@ -16,6 +16,7 @@ const config: Config = {
     '!src/routerPublic.ts',
     '!src/index-public.ts',
     '!src/index-public.prod.ts',
+    '!src/ustc-ui/Utils/types.ts',
   ],
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',
