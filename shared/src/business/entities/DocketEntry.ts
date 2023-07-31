@@ -440,7 +440,7 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
-  isCourtIssued() {
+  isCourtIssued(): boolean {
     return DocketEntry.isCourtIssued(this.eventCode);
   }
 
