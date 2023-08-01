@@ -60,7 +60,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       );
   });
 
-  it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return it to props', async () => {
+  it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return items as props', async () => {
     const result = await runAction(getSubmittedAndCavCasesByJudgeAction, {
       modules: {
         presenter,

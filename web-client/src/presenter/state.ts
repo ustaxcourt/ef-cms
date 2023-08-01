@@ -329,11 +329,8 @@ export const baseState = {
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
-
   isTerminalUser: false,
-  // needs its own object because it's present when other forms are on screen
   judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
-  judgeActivityReportData: {},
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],

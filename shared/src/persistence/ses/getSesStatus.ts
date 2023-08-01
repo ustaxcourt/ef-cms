@@ -8,8 +8,8 @@ export const getSesStatus = async ({
   applicationContext: IApplicationContext;
 }) => {
   const cachedResponse = cache.get(cacheKey);
+
   if (cachedResponse) {
-    applicationContext.logger.info('Returning SES health status from cache');
     return cachedResponse;
   }
 
@@ -22,8 +22,5 @@ export const getSesStatus = async ({
   );
   cache.set(cacheKey, sesHealth);
 
-  applicationContext.logger.info(
-    'Returning SES health status from SES service',
-  );
   return sesHealth;
 };

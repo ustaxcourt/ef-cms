@@ -1570,6 +1570,9 @@ export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
 
+export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
+  'tempJudgeIdToRepresentAllJudgesSelection';
+
 export const isDocumentBriefType = (documentType: string) => {
   const documents = [
     ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
@@ -1578,5 +1581,3 @@ export const isDocumentBriefType = (documentType: string) => {
   return !!documents.find(document => document.documentType === documentType)
     ?.eventCode;
 };
-export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
-  'tempJudgeIdToRepresentAllJudgesSelection';
