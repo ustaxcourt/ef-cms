@@ -7,7 +7,7 @@ export type StoredApplicationHealth = {
 
 export const setStoredApplicationHealth = async (
   applicationContext: IApplicationContext,
-  allChecksHealthy: boolean,
+  { allChecksHealthy, region }: { allChecksHealthy: boolean; region: string },
 ): Promise<void> => {
   await putInDeployTable(applicationContext, {
     data: {
@@ -15,6 +15,6 @@ export const setStoredApplicationHealth = async (
       timeStamp: Date.now(),
     },
     pk: 'healthCheckValue',
-    sk: 'healthCheckValue',
+    sk: `healthCheckValue|${region}`,
   });
 };

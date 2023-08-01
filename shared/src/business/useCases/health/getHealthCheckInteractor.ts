@@ -170,48 +170,38 @@ export const getEmailServiceStatus = async ({ applicationContext }) => {
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  console.log('getHealthCheckInteractor 1: ');
-  const applicationHealth = await applicationContext
-    .getPersistenceGateway()
-    .getStoredApplicationHealth(applicationContext);
-
-  console.log('getHealthCheckInteractor allChecksHealthy: ', applicationHealth);
-  const cacheTtl = 30 * 1000;
-
-  if (
-    !applicationHealth ||
-    Date.now() - applicationHealth.timeStamp > cacheTtl
-  ) {
-    console.log(
-      'getHealthCheckInteractor going to fetch and set health check: ',
-    );
-    // intentionally not awaiting async useCase
-    applicationContext
-      .getUseCases()
-      .getHealthCheckAndSetCacheProxy(applicationContext);
-  }
-  console.log('getHealthCheckInteractor finished: ', Date.now());
+  const [
+    elasticSearchStatus,
+    dynamoStatus,
+    deployDynamoStatus,
+    dynamsoftStatus,
+    s3BucketStatus,
+    cognitoStatus,
+    emailServiceStatus,
+  ] = await Promise.all([
+    getElasticSearchStatus({
+      applicationContext,
+    }),
+    getDynamoStatus({ applicationContext }),
+    getDeployDynamoStatus({
+      applicationContext,
+    }),
+    getDynamsoftStatus({ applicationContext }),
+    getS3BucketStatus({ applicationContext }),
+    getCognitoStatus({ applicationContext }),
+    getEmailServiceStatus({
+      applicationContext,
+    }),
+  ]);
   return {
-    allChecksHealthy: applicationHealth?.allChecksHealthy ? 'pass' : 'fail',
-    cognito: true,
+    cognito: cognitoStatus,
     dynamo: {
-      efcms: true,
-      efcmsDeploy: true,
+      efcms: dynamoStatus,
+      efcmsDeploy: deployDynamoStatus,
     },
-    dynamsoft: true,
-    elasticsearch: true,
-    emailService: true,
-    s3: {
-      app: true,
-      appFailover: true,
-      eastDocuments: true,
-      eastQuarantine: true,
-      eastTempDocuments: true,
-      public: true,
-      publicFailover: true,
-      westDocuments: true,
-      westQuarantine: true,
-      westTempDocuments: true,
-    },
+    dynamsoft: dynamsoftStatus,
+    elasticsearch: elasticSearchStatus,
+    emailService: emailServiceStatus,
+    s3: s3BucketStatus,
   };
 };

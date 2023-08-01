@@ -8,10 +8,10 @@ import {
   getS3BucketStatus,
 } from './getHealthCheckInteractor';
 
-export const getHealthCheckAndSetCache = async (
+export const setHealthCheckCacheInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  console.log('getHealthCheckAndSetCache 1', Date.now());
+  console.log('setHealthCheckCacheInteractor 1', Date.now());
   const [
     elasticSearchStatus,
     dynamoStatus,
@@ -48,9 +48,13 @@ export const getHealthCheckAndSetCache = async (
     return status === true;
   });
 
+  const region = process.env.REGION!;
   await applicationContext
     .getPersistenceGateway()
-    .setStoredApplicationHealth(applicationContext, allChecksHealthy);
+    .setStoredApplicationHealth(applicationContext, {
+      allChecksHealthy,
+      region,
+    });
 
-  console.log('getHealthCheckAndSetCache 2', Date.now());
+  console.log('setHealthCheckCacheInteractor 2', Date.now());
 };
