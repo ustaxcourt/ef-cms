@@ -1,20 +1,26 @@
 import {
+  COUNTRY_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../shared/src/business/entities/EntityConstants';
 import {
   assignWorkItems,
+  contactPrimaryFromState,
+  embedWithLegalIpsumText,
   getFormattedDocumentQCSectionInbox,
   loginAs,
   setupTest,
+  uploadPetition,
 } from './helpers';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 
 const docketSectionMessage = 'To CSS under Docket Section';
 const petitionsSectionMessage = 'To CSS under Petitions Section';
 const seedCaseServicesSupervisorUserid = '35959d1a-0981-40b2-a93d-f65c7977db52';
 const seededDocketNumber = '105-20';
-const seededDocketNumberWithDocumentQC = '101-21';
 
 describe('Case Services Supervisor Messages Journey', () => {
   const cerebralTest = setupTest();
@@ -22,6 +28,38 @@ describe('Case Services Supervisor Messages Journey', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('Creates the first case', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, {
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        city: 'Amazing',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'welcome to flavortown',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        state: 'AZ',
+      },
+    });
+
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentContents: embedWithLegalIpsumText('magic'),
+    documentTitle: 'some title',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+    signedAtFormatted: '01/02/2020',
+  });
+  docketClerkSignsOrder(cerebralTest);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+
+  // TODO: add a docket entry work item associated with docket section
+  // TODO: add a docket entry work item associated with petitions clerk section
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   createNewMessageOnCase(cerebralTest, {
@@ -117,7 +155,7 @@ describe('Case Services Supervisor Messages Journey', () => {
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+          workItemInQueue.docketNumber === cerebralTest.docketNumber,
       );
 
     expect(workItem).toBeDefined();
@@ -134,7 +172,7 @@ describe('Case Services Supervisor Messages Journey', () => {
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+          workItemInQueue.docketNumber === cerebralTest.docketNumber,
       );
 
     expect(workItem).toBeDefined();
@@ -147,7 +185,7 @@ describe('Case Services Supervisor Messages Journey', () => {
     );
     const workItem = documentQCSectionInbox.filter(
       workItemToAssign =>
-        workItemToAssign.docketNumber === seededDocketNumberWithDocumentQC,
+        workItemToAssign.docketNumber === cerebralTest.docketNumber,
     );
 
     await assignWorkItems(cerebralTest, 'caseservicessupervisor', workItem);
@@ -163,7 +201,7 @@ describe('Case Services Supervisor Messages Journey', () => {
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+          workItemInQueue.docketNumber === cerebralTest.docketNumber,
       );
 
     expect(workItem).toBeDefined();
@@ -176,7 +214,7 @@ describe('Case Services Supervisor Messages Journey', () => {
     );
     const workItem = documentQCSectionInbox.filter(
       workItemToAssign =>
-        workItemToAssign.docketNumber === seededDocketNumberWithDocumentQC,
+        workItemToAssign.docketNumber === cerebralTest.docketNumber,
     );
 
     await assignWorkItems(cerebralTest, 'docketclerk', workItem);
@@ -191,7 +229,7 @@ describe('Case Services Supervisor Messages Journey', () => {
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+          workItemInQueue.docketNumber === cerebralTest.docketNumber,
       );
 
     expect(assignedWorkItem.section).toBe(DOCKET_SECTION);
@@ -208,14 +246,38 @@ describe('Case Services Supervisor Messages Journey', () => {
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+          workItemInQueue.docketNumber === cerebralTest.docketNumber,
       );
 
     expect(workItem).toBeDefined();
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
       docketEntryId: workItem.docketEntry.docketEntryId,
-      docketNumber: seededDocketNumberWithDocumentQC,
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'dateReceivedMonth',
+      value: 1,
+    });
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'dateReceivedDay',
+      value: 1,
+    });
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'dateReceivedYear',
+      value: 2018,
+    });
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'documentType',
+      value: 'Order',
+    });
+
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
     });
 
     await cerebralTest.runSequence('completeDocketEntryQCSequence');
@@ -230,7 +292,7 @@ describe('Case Services Supervisor Messages Journey', () => {
       .getState('workQueue')
       .find(
         workItemInQueue =>
-          workItemInQueue.docketNumber === seededDocketNumberWithDocumentQC,
+          workItemInQueue.docketNumber === cerebralTest.docketNumber,
       );
     expect(workItem).toBeDefined();
   });
