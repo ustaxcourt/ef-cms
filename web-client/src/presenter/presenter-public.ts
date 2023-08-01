@@ -70,9 +70,7 @@ export const presenterSequences = {
   gotoPublicEmailVerificationSuccessSequence: showMaintenancePageDecorator(
     gotoPublicEmailVerificationSuccessSequence,
   ),
-  gotoPublicPrintableDocketRecordSequence: showMaintenancePageDecorator(
-    gotoPublicPrintableDocketRecordSequence,
-  ),
+  gotoPublicPrintableDocketRecordSequence,
   gotoPublicSearchSequence: showMaintenancePageDecorator(
     gotoPublicSearchSequence,
   ),
