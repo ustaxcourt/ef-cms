@@ -171,6 +171,8 @@ export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
 export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
 export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
+export TF_VAR_status_health_check_west_id=$HEALTH_CHECK_WEST_ID
+export TF_VAR_status_health_check_east_id=$HEALTH_CHECK_EAST_ID
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
