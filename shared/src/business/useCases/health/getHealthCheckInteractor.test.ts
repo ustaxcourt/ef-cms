@@ -39,6 +39,7 @@ describe('getHealthCheckInteractor', () => {
     } as any);
 
     expect(statusResult).toEqual({
+      allChecksHealthy: 'pass',
       cognito: true,
       dynamo: {
         efcms: true,
@@ -110,6 +111,7 @@ describe('getHealthCheckInteractor', () => {
     } as any);
 
     expect(status).toEqual({
+      allChecksHealthy: 'fail',
       cognito: false,
       dynamo: {
         efcms: false,
