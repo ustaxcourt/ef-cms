@@ -2,8 +2,8 @@ import {
   GetCaseInventoryReportRequest,
   getCustomCaseInventoryReportInteractor,
 } from './getCustomCaseInventoryReportInteractor';
-import { ROLES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('getCustomCaseInventoryReportInteractor', () => {
   let params: GetCaseInventoryReportRequest;

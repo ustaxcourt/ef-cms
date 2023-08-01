@@ -1,14 +1,17 @@
-import { CaseStatus, CaseType } from '../../entities/EntityConstants';
+import {
+  CaseStatus,
+  CaseType,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   CustomCaseFilingMethods,
   CustomCaseInventorySearch,
   CustomCaseProcedureTypes,
-} from '../../entities/customCaseInventorySearch/CustomCaseInventorySearch';
+} from '../../../../../shared/src/business/entities/customCaseInventorySearch/CustomCaseInventorySearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+} from '../../../../../shared/src/authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 export type CustomCaseInventoryReportFilters = {
   caseStatuses: CaseStatus[];

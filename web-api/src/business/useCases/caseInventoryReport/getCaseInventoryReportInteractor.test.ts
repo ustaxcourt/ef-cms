@@ -3,8 +3,8 @@ import {
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
-} from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getCaseInventoryReportInteractor } from './getCaseInventoryReportInteractor';
 
 describe('getCaseInventoryReportInteractor', () => {
