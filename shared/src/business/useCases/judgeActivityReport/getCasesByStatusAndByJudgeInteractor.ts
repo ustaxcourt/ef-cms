@@ -147,15 +147,17 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   );
 
   const formattedCaseRecords: CavAndSubmittedFilteredCasesType[] =
-    filteredCaseRecords.map(caseRecord => ({
-      caseCaption: caseRecord.caseCaption,
-      caseStatusHistory: caseRecord.caseStatusHistory || [],
-      docketNumber: caseRecord.docketNumber,
-      docketNumberWithSuffix: caseRecord.docketNumberWithSuffix,
-      leadDocketNumber: caseRecord.leadDocketNumber,
-      petitioners: caseRecord.petitioners,
-      status: caseRecord.status,
-    }));
+    filteredCaseRecords
+      .map(caseRecord => ({
+        caseCaption: caseRecord.caseCaption,
+        caseStatusHistory: caseRecord.caseStatusHistory || [],
+        docketNumber: caseRecord.docketNumber,
+        docketNumberWithSuffix: caseRecord.docketNumberWithSuffix,
+        leadDocketNumber: caseRecord.leadDocketNumber,
+        petitioners: caseRecord.petitioners,
+        status: caseRecord.status,
+      }))
+      .filter(unfilteredCase => unfilteredCase.caseStatusHistory.length > 0);
 
   const itemOffset =
     (searchEntity.pageNumber * searchEntity.pageSize) %
