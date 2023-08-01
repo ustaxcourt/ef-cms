@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { applicationContextPublic as applicationContext } from '../../../../web-client/src/applicationContextPublic';
 import { post } from '../requests';
 
 export const getHealthCheckAndSetCacheProxy = () => {
