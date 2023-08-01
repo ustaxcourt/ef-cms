@@ -38,9 +38,6 @@ const pages = {
 
 let initialPageLoaded = false;
 
-/**
- * Root application component for the public site
- */
 export const AppComponentPublic = connect(
   {
     currentPage: state.currentPage,
@@ -77,7 +74,7 @@ export const AppComponentPublic = connect(
             <a
               className="usa-skipnav"
               href="#main-content"
-              tabIndex="0"
+              tabIndex={0}
               onClick={focusMain}
             >
               Skip to main content
