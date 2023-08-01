@@ -247,35 +247,39 @@ describe('judgeActivityReportHelper', () => {
   });
 
   describe('progressDescriptionTableTotal', () => {
+    const mockSubmittedAndCavCasesByJudge = [
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '101-20',
+      },
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '103-20',
+      },
+      {
+        caseStatusHistory: [
+          { date: '2022-02-15T05:00:00.000Z' },
+          { date: '2022-02-16T05:00:00.000Z' },
+        ],
+        docketNumber: '102-20',
+      },
+    ];
     it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
         {};
-      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
-        mockTotalCountForSubmittedAndCavCases;
+
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        [
-          {
-            caseStatusHistory: [
-              { date: '2022-02-15T05:00:00.000Z' },
-              { date: '2022-02-16T05:00:00.000Z' },
-            ],
-            docketNumber: '101-20',
-          },
-          {
-            caseStatusHistory: [
-              { date: '2022-02-15T05:00:00.000Z' },
-              { date: '2022-02-16T05:00:00.000Z' },
-            ],
-            docketNumber: '103-20',
-          },
-          {
-            caseStatusHistory: [
-              { date: '2022-02-15T05:00:00.000Z' },
-              { date: '2022-02-16T05:00:00.000Z' },
-            ],
-            docketNumber: '102-20',
-          },
-        ];
+        mockSubmittedAndCavCasesByJudge;
+
+      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
+        mockSubmittedAndCavCasesByJudge.length;
+
       const { progressDescriptionTableTotal } = runCompute(
         judgeActivityReportHelper,
         {
@@ -284,7 +288,7 @@ describe('judgeActivityReportHelper', () => {
       );
 
       expect(progressDescriptionTableTotal).toBe(
-        mockTotalCountForSubmittedAndCavCases,
+        mockSubmittedAndCavCasesByJudge.length,
       );
     });
   });
@@ -318,7 +322,7 @@ describe('judgeActivityReportHelper', () => {
       ];
     });
 
-    it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
       (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
         .mockReturnValue(10)
         .mockReturnValueOnce(5);
@@ -328,24 +332,24 @@ describe('judgeActivityReportHelper', () => {
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
+      const { submittedAndCavCasesByJudge } = runCompute(
         judgeActivityReportHelper,
         {
           state: baseState,
         },
       );
 
-      const leadCase = filteredSubmittedAndCavCasesByJudge.find(caseRecord => {
+      const leadCase = submittedAndCavCasesByJudge.find(caseRecord => {
         return caseRecord.leadDocketNumber;
       });
 
-      const unconsolidatedCases = filteredSubmittedAndCavCasesByJudge.filter(
+      const unconsolidatedCases = submittedAndCavCasesByJudge.filter(
         caseRecord => {
           return !caseRecord.leadDocketNumber;
         },
       );
 
-      expect(filteredSubmittedAndCavCasesByJudge.length).toBe(3);
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
       expect(leadCase.consolidatedIconTooltipText).toBe('Lead case');
       expect(leadCase.isLeadCase).toBe(true);
       expect(leadCase.inConsolidatedGroup).toBe(true);
@@ -359,7 +363,7 @@ describe('judgeActivityReportHelper', () => {
       });
     });
 
-    it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
       (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
         .mockReturnValue(10)
         .mockReturnValueOnce(5);
@@ -368,51 +372,23 @@ describe('judgeActivityReportHelper', () => {
         { '101-20': 4 };
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
+      const { submittedAndCavCasesByJudge } = runCompute(
         judgeActivityReportHelper,
         {
           state: baseState,
         },
       );
 
-      expect(filteredSubmittedAndCavCasesByJudge.length).toBe(3);
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
       expect(
-        filteredSubmittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
+        submittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
       ).toBe(10);
       expect(
-        filteredSubmittedAndCavCasesByJudge[1].daysElapsedSinceLastStatusChange,
+        submittedAndCavCasesByJudge[1].daysElapsedSinceLastStatusChange,
       ).toBe(10);
       expect(
-        filteredSubmittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
+        submittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
       ).toBe(5);
-    });
-
-    it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange with cases without caseStatusHistory filtered out', () => {
-      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
-        .mockReturnValue(10)
-        .mockReturnValueOnce(5);
-
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        { '101-20': 4 };
-
-      mockSubmittedAndCavCasesByJudge.push({
-        caseStatusHistory: [],
-        docketNumber: '215-11',
-      });
-
-      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        mockSubmittedAndCavCasesByJudge;
-
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(filteredSubmittedAndCavCasesByJudge.length).toBe(
-        mockSubmittedAndCavCasesByJudge.length - 1,
-      );
     });
   });
 
@@ -481,6 +457,7 @@ describe('judgeActivityReportHelper', () => {
             docketNumber: '102-20',
           },
         ];
+
       const result = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
