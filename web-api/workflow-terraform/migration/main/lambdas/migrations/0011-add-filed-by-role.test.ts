@@ -54,5 +54,28 @@ describe('migrateItems', () => {
     ]);
   });
 
-  // should NOT migrate a docket entry that is a draft
+  it('should NOT add filedByRole to a docket entry that is a draft', async () => {
+    (getUserById as jest.Mock).mockResolvedValue(undefined);
+    const items = [
+      {
+        ...PENDING_DOCKET_ENTRY,
+        filedByRole: undefined,
+        isDraft: true,
+        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results).toEqual([
+      {
+        ...PENDING_DOCKET_ENTRY,
+        filedByRole: undefined,
+        isDraft: true,
+        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+      },
+    ]);
+  });
 });
