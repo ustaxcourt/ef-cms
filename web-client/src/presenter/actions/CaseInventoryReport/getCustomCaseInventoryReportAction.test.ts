@@ -3,7 +3,7 @@ import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportRequest,
   GetCaseInventoryReportResponse,
-} from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+} from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getCustomCaseInventoryReportAction } from './getCustomCaseInventoryReportAction';
 import { presenter } from '../../presenter-mock';
