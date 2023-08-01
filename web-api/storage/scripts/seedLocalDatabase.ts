@@ -4,7 +4,6 @@ const {
   migrateItems: validationMigration,
 } = require('../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items');
 const { chunk: splitIntoChunks } = require('lodash');
-const { createCase1 } = require('./cases/createCase1');
 const { createUsers } = require('./createUsers');
 
 AWS.config = new AWS.Config();
@@ -45,14 +44,7 @@ const putEntries = async entries => {
   }
 };
 
-module.exports.seedLocalDatabase = async entries => {
-  if (entries) {
-    await putEntries(entries);
-  } else {
-    await createUsers();
-
-    await putEntries(seedEntries);
-
-    await createCase1();
-  }
+module.exports.seedLocalDatabase = async () => {
+  await createUsers(); // TODO: we should probably remove this at some point
+  await putEntries(seedEntries);
 };

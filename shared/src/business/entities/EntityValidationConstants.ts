@@ -129,13 +129,13 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
-  filedByRole: JoiValidationConstants.STRING.valid(
-    ...[...Object.values(ROLES), 'System'],
-  )
+  filedByRole: joi
     .when('isDraft', {
-      is: undefined,
-      otherwise: joi.optional(),
-      then: joi.required(),
+      is: true,
+      otherwise: JoiValidationConstants.STRING.valid(
+        ...[...Object.values(ROLES), 'System'],
+      ).required(),
+      then: joi.optional(),
     })
     .description('The role of the party who filed the document.'),
   filers: joi.when('servedAt', {

@@ -4,16 +4,14 @@ import { createApplicationContext } from '../../../../../src/applicationContext'
 const applicationContext = createApplicationContext({});
 
 const isDocketEntryItem = item => {
-  return (
-    item.pk.startsWith('docket-entry|') && item.sk.startsWith('docket-entry|')
-  );
+  return item.pk.startsWith('case|') && item.sk.startsWith('docket-entry|');
 };
 
 export const migrateItems = async items => {
   const itemsAfter: TDynamoRecord[] = [];
 
   for (const item of items) {
-    if (isDocketEntryItem(item)) {
+    if (isDocketEntryItem(item) && !item.isDraft) {
       const filedByUser = await applicationContext
         .getPersistenceGateway()
         .getUserById({
