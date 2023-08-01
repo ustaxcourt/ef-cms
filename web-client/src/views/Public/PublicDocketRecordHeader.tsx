@@ -2,12 +2,27 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
+import { PUBLIC_DOCKET_RECORD_FILTER } from '../../../../shared/src/business/entities/EntityConstants';
 import { connect } from '@cerebral/react';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences } from '@web-client/presenter/app-public.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
-const props = {
+interface IPublicDocketRecordHeaderProps {
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS: PUBLIC_DOCKET_RECORD_FILTER;
+  docketNumber: string;
+  gotoPublicPrintableDocketRecordSequence: (
+    | (({ applicationContext, path, store }: ActionProps<any>) => Promise<any>)
+    | {
+        maintenanceOff: any[];
+        maintenanceOn: any[][];
+      }
+  )[];
+  publicCaseDetailHelper: IPublicCaseDetailHelper;
+  showModal: string;
+}
+
+const props: IPublicDocketRecordHeaderProps = {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
     state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   docketNumber: state.caseDetail.docketNumber,
@@ -15,7 +30,6 @@ const props = {
     sequences.gotoPublicPrintableDocketRecordSequence,
   publicCaseDetailHelper:
     state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
-
   showModal: state.modal.showModal,
 };
 

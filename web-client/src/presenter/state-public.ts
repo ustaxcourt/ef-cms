@@ -30,6 +30,7 @@ const computeds = {
 export const baseState = {
   advancedSearchForm: {},
   advancedSearchTab: 'case',
+  caseDetail: {} as RawPublicCase,
   commonUI: {
     showBetaBar: true,
     showMobileMenu: false,
