@@ -53,4 +53,6 @@ describe('migrateItems', () => {
       },
     ]);
   });
+
+  // should NOT migrate a docket entry that is a draft
 });
