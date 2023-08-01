@@ -2,8 +2,8 @@ const {
   checkForReadyForTrialCasesLambda,
 } = require('../../../src/cases/checkForReadyForTrialCasesLambda');
 const {
-  getHealthCheckAndSetCacheLambda,
-} = require('../../../src/health/getHealthCheckAndSetCacheLambda');
+  setHealthCheckCacheLambda,
+} = require('../../../src/health/setHealthCheckCacheLambda');
 
 exports.checkForReadyForTrialCasesHandler = checkForReadyForTrialCasesLambda;
-exports.getHealthCheckAndSetCacheHandler = getHealthCheckAndSetCacheLambda;
+exports.setHealthCheckCacheHandler = setHealthCheckCacheLambda;
