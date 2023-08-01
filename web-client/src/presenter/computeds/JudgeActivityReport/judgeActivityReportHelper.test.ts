@@ -68,7 +68,7 @@ describe('judgeActivityReportHelper', () => {
     };
 
     judgeActivityReportFilters = {
-      judgeName: judgeUser.name,
+      judgeNameToDisplayForHeader: judgeUser.name,
     };
 
     baseState = {

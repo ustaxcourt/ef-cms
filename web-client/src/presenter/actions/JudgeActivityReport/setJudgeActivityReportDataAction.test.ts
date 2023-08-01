@@ -60,18 +60,4 @@ describe('setJudgeActivityReportDataAction', () => {
       state.judgeActivityReport.judgeActivityReportData.trialSessions,
     ).toBe(mockTrialSessions);
   });
-
-  it('should set judges last name on state.judgeActivityReport.filters', async () => {
-    const { state } = await runAction(setJudgeActivityReportDataAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: baseState,
-    });
-
-    expect(state.judgeActivityReport.filters.judgeNameToDisplayForHeader).toBe(
-      judgeUser.name,
-    );
-  });
 });
