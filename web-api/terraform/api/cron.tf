@@ -29,7 +29,7 @@ resource "aws_lambda_function" "health_check_cron_lambda" {
   source_code_hash = var.cron_object_hash
   function_name    = "health_check_cron_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = "cron.getHealthCheckAndSetCacheHandler"
+  handler          = "cron.setHealthCheckCacheHandler"
   timeout          = "900"
   memory_size      = "3008"
 
