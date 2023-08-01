@@ -133,7 +133,11 @@ variable "streams_object_hash" {
   type = string
 }
 
-variable "create_cron" {
+variable "create_health_check_cron" {
+  type = number
+}
+
+variable "create_check_case_cron" {
   type = number
 }
 
