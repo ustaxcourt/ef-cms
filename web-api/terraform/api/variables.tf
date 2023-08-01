@@ -206,3 +206,7 @@ variable "use_layers" {
   type = bool
   default = true
 }
+
+variable "status_health_check_id" {
+  type = string
+}
