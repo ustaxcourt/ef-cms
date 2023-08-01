@@ -176,7 +176,7 @@ Architecting a system with dynamodb can be tricky.  One recommendation from AWS 
 | add a hearing to a case                                    | case\|${CASE_ID}                                | hearing\|${TRIAL_SESSION_ID}             |                                             |
 | a work item on a case                                      | case\|${CASE_ID}                                | work-item\|${WORK_ITEM_ID}               |                                             |
 | docket number generator counter                            | docketNumberCounter-${YEAR}                     | docketNumberCounter-${YEAR}              |                                             |
-| how we store the list of trial sessions eligble for a case | eligible-for-trial-case-catalog                 | LasVegasNevada-H-B-20190816132910-107-19 | eligible-for-trial-case-catalog\|${CASE_ID} |
+| how we store the list of trial sessions eligible for a case | eligible-for-trial-case-catalog                 | LasVegasNevada-H-B-20190816132910-107-19 | eligible-for-trial-case-catalog\|${CASE_ID} |
 | associate practitioner by bar number for lookup            | privatePractitioner\|${BAR_NUMBER}              | user\|${userId}                          |                                             |
 | associate practitioner by name for lookup                  | privatePractitioner\|${NAME}                    | user\|${userId}                          |                                             |
 | save outbox workitems for a section sorted by date         | section-outbox\|                                | $datetime                                | work-item\|${WORK_ITEM_ID}                  |

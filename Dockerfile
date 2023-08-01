@@ -24,7 +24,7 @@ RUN apt-get install -y \
   python3-pip \
   jq \
   graphicsmagick=1.4+really1.3.36+hg16481-2+deb11u1 \
-  ghostscript=9.53.3~dfsg-7+deb11u4 \
+  ghostscript=9.53.3~dfsg-7+deb11u5 \
   chromium \
   openssh-client \
   sudo
@@ -34,13 +34,13 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.1.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.3.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.5.3/terraform_1.5.3_linux_amd64.zip && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.5.4/terraform_1.5.4_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

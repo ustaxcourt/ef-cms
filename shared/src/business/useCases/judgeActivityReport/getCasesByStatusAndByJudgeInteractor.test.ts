@@ -21,6 +21,8 @@ import {
 } from '../../../test/mockUsers';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
 
+const docketEntryWithoutCaseHistory = '115-23';
+
 const mockSubmittedCase = {
   ...MOCK_CASE,
   associatedJudge: judgeUser.name,
@@ -33,6 +35,14 @@ const mockSubmittedCase = {
   ],
   pk: `case|${MOCK_CASE.docketNumber}`,
   sk: `case|${MOCK_CASE.docketNumber}`,
+};
+
+const mockSubmittedCaseWithoutCaseHistory = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [],
+  pk: `case|${docketEntryWithoutCaseHistory}`,
+  sk: `case|${docketEntryWithoutCaseHistory}`,
 };
 
 const mockSubmittedCaseWithOddOnDocketRecord = {
@@ -200,6 +210,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockCavLeadCase.docketNumber },
       { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
+      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
     ];
 
     const casesForLeadDocketNumber = [
@@ -245,6 +256,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+
+    expect(result.cases).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: docketEntryWithoutCaseHistory,
+        }),
+      ]),
+    );
+
     expect(result.consolidatedCasesGroupCountMap).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
@@ -257,6 +277,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
       { docketNumber: mockCavLeadCase.docketNumber },
       { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
+      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
     ];
 
     const casesForLeadDocketNumber = [
@@ -303,6 +324,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+
+    expect(result.cases).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: docketEntryWithoutCaseHistory,
+        }),
+      ]),
+    );
+
     expect(result.consolidatedCasesGroupCountMap).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
@@ -313,6 +343,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
+      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
     ];
 
     applicationContext
@@ -339,6 +370,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+
+    expect(result.cases).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: docketEntryWithoutCaseHistory,
+        }),
+      ]),
+    );
+
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(1);
   });
@@ -355,6 +395,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
+      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
     ];
 
     applicationContext
@@ -384,6 +425,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+
+    expect(result.cases).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: docketEntryWithoutCaseHistory,
+        }),
+      ]),
+    );
+
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(2);
   });
@@ -400,6 +450,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
+      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
     ];
 
     applicationContext
@@ -429,6 +480,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+
+    expect(result.cases).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: docketEntryWithoutCaseHistory,
+        }),
+      ]),
+    );
+
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(2);
   });
@@ -446,6 +506,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
+      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
     ];
 
     applicationContext
@@ -475,6 +536,14 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
+    expect(result.cases).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: docketEntryWithoutCaseHistory,
+        }),
+      ]),
+    );
+
     expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(2);
   });

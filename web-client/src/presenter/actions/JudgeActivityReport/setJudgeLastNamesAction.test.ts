@@ -49,4 +49,25 @@ describe('setJudgeLastNamesAction', () => {
 
     expect(state.judgeActivityReport.filters.judges).toEqual([judgeUser.name]);
   });
+
+  it('should set judges last name on state.judgeActivityReport.filters', async () => {
+    const { state } = await runAction(setJudgeLastNamesAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        judgeActivityReport: {
+          filters: {
+            judgeName: judgeUser.name,
+          },
+        },
+        judges: mockJudgesInState,
+      },
+    });
+
+    expect(state.judgeActivityReport.filters.judgeNameToDisplayForHeader).toBe(
+      judgeUser.name,
+    );
+  });
 });
