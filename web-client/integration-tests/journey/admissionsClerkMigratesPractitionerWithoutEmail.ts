@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 import axios from 'axios';
 const { faker } = require('@faker-js/faker');

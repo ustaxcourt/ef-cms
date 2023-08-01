@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 export const petitionsClerkAddsCaseNote = cerebralTest => {
   return it('petitions clerk adds procedural note to a case', async () => {

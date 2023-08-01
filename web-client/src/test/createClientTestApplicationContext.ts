@@ -646,5 +646,11 @@ const createTestApplicationContext = () => {
   return applicationContext;
 };
 
+/*
+  If you receive an error when testing cerebral that says:
+  `The property someProperty passed to Provider is not a method`
+  it is because the cerebral testing framework expects all objects on the
+  applicationContext to be functions.
+*/
 export const applicationContextForClient: ClientApplicationContext =
   createTestApplicationContext();

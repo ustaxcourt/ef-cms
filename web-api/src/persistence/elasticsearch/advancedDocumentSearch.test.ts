@@ -1,8 +1,5 @@
 /* eslint-disable max-lines */
-import {
-  applicationContext,
-  applicationContextForClient,
-} from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 
 import {
   BENCH_OPINION_EVENT_CODE,
@@ -442,7 +439,7 @@ describe('advancedDocumentSearch', () => {
   });
 
   it('should return the results and totalCount of results', async () => {
-    applicationContextForClient.i;
+    // applicationContextForClient.i;
     const result = await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
