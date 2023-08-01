@@ -1,3 +1,4 @@
+import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -104,6 +105,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { serveThirtyDayNoticeModalHelper } from './computeds/serveThirtyDayNoticeModalHelper';
 import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
@@ -230,6 +232,7 @@ export const computeds = {
   scanBatchPreviewerHelper,
   scanHelper,
   sealedCaseDetailHelper,
+  serveThirtyDayNoticeModalHelper,
   sessionAssignmentHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
@@ -264,8 +267,8 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
-  batchDownloads: {}, // batch download of PDFs
+  assigneeId: null,
+  batchDownloads: {},
   caseDeadlineReport: {} as {
     caseDeadlines: RawCaseDeadline[];
     judgeFilter: string;
@@ -276,9 +279,7 @@ export const baseState = {
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
-  // TODO: replace with state.form
   currentJudges: [],
-
   currentPage: 'Interstitial',
   currentViewMetadata: {
     caseDetail: {
@@ -308,7 +309,6 @@ export const baseState = {
   },
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   docketEntryId: null,
-
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
@@ -325,13 +325,13 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
-
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   individualInProgressCount: 0,
   individualInboxCount: 0,
-  // needs its own object because it's present when other forms are on screen
+  isTerminalUser: false,
   judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
+  judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
@@ -396,10 +396,10 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
+  trialSession: {} as RawTrialSession,
   trialSessionJudge: {
     name: '',
   },
-
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

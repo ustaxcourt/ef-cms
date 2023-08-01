@@ -3,6 +3,7 @@ import {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
+  SESSION_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -31,26 +32,26 @@ describe('Trial Session Eligible Cases Journey', () => {
     addToTrialSessionModalHelperComputed,
   );
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
-
   const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const currentYearPlusFive = new Date().getFullYear() + 5;
   const overrides = {
     maxCases: 4,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialLocation,
     trialYear: currentYearPlusFive.toString(),
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
+
+  let caseOverrides;
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, overrides);
-
-  let caseOverrides;
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case #1', async () => {
@@ -180,8 +181,8 @@ describe('Trial Session Eligible Cases Journey', () => {
         state: cerebralTest.getState(),
       });
 
-      expect(modalHelper.trialSessionStatesSorted[0]).toEqual('Remote');
-      expect(modalHelper.trialSessionStatesSorted[1]).toEqual('Alabama');
+      expect(modalHelper.trialSessionStatesSorted![0]).toEqual('Remote');
+      expect(modalHelper.trialSessionStatesSorted![1]).toEqual('Alabama');
 
       await cerebralTest.runSequence('updateModalValueSequence', {
         key: 'trialSessionId',

@@ -39,11 +39,7 @@ const updateCaseEntityAndGenerateChange = async ({
   const oldData = { email: oldEmail };
   petitionerObject.email = user.email;
 
-  if (
-    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerObject.contactId,
-    )
-  ) {
+  if (!Case.isPetitionerRepresented(caseEntity, petitionerObject.contactId)) {
     petitionerObject.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
   }
 
@@ -52,10 +48,10 @@ const updateCaseEntityAndGenerateChange = async ({
     .getUtilities()
     .getDocumentTypeForAddressChange({ newData, oldData });
 
-  const privatePractitionersRepresentingContact =
-    caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerObject.contactId,
-    );
+  const privatePractitionersRepresentingContact = Case.isPetitionerRepresented(
+    caseEntity,
+    petitionerObject.contactId,
+  );
 
   if (caseEntity.shouldGenerateNoticesForCase()) {
     const { changeOfAddressDocketEntry } = await applicationContext

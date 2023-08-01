@@ -37,6 +37,7 @@ describe('serveGeneratedNoticesOnCase', () => {
       caseEntity: mockOpenCaseEntity,
       docketEntryId: mockNoticeDocketEntryEntity.docketEntryId,
       servedParties: mockServedParties,
+      skipEmailToIrs: false,
     });
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,

@@ -47,12 +47,16 @@ export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
-};
+} as const;
+const TRIAL_PROCEEDINGS = Object.values(TRIAL_SESSION_PROCEEDING_TYPES);
+export type TrialSessionProceedingType = (typeof TRIAL_PROCEEDINGS)[number];
 
 export const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
-};
+} as const;
+const TRIAL_SESSION_SCOPES = Object.values(TRIAL_SESSION_SCOPE_TYPES);
+export type TrialSessionScope = (typeof TRIAL_SESSION_SCOPES)[number];
 
 export const JURISDICTIONAL_OPTIONS = {
   restoredToDocket: 'The case is restored to the general docket',
@@ -466,6 +470,10 @@ export const POLICY_DATE_IMPACTED_EVENTCODES = [
   ...BRIEF_EVENTCODES,
   AMICUS_BRIEF_EVENT_CODE,
   SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+  ...AMENDMENT_EVENT_CODES,
+  'REDC',
+  'SPML',
+  'SUPM',
 ];
 
 export const SCENARIOS = [
@@ -1291,9 +1299,8 @@ export const SESSION_TYPES = {
   special: 'Special',
   motionHearing: 'Motion/Hearing',
 } as const;
-
-export const SESSION_TYPES_VALUES = Object.values(SESSION_TYPES);
-export type SESSIONS = (typeof SESSION_TYPES_VALUES)[number];
+const TRIAL_SESSION_TYPES = Object.values(SESSION_TYPES);
+export type TrialSessionTypes = (typeof TRIAL_SESSION_TYPES)[number];
 
 export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
   'hybrid',
@@ -1554,3 +1561,12 @@ export const MAX_SEARCH_RESULTS = 100;
 
 export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
   'tempJudgeIdToRepresentAllJudgesSelection';
+
+export const isDocumentBriefType = (documentType: string) => {
+  const documents = [
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+  ];
+  return !!documents.find(document => document.documentType === documentType)
+    ?.eventCode;
+};
