@@ -3,6 +3,7 @@ import {
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setJudgeActivityReportDataAction } from './setJudgeActivityReportDataAction';
@@ -21,6 +22,13 @@ describe('setJudgeActivityReportDataAction', () => {
     [SESSION_TYPES.motionHearing]: 2,
   };
 
+  const baseState = {
+    judgeActivityReport: {
+      filters: { judgeName: judgeUser.name },
+      judgeActivityReportData: {},
+    },
+  };
+
   it('should set props.casesClosedByJudge on state.judgeActivityReport', async () => {
     const { state } = await runAction(setJudgeActivityReportDataAction, {
       modules: {
@@ -29,13 +37,7 @@ describe('setJudgeActivityReportDataAction', () => {
       props: {
         casesClosedByJudge: mockCasesClosedByJudge,
       },
-      state: {
-        judgeActivityReport: {
-          judgeActivityReportData: {
-            casesClosedByJudge: undefined,
-          },
-        },
-      },
+      state: baseState,
     });
 
     expect(
@@ -51,13 +53,7 @@ describe('setJudgeActivityReportDataAction', () => {
       props: {
         trialSessions: mockTrialSessions,
       },
-      state: {
-        judgeActivityReport: {
-          judgeActivityReportData: {
-            trialSessions: undefined,
-          },
-        },
-      },
+      state: baseState,
     });
 
     expect(

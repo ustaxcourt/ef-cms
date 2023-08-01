@@ -10,4 +10,8 @@ export const setJudgeLastNamesAction = ({ get, store }: ActionProps) => {
     judgeName === 'All Judges' ? getJudgeNames : [judgeName];
 
   store.set(state.judgeActivityReport.filters.judges, judgesToQueryFor);
+  store.set(
+    state.judgeActivityReport.filters.judgeNameToDisplayForHeader,
+    judgeName,
+  );
 };

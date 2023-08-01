@@ -5,7 +5,7 @@ import { sum, sumBy } from 'lodash';
 
 interface IJudgeActivityReportHelper {
   closedCasesTotal: number | undefined;
-  filteredSubmittedAndCavCasesByJudge: any | undefined;
+  submittedAndCavCasesByJudge: any | undefined;
   isFormPristine: boolean | undefined;
   opinionsFiledTotal: number | undefined;
   ordersFiledTotal: number | undefined;
@@ -23,7 +23,7 @@ export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeName, startDate } = get(
+  const { endDate, judgeNameToDisplayForHeader, startDate } = get(
     state.judgeActivityReport.filters,
   );
 
@@ -75,7 +75,7 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader: string = `${judgeName} ${currentDate}`;
+  const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
@@ -84,12 +84,7 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.ISO,
     );
 
-  const filteredSubmittedAndCavCasesByJudge =
-    submittedAndCavCasesByJudge.filter(
-      unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
-    );
-
-  filteredSubmittedAndCavCasesByJudge.forEach(individualCase => {
+  submittedAndCavCasesByJudge.forEach(individualCase => {
     individualCase.formattedCaseCount =
       consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
@@ -114,7 +109,7 @@ export const judgeActivityReportHelper = (
       );
   });
 
-  filteredSubmittedAndCavCasesByJudge.sort((a, b) => {
+  submittedAndCavCasesByJudge.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
@@ -127,7 +122,6 @@ export const judgeActivityReportHelper = (
 
   return {
     closedCasesTotal,
-    filteredSubmittedAndCavCasesByJudge,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal,
     ordersFiledTotal,
@@ -137,6 +131,7 @@ export const judgeActivityReportHelper = (
     showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
+    submittedAndCavCasesByJudge,
     today,
     trialSessionsHeldTotal,
   };
