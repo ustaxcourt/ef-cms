@@ -11,13 +11,9 @@ import React from 'react';
 interface IPublicDocketRecordHeaderProps {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS: PUBLIC_DOCKET_RECORD_FILTER;
   docketNumber: string;
-  gotoPublicPrintableDocketRecordSequence: (
-    | (({ applicationContext, path, store }: ActionProps<any>) => Promise<any>)
-    | {
-        maintenanceOff: any[];
-        maintenanceOn: any[][];
-      }
-  )[];
+  gotoPublicPrintableDocketRecordSequence: (props: {
+    docketNumber: string;
+  }) => void;
   publicCaseDetailHelper: IPublicCaseDetailHelper;
   showModal: string;
 }
@@ -53,9 +49,7 @@ export const PublicDocketRecordHeader = connect(
               icon="print"
               id="printable-docket-record-button"
               onClick={() => {
-                gotoPublicPrintableDocketRecordSequence({
-                  docketNumber,
-                });
+                gotoPublicPrintableDocketRecordSequence({ docketNumber });
               }}
             >
               Printable Docket Record
