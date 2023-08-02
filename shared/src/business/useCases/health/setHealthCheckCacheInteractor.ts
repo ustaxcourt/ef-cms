@@ -1,49 +1,21 @@
-import {
-  getCognitoStatus,
-  getDeployDynamoStatus,
-  getDynamoStatus,
-  getDynamsoftStatus,
-  getElasticSearchStatus,
-  getEmailServiceStatus,
-  getS3BucketStatus,
-} from './getHealthCheckInteractor';
-
 export const setHealthCheckCacheInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
+  // intentionally leaving these here for testing
   console.log('setHealthCheckCacheInteractor 1', Date.now());
-  const [
-    elasticSearchStatus,
-    dynamoStatus,
-    deployDynamoStatus,
-    dynamsoftStatus,
-    s3BucketStatus,
-    cognitoStatus,
-    emailServiceStatus,
-  ] = await Promise.all([
-    getElasticSearchStatus({
-      applicationContext,
-    }),
-    getDynamoStatus({ applicationContext }),
-    getDeployDynamoStatus({
-      applicationContext,
-    }),
-    getDynamsoftStatus({ applicationContext }),
-    getS3BucketStatus({ applicationContext }),
-    getCognitoStatus({ applicationContext }),
-    getEmailServiceStatus({
-      applicationContext,
-    }),
-  ]);
+
+  const { cognito, dynamo, dynamsoft, elasticsearch, emailService, s3 } =
+    await applicationContext
+      .getUseCases()
+      .getHealthCheckInteractor(applicationContext);
 
   const allChecksHealthy = [
-    ...Object.values(s3BucketStatus),
-    elasticSearchStatus,
-    dynamoStatus,
-    deployDynamoStatus,
-    dynamsoftStatus,
-    cognitoStatus,
-    emailServiceStatus,
+    ...Object.values(s3),
+    ...Object.values(dynamo),
+    cognito,
+    dynamsoft,
+    elasticsearch,
+    emailService,
   ].every(status => {
     return status === true;
   });

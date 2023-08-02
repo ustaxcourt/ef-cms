@@ -79,11 +79,6 @@ export const describeDeployTable = async ({ applicationContext }) => {
   return await dynamoClient.describeTable(params).promise();
 };
 
-/**
- *
- * @param {object} params the params to put
- * @returns {object} the item that was put
- */
 export const put = ({
   applicationContext,
   Item,
@@ -103,11 +98,6 @@ export const put = ({
     .then(() => Item);
 };
 
-/**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
 export const update = ({
   applicationContext,
   ConditionExpression,
@@ -227,17 +217,11 @@ export const getFromDeployTable = params => {
     });
 };
 
-/**
- *
- * @param {object} applicationContext the applicationContext
- * @param {TDynamoRecord} item the dynamo record to write
- * @returns {object} the item that was put
- */
-export const putInDeployTable = (
+export const putInDeployTable = async (
   applicationContext: IApplicationContext,
   item: TDynamoRecord,
-) => {
-  return applicationContext
+): Promise<void> => {
+  await applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
@@ -250,12 +234,6 @@ export const putInDeployTable = (
     .promise();
 };
 
-/**
- * GET for aws-sdk dynamodb client
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
 export const query = ({
   applicationContext,
   ExpressionAttributeNames,
@@ -322,12 +300,6 @@ export const scan = async params => {
   return allItems;
 };
 
-/**
- * GET for aws-sdk dynamodb client
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
 export const queryFull = async ({
   applicationContext,
   ExpressionAttributeNames,

@@ -9,6 +9,29 @@ const handleAxiosTimeout = axios => {
   return source;
 };
 
+export type ApplicationHealth = {
+  cognito: boolean;
+  dynamo: {
+    efcms: boolean;
+    efcmsDeploy: boolean;
+  };
+  dynamsoft: boolean;
+  elasticsearch: boolean;
+  emailService: boolean;
+  s3: {
+    app: boolean;
+    appFailover: boolean;
+    eastDocuments: boolean;
+    eastQuarantine: boolean;
+    eastTempDocuments: boolean;
+    public: boolean;
+    publicFailover: boolean;
+    westDocuments: boolean;
+    westQuarantine: boolean;
+    westTempDocuments: boolean;
+  };
+};
+
 export const getElasticSearchStatus = async ({ applicationContext }) => {
   try {
     await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
@@ -169,7 +192,7 @@ export const getEmailServiceStatus = async ({ applicationContext }) => {
 
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
-) => {
+): Promise<ApplicationHealth> => {
   const [
     elasticSearchStatus,
     dynamoStatus,
