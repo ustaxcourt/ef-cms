@@ -47,6 +47,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -55,7 +56,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          iledByRole: ROLES.petitioner,
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -64,7 +65,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
-          iledByRole: ROLES.petitioner,
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
