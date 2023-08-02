@@ -33,7 +33,7 @@ export class User extends JoiValidationEntity {
   };
   public judgeFullName?: string;
   public judgeTitle?: string;
-  public section: string;
+  public section?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
