@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
 
@@ -21,6 +22,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           isFileAttached: true,
           processingStatus: 'pending',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
