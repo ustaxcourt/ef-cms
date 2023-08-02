@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
@@ -7,9 +8,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
 import { MOCK_CASE } from '../../../test/mockCase';
-import { addCoverToPdf } from '../addCoverToPdf';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -23,16 +22,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(mockNumberOfPages);
-
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: testPdfDoc,
-    });
   });
 
   beforeEach(() => {
     mockCase = {
       ...MOCK_CASE,
-      docketEntries: [{ docketEntryId: mockDocketEntryId }],
+      docketEntries: [
+        { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
+      ],
     };
 
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
@@ -47,7 +44,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: true,
+      });
 
     applicationContext
       .getUseCaseHelpers()
@@ -146,6 +145,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             draftOrderState: 'abc',
           },
         ],
@@ -177,6 +177,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             eventCode: 'A',
             filingDate: 'abc',
           },
@@ -233,6 +234,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             isDraft: true,
           },
         ],
@@ -259,6 +261,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             isFileAttached: false,
           },
         ],
@@ -285,6 +288,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             isOnDocketRecord: false,
           },
         ],
@@ -325,6 +329,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketEntries: [
           {
             docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
             processingStatus: 'abc',
           },
         ],
@@ -347,7 +352,72 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const mockMemberCaseDocketNumber = '999-15';
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(false);
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: false,
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
+  it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          },
+        ],
+      });
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId: '',
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [mockMemberCaseDocketNumber],
+      subjectCaseDocketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+        .calls[0][0].caseEntity.docketNumber,
+    ).toBe(mockCase.docketNumber);
+  });
+
+  it('should only serve the docket entry on the subjectCase when the subject docket entry has a simultaneous document title', async () => {
+    const mockMemberCaseDocketNumber = '999-15';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'Simultaneous doc title',
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -370,7 +440,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -388,23 +466,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({ ...mockCase, docketEntries: [] });
-
-    await serveExternallyFiledDocumentInteractor(applicationContext, {
-      clientConnectionId: '',
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [],
-      subjectCaseDocketNumber: mockCase.docketNumber,
-    });
-
-    expect(addCoverToPdf).toHaveBeenCalled();
-  });
-
-  it('should save the pdf with coversheet attached to persistence', async () => {
-    const mockPdfWithCoversheet = { abc: '123' };
-    (addCoverToPdf as jest.Mock).mockResolvedValue({
-      pdfData: mockPdfWithCoversheet,
-    });
+      .mockReturnValueOnce({
+        ...mockCase,
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntryId,
+            documentTitle: 'fake title',
+          },
+        ],
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId: '',
@@ -414,9 +484,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0].document,
-    ).toBe(mockPdfWithCoversheet);
+      applicationContext.getUseCases().addCoversheetInteractor,
+    ).toHaveBeenCalled();
   });
 
   it('should set isPendingService to truthy when filing the subject docket entry', async () => {

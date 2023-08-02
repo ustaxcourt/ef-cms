@@ -100,7 +100,7 @@ export const EditDocketEntryMetaFormDocument = connect(
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
             value={reactSelectValue({
               documentTypes:
-                internalTypesHelper.internalDocumentTypesForSelectSorted,
+                internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
               selectedEventCode: form.eventCode,
             })}
             onChange={(inputValue, { action, name: inputName }) => {
@@ -147,7 +147,7 @@ export const EditDocketEntryMetaFormDocument = connect(
               options={internalTypesHelper.internalDocumentTypesForSelectSorted}
               value={reactSelectValue({
                 documentTypes:
-                  internalTypesHelper.internalDocumentTypesForSelectSorted,
+                  internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
                 selectedEventCode:
                   form.secondaryDocument && form.secondaryDocument.eventCode,
               })}

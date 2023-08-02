@@ -1,4 +1,3 @@
-import { ActionProps } from '../presenter';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

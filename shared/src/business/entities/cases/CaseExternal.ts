@@ -57,7 +57,7 @@ export class CaseExternal extends JoiValidationEntity {
     this.corporateDisclosureFile = rawCase.corporateDisclosureFile;
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
 
-    const contacts = ContactFactory.createContacts({
+    const contacts = ContactFactory({
       applicationContext,
       contactInfo: {
         primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

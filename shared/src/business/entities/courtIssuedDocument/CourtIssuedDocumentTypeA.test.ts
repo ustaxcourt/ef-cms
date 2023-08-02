@@ -1,10 +1,11 @@
-const {
+import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   REPORT_PAMPHLET_DOCUMENT_TYPE,
   VALIDATION_ERROR_MESSAGES,
-} = require('./CourtIssuedDocumentConstants');
-const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { getTextByCount } = require('../../utilities/getTextByCount');
+} from './CourtIssuedDocumentConstants';
+
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('constructor', () => {
@@ -82,7 +83,7 @@ describe('CourtIssuedDocumentTypeA', () => {
           scenario: 'Type A',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 

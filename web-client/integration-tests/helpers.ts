@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import * as client from '../../shared/src/persistence/dynamodbClientService';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
@@ -70,7 +71,6 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
-import { ALLOWLIST_FEATURE_FLAGS } from '../../shared/src/business/entities/EntityConstants';
 import {
   fakeData,
   getFakeFile,
@@ -260,16 +260,21 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
-        if (
-          featureFlag ===
-          ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-      },
+      getAllFeatureFlagsInteractor: () => ({
+        'chief-judge-name': 'Maurice B. Foley',
+        'consolidated-cases-add-docket-numbers': true,
+        'consolidated-cases-group-access-petitioner': true,
+        'document-visibility-policy-change-date': '2023-05-01',
+        'e-consent-fields-enabled-feature-flag': true,
+        'external-opinion-search-enabled': true,
+        'external-order-search-enabled': true,
+        'internal-opinion-search-enabled': true,
+        'internal-order-search-enabled': true,
+        'multi-docketable-paper-filings': true,
+        'redaction-acknowledgement-enabled': true,
+        'updated-trial-status-types': true,
+        'use-external-pdf-generation': false,
+      }),
     }),
     getUtilities: () => ({
       calculateDifferenceInDays,
@@ -336,8 +341,6 @@ export const getCaseMessagesForCase = cerebralTest => {
   });
 };
 
-const client = require('../../shared/src/persistence/dynamodbClientService');
-
 export const getConnectionsByUserId = userId => {
   return client.query({
     ExpressionAttributeNames: {
@@ -381,6 +384,17 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
       current: isEnabled,
       pk: `${keyPrefix}-opinion-search-enabled`,
       sk: `${keyPrefix}-opinion-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
+export const setTerminalUserIps = (ips: string[]) => {
+  return client.put({
+    Item: {
+      ips,
+      pk: 'allowed-terminal-ips',
+      sk: 'allowed-terminal-ips',
     },
     applicationContext,
   });

@@ -4,8 +4,8 @@ export const countPagesInDocument = async ({
   documentBytes,
 }: {
   applicationContext: IApplicationContext;
-  docketEntryId?: string;
-  documentBytes?: Blob;
+  docketEntryId: string;
+  documentBytes?: any;
 }) => {
   let bytes;
   const { PDFDocument } = await applicationContext.getPdfLib();

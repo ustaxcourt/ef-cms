@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { CASE_STATUS_TYPES } = require('../EntityConstants');
+import { CASE_STATUS_TYPES } from '../EntityConstants';
+import { Case } from './Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('updateCaseCaptionDocketRecord', () => {
   it('should not add a notice of caption changed document when the caption is not set', () => {

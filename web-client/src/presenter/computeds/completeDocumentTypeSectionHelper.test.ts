@@ -73,7 +73,7 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.primary.showSecondaryDocumentSelect).toBe(false);
   });
 
-  it('returns an array of documentTypes for select sans [NCA, NCP, NCAP]', () => {
+  it('returns an array of documentTypes for select sans [NCA, NCP, NCAP, DSC]', () => {
     const categoryKey = 'Application';
     const categoryIdx = 0;
 
@@ -94,6 +94,9 @@ describe('completeDocumentTypeSectionHelper', () => {
     expect(result.primary).toBeTruthy();
     expect(result.documentTypesForSelectSorted).not.toEqual(
       expect.arrayContaining([
+        expect.objectContaining({
+          eventCode: 'DSC',
+        }),
         expect.objectContaining({
           eventCode: 'NCA',
         }),

@@ -95,10 +95,10 @@ export const statisticsHelper = (
   }
 
   const formattedDamages =
-    damages && applicationContext.getUtilities().formatDollars(damages);
+    damages && applicationContext.getUtilities().formatDollars(+damages);
   const formattedLitigationCosts =
     litigationCosts &&
-    applicationContext.getUtilities().formatDollars(litigationCosts);
+    applicationContext.getUtilities().formatDollars(+litigationCosts);
 
   const showDamages = !!formattedDamages;
   const showLitigationCosts = !!formattedLitigationCosts;

@@ -8,6 +8,7 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_USERS, docketClerkUser } from '../../../test/mockUsers';
@@ -410,7 +411,7 @@ describe('fileExternalDocumentInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Simultaneous Memoranda of Law',
           documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
           filedBy: 'Test Petitioner',
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },

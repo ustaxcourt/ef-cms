@@ -1,6 +1,5 @@
-import puppeteer from 'puppeteer';
-
 export const getChromiumBrowser = async () => {
+  const { default: puppeteer } = await import('puppeteer');
   return await puppeteer.launch({
     args: ['--no-sandbox'],
   });

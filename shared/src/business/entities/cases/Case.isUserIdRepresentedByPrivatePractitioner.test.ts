@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case, isUserIdRepresentedByPrivatePractitioner } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isUserIdRepresentedByPrivatePractitioner', () => {
   let caseEntity;
@@ -29,26 +27,22 @@ describe('isUserIdRepresentedByPrivatePractitioner', () => {
   });
 
   it('returns true if there is a privatePractitioner representing the given userId', () => {
-    expect(caseEntity.isUserIdRepresentedByPrivatePractitioner('456')).toEqual(
-      true,
-    );
+    expect(Case.isPetitionerRepresented(caseEntity, '456')).toEqual(true);
   });
 
   it('returns false if there is NO privatePractitioner representing the given userId', () => {
-    expect(caseEntity.isUserIdRepresentedByPrivatePractitioner('678')).toEqual(
-      false,
-    );
+    expect(Case.isPetitionerRepresented(caseEntity, '678')).toEqual(false);
   });
 
   it('returns true if there is a privatePractitioner representing the given userId', () => {
     expect(
-      isUserIdRepresentedByPrivatePractitioner(caseEntity.toRawObject(), '456'),
+      Case.isPetitionerRepresented(caseEntity.toRawObject(), '456'),
     ).toEqual(true);
   });
 
   it('returns false if there is NO privatePractitioner representing the given userId', () => {
     expect(
-      isUserIdRepresentedByPrivatePractitioner(caseEntity.toRawObject(), '789'),
+      Case.isPetitionerRepresented(caseEntity.toRawObject(), '789'),
     ).toEqual(false);
   });
 
@@ -64,7 +58,7 @@ describe('isUserIdRepresentedByPrivatePractitioner', () => {
     );
 
     expect(
-      isUserIdRepresentedByPrivatePractitioner(
+      Case.isPetitionerRepresented(
         newCaseEntityWithoutPractitioners.toRawObject(),
         '789',
       ),

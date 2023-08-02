@@ -130,11 +130,8 @@ export const calculateISODate = ({
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
  */
-export const createISODateString = (
-  dateString?: string,
-  inputFormat?: TimeFormats,
-): string => {
-  let result: DateTime;
+export const createISODateString = (dateString?, inputFormat?: TimeFormats) => {
+  let result;
 
   if (!dateString) {
     result = DateTime.now().setZone(USTC_TZ);
