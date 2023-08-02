@@ -281,12 +281,14 @@ data "aws_s3_bucket_object" "cron_blue_west_object" {
   depends_on = [null_resource.cron_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
   key        = "cron_blue.js.zip"
+  provider   = aws.us-west-1
 }
 
 data "aws_s3_bucket_object" "cron_green_west_object" {
   depends_on = [null_resource.cron_west_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
   key        = "cron_green.js.zip"
+  provider   = aws.us-west-1
 }
 
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
