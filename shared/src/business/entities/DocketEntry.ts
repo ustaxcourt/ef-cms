@@ -460,6 +460,11 @@ export class DocketEntry extends JoiValidationEntity {
     this.numberOfPages = numberOfPages;
   }
 
+  setFiledBy(user: User) {
+    this.userId = user.userId;
+    this.filedByRole = user.role;
+  }
+
   /**
    * strikes this docket entry
    * @param {object} obj param
