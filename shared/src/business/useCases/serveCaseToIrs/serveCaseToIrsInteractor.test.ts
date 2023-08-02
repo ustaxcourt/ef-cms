@@ -12,7 +12,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case.ts';
+import { Case, getContactPrimary } from '../../entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
@@ -980,6 +980,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filedByRole: ROLES.petitioner,
           isFileAttached: true,
           processingStatus: 'pending',
           userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1001,6 +1002,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filedByRole: ROLES.petitioner,
           index: 2,
           isFileAttached: true,
           isOnDocketRecord: true,
@@ -1084,6 +1086,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Request for Place of Trial',
           eventCode: 'RPT',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           processingStatus: 'pending',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
         },
@@ -1095,6 +1098,7 @@ describe('serveCaseToIrsInteractor', () => {
           documentType: 'Application for Waiver of Filing Fee',
           eventCode: 'APW',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           processingStatus: 'pending',
           userId: 'b88a8284-b859-4641-a270-b3ee26c6c068',
         },
