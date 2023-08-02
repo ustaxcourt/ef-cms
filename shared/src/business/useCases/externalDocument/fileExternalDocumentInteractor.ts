@@ -147,9 +147,11 @@ export const fileExternalDocumentInteractor = async (
               relationship,
             },
             { applicationContext, petitioners: currentCaseEntity.petitioners },
-          ).validate();
+          );
 
           docketEntryEntity.setFiledBy(user);
+
+          docketEntryEntity.validate();
 
           const highPriorityWorkItem =
             caseEntity.status === CASE_STATUS_TYPES.calendared;
