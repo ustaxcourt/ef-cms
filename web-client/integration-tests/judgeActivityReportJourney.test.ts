@@ -60,101 +60,91 @@ describe('Judge activity report journey', () => {
   });
 
   viewJudgeActivityReportResults(cerebralTest);
-  describe('check for the addition of cav and submitted cases', () => {
-    it('should set the progressDescriptionTableBeforeCount', () => {
-      progressDescriptionTableTotalBefore =
-        cerebralTest.progressDescriptionTableTotal;
-    });
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
 
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusTo(
-      cerebralTest,
-      CASE_STATUS_TYPES.cav,
-      'Colvin',
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest, {});
+  it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore + 2,
     );
-
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
-
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusTo(
-      cerebralTest,
-      CASE_STATUS_TYPES.submitted,
-      'Colvin',
-    );
-
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    viewJudgeActivityReportResults(cerebralTest, {});
-    it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
-      const progressDescriptionTableTotalAfter =
-        cerebralTest.progressDescriptionTableTotal;
-
-      expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore + 2,
-      );
-    });
   });
 
   viewJudgeActivityReportResults(cerebralTest);
-  describe('check that a regular case is not added to Submitted/CAV cases table', () => {
-    it('should set the progressDescriptionTableBeforeCount', () => {
-      progressDescriptionTableTotalBefore =
-        cerebralTest.progressDescriptionTableTotal;
-    });
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
 
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
 
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    viewJudgeActivityReportResults(cerebralTest);
-    it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
-      const progressDescriptionTableTotalAfter =
-        cerebralTest.progressDescriptionTableTotal;
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a non-submitted or non-CAV case is added', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
 
-      expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore,
-      );
-    });
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore,
+    );
   });
 
   viewJudgeActivityReportResults(cerebralTest);
-  describe('check that a submitted case with a decision type is not added to Submitted/CAV cases table', () => {
-    it('should set the progressDescriptionTableBeforeCount', () => {
-      progressDescriptionTableTotalBefore =
-        cerebralTest.progressDescriptionTableTotal;
-    });
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
 
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkCreatesNewCase(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest);
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkUpdatesCaseStatusTo(
-      cerebralTest,
-      CASE_STATUS_TYPES.submitted,
-      'Colvin',
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order and Decision',
+    eventCode: 'OAD',
+    expectedDocumentType: 'Order and Decision',
+  });
+  docketClerkViewsDraftOrder(cerebralTest);
+  docketClerkSignsOrder(cerebralTest);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
+  docketClerkServesDocument(cerebralTest, 0);
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore,
     );
-    docketClerkCreatesAnOrder(cerebralTest, {
-      documentTitle: 'Order and Decision',
-      eventCode: 'OAD',
-      expectedDocumentType: 'Order and Decision',
-    });
-    docketClerkViewsDraftOrder(cerebralTest);
-    docketClerkSignsOrder(cerebralTest);
-    docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
-    docketClerkServesDocument(cerebralTest, 0);
-
-    loginAs(cerebralTest, 'judgecolvin@example.com');
-    viewJudgeActivityReportResults(cerebralTest);
-    it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record', () => {
-      const progressDescriptionTableTotalAfter =
-        cerebralTest.progressDescriptionTableTotal;
-
-      expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore,
-      );
-    });
   });
 });
