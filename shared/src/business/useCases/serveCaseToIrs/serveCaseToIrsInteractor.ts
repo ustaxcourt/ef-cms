@@ -46,7 +46,9 @@ export const addDocketEntryForPaymentStatus = ({
       },
       { applicationContext },
     );
+
     paymentStatusDocketEntry.setFiledBy(user);
+
     caseEntity.addDocketEntry(paymentStatusDocketEntry);
   } else if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.WAIVED) {
     const petitionPaymentStatusDocketEntry = new DocketEntry(
@@ -62,7 +64,9 @@ export const addDocketEntryForPaymentStatus = ({
       },
       { applicationContext },
     );
+
     petitionPaymentStatusDocketEntry.setFiledBy(user);
+
     caseEntity.addDocketEntry(petitionPaymentStatusDocketEntry);
   }
 };
@@ -323,6 +327,7 @@ const generateNoticeOfReceipt = async ({
     },
     { applicationContext, petitioners: caseEntity.petitioners },
   );
+
   notrDocketEntry.setFiledBy(userServingPetition);
 
   const servedParties = aggregatePartiesForService(caseEntity);
