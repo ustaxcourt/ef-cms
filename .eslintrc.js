@@ -356,6 +356,7 @@ module.exports = {
           'semibold',
           'seriatim',
           'serverless',
+          'servable',
           'servoss',
           'sisqo',
           'skipnav',

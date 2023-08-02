@@ -7,7 +7,7 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
-import { MOCK_DOCUMENTS } from './mockDocuments';
+import { MOCK_DOCUMENTS } from './mockDocketEntry';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
@@ -16,6 +16,7 @@ export const MOCK_CASE: RawCase = {
   correspondence: [],
   createdAt: '2018-03-01T21:40:46.415Z',
   docketEntries: MOCK_DOCUMENTS,
+  docketEntriesEFiledByPractitioner: [],
   docketNumber: '101-18',
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',
