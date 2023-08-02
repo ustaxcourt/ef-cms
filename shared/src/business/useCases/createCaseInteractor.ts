@@ -239,7 +239,9 @@ export const createCaseInteractor = async (
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
     cdsDocketEntryEntity.setFiledBy(user);
+
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }
 
