@@ -50,7 +50,7 @@ resource "aws_cloudwatch_event_rule" "check_case_cron_rule" {
 resource "aws_cloudwatch_event_rule" "health_check_cron_rule" {
   count               = var.create_health_check_cron
   name                = "health_check_cron_${var.environment}_${var.current_color}"
-  schedule_expression = "cron(0/3 * * * ? *)"
+  schedule_expression = "cron(0/1 * * * ? *)"
 }
 
 resource "aws_cloudwatch_event_target" "check_case_cron_target" {
