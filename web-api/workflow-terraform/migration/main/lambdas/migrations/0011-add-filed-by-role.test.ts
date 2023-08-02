@@ -1,4 +1,4 @@
-// import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
+import { MOCK_CASE } from '../../../../../../shared/src/test/mockCase';
 import { PENDING_DOCKET_ENTRY } from '../../../../../../shared/src/test/mockDocketEntry';
 import { ROLES } from '../../../../../../shared/src/business/entities/EntityConstants';
 import { getUserById } from '../../../../../../shared/src/persistence/dynamo/users/getUserById';
@@ -7,14 +7,38 @@ import { privatePractitionerUser } from '../../../../../../shared/src/test/mockU
 jest.mock('../../../../../../shared/src/persistence/dynamo/users/getUserById');
 
 describe('migrateItems', () => {
-  it('should add the filedByRole onto any docket entry', async () => {
+  it('should NOT modify a record that is NOT a docket entry', async () => {
+    (getUserById as jest.Mock).mockResolvedValue(privatePractitionerUser);
+
+    const items = [
+      {
+        ...MOCK_CASE,
+        filedByRole: undefined,
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: `case|${MOCK_CASE.docketNumber}`,
+      },
+    ];
+
+    const results = await migrateItems(items);
+
+    expect(results).toEqual([
+      {
+        ...MOCK_CASE,
+        filedByRole: undefined,
+        pk: `case|${MOCK_CASE.docketNumber}`,
+        sk: `case|${MOCK_CASE.docketNumber}`,
+      },
+    ]);
+  });
+
+  it('should set the role of the person who filed the docket entry when the item is a docket entry', async () => {
     (getUserById as jest.Mock).mockResolvedValue(privatePractitionerUser);
 
     const items = [
       {
         ...PENDING_DOCKET_ENTRY,
         filedByRole: undefined,
-        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        pk: `case|${PENDING_DOCKET_ENTRY.docketEntryId}`,
         sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
       },
     ];
@@ -25,19 +49,19 @@ describe('migrateItems', () => {
       {
         ...PENDING_DOCKET_ENTRY,
         filedByRole: ROLES.privatePractitioner,
-        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        pk: `case|${PENDING_DOCKET_ENTRY.docketEntryId}`,
         sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
       },
     ]);
   });
 
-  it('should add system as filedByRole onto any docket entry where the user cannot be found', async () => {
+  it('should add system as the role of the person who filed the docket entry when the user who filed the entry was not found in persistence', async () => {
     (getUserById as jest.Mock).mockResolvedValue(undefined);
     const items = [
       {
         ...PENDING_DOCKET_ENTRY,
         filedByRole: undefined,
-        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        pk: `case|${PENDING_DOCKET_ENTRY.docketEntryId}`,
         sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
       },
     ];
@@ -48,20 +72,20 @@ describe('migrateItems', () => {
       {
         ...PENDING_DOCKET_ENTRY,
         filedByRole: 'System',
-        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        pk: `case|${PENDING_DOCKET_ENTRY.docketEntryId}`,
         sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
       },
     ]);
   });
 
-  it('should NOT add filedByRole to a docket entry that is a draft', async () => {
-    (getUserById as jest.Mock).mockResolvedValue(undefined);
+  it('should set the role of the person who filed the docket entry when the docket entry is a draft', async () => {
+    (getUserById as jest.Mock).mockResolvedValue(privatePractitionerUser);
     const items = [
       {
         ...PENDING_DOCKET_ENTRY,
         filedByRole: undefined,
         isDraft: true,
-        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        pk: `case|${PENDING_DOCKET_ENTRY.docketEntryId}`,
         sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
       },
     ];
@@ -73,7 +97,7 @@ describe('migrateItems', () => {
         ...PENDING_DOCKET_ENTRY,
         filedByRole: undefined,
         isDraft: true,
-        pk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
+        pk: `case|${PENDING_DOCKET_ENTRY.docketEntryId}`,
         sk: `docket-entry|${PENDING_DOCKET_ENTRY.docketEntryId}`,
       },
     ]);

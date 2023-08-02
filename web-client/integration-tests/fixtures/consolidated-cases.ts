@@ -1,4 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import { TDynamoRecord } from '../../../shared/src/persistence/dynamo/dynamoTypes';
 
 const case105_23: Case & TDynamoRecord = {
@@ -138,10 +139,10 @@ const case105_23_place_of_trial: RawDocketEntry & TDynamoRecord = {
   docketNumber: '105-23',
   documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
   documentType: 'Request for Place of Trial',
-  draftOrderState: null,
   entityName: 'DocketEntry',
   eventCode: 'RQT',
   filedBy: 'Petr. Armand Fulton',
+  filedByRole: ROLES.petitioner,
   filers: ['40eb0890-aab3-4925-8769-e056b30c502d'],
   filingDate: '2023-01-02T05:00:00.000Z',
   index: 2,
@@ -239,10 +240,10 @@ const case106_23_stin: RawDocketEntry & TDynamoRecord = {
   docketNumber: '106-23',
   documentTitle: 'Statement of Taxpayer Identification',
   documentType: 'Statement of Taxpayer Identification',
-  draftOrderState: null,
   entityName: 'DocketEntry',
   eventCode: 'STIN',
   filedBy: 'Petr. Thaddeus Nicholson',
+  filedByRole: ROLES.petitioner,
   filers: ['7805d1ab-18d0-43ec-bafb-654e83405417'],
   filingDate: '2023-01-06T22:34:19.386Z',
   index: 0,
@@ -307,9 +308,9 @@ const case105_23_notr: RawDocketEntry & TDynamoRecord = {
   docketNumber: '105-23',
   documentTitle: 'Notice of Receipt of Petition',
   documentType: 'Notice of Receipt of Petition',
-  draftOrderState: null,
   entityName: 'DocketEntry',
   eventCode: 'NOTR',
+  filedByRole: ROLES.petitionsClerk,
   filers: [],
   filingDate: '2023-01-06T22:33:18.437Z',
   index: 3,
@@ -335,7 +336,7 @@ const case105_23_notr: RawDocketEntry & TDynamoRecord = {
   userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const case106_23_place_of_trial = {
+const case106_23_place_of_trial: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:34:19.388Z',
   docketEntryId: '7d357d67-7a95-4097-872e-fce395362a7e',
@@ -344,6 +345,7 @@ const case106_23_place_of_trial = {
   documentType: 'Request for Place of Trial',
   entityName: 'DocketEntry',
   eventCode: 'RQT',
+  filedByRole: ROLES.petitioner,
   filers: [],
   filingDate: '2023-01-06T22:34:19.386Z',
   index: 2,
@@ -368,9 +370,9 @@ const case106_23_notr: RawDocketEntry & TDynamoRecord = {
   docketNumber: '106-23',
   documentTitle: 'Notice of Receipt of Petition',
   documentType: 'Notice of Receipt of Petition',
-  draftOrderState: null,
   entityName: 'DocketEntry',
   eventCode: 'NOTR',
+  filedByRole: ROLES.petitionsClerk,
   filers: [],
   filingDate: '2023-01-06T22:34:42.962Z',
   index: 3,
@@ -397,17 +399,17 @@ const case106_23_notr: RawDocketEntry & TDynamoRecord = {
   userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const case106_23_petition = {
+const case106_23_petition: RawDocketEntry & TDynamoRecord = {
   addToCoversheet: false,
   createdAt: '2023-01-06T22:34:19.387Z',
   docketEntryId: 'dfb11c0f-6680-4b1b-88de-7a04c79630d2',
   docketNumber: '106-23',
   documentTitle: 'Petition',
   documentType: 'Petition',
-  draftOrderState: null,
   entityName: 'DocketEntry',
   eventCode: 'P',
   filedBy: 'Petr. Thaddeus Nicholson',
+  filedByRole: ROLES.petitioner,
   filers: ['7805d1ab-18d0-43ec-bafb-654e83405417'],
   filingDate: '2023-01-06T22:34:19.386Z',
   index: 1,
