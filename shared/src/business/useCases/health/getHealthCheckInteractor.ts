@@ -173,26 +173,44 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  const elasticSearchStatus = await getElasticSearchStatus({
-    applicationContext,
-  });
+  const [
+    elasticSearchStatus,
+    dynamoStatus,
+    deployDynamoStatus,
+    dynamsoftStatus,
+    s3BucketStatus,
+    cognitoStatus,
+    emailServiceStatus,
+  ] = await Promise.all([
+    getElasticSearchStatus({
+      applicationContext,
+    }),
+    getDynamoStatus({ applicationContext }),
+    getDeployDynamoStatus({
+      applicationContext,
+    }),
+    getDynamsoftStatus({ applicationContext }),
+    getS3BucketStatus({ applicationContext }),
+    getCognitoStatus({ applicationContext }),
+    getEmailServiceStatus({
+      applicationContext,
+    }),
+  ]);
 
-  const dynamoStatus = await getDynamoStatus({ applicationContext });
-  const deployDynamoStatus = await getDeployDynamoStatus({
-    applicationContext,
-  });
-
-  const dynamsoftStatus = await getDynamsoftStatus({ applicationContext });
-
-  const s3BucketStatus = await getS3BucketStatus({ applicationContext });
-
-  const cognitoStatus = await getCognitoStatus({ applicationContext });
-
-  const emailServiceStatus = await getEmailServiceStatus({
-    applicationContext,
+  const allChecksHealthy = [
+    ...Object.values(s3BucketStatus),
+    elasticSearchStatus,
+    dynamoStatus,
+    deployDynamoStatus,
+    dynamsoftStatus,
+    cognitoStatus,
+    emailServiceStatus,
+  ].every(status => {
+    return status === true;
   });
 
   return {
+    allChecksHealthy: allChecksHealthy ? 'pass' : 'fail',
     cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,
