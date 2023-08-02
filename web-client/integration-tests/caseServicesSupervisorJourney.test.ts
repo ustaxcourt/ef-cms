@@ -58,9 +58,6 @@ describe('Case Services Supervisor Messages Journey', () => {
   docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
 
-  // TODO: add a docket entry work item associated with docket section
-  // TODO: add a docket entry work item associated with petitions clerk section
-
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   createNewMessageOnCase(cerebralTest, {
     docketNumber: seededDocketNumber,
