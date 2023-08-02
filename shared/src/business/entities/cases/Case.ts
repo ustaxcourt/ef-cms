@@ -10,6 +10,7 @@ import {
   CHIEF_JUDGE,
   CLOSED_CASE_STATUSES,
   CONTACT_TYPES,
+  CaseStatus,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -111,7 +112,7 @@ export class Case extends JoiValidationEntity {
   public noticeOfTrialDate: string;
   public docketNumberWithSuffix: string;
   public canAllowDocumentService: string;
-  public canAllowPrintableDocketRecord: string;
+  public canAllowPrintableDocketRecord!: boolean;
   public archivedDocketEntries: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed: boolean;
@@ -181,7 +182,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} docketNumber the docket number to use
    * @returns {string|void} the sortable docket number
    */
-  static getSortableDocketNumber(docketNumber) {
+  static getSortableDocketNumber(docketNumber?: string) {
     if (!docketNumber) {
       return;
     }
@@ -1421,17 +1422,15 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  /**
-   * remove case from trial, setting case status to generalDocketReadyForTrial
-   * @param {string} providers.updatedCaseStatus optional case status to set the case to
-   * @param {string} providers.associatedJudge optional associatedJudge to set on the case
-   * @returns {Case} the updated case entity
-   */
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
     changedBy,
     updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
-  }) {
+  }: {
+    associatedJudge?: string;
+    changedBy?: string;
+    updatedCaseStatus?: CaseStatus;
+  }): Case {
     this.setAssociatedJudge(associatedJudge);
     this.setCaseStatus({
       changedBy,
@@ -1441,6 +1440,7 @@ export class Case extends JoiValidationEntity {
     this.trialLocation = undefined;
     this.trialSessionId = undefined;
     this.trialTime = undefined;
+
     return this;
   }
 

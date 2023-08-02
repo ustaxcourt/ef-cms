@@ -453,9 +453,18 @@ export const SERIATIM_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const MODIFIED_BRIEF_DOCUMENT_EVENT_CODES = [
+  'AMAT',
+  'ADMT',
+  'REDC',
+  'SPML',
+  'SUPM',
+];
+
 export const BRIEF_EVENTCODES = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
+  ...MODIFIED_BRIEF_DOCUMENT_EVENT_CODES,
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
@@ -591,6 +600,10 @@ export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
   DOCKET_RECORD_FILTER_OPTIONS,
   ['exhibits'],
 );
+export const FILTER_OPTIONS = Object.values(
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+);
+export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
 // TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
@@ -1461,6 +1474,7 @@ export const ALL_EVENT_CODES = flatten([
 ])
   .map(item => item.eventCode)
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
+  .concat(LEGACY_DOCUMENT_TYPES.map(item => item.eventCode))
   .sort();
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
@@ -1484,6 +1498,7 @@ export const ALL_DOCUMENT_TYPES_MAP = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
+    ...LEGACY_DOCUMENT_TYPES,
   ];
   return documentTypes;
 })();

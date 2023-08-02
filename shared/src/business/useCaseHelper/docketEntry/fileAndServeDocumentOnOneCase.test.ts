@@ -13,7 +13,7 @@ import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { WorkItem } from '../../entities/WorkItem';
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
