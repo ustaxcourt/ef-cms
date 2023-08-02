@@ -108,10 +108,11 @@ export const fileCourtIssuedDocketEntryInteractor = async (
           scenario: documentMeta.scenario,
           serviceStamp: documentMeta.serviceStamp,
           trialLocation: documentMeta.trialLocation,
-          userId: user.userId,
         },
         { applicationContext },
       );
+
+      docketEntryEntity.setFiledBy(user);
 
       const workItem = new WorkItem(
         {

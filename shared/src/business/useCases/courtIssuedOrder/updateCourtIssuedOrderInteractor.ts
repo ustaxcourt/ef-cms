@@ -111,10 +111,12 @@ export const updateCourtIssuedOrderInteractor = async (
       filedBy: user.name,
       numberOfPages,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
     },
     { applicationContext },
   );
+
+  docketEntryEntity.setFiledBy(user);
+
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   // we always un-sign the order document on updates because the court user will need to sign it again
