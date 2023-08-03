@@ -1,7 +1,14 @@
-export const scanFull = async (tableName, documentClient) => {
-  let items: any[] = [];
+import { Key } from 'aws-sdk/clients/dynamodb';
+import { TDynamoRecord } from '../../shared/src/persistence/dynamo/dynamoTypes';
+
+export const scanFull = async (
+  tableName: string,
+  documentClient: AWS.DynamoDB.DocumentClient,
+): Promise<TDynamoRecord[]> => {
+  let items: TDynamoRecord[] = [];
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey: Key | undefined = undefined;
+
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -14,8 +21,9 @@ export const scanFull = async (tableName, documentClient) => {
       .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        items = [...items, ...results.Items];
+        items = [...items, ...results.Items!];
       });
   }
+
   return items;
 };
