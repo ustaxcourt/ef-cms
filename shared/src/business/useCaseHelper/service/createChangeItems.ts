@@ -83,6 +83,7 @@ export const createDocketEntryForChange = async ({
   );
 
   changeOfAddressDocketEntry.setFiledBy(user);
+
   caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
   const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({

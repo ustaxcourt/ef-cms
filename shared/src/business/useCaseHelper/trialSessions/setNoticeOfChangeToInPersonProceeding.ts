@@ -12,7 +12,7 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants'
  */
 export const setNoticeOfChangeToInPersonProceeding = async (
   applicationContext,
-  { caseEntity, newPdfDoc, newTrialSessionEntity, userId },
+  { caseEntity, newPdfDoc, newTrialSessionEntity, user },
 ) => {
   const trialSessionInformation = {
     address1: newTrialSessionEntity.address1,
@@ -50,6 +50,6 @@ export const setNoticeOfChangeToInPersonProceeding = async (
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding,
       newPdfDoc,
       noticePdf,
-      userId,
+      user,
     });
 };

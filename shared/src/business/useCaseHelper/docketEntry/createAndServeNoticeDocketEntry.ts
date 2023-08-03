@@ -16,7 +16,7 @@ export const createAndServeNoticeDocketEntry = async (
     newPdfDoc,
     noticePdf,
     onlyProSePetitioners,
-    userId,
+    user,
   }: {
     additionalDocketEntryInfo?: any;
     caseEntity: Case;
@@ -27,7 +27,7 @@ export const createAndServeNoticeDocketEntry = async (
     };
     newPdfDoc: any;
     noticePdf: Buffer;
-    userId: string;
+    user: RawUser;
     onlyProSePetitioners?: boolean;
   },
 ) => {
@@ -66,11 +66,12 @@ export const createAndServeNoticeDocketEntry = async (
       servedPartiesCode: onlyProSePetitioners
         ? PARTIES_CODES.PETITIONER
         : getServedPartiesCode(servedParties.all),
-      userId,
       ...additionalDocketEntryInfo,
     },
     { applicationContext },
   );
+
+  noticeDocketEntry.setFiledBy(user);
 
   caseEntity.addDocketEntry(noticeDocketEntry);
 

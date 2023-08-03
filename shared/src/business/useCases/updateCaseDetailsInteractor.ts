@@ -80,7 +80,9 @@ export const updateCaseDetailsInteractor = async (
         },
         { applicationContext },
       );
+
       filingFeePaidEntry.setFiledBy(user);
+
       newCaseEntity.addDocketEntry(filingFeePaidEntry);
     } else if (isWaived) {
       const filingFeeWaivedEntry = new DocketEntry(
@@ -96,7 +98,9 @@ export const updateCaseDetailsInteractor = async (
         },
         { applicationContext },
       );
+
       filingFeeWaivedEntry.setFiledBy(user);
+
       newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
     }
   }
