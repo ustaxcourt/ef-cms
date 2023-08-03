@@ -38,7 +38,7 @@ describe('setHealthCheckCacheInteractor', () => {
     process.env.REGION = oldRegion;
   });
 
-  it('should get service statuses and write an healthy status to persistence when all services are health', async () => {
+  it('should get service statuses and write an healthy status to persistence when all services are healthy', async () => {
     const region = 'us-west-2';
     process.env.REGION = region;
 
