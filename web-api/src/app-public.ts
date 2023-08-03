@@ -54,6 +54,7 @@ import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
+import { getCachedHealthCheckLambda } from './health/getCachedHealthCheckLambda';
 import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
 import { getHealthCheckLambda } from './health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
@@ -125,7 +126,7 @@ app.get(
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
-
+app.get('/public-api/cached-health', lambdaWrapper(getCachedHealthCheckLambda));
 app.get(
   '/public-api/maintenance-mode',
   lambdaWrapper(getMaintenanceModeLambda),
