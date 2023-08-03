@@ -5,6 +5,7 @@ import {
   PARTIES_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  ROLES,
   STIPULATED_DECISION_EVENT_CODE,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
@@ -138,7 +139,6 @@ describe('publicCaseDetailHelper', () => {
     state = {
       caseDetail: {
         docketEntries: [],
-        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
         docketNumber: '123-45',
       },
       sessionMetadata: {
@@ -392,7 +392,6 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: mockSealedDocketEntry,
             isTerminalUser: false,
             visibilityPolicyDateFormatted: '',
@@ -413,7 +412,6 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: mockDocketEntry,
             isTerminalUser: false,
             visibilityPolicyDateFormatted: '',
@@ -879,13 +877,6 @@ describe('publicCaseDetailHelper', () => {
       });
 
       it('should show a link when the current document is a multi level ammendment whose root document is a brief', () => {
-        state.caseDetail.docketEntriesEFiledByPractitioner = [
-          '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
-          '4796a931-14fb-43e6-948f-d2b67ce4c1cb',
-          '8e3ae16b-dc29-433f-878a-7a0534c39919',
-          'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
-          'b22fd1a0-56cb-4873-bb4f-50df3a65da3f',
-        ];
         state.caseDetail.docketEntries = [
           {
             attachments: false,
@@ -899,6 +890,7 @@ describe('publicCaseDetailHelper', () => {
             entityName: 'PublicDocketEntry',
             eventCode: 'REDC',
             filedBy: 'Petr. Reuben Blair',
+            filedByRole: ROLES.privatePractitioner,
             filingDate: '2024-07-26T15:27:03.890Z',
             index: 9,
             isFileAttached: true,
@@ -911,6 +903,7 @@ describe('publicCaseDetailHelper', () => {
               docketEntryId: 'ea55927d-f61a-4657-b828-3b8a9d9b9b70',
               documentTitle: 'First Supplement to Seriatim Answering Brief',
               documentType: 'Supplement',
+              filedByRole: ROLES.privatePractitioner,
             },
             processingStatus: 'complete',
             receivedAt: '2023-07-26T04:00:00.000Z',
@@ -928,6 +921,7 @@ describe('publicCaseDetailHelper', () => {
             entityName: 'PublicDocketEntry',
             eventCode: 'SUPM',
             filedBy: 'Petr. Reuben Blair',
+            filedByRole: ROLES.privatePractitioner,
             filingDate: '2024-07-26T15:26:33.586Z',
             index: 8,
             isFileAttached: true,
@@ -940,6 +934,7 @@ describe('publicCaseDetailHelper', () => {
               docketEntryId: '8e3ae16b-dc29-433f-878a-7a0534c39919',
               documentTitle: 'Seriatim Answering Brief',
               documentType: 'Seriatim Answering Brief',
+              filedByRole: ROLES.privatePractitioner,
             },
             processingStatus: 'complete',
             receivedAt: '2023-07-26T04:00:00.000Z',
@@ -957,6 +952,7 @@ describe('publicCaseDetailHelper', () => {
             entityName: 'PublicDocketEntry',
             eventCode: 'SEAB',
             filedBy: 'Petr. Reuben Blair',
+            filedByRole: ROLES.privatePractitioner,
             filingDate: '2024-07-26T15:25:33.548Z',
             index: 7,
             isFileAttached: true,
@@ -983,9 +979,9 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: {
               ...baseDocketEntry,
+              filedByRole: ROLES.privatePractitioner,
               isStricken: true,
               rootDocument: { documentType: 'Petition' },
             },
@@ -1001,10 +997,10 @@ describe('publicCaseDetailHelper', () => {
         const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+              filedByRole: ROLES.privatePractitioner,
               isCourtIssuedDocument: false,
               rootDocument: { documentType: 'Petition' },
               servedAt: '2012-05-16T00:00:00.000-04:00',
@@ -1021,10 +1017,10 @@ describe('publicCaseDetailHelper', () => {
         const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+              filedByRole: ROLES.privatePractitioner,
               isCourtIssuedDocument: false,
               rootDocument: { documentType: 'Petition' },
               servedAt: '2040-05-16T00:00:00.000-04:00',
@@ -1041,10 +1037,10 @@ describe('publicCaseDetailHelper', () => {
         const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2030-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               rootDocument: { documentType: 'Petition' },
@@ -1062,10 +1058,10 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: STIPULATED_DECISION_EVENT_CODE,
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2030-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: true,
               isNotServedDocument: false,
@@ -1084,10 +1080,10 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: POLICY_DATE_IMPACTED_EVENTCODES[0],
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2030-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isNotServedDocument: false,
@@ -1105,10 +1101,10 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: 'AMAT',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2020-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isNotServedDocument: false,
@@ -1130,10 +1126,10 @@ describe('publicCaseDetailHelper', () => {
         const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: 'AMAT',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               rootDocument: {
@@ -1155,10 +1151,10 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
             entry: {
               ...baseDocketEntry,
               eventCode: 'AMAT',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isNotServedDocument: false,
@@ -1180,9 +1176,9 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: {
               ...stipDecisionDocument,
+              filedByRole: ROLES.docketClerk,
               rootDocument: { documentType: 'Petition' },
             },
             isTerminalUser: false,
@@ -1197,10 +1193,10 @@ describe('publicCaseDetailHelper', () => {
         const result = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: {
               ...baseDocketEntry,
               eventCode: 'AMAT',
+              filedByRole: ROLES.docketClerk,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isNotServedDocument: false,
@@ -1222,16 +1218,16 @@ describe('publicCaseDetailHelper', () => {
         const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: {
               ...baseDocketEntry,
               eventCode: 'AMAT',
+              filedByRole: ROLES.docketClerk,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               rootDocument: {
-                docketEntryId: baseDocketEntry.docketEntryId,
                 documentTitle: 'Amicus Brief',
                 documentType: 'Amicus Brief',
+                filedByRole: ROLES.docketClerk,
               },
               servedAt: '2050-05-16T00:00:00.000-04:00',
             },
@@ -1247,16 +1243,16 @@ describe('publicCaseDetailHelper', () => {
         const { showLinkToDocument } = formatDocketEntryOnDocketRecord(
           applicationContextPublic,
           {
-            docketEntriesEFiledByPractitioner: [],
             entry: {
               ...baseDocketEntry,
               eventCode: 'REDC',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               rootDocument: {
-                docketEntryId: baseDocketEntry.docketEntryId,
                 documentTitle: 'Amicus Brief',
                 documentType: 'Amicus Brief',
+                filedByRole: ROLES.docketClerk,
               },
               servedAt: '2050-05-16T00:00:00.000-04:00',
             },
@@ -1359,18 +1355,6 @@ describe('fetchRootDocument', () => {
       previousDocument: { docketEntryId: '3' },
     });
   });
-
-  // it('should return undefined for previousDocument if there is no parent', () => {
-  //   const theDocketEntry: any = {
-  //     docketEntryId: '1',
-  //     documentTitle: 'booba',
-  //   };
-  //   const docketEntries = [theDocketEntry];
-
-  //   const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
-
-  //   expect(docketEntry).toEqual(undefined);
-  // });
 });
 
 describe('formatDocketEntryOnDocketRecord', () => {
@@ -1403,7 +1387,6 @@ describe('formatDocketEntryOnDocketRecord', () => {
     state = {
       caseDetail: {
         docketEntries: [],
-        docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
         docketNumber: '123-45',
       },
       sessionMetadata: {
