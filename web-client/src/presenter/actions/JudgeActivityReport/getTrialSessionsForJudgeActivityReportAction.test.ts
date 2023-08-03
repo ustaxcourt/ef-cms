@@ -1,4 +1,4 @@
-import { ID_FOR_ALL_JUDGES } from 'shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
+import { ID_FOR_ALL_JUDGES } from '../../../../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
