@@ -406,7 +406,6 @@ module "api-west-green" {
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
   pool_arn                       = aws_cognito_user_pool.pool.arn
-# DO NOT create cron
   create_check_case_cron         = 0
   create_health_check_cron       = 1
   create_streams                 = 0

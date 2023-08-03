@@ -1,5 +1,4 @@
 resource "aws_lambda_function" "check_case_cron_lambda" {
-  # Replace with create_check_case_cron?
   count            = var.create_check_case_cron
   depends_on       = [var.cron_object]
   s3_bucket        = var.lambda_bucket_id
