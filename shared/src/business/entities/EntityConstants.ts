@@ -189,6 +189,14 @@ export const CASE_STATUS_TYPES = {
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
 
+export const CAV_AND_SUBMITTED_CASE_STATUS = [
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.submitted,
+];
+
+export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
+  typeof CAV_AND_SUBMITTED_CASE_STATUS;
+
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
@@ -208,6 +216,15 @@ export const DOCUMENT_SERVED_MESSAGES = {
     'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
+};
+
+export const VALIDATION_ERROR_MESSAGES = {
+  END_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
+    'End date cannot be in the future. Enter a valid date.',
+  END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE:
+    'End date cannot be prior to start date. Enter a valid date.',
+  START_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
+    'Start date cannot be in the future. Enter a valid date.',
 };
 
 export const DOCUMENT_SEARCH_SORT = {
@@ -436,9 +453,18 @@ export const SERIATIM_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const MODIFIED_BRIEF_DOCUMENT_EVENT_CODES = [
+  'AMAT',
+  'ADMT',
+  'REDC',
+  'SPML',
+  'SUPM',
+];
+
 export const BRIEF_EVENTCODES = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
+  ...MODIFIED_BRIEF_DOCUMENT_EVENT_CODES,
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
@@ -921,6 +947,7 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
@@ -1447,6 +1474,7 @@ export const ALL_EVENT_CODES = flatten([
 ])
   .map(item => item.eventCode)
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
+  .concat(LEGACY_DOCUMENT_TYPES.map(item => item.eventCode))
   .sort();
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
@@ -1470,6 +1498,7 @@ export const ALL_DOCUMENT_TYPES_MAP = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
+    ...LEGACY_DOCUMENT_TYPES,
   ];
   return documentTypes;
 })();
@@ -1544,6 +1573,9 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
+  'tempJudgeIdToRepresentAllJudgesSelection';
 
 export const isDocumentBriefType = (documentType: string) => {
   const documents = [
