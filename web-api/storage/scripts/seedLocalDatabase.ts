@@ -44,7 +44,11 @@ const putEntries = async entries => {
   }
 };
 
-module.exports.seedLocalDatabase = async () => {
-  await createUsers(); // TODO: we should probably remove this at some point
-  await putEntries(seedEntries);
+module.exports.seedLocalDatabase = async entries => {
+  if (entries) {
+    await putEntries(entries);
+  } else {
+    await createUsers();
+    await putEntries(seedEntries);
+  }
 };
