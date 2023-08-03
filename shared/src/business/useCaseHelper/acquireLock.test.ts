@@ -1,21 +1,26 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../../business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '../../errors/errors';
 import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
 import { applicationContext } from '../test/createTestApplicationContext';
 
 const onLockError = new ServiceUnavailableError('The case is currently locked');
+let mockLock;
+let mockFeatureFlagValue = true;
 
 describe('acquireLock', () => {
   let mockCall: Parameters<typeof acquireLock>[0];
-  let mockFeatureFlagValue = true;
-  let mockLock;
 
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockImplementation(
-        () => mockFeatureFlagValue,
-      );
+      .getAllFeatureFlagsInteractor.mockImplementation(() => {
+        return {
+          [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
+            mockFeatureFlagValue,
+        };
+      });
+
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
@@ -200,18 +205,20 @@ describe('withLocking', () => {
       ttl: 60,
     }));
   let func;
-  let mockFeatureFlagValue;
-  let mockLock;
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockImplementation(
-        () => mockFeatureFlagValue,
-      );
+      .getAllFeatureFlagsInteractor.mockImplementation(() => {
+        return {
+          [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
+            mockFeatureFlagValue,
+        };
+      });
   });
 
   beforeEach(() => {
@@ -373,16 +380,17 @@ describe('withLocking', () => {
 });
 
 describe('checkLock', () => {
-  let mockLock;
-  let mockFeatureFlagValue;
   let mockCall;
 
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockImplementation(
-        () => mockFeatureFlagValue,
-      );
+      .getAllFeatureFlagsInteractor.mockImplementation(() => {
+        return {
+          [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
+            mockFeatureFlagValue,
+        };
+      });
 
     applicationContext
       .getPersistenceGateway()
