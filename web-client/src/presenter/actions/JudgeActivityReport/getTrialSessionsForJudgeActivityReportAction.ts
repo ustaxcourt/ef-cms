@@ -1,4 +1,4 @@
-import { ID_FOR_ALL_JUDGES } from 'shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
+import { ID_FOR_ALL_JUDGES } from '../../../../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getTrialSessionsForJudgeActivityReportAction = async ({
