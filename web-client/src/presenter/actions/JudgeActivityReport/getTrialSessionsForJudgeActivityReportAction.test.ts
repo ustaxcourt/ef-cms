@@ -1,9 +1,9 @@
 import {
-  JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
-  SESSION_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+  ID_FOR_ALL_JUDGES,
+  getTrialSessionsForJudgeActivityReportAction,
+} from './getTrialSessionsForJudgeActivityReportAction';
+import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -93,7 +93,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeId: JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
+      judgeId: ID_FOR_ALL_JUDGES,
       startDate: mockStartDate,
     });
   });
