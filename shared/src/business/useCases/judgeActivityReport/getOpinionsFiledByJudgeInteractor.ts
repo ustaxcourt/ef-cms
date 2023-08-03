@@ -4,7 +4,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from '@web-client/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -23,9 +23,9 @@ import { orderBy } from 'lodash';
  * @returns {array} list of opinions filed by the judge in the given date range, sorted alphabetically ascending by event code
  */
 export const getOpinionsFiledByJudgeInteractor = async (
-  applicationContext,
+  applicationContext: object,
   params: JudgeActivityReportFilters,
-) => {
+): Array<any> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
