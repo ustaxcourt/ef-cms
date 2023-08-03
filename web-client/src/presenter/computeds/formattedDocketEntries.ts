@@ -338,7 +338,6 @@ export const formattedDocketEntries = (
         applicationContext,
         docketNumber,
         entry,
-        formattedCase: result,
         isExternalUser,
         permissions,
         userAssociatedWithCase,

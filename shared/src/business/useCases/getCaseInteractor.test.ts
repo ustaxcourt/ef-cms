@@ -338,7 +338,6 @@ describe('getCaseInteractor', () => {
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
         entityName: 'PublicCase',
-        filedByRole: ROLES.petitioner,
         hasIrsPractitioner: false,
         isPaper: undefined,
         isSealed: true,

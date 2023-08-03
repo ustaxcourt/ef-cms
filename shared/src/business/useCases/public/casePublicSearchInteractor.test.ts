@@ -61,7 +61,6 @@ describe('casePublicSearchInteractor', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketNumberWithSuffix: '123-19S',
         entityName: 'PublicCase',
-        filedByRole: ROLES.petitioner,
         hasIrsPractitioner: false,
         isPaper: undefined,
         isSealed: false,
