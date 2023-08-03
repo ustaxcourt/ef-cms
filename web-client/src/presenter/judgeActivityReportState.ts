@@ -2,16 +2,7 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
-
-export type JudgeActivityReportFilters = {
-  endDate: string;
-  startDate: string;
-  judgeName?: string;
-  judgeId?: string;
-  judges?: string[];
-  clientConnectionId?: string;
-  judgeNameToDisplayForHeader?: string;
-};
+import { JudgeActivityReportFilters } from '../../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];

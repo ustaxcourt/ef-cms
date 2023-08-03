@@ -1,5 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,

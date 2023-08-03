@@ -1,4 +1,4 @@
-import { JudgeActivityReportFilters } from '@web-client/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
 import {
   MAX_ELASTICSEARCH_PAGINATION,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,

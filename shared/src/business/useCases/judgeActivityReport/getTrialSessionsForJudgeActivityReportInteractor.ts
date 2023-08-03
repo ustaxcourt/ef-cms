@@ -1,6 +1,4 @@
-import { ID_FOR_ALL_JUDGES } from '../../../../../web-client/src/presenter/actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -10,6 +8,17 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../entities/EntityConstants';
+
+export const ID_FOR_ALL_JUDGES = 'judgeIdToRepresentAllJudgesSelection';
+export type JudgeActivityReportFilters = {
+  endDate: string;
+  startDate: string;
+  judgeName?: string;
+  judgeId?: string;
+  judges?: string[];
+  clientConnectionId?: string;
+  judgeNameToDisplayForHeader?: string;
+};
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
