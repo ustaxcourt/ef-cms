@@ -154,7 +154,7 @@ describe('case inventory report journey', () => {
     );
 
     expect(updatedCaseInventoryCount).toEqual(
-      initialCaseInventoryCounts.new + 1,
+      initialCaseInventoryCounts.new! + 1,
     );
   });
 
@@ -182,7 +182,7 @@ describe('case inventory report journey', () => {
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
-      initialCaseInventoryCounts.calendaredColvin + 1,
+      initialCaseInventoryCounts.calendaredColvin! + 1,
     );
   });
 
@@ -196,7 +196,7 @@ describe('case inventory report journey', () => {
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
-      initialCaseInventoryCounts.calendared + 1,
+      initialCaseInventoryCounts.calendared! + 1,
     );
   });
 
@@ -214,7 +214,7 @@ describe('case inventory report journey', () => {
       'caseInventoryReportData.totalCount',
     );
     expect(updatedCaseInventoryCount).toEqual(
-      initialCaseInventoryCounts.colvin + 1,
+      initialCaseInventoryCounts.colvin! + 1,
     );
   });
 
