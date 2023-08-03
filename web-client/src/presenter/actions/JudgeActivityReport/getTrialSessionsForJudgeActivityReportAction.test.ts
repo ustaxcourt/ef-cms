@@ -1,6 +1,6 @@
 import {
+  JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
   SESSION_TYPES,
-  TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
@@ -93,7 +93,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeId: TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
+      judgeId: JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
       startDate: mockStartDate,
     });
   });

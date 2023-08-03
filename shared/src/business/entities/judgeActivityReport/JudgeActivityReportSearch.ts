@@ -89,13 +89,13 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .number()
       .optional()
       .description(
-        'The page size for getting aggregated judge activity report for closed cases, opinions, orders issued  and sessions held',
+        'The page of the selected subset of CAV and Submitted cases for display',
       ),
     pageSize: joi
       .number()
       .optional()
       .description(
-        'The page number for calculating the number of cav and submitted cases to display',
+        'The page size for calculating the number of CAV and Submitted cases to display.',
       ),
     searchAfter: joi
       .number()
@@ -117,12 +117,11 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     endDate: [
       {
         contains: 'ref:startDate',
-        message:
-          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
+        message: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR,
       },
       {
         contains: 'ref:tomorrow',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
+        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR,
       },
       {
         contains: 'is required',
