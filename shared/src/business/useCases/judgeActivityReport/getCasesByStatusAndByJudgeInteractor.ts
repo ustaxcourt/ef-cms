@@ -1,4 +1,3 @@
-import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstants';
 import {
   ConsolidatedCasesGroupCountMapResponseType,
   JudgeActivityReportCavAndSubmittedCasesRequest,
@@ -79,11 +78,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  params.judges = params.judges || [];
-  params.statuses = params.statuses || [];
-  params.pageNumber = params.pageNumber || 0;
-  params.pageSize = params.pageSize || CAV_AND_SUBMITTED_CASES_PAGE_SIZE;
 
   const searchEntity = new JudgeActivityReportSearch(params);
   if (!searchEntity.isValid()) {
