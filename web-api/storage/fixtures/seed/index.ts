@@ -1,3 +1,1 @@
-import { seedData } from './cav-submitted-cases';
-
-module.exports = [...require('./efcms-local.json'), ...seedData];
+module.exports = [...require('./efcms-local.json')];
