@@ -24914,12 +24914,6 @@
     "maxInvocations": 9999
   },
   {
-    "sk": "document-search-limiter",
-    "id": 1,
-    "pk": "document-search-limiter",
-    "expiresAt": 1638454069047
-  },
-  {
     "sk": "document-visibility-policy-change-date",
     "current": "2023-05-01",
     "pk": "document-visibility-policy-change-date"
