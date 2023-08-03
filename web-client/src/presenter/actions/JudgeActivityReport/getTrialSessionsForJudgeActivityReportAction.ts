@@ -1,4 +1,4 @@
-import { TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getTrialSessionsForJudgeActivityReportAction = async ({
@@ -9,8 +9,7 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
     state.judgeActivityReport.filters,
   );
 
-  let judgeIdForRequest: string =
-    TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION;
+  let judgeIdForRequest: string = JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION;
 
   if (judgeName !== 'All Judges') {
     const allJudges: Array<{

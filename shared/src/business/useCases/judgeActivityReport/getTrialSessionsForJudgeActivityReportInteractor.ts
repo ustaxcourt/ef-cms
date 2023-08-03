@@ -1,15 +1,15 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '../../entities/EntityConstants';
 import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import {
-  SESSION_STATUS_TYPES,
-  SESSION_TYPES,
-  TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
-} from '../../entities/EntityConstants';
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
@@ -38,9 +38,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     });
 
   const trialSessionsForSelectedJudge = trialSessions.filter(session => {
-    if (
-      searchEntity.judgeId !== TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION
-    )
+    if (searchEntity.judgeId !== JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION)
       return session.judge?.userId === searchEntity.judgeId;
     else return session;
   });

@@ -1,8 +1,8 @@
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import {
+  JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
   SESSION_TYPES,
-  TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
 } from '../../entities/EntityConstants';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
@@ -173,7 +173,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   });
 
   it('should return all trial session type, the weighted count of sessions held in the date range for all the judges', async () => {
-    mockValidRequest.judgeId = TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION;
+    mockValidRequest.judgeId = JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION;
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
