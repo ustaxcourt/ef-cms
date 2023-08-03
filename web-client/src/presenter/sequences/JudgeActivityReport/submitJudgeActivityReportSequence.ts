@@ -1,3 +1,4 @@
+import { checkJudgeActivityReportOpinionsAndOrdersIsSetAction } from '@web-client/presenter/actions/JudgeActivityReport/checkJudgeActivityReportOpinionsAndOrdersIsSetAction';
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { getCasesClosedByJudgeAction } from '../../actions/JudgeActivityReport/getCasesClosedByJudgeAction';
@@ -16,6 +17,7 @@ import { setValidationErrorsAction } from '../../actions/setValidationErrorsActi
 import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
+import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
 import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
 export const submitJudgeActivityReportSequence = [
@@ -43,6 +45,11 @@ export const submitJudgeActivityReportSequence = [
       ]),
       setCavAndSubmittedCasesAction,
       setJudgeActivityReportDataAction,
+      checkJudgeActivityReportOpinionsAndOrdersIsSetAction,
+      {
+        no: [],
+        yes: [unsetWaitingForResponseAction],
+      },
     ],
   },
 ];
