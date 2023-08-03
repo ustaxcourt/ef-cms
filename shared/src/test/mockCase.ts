@@ -8,6 +8,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
 import { MOCK_DOCUMENTS } from './mockDocuments';
+import { docketClerkUser, judgeUser } from './mockUsers';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
@@ -451,4 +452,189 @@ export const MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
       userId: '3bcd5fb7-434e-4354-aa08-1d10846c1867',
     },
   ],
+};
+
+export const MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-12T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+    },
+  ],
+  docketEntries: [
+    {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3888',
+      docketNumber: '101-19',
+      documentTitle: 'Decision',
+      documentType: 'Decision',
+      draftOrderState: {},
+      entityName: 'DocketEntry',
+      eventCode: 'DEC',
+      isFileAttached: true,
+      isMinuteEntry: false,
+      isOnDocketRecord: false,
+      isStricken: false,
+      judge: 'Colvin',
+      pending: false,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T05:00:00.000Z',
+      servedAt: '2019-05-24T18:41:36.122Z',
+      signedAt: '2019-05-24T18:41:36.122Z',
+      signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      signedJudgeName: 'John O. Colvin',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ],
+  docketNumber: '121-19',
+  docketNumberWithSuffix: '121-19',
+  pk: 'case|121-19',
+  sk: 'case|121-19',
+  sortableDocketNumber: 2019000121,
+};
+
+export const MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-12T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+    },
+  ],
+  docketEntries: [
+    {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3888',
+      docketNumber: '101-19',
+      documentTitle: 'Stipulated Decision Entered, [Judge Name] [Anything]',
+      documentType: 'Stipulated Decision',
+      draftOrderState: {},
+      entityName: 'DocketEntry',
+      eventCode: 'SDEC',
+      filingDate: '2018-03-01T05:00:00.000Z',
+      index: 4,
+      isDraft: false,
+      isStricken: false,
+      judge: 'Colvin',
+      pending: false,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T05:00:00.000Z',
+      servedAt: '2019-05-24T18:41:36.122Z',
+      signedAt: '2019-05-24T18:41:36.122Z',
+      signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      signedJudgeName: 'John O. Colvin',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ],
+  docketNumber: '122-19',
+  docketNumberWithSuffix: '122-19',
+  pk: 'case|122-19',
+  sk: 'case|122-19',
+  sortableDocketNumber: 2019000122,
+};
+
+export const MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-12T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+    },
+  ],
+  docketEntries: [
+    {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3888',
+      docketNumber: '101-19',
+      documentTitle: `Order of Dismissal and Decision Entered, ${judgeUser.name} Dismissed`,
+      documentType: 'Order of Dismissal and Decision',
+      draftOrderState: {},
+      entityName: 'DocketEntry',
+      eventCode: 'ODD',
+      filers: [],
+      filingDate: '2018-03-01T05:00:00.000Z',
+      index: 4,
+      isDraft: false,
+      isStricken: false,
+      judge: 'Colvin',
+      pending: false,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T05:00:00.000Z',
+      servedAt: '2019-05-24T18:41:36.122Z',
+      signedAt: '2019-05-24T18:41:36.122Z',
+      signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      signedJudgeName: 'John O. Colvin',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ],
+  docketNumber: '101-19',
+  docketNumberWithSuffix: '101-19',
+  hasVerifiedIrsNotice: false,
+  pk: 'case|101-19',
+  sk: 'case|101-19',
+  sortableDocketNumber: 2019000101,
+  status: CASE_STATUS_TYPES.submitted,
+};
+
+export const MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-12T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+    },
+  ],
+  docketEntries: [
+    {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3888',
+      docketNumber: '101-19',
+      documentTitle: 'Order and Decision',
+      documentType: 'Order and Decision',
+      draftOrderState: {},
+      entityName: 'DocketEntry',
+      eventCode: 'OAD',
+      filers: [],
+      filingDate: '2018-03-01T05:00:00.000Z',
+      index: 4,
+      isDraft: false,
+      isFileAttached: true,
+      isMinuteEntry: false,
+      isOnDocketRecord: false,
+      isStricken: false,
+      judge: 'Colvin',
+      pending: false,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T05:00:00.000Z',
+      servedAt: '2019-05-24T18:41:36.122Z',
+      servedParties: [
+        {
+          name: 'Bernard Lowe',
+        },
+        {
+          name: 'IRS',
+          role: 'irsSuperuser',
+        },
+      ],
+      signedAt: '2019-05-24T18:41:36.122Z',
+      signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      signedJudgeName: 'John O. Colvin',
+      stampData: {},
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    },
+  ],
+  docketNumber: '123-19',
+  docketNumberWithSuffix: '123-19',
+  pk: 'case|123-19',
+  sk: 'case|123-19',
+  sortableDocketNumber: 2021000123,
 };
