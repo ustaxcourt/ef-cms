@@ -139,7 +139,6 @@ describe('publicCaseDetailHelper', () => {
     state = {
       caseDetail: {
         docketEntries: [],
-        // docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
         docketNumber: '123-45',
       },
       sessionMetadata: {
@@ -1356,18 +1355,6 @@ describe('fetchRootDocument', () => {
       previousDocument: { docketEntryId: '3' },
     });
   });
-
-  // it('should return undefined for previousDocument if there is no parent', () => {
-  //   const theDocketEntry: any = {
-  //     docketEntryId: '1',
-  //     documentTitle: 'booba',
-  //   };
-  //   const docketEntries = [theDocketEntry];
-
-  //   const docketEntry = fetchRootDocument(theDocketEntry, docketEntries);
-
-  //   expect(docketEntry).toEqual(undefined);
-  // });
 });
 
 describe('formatDocketEntryOnDocketRecord', () => {
@@ -1400,7 +1387,6 @@ describe('formatDocketEntryOnDocketRecord', () => {
     state = {
       caseDetail: {
         docketEntries: [],
-        // docketEntriesEFiledByPractitioner: [baseDocketEntry.docketEntryId],
         docketNumber: '123-45',
       },
       sessionMetadata: {
