@@ -256,12 +256,12 @@ resource "aws_route53_health_check" "status_health_check_west" {
   fqdn               = "public-api.${var.dns_domain}"
   port               = 443
   type               = "HTTPS_STR_MATCH"
-  resource_path      = "/public-api/health"
+  resource_path      = "/public-api/cached-health"
   failure_threshold  = "3"
   request_interval   = "30"
   count              = var.enable_health_checks
   invert_healthcheck = false
-  search_string      = "pass"                                       # Search for a JSON property returning "pass"; fail check if not present
+  search_string      = "true"                                       # Search for a JSON property returning "true"; fail check if not present
   regions            = ["us-west-1", "us-west-2", "ap-northeast-1"] # Minimum of three regions required
 }
 
@@ -269,11 +269,11 @@ resource "aws_route53_health_check" "status_health_check_east" {
   fqdn               = "public-api.${var.dns_domain}"
   port               = 443
   type               = "HTTPS_STR_MATCH"
-  resource_path      = "/public-api/health"
+  resource_path      = "/public-api/cached-health"
   failure_threshold  = "3"
   request_interval   = "30"
   count              = var.enable_health_checks
   invert_healthcheck = false
-  search_string      = "pass"                                  # Search for a JSON property returning "pass"; fail check if not present
+  search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
   regions            = ["us-east-1", "sa-east-1", "eu-west-1"] # Minimum of three regions required
 }
