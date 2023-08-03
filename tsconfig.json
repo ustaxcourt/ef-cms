@@ -28,7 +28,7 @@
     "./web-client/integration-tests/**/*",
     "./web-client/integration-tests-public/**/*",
     "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
-    "./web-client/integration-tests/fixtures/consolidated-cases.ts"
+    "./web-api/storage/fixtures/seed/cav-submitted-cases.ts"
   ],
   "exclude": ["node_modules"]
 }
