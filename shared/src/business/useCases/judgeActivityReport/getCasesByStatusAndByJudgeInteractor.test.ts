@@ -19,6 +19,8 @@ import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJud
 
 const docketEntryWithoutCaseHistory = '115-23';
 
+const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
+
 const mockSubmittedCase = {
   ...MOCK_CASE,
   associatedJudge: judgeUser.name,
@@ -65,29 +67,29 @@ const mockSubmittedCaseWithOddOnDocketRecord = {
       filingDate: '2018-03-01T05:00:00.000Z',
       index: 4,
       isDraft: false,
-      isFileAttached: true,
-      isMinuteEntry: false,
-      isOnDocketRecord: false,
+      // isFileAttached: true,
+      // isMinuteEntry: false,
+      // isOnDocketRecord: false,
       isStricken: false,
       judge: 'Colvin',
-      pending: false,
-      processingStatus: 'complete',
-      receivedAt: '2018-03-01T05:00:00.000Z',
-      servedAt: '2019-05-24T18:41:36.122Z',
-      servedParties: [
-        {
-          name: 'Bernard Lowe',
-        },
-        {
-          name: 'IRS',
-          role: 'irsSuperuser',
-        },
-      ],
-      signedAt: '2019-05-24T18:41:36.122Z',
-      signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-      signedJudgeName: 'John O. Colvin',
-      stampData: {},
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      // pending: false,
+      // processingStatus: 'complete',
+      // receivedAt: '2018-03-01T05:00:00.000Z',
+      // servedAt: '2019-05-24T18:41:36.122Z',
+      // servedParties: [
+      //   {
+      //     name: 'Bernard Lowe',
+      //   },
+      //   {
+      //     name: 'IRS',
+      //     role: 'irsSuperuser',
+      //   },
+      // ],
+      // signedAt: '2019-05-24T18:41:36.122Z',
+      // signedByUserId: 'dabbad00-18d0-43ec-bafb-654e83405416',
+      // signedJudgeName: 'John O. Colvin',
+      // stampData: {},
+      // userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     },
   ],
   docketNumber: '101-19',
@@ -401,7 +403,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.totalCount).toEqual(2);
   });
 
-  it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the member case of consolidated cases and case with prohibited docket entries)', async () => {
+  it(`should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the member case of consolidated cases and cases with ${prohibitedDocketEntries} docket entries)`, async () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
@@ -486,7 +488,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.totalCount).toEqual(2);
   });
 
-  it('should return an array of 1 case and consolidatedCasesGroupMap (stripping out the case with served prohibited docket entries and no consolidated cases)', async () => {
+  it(`should return an array of 1 case and consolidatedCasesGroupMap (stripping out the cases with served ${prohibitedDocketEntries} docket entries and no consolidated cases)`, async () => {
     mockReturnedDocketNumbers = [
       { docketNumber: mockSubmittedCase.docketNumber },
       { docketNumber: mockSubmittedCaseWithOddOnDocketRecord.docketNumber },
@@ -548,7 +550,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.totalCount).toEqual(1);
   });
 
-  it('should return an array of 5 cases (4 cases containing an prohibited docket entries in DRAFT statuses) and consolidatedCasesGroupMap', async () => {
+  it(`should return an array of 5 cases (4 cases containing ${prohibitedDocketEntries} docket entries in DRAFT statuses) and consolidatedCasesGroupMap`, async () => {
     mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
       {
         ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
@@ -642,7 +644,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.totalCount).toEqual(5);
   });
 
-  it('should return an array of 5 cases (4 cases containing UNSERVED prohibited docket entries) and consolidatedCasesGroupMap', async () => {
+  it(`should return an array of 5 cases (4 cases containing UNSERVED ${prohibitedDocketEntries} docket entries) and consolidatedCasesGroupMap`, async () => {
     mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
       {
         ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],
@@ -737,7 +739,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.totalCount).toEqual(5);
   });
 
-  it('should return an array of 5 cases (4 cases containing an prohibited docket entries that have been stricken) and consolidatedCasesGroupMap', async () => {
+  it(`should return an array of 5 cases (4 cases containing ${prohibitedDocketEntries} docket entries that have been stricken) and consolidatedCasesGroupMap`, async () => {
     mockSubmittedCaseWithOddOnDocketRecord.docketEntries = [
       {
         ...mockSubmittedCaseWithOddOnDocketRecord.docketEntries[0],

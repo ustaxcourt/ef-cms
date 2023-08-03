@@ -1,3 +1,5 @@
+import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
+
 const rawCaseRecord: RawCase = {
   associatedJudge: 'Colvin',
   automaticBlocked: false,
@@ -7,7 +9,7 @@ const rawCaseRecord: RawCase = {
   caseType: 'Partnership (Section 6226)',
   createdAt: '2021-10-29T13:41:06.778Z',
   docketNumber: '101-11',
-  docketNumberSuffix: null,
+  docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
   docketNumberWithSuffix: '101-11',
   entityName: 'Case',
   hasPendingItems: false,
@@ -27,10 +29,7 @@ const rawCaseRecord: RawCase = {
   orderForRatification: true,
   orderToShowCause: false,
   partyType: 'Surviving spouse',
-  petitionPaymentDate: null,
   petitionPaymentStatus: 'Not paid',
-  petitionPaymentWaivedDate: null,
-
   petitioners: [
     {
       additionalName: 'Virginia Vincent',
@@ -54,7 +53,6 @@ const rawCaseRecord: RawCase = {
   pk: 'case|101-11',
   preferredTrialCity: 'Lubbock, Texas',
   procedureType: 'Regular',
-  qcCompleteForTrial: {},
   receivedAt: '2011-10-11T04:00:00.000Z',
   sk: 'case|101-11',
   sortableDocketNumber: 2011000101,
@@ -62,7 +60,7 @@ const rawCaseRecord: RawCase = {
   status: 'General Docket - Not at Issue',
 };
 
-const rqtDocketEntry = {
+const rqtDocketEntry: RawDocketEntry = {
   addToCoversheet: false,
   createdAt: '2022-02-01T17:21:05.486Z',
   docketEntryId: '06115c26-ecd8-425a-b58b-4d25649f1d96',
@@ -87,9 +85,9 @@ const rqtDocketEntry = {
   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
-const submittedRawCases = [];
-const cavRawCases = [];
-const rqtRawDocketEntries = [];
+const submittedRawCases: RawCase[] = [];
+const cavRawCases: RawCase[] = [];
+const rqtRawDocketEntries: RawDocketEntry[] = [];
 
 const formatNumber = numberSuffix =>
   numberSuffix.toLocaleString('en-US', {
@@ -100,7 +98,7 @@ const formatNumber = numberSuffix =>
 for (let i = 0; i < 100; i++) {
   const formattedNumber = formatNumber(i);
   const docketNumber = `4${formattedNumber}-23`;
-  const sortableDocketNumber = `20230001${formattedNumber}`;
+  const sortableDocketNumber = Number(`20230001${formattedNumber}`);
   const caseStatusHistory = [
     {
       changedBy: 'Docketclerk',
@@ -132,7 +130,7 @@ for (let i = 0; i < 100; i++) {
 for (let i = 0; i < 97; i++) {
   const formattedNumber = formatNumber(i);
   const docketNumber = `4${formattedNumber}-22`;
-  const sortableDocketNumber = `20220001${formattedNumber}`;
+  const sortableDocketNumber = Number(`20220001${formattedNumber}`);
   const caseStatusHistory = [
     {
       changedBy: 'Docketclerk',
@@ -160,7 +158,7 @@ for (let i = 0; i < 97; i++) {
   rqtRawDocketEntries.push(docketEntry);
 }
 
-export const seedData = [
+export const seedData: (RawCase | RawDocketEntry)[] = [
   ...submittedRawCases,
   ...cavRawCases,
   ...rqtRawDocketEntries,
