@@ -10,9 +10,9 @@ import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolid
 import { irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
-import { seedDatabase, seedFullDataset } from './utils/database';
+import { seedDatabase } from './utils/database';
+import { seedLocalDatabase } from '../../web-api/storage/scripts/seedLocalDatabase';
 import { withAppContextDecorator } from '../src/withAppContext';
-
 // Feature flag: consolidated-cases-group-access-petitioner, CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
 
 const caseDetailHeaderHelper = withAppContextDecorator(
@@ -111,7 +111,7 @@ describe('External User files a document across a consolidated case group', () =
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await seedFullDataset();
+    await seedLocalDatabase();
   });
 
   describe('irsPractitioner', () => {
