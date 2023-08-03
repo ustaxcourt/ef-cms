@@ -102,6 +102,7 @@ import { getReconciliationReport } from '../../shared/src/persistence/elasticsea
 import { getSectionInboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getSectionInboxMessages';
 import { getSectionOutboxMessages } from '../../shared/src/persistence/elasticsearch/messages/getSectionOutboxMessages';
 import { getSesStatus } from '../../shared/src/persistence/ses/getSesStatus';
+import { getStoredApplicationHealth } from '../../shared/src/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from '../../shared/src/persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
@@ -143,6 +144,7 @@ import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/save
 import { saveWorkItemForDocketClerkFilingExternalDocument } from '../../shared/src/persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setMessageAsRead } from '../../shared/src/persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from '../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems';
+import { setStoredApplicationHealth } from '../../shared/src/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from '../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateAttributeOnDynamoRecord } from '../../shared/src/persistence/dynamo/workitems/updateAttributeOnDynamoRecord';
@@ -341,6 +343,7 @@ const gatewayMethods = {
   getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
+  getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,
   getTrialSessionWorkingCopy,
@@ -369,6 +372,7 @@ const gatewayMethods = {
     : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  setStoredApplicationHealth,
   updateUserCaseMapping,
   verifyCaseForUser,
   verifyPendingCaseForUser,

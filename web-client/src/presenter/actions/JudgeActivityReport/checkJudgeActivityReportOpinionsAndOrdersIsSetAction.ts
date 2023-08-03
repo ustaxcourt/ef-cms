@@ -4,11 +4,23 @@ export const checkJudgeActivityReportOpinionsAndOrdersIsSetAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { opinions, orders } = get(
-    state.judgeActivityReport.judgeActivityReportData,
+  const {
+    casesClosedByJudge,
+    opinions,
+    orders,
+    submittedAndCavCasesByJudge,
+    trialSessions,
+  } = get(state.judgeActivityReport.judgeActivityReportData);
+
+  const isFullReportResolved = !!(
+    opinions &&
+    orders &&
+    casesClosedByJudge &&
+    trialSessions &&
+    submittedAndCavCasesByJudge
   );
 
-  if (opinions && orders) {
+  if (isFullReportResolved) {
     return path.yes();
   } else return path.no();
 };

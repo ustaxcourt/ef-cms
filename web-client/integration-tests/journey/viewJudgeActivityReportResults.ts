@@ -78,5 +78,17 @@ export const viewJudgeActivityReportResults = (
         orders: expect.anything(),
       }),
     );
+
+    await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
+      selectedPage: 1,
+    });
+
+    expect(
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
+    ).toMatchObject(
+      expect.objectContaining({
+        submittedAndCavCasesByJudge: expect.anything(),
+      }),
+    );
   });
 };
