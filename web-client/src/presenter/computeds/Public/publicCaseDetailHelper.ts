@@ -9,6 +9,7 @@ import {
   POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   isDocumentBriefType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -22,7 +23,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getMeetsPolicyChangeRequirements = (
   entry: RawDocketEntry & { rootDocument: RawDocketEntry },
   visibilityPolicyDate: string,
-  docketEntriesEFiledByPractitioner: string[],
 ) => {
   if (!POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
     return false;
@@ -31,9 +31,10 @@ export const getMeetsPolicyChangeRequirements = (
   const visibilityPolicyDateFormatted =
     prepareDateFromString(visibilityPolicyDate).toISO();
 
-  const filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-    entry.docketEntryId,
-  );
+  const filedByPractitioner = [
+    ROLES.privatePractitioner,
+    ROLES.irsPractitioner,
+  ].includes(entry.filedByRole ?? '');
 
   const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
     entry.eventCode,
@@ -80,12 +81,10 @@ export const fetchRootDocument = (
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   {
-    docketEntriesEFiledByPractitioner,
     entry,
     isTerminalUser,
     visibilityPolicyDate,
   }: {
-    docketEntriesEFiledByPractitioner: string[];
     entry: any & { rootDocument: any };
     isTerminalUser: boolean;
     visibilityPolicyDate: string; // ISO Date String
@@ -124,7 +123,6 @@ export const formatDocketEntryOnDocketRecord = (
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
     entry,
     visibilityPolicyDate,
-    docketEntriesEFiledByPractitioner,
   );
 
   const canTerminalUserSeeLink =
@@ -209,12 +207,9 @@ export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): IPublicCaseDetailHelper => {
-  const {
-    canAllowPrintableDocketRecord,
-    docketEntries,
-    docketEntriesEFiledByPractitioner,
-    isSealed,
-  } = get(state.caseDetail);
+  const { canAllowPrintableDocketRecord, docketEntries, isSealed } = get(
+    state.caseDetail,
+  );
 
   const isTerminalUser = get(state.isTerminalUser);
 
@@ -232,7 +227,6 @@ export const publicCaseDetailHelper = (
     })
     .map(entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
-        docketEntriesEFiledByPractitioner,
         entry,
         isTerminalUser,
         visibilityPolicyDate,
