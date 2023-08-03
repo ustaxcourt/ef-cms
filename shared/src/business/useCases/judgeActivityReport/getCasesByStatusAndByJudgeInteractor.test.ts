@@ -610,8 +610,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       mockValidRequest,
     );
 
-    console.log('result.cases', result.cases);
-
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({

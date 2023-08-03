@@ -50,7 +50,7 @@ describe('checkJudgeActivityReportOpinionsAndOrdersIsSetAction', () => {
     expect(mockNo).toHaveBeenCalled();
   });
 
-  it('should return the yes path when both orders and opinions are set', async () => {
+  it('should return the yes path when both orders, opinions, casesClosed, trialSessions, and submittedAndCavCasesByJudge are set', async () => {
     await runAction(checkJudgeActivityReportOpinionsAndOrdersIsSetAction, {
       modules: {
         presenter,
@@ -58,8 +58,11 @@ describe('checkJudgeActivityReportOpinionsAndOrdersIsSetAction', () => {
       state: {
         judgeActivityReport: {
           judgeActivityReportData: {
+            casesClosedByJudge: {},
             opinions: [],
             orders: [],
+            submittedAndCavCasesByJudge: [],
+            trialSessions: {},
           },
         },
       },
