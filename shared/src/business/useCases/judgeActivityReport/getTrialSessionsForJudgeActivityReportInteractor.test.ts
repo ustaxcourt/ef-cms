@@ -1,9 +1,11 @@
-import { ID_FOR_ALL_JUDGES } from '../../../../../web-client/src/presenter/actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
+import {
+  ID_FOR_ALL_JUDGES,
+  getTrialSessionsForJudgeActivityReportInteractor,
+} from './getTrialSessionsForJudgeActivityReportInteractor';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { SESSION_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
-import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
 
 describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   const mockJudges = [
