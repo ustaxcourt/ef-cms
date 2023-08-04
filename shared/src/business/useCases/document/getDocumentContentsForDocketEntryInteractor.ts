@@ -28,7 +28,6 @@ export const getDocumentContentsForDocketEntryInteractor = async (
       .getDocument({
         applicationContext,
         key: documentContentsId,
-        protocol: 'S3',
         useTempBucket: false,
       });
 

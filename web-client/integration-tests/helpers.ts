@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import * as client from '../../shared/src/persistence/dynamodbClientService';
+import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
@@ -30,14 +30,14 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/present
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
-import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
+import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCasesForUser } from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
-import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
+import { getDocketNumbersByUser } from '../../web-api/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
-import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
-import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
+import { getUserById } from '../../web-api/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
@@ -45,18 +45,18 @@ import {
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { saveDocumentFromLambda } from '../../shared/src/persistence/s3/saveDocumentFromLambda';
-import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/saveWorkItem';
+import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
+import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
-import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
+import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
-import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
+import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
@@ -69,7 +69,7 @@ import {
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
-import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
+import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
