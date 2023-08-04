@@ -117,8 +117,11 @@ export const formatDocketEntryOnDocketRecord = (
     entry.eventCode = 'MISCL';
   }
 
+  entry.servedAtFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(entry.servedAt, 'MMDDYY');
+
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
-  ///
 
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
     entry,
@@ -172,7 +175,8 @@ export const formatDocketEntryOnDocketRecord = (
     servedPartiesCode: entry.servedPartiesCode,
     showDocumentDescriptionWithoutLink: !showLinkToDocument,
     showLinkToDocument,
-    showNotServed: !DocketEntry.isServed(entry),
+    showNotServed:
+      !DocketEntry.isServed(entry) && !DocketEntry.isUnservable(entry),
     showServed: DocketEntry.isServed(entry),
     signatory: entry.signatory,
   };
