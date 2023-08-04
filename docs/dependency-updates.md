@@ -60,14 +60,8 @@ Keep `@sparticuz/chromium` locked to 112.0.2 and `puppeteer` locked to 19.8.5 as
 When updating puppeteer or puppeteer core in the project make sure to also match versions in web-api/runtimes/puppeteer/package.json as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
 
 #### s3rver
-
-Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver).
-
-- Why is there a patch called `s3rver+3.7.1.patch`?
-  - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` ^0.3.1 is incompatible with s3rver which is why there's a patch in place to make it compatible.
-- How does the patch run?
-  - This runs as part of the `npm postinstall` step.
-- As of 7/26/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813). Ignoring high security vulnerability as this is a dev dependency and not included in production code.
+- As of 7/26/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813).
+- The s3rver package has been abandoned for two years now and is unlikely to be fixed. A community member has forked the repo and fixed the vulnerabilities so we are switching to the forked version here: github:20minutes/s3rver (https://github.com/20minutes/s3rver). This means the s3rver community version is unlikely to be updated however, the original npm package has been abandoned for over 2 years.
 
 ### pdfjs-dist
 
