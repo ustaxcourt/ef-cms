@@ -1,5 +1,5 @@
 import { createApplicationContext } from './applicationContext';
-import { get } from '../../shared/src/persistence/dynamodbClientService';
+import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
