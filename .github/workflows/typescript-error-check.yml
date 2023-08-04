@@ -40,4 +40,4 @@ jobs:
         run: ls
       - name: Compare errors between your branch and staging
         working-directory: ./branchToBeCompared
-        run: npx tsc --noEmit
+        run: NODE_OPTIONS=--max-old-space-size=8192 npx tsc --noEmit
