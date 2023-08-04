@@ -73,6 +73,7 @@ const case105_23_petition: TDynamoRecord & RawDocketEntry = {
   entityName: 'DocketEntry',
   eventCode: 'P',
   filedBy: 'Petr. Armand Fulton',
+  filedByRole: ROLES.petitioner,
   filers: ['40eb0890-aab3-4925-8769-e056b30c502d'],
   filingDate: '2023-01-02T05:00:00.000Z',
   index: 1,
