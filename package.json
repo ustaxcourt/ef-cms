@@ -22,6 +22,7 @@
     "@aws-sdk/protocol-http": "^3.374.0",
     "@aws-sdk/signature-v4": "^3.374.0",
     "@aws-sdk/types": "^3.370.0",
+    "@aws-sdk/util-dynamodb": "^3.382.0",
     "@cerebral/react": "4.2.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.36",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
