@@ -30,7 +30,7 @@ function countTypescriptErrors(text: string): number {
 console.log('Typechecking your branch...');
 const branchToBeComparedTypescriptOutput = spawnSync(
   'npx',
-  ['tsc', '--noEmit'],
+  ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
   {
     encoding: 'utf-8',
     maxBuffer: 1024 * 5000,
@@ -42,11 +42,15 @@ const branchToBeComparedErrorCount = countTypescriptErrors(
 
 // ************************************ Staging Errors ***********************************
 console.log('Typechecking staging...');
-const stagingTypescriptOutput = spawnSync('npx', ['tsc', '--noEmit'], {
-  cwd: '../stagingBranch',
-  encoding: 'utf-8',
-  maxBuffer: 1024 * 5000,
-});
+const stagingTypescriptOutput = spawnSync(
+  'npx',
+  ['--node-options="--max-old-space-size=8192"', 'tsc', '--noEmit'],
+  {
+    cwd: '../stagingBranch',
+    encoding: 'utf-8',
+    maxBuffer: 1024 * 5000,
+  },
+);
 const stagingProjectErrorCount = countTypescriptErrors(
   stagingTypescriptOutput.stdout,
 );
