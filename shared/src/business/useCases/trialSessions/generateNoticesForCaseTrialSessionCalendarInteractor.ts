@@ -157,7 +157,6 @@ const setNoticeForCase = async ({
       .getDocument({
         applicationContext,
         key: clinicLetterKey,
-        protocol: 'S3',
         useTempBucket: false,
       });
     noticeOfTrialIssuedWithClinicLetter = await applicationContext

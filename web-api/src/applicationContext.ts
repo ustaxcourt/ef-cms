@@ -1,8 +1,8 @@
 /* eslint-disable max-lines */
 import AWS from 'aws-sdk';
 
-import * as barNumberGenerator from '../../shared/src/persistence/dynamo/users/barNumberGenerator';
-import * as docketNumberGenerator from '../../shared/src/persistence/dynamo/cases/docketNumberGenerator';
+import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
+import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import axios from 'axios';
@@ -56,19 +56,20 @@ import { getUseCaseHelpers } from './getUseCaseHelpers';
 import { getUseCases } from './getUseCases';
 import { getUtilities } from './getUtilities';
 import { isAuthorized } from '../../shared/src/authorization/authorizationClientService';
-import { isCurrentColorActive } from '../../shared/src/persistence/dynamo/helpers/isCurrentColorActive';
+import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
-import { scan } from '../../shared/src/persistence/dynamodbClientService';
+import { scan } from './persistence/dynamodbClientService';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
-import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
+import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
 import { sendNotificationOfSealing } from '../../shared/src/dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
-import { sendSetTrialSessionCalendarEvent } from '../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent';
+import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
 import { sendSlackNotification } from '../../shared/src/dispatchers/slack/sendSlackNotification';
-import { sendUpdatePetitionerCasesMessage } from '../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage';
+import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
+import type { ClientApplicationContext } from '../../web-client/src/applicationContext';
 const { CognitoIdentityServiceProvider, DynamoDB, S3, SES, SQS } = AWS;
 const execPromise = util.promisify(exec);
 
@@ -533,3 +534,11 @@ export const createApplicationContext = (
     },
   };
 };
+
+export type IServerApplicationContext = ReturnType<
+  typeof createApplicationContext
+>;
+
+export type IMergeContext =
+  | IServerApplicationContext
+  | ClientApplicationContext;
