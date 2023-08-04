@@ -14,7 +14,9 @@
     "strict": true,
     "baseUrl": "./",
     "paths": {
-      "@web-client/*": ["web-client/src/*"]
+      "@web-client/*": ["web-client/src/*"],
+      "@web-api/*": ["web-api/src/*"],
+      "@shared/*": ["shared/src/*"]
     }
   },
   "ts-node": {
