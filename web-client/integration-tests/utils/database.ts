@@ -1,4 +1,5 @@
 import { chunk } from 'lodash';
+import { createUsers } from '../../../web-api/storage/scripts/createUsers';
 import { exec } from 'child_process';
 import AWS from 'aws-sdk';
 import fs from 'fs';
@@ -97,6 +98,7 @@ export const seedFullDataset = async () => {
   );
 
   await seedDatabase(entries);
+  await createUsers();
 };
 
 export const resetElasticsearch = () => {
