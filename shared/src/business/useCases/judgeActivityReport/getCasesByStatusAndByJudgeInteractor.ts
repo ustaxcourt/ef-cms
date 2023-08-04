@@ -95,12 +95,11 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     });
 
   const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(
-      async result =>
-        await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: result.docketNumber,
-        }),
+    submittedAndCavCasesResults.map(result =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: result.docketNumber,
+      }),
     ),
   );
 

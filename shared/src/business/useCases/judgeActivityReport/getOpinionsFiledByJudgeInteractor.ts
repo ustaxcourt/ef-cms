@@ -6,6 +6,7 @@ import {
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
+import { OrdersAndOpinionFormattedResultsTypes } from '../../../../../web-api/src/persistence/elasticsearch/advancedDocumentSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -23,9 +24,9 @@ import { orderBy } from 'lodash';
  * @returns {array} list of opinions filed by the judge in the given date range, sorted alphabetically ascending by event code
  */
 export const getOpinionsFiledByJudgeInteractor = async (
-  applicationContext: object,
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportFilters,
-): Array<any> => {
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -38,11 +39,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  let sortedResults: Array<{
-    results: {
-      eventCode: string;
-    };
-  }>[] = [];
+  let sortedResults: OrdersAndOpinionFormattedResultsTypes[] = [];
 
   if (searchEntity.judges.length) {
     sortedResults = await Promise.all(
