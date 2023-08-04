@@ -15,7 +15,6 @@ export const countPagesInDocument = async ({
     bytes = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key: docketEntryId,
-      protocol: 'S3',
       useTempBucket: false,
     });
   }
