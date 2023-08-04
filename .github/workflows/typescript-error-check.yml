@@ -40,4 +40,4 @@ jobs:
         run: ls
       - name: Compare errors between your branch and staging
         working-directory: ./branchToBeCompared
-        run: npx ts-node scripts/compareTypescriptErrors.ts
+        run: npx tsc --noEmit
