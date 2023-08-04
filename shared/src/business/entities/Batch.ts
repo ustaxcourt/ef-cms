@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { createISODateString } from '../utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
 export class Batch extends JoiValidationEntity {
