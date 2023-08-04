@@ -1,5 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { TDynamoRecord } from '../../../shared/src/persistence/dynamo/dynamoTypes';
+import { TDynamoRecord } from '../../../web-api/src/persistence/dynamo/dynamoTypes';
 
 const case105_23: Case & TDynamoRecord = {
   associatedJudge: 'Chief Judge',
