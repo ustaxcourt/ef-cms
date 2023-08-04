@@ -1,4 +1,5 @@
 const CopyPlugin = require('copy-webpack-plugin');
+const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   externals: {
@@ -49,6 +50,7 @@ module.exports = {
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    plugins: [new TsconfigPathsPlugin()], // Allows us to use the tsconfig path alias + basePath
   },
   target: 'node',
 };
