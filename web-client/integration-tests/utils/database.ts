@@ -1,7 +1,9 @@
 import { chunk } from 'lodash';
 import { createUsers } from '../../../web-api/storage/scripts/createUsers';
 import { exec } from 'child_process';
+import { waitUntil } from '../helpers';
 import AWS from 'aws-sdk';
+import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
@@ -77,6 +79,10 @@ export const seedDatabase = async entries => {
   await clearDatabase();
   await resetElasticsearch();
 
+  if (!entries) {
+    await createUsers();
+  }
+
   // we want to process the case entries LAST because we get stream errors otherwise
   entries.sort((a, b) => {
     const isACase = a.pk.includes('case|') && a.sk.includes('case|') ? 1 : 0;
@@ -98,7 +104,13 @@ export const seedFullDataset = async () => {
   );
 
   await seedDatabase(entries);
-  await createUsers();
+
+  await waitUntil(async () => {
+    const value = await axios
+      .get('http://localhost:5005/isDone')
+      .then(response => response.data);
+    return value === true;
+  });
 };
 
 export const resetElasticsearch = () => {

@@ -22,6 +22,7 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
+  SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
@@ -1128,7 +1129,7 @@ export class Case extends JoiValidationEntity {
    */
   markAsSentToIRS() {
     this.setCaseStatus({
-      changedBy: 'System',
+      changedBy: SYSTEM_ROLE,
       updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
     });
 
@@ -1496,7 +1497,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} updatedCaseStatus the case status to update
    * @returns {Case} the updated case entity
    */
-  setCaseStatus({ changedBy = 'System', updatedCaseStatus }) {
+  setCaseStatus({ changedBy = SYSTEM_ROLE, updatedCaseStatus }) {
     const previousCaseStatus = this.status;
     const date = createISODateString();
 
@@ -1800,7 +1801,7 @@ export class Case extends JoiValidationEntity {
     this.updateTrialSessionInformation(trialSessionEntity);
     if (trialSessionEntity.isCalendared === true) {
       this.setCaseStatus({
-        changedBy: 'System',
+        changedBy: SYSTEM_ROLE,
         updatedCaseStatus: CASE_STATUS_TYPES.calendared,
       });
     }

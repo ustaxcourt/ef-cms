@@ -1089,7 +1089,7 @@ export const waitForExpectedItemToExist = async ({
 };
 
 // will run the cb every second until it returns true
-const waitUntil = cb => {
+export const waitUntil = cb => {
   return new Promise(resolve => {
     const waitUntilInternal = async () => {
       const value = await cb();
