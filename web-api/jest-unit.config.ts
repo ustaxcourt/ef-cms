@@ -1,3 +1,5 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -28,6 +30,12 @@ const config: Config = {
       lines: 99,
       statements: 99,
     },
+  },
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/../',
+    }),
+    uuid: require.resolve('uuid'),
   },
   testEnvironment: 'node',
   transform: {
