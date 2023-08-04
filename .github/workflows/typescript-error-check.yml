@@ -30,6 +30,14 @@ jobs:
       - name: NPM Install in staging
         working-directory: ./stagingBranch
         run: npm ci
+      - name: primary ls
+        run: ls
+      - name: branchToBeCompared ls
+        working-directory: ./branchToBeCompared
+        run: ls
+      - name: stagingBranch ls
+        working-directory: ./stagingBranch
+        run: ls
       - name: Compare errors between your branch and staging
         working-directory: ./branchToBeCompared
         run: npx ts-node scripts/compareTypescriptErrors.ts

@@ -16,7 +16,14 @@ import { spawnSync } from 'child_process';
 */
 
 function countTypescriptErrors(text: string): number {
-  return (text.match(/: error TS/g) || []).length;
+  console.log('I am stdOut text: ', text);
+  const matchedText = text.match(/: error TS/g);
+  if (!matchedText) {
+    throw new Error(
+      'Unable to find typescript text to count errors: ": error TS"',
+    );
+  }
+  return matchedText.length;
 }
 
 // ************************************ Your Branch Errors ***********************************
