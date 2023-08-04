@@ -1,9 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
-import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
+import { aggregateCaseItems } from '../../../../../src/persistence/dynamo/helpers/aggregateCaseItems';
 import { migrateItems } from './0010-add-lead-docket-number-to-case-deadline';
-jest.mock(
-  '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems',
-);
+jest.mock('../../../../../src/persistence/dynamo/helpers/aggregateCaseItems');
 import { queryFullCase } from '../utilities/queryFullCase';
 jest.mock('../utilities/queryFullCase');
 
