@@ -4,10 +4,10 @@ import {
   ROLES,
   SYSTEM_ROLE,
 } from '../../../../../../shared/src/business/entities/EntityConstants';
-import { getUserById } from '../../../../../../shared/src/persistence/dynamo/users/getUserById';
+import { getUserById } from '../../../../../../web-api/src/persistence/dynamo/users/getUserById';
 import { migrateItems } from './0011-add-filed-by-role';
 import { privatePractitionerUser } from '../../../../../../shared/src/test/mockUsers';
-jest.mock('../../../../../../shared/src/persistence/dynamo/users/getUserById');
+jest.mock('../../../../../../web-api/src/persistence/dynamo/users/getUserById');
 
 describe('migrateItems', () => {
   it('should NOT modify a record that is NOT a docket entry', async () => {
