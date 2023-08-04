@@ -7,6 +7,7 @@ import {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
+  UNSERVABLE_EVENT_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   MOCK_ANSWER,
@@ -394,7 +395,7 @@ describe('publicCaseDetailHelper', () => {
           {
             entry: mockSealedDocketEntry,
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '',
+            visibilityPolicyDate: '',
           },
         );
 
@@ -414,7 +415,7 @@ describe('publicCaseDetailHelper', () => {
           {
             entry: mockDocketEntry,
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '',
+            visibilityPolicyDate: '',
           },
         );
 
@@ -986,7 +987,7 @@ describe('publicCaseDetailHelper', () => {
               rootDocument: { documentType: 'Petition' },
             },
             isTerminalUser: true,
-            visibilityPolicyDateFormatted: '',
+            visibilityPolicyDate: '',
           },
         );
 
@@ -1006,7 +1007,7 @@ describe('publicCaseDetailHelper', () => {
               servedAt: '2012-05-16T00:00:00.000-04:00',
             },
             isTerminalUser: true,
-            visibilityPolicyDateFormatted: '2010-05-16T00:00:00.000-04:00',
+            visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1026,7 +1027,7 @@ describe('publicCaseDetailHelper', () => {
               servedAt: '2040-05-16T00:00:00.000-04:00',
             },
             isTerminalUser: true,
-            visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+            visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1047,7 +1048,7 @@ describe('publicCaseDetailHelper', () => {
               servedAt: '2030-05-16T00:00:00.000-04:00',
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2020-05-16T00:00:00.000-04:00',
+            visibilityPolicyDate: '2020-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1069,7 +1070,7 @@ describe('publicCaseDetailHelper', () => {
               rootDocument: { documentType: 'Petition' },
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+            visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1090,7 +1091,7 @@ describe('publicCaseDetailHelper', () => {
               rootDocument: { documentType: 'Petition' },
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2040-05-16T00:00:00.000-04:00',
+            visibilityPolicyDate: '2040-05-16T00:00:00.000-04:00',
           },
         );
 
@@ -1115,7 +1116,7 @@ describe('publicCaseDetailHelper', () => {
               },
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1140,7 +1141,7 @@ describe('publicCaseDetailHelper', () => {
               servedAt: '2050-05-16T00:00:00.000-04:00',
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1165,7 +1166,7 @@ describe('publicCaseDetailHelper', () => {
               },
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1182,7 +1183,7 @@ describe('publicCaseDetailHelper', () => {
               rootDocument: { documentType: 'Petition' },
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1207,7 +1208,7 @@ describe('publicCaseDetailHelper', () => {
               },
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1232,7 +1233,7 @@ describe('publicCaseDetailHelper', () => {
               servedAt: '2050-05-16T00:00:00.000-04:00',
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1257,7 +1258,7 @@ describe('publicCaseDetailHelper', () => {
               servedAt: '2050-05-16T00:00:00.000-04:00',
             },
             isTerminalUser: false,
-            visibilityPolicyDateFormatted: '2023-08-01T00:00:00.000-04:00',
+            visibilityPolicyDate: '2023-08-01T00:00:00.000-04:00',
           },
         );
 
@@ -1393,6 +1394,56 @@ describe('formatDocketEntryOnDocketRecord', () => {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
       },
     };
+  });
+
+  it('should set servedAtFormatted when the servedAt property is set', () => {
+    const { servedAtFormatted } = formatDocketEntryOnDocketRecord(
+      applicationContextPublic,
+      {
+        entry: {
+          ...baseDocketEntry,
+          servedAt: '2012-05-16T00:00:00.000-04:00',
+        },
+        isTerminalUser: true,
+        visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+      },
+    );
+
+    expect(servedAtFormatted).toBe('05/16/12');
+  });
+
+  it('should set showNotServed to true when the docket entry can be served and it has not yet been', () => {
+    const { showNotServed } = formatDocketEntryOnDocketRecord(
+      applicationContextPublic,
+      {
+        entry: {
+          ...baseDocketEntry,
+          eventCode: 'O',
+          servedAt: undefined,
+        },
+        isTerminalUser: true,
+        visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+      },
+    );
+
+    expect(showNotServed).toBe(true);
+  });
+
+  it('should set showNotServed to false when the docket entry is unservable', () => {
+    const { showNotServed } = formatDocketEntryOnDocketRecord(
+      applicationContextPublic,
+      {
+        entry: {
+          ...baseDocketEntry,
+          eventCode: UNSERVABLE_EVENT_CODES[0],
+          servedAt: undefined,
+        },
+        isTerminalUser: true,
+        visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+      },
+    );
+
+    expect(showNotServed).toBe(false);
   });
 
   it('should return formatted docket entry', () => {
