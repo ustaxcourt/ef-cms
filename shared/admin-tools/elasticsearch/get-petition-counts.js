@@ -9,7 +9,7 @@ const {
 } = require('../../../web-api/src/applicationContext');
 const {
   searchAll,
-} = require('../../src/persistence/elasticsearch/searchClient');
+} = require('../../../web-api/src/persistence/elasticsearch/searchClient');
 const { DateTime } = require('luxon');
 
 const year = process.argv[2] || DateTime.now().toObject().year;
