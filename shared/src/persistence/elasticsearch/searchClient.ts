@@ -8,6 +8,7 @@ const CHUNK_SIZE = 10000;
 
 export const formatResults = body => {
   const total = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
   const results = get(body, 'hits.hits', []).map(hit => {
@@ -41,6 +42,7 @@ export const formatResults = body => {
   });
 
   return {
+    aggregations,
     results,
     total,
   };

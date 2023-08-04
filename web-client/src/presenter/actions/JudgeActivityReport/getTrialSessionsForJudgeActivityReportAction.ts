@@ -1,29 +1,36 @@
+import { TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Fetches the trial sessions within a date range for the judge activity report
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting the getCase use case
- * @returns {object} contains the trial sessions returned from the use case
- */
 export const getTrialSessionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
-  const { role, userId } = applicationContext.getCurrentUser();
-  const { USER_ROLES } = applicationContext.getConstants();
-  const chambersJudgeUser = get(state.judgeUser);
-  const isChambersUser = role === USER_ROLES.chambers;
-  const judgeId =
-    isChambersUser && chambersJudgeUser ? chambersJudgeUser.userId : userId;
+  let judgeIdForRequest: string =
+    TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION;
+
+  if (judgeName !== 'All Judges') {
+    const allJudges: Array<{
+      role?: string;
+      userId?: string;
+      name?: string;
+    }> = get(state.judges);
+
+    const { userId } = (allJudges || []).find(
+      eachJudge => eachJudge.name === judgeName,
+    );
+
+    judgeIdForRequest = userId;
+  }
 
   const trialSessions = await applicationContext
     .getUseCases()
     .getTrialSessionsForJudgeActivityReportInteractor(applicationContext, {
       endDate,
-      judgeId,
+      judgeId: judgeIdForRequest,
       startDate,
     });
 
