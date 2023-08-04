@@ -1,9 +1,8 @@
 import { chunk } from 'lodash';
 import { createUsers } from '../../../web-api/storage/scripts/createUsers';
 import { exec } from 'child_process';
-import { waitUntil } from '../helpers';
+import { refreshElasticsearchIndex } from '../helpers';
 import AWS from 'aws-sdk';
-import axios from 'axios';
 import fs from 'fs';
 import path from 'path';
 
@@ -105,12 +104,7 @@ export const seedFullDataset = async () => {
 
   await seedDatabase(entries);
 
-  await waitUntil(async () => {
-    const value = await axios
-      .get('http://localhost:5005/isDone')
-      .then(response => response.data);
-    return value === true;
-  });
+  await refreshElasticsearchIndex();
 };
 
 export const resetElasticsearch = () => {
