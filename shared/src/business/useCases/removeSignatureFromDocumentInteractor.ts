@@ -31,7 +31,6 @@ export const removeSignatureFromDocumentInteractor = async (
     .getDocument({
       applicationContext,
       key: docketEntryToUnsign.documentIdBeforeSignature,
-      protocol: 'S3',
       useTempBucket: false,
     });
 
