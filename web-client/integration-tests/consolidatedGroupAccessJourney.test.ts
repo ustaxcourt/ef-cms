@@ -1,4 +1,5 @@
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
+import { createUsers } from '../../web-api/storage/scripts/createUsers';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -26,6 +27,7 @@ describe('User accesses a case that does not belong to them, but is part of a co
   afterAll(async () => {
     cerebralTest.closeSocket();
     await seedFullDataset();
+    await createUsers();
   });
 
   describe('Petitioner', () => {
