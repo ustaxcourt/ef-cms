@@ -19,6 +19,7 @@ import {
   PARTIES_CODES,
   ROLES,
   SCENARIOS,
+  SYSTEM_ROLE,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { createEndOfDayISO } from '../utilities/DateHandler';
@@ -133,7 +134,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .when('isDraft', {
       is: true,
       otherwise: JoiValidationConstants.STRING.valid(
-        ...[...Object.values(ROLES), 'System'],
+        ...[...Object.values(ROLES), SYSTEM_ROLE],
       ).required(),
       then: joi.optional(),
     })

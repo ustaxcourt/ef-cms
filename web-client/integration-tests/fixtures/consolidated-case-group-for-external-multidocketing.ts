@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
 
+import { SYSTEM_ROLE } from '../../../shared/src/business/entities/EntityConstants';
+
 export const seedData = [
   {
     current: true,
@@ -154,7 +156,7 @@ export const seedData = [
         updatedCaseStatus: 'New',
       },
       {
-        changedBy: 'System',
+        changedBy: SYSTEM_ROLE,
         date: '2023-04-03T15:52:59.423Z',
         updatedCaseStatus: 'General Docket - Not at Issue',
       },
@@ -311,7 +313,7 @@ export const seedData = [
     draftOrderState: null,
     entityName: 'DocketEntry',
     eventCode: 'NOTR',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-04-03T15:53:02.251Z',
     index: 4,
@@ -345,7 +347,7 @@ export const seedData = [
     documentType: 'Filing Fee Paid',
     entityName: 'DocketEntry',
     eventCode: 'FEE',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-04-01T04:00:00.000Z',
     index: 3,
@@ -436,7 +438,7 @@ export const seedData = [
         updatedCaseStatus: 'New',
       },
       {
-        changedBy: 'System',
+        changedBy: SYSTEM_ROLE,
         date: '2023-04-03T15:53:18.587Z',
         updatedCaseStatus: 'General Docket - Not at Issue',
       },
@@ -533,7 +535,7 @@ export const seedData = [
     documentType: 'Filing Fee Paid',
     entityName: 'DocketEntry',
     eventCode: 'FEE',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-03-25T04:00:00.000Z',
     index: 4,
@@ -638,7 +640,7 @@ export const seedData = [
     draftOrderState: null,
     entityName: 'DocketEntry',
     eventCode: 'NOTR',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-04-03T15:53:21.857Z',
     index: 5,
@@ -775,7 +777,7 @@ export const seedData = [
         updatedCaseStatus: 'New',
       },
       {
-        changedBy: 'System',
+        changedBy: SYSTEM_ROLE,
         date: '2023-04-03T15:53:43.150Z',
         updatedCaseStatus: 'General Docket - Not at Issue',
       },
@@ -875,7 +877,7 @@ export const seedData = [
     documentType: 'Filing Fee Waived',
     entityName: 'DocketEntry',
     eventCode: 'FEEW',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-03-18T04:00:00.000Z',
     index: 4,
@@ -902,7 +904,7 @@ export const seedData = [
     draftOrderState: null,
     entityName: 'DocketEntry',
     eventCode: 'NOTR',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-04-03T15:53:47.142Z',
     index: 5,
@@ -1109,7 +1111,7 @@ export const seedData = [
         updatedCaseStatus: 'New',
       },
       {
-        changedBy: 'System',
+        changedBy: SYSTEM_ROLE,
         date: '2023-04-03T15:52:36.482Z',
         updatedCaseStatus: 'General Docket - Not at Issue',
       },
@@ -1190,7 +1192,7 @@ export const seedData = [
     draftOrderState: null,
     entityName: 'DocketEntry',
     eventCode: 'NOTR',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-04-03T15:52:39.435Z',
     index: 4,
@@ -1224,7 +1226,7 @@ export const seedData = [
     documentType: 'Filing Fee Paid',
     entityName: 'DocketEntry',
     eventCode: 'FEE',
-    filedByRole: 'System',
+    filedByRole: SYSTEM_ROLE,
     filers: [],
     filingDate: '2023-03-11T05:00:00.000Z',
     index: 3,

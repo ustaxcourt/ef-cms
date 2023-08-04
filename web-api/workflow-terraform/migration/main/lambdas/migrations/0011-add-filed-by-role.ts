@@ -1,3 +1,4 @@
+import { SYSTEM_ROLE } from '../../../../../../shared/src/business/entities/EntityConstants';
 import { TDynamoRecord } from '../../../../../../shared/src/persistence/dynamo/dynamoTypes';
 import { createApplicationContext } from '../../../../../src/applicationContext';
 
@@ -19,7 +20,7 @@ export const migrateItems = async items => {
           userId: item.userId,
         });
 
-      item.filedByRole = filedByUser ? filedByUser.role : 'System';
+      item.filedByRole = filedByUser ? filedByUser.role : SYSTEM_ROLE;
     }
 
     itemsAfter.push(item);

@@ -1002,6 +1002,10 @@ export const ROLES = {
   trialClerk: 'trialclerk',
 };
 
+// this isn't a real role someone can login with, which is why
+// it's a separate constant.
+export const SYSTEM_ROLE = 'System';
+
 export const FILING_TYPES = {
   [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
   [ROLES.privatePractitioner]: [
