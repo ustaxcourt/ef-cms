@@ -16,7 +16,6 @@ import { spawnSync } from 'child_process';
 */
 
 function countTypescriptErrors(text: string): number {
-  console.log('I am stdOut text: ', text);
   const matchedText = text.match(/: error TS/g);
   if (!matchedText) {
     throw new Error(
