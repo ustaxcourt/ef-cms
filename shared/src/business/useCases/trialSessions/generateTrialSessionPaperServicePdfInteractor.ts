@@ -42,7 +42,6 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       .getDocument({
         applicationContext,
         key: trialNoticePdfsKey,
-        protocol: 'S3',
         useTempBucket: true,
       });
 

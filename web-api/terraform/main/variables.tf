@@ -128,3 +128,10 @@ variable "default_account_pass" {
   type = string
 }
 
+variable "status_health_check_west_id" {
+  type = string
+}
+
+variable "status_health_check_east_id" {
+  type = string
+}
