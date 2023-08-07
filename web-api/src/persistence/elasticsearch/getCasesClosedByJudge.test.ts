@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { CasesClosedType } from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCasesClosedByJudge } from './getCasesClosedByJudge';

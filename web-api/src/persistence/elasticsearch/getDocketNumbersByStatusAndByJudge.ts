@@ -2,7 +2,7 @@ import {
   CavAndSubmittedCaseResponseType,
   JudgeActivityReportCavAndSubmittedCasesRequest,
 } from '../../../../web-client/src/presenter/judgeActivityReportState';
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../business/entities/EntityConstants';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
 
