@@ -4,14 +4,18 @@ import {
   ROLES,
   SYSTEM_ROLE,
 } from '../../../../../../shared/src/business/entities/EntityConstants';
-import { getUserById } from '../../../../../../web-api/src/persistence/dynamo/users/getUserById';
+import { getUserById } from '../utilities/getUserById';
 import { migrateItems } from './0011-add-filed-by-role';
 import { privatePractitionerUser } from '../../../../../../shared/src/test/mockUsers';
-jest.mock('../../../../../../web-api/src/persistence/dynamo/users/getUserById');
+jest.mock('../utilities/getUserById');
 
 describe('migrateItems', () => {
+  let documentClientMock;
+
   it('should NOT modify a record that is NOT a docket entry', async () => {
-    (getUserById as jest.Mock).mockResolvedValue(privatePractitionerUser);
+    (getUserById as jest.Mock).mockResolvedValue({
+      Item: privatePractitionerUser,
+    });
 
     const items = [
       {
@@ -22,7 +26,7 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = await migrateItems(items, documentClientMock);
 
     expect(results).toEqual([
       {
@@ -35,7 +39,9 @@ describe('migrateItems', () => {
   });
 
   it('should set the role of the person who filed the docket entry when the item is a docket entry', async () => {
-    (getUserById as jest.Mock).mockResolvedValue(privatePractitionerUser);
+    (getUserById as jest.Mock).mockResolvedValue({
+      Item: privatePractitionerUser,
+    });
 
     const items = [
       {
@@ -46,7 +52,7 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = await migrateItems(items, documentClientMock);
 
     expect(results).toEqual([
       {
@@ -59,7 +65,7 @@ describe('migrateItems', () => {
   });
 
   it('should add system as the role of the person who filed the docket entry when the user who filed the entry was not found in persistence', async () => {
-    (getUserById as jest.Mock).mockResolvedValue(undefined);
+    (getUserById as jest.Mock).mockResolvedValue({ Item: undefined });
     const items = [
       {
         ...PENDING_DOCKET_ENTRY,
@@ -69,7 +75,7 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = await migrateItems(items, documentClientMock);
 
     expect(results).toEqual([
       {
@@ -82,7 +88,9 @@ describe('migrateItems', () => {
   });
 
   it('should set the role of the person who filed the docket entry when the docket entry is a draft', async () => {
-    (getUserById as jest.Mock).mockResolvedValue(privatePractitionerUser);
+    (getUserById as jest.Mock).mockResolvedValue({
+      Item: privatePractitionerUser,
+    });
     const items = [
       {
         ...PENDING_DOCKET_ENTRY,
@@ -93,7 +101,7 @@ describe('migrateItems', () => {
       },
     ];
 
-    const results = await migrateItems(items);
+    const results = await migrateItems(items, documentClientMock);
 
     expect(results).toEqual([
       {
