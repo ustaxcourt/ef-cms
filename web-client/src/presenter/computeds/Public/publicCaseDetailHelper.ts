@@ -1,7 +1,36 @@
 /* eslint-disable complexity */
 
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  BRIEF_EVENTCODES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  EVENT_CODES_VISIBLE_TO_PUBLIC,
+  MOTION_EVENT_CODES,
+  ORDER_EVENT_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  isDocumentBriefType,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+
+export const fetchRootDocument = (
+  entry: RawDocketEntry,
+  docketEntries: RawDocketEntry[],
+): RawDocketEntry => {
+  const { previousDocument } = entry;
+  if (!previousDocument) return entry;
+
+  const previousEntry = docketEntries.find(
+    e => e.docketEntryId === previousDocument.docketEntryId,
+  );
+
+  if (!previousEntry) return entry;
+
+  return fetchRootDocument(previousEntry, docketEntries);
+};
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
@@ -10,37 +39,57 @@ export const formatDocketEntryOnDocketRecord = (
     entry,
     isTerminalUser,
     visibilityPolicyDateFormatted,
+  }: {
+    docketEntriesEFiledByPractitioner: string[];
+    entry: any & { rootDocument: any };
+    isTerminalUser: boolean;
+    visibilityPolicyDateFormatted: string; // ISO Date String
   },
 ) => {
-  const {
-    BRIEF_EVENTCODES,
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
-    POLICY_DATE_IMPACTED_EVENTCODES,
-  } = applicationContext.getConstants();
   const record = cloneDeep(entry);
 
   const isServedDocument = !record.isNotServedDocument;
 
-  let filedByPractitioner: boolean = false;
-  let requiresPractitionerCheck: boolean = false;
-  let filedAfterPolicyChange: boolean = false;
-  const isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(
+  let filedByPractitioner = false;
+  let meetsPolicyChangeRequirements = false;
+  const isAmendment = ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
     entry.eventCode,
   );
+  const filedAfterPolicyChange =
+    record.filingDate >= visibilityPolicyDateFormatted;
+
   if (POLICY_DATE_IMPACTED_EVENTCODES.includes(entry.eventCode)) {
-    filedAfterPolicyChange = record.filingDate >= visibilityPolicyDateFormatted;
-    if (isDocketEntryBriefEventCode) {
-      requiresPractitionerCheck = true;
-      filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
-        entry.docketEntryId,
-      );
+    let isDocketEntryBriefEventCode;
+    const docType = entry.rootDocument.documentType;
+
+    if (isAmendment) {
+      isDocketEntryBriefEventCode = isDocumentBriefType(docType);
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+          entry.docketEntryId,
+        );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else if (docType === 'Amicus Brief') {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
+      } else {
+        meetsPolicyChangeRequirements = false;
+      }
+    } else {
+      isDocketEntryBriefEventCode = BRIEF_EVENTCODES.includes(entry.eventCode);
+
+      if (isDocketEntryBriefEventCode) {
+        filedByPractitioner = docketEntriesEFiledByPractitioner.includes(
+          entry.docketEntryId,
+        );
+        meetsPolicyChangeRequirements =
+          filedAfterPolicyChange && filedByPractitioner;
+      } else {
+        meetsPolicyChangeRequirements = filedAfterPolicyChange;
+      }
     }
   }
-
-  const meetsPolicyChangeRequirements =
-    filedAfterPolicyChange &&
-    (requiresPractitionerCheck ? filedByPractitioner : true);
 
   let canTerminalUserSeeLink =
     record.isFileAttached &&
@@ -108,18 +157,10 @@ export const formatDocketEntryOnDocketRecord = (
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const {
-    ALLOWLIST_FEATURE_FLAGS,
-    MOTION_EVENT_CODES,
-    ORDER_EVENT_CODES,
-    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-  } = applicationContext.getConstants();
   const publicCase = get(state.caseDetail);
   const isTerminalUser = get(state.isTerminalUser);
   const { docketRecordFilter } = get(state.sessionMetadata);
@@ -148,8 +189,11 @@ export const publicCaseDetailHelper = (
     .prepareDateFromString(DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE)
     .toISO();
 
-  let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords.map(
-    entry => {
+  let formattedDocketEntriesOnDocketRecord = sortedFormattedDocketRecords
+    .map((entry: any, _, array) => {
+      return { ...entry, rootDocument: fetchRootDocument(entry, array) };
+    })
+    .map(entry => {
       return formatDocketEntryOnDocketRecord(applicationContext, {
         docketEntriesEFiledByPractitioner:
           publicCase.docketEntriesEFiledByPractitioner,
@@ -157,8 +201,7 @@ export const publicCaseDetailHelper = (
         isTerminalUser,
         visibilityPolicyDateFormatted,
       });
-    },
-  );
+    });
 
   if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
     formattedDocketEntriesOnDocketRecord =

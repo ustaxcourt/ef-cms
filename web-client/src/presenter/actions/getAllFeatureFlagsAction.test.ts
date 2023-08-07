@@ -38,4 +38,21 @@ describe('getAllFeatureFlagsAction', () => {
 
     expect(result.state.featureFlags).toEqual(mockFeatureFlagsObject);
   });
+
+  it('should set features flags to an empty object on errors', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    applicationContext
+      .getUseCases()
+      .getAllFeatureFlagsInteractor.mockRejectedValue(new Error('gg'));
+
+    const result = await runAction(getAllFeatureFlagsAction, {
+      modules: {
+        presenter,
+      },
+      state: {},
+    });
+
+    expect(result.state.featureFlags).toEqual({});
+  });
 });

@@ -1,6 +1,6 @@
 import { applicationContext } from '../test/createTestApplicationContext';
-import { getItem } from '../../persistence/localStorage/getItem';
-import { setItem } from '../../persistence/localStorage/setItem';
+import { getItem } from '../../../../web-client/src/persistence/localStorage/getItem';
+import { setItem } from '../../../../web-client/src/persistence/localStorage/setItem';
 import { setItemInteractor } from './setItemInteractor';
 
 describe('setItemInteractor', () => {
