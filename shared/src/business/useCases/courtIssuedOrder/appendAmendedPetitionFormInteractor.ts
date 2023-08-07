@@ -35,7 +35,6 @@ export const appendAmendedPetitionFormInteractor = async (
       .getDocument({
         applicationContext,
         key: docketEntryId,
-        protocol: 'S3',
         useTempBucket: false,
       });
   } catch (e) {

@@ -101,7 +101,6 @@ export const serveThirtyDayNoticeInteractor = async (
         .getDocument({
           applicationContext,
           key: clinicLetterKey,
-          protocol: 'S3',
           useTempBucket: false,
         });
     }

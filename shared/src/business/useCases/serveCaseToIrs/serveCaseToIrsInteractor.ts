@@ -258,7 +258,6 @@ const generateNoticeOfReceipt = async ({
         .getDocument({
           applicationContext,
           key: clinicLetterKey,
-          protocol: 'S3',
           useTempBucket: false,
         });
     }
