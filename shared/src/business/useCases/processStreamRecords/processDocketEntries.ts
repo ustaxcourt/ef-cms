@@ -42,7 +42,6 @@ export const processDocketEntries = async ({
             .getDocument({
               applicationContext,
               key: fullDocketEntry.documentContentsId,
-              protocol: 'S3',
               useTempBucket: false,
             });
           const { documentContents } = JSON.parse(buffer.toString());

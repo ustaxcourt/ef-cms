@@ -453,6 +453,10 @@ export const POLICY_DATE_IMPACTED_EVENTCODES = [
   ...BRIEF_EVENTCODES,
   AMICUS_BRIEF_EVENT_CODE,
   SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+  ...AMENDMENT_EVENT_CODES,
+  'REDC',
+  'SPML',
+  'SUPM',
 ];
 
 export const SCENARIOS = [
@@ -1536,3 +1540,12 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const isDocumentBriefType = (documentType: string) => {
+  const documents = [
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+  ];
+  return !!documents.find(document => document.documentType === documentType)
+    ?.eventCode;
+};

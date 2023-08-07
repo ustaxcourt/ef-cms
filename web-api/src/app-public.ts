@@ -1,5 +1,5 @@
 import { createApplicationContext } from './applicationContext';
-import { get } from '../../shared/src/persistence/dynamodbClientService';
+import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
@@ -31,22 +31,20 @@ app.use(async (req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const whitelist = await get({
+    const allowlist = await get({
       Key: {
         pk: 'allowed-terminal-ips',
         sk: 'allowed-terminal-ips',
       },
       applicationContext,
     });
-    const ips = whitelist?.ips ?? [];
+    const ips = allowlist?.ips ?? [];
 
-    if (ips.includes('localhost')) {
-      set(
-        currentInvoke,
-        'event.requestContext.authorizer.isTerminalUser',
-        'true',
-      );
-    }
+    set(
+      currentInvoke,
+      'event.requestContext.authorizer.isTerminalUser',
+      ips.includes('localhost') ? 'true' : 'false',
+    );
   }
   return next();
 });
