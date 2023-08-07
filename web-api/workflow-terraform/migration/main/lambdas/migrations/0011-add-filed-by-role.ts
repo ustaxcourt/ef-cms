@@ -13,12 +13,6 @@ export const migrateItems = async (items, documentClient) => {
     if (isDocketEntryItem(item) && !item.isDraft) {
       const { Item } = (await getUserById(documentClient, item.userId)) as any;
 
-      console.log('*** filedByUser is: ', Item, item.eventCode);
-
-      if (Item && !Item.role) {
-        console.log('*** no role found: ', Item);
-      }
-
       item.filedByRole = Item ? Item.role : SYSTEM_ROLE;
     }
 
