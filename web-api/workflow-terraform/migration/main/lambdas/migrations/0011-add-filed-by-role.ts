@@ -11,7 +11,7 @@ export const migrateItems = async (items, documentClient) => {
 
   for (const item of items) {
     if (isDocketEntryItem(item) && !item.isDraft) {
-      const { Item } = (await getUserById(documentClient, item.userId)) as any;
+      const { Item } = await getUserById(documentClient, item.userId);
 
       item.filedByRole = Item ? Item.role : SYSTEM_ROLE;
     }
