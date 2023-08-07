@@ -1,26 +1,25 @@
 import { SYSTEM_ROLE } from '../../../../../../shared/src/business/entities/EntityConstants';
-import { TDynamoRecord } from '../../../../../../shared/src/persistence/dynamo/dynamoTypes';
-import { createApplicationContext } from '../../../../../src/applicationContext';
-
-const applicationContext = createApplicationContext({});
+import { TDynamoRecord } from '../../../../../src/persistence/dynamo/dynamoTypes';
+import { getUserById } from '../utilities/getUserById';
 
 const isDocketEntryItem = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('docket-entry|');
 };
 
-export const migrateItems = async items => {
+export const migrateItems = async (items, documentClient) => {
   const itemsAfter: TDynamoRecord[] = [];
 
   for (const item of items) {
     if (isDocketEntryItem(item) && !item.isDraft) {
-      const filedByUser = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({
-          applicationContext,
-          userId: item.userId,
-        });
+      const { Item } = (await getUserById(documentClient, item.userId)) as any;
 
-      item.filedByRole = filedByUser ? filedByUser.role : SYSTEM_ROLE;
+      console.log('*** filedByUser is: ', Item, item.eventCode);
+
+      if (Item && !Item.role) {
+        console.log('*** no role found: ', Item);
+      }
+
+      item.filedByRole = Item ? Item.role : SYSTEM_ROLE;
     }
 
     itemsAfter.push(item);
