@@ -1,4 +1,4 @@
-import { StoredApplicationHealth } from '../../../persistence/dynamo/deployTable/setStoredApplicationHealth';
+import { StoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 
 export const getCachedHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
