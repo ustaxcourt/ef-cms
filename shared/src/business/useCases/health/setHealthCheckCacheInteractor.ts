@@ -1,24 +1,9 @@
 export const setHealthCheckCacheInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  // intentionally leaving these here for testing
-  console.log('setHealthCheckCacheInteractor 1', Date.now());
-
-  const { cognito, dynamo, dynamsoft, elasticsearch, emailService, s3 } =
-    await applicationContext
-      .getUseCases()
-      .getHealthCheckInteractor(applicationContext);
-
-  const allChecksHealthy = [
-    ...Object.values(s3),
-    ...Object.values(dynamo),
-    cognito,
-    dynamsoft,
-    elasticsearch,
-    emailService,
-  ].every(status => {
-    return status === true;
-  });
+  // The scope of how we consider the application to be "healthy" will grow.
+  // Currently we consider an application region to be "healthy" if a web request can be made to API Gateway, and the lambda can retrieve the stored application health from Dynamo
+  const allChecksHealthy = true;
 
   const region = process.env.REGION!;
   await applicationContext
@@ -27,6 +12,4 @@ export const setHealthCheckCacheInteractor = async (
       allChecksHealthy,
       region,
     });
-
-  console.log('setHealthCheckCacheInteractor 2', Date.now());
 };
