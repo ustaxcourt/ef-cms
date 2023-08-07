@@ -10,5 +10,5 @@ export const getUserById = (
       },
       TableName: process.env.SOURCE_TABLE!,
     })
-    .promise();
+    .promise() as Promise<{ Item: RawUser | undefined }>;
 };
