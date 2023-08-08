@@ -218,25 +218,6 @@ resource "aws_api_gateway_domain_name" "api_public_custom" {
   }
 }
 
-
-resource "aws_route53_record" "api_public_route53_regional_record" {
-  name           = aws_api_gateway_domain_name.api_public_custom.domain_name
-  type           = "A"
-  zone_id        = var.zone_id
-  set_identifier = "api_public_${var.region}_${var.current_color}"
-  health_check_id = var.status_health_check_id
-
-  alias {
-    name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
-    zone_id                = aws_api_gateway_domain_name.api_public_custom.regional_zone_id
-    evaluate_target_health = true
-  }
-
-  latency_routing_policy {
-    region = var.region
-  }
-}
-
 resource "aws_api_gateway_base_path_mapping" "api_public_mapping" {
   api_id      = aws_api_gateway_rest_api.gateway_for_api_public.id
   stage_name  = aws_api_gateway_stage.api_public_stage.stage_name

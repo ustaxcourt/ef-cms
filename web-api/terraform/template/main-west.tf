@@ -6,12 +6,12 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
   tags = {
     environment = var.environment
   }
-  
-    server_side_encryption_configuration {
+
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-          sse_algorithm = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -415,7 +415,6 @@ module "api-west-green" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
-  status_health_check_id         = var.status_health_check_west_id
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
@@ -486,7 +485,6 @@ module "api-west-blue" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
-  status_health_check_id         = var.status_health_check_west_id
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
