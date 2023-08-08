@@ -1,4 +1,7 @@
-import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  ROLES,
+} from '../business/entities/EntityConstants';
 
 export const PENDING_DOCKET_ENTRY: RawDocketEntry = {
   createdAt: '2018-11-21T20:49:28.192Z',
@@ -10,6 +13,7 @@ export const PENDING_DOCKET_ENTRY: RawDocketEntry = {
   entityName: 'DocketEntry',
   eventCode: 'PSDE',
   filedBy: 'Test Petitioner',
+  filedByRole: ROLES.petitioner,
   filers: [],
   filingDate: '2018-03-01T05:00:00.000Z',
   index: 5,
@@ -43,6 +47,7 @@ export const MOCK_MINUTE_ENTRY: RawDocketEntry = {
   draftOrderState: {},
   entityName: 'DocketEntry',
   eventCode: 'FEE',
+  filedByRole: ROLES.petitionsClerk,
   filers: [],
   filingDate: '2023-02-08T05:00:00.000Z',
   index: 3,
@@ -55,7 +60,7 @@ export const MOCK_MINUTE_ENTRY: RawDocketEntry = {
   processingStatus: 'complete',
   receivedAt: '2023-02-08T05:00:00.000Z',
   stampData: {},
-  userId: '23f53824-1c1b-4cad-876e-0b7ce045e472',
+  userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
 };
 
 export const MOCK_ANSWER: RawDocketEntry = {
@@ -69,6 +74,7 @@ export const MOCK_ANSWER: RawDocketEntry = {
   entityName: 'DocketEntry',
   eventCode: 'A',
   filedBy: 'Resp.',
+  filedByRole: ROLES.irsPractitioner,
   filers: [],
   filingDate: '2023-03-30T18:01:14.583Z',
   hasSupportingDocuments: false,
@@ -147,6 +153,7 @@ export const MOCK_DOCUMENTS: RawDocketEntry[] = [
     entityName: 'DocketEntry',
     eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
     filedBy: 'Test Petitioner',
+    filedByRole: ROLES.petitioner,
     filers: [],
     filingDate: '2018-03-01T05:00:00.000Z',
     index: 1,
@@ -168,6 +175,7 @@ export const MOCK_DOCUMENTS: RawDocketEntry[] = [
     draftOrderState: {},
     entityName: 'DocketEntry',
     eventCode: INITIAL_DOCUMENT_TYPES.stin.eventCode,
+    filedByRole: ROLES.petitioner,
     filers: [],
     filingDate: '2018-03-01T05:00:00.000Z',
     index: 3,
@@ -190,6 +198,7 @@ export const MOCK_DOCUMENTS: RawDocketEntry[] = [
     entityName: 'DocketEntry',
     eventCode: 'A',
     filedBy: 'Test Petitioner',
+    filedByRole: ROLES.petitioner,
     filers: [],
     filingDate: '2018-03-01T05:00:00.000Z',
     index: 4,

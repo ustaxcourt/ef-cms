@@ -140,7 +140,6 @@ export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
   entry,
-  formattedCase,
   isExternalUser,
   permissions,
   userAssociatedWithCase,
@@ -201,7 +200,6 @@ export const getFormattedDocketEntry = ({
   const meetsPolicyChangeRequirements = getMeetsPolicyChangeRequirements(
     entry,
     visibilityPolicyDateFormatted,
-    formattedCase.docketEntriesEFiledByPractitioner,
   );
 
   showDocumentLinks = getShowDocumentViewerLink({
@@ -340,7 +338,6 @@ export const formattedDocketEntries = (
         applicationContext,
         docketNumber,
         entry,
-        formattedCase: result,
         isExternalUser,
         permissions,
         userAssociatedWithCase,

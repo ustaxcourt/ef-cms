@@ -17,7 +17,6 @@ export const MOCK_CASE: RawCase = {
   correspondence: [],
   createdAt: '2018-03-01T21:40:46.415Z',
   docketEntries: MOCK_DOCUMENTS,
-  docketEntriesEFiledByPractitioner: [],
   docketNumber: '101-18',
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',

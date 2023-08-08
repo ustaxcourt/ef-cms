@@ -77,11 +77,11 @@ const mockCavConsolidatedMemberCase = {
   status: CASE_STATUS_TYPES.cav,
 };
 
-let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
-
-let expectedConsolidatedCasesGroupCountMap = {};
-
 describe('getCasesByStatusAndByJudgeInteractor', () => {
+  let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
+
+  let expectedConsolidatedCasesGroupCountMap = {};
+
   const mockValidRequest = {
     judges: [judgeUser.name],
     pageNumber: 0,
@@ -107,8 +107,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCasesByStatusAndByJudgeInteractor(applicationContext, {
-        judges: [judgeUser.name],
-        statuses: [undefined],
+        judgeName: judgeUser.name,
+        statuses: undefined as any,
       }),
     ).rejects.toThrow();
   });

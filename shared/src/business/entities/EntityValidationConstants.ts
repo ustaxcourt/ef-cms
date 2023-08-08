@@ -19,6 +19,7 @@ import {
   PARTIES_CODES,
   ROLES,
   SCENARIOS,
+  SYSTEM_ROLE,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { createEndOfDayISO } from '../utilities/DateHandler';
@@ -129,6 +130,15 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
+  filedByRole: joi
+    .when('isDraft', {
+      is: true,
+      otherwise: JoiValidationConstants.STRING.valid(
+        ...[...Object.values(ROLES), SYSTEM_ROLE],
+      ).required(),
+      then: joi.optional(),
+    })
+    .description('The role of the party who filed the document.'),
   filers: joi.when('servedAt', {
     is: joi.exist().not(null),
     otherwise: joi.array().items(JoiValidationConstants.UUID).optional(),

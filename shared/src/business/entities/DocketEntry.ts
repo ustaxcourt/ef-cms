@@ -41,6 +41,7 @@ export class DocketEntry extends JoiValidationEntity {
   public documentType: string;
   public eventCode: string;
   public filedBy?: string;
+  public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
   public freeText2?: string;
@@ -156,6 +157,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.documentType = rawDocketEntry.documentType;
     this.eventCode = rawDocketEntry.eventCode;
     this.filedBy = rawDocketEntry.filedBy;
+    this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
     this.freeText2 = rawDocketEntry.freeText2;
@@ -456,6 +458,11 @@ export class DocketEntry extends JoiValidationEntity {
    */
   setNumberOfPages(numberOfPages) {
     this.numberOfPages = numberOfPages;
+  }
+
+  setFiledBy(user: RawUser) {
+    this.userId = user.userId;
+    this.filedByRole = user.role;
   }
 
   /**
