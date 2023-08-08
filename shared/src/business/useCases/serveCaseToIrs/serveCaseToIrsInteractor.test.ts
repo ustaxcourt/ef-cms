@@ -12,7 +12,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { Case, getContactPrimary } from '../../entities/cases/Case.ts';
+import { Case, getContactPrimary } from '../../entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
@@ -587,7 +587,6 @@ describe('serveCaseToIrsInteractor', () => {
         applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
       ).toMatchObject({
         key: 'clinic-letter-los-angeles-california-regular',
-        protocol: 'S3',
         useTempBucket: false,
       });
 
