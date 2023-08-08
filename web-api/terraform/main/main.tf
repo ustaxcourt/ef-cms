@@ -61,6 +61,7 @@ module "ef-cms_apis" {
   disable_emails             = var.disable_emails
   dns_domain                 = var.dns_domain
   email_dmarc_policy         = var.email_dmarc_policy
+  enable_health_checks       = var.enable_health_checks
   environment                = var.environment
   es_instance_count          = var.es_instance_count
   es_instance_type           = var.es_instance_type

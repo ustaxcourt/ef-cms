@@ -132,3 +132,8 @@ variable "green_use_layers" {
 variable "blue_use_layers" {
   type = string
 }
+
+variable "enable_health_checks" {
+  type    = string
+  default = "1"
+}
