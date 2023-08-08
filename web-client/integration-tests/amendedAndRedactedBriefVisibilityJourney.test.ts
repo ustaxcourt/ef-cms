@@ -83,6 +83,28 @@ describe('Amended And Redacted Brief Visibility Journey', () => {
         expect(found.eventCode).toBe(eventCode);
       }
     });
+
+    it('should display multi-docketed briefs as hyperlinks when they were e-filed by a practitioner AFTER the visibility policy date change', async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: '104-67',
+      });
+
+      const formattedDocketEntriesHelperResult = runCompute(
+        formattedDocketEntries,
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      const { formattedDocketEntriesOnDocketRecord } =
+        formattedDocketEntriesHelperResult;
+
+      const document = formattedDocketEntriesOnDocketRecord.find(
+        entry => entry.eventCode === 'SEAB',
+      );
+
+      expect(document.showLinkToDocument).toBeTruthy();
+    });
   });
 
   describe('Associated private practitioner', () => {
