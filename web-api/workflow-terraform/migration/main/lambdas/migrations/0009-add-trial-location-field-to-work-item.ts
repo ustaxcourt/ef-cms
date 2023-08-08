@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
 import { OutboxItem } from '../../../../../../shared/src/business/entities/OutboxItem';
 import { WorkItem } from '../../../../../../shared/src/business/entities/WorkItem';
-import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
+import { aggregateCaseItems } from '../../../../../src/persistence/dynamo/helpers/aggregateCaseItems';
 import { createApplicationContext } from '../../../../../src/applicationContext';
 import { queryFullCase } from '../utilities/queryFullCase';
 
