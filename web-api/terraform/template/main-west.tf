@@ -315,11 +315,11 @@ resource "aws_api_gateway_domain_name" "api_custom_main_west" {
 
 
 resource "aws_route53_record" "api_route53_main_west_regional_record" {
-  name           = aws_api_gateway_domain_name.api_custom_main_west.domain_name
-  type           = "A"
-  zone_id        = data.aws_route53_zone.zone.id
-  set_identifier = "api_main_us_west_1"
-  provider       = aws.us-west-1
+  name            = aws_api_gateway_domain_name.api_custom_main_west.domain_name
+  type            = "A"
+  zone_id         = data.aws_route53_zone.zone.id
+  set_identifier  = "api_main_us_west_1"
+  health_check_id = length(aws_route53_health_check.status_health_check_west) > 0 ? aws_route53_health_check.status_health_check_west[0].id : null
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_west.regional_domain_name
@@ -334,11 +334,11 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
 
 
 resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
-  name           = aws_api_gateway_domain_name.public_api_custom_main_west.domain_name
-  type           = "A"
-  zone_id        = data.aws_route53_zone.zone.id
-  set_identifier = "public_api_main_us_west_1"
-  provider       = aws.us-west-1
+  name            = aws_api_gateway_domain_name.public_api_custom_main_west.domain_name
+  type            = "A"
+  zone_id         = data.aws_route53_zone.zone.id
+  set_identifier  = "public_api_main_us_west_1"
+  health_check_id = length(aws_route53_health_check.status_health_check_west) > 0 ? aws_route53_health_check.status_health_check_west[0].id : null
 
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
@@ -349,6 +349,39 @@ resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
   latency_routing_policy {
     region = "us-west-1"
   }
+}
+
+resource "aws_route53_health_check" "status_health_check_west" {
+  fqdn               = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
+  port               = 443
+  type               = "HTTPS_STR_MATCH"
+  resource_path      = "/public-api/cached-health"
+  failure_threshold  = "3"
+  request_interval   = "30"
+  count              = var.enable_health_checks
+  invert_healthcheck = false
+  search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
+  regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
+}
+
+resource "aws_cloudwatch_metric_alarm" "status_health_check_west" {
+  alarm_name          = "${var.dns_domain} west health check endpoint"
+  namespace           = "AWS/Route53"
+  metric_name         = "HealthCheckStatus"
+  comparison_operator = "LessThanThreshold"
+  statistic           = "Minimum"
+  count               = var.enable_health_checks
+  threshold           = "1"
+  evaluation_periods  = "2"
+  period              = "60"
+
+  dimensions = {
+    HealthCheckId = aws_route53_health_check.status_health_check_west[0].id
+  }
+
+  alarm_actions             = [alert_sns_topic_arn]
+  insufficient_data_actions = [alert_sns_topic_arn]
+  ok_actions                = [alert_sns_topic_arn]
 }
 
 module "api-west-waf" {
