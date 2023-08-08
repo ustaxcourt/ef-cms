@@ -597,7 +597,7 @@ resource "aws_route53_health_check" "status_health_check_east" {
   count              = var.enable_health_checks
   invert_healthcheck = false
   search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
-  regions            = ["us-east-1", "sa-east-1", "eu-west-1"] # Minimum of three regions required
+  regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
 
 resource "aws_cloudwatch_metric_alarm" "status_health_check_east" {
