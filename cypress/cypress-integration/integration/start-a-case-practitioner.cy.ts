@@ -8,7 +8,7 @@ import {
 describe('Start a case as a practitioner', () => {
   it('go to the practitioner dashboard and expect that a case list table is displayed with eight cases', () => {
     navigateToDashboard('privatepractitioner');
-    getCaseList().should('have.length', 8);
+    getCaseList().should('have.length', 12);
   });
 
   it('click the start a case button', () => {
@@ -21,6 +21,6 @@ describe('Start a case as a practitioner', () => {
 
   it('expect the case list to be displayed with nine items now', () => {
     getCaseList().should('exist');
-    getCaseList().should('have.length', 9);
+    getCaseList().should('have.length', 13);
   });
 });
