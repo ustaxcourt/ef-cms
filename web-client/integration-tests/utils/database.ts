@@ -7,7 +7,6 @@ import {
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { Key } from 'aws-sdk/clients/dynamodb';
 import { chunk } from 'lodash';
-import { createUsers } from '../../../web-api/storage/scripts/createUsers';
 import { exec } from 'child_process';
 import { putEntries } from '../../../web-api/storage/scripts/seedLocalDatabase';
 import { refreshElasticsearchIndex } from '../helpers';
@@ -67,10 +66,6 @@ export const clearDatabase = async () => {
 export const seedDatabase = async entries => {
   await clearDatabase();
   await resetElasticsearch();
-
-  if (!entries) {
-    await createUsers();
-  }
 
   // we want to process the case entries LAST because we get stream errors otherwise
   entries.sort((a, b) => {
