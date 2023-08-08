@@ -69,7 +69,7 @@ variable "trial_session_object_hash" {
   type = any
 }
 
-variable "trial_session_object" { 
+variable "trial_session_object" {
   type = any
 }
 
@@ -154,7 +154,7 @@ variable "stream_arn" {
 }
 
 variable "create_triggers" {
-  type = number  
+  type    = number
   default = 1
 }
 
@@ -190,7 +190,7 @@ variable "lower_env_account_id" {
   type = string
 }
 
-variable "create_bounce_handler" { 
+variable "create_bounce_handler" {
   type = number
 }
 
@@ -207,10 +207,6 @@ variable "node_version" {
 }
 
 variable "use_layers" {
-  type = bool
+  type    = bool
   default = true
-}
-
-variable "status_health_check_id" {
-  type = string
 }
