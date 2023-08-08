@@ -1,86 +1,71 @@
+import {
+  BatchWriteCommand,
+  DynamoDBDocumentClient,
+  ScanCommand,
+  ScanCommandOutput,
+} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { Key } from 'aws-sdk/clients/dynamodb';
 import { chunk } from 'lodash';
-import { createUsers } from '../../../web-api/storage/scripts/createUsers';
 import { exec } from 'child_process';
+import { putEntries } from '../../../web-api/storage/scripts/seedLocalDatabase';
 import { refreshElasticsearchIndex } from '../helpers';
-import AWS from 'aws-sdk';
-import fs from 'fs';
-import path from 'path';
-
-AWS.config = new AWS.Config();
-AWS.config.region = 'us-east-1';
-
-const client = new AWS.DynamoDB.DocumentClient({
-  credentials: {
-    accessKeyId: 'S3RVER',
-    secretAccessKey: 'S3RVER',
-  },
-  endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
-  region: 'us-east-1',
-});
-
-const putEntries = async entries => {
-  const chunks = chunk(entries, 25);
-  for (let aChunk of chunks) {
-    await client
-      .batchWrite({
-        RequestItems: {
-          'efcms-local': aChunk.map(item => ({
-            PutRequest: {
-              Item: item,
-            },
-          })),
-        },
-      })
-      .promise();
-  }
-};
+import { seedEntries } from '../../../web-api/storage/fixtures/seed/index';
 
 const CHUNK_SIZE = 25;
 
 export const clearDatabase = async () => {
+  const client = new DynamoDBClient({
+    credentials: {
+      accessKeyId: 'S3RVER',
+      secretAccessKey: 'S3RVER',
+    },
+    endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
+    region: 'us-east-1',
+  });
+
+  const docClient = DynamoDBDocumentClient.from(client);
+
   let hasMoreResults = true;
-  let lastKey = null;
+  let lastKey: Key | undefined = undefined;
+
   while (hasMoreResults) {
-    hasMoreResults = false;
+    const command = new ScanCommand({
+      ExclusiveStartKey: lastKey!,
+      TableName: 'efcms-local',
+    });
 
-    await client
-      .scan({
-        ExclusiveStartKey: lastKey,
-        TableName: 'efcms-local',
-      })
-      .promise()
-      .then(async results => {
-        hasMoreResults = !!results.LastEvaluatedKey;
-        lastKey = results.LastEvaluatedKey;
+    const response: ScanCommandOutput = await docClient.send(command);
 
-        const chunks = chunk(results.Items, CHUNK_SIZE);
-        for (let c of chunks) {
-          await client
-            .batchWrite({
-              RequestItems: {
-                ['efcms-local']: c.map(item => ({
-                  DeleteRequest: {
-                    Key: {
-                      pk: item.pk,
-                      sk: item.sk,
-                    },
-                  },
-                })),
-              },
-            })
-            .promise();
-        }
-      });
+    hasMoreResults = !!response.LastEvaluatedKey;
+    lastKey = response.LastEvaluatedKey;
+
+    const chunks = chunk(response.Items, CHUNK_SIZE);
+
+    for (let aChunk of chunks) {
+      const deleteRequests = aChunk.map((item: any) => ({
+        DeleteRequest: {
+          Key: {
+            pk: item.pk,
+            sk: item.sk,
+          },
+        },
+      }));
+
+      await docClient.send(
+        new BatchWriteCommand({
+          RequestItems: {
+            ['efcms-local']: deleteRequests,
+          },
+        }),
+      );
+    }
   }
 };
 
 export const seedDatabase = async entries => {
   await clearDatabase();
   await resetElasticsearch();
-
-  if (!entries) {
-    await createUsers();
-  }
 
   // we want to process the case entries LAST because we get stream errors otherwise
   entries.sort((a, b) => {
@@ -93,16 +78,7 @@ export const seedDatabase = async entries => {
 };
 
 export const seedFullDataset = async () => {
-  const entries = JSON.parse(
-    fs.readFileSync(
-      path.join(
-        __dirname,
-        '../../../web-api/storage/fixtures/seed/efcms-local.json',
-      ),
-    ),
-  );
-
-  await seedDatabase(entries);
+  await seedDatabase(seedEntries);
 
   await refreshElasticsearchIndex();
 };

@@ -1,1 +1,1 @@
-module.exports = [...require('./efcms-local.json')];
+export const seedEntries = require('./efcms-local.json');

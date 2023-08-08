@@ -1,50 +1,54 @@
-const AWS = require('aws-sdk');
-const seedEntries = require('../fixtures/seed');
-const {
-  migrateItems: validationMigration,
-} = require('../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items');
-const { chunk: splitIntoChunks } = require('lodash');
-const { createUsers } = require('./createUsers');
-
-AWS.config = new AWS.Config();
-AWS.config.region = 'us-east-1';
+import {
+  BatchWriteCommand,
+  DynamoDBDocumentClient,
+} from '@aws-sdk/lib-dynamodb';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { chunk } from 'lodash';
+import { createUsers } from './createUsers';
+import { seedEntries } from '../fixtures/seed';
+import { migrateItems as validationMigration } from '../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items';
 
 Error.stackTraceLimit = Infinity;
 
-const client = new AWS.DynamoDB.DocumentClient({
-  credentials: {
-    accessKeyId: 'S3RVER',
-    secretAccessKey: 'S3RVER',
-  },
-  endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
-  region: 'us-east-1',
-});
+export const putEntries = async entries => {
+  const client = new DynamoDBClient({
+    credentials: {
+      accessKeyId: 'S3RVER',
+      secretAccessKey: 'S3RVER',
+    },
+    endpoint: process.env.DYNAMODB_ENDPOINT ?? 'http://localhost:8000',
+    region: 'us-east-1',
+  });
 
-const putEntries = async entries => {
-  const chunks = splitIntoChunks(entries, 25);
-  for (let chunk of chunks) {
+  const docClient = DynamoDBDocumentClient.from(client);
+
+  const chunks = chunk(entries, 25);
+
+  for (let aChunk of chunks) {
     try {
-      validationMigration(chunk);
+      validationMigration(aChunk);
     } catch (e) {
       console.log('Seed data is invalid, exiting.', e);
       process.exit(1);
     }
 
-    await client
-      .batchWrite({
+    const putRequests = aChunk.map(item => ({
+      PutRequest: {
+        Item: item,
+      },
+    }));
+
+    await docClient.send(
+      new BatchWriteCommand({
         RequestItems: {
-          'efcms-local': chunk.map(item => ({
-            PutRequest: {
-              Item: item,
-            },
-          })),
+          ['efcms-local']: putRequests as any,
         },
-      })
-      .promise();
+      }),
+    );
   }
 };
 
-module.exports.seedLocalDatabase = async () => {
+export const seedLocalDatabase = async () => {
   await createUsers(); // TODO: we should probably remove this at some point
   await putEntries(seedEntries);
 };
