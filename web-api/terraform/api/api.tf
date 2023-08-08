@@ -400,6 +400,24 @@ resource "aws_api_gateway_method_settings" "api_default" {
   }
 }
 
+resource "aws_route53_record" "api_route53_regional_record" {
+  name            = aws_api_gateway_domain_name.api_custom.domain_name
+  type            = "A"
+  zone_id         = var.zone_id
+  set_identifier  = "api_${var.region}_${var.current_color}"
+  health_check_id = length(aws_route53_health_check.status_health_check) > 0 ? aws_route53_health_check.status_health_check[0].id : null
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_custom.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_custom.regional_zone_id
+    evaluate_target_health = true
+  }
+
+  latency_routing_policy {
+    region = var.region
+  }
+}
+
 resource "aws_wafv2_web_acl_association" "association" {
   resource_arn = aws_api_gateway_stage.api_stage.arn
   web_acl_arn  = var.web_acl_arn

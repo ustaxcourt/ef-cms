@@ -552,11 +552,10 @@ resource "aws_api_gateway_domain_name" "api_custom_main_east" {
 }
 
 resource "aws_route53_record" "api_route53_main_east_regional_record" {
-  name           = aws_api_gateway_domain_name.api_custom_main_east.domain_name
-  type           = "A"
-  zone_id        = data.aws_route53_zone.zone.id
-  set_identifier = "api_main_us_east_1"
-  health_check_id = length(aws_route53_health_check.status_health_check_east) > 0 ? aws_route53_health_check.status_health_check_east[0].id : null
+  name            = aws_api_gateway_domain_name.api_custom_main_east.domain_name
+  type            = "A"
+  zone_id         = data.aws_route53_zone.zone.id
+  set_identifier  = "api_main_us_east_1"
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
@@ -570,11 +569,10 @@ resource "aws_route53_record" "api_route53_main_east_regional_record" {
 }
 
 resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
-  name            = aws_api_gateway_domain_name.public_api_custom_main_east.domain_name
-  type            = "A"
-  zone_id         = data.aws_route53_zone.zone.id
-  set_identifier  = "public_api_main_us_east_1"
-  health_check_id = length(aws_route53_health_check.status_health_check_east) > 0 ? aws_route53_health_check.status_health_check_east[0].id : null
+  name           = aws_api_gateway_domain_name.public_api_custom_main_east.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "public_api_main_us_east_1"
 
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_east.regional_domain_name
@@ -585,39 +583,6 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
   latency_routing_policy {
     region = "us-east-1"
   }
-}
-
-resource "aws_route53_health_check" "status_health_check_east" {
-  fqdn               = aws_api_gateway_domain_name.public_api_custom_main_east.regional_domain_name
-  port               = 443
-  type               = "HTTPS_STR_MATCH"
-  resource_path      = "/public-api/cached-health"
-  failure_threshold  = "3"
-  request_interval   = "30"
-  count              = var.enable_health_checks
-  invert_healthcheck = false
-  search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
-  regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
-}
-
-resource "aws_cloudwatch_metric_alarm" "status_health_check_east" {
-  alarm_name          = "${var.dns_domain} east health check endpoint"
-  namespace           = "AWS/Route53"
-  metric_name         = "HealthCheckStatus"
-  comparison_operator = "LessThanThreshold"
-  statistic           = "Minimum"
-  count               = var.enable_health_checks
-  threshold           = "1"
-  evaluation_periods  = "2"
-  period              = "60"
-
-  dimensions = {
-    HealthCheckId = aws_route53_health_check.status_health_check_east[0].id
-  }
-
-  alarm_actions             = [var.alert_sns_topic_arn]
-  insufficient_data_actions = [var.alert_sns_topic_arn]
-  ok_actions                = [var.alert_sns_topic_arn]
 }
 
 module "api-east-waf" {
@@ -683,6 +648,8 @@ module "api-east-green" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  enable_health_checks           = var.enable_health_checks
+  alert_sns_topic_arn            = var.alert_sns_topic_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = null_resource.seal_in_lower_east_object
@@ -752,6 +719,8 @@ module "api-east-blue" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+  enable_health_checks           = var.enable_health_checks
+  alert_sns_topic_arn            = var.alert_sns_topic_arn
 
 
   # lambda to seal cases in lower environment (only deployed to lower environments)

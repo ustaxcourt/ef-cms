@@ -99,7 +99,7 @@ resource "aws_lambda_permission" "apigw_public_lambda" {
 }
 
 resource "aws_api_gateway_deployment" "api_public_deployment" {
-  rest_api_id       = aws_api_gateway_rest_api.gateway_for_api_public.id
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api_public.id
 
   triggers = {
     redeployment = sha1(jsonencode([
@@ -124,7 +124,7 @@ resource "aws_api_gateway_stage" "api_public_stage" {
     destination_arn = aws_cloudwatch_log_group.api_public_stage_logs.arn
 
     format = jsonencode({
-      level = "info"
+      level   = "info"
       message = "API Gateway Access Log"
 
       environment = {
@@ -134,35 +134,35 @@ resource "aws_api_gateway_stage" "api_public_stage" {
 
       requestId = {
         apiGateway = "$context.requestId"
-        lambda = "$context.integration.requestId"
+        lambda     = "$context.integration.requestId"
         authorizer = "$context.authorizer.requestId"
       }
 
       request = {
         headers = {
           x-forwarded-for = "$context.identity.sourceIp"
-          user-agent = "$context.identity.userAgent"
+          user-agent      = "$context.identity.userAgent"
         }
         method = "$context.httpMethod"
-        url = "$context.path"
+        url    = "$context.path"
       }
 
       authorizer = {
-        error = "$context.authorizer.error"
+        error          = "$context.authorizer.error"
         responseTimeMs = "$context.authorizer.integrationLatency"
-        statusCode = "$context.authorizer.status"
+        statusCode     = "$context.authorizer.status"
       }
 
       response = {
         responseTimeMs = "$context.responseLatency"
         responseLength = "$context.responseLength"
-        statusCode = "$context.status"
+        statusCode     = "$context.status"
       }
 
       metadata = {
-        apiId = "$context.apiId"
+        apiId        = "$context.apiId"
         resourcePath = "$context.resourcePath"
-        resourceId = "$context.resourceId"
+        resourceId   = "$context.resourceId"
       }
     })
   }
@@ -230,12 +230,63 @@ resource "aws_api_gateway_method_settings" "api_public_default" {
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000 // concurrent request limit
-    throttling_rate_limit = 10000 // per second
+    throttling_burst_limit = 5000  // concurrent request limit
+    throttling_rate_limit  = 10000 // per second
+  }
+}
+
+resource "aws_route53_record" "api_public_route53_regional_record" {
+  name            = aws_api_gateway_domain_name.api_public_custom.domain_name
+  type            = "A"
+  zone_id         = var.zone_id
+  set_identifier  = "api_public_${var.region}_${var.current_color}"
+  health_check_id = length(aws_route53_health_check.status_health_check) > 0 ? aws_route53_health_check.status_health_check[0].id : null
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_public_custom.regional_zone_id
+    evaluate_target_health = true
+  }
+
+  latency_routing_policy {
+    region = var.region
   }
 }
 
 resource "aws_wafv2_web_acl_association" "api_public_association" {
   resource_arn = aws_api_gateway_stage.api_public_stage.arn
   web_acl_arn  = var.web_acl_arn
+}
+
+resource "aws_route53_health_check" "status_health_check" {
+  fqdn               = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
+  port               = 443
+  type               = "HTTPS_STR_MATCH"
+  resource_path      = "/public-api/cached-health"
+  failure_threshold  = "3"
+  request_interval   = "30"
+  count              = var.enable_health_checks
+  invert_healthcheck = false
+  search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
+  regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
+}
+
+resource "aws_cloudwatch_metric_alarm" "status_health_check" {
+  alarm_name          = "${var.dns_domain} health check endpoint"
+  namespace           = "AWS/Route53"
+  metric_name         = "HealthCheckStatus"
+  comparison_operator = "LessThanThreshold"
+  statistic           = "Minimum"
+  count               = var.enable_health_checks
+  threshold           = "1"
+  evaluation_periods  = "2"
+  period              = "60"
+
+  dimensions = {
+    HealthCheckId = aws_route53_health_check.status_health_check[0].id
+  }
+
+  alarm_actions             = [var.alert_sns_topic_arn]
+  insufficient_data_actions = [var.alert_sns_topic_arn]
+  ok_actions                = [var.alert_sns_topic_arn]
 }
