@@ -379,9 +379,9 @@ resource "aws_cloudwatch_metric_alarm" "status_health_check_west" {
     HealthCheckId = aws_route53_health_check.status_health_check_west[0].id
   }
 
-  alarm_actions             = [alert_sns_topic_arn]
-  insufficient_data_actions = [alert_sns_topic_arn]
-  ok_actions                = [alert_sns_topic_arn]
+  alarm_actions             = [var.alert_sns_topic_arn]
+  insufficient_data_actions = [var.alert_sns_topic_arn]
+  ok_actions                = [var.alert_sns_topic_arn]
 }
 
 module "api-west-waf" {
