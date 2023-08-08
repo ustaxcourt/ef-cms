@@ -1,4 +1,3 @@
-import * as seedEntries from '../../../web-api/storage/fixtures/seed/index';
 import {
   BatchWriteCommand,
   DynamoDBDocumentClient,
@@ -12,6 +11,7 @@ import { createUsers } from '../../../web-api/storage/scripts/createUsers';
 import { exec } from 'child_process';
 import { putEntries } from '../../../web-api/storage/scripts/seedLocalDatabase';
 import { refreshElasticsearchIndex } from '../helpers';
+import { seedEntries } from '../../../web-api/storage/fixtures/seed/index';
 
 const CHUNK_SIZE = 25;
 

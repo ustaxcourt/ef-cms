@@ -13,12 +13,6 @@ import { seedData } from './fixtures/consolidated-case-group-for-external-multid
 import { seedDatabase, seedFullDataset } from './utils/database';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-// Feature flag: consolidated-cases-group-access-petitioner, CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
-
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderComputed,
-);
-
 const verifyCorrectFileDocumentButton = (
   cerebralTest,
   {
@@ -32,6 +26,10 @@ const verifyCorrectFileDocumentButton = (
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber,
     });
+
+    const caseDetailHeaderHelper = withAppContextDecorator(
+      caseDetailHeaderComputed,
+    );
 
     const {
       showFileDocumentButton,
