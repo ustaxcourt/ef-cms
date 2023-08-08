@@ -183,5 +183,3 @@ resource "aws_iam_policy" "dawson_dev_policy" {
 
 EOF
 }
-
-# add trust policy
