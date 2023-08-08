@@ -1,4 +1,3 @@
-import * as seedEntries from '../fixtures/seed';
 import {
   BatchWriteCommand,
   DynamoDBDocumentClient,
@@ -6,6 +5,7 @@ import {
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { chunk } from 'lodash';
 import { createUsers } from './createUsers';
+import { seedEntries } from '../fixtures/seed';
 import { migrateItems as validationMigration } from '../../workflow-terraform/migration/main/lambdas/migrations/0000-validate-all-items';
 
 Error.stackTraceLimit = Infinity;
