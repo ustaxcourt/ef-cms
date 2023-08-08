@@ -210,3 +210,12 @@ variable "use_layers" {
   type    = bool
   default = true
 }
+
+variable "enable_health_checks" {
+  type    = string
+  default = "1"
+}
+
+variable "alert_sns_topic_arn" {
+  type = string
+}
