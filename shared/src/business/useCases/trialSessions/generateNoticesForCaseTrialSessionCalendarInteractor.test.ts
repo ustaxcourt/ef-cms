@@ -10,6 +10,7 @@ import {
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { combineTwoPdfs } from '../../utilities/documentGenerators/combineTwoPdfs';
+import { docketClerkUser } from '../../../test/mockUsers';
 import { fakeData, testPdfDoc } from '../../test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
@@ -43,6 +44,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       clinicLetterKey,
     });
 
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(docketClerkUser);
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);

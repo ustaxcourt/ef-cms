@@ -17,7 +17,7 @@ import {
 import { Case, getContactPrimary } from './Case';
 import { Contact } from '../contacts/Contact';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import {
@@ -111,7 +111,7 @@ describe('Case entity', () => {
     });
   });
   it('should throw an error if app context is not passed in', () => {
-    expect(() => new Case({}, {})).toThrow();
+    expect(() => new Case({}, {} as any)).toThrow();
   });
 
   it('defaults the orders to false', () => {
