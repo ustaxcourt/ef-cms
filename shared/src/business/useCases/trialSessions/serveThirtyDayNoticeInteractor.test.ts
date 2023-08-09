@@ -143,7 +143,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         newPdfDoc: expect.anything(),
         noticePdf: expect.anything(),
         onlyProSePetitioners: true,
-        userId: petitionsClerkUser.userId,
+        user: petitionsClerkUser,
       });
     });
 
