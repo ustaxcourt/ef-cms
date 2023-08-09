@@ -12,14 +12,17 @@ describe('isUnservable', () => {
     expect(DocketEntry.isUnservable(minuteEntry)).toBe(true);
   });
 
-  it('should return true when the docketEntry event code is in the list of unservable event codes', () => {
-    const unservableDocketEntry = new DocketEntry(
-      { eventCode: UNSERVABLE_EVENT_CODES[0] },
-      { applicationContext },
-    );
+  it.each(UNSERVABLE_EVENT_CODES)(
+    'should return true when the docketEntry event code is in the list of unservable event codes',
+    eventCode => {
+      const unservableDocketEntry = new DocketEntry(
+        { eventCode },
+        { applicationContext },
+      );
 
-    expect(DocketEntry.isUnservable(unservableDocketEntry)).toBe(true);
-  });
+      expect(DocketEntry.isUnservable(unservableDocketEntry)).toBe(true);
+    },
+  );
 
   it('should return false when the docketEntry event code is NOT in the list of unservable event codes and it is NOT a minute entry', () => {
     const servableDocketEntry = new DocketEntry(
