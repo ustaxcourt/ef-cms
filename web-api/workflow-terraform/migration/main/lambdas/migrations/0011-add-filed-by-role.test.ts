@@ -87,7 +87,7 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should set the role of the person who filed the docket entry when the docket entry is a draft', async () => {
+  it('should NOT set the role of the person who filed the docket entry when the docket entry is a draft', async () => {
     (getUserById as jest.Mock).mockResolvedValue({
       Item: privatePractitionerUser,
     });
