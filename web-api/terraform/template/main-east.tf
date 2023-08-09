@@ -657,7 +657,6 @@ resource "aws_cloudwatch_metric_alarm" "failover_has_occurred_alarm" {
   metric_query {
     expression  = "AVG(METRICS())"
     id          = "AllErrorsAveraged"
-    label       = "All errors averaged"
     return_data = true
   }
 
