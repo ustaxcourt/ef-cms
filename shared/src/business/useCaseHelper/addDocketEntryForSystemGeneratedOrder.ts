@@ -38,10 +38,11 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       eventCode: systemGeneratedDocument.eventCode,
       ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       isDraft: true,
-      userId: user.userId,
     },
     { applicationContext },
   );
+
+  newDocketEntry.setFiledBy(user);
 
   caseEntity.addDocketEntry(newDocketEntry);
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
