@@ -72,6 +72,7 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '../utilities/generateChangeOfAddressTemplate';
+import { getAllFeatureFlagsInteractor } from '../useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllWebSocketConnections } from '../../../../web-api/src/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getCaseDeadlinesByDocketNumber } from '../../../../web-api/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
@@ -344,7 +345,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getAllFeatureFlagsInteractor: jest.fn().mockReturnValue({}),
+    getAllFeatureFlagsInteractor: jest
+      .fn()
+      .mockImplementation(getAllFeatureFlagsInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()

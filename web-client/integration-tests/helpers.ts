@@ -28,7 +28,7 @@ import {
   createLock,
   getLock,
   removeLock,
-} from '../../shared/src/persistence/dynamo/locks/acquireLock';
+} from '../../web-api/src/persistence/dynamo/locks/acquireLock';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
