@@ -50,7 +50,7 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     this.corporateDisclosureFileSize = rawCase.corporateDisclosureFileSize;
 
     if (+this.wizardStep >= 3) {
-      const contacts = ContactFactory.createContacts({
+      const contacts = ContactFactory({
         applicationContext,
         contactInfo: {
           primary: getContactPrimary(rawCase) || rawCase.contactPrimary,

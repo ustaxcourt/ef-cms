@@ -63,7 +63,7 @@ const serveNoticesForCase = async ({
       const userId = party.userId || party.contactId;
       if (
         !caseEntity.isPractitioner(userId) &&
-        !caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) &&
+        !Case.isPetitionerRepresented(caseEntity, party.contactId) &&
         appendClinicLetter
       ) {
         noticeDocumentPdf = await PDFDocument.load(
@@ -157,7 +157,6 @@ const setNoticeForCase = async ({
       .getDocument({
         applicationContext,
         key: clinicLetterKey,
-        protocol: 'S3',
         useTempBucket: false,
       });
     noticeOfTrialIssuedWithClinicLetter = await applicationContext

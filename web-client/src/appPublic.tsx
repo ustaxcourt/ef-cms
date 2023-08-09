@@ -16,6 +16,7 @@ import {
 // Icons - Solid
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
 import { faFileAlt as faFileAltSolid } from '@fortawesome/free-solid-svg-icons/faFileAlt';
 import { faFilePdf } from '@fortawesome/free-solid-svg-icons/faFilePdf';
@@ -67,6 +68,7 @@ const appPublic = {
       faTimesCircle,
       faInfoCircle,
       faCheckCircle,
+      faChevronUp,
       faEnvelopeSolid,
       faPhone,
       faTimesCircleRegular,

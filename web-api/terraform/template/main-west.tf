@@ -400,6 +400,7 @@ module "api-west-green" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
+  status_health_check_id         = var.status_health_check_west_id
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
@@ -469,6 +470,7 @@ module "api-west-blue" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
+  status_health_check_id         = var.status_health_check_west_id
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""

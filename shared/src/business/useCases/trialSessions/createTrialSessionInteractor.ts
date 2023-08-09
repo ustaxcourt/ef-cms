@@ -5,7 +5,6 @@ import {
 import {
   RawTrialSession,
   TrialSession,
-  isStandaloneRemoteSession,
 } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
 
@@ -33,7 +32,7 @@ export const createTrialSessionInteractor = async (
 
   if (
     ['Motion/Hearing', 'Special'].includes(trialSessionToAdd.sessionType) ||
-    isStandaloneRemoteSession(trialSessionToAdd.sessionScope)
+    trialSessionToAdd.isStandaloneRemote()
   ) {
     trialSessionToAdd.setAsCalendared();
   }

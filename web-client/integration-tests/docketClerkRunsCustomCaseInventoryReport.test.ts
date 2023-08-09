@@ -87,6 +87,21 @@ describe('Docket clerk runs custom case inventory report', () => {
       'setCustomCaseInventoryReportFiltersSequence',
       { action: 'add', caseType },
     );
+
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { procedureType: 'All' },
+    );
+
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { action: 'add', judge: 'Chief Judge' },
+    );
+
+    await cerebralTest.runSequence(
+      'setCustomCaseInventoryReportFiltersSequence',
+      { action: 'add', preferredTrialCity: 'Birmingham, Alabama' },
+    );
   });
 
   it('should run the custom case inventory report', async () => {

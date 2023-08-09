@@ -8,8 +8,7 @@ import {
   ROLES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
-
-import { getJudgesChambers } from '../persistence/dynamo/chambers/getJudgesChambers';
+import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adcUser = {
   name: 'ADC',

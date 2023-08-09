@@ -1,4 +1,4 @@
-const { caseHasServedDocketEntries } = require('./Case');
+import { caseHasServedDocketEntries } from './Case';
 
 describe('caseHasServedDocketEntries', () => {
   it('should return true if the case has any docket entry with isLegacyServed set to true', () => {

@@ -43,7 +43,8 @@ jobs:
           ./wait-until-services.sh
           sleep 5
           npm run cypress:smoketests:local
-      - name: Store Video Artifacts
+      - name: Store Cypress Failure Videos
+        if: always()
         uses: actions/upload-artifact@v3
         with:
           name: cypress-videos

@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('setAsBlocked', () => {
   it('sets the case as blocked with a blocked reason', () => {

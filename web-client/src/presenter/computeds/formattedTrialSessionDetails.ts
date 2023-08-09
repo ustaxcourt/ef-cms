@@ -31,7 +31,8 @@ export const formattedTrialSessionDetails = (
 
     formattedTrialSession.showAlertForNOTTReminder =
       !formattedTrialSession.dismissedAlertForNOTT &&
-      formattedTrialSession.isStartDateWithinNOTTReminderRange;
+      !!formattedTrialSession.isStartDateWithinNOTTReminderRange &&
+      formattedTrialSession.sessionStatus !== SESSION_STATUS_TYPES.closed;
 
     if (formattedTrialSession.showAlertForNOTTReminder) {
       formattedTrialSession.alertMessageForNOTT = `30-day trial notices are due by ${formattedTrialSession.thirtyDaysBeforeTrialFormatted}. Have notices been served?`;

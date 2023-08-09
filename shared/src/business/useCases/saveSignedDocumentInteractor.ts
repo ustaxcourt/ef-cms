@@ -16,7 +16,6 @@ const saveOriginalDocumentWithNewId = async ({
     .getDocument({
       applicationContext,
       key: originalDocketEntryId,
-      protocol: 'S3',
       useTempBucket: false,
     });
 
@@ -40,7 +39,6 @@ const replaceOriginalWithSignedDocument = async ({
     .getDocument({
       applicationContext,
       key: signedDocketEntryId,
-      protocol: 'S3',
       useTempBucket: false,
     });
 

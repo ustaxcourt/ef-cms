@@ -1,17 +1,28 @@
-const { ContactFactory } = require('./ContactFactory');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+import { Contact } from './Contact';
+import { JoiValidationConstants } from '../JoiValidationConstants';
 
-/**
- * returns the constructor used for creating the PetitionerDeceasedSpouseContact entity
- */
-exports.getPetitionerDeceasedSpouseContact =
-  ContactFactory.createContactFactory({
-    additionalErrorMappings: {
-      inCareOf: 'Enter name for in care of',
-    },
-    additionalValidation: {
+export class PetitionerDeceasedSpouseContact extends Contact {
+  constructor(
+    rawContact,
+    { applicationContext }: { applicationContext: IApplicationContext },
+  ) {
+    super(rawContact, 'PetitionerDeceasedSpouseContact', {
+      applicationContext,
+    });
+  }
+
+  getValidationRules() {
+    return {
+      ...super.getValidationRules(),
       inCareOf: JoiValidationConstants.STRING.max(100).required(),
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
-    },
-    contactName: 'PetitionerDeceasedSpouseContact',
-  });
+    };
+  }
+
+  getErrorToMessageMap() {
+    return {
+      ...super.getErrorToMessageMap(),
+      inCareOf: 'Enter name for in care of',
+    };
+  }
+}
