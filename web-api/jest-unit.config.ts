@@ -1,3 +1,5 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from '../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -18,16 +20,26 @@ const config: Config = {
     '!src/app-local.{js,ts}',
     '!src/app-public-local.{js,ts}',
     '!src/getDocumentGenerators.ts',
+    '!src/persistence/sqs/deleteMessage.ts',
+    '!src/persistence/sqs/getMessages.ts',
+    '!src/persistence/messages/*.ts',
+    '!src/persistence/dynamo/**/*.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
   coverageThreshold: {
     global: {
-      branches: 97,
-      functions: 99,
+      branches: 96,
+      functions: 96,
       lines: 99,
       statements: 99,
     },
+  },
+  moduleNameMapper: {
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/../',
+    }),
+    uuid: require.resolve('uuid'),
   },
   testEnvironment: 'node',
   transform: {

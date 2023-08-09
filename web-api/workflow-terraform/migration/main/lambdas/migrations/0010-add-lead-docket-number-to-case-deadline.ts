@@ -1,5 +1,5 @@
 import { CaseDeadline } from '../../../../../../shared/src/business/entities/CaseDeadline';
-import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
+import { aggregateCaseItems } from '../../../../../src/persistence/dynamo/helpers/aggregateCaseItems';
 import { createApplicationContext } from '../../../../../src/applicationContext';
 import { queryFullCase } from '../utilities/queryFullCase';
 

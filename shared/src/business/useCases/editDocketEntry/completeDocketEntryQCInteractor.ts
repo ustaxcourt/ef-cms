@@ -25,11 +25,11 @@ import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTi
 import { replaceBracketed } from '../../utilities/replaceBracketed';
 import { withLocking } from '../../useCaseHelper/acquireLock';
 
-export const needsNewCoversheet = ({
+export const needsNewCoversheet = (
   applicationContext,
   currentDocketEntry,
   updatedDocketEntry,
-}) => {
+) => {
   const receivedAtUpdated =
     dateStringsCompared(
       currentDocketEntry.receivedAt,
