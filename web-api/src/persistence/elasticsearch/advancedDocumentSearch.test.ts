@@ -102,7 +102,7 @@ describe('advancedDocumentSearch', () => {
   };
 
   beforeEach(() => {
-    search.mockReturnValue({ results: [], total: 0 });
+    search.mockReturnValue({ aggregations: {}, results: [], total: 0 });
   });
 
   it('does a bare search for just eventCodes', async () => {
@@ -476,12 +476,14 @@ describe('advancedDocumentSearch', () => {
   });
 
   describe('judges search', () => {
-    it('should create populate the should clause with a match query for opinion searches for selected judges', async () => {
+    it('should create a query to aggregate opinion(s) event codes for selected judges', async () => {
       const selectedJudge = 'Buch';
+      const overriedResultSizeForQuery = 0;
       await advancedDocumentSearch({
         applicationContext,
         isOpinionSearch: true,
         judges: [judgeUser.name, selectedJudge],
+        overrideResultSize: overriedResultSizeForQuery,
       });
 
       expect(
@@ -499,6 +501,18 @@ describe('advancedDocumentSearch', () => {
             },
           },
         ]),
+      );
+
+      expect(search.mock.calls[0][0].searchParameters.body.aggs).toMatchObject({
+        event_code_count: {
+          terms: {
+            field: 'eventCode.S',
+          },
+        },
+      });
+
+      expect(search.mock.calls[0][0].searchParameters.body.size).toEqual(
+        overriedResultSizeForQuery,
       );
     });
   });
