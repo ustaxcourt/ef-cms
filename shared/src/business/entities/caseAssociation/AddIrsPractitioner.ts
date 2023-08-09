@@ -25,7 +25,7 @@ export class AddIrsPractitioner extends JoiValidationEntity {
       'Select service type',
     ],
     user: 'Select a respondent counsel',
-  };
+  } as const;
 
   getErrorToMessageMap() {
     return AddIrsPractitioner.VALIDATION_ERROR_MESSAGES;

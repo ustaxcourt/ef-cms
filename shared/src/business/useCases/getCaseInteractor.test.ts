@@ -334,7 +334,6 @@ describe('getCaseInteractor', () => {
         canAllowPrintableDocketRecord: undefined,
         caseCaption: undefined,
         docketEntries: [],
-        docketEntriesEFiledByPractitioner: [],
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
