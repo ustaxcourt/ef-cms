@@ -258,5 +258,41 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext.getUtilities().combineTwoPdfs,
       ).not.toHaveBeenCalled();
     });
+
+    it('should ONLY generate a 30 day notice of trial (NOTT) for open cases in a trial session', async () => {
+      const inactiveCaseWithProSePetitioner = cloneDeep(mockCase);
+      inactiveCaseWithProSePetitioner.docketNumber = '100-78';
+
+      const caseWithProSePetitioner = cloneDeep(mockCase);
+      caseWithProSePetitioner.privatePractitioners = [];
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValue(caseWithProSePetitioner);
+
+      trialSession.caseOrder = [
+        {
+          docketNumber: caseWithProSePetitioner.docketNumber,
+          removedFromTrial: false,
+        },
+        {
+          disposition: 'Status was changed to Closed',
+          docketNumber: inactiveCaseWithProSePetitioner.docketNumber,
+          removedFromTrial: true,
+          removedFromTrialDate: '2100-12-01T00:00:00.000Z',
+        },
+      ];
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
+      ).toHaveBeenCalledTimes(1);
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial.mock
+          .calls[0][0].data.docketNumberWithSuffix,
+      ).toEqual(caseWithProSePetitioner.docketNumberWithSuffix);
+    });
   });
 });
