@@ -271,22 +271,22 @@ resource "aws_route53_health_check" "status_health_check" {
   regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
 
-resource "aws_cloudwatch_metric_alarm" "status_health_check" {
-  alarm_name          = "${var.dns_domain} health check endpoint"
-  namespace           = "AWS/Route53"
-  metric_name         = "HealthCheckStatus"
-  comparison_operator = "LessThanThreshold"
-  statistic           = "Minimum"
-  count               = var.enable_health_checks
-  threshold           = "1"
-  evaluation_periods  = "2"
-  period              = "60"
+# resource "aws_cloudwatch_metric_alarm" "status_health_check" {
+#   alarm_name          = "${var.dns_domain} health check endpoint"
+#   namespace           = "AWS/Route53"
+#   metric_name         = "HealthCheckStatus"
+#   comparison_operator = "LessThanThreshold"
+#   statistic           = "Minimum"
+#   count               = var.enable_health_checks
+#   threshold           = "1"
+#   evaluation_periods  = "2"
+#   period              = "60"
 
-  dimensions = {
-    HealthCheckId = aws_route53_health_check.status_health_check[0].id
-  }
+#   dimensions = {
+#     HealthCheckId = aws_route53_health_check.status_health_check[0].id
+#   }
 
-  alarm_actions             = [var.alert_sns_topic_arn]
-  insufficient_data_actions = [var.alert_sns_topic_arn]
-  ok_actions                = [var.alert_sns_topic_arn]
-}
+#   alarm_actions             = [var.alert_sns_topic_arn]
+#   insufficient_data_actions = [var.alert_sns_topic_arn]
+#   ok_actions                = [var.alert_sns_topic_arn]
+# }

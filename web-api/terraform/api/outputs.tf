@@ -15,3 +15,7 @@ output "websockets_domain" {
 output "puppeteer_layer_arn" {
   value = aws_lambda_layer_version.puppeteer_layer.arn
 }
+
+output "health_check_id" {
+  value =  aws_route53_health_check.status_health_check[0].id // make safe
+}
