@@ -39,36 +39,23 @@ export const getOpinionsFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  let sortedResults: OrdersAndOpinionFormattedResultsTypes[] = [];
-
-  if (searchEntity.judges.length) {
-    sortedResults = await Promise.all(
-      searchEntity.judges.map(async judge => {
-        const { results } = await applicationContext
-          .getPersistenceGateway()
-          .advancedDocumentSearch({
-            applicationContext,
-            documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-            endDate: searchEntity.endDate,
-            isOpinionSearch: true,
-            judge,
-            overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-            startDate: searchEntity.startDate,
-          });
-
-        return results;
-      }),
-    );
-  }
+  const { results }: { results: OrdersAndOpinionFormattedResultsTypes } =
+    await applicationContext.getPersistenceGateway().advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      endDate: searchEntity.endDate,
+      isOpinionSearch: true,
+      judges: searchEntity.judges,
+      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
+      startDate: searchEntity.startDate,
+    });
 
   const result: {
     count: number;
     documentType: string | undefined;
     eventCode: string;
   }[] = OPINION_EVENT_CODES_WITH_BENCH_OPINION.map(eventCode => {
-    const count = sortedResults
-      .flat()
-      .filter(res => res.eventCode === eventCode).length;
+    const count = results.filter(res => res.eventCode === eventCode).length;
     return {
       count,
       documentType: COURT_ISSUED_EVENT_CODES.find(

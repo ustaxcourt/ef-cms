@@ -1,4 +1,8 @@
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  MAX_SEARCH_CLIENT_RESULTS,
+  OPINION_JUDGE_FIELD,
+  ORDER_JUDGE_FIELD,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getJudgeFilterForOpinionSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch';
 import { getJudgeFilterForOrderSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch';
@@ -30,6 +34,27 @@ export type OrdersAndOpinionFormattedResultsTypes = {
   _score: null;
 }[];
 
+// TODO about types
+// 1. decide what are optional
+// 2. Type documentEventCodes
+export type AdvancedSearchArgsTypes = {
+  applicationContext: IApplicationContext;
+  from: number; // check if string (or both)
+  endDate: string;
+  isOpinionSearch: boolean;
+  startDate: string;
+  sortField: string;
+  docketNumber: string;
+  isExternalUser: boolean;
+  keyword: string;
+  caseTitleOrPetitioner: string;
+  judge: string;
+  judges: string[];
+  overrideResultSize: number;
+  omitSealed: boolean;
+  documentEventCodes: any;
+};
+
 export const advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
@@ -40,12 +65,13 @@ export const advancedDocumentSearch = async ({
   isExternalUser,
   isOpinionSearch = false,
   judge,
+  judges,
   keyword,
   omitSealed,
   overrideResultSize,
   sortField,
   startDate,
-}) => {
+}: AdvancedSearchArgsTypes) => {
   const sourceFields = [
     'caseCaption',
     'docketEntryId',
@@ -69,17 +95,17 @@ export const advancedDocumentSearch = async ({
   ];
 
   const documentMust = [];
-
-  if (keyword) {
-    documentMust.push({
-      simple_query_string: {
-        default_operator: 'and',
-        fields: ['documentContents.S', 'documentTitle.S'],
-        flags: simpleQueryFlags,
-        query: keyword,
+  const shouldFilter = [];
+  const documentFilter: QueryDslQueryContainer[] = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+    {
+      exists: {
+        field: 'servedAt',
       },
-    });
-  }
+    },
+    { term: { 'isFileAttached.BOOL': true } },
+    { terms: { 'eventCode.S': documentEventCodes } },
+  ];
 
   let caseQueryParams: any = {
     has_parent: {
@@ -100,6 +126,18 @@ export const advancedDocumentSearch = async ({
   };
 
   let documentMustNot = [{ term: { 'isStricken.BOOL': true } }];
+
+  if (keyword) {
+    documentMust.push({
+      simple_query_string: {
+        default_operator: 'and',
+        fields: ['documentContents.S', 'documentTitle.S'],
+        flags: simpleQueryFlags,
+        query: keyword,
+      },
+    });
+  }
+
   if (omitSealed) {
     const { sealedCaseQuery, sealedDocumentMustNotQuery } = getSealedQuery();
 
@@ -139,17 +177,6 @@ export const advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter: QueryDslQueryContainer[] = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
-      exists: {
-        field: 'servedAt',
-      },
-    },
-    { term: { 'isFileAttached.BOOL': true } },
-    { terms: { 'eventCode.S': documentEventCodes } },
-  ];
-
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     if (isOpinionSearch) {
@@ -165,6 +192,26 @@ export const advancedDocumentSearch = async ({
 
       documentFilter.push(judgeFilter);
     }
+  }
+
+  if (judges) {
+    judges.forEach(judgeName => {
+      const matchedQueryForJudge = isOpinionSearch
+        ? {
+            match: {
+              [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
+            },
+          }
+        : {
+            match: {
+              [`${ORDER_JUDGE_FIELD}.S`]: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          };
+      shouldFilter.push(matchedQueryForJudge);
+    });
   }
 
   if (endDate && startDate) {
@@ -191,6 +238,7 @@ export const advancedDocumentSearch = async ({
       filter: documentFilter,
       must: documentMust,
       must_not: documentMustNot,
+      should: shouldFilter,
     },
   };
 
@@ -208,7 +256,7 @@ export const advancedDocumentSearch = async ({
   const {
     results,
     total,
-  }: { results: OrdersAndOpinionFormattedResultsTypes; total: number } =
+  }: { results: OrdersAndOpinionFormattedResultsTypes; total?: number } =
     await search({
       applicationContext,
       searchParameters: documentQuery,
