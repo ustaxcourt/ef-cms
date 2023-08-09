@@ -1,4 +1,5 @@
 const AWS = require('aws-sdk');
+const { scanFull } = require('./utilities/scanFull');
 
 const tableName = process.argv[2] ?? 'efcms-local';
 
@@ -12,14 +13,9 @@ const documentClient = new AWS.DynamoDB.DocumentClient({
   region: 'us-east-1',
 });
 
-documentClient
-  .scan({
-    TableName: tableName,
-  })
-  .promise()
-  .then(documents => {
-    documents.Items.sort((a, b) => {
-      return `${a.pk}-${a.sk}`.localeCompare(`${b.pk}-${b.sk}`);
-    });
-    console.log(JSON.stringify(documents.Items, null, 2));
+scanFull(tableName, documentClient).then(documents => {
+  documents.sort((a, b) => {
+    return `${a.pk}-${a.sk}`.localeCompare(`${b.pk}-${b.sk}`);
   });
+  console.log(JSON.stringify(documents, null, 2));
+});

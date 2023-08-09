@@ -1,6 +1,6 @@
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';

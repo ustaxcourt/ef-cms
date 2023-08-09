@@ -31,7 +31,6 @@ export class PublicCase extends JoiValidationEntity {
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
   public docketEntries: any[];
-  public docketEntriesEFiledByPractitioner: string[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;
@@ -68,8 +67,6 @@ export class PublicCase extends JoiValidationEntity {
       `${this.docketNumber}${this.docketNumberSuffix || ''}`;
     this.hasIrsPractitioner =
       !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
-    this.docketEntriesEFiledByPractitioner =
-      PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
 
     this.isPaper = rawCase.isPaper;
     this.partyType = rawCase.partyType;
@@ -145,33 +142,6 @@ export class PublicCase extends JoiValidationEntity {
     }
 
     return !isPublicDocumentType;
-  }
-
-  static getDocketEntriesEFiledByPractitioner(rawCase) {
-    let casePractitioners: any[];
-    let docketEntriesEFiledByPractitioner: string[] = [];
-
-    if (rawCase.irsPractitioners && rawCase.privatePractitioners) {
-      casePractitioners = [
-        ...rawCase.irsPractitioners,
-        ...rawCase.privatePractitioners,
-      ];
-
-      for (let i = 0; i < rawCase.docketEntries?.length; i++) {
-        const currentDocketEntry = rawCase.docketEntries[i];
-        let docketEntryFiledByPractitioner = casePractitioners.some(
-          p => p.userId === currentDocketEntry.userId,
-        );
-
-        if (docketEntryFiledByPractitioner) {
-          docketEntriesEFiledByPractitioner.push(
-            currentDocketEntry.docketEntryId,
-          );
-        }
-      }
-    }
-
-    return docketEntriesEFiledByPractitioner;
   }
 
   static VALIDATION_RULES = {

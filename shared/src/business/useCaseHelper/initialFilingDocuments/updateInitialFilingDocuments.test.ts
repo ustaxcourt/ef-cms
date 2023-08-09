@@ -6,7 +6,7 @@ import {
 } from '../../entities/EntityConstants';
 import { Case, getContactPrimary } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateInitialFilingDocuments } from './updateInitialFilingDocuments';
 
