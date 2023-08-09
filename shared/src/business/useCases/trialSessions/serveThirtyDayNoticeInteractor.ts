@@ -164,7 +164,7 @@ export const serveThirtyDayNoticeInteractor = async (
                   trialSession.startDate,
                   FORMATS.MMDDYYYY_DASHED,
                 ),
-                trialSession.trialLocation,
+                trialSession.trialLocation!,
               ),
               documentType: thirtyDayNoticeDocumentInfo!.documentType,
               eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
@@ -172,7 +172,7 @@ export const serveThirtyDayNoticeInteractor = async (
             newPdfDoc: paperServicePdf,
             noticePdf,
             onlyProSePetitioners: true,
-            userId: currentUser.userId,
+            user: currentUser,
           });
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

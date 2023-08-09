@@ -6,7 +6,9 @@ import { ROLE_PERMISSIONS, isAuthorized } from './authorizationClientService';
  * @param {object} user the user to check for authorization
  * @returns {object|void} ROLE_PERMISSIONS keys with boolean value based on user role
  */
-export const getUserPermissions = user => {
+export const getUserPermissions = (
+  user?: RawUser | RawPractitioner | RawIrsPractitioner,
+) => {
   if (user) {
     const permissions = {};
     Object.keys(ROLE_PERMISSIONS).forEach(key => {

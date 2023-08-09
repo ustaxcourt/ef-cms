@@ -8,11 +8,11 @@ import {
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createAndServeNoticeDocketEntry } from './createAndServeNoticeDocketEntry';
+import { docketClerk1User } from '../../../test/mockUsers';
 
 describe('createAndServeDocketEntry', () => {
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
-  const mockUserId = '85a5b1c81eed44b6932a967af060597a';
-  const mockNotice = 'The rain falls mainly on the plane';
+  const mockNotice = Buffer.from('The rain falls mainly on the plane');
 
   const mockCaseEntity = new Case(
     {
@@ -41,7 +41,7 @@ describe('createAndServeDocketEntry', () => {
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
       noticePdf: mockNotice,
-      userId: mockUserId,
+      user: docketClerk1User,
     });
 
     expect(
@@ -59,7 +59,7 @@ describe('createAndServeDocketEntry', () => {
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
       noticePdf: mockNotice,
-      userId: mockUserId,
+      user: docketClerk1User,
     });
 
     const expectedNotice = mockCaseEntity.docketEntries.find(
@@ -99,8 +99,8 @@ describe('createAndServeDocketEntry', () => {
       caseEntity: mockCaseWithPaperService,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
-      noticePdf: getFakeFile,
-      userId: mockUserId,
+      noticePdf: mockNotice,
+      user: docketClerk1User,
     });
 
     expect(

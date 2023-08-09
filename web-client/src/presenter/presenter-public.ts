@@ -19,6 +19,7 @@ import { gotoPublicPrintableDocketRecordSequence } from './sequences/Public/goto
 import { gotoPublicSearchSequence } from './sequences/Public/gotoPublicSearchSequence';
 import { gotoTodaysOpinionsSequence } from './sequences/Public/gotoTodaysOpinionsSequence';
 import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSequence';
+import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
@@ -31,7 +32,6 @@ import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequ
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
-import { state } from './state-public';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
@@ -48,6 +48,65 @@ import { validateCaseDocketNumberSearchFormSequence } from './sequences/validate
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 
+export const presenterSequences = {
+  advancedSearchTabChangeSequence,
+  cerebralBindSimpleSetStateSequence,
+  clearAdvancedSearchFormSequence,
+  clearPdfPreviewUrlSequence,
+  closeModalAndNavigateToMaintenanceSequence,
+  dismissModalSequence,
+  gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
+  gotoHealthCheckSequence: showMaintenancePageDecorator(
+    gotoHealthCheckSequence,
+  ),
+  gotoMaintenanceSequence,
+  gotoPrivacySequence: showMaintenancePageDecorator(gotoPrivacySequence),
+  gotoPublicCaseDetailSequence: showMaintenancePageDecorator(
+    gotoPublicCaseDetailSequence,
+  ),
+  gotoPublicEmailVerificationInstructionsSequence: showMaintenancePageDecorator(
+    gotoPublicEmailVerificationInstructionsSequence,
+  ),
+  gotoPublicEmailVerificationSuccessSequence: showMaintenancePageDecorator(
+    gotoPublicEmailVerificationSuccessSequence,
+  ),
+  gotoPublicPrintableDocketRecordSequence,
+  gotoPublicSearchSequence: showMaintenancePageDecorator(
+    gotoPublicSearchSequence,
+  ),
+  gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
+    gotoTodaysOpinionsSequence,
+  ),
+  gotoTodaysOrdersSequence: showMaintenancePageDecorator(
+    gotoTodaysOrdersSequence,
+  ),
+  loadMoreTodaysOrdersSequence,
+  navigateBackSequence,
+  navigateToCognitoSequence,
+  navigateToPublicSiteSequence,
+  notFoundErrorSequence,
+  openAppMaintenanceModalSequence,
+  openCaseDocumentDownloadUrlSequence,
+  persistFormsOnReloadSequence,
+  showMoreResultsSequence,
+  sortTodaysOrdersSequence,
+  submitPublicCaseAdvancedSearchSequence,
+  submitPublicCaseDocketNumberSearchSequence,
+  submitPublicOpinionAdvancedSearchSequence,
+  submitPublicOrderAdvancedSearchSequence,
+  toggleBetaBarSequence,
+  toggleUsaBannerDetailsSequence,
+  updateAdvancedOpinionSearchFormValueSequence,
+  updateAdvancedOrderSearchFormValueSequence,
+  updateAdvancedSearchFormValueSequence,
+  updateCaseAdvancedSearchByNameFormValueSequence,
+  updateDocketNumberSearchFormSequence,
+  validateCaseAdvancedSearchFormSequence,
+  validateCaseDocketNumberSearchFormSequence,
+  validateOpinionSearchSequence,
+  validateOrderSearchSequence,
+};
+
 export const presenter = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
@@ -57,66 +116,8 @@ export const presenter = {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
-  sequences: {
-    advancedSearchTabChangeSequence,
-    cerebralBindSimpleSetStateSequence,
-    clearAdvancedSearchFormSequence,
-    clearPdfPreviewUrlSequence,
-    closeModalAndNavigateToMaintenanceSequence,
-    dismissModalSequence,
-    gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
-    gotoHealthCheckSequence: showMaintenancePageDecorator(
-      gotoHealthCheckSequence,
-    ),
-    gotoMaintenanceSequence,
-    gotoPrivacySequence: showMaintenancePageDecorator(gotoPrivacySequence),
-    gotoPublicCaseDetailSequence: showMaintenancePageDecorator(
-      gotoPublicCaseDetailSequence,
-    ),
-    gotoPublicEmailVerificationInstructionsSequence:
-      showMaintenancePageDecorator(
-        gotoPublicEmailVerificationInstructionsSequence,
-      ),
-    gotoPublicEmailVerificationSuccessSequence: showMaintenancePageDecorator(
-      gotoPublicEmailVerificationSuccessSequence,
-    ),
-    gotoPublicPrintableDocketRecordSequence: showMaintenancePageDecorator(
-      gotoPublicPrintableDocketRecordSequence,
-    ),
-    gotoPublicSearchSequence: showMaintenancePageDecorator(
-      gotoPublicSearchSequence,
-    ),
-    gotoTodaysOpinionsSequence: showMaintenancePageDecorator(
-      gotoTodaysOpinionsSequence,
-    ),
-    gotoTodaysOrdersSequence: showMaintenancePageDecorator(
-      gotoTodaysOrdersSequence,
-    ),
-    loadMoreTodaysOrdersSequence,
-    navigateBackSequence,
-    navigateToCognitoSequence,
-    navigateToPublicSiteSequence,
-    notFoundErrorSequence,
-    openAppMaintenanceModalSequence,
-    openCaseDocumentDownloadUrlSequence,
-    persistFormsOnReloadSequence,
-    showMoreResultsSequence,
-    sortTodaysOrdersSequence,
-    submitPublicCaseAdvancedSearchSequence,
-    submitPublicCaseDocketNumberSearchSequence,
-    submitPublicOpinionAdvancedSearchSequence,
-    submitPublicOrderAdvancedSearchSequence,
-    toggleBetaBarSequence,
-    toggleUsaBannerDetailsSequence,
-    updateAdvancedOpinionSearchFormValueSequence,
-    updateAdvancedOrderSearchFormValueSequence,
-    updateAdvancedSearchFormValueSequence,
-    updateCaseAdvancedSearchByNameFormValueSequence,
-    updateDocketNumberSearchFormSequence,
-    validateCaseAdvancedSearchFormSequence,
-    validateCaseDocketNumberSearchFormSequence,
-    validateOpinionSearchSequence,
-    validateOrderSearchSequence,
-  },
-  state,
+  sequences: presenterSequences,
+  state: initialPublicState,
 };
+
+export type Sequences = typeof presenterSequences;

@@ -4,21 +4,21 @@ import {
 } from '../../entities/trialSessions/TrialSession';
 
 export class TrialSessionInfoDTO {
-  public estimatedEndDate: string;
+  public estimatedEndDate?: string;
   public isCalendared: boolean;
-  public judge: TJudge;
+  public judge?: TJudge;
   public proceedingType: string;
   public sessionType: string;
   public startDate: string;
-  public startTime: string;
+  public startTime?: string;
   public term: string;
   public termYear: string;
-  public trialLocation: string;
-  public trialSessionId: string;
-  public noticeIssuedDate: string;
+  public trialLocation?: string;
+  public trialSessionId?: string;
+  public noticeIssuedDate?: string;
   public sessionScope: string;
   public sessionStatus: string;
-  public swingSession: boolean;
+  public swingSession?: boolean;
   public dismissedAlertForNOTT?: boolean;
   public isStartDateWithinNOTTReminderRange?: boolean;
   public thirtyDaysBeforeTrialFormatted?: string;
