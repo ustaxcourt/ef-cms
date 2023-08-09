@@ -585,6 +585,92 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
   }
 }
 
+resource "aws_cloudwatch_metric_alarm" "who_the_hell_knows" {
+  alarm_name          = "Combinatorial Failover Alarm"
+  # namespace           = "AWS/Route53"
+  # metric_name         = "HealthCheckStatus"
+  alarm_description   = "If this alarm is going off a regional failover is occurring"
+  comparison_operator = "LessThanThreshold"
+  # statistic           = "Minimum"
+  count               = var.enable_health_checks
+  threshold           = "4"
+  evaluation_periods  = "2"
+  # period              = "60"
+
+  metric_query {
+    id          = "eastGreenErrors"
+    return_data = false
+
+    metric {
+      dimensions = {
+        HealthCheckId = module.api-east-green.health_check_id
+      }
+      metric_name = "HealthCheckStatus"
+      namespace   = "AWS/Route53"
+      period      = "60"
+      stat        = "Minimum"
+    }
+  }
+
+  metric_query {
+    id          = "eastBlueErrors"
+    return_data = false
+
+    metric {
+      dimensions = {
+        HealthCheckId = module.api-east-blue.health_check_id
+      }
+      metric_name = "HealthCheckStatus"
+      namespace   = "AWS/Route53"
+      period      = "60"
+      stat        = "Minimum"
+    }
+  }
+
+  metric_query {
+    id          = "westGreenErrors"
+    return_data = false
+
+    metric {
+      dimensions = {
+        HealthCheckId = module.api-west-green.health_check_id
+      }
+      metric_name = "HealthCheckStatus"
+      namespace   = "AWS/Route53"
+      period      = "60"
+      stat        = "Minimum"
+    }
+  }
+
+
+  metric_query {
+    id          = "westBlueErrors"
+    return_data = false
+
+    metric {
+      dimensions = {
+        HealthCheckId = module.api-west-blue.health_check_id
+      }
+      metric_name = "HealthCheckStatus"
+      namespace   = "AWS/Route53"
+      period      = "60"
+      stat        = "Minimum"
+    }
+  }
+
+  metric_query {
+    expression  = "SUM(METRICS())"
+    id          = "AllErrorsSummed"
+    label       = "All errors summed"
+    return_data = true
+  }
+
+  alarm_actions             = [var.alert_sns_topic_arn]
+  insufficient_data_actions = [var.alert_sns_topic_arn]
+  ok_actions                = [var.alert_sns_topic_arn]
+}
+
+
 module "api-east-waf" {
   environment = var.environment
   providers = {
