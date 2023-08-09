@@ -31,17 +31,14 @@ export const createUserForContact = async ({
 
   const contact = caseEntity.getPetitionerById(contactId);
 
-  const userEntity = new User(
-    {
-      contact,
-      hasEAccess: true,
-      name,
-      pendingEmail: email,
-      role: ROLES.petitioner,
-      userId: contactId,
-    },
-    { applicationContext },
-  );
+  const userEntity = new User({
+    contact,
+    hasEAccess: true,
+    name,
+    pendingEmail: email,
+    role: ROLES.petitioner,
+    userId: contactId,
+  });
 
   const userRaw = userEntity.validate().toRawObject();
 

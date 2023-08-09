@@ -432,7 +432,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection: string | null = null,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -1089,7 +1089,7 @@ export const waitForExpectedItemToExist = async ({
 };
 
 // will run the cb every second until it returns true
-const waitUntil = cb => {
+export const waitUntil = cb => {
   return new Promise(resolve => {
     const waitUntilInternal = async () => {
       const value = await cb();

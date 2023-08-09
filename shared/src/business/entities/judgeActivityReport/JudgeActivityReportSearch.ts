@@ -2,6 +2,10 @@ import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
 import {
+  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
+  VALIDATION_ERROR_MESSAGES,
+} from '../EntityConstants';
+import {
   FORMATS,
   calculateISODate,
   createEndOfDayISO,
@@ -18,6 +22,11 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public startDate: string;
   public judgeName: string;
   public judgeId: string;
+  public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
+  public judges: string[];
+  public pageSize: number;
+  public searchAfter: number;
+  public pageNumber: number;
 
   protected tomorrow: string;
 
@@ -26,6 +35,12 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
 
     this.judgeId = rawProps.judgeId;
     this.judgeName = rawProps.judgeName;
+    this.statuses = rawProps.statuses;
+    this.judges = rawProps.judges;
+    this.pageSize = rawProps.pageSize;
+    this.searchAfter = rawProps.searchAfter;
+    this.pageNumber = rawProps.pageNumber;
+
     this.tomorrow = calculateISODate({
       howMuch: +1,
       units: 'days',
@@ -55,8 +70,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    endDate: JoiValidationConstants.ISO_DATE.required()
-      .less(joi.ref('tomorrow'))
+    endDate: JoiValidationConstants.ISO_DATE.less(joi.ref('tomorrow'))
       .min(joi.ref('startDate'))
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
@@ -67,11 +81,33 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     judgeName: joi
       .optional()
       .description('The last name of the judge to generate the report for'),
-    startDate: JoiValidationConstants.ISO_DATE.max('now')
-      .required()
+    judges: joi
+      .array()
+      .items(joi.string())
+      .description('The last names of judges to generate report for'),
+    pageNumber: joi
+      .number()
+      .optional()
       .description(
-        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+        'The page size for getting aggregated judge activity report for closed cases, opinions, orders issued  and sessions held',
       ),
+    pageSize: joi
+      .number()
+      .optional()
+      .description(
+        'The page number for calculating the number of cav and submitted cases to display',
+      ),
+    searchAfter: joi
+      .number()
+      .description(
+        'The last docket number to be used to make the next set of calls per page number',
+      ),
+    startDate: JoiValidationConstants.ISO_DATE.max('now').description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
+    statuses: JoiValidationConstants.JUDGES_STATUSES.optional().description(
+      'The CAV and Submitted case statuses associated with judges',
+    ),
     tomorrow: JoiValidationConstants.STRING.optional().description(
       'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
     ),
@@ -82,11 +118,11 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       {
         contains: 'ref:startDate',
         message:
-          'End date cannot be prior to Start Date. Enter a valid end date.',
+          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
       },
       {
         contains: 'ref:tomorrow',
-        message: 'End date cannot be in the future. Enter a valid date.',
+        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       },
       {
         contains: 'is required',
@@ -101,7 +137,8 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       },
       {
         contains: 'must be less than or equal to',
-        message: 'Start date cannot be in the future. Enter a valid date.',
+        message:
+          VALIDATION_ERROR_MESSAGES.START_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
       },
       'Enter a valid start date.',
     ],

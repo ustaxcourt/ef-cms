@@ -1,24 +1,18 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Fetches the opinions within a date range for the judge activity report
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context object
- * @returns {object} contains the opinions returned from the use case
- */
 export const getOpinionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
+  const clientConnectionId = get(state.clientConnectionId);
 
-  const opinions = await applicationContext
+  await applicationContext
     .getUseCases()
     .getOpinionsFiledByJudgeInteractor(applicationContext, {
+      clientConnectionId,
       endDate,
-      judgeName,
+      judges,
       startDate,
     });
-
-  return { opinions };
 };
