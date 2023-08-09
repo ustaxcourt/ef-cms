@@ -1,4 +1,7 @@
-import { FORMATS, formatNow } from '../../../business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatNow,
+} from '../../../../../shared/src/business/utilities/DateHandler';
 import { TDynamoRecord } from '../dynamoTypes';
 import { getTableName } from '../../dynamodbClientService';
 
