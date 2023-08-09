@@ -7,9 +7,11 @@ import {
 import {
   BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
+  OPINION_JUDGE_FIELD,
   TODAYS_ORDERS_SORTS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { advancedDocumentSearch } from './advancedDocumentSearch';
+import { judgeUser } from '../../../../shared/src/test/mockUsers';
 import { search } from './searchClient';
 jest.mock('./searchClient');
 
@@ -144,67 +146,6 @@ describe('advancedDocumentSearch', () => {
       getKeywordQueryParams('Guy Fieri'),
       getCaseMappingQueryParams(), // match all parents
     ]);
-  });
-
-  it('does a search for a signed judge when searching for opinions', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      isOpinionSearch: true,
-      judge: 'Judge Guy Fieri',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toMatchObject(
-      expect.arrayContaining([
-        expect.objectContaining({
-          bool: {
-            should: [
-              {
-                match: {
-                  'judge.S': 'Guy Fieri',
-                },
-              },
-              {
-                match: {
-                  'signedJudgeName.S': {
-                    operator: 'and',
-                    query: 'Guy Fieri',
-                  },
-                },
-              },
-            ],
-          },
-        }),
-      ]),
-    );
-  });
-
-  it('does a search for a signed judge when searching for orders', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodes,
-      judge: 'Judge Guy Fieri',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toMatchObject(
-      expect.arrayContaining([
-        expect.objectContaining({
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
-                },
-              },
-            },
-          },
-        }),
-      ]),
-    );
   });
 
   it('should only include sealed docket entries in the search results when they are sealed to the public', async () => {
@@ -470,6 +411,95 @@ describe('advancedDocumentSearch', () => {
       ).toMatchObject({
         'judge.S': 'Guy Fieri',
       });
+    });
+
+    it('does a search for a signed judge when searching for opinions', async () => {
+      await advancedDocumentSearch({
+        applicationContext,
+        isOpinionSearch: true,
+        judge: 'Judge Guy Fieri',
+      });
+
+      expect(
+        search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+      ).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            bool: {
+              should: [
+                {
+                  match: {
+                    'judge.S': 'Guy Fieri',
+                  },
+                },
+                {
+                  match: {
+                    'signedJudgeName.S': {
+                      operator: 'and',
+                      query: 'Guy Fieri',
+                    },
+                  },
+                },
+              ],
+            },
+          }),
+        ]),
+      );
+    });
+
+    it('does a search for a signed judge when searching for orders', async () => {
+      await advancedDocumentSearch({
+        applicationContext,
+        documentEventCodes: orderEventCodes,
+        judge: 'Judge Guy Fieri',
+      });
+
+      expect(
+        search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+      ).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            bool: {
+              should: {
+                match: {
+                  'signedJudgeName.S': {
+                    operator: 'and',
+                    query: 'Guy Fieri',
+                  },
+                },
+              },
+            },
+          }),
+        ]),
+      );
+    });
+  });
+
+  describe('judges search', () => {
+    it('should create populate the should clause with a match query for opinion searches for selected judges', async () => {
+      const selectedJudge = 'Buch';
+      await advancedDocumentSearch({
+        applicationContext,
+        isOpinionSearch: true,
+        judges: [judgeUser.name, selectedJudge],
+      });
+
+      expect(
+        search.mock.calls[0][0].searchParameters.body.query.bool.should,
+      ).toMatchObject(
+        expect.arrayContaining([
+          {
+            match: {
+              [`${OPINION_JUDGE_FIELD}.S`]: `${judgeUser.name}`,
+            },
+          },
+          {
+            match: {
+              [`${OPINION_JUDGE_FIELD}.S`]: selectedJudge,
+            },
+          },
+        ]),
+      );
     });
   });
 });
