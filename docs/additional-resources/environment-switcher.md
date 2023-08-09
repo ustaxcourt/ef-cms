@@ -144,28 +144,3 @@ Then to use the wrapper, simply run:
 . dawson_env myenv
 ```
 
-### Retrieve a new AWS session token and populate it in `myaccount.env` automatically
-
-First, define this function in your `.zshrc` or aliases file:
-```
-function renew_aws_session_token() {
-    account=${1-"myaccount"}
-    cd "$HOME/path/to/ef-cms"
-    if [[ -f "./scripts/env/aws-accounts/${account}.env" ]]; then
-        source "./scripts/env/aws-accounts/${account}.env"
-        if [[ ! -z "$AWS_ACCOUNT_ID" ]] && [[ ! -z "$AWS_SECRET_ACCESS_KEY" ]]; then
-            AWS_SESSION_TOKEN=$(aws sts get-session-token --duration-seconds 86400 --output json | jq -r ".Credentials.SessionToken")
-            sed -i '' "/AWS_SESSION_TOKEN/s/.*/export AWS_SESSION_TOKEN='$AWS_SESSION_TOKEN'/" "scripts/env/aws-accounts/${account}.env"
-            export AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
-        fi
-    fi
-}
-```
-Then to use the function, simply run:
-```
-renew_aws_session_token
-```
-or:
-```
-renew_aws_session_token myotheraccount
-```
