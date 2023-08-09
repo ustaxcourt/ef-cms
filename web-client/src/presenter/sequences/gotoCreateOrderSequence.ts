@@ -2,8 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
-import { getConstants } from '../../getConstants';
-import { getFeatureFlagFactoryAction } from '../actions/getFeatureFlagFactoryAction';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -12,10 +10,9 @@ import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
-import { setFeatureFlagFactoryAction } from '../actions/setFeatureFlagFactoryAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
@@ -36,7 +33,7 @@ export const gotoCreateOrderSequence = [
         proceed: [
           unsetDocumentToEditAction,
           clearModalAction,
-          setCurrentPageAction('Interstitial'),
+          setupCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           clearFormAction,
           setCreateOrderModalDataOnFormAction,
@@ -47,18 +44,8 @@ export const gotoCreateOrderSequence = [
               getConsolidatedCasesByCaseAction,
               setConsolidatedCasesForCaseAction,
             ],
-            [
-              getFeatureFlagFactoryAction(
-                getConstants().ALLOWLIST_FEATURE_FLAGS
-                  .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key,
-              ),
-              setFeatureFlagFactoryAction(
-                getConstants().ALLOWLIST_FEATURE_FLAGS
-                  .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS.key,
-              ),
-            ],
           ]),
-          setCurrentPageAction('CreateOrder'),
+          setupCurrentPageAction('CreateOrder'),
         ],
       },
     ]),

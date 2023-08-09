@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
@@ -35,14 +36,14 @@ import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/present
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
-import { getCaseByDocketNumber } from '../../shared/src/persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCasesForUser } from '../../shared/src/persistence/dynamo/users/getCasesForUser';
+import { getCaseByDocketNumber } from '../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCasesForUser } from '../../web-api/src/persistence/dynamo/users/getCasesForUser';
 import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
-import { getDocketNumbersByUser } from '../../shared/src/persistence/dynamo/cases/getDocketNumbersByUser';
+import { getDocketNumbersByUser } from '../../web-api/src/persistence/dynamo/cases/getDocketNumbersByUser';
 import { getDocumentTypeForAddressChange } from '../../shared/src/business/utilities/generateChangeOfAddressTemplate';
-import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getScannerMockInterface } from '../src/persistence/dynamsoft/getScannerMockInterface';
 import { getUniqueId } from '../../shared/src/sharedAppContext';
-import { getUserById } from '../../shared/src/persistence/dynamo/users/getUserById';
+import { getUserById } from '../../web-api/src/persistence/dynamo/users/getUserById';
 import {
   image1,
   image2,
@@ -50,19 +51,19 @@ import {
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from '../src/presenter/presenter';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { saveDocumentFromLambda } from '../../shared/src/persistence/s3/saveDocumentFromLambda';
-import { saveWorkItem } from '../../shared/src/persistence/dynamo/workitems/saveWorkItem';
+import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
+import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
 import { sleep } from '../../shared/src/business/utilities/sleep';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
-import { updateCase } from '../../shared/src/persistence/dynamo/cases/updateCase';
+import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../../shared/src/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { updateDocketEntry } from '../../shared/src/persistence/dynamo/documents/updateDocketEntry';
+import { updateDocketEntry } from '../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
-import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
+import { updateUser } from '../../web-api/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
@@ -70,13 +71,12 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
-import { ALLOWLIST_FEATURE_FLAGS } from '../../shared/src/business/entities/EntityConstants';
 import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
-import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
+import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
@@ -260,16 +260,21 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     }),
     getUseCases: () => ({
       generatePdfFromHtmlInteractor,
-      getFeatureFlagValueInteractor: (appContext, { featureFlag }) => {
-        if (
-          featureFlag ===
-          ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key
-        ) {
-          return false;
-        } else {
-          return true;
-        }
-      },
+      getAllFeatureFlagsInteractor: () => ({
+        'chief-judge-name': 'Maurice B. Foley',
+        'consolidated-cases-add-docket-numbers': true,
+        'consolidated-cases-group-access-petitioner': true,
+        'document-visibility-policy-change-date': '2023-05-01',
+        'e-consent-fields-enabled-feature-flag': true,
+        'external-opinion-search-enabled': true,
+        'external-order-search-enabled': true,
+        'internal-opinion-search-enabled': true,
+        'internal-order-search-enabled': true,
+        'multi-docketable-paper-filings': true,
+        'redaction-acknowledgement-enabled': true,
+        'updated-trial-status-types': true,
+        'use-external-pdf-generation': false,
+      }),
     }),
     getUtilities: () => ({
       calculateDifferenceInDays,
@@ -336,8 +341,6 @@ export const getCaseMessagesForCase = cerebralTest => {
   });
 };
 
-const client = require('../../shared/src/persistence/dynamodbClientService');
-
 export const getConnectionsByUserId = userId => {
   return client.query({
     ExpressionAttributeNames: {
@@ -381,6 +384,17 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
       current: isEnabled,
       pk: `${keyPrefix}-opinion-search-enabled`,
       sk: `${keyPrefix}-opinion-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
+export const setTerminalUserIps = (ips: string[]) => {
+  return client.put({
+    Item: {
+      ips,
+      pk: 'allowed-terminal-ips',
+      sk: 'allowed-terminal-ips',
     },
     applicationContext,
   });

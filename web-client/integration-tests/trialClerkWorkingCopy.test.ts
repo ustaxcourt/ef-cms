@@ -1,4 +1,7 @@
-import { CASE_TYPES_MAP } from '../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  SESSION_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
@@ -15,22 +18,22 @@ import { trialClerkViewsTrialSessionWorkingCopyWithNotes } from './journey/trial
 describe('Trial Clerk Views Trial Session Working Copy', () => {
   const cerebralTest = setupTest();
 
-  afterAll(() => {
-    cerebralTest.closeSocket();
-  });
-
   const trialLocation = `Boise, Idaho, ${Date.now()}`;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,
-    sessionType: 'Small',
+    sessionType: SESSION_TYPES.small,
     trialClerk: {
       name: 'Test Trial Clerk',
       userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
     },
     trialLocation,
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, overrides);

@@ -16,12 +16,12 @@ const config: Config = {
     '!src/routerPublic.ts',
     '!src/index-public.ts',
     '!src/index-public.prod.ts',
+    '!src/ustc-ui/Utils/types.ts',
   ],
   coverageDirectory: './coverage-unit',
   coverageProvider: 'babel',
   coverageReporters: ['json', 'lcov'],
   globals: {
-    File() {},
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
@@ -31,6 +31,7 @@ const config: Config = {
     prefix: '<rootDir>/../',
   }),
   testEnvironment: 'jsdom',
+  // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files

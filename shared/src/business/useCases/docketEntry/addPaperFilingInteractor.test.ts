@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
@@ -41,7 +42,9 @@ describe('addPaperFilingInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(Promise.resolve(true));
+      .getAllFeatureFlagsInteractor.mockReturnValue({
+        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: true,
+      });
 
     applicationContext
       .getPersistenceGateway()
