@@ -2,7 +2,7 @@ import { setPageTitle } from './setPageTitle';
 
 describe('setPageTitle', () => {
   beforeAll(() => {
-    global.window = {};
+    global.window ??= Object.create({});
     global.window.document = {};
   });
 
