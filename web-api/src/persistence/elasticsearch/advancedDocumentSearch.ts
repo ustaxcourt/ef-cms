@@ -43,16 +43,16 @@ export type AdvancedSearchArgsTypes = {
   endDate: string;
   isOpinionSearch: boolean;
   startDate: string;
-  sortField: string;
-  docketNumber: string;
-  isExternalUser: boolean;
-  keyword: string;
-  caseTitleOrPetitioner: string;
-  judge: string;
-  judges: string[];
-  overrideResultSize: number;
-  omitSealed: boolean;
-  documentEventCodes: any;
+  sortField?: string;
+  docketNumber?: string;
+  isExternalUser?: boolean;
+  keyword?: string;
+  caseTitleOrPetitioner?: string;
+  judge?: string;
+  judges?: string[];
+  overrideResultSize?: number;
+  omitSealed?: boolean;
+  documentEventCodes?: any;
 };
 
 export const advancedDocumentSearch = async ({
@@ -245,22 +245,36 @@ export const advancedDocumentSearch = async ({
   const documentQuery = {
     body: {
       _source: sourceFields,
+      aggs: {
+        event_code_count: {
+          terms: {
+            field: 'eventCode.S',
+          },
+        },
+      },
       from,
       query: searchQuery,
-      size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
+      size:
+        overrideResultSize !== undefined
+          ? overrideResultSize
+          : MAX_SEARCH_CLIENT_RESULTS,
       sort: getSortQuery(sortField),
     },
     index: 'efcms-docket-entry',
   };
 
   const {
+    aggregations,
     results,
     total,
-  }: { results: OrdersAndOpinionFormattedResultsTypes; total?: number } =
-    await search({
-      applicationContext,
-      searchParameters: documentQuery,
-    });
+  }: {
+    results: OrdersAndOpinionFormattedResultsTypes;
+    total?: number;
+    aggregations: any;
+  } = await search({
+    applicationContext,
+    searchParameters: documentQuery,
+  });
 
-  return { results, totalCount: total };
+  return { aggregations, results, totalCount: total };
 };
