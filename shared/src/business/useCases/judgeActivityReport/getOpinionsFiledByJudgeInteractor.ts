@@ -50,7 +50,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
       startDate: searchEntity.startDate,
     });
 
-  const result: {
+  const sortedOpinions: {
     count: number;
     documentType: string | undefined;
     eventCode: string;
@@ -65,15 +65,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
     };
   });
 
-  const sortedResult = orderBy(result, 'eventCode', 'asc');
+  const opinions = orderBy(sortedOpinions, 'eventCode', 'asc');
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: params.clientConnectionId,
-    message: {
-      action: 'fetch_opinions_complete',
-      opinions: sortedResult,
-    },
-    userId: authorizedUser.userId,
-  });
+  return opinions;
 };

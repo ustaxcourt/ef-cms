@@ -4,7 +4,7 @@ export const setJudgeActivityReportDataAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { casesClosedByJudge, trialSessions } = props;
+  const { casesClosedByJudge, opinions, trialSessions } = props;
 
   store.set(
     state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
@@ -14,5 +14,10 @@ export const setJudgeActivityReportDataAction = ({
   store.set(
     state.judgeActivityReport.judgeActivityReportData.trialSessions,
     trialSessions,
+  );
+
+  store.set(
+    state.judgeActivityReport.judgeActivityReportData.opinions,
+    opinions,
   );
 };

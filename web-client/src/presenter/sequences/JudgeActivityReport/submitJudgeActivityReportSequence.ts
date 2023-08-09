@@ -36,9 +36,9 @@ export const submitJudgeActivityReportSequence = [
       clearErrorAlertsAction,
       clearAlertsAction,
       setJudgeLastNamesAction,
-      getOpinionsForJudgeActivityReportAction,
       getOrdersIssuedForJudgeActivityReportAction,
       parallel([
+        getOpinionsForJudgeActivityReportAction,
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,
         getSubmittedAndCavCasesByJudgeAction,
