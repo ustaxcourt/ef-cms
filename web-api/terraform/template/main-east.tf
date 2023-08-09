@@ -585,17 +585,13 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
   }
 }
 
-resource "aws_cloudwatch_metric_alarm" "who_the_hell_knows" {
+resource "aws_cloudwatch_metric_alarm" "failover_has_occurred_alarm" {
   alarm_name          = "Combinatorial Failover Alarm"
-  # namespace           = "AWS/Route53"
-  # metric_name         = "HealthCheckStatus"
   alarm_description   = "If this alarm is going off a regional failover is occurring"
   comparison_operator = "LessThanThreshold"
-  # statistic           = "Minimum"
   count               = var.enable_health_checks
-  threshold           = "4"
+  threshold           = "1"
   evaluation_periods  = "2"
-  # period              = "60"
 
   metric_query {
     id          = "eastGreenErrors"
@@ -659,9 +655,9 @@ resource "aws_cloudwatch_metric_alarm" "who_the_hell_knows" {
   }
 
   metric_query {
-    expression  = "SUM(METRICS())"
-    id          = "AllErrorsSummed"
-    label       = "All errors summed"
+    expression  = "AVG(METRICS())"
+    id          = "AllErrorsAveraged"
+    label       = "All errors averaged"
     return_data = true
   }
 
