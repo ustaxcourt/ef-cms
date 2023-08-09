@@ -861,8 +861,8 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
   );
   app.post(
-    '/async/judge-activity-report/opinions',
-    lambdaWrapper(getOpinionsFiledByJudgeLambda, { isAsync: true }),
+    '/judge-activity-report/opinions',
+    lambdaWrapper(getOpinionsFiledByJudgeLambda),
   );
   app.post(
     '/async/judge-activity-report/orders',
