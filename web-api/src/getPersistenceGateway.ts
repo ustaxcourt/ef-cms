@@ -102,6 +102,7 @@ import { getReconciliationReport } from './persistence/elasticsearch/getReconcil
 import { getSectionInboxMessages } from './persistence/elasticsearch/messages/getSectionInboxMessages';
 import { getSectionOutboxMessages } from './persistence/elasticsearch/messages/getSectionOutboxMessages';
 import { getSesStatus } from './persistence/ses/getSesStatus';
+import { getStoredApplicationHealth } from './persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
@@ -143,6 +144,7 @@ import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
 import { setMessageAsRead } from './persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
+import { setStoredApplicationHealth } from './persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateAttributeOnDynamoRecord } from './persistence/dynamo/workitems/updateAttributeOnDynamoRecord';
@@ -341,6 +343,7 @@ const gatewayMethods = {
   getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
+  getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,
   getTrialSessionWorkingCopy,
@@ -369,6 +372,7 @@ const gatewayMethods = {
     : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  setStoredApplicationHealth,
   updateUserCaseMapping,
   verifyCaseForUser,
   verifyPendingCaseForUser,

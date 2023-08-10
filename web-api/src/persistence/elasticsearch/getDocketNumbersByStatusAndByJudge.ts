@@ -1,50 +1,64 @@
-import { search } from './searchClient';
+import {
+  CavAndSubmittedCaseResponseType,
+  JudgeActivityReportCavAndSubmittedCasesRequest,
+} from '../../../../web-client/src/presenter/judgeActivityReportState';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import { formatResults } from './searchClient';
 
-/**
- * getDocketNumbersByStatusAndByJudge
- * @param {object} providers the providers object containing applicationContext
- * @param {string} providers.applicationContext application context
- * @param {string} providers.judgeName judge
- * @param {string} providers.statuses case statuses
- * @returns {array} array of docketNumbers with field based on source
- */
 export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
-  judgeName,
-  statuses,
-}) => {
+  params,
+}: {
+  applicationContext: IApplicationContext;
+  params: JudgeActivityReportCavAndSubmittedCasesRequest;
+}): Promise<CavAndSubmittedCaseResponseType> => {
   const source = ['docketNumber'];
 
-  const searchParameters = {
+  const mustFilters: QueryDslQueryContainer[] = [];
+  const filters: QueryDslQueryContainer[] = [
+    {
+      terms: { 'status.S': params.statuses },
+    },
+  ];
+
+  if (params.judges.length) {
+    const shouldArray: Object[] = [];
+    params.judges.forEach(judge => {
+      const associatedJudgeFilters = {
+        match_phrase: {
+          'associatedJudge.S': judge,
+        },
+      };
+      shouldArray.push(associatedJudgeFilters);
+    });
+    const shouldObject: QueryDslQueryContainer = {
+      bool: {
+        should: shouldArray,
+      },
+    };
+    mustFilters.push(shouldObject);
+  }
+
+  const searchResults = await applicationContext.getSearchClient().search({
+    _source: source,
     body: {
-      _source: source,
       query: {
         bool: {
-          must: [
-            {
-              match_phrase: { 'associatedJudge.S': `${judgeName}` },
-            },
-            {
-              terms: { 'status.S': statuses },
-            },
-          ],
+          filter: filters,
+          must: mustFilters,
         },
       },
-      size: 10000,
       sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
-      track_total_hits: true, // to allow the count on the case inventory report UI to be accurate
     },
     index: 'efcms-case',
+    size: MAX_ELASTICSEARCH_PAGINATION,
+    track_total_hits: true,
+  });
+
+  const { results } = formatResults(searchResults.body);
+
+  return {
+    foundCases: results,
   };
-
-  const {
-    results,
-  }: { results: Array<{ docketNumber: string }>; total: number } = await search(
-    {
-      applicationContext,
-      searchParameters,
-    },
-  );
-
-  return results;
 };
