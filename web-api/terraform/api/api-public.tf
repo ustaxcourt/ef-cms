@@ -240,7 +240,7 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
   type            = "A"
   zone_id         = var.zone_id
   set_identifier  = "api_public_${var.region}_${var.current_color}"
-  health_check_id = length(aws_route53_health_check.status_health_check) > 0 ? aws_route53_health_check.status_health_check[0].id : null
+  health_check_id = length(aws_route53_health_check.failover_health_check) > 0 ? aws_route53_health_check.failover_health_check[0].id : null
 
   alias {
     name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
@@ -256,21 +256,4 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
 resource "aws_wafv2_web_acl_association" "api_public_association" {
   resource_arn = aws_api_gateway_stage.api_public_stage.arn
   web_acl_arn  = var.web_acl_arn
-}
-
-resource "aws_route53_health_check" "status_health_check" {
-  // fqdn must be a fully qualified domain name, and the invoke_url is not a domain but a url.
-  // Therefore, we are addding the stage ("/exp1") to the resource path, and omitting ("https://") from the fqdn
-  // e.g: https://6oz2qiqb7h.execute-api.us-east-1.amazonaws.com/exp1 --> 6oz2qiqb7h.execute-api.us-east-1.amazonaws.com
-  reference_name     = "${var.environment} ${var.current_color} Health Check"
-  fqdn               = element(split("/", aws_api_gateway_stage.api_public_stage.invoke_url), 2)
-  port               = 443
-  type               = "HTTPS_STR_MATCH"
-  resource_path      = "${var.environment}/public-api/cached-health"
-  failure_threshold  = "3"
-  request_interval   = "30"
-  count              = var.enable_health_checks
-  invert_healthcheck = false
-  search_string      = "true"                                  # Search for a JSON property returning "true"; fail check if not present
-  regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
 }
