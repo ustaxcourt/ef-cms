@@ -2,8 +2,9 @@ import { setPageTitle } from './setPageTitle';
 
 describe('setPageTitle', () => {
   beforeAll(() => {
-    global.window ??= Object.create({});
-    global.window.document = {};
+    global.window ??= Object.create({
+      document: {},
+    });
   });
 
   it('should set the page title to the passed in title, adding suffix and removing multi-spaces', () => {
