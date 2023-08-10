@@ -28,7 +28,7 @@ export type TrialSessionTypes = {
   [SESSION_TYPES.motionHearing]: number;
 };
 
-export type OrdersAndOpinionTypes = {
+export type OrdersAndOpinionResultCountTypes = {
   count: number;
   documentType: string | undefined;
   eventCode: string;
@@ -44,8 +44,8 @@ export type JudgeActivityReportState = {
     trialSessions?: TrialSessionTypes;
     casesClosedByJudge?: CasesClosedType;
     consolidatedCasesGroupCountMap?: ConsolidatedCasesGroupCountMapResponseType;
-    opinions?: OrdersAndOpinionTypes[];
-    orders?: OrdersAndOpinionTypes[];
+    opinions?: OrdersAndOpinionResultCountTypes[];
+    orders?: OrdersAndOpinionResultCountTypes[];
     submittedAndCavCasesByJudge?: RawCase[];
     totalCountForSubmittedAndCavCases?: number;
   };
