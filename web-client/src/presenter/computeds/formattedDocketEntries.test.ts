@@ -4,6 +4,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -308,6 +309,7 @@ describe('formattedDocketEntries', () => {
             {
               ...mockDocketEntry,
               eventCode: 'AMAT',
+              filedByRole: ROLES.privatePractitioner,
               filingDate: '2050-05-16T00:00:00.000-04:00',
               isCourtIssuedDocument: false,
               isFileAttached: true,
@@ -329,7 +331,6 @@ describe('formattedDocketEntries', () => {
               servedAt: '2050-05-16T00:00:00.000-04:01',
             },
           ],
-          docketEntriesEFiledByPractitioner: [mockDocketEntry.docketEntryId],
         },
       },
     });

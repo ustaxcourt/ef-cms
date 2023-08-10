@@ -16,9 +16,9 @@ export const A_VALID_DOCKET_ENTRY = {
   documentType: 'Petition',
   eventCode: 'A',
   filedBy: 'Test Petitioner',
+  filedByRole: ROLES.petitioner,
   filers: [mockPrimaryId],
   receivedAt: '2020-07-17T19:28:29.675Z',
-  role: ROLES.petitioner,
   userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
 };
 
@@ -358,6 +358,7 @@ describe('DocketEntry entity', () => {
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
           eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+          filedByRole: ROLES.petitioner,
           isMinuteEntry: true,
           isOnDocketRecord: true,
           userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
