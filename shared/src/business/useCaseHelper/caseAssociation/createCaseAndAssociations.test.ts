@@ -1,6 +1,6 @@
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../../src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createCaseAndAssociations } from './createCaseAndAssociations';
 

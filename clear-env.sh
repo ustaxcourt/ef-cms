@@ -88,7 +88,7 @@ echo "setting up elasticsearch"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
 
 echo "clearing dynamo"
-npx ts-node --transpile-only ./web-api/clear-dynamodb-table.js "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
+npx ts-node --transpile-only ./web-api/clear-dynamodb-table.ts "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
 # shellcheck disable=SC1091
 . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"

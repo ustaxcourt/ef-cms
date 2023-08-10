@@ -12,7 +12,7 @@ import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants'
  */
 export const setNoticeOfChangeToRemoteProceeding = async (
   applicationContext,
-  { caseEntity, newPdfDoc, newTrialSessionEntity, userId },
+  { caseEntity, newPdfDoc, newTrialSessionEntity, user },
 ) => {
   const trialSessionInformation = {
     chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
@@ -40,6 +40,6 @@ export const setNoticeOfChangeToRemoteProceeding = async (
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
       newPdfDoc,
       noticePdf,
-      userId,
+      user,
     });
 };
