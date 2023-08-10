@@ -371,7 +371,7 @@ describe('deleteCounselFromCaseInteractor', () => {
         new Case(mockCase, { applicationContext }),
       );
 
-      expect(result.petitioners[0].serviceIndicator).toEqual(null);
+      expect(result.petitioners[0].serviceIndicator).toBeUndefined();
     });
 
     it("should set the petitioner's serviceIndicator to null when the peitioner is not represented", () => {
