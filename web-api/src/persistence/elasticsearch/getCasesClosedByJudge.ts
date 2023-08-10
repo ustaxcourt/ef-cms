@@ -1,29 +1,19 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { CasesClosedType } from '@web-client/presenter/judgeActivityReportState';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
-import { sum } from 'lodash';
 
-/**
- * getCasesClosedByJudge
- *
- * @param {object} providers the providers object containing applicationContext
- * @param {string} providers.applicationContext application context
- * @param {string} providers.judge judge
- * @param {string} providers.startDate start date
- * @param {string} providers.endDate end date
- * @returns {array} array of docket numbers
- */
 export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
   judges,
   startDate,
-}): Promise<CasesClosedType> => {
+}) => {
   const source = ['status'];
 
   const shouldFilters: QueryDslQueryContainer[] = [];
 
+  // TODO: is it safe to assume we'll always use this method with judges provided?
+  // How do we enforce that?
+  // Do we test the logging?
   if (judges.length) {
     judges.forEach(judge => {
       shouldFilters.push({
@@ -32,63 +22,48 @@ export const getCasesClosedByJudge = async ({
     });
   }
 
-  const { aggregations } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        _source: source,
-        aggs: {
-          closed_cases: {
-            terms: {
-              field: 'status.S',
-            },
+  const documentQuery = {
+    body: {
+      _source: source,
+      aggs: {
+        closed_cases: {
+          terms: {
+            field: 'status.S',
           },
         },
-        query: {
-          bool: {
-            filter: [
-              {
-                range: {
-                  'closedDate.S': {
-                    gte: `${startDate}||/h`,
-                    lte: `${endDate}||/h`,
-                  },
+      },
+      query: {
+        bool: {
+          filter: [
+            {
+              range: {
+                'closedDate.S': {
+                  gte: `${startDate}||/h`,
+                  lte: `${endDate}||/h`,
                 },
               },
-            ],
-            minimum_should_match: 1,
-            should: shouldFilters,
-          },
+            },
+          ],
+          minimum_should_match: 1,
+          should: shouldFilters,
         },
-        size: 0,
       },
-      index: 'efcms-case',
+      size: 0,
     },
+    index: 'efcms-case',
+  };
+
+  const { aggregations, total } = await search({
+    applicationContext,
+    searchParameters: documentQuery,
   });
-
-  const computedAggregatedClosedCases =
-    aggregations.closed_cases.buckets.reduce((bucketObj, item) => {
-      return {
-        ...bucketObj,
-        [item.key]: item.doc_count,
-      };
-    }, {});
-
-  const results: CasesClosedType = aggregations.closed_cases.buckets.length
-    ? computedAggregatedClosedCases
-    : {
-        [CASE_STATUS_TYPES.closed]: 0,
-        [CASE_STATUS_TYPES.closedDismissed]: 0,
-      };
-
-  const totalNumberOfClosedCases = sum(Object.values(results));
 
   const judgeNameToLog =
     judges.length > 1 ? 'all judges' : `judge ${judges[0]}`;
 
   applicationContext.logger.info(
-    `Found ${totalNumberOfClosedCases} closed cases associated with ${judgeNameToLog}`,
+    `Found ${total} closed cases associated with ${judgeNameToLog}`,
   );
 
-  return results;
+  return { aggregations, total };
 };
