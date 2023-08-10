@@ -1,8 +1,9 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { CasesClosedType } from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCasesClosedByJudge } from './getCasesClosedByJudge';
 import { judgeUser } from '../../../../shared/src/test/mockUsers';
+jest.mock('./searchClient');
+import { search } from './searchClient';
 
 describe('getCasesClosedByJudge', () => {
   let mockValidRequest = {
@@ -21,15 +22,13 @@ describe('getCasesClosedByJudge', () => {
     key: CASE_STATUS_TYPES.closedDismissed,
   };
 
-  const mockReturnedCloseCases: CasesClosedType = {
-    [CASE_STATUS_TYPES.closed]: 3,
-    [CASE_STATUS_TYPES.closedDismissed]: 2,
-  };
-
-  const mockAggregations = {
-    closed_cases: {
-      buckets: [mockCaseClosed, mockCaseClosedDismissed],
+  const mockAggregationsResult = {
+    aggregations: {
+      closed_cases: {
+        buckets: [mockCaseClosed, mockCaseClosedDismissed],
+      },
     },
+    total: 5,
   };
 
   let mockBodyQuery = {
@@ -66,75 +65,19 @@ describe('getCasesClosedByJudge', () => {
   };
 
   beforeAll(() => {
-    applicationContext.getSearchClient().search.mockReturnValue({
-      body: { aggregations: mockAggregations },
-    });
+    search.mockReturnValue(mockAggregationsResult);
   });
 
-  it('should make a persistence call to obtain all closed cases associated with the given judge within the selected date range', async () => {
-    const closedCases: CasesClosedType = await getCasesClosedByJudge({
+  it('should make a persistence call to obtain an aggregation of closed cases associated with the given judges within the selected date range', async () => {
+    const results = await getCasesClosedByJudge({
       applicationContext,
       ...mockValidRequest,
     });
 
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body,
-    ).toMatchObject(mockBodyQuery);
+    expect(search.mock.calls[0][0].searchParameters.body).toMatchObject(
+      mockBodyQuery,
+    );
 
-    expect(closedCases).toEqual(mockReturnedCloseCases);
-  });
-
-  it('should make a persistence call to obtain all closed cases for no specified judge within the selected date range', async () => {
-    const mockJudges = [judgeUser.name, 'Buch'];
-
-    mockBodyQuery.query.bool.should = [
-      {
-        match_phrase: {
-          'associatedJudge.S': mockJudges[0],
-        },
-      },
-      {
-        match_phrase: {
-          'associatedJudge.S': mockJudges[1],
-        },
-      },
-    ];
-    mockValidRequest = {
-      ...mockValidRequest,
-      judges: mockJudges,
-    };
-
-    const closedCases: CasesClosedType = await getCasesClosedByJudge({
-      applicationContext,
-      ...mockValidRequest,
-    });
-
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body,
-    ).toMatchObject(mockBodyQuery);
-
-    expect(closedCases).toEqual(mockReturnedCloseCases);
-  });
-
-  it('should return default values of zero for both closed and closed - dismissed for judges with no closed cases', async () => {
-    applicationContext.getSearchClient().search.mockReturnValue({
-      body: { aggregations: { closed_cases: { buckets: [] } } },
-    });
-
-    const mockReturnedCloseCasesWithZeroItems = {
-      [CASE_STATUS_TYPES.closed]: 0,
-      [CASE_STATUS_TYPES.closedDismissed]: 0,
-    };
-
-    const closedCases: CasesClosedType = await getCasesClosedByJudge({
-      applicationContext,
-      ...mockValidRequest,
-    });
-
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body,
-    ).toMatchObject(mockBodyQuery);
-
-    expect(closedCases).toEqual(mockReturnedCloseCasesWithZeroItems);
+    expect(results).toEqual(mockAggregationsResult);
   });
 });
