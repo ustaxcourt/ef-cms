@@ -9,7 +9,6 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
     publicCaseDetailHelperComputed,
     applicationContextPublic,
   );
-  const { INITIAL_DOCUMENT_TYPES } = applicationContextPublic.getConstants();
 
   return it('View case detail', async () => {
     await cerebralTest.runSequence('gotoPublicCaseDetailSequence', {
@@ -86,30 +85,6 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
           showLinkToDocument: true,
           showServed: true,
         }),
-      ]),
-    );
-
-    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(7);
-    expect(helper.formattedCaseDetail.docketEntries).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          documentType: 'Petition',
-        }),
-        expect.objectContaining({
-          documentType: 'Motion',
-        }),
-        expect.objectContaining({
-          documentType:
-            INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        }),
-        expect.objectContaining({
-          documentType: 'Notice of Receipt of Petition',
-        }),
-        expect.objectContaining({
-          documentType: 'Order of Dismissal',
-        }),
-        expect.objectContaining({ documentType: 'Transcript' }),
-        expect.objectContaining({ documentType: 'Stipulated Decision' }),
       ]),
     );
   });

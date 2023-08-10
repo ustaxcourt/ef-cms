@@ -22,6 +22,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           docketNumber: '45678-18',
           documentType: 'Order',
           eventCode: 'O',
+          filedByRole: ROLES.docketClerk,
           signedAt: '2019-03-01T21:40:46.415Z',
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
@@ -44,6 +45,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
