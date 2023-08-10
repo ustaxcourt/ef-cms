@@ -22,13 +22,7 @@ export const fetchEventCodesAggregationForJudges = async ({
     index: 'efcms-docket-entry',
   };
 
-  const {
-    aggregations,
-    total,
-  }: {
-    total?: number;
-    aggregations: any;
-  } = await search({
+  const { aggregations, total } = await search({
     applicationContext,
     searchParameters: documentQuery,
   });

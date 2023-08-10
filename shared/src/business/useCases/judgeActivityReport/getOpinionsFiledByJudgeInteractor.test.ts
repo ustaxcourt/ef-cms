@@ -1,5 +1,6 @@
 import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import { SeachClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -25,7 +26,9 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     startDate: mockStartDate,
   };
 
-  const mockOpinionsResults = {
+  const mockOpinionsFiledTotal = 269;
+
+  const mockOpinionsResults: SeachClientResultsType = {
     aggregations: {
       search_field_count: {
         buckets: [
@@ -36,6 +39,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
         ],
       },
     },
+    total: mockOpinionsFiledTotal,
   };
 
   beforeEach(() => {
@@ -67,7 +71,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
         mockOpinionsResults,
       );
 
-    const results = await getOpinionsFiledByJudgeInteractor(
+    const opinions = await getOpinionsFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -85,6 +89,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       },
     });
 
-    expect(results).toEqual(mockOpinionsFiledByJudge);
+    expect(opinions.results).toEqual(mockOpinionsFiledByJudge);
+    expect(opinions.opinionsFiledTotal).toEqual(mockOpinionsFiledTotal);
   });
 });

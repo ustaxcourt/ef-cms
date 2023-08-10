@@ -5,7 +5,7 @@ import {
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
-import { OrdersAndOpinionResultCountTypes } from '../../../../../web-client/src/presenter/judgeActivityReportState';
+import { OpinionsReturnType } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -14,7 +14,7 @@ import {
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext: IApplicationContext,
   params: JudgeActivityReportFilters,
-): Promise<OrdersAndOpinionResultCountTypes[]> => {
+): Promise<OpinionsReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -27,7 +27,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { aggregations }: { aggregations: any } = await applicationContext
+  const { aggregations, total } = await applicationContext
     .getPersistenceGateway()
     .fetchEventCodesAggregationForJudges({
       applicationContext,
@@ -41,13 +41,16 @@ export const getOpinionsFiledByJudgeInteractor = async (
     });
 
   const computedAggregatedOpinionEventCodes =
-    aggregations.search_field_count.buckets.map(bucketObj => ({
+    aggregations!.search_field_count.buckets.map(bucketObj => ({
       count: bucketObj.doc_count,
       documentType: COURT_ISSUED_EVENT_CODES.find(
         event => event.eventCode === bucketObj.key,
-      ).documentType,
+      )!.documentType,
       eventCode: bucketObj.key,
     }));
 
-  return computedAggregatedOpinionEventCodes;
+  return {
+    opinionsFiledTotal: total,
+    results: computedAggregatedOpinionEventCodes,
+  };
 };
