@@ -81,9 +81,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         documentType: 'Notice',
         eventCode: 'ODJ',
+        isDraft: true,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: docketClerkUser.userId,
         signedJudgeName: 'Judge Dredd',
+        userId: docketClerkUser.userId,
       },
     ],
   };
