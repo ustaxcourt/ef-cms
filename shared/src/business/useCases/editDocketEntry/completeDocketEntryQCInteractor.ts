@@ -7,6 +7,11 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
+import {
+  FORMATS,
+  dateStringsCompared,
+  formatDateString,
+} from '../../utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
@@ -15,10 +20,6 @@ import {
 import { User } from '../../entities/User';
 import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import {
-  dateStringsCompared,
-  formatDateString,
-} from '../../utilities/DateHandler';
 import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
@@ -327,8 +328,8 @@ const completeDocketEntryQC = async (
       .promise();
 
     const serviceStampDate = formatDateString(
-      noticeUpdatedDocketEntry.servedAt,
-      'MMDDYY',
+      noticeUpdatedDocketEntry.servedAt!,
+      FORMATS.MMDDYY,
     );
 
     const newPdfData = await addServedStampToDocument({

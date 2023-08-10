@@ -80,6 +80,7 @@ export const checkForReadyForTrialCasesInteractor = async (
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
         if (
+          // @ts-ignore this can get updated in caseEntity.checkForReadyForTrial
           caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
         ) {
           await updateForTrial(caseEntity);

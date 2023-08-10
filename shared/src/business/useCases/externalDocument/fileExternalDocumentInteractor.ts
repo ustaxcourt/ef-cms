@@ -121,7 +121,7 @@ export const fileExternalDocument = async (
     documentMetadataForConsolidatedCases.push(documentMetadata);
   }
 
-  let consolidatedCaseEntities: Promise<TCase>[] = [];
+  let consolidatedCaseEntities: Promise<RawCase>[] = [];
 
   consolidatedCaseEntities = documentMetadataForConsolidatedCases.map(
     async individualDocumentMetadata => {
@@ -226,7 +226,7 @@ export const fileExternalDocument = async (
     },
   );
 
-  const resolvedCaseEntities: TCase[] = await Promise.all(
+  const resolvedCaseEntities: RawCase[] = await Promise.all(
     consolidatedCaseEntities,
   );
   return resolvedCaseEntities.find(
