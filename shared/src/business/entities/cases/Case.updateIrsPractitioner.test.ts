@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { IrsPractitioner } = require('../IrsPractitioner');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { Case } from './Case';
+import { IrsPractitioner } from '../IrsPractitioner';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('updateIrsPractitioner', () => {
   let myCase;

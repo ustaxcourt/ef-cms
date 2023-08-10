@@ -30,4 +30,5 @@ export default defineConfig({
   videosFolder: 'cypress/cypress-integration/videos',
   viewportHeight: 900,
   viewportWidth: 1200,
+  watchForFileChanges: false,
 });

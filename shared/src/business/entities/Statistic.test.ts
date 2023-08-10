@@ -7,6 +7,7 @@ describe('Statistic', () => {
       'applicationContext must be defined',
     );
   });
+
   describe('validation', () => {
     it("fails validation if a yearOrPeriod is not 'year' or 'period'", () => {
       const statistic = new Statistic(
@@ -16,8 +17,9 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors())).toContain(
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toContain(
         'yearOrPeriod',
       );
     });
@@ -39,6 +41,7 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeTruthy();
     });
 
@@ -59,8 +62,9 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'irsDeficiencyAmount',
         'irsTotalPenalties',
         'year',
@@ -78,6 +82,7 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
         lastDateOfPeriod: (
@@ -103,8 +108,9 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'year',
       ]);
     });
@@ -127,6 +133,7 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeTruthy();
     });
 
@@ -149,6 +156,7 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeTruthy();
     });
 
@@ -171,8 +179,9 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'determinationDeficiencyAmount',
       ]);
     });
@@ -196,8 +205,9 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors())).toEqual([
+      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
         'determinationTotalPenalties',
       ]);
     });
@@ -258,6 +268,7 @@ describe('Statistic', () => {
         applicationContext,
         rawPenalty: MOCK_PENALTY_WITH_STATISTIC_ID,
       });
+
       expect(statistic.penalties.length).toEqual(penaltyArrayLength + 1);
       expect(statistic.penalties[1]).toEqual(MOCK_PENALTY_WITH_STATISTIC_ID);
     });
@@ -313,6 +324,7 @@ describe('Statistic', () => {
           statisticId,
         },
       ];
+
       expect(preItemizationStatistic.penalties).toEqual([
         expect.objectContaining(expectedPenalties[0]),
         expect.objectContaining(expectedPenalties[1]),
@@ -340,6 +352,7 @@ describe('Statistic', () => {
           statisticId,
         },
       ];
+
       expect(preItemizationStatistic.penalties).toEqual([
         expect.objectContaining(expectedPenalties[0]),
       ]);

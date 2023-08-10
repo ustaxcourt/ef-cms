@@ -1,5 +1,5 @@
 import { createApplicationContext } from './applicationContext';
-import { get } from '../../shared/src/persistence/dynamodbClientService';
+import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
@@ -31,22 +31,20 @@ app.use(async (req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const whitelist = await get({
+    const allowlist = await get({
       Key: {
         pk: 'allowed-terminal-ips',
         sk: 'allowed-terminal-ips',
       },
       applicationContext,
     });
-    const ips = whitelist?.ips ?? [];
+    const ips = allowlist?.ips ?? [];
 
-    if (ips.includes('localhost')) {
-      set(
-        currentInvoke,
-        'event.requestContext.authorizer.isTerminalUser',
-        'true',
-      );
-    }
+    set(
+      currentInvoke,
+      'event.requestContext.authorizer.isTerminalUser',
+      ips.includes('localhost') ? 'true' : 'false',
+    );
   }
   return next();
 });
@@ -55,8 +53,8 @@ app.use(logger());
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './public-api/generatePublicDocketRecordPdfLambda';
+import { getAllFeatureFlagsLambda } from './featureFlag/getAllFeatureFlagsLambda';
 import { getCaseForPublicDocketSearchLambda } from './public-api/getCaseForPublicDocketSearchLambda';
-import { getFeatureFlagValueLambda } from './featureFlag/getFeatureFlagValueLambda';
 import { getHealthCheckLambda } from './health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda';
 import { getPublicCaseExistsLambda } from './public-api/getPublicCaseExistsLambda';
@@ -133,4 +131,4 @@ app.get(
   lambdaWrapper(getMaintenanceModeLambda),
 );
 
-app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));

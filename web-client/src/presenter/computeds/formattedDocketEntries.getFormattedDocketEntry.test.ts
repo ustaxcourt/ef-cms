@@ -1,6 +1,7 @@
 import {
   BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -8,16 +9,25 @@ import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
 describe('getFormattedDocketEntry', () => {
+  let simpleDocketEntry;
+
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
-  const simpleDocketEntry = simpleDocketEntries[0];
+  const rootDocument = {
+    docketEntryId: '743595eb-e3e2-4308-859d-e4215fe8b706',
+    documentType: 'Petition',
+    eventCode: 'P',
+  };
 
   const baseParams = {
     applicationContext,
     docketNumber: MOCK_CASE.docketNumber,
     entry: simpleDocketEntry,
-    formattedCase: { ...MOCK_CASE, docketEntriesEFiledByPractitioner: [] },
+    formattedCase: {
+      ...MOCK_CASE,
+      filedByRole: ROLES.privatePractitioner,
+    },
     isExternalUser: false,
     permissions: {},
     userAssociatedWithCase: true,
@@ -38,6 +48,13 @@ describe('getFormattedDocketEntry', () => {
     qcWorkItemsCompleted: true,
     servedAt: '2019-02-28T21:14:39.488Z',
   };
+
+  beforeEach(() => {
+    simpleDocketEntry = {
+      ...simpleDocketEntries[0],
+      rootDocument,
+    };
+  });
 
   describe('showLoadingIcon', () => {
     it('should be true if isExternalUser is false, permissions.UPDATE_CASE is false, and entry.processingStatus is not complete', () => {
@@ -421,11 +438,12 @@ describe('getFormattedDocketEntry', () => {
           ...servedCourtIssuedDocketEntry,
           eventCode: BRIEF_EVENTCODES[0],
           isFileAttached: true,
+          rootDocument,
         },
         filedAfterPolicyChange: true,
         formattedCase: {
           ...MOCK_CASE,
-          docketEntriesEFiledByPractitioner: [simpleDocketEntry.docketEntryId],
+          filedByRole: ROLES.privatePractitioner,
         },
         isExternalUser: true,
       });
@@ -439,11 +457,12 @@ describe('getFormattedDocketEntry', () => {
         ...simpleDocketEntry,
         entry: {
           eventCode: BRIEF_EVENTCODES[0],
+          rootDocument,
         },
         filedAfterPolicyChange: false,
         formattedCase: {
           ...MOCK_CASE,
-          docketEntriesEFiledByPractitioner: [simpleDocketEntry.docketEntryId],
+          filedByRole: ROLES.privatePractitioner,
         },
         isExternalUser: true,
       });

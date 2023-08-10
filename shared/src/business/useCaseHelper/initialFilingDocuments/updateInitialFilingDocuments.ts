@@ -13,13 +13,19 @@ const addNewInitialFilingToCase = ({
   documentType,
   originalCaseDocument,
 }) => {
-  let documentMeta;
+  let documentToAdd: DocketEntry;
 
   if (originalCaseDocument) {
-    documentMeta = {
-      ...originalCaseDocument,
-      ...currentCaseDocument,
-    };
+    documentToAdd = new DocketEntry(
+      {
+        ...originalCaseDocument,
+        ...currentCaseDocument,
+      },
+      {
+        applicationContext,
+        petitioners: caseEntity.petitioners,
+      },
+    );
   } else {
     const { eventCode } = Object.values(INITIAL_DOCUMENT_TYPES).find(
       dt => dt.documentType === documentType,
@@ -32,25 +38,27 @@ const addNewInitialFilingToCase = ({
       filers.push(contactSecondary.contactId);
     }
 
-    documentMeta = {
-      ...currentCaseDocument,
-      createdAt: caseEntity.receivedAt,
-      eventCode,
-      filers,
-      filingDate: caseEntity.receivedAt,
-      isFileAttached: true,
-      isOnDocketRecord: eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
-      isPaper: true,
-      mailingDate: caseEntity.mailingDate,
-      receivedAt: caseEntity.receivedAt,
-      userId: authorizedUser.userId,
-    };
-  }
+    documentToAdd = new DocketEntry(
+      {
+        ...currentCaseDocument,
+        createdAt: caseEntity.receivedAt,
+        eventCode,
+        filers,
+        filingDate: caseEntity.receivedAt,
+        isFileAttached: true,
+        isOnDocketRecord: eventCode !== INITIAL_DOCUMENT_TYPES.stin.eventCode,
+        isPaper: true,
+        mailingDate: caseEntity.mailingDate,
+        receivedAt: caseEntity.receivedAt,
+      },
+      {
+        applicationContext,
+        petitioners: caseEntity.petitioners,
+      },
+    );
 
-  const documentToAdd = new DocketEntry(documentMeta, {
-    applicationContext,
-    petitioners: caseEntity.petitioners,
-  });
+    documentToAdd.setFiledBy(authorizedUser);
+  }
 
   caseEntity.addDocketEntry(documentToAdd);
 };

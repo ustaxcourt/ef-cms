@@ -21,6 +21,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
         documentType: 'Petition',
         eventCode: 'P',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         processingStatus: 'pending',
         userId: 'd13d017b-28d1-45b6-aa7d-f54865b0121b',
       },

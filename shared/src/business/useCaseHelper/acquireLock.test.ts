@@ -1,3 +1,4 @@
+import { ALLOWLIST_FEATURE_FLAGS } from '../../business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '../../errors/errors';
 import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
@@ -13,9 +14,10 @@ describe('acquireLock', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockImplementation(
-        () => mockFeatureFlagValue,
-      );
+      .getAllFeatureFlagsInteractor.mockImplementation(() => ({
+        [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
+          mockFeatureFlagValue,
+      }));
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
@@ -209,9 +211,10 @@ describe('withLocking', () => {
       .getLock.mockImplementation(() => mockLock);
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockImplementation(
-        () => mockFeatureFlagValue,
-      );
+      .getAllFeatureFlagsInteractor.mockImplementation(() => ({
+        [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
+          mockFeatureFlagValue,
+      }));
   });
 
   beforeEach(() => {
@@ -380,9 +383,10 @@ describe('checkLock', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockImplementation(
-        () => mockFeatureFlagValue,
-      );
+      .getAllFeatureFlagsInteractor.mockImplementation(() => ({
+        [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
+          mockFeatureFlagValue,
+      }));
 
     applicationContext
       .getPersistenceGateway()

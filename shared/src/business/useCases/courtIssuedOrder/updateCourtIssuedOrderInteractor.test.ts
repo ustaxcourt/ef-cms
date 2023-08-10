@@ -28,6 +28,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         isDraft: true,
         userId: mockUserId,
       },
@@ -37,6 +38,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
       {
@@ -45,6 +47,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
     ],

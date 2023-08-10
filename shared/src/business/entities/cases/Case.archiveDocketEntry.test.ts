@@ -1,7 +1,7 @@
 import { Case } from './Case';
 import { DocketEntry } from '../DocketEntry';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocuments';
+import { PENDING_DOCKET_ENTRY } from '../../../test/mockDocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 

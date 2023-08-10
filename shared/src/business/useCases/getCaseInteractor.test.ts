@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -333,7 +334,6 @@ describe('getCaseInteractor', () => {
         canAllowPrintableDocketRecord: undefined,
         caseCaption: undefined,
         docketEntries: [],
-        docketEntriesEFiledByPractitioner: [],
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
@@ -466,7 +466,10 @@ describe('getCaseInteractor', () => {
       });
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockReturnValue({
+          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+            .key]: true,
+        });
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue({

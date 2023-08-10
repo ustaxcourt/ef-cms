@@ -25,7 +25,7 @@ export const messageModalHelper = (
       .getUtilities()
       .getFormattedCaseDetail({ applicationContext, caseDetail });
 
-  const documents = [];
+  const documents: RawDocketEntry[] = [];
   formattedDocketEntries.forEach(entry => {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;

@@ -1,4 +1,4 @@
-import { MOCK_DOCUMENTS } from '../../../../shared/src/test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../../shared/src/test/mockDocketEntry';
 import { marshallDocketEntry } from './marshallDocketEntry';
 const MOCK_DOCUMENT = MOCK_DOCUMENTS[0];
 
