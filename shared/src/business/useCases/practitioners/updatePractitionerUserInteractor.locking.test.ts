@@ -13,7 +13,7 @@ import {
 } from './updatePractitionerUserInteractor';
 
 describe('determineEntitiesToLock', () => {
-  let mockPractitioner = MOCK_PRACTITIONER as TPractitioner;
+  const mockPractitioner: TPractitioner = MOCK_PRACTITIONER;
   let mockParams;
   beforeEach(() => {
     mockParams = {

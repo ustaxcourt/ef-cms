@@ -13,7 +13,7 @@ import joi from 'joi';
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
-  public email: string;
+  public email?: string;
   public name: string;
   public pendingEmail?: string;
   public role: string;
@@ -139,7 +139,7 @@ export class User extends JoiValidationEntity {
   };
 
   isChambersUser() {
-    return this.section.includes('Chambers');
+    return this.section && this.section.includes('Chambers');
   }
 
   static isExternalUser(role) {

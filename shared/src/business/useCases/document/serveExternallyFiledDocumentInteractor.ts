@@ -103,7 +103,7 @@ export const serveExternallyFiledDocument = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   let paperServiceResult;
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   const coversheetLength = 1;
 
   const featureFlags = await applicationContext
@@ -180,14 +180,14 @@ export const serveExternallyFiledDocument = async (
       c => c.docketNumber === subjectCaseDocketNumber,
     );
     const updatedSubjectDocketEntry =
-      updatedSubjectCaseEntity.getDocketEntryById({ docketEntryId });
+      updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
         caseEntity: updatedSubjectCaseEntity,
         docketEntryId: updatedSubjectDocketEntry.docketEntryId,
-        docketNumber: updatedSubjectCaseEntity.docketNumber,
+        docketNumber: updatedSubjectCaseEntity!.docketNumber,
       });
 
     paperServiceResult = await applicationContext

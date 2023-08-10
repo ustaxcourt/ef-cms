@@ -153,16 +153,17 @@ export const MOCK_EXTERNAL_USERS = {
   [irsPractitionerUser.userId]: irsPractitionerUser,
 };
 
-export const MOCK_PRACTITIONER = {
+export const MOCK_PRACTITIONER: TPractitioner = {
   admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AB1111',
-  birthYear: 2019,
+  birthYear: '2019',
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
     address3: 'Under the stairs',
     city: 'Chicago',
+    country: 'USA',
     countryType: COUNTRY_TYPES.DOMESTIC,
     phone: '+1 (555) 555-5555',
     postalCode: '61234',
@@ -170,6 +171,7 @@ export const MOCK_PRACTITIONER = {
   },
   email: 'ab@example.com',
   employer: 'Private',
+  entityName: 'Practitioner',
   firmName: 'GW Law Offices',
   firstName: 'Test',
   lastName: 'Attorney',
@@ -177,6 +179,8 @@ export const MOCK_PRACTITIONER = {
   originalBarState: 'OK',
   practitionerType: 'Attorney',
   role: ROLES.privatePractitioner,
+  section: 'privatePractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
 };
 

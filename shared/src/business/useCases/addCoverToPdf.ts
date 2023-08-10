@@ -1,3 +1,4 @@
+import { Case } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
@@ -17,7 +18,7 @@ export const addCoverToPdf = async ({
   filingDateUpdated,
   pdfData,
   replaceCoversheet = false,
-  useInitialData,
+  useInitialData = false,
 }: {
   applicationContext: IApplicationContext;
   caseEntity: Case;

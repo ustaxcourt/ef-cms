@@ -71,7 +71,6 @@ describe('updateDeficiencyStatisticInteractor', () => {
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
-        statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
         ...statisticToUpdate,
       } as any,
     );
@@ -91,7 +90,6 @@ describe('updateDeficiencyStatisticInteractor', () => {
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
-        statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
         ...statisticToUpdate,
       } as any,
     );
@@ -106,7 +104,6 @@ describe('updateDeficiencyStatisticInteractor', () => {
     await expect(
       updateDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
         ...statistic,
       } as any),
     ).rejects.toThrow(ServiceUnavailableError);
@@ -119,7 +116,6 @@ describe('updateDeficiencyStatisticInteractor', () => {
   it('should acquire and remove the lock on the case', async () => {
     await updateDeficiencyStatisticInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
       ...statistic,
     } as any);
 
