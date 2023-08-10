@@ -8,7 +8,7 @@ Before you start, you should have an SSO Signin URL and know the region where yo
 
 1. Configure AWS SSO:
     ```
-    aws sso configure
+    aws configure sso
     ```
 1. Give the session a name:
     ```
