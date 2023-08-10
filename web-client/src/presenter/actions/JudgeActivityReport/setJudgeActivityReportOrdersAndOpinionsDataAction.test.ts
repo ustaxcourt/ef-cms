@@ -18,7 +18,7 @@ describe('setJudgeActivityReportOrdersAndOpinionsDataAction', () => {
     },
   ];
 
-  const mockOpinions = [
+  const mockOpinionsAggregated = [
     {
       count: 1,
       documentType: 'Memorandum Opinion',
@@ -49,7 +49,7 @@ describe('setJudgeActivityReportOrdersAndOpinionsDataAction', () => {
           presenter,
         },
         props: {
-          opinions: mockOpinions,
+          opinions: mockOpinionsAggregated,
           orders: undefined,
         },
         state: {
@@ -64,7 +64,7 @@ describe('setJudgeActivityReportOrdersAndOpinionsDataAction', () => {
     );
 
     expect(state.judgeActivityReport.judgeActivityReportData.opinions).toBe(
-      mockOpinions,
+      mockOpinionsAggregated,
     );
     expect(state.judgeActivityReport.judgeActivityReportData.orders).toBe(
       mockOrdersIssuedByJudge,
@@ -85,7 +85,7 @@ describe('setJudgeActivityReportOrdersAndOpinionsDataAction', () => {
         state: {
           judgeActivityReport: {
             judgeActivityReportData: {
-              opinions: mockOpinions,
+              opinions: mockOpinionsAggregated,
               orders: undefined,
             },
           },
@@ -98,7 +98,7 @@ describe('setJudgeActivityReportOrdersAndOpinionsDataAction', () => {
     );
 
     expect(state.judgeActivityReport.judgeActivityReportData.opinions).toBe(
-      mockOpinions,
+      mockOpinionsAggregated,
     );
   });
 });

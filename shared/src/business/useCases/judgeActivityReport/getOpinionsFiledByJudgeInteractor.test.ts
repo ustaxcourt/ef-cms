@@ -1,4 +1,7 @@
-import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
+import {
+  JudgeActivityReportFilters,
+  OpinionsReturnType,
+} from '@web-client/presenter/judgeActivityReportState';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import { SeachClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -16,6 +19,13 @@ export const mockOpinionsFiledByJudge = [
   { count: 30, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
 ];
 
+const mockOpinionsFiledTotal = 269;
+
+export const mockOpinionsAggregated: OpinionsReturnType = {
+  opinionsFiledTotal: mockOpinionsFiledTotal,
+  results: mockOpinionsFiledByJudge,
+};
+
 describe('getOpinionsFiledByJudgeInteractor', () => {
   const mockStartDate = '02/12/2020';
   const mockEndDate = '03/21/2020';
@@ -25,8 +35,6 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     judges: mockJudges,
     startDate: mockStartDate,
   };
-
-  const mockOpinionsFiledTotal = 269;
 
   const mockOpinionsResults: SeachClientResultsType = {
     aggregations: {
@@ -89,7 +97,6 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       },
     });
 
-    expect(opinions.results).toEqual(mockOpinionsFiledByJudge);
-    expect(opinions.opinionsFiledTotal).toEqual(mockOpinionsFiledTotal);
+    expect(opinions).toEqual(mockOpinionsAggregated);
   });
 });
