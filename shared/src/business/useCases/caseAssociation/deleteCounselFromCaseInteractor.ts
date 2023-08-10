@@ -76,7 +76,7 @@ export const setupServiceIndicatorForUnrepresentedPetitioners = (
 ) => {
   caseEntity.petitioners.forEach(petitioner => {
     if (!Case.isPetitionerRepresented(caseEntity, petitioner.contactId)) {
-      petitioner.serviceIndicator = null;
+      petitioner.serviceIndicator = undefined;
     }
   });
 

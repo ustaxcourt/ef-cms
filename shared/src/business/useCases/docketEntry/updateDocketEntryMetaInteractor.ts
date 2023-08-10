@@ -47,7 +47,7 @@ export const updateDocketEntryMeta = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const originalDocketEntry = caseEntity.getDocketEntryById({
+  const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
@@ -105,7 +105,7 @@ export const updateDocketEntryMeta = async (
   const servedAtUpdated =
     editableFields.servedAt &&
     editableFields.servedAt !== originalDocketEntry.servedAt;
-  const filingDateUpdated =
+  const filingDateUpdated: boolean =
     editableFields.filingDate &&
     editableFields.filingDate !== originalDocketEntry.filingDate;
 
