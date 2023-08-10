@@ -21,7 +21,7 @@ type TPetitioner = {
   phone: string;
   postalCode: string;
   sealedAndUnavailable: boolean;
-  serviceIndicator: string | null;
+  serviceIndicator?: string;
   state: string;
   title: string;
 };
