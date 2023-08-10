@@ -20,7 +20,7 @@ export const associateIrsPractitionerToCase = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  consolidatedCasesDocketNumbers: string[] | undefined;
+  consolidatedCasesDocketNumbers?: string[];
   serviceIndicator?: string;
   user: RawUser;
 }) => {
