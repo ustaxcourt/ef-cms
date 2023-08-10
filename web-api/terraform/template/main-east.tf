@@ -552,10 +552,10 @@ resource "aws_api_gateway_domain_name" "api_custom_main_east" {
 }
 
 resource "aws_route53_record" "api_route53_main_east_regional_record" {
-  name            = aws_api_gateway_domain_name.api_custom_main_east.domain_name
-  type            = "A"
-  zone_id         = data.aws_route53_zone.zone.id
-  set_identifier  = "api_main_us_east_1"
+  name           = aws_api_gateway_domain_name.api_custom_main_east.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "api_main_us_east_1"
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
@@ -586,7 +586,7 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
 }
 
 resource "aws_cloudwatch_metric_alarm" "failover_has_occurred_alarm" {
-  alarm_name          = "Combinatorial Failover Alarm"
+  alarm_name          = "Failover Alarm"
   alarm_description   = "If this alarm is going off a regional failover is occurring"
   comparison_operator = "LessThanThreshold"
   count               = var.enable_health_checks
@@ -730,7 +730,6 @@ module "api-east-green" {
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
-  alert_sns_topic_arn            = var.alert_sns_topic_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = null_resource.seal_in_lower_east_object
@@ -801,7 +800,6 @@ module "api-east-blue" {
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
-  alert_sns_topic_arn            = var.alert_sns_topic_arn
 
 
   # lambda to seal cases in lower environment (only deployed to lower environments)

@@ -212,10 +212,6 @@ variable "use_layers" {
 }
 
 variable "enable_health_checks" {
-  type    = string
-  default = "1"
-}
-
-variable "alert_sns_topic_arn" {
+  // e.g. "1" or "0"
   type = string
 }
