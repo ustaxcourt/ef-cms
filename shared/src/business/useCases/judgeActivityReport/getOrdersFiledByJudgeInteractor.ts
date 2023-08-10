@@ -1,33 +1,22 @@
+import {
+  COURT_ISSUED_EVENT_CODES,
+  ORDER_EVENT_CODES,
+} from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import {
   JudgeActivityReportFilters,
-  OrdersAndOpinionTypes,
+  OrdersReturnType,
 } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
-import {
-  MAX_ELASTICSEARCH_PAGINATION,
-  ORDER_EVENT_CODES,
-} from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { groupBy, orderBy } from 'lodash';
 
-/**
- * getOrdersFiledByJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the date to end the search for judge activity
- * @param {string} providers.judgeName the name of the judge
- * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {array} list of orders filed by the judge in the given date range, sorted alphabetically ascending by event code
- */
 export const getOrdersFiledByJudgeInteractor = async (
   applicationContext,
   params: JudgeActivityReportFilters,
-) => {
+): Promise<OrdersReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -45,52 +34,30 @@ export const getOrdersFiledByJudgeInteractor = async (
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  let sortedResults: {
-    results: {
-      documentType: string;
-    };
-  }[][] = [];
+  const { aggregations, total } = await applicationContext
+    .getPersistenceGateway()
+    .fetchEventCodesAggregationForJudges({
+      applicationContext,
+      params: {
+        documentEventCodes: orderEventCodesToSearch,
+        endDate: searchEntity.endDate,
+        judges: searchEntity.judges,
+        searchType: 'order',
+        startDate: searchEntity.startDate,
+      },
+    });
 
-  if (searchEntity.judges.length) {
-    sortedResults = await Promise.all(
-      searchEntity.judges.map(async judge => {
-        const { results } = await applicationContext
-          .getPersistenceGateway()
-          .advancedDocumentSearch({
-            applicationContext,
-            documentEventCodes: orderEventCodesToSearch,
-            endDate: searchEntity.endDate,
-            judge,
-            overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-            startDate: searchEntity.startDate,
-          });
+  const computedAggregatedOrdersEventCodes =
+    aggregations!.search_field_count.buckets.map(bucketObj => ({
+      count: bucketObj.doc_count,
+      documentType: COURT_ISSUED_EVENT_CODES.find(
+        event => event.eventCode === bucketObj.key,
+      )!.documentType,
+      eventCode: bucketObj.key,
+    }));
 
-        return results;
-      }),
-    );
-  }
-
-  const result = groupBy(sortedResults.flat(), 'eventCode');
-
-  const formattedResult: Array<OrdersAndOpinionTypes> = Object.entries(
-    result,
-  ).map(([key, value]) => {
-    return {
-      count: value.length,
-      documentType: value[0].documentType,
-      eventCode: key,
-    };
-  });
-
-  const sortedResult = orderBy(formattedResult, 'eventCode', 'asc');
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    clientConnectionId: params.clientConnectionId,
-    message: {
-      action: 'fetch_orders_complete',
-      orders: sortedResult,
-    },
-    userId: authorizedUser.userId,
-  });
+  return {
+    ordersFiledTotal: total,
+    results: computedAggregatedOrdersEventCodes,
+  };
 };

@@ -1,9 +1,11 @@
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../entities/EntityConstants';
+import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { OrdersReturnType } from '@web-client/presenter/judgeActivityReportState';
+import { SeachClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-export const mockOrdersIssuedByJudge = [
+const mockOrdersIssuedByJudge = [
   { count: 2, documentType: 'Order', eventCode: 'O' },
   {
     count: 1,
@@ -15,38 +17,46 @@ export const mockOrdersIssuedByJudge = [
     documentType: 'Order that the letter "X" is deleted from the Docket number',
     eventCode: 'ODX',
   },
+  {
+    count: 5,
+    documentType: 'T.C. Opinion',
+    eventCode: 'TCOP',
+  },
 ];
 
+const mockOrdersFiledTotal = 9;
+
+export const mockOrdersAggregated: OrdersReturnType = {
+  ordersFiledTotal: mockOrdersFiledTotal,
+  results: mockOrdersIssuedByJudge,
+};
+
 describe('getOrdersFiledByJudgeInteractor', () => {
-  const mockClientConnectionID = 'clientConnnectionID';
   const mockValidRequest = {
-    clientConnectionId: mockClientConnectionID,
     endDate: '03/21/2020',
     judges: [judgeUser.name],
     startDate: '02/12/2020',
   };
 
-  const mockResults = {
-    results: [
-      {
-        documentType:
-          'Order that the letter "X" is deleted from the Docket number',
-        eventCode: 'ODX',
+  const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+  const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
+    eventCode => !excludedOrderEventCodes.includes(eventCode),
+  );
+
+  const mockOrdersResults: SeachClientResultsType = {
+    aggregations: {
+      search_field_count: {
+        buckets: [
+          { doc_count: 2, key: 'O' },
+          { doc_count: 1, key: 'OAL' },
+          { doc_count: 1, key: 'ODX' },
+          { doc_count: 5, key: 'TCOP' },
+        ],
       },
-      {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      {
-        documentType: 'Order that the letter "L" is added to Docket number',
-        eventCode: 'OAL',
-      },
-      {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-    ],
+    },
+    total: mockOrdersFiledTotal,
   };
+  const mockJudges = [judgeUser.name];
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
@@ -73,79 +83,59 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(mockResults);
+      .fetchEventCodesAggregationForJudges.mockResolvedValue(mockOrdersResults);
 
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+    const orders = await getOrdersFiledByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
 
     expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway()
+        .fetchEventCodesAggregationForJudges.mock.calls[0][0],
     ).toMatchObject({
-      endDate: '2020-03-22T03:59:59.999Z',
-      judge: judgeUser.name,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
-    });
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      clientConnectionId: mockValidRequest.clientConnectionId,
-      message: {
-        action: 'fetch_orders_complete',
-        orders: mockOrdersIssuedByJudge,
+      params: {
+        documentEventCodes: orderEventCodesToSearch,
+        endDate: '2020-03-22T03:59:59.999Z',
+        judges: mockJudges,
+        searchType: 'order',
+        startDate: '2020-02-12T05:00:00.000Z',
       },
-      userId: judgeUser.userId,
     });
+
+    expect(orders).toEqual(mockOrdersAggregated);
   });
 
-  it('should return an empty list of orders when there are no matching orders for the selected judge in the date range provided', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
-        results: [],
-      });
+  // TODO: move testing of forbidden event codes to integration FOR ORDERS
 
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+  // it('should exclude certain order event codes when calling fetchEventCodesAggregationForJudges', async () => {
+  //   // applicationContext
+  //   //   .getPersistenceGateway()
+  //   //   .fetchEventCodesAggregationForJudges.mockResolvedValue({
+  //   //     results: mockResults,
+  //   //   });
 
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      clientConnectionId: mockValidRequest.clientConnectionId,
-      message: {
-        action: 'fetch_orders_complete',
-        orders: [],
-      },
-      userId: judgeUser.userId,
-    });
-  });
+  //   await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
-  it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
-        results: mockResults,
-      });
-
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
-    ).not.toContain('OAJ');
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
-    ).not.toContain('SPOS');
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
-    ).not.toContain('SPTO');
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
-    ).not.toContain('OST');
-  });
+  //   expect(
+  //     applicationContext.getPersistenceGateway()
+  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
+  //       .documentEventCodes,
+  //   ).not.toContain('OAJ');
+  //   expect(
+  //     applicationContext.getPersistenceGateway()
+  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
+  //       .documentEventCodes,
+  //   ).not.toContain('SPOS');
+  //   expect(
+  //     applicationContext.getPersistenceGateway()
+  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
+  //       .documentEventCodes,
+  //   ).not.toContain('SPTO');
+  //   expect(
+  //     applicationContext.getPersistenceGateway()
+  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
+  //       .documentEventCodes,
+  //   ).not.toContain('OST');
+  // });
 });

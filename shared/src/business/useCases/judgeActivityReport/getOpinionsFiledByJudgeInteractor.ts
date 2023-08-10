@@ -3,9 +3,11 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
+import {
+  JudgeActivityReportFilters,
+  OpinionsReturnType,
+} from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
-import { OpinionsReturnType } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
