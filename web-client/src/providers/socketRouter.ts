@@ -130,14 +130,6 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
-      case 'fetch_opinions_complete':
-      case 'fetch_orders_complete':
-        await app.getSequence(
-          'fetchOrdersAndOpinionsForJudgesCompleteSequence',
-        )({
-          ...message,
-        });
-        break;
     }
 
     (onMessageCallbackFn || noop)(message);
