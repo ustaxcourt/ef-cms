@@ -315,10 +315,10 @@ resource "aws_api_gateway_domain_name" "api_custom_main_west" {
 
 
 resource "aws_route53_record" "api_route53_main_west_regional_record" {
-  name            = aws_api_gateway_domain_name.api_custom_main_west.domain_name
-  type            = "A"
-  zone_id         = data.aws_route53_zone.zone.id
-  set_identifier  = "api_main_us_west_1"
+  name           = aws_api_gateway_domain_name.api_custom_main_west.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "api_main_us_west_1"
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_west.regional_domain_name
@@ -333,10 +333,10 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
 
 
 resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
-  name            = aws_api_gateway_domain_name.public_api_custom_main_west.domain_name
-  type            = "A"
-  zone_id         = data.aws_route53_zone.zone.id
-  set_identifier  = "public_api_main_us_west_1"
+  name           = aws_api_gateway_domain_name.public_api_custom_main_west.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "public_api_main_us_west_1"
 
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
@@ -414,7 +414,6 @@ module "api-west-green" {
   triggers_object_hash           = ""
   create_triggers                = 0
   enable_health_checks           = var.enable_health_checks
-  alert_sns_topic_arn            = var.alert_sns_topic_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
@@ -486,7 +485,6 @@ module "api-west-blue" {
   triggers_object_hash           = ""
   create_triggers                = 0
   enable_health_checks           = var.enable_health_checks
-  alert_sns_topic_arn            = var.alert_sns_topic_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""

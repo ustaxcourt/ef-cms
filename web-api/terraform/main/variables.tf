@@ -129,6 +129,6 @@ variable "default_account_pass" {
 }
 
 variable "enable_health_checks" {
-  type    = string
-  default = "1"
+  // e.g. "1" or "0"
+  type = string
 }
