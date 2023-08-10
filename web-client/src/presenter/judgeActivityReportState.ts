@@ -34,6 +34,16 @@ export type OrdersAndOpinionResultCountTypes = {
   eventCode: string;
 };
 
+export type OpinionsReturnType = {
+  results: OrdersAndOpinionResultCountTypes[];
+  opinionsFiledTotal: number | undefined;
+};
+
+export type OrdersReturnType = {
+  results: OrdersAndOpinionResultCountTypes[];
+  ordersFiledTotal: number | undefined;
+};
+
 export type ConsolidatedCasesGroupCountMapResponseType = {
   [leadDocketNumber: string]: number;
 };
@@ -44,8 +54,8 @@ export type JudgeActivityReportState = {
     trialSessions?: TrialSessionTypes;
     casesClosedByJudge?: CasesClosedType;
     consolidatedCasesGroupCountMap?: ConsolidatedCasesGroupCountMapResponseType;
-    opinions?: OrdersAndOpinionResultCountTypes[];
-    orders?: OrdersAndOpinionResultCountTypes[];
+    opinions?: OpinionsReturnType;
+    orders?: OrdersReturnType;
     submittedAndCavCasesByJudge?: RawCase[];
     totalCountForSubmittedAndCavCases?: number;
   };
