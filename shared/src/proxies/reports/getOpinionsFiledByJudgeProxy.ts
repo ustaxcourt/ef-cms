@@ -1,11 +1,11 @@
 import { JudgeActivityReportFilters } from 'shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
-import { OrdersAndOpinionTypes } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import { OrdersAndOpinionResultCountTypes } from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 export const getOpinionsFiledByJudgeInteractor = (
   applicationContext,
   params: JudgeActivityReportFilters,
-): Promise<OrdersAndOpinionTypes[]> => {
+): Promise<OrdersAndOpinionResultCountTypes[]> => {
   return post({
     applicationContext,
     body: params,

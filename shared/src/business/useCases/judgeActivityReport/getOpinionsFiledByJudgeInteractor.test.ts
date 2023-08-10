@@ -1,21 +1,18 @@
 import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
-import {
-  MAX_ELASTICSEARCH_PAGINATION,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} from '../../entities/EntityConstants';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 export const mockOpinionsFiledByJudge = [
-  { count: 0, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
+  { count: 177, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
   {
-    count: 0,
+    count: 53,
     documentType: 'Order of Service of Transcript (Bench Opinion)',
     eventCode: 'OST',
   },
-  { count: 1, documentType: 'Summary Opinion', eventCode: 'SOP' },
-  { count: 1, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
+  { count: 34, documentType: 'Summary Opinion', eventCode: 'SOP' },
+  { count: 30, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
 ];
 
 describe('getOpinionsFiledByJudgeInteractor', () => {
@@ -28,27 +25,17 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     startDate: mockStartDate,
   };
 
-  const mockOrdersResultFromPersistence = {
-    results: [
-      {
-        caseCaption: 'Samson Workman, Petitioner',
-        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-        docketNumber: '103-19',
-        documentTitle: 'T.C. Opinion for More Candy',
-        documentType: 'T.C. Opinion',
-        eventCode: 'TCOP',
-        signedJudgeName: 'Guy Fieri',
+  const mockOpinionsResults = {
+    aggregations: {
+      search_field_count: {
+        buckets: [
+          { doc_count: 177, key: 'MOP' },
+          { doc_count: 53, key: 'OST' },
+          { doc_count: 34, key: 'SOP' },
+          { doc_count: 30, key: 'TCOP' },
+        ],
       },
-      {
-        caseCaption: 'Samson Workman, Petitioner',
-        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-        docketNumber: '103-19',
-        documentTitle: 'Summary Opinion for KitKats',
-        documentType: 'Summary Opinion',
-        eventCode: 'SOP',
-        signedJudgeName: 'Guy Fieri',
-      },
-    ],
+    },
   };
 
   beforeEach(() => {
@@ -76,8 +63,8 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
   it('should make a call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(
-        mockOrdersResultFromPersistence,
+      .fetchEventCodesAggregationForJudges.mockResolvedValue(
+        mockOpinionsResults,
       );
 
     const results = await getOpinionsFiledByJudgeInteractor(
@@ -86,15 +73,16 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway()
+        .fetchEventCodesAggregationForJudges.mock.calls[0][0],
     ).toMatchObject({
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      endDate: '2020-03-22T03:59:59.999Z',
-      isOpinionSearch: true,
-      judges: mockJudges,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
+      params: {
+        documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        endDate: '2020-03-22T03:59:59.999Z',
+        judges: mockJudges,
+        searchType: 'opinion',
+        startDate: '2020-02-12T05:00:00.000Z',
+      },
     });
 
     expect(results).toEqual(mockOpinionsFiledByJudge);

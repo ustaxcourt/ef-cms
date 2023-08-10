@@ -47,6 +47,7 @@ import { deleteUserConnection } from './persistence/dynamo/notifications/deleteU
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
+import { fetchEventCodesAggregationForJudges } from './persistence/elasticsearch/fetchEventCodesAggregationForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
@@ -295,6 +296,7 @@ const gatewayMethods = {
   deleteUserConnection,
   deleteUserFromCase,
   deleteWorkItem,
+  fetchEventCodesAggregationForJudges,
   getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
