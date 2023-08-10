@@ -277,6 +277,20 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
   provider   = aws.us-west-1
 }
 
+data "aws_s3_bucket_object" "cron_blue_west_object" {
+  depends_on = [null_resource.cron_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "cron_blue.js.zip"
+  provider   = aws.us-west-1
+}
+
+data "aws_s3_bucket_object" "cron_green_west_object" {
+  depends_on = [null_resource.cron_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "cron_green.js.zip"
+  provider   = aws.us-west-1
+}
+
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   depends_on               = [aws_acm_certificate.api_gateway_cert_west]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
@@ -353,7 +367,7 @@ module "api-west-green" {
   pdf_generation_object     = null_resource.pdf_generation_west_object
   websockets_object         = null_resource.websockets_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
-  cron_object               = ""
+  cron_object               = null_resource.cron_west_object
   maintenance_notify_object = null_resource.maintenance_notify_west_object
   streams_object            = ""
   source                    = "../api/"
@@ -388,11 +402,12 @@ module "api-west-green" {
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
   use_layers                     = var.green_use_layers
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
-  cron_object_hash               = ""
+  cron_object_hash               = data.aws_s3_bucket_object.cron_green_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
   pool_arn                       = aws_cognito_user_pool.pool.arn
-  create_cron                    = 0
+  create_check_case_cron         = 0
+  create_health_check_cron       = 1
   create_streams                 = 0
   create_maintenance_notify      = 1
   stream_arn                     = ""
@@ -423,7 +438,7 @@ module "api-west-blue" {
   send_emails_object        = null_resource.send_emails_west_object
   trial_session_object      = null_resource.trial_session_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
-  cron_object               = ""
+  cron_object               = null_resource.cron_west_object
   maintenance_notify_object = null_resource.maintenance_notify_west_object
   streams_object            = ""
   source                    = "../api/"
@@ -458,10 +473,11 @@ module "api-west-blue" {
   trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_blue_west_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_west_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
-  cron_object_hash               = ""
+  cron_object_hash               = data.aws_s3_bucket_object.cron_blue_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
   streams_object_hash            = ""
-  create_cron                    = 0
+  create_check_case_cron         = 0
+  create_health_check_cron       = 1
   create_streams                 = 0
   pool_arn                       = aws_cognito_user_pool.pool.arn
   create_maintenance_notify      = 1

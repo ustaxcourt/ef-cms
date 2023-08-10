@@ -445,7 +445,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection: string | null = null,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',

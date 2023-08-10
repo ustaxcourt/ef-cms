@@ -105,6 +105,7 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { dismissThirtyDayTrialAlertSequence } from './sequences/dismissThirtyDayTrialAlertSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
+import { fetchOrdersAndOpinionsForJudgesCompleteSequence } from './sequences/JudgeActivityReport/fetchOrdersAndOpinionsForJudgesCompleteSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
@@ -115,6 +116,7 @@ import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequ
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
+import { getCavAndSubmittedCasesForJudgesSequence } from './sequences/JudgeActivityReport/getCavAndSubmittedCasesForJudgesSequence';
 import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
@@ -326,7 +328,6 @@ import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
-import { selectDateRangeFromJudgeActivityReportSequence } from './sequences/selectDateRangeFromJudgeActivityReportSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
@@ -351,6 +352,7 @@ import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequ
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
@@ -638,6 +640,7 @@ export const presenterSequences = {
   dismissThirtyDayTrialAlertSequence,
   editCorrespondenceDocumentSequence,
   editUploadCourtIssuedDocumentSequence,
+  fetchOrdersAndOpinionsForJudgesCompleteSequence,
   fetchUserNotificationsSequence,
   fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
   filterCaseDeadlinesByJudgeSequence,
@@ -647,6 +650,7 @@ export const presenterSequences = {
   generatePdfFromScanSessionSequence,
   getBlockedCasesByTrialLocationSequence,
   getCaseInventoryReportSequence,
+  getCavAndSubmittedCasesForJudgesSequence,
   getCustomCaseInventoryReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,
@@ -857,7 +861,6 @@ export const presenterSequences = {
   sealDocketEntrySequence,
   selectAssigneeSequence,
   selectDateRangeFromCalendarSequence,
-  selectDateRangeFromJudgeActivityReportSequence,
   selectDocumentForPreviewSequence,
   selectDocumentForScanSequence,
   selectScannerSequence,
@@ -881,6 +884,7 @@ export const presenterSequences = {
   setIdleStatusIdleSequence,
   setIdleTimerRefSequence,
   setIrsNoticeFalseSequence,
+  setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence,
   setPDFPageForSigningSequence,
   setPDFSignatureDataSequence,

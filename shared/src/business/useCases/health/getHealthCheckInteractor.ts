@@ -9,7 +9,30 @@ const handleAxiosTimeout = axios => {
   return source;
 };
 
-const getElasticSearchStatus = async ({ applicationContext }) => {
+export type ApplicationHealth = {
+  cognito: boolean;
+  dynamo: {
+    efcms: boolean;
+    efcmsDeploy: boolean;
+  };
+  dynamsoft: boolean;
+  elasticsearch: boolean;
+  emailService: boolean;
+  s3: {
+    app: boolean;
+    appFailover: boolean;
+    eastDocuments: boolean;
+    eastQuarantine: boolean;
+    eastTempDocuments: boolean;
+    public: boolean;
+    publicFailover: boolean;
+    westDocuments: boolean;
+    westQuarantine: boolean;
+    westTempDocuments: boolean;
+  };
+};
+
+export const getElasticSearchStatus = async ({ applicationContext }) => {
   try {
     await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
       applicationContext,
@@ -22,7 +45,7 @@ const getElasticSearchStatus = async ({ applicationContext }) => {
   return true;
 };
 
-const getDynamoStatus = async ({ applicationContext }) => {
+export const getDynamoStatus = async ({ applicationContext }) => {
   try {
     const dynamoStatus = await applicationContext
       .getPersistenceGateway()
@@ -34,7 +57,7 @@ const getDynamoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getDeployDynamoStatus = async ({ applicationContext }) => {
+export const getDeployDynamoStatus = async ({ applicationContext }) => {
   try {
     const deployDynamoStatus = await applicationContext
       .getPersistenceGateway()
@@ -46,7 +69,7 @@ const getDeployDynamoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getDynamsoftStatus = async ({ applicationContext }) => {
+export const getDynamsoftStatus = async ({ applicationContext }) => {
   const axios = applicationContext.getHttpClient();
 
   const source = handleAxiosTimeout(axios);
@@ -70,7 +93,10 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
   }
 };
 
-const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
+export const checkS3BucketsStatus = async ({
+  applicationContext,
+  bucketName,
+}) => {
   try {
     await applicationContext
       .getStorageClient()
@@ -87,7 +113,7 @@ const checkS3BucketsStatus = async ({ applicationContext, bucketName }) => {
   }
 };
 
-const getS3BucketStatus = async ({ applicationContext }) => {
+export const getS3BucketStatus = async ({ applicationContext }) => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
   const currentColor = process.env.CURRENT_COLOR;
   const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`;
@@ -126,7 +152,7 @@ const getS3BucketStatus = async ({ applicationContext }) => {
   return bucketStatus;
 };
 
-const getCognitoStatus = async ({ applicationContext }) => {
+export const getCognitoStatus = async ({ applicationContext }) => {
   const axios = applicationContext.getHttpClient();
 
   const source = handleAxiosTimeout(axios);
@@ -153,7 +179,7 @@ const getCognitoStatus = async ({ applicationContext }) => {
   }
 };
 
-const getEmailServiceStatus = async ({ applicationContext }) => {
+export const getEmailServiceStatus = async ({ applicationContext }) => {
   try {
     return await applicationContext
       .getPersistenceGateway()
@@ -164,15 +190,9 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
   }
 };
 
-/**
- * getHealthCheckInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {object} contains the status of all our different services
- */
 export const getHealthCheckInteractor = async (
   applicationContext: IApplicationContext,
-) => {
+): Promise<ApplicationHealth> => {
   const [
     elasticSearchStatus,
     dynamoStatus,
@@ -196,21 +216,7 @@ export const getHealthCheckInteractor = async (
       applicationContext,
     }),
   ]);
-
-  const allChecksHealthy = [
-    ...Object.values(s3BucketStatus),
-    elasticSearchStatus,
-    dynamoStatus,
-    deployDynamoStatus,
-    dynamsoftStatus,
-    cognitoStatus,
-    emailServiceStatus,
-  ].every(status => {
-    return status === true;
-  });
-
   return {
-    allChecksHealthy: allChecksHealthy ? 'pass' : 'fail',
     cognito: cognitoStatus,
     dynamo: {
       efcms: dynamoStatus,
