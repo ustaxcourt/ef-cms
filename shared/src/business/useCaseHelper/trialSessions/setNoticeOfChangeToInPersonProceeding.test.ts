@@ -1,27 +1,18 @@
-import { getFakeFile } from '../../test/getFakeFile';
-
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
-import {
-  MOCK_TRIAL_INPERSON,
-  MOCK_TRIAL_REMOTE,
-} from '../../../test/mockTrial';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { getFakeFile } from '../../test/getFakeFile';
+import { petitionsClerkUser } from '../../../test/mockUsers';
 import { setNoticeOfChangeToInPersonProceeding } from './setNoticeOfChangeToInPersonProceeding';
 
 describe('setNoticeOfChangeToInPersonProceeding', () => {
   const mockTrialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-  const mockUserId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
   const mockInPersonCalendaredTrialSession = {
     ...MOCK_TRIAL_INPERSON,
     isCalendared: true,
-    trialSessionId: mockTrialSessionId,
-  };
-
-  const mockRemoteTrialSession = {
-    ...MOCK_TRIAL_REMOTE,
     trialSessionId: mockTrialSessionId,
   };
 
@@ -43,10 +34,9 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   it('should make a call to generate the NOIP pdf', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       caseEntity: mockOpenCase,
-      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      userId: mockUserId,
+      user: petitionsClerkUser,
     });
 
     expect(
@@ -61,7 +51,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
           mockInPersonCalendaredTrialSession.chambersPhoneNumber,
         city: mockInPersonCalendaredTrialSession.city,
         courthouseName: mockInPersonCalendaredTrialSession.courthouseName,
-        judgeName: mockInPersonCalendaredTrialSession.judge.name,
+        judgeName: mockInPersonCalendaredTrialSession.judge!.name,
         startDate: mockInPersonCalendaredTrialSession.startDate,
         startTime: mockInPersonCalendaredTrialSession.startTime,
         state: mockInPersonCalendaredTrialSession.state,
@@ -74,10 +64,9 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   it('should make a call to create and serve the NOIP docket entry on the case', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       caseEntity: mockOpenCase,
-      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      userId: mockUserId,
+      user: petitionsClerkUser,
     });
 
     expect(
@@ -94,7 +83,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding,
       newPdfDoc: getFakeFile,
       noticePdf: getFakeFile,
-      userId: mockUserId,
+      user: petitionsClerkUser,
     });
   });
 });

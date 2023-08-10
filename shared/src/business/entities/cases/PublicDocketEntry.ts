@@ -19,6 +19,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
   public documentType?: string;
   public eventCode?: string;
   public filedBy?: string;
+  public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
   public index?: number;
@@ -60,6 +61,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     this.freeText = rawProps.freeText;
     this.index = rawProps.index;
     this.isFileAttached = rawProps.isFileAttached;
+    this.filedByRole = rawProps.filedByRole;
     this.isLegacyServed = rawProps.isLegacyServed;
     this.isMinuteEntry = rawProps.isMinuteEntry;
     this.isOnDocketRecord = rawProps.isOnDocketRecord;
