@@ -5,7 +5,7 @@ requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
 import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { searchAll } from '../../src/persistence/elasticsearch/searchClient';
+import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
 import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
@@ -21,9 +21,9 @@ const toDate = validateDateAndCreateISO({
   year: `${year + 1}`,
 });
 
-const getAllPractitioners = async ({
+const getAllPractitioners = async (
   applicationContext,
-}): Promise<Array<Object>> => {
+): Promise<Array<Object>> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {

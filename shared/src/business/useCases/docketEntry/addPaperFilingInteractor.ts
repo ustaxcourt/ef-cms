@@ -59,11 +59,12 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
-  const isCaseConsolidationFeatureOn = await applicationContext
+  const featureFlags = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const isCaseConsolidationFeatureOn =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key];
 
   if (!isCaseConsolidationFeatureOn || isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
@@ -108,12 +109,13 @@ export const addPaperFiling = async (
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+    docketEntryEntity.setFiledBy(user);
+
+    const servedParties: any = aggregatePartiesForService(caseEntity);
 
     if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
@@ -172,6 +174,7 @@ export const addPaperFiling = async (
         .countPagesInDocument({
           applicationContext,
           docketEntryId,
+          documentBytes: undefined,
         });
     }
 
@@ -201,6 +204,7 @@ export const addPaperFiling = async (
         applicationContext,
         caseEntities,
         docketEntryId,
+        stampedPdf: undefined,
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;

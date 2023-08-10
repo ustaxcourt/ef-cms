@@ -5,6 +5,7 @@ import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '../../../errors/errors';
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { getContactPrimary } from '../../entities/cases/Case';
@@ -18,6 +19,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   const baseDocketEntry = {
     docketNumber: MOCK_CASE.docketNumber,
     filedBy: 'Test Petitioner',
+    filedByRole: ROLES.petitioner,
     filers: [getContactPrimary(MOCK_CASE).contactId],
     filingDate: '2011-02-22T00:01:00.000Z',
     userId: mockUserId,
@@ -47,8 +49,8 @@ describe('updateDocketEntryMetaInteractor', () => {
         servedParties: [{ name: 'Some Party' }],
       },
       {
-        docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         ...baseDocketEntry,
+        docketEntryId: '111ba5a9-b37b-479d-9201-067ec6e33111',
         documentTitle: 'Test Entry 1',
         documentType: 'Order',
         eventCode: 'O',
@@ -144,6 +146,7 @@ describe('updateDocketEntryMetaInteractor', () => {
         documentType: 'Summary Opinion',
         entityName: 'DocketEntry',
         eventCode: 'SOP',
+        filedByRole: ROLES.judge,
         filingDate: '2011-02-22T00:01:00.000Z',
         index: 7,
         isDraft: false,

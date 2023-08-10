@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { DOCUMENT_PROCESSING_STATUS_OPTIONS } = require('../EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+import { Case } from './Case';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('updateDocketEntry', () => {
   it('should replace the docket entry with the exact object provided', () => {

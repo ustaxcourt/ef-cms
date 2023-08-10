@@ -86,6 +86,7 @@ describe('editPaperFilingInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: 'petitioner',
         isFileAttached: true,
         userId: mockDocketEntryId,
       },

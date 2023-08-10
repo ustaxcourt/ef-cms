@@ -12,11 +12,12 @@ export const checkLock = async ({
   onLockError?: Error | Function;
   options?: any;
 }): Promise<void> => {
-  const isCaseLockingEnabled = await applicationContext
+  const featureFlags = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const isCaseLockingEnabled =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];
 
   const currentLock = await applicationContext
     .getPersistenceGateway()

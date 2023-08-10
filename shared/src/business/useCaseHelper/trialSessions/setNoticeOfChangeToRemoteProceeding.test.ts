@@ -6,10 +6,10 @@ import {
 } from '../../../test/mockTrial';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { petitionsClerkUser } from '../../../test/mockUsers';
 import { setNoticeOfChangeToRemoteProceeding } from './setNoticeOfChangeToRemoteProceeding';
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {
-  const mockUserId = '85a5b1c8-1eed-44b6-932a-967af060597a';
   const mockNoticePdf = 'Blah blah blah';
   const mockNewPdf = 'This is some other newer stuff';
 
@@ -33,10 +33,9 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
   it('should generate and serve a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
     await setNoticeOfChangeToRemoteProceeding(applicationContext, {
       caseEntity: mockOpenCase,
-      currentTrialSession: MOCK_TRIAL_INPERSON,
       newPdfDoc: mockNewPdf,
       newTrialSessionEntity: MOCK_TRIAL_REMOTE,
-      userId: mockUserId,
+      user: petitionsClerkUser,
     });
 
     expect(
@@ -64,7 +63,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
       newPdfDoc: mockNewPdf,
       noticePdf: mockNoticePdf,
-      userId: mockUserId,
+      user: petitionsClerkUser,
     });
   });
 });

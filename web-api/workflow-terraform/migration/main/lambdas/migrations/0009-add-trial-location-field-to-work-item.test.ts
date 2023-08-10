@@ -1,8 +1,8 @@
 import { CASE_STATUS_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
-import { aggregateCaseItems } from '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems';
 jest.mock(
-  '../../../../../../shared/src/persistence/dynamo/helpers/aggregateCaseItems',
+  '../../../../../../web-api/src/persistence/dynamo/helpers/aggregateCaseItems',
 );
+import { aggregateCaseItems } from '../../../../../src/persistence/dynamo/helpers/aggregateCaseItems';
 import { migrateItems } from './0009-add-trial-location-field-to-work-item';
 import { queryFullCase } from '../utilities/queryFullCase';
 jest.mock('../utilities/queryFullCase');

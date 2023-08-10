@@ -1,6 +1,7 @@
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
+  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
@@ -44,6 +45,7 @@ describe('editPaperFilingInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: mockDocketEntryId,
           workItem,
         },
@@ -53,6 +55,7 @@ describe('editPaperFilingInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [
             {

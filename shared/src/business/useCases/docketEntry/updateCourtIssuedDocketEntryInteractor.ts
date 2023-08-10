@@ -72,10 +72,11 @@ export const updateCourtIssuedDocketEntry = async (
       documentTitle: editableFields.documentTitle,
       editState: JSON.stringify(editableFields),
       isOnDocketRecord: true,
-      userId: user.userId,
     },
     { applicationContext },
   );
+
+  docketEntryEntity.setFiledBy(user);
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 

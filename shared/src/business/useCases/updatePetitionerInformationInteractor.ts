@@ -61,10 +61,10 @@ const updateCaseEntityAndGenerateChange = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const privatePractitionersRepresentingContact =
-    caseEntity.isUserIdRepresentedByPrivatePractitioner(
-      petitionerOnCase.contactId,
-    );
+  const privatePractitionersRepresentingContact = Case.isPetitionerRepresented(
+    caseEntity,
+    petitionerOnCase.contactId,
+  );
 
   if (!privatePractitionersRepresentingContact) {
     petitionerOnCase.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
@@ -216,9 +216,7 @@ export const updatePetitionerInformation = async (
 
   if (updateAddressOrPhone) {
     const privatePractitionersRepresentingContact =
-      caseEntity.isUserIdRepresentedByPrivatePractitioner(
-        oldCaseContact.contactId,
-      );
+      Case.isPetitionerRepresented(caseEntity, oldCaseContact.contactId);
 
     const newData = editableFields;
     const oldData = oldCaseContact;

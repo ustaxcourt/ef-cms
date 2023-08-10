@@ -26,6 +26,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
       {
@@ -34,6 +35,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
       {
@@ -42,6 +44,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         documentType: 'Answer',
         eventCode: 'A',
         filedBy: 'Test Petitioner',
+        filedByRole: ROLES.petitioner,
         userId: mockUserId,
       },
     ],

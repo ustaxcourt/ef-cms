@@ -6,6 +6,7 @@ import {
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
+  isDocumentBriefType,
 } from '../EntityConstants';
 import { Case, isSealedCase } from './Case';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -30,7 +31,6 @@ export class PublicCase extends JoiValidationEntity {
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
   public docketEntries: any[];
-  public docketEntriesEFiledByPractitioner: string[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;
@@ -38,6 +38,7 @@ export class PublicCase extends JoiValidationEntity {
   public petitioners: any[] | undefined;
   public irsPractitioners?: any[];
   public privatePractitioners: any;
+
   private _score?: string;
 
   constructor(
@@ -53,6 +54,7 @@ export class PublicCase extends JoiValidationEntity {
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
+
     this.entityName = 'PublicCase';
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
@@ -65,8 +67,6 @@ export class PublicCase extends JoiValidationEntity {
       `${this.docketNumber}${this.docketNumberSuffix || ''}`;
     this.hasIrsPractitioner =
       !!rawCase.irsPractitioners && rawCase.irsPractitioners.length > 0;
-    this.docketEntriesEFiledByPractitioner =
-      PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
 
     this.isPaper = rawCase.isPaper;
     this.partyType = rawCase.partyType;
@@ -109,55 +109,39 @@ export class PublicCase extends JoiValidationEntity {
     return Case.VALIDATION_ERROR_MESSAGES;
   }
 
-  static isPrivateDocument(documentEntity) {
+  static isPrivateDocument(
+    docketEntry: any,
+    visibilityChangeDate: string,
+  ): boolean {
+    if (docketEntry.isStricken) return true;
+    if (docketEntry.eventCode === TRANSCRIPT_EVENT_CODE) return true;
+    if (!docketEntry.isOnDocketRecord) return true;
+
     const orderDocumentTypes = map(ORDER_TYPES, 'documentType');
 
-    const isTranscript = documentEntity.eventCode === TRANSCRIPT_EVENT_CODE;
+    const filedAfterPolicyChange =
+      docketEntry.filingDate >= visibilityChangeDate;
+
     const hasPolicyDateImpactedEventCode =
-      POLICY_DATE_IMPACTED_EVENTCODES.includes(documentEntity.eventCode);
-    const isOrder = orderDocumentTypes.includes(documentEntity.documentType);
-    const isDocumentOnDocketRecord = documentEntity.isOnDocketRecord;
+      POLICY_DATE_IMPACTED_EVENTCODES.includes(docketEntry.eventCode);
+    const isOrder = orderDocumentTypes.includes(docketEntry.documentType);
     const isCourtIssuedDocument = COURT_ISSUED_EVENT_CODES.map(
       ({ eventCode }) => eventCode,
-    ).includes(documentEntity.eventCode);
-    const documentIsStricken = !!documentEntity.isStricken;
+    ).includes(docketEntry.eventCode);
 
-    const isPublicDocumentType =
-      (isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode) &&
-      !isTranscript &&
-      !documentIsStricken;
+    let isPublicDocumentType =
+      isOrder || isCourtIssuedDocument || hasPolicyDateImpactedEventCode;
 
-    return (
-      (isPublicDocumentType && !isDocumentOnDocketRecord) ||
-      !isPublicDocumentType
-    );
-  }
+    const isAmendmentToABrief =
+      ['AMAT', 'ADMT', 'REDC', 'SPML', 'SUPM'].includes(
+        docketEntry.eventCode,
+      ) && isDocumentBriefType(docketEntry.previousDocument.documentType);
 
-  static getDocketEntriesEFiledByPractitioner(rawCase) {
-    let casePractitioners: any[];
-    let docketEntriesEFiledByPractitioner: string[] = [];
-
-    if (rawCase.irsPractitioners && rawCase.privatePractitioners) {
-      casePractitioners = [
-        ...rawCase.irsPractitioners,
-        ...rawCase.privatePractitioners,
-      ];
-
-      for (let i = 0; i < rawCase.docketEntries?.length; i++) {
-        const currentDocketEntry = rawCase.docketEntries[i];
-        let docketEntryFiledByPractitioner = casePractitioners.some(
-          p => p.userId === currentDocketEntry.userId,
-        );
-
-        if (docketEntryFiledByPractitioner) {
-          docketEntriesEFiledByPractitioner.push(
-            currentDocketEntry.docketEntryId,
-          );
-        }
-      }
+    if (isAmendmentToABrief) {
+      isPublicDocumentType = filedAfterPolicyChange;
     }
 
-    return docketEntriesEFiledByPractitioner;
+    return !isPublicDocumentType;
   }
 
   static VALIDATION_RULES = {

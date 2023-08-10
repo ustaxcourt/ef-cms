@@ -45,7 +45,7 @@ These various terraform deployment will be explained in detail later in the foll
 │   ├── variables.tf // a definition of all variables of this terraform directory
 ```
 
-The `variables.tf` file is used to define the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessibility to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
+The `variables.tf` file is used to define the arguments needed to run terraform in order to successfully deploy the application.  These variables are then accessible to other sibling `.tf` files and can be referenced via `var.my_variable_name`, or interpolated in strings using `"testing-${var.my_variable_name}"`.  
 
 The `outputs.tf` is useful to understand because we often define certain outputs from modules that are pass around throughout the terraform code.  For example, assume the `outputs.tf` contains the following code:
 
@@ -64,7 +64,7 @@ module.my_module.puppeteer_layer_arn
 
 The `main.tf` usually just contains definitions for the `providers` and `terraform` setup.  
 
-> every .tf file inside a directory is considered part of the same module, so they all have access to the same resources and variables defined in sibiling .tf files.
+> every .tf file inside a directory is considered part of the same module, so they all have access to the same resources and variables defined in sibling .tf files.
 
 
 ### Web Api Terraform
@@ -121,13 +121,13 @@ Let's take a look at the directory structure to understand what we are doing:
 │   ├── dynamsoft.tf // code for deploying the dynamsoft instance to an EC2 server
 ├── main
 │   ├── main.tf // main entry file
-│   ├── setup_dynamsoft.sh // script for bootstraping the ec2 instance
+│   ├── setup_dynamsoft.sh // script for bootstrapping the ec2 instance
 └── ui // module for setting up the CloudFront and S3 buckets hosting the UI
     ├── frontend-public.tf // code for the public UI
     ├── frontend.tf // code for the private UI
 ```
 
-At this point, if you have a decent understanding of how the web-api terraform directory was setup, this web-client directory should be easier to understand.  All in all, this terraform deployment is responsibile for deploying and managing the following AWS resources:
+At this point, if you have a decent understanding of how the web-api terraform directory was setup, this web-client directory should be easier to understand.  All in all, this terraform deployment is responsible for deploying and managing the following AWS resources:
 
 - CloudFront for hosting our files on a CDN
 - S3 buckets for hosting our compiled public and private react app
@@ -367,15 +367,16 @@ Cancelling a Terraform run before it completes often results in a locked state f
 2. Switch to the correct environment using your AWS creds.
 3. Switch to the correct terraform version (example: `tfswitch 1.4.5`).
 4. Navigate to `main` directory of the deployed terraform at fault (example `web-api/terraform/main`).
-5. Edit the deploy-app.sh to comment out ONLY the terraform plan and apply commands (not `terraform init`).
+5. Edit the deploy-app.sh by commenting out both the terraform `plan` and `apply` commands (not `terraform init`).
 ```
 # terraform plan -out execution-plan
 # terraform apply -auto-approve execution-plan
 ```
-6. Set up terraform for the specific environment in question by running the deploy-app.sh script (this will eventually run the `terraform init` command)  (example: `../bin/deploy-app.sh "$ENV"`). (Be sure to have Docker Desktop running!)
-7. Determine the lock ID that needs to be unlocked (lockID).
-8. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
-9. Uncomment the `terraform plan` and `apply` commands.
+6. Start up Docker Desktop if you don't have it running already.
+7. Set up terraform for the specific environment in question by running the deploy-app.sh script (this will eventually run the `terraform init` command)  (example: `../bin/deploy-app.sh "$ENV"`). 
+8. Determine the lock ID that needs to be unlocked (lockID).
+9. Force unlock the state file by running `terraform force-unlock ${lockID}` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
+10. Uncomment the `terraform plan` and `apply` commands.
 
 ### Fixing Version Errors
 
