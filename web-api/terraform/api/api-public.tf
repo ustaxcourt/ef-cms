@@ -259,7 +259,7 @@ resource "aws_wafv2_web_acl_association" "api_public_association" {
 }
 
 resource "aws_route53_health_check" "status_health_check" {
-  fqdn               = substr(aws_api_gateway_stage.api_public_stage.invoke_url, 0, regex("[^/]+$", aws_api_gateway_stage.api_public_stage.invoke_url))
+  fqdn               = join(".", slice(split("/", aws_api_gateway_stage.api_public_stage.invoke_url), 3, 5))
   port               = 443
   type               = "HTTPS_STR_MATCH"
   resource_path      = "${var.environment}/public-api/cached-health"
