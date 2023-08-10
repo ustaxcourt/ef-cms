@@ -145,7 +145,9 @@ const appContextProxy = (initial = {}, makeMock = true) => {
   return makeMock ? jest.fn().mockReturnValue(proxied) : proxied;
 };
 
-export const createTestApplicationContext = ({ user } = {}) => {
+export const createTestApplicationContext = ({
+  user,
+}: { user?: User } = {}) => {
   const emptyAppContextProxy = appContextProxy();
 
   const mockGetPdfJsReturnValue = {
