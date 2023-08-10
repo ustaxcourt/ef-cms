@@ -65,6 +65,7 @@ describe('archiveDraftDocumentInteractor', () => {
             documentTitle: 'Order',
             documentType: 'Order',
             eventCode: 'O',
+            filedByRole: ROLES.docketClerk,
             isOnDocketRecord: false,
             signedAt: '2019-04-19T17:29:13.120Z',
             signedByUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3111',
