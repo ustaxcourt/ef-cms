@@ -92,7 +92,9 @@ export const docketClerkUser = {
   userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const docketClerk1User = {
+export const docketClerk1User: RawUser = {
+  email: 'docketclerk1@example.com',
+  entityName: 'User',
   name: 'Docketclerk1',
   role: ROLES.docketClerk,
   section: DOCKET_SECTION,

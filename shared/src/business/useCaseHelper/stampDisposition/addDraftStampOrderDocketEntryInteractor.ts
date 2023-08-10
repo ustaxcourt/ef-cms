@@ -91,10 +91,11 @@ export const addDraftStampOrderDocketEntry = async (
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       stampData: validatedStampData,
-      userId: user.userId,
     },
     { applicationContext },
   );
+
+  stampedDocketEntryEntity.setFiledBy(user);
 
   stampedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
 

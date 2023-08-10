@@ -2,6 +2,7 @@ import {
   CONTACT_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
+  ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
@@ -182,6 +183,7 @@ describe('updateCase', () => {
       documentType: 'Request for Place of Trial',
       eventCode: 'RQT',
       filedBy: 'Test Petitioner',
+      filedByRole: ROLES.petitioner,
       userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
     };
 

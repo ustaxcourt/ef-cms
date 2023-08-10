@@ -9,6 +9,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { Case, getOtherFilers } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
@@ -17,14 +18,13 @@ import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '../../errors/errors';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
+import { addCoverToPdf } from './addCoverToPdf';
 import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { calculateISODate } from '../utilities/DateHandler';
 import { docketClerkUser } from '../../test/mockUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 jest.mock('./addCoverToPdf');
-import { DocketEntry } from '../entities/DocketEntry';
-import { addCoverToPdf } from './addCoverToPdf';
-import { calculateISODate } from '../utilities/DateHandler';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;
@@ -634,6 +634,7 @@ describe('updatePetitionerInformationInteractor', () => {
               documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
               filedBy: 'Test Petitioner',
+              filedByRole: ROLES.petitioner,
               filingDate: '2018-03-01T05:00:00.000Z',
               index: 1,
               isFileAttached: true,

@@ -126,7 +126,7 @@ export const fileAndServeCourtIssuedDocument = async (
       status: true,
     });
 
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   let serviceResults;
 
   try {
@@ -168,10 +168,11 @@ export const fileAndServeCourtIssuedDocument = async (
             scenario: form.scenario,
             serviceStamp: form.serviceStamp,
             trialLocation: form.trialLocation,
-            userId: user.userId,
           },
           { applicationContext },
         );
+
+        docketEntryEntity.setFiledBy(user);
 
         const isSubjectCase =
           caseEntity.docketNumber === subjectCaseEntity.docketNumber;
