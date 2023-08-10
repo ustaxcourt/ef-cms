@@ -21,8 +21,8 @@ describe('unsignDocument', () => {
 
     docketEntry.unsignDocument();
 
-    expect(docketEntry.signedByUserId).toEqual(null);
-    expect(docketEntry.signedJudgeName).toEqual(null);
-    expect(docketEntry.signedAt).toEqual(null);
+    expect(docketEntry.signedByUserId).toBeUndefined();
+    expect(docketEntry.signedJudgeName).toBeUndefined();
+    expect(docketEntry.signedAt).toBeUndefined();
   });
 });

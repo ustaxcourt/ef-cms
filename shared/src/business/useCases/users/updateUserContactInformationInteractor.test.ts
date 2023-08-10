@@ -84,7 +84,7 @@ describe('updateUserContactInformationInteractor', () => {
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
     await updateUserContactInformationInteractor(applicationContext, {
-      contactInfo: {},
+      contactInfo: mockUser.contact,
       firmName: 'broken',
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
@@ -161,7 +161,7 @@ describe('updateUserContactInformationInteractor', () => {
         postalCode: '61234',
         state: 'IL',
       },
-      email: undefined,
+      email: mockUser.email,
       entityName: practitionerEntityName,
       isUpdatingInformation: true,
       name: 'Test IRS Practitioner',
