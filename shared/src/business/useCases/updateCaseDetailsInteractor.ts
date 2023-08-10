@@ -68,39 +68,41 @@ export const updateCaseDetails = async (
 
   if (oldCase.petitionPaymentStatus === PAYMENT_STATUS.UNPAID) {
     if (isPaid) {
-      newCaseEntity.addDocketEntry(
-        new DocketEntry(
-          {
-            documentTitle: 'Filing Fee Paid',
-            documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
-            eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
-            filingDate: newCaseEntity.petitionPaymentDate,
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            userId: user.userId,
-          },
-          { applicationContext },
-        ),
+      const filingFeePaidEntry = new DocketEntry(
+        {
+          documentTitle: 'Filing Fee Paid',
+          documentType: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeePaid.eventCode,
+          filingDate: newCaseEntity.petitionPaymentDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { applicationContext },
       );
+
+      filingFeePaidEntry.setFiledBy(user);
+
+      newCaseEntity.addDocketEntry(filingFeePaidEntry);
     } else if (isWaived) {
-      newCaseEntity.addDocketEntry(
-        new DocketEntry(
-          {
-            documentTitle: 'Filing Fee Waived',
-            documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
-            eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
-            filingDate: newCaseEntity.petitionPaymentWaivedDate,
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            userId: user.userId,
-          },
-          { applicationContext },
-        ),
+      const filingFeeWaivedEntry = new DocketEntry(
+        {
+          documentTitle: 'Filing Fee Waived',
+          documentType: MINUTE_ENTRIES_MAP.filingFeeWaived.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.filingFeeWaived.eventCode,
+          filingDate: newCaseEntity.petitionPaymentWaivedDate,
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { applicationContext },
       );
+
+      filingFeeWaivedEntry.setFiledBy(user);
+
+      newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
     }
   }
 

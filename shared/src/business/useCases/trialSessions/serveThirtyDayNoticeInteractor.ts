@@ -165,7 +165,7 @@ export const serveThirtyDayNoticeInteractor = async (
           newPdfDoc: paperServicePdf,
           noticePdf,
           onlyProSePetitioners: true,
-          userId: currentUser.userId,
+          user: currentUser,
         });
 
       await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

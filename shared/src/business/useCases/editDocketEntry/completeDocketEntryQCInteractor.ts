@@ -301,10 +301,11 @@ const completeDocketEntryQC = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToUpdate.petitioners },
     );
+
+    noticeUpdatedDocketEntry.setFiledBy(user);
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext
       .getUseCaseHelpers()

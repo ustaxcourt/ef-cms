@@ -111,10 +111,12 @@ export const fileCourtIssuedOrder = async (
       isDraft: true,
       isFileAttached: true,
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
     },
     { applicationContext },
   );
+
+  docketEntryEntity.setFiledBy(user);
+
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   caseEntity.addDocketEntry(docketEntryEntity);

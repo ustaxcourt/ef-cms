@@ -1,20 +1,9 @@
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../entities/EntityConstants';
 import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
-/**
- * setNoticeOfChangeOfTrialJudge
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.caseEntity the case data
- * @param {object} providers.currentTrialSession the old trial session data
- * @param {object} providers.newPdfDoc the new PDF contents to be appended
- * @param {object} providers.newTrialSessionEntity the new trial session data
- * @param {object} providers.userId the user ID
- */
 export const setNoticeOfChangeOfTrialJudge = async (
   applicationContext,
-  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, userId },
+  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, user },
 ) => {
   const priorJudgeTitleWithFullName = await getJudgeWithTitle({
     applicationContext,
@@ -53,6 +42,6 @@ export const setNoticeOfChangeOfTrialJudge = async (
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc,
       noticePdf,
-      userId,
+      user,
     });
 };

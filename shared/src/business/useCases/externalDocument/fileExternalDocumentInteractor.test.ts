@@ -43,6 +43,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
@@ -56,6 +57,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -64,6 +66,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -72,6 +75,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
@@ -204,6 +208,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
@@ -217,6 +222,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -225,6 +231,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -233,6 +240,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
