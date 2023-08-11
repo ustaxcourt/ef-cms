@@ -18,6 +18,6 @@ export const docketClerkRemovesSignatureFromUploadedCourtIssuedDocument =
         .getState('caseDetail.docketEntries')
         .find(d => d.docketEntryId === cerebralTest.docketEntryId);
 
-      expect(caseDocument.signedAt).toEqual(null);
+      expect(caseDocument.signedAt).toBeUndefined();
     });
   };
