@@ -49,7 +49,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes: 'testing',
         docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -64,7 +64,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes: 'testing',
         docketNumber: mockCase.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
       }),
     ).rejects.toThrow('The case is already calendared');
   });
@@ -80,7 +80,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       addCaseToTrialSessionInteractor(applicationContext, {
         calendarNotes: 'testing',
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
       }),
     ).rejects.toThrow('The case is already part of this trial session.');
   });
@@ -121,7 +121,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'Test',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     const caseWithCalendarNotes = applicationContext
@@ -142,7 +142,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     expect(
@@ -164,7 +164,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
     });
 
     expect(

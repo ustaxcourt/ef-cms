@@ -34,6 +34,14 @@ describe('acquireLock', () => {
     mockLock = undefined; // unlocked
   });
 
+  it('does not call persistence if no identifier is passed in', async () => {
+    mockCall.identifiers = undefined;
+    await acquireLock(mockCall);
+    expect(
+      applicationContext.getPersistenceGateway().getLock,
+    ).not.toHaveBeenCalled();
+  });
+
   it('gets the current lock from persistence for the given identifier', async () => {
     await acquireLock(mockCall);
     expect(
@@ -186,7 +194,7 @@ describe('acquireLock', () => {
         applicationContext.getPersistenceGateway().createLock,
       ).toHaveBeenCalledWith({
         applicationContext,
-        identifier: mockCall.identifiers[0],
+        identifier: mockCall.identifiers![0],
         ttl: 30,
       });
     });
