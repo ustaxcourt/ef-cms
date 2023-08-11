@@ -1,9 +1,9 @@
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import { Practitioner } from '../../entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 import { withLocking } from '../../useCaseHelper/acquireLock';
@@ -76,6 +76,10 @@ export const updatePractitionerUser = async (
   const oldUser = await applicationContext
     .getPersistenceGateway()
     .getPractitionerByBarNumber({ applicationContext, barNumber });
+
+  if (!oldUser) {
+    throw new NotFoundError('Could not find user');
+  }
 
   const userHasAccount = !!oldUser.email;
   const userIsUpdatingEmail = !!user.updatedEmail;
