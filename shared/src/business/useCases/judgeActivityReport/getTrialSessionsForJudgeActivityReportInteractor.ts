@@ -120,8 +120,8 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
   const trialSessionsHeldTotal = sum(Object.values(aggregatedSessionTypes));
 
   return {
-    results: aggregatedSessionTypes,
-    trialSessionsHeldTotal,
+    aggregations: aggregatedSessionTypes,
+    total: trialSessionsHeldTotal,
   };
 };
 

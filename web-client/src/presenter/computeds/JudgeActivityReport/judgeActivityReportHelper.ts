@@ -51,7 +51,7 @@ export const judgeActivityReportHelper = (
     resultsCount =
       orders.total +
       opinions.total +
-      trialSessions.trialSessionsHeldTotal +
+      trialSessions.total +
       casesClosedByJudge.total;
   } else {
     showSelectDateRangeText = true;
@@ -122,6 +122,6 @@ export const judgeActivityReportHelper = (
     showSelectDateRangeText,
     submittedAndCavCasesByJudge,
     today,
-    trialSessionsHeldTotal: trialSessions?.trialSessionsHeldTotal || 0,
+    trialSessionsHeldTotal: trialSessions?.total || 0,
   };
 };

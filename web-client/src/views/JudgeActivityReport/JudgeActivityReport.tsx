@@ -88,14 +88,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(judgeActivityReportData.trialSessions.results).map(
-              ([sessionStatus, count]) => (
-                <tr key={sessionStatus}>
-                  <td>{sessionStatus}</td>
-                  <td>{count}</td>
-                </tr>
-              ),
-            )}
+            {Object.entries(
+              judgeActivityReportData.trialSessions.aggregations,
+            ).map(([sessionStatus, count]) => (
+              <tr key={sessionStatus}>
+                <td>{sessionStatus}</td>
+                <td>{count}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>

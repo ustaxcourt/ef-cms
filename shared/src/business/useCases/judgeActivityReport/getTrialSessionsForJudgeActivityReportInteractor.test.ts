@@ -164,14 +164,14 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     );
 
     expect(opinions).toEqual({
-      results: {
+      aggregations: {
         Hybrid: 3, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
         'Motion/Hearing': 0.5, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
         Regular: 1,
         Small: 0.5, // .5 for each R/S/H that is a part of a swing session
         Special: 0,
       },
-      trialSessionsHeldTotal: 5,
+      total: 5,
     });
   });
 
@@ -184,14 +184,14 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     );
 
     expect(result).toEqual({
-      results: {
+      aggregations: {
         Hybrid: 6, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
         'Motion/Hearing': 1, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
         Regular: 2,
         Small: 1, // .5 for each R/S/H that is a part of a swing session
         Special: 0,
       },
-      trialSessionsHeldTotal: 10,
+      total: 10,
     });
   });
 });

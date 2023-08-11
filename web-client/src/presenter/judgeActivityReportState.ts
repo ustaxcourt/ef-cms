@@ -58,8 +58,8 @@ export type CasesClosedReturnType = {
 };
 
 export type TrialSessionReturnType = {
-  results: TrialSessionTypes;
-  trialSessionsHeldTotal: number;
+  aggregations: TrialSessionTypes;
+  total: number;
 };
 
 export type ConsolidatedCasesGroupCountMapResponseType = {
