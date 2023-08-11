@@ -64,7 +64,7 @@ export const searchQueryForAggregation = ({ params }) => {
 
   return {
     filter: documentFilter,
-    minimum_should_match: 1,
+    minimum_should_match: 1, // TODO: who should own this? helper or persistence?
     should: shouldFilter,
   };
 };
