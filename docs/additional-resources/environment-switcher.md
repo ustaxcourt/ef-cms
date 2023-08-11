@@ -54,7 +54,10 @@ For each deployed environment you wish to manage, you will need to create a `.en
     ```
     cp scripts/env/environments/example.env scripts/env/environments/myenv.env
     ```
-1. Open the new file and populate your DAWSON environment name (`ENV`). Be sure to set `AWS_PROFILE` to the **CLI profile name** from your SSO configuration.
+1. Open the new file and update your environment variables
+    - Populate your DAWSON environment name (`ENV`) (e.g., `test`). 
+    - Set `AWS_PROFILE` to the **CLI profile name** from your SSO configuration.
+    - Set the `AWS_ACCOUNT_ID` to where the environments are hosted. (e.g., if USTC, contact someone at USTC for this value)
 1. (Optional) Define any additional values used for local testing.
 
 ### Local Environment Setup
