@@ -7,12 +7,6 @@ if [ "${EXIT_CODE}" != "0" ]; then
   aws sso login
 fi
 
-AWS_ACCOUNT_ID=$(aws sts get-caller-identity --query "Account" --output text)
-EXIT_CODE="$?"
-if [ "${EXIT_CODE}" != "0" ]; then
-  echo "Unable to determine AWS_ACCOUNT_ID"
-  return 1
-fi
 
 # what role do we want to assume?
 AWS_ROLE_ARN="arn:aws:iam::${AWS_ACCOUNT_ID}:role/dawson_dev"
