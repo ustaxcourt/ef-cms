@@ -13,7 +13,6 @@ import { setJudgeActivityReportDataAction } from '@web-client/presenter/actions/
 import { setJudgeLastNamesAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeLastNamesAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
@@ -30,7 +29,6 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
       setValidationAlertErrorsAction,
     ],
     success: [
-      setWaitingForResponseAction,
       stopShowValidationAction,
       clearErrorAlertsAction,
       clearAlertsAction,
