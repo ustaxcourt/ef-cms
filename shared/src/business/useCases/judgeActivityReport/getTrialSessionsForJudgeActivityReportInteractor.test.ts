@@ -158,21 +158,24 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   });
 
   it('should return for each trial session type, the weighted count of sessions held in the date range for the judge provided', async () => {
-    const result = await getTrialSessionsForJudgeActivityReportInteractor(
+    const opinions = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
       mockValidRequest,
     );
 
-    expect(result).toEqual({
-      Hybrid: 3, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
-      'Motion/Hearing': 0.5, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
-      Regular: 1,
-      Small: 0.5, // .5 for each R/S/H that is a part of a swing session
-      Special: 0,
+    expect(opinions).toEqual({
+      results: {
+        Hybrid: 3, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
+        'Motion/Hearing': 0.5, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
+        Regular: 1,
+        Small: 0.5, // .5 for each R/S/H that is a part of a swing session
+        Special: 0,
+      },
+      trialSessionsHeldTotal: 5,
     });
   });
 
-  it('should return all trial session type, the weighted count of sessions held in the date range for all the judges', async () => {
+  it('should return ALL trial session types, the weighted count of sessions held in the date range for all the judges', async () => {
     mockValidRequest.judgeId = ID_FOR_ALL_JUDGES;
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
@@ -181,11 +184,14 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     );
 
     expect(result).toEqual({
-      Hybrid: 6, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
-      'Motion/Hearing': 1, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
-      Regular: 2,
-      Small: 1, // .5 for each R/S/H that is a part of a swing session
-      Special: 0,
+      results: {
+        Hybrid: 6, // .5 for swing hybrid, 1 for non-swing, .5 for swing hybrid small, 1 for non-swing hybrid small
+        'Motion/Hearing': 1, // .5 for each motion/hearing whose start date is within the date range AND session status is not new
+        Regular: 2,
+        Small: 1, // .5 for each R/S/H that is a part of a swing session
+        Special: 0,
+      },
+      trialSessionsHeldTotal: 10,
     });
   });
 });

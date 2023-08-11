@@ -1,4 +1,8 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  JudgeActivityReportFilters,
+  TrialSessionReturnType,
+} from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -8,21 +12,14 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../entities/EntityConstants';
+import { sum } from 'lodash';
 
 export const ID_FOR_ALL_JUDGES = 'judgeIdToRepresentAllJudgesSelection';
-export type JudgeActivityReportFilters = {
-  endDate: string;
-  startDate: string;
-  judgeName?: string;
-  judgeId?: string;
-  judges?: string[];
-  judgeNameToDisplayForHeader?: string;
-};
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
   { endDate, judgeId, startDate }: JudgeActivityReportFilters,
-) => {
+): Promise<TrialSessionReturnType> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -112,12 +109,19 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     isTypeOf(SESSION_TYPES.special)(session),
   ).length;
 
-  return {
+  const aggregatedSessionTypes = {
     [SESSION_TYPES.regular]: regularSwingSessions + regularNonSwingSessions,
     [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
     [SESSION_TYPES.hybrid]: hybridSwingSessions + hybridNonSwingSessions,
     [SESSION_TYPES.special]: specialSessions,
     [SESSION_TYPES.motionHearing]: motionHearingSessions,
+  };
+
+  const trialSessionsHeldTotal = sum(Object.values(aggregatedSessionTypes));
+
+  return {
+    results: aggregatedSessionTypes,
+    trialSessionsHeldTotal,
   };
 };
 
