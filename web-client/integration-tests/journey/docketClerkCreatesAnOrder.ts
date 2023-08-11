@@ -1,5 +1,5 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
@@ -38,6 +38,14 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('currentPage')).toBe('CreateOrder');
+
+    expect(cerebralTest.getState('featureFlags')).toMatchObject({
+      'consolidated-cases-add-docket-numbers': expect.anything(),
+      'consolidated-cases-group-access-petitioner': expect.anything(),
+      'document-visibility-policy-change-date': expect.anything(),
+      'e-consent-fields-enabled-feature-flag': expect.anything(),
+      'multi-docketable-paper-filings': expect.anything(),
+    });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'richText',

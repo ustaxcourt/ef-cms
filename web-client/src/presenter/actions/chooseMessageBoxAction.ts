@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Used for changing the message queue (my, section) and box (inbox, outbox, completed) from props

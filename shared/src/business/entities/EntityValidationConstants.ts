@@ -19,9 +19,10 @@ import {
   PARTIES_CODES,
   ROLES,
   SCENARIOS,
+  SYSTEM_ROLE,
 } from './EntityConstants';
-
 import { JoiValidationConstants } from './JoiValidationConstants';
+import { createEndOfDayISO } from '../utilities/DateHandler';
 
 export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
@@ -129,6 +130,15 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     .description(
       'The party who filed the document, either the petitioner or respondent on the case.',
     ),
+  filedByRole: joi
+    .when('isDraft', {
+      is: true,
+      otherwise: JoiValidationConstants.STRING.valid(
+        ...[...Object.values(ROLES), SYSTEM_ROLE],
+      ).required(),
+      then: joi.optional(),
+    })
+    .description('The role of the party who filed the document.'),
   filers: joi.when('servedAt', {
     is: joi.exist().not(null),
     otherwise: joi.array().items(JoiValidationConstants.UUID).optional(),
@@ -460,6 +470,26 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   section: JoiValidationConstants.STRING.required(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+};
+
+export const DATE_RANGE_VALIDATION_RULE_KEYS = {
+  endDate: joi.alternatives().conditional('startDate', {
+    is: JoiValidationConstants.ISO_DATE.exist().not(null),
+    otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+      .required()
+      .description('The end date search filter must be of valid date format'),
+    then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+      .min(joi.ref('startDate'))
+      .required()
+      .description(
+        'The end date search filter must be of valid date format and greater than or equal to the start date',
+      ),
+  }),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    ),
 };
 
 export const DOCKET_ENTRY_VALIDATION_RULES = joi

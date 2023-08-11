@@ -1,6 +1,3 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
-
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -9,8 +6,9 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-
 import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {
   getContactPrimary,
   getContactSecondary,
@@ -19,8 +17,10 @@ import {
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
 
-  const practitionerUser = {
-    barNumber: 'BN1234',
+  const practitionerUser: RawUser = {
+    barNumber: 'PT1234',
+    email: 'emmett@example.com',
+    entityName: 'User',
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: ROLES.privatePractitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -39,6 +39,7 @@ describe('associatePrivatePractitionerToCase', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           processingStatus: 'pending',
           userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
         },

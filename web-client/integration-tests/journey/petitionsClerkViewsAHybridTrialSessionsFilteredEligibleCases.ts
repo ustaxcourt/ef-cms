@@ -1,11 +1,11 @@
 import { formattedEligibleCasesHelper } from '../../src/presenter/computeds/formattedEligibleCasesHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases = (
   cerebralTest,
   expectedCount,
-  hybridFilter = null,
+  hybridFilter?: string,
 ) => {
   return it(`Petitions Clerk Views A Hybrid Trial Sessions with "${
     hybridFilter || 'All'

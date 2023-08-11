@@ -1,5 +1,3 @@
-import './uswds.scss';
-// leave this comment here: it prevents eslint from auto-sorting these in the wrong order
 import './index.scss';
 
 import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
@@ -45,6 +43,7 @@ import { faCaretRight } from '@fortawesome/free-solid-svg-icons/faCaretRight';
 import { faCaretUp } from '@fortawesome/free-solid-svg-icons/faCaretUp';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons/faCheckCircle';
+import { faChevronUp } from '@fortawesome/free-solid-svg-icons/faChevronUp';
 import { faCircle } from '@fortawesome/free-solid-svg-icons/faCircle';
 import { faClipboardList } from '@fortawesome/free-solid-svg-icons/faClipboardList';
 import { faClock as faClockSolid } from '@fortawesome/free-solid-svg-icons/faClock';
@@ -104,6 +103,7 @@ import { faStickyNote } from '@fortawesome/free-solid-svg-icons/faStickyNote';
 import { faStrikethrough } from '@fortawesome/free-solid-svg-icons/faStrikethrough';
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
+import { faTimes } from '@fortawesome/free-solid-svg-icons/faTimes';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
 import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
@@ -197,6 +197,7 @@ const app = {
       faExchangeAlt,
       faCalculator,
       faCalendarAlt,
+      faTimes,
       faCalendarCheck,
       faCalendarPlus,
       faCaretDown,
@@ -280,6 +281,7 @@ const app = {
       faUserCheck,
       faUserFriends,
       faWrench,
+      faChevronUp,
     );
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.router = {

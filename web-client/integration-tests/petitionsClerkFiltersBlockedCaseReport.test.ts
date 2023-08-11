@@ -4,7 +4,7 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const blockedCasesReportHelper = withAppContextDecorator(
@@ -20,10 +20,8 @@ const createAndBlockCase = (
 ) => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      procedureType,
-      trialLocation,
-    },
+    procedureType,
+    trialLocation,
   });
   it('track the docket number', () => {
     blockedCases.push({
@@ -41,11 +39,8 @@ const createAndBlockCase = (
 
 describe('Blocking a Case', () => {
   const cerebralTest = setupTest();
-  const blockedCases = [];
 
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
+  const blockedCases = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

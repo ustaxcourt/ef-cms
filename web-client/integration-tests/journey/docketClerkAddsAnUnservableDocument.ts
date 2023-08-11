@@ -3,7 +3,7 @@ import { addCourtIssuedDocketEntryHelper } from '../../src/presenter/computeds/a
 import { caseDetailHeaderHelper } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { caseDetailSubnavHelper } from '../../src/presenter/computeds/caseDetailSubnavHelper';
 import { refreshElasticsearchIndex } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsAnUnservableDocument = cerebralTest => {

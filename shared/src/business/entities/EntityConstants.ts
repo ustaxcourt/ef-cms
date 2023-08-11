@@ -26,6 +26,13 @@ export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
+export const LEGACY_DOCUMENT_TYPES = [
+  {
+    documentType: 'Designation of Counsel to Receive Service',
+    eventCode: 'DSC',
+  },
+];
+
 // city, state, optional unique ID (generated automatically in testing files)
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -40,12 +47,16 @@ export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
-};
+} as const;
+const TRIAL_PROCEEDINGS = Object.values(TRIAL_SESSION_PROCEEDING_TYPES);
+export type TrialSessionProceedingType = (typeof TRIAL_PROCEEDINGS)[number];
 
 export const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
-};
+} as const;
+const TRIAL_SESSION_SCOPES = Object.values(TRIAL_SESSION_SCOPE_TYPES);
+export type TrialSessionScope = (typeof TRIAL_SESSION_SCOPES)[number];
 
 export const JURISDICTIONAL_OPTIONS = {
   restoredToDocket: 'The case is restored to the general docket',
@@ -77,28 +88,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
     key: 'consolidated-cases-group-access-petitioner',
   },
+  DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
+    key: 'document-visibility-policy-change-date',
+  },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
-  },
-  EXTERNAL_OPINION_SEARCH: {
-    disabledMessage:
-      'Opinion search has been temporarily disabled. Please try again later.',
-    key: 'external-opinion-search-enabled',
-  },
-  EXTERNAL_ORDER_SEARCH: {
-    disabledMessage:
-      'Order search has been temporarily disabled. Please try again later.',
-    key: 'external-order-search-enabled',
-  },
-  INTERNAL_OPINION_SEARCH: {
-    disabledMessage:
-      'Opinion search has been temporarily disabled. Please try again later.',
-    key: 'internal-opinion-search-enabled',
-  },
-  INTERNAL_ORDER_SEARCH: {
-    disabledMessage:
-      'Order search has been temporarily disabled. Please try again later.',
-    key: 'internal-order-search-enabled',
   },
   MULTI_DOCKETABLE_PAPER_FILINGS: {
     disabledMessage:
@@ -111,6 +105,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
+  },
+  USE_EXTERNAL_PDF_GENERATION: {
+    disabledMessage:
+      'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
+    key: 'use-external-pdf-generation',
   },
 };
 
@@ -186,7 +185,9 @@ export const CASE_STATUS_TYPES = {
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
-};
+} as const;
+export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
+export type CaseStatus = (typeof CASE_STATUSES)[number];
 
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
@@ -203,6 +204,8 @@ export const DOCUMENT_RELATIONSHIPS = {
 
 export const DOCUMENT_SERVED_MESSAGES = {
   ENTRY_ADDED: 'Your entry has been added to the docket record.',
+  EXTERNAL_ENTRY_ADDED:
+    'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
 };
@@ -427,6 +430,35 @@ export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const SERIATIM_DOCUMENT_EVENT_CODES = [
+  ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const BRIEF_EVENTCODES = [
+  ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+  ...SERIATIM_DOCUMENT_EVENT_CODES,
+];
+
+export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
+export const SIGNED_DOCUMENT_TYPES = {
+  signedStipulatedDecision: {
+    documentType: 'Stipulated Decision',
+    eventCode: 'SDEC',
+  },
+};
+
+export const POLICY_DATE_IMPACTED_EVENTCODES = [
+  ...BRIEF_EVENTCODES,
+  AMICUS_BRIEF_EVENT_CODE,
+  SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+  ...AMENDMENT_EVENT_CODES,
+  'REDC',
+  'SPML',
+  'SUPM',
+];
+
 export const SCENARIOS = [
   'Standard',
   'Nonstandard A',
@@ -542,6 +574,10 @@ export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
   DOCKET_RECORD_FILTER_OPTIONS,
   ['exhibits'],
 );
+export const FILTER_OPTIONS = Object.values(
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+);
+export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
 // TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
@@ -624,12 +660,11 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 );
 
-export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
-
 export const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   ...COURT_ISSUED_EVENT_CODES.filter(d => d.isOrder || d.isOpinion).map(
     d => d.eventCode,
   ),
+  ...POLICY_DATE_IMPACTED_EVENTCODES,
   'DEC',
   'ODL',
   'SPTN',
@@ -769,13 +804,6 @@ export const STIPULATED_DECISION_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Stipulated Decision',
 ).eventCode;
 
-export const SIGNED_DOCUMENT_TYPES = {
-  signedStipulatedDecision: {
-    documentType: 'Stipulated Decision',
-    eventCode: 'SDEC',
-  },
-};
-
 export const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
   {
     documentType: 'Entry of Appearance',
@@ -892,6 +920,8 @@ export const AUTOMATIC_BLOCKED_REASONS = {
   pendingAndDueDate: 'Pending Item and Due Date',
 };
 
+export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
   deficiency: 'Deficiency',
@@ -907,9 +937,10 @@ export const CASE_TYPES_MAP = {
   passport: 'Passport',
   whistleblower: 'Whistleblower',
   workerClassification: 'Worker Classification',
-};
+} as const;
 
 export const CASE_TYPES = Object.values(CASE_TYPES_MAP);
+export type CaseType = (typeof CASE_TYPES)[number];
 
 export const CASE_TYPE_DESCRIPTIONS_WITH_IRS_NOTICE = {
   [CASE_TYPES_MAP.deficiency]: 'Notice of Deficiency',
@@ -971,6 +1002,10 @@ export const ROLES = {
   trialClerk: 'trialclerk',
 };
 
+// this isn't a real role someone can login with, which is why
+// it's a separate constant.
+export const SYSTEM_ROLE = 'System';
+
 export const FILING_TYPES = {
   [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
   [ROLES.privatePractitioner]: [
@@ -988,7 +1023,9 @@ export const ANSWER_CUTOFF_UNIT = 'day';
 export const COUNTRY_TYPES = {
   DOMESTIC: 'domestic',
   INTERNATIONAL: 'international',
-};
+} as const;
+const CountryTypesArray = Object.values(COUNTRY_TYPES);
+export type CountryTypes = (typeof CountryTypesArray)[number];
 
 export const US_STATES = {
   AK: 'Alaska',
@@ -1084,7 +1121,9 @@ export const PARTY_TYPES = {
   survivingSpouse: 'Surviving spouse',
   transferee: 'Transferee',
   trust: 'Trust',
-};
+} as const;
+const partyTypeArray = Object.values(PARTY_TYPES);
+export type PartyType = (typeof partyTypeArray)[number];
 
 export const BUSINESS_TYPES = {
   corporation: PARTY_TYPES.corporation,
@@ -1249,7 +1288,9 @@ export const SESSION_TYPES = {
   hybridSmall: 'Hybrid-S',
   special: 'Special',
   motionHearing: 'Motion/Hearing',
-};
+} as const;
+const TRIAL_SESSION_TYPES = Object.values(SESSION_TYPES);
+export type TrialSessionTypes = (typeof TRIAL_SESSION_TYPES)[number];
 
 export const HYBRID_SESSION_TYPES = pick(SESSION_TYPES, [
   'hybrid',
@@ -1507,3 +1548,12 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const isDocumentBriefType = (documentType: string) => {
+  const documents = [
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+  ];
+  return !!documents.find(document => document.documentType === documentType)
+    ?.eventCode;
+};

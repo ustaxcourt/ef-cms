@@ -1,6 +1,6 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { scanHelper as scanHelperComputed } from './scanHelper';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 

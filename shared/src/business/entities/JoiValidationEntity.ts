@@ -76,7 +76,7 @@ function getFormattedValidationErrorsHelper(entity) {
  *
  * @returns {object} the formatted errors
  */
-function getFormattedValidationErrors(entity) {
+function getFormattedValidationErrors(entity): Record<string, any> | null {
   const keys = Object.keys(entity);
   const obj = {};
   let errors = null;
@@ -123,24 +123,18 @@ function getFormattedValidationErrors(entity) {
 
 export abstract class JoiValidationEntity {
   public entityName: string;
-  private schema: any;
 
   constructor(entityName: string) {
     this.entityName = entityName;
-    const rules = this.getValidationRules();
-
-    Object.defineProperty(this, 'schema', {
-      enumerable: false,
-      value: rules.validate ? rules : joi.object().keys(rules),
-      writable: true,
-    });
   }
 
   abstract getValidationRules(): any;
   abstract getErrorToMessageMap(): any;
 
   getValidationErrors() {
-    const { error } = this.schema.validate(this, {
+    const rules = this.getValidationRules();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });
@@ -208,7 +202,9 @@ export abstract class JoiValidationEntity {
   }
 
   validateForMigration() {
-    let { error } = this.schema.validate(this, {
+    const rules = this.getValidationRules();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    let { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });

@@ -1,6 +1,6 @@
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const supportingDocumentFreeTextTypes = [
   'Affidavit in Support',
@@ -10,7 +10,12 @@ export const supportingDocumentFreeTextTypes = [
 
 export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
-export const fileDocumentHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const fileDocumentHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     ALLOWLIST_FEATURE_FLAGS,
     AMENDMENT_EVENT_CODES,
@@ -49,30 +54,6 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
 
-  const selectedCasesMap = (form.selectedCases || []).reduce(
-    (acc, docketNumber) => {
-      acc[docketNumber] = true;
-      return acc;
-    },
-    {},
-  );
-
-  const { formattedSelectedCasesAsCase, selectedCasesAsCase } =
-    getFormattedSelectedCasesAsCase({
-      applicationContext,
-      cases: caseDetail.consolidatedCases || [],
-      selectedCasesMap,
-    });
-
-  const selectedDocketNumbers = get(state.form.selectedCases);
-  const formattedDocketNumbers =
-    (selectedDocketNumbers &&
-      getFormattedDocketNumbers({
-        applicationContext,
-        selectedDocketNumbers,
-      })) ||
-    null;
-
   const { primaryDocument, secondaryDocument } = getPrimarySecondaryDocuments({
     AMENDMENT_EVENT_CODES,
     CATEGORY_MAP,
@@ -100,18 +81,14 @@ export const fileDocumentHelper = (get, applicationContext) => {
 
   const exported = {
     certificateOfServiceDateFormatted,
-    formattedDocketNumbers,
     formattedFilingParties,
-    formattedSelectedCasesAsCase,
     isSecondaryDocumentUploadOptional:
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument,
     redactionAcknowledgementEnabled,
     secondaryDocument,
-    selectedCasesAsCase,
     showFilingIncludes,
-    showMultiDocumentFilingPartyForm: !!form.selectedCases,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
     supportingDocumentTypeList,
     ...showSecondaryProperties,
@@ -224,56 +201,6 @@ const getPrimarySecondaryDocuments = ({
     },
   };
   return primarySecondaryDocuments;
-};
-
-const getFormattedSelectedCasesAsCase = ({
-  applicationContext,
-  cases = [],
-  selectedCasesMap,
-}) => {
-  const { formatCase } = applicationContext.getUtilities();
-  const { PARTY_TYPES } = applicationContext.getConstants();
-
-  const selectedCasesAsCase = cases
-    .reduce((acc, consolidatedCase) => {
-      if (selectedCasesMap[consolidatedCase.docketNumber]) {
-        acc.push({ ...consolidatedCase });
-      }
-      return acc;
-    }, [])
-    .map(consolidatedCase => {
-      consolidatedCase.showSecondaryParty =
-        consolidatedCase.partyType === PARTY_TYPES.petitionerSpouse ||
-        consolidatedCase.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
-      return consolidatedCase;
-    });
-  const formattedSelectedCasesAsCase = selectedCasesAsCase.map(selectedCase =>
-    formatCase(applicationContext, selectedCase),
-  );
-  return {
-    formattedSelectedCasesAsCase,
-    selectedCasesAsCase,
-  };
-};
-
-const getFormattedDocketNumbers = ({
-  applicationContext,
-  selectedDocketNumbers,
-}) => {
-  const sortedDocketNumbers = selectedDocketNumbers
-    .map(docketNumber => ({
-      // convert to Case entity-like object to use entity method
-      docketNumber,
-    }))
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
-    .map(({ docketNumber }) => docketNumber);
-
-  const formattedDocketNumbers = [
-    sortedDocketNumbers.slice(0, -1).join(', '),
-    sortedDocketNumbers.slice(-1)[0],
-  ].join(sortedDocketNumbers.length < 2 ? '' : ' & ');
-
-  return formattedDocketNumbers;
 };
 
 const getFormattedSupportingDocument = ({ applicationContext, item }) => {

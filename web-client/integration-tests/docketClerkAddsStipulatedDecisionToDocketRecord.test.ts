@@ -53,7 +53,7 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
   });
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
-  it('unassociated privatePractitioner views Stipulated Decision on docket record', async () => {
+  it('unassociated privatePractitioner views Stipulated Decision on docket record after policy change date', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
     const stipulatedDecisionDocument =
@@ -61,6 +61,6 @@ describe('Docket Clerk Adds Stipulated Decision to Docket Record', () => {
         document => document.eventCode === STIPULATED_DECISION_EVENT_CODE,
       );
 
-    expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(false);
+    expect(stipulatedDecisionDocument.showLinkToDocument).toEqual(true);
   });
 });

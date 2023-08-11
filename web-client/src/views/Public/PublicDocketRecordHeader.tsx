@@ -1,27 +1,43 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
+import { PUBLIC_DOCKET_RECORD_FILTER } from '../../../../shared/src/business/entities/EntityConstants';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app-public.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
+interface IPublicDocketRecordHeaderProps {
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS: PUBLIC_DOCKET_RECORD_FILTER;
+  docketNumber: string;
+  gotoPublicPrintableDocketRecordSequence: (props: {
+    docketNumber: string;
+  }) => void;
+  publicCaseDetailHelper: IPublicCaseDetailHelper;
+  showModal: string;
+}
+
+const props: IPublicDocketRecordHeaderProps = {
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
+    state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+  docketNumber: state.caseDetail.docketNumber,
+  gotoPublicPrintableDocketRecordSequence:
+    sequences.gotoPublicPrintableDocketRecordSequence,
+  publicCaseDetailHelper:
+    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
+  showModal: state.modal.showModal,
+};
+
 export const PublicDocketRecordHeader = connect(
-  {
-    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
-      state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
-    docketNumber: state.caseDetail.docketNumber,
-    gotoPublicPrintableDocketRecordSequence:
-      sequences.gotoPublicPrintableDocketRecordSequence,
-    publicCaseDetailHelper: state.publicCaseDetailHelper,
-    showModal: state.modal.showModal,
-  },
-  function PublicDocketRecordHeader({
+  props,
+  function ({
     docketNumber,
     gotoPublicPrintableDocketRecordSequence,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
     showModal,
-  }) {
+  }: typeof props) {
     return (
       <React.Fragment>
         <div className="title">
@@ -33,9 +49,7 @@ export const PublicDocketRecordHeader = connect(
               icon="print"
               id="printable-docket-record-button"
               onClick={() => {
-                gotoPublicPrintableDocketRecordSequence({
-                  docketNumber,
-                });
+                gotoPublicPrintableDocketRecordSequence({ docketNumber });
               }}
             >
               Printable Docket Record

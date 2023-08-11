@@ -3,6 +3,7 @@ import {
   ADVANCED_SEARCH_OPINION_TYPES_LIST,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -18,6 +19,7 @@ import {
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
@@ -45,20 +47,22 @@ import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/
 import {
   createISODateString,
   formatDateString,
+  formatNow,
+  prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import {
   formatDocketEntry,
   sortDocketEntries,
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
+import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
-import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
-import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
@@ -71,9 +75,9 @@ import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTo
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
-import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
-import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
@@ -90,12 +94,12 @@ const ADVANCED_SEARCH_TABS = {
 const allUseCases = {
   casePublicSearchInteractor,
   generatePublicDocketRecordPdfInteractor,
+  getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
-  getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
   getItemInteractor,
   getMaintenanceModePublicInteractor,
@@ -118,6 +122,7 @@ const frozenConstants = deepFreeze({
   ADVANCED_SEARCH_TABS,
   ALLOWLIST_FEATURE_FLAGS,
   BENCH_OPINION_EVENT_CODE,
+  BRIEF_EVENTCODES,
   CASE_CAPTION_POSTFIX,
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
@@ -134,6 +139,7 @@ const frozenConstants = deepFreeze({
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   ORDER_EVENT_CODES,
+  POLICY_DATE_IMPACTED_EVENTCODES,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   STIPULATED_DECISION_EVENT_CODE,
   TODAYS_ORDERS_SORT_DEFAULT,
@@ -191,6 +197,7 @@ const applicationContextPublic = {
       createISODateString,
       formatDateString,
       formatDocketEntry,
+      formatNow,
       getContactPrimary,
       getContactSecondary,
       getDescriptionDisplay,
@@ -199,6 +206,7 @@ const applicationContextPublic = {
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       openUrlInNewTab,
+      prepareDateFromString,
       sortDocketEntries,
     };
   },

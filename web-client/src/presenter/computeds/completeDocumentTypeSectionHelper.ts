@@ -4,9 +4,14 @@ import {
 } from './internalTypesHelper';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const completeDocumentTypeSectionHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
@@ -15,10 +20,17 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
   if (isEmpty(caseDetail)) {
     return {};
   }
-  const { CATEGORY_MAP, NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES } =
-    applicationContext.getConstants();
+  const {
+    CATEGORY_MAP,
+    LEGACY_DOCUMENT_TYPES,
+    NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  } = applicationContext.getConstants();
   const searchText = get(state.screenMetadata.searchText) || '';
   const documentTypesForSelect = getDocumentTypesForSelect(CATEGORY_MAP);
+
+  const legacyDocumentCodes = LEGACY_DOCUMENT_TYPES.map(
+    value => value.eventCode,
+  );
 
   returnData.documentTypesForSelectSorted = documentTypesForSelect
     .sort(getSortFunction(searchText))
@@ -26,7 +38,7 @@ export const completeDocumentTypeSectionHelper = (get, applicationContext) => {
       docType =>
         !NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES.includes(
           docType.eventCode,
-        ),
+        ) && legacyDocumentCodes.indexOf(docType.eventCode) === -1,
     );
   returnData.documentTypesForSecondarySelectSorted =
     returnData.documentTypesForSelectSorted.filter(

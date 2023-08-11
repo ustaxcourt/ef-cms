@@ -1,6 +1,6 @@
 import { incrementPendingItemsPageAction } from './incrementPendingItemsPageAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('incrementPendingItemsPageAction', () => {
   it('should increment current page to 1 if page is not defined', async () => {

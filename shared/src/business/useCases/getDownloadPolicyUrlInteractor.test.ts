@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
@@ -359,6 +360,46 @@ describe('getDownloadPolicyUrlInteractor', () => {
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });
+
+    it('should NOT throw an error when the document requested is a brief', async () => {
+      const briefDocketEntryId = 'abb81f4d-1e47-423a-8caf-6d2fdc3d3859';
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              createdAt: '2009-11-21T20:49:28.192Z',
+              docketEntryId: briefDocketEntryId,
+              docketNumber: '101-18',
+              documentTitle: 'Simultaneous Opening Brief',
+              documentType: 'Simultaneous Opening Brief',
+              draftOrderState: {},
+              entityName: 'DocketEntry',
+              eventCode: 'SIOB',
+              filedBy: 'Test Petitioner',
+              filers: [],
+              filingDate: '2009-03-01T05:00:00.000Z',
+              index: 6,
+              isFileAttached: true,
+              isMinuteEntry: false,
+              isOnDocketRecord: true,
+              pending: false,
+              processingStatus: 'complete',
+              receivedAt: '2009-03-01T05:00:00.000Z',
+              stampData: {},
+              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+            },
+          ],
+        });
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: briefDocketEntryId,
+      });
+
+      expect(url).toEqual('localhost');
+    });
   });
 
   describe('when the user is a private practitioner not associated with case', () => {
@@ -401,23 +442,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
           key: baseDocketEntry.docketEntryId,
         }),
       ).resolves.toBeDefined();
-    });
-
-    it('should throw an error when the document being viewed is a served Stipulated Decision', async () => {
-      mockCase.docketEntries[0] = {
-        ...baseDocketEntry,
-        documentType: 'Stipulated Decision',
-        eventCode: STIPULATED_DECISION_EVENT_CODE,
-        isOnDocketRecord: true,
-        servedAt: applicationContext.getUtilities().createISODateString(),
-      };
-
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time');
     });
   });
 
@@ -732,7 +756,10 @@ describe('getDownloadPolicyUrlInteractor', () => {
     it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockReturnValue({
+          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+            .key]: true,
+        });
 
       applicationContext
         .getPersistenceGateway()

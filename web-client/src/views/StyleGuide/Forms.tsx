@@ -121,7 +121,7 @@ export const Forms = () => (
             Dropdown label
           </label>
           <select className="usa-select" id="options">
-            <option value>- Select -</option>
+            <option>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
@@ -132,7 +132,7 @@ export const Forms = () => (
             Dropdown label (disabled)
           </label>
           <select disabled className="usa-select" id="options-disabled">
-            <option value>- Select -</option>
+            <option>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
@@ -151,6 +151,7 @@ export const Forms = () => (
               { label: 'Carrots (CA)', value: 'CA' },
               { label: 'Baccarat (B)', value: 'B' },
             ]}
+            onChange={() => {}}
           />
         </div>
 
@@ -159,7 +160,7 @@ export const Forms = () => (
             Dropdown label with error
           </label>
           <select className="usa-select usa-select--error" id="options-error">
-            <option value>- Select -</option>
+            <option>- Select -</option>
             <option value="value1">Option A</option>
             <option value="value2">Option B</option>
             <option value="value3">Option C</option>
@@ -381,7 +382,7 @@ export const Forms = () => (
                   State
                 </label>
                 <select className="usa-select" id="state" name="state">
-                  <option value>- Select -</option>
+                  <option>- Select -</option>
                   <option value="AL">Alabama</option>
                   <option value="AK">Alaska</option>
                 </select>

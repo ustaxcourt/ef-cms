@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-public';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOrderAdvancedSearchAction } from './submitPublicOrderAdvancedSearchAction';
 
 describe('submitPublicOrderAdvancedSearchAction', () => {

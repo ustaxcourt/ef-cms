@@ -58,11 +58,12 @@ export const addPaperFilingInteractor = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
-  const isCaseConsolidationFeatureOn = await applicationContext
+  const featureFlags = await applicationContext
     .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key,
-    });
+    .getAllFeatureFlagsInteractor(applicationContext);
+
+  const isCaseConsolidationFeatureOn =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key];
 
   if (!isCaseConsolidationFeatureOn || isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
@@ -83,7 +84,7 @@ export const addPaperFilingInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities = [];
+  let caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
@@ -107,12 +108,13 @@ export const addPaperFilingInteractor = async (
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    const servedParties = aggregatePartiesForService(caseEntity);
+    docketEntryEntity.setFiledBy(user);
+
+    const servedParties: any = aggregatePartiesForService(caseEntity);
 
     if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
@@ -171,6 +173,7 @@ export const addPaperFilingInteractor = async (
         .countPagesInDocument({
           applicationContext,
           docketEntryId,
+          documentBytes: undefined,
         });
     }
 
@@ -200,6 +203,7 @@ export const addPaperFilingInteractor = async (
         applicationContext,
         caseEntities,
         docketEntryId,
+        stampedPdf: undefined,
       });
 
     paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;

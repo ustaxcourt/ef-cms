@@ -1,17 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-} = require('../EntityConstants');
-const { CaseExternal } = require('./CaseExternal');
-const { ContactFactory } = require('../contacts/ContactFactory');
-
-const contactErrorMessages =
-  ContactFactory.INTERNATIONAL_VALIDATION_ERROR_MESSAGES;
+} from '../EntityConstants';
+import { CaseExternal } from './CaseExternal';
+import { Contact } from '../contacts/Contact';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
   describe('for (international) Contacts', () => {
@@ -47,7 +42,12 @@ describe('CaseExternal', () => {
         { applicationContext },
       );
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
-        petitioners: [{ country: contactErrorMessages.country, index: 0 }],
+        petitioners: [
+          {
+            country: Contact.INTERNATIONAL_VALIDATION_MESSAGES.country,
+            index: 0,
+          },
+        ],
       });
     });
 

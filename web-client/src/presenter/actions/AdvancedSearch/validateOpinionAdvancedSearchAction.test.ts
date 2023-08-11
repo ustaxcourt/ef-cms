@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateOpinionAdvancedSearchAction } from './validateOpinionAdvancedSearchAction';
 
 describe('validateOpinionAdvancedSearchAction', () => {
@@ -15,9 +15,9 @@ describe('validateOpinionAdvancedSearchAction', () => {
       error: errorStub,
       success: successStub,
     };
-  });
 
-  presenter.providers.applicationContext = applicationContext;
+    presenter.providers.applicationContext = applicationContext;
+  });
 
   it('validates advanced opinion search successfully', async () => {
     applicationContext
@@ -97,7 +97,7 @@ describe('validateOpinionAdvancedSearchAction', () => {
 
     expect(
       applicationContext.getUseCases().validateOpinionAdvancedSearchInteractor
-        .mock.calls[0][1].opinionSearch,
+        .mock.calls[0][0].opinionSearch,
     ).toMatchObject({ opinionTypes: ['Cucumber', 'Mango'] });
   });
 });

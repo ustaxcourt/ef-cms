@@ -25,6 +25,7 @@ describe('strikeDocketEntryInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           index: 1,
           isOnDocketRecord: true,
           userId: mockUserId,

@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../../support/login-types';
 import {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -8,7 +9,6 @@ import {
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
 } from '../support/pages/case-detail';
-
 import {
   completeWizardStep1,
   completeWizardStep2,
@@ -25,7 +25,6 @@ import {
   hasIrsNotice,
   submitPetition,
 } from '../support/pages/create-electronic-petition';
-
 import {
   createTrialSession,
   goToCreateTrialSession,
@@ -35,7 +34,6 @@ import {
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
 } from '../support/pages/trial-sessions';
-
 import { faker } from '@faker-js/faker';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
 import {
@@ -46,45 +44,50 @@ import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-faker.seed(faker.datatype.number());
+faker.seed(faker.number.int());
 
-let docketClerkToken = null;
-let petitionsClerkToken = null;
+let docketClerkToken: string;
+let petitionsClerkToken: string;
 const testData = {
   preferredTrialCity: 'Mobile, Alabama',
   trialSessionIds: [],
 };
+const { login } = getEnvironmentSpecificFunctions();
 
 let firstDocketNumber;
 let secondDocketNumber;
 const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
-  const { getUserToken, login } = getEnvironmentSpecificFunctions();
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      petitionsClerkToken = result.AuthenticationResult.IdToken;
+    });
+  });
 
-  before(async () => {
-    let result = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    petitionsClerkToken = result.AuthenticationResult.IdToken;
-    result = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    docketClerkToken = result.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      docketClerkToken = result.AuthenticationResult.IdToken;
+    });
   });
 
   describe('Petitioner creates cases', () => {
     let petitionerToken;
 
     describe('Petitioner', () => {
-      before(async () => {
-        const results = await getUserToken(
-          'petitioner1@example.com',
-          DEFAULT_ACCOUNT_PASS,
-        );
-        petitionerToken = results.AuthenticationResult.IdToken;
+      before(() => {
+        cy.task<AuthenticationResult>('getUserToken', {
+          email: 'petitioner1@example.com',
+          password: DEFAULT_ACCOUNT_PASS,
+        }).then(result => {
+          petitionerToken = result.AuthenticationResult.IdToken;
+        });
       });
 
       it('should be able to login', () => {
@@ -108,7 +111,7 @@ describe('Petitions Clerk', () => {
           goToWizardStep3();
           completeWizardStep3(
             filingTypes.INDIVIDUAL,
-            `${faker.name.firstName()} ${faker.name.lastName()}`,
+            `${faker.person.firstName()} ${faker.person.lastName()}`,
           );
           goToWizardStep4();
           completeWizardStep4();
@@ -139,7 +142,7 @@ describe('Petitions Clerk', () => {
           goToWizardStep3();
           completeWizardStep3(
             filingTypes.INDIVIDUAL,
-            `${faker.name.firstName()} ${faker.name.lastName()}`,
+            `${faker.person.firstName()} ${faker.person.lastName()}`,
           );
           goToWizardStep4();
           completeWizardStep4();

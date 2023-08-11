@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validate the case or session note
@@ -18,7 +18,7 @@ export const validateUserContactAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateUserContactInteractor(applicationContext, {
+    .validateUserContactInteractor({
       user: {
         ...currentUser,
         contact: formContact.contact,

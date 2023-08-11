@@ -1,5 +1,5 @@
 import { clearModalStateAction } from './clearModalStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearModalStateAction', () => {
   it('should clear the value of state.modal', async () => {

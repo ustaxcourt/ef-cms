@@ -7,22 +7,18 @@ import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('Adds automatic block case to trial', () => {
-  beforeAll(() => {
-    jest.setTimeout(50000);
-  });
+  const cerebralTest = setupTest();
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+  const caseDetailHeaderHelper = withAppContextDecorator(
+    caseDetailHeaderHelperComputed,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -34,7 +30,7 @@ describe('Adds automatic block case to trial', () => {
   };
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, { overrides: { trialLocation } });
+  petitionsClerkCreatesNewCase(cerebralTest, { trialLocation });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);

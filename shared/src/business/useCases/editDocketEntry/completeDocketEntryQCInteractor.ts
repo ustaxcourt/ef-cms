@@ -23,7 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
+import { withLocking } from '../../../../../web-api/src/persistence/dynamo/locks/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -53,7 +53,6 @@ export const needsNewCoversheet = ({
 
 /**
  * completeDocketEntryQCInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.entryMetadata the entry metadata
@@ -140,7 +139,6 @@ const completeDocketEntryQC = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      userId: user.userId,
       workItem: {
         ...currentDocketEntry.workItem,
         leadDocketNumber,
@@ -303,10 +301,11 @@ const completeDocketEntryQC = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToUpdate.petitioners },
     );
+
+    noticeUpdatedDocketEntry.setFiledBy(user);
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext
       .getUseCaseHelpers()

@@ -1,12 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-  CLOSED_CASE_STATUSES,
-} = require('../EntityConstants');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { CASE_STATUS_TYPES, CLOSED_CASE_STATUSES } from '../EntityConstants';
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('isClosed', () => {
   it(`should return false when the case status is NOT one of ${CLOSED_CASE_STATUSES}`, () => {

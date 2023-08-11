@@ -1,36 +1,36 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
   ROLES,
-} = require('../EntityConstants');
-const { CaseInternal } = require('./CaseInternal');
-const { Correspondence } = require('../Correspondence');
-const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
+} from '../EntityConstants';
+import { CaseInternal } from './CaseInternal';
+import { Correspondence } from '../Correspondence';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseInternal entity', () => {
   describe('validation', () => {
     it('throws an exception when not provided an application context', () => {
-      expect(() => new CaseInternal({}, {})).toThrow();
+      expect(() => new CaseInternal({}, {} as any)).toThrow();
     });
 
     it('returns the expected set of errors for an empty object', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        caseCaption: VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: VALIDATION_ERROR_MESSAGES.caseType,
-        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
-        mailingDate: VALIDATION_ERROR_MESSAGES.mailingDate,
-        partyType: VALIDATION_ERROR_MESSAGES.partyType,
-        petitionFile: VALIDATION_ERROR_MESSAGES.petitionFile,
-        petitionPaymentStatus: VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
-        procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
-        receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
+        caseCaption: CaseInternal.VALIDATION_ERROR_MESSAGES.caseCaption,
+        caseType: CaseInternal.VALIDATION_ERROR_MESSAGES.caseType,
+        chooseAtLeastOneValue:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        mailingDate: CaseInternal.VALIDATION_ERROR_MESSAGES.mailingDate,
+        partyType: CaseInternal.VALIDATION_ERROR_MESSAGES.partyType,
+        petitionFile: CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFile,
+        petitionPaymentStatus:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.petitionPaymentStatus,
+        procedureType: CaseInternal.VALIDATION_ERROR_MESSAGES.procedureType,
+        receivedAt: CaseInternal.VALIDATION_ERROR_MESSAGES.receivedAt[1],
       });
     });
 
@@ -74,6 +74,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -87,7 +88,7 @@ describe('CaseInternal entity', () => {
               documentType: 'Petition',
               eventCode: 'A',
               filedBy: 'Test Petitioner',
-              role: ROLES.petitioner,
+              filedByRole: ROLES.petitioner,
               userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
             },
           ],
@@ -128,6 +129,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -166,6 +168,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -203,6 +206,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -231,8 +235,8 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+        caseInternal.getFormattedValidationErrors()!.petitionFileSize,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
     });
 
     it('fails validation if petitionPaymentStatus is Waived but applicationForWaiverOfFilingFeeFile is not set', () => {
@@ -246,9 +250,12 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()
+        caseInternal.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFile);
+      ).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES
+          .applicationForWaiverOfFilingFeeFile,
+      );
     });
 
     it('fails validation if partyType is Corporation and orderForCds is undefined', () => {
@@ -260,8 +267,8 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().corporateDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+        caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
     it('fails validation if partyType is partnershipAsTaxMattersPartner and orderForCds is false', () => {
@@ -274,8 +281,8 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().corporateDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+        caseInternal.getFormattedValidationErrors()!.corporateDisclosureFile,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
     });
 
     it('fails validation if applicationForWaiverOfFilingFeeFile is set, but applicationForWaiverOfFilingFeeFileSize is not', () => {
@@ -289,10 +296,11 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()
+        caseInternal.getFormattedValidationErrors()!
           .applicationForWaiverOfFilingFeeFileSize,
       ).toEqual(
-        VALIDATION_ERROR_MESSAGES.applicationForWaiverOfFilingFeeFileSize[1],
+        CaseInternal.VALIDATION_ERROR_MESSAGES
+          .applicationForWaiverOfFilingFeeFileSize[1],
       );
     });
 
@@ -306,8 +314,8 @@ describe('CaseInternal entity', () => {
         { applicationContext },
       );
 
-      expect(caseInternal.getFormattedValidationErrors().stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+      expect(caseInternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES.stinFileSize[1],
       );
     });
 
@@ -322,8 +330,11 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+        caseInternal.getFormattedValidationErrors()!
+          .corporateDisclosureFileSize,
+      ).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1],
+      );
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but requestForPlaceOfTrialFileSize is not', () => {
@@ -337,9 +348,12 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors()
+        caseInternal.getFormattedValidationErrors()!
           .requestForPlaceOfTrialFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFileSize[1]);
+      ).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES
+          .requestForPlaceOfTrialFileSize[1],
+      );
     });
 
     it('fails validation if requestForPlaceOfTrialFile is set, but preferredTrialCity is not', () => {
@@ -353,8 +367,8 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().preferredTrialCity,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.preferredTrialCity);
+        caseInternal.getFormattedValidationErrors()!.preferredTrialCity,
+      ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.preferredTrialCity);
     });
 
     it('fails validation if preferredTrialCity is set, but requestForPlaceOfTrialFile is not', () => {
@@ -368,8 +382,10 @@ describe('CaseInternal entity', () => {
       );
 
       expect(
-        caseInternal.getFormattedValidationErrors().requestForPlaceOfTrialFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
+        caseInternal.getFormattedValidationErrors()!.requestForPlaceOfTrialFile,
+      ).toEqual(
+        CaseInternal.VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile,
+      );
     });
 
     it('fails validation if one of preferredTrialCity, RQT file, or orderDesignatingPlaceOfTrial is not selected', () => {
@@ -407,9 +423,11 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        chooseAtLeastOneValue:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
 
@@ -449,9 +467,11 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
-        chooseAtLeastOneValue: VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+        chooseAtLeastOneValue:
+          CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
       });
     });
   });

@@ -18,7 +18,7 @@ import {
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Docket Clerk edits a calendared trial session', () => {
@@ -28,13 +28,18 @@ describe('Docket Clerk edits a calendared trial session', () => {
     formattedTrialSessionDetailsComputed,
   );
 
-  let overrides = {};
+  const trialLocation = `Helena, Montana, ${Date.now()}`;
+  const overrides = {
+    fieldToUpdate: 'judge',
+    valueToUpdate: {
+      name: 'Gustafson',
+      userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
+    },
+  };
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  const trialLocation = `Helena, Montana, ${Date.now()}`;
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, {
@@ -84,13 +89,6 @@ describe('Docket Clerk edits a calendared trial session', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.closed);
 
-  overrides = {
-    fieldToUpdate: 'judge',
-    valueToUpdate: {
-      name: 'Gustafson',
-      userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
-    },
-  };
   docketClerkEditsTrialSession(cerebralTest, overrides);
 
   it('verify that there are 3 cases on the trial session', async () => {

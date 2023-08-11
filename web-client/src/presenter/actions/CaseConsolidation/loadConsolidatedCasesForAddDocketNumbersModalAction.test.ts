@@ -1,13 +1,13 @@
 import { loadConsolidatedCasesForAddDocketNumbersModalAction } from './loadConsolidatedCasesForAddDocketNumbersModalAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('loadConsolidatedCasesForAddDocketNumbersModalAction', () => {
   it('should restore the expected checked consolidated cases on load', async () => {
     const consolidatedCases = [
       {
         docketNumber: '101-20',
-        petitioners: [],
+        petitioners: [{ name: 'Roy Kent' }, { name: 'Jamie Tartt' }],
       },
       {
         docketNumber: '102-20',
@@ -35,6 +35,7 @@ describe('loadConsolidatedCasesForAddDocketNumbersModalAction', () => {
     ).toMatchObject({
       checkboxDisabled: true,
       checked: true,
+      formattedPetitioners: 'Roy Kent & Jamie Tartt',
     });
     expect(
       consolidatedCases.find(({ docketNumber }) => docketNumber === '102-20'),

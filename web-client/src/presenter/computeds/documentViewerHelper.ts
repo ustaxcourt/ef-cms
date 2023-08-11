@@ -1,8 +1,15 @@
 /* eslint-disable complexity */
-import { getShowNotServedForDocument } from './getShowNotServedForDocument';
-import { state } from 'cerebral';
 
-export const documentViewerHelper = (get, applicationContext) => {
+import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+import { getShowNotServedForDocument } from './getShowNotServedForDocument';
+import { state } from '@web-client/presenter/app.cerebral';
+
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const documentViewerHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
@@ -82,7 +89,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showSignStipulatedDecisionButton =
     formattedDocumentToDisplay.eventCode ===
       PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
-    applicationContext.getUtilities().isServed(formattedDocumentToDisplay) &&
+    DocketEntry.isServed(formattedDocumentToDisplay) &&
     !formattedCaseDetail.docketEntries.find(
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );

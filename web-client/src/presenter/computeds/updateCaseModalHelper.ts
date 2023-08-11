@@ -1,6 +1,11 @@
-import { state } from 'cerebral';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const updateCaseModalHelper = (get, applicationContext) => {
+export const updateCaseModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const caseDetail = get(state.caseDetail);
   const {
     STATUS_TYPES,

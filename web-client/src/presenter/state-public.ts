@@ -1,6 +1,7 @@
 import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/business/entities/EntityConstants';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
+import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -11,10 +12,11 @@ import { templateHelper } from './computeds/templateHelper';
 import { todaysOpinionsHelper } from './computeds/Public/todaysOpinionsHelper';
 import { todaysOrdersHelper } from './computeds/Public/todaysOrdersHelper';
 
-const helpers = {
+const computeds = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
+  caseSearchByNameHelper,
   featureFlagHelper,
   loadingHelper,
   menuHelper,
@@ -25,10 +27,10 @@ const helpers = {
   todaysOrdersHelper,
 };
 
-export const state = {
-  ...helpers,
+export const baseState = {
   advancedSearchForm: {},
   advancedSearchTab: 'case',
+  caseDetail: {} as RawPublicCase,
   commonUI: {
     showBetaBar: true,
     showMobileMenu: false,
@@ -58,3 +60,10 @@ export const state = {
   user: {},
   validationErrors: {},
 };
+
+export const initialPublicState = {
+  ...baseState,
+  ...computeds,
+};
+
+export type PublicClientState = typeof initialPublicState;

@@ -3,7 +3,8 @@ import { Button } from '../ustc-ui/Button/Button';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const BeforeStartingCase = connect(
@@ -42,7 +43,7 @@ export const BeforeStartingCase = connect(
             <div className="grid-row grid-gap grid-col-10">
               <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
-                  displayIcon="true"
+                  displayIcon={true}
                   iconClassName="bullet-icon"
                   iconSize="lg"
                   iconTypes={['far', 'clock']}
@@ -53,6 +54,7 @@ export const BeforeStartingCase = connect(
                     You may have received a notice in the mail from the Internal
                     Revenue Service (IRS). The IRS notice may show the last date
                     to file or the number of days you have to file a Petition.
+                    &nbsp;
                     <strong>
                       The Court must receive your electronically filed Petition
                       no later than 11:59 pm Eastern Time on the last date to
@@ -65,7 +67,7 @@ export const BeforeStartingCase = connect(
               </Accordion>
               <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
-                  displayIcon="true"
+                  displayIcon={true}
                   iconClassName="bullet-icon"
                   iconSize="lg"
                   iconTypes={['fa', 'fingerprint']}
@@ -109,7 +111,7 @@ export const BeforeStartingCase = connect(
               </Accordion>
               <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
-                  displayIcon="true"
+                  displayIcon={true}
                   iconClassName="bullet-icon"
                   iconSize="lg"
                   iconTypes={['far', 'edit']}
@@ -180,7 +182,7 @@ export const BeforeStartingCase = connect(
               </Accordion>
               <Accordion headingLevel="3" role="listitem">
                 <AccordionItem
-                  displayIcon="true"
+                  displayIcon={true}
                   iconClassName="bullet-icon"
                   iconSize="lg"
                   iconTypes={['far', 'user']}

@@ -1279,6 +1279,14 @@ const router = {
     );
 
     registerRoute(
+      '/reports/custom-case',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Custom Case Report');
+        return app.getSequence('gotoCustomCaseReportSequence')();
+      }),
+    );
+
+    registerRoute(
       '/reports/blocked-cases',
       ifHasAccess({ app }, () => {
         setPageTitle('Blocked cases');

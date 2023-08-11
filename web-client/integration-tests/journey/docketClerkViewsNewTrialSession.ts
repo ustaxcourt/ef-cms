@@ -1,11 +1,11 @@
 import { formattedTrialSessionDetails } from '../../src/presenter/computeds/formattedTrialSessionDetails';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsNewTrialSession = (
   cerebralTest,
-  checkCase,
-  calendarNote,
+  checkCase?,
+  calendarNote?,
 ) => {
   return it('Docket Clerk Views a new trial session', async () => {
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {

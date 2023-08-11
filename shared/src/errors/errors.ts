@@ -1,12 +1,11 @@
 /**
  * Custom not found error handling for middlewares
- *
  * @type {module.NotFoundError}
  */
 export const NotFoundError = class NotFoundError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -18,13 +17,12 @@ export const NotFoundError = class NotFoundError extends Error {
 
 /**
  * Invalid request error
- *
  * @type {module.NotFoundError}
  */
 export const InvalidRequest = class InvalidRequest extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -36,13 +34,12 @@ export const InvalidRequest = class InvalidRequest extends Error {
 
 /**
  * Custom unknown user error handling for middlewares
- *
  * @type {module.UnknownUserError}
  */
 export const UnknownUserError = class UnknownUserError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -54,13 +51,12 @@ export const UnknownUserError = class UnknownUserError extends Error {
 
 /**
  * Unauthorized error
- *
  * @type {module.UnauthorizedError}
  */
 export const UnauthorizedError = class UnauthorizedError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message) {
@@ -72,13 +68,12 @@ export const UnauthorizedError = class UnauthorizedError extends Error {
 
 /**
  * UnprocessableEntityError error
- *
  * @type {module.UnprocessableEntity}
  */
 export const UnprocessableEntityError = class UnprocessableEntityError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message = 'cannot process') {
@@ -90,13 +85,12 @@ export const UnprocessableEntityError = class UnprocessableEntityError extends E
 
 /**
  * UnsanitizedEntityError error
- *
  * @type {module.UnsanitizedEntity}
  */
 export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
+  public statusCode: number;
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(message = 'Unsanitized entity') {
@@ -108,13 +102,11 @@ export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error
 
 /**
  * InvalidEntityError error
- *
  * @type {module.InvalidEntityError}
  */
 export const InvalidEntityError = class InvalidEntityError extends Error {
   /**
    * constructor
-   *
    * @param {string} message the error message
    */
   constructor(

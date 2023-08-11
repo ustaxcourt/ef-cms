@@ -5,9 +5,9 @@ import { getServeToIrsAlertSuccessAction } from '../actions/StartCaseInternal/ge
 import { navigateToDocumentQCAction } from '../actions/navigateToDocumentQCAction';
 import { serveCaseToIrsAction } from '../actions/StartCaseInternal/serveCaseToIrsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const serveCaseToIrsSequence = [
@@ -29,7 +29,7 @@ export const serveCaseToIrsSequence = [
       paper: [
         clearModalAction,
         setPdfPreviewUrlSequence,
-        setCurrentPageAction('PrintPaperPetitionReceipt'),
+        setupCurrentPageAction('PrintPaperPetitionReceipt'),
       ],
     },
   ]),

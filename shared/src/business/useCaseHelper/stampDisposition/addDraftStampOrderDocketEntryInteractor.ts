@@ -57,25 +57,26 @@ export const addDraftStampOrderDocketEntryInteractor = async (
       docketEntryId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
       documentTitle: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
-      documentType: orderDocumentInfo.documentType,
+      documentType: orderDocumentInfo?.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
         documentTitle: formattedDraftDocumentTitle,
-        documentType: orderDocumentInfo.documentType,
-        eventCode: orderDocumentInfo.eventCode,
+        documentType: orderDocumentInfo?.documentType,
+        eventCode: orderDocumentInfo?.eventCode,
         freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       },
-      eventCode: orderDocumentInfo.eventCode,
+      eventCode: orderDocumentInfo?.eventCode,
       filedBy: user.judgeFullName || user.name,
       freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       stampData: validatedStampData,
-      userId: user.userId,
     },
     { applicationContext },
   );
+
+  stampedDocketEntryEntity.setFiledBy(user);
 
   stampedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
 

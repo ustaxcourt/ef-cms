@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validate opinion advanced search form
@@ -22,7 +22,7 @@ export const validateOpinionAdvancedSearchAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateOpinionAdvancedSearchInteractor(applicationContext, {
+    .validateOpinionAdvancedSearchInteractor({
       opinionSearch: {
         ...opinionSearch,
         opinionTypes,

@@ -4,6 +4,7 @@ import { contactPrimaryFromState } from '../helpers';
 export const externalUserFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
+  fileAcrossConsolidatedGroup?,
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
@@ -111,18 +112,40 @@ export const externalUserFilesDocumentForOwnedCase = (
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: `filersMap.${contactPrimary.contactId}`,
-        value: true,
-      },
-    );
+    if (fileAcrossConsolidatedGroup) {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: 'partyIrsPractitioner',
+          value: true,
+        },
+      );
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: `filersMap.${contactPrimary.contactId}`,
+          value: false,
+        },
+      );
+    } else {
+      await cerebralTest.runSequence(
+        'updateFileDocumentWizardFormValueSequence',
+        {
+          key: `filersMap.${contactPrimary.contactId}`,
+          value: true,
+        },
+      );
+    }
 
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    if (fileAcrossConsolidatedGroup) {
+      const form = cerebralTest.getState('form');
+
+      expect(form.fileAcrossConsolidatedGroup).toEqual(true);
+    }
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'redactionAcknowledgement',
       value: true,

@@ -8,6 +8,7 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { MOCK_USERS, docketClerkUser } from '../../../test/mockUsers';
 import { User } from '../../entities/User';
@@ -32,6 +33,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
@@ -45,6 +47,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -53,6 +56,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -61,11 +65,13 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
       docketNumber: '45678-18',
       filingType: 'Myself',
+      leadDocketNumber: '45678-18',
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
         {
@@ -169,6 +175,126 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
+    expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
+  });
+
+  it('should add documents and workitems and auto-serve the documents on the parties with an electronic service indicator across consolidated cases', async () => {
+    const consolidatedCase = {
+      caseCaption: 'Caption',
+      caseType: CASE_TYPES_MAP.deficiency,
+      createdAt: '',
+      docketEntries: [
+        {
+          docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
+          docketNumber: '45678-18',
+          documentTitle: 'first record',
+          documentType: 'Petition',
+          eventCode: 'P',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          filingDate: '2018-03-01T00:01:00.000Z',
+          index: 1,
+          isOnDocketRecord: true,
+          servedAt: '2020-07-17T19:28:29.675Z',
+          servedParties: [],
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
+        },
+        {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
+        },
+        {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
+        },
+        {
+          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          docketNumber: '45678-18',
+          documentType: 'Answer',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
+          userId: '15fac684-d333-45c2-b414-4af63a7f7613',
+        },
+      ],
+      docketNumber: '45679-18',
+      filingType: 'Myself',
+      leadDocketNumber: '45678-18',
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Guy Fieri',
+          phone: '1234567890',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          state: 'CA',
+        },
+      ],
+      preferredTrialCity: 'Fresno, California',
+      procedureType: 'Regular',
+      role: ROLES.petitioner,
+      userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(caseRecord)
+      .mockReturnValueOnce(consolidatedCase);
+
+    const updatedCase = await fileExternalDocumentInteractor(
+      applicationContext,
+      {
+        documentMetadata: {
+          consolidatedCasesToFileAcross: [
+            {
+              docketNumber: caseRecord.docketNumber,
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+            {
+              docketNumber: consolidatedCase.docketNumber,
+              leadDocketNumber: caseRecord.docketNumber,
+            },
+          ],
+          docketNumber: caseRecord.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'A',
+          filedBy: 'Test Petitioner',
+          primaryDocumentId: mockDocketEntryId,
+        },
+      },
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalledTimes(5);
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toHaveBeenCalledTimes(4);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalledTimes(2);
     expect(updatedCase.docketEntries[4].servedAt).toBeDefined();
   });
 
@@ -276,7 +402,7 @@ describe('fileExternalDocumentInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Simultaneous Memoranda of Law',
           documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
           filedBy: 'Test Petitioner',
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },

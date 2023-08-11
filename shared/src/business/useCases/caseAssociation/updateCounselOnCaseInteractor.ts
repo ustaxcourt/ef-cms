@@ -62,9 +62,7 @@ export const updateCounselOnCaseInteractor = async (
       if (editableFields.representing.includes(petitioner.contactId)) {
         petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
       } else if (
-        !caseEntity.isUserIdRepresentedByPrivatePractitioner(
-          petitioner.contactId,
-        )
+        !Case.isPetitionerRepresented(caseEntity, petitioner.contactId)
       ) {
         const serviceIsPaper = !petitioner.email;
         petitioner.serviceIndicator = serviceIsPaper
