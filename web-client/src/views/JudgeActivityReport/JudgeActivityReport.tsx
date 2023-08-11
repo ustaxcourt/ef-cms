@@ -122,7 +122,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.orders.results.map(
+            {judgeActivityReportData.orders.aggregations.map(
               ({ count, documentType, eventCode }) => (
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
@@ -165,7 +165,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.opinions.results.map(
+            {judgeActivityReportData.opinions.aggregations.map(
               ({ count, documentType, eventCode }) => (
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>

@@ -1,4 +1,4 @@
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '@shared/business/entities/EntityConstants';
+import { COURT_ISSUED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 import { searchQueryForAggregation } from './helpers/searchQueryForAggregation';
@@ -10,7 +10,7 @@ export const fetchEventCodesCountForJudges = async ({
   applicationContext: IApplicationContext;
   params: {
     endDate: string;
-    documentEventCodes: (typeof OPINION_EVENT_CODES_WITH_BENCH_OPINION)[number];
+    documentEventCodes: any;
     judges: string[];
     searchType: string;
     startDate: string;
@@ -42,5 +42,14 @@ export const fetchEventCodesCountForJudges = async ({
     searchParameters: documentQuery,
   });
 
-  return { aggregations, total };
+  const computedAggregatedEventCodes =
+    aggregations!.search_field_count.buckets.map(bucketObj => ({
+      count: bucketObj.doc_count,
+      documentType: COURT_ISSUED_EVENT_CODES.find(
+        event => event.eventCode === bucketObj.key,
+      )!.documentType,
+      eventCode: bucketObj.key,
+    }));
+
+  return { aggregations: computedAggregatedEventCodes, total };
 };

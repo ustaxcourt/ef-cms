@@ -43,13 +43,13 @@ export type OrdersAndOpinionResultCountTypes = {
 };
 
 export type OpinionsReturnType = {
-  results: OrdersAndOpinionResultCountTypes[];
-  opinionsFiledTotal: number | undefined;
+  aggregations: OrdersAndOpinionResultCountTypes[];
+  total: number | undefined;
 };
 
 export type OrdersReturnType = {
-  results: OrdersAndOpinionResultCountTypes[];
-  ordersFiledTotal: number | undefined;
+  aggregations: OrdersAndOpinionResultCountTypes[];
+  total: number | undefined;
 };
 
 export type CasesClosedReturnType = {

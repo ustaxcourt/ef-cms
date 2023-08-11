@@ -1,6 +1,5 @@
 import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { OrdersReturnType } from '@web-client/presenter/judgeActivityReportState';
-import { SeachClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -27,8 +26,8 @@ const mockOrdersIssuedByJudge = [
 const mockOrdersFiledTotal = 9;
 
 export const mockOrdersAggregated: OrdersReturnType = {
-  ordersFiledTotal: mockOrdersFiledTotal,
-  results: mockOrdersIssuedByJudge,
+  aggregations: mockOrdersIssuedByJudge,
+  total: mockOrdersFiledTotal,
 };
 
 describe('getOrdersFiledByJudgeInteractor', () => {
@@ -43,26 +42,13 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  const mockOrdersResults: SeachClientResultsType = {
-    aggregations: {
-      search_field_count: {
-        buckets: [
-          { doc_count: 2, key: 'O' },
-          { doc_count: 1, key: 'OAL' },
-          { doc_count: 1, key: 'ODX' },
-          { doc_count: 5, key: 'TCOP' },
-        ],
-      },
-    },
-    total: mockOrdersFiledTotal,
-  };
   const mockJudges = [judgeUser.name];
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
     applicationContext
       .getPersistenceGateway()
-      .fetchEventCodesCountForJudges.mockResolvedValue(mockOrdersResults);
+      .fetchEventCodesCountForJudges.mockResolvedValue(mockOrdersAggregated);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {

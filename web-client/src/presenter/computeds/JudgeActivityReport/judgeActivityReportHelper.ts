@@ -49,8 +49,8 @@ export const judgeActivityReportHelper = (
 
   if (hasFormBeenSubmitted) {
     resultsCount =
-      orders.ordersFiledTotal +
-      opinions.opinionsFiledTotal +
+      orders.total +
+      opinions.total +
       trialSessions.trialSessionsHeldTotal +
       casesClosedByJudge.closedCasesTotal;
   } else {
@@ -112,8 +112,8 @@ export const judgeActivityReportHelper = (
   return {
     closedCasesTotal: casesClosedByJudge?.closedCasesTotal || 0,
     isFormPristine: !endDate || !startDate,
-    opinionsFiledTotal: opinions?.opinionsFiledTotal || 0,
-    ordersFiledTotal: orders?.ordersFiledTotal || 0,
+    opinionsFiledTotal: opinions?.total || 0,
+    ordersFiledTotal: orders?.total || 0,
     pageCount,
     progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
     reportHeader,
