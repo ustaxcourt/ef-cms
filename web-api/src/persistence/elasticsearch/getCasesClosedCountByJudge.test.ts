@@ -3,6 +3,7 @@ import { applicationContext } from '../../../../shared/src/business/test/createT
 import { getCasesClosedCountByJudge } from './getCasesClosedCountByJudge';
 import { judgeUser } from '../../../../shared/src/test/mockUsers';
 jest.mock('./searchClient');
+import { casesClosedResults } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor.test';
 import { search } from './searchClient';
 
 describe('getCasesClosedCountByJudge', () => {
@@ -22,7 +23,7 @@ describe('getCasesClosedCountByJudge', () => {
     key: CASE_STATUS_TYPES.closedDismissed,
   };
 
-  const mockAggregationsResult = {
+  let mockAggregationsResult = {
     aggregations: {
       closed_cases: {
         buckets: [mockCaseClosed, mockCaseClosedDismissed],
@@ -78,6 +79,29 @@ describe('getCasesClosedCountByJudge', () => {
       mockBodyQuery,
     );
 
-    expect(results).toEqual(mockAggregationsResult);
+    expect(results).toEqual(casesClosedResults);
+  });
+
+  it('should return a zero count(s) for both closed and closed - dismissed for judges if there no closed cases associated with selected judges', async () => {
+    mockAggregationsResult.aggregations.closed_cases.buckets = [];
+    search.mockReturnValue(mockAggregationsResult);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
+
+    const mockReturnedCloseCasesWithZeroItems = {
+      [CASE_STATUS_TYPES.closed]: 0,
+      [CASE_STATUS_TYPES.closedDismissed]: 0,
+    };
+
+    const closedCasesResults = await getCasesClosedCountByJudge({
+      applicationContext,
+      ...mockValidRequest,
+    });
+
+    expect(closedCasesResults.aggregations).toEqual(
+      mockReturnedCloseCasesWithZeroItems,
+    );
   });
 });

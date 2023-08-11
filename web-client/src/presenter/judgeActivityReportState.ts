@@ -53,8 +53,8 @@ export type OrdersReturnType = {
 };
 
 export type CasesClosedReturnType = {
-  results: CasesClosedType;
-  closedCasesTotal: number | undefined;
+  aggregations: CasesClosedType;
+  total: number | undefined;
 };
 
 export type TrialSessionReturnType = {

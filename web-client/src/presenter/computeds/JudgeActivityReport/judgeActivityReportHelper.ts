@@ -52,7 +52,7 @@ export const judgeActivityReportHelper = (
       orders.total +
       opinions.total +
       trialSessions.trialSessionsHeldTotal +
-      casesClosedByJudge.closedCasesTotal;
+      casesClosedByJudge.total;
   } else {
     showSelectDateRangeText = true;
   }
@@ -110,7 +110,7 @@ export const judgeActivityReportHelper = (
   );
 
   return {
-    closedCasesTotal: casesClosedByJudge?.closedCasesTotal || 0,
+    closedCasesTotal: casesClosedByJudge?.total || 0,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal: opinions?.total || 0,
     ordersFiledTotal: orders?.total || 0,
