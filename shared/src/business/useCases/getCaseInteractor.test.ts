@@ -1,4 +1,5 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -329,14 +330,16 @@ describe('getCaseInteractor', () => {
       });
 
       expect(result).toEqual({
+        canAllowDocumentService: undefined,
+        canAllowPrintableDocketRecord: undefined,
         caseCaption: undefined,
-        contactSecondary: undefined,
         docketEntries: [],
         docketNumber: '101-18',
         docketNumberSuffix: undefined,
         docketNumberWithSuffix: '101-18',
         entityName: 'PublicCase',
         hasIrsPractitioner: false,
+        isPaper: undefined,
         isSealed: true,
         partyType: undefined,
         receivedAt: undefined,
@@ -463,7 +466,10 @@ describe('getCaseInteractor', () => {
       });
       applicationContext
         .getUseCases()
-        .getFeatureFlagValueInteractor.mockResolvedValue(true);
+        .getAllFeatureFlagsInteractor.mockReturnValue({
+          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
+            .key]: true,
+        });
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue({

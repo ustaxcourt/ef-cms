@@ -1,6 +1,7 @@
-import { DocketHeader } from '../components/DocketHeader.tsx';
+import { ClerkOfTheCourtSignature } from '../components/ClerkOfTheCourtSignature';
+import { DocketHeader } from '../components/DocketHeader';
 import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader';
 import React from 'react';
 
 export const NoticeOfChangeOfTrialJudge = ({
@@ -36,11 +37,7 @@ export const NoticeOfChangeOfTrialJudge = ({
           session remains in full force and effect.
         </p>
 
-        <p className="float-right width-third">
-          Stephanie A. Servoss
-          <br />
-          Clerk of the Court
-        </p>
+        <ClerkOfTheCourtSignature />
       </div>
     </div>
   );

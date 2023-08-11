@@ -1,8 +1,13 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const advancedDocumentSearchHelper = (get, applicationContext) => {
+export const advancedDocumentSearchHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   let paginatedResults = {};
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);

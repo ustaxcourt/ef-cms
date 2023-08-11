@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('./Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
+import { Case } from './Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('getDocketEntryById', () => {
   it('should get the docket entry by an Id', () => {

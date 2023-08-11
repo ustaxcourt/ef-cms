@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createPaperServicePdfForCasesAction } from './createPaperServicePdfForCasesAction';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('createPaperServicePdfForCasesAction', () => {
   beforeAll(() => {
@@ -21,7 +21,7 @@ describe('createPaperServicePdfForCasesAction', () => {
       );
     const trialNoticePdfsKeys = ['382-830-29'];
 
-    const result = await runAction(createPaperServicePdfForCasesAction, {
+    await runAction(createPaperServicePdfForCasesAction, {
       modules: {
         presenter,
       },
@@ -30,7 +30,6 @@ describe('createPaperServicePdfForCasesAction', () => {
       },
     });
 
-    expect(result.output).toEqual(paperServiceInfo);
     expect(
       applicationContext.getUseCases()
         .generateTrialSessionPaperServicePdfInteractor,

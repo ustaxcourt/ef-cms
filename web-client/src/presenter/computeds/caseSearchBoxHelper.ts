@@ -1,4 +1,9 @@
-export const caseSearchBoxHelper = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseSearchBoxHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 

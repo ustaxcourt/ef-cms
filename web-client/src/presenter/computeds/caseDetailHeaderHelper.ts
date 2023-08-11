@@ -1,6 +1,12 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const caseDetailHeaderHelper = (get, applicationContext) => {
+import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const caseDetailHeaderHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const { USER_ROLES } = applicationContext.getConstants();
 
   const user = applicationContext.getCurrentUser();
@@ -23,12 +29,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     .isSealedCase(caseDetail);
 
   const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner =>
-    applicationContext
-      .getUtilities()
-      .isUserIdRepresentedByPrivatePractitioner(
-        caseDetail,
-        petitioner.contactId,
-      ),
+    Case.isPetitionerRepresented(caseDetail, petitioner.contactId),
   );
 
   let showRequestAccessToCaseButton = false;

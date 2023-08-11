@@ -11,15 +11,16 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setFormPartyTrueAction } from '../actions/AdvancedSearch/setFormPartyTrueAction';
+import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from '../actions/FileDocument/setIsExternalConsolidatedCaseGroupEnabledValueAction';
 import { setRequestAccessWizardStepActionGenerator } from '../actions/setRequestAccessWizardStepActionGenerator';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 
 const gotoRequestAccess = startWebSocketConnectionSequenceDecorator([
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
   clearScreenMetadataAction,
@@ -32,18 +33,19 @@ const gotoRequestAccess = startWebSocketConnectionSequenceDecorator([
   canRequestAccessAction,
   {
     proceed: [
+      setIsExternalConsolidatedCaseGroupEnabledValueAction,
       setDefaultFileDocumentFormValuesAction,
       runPathForUserRoleAction,
       {
         irsPractitioner: [
           setFormPartyTrueAction('partyIrsPractitioner'),
           setRequestAccessWizardStepActionGenerator('RequestAccess'),
-          setCurrentPageAction('RequestAccessWizard'),
+          setupCurrentPageAction('RequestAccessWizard'),
         ],
         privatePractitioner: [
           setFormPartyTrueAction('partyPrivatePractitioner'),
           setRequestAccessWizardStepActionGenerator('RequestAccess'),
-          setCurrentPageAction('RequestAccessWizard'),
+          setupCurrentPageAction('RequestAccessWizard'),
         ],
       },
     ],

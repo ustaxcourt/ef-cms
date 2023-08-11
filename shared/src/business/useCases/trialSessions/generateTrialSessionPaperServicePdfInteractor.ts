@@ -7,7 +7,6 @@ import { UnauthorizedError } from '../../../errors/errors';
 // eslint-disable-next-line spellcheck/spell-checker
 /**
  * generateTrialSessionPaperServicePdfInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.trialNoticePdfsKeys the trialNoticePdfsKeys
@@ -26,13 +25,23 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const paperServiceDocumentsPdf = await PDFDocument.create();
 
-  for (let index = 0; index < trialNoticePdfsKeys.length; index++) {
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'paper_service_started',
+      totalPdfs: trialNoticePdfsKeys.length,
+    },
+    userId: user.userId,
+  });
+
+  let pdfsAppended = 0;
+
+  for (const trialNoticePdfsKey of trialNoticePdfsKeys) {
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
-        key: trialNoticePdfsKeys[index],
-        protocol: 'S3',
+        key: trialNoticePdfsKey,
         useTempBucket: true,
       });
 
@@ -41,6 +50,17 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
       copyFrom: calendaredCasePdf,
       copyInto: paperServiceDocumentsPdf,
+    });
+
+    pdfsAppended++;
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'paper_service_updated',
+        pdfsAppended,
+      },
+      userId: user.userId,
     });
   }
 
@@ -64,5 +84,14 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     );
   }
 
-  return { docketEntryId, hasPaper, pdfUrl };
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'paper_service_complete',
+      docketEntryId,
+      hasPaper,
+      pdfUrl,
+    },
+    userId: user.userId,
+  });
 };

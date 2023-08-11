@@ -4,38 +4,37 @@
 # shellcheck disable=SC2086
 
 
-trialSessionId="[PLACE TOKEN HERE]"
-token="[PLACE TOKEN HERE]"
-targetExperimentalEnvironment="[EXP OF CHOICE]"
-currentColor="[CURRENT COLOR OF EXP]"
+trialSessionId="[INSERT ID HERE]"
+token="[INSERT TOKEN HERE]"
+targetExperimentalEnvironment="[INSERT ENV HERE]"
+currentColor="[INSERT COLOR HERE]"
 hostName="api-${currentColor}.${targetExperimentalEnvironment}.ustc-case-mgmt.flexion.us"
 baseUrl="https://${hostName}"
-petitionFileId="[PLACE HERE]"
-requestForPlaceOfTrialFileId="[PLACE HERE]"
+petitionFileId="[INSERT ID HERE]"
 numberOfCasesToCreate=5
 
 createCaseAndAddToTrialSession(){
-   docketNumber=$(curl "${baseUrl}/cases/paper" \
+  local docketNumber
+  docketNumber=$(curl -s "${baseUrl}/cases/paper" \
     -H "authority: ${hostName}" \
     -H 'accept: application/json, text/plain, */*' \
-    -H 'accept-language: en-US,en;q=0.9' \
-    -H "authorization: Bearer $token" \
-    -H 'cache-control: no-cache' \
+    -H 'accept-language: en-US,en;q=0.9,ar;q=0.8' \
+    -H "authorization: Bearer ${token}" \
     -H 'content-type: application/json' \
-    -H 'dnt: 1' \
-    -H "origin: ${baseUrl}" \
-    -H 'pragma: no-cache' \
-    -H 'sec-ch-ua: ".Not/A)Brand";v="99", "Google Chrome";v="103", "Chromium";v="103"' \
+    -H "origin: ${hostName}" \
+    -H 'sec-ch-ua: "Chromium";v="112", "Google Chrome";v="112", "Not:A-Brand";v="99"' \
     -H 'sec-ch-ua-mobile: ?0' \
     -H 'sec-ch-ua-platform: "macOS"' \
     -H 'sec-fetch-dest: empty' \
     -H 'sec-fetch-mode: cors' \
     -H 'sec-fetch-site: same-site' \
     -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
-    --data-raw '{"petitionFileId":"'$petitionFileId'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Kelsie Taylor","address1":"811 Milton Road","address2":"Iusto quam consequat","address3":"Repellendus Tenetur","city":"Exercitation repelle","postalCode":"36589","phone":"+1 (778) 202-3151","state":"KY"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":false,"statistics":[],"partyType":"Petitioner","orderForCds":false,"petitionFile":{},"petitionFileSize":3028,"requestForPlaceOfTrialFile":{},"requestForPlaceOfTrialFileSize":3028,"caseCaption":"Kelsie Taylor, Petitioner","mailingDate":"24-Jul-1994","orderToShowCause":true,"petitionPaymentStatus":"Not paid","orderForFilingFee":true,"orderForAmendedPetitionAndFilingFee":true,"preferredTrialCity":"Dallas, Texas","caseType":"Innocent Spouse","receivedAt":"2022-07-04T04:00:00.000Z","petitionPaymentDate":null,"petitionPaymentWaivedDate":null},"requestForPlaceOfTrialFileId":"'$requestForPlaceOfTrialFileId'"}' \
+    --data-raw '{"petitionFileId":"'$petitionFileId'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Rachel Foreman","address1":"688 Green Nobel Road","address2":"Rerum atque facere q","address3":"Deleniti explicabo ","city":"In est tempor adipis","postalCode":"38854","phone":"+1 (266) 459-9362","state":"NJ"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":true,"statistics":[],"isPaper":true,"partyType":"Petitioner","orderForCds":false,"petitionFile":{},"petitionFileSize":3028,"caseCaption":"Rachel Foreman, Petitioner","mailingDate":"Test","petitionPaymentStatus":"Paid","orderForFilingFee":false,"paymentDateDay":"29","paymentDateMonth":"05","paymentDateYear":"2023","petitionPaymentMethod":"Check","caseType":"Other","receivedAt":"2023-05-28T04:00:00.000Z","petitionPaymentDate":"2023-05-29T04:00:00.000Z","petitionPaymentWaivedDate":null}}' \
     --compressed | jq -r '.docketNumber')
 
-  curl "${baseUrl}/cases/$docketNumber/serve-to-irs" \
+  echo "created case $docketNumber"
+
+  curl -s "${baseUrl}/cases/$docketNumber/serve-to-irs" \
     -X 'POST' \
     -H "authority: ${hostName}" \
     -H 'accept: application/json, text/plain, */*' \
@@ -54,6 +53,8 @@ createCaseAndAddToTrialSession(){
     -H 'sec-fetch-site: same-site' \
     -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
     --compressed
+
+  echo "served case $docketNumber"
 
   curl "${baseUrl}/trial-sessions/$trialSessionId/cases/$docketNumber" \
     -H "authority: ${hostName}" \
@@ -74,6 +75,9 @@ createCaseAndAddToTrialSession(){
     -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
     --data-raw '{}' \
     --compressed
+
+  echo "added case $docketNumber to trial session"
+
 }
 
 

@@ -2,7 +2,7 @@ import {
   aggregatePetitionerErrors,
   aggregateStatisticsErrors,
 } from './validatePetitionFromPaperAction';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the case detail form and sets state.validationErrors when errors occur.

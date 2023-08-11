@@ -1,7 +1,7 @@
 import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPublicCaseAction } from './getPublicCaseAction';
 import { presenter } from '../../presenter-public';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getPublicCaseAction', () => {
   beforeAll(() => {

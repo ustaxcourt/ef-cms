@@ -1,5 +1,5 @@
 import { clearConfirmationTextAction } from './clearConfirmationTextAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearConfirmationTextAction', () => {
   it('should unset state.confirmationText', async () => {

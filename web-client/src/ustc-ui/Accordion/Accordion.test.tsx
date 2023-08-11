@@ -15,7 +15,7 @@ describe('Accordion', () => {
         item: '',
       },
     };
-    const app = App(testModule);
+    const app = (App as any)(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Accordion bind="item">
@@ -82,7 +82,7 @@ describe('Accordion', () => {
         item: 'item-1',
       },
     };
-    const app = App(testModule);
+    const app = (App as any)(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Accordion bind="item">
@@ -124,7 +124,7 @@ describe('Accordion', () => {
         item: 'item-1',
       },
     };
-    const app = App(testModule);
+    const app = (App as any)(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Accordion bind="item">
@@ -166,7 +166,7 @@ describe('Accordion', () => {
         item: 'item-1',
       },
     };
-    const app = App(testModule);
+    const app = (App as any)(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Accordion bind="item">
@@ -193,7 +193,7 @@ describe('Accordion', () => {
         cerebralBindSimpleSetStateSequence,
       },
     };
-    const app = App(testModule);
+    const app = (App as any)(testModule);
     const testRenderer = TestRenderer.create(
       <Container app={app}>
         <Accordion bordered>

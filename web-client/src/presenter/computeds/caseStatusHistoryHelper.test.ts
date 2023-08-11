@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseStatusHistoryHelper as ccaseStatusHistoryHelperComputed } from './caseStatusHistoryHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 const caseStatusHistoryHelper = withAppContextDecorator(

@@ -1,46 +1,40 @@
+import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { DynamoDB } from '@aws-sdk/client-dynamodb';
 import readline from 'readline';
-
-import { CognitoIdentityServiceProvider, DynamoDB } from 'aws-sdk';
 
 const { ENV } = process.env;
 const UserPoolCache = {};
 
-/**
- * This function makes it easy to lookup the current version so that we can perform searches against it
- *
- * @param {String} environmentName The environment we are going to lookup the current color
- * @returns {String} The current version of the application
- */
-export const getVersion = async () => {
+// Look up the current version so that we can perform searches against it
+export const getVersion = async (): Promise<string> => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   const dynamodb = new DynamoDB({ region: 'us-east-1' });
-  const result = await dynamodb
-    .getItem({
-      Key: {
-        pk: {
-          S: 'source-table-version',
-        },
-        sk: {
-          S: 'source-table-version',
-        },
+  const result = await dynamodb.getItem({
+    Key: {
+      pk: {
+        S: 'source-table-version',
       },
-      TableName: `efcms-deploy-${ENV}`,
-    })
-    .promise();
+      sk: {
+        S: 'source-table-version',
+      },
+    },
+    TableName: `efcms-deploy-${ENV}`,
+  });
 
-  if (!result || !result.Item) {
+  if (
+    !result ||
+    !result.Item ||
+    !('current' in result.Item) ||
+    typeof result.Item.current.S === 'undefined'
+  ) {
     throw 'Could not determine the current version';
   }
   return result.Item.current.S;
 };
 
-/**
- * Exit if any of the provided strings are not set as environment variables
- *
- * @param {Array<String>} requiredEnvVars Array of strings to check
- */
-export const requireEnvVars = requiredEnvVars => {
+// Exit if any of the provided strings are not set as environment variables
+export const requireEnvVars = (requiredEnvVars: Array<string>): void => {
   const envVars = Object.keys(process.env);
   let missing = '';
   for (const key of requiredEnvVars) {
@@ -54,78 +48,66 @@ export const requireEnvVars = requiredEnvVars => {
   }
 };
 
-/**
- * Simple function to help ensure that a value is truthy before allowing the process to continue
- *
- * @param {String} value The value to ensure is truthy
- * @param {String} message The message to relay if the value is not truthy
- */
-export const checkEnvVar = (value, message) => {
+// Ensure that a value is truthy before allowing the process to continue
+export const checkEnvVar = (
+  value: string | undefined,
+  message: string,
+): void => {
   if (!value) {
     console.log(message);
     process.exit(1);
   }
 };
 
-/**
- * Ascertain the Cognito User Pool based on the current environment
- *
- * @param {Object} cognitoInstance (optional) instance of the CognitoIdentityServiceProvider
- * @returns {String} The unique identifier of the Cognito User Pool
- */
-export const getUserPoolId = async cognitoInstance => {
+// Ascertain the Cognito User Pool based on the current environment
+export const getUserPoolId = async (): Promise<string | undefined> => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
-  if (UserPoolCache[ENV]) {
-    return UserPoolCache[ENV];
+  if (ENV) {
+    if (UserPoolCache[ENV]) {
+      return UserPoolCache[ENV];
+    }
+
+    const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+    const { UserPools } = await cognito.listUserPools({
+      MaxResults: 50,
+    });
+    if (UserPools) {
+      const userPool = UserPools.find(pool => pool.Name === `efcms-${ENV}`);
+      if (userPool && userPool.Id) {
+        UserPoolCache[ENV] = userPool.Id;
+        return UserPoolCache[ENV];
+      }
+    }
   }
 
-  const cognito =
-    cognitoInstance ||
-    new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-  const results = await cognito
-    .listUserPools({
-      MaxResults: 50,
-    })
-    .promise();
-  const userPoolId = results.UserPools.find(
-    pool => pool.Name === `efcms-${ENV}`,
-  ).Id;
-
-  UserPoolCache[ENV] = userPoolId;
-  return UserPoolCache[ENV];
+  return undefined;
 };
 
-/**
- * Ascertain the Client ID for the Cognito User Pool we use to authenticate users
- *
- * @param {String} userPoolId The unique identifier of the Cognito User Pool
- * @returns {String} The unique identifier of the Cognito Client ID
- */
-export const getClientId = async userPoolId => {
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-  const results = await cognito
-    .listUserPoolClients({
-      MaxResults: 60,
-      UserPoolId: userPoolId,
-    })
-    .promise();
-  const clientId = results.UserPoolClients[0].ClientId;
-  return clientId;
+// Ascertain the Client ID for the Cognito User Pool we use to authenticate users
+export const getClientId = async (
+  userPoolId: string,
+): Promise<string | undefined> => {
+  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+  const { UserPoolClients } = await cognito.listUserPoolClients({
+    MaxResults: 60,
+    UserPoolId: userPoolId,
+  });
+
+  if (UserPoolClients) {
+    return UserPoolClients[0].ClientId;
+  }
+
+  return undefined;
 };
 
-/**
- * Generate a strong password that makes Cognito happy
- *
- * @param {Number} numChars Number of characters for the password
- * @returns {String} A strong password that is numChars long
- */
-export const generatePassword = numChars => {
-  const pickRandomChar = src => {
+// Generate a strong password that makes Cognito happy
+export const generatePassword = (numChars: number): string => {
+  const pickRandomChar = (src: string): string => {
     const rand = Math.floor(Math.random() * chars[src].length);
     return chars[src][rand];
   };
-  const pickRandomType = () => {
+  const pickRandomType = (): string => {
     const rand = Math.floor(Math.random() * Object.keys(chars).length);
     return Object.keys(chars)[rand];
   };
@@ -136,7 +118,7 @@ export const generatePassword = numChars => {
     special: '!@#$%^&*()',
     upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
   };
-  const pass = [];
+  const pass: string[] = [];
 
   for (const k of Object.keys(chars)) {
     pass.push(pickRandomChar(k));
@@ -149,7 +131,7 @@ export const generatePassword = numChars => {
   return shuffle(pass).join('');
 };
 
-const shuffle = arr => {
+const shuffle = (arr: Array<string>): Array<string> => {
   let currentIndex = arr.length,
     temporaryValue,
     randomIndex;
@@ -169,13 +151,8 @@ const shuffle = arr => {
   return arr;
 };
 
-/**
- * Wrapper for readline that asks a question and returns the input from stdin
- *
- * @param {String} query Question to ask
- * @returns {Promise<String>} The answer provided via stdin
- */
-export const askQuestion = query => {
+// Wrapper for readline that asks a question and returns the input from stdin
+export const askQuestion = (query: string): Promise<string> => {
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,

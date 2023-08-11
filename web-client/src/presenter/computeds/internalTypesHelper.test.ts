@@ -3,7 +3,7 @@ import {
   getSortFunction,
   internalTypesHelper as internalTypesHelperComputed,
 } from './internalTypesHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('internalTypesHelper', () => {
@@ -162,10 +162,9 @@ describe('internalTypesHelper', () => {
         state: {},
       });
 
-      expect(result.internalDocumentTypesForSelect).toMatchObject(expected);
-      expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-        expected,
-      );
+      expect(
+        result.internalDocumentTypesForSelectWithLegacySorted,
+      ).toMatchObject(expected);
     });
 
     describe('when searchText is defined', () => {
@@ -183,9 +182,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
 
       it('and is not matching an event code', () => {
@@ -202,9 +201,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
 
       it('and matches the beginning of an eventCode', () => {
@@ -221,9 +220,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
 
       it('and matches an event code exactly', () => {
@@ -240,9 +239,9 @@ describe('internalTypesHelper', () => {
           },
         });
 
-        expect(result.internalDocumentTypesForSelectSorted).toMatchObject(
-          expected,
-        );
+        expect(
+          result.internalDocumentTypesForSelectWithLegacySorted,
+        ).toMatchObject(expected);
       });
     });
   });
@@ -260,11 +259,31 @@ describe('internalTypesHelper', () => {
       });
 
       const miscellaneousLodgedType =
-        result.internalDocumentTypesForSelectSorted.find(
+        result.internalDocumentTypesForSelectWithLegacySorted.find(
           d => d.eventCode === LODGED_EVENT_CODE,
         );
 
       expect(miscellaneousLodgedType).toBeUndefined();
+    });
+  });
+
+  describe('legacy document types', () => {
+    let LEGACY_DOCUMENT_TYPES;
+    beforeAll(() => {
+      ({ LEGACY_DOCUMENT_TYPES } = applicationContext.getConstants());
+    });
+
+    it('does not show any legacy document types in dropdown', () => {
+      const result = runCompute(internalTypesHelper, {
+        state: {},
+      });
+
+      const legacyType =
+        result.internalDocumentTypesForSelectWithLegacySorted.find(
+          d => d.eventCode === LEGACY_DOCUMENT_TYPES[0].eventCode,
+        );
+
+      expect(legacyType).toBeUndefined();
     });
   });
 });

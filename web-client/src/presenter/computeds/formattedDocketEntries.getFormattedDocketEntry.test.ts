@@ -1,19 +1,33 @@
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  BRIEF_EVENTCODES,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getFormattedDocketEntry } from './formattedDocketEntries';
 import { simpleDocketEntries } from './formattedCaseDetail.test';
 
 describe('getFormattedDocketEntry', () => {
+  let simpleDocketEntry;
+
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
-  const simpleDocketEntry = simpleDocketEntries[0];
+  const rootDocument = {
+    docketEntryId: '743595eb-e3e2-4308-859d-e4215fe8b706',
+    documentType: 'Petition',
+    eventCode: 'P',
+  };
 
   const baseParams = {
     applicationContext,
     docketNumber: MOCK_CASE.docketNumber,
     entry: simpleDocketEntry,
+    formattedCase: {
+      ...MOCK_CASE,
+      filedByRole: ROLES.privatePractitioner,
+    },
     isExternalUser: false,
     permissions: {},
     userAssociatedWithCase: true,
@@ -35,9 +49,17 @@ describe('getFormattedDocketEntry', () => {
     servedAt: '2019-02-28T21:14:39.488Z',
   };
 
+  beforeEach(() => {
+    simpleDocketEntry = {
+      ...simpleDocketEntries[0],
+      rootDocument,
+    };
+  });
+
   describe('showLoadingIcon', () => {
     it('should be true if isExternalUser is false, permissions.UPDATE_CASE is false, and entry.processingStatus is not complete', () => {
       const result = getFormattedDocketEntry({
+        filedAfterPolicyChange: true,
         ...baseParams,
         entry: {
           ...simpleDocketEntry,
@@ -57,6 +79,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: false,
         permissions: { UPDATE_CASE: true },
       });
@@ -71,6 +94,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: false,
         permissions: { UPDATE_CASE: false },
       });
@@ -85,6 +109,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: true,
         permissions: { UPDATE_CASE: false },
       });
@@ -103,6 +128,7 @@ describe('getFormattedDocketEntry', () => {
           isPaper: true,
           qcWorkItemsUntouched: false,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.isPaper).toBeTruthy();
@@ -117,6 +143,7 @@ describe('getFormattedDocketEntry', () => {
           isPaper: false,
           qcWorkItemsUntouched: false,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.isPaper).toBeFalsy();
@@ -131,6 +158,7 @@ describe('getFormattedDocketEntry', () => {
           isPaper: true,
           qcWorkItemsUntouched: false,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.isPaper).toBeFalsy();
@@ -145,6 +173,7 @@ describe('getFormattedDocketEntry', () => {
           isPaper: true,
           qcWorkItemsUntouched: true,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.isPaper).toBeFalsy();
@@ -161,6 +190,7 @@ describe('getFormattedDocketEntry', () => {
           additionalInfo: undefined,
           documentTitle: 'Answer',
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(
@@ -180,6 +210,7 @@ describe('getFormattedDocketEntry', () => {
           additionalInfo,
           documentTitle: 'Answer',
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(
@@ -195,6 +226,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           documentTitle: undefined,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(
@@ -212,6 +244,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
+        filedAfterPolicyChange: true,
         permissions: { UPDATE_CASE: false },
       });
 
@@ -225,6 +258,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         },
+        filedAfterPolicyChange: true,
         permissions: { UPDATE_CASE: false },
       });
 
@@ -238,6 +272,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
+        filedAfterPolicyChange: true,
         permissions: { UPDATE_CASE: true },
       });
 
@@ -253,6 +288,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           isNotServedDocument: true,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.showNotServed).toBeTruthy();
@@ -265,6 +301,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           isNotServedDocument: false,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.showNotServed).toBeFalsy();
@@ -279,6 +316,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           isStatusServed: true,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.showServed).toBeTruthy();
@@ -291,6 +329,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           isStatusServed: false,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.showServed).toBeFalsy();
@@ -304,6 +343,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: false,
       });
 
@@ -316,6 +356,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...simpleDocketEntry,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: false,
       });
 
@@ -328,6 +369,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: true,
       });
 
@@ -342,6 +384,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: true,
       });
 
@@ -354,6 +397,21 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...simpleDocketEntry,
         },
+        filedAfterPolicyChange: true,
+        isExternalUser: true,
+      });
+
+      expect(result.showLinkToDocument).toBeFalsy();
+    });
+
+    it('should be false if isExternalUser is true and document links are not shown because the docket entry is a brief, not filed by practitioner', () => {
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: {
+          ...simpleDocketEntry,
+          eventCode: 'SEAB',
+        },
+        filedAfterPolicyChange: true,
         isExternalUser: true,
       });
 
@@ -366,43 +424,50 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
+        filedAfterPolicyChange: true,
         isExternalUser: false,
       });
 
       expect(result.showLinkToDocument).toBeFalsy();
     });
-  });
 
-  describe('filingsAndProceedingsWithAdditionalInfo', () => {
-    it('should contain filingsAndProceedings and additionalInfo2 separated by a space', () => {
-      const mockFilingsAndProceedings = 'Mock Filings and Proceedings';
-      const mockAdditionalInfo2 = 'Mock Additional Info 2';
-
+    it('should be true for an external user when filedAfterPolicyChange is true and the document was filed by a practitioner', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: {
-          ...simpleDocketEntry,
-          additionalInfo2: mockAdditionalInfo2,
-          filingsAndProceedings: mockFilingsAndProceedings,
+          ...servedCourtIssuedDocketEntry,
+          eventCode: BRIEF_EVENTCODES[0],
+          isFileAttached: true,
+          rootDocument,
         },
+        filedAfterPolicyChange: true,
+        formattedCase: {
+          ...MOCK_CASE,
+          filedByRole: ROLES.privatePractitioner,
+        },
+        isExternalUser: true,
       });
 
-      expect(result.filingsAndProceedingsWithAdditionalInfo).toEqual(
-        ` ${mockFilingsAndProceedings} ${mockAdditionalInfo2}`,
-      );
+      expect(result.showLinkToDocument).toBe(true);
     });
 
-    it('should be an empty string if filingsAndProceedings and additionalInfo2 are both undefined', () => {
+    it('should be false for an external user when filedAfterPolicyChange is false and the document was filed by a practitioner', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
+        ...simpleDocketEntry,
         entry: {
-          ...simpleDocketEntry,
-          additionalInfo2: undefined,
-          filingsAndProceedings: undefined,
+          eventCode: BRIEF_EVENTCODES[0],
+          rootDocument,
         },
+        filedAfterPolicyChange: false,
+        formattedCase: {
+          ...MOCK_CASE,
+          filedByRole: ROLES.privatePractitioner,
+        },
+        isExternalUser: true,
       });
 
-      expect(result.filingsAndProceedingsWithAdditionalInfo).toEqual('');
+      expect(result.showLinkToDocument).toBe(false);
     });
   });
 
@@ -413,6 +478,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
+        filedAfterPolicyChange: true,
         permissions: {
           EDIT_DOCKET_ENTRY: true,
         },
@@ -427,6 +493,7 @@ describe('getFormattedDocketEntry', () => {
         entry: {
           ...servedCourtIssuedDocketEntry,
         },
+        filedAfterPolicyChange: true,
         permissions: {
           EDIT_DOCKET_ENTRY: false,
         },
@@ -444,6 +511,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.showDocumentDescriptionWithoutLink).toBeTruthy();
@@ -456,6 +524,7 @@ describe('getFormattedDocketEntry', () => {
           ...servedCourtIssuedDocketEntry,
           processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.showDocumentDescriptionWithoutLink).toBeFalsy();
@@ -475,6 +544,7 @@ describe('getFormattedDocketEntry', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: mockSealedDocketEntry,
+        filedAfterPolicyChange: true,
         isExternalUser: true,
         userAssociatedWithCase: false,
       });
@@ -496,6 +566,7 @@ describe('getFormattedDocketEntry', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: mockSealedDocketEntry,
+        filedAfterPolicyChange: true,
         isExternalUser: true,
         userAssociatedWithCase: true,
       });
@@ -512,6 +583,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           index: 1234,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.editDocketEntryMetaLink).toEqual(
@@ -525,6 +597,7 @@ describe('getFormattedDocketEntry', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: simpleDocketEntry,
+        filedAfterPolicyChange: true,
       });
 
       expect(result.toolTipText).toEqual('No Document View');
@@ -537,6 +610,7 @@ describe('getFormattedDocketEntry', () => {
           ...simpleDocketEntry,
           isFileAttached: true,
         },
+        filedAfterPolicyChange: true,
       });
 
       expect(result.toolTipText).toBeUndefined();

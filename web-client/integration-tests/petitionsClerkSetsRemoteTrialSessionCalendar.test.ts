@@ -8,7 +8,7 @@ import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsOpenTrialSession } from './journey/petitionsClerkViewsOpenTrialSession';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('petitions clerk sets a remote trial session calendar', () => {
@@ -74,9 +74,7 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     describe('case #5 - manually added to session', () => {
       loginAs(cerebralTest, 'petitionsclerk@example.com');
       cerebralTest.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(cerebralTest, {
-        overrides: { trialLocation },
-      });
+      petitionsClerkCreatesNewCase(cerebralTest, { trialLocation });
       manuallyAddCaseToTrial(cerebralTest);
     });
   });

@@ -1,5 +1,5 @@
 import { correspondenceViewerHelper } from './correspondenceViewerHelper';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('correspondenceViewerHelper', () => {
   it('returns showDeleteCorrespondenceButton true if the user has the CASE_CORRESPONDENCE permissions', () => {

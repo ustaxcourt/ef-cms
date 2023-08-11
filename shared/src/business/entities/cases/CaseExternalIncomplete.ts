@@ -1,103 +1,78 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { Case, getContactPrimary, getContactSecondary } = require('./Case');
-const { CaseExternal } = require('./CaseExternal');
-const { ContactFactory } = require('../contacts/ContactFactory');
+import { Case, getContactPrimary, getContactSecondary } from './Case';
+import { CaseExternal } from './CaseExternal';
+import { ContactFactory } from '../contacts/ContactFactory';
+import { JoiValidationEntity } from '../JoiValidationEntity';
+import joi from 'joi';
 
-/**
- * CaseExternalIncomplete
- * Represents a Case without required documents that a Petitioner is attempting to add to the system.
- * After the Case's files have been saved, a Petition is created to include the document metadata.
- *
- * @param {object} rawCase the raw case data
- * @constructor
- */
-function CaseExternalIncomplete() {}
-CaseExternalIncomplete.prototype.init = function init(
-  rawCase,
-  { applicationContext },
-) {
-  CaseExternalIncomplete.prototype.initSelf.call(this, rawCase, {
-    applicationContext,
-  });
-  CaseExternalIncomplete.prototype.initContacts.call(this, rawCase, {
-    applicationContext,
-  });
-};
+export class CaseExternalIncomplete extends JoiValidationEntity {
+  public businessType: string;
+  public caseType: string;
+  public countryType: string;
+  public filingType: string;
+  public hasIrsNotice: string;
+  public partyType: string;
+  public preferredTrialCity: string;
+  public procedureType: string;
+  public petitioners: any[];
 
-CaseExternalIncomplete.prototype.initContacts = function (
-  rawCase,
-  { applicationContext },
-) {
-  const contacts = ContactFactory.createContacts({
-    applicationContext,
-    contactInfo: {
-      primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
-      secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
-    },
-    partyType: rawCase.partyType,
-  });
-  this.petitioners = [];
-  this.petitioners.push(contacts.primary);
-  if (contacts.secondary) {
-    this.petitioners.push(contacts.secondary);
+  constructor(rawCase, { applicationContext }) {
+    super('CaseExternalIncomplete');
+    this.businessType = rawCase.businessType;
+    this.caseType = rawCase.caseType;
+    this.countryType = rawCase.countryType;
+    this.filingType = rawCase.filingType;
+    this.hasIrsNotice = rawCase.hasIrsNotice;
+    this.partyType = rawCase.partyType;
+    this.preferredTrialCity = rawCase.preferredTrialCity;
+    this.procedureType = rawCase.procedureType;
+
+    const contacts = ContactFactory({
+      applicationContext,
+      contactInfo: {
+        primary: getContactPrimary(rawCase) || rawCase.contactPrimary,
+        secondary: getContactSecondary(rawCase) || rawCase.contactSecondary,
+      },
+      partyType: rawCase.partyType,
+    });
+    this.petitioners = [];
+    this.petitioners.push(contacts.primary);
+    if (contacts.secondary) {
+      this.petitioners.push(contacts.secondary);
+    }
   }
-};
 
-CaseExternalIncomplete.prototype.initSelf = function (rawCase) {
-  this.businessType = rawCase.businessType;
-  this.caseType = rawCase.caseType;
-  this.countryType = rawCase.countryType;
-  this.filingType = rawCase.filingType;
-  this.hasIrsNotice = rawCase.hasIrsNotice;
-  this.partyType = rawCase.partyType;
-  this.preferredTrialCity = rawCase.preferredTrialCity;
-  this.procedureType = rawCase.procedureType;
-};
-
-CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES =
-  Case.VALIDATION_ERROR_MESSAGES;
-
-joiValidationDecorator(
-  CaseExternalIncomplete,
-  joi.object().keys({
-    businessType: CaseExternal.commonRequirements.businessType,
-    caseType: CaseExternal.commonRequirements.caseType,
-    countryType: CaseExternal.commonRequirements.countryType,
-    filingType: CaseExternal.commonRequirements.filingType,
-    hasIrsNotice: CaseExternal.commonRequirements.hasIrsNotice,
-    partyType: CaseExternal.commonRequirements.partyType,
+  static VALIDATION_RULES = {
+    businessType: CaseExternal.VALIDATION_RULES.businessType,
+    caseType: CaseExternal.VALIDATION_RULES.caseType,
+    countryType: CaseExternal.VALIDATION_RULES.countryType,
+    filingType: CaseExternal.VALIDATION_RULES.filingType,
+    hasIrsNotice: CaseExternal.VALIDATION_RULES.hasIrsNotice,
+    partyType: CaseExternal.VALIDATION_RULES.partyType,
     petitioners: joi
       .array()
       .description('List of Contact Entities for the case.')
       .optional(),
-    preferredTrialCity: CaseExternal.commonRequirements.preferredTrialCity,
-    procedureType: CaseExternal.commonRequirements.procedureType,
-  }),
-  CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES,
-);
+    preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
+    procedureType: CaseExternal.VALIDATION_RULES.procedureType,
+  } as const;
 
-/**
- * Returns the primary contact on the case
- *
- * @returns {Object} the primary contact object on the case
- */
-CaseExternalIncomplete.prototype.getContactPrimary = function () {
-  return getContactPrimary(this);
-};
+  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
 
-/**
- * Retrieves the secondary contact on the case
- *
- * @returns {Object} the secondary contact object on the case
- */
-CaseExternalIncomplete.prototype.getContactSecondary = function () {
-  return getContactSecondary(this);
-};
+  getValidationRules() {
+    return CaseExternalIncomplete.VALIDATION_RULES;
+  }
 
-module.exports = {
-  CaseExternalIncomplete: validEntityDecorator(CaseExternalIncomplete),
-};
+  getErrorToMessageMap() {
+    return CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES;
+  }
+
+  getContactPrimary() {
+    return getContactPrimary(this);
+  }
+
+  getContactSecondary() {
+    return getContactSecondary(this);
+  }
+}
+
+export type RawCaseExternalIncomplete = ExcludeMethods<CaseExternalIncomplete>;

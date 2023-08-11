@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /*
  * sets state.searchResults for case search to an empty array to display no matches found message

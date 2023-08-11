@@ -8,13 +8,13 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetAddPaperFilingAction } from '../actions/resetAddPaperFilingAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
-import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetDocketEntryIdAction } from '../actions/unsetDocketEntryIdAction';
 
 export const gotoAddPaperFiling = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearScansAction,
   clearFormAction,
@@ -25,7 +25,7 @@ export const gotoAddPaperFiling = [
   getConsolidatedCasesByCaseAction,
   setConsolidatedCasesForCaseAction,
   resetAddPaperFilingAction,
-  setCurrentPageAction('PaperFiling'),
+  setupCurrentPageAction('PaperFiling'),
 ];
 
 export const gotoAddPaperFilingSequence = [

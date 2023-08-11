@@ -42,6 +42,10 @@ variable "blue_table_name" {
   type = string
 }
 
+variable "default_account_pass" {
+  type = string
+}
+
 variable "green_table_name" {
   type = string
 }
@@ -117,5 +121,22 @@ variable "green_node_version" {
 }
 
 variable "blue_node_version" {
+  type = string
+}
+
+
+variable "green_use_layers" {
+  type = string
+}
+
+variable "blue_use_layers" {
+  type = string
+}
+
+variable "status_health_check_west_id" {
+  type = string
+}
+
+variable "status_health_check_east_id" {
   type = string
 }

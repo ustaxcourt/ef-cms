@@ -1,31 +1,39 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const CaseSearchByName = connect(
   {
     advancedSearchForm: state.advancedSearchForm,
     advancedSearchHelper: state.advancedSearchHelper,
+    caseSearchByNameHelper: state.caseSearchByNameHelper,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
     constants: state.constants,
     updateAdvancedSearchFormValueSequence:
       sequences.updateAdvancedSearchFormValueSequence,
+    updateCaseAdvancedSearchByNameFormValueSequence:
+      sequences.updateCaseAdvancedSearchByNameFormValueSequence,
     usStates: state.constants.US_STATES,
     usStatesOther: state.constants.US_STATES_OTHER,
     validateCaseAdvancedSearchFormSequence:
       sequences.validateCaseAdvancedSearchFormSequence,
+    validateOrderSearchSequence: sequences.validateOrderSearchSequence,
     validationErrors: state.validationErrors,
   },
   function CaseSearchByName({
     advancedSearchForm,
     advancedSearchHelper,
+    caseSearchByNameHelper,
     clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
     updateAdvancedSearchFormValueSequence,
+    updateCaseAdvancedSearchByNameFormValueSequence,
     usStates,
     usStatesOther,
     validateCaseAdvancedSearchFormSequence,
@@ -135,68 +143,42 @@ export const CaseSearchByName = connect(
                   )}
                 </div>
               </div>
-              <div className="tablet:grid-col-5">
-                <FormGroup
-                  className="margin-top-0"
-                  errorText={[
-                    validationErrors.yearFiledMin,
-                    validationErrors.yearFiledMax,
-                  ]}
-                >
-                  <fieldset className="usa-fieldset margin-bottom-0">
-                    <legend className="display-block" id="year-filed-legend">
-                      Year filed
-                    </legend>
-                    <div className="usa-form-group--year display-inline-block">
-                      <input
-                        aria-describedby="case-search-by-name year-filed-legend"
-                        aria-label="starting year, four digits"
-                        className="usa-input"
-                        id="year-filed-min"
-                        name="yearFiledMin"
-                        type="text"
-                        value={
-                          advancedSearchForm.caseSearchByName.yearFiledMin || ''
-                        }
-                        onBlur={() => {
-                          validateCaseAdvancedSearchFormSequence();
-                        }}
-                        onChange={e => {
-                          updateAdvancedSearchFormValueSequence({
-                            formType: 'caseSearchByName',
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                    <span className="margin-right-2">to</span>
-                    <div className="usa-form-group--year display-inline-block">
-                      <input
-                        aria-describedby="case-search-by-name year-filed-legend"
-                        aria-label="ending year, four digits"
-                        className="usa-input"
-                        id="year-filed-max"
-                        name="yearFiledMax"
-                        type="text"
-                        value={
-                          advancedSearchForm.caseSearchByName.yearFiledMax || ''
-                        }
-                        onBlur={() => {
-                          validateCaseAdvancedSearchFormSequence();
-                        }}
-                        onChange={e => {
-                          updateAdvancedSearchFormValueSequence({
-                            formType: 'caseSearchByName',
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                    </div>
-                  </fieldset>
-                </FormGroup>
-              </div>
+            </div>
+
+            <div className="grid-row grid-gap margin-top-4 margin-bottom-2">
+              <DateRangePickerComponent
+                omitFormGroupClass
+                endDateErrorText={validationErrors.endDate}
+                endLabel="Date filed end date"
+                endName="caseSearchByNameEndDate"
+                endPickerCls={
+                  'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                }
+                endValue={advancedSearchForm.caseSearchByName.endDate}
+                formGroupCls={'margin-bottom-0'}
+                maxDate={caseSearchByNameHelper.today}
+                rangePickerCls={'grid-row grid-gap-3'}
+                showDateHint={true}
+                startDateErrorText={validationErrors.startDate}
+                startLabel="Date filed start date"
+                startName="caseSearchByNameStartDate"
+                startPickerCls={
+                  'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                }
+                startValue={advancedSearchForm.caseSearchByName.startDate}
+                onChangeEnd={e => {
+                  updateCaseAdvancedSearchByNameFormValueSequence({
+                    key: 'endDate',
+                    value: e.target.value,
+                  });
+                }}
+                onChangeStart={e => {
+                  updateCaseAdvancedSearchByNameFormValueSequence({
+                    key: 'startDate',
+                    value: e.target.value,
+                  });
+                }}
+              />
             </div>
 
             <div className="grid-row">

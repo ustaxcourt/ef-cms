@@ -10,7 +10,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {

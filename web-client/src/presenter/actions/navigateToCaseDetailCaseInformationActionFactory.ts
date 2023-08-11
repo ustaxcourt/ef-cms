@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * changes the route to view the case-detail of the docketNumber of props.docketNumber and also sets the tab to the case information

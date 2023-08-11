@@ -1,7 +1,7 @@
 import { createDateAtStartOfWeekEST } from '../../../../shared/src/business/utilities/DateHandler';
 import { filter, find, identity, omit, orderBy, pickBy } from 'lodash';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const formatSession = (session, applicationContext) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
@@ -27,6 +27,14 @@ export const formatSession = (session, applicationContext) => {
   session.formattedNoticeIssuedDate = applicationContext
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
+
+  session.showAlertForNOTTReminder =
+    !session.dismissedAlertForNOTT &&
+    session.isStartDateWithinNOTTReminderRange;
+
+  if (session.showAlertForNOTTReminder) {
+    session.alertMessageForNOTT = `The 30-day notice is due by ${session.thirtyDaysBeforeTrialFormatted}`;
+  }
 
   return session;
 };
@@ -111,7 +119,12 @@ export const filterFormattedSessionsByStatus = trialTerms => {
   return filteredbyStatusType;
 };
 
-export const formattedTrialSessions = (get, applicationContext) => {
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const formattedTrialSessions = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const judgeId = get(state.judgeUser.userId);
   const currentTrialSessionId = get(state.trialSessionId);
   const currentUser = applicationContext.getCurrentUser();
@@ -166,7 +179,7 @@ export const formattedTrialSessions = (get, applicationContext) => {
   );
 
   const selectedTerm = get(state.form.term);
-  let sessionsByTerm = [];
+  let sessionsByTerm: any[] = [];
   if (selectedTerm) {
     const selectedTermYear = get(state.form.termYear);
     sessionsByTerm = orderBy(

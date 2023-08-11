@@ -2,18 +2,26 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { DismissThirtyDayNoticeModal } from './DismissThirtyDayNoticeModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
 import { InactiveCases } from './InactiveCases';
+import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
+import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
+import { ServeThirtyDayNoticeModal } from './ServeThirtyDayNoticeModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionDetailHeader } from './TrialSessionDetailHeader';
 import { TrialSessionInformation } from './TrialSessionInformation';
-import { WarningNotification } from '../WarningNotification';
+import {
+  WarningNotification,
+  WarningNotificationComponent,
+} from '../WarningNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionDetail = connect(
@@ -22,6 +30,8 @@ export const TrialSessionDetail = connect(
     openConfirmModalSequence: sequences.openConfirmModalSequence,
     openSetCalendarModalSequence: sequences.openSetCalendarModalSequence,
     showModal: state.modal.showModal,
+    showThirtyDayNoticeModalSequence:
+      sequences.showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
   },
   function TrialSessionDetail({
@@ -29,6 +39,7 @@ export const TrialSessionDetail = connect(
     openConfirmModalSequence,
     openSetCalendarModalSequence,
     showModal,
+    showThirtyDayNoticeModalSequence,
     trialSessionDetailsHelper,
   }) {
     return (
@@ -39,7 +50,23 @@ export const TrialSessionDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WarningNotification />
+          {formattedTrialSessionDetails.showAlertForNOTTReminder && (
+            <WarningNotificationComponent
+              alertWarning={{
+                dismissIcon: 'paper-plane',
+                dismissText: trialSessionDetailsHelper.nottReminderAction,
+                message: formattedTrialSessionDetails.alertMessageForNOTT,
+              }}
+              dismissAlertSequence={showThirtyDayNoticeModalSequence}
+              dismissable={trialSessionDetailsHelper.canDismissThirtyDayAlert}
+              iconRight={false}
+              messageNotBold={true}
+              scrollToTop={false}
+            />
+          )}
+
           <TrialSessionInformation />
+
           {!formattedTrialSessionDetails.isCalendared && (
             <Tabs
               bind="trialSessionDetailsTab.caseList"
@@ -101,6 +128,7 @@ export const TrialSessionDetail = connect(
               </Tab>
             </Tabs>
           )}
+
           {formattedTrialSessionDetails.showOpenCases && (
             <div>
               <Tabs
@@ -167,6 +195,7 @@ export const TrialSessionDetail = connect(
             </Tabs>
           )}
         </section>
+
         {showModal == 'SetCalendarModalDialog' && <SetCalendarModalDialog />}
         {showModal == 'ConfirmModalDialog' && (
           <ConfirmModal
@@ -180,6 +209,14 @@ export const TrialSessionDetail = connect(
             You will not be able to reopen this session.
           </ConfirmModal>
         )}
+        {showModal === 'ServeThirtyDayNoticeModal' && (
+          <ServeThirtyDayNoticeModal />
+        )}
+        {showModal === 'DismissThirtyDayNoticeModal' && (
+          <DismissThirtyDayNoticeModal />
+        )}
+        {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
+        {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
       </>
     );
   },

@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import { uniqBy } from 'lodash';
 
 /**
@@ -8,9 +8,18 @@ import { uniqBy } from 'lodash';
  * @param {object} applicationContext the application context
  * @returns {object} the computed values
  */
-export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const { CONTACT_TYPE_TITLES, NON_MULTI_DOCKETABLE_EVENT_CODES, USER_ROLES } =
-    applicationContext.getConstants();
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const confirmInitiateServiceModalHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
+  const {
+    CONTACT_TYPE_TITLES,
+    NON_MULTI_DOCKETABLE_EVENT_CODES,
+    SIMULTANEOUS_DOCUMENT_EVENT_CODES,
+    USER_ROLES,
+  } = applicationContext.getConstants();
   const { isCourtIssued } = applicationContext.getUtilities();
 
   const docketEntryId = get(state.docketEntryId);
@@ -18,12 +27,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const form = get(state.form);
 
   const isOnMessageDetailPage = get(state.currentPage) === 'MessageDetail';
-
-  let { eventCode } = form;
+  let { documentTitle, eventCode, isPaper } = form;
   if (!eventCode) {
-    ({ eventCode } = formattedCaseDetail.docketEntries.find(
-      doc => doc.docketEntryId === docketEntryId,
-    ));
+    ({ documentTitle, eventCode, isPaper } =
+      formattedCaseDetail.docketEntries.find(
+        doc => doc.docketEntryId === docketEntryId,
+      ));
   }
 
   let showConsolidatedCasesForService =
@@ -38,6 +47,14 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
     showConsolidatedCasesForService =
       showConsolidatedCasesForService && areMultiDocketablePaperFilingsEnabled;
+
+    if (
+      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
+      documentTitle.includes('Simultaneous')
+    ) {
+      showConsolidatedCasesForService =
+        showConsolidatedCasesForService && isPaper;
+    }
   }
 
   const confirmationText = showConsolidatedCasesForService

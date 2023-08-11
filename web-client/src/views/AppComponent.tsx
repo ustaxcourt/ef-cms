@@ -24,6 +24,7 @@ import { ContactEdit } from './ContactEdit';
 import { CourtIssuedDocketEntry } from './CourtIssuedDocketEntry/CourtIssuedDocketEntry';
 import { CreateOrder } from './CreateOrder/CreateOrder';
 import { CreatePractitionerUser } from './Practitioners/CreatePractitionerUser';
+import { CustomCaseReport } from './CustomCaseReport/CustomCaseReport';
 import { DashboardChambers } from './Dashboards/DashboardChambers';
 import { DashboardInactive } from './Dashboards/DashboardInactive';
 import { DashboardIrsSuperuser } from './Dashboards/DashboardIrsSuperuser';
@@ -93,7 +94,7 @@ import { UserContactEditProgress } from './UserContactEditProgress';
 import { WebSocketErrorModal } from './WebSocketErrorModal';
 import { WorkQueue } from './WorkQueue';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 
 const pages = {
@@ -120,6 +121,7 @@ const pages = {
   CourtIssuedDocketEntry,
   CreateOrder,
   CreatePractitionerUser,
+  CustomCaseReport,
   DashboardChambers,
   DashboardInactive,
   DashboardIrsSuperuser,

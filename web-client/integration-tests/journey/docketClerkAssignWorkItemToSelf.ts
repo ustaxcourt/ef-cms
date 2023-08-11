@@ -1,13 +1,13 @@
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { refreshElasticsearchIndex } from '../helpers';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
 export const docketClerkAssignWorkItemToSelf = (
   cerebralTest,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
   return it('Docket clerk assigns the selected work items to self', async () => {
     await refreshElasticsearchIndex();

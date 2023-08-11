@@ -2,7 +2,7 @@ import { CASE_SERVICES_SUPERVISOR_SECTION } from '../../../../shared/src/busines
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getUsersInSectionAction } from './getUsersInSectionAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getUsersInSectionAction', () => {
   beforeAll(() => {

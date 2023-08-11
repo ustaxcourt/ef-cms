@@ -1,4 +1,8 @@
-import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
+import {
+  waitForExpectedItem,
+  waitForLoadingComponentToHide,
+  waitForModalsToHide,
+} from '../helpers';
 
 export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
   return it('Petitions Clerk Sets A Trial Sessions Schedule', async () => {
@@ -11,6 +15,7 @@ export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
     await waitForLoadingComponentToHide({ cerebralTest, maxWait: 120000 });
+    await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
     await waitForExpectedItem({
       cerebralTest,

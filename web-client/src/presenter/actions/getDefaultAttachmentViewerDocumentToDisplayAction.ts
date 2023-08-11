@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * gets the first attachment document from the most recent message to set as the default messageViewerDocumentToDisplay
  * @param {object} providers the providers object

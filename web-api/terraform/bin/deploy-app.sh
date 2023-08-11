@@ -17,6 +17,7 @@ if [ -z "${SECRETS_LOADED}" ]; then
 fi
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
+[ -z "${DEFAULT_ACCOUNT_PASS}" ] && echo "You must have DEFAULT_ACCOUNT_PASS set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
@@ -31,6 +32,7 @@ fi
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
+echo "  - DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
@@ -124,9 +126,13 @@ fi
 if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
   GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
   BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 else
   BLUE_NODE_VERSION=$(../../../scripts/dynamo/get-current-node-version.sh "${ENV}")
   GREEN_NODE_VERSION=$(../../../scripts/dynamo/get-deploying-node-version.sh "${ENV}")
+  BLUE_USE_LAYERS=$(../../../scripts/dynamo/get-current-use-layers.sh "${ENV}")
+  GREEN_USE_LAYERS=$(../../../scripts/dynamo/get-deploying-use-layers.sh "${ENV}")
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
@@ -162,6 +168,11 @@ export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_green_node_version=$GREEN_NODE_VERSION
 export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
+export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
+export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
+export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
+export TF_VAR_status_health_check_west_id=$HEALTH_CHECK_WEST_ID
+export TF_VAR_status_health_check_east_id=$HEALTH_CHECK_EAST_ID
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

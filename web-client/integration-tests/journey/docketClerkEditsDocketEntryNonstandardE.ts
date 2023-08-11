@@ -60,7 +60,7 @@ export const docketClerkEditsDocketEntryNonstandardE = cerebralTest => {
     const updatedDocketEntry = formattedDocketEntriesOnDocketRecord[0];
     expect(updatedDocketEntry).toMatchObject({
       descriptionDisplay:
-        'Motion to Change Place of Hearing of Disclosure Case To Boise, Idaho some additional info',
+        'Motion to Change Place of Hearing of Disclosure Case To Boise, Idaho some additional info (C/S 01/01/11) (Attachment(s)) (Lodged) some additional info pt 2',
     });
 
     const updatedDocument = formattedDocketEntriesOnDocketRecord.find(

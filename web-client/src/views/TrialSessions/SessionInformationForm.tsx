@@ -1,7 +1,8 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -32,46 +33,43 @@ export const SessionInformationForm = connect(
       <>
         <h2 className="margin-top-0">Session Information</h2>
         <div className="blue-container">
-          {addingTrialSession &&
-            addTrialSessionInformationHelper.FEATURE_canDisplayStandaloneRemote && (
-              <div className="margin-bottom-5">
-                <legend className="usa-legend" id="session-scope-legend">
-                  Session scope
-                </legend>
-                {Object.entries(TRIAL_SESSION_SCOPE_TYPES).map(
-                  ([key, value]) => (
-                    <div className="usa-radio usa-radio__inline" key={key}>
-                      <input
-                        aria-describedby="session-scope"
-                        checked={form.sessionScope === value}
-                        className="usa-radio__input"
-                        id={`${key}-sessionScope`}
-                        name="sessionScope"
-                        type="radio"
-                        value={value}
-                        onBlur={() => {
-                          validateTrialSessionSequence();
-                        }}
-                        onChange={e => {
-                          updateTrialSessionFormDataSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        aria-label={value}
-                        className="smaller-padding-right usa-radio__label"
-                        htmlFor={`${key}-sessionScope`}
-                        id={`${key}-session-scope-label`}
-                      >
-                        {value}
-                      </label>
-                    </div>
-                  ),
-                )}
-              </div>
-            )}
+          {addingTrialSession && (
+            <div className="margin-bottom-5">
+              <legend className="usa-legend" id="session-scope-legend">
+                Session scope
+              </legend>
+              {Object.entries(TRIAL_SESSION_SCOPE_TYPES).map(([key, value]) => (
+                <div className="usa-radio usa-radio__inline" key={key}>
+                  <input
+                    aria-describedby="session-scope"
+                    checked={form.sessionScope === value}
+                    className="usa-radio__input"
+                    id={`${key}-sessionScope`}
+                    name="sessionScope"
+                    type="radio"
+                    value={value}
+                    onBlur={() => {
+                      validateTrialSessionSequence();
+                    }}
+                    onChange={e => {
+                      updateTrialSessionFormDataSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  />
+                  <label
+                    aria-label={value}
+                    className="smaller-padding-right usa-radio__label"
+                    htmlFor={`${key}-sessionScope`}
+                    id={`${key}-session-scope-label`}
+                  >
+                    {value}
+                  </label>
+                </div>
+              ))}
+            </div>
+          )}
 
           <div className="grid-row grid-gap-6">
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
@@ -84,6 +82,7 @@ export const SessionInformationForm = connect(
                 }
                 id="start-date"
                 label="Start date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'startDateDay',
                   month: 'startDateMonth',
@@ -108,7 +107,7 @@ export const SessionInformationForm = connect(
                 <FormGroup errorText={validationErrors.startTime}>
                   <fieldset className="start-time usa-fieldset margin-bottom-0">
                     <legend className="usa-legend" id="start-time-legend">
-                      Time <span className="usa-hint">(optional)</span>
+                      Time
                     </legend>
                     <div className="ustc-time-of-day">
                       <div className="usa-form-group ustc-time-of-day--hour">
@@ -203,12 +202,13 @@ export const SessionInformationForm = connect(
                 }
                 id="estimated-end-date"
                 label="Estimated end date"
+                minDate={addTrialSessionInformationHelper.today}
                 names={{
                   day: 'estimatedEndDateDay',
                   month: 'estimatedEndDateMonth',
                   year: 'estimatedEndDateYear',
                 }}
-                optional="true"
+                optional={true}
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
                 useHintNoWrap={true}

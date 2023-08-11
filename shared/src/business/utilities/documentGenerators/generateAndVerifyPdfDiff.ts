@@ -1,6 +1,7 @@
 import { PNG } from 'pngjs';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { fromPath } from 'pdf2pic';
+import { generatePdfFromHtmlHelper } from '../../useCaseHelper/generatePdfFromHtmlHelper';
 import { generatePdfFromHtmlInteractor } from '../../useCases/generatePdfFromHtmlInteractor';
 import { getChromiumBrowser } from '../getChromiumBrowser';
 import fs from 'fs';
@@ -61,6 +62,9 @@ export const generateAndVerifyPdfDiff = ({
     fs.mkdirSync(testOutputPath, { recursive: true });
 
     applicationContext.getChromiumBrowser = getChromiumBrowser as any;
+
+    applicationContext.getUseCaseHelpers().generatePdfFromHtmlHelper =
+      generatePdfFromHtmlHelper;
 
     applicationContext.getUseCases().generatePdfFromHtmlInteractor =
       generatePdfFromHtmlInteractor as any;

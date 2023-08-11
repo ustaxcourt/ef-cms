@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 /**
  * Fetches the case using the getCase use case using the props.docketNumber
  * @param {object} providers the providers object

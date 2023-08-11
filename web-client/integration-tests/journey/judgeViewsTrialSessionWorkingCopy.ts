@@ -1,12 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedTrialSessionDetails } from '../../src/presenter/computeds/formattedTrialSessionDetails';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const judgeViewsTrialSessionWorkingCopy = (
   cerebralTest,
-  checkCase,
-  calendarNote,
+  checkCase?,
+  calendarNote?,
   expectedNumberOfCasesOnTrialSession = 1,
 ) => {
   const { DOCKET_SECTION } = applicationContext.getConstants();

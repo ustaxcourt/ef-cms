@@ -1,45 +1,35 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * calls the proxy/interactor to archive a document on the backend
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the assignWorkItems method we will need from the getUseCases method
- * @param {object} providers.props props passed through via cerebral
- * @param {object} providers.store the cerebral store object
- * @returns {Promise} async action
- */
 export const archiveDraftDocumentAction = async ({
   applicationContext,
   get,
-  store,
+  path,
 }: ActionProps) => {
-  const { docketEntryId, redirectToCaseDetail } = get(
-    state.archiveDraftDocument,
-  );
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const { docketEntryId, docketNumber } = get(state.archiveDraftDocument);
 
-  const updatedCase = await applicationContext
-    .getUseCases()
-    .archiveDraftDocumentInteractor(applicationContext, {
-      docketEntryId,
-      docketNumber,
-    });
-
-  store.unset(state.viewerDraftDocumentToDisplay);
-  store.unset(state.draftDocumentViewerDocketEntryId);
-
-  store.set(state.alertSuccess, {
-    message: 'Document deleted.',
-  });
-
-  if (redirectToCaseDetail) {
-    store.set(state.saveAlertsForNavigation, true);
-
-    return {
-      caseDetail: updatedCase,
-      docketNumber,
-    };
+  let updatedCase: RawCase;
+  try {
+    updatedCase = await applicationContext
+      .getUseCases()
+      .archiveDraftDocumentInteractor(applicationContext, {
+        docketEntryId,
+        docketNumber,
+      });
+  } catch (error: any) {
+    const isArchivingServedEntry =
+      error?.originalError?.response?.data?.includes(
+        'Cannot archive docket entry that has already been served.',
+      );
+    if (isArchivingServedEntry) {
+      return path.error({ showModal: 'DocketEntryHasAlreadyBeenServedModal' });
+    }
+    throw error;
   }
 
-  return { caseDetail: updatedCase };
+  return path.success({
+    alertSuccess: {
+      message: 'Document deleted.',
+    },
+    caseDetail: updatedCase,
+  });
 };

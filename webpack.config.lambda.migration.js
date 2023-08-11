@@ -8,7 +8,6 @@ module.exports = {
     'migration-segments':
       './web-api/workflow-terraform/migration/main/lambdas/migration-segments.js',
   },
-  externals: ['aws-crt'],
   output: {
     clean: true,
     libraryTarget: 'umd',

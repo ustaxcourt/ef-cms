@@ -1,3 +1,4 @@
+import { AuthenticationResult } from '../../support/login-types';
 import {
   addDocketEntryForOrderAndSaveForLater,
   addDocketEntryForOrderAndServePaper,
@@ -11,7 +12,6 @@ import {
   serveCourtIssuedDocketEntry,
   uploadCourtIssuedDocPdf,
 } from '../support/pages/case-detail';
-
 import {
   completeWizardStep1,
   completeWizardStep2,
@@ -28,7 +28,6 @@ import {
   hasIrsNotice,
   submitPetition,
 } from '../support/pages/create-electronic-petition';
-
 import { faker } from '@faker-js/faker';
 import { fillInCreateCaseFromPaperForm } from '../../cypress-integration/support/pages/create-paper-petition';
 import { getEnvironmentSpecificFunctions } from '../support/pages/environment-specific-factory';
@@ -39,21 +38,22 @@ import {
 } from '../support/pages/create-paper-case';
 import { goToMyDocumentQC } from '../support/pages/document-qc';
 
-let token = null;
+let token: string;
 const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const { closeScannerSetupDialog, getUserToken, login } =
-  getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+let createdPaperDocketNumber: string;
 
 describe('Petitioner', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitioner1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'petitioner1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -77,7 +77,7 @@ describe('Petitioner', () => {
       goToWizardStep3();
       completeWizardStep3(
         filingTypes.INDIVIDUAL,
-        `${faker.name.firstName()} ${faker.name.lastName()}`,
+        `${faker.person.firstName()} ${faker.person.lastName()}`,
       );
       goToWizardStep4();
       completeWizardStep4();
@@ -89,12 +89,13 @@ describe('Petitioner', () => {
 });
 
 describe('Petitions clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'petitionsclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -106,7 +107,9 @@ describe('Petitions clerk', () => {
     goToCreateCase();
     closeScannerSetupDialog();
     fillInCreateCaseFromPaperForm();
-    goToReviewCase(testData);
+    goToReviewCase().then(
+      docketNumber => (createdPaperDocketNumber = docketNumber),
+    );
     serveCaseToIrs();
   });
 
@@ -117,12 +120,13 @@ describe('Petitions clerk', () => {
 });
 
 describe('Docket Clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
+  before(() => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'docketclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+    });
   });
 
   it('should be able to login', () => {
@@ -139,7 +143,7 @@ describe('Docket Clerk', () => {
   });
 
   it('should be able to create an order on the paper-filed case and serve it', () => {
-    createOrder(testData.createdPaperDocketNumber);
+    createOrder(createdPaperDocketNumber);
     editAndSignOrder();
     addDocketEntryForOrderAndServePaper();
   });
@@ -159,7 +163,7 @@ describe('Docket Clerk', () => {
   });
 
   it('should be able to upload a court-issued order pdf on the paper-filed case', () => {
-    goToCaseDetail(testData.createdPaperDocketNumber);
+    goToCaseDetail(createdPaperDocketNumber);
 
     uploadCourtIssuedDocPdf();
   });

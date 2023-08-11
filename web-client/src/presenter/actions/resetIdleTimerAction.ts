@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * obtains the idleTimeRef ref and calls its reset() method to reset the idle timer

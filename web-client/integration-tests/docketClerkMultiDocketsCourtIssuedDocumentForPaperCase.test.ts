@@ -16,7 +16,7 @@ import {
 } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Group with Paper Service', () => {
@@ -51,7 +51,7 @@ describe('Docket Clerk Multi-Dockets a Court Issued Order in a Consolidated Grou
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkCreatesNewCase(cerebralTest, { overrides });
+  petitionsClerkCreatesNewCase(cerebralTest, overrides);
 
   it('add paper case docket number to tracked consolidated cases', () => {
     cerebralTest.consolidatedCases.push(cerebralTest.docketNumber);

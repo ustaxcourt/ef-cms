@@ -1,7 +1,10 @@
 /* eslint-disable max-lines */
+
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -15,22 +18,22 @@ import {
   setupIconsToDisplay,
 } from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const getDateISO = () =>
-  applicationContext.getUtilities().createISODateString();
-
-export const mockDocketEntry = {
-  createdAt: getDateISO(),
-  docketEntryId: '123',
-  documentTitle: 'Petition',
-  filedBy: 'Jessica Frase Marine',
-  filingDate: '2019-02-28T21:14:39.488Z',
-  isOnDocketRecord: true,
-};
-
 describe('formattedDocketEntries', () => {
+  const getDateISO = () =>
+    applicationContext.getUtilities().createISODateString();
+
+  const mockDocketEntry = {
+    createdAt: getDateISO(),
+    docketEntryId: '123',
+    documentTitle: 'Petition',
+    filedBy: 'Jessica Frase Marine',
+    filingDate: '2019-02-28T21:14:39.488Z',
+    isOnDocketRecord: true,
+  };
+
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
@@ -47,6 +50,10 @@ describe('formattedDocketEntries', () => {
   const getBaseState = user => {
     globalUser = user;
     return {
+      featureFlags: {
+        [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+          '2023-05-01',
+      },
       permissions: getUserPermissions(user),
       sessionMetadata: {
         docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
@@ -249,6 +256,90 @@ describe('formattedDocketEntries', () => {
         isStatusServed: false,
       },
     ]);
+  });
+
+  it('should NOT show document link for an amendment petition docket entry when the previous docket entry is NOT a brief', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              eventCode: 'AMAT',
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isFileAttached: true,
+              previousDocument: {
+                docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
+                documentTitle: 'Petition',
+                documentType: 'Petition',
+              },
+              servedAt: '2050-05-16T00:00:00.000-04:01',
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
+              eventCode: 'P',
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isFileAttached: true,
+              servedAt: '2050-05-16T00:00:00.000-04:01',
+            },
+          ],
+        },
+      },
+    });
+
+    const amat = result.formattedDocketEntriesOnDocketRecord.find(
+      document => document.docketEntryId === mockDocketEntry.docketEntryId,
+    );
+
+    expect(amat.showLinkToDocument).toEqual(false);
+  });
+
+  it('should show document link for an amendment docket entry when the previous docket entry is a brief and filed after visibility policy change date', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              eventCode: 'AMAT',
+              filedByRole: ROLES.privatePractitioner,
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isFileAttached: true,
+              previousDocument: {
+                docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
+                documentTitle: 'Seriatim Answering Brief',
+                documentType: 'Seriatim Answering Brief',
+              },
+              servedAt: '2050-05-16T00:00:00.000-04:01',
+            },
+            {
+              ...mockDocketEntry,
+              docketEntryId: '0f52c863-6702-4243-9ea7-e0af17294067',
+              documentType: 'Seriatim Answering Brief',
+              eventCode: 'SEAB',
+              filingDate: '2050-05-16T00:00:00.000-04:00',
+              isCourtIssuedDocument: false,
+              isFileAttached: true,
+              servedAt: '2050-05-16T00:00:00.000-04:01',
+            },
+          ],
+        },
+      },
+    });
+
+    const amat = result.formattedDocketEntriesOnDocketRecord.find(
+      document => document.docketEntryId === mockDocketEntry.docketEntryId,
+    );
+
+    expect(amat.showLinkToDocument).toEqual(true);
   });
 
   describe('sorts docket records', () => {

@@ -1,5 +1,5 @@
 import { clearScreenMetadataAction } from './clearScreenMetadataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearScreenMetadataAction', () => {
   it('should clear the value of state.screenMetadata', async () => {

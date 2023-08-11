@@ -6,7 +6,8 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
-import { props, state } from 'cerebral';
+import { props } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const TrialSessionsTable = connect(
@@ -136,7 +137,17 @@ export const TrialSessionsTable = connect(
               {trialDate.sessions.map(item => (
                 <tbody key={item.trialSessionId}>
                   <tr className="trial-sessions-row">
-                    <td>{item.formattedStartDate}</td>
+                    <td>
+                      {item.showAlertForNOTTReminder && (
+                        <FontAwesomeIcon
+                          className="fa-icon-blue margin-right-05"
+                          icon="clock"
+                          size="sm"
+                          title={item.alertMessageForNOTT}
+                        />
+                      )}
+                      {item.formattedStartDate}
+                    </td>
                     <td>{item.formattedEstimatedEndDate}</td>
                     <td>
                       {item.swingSession && (

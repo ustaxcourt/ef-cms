@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ExternalConsolidatedCaseGroupFilingCard } from '../FileDocument/ExternalConsolidatedCaseGroupFilingCard';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
@@ -6,12 +7,15 @@ import { RequestAccessDocumentForm } from './RequestAccessDocumentForm';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { connect } from '@cerebral/react';
 import { reactSelectValue } from '../../ustc-ui/Utils/documentTypeSelectHelper';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
 export const RequestAccess = connect(
   {
+    allowExternalConsolidatedGroupFiling:
+      state.allowExternalConsolidatedGroupFiling,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     requestAccessHelper: state.requestAccessHelper,
@@ -24,6 +28,7 @@ export const RequestAccess = connect(
     validationErrors: state.validationErrors,
   },
   function RequestAccess({
+    allowExternalConsolidatedGroupFiling,
     form,
     formCancelToggleCancelSequence,
     requestAccessHelper,
@@ -103,6 +108,9 @@ export const RequestAccess = connect(
           <RequestAccessDocumentForm />
           {requestAccessHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
+          )}
+          {allowExternalConsolidatedGroupFiling && (
+            <ExternalConsolidatedCaseGroupFilingCard />
           )}
           <div className="margin-top-5">
             <Button

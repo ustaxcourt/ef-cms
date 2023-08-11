@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * sets the state.modal.showModal based on the props.openModal passed in (mainly used for pa11y and debugging)

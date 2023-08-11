@@ -1,8 +1,14 @@
 /* eslint-disable complexity */
-import { capitalize } from 'lodash';
-import { state } from 'cerebral';
 
-export const workQueueHelper = (get, applicationContext) => {
+import { capitalize } from 'lodash';
+import { state } from '@web-client/presenter/app.cerebral';
+
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
+export const workQueueHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+) => {
   const user = applicationContext.getCurrentUser();
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);

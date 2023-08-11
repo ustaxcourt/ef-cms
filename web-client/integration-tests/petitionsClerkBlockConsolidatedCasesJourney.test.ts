@@ -7,7 +7,7 @@ import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseR
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Manually block consolidated cases', () => {
@@ -29,10 +29,8 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      procedureType: 'Regular',
-      trialLocation,
-    },
+    procedureType: 'Regular',
+    trialLocation,
   });
 
   it('creates lead case', () => {
@@ -47,10 +45,8 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, {
-    overrides: {
-      procedureType: 'Regular',
-      trialLocation,
-    },
+    procedureType: 'Regular',
+    trialLocation,
   });
 
   it('should set member case docket number', () => {

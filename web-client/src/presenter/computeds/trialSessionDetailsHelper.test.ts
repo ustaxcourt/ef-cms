@@ -4,55 +4,40 @@ import {
   SESSION_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { runCompute } from 'cerebral/test';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionDetailsHelper as trialSessionDetailsHelperComputed } from './trialSessionDetailsHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('trialSessionDetailsHelper', () => {
-  const TRIAL_SESSION = {
-    city: 'Hartford',
-    courtReporter: 'Test Court Reporter',
-    irsCalendarAdministrator: 'Test Calendar Admin',
-    isCalendared: false,
-    judge: { name: 'Test Judge' },
-    postalCode: '12345',
-    startDate: '2019-11-25T15:00:00.000Z',
-    startTime: '10:00',
-    state: 'CT',
-    term: 'Fall',
-    termYear: '2019',
-    trialClerk: { name: 'Test Trial Clerk' },
-    trialLocation: 'Hartford, Connecticut',
-  };
-
-  const mockCases = [
+  const mockEligibleCases = [
     MOCK_CASE,
     {
       ...MOCK_CASE,
       caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+      qcCompleteForTrial: { [`${MOCK_TRIAL_INPERSON.trialSessionId}`]: true },
     },
     {
       ...MOCK_CASE,
       caseCaption: undefined,
       docketNumber: '103-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+      qcCompleteForTrial: { [`${MOCK_TRIAL_INPERSON.trialSessionId}`]: true },
     },
     {
       ...MOCK_CASE,
       caseCaption: undefined,
       docketNumber: '110-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
-      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+      qcCompleteForTrial: { [`${MOCK_TRIAL_INPERSON.trialSessionId}`]: true },
     },
     {
       ...MOCK_CASE,
       caseCaption: undefined,
       docketNumber: '111-19',
-      qcCompleteForTrial: { [TRIAL_SESSION.trialSessionId]: true },
+      qcCompleteForTrial: { [`${MOCK_TRIAL_INPERSON.trialSessionId}`]: true },
     },
   ];
 
@@ -61,124 +46,207 @@ describe('trialSessionDetailsHelper', () => {
     applicationContext,
   );
 
-  it('returns total count of eligible cases with QC complete', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: mockCases,
+  describe('canDismissThirtyDayAlert', () => {
+    it('should be true when the curent user has DISMISS_NOTT_REMINDER permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DISMISS_NOTT_REMINDER: true },
+          trialSession: MOCK_TRIAL_INPERSON,
         },
-      },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toEqual(true);
     });
-    expect(result.eligibleTotalCaseQcCompleteCount).toEqual(
-      mockCases.length - 1,
-    );
+
+    it('should be false when the curent user does NOT have DISMISS_NOTT_REMINDER permissions', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { DISMISS_NOTT_REMINDER: false },
+          trialSession: MOCK_TRIAL_INPERSON,
+        },
+      });
+
+      expect(result.canDismissThirtyDayAlert).toEqual(false);
+    });
   });
 
-  it('returns 0 total of eligible cases if eligibleCases is not on the state', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
+  describe('eligibleRegularCaseQcTotalCompleteCount', () => {
+    it('should return the number of eligible regular cases who have QC completed', () => {
+      const { eligibleRegularCaseQcTotalCompleteCount } = runCompute(
+        trialSessionDetailsHelper,
+        {
+          state: {
+            permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+            trialSession: {
+              ...MOCK_TRIAL_INPERSON,
+              eligibleCases: mockEligibleCases,
+            },
+          },
         },
-      },
+      );
+
+      expect(eligibleRegularCaseQcTotalCompleteCount).toEqual(2);
     });
-    expect(result.eligibleTotalCaseQcCompleteCount).toEqual(0);
   });
 
-  it('returns count of small eligible cases with QC complete', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: mockCases,
+  describe('eligibleSmallCaseQcTotalCompleteCount', () => {
+    it('should return the number of eligible small cases who have QC completed', () => {
+      const { eligibleSmallCaseQcTotalCompleteCount } = runCompute(
+        trialSessionDetailsHelper,
+        {
+          state: {
+            permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+            trialSession: {
+              ...MOCK_TRIAL_INPERSON,
+              eligibleCases: mockEligibleCases,
+            },
+          },
         },
-      },
+      );
+
+      expect(eligibleSmallCaseQcTotalCompleteCount).toEqual(2);
     });
-    expect(result.eligibleSmallCaseQcTotalCompleteCount).toEqual(2);
   });
 
-  it('returns count of regular eligible cases with QC complete', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: mockCases,
+  describe('eligibleTotalCaseQcCompleteCount', () => {
+    it('should return the total number of eligible cases with QC complete', () => {
+      const { eligibleTotalCaseQcCompleteCount } = runCompute(
+        trialSessionDetailsHelper,
+        {
+          state: {
+            permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+            trialSession: {
+              ...MOCK_TRIAL_INPERSON,
+              eligibleCases: mockEligibleCases,
+            },
+          },
         },
-      },
+      );
+
+      expect(eligibleTotalCaseQcCompleteCount).toEqual(
+        mockEligibleCases.length - 1,
+      );
     });
-    expect(result.eligibleRegularCaseQcTotalCompleteCount).toEqual(2);
+
+    it('should return 0 when eligibleCases is not on the state', () => {
+      const { eligibleTotalCaseQcCompleteCount } = runCompute(
+        trialSessionDetailsHelper,
+        {
+          state: {
+            permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+            trialSession: {
+              ...MOCK_TRIAL_INPERSON,
+              eligibleCases: undefined,
+            },
+          },
+        },
+      );
+
+      expect(eligibleTotalCaseQcCompleteCount).toEqual(0);
+    });
   });
 
-  it('returns showQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: [],
+  describe('nottReminderAction', () => {
+    it('should be `Yes, Dismiss` when thirty day notices of trial have already been served for cases on the trial session', () => {
+      const { nottReminderAction } = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+          trialSession: {
+            ...MOCK_TRIAL_INPERSON,
+            hasNOTTBeenServed: true,
+          },
         },
-      },
+      });
+
+      expect(nottReminderAction).toEqual('Yes, Dismiss');
     });
-    expect(result.showQcComplete).toEqual(true);
+
+    it('should be `Serve/Dismiss` when thirty day notices of trial have NOT been served for cases on the trial session', () => {
+      const { nottReminderAction } = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+          trialSession: {
+            ...MOCK_TRIAL_INPERSON,
+            hasNOTTBeenServed: false,
+          },
+        },
+      });
+
+      expect(nottReminderAction).toEqual('Serve/Dismiss');
+    });
   });
 
-  it('returns showQcComplete false if the user does not have TRIAL_SESSION_QC_COMPLETE permission', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: false },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: [],
+  describe('showQcComplete', () => {
+    it('should return true when the user has TRIAL_SESSION_QC_COMPLETE permission', () => {
+      const { showQcComplete } = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+          trialSession: MOCK_TRIAL_INPERSON,
         },
-      },
+      });
+
+      expect(showQcComplete).toEqual(true);
     });
-    expect(result.showQcComplete).toEqual(false);
+
+    it('should return false when the user does not have TRIAL_SESSION_QC_COMPLETE permission', () => {
+      const { showQcComplete } = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { TRIAL_SESSION_QC_COMPLETE: false },
+          trialSession: MOCK_TRIAL_INPERSON,
+        },
+      });
+
+      expect(showQcComplete).toEqual(false);
+    });
   });
 
-  it('returns showSmallAndRegularQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is a Hybrid type', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: [],
-          sessionType: HYBRID_SESSION_TYPES.hybrid,
+  describe('showSmallAndRegularQcComplete', () => {
+    it('should return true when the user has TRIAL_SESSION_QC_COMPLETE permission and the trial session is a Hybrid type', () => {
+      const { showSmallAndRegularQcComplete } = runCompute(
+        trialSessionDetailsHelper,
+        {
+          state: {
+            permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+            trialSession: {
+              ...MOCK_TRIAL_INPERSON,
+              sessionType: HYBRID_SESSION_TYPES.hybrid,
+            },
+          },
         },
-      },
-    });
-    expect(result.showSmallAndRegularQcComplete).toEqual(true);
-  });
+      );
 
-  it('returns showSmallAndRegularQcComplete false if the user does not have TRIAL_SESSION_QC_COMPLETE permission and sessionType is a Hybrid type', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: false },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: [],
-          sessionType: HYBRID_SESSION_TYPES.hybridSmall,
-        },
-      },
+      expect(showSmallAndRegularQcComplete).toEqual(true);
     });
-    expect(result.showSmallAndRegularQcComplete).toEqual(false);
-  });
 
-  it('returns showSmallAndRegularQcComplete false if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is Regular', () => {
-    const result = runCompute(trialSessionDetailsHelper, {
-      state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
-        trialSession: {
-          ...TRIAL_SESSION,
-          eligibleCases: [],
-          sessionType: SESSION_TYPES.regular,
+    it('should return false when the user does not have TRIAL_SESSION_QC_COMPLETE permission and the trial session is a Hybrid type', () => {
+      const { showSmallAndRegularQcComplete } = runCompute(
+        trialSessionDetailsHelper,
+        {
+          state: {
+            permissions: { TRIAL_SESSION_QC_COMPLETE: false },
+            trialSession: {
+              ...MOCK_TRIAL_INPERSON,
+              sessionType: HYBRID_SESSION_TYPES.hybridSmall,
+            },
+          },
         },
-      },
+      );
+
+      expect(showSmallAndRegularQcComplete).toEqual(false);
     });
-    expect(result.showSmallAndRegularQcComplete).toEqual(false);
+
+    it('should return false when the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType and the trial session is a Regular type', () => {
+      const result = runCompute(trialSessionDetailsHelper, {
+        state: {
+          permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+          trialSession: {
+            ...MOCK_TRIAL_INPERSON,
+            sessionType: SESSION_TYPES.regular,
+          },
+        },
+      });
+
+      expect(result.showSmallAndRegularQcComplete).toEqual(false);
+    });
   });
 });

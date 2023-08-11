@@ -1,5 +1,5 @@
 import { clearWizardDataAction } from './clearWizardDataAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearWizardDataAction', () => {
   it('clears document scenario with "category" key', async () => {

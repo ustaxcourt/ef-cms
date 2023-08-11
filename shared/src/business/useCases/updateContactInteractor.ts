@@ -135,19 +135,20 @@ export const updateContactInteractor = async (
         isOnDocketRecord: true,
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
+
+    changeOfAddressDocketEntry.setFiledBy(user);
 
     const servedParties = aggregatePartiesForService(caseEntity);
 
     changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
-    const isContactRepresented =
-      caseEntity.isUserIdRepresentedByPrivatePractitioner(
-        contactInfo.contactId,
-      );
+    const isContactRepresented = Case.isPetitionerRepresented(
+      caseEntity,
+      contactInfo.contactId,
+    );
 
     const partyWithPaperService = caseEntity.hasPartyWithServiceType(
       SERVICE_INDICATOR_TYPES.SI_PAPER,

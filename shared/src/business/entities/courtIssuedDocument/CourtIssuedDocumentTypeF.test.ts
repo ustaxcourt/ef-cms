@@ -1,6 +1,6 @@
-const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../EntityConstants');
-const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
+import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
+import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 
 describe('CourtIssuedDocumentTypeF', () => {
   describe('constructor', () => {
@@ -38,7 +38,7 @@ describe('CourtIssuedDocumentTypeF', () => {
         scenario: 'Type F',
       });
 
-      expect(documentInstance.getFormattedValidationErrors().freeText).toEqual(
+      expect(documentInstance.getFormattedValidationErrors()!.freeText).toEqual(
         VALIDATION_ERROR_MESSAGES.freeText[1].message,
       );
     });
@@ -68,7 +68,7 @@ describe('CourtIssuedDocumentTypeF', () => {
           trialLocation: 'Seattle, Washington',
         });
         expect(
-          documentInstance.getFormattedValidationErrors().filingDate,
+          documentInstance.getFormattedValidationErrors()!.filingDate,
         ).toBeDefined();
       });
 

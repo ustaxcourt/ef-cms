@@ -118,7 +118,7 @@ Here is an example of a signOutSequence in our application:
 
 ```javascript
 export const signOutSequence = [
-  setCurrentPageAction('Interstitial'),
+  setupCurrentPageAction('Interstitial'),
   stopWebSocketConnectionAction,
   broadcastLogoutAction,
   deleteAuthCookieAction,
@@ -137,7 +137,7 @@ This sequence basically shows a spinner, stops any web socket connections, delet
 Actions are the building blocks of the sequences.  Each action is a function which can run async code if needed to talk to API endpoints, and they will update the Cerebral store.  Here is a small example action we use in our application for setting the case detail on the store.  This action is typically invoked in a sequence directly after a previous action that might be used to fetch the case detail from the API and pass it along in props. A cerebral action is basically the .then() of a promise chain.
 
 ```javascript
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 // props - contains data original passed to the sequence, or any object that was returned in previous actions merged together
 // store - a cerebral object that can be used for toggling and setting state in the cerebral store
@@ -159,9 +159,10 @@ Our project tries to keep all state in our application store.  The main reason w
 Sometimes we want to compute state using a combination of other state variables. We often will use a computed to setup various booleans that a UI might need to calculate when it should hide or show things.  For example, take a look at this menuHelper.js file:
 
 ```javascript
-import { state } from 'cerebral';
+import {  } from 'cerebral'; import { state } from '@web-client/presenter/app.cerebral';
 
-export const menuHelper = get => {
+import { Get } from 'cerebral';
+export const menuHelper = (get: Get) => {
   const isAccountMenuOpen = get(state.navigation.openMenu) === 'AccountMenu';
   const isReportsMenuOpen = get(state.navigation.openMenu) === 'ReportsMenu';
   const isCaseDetailMenuOpen =

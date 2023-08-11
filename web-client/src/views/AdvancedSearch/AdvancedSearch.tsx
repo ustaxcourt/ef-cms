@@ -13,7 +13,8 @@ import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 export const AdvancedSearch = connect(
@@ -23,7 +24,6 @@ export const AdvancedSearch = connect(
     advancedSearchTabChangeSequence: sequences.advancedSearchTabChangeSequence,
     cerebralBindSimpleSetStateSequence:
       sequences.cerebralBindSimpleSetStateSequence,
-    featureFlagHelper: state.featureFlagHelper,
     searchTabs: state.constants.ADVANCED_SEARCH_TABS,
     submitCaseAdvancedSearchSequence:
       sequences.submitCaseAdvancedSearchSequence,
@@ -43,7 +43,6 @@ export const AdvancedSearch = connect(
     advancedSearchTab,
     advancedSearchTabChangeSequence,
     cerebralBindSimpleSetStateSequence,
-    featureFlagHelper,
     searchTabs,
     submitCaseAdvancedSearchSequence,
     submitCaseDocketNumberSearchSequence,
@@ -81,17 +80,7 @@ export const AdvancedSearch = connect(
                 />
                 <SearchResults />
               </Tab>
-              <Tab
-                disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
-                id="tab-order"
-                tabName={searchTabs.ORDER}
-                title={
-                  'Order' +
-                  (featureFlagHelper.isOrderSearchEnabledForRole
-                    ? ''
-                    : ' (Coming Soon)')
-                }
-              >
+              <Tab id="tab-order" tabName={searchTabs.ORDER} title={'Order'}>
                 <SearchBoilerplateText formTypeText="an order" />
                 <OrderSearchForm
                   submitAdvancedSearchSequence={
@@ -101,15 +90,9 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
-                title={
-                  'Opinion' +
-                  (featureFlagHelper.isOpinionSearchEnabledForRole
-                    ? ''
-                    : ' (Coming Soon)')
-                }
+                title={'Opinion'}
               >
                 <SearchBoilerplateText
                   formTypeText="an opinion"
@@ -157,24 +140,8 @@ export const AdvancedSearch = connect(
                 }}
               >
                 <option value={searchTabs.CASE}>Case</option>
-                <option
-                  disabled={!featureFlagHelper.isOrderSearchEnabledForRole}
-                  value={searchTabs.ORDER}
-                >
-                  Order
-                  {featureFlagHelper.isOrderSearchEnabledForRole
-                    ? ''
-                    : ' (Coming Soon)'}
-                </option>
-                <option
-                  disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
-                  value={searchTabs.OPINION}
-                >
-                  Opinion
-                  {featureFlagHelper.isOpinionSearchEnabledForRole
-                    ? ''
-                    : ' (Coming Soon)'}
-                </option>
+                <option value={searchTabs.ORDER}>Order</option>
+                <option value={searchTabs.OPINION}>Opinion</option>
                 <option value={searchTabs.PRACTITIONER}>Practitioner</option>
               </select>
             </div>

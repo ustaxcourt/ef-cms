@@ -1,3 +1,6 @@
+@use '../uswds' as *;
+@use '../variables' as *;
+
 body.no-scroll {
   overflow: hidden;
   cursor: default;
@@ -25,11 +28,6 @@ hr {
   border: 0;
   border-top: 1px solid color($theme-color-base-light);
   margin: 20px 0;
-}
-
-.ustc-icon-square--small {
-  width: 15px;
-  height: 15px;
 }
 
 .hide {
@@ -510,8 +508,9 @@ select[disabled] {
   }
 
   display: inline-block;
-  padding: 1.25rem 1.25rem 1rem 1.75rem;
-  border-left: 5px solid color($theme-color-primary-vivid);
+  max-width: 45em;
+  padding: 1.25rem 1.25rem 1rem 1.6rem;
+  border-left: 0.5rem solid color($theme-color-primary-vivid);
   background: color($theme-color-base-lightest);
   color: color($theme-color-base-dark);
 
@@ -811,12 +810,19 @@ textarea#case-caption {
 }
 
 .beta {
-  padding: 10px;
   background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
 
   a {
     color: color($theme-color-base-darkest);
+  }
+
+  @media only screen and (min-width: $large-screen) {
+    padding: 10px 10px 0 10px;
+  }
+
+  @media only screen and (max-width: $large-screen - 1px) {
+    padding: 10px;
   }
 }
 
@@ -888,6 +894,10 @@ textarea#case-caption {
 #save-and-finish {
   padding-right: 45px;
   padding-left: 45px;
+}
+
+.padding-right-6 {
+  padding-right: 48px !important;
 }
 
 header.usa-header {
@@ -1252,39 +1262,51 @@ hr.lighter {
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='10px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='10px']::before {
   content: '10px';
   font-size: 10px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='12px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='12px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='12px']::before {
   content: '12px';
   font-size: 12px !important;
 }
 
 /* default */
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='14px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='14px']::before {
   content: '14px';
   font-size: 14px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='16px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='16px']::before,
 .ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
   content: '16px';
   font-size: 16px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='18px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='18px']::before {
   content: '18px';
   font-size: 18px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='20px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='20px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='20px']::before {
   content: '20px';
   font-size: 20px !important;
 }
@@ -1670,7 +1692,7 @@ button.change-scanner-button {
     }
 
     .advanced-search__form-container {
-      height: 375px;
+      height: 90%;
     }
 
     .nowrap-large-screens {
@@ -2072,5 +2094,38 @@ button.change-scanner-button {
 .docket-record-header {
   .docket-record-filter {
     max-width: 175px;
+  }
+}
+
+.blue-pill {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 0 0.7rem 0.7rem 0;
+  background: color($theme-color-primary);
+  color: $color-white;
+  font-weight: $font-semibold;
+  text-align: center;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.optional-light-text {
+  color: color($theme-color-base-dark);
+  font-size: 15px;
+}
+
+.paginator-current {
+  background-color: color($theme-color-primary);
+  color: $color-white;
+
+  &:focus {
+    color: $color-white;
+  }
+
+  &:hover {
+    color: $color-white;
   }
 }

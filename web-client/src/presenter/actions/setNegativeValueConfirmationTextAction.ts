@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Sets props.key on the confirmationText object on state to the NEGATIVE_VALUE_CONFIRMATION_TEXT constant
