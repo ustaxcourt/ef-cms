@@ -1,6 +1,6 @@
 import { query } from '../../dynamodbClientService';
 
-export const getCasesByLeadDocketNumber = async ({
+export const getCasesMetadataByLeadDocketNumber = async ({
   applicationContext,
   leadDocketNumber,
 }: {
@@ -21,7 +21,7 @@ export const getCasesByLeadDocketNumber = async ({
 
   const cases = await Promise.all(
     consolidatedCases.map(({ docketNumber }) =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+      applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel({
         applicationContext,
         docketNumber,
       }),
