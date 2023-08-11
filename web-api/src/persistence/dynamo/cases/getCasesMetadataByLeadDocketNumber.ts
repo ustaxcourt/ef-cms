@@ -7,7 +7,7 @@ export const getCasesMetadataByLeadDocketNumber = async ({
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
 }) => {
-  let consolidatedCases = await query({
+  const consolidatedGroup = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -19,14 +19,12 @@ export const getCasesMetadataByLeadDocketNumber = async ({
     applicationContext,
   });
 
-  const cases = await Promise.all(
-    consolidatedCases.map(({ docketNumber }) =>
+  return await Promise.all(
+    consolidatedGroup.map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel({
         applicationContext,
         docketNumber,
       }),
     ),
   );
-
-  return cases;
 };
