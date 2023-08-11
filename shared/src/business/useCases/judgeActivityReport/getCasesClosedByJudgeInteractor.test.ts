@@ -66,7 +66,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesClosedByJudge.mockResolvedValue(casesClosedResults);
+      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
 
     casesClosedResults = {
       aggregations: aggregationsResults,
@@ -99,7 +99,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
+      applicationContext.getPersistenceGateway().getCasesClosedCountByJudge.mock
         .calls[0][0],
     ).toMatchObject({
       endDate: calculatedEndDate,
@@ -114,7 +114,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
     casesClosedResults.aggregations.closed_cases.buckets = [];
     applicationContext
       .getPersistenceGateway()
-      .getCasesClosedByJudge.mockResolvedValue(casesClosedResults);
+      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
 
     const mockReturnedCloseCasesWithZeroItems = {
       [CASE_STATUS_TYPES.closed]: 0,

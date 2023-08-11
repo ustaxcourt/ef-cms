@@ -31,7 +31,7 @@ export const getOpinionsFiledByJudgeInteractor = async (
 
   const { aggregations, total } = await applicationContext
     .getPersistenceGateway()
-    .fetchEventCodesAggregationForJudges({
+    .fetchEventCodesCountForJudges({
       applicationContext,
       params: {
         documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,

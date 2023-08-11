@@ -1,11 +1,11 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getCasesClosedByJudge } from './getCasesClosedByJudge';
+import { getCasesClosedCountByJudge } from './getCasesClosedCountByJudge';
 import { judgeUser } from '../../../../shared/src/test/mockUsers';
 jest.mock('./searchClient');
 import { search } from './searchClient';
 
-describe('getCasesClosedByJudge', () => {
+describe('getCasesClosedCountByJudge', () => {
   let mockValidRequest = {
     endDate: '03/21/2020',
     judges: [judgeUser.name],
@@ -69,7 +69,7 @@ describe('getCasesClosedByJudge', () => {
   });
 
   it('should make a persistence call to obtain an aggregation of closed cases associated with the given judges within the selected date range', async () => {
-    const results = await getCasesClosedByJudge({
+    const results = await getCasesClosedCountByJudge({
       applicationContext,
       ...mockValidRequest,
     });

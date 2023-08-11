@@ -36,7 +36,7 @@ export const getOrdersFiledByJudgeInteractor = async (
 
   const { aggregations, total } = await applicationContext
     .getPersistenceGateway()
-    .fetchEventCodesAggregationForJudges({
+    .fetchEventCodesCountForJudges({
       applicationContext,
       params: {
         documentEventCodes: orderEventCodesToSearch,
