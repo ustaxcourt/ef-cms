@@ -58,13 +58,16 @@ export const acquireLock = async ({
   waitTime = 3000,
 }: {
   applicationContext: IApplicationContext;
-  identifiers: string[];
+  identifiers?: string[];
   onLockError?: Error | Function;
   options?: any;
   retries?: number;
   ttl?: number;
   waitTime?: number;
 }): Promise<void> => {
+  if (!identifiers) {
+    return;
+  }
   let isLockAcquired = false;
   let attempts = 0;
 
