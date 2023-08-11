@@ -2,22 +2,63 @@
 
 ## Getting Started
 
+Before you start, you should have an SSO Signin URL and know the region where your AWS Identity Center is hosted. We use the AWS Identity Center for authentication and granting access with short lived credentials. Contact your Sysadmin to ascertain this information. You should be able to login and authenticate with this URL.
+
+### Configuring AWS SSO
+
+1. Configure AWS SSO:
+    ```
+    aws configure sso
+    ```
+1. Give the session a name:
+    ```
+    SSO session name (Recommended): ustc-sso
+    ```
+1. Enter your SSO start URL and SSO region (contact your Sysadmin for this information):
+    ```
+    SSO start URL [None]: https://example.com
+    SSO region [None]: us-something-1
+    ```
+1. Accept the default for SSO registration scopes:
+    ```
+    SSO registration scopes [sso:account:access]:
+    ```
+1. The process will spawn a browser session to authenticate you (if you're not already) via the AWS Identity Center. After authenticating, click "Allow" to proceed. 
+1. Your terminal window will now prompt you to choose an account from those available to you. Select the one to use with `efcms` (DAWSON). 
+1. Enter `us-east-1` for the default client Region:
+    ```
+    CLI default client Region [None]: us-east-1
+    ```
+1. Accept the default output format:
+    ```
+    CLI default output format [None]:
+    ```
+1. Enter a CLI profile name. (e.g., `ustc-staging` for working with the environments in the USTC Staging account). Keep track of this value, as it will be required when setting up your environment files later. 
+    ```
+    CLI profile name [*****]: ustc-staging
+    ```
+
+### Default Setup
+
 1. Create a `defaults` configuration file:
     ```
    cp scripts/env/defaults-example scripts/env/defaults
    ```
 1. Open the new file and populate it with values that make sense for you.
-1. Create a configuration file for the AWS account to which this deployed environment belongs:
-    ```
-    cp scripts/env/aws-accounts/example.env scripts/env/aws-accounts/myaccount.env
-    ```
-1. Open the new file and populate your AWS account details and credentials.
+
+### Environment Setup
+
+For each deployed environment you wish to manage, you will need to create a `.env` file that corresponds with the environment. 
+
 1. Create a configuration file for the DAWSON environment:
     ```
     cp scripts/env/environments/example.env scripts/env/environments/myenv.env
     ```
-1. Open the new file and populate your DAWSON environment name and AWS account configuration filename.
+1. Open the new file and populate your DAWSON environment name (`ENV`). Be sure to set `AWS_PROFILE` to the **CLI profile name** from your SSO configuration.
 1. (Optional) Define any additional values used for local testing.
+
+### Local Environment Setup
+
 1. Create a configuration file for local development:
     ```
    cp scripts/env/environments/local-example.env scripts/env/environments/local.env
@@ -103,28 +144,3 @@ Then to use the wrapper, simply run:
 . dawson_env myenv
 ```
 
-### Retrieve a new AWS session token and populate it in `myaccount.env` automatically
-
-First, define this function in your `.zshrc` or aliases file:
-```
-function renew_aws_session_token() {
-    account=${1-"myaccount"}
-    cd "$HOME/path/to/ef-cms"
-    if [[ -f "./scripts/env/aws-accounts/${account}.env" ]]; then
-        source "./scripts/env/aws-accounts/${account}.env"
-        if [[ ! -z "$AWS_ACCOUNT_ID" ]] && [[ ! -z "$AWS_SECRET_ACCESS_KEY" ]]; then
-            AWS_SESSION_TOKEN=$(aws sts get-session-token --duration-seconds 86400 --output json | jq -r ".Credentials.SessionToken")
-            sed -i '' "/AWS_SESSION_TOKEN/s/.*/export AWS_SESSION_TOKEN='$AWS_SESSION_TOKEN'/" "scripts/env/aws-accounts/${account}.env"
-            export AWS_SESSION_TOKEN="$AWS_SESSION_TOKEN"
-        fi
-    fi
-}
-```
-Then to use the function, simply run:
-```
-renew_aws_session_token
-```
-or:
-```
-renew_aws_session_token myotheraccount
-```
