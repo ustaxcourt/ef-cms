@@ -8,7 +8,7 @@ const CHUNK_SIZE = 10000;
 
 export type SeachClientResultsType = {
   aggregations?: {
-    search_field_count: {
+    [x: string]: {
       buckets: {
         doc_count: number;
         key: string;
