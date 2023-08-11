@@ -1,4 +1,3 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   CasesClosedReturnType,
   JudgeActivityReportFilters,
@@ -26,7 +25,7 @@ export const getCasesClosedByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { aggregations, total } = await applicationContext
+  return await applicationContext
     .getPersistenceGateway()
     .getCasesClosedCountByJudge({
       applicationContext,
@@ -34,24 +33,4 @@ export const getCasesClosedByJudgeInteractor = async (
       judges: searchEntity.judges,
       startDate: searchEntity.startDate,
     });
-
-  const computedAggregatedClosedCases =
-    aggregations.closed_cases.buckets.reduce((bucketObj, item) => {
-      return {
-        ...bucketObj,
-        [item.key]: item.doc_count,
-      };
-    }, {});
-
-  const results = aggregations.closed_cases.buckets.length
-    ? computedAggregatedClosedCases
-    : {
-        [CASE_STATUS_TYPES.closed]: 0,
-        [CASE_STATUS_TYPES.closedDismissed]: 0,
-      };
-
-  return {
-    closedCasesTotal: total,
-    results,
-  };
 };

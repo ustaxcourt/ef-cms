@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
@@ -58,6 +59,21 @@ export const getCasesClosedCountByJudge = async ({
     searchParameters: documentQuery,
   });
 
+  const computedAggregatedClosedCases =
+    aggregations!.closed_cases.buckets.reduce((bucketObj, item) => {
+      return {
+        ...bucketObj,
+        [item.key]: item.doc_count,
+      };
+    }, {});
+
+  const results = aggregations!.closed_cases.buckets.length
+    ? computedAggregatedClosedCases
+    : {
+        [CASE_STATUS_TYPES.closed]: 0,
+        [CASE_STATUS_TYPES.closedDismissed]: 0,
+      };
+
   const judgeNameToLog =
     judges.length > 1 ? 'all judges' : `judge ${judges[0]}`;
 
@@ -65,5 +81,5 @@ export const getCasesClosedCountByJudge = async ({
     `Found ${total} closed cases associated with ${judgeNameToLog}`,
   );
 
-  return { aggregations, total };
+  return { aggregations: results, total };
 };

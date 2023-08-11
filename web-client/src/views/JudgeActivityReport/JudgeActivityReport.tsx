@@ -55,7 +55,7 @@ export const JudgeActivityReport = connect(
           </thead>
           <tbody>
             {Object.entries(
-              judgeActivityReportData.casesClosedByJudge.results,
+              judgeActivityReportData.casesClosedByJudge.aggregations,
             ).map(([status, count]) => (
               <tr key={status}>
                 <td>{status}</td>
@@ -133,7 +133,7 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
-        {!judgeActivityReportData.ordersFiledTotal && (
+        {judgeActivityReportData.ordersFiledTotal && (
           <p>There are no orders issued for the selected dates</p>
         )}
       </>
