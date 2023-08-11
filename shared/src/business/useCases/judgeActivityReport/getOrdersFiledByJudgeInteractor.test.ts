@@ -4,7 +4,7 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-const mockOrdersIssuedByJudge = [
+export const mockOrdersIssuedByJudge = [
   { count: 2, documentType: 'Order', eventCode: 'O' },
   {
     count: 1,
