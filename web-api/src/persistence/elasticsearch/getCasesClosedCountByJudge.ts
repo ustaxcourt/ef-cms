@@ -1,26 +1,26 @@
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
-export const getCasesClosedByJudge = async ({
+export const getCasesClosedCountByJudge = async ({
   applicationContext,
   endDate,
   judges,
   startDate,
+}: {
+  applicationContext: IApplicationContext;
+  endDate: string;
+  judges: string[];
+  startDate: string;
 }) => {
   const source = ['status'];
 
   const shouldFilters: QueryDslQueryContainer[] = [];
 
-  // TODO: is it safe to assume we'll always use this method with judges provided?
-  // How do we enforce that?
-  // Do we test the logging?
-  if (judges.length) {
-    judges.forEach(judge => {
-      shouldFilters.push({
-        match_phrase: { 'associatedJudge.S': `${judge}` },
-      });
+  judges.forEach(judge => {
+    shouldFilters.push({
+      match_phrase: { 'associatedJudge.S': `${judge}` },
     });
-  }
+  });
 
   const documentQuery = {
     body: {

@@ -75,9 +75,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
   it('should make a call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
     applicationContext
       .getPersistenceGateway()
-      .fetchEventCodesAggregationForJudges.mockResolvedValue(
-        mockOpinionsResults,
-      );
+      .fetchEventCodesCountForJudges.mockResolvedValue(mockOpinionsResults);
 
     const opinions = await getOpinionsFiledByJudgeInteractor(
       applicationContext,
@@ -85,8 +83,8 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .fetchEventCodesAggregationForJudges.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0],
     ).toMatchObject({
       params: {
         documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,

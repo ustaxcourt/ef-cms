@@ -62,13 +62,8 @@ export const searchQueryForAggregation = ({ params }) => {
     });
   }
 
-  // possibly move to `eventCodesAggregationForJudges`. Use helpers strictly for terms construction
-  const searchQuery: QueryDslQueryContainer = {
-    bool: {
-      filter: documentFilter,
-      should: shouldFilter,
-    },
+  return {
+    filter: documentFilter,
+    should: shouldFilter,
   };
-
-  return searchQuery;
 };

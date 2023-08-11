@@ -60,6 +60,9 @@ describe('getOrdersFiledByJudgeInteractor', () => {
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    applicationContext
+      .getPersistenceGateway()
+      .fetchEventCodesCountForJudges.mockResolvedValue(mockOrdersResults);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -81,18 +84,14 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   });
 
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .fetchEventCodesAggregationForJudges.mockResolvedValue(mockOrdersResults);
-
     const orders = await getOrdersFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .fetchEventCodesAggregationForJudges.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0],
     ).toMatchObject({
       params: {
         documentEventCodes: orderEventCodesToSearch,
@@ -106,36 +105,24 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     expect(orders).toEqual(mockOrdersAggregated);
   });
 
-  // TODO: move testing of forbidden event codes to integration FOR ORDERS
+  it('should exclude certain order event codes when calling fetchEventCodesCountForJudges', async () => {
+    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
-  // it('should exclude certain order event codes when calling fetchEventCodesAggregationForJudges', async () => {
-  //   // applicationContext
-  //   //   .getPersistenceGateway()
-  //   //   .fetchEventCodesAggregationForJudges.mockResolvedValue({
-  //   //     results: mockResults,
-  //   //   });
-
-  //   await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
-
-  //   expect(
-  //     applicationContext.getPersistenceGateway()
-  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
-  //       .documentEventCodes,
-  //   ).not.toContain('OAJ');
-  //   expect(
-  //     applicationContext.getPersistenceGateway()
-  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
-  //       .documentEventCodes,
-  //   ).not.toContain('SPOS');
-  //   expect(
-  //     applicationContext.getPersistenceGateway()
-  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
-  //       .documentEventCodes,
-  //   ).not.toContain('SPTO');
-  //   expect(
-  //     applicationContext.getPersistenceGateway()
-  //       .fetchEventCodesAggregationForJudges.mock.calls[0][0]
-  //       .documentEventCodes,
-  //   ).not.toContain('OST');
-  // });
+    expect(
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
+    ).not.toContain('OAJ');
+    expect(
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
+    ).not.toContain('SPOS');
+    expect(
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
+    ).not.toContain('SPTO');
+    expect(
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
+    ).not.toContain('OST');
+  });
 });

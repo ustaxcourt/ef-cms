@@ -28,7 +28,7 @@ export const getCasesClosedByJudgeInteractor = async (
 
   const { aggregations, total } = await applicationContext
     .getPersistenceGateway()
-    .getCasesClosedByJudge({
+    .getCasesClosedCountByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
       judges: searchEntity.judges,
