@@ -10,7 +10,11 @@ describe('removeCoversheet', () => {
       },
     });
 
-    await expect(removeCoversheet(applicationContext, {})).rejects.toThrow();
+    await expect(
+      removeCoversheet(applicationContext, {
+        docketEntryId: 'does-not-exist',
+      }),
+    ).rejects.toThrow();
   });
 
   it('should remove the coversheet from the provided docket entry`s pdf', async () => {
