@@ -164,7 +164,7 @@ export const serveThirtyDayNoticeInteractor = async (
                   trialSession.startDate,
                   FORMATS.MMDDYYYY_DASHED,
                 ),
-                trialSession.trialLocation,
+                trialSession.trialLocation!,
               ),
               documentType: thirtyDayNoticeDocumentInfo!.documentType,
               eventCode: thirtyDayNoticeDocumentInfo!.eventCode,
