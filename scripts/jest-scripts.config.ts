@@ -12,6 +12,7 @@ const config: Config = {
     '!set-maintenance-mode-locally.js',
     '!data-import/judge/bulkImportJudgeUsers.ts',
     '!irs-super-user.js',
+    '!ready-cluster-for-migration.ts',
     '!compareTypescriptErrors.ts',
   ],
   coverageDirectory: './coverage',
