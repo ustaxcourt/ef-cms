@@ -1,13 +1,10 @@
-import {
-  COURT_ISSUED_EVENT_CODES,
-  ORDER_EVENT_CODES,
-} from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import {
   JudgeActivityReportFilters,
   OrdersReturnType,
 } from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
+import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -34,7 +31,7 @@ export const getOrdersFiledByJudgeInteractor = async (
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  const { aggregations, total } = await applicationContext
+  return await applicationContext
     .getPersistenceGateway()
     .fetchEventCodesCountForJudges({
       applicationContext,
@@ -46,18 +43,4 @@ export const getOrdersFiledByJudgeInteractor = async (
         startDate: searchEntity.startDate,
       },
     });
-
-  const computedAggregatedOrdersEventCodes =
-    aggregations!.search_field_count.buckets.map(bucketObj => ({
-      count: bucketObj.doc_count,
-      documentType: COURT_ISSUED_EVENT_CODES.find(
-        event => event.eventCode === bucketObj.key,
-      )!.documentType,
-      eventCode: bucketObj.key,
-    }));
-
-  return {
-    ordersFiledTotal: total,
-    results: computedAggregatedOrdersEventCodes,
-  };
 };

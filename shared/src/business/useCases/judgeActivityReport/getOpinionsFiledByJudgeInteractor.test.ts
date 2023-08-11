@@ -3,7 +3,6 @@ import {
   OpinionsReturnType,
 } from '@web-client/presenter/judgeActivityReportState';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
-import { SeachClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -22,8 +21,8 @@ export const mockOpinionsFiledByJudge = [
 const mockOpinionsFiledTotal = 269;
 
 export const mockOpinionsAggregated: OpinionsReturnType = {
-  opinionsFiledTotal: mockOpinionsFiledTotal,
-  results: mockOpinionsFiledByJudge,
+  aggregations: mockOpinionsFiledByJudge,
+  total: mockOpinionsFiledTotal,
 };
 
 describe('getOpinionsFiledByJudgeInteractor', () => {
@@ -36,22 +35,12 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
     startDate: mockStartDate,
   };
 
-  const mockOpinionsResults: SeachClientResultsType = {
-    aggregations: {
-      search_field_count: {
-        buckets: [
-          { doc_count: 177, key: 'MOP' },
-          { doc_count: 53, key: 'OST' },
-          { doc_count: 34, key: 'SOP' },
-          { doc_count: 30, key: 'TCOP' },
-        ],
-      },
-    },
-    total: mockOpinionsFiledTotal,
-  };
-
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+
+    applicationContext
+      .getPersistenceGateway()
+      .fetchEventCodesCountForJudges.mockResolvedValue(mockOpinionsAggregated);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -73,10 +62,6 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
   });
 
   it('should make a call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .fetchEventCodesCountForJudges.mockResolvedValue(mockOpinionsResults);
-
     const opinions = await getOpinionsFiledByJudgeInteractor(
       applicationContext,
       mockValidRequest,
