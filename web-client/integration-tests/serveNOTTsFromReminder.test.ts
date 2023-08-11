@@ -16,6 +16,8 @@ import { withAppContextDecorator } from '../src/withAppContext';
 describe('Serve NOTTs from reminder on calendared trial session detail page', () => {
   const cerebralTest = setupTest();
 
+  cerebralTest.casesReadyForTrial = [];
+
   const trialLocation = 'Los Angeles, California';
 
   const currentDate = prepareDateFromString().plus({
@@ -48,11 +50,12 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
   });
 
   describe('Petitions clerk sets calendar for trial session and manually adds cases to the trial session', () => {
-    beforeAll(() => {
-      cerebralTest.casesReadyForTrial = [];
-    });
-
     loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkCreatesNewCase(cerebralTest, {
+      procedureType: PROCEDURE_TYPES_MAP.regular,
+      shouldServe: true,
+      trialLocation,
+    });
     petitionsClerkCreatesNewCase(cerebralTest, {
       procedureType: PROCEDURE_TYPES_MAP.regular,
       shouldServe: true,
@@ -61,23 +64,34 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
     petitionsClerkViewsNewTrialSession(cerebralTest);
     petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
 
-    it('Petitions clerk manually adds a case to an uncalendared trial session', async () => {
-      const docketNumberToAdd =
-        cerebralTest.casesReadyForTrial[
-          cerebralTest.casesReadyForTrial.length - 1
-        ];
+    it('Petitions clerk manually adds a case to a trial session', async () => {
+      for (const docketNumber of cerebralTest.casesReadyForTrial) {
+        await cerebralTest.runSequence('gotoCaseDetailSequence', {
+          docketNumber,
+        });
 
+        await cerebralTest.runSequence('openAddToTrialModalSequence');
+        await cerebralTest.runSequence('updateModalValueSequence', {
+          key: 'trialSessionId',
+          value: cerebralTest.trialSessionId,
+        });
+
+        await cerebralTest.runSequence('addCaseToTrialSessionSequence');
+      }
+    });
+
+    it('Petitions clerk manually removes a case from the trial session', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: docketNumberToAdd,
+        docketNumber: cerebralTest.casesReadyForTrial[0],
       });
 
-      await cerebralTest.runSequence('openAddToTrialModalSequence');
+      await cerebralTest.runSequence('openRemoveFromTrialSessionModalSequence');
       await cerebralTest.runSequence('updateModalValueSequence', {
-        key: 'trialSessionId',
-        value: cerebralTest.trialSessionId,
+        key: 'disposition',
+        value: 'Test disposition',
       });
 
-      await cerebralTest.runSequence('addCaseToTrialSessionSequence');
+      await cerebralTest.runSequence('removeCaseFromTrialSequence');
     });
   });
 
@@ -147,9 +161,22 @@ describe('Serve NOTTs from reminder on calendared trial session detail page', ()
       );
     });
 
-    it('should verify that the NOTT has been added to the docket record', async () => {
+    it('should verify that an NOTT has NOT been added to the docket record for a case that has been removed from the trial session', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
+        docketNumber: cerebralTest.casesReadyForTrial[0],
+      });
+
+      const { docketEntries } = cerebralTest.getState('caseDetail');
+      const nottDocketEntry = docketEntries.find(
+        doc => doc.eventCode === 'NOTT',
+      );
+
+      expect(nottDocketEntry).toBeUndefined();
+    });
+
+    it('should verify that the NOTT has been added to the docket record for an open case on the trial session', async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.casesReadyForTrial[1],
       });
 
       const { docketEntries } = cerebralTest.getState('caseDetail');
