@@ -22,7 +22,7 @@ export const searchQueryForAggregation = ({ params }) => {
 
       if (params.searchType === 'opinion') {
         matchedQueryForJudge = {
-          match: {
+          match_phrase: {
             [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
           },
         };
@@ -64,6 +64,7 @@ export const searchQueryForAggregation = ({ params }) => {
 
   return {
     filter: documentFilter,
+    minimum_should_match: 1,
     should: shouldFilter,
   };
 };

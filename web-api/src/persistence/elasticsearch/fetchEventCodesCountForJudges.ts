@@ -33,6 +33,7 @@ export const fetchEventCodesCountForJudges = async ({
       },
       query: searchQuery,
       size: 0,
+      track_total_hits: true,
     },
     index: 'efcms-docket-entry',
   };
