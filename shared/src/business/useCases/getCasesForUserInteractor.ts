@@ -49,11 +49,12 @@ async function fetchConsolidatedGroupsAndNest({
         cases.filter(aCase => aCase.leadDocketNumber),
         'leadDocketNumber',
       ).map(aCase =>
-        applicationContext.getPersistenceGateway().getCasesByLeadDocketNumber({
-          applicationContext,
-          includeDocketEntries: false,
-          leadDocketNumber: aCase.leadDocketNumber!,
-        }),
+        applicationContext
+          .getPersistenceGateway()
+          .getCasesMetadataByLeadDocketNumber({
+            applicationContext,
+            leadDocketNumber: aCase.leadDocketNumber!,
+          }),
       ),
     )
   )
