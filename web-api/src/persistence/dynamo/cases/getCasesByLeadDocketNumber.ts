@@ -10,10 +10,12 @@ import { query } from '../../dynamodbClientService';
  */
 export const getCasesByLeadDocketNumber = async ({
   applicationContext,
+  includeDocketEntries = true,
   leadDocketNumber,
 }: {
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
+  includeDocketEntries?: boolean;
 }) => {
   let consolidatedCases = await query({
     ExpressionAttributeNames: {
@@ -29,12 +31,21 @@ export const getCasesByLeadDocketNumber = async ({
 
   const cases = await Promise.all(
     consolidatedCases.map(({ docketNumber }) =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
+      includeDocketEntries
+        ? applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+            applicationContext,
+            docketNumber,
+          })
+        : applicationContext
+            .getPersistenceGateway()
+            .getCaseMetadataWithCounsel({
+              applicationContext,
+              docketNumber,
+            }),
     ),
   );
 
   return cases;
 };
+
+// getCaseMetadataWithCounsel

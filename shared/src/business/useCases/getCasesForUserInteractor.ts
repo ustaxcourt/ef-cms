@@ -4,7 +4,6 @@ import {
   isLeadCase,
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
-import { FORMATS, formatNow } from '../utilities/DateHandler';
 import { UserCase } from '../entities/UserCase';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { uniqBy } from 'lodash';
@@ -46,16 +45,16 @@ async function fetchConsolidatedGroupsAndNest({
   // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
   const consolidatedGroups = (
     await Promise.all(
-      cases
-        .filter(aCase => aCase.leadDocketNumber)
-        .map(aCase =>
-          applicationContext
-            .getPersistenceGateway()
-            .getCasesByLeadDocketNumber({
-              applicationContext,
-              leadDocketNumber: aCase.leadDocketNumber!,
-            }),
-        ),
+      uniqBy(
+        cases.filter(aCase => aCase.leadDocketNumber),
+        'leadDocketNumber',
+      ).map(aCase =>
+        applicationContext.getPersistenceGateway().getCasesByLeadDocketNumber({
+          applicationContext,
+          includeDocketEntries: false,
+          leadDocketNumber: aCase.leadDocketNumber!,
+        }),
+      ),
     )
   )
     .flat()
@@ -117,10 +116,6 @@ async function fetchConsolidatedGroupsAndNest({
 export const getCasesForUserInteractor = async (
   applicationContext: IApplicationContext,
 ) => {
-  console.log(
-    'getCasesForUserInteractor, 1, ',
-    formatNow(FORMATS.LOG_TIMESTAMP),
-  );
   const { userId } = await applicationContext.getCurrentUser();
 
   let allUserCases = await applicationContext
@@ -130,19 +125,9 @@ export const getCasesForUserInteractor = async (
       userId,
     });
 
-  console.log(
-    'getCasesForUserInteractor, 2, ',
-    formatNow(FORMATS.LOG_TIMESTAMP),
-  );
-
   allUserCases = allUserCases.map(aCase => {
     return { ...aCase, isRequestingUserAssociated: true } as TAssociatedCase;
   });
-
-  console.log(
-    'getCasesForUserInteractor, 3, ',
-    formatNow(FORMATS.LOG_TIMESTAMP),
-  );
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
@@ -150,24 +135,9 @@ export const getCasesForUserInteractor = async (
     userId,
   });
 
-  console.log(
-    'getCasesForUserInteractor, 4, ',
-    formatNow(FORMATS.LOG_TIMESTAMP),
-  );
-
   const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
 
-  console.log(
-    'getCasesForUserInteractor, 5, ',
-    formatNow(FORMATS.LOG_TIMESTAMP),
-  );
-
   const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
-
-  console.log(
-    'getCasesForUserInteractor, 6, ',
-    formatNow(FORMATS.LOG_TIMESTAMP),
-  );
 
   return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
 };
