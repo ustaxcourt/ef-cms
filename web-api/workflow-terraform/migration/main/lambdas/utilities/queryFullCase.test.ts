@@ -1,4 +1,4 @@
-const { queryFullCase } = require('./queryFullCase');
+import { queryFullCase } from './queryFullCase';
 
 describe('queryFullCase', () => {
   let documentClient;

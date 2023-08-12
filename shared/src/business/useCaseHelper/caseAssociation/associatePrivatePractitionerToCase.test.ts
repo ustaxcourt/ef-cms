@@ -1,28 +1,26 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  associatePrivatePractitionerToCase,
-} = require('./associatePrivatePractitionerToCase');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
+import {
   getContactPrimary,
   getContactSecondary,
-} = require('../../entities/cases/Case');
-const { MOCK_USERS } = require('../../../test/mockUsers');
+} from '../../entities/cases/Case';
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
 
-  const practitionerUser = {
-    barNumber: 'BN1234',
+  const practitionerUser: RawUser = {
+    barNumber: 'PT1234',
+    email: 'emmett@example.com',
+    entityName: 'User',
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: ROLES.privatePractitioner,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -41,6 +39,7 @@ describe('associatePrivatePractitionerToCase', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           processingStatus: 'pending',
           userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
         },

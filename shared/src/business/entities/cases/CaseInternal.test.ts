@@ -18,6 +18,7 @@ describe('CaseInternal entity', () => {
 
     it('returns the expected set of errors for an empty object', () => {
       const caseInternal = new CaseInternal({}, { applicationContext });
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         caseCaption: CaseInternal.VALIDATION_ERROR_MESSAGES.caseCaption,
         caseType: CaseInternal.VALIDATION_ERROR_MESSAGES.caseType,
@@ -73,6 +74,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -86,7 +88,7 @@ describe('CaseInternal entity', () => {
               documentType: 'Petition',
               eventCode: 'A',
               filedBy: 'Test Petitioner',
-              role: ROLES.petitioner,
+              filedByRole: ROLES.petitioner,
               userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
             },
           ],
@@ -127,6 +129,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -165,6 +168,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -202,6 +206,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.getFormattedValidationErrors()).toEqual(null);
       expect(caseInternal.isValid()).toEqual(true);
     });
@@ -418,6 +423,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         chooseAtLeastOneValue:
@@ -461,6 +467,7 @@ describe('CaseInternal entity', () => {
         },
         { applicationContext },
       );
+
       expect(caseInternal.isValid()).toEqual(false);
       expect(caseInternal.getFormattedValidationErrors()).toEqual({
         chooseAtLeastOneValue:
