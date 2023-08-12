@@ -83,7 +83,6 @@ describe('addPaperFilingInteractor', () => {
       consolidatedGroupDocketNumbers: [],
       docketEntryId: mockdocketEntryId,
       documentMetadata: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: mockCase.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -127,7 +126,6 @@ describe('addPaperFilingInteractor', () => {
       consolidatedGroupDocketNumbers: [],
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: mockCase.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -168,7 +166,6 @@ describe('addPaperFilingInteractor', () => {
       ],
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: mockCase.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -363,7 +360,6 @@ describe('addPaperFilingInteractor', () => {
         consolidatedGroupDocketNumbers: [],
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',

@@ -236,6 +236,7 @@ export const putInDeployTable = async (
 
 export const query = ({
   applicationContext,
+  ConsistentRead = false,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
   FilterExpression,
@@ -244,6 +245,7 @@ export const query = ({
   Limit,
   ...params
 }: {
+  ConsistentRead?: boolean;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string | number>;
   IndexName?: string;
@@ -256,6 +258,7 @@ export const query = ({
   return applicationContext
     .getDocumentClient()
     .query({
+      ConsistentRead,
       ExpressionAttributeNames,
       ExpressionAttributeValues,
       FilterExpression,
@@ -302,17 +305,21 @@ export const scan = async params => {
 
 export const queryFull = async ({
   applicationContext,
+  ConsistentRead = false,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
+  FilterExpression,
   IndexName,
   KeyConditionExpression,
   ...params
 }: {
+  ConsistentRead?: boolean;
   applicationContext: IApplicationContext;
   params?: Record<string, any>;
   IndexName?: string;
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
+  FilterExpression?: string;
   KeyConditionExpression: string;
 }): Promise<TDynamoRecord[]> => {
   let hasMoreResults = true;
@@ -324,9 +331,11 @@ export const queryFull = async ({
     const subsetResults = await applicationContext
       .getDocumentClient()
       .query({
+        ConsistentRead,
         ExclusiveStartKey: lastKey,
         ExpressionAttributeNames,
         ExpressionAttributeValues,
+        FilterExpression,
         IndexName,
         KeyConditionExpression,
         TableName: getTableName({
