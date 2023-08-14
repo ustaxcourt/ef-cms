@@ -6,28 +6,6 @@ import { search } from './searchClient';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
-export type OrdersAndOpinionFormattedResultsTypes = {
-  isCaseSealed: boolean;
-  isDocketEntrySealed: boolean;
-  isSealed: boolean | undefined;
-  caseCaption: string;
-  docketNumberWithSuffix: string;
-  irsPractitioners: Object[];
-  privatePractitioners: Array<{}>;
-  petitioners: Object[];
-  docketNumber: string;
-  eventCode: string;
-  signedJudgeName: string;
-  isStricken: boolean;
-  numberOfPages: number;
-  documentType: string;
-  filingDate: string;
-  docketEntryId: string;
-  documentTitle: string;
-  isFileAttached: true;
-  _score: null;
-}[];
-
 export const advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
