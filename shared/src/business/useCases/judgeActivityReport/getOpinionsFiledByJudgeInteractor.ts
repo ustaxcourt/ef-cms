@@ -1,14 +1,14 @@
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
 import {
   JudgeActivityReportFilters,
   OpinionsReturnType,
-} from '../../../../../web-client/src/presenter/judgeActivityReportState';
+} from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext: IApplicationContext,
