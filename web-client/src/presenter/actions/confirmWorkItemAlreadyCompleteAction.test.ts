@@ -6,9 +6,9 @@ describe('confirmWorkItemAlreadyCompleteAction', () => {
   let routeStub;
 
   beforeEach(() => {
-    global.location = {
+    global.location ??= Object.create({
       href: '',
-    };
+    });
   });
 
   beforeAll(() => {
