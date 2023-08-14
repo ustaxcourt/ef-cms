@@ -18,7 +18,7 @@ export const mockOpinionsFiledByJudge = [
   { count: 30, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
 ];
 
-const mockOpinionsFiledTotal = 269;
+export const mockOpinionsFiledTotal = 269;
 
 export const mockOpinionsAggregated: OpinionsReturnType = {
   aggregations: mockOpinionsFiledByJudge,

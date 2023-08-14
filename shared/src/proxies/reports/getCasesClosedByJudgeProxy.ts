@@ -1,5 +1,7 @@
-import { CasesClosedType } from '../../../../web-client/src/presenter/judgeActivityReportState';
-import { JudgeActivityReportFilters } from 'shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
+import {
+  CasesClosedType,
+  JudgeActivityReportFilters,
+} from '../../../../web-client/src/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
 /**

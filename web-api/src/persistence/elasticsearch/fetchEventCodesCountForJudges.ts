@@ -1,7 +1,14 @@
 import { COURT_ISSUED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import {
+  getDocumentFilters,
+  getShouldFilters,
+} from './helpers/searchQueryForAggregation';
 import { search } from './searchClient';
-import { searchQueryForAggregation } from './helpers/searchQueryForAggregation';
+
+export type ComputedAggs = {
+  aggregations: { count: number; documentType: string; eventCode: string }[];
+  total: number | undefined;
+};
 
 export const fetchEventCodesCountForJudges = async ({
   applicationContext,
@@ -15,12 +22,9 @@ export const fetchEventCodesCountForJudges = async ({
     searchType: string;
     startDate: string;
   };
-}) => {
-  const searchQueryParams = searchQueryForAggregation({ params });
-
-  const searchQuery: QueryDslQueryContainer = {
-    bool: searchQueryParams,
-  };
+}): Promise<ComputedAggs> => {
+  const documentFilter = getDocumentFilters({ params });
+  const shouldFilter = getShouldFilters({ params });
 
   const documentQuery = {
     body: {
@@ -31,7 +35,13 @@ export const fetchEventCodesCountForJudges = async ({
           },
         },
       },
-      query: searchQuery,
+      query: {
+        bool: {
+          filter: documentFilter,
+          minimum_should_match: 1,
+          should: shouldFilter,
+        },
+      },
       size: 0,
       track_total_hits: true,
     },
