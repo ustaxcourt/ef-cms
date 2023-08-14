@@ -86,3 +86,32 @@ resource "aws_route53_health_check" "failover_health_check_west" {
     ignore_changes = [fqdn]
   }
 }
+
+resource "aws_ssm_parameter" "public_west_green_fqdn" {
+  count = var.enable_health_checks
+  name  = "terraform-${var.environment}-west-green-fqdn"
+  type  = "String"
+  value = element(split("/", module.api-west-green.public_api_invoke_url), 2)
+}
+
+resource "aws_ssm_parameter" "public_west_blue_fqdn" {
+  count = var.enable_health_checks
+  name  = "terraform-${var.environment}-west-blue-fqdn"
+  type  = "String"
+  value = element(split("/", module.api-west-blue.public_api_invoke_url), 2)
+}
+
+resource "aws_ssm_parameter" "public_east_green_fqdn" {
+  count = var.enable_health_checks
+  name  = "terraform-${var.environment}-east-green-fqdn"
+  type  = "String"
+  value = element(split("/", module.api-east-green.public_api_invoke_url), 2)
+}
+
+resource "aws_ssm_parameter" "public_east_blue_fqdn" {
+  count = var.enable_health_checks
+  name  = "terraform-${var.environment}-east-blue-fqdn"
+  type  = "String"
+  value = element(split("/", module.api-east-blue.public_api_invoke_url), 2)
+}
+// TODO: Store json object with fqdn and health check id.
