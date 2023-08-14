@@ -453,6 +453,10 @@ export const POLICY_DATE_IMPACTED_EVENTCODES = [
   ...BRIEF_EVENTCODES,
   AMICUS_BRIEF_EVENT_CODE,
   SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+  ...AMENDMENT_EVENT_CODES,
+  'REDC',
+  'SPML',
+  'SUPM',
 ];
 
 export const SCENARIOS = [
@@ -570,6 +574,10 @@ export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
   DOCKET_RECORD_FILTER_OPTIONS,
   ['exhibits'],
 );
+export const FILTER_OPTIONS = Object.values(
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+);
+export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
 // TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
@@ -993,6 +1001,10 @@ export const ROLES = {
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
 };
+
+// this isn't a real role someone can login with, which is why
+// it's a separate constant.
+export const SYSTEM_ROLE = 'System';
 
 export const FILING_TYPES = {
   [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
@@ -1536,3 +1548,12 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
+
+export const isDocumentBriefType = (documentType: string) => {
+  const documents = [
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Simultaneous Brief'],
+    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Seriatim Brief'],
+  ];
+  return !!documents.find(document => document.documentType === documentType)
+    ?.eventCode;
+};

@@ -10,7 +10,7 @@ import { DynamoDB } from 'aws-sdk';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../../web-api/src/applicationContext';
 import { getUserPoolId, getVersion } from '../util';
-import { search } from '../../src/persistence/elasticsearch/searchClient';
+import { search } from '../../../web-api/src/persistence/elasticsearch/searchClient';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
 const dynamo = new DynamoDB({ region: process.env.REGION });

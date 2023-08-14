@@ -7,7 +7,7 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
-import { MOCK_DOCUMENTS } from './mockDocuments';
+import { MOCK_DOCUMENTS } from './mockDocketEntry';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],

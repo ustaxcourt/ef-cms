@@ -1,10 +1,9 @@
 /* eslint-disable max-lines */
-import { applicationContext } from '../../test/createTestApplicationContext';
-
 import {
   AUTOMATIC_BLOCKED_REASONS,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
+  ROLES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
@@ -13,8 +12,9 @@ import {
   MOCK_CASE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import { WorkItem } from '../../entities/WorkItem';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
 import { fileAndServeDocumentOnOneCase } from './fileAndServeDocumentOnOneCase';
@@ -38,6 +38,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
           docketNumber: MOCK_CASE.docketNumber,
           documentType: eventCodeMap.documentType,
           eventCode,
+          filedByRole: ROLES.judge,
           signedAt: createISODateString(),
           signedByUserId: 'ab540a2d-2e61-4ec3-be8e-ea744d12a283',
           signedJudgeName: 'Chief Judge',
@@ -85,6 +86,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
+        filedByRole: ROLES.judge,
         judge: judgeUser.name,
         numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -103,6 +105,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
+        filedByRole: ROLES.judge,
         judge: judgeUser.name,
         numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -147,6 +150,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
+        filedByRole: ROLES.judge,
         judge: judgeUser.name,
         numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -187,6 +191,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
+        filedByRole: ROLES.judge,
         judge: judgeUser.name,
         numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
@@ -387,6 +392,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
         docketNumber: mockCaseEntity.docketNumber,
         documentType: 'Order',
         eventCode: 'O',
+        filedByRole: ROLES.judge,
         judge: judgeUser.name,
         numberOfPages: 1,
         signedAt: '2019-03-01T21:40:46.415Z',
