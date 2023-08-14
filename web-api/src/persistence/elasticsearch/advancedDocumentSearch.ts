@@ -7,24 +7,6 @@ import { search } from './searchClient';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
-export type AdvancedSearchArgsTypes = {
-  applicationContext: IApplicationContext;
-  from?: number; // check if string (or both)
-  endDate?: string;
-  isOpinionSearch?: boolean;
-  startDate?: string;
-  sortField?: string;
-  docketNumber?: string;
-  isExternalUser?: boolean;
-  keyword?: string;
-  caseTitleOrPetitioner?: string;
-  judge?: string;
-  judges?: string[];
-  overrideResultSize?: number;
-  omitSealed?: boolean;
-  documentEventCodes?: any;
-};
-
 export const advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
@@ -40,7 +22,7 @@ export const advancedDocumentSearch = async ({
   overrideResultSize,
   sortField,
   startDate,
-}: AdvancedSearchArgsTypes) => {
+}) => {
   const sourceFields = [
     'caseCaption',
     'docketEntryId',
