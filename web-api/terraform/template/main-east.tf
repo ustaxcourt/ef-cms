@@ -641,7 +641,8 @@ module "api-east-green" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_green_east_object.etag
   streams_object_hash            = data.aws_s3_bucket_object.streams_green_east_object.etag
   use_layers                     = var.green_use_layers
-  create_cron                    = 1
+  create_check_case_cron         = 1
+  create_health_check_cron       = 1
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
@@ -710,7 +711,8 @@ module "api-east-blue" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_blue_east_object.etag
   streams_object_hash            = data.aws_s3_bucket_object.streams_blue_east_object.etag
   use_layers                     = var.blue_use_layers
-  create_cron                    = 1
+  create_check_case_cron         = 1
+  create_health_check_cron       = 1
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
