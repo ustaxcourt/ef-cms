@@ -2,8 +2,9 @@
 
 # unset everything in .env
 ENV_KEYS=$(awk -F'=' '{print $1}' .env)
-AWS_ENV_KEYS=$(grep "=" ./scripts/env/aws-accounts/example.env | awk -F'[ =]' '{print $2}')
-KEYS="${ENV_KEYS}\n${AWS_ENV_KEYS}"
+KEYS="${ENV_KEYS}"
+
+unset AWS_SESSION_TOKEN AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_PROFILE AWS_ACCOUNT_ID
 
 echo "$KEYS" | while read -r key; do
    unset "$key"
