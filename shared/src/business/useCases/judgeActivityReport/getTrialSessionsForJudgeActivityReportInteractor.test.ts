@@ -2,10 +2,10 @@ import {
   ID_FOR_ALL_JUDGES,
   getTrialSessionsForJudgeActivityReportInteractor,
 } from './getTrialSessionsForJudgeActivityReportInteractor';
-import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
-import { SESSION_TYPES } from '../../entities/EntityConstants';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { docketClerkUser, judgeUser } from '../../../test/mockUsers';
+import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 
 describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   const mockJudges = [

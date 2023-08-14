@@ -1,24 +1,20 @@
 import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-} from '../../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
+  MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
   MOCK_CAV_LEAD_CASE,
-  MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_SUBMITTED_CASE,
   MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY,
   MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
-} from '../../../test/mockCase';
+} from '@shared/test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import {
-  docketClerkUser,
-  judgeUser,
-  petitionsClerkUser,
-} from '../../../test/mockUsers';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
+import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
   const docketEntryWithoutCaseHistory = '115-23';
@@ -27,20 +23,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
 
   let expectedConsolidatedCasesGroupCountMap = {};
-
-  const mockCavConsolidatedMemberCase = {
-    ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-    associatedJudge: judgeUser.name,
-    caseStatusHistory: [
-      {
-        changedBy: docketClerkUser.name,
-        date: '2023-05-13T14:19:28.717Z',
-        updatedCaseStatus: CASE_STATUS_TYPES.cav,
-      },
-    ],
-    sortableDocketNumber: 2019000110,
-    status: CASE_STATUS_TYPES.cav,
-  };
 
   const mockValidRequest = {
     judges: [judgeUser.name],
@@ -77,13 +59,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     mockReturnedDocketNumbers = [
       { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       { docketNumber: MOCK_CAV_LEAD_CASE.docketNumber },
-      { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
+      { docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber },
       { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     const casesForLeadDocketNumber = [
       MOCK_CAV_LEAD_CASE,
-      mockCavConsolidatedMemberCase,
+      MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
     ];
 
     expectedConsolidatedCasesGroupCountMap = {
@@ -100,7 +82,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_CAV_LEAD_CASE)
-      .mockResolvedValueOnce(mockCavConsolidatedMemberCase);
+      .mockResolvedValueOnce(MOCK_CAV_CONSOLIDATED_MEMBER_CASE);
 
     applicationContext
       .getPersistenceGateway()
@@ -156,13 +138,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
       { docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber },
       { docketNumber: MOCK_CAV_LEAD_CASE.docketNumber },
-      { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
+      { docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber },
       { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     const casesForLeadDocketNumber = [
       MOCK_CAV_LEAD_CASE,
-      mockCavConsolidatedMemberCase,
+      MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
     ];
 
     expectedConsolidatedCasesGroupCountMap = {
@@ -180,7 +162,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_CAV_LEAD_CASE)
-      .mockResolvedValueOnce(mockCavConsolidatedMemberCase)
+      .mockResolvedValueOnce(MOCK_CAV_CONSOLIDATED_MEMBER_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD);

@@ -2,7 +2,7 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockOpinionsAggregated } from '@shared/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor.test';
 import { mockOrdersAggregated } from '@shared/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor.test';
