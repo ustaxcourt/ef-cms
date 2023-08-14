@@ -54,7 +54,8 @@ describe('User entity', () => {
         phone: '1234567890',
       },
     });
-    expect(user.contact.phone).toEqual('123-456-7890');
+
+    expect(user.contact!.phone).toEqual('123-456-7890');
   });
 
   it('Creates a valid petitioner user without address2 or address3', () => {

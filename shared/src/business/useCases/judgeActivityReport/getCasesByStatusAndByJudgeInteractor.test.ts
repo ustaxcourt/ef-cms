@@ -19,69 +19,66 @@ import {
 } from '../../../test/mockUsers';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
 
-const docketEntryWithoutCaseHistory = '115-23';
-
-const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
-
-const mockSubmittedCase = {
-  ...MOCK_CASE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [
-    {
-      changedBy: docketClerkUser.name,
-      date: '2023-05-11T14:19:28.717Z',
-      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
-    },
-  ],
-  pk: `case|${MOCK_CASE.docketNumber}`,
-  sk: `case|${MOCK_CASE.docketNumber}`,
-};
-
-const mockSubmittedCaseWithoutCaseHistory = {
-  ...MOCK_CASE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [],
-  pk: `case|${docketEntryWithoutCaseHistory}`,
-  sk: `case|${docketEntryWithoutCaseHistory}`,
-};
-
-const mockCavLeadCase = {
-  ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [
-    {
-      changedBy: docketClerkUser.name,
-      date: '2023-05-13T14:19:28.717Z',
-      updatedCaseStatus: CASE_STATUS_TYPES.cav,
-    },
-  ],
-  pk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sortableDocketNumber: 2019000109,
-  status: CASE_STATUS_TYPES.cav,
-};
-
-const mockCavConsolidatedMemberCase = {
-  ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [
-    {
-      changedBy: docketClerkUser.name,
-      date: '2023-05-13T14:19:28.717Z',
-      updatedCaseStatus: CASE_STATUS_TYPES.cav,
-    },
-  ],
-  pk: `case|${MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sk: `case|${MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sortableDocketNumber: 2019000110,
-  status: CASE_STATUS_TYPES.cav,
-};
-
-let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
-
-let expectedConsolidatedCasesGroupCountMap = {};
-
 describe('getCasesByStatusAndByJudgeInteractor', () => {
+  const docketEntryWithoutCaseHistory = '115-23';
+
+  const mockSubmittedCaseWithoutCaseHistory = {
+    ...MOCK_CASE,
+    associatedJudge: judgeUser.name,
+    caseStatusHistory: [],
+    pk: `case|${docketEntryWithoutCaseHistory}`,
+    sk: `case|${docketEntryWithoutCaseHistory}`,
+  };
+
+  const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
+  let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
+
+  let expectedConsolidatedCasesGroupCountMap = {};
+
+  const mockSubmittedCase: RawCase = {
+    ...MOCK_CASE,
+    associatedJudge: judgeUser.name,
+    caseStatusHistory: [
+      {
+        changedBy: docketClerkUser.name,
+        date: '2023-05-11T14:19:28.717Z',
+        updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+      },
+    ],
+    pk: `case|${MOCK_CASE.docketNumber}`,
+    sk: `case|${MOCK_CASE.docketNumber}`,
+  };
+
+  let mockCavLeadCase = {
+    ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+    associatedJudge: judgeUser.name,
+    caseStatusHistory: [
+      {
+        changedBy: docketClerkUser.name,
+        date: '2023-05-13T14:19:28.717Z',
+        updatedCaseStatus: CASE_STATUS_TYPES.cav,
+      },
+    ],
+    pk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
+    sk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
+    sortableDocketNumber: 2019000109,
+    status: CASE_STATUS_TYPES.cav,
+  };
+
+  const mockCavConsolidatedMemberCase = {
+    ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+    associatedJudge: judgeUser.name,
+    caseStatusHistory: [
+      {
+        changedBy: docketClerkUser.name,
+        date: '2023-05-13T14:19:28.717Z',
+        updatedCaseStatus: CASE_STATUS_TYPES.cav,
+      },
+    ],
+    sortableDocketNumber: 2019000110,
+    status: CASE_STATUS_TYPES.cav,
+  };
+
   const mockValidRequest = {
     judges: [judgeUser.name],
     pageNumber: 0,
