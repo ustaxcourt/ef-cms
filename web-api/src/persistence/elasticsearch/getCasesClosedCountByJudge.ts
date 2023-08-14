@@ -50,6 +50,7 @@ export const getCasesClosedCountByJudge = async ({
         },
       },
       size: 0,
+      track_total_hits: true,
     },
     index: 'efcms-case',
   };

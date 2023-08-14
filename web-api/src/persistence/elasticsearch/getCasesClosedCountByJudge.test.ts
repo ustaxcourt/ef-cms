@@ -50,7 +50,7 @@ describe('getCasesClosedCountByJudge', () => {
             range: {
               'closedDate.S': {
                 gte: `${mockStartDate}||/h`,
-                lte: `${mockEndDate}||/h'`,
+                lte: `${mockEndDate}||/h`,
               },
             },
           },
