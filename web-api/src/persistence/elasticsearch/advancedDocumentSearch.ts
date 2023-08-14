@@ -1,6 +1,4 @@
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { getJudgeFilterForOpinionSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch';
-import { getJudgeFilterForOrderSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
 import { search } from './searchClient';
@@ -129,19 +127,25 @@ export const advancedDocumentSearch = async ({
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-    if (isOpinionSearch) {
-      const judgeFilter = getJudgeFilterForOpinionSearch({
-        judgeName,
-      });
-
-      documentFilter.push(judgeFilter);
-    } else {
-      const judgeFilter = getJudgeFilterForOrderSearch({
-        judgeName,
-      });
-
-      documentFilter.push(judgeFilter);
-    }
+    documentFilter.push({
+      bool: {
+        should: [
+          {
+            match: {
+              ['signedJudgeName.S']: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
+          {
+            match: {
+              ['judge.S']: judgeName,
+            },
+          },
+        ],
+      },
+    });
   }
 
   if (endDate && startDate) {
