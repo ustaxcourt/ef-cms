@@ -1,15 +1,11 @@
 /* eslint-disable max-lines */
 import {
-  applicationContext,
-  applicationContextForClient,
-} from '../../../../shared/src/business/test/createTestApplicationContext';
-
-import {
   BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
   TODAYS_ORDERS_SORTS,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { advancedDocumentSearch } from './advancedDocumentSearch';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { search } from './searchClient';
 jest.mock('./searchClient');
 
@@ -146,7 +142,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge when searching for opinions', async () => {
+  it('should search for documents that have been signed or created by a specific judge when one is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
       isOpinionSearch: true,
@@ -162,45 +158,18 @@ describe('advancedDocumentSearch', () => {
             should: [
               {
                 match: {
-                  'judge.S': 'Guy Fieri',
-                },
-              },
-              {
-                match: {
                   'signedJudgeName.S': {
                     operator: 'and',
                     query: 'Guy Fieri',
                   },
                 },
               },
-            ],
-          },
-        }),
-      ]),
-    );
-  });
-
-  it('does a search for a signed judge when searching for orders', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodes,
-      judge: 'Judge Guy Fieri',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toMatchObject(
-      expect.arrayContaining([
-        expect.objectContaining({
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
+              {
+                match: {
+                  'judge.S': 'Guy Fieri',
                 },
               },
-            },
+            ],
           },
         }),
       ]),
@@ -442,7 +411,6 @@ describe('advancedDocumentSearch', () => {
   });
 
   it('should return the results and totalCount of results', async () => {
-    applicationContextForClient.i;
     const result = await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
@@ -466,7 +434,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.filter[4].bool
-          .should[0].match,
+          .should[1].match,
       ).toMatchObject({
         'judge.S': 'Guy Fieri',
       });
