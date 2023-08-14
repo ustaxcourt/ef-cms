@@ -11,12 +11,20 @@ import {
 import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-describe('getCasesClosedByJudgeInteractor', () => {
-  const mockReturnedCloseCases: CasesClosedType = {
-    [CASE_STATUS_TYPES.closed]: 3,
-    [CASE_STATUS_TYPES.closedDismissed]: 2,
-  };
+const mockClosedCases = 3;
+const mockClosedDismissedCases = 2;
 
+const mockReturnedCloseCases: CasesClosedType = {
+  [CASE_STATUS_TYPES.closed]: mockClosedCases,
+  [CASE_STATUS_TYPES.closedDismissed]: mockClosedDismissedCases,
+};
+
+export const casesClosedResults = {
+  aggregations: mockReturnedCloseCases,
+  total: 5,
+};
+
+describe('getCasesClosedByJudgeInteractor', () => {
   const mockEndDate = '03/21/2020';
   const mockStartDate = '02/12/2020';
 
@@ -49,7 +57,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesClosedByJudge.mockResolvedValue(mockReturnedCloseCases);
+      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -70,14 +78,14 @@ describe('getCasesClosedByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return the cases closed organized by status for selected judges', async () => {
-    const result = await getCasesClosedByJudgeInteractor(
+  it('should return cases closed count organized by status closed for selected judges', async () => {
+    const closedCases = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCasesClosedByJudge.mock
+      applicationContext.getPersistenceGateway().getCasesClosedCountByJudge.mock
         .calls[0][0],
     ).toMatchObject({
       endDate: calculatedEndDate,
@@ -85,6 +93,6 @@ describe('getCasesClosedByJudgeInteractor', () => {
       startDate: calculatedStartDate,
     });
 
-    expect(result).toEqual(mockReturnedCloseCases);
+    expect(closedCases).toEqual(casesClosedResults);
   });
 });

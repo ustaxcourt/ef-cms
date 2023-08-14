@@ -1,5 +1,4 @@
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getJudgeFilterForOpinionSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch';
 import { getJudgeFilterForOrderSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
@@ -8,27 +7,26 @@ import { search } from './searchClient';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
-export type OrdersAndOpinionFormattedResultsTypes = {
-  isCaseSealed: boolean;
-  isDocketEntrySealed: boolean;
-  isSealed: boolean | undefined;
-  caseCaption: string;
-  docketNumberWithSuffix: string;
-  irsPractitioners: Object[];
-  privatePractitioners: Array<{}>;
-  petitioners: Object[];
-  docketNumber: string;
-  eventCode: string;
-  signedJudgeName: string;
-  isStricken: boolean;
-  numberOfPages: number;
-  documentType: string;
-  filingDate: string;
-  docketEntryId: string;
-  documentTitle: string;
-  isFileAttached: true;
-  _score: null;
-}[];
+// TODO about types
+// 1. decide what are optional
+// 2. Type documentEventCodes
+export type AdvancedSearchArgsTypes = {
+  applicationContext: IApplicationContext;
+  from?: number; // check if string (or both)
+  endDate?: string;
+  isOpinionSearch?: boolean;
+  startDate?: string;
+  sortField?: string;
+  docketNumber?: string;
+  isExternalUser?: boolean;
+  keyword?: string;
+  caseTitleOrPetitioner?: string;
+  judge?: string;
+  judges?: string[];
+  overrideResultSize?: number;
+  omitSealed?: boolean;
+  documentEventCodes?: any;
+};
 
 export const advancedDocumentSearch = async ({
   applicationContext,
@@ -45,7 +43,7 @@ export const advancedDocumentSearch = async ({
   overrideResultSize,
   sortField,
   startDate,
-}) => {
+}: AdvancedSearchArgsTypes) => {
   const sourceFields = [
     'caseCaption',
     'docketEntryId',
@@ -139,7 +137,7 @@ export const advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter: QueryDslQueryContainer[] = [
+  const documentFilter = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
@@ -186,33 +184,27 @@ export const advancedDocumentSearch = async ({
     });
   }
 
-  const searchQuery: QueryDslQueryContainer = {
-    bool: {
-      filter: documentFilter,
-      must: documentMust,
-      must_not: documentMustNot,
-    },
-  };
-
   const documentQuery = {
     body: {
       _source: sourceFields,
       from,
-      query: searchQuery,
+      query: {
+        bool: {
+          filter: documentFilter,
+          must: documentMust,
+          must_not: documentMustNot,
+        },
+      },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
       sort: getSortQuery(sortField),
     },
     index: 'efcms-docket-entry',
   };
 
-  const {
-    results,
-    total,
-  }: { results: OrdersAndOpinionFormattedResultsTypes; total: number } =
-    await search({
-      applicationContext,
-      searchParameters: documentQuery,
-    });
+  const { results, total } = await search({
+    applicationContext,
+    searchParameters: documentQuery,
+  });
 
   return { results, totalCount: total };
 };

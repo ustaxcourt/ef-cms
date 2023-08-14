@@ -1,4 +1,5 @@
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../entities/EntityConstants';
+import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { OrdersReturnType } from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
@@ -15,41 +16,39 @@ export const mockOrdersIssuedByJudge = [
     documentType: 'Order that the letter "X" is deleted from the Docket number',
     eventCode: 'ODX',
   },
+  {
+    count: 5,
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
+  },
 ];
 
+export const mockOrdersFiledTotal = 9;
+
+export const mockOrdersAggregated: OrdersReturnType = {
+  aggregations: mockOrdersIssuedByJudge,
+  total: mockOrdersFiledTotal,
+};
+
 describe('getOrdersFiledByJudgeInteractor', () => {
-  const mockClientConnectionID = 'clientConnnectionID';
   const mockValidRequest = {
-    clientConnectionId: mockClientConnectionID,
     endDate: '03/21/2020',
     judges: [judgeUser.name],
     startDate: '02/12/2020',
   };
 
-  const mockResults = {
-    results: [
-      {
-        documentType:
-          'Order that the letter "X" is deleted from the Docket number',
-        eventCode: 'ODX',
-      },
-      {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-      {
-        documentType: 'Order that the letter "L" is added to Docket number',
-        eventCode: 'OAL',
-      },
-      {
-        documentType: 'Order',
-        eventCode: 'O',
-      },
-    ],
-  };
+  const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+  const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
+    eventCode => !excludedOrderEventCodes.includes(eventCode),
+  );
+
+  const mockJudges = [judgeUser.name];
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    applicationContext
+      .getPersistenceGateway()
+      .fetchEventCodesCountForJudges.mockResolvedValue(mockOrdersAggregated);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -71,81 +70,45 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   });
 
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue(mockResults);
-
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+    const orders = await getOrdersFiledByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
 
     expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0],
     ).toMatchObject({
-      endDate: '2020-03-22T03:59:59.999Z',
-      judge: judgeUser.name,
-      overrideResultSize: MAX_ELASTICSEARCH_PAGINATION,
-      startDate: '2020-02-12T05:00:00.000Z',
+      params: {
+        documentEventCodes: orderEventCodesToSearch,
+        endDate: '2020-03-22T03:59:59.999Z',
+        judges: mockJudges,
+        searchType: 'order',
+        startDate: '2020-02-12T05:00:00.000Z',
+      },
     });
 
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      clientConnectionId: mockValidRequest.clientConnectionId,
-      message: {
-        action: 'fetch_orders_complete',
-        orders: mockOrdersIssuedByJudge,
-      },
-      userId: judgeUser.userId,
-    });
+    expect(orders).toEqual(mockOrdersAggregated);
   });
 
-  it('should return an empty list of orders when there are no matching orders for the selected judge in the date range provided', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
-        results: [],
-      });
-
+  it('should exclude certain order event codes when calling fetchEventCodesCountForJudges', async () => {
     await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
 
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      clientConnectionId: mockValidRequest.clientConnectionId,
-      message: {
-        action: 'fetch_orders_complete',
-        orders: [],
-      },
-      userId: judgeUser.userId,
-    });
-  });
-
-  it('should exclude certain order event codes when calling advancedDocumentSearch', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .advancedDocumentSearch.mockResolvedValue({
-        results: mockResults,
-      });
-
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
     ).not.toContain('OAJ');
     expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
     ).not.toContain('SPOS');
     expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
     ).not.toContain('SPTO');
     expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].documentEventCodes,
+      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
+        .mock.calls[0][0].params.documentEventCodes,
     ).not.toContain('OST');
   });
 });

@@ -1,4 +1,3 @@
-import { checkJudgeActivityReportOpinionsAndOrdersIsSetAction } from '@web-client/presenter/actions/JudgeActivityReport/checkJudgeActivityReportOpinionsAndOrdersIsSetAction';
 import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearErrorAlertsAction } from '../../actions/clearErrorAlertsAction';
 import { getCasesClosedByJudgeAction } from '../../actions/JudgeActivityReport/getCasesClosedByJudgeAction';
@@ -14,13 +13,12 @@ import { setJudgeActivityReportDataAction } from '@web-client/presenter/actions/
 import { setJudgeLastNamesAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeLastNamesAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
-import { setWaitingForResponseAction } from '@web-client/presenter/actions/setWaitingForResponseAction';
+import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../../actions/stopShowValidationAction';
-import { unsetWaitingForResponseAction } from '@web-client/presenter/actions/unsetWaitingForResponseAction';
 import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
-export const submitJudgeActivityReportSequence = [
+export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
   resetJudgeActivityReportDataAction,
   startShowValidationAction,
   validateJudgeActivityReportSearchAction,
@@ -31,25 +29,19 @@ export const submitJudgeActivityReportSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
-      setWaitingForResponseAction,
       stopShowValidationAction,
       clearErrorAlertsAction,
       clearAlertsAction,
       setJudgeLastNamesAction,
-      getOpinionsForJudgeActivityReportAction,
-      getOrdersIssuedForJudgeActivityReportAction,
       parallel([
+        getOrdersIssuedForJudgeActivityReportAction,
+        getOpinionsForJudgeActivityReportAction,
         getCasesClosedByJudgeAction,
         getTrialSessionsForJudgeActivityReportAction,
         getSubmittedAndCavCasesByJudgeAction,
       ]),
       setCavAndSubmittedCasesAction,
       setJudgeActivityReportDataAction,
-      checkJudgeActivityReportOpinionsAndOrdersIsSetAction,
-      {
-        no: [],
-        yes: [unsetWaitingForResponseAction],
-      },
     ],
   },
-];
+]);

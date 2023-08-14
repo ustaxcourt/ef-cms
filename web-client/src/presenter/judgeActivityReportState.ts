@@ -2,7 +2,15 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { JudgeActivityReportFilters } from '../../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
+
+export type JudgeActivityReportFilters = {
+  endDate: string;
+  startDate: string;
+  judgeName?: string;
+  judgeId?: string;
+  judges?: string[];
+  judgeNameToDisplayForHeader?: string;
+};
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -28,10 +36,30 @@ export type TrialSessionTypes = {
   [SESSION_TYPES.motionHearing]: number;
 };
 
-export type OrdersAndOpinionTypes = {
+export type OrdersAndOpinionResultCountTypes = {
   count: number;
   documentType: string | undefined;
   eventCode: string;
+};
+
+export type OpinionsReturnType = {
+  aggregations: OrdersAndOpinionResultCountTypes[];
+  total: number | undefined;
+};
+
+export type OrdersReturnType = {
+  aggregations: OrdersAndOpinionResultCountTypes[];
+  total: number | undefined;
+};
+
+export type CasesClosedReturnType = {
+  aggregations: CasesClosedType;
+  total: number | undefined;
+};
+
+export type TrialSessionReturnType = {
+  aggregations: TrialSessionTypes;
+  total: number;
 };
 
 export type ConsolidatedCasesGroupCountMapResponseType = {
@@ -41,11 +69,11 @@ export type ConsolidatedCasesGroupCountMapResponseType = {
 export type JudgeActivityReportState = {
   filters: JudgeActivityReportFilters;
   judgeActivityReportData: {
-    trialSessions?: TrialSessionTypes;
+    trialSessions?: TrialSessionReturnType;
     casesClosedByJudge?: CasesClosedType;
     consolidatedCasesGroupCountMap?: ConsolidatedCasesGroupCountMapResponseType;
-    opinions?: OrdersAndOpinionTypes[];
-    orders?: OrdersAndOpinionTypes[];
+    opinions?: OpinionsReturnType;
+    orders?: OrdersReturnType;
     submittedAndCavCasesByJudge?: RawCase[];
     totalCountForSubmittedAndCavCases?: number;
   };

@@ -6,6 +6,19 @@ import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
 
+export type SeachClientResultsType = {
+  aggregations?: {
+    [x: string]: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+    };
+  };
+  total?: number;
+  results?: any;
+};
+
 export const formatResults = body => {
   const total = get(body, 'hits.total.value', 0);
   const aggregations = get(body, 'aggregations');
@@ -48,7 +61,10 @@ export const formatResults = body => {
   };
 };
 
-export const search = async ({ applicationContext, searchParameters }) => {
+export const search = async ({
+  applicationContext,
+  searchParameters,
+}): Promise<SeachClientResultsType> => {
   let body;
   try {
     ({ body } = await applicationContext

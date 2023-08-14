@@ -1,6 +1,9 @@
+import {
+  CasesClosedReturnType,
+  JudgeActivityReportFilters,
+} from '@web-client/presenter/judgeActivityReportState';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from './getTrialSessionsForJudgeActivityReportInteractor';
-import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
+import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -9,7 +12,7 @@ import {
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,
   params: JudgeActivityReportFilters,
-) => {
+): Promise<CasesClosedReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -24,7 +27,7 @@ export const getCasesClosedByJudgeInteractor = async (
 
   return await applicationContext
     .getPersistenceGateway()
-    .getCasesClosedByJudge({
+    .getCasesClosedCountByJudge({
       applicationContext,
       endDate: searchEntity.endDate,
       judges: searchEntity.judges,
