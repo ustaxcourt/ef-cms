@@ -1,5 +1,5 @@
-import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
-import { FORMATS } from '../../../../../shared/src/business/utilities/DateHandler';
+import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
@@ -35,11 +35,6 @@ export const judgeActivityReportHelper = (
     totalCountForSubmittedAndCavCases,
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
-
-  console.log(
-    'state.judgeActivityReport.judgeActivityReportData',
-    get(state.judgeActivityReport.judgeActivityReportData),
-  );
 
   let resultsCount: number = 0,
     showSelectDateRangeText: boolean = false;

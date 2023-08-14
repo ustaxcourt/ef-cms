@@ -1,9 +1,9 @@
-import { ID_FOR_ALL_JUDGES } from '../../../../../shared/src/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
-import { SESSION_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { ID_FOR_ALL_JUDGES } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
-import { judgeUser } from '../../../../../shared/src/test/mockUsers';
-import { presenter } from '../../presenter-mock';
+import { judgeUser } from '@shared/test/mockUsers';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getTrialSessionsForJudgeActivityReportAction', () => {
