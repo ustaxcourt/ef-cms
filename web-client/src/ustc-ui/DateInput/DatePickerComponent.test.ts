@@ -2,7 +2,7 @@ import { getComputedInputValue } from './DatePickerComponentHelper';
 
 describe('DatePickerComponent', () => {
   beforeEach(() => {
-    global.window = {};
+    global.window ??= Object.create({});
   });
 
   it('should output the correct string if provided a valid month, day, and year', () => {
