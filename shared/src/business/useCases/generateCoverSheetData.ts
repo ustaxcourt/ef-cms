@@ -54,7 +54,7 @@ export const generateCoverSheetData = async ({
   docketEntryEntity: DocketEntry;
   filingDateUpdated: boolean;
   stampData?: any;
-  useInitialData: boolean;
+  useInitialData?: boolean;
 }) => {
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)

@@ -8,6 +8,7 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
 import { get } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,
@@ -114,6 +115,10 @@ const createWorkingCopyForNewUserOnSession = async ({
   applicationContext,
   trialSessionId,
   userId,
+}: {
+  applicationContext: IApplicationContext;
+  trialSessionId: string;
+  userId: string;
 }) => {
   const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
     trialSessionId,
@@ -136,9 +141,9 @@ const createWorkingCopyForNewUserOnSession = async ({
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
  */
-export const updateTrialSessionInteractor = async (
+export const updateTrialSession = async (
   applicationContext: IApplicationContext,
-  { trialSession },
+  { trialSession }: { trialSession: TrialSession },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -288,3 +293,49 @@ export const updateTrialSessionInteractor = async (
     userId: user.userId,
   });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: TrialSession },
+) => {
+  const { caseOrder } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId: trialSession.trialSessionId,
+    });
+
+  const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
+
+  caseOrder?.forEach(({ docketNumber }) =>
+    entitiesToLock.push(`case|${docketNumber}`),
+  );
+
+  return {
+    identifiers: entitiesToLock,
+    ttl: 900,
+  };
+};
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_trial_session',
+    },
+    userId: user.userId,
+  });
+};
+
+export const updateTrialSessionInteractor = withLocking(
+  updateTrialSession,
+  determineEntitiesToLock,
+  handleLockError,
+);

@@ -1,4 +1,8 @@
+import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { CasesClosedType } from '@web-client/presenter/judgeActivityReportState';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
+import { sum } from 'lodash';
 
 /**
  * getCasesClosedByJudge
@@ -13,16 +17,33 @@ import { search } from './searchClient';
 export const getCasesClosedByJudge = async ({
   applicationContext,
   endDate,
-  judgeName,
+  judges,
   startDate,
-}) => {
+}): Promise<CasesClosedType> => {
   const source = ['status'];
 
-  const { results } = await search({
+  const shouldFilters: QueryDslQueryContainer[] = [];
+
+  if (judges.length) {
+    judges.forEach(judge => {
+      shouldFilters.push({
+        match_phrase: { 'associatedJudge.S': `${judge}` },
+      });
+    });
+  }
+
+  const { aggregations } = await search({
     applicationContext,
     searchParameters: {
       body: {
         _source: source,
+        aggs: {
+          closed_cases: {
+            terms: {
+              field: 'status.S',
+            },
+          },
+        },
         query: {
           bool: {
             filter: [
@@ -35,21 +56,38 @@ export const getCasesClosedByJudge = async ({
                 },
               },
             ],
-            must: [
-              {
-                match_phrase: { 'associatedJudge.S': `${judgeName}` },
-              },
-            ],
+            minimum_should_match: 1,
+            should: shouldFilters,
           },
         },
-        size: 10000,
+        size: 0,
       },
       index: 'efcms-case',
     },
   });
 
+  const computedAggregatedClosedCases =
+    aggregations.closed_cases.buckets.reduce((bucketObj, item) => {
+      return {
+        ...bucketObj,
+        [item.key]: item.doc_count,
+      };
+    }, {});
+
+  const results: CasesClosedType = aggregations.closed_cases.buckets.length
+    ? computedAggregatedClosedCases
+    : {
+        [CASE_STATUS_TYPES.closed]: 0,
+        [CASE_STATUS_TYPES.closedDismissed]: 0,
+      };
+
+  const totalNumberOfClosedCases = sum(Object.values(results));
+
+  const judgeNameToLog =
+    judges.length > 1 ? 'all judges' : `judge ${judges[0]}`;
+
   applicationContext.logger.info(
-    `Found ${results.length} closed cases associated with judge ${judgeName}`,
+    `Found ${totalNumberOfClosedCases} closed cases associated with ${judgeNameToLog}`,
   );
 
   return results;
