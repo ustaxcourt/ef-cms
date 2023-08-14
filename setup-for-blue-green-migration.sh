@@ -109,8 +109,8 @@ if [[ "${EXISTS}" == "1" ]]; then
   npx ts-node --transpile-only ./scripts/ready-cluster-for-migration.ts "${NEXT_OPENSEARCH_DOMAIN}"
   CLUSTER_IS_NOT_EMPTY="$?"
   if [[ "${CLUSTER_IS_NOT_EMPTY}" == "1" ]]; then
-    echo "error: expected the ${NEXT_OPENSEARCH_DOMAIN} elasticsearch cluster to have been deleted from us-east-1 before running migration"
+    echo "error: expected the ${NEXT_OPENSEARCH_DOMAIN} openserach cluster to have been deleted from us-east-1 before running migration"
     exit 1
   fi
-  echo "warn: the table ${NEXT_OPENSEARCH_DOMAIN} exists, but it is empty"
+  echo "warn: the openserach cluster ${NEXT_OPENSEARCH_DOMAIN} exists, but it is empty"
 fi
