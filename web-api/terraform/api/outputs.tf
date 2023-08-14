@@ -15,7 +15,3 @@ output "websockets_domain" {
 output "puppeteer_layer_arn" {
   value = aws_lambda_layer_version.puppeteer_layer.arn
 }
-
-output "health_check_id" {
-  value = length(aws_route53_health_check.failover_health_check) > 0 ? aws_route53_health_check.failover_health_check[0].id : null
-}

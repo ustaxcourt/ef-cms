@@ -405,7 +405,7 @@ resource "aws_route53_record" "api_route53_regional_record" {
   type            = "A"
   zone_id         = var.zone_id
   set_identifier  = "api_${var.region}_${var.current_color}"
-  health_check_id = length(aws_route53_health_check.failover_health_check) > 0 ? aws_route53_health_check.failover_health_check[0].id : null
+  health_check_id = var.health_check_id
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom.regional_domain_name

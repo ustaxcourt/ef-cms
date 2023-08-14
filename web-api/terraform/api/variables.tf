@@ -215,3 +215,7 @@ variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
 }
+
+variable "health_check_id" {
+  type = string
+}
