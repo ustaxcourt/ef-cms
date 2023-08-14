@@ -16,10 +16,16 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    > - `@fortawesome` packages are locked down to pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes `@fortawesome/free-solid-svg-icons`, `@fortawesome/free-regular-svg-icons`, and `@fortawesome/fontawesome-svg-core`.
    > - Check [caveats](#caveats) for info on which packages are locked down, but might be available to upgrade now.
    >
+   > - keep @sparticuz/chromium` locked to 112.0.2 and `puppeteer` and `puppeteer-core` locked to 19.8.5 as 114+ and 20+ 
+   > 
+   > - `pdfjs-dist` is being updated in a devex task due to the heavy lifting needed to update this package
 3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the overrides block in `package.json` to specify version overrides. If a dependency is vulnerable and has no fix, consider replacing it with an alternative.
 
    > **Why am I seeing a high severity `dicer` issue?**
    > If you see this warning, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue. Check [caveats](#caveats) for more info.
+
+   > **Why am I seeing a medium severity for `@cypress/request`?**
+   > the audit fix --force will try to revert us down to version 4, but we are on version 12. I'm not sure how to resolve this issue.  the @cypress/request package just had a version 3.0.0 released which might fix this issue, but the cypress package has not been updated yet to use version 3.0.0.  Since cypress is only used for running tests, I think it's ok to leave this until the maintainers fix the issues.
 
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using
