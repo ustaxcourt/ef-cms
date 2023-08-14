@@ -47,6 +47,7 @@ import { deleteUserConnection } from './persistence/dynamo/notifications/deleteU
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { deleteWorkItem } from './persistence/dynamo/workitems/deleteWorkItem';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
+import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { fetchPendingItems } from './persistence/elasticsearch/fetchPendingItems';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBlockedCases } from './persistence/elasticsearch/getBlockedCases';
@@ -64,7 +65,7 @@ import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDo
 import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
-import { getCasesClosedByJudge } from './persistence/elasticsearch/getCasesClosedByJudge';
+import { getCasesClosedCountByJudge } from './persistence/elasticsearch/getCasesClosedCountByJudge';
 import { getCasesForUser } from './persistence/dynamo/users/getCasesForUser';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
@@ -227,7 +228,6 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
-    getCasesClosedByJudge,
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
@@ -295,6 +295,7 @@ const gatewayMethods = {
   deleteUserConnection,
   deleteUserFromCase,
   deleteWorkItem,
+  fetchEventCodesCountForJudges,
   getAllWebSocketConnections,
   getBlockedCases,
   getCalendaredCasesForTrialSession,
@@ -308,6 +309,7 @@ const gatewayMethods = {
   getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
+  getCasesClosedCountByJudge,
   getCasesForUser,
   getClientId,
   getCognitoUserIdByEmail,
