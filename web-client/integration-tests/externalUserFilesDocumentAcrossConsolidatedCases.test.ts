@@ -9,15 +9,7 @@ import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFil
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
 import { irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { seedData } from './fixtures/consolidated-case-group-for-external-multidocketing';
-import { seedDatabase, seedFullDataset } from './utils/database';
 import { withAppContextDecorator } from '../src/withAppContext';
-
-// Feature flag: consolidated-cases-group-access-petitioner, CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
-
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderComputed,
-);
 
 const verifyCorrectFileDocumentButton = (
   cerebralTest,
@@ -32,6 +24,10 @@ const verifyCorrectFileDocumentButton = (
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber,
     });
+
+    const caseDetailHeaderHelper = withAppContextDecorator(
+      caseDetailHeaderComputed,
+    );
 
     const {
       showFileDocumentButton,
@@ -100,18 +96,13 @@ const verifyPractitionerAssociationAcrossConsolidatedCaseGroup = (
 describe('External User files a document across a consolidated case group', () => {
   const cerebralTest = setupTest();
 
-  const leadCaseDocketNumber = '102-23';
-  const consolidatedCaseDocketNumber1 = '103-23';
-  const consolidatedCaseDocketNumber2 = '104-23';
-  const consolidatedCaseDocketNumber3 = '105-23';
+  const leadCaseDocketNumber = '102-67';
+  const consolidatedCaseDocketNumber1 = '103-67';
+  const consolidatedCaseDocketNumber2 = '104-67';
+  const consolidatedCaseDocketNumber3 = '105-67';
 
-  beforeAll(async () => {
-    await seedDatabase(seedData);
-  });
-
-  afterAll(async () => {
+  afterAll(() => {
     cerebralTest.closeSocket();
-    await seedFullDataset();
   });
 
   describe('irsPractitioner', () => {

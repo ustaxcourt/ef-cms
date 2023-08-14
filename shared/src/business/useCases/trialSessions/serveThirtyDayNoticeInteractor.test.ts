@@ -143,7 +143,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         newPdfDoc: expect.anything(),
         noticePdf: expect.anything(),
         onlyProSePetitioners: true,
-        userId: petitionsClerkUser.userId,
+        user: petitionsClerkUser,
       });
     });
 
@@ -257,6 +257,58 @@ describe('serveThirtyDayNoticeInteractor', () => {
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
       ).not.toHaveBeenCalled();
+    });
+
+    it('should ONLY generate a 30 day notice of trial (NOTT) for cases in the trial session that have NOT been removed from trial', async () => {
+      const caseWithProSePetitionerRemovedFromTrial = cloneDeep(mockCase);
+      caseWithProSePetitionerRemovedFromTrial.docketNumber = '100-78';
+      caseWithProSePetitionerRemovedFromTrial.docketNumberWithSuffix = '100-78';
+
+      const caseWithProSePetitioner = cloneDeep(mockCase);
+      caseWithProSePetitioner.privatePractitioners = [];
+
+      const caseWithProSePetitioner2 = cloneDeep(mockCase);
+      caseWithProSePetitioner2.docketNumber = '732-34';
+      caseWithProSePetitioner2.docketNumberWithSuffix = '732-34';
+      caseWithProSePetitioner2.privatePractitioners = [];
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockResolvedValueOnce(caseWithProSePetitioner)
+        .mockResolvedValueOnce(caseWithProSePetitioner2);
+
+      trialSession.caseOrder = [
+        {
+          docketNumber: caseWithProSePetitioner.docketNumber,
+          removedFromTrial: false,
+        },
+        {
+          disposition: 'Status was changed to Closed',
+          docketNumber: caseWithProSePetitionerRemovedFromTrial.docketNumber,
+          removedFromTrial: true,
+          removedFromTrialDate: '2100-12-01T00:00:00.000Z',
+        },
+        {
+          docketNumber: caseWithProSePetitioner2.docketNumber,
+          removedFromTrial: undefined, // Has not been explicitly removed from trial
+        },
+      ];
+
+      await serveThirtyDayNoticeInteractor(applicationContext, {
+        trialSessionId: trialSession.trialSessionId!,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial,
+      ).toHaveBeenCalledTimes(2);
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial.mock
+          .calls[0][0].data.docketNumberWithSuffix,
+      ).toEqual(caseWithProSePetitioner.docketNumberWithSuffix);
+      expect(
+        applicationContext.getDocumentGenerators().thirtyDayNoticeOfTrial.mock
+          .calls[1][0].data.docketNumberWithSuffix,
+      ).toEqual(caseWithProSePetitioner2.docketNumberWithSuffix);
     });
   });
 });
