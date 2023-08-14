@@ -69,6 +69,7 @@ const rqtDocketEntry: RawDocketEntry = {
   documentType: 'Request for Place of Trial',
   entityName: 'DocketEntry',
   eventCode: 'RQT',
+  filedByRole: 'petitioner',
   filers: [],
   filingDate: '2022-02-01T17:21:05.483Z',
   index: 2,
