@@ -7,9 +7,6 @@ import { search } from './searchClient';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
-// TODO about types
-// 1. decide what are optional
-// 2. Type documentEventCodes
 export type AdvancedSearchArgsTypes = {
   applicationContext: IApplicationContext;
   from?: number; // check if string (or both)
