@@ -5,7 +5,7 @@ import {
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
-import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
+import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 export const mockOpinionsFiledByJudge = [
   { count: 177, documentType: 'Memorandum Opinion', eventCode: 'MOP' },

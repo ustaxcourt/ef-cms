@@ -1,8 +1,8 @@
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
 import {
   JudgeActivityReportFilters,
   OrdersReturnType,
-} from '../../../../../web-client/src/presenter/judgeActivityReportState';
+} from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
 import {

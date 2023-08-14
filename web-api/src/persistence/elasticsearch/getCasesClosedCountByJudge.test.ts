@@ -1,9 +1,9 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getCasesClosedCountByJudge } from './getCasesClosedCountByJudge';
-import { judgeUser } from '../../../../shared/src/test/mockUsers';
 jest.mock('./searchClient');
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { casesClosedResults } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor.test';
+import { judgeUser } from '@shared/test/mockUsers';
 import { search } from './searchClient';
 
 describe('getCasesClosedCountByJudge', () => {

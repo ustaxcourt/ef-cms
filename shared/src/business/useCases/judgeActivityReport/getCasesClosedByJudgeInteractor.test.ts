@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import {
-  CasesClosedType,
+  CasesClosedReturnType,
   JudgeActivityReportFilters,
 } from '@web-client/presenter/judgeActivityReportState';
 import { applicationContext } from '../../test/createTestApplicationContext';
@@ -14,13 +14,11 @@ import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 const mockClosedCases = 3;
 const mockClosedDismissedCases = 2;
 
-const mockReturnedCloseCases: CasesClosedType = {
-  [CASE_STATUS_TYPES.closed]: mockClosedCases,
-  [CASE_STATUS_TYPES.closedDismissed]: mockClosedDismissedCases,
-};
-
-export const casesClosedResults = {
-  aggregations: mockReturnedCloseCases,
+export const casesClosedResults: CasesClosedReturnType = {
+  aggregations: {
+    [CASE_STATUS_TYPES.closed]: mockClosedCases,
+    [CASE_STATUS_TYPES.closedDismissed]: mockClosedDismissedCases,
+  },
   total: 5,
 };
 

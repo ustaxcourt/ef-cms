@@ -676,3 +676,17 @@ export const MOCK_CAV_LEAD_CASE = {
   sortableDocketNumber: 2019000109,
   status: CASE_STATUS_TYPES.cav,
 };
+
+export const MOCK_CAV_CONSOLIDATED_MEMBER_CASE = {
+  ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-13T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.cav,
+    },
+  ],
+  sortableDocketNumber: 2019000110,
+  status: CASE_STATUS_TYPES.cav,
+};
