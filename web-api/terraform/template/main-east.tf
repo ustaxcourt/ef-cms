@@ -649,6 +649,8 @@ module "api-east-green" {
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = null_resource.seal_in_lower_east_object
@@ -719,6 +721,7 @@ module "api-east-blue" {
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
   enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
 
   # lambda to seal cases in lower environment (only deployed to lower environments)

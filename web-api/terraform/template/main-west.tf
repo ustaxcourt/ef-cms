@@ -414,6 +414,8 @@ module "api-west-green" {
   triggers_object_hash           = ""
   create_triggers                = 0
   enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
@@ -485,6 +487,8 @@ module "api-west-blue" {
   triggers_object_hash           = ""
   create_triggers                = 0
   enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
