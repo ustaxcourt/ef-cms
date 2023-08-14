@@ -24,13 +24,13 @@ describe('Case journey', () => {
   const cerebralTest = setupTest();
 
   beforeEach(() => {
-    global.window = {
+    global.window ??= Object.create({
       ...global.window,
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
       },
-    };
+    });
   });
 
   afterAll(() => {
