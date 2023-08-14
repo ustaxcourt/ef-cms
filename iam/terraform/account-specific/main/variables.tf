@@ -30,3 +30,7 @@ variable "cognito_suffix" {
 variable "number_of_days_to_keep_info_logs" {
   type = number
 }
+
+variable "dawson_dev_trusted_role_arns" {
+  type = set(string)
+}

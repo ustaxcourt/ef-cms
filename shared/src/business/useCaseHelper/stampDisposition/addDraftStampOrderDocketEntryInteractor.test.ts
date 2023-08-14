@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocketEntry';
 import {
   MOTION_DISPOSITIONS,
   ORDER_TYPES,

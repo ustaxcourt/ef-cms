@@ -591,6 +591,10 @@ export const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(
   DOCKET_RECORD_FILTER_OPTIONS,
   ['exhibits'],
 );
+export const FILTER_OPTIONS = Object.values(
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
+);
+export type PUBLIC_DOCKET_RECORD_FILTER = (typeof FILTER_OPTIONS)[number];
 
 // TODO: should come from internal or external filing event
 export const INITIAL_DOCUMENT_TYPES = {
@@ -1015,6 +1019,10 @@ export const ROLES = {
   reportersOffice: 'reportersOffice',
   trialClerk: 'trialclerk',
 };
+
+// this isn't a real role someone can login with, which is why
+// it's a separate constant.
+export const SYSTEM_ROLE = 'System';
 
 export const FILING_TYPES = {
   [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
