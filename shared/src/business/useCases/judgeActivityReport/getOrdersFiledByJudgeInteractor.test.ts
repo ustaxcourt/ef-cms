@@ -18,12 +18,12 @@ export const mockOrdersIssuedByJudge = [
   },
   {
     count: 5,
-    documentType: 'T.C. Opinion',
-    eventCode: 'TCOP',
+    documentType: 'Order to Show Cause',
+    eventCode: 'OSC',
   },
 ];
 
-const mockOrdersFiledTotal = 9;
+export const mockOrdersFiledTotal = 9;
 
 export const mockOrdersAggregated: OrdersReturnType = {
   aggregations: mockOrdersIssuedByJudge,

@@ -7,10 +7,13 @@ import { casesClosedResults } from '@shared/business/useCases/judgeActivityRepor
 import { search } from './searchClient';
 
 describe('getCasesClosedCountByJudge', () => {
+  const mockEndDate = '03/21/2020';
+  const mockStartDate = '02/12/2020';
+
   let mockValidRequest = {
-    endDate: '03/21/2020',
+    endDate: mockEndDate,
     judges: [judgeUser.name],
-    startDate: '02/12/2020',
+    startDate: mockStartDate,
   };
 
   const mockCaseClosed = {
@@ -46,8 +49,8 @@ describe('getCasesClosedCountByJudge', () => {
           {
             range: {
               'closedDate.S': {
-                gte: '02/12/2020||/h',
-                lte: '03/21/2020||/h',
+                gte: `${mockStartDate}||/h`,
+                lte: `${mockEndDate}||/h'`,
               },
             },
           },
@@ -63,6 +66,7 @@ describe('getCasesClosedCountByJudge', () => {
       },
     },
     size: 0,
+    track_total_hits: true,
   };
 
   beforeAll(() => {

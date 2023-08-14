@@ -4,17 +4,8 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 
-export const searchQueryForAggregation = ({ params }) => {
-  const documentFilter: QueryDslQueryContainer[] = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-  ];
-
+export const getShouldFilters = ({ params }) => {
   const shouldFilter = [];
-  if (params.searchType) {
-    documentFilter.push({
-      terms: { 'eventCode.S': params.documentEventCodes },
-    });
-  }
 
   if (params.judges) {
     params.judges.forEach(judgeName => {
@@ -43,6 +34,14 @@ export const searchQueryForAggregation = ({ params }) => {
     });
   }
 
+  return shouldFilter;
+};
+
+export const getDocumentFilters = ({ params }) => {
+  const documentFilter: QueryDslQueryContainer[] = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+  ];
+
   if (params.endDate && params.startDate) {
     documentFilter.push({
       range: {
@@ -52,19 +51,13 @@ export const searchQueryForAggregation = ({ params }) => {
         },
       },
     });
-  } else if (params.startDate) {
+  }
+
+  if (params.searchType) {
     documentFilter.push({
-      range: {
-        'filingDate.S': {
-          gte: `${params.startDate}||/h`,
-        },
-      },
+      terms: { 'eventCode.S': params.documentEventCodes },
     });
   }
 
-  return {
-    filter: documentFilter,
-    minimum_should_match: 1, // TODO: who should own this? helper or persistence?
-    should: shouldFilter,
-  };
+  return documentFilter;
 };
