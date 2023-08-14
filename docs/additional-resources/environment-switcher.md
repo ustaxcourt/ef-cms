@@ -94,7 +94,7 @@ npm run cypress:smoketests:open
 First configure your user's `$COGNITO_USER_ID` and `$COGNITO_USER_EMAIL` in your `myenv.env` file, then run:
 ```
 source scripts/env/set-env.zsh myenv
-npm run admin:lookup-user -- admissionsClerk "John Doe"
+npm run admin:lookup-user admissionsclerk "John Doe"
 npm run admin:become-user 00000000-aaaa-bbbb-cccc-999999999999
 ```
 Log in to DAWSON with your credentials. When you're done impersonating, run this to go back to yourself:
