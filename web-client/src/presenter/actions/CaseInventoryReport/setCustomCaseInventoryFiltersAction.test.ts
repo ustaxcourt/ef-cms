@@ -334,5 +334,43 @@ describe('setCustomCaseInventoryFiltersAction', () => {
         'Roger Waters',
       ]);
     });
+
+    it('should negate the highPriority filter when passed in as props', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          highPriority: true,
+        },
+        state: {
+          customCaseInventory: {
+            ...initialFilterState,
+            filters: { highPriority: false },
+          },
+        },
+      });
+
+      expect(result.state.customCaseInventory.filters.highPriority).toEqual(
+        true,
+      );
+    });
+
+    it('should set the procedureType on the filters if one is passed in props', async () => {
+      const result = await runAction(setCustomCaseInventoryFiltersAction, {
+        modules: { presenter },
+        props: {
+          procedureType: 'Small',
+        },
+        state: {
+          customCaseInventory: {
+            ...initialFilterState,
+            filters: { procedureType: 'Regular' },
+          },
+        },
+      });
+
+      expect(result.state.customCaseInventory.filters.procedureType).toEqual(
+        'Small',
+      );
+    });
   });
 });
