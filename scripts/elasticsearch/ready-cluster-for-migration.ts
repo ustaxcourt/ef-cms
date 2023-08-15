@@ -96,6 +96,6 @@ export const readyClusterForMigration = async (DomainName?: string) => {
   );
 };
 
-readyClusterForMigration(process.argv[2]).then(() => {
-  console.log('cluster is ready for migration');
-});
+(async () => {
+  await readyClusterForMigration(process.argv[2]);
+})();

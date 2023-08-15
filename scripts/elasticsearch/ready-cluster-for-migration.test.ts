@@ -123,11 +123,17 @@ describe('readyClusterForMigration', () => {
 
   beforeEach(() => {
     mockedOpenSearch.reset();
-    mockedOpenSearch.on(DescribeDomainCommand).resolves({});
+    // mockedOpenSearch.on(DescribeDomainCommand).resolves({});
   });
 
   it('does not check to see if the cluster is empty if an invalid DomainName is passed in', async () => {
     await readyClusterForMigration('invalid-name');
+    expect(mockedClient.count).not.toHaveBeenCalled();
+  });
+
+  it('does not check to see if the cluster is empty if an invalid DomainName is passed in', async () => {
+    await readyClusterForMigration('');
+    expect(mockedOpenSearch.commandCalls(DescribeDomainCommand).length).toBe(0);
     expect(mockedClient.count).not.toHaveBeenCalled();
   });
 
