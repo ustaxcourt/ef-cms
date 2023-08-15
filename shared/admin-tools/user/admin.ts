@@ -182,7 +182,7 @@ export const createDawsonUser = async ({
   setPermanentPassword = false,
   user,
 }: {
-  deployingColorUrl?: string;
+  deployingColorUrl: string;
   setPermanentPassword?: boolean;
   user: {
     password?: string;
@@ -202,9 +202,8 @@ export const createDawsonUser = async ({
     },
   };
 
-  const url = deployingColorUrl ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
-    await axios.post(url, user, headers);
+    await axios.post(deployingColorUrl, user, headers);
 
     if (setPermanentPassword) {
       await setPassword({
