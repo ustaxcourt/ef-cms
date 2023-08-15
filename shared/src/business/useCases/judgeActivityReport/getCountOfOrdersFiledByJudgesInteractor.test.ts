@@ -1,7 +1,9 @@
 import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { OrdersReturnType } from '@web-client/presenter/judgeActivityReportState';
+import {
+  OrdersReturnType,
+  getCountOfOrdersFiledByJudgesInteractor,
+} from './getCountOfOrdersFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getCountOfOrdersFiledByJudgesInteractor } from './getCountOfOrdersFiledByJudgesInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 export const mockCountOfFormattedOrdersIssuedByJudge = [
@@ -23,11 +25,9 @@ export const mockCountOfFormattedOrdersIssuedByJudge = [
   },
 ];
 
-export const mockOrdersFiledTotal = 9;
-
 export const mockCountOfOrdersIssuedByJudge: OrdersReturnType = {
   aggregations: mockCountOfFormattedOrdersIssuedByJudge,
-  total: mockOrdersFiledTotal,
+  total: 9,
 };
 
 describe('getCountOfOrdersFiledByJudgesInteractor', () => {

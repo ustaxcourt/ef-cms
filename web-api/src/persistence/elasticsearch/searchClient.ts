@@ -15,8 +15,8 @@ export type SeachClientResultsType = {
       }[];
     };
   };
-  total?: number;
-  results?: any;
+  total: number;
+  results: any;
 };
 
 export const formatResults = body => {

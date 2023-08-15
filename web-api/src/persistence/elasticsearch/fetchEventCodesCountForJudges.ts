@@ -10,18 +10,20 @@ export type ComputedAggs = {
   total: number | undefined;
 };
 
+export type FetchEventCodesParamsType = {
+  endDate: string;
+  documentEventCodes: any;
+  judges: string[];
+  searchType: string;
+  startDate: string;
+};
+
 export const fetchEventCodesCountForJudges = async ({
   applicationContext,
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: {
-    endDate: string;
-    documentEventCodes: any;
-    judges: string[];
-    searchType: string;
-    startDate: string;
-  };
+  params: FetchEventCodesParamsType;
 }): Promise<ComputedAggs> => {
   const documentFilters = computeDocumentFilters({ params });
   const shouldFilters = computeShouldFilters({ params });
