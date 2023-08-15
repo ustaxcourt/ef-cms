@@ -1,3 +1,4 @@
+import { DocketEntryMapping } from '../../../elasticsearch/mappings';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
@@ -5,28 +6,6 @@ import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
 import { search } from './searchClient';
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
-
-export type OrdersAndOpinionFormattedResultsTypes = {
-  isCaseSealed: boolean;
-  isDocketEntrySealed: boolean;
-  isSealed: boolean | undefined;
-  caseCaption: string;
-  docketNumberWithSuffix: string;
-  irsPractitioners: Object[];
-  privatePractitioners: Array<{}>;
-  petitioners: Object[];
-  docketNumber: string;
-  eventCode: string;
-  signedJudgeName: string;
-  isStricken: boolean;
-  numberOfPages: number;
-  documentType: string;
-  filingDate: string;
-  docketEntryId: string;
-  documentTitle: string;
-  isFileAttached: true;
-  _score: null;
-}[];
 
 export const advancedDocumentSearch = async ({
   applicationContext,
@@ -43,6 +22,21 @@ export const advancedDocumentSearch = async ({
   overrideResultSize,
   sortField,
   startDate,
+}: {
+  applicationContext: IApplicationContext;
+  caseTitleOrPetitioner?: string;
+  docketNumber?: string;
+  documentEventCodes: string[];
+  endDate?: string;
+  from?: number;
+  isExternalUser?: boolean;
+  isOpinionSearch?: boolean;
+  judge?: string;
+  keyword?: string;
+  omitSealed?: boolean;
+  overrideResultSize?: number;
+  sortField?: string;
+  startDate?: string;
 }) => {
   const sourceFields = [
     'caseCaption',
@@ -66,7 +60,7 @@ export const advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentMust = [];
+  const documentMust: QueryDslQueryContainer[] = [];
 
   if (keyword) {
     documentMust.push({
@@ -97,7 +91,9 @@ export const advancedDocumentSearch = async ({
     },
   };
 
-  let documentMustNot = [{ term: { 'isStricken.BOOL': true } }];
+  let documentMustNot: QueryDslQueryContainer[] = [
+    { term: { 'isStricken.BOOL': true } },
+  ];
   if (omitSealed) {
     const { sealedCaseQuery, sealedDocumentMustNotQuery } = getSealedQuery();
 
@@ -209,14 +205,10 @@ export const advancedDocumentSearch = async ({
     index: 'efcms-docket-entry',
   };
 
-  const {
-    results,
-    total,
-  }: { results: OrdersAndOpinionFormattedResultsTypes; total: number } =
-    await search({
-      applicationContext,
-      searchParameters: documentQuery,
-    });
+  const { results, total } = await search<DocketEntryMapping>({
+    applicationContext,
+    searchParameters: documentQuery,
+  });
 
   return { results, totalCount: total };
 };
