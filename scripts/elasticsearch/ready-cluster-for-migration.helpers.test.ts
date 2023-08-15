@@ -10,7 +10,7 @@ import {
   checkIfExists,
   deleteIfExists,
   readyClusterForMigration,
-} from './ready-cluster-for-migration';
+} from './ready-cluster-for-migration.helpers';
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { mockClient } from 'aws-sdk-client-mock';
 
