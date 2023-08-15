@@ -15,7 +15,3 @@ output "websockets_domain" {
 output "puppeteer_layer_arn" {
   value = aws_lambda_layer_version.puppeteer_layer.arn
 }
-
-output "public_api_invoke_url" {
-  value = aws_api_gateway_stage.api_public_stage.invoke_url
-}
