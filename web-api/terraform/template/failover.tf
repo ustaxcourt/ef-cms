@@ -91,30 +91,28 @@ resource "aws_ssm_parameter" "public_west_green_params" {
   count = var.enable_health_checks
   name  = "terraform-${var.environment}-west-green-params"
   type  = "String"
-  value = "{\"fqdn\": \"" + element(split("/", module.api-west-green.public_api_invoke_url), 2) + "\", \"healthCheckId\": \"" + aws_route53_health_check.failover_health_check_west[0].id + "\"}"
-
+  value = "{\"fqdn\":\"${element(split("/", module.api-west-green.public_api_invoke_url), 2)}\",\"healthCheckId\":\"${aws_route53_health_check.failover_health_check_west[0].id}\"}"
 }
 
 resource "aws_ssm_parameter" "public_west_blue_params" {
   count = var.enable_health_checks
   name  = "terraform-${var.environment}-west-blue-params"
   type  = "String"
-  value = "{\"fqdn\": \"" + element(split("/", module.api-west-blue.public_api_invoke_url), 2) + "\", \"healthCheckId\": \"" + aws_route53_health_check.failover_health_check_west[0].id + "\"}"
+  value = "{\"fqdn\":\"${element(split("/", module.api-west-blue.public_api_invoke_url), 2)}\",\"healthCheckId\":\"${aws_route53_health_check.failover_health_check_west[0].id}\"}"
 }
 
 resource "aws_ssm_parameter" "public_east_green_params" {
   count = var.enable_health_checks
   name  = "terraform-${var.environment}-east-green-params"
   type  = "String"
-  value = "{\"fqdn\": \"" + element(split("/", module.api-east-green.public_api_invoke_url), 2) + "\", \"healthCheckId\": \"" + aws_route53_health_check.failover_health_check_east[0].id + "\"}"
+  value = "{\"fqdn\":\"${element(split("/", module.api-east-green.public_api_invoke_url), 2)}\",\"healthCheckId\":\"${aws_route53_health_check.failover_health_check_east[0].id}\"}"
 }
 
 resource "aws_ssm_parameter" "public_east_blue_params" {
   count = var.enable_health_checks
   name  = "terraform-${var.environment}-east-blue-params"
   type  = "String"
-  value = "{\"fqdn\": \"" + element(split("/", module.api-east-blue.public_api_invoke_url), 2) + "\", \"healthCheckId\": \"" + aws_route53_health_check.failover_health_check_east[0].id + "\"}"
-
+  value = "{\"fqdn\":\"${element(split("/", module.api-east-blue.public_api_invoke_url), 2)}\",\"healthCheckId\":\"${aws_route53_health_check.failover_health_check_east[0].id}\"}"
 }
 // TODO: Store json object with fqdn and health check id.
 // "value" must always be a string, or comma-separated string of strings
