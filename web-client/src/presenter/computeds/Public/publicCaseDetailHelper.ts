@@ -18,7 +18,7 @@ import { DocketEntry } from '../../../../../shared/src/business/entities/DocketE
 import { Get } from 'cerebral';
 import { getFilingsAndProceedings } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const getMeetsPolicyChangeRequirements = (
   entry: RawDocketEntry & { rootDocument: RawDocketEntry },
@@ -237,9 +237,13 @@ export const publicCaseDetailHelper = (
       });
     });
 
+  const { sortDirection } = get(state.sessionMetadata);
   const sortedFormattedDocketRecords = applicationContext
     .getUtilities()
-    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, 'byDate');
+    .sortDocketEntries(
+      formattedDocketEntriesOnDocketRecord as any,
+      sortDirection,
+    );
 
   formattedDocketEntriesOnDocketRecord = filterDocketEntries(
     sortedFormattedDocketRecords,

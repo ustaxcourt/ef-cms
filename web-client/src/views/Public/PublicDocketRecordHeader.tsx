@@ -1,24 +1,14 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DocketRecordSort } from '../DocketRecord/DocketRecordSort';
 import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
-import { PUBLIC_DOCKET_RECORD_FILTER } from '../../../../shared/src/business/entities/EntityConstants';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app-public.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
-interface IPublicDocketRecordHeaderProps {
-  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS: PUBLIC_DOCKET_RECORD_FILTER;
-  docketNumber: string;
-  gotoPublicPrintableDocketRecordSequence: (props: {
-    docketNumber: string;
-  }) => void;
-  publicCaseDetailHelper: IPublicCaseDetailHelper;
-  showModal: string;
-}
-
-const props: IPublicDocketRecordHeaderProps = {
+const props = {
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
     state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   docketNumber: state.caseDetail.docketNumber,
@@ -26,7 +16,9 @@ const props: IPublicDocketRecordHeaderProps = {
     sequences.gotoPublicPrintableDocketRecordSequence,
   publicCaseDetailHelper:
     state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
+  sessionMetadata: state.sessionMetadata,
   showModal: state.modal.showModal,
+  updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
 };
 
 export const PublicDocketRecordHeader = connect(
@@ -36,7 +28,9 @@ export const PublicDocketRecordHeader = connect(
     gotoPublicPrintableDocketRecordSequence,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
+    sessionMetadata,
     showModal,
+    updateSessionMetadataSequence,
   }: typeof props) {
     return (
       <React.Fragment>
@@ -58,6 +52,13 @@ export const PublicDocketRecordHeader = connect(
         </div>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row margin-bottom-2">
+            <div className="tablet:grid-col-3">
+              <DocketRecordSort
+                name="sortDirection"
+                value={sessionMetadata.sortDirection}
+                onChange={updateSessionMetadataSequence}
+              />
+            </div>
             <div className="tablet:grid-col-4">
               <label
                 className="dropdown-label-serif margin-right-3"
