@@ -5,17 +5,14 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { fetchEventCodesCountForJudges } from './fetchEventCodesCountForJudges';
-jest.mock('./searchClient');
-import { SeachClientResultsType, search } from './searchClient';
 import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockCountOfFormattedOpinionsIssuedByJudge,
   mockOpinionsFiledTotal,
 } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
-import {
-  mockCountOfFormattedOrdersIssuedByJudge,
-  mockOrdersFiledTotal,
-} from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
+import { mockCountOfFormattedOrdersIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
+import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('fetchEventCodesCountForJudges', () => {
   const ordersAggsBucket = [
@@ -34,16 +31,16 @@ describe('fetchEventCodesCountForJudges', () => {
 
   const mockJudges = [judgeUser.name];
 
-  const mockOrdersResults: SeachClientResultsType = {
+  const mockOrdersResults = {
     aggregations: {
       search_field_count: {
         buckets: ordersAggsBucket,
       },
     },
-    total: mockOrdersFiledTotal,
+    total: 9,
   };
 
-  const mockOpinionsResults: SeachClientResultsType = {
+  const mockOpinionsResults = {
     aggregations: {
       search_field_count: {
         buckets: opinionsAggsBucket,
@@ -126,7 +123,7 @@ describe('fetchEventCodesCountForJudges', () => {
     });
 
     expect(aggregations).toMatchObject(mockCountOfFormattedOrdersIssuedByJudge);
-    expect(total).toEqual(mockOrdersFiledTotal);
+    expect(total).toEqual(9);
   });
 
   it('returns searches for opinions within a time range using selected judges', async () => {
