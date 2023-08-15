@@ -1,5 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
+import { DocketRecordSort } from './DocketRecordSort';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
@@ -36,45 +37,15 @@ export const DocketRecordHeader = connect(
           <NonMobile>
             <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
               <div className="tablet:grid-col-3">
-                <select
-                  aria-label="docket record"
-                  className="usa-select margin-top-0 sort"
+                <DocketRecordSort
                   name={`docketRecordSort.${formattedCaseDetail.docketNumber}`}
                   value={
                     sessionMetadata.docketRecordSort[
                       formattedCaseDetail.docketNumber
                     ]
                   }
-                  onChange={e => {
-                    updateSessionMetadataSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  {[
-                    {
-                      label: 'oldest',
-                      value: 'byDate',
-                    },
-                    {
-                      label: 'newest',
-                      value: 'byDateDesc',
-                    },
-                    {
-                      label: 'no. (ascending)',
-                      value: 'byIndex',
-                    },
-                    {
-                      label: 'no. (descending)',
-                      value: 'byIndexDesc',
-                    },
-                  ].map(item => (
-                    <option key={item.value} value={item.value}>
-                      Sort by {item.label}
-                    </option>
-                  ))}
-                </select>
+                  onChange={updateSessionMetadataSequence}
+                />
               </div>
               <div className="tablet:grid-col-fill">
                 <label
