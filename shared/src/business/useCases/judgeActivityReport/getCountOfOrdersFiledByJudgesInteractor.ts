@@ -1,8 +1,4 @@
 import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
-import {
-  JudgeActivityReportFilters,
-  OrdersReturnType,
-} from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
 import {
@@ -10,7 +6,27 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 
-export const getOrdersFiledByJudgeInteractor = async (
+export type JudgeActivityReportFilters = {
+  endDate: string;
+  startDate: string;
+  judgeName?: string;
+  judgeId?: string;
+  judges?: string[];
+  judgeNameToDisplayForHeader?: string;
+};
+
+export type OrdersAndOpinionResultCountTypes = {
+  count: number;
+  documentType: string | undefined;
+  eventCode: string;
+};
+
+export type OrdersReturnType = {
+  aggregations: OrdersAndOpinionResultCountTypes[];
+  total: number | undefined;
+};
+
+export const getCountOfOrdersFiledByJudgesInteractor = async (
   applicationContext,
   params: JudgeActivityReportFilters,
 ): Promise<OrdersReturnType> => {

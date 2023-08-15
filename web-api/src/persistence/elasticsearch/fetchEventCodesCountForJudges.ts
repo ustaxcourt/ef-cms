@@ -1,7 +1,7 @@
 import { COURT_ISSUED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
-  getDocumentFilters,
-  getShouldFilters,
+  computeDocumentFilters,
+  computeShouldFilters,
 } from './helpers/searchQueryForAggregation';
 import { search } from './searchClient';
 
@@ -10,21 +10,23 @@ export type ComputedAggs = {
   total: number | undefined;
 };
 
+export type FetchEventCodesParamsType = {
+  endDate: string;
+  documentEventCodes: any;
+  judges: string[];
+  searchType: string;
+  startDate: string;
+};
+
 export const fetchEventCodesCountForJudges = async ({
   applicationContext,
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: {
-    endDate: string;
-    documentEventCodes: any;
-    judges: string[];
-    searchType: string;
-    startDate: string;
-  };
+  params: FetchEventCodesParamsType;
 }): Promise<ComputedAggs> => {
-  const documentFilter = getDocumentFilters({ params });
-  const shouldFilter = getShouldFilters({ params });
+  const documentFilters = computeDocumentFilters({ params });
+  const shouldFilters = computeShouldFilters({ params });
 
   const documentQuery = {
     body: {
@@ -37,9 +39,9 @@ export const fetchEventCodesCountForJudges = async ({
       },
       query: {
         bool: {
-          filter: documentFilter,
+          filter: documentFilters,
           minimum_should_match: 1,
-          should: shouldFilter,
+          should: shouldFilters,
         },
       },
       size: 0,

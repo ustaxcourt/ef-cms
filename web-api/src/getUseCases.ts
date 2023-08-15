@@ -84,6 +84,8 @@ import { getCasesForUserInteractor } from '../../shared/src/business/useCases/ge
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor';
+import { getCountOfOpinionsFiledByJudgesInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor';
+import { getCountOfOrdersFiledByJudgesInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForUserInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForUserInteractor';
@@ -102,8 +104,6 @@ import { getMaintenanceModeInteractor } from '../../shared/src/business/useCases
 import { getMessageThreadInteractor } from '../../shared/src/business/useCases/messages/getMessageThreadInteractor';
 import { getMessagesForCaseInteractor } from '../../shared/src/business/useCases/messages/getMessagesForCaseInteractor';
 import { getNotificationsInteractor } from '../../shared/src/business/useCases/getNotificationsInteractor';
-import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor';
-import { getOrdersFiledByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getOutboxMessagesForUserInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/business/useCases/practitioners/getPractitionerByBarNumberInteractor';
@@ -285,6 +285,8 @@ const useCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getCountOfOpinionsFiledByJudgesInteractor,
+  getCountOfOrdersFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForSectionInteractor,
@@ -304,8 +306,6 @@ const useCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
-  getOpinionsFiledByJudgeInteractor,
-  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPractitionerByBarNumberInteractor,

@@ -1,10 +1,12 @@
 import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { OrdersReturnType } from '@web-client/presenter/judgeActivityReportState';
+import {
+  OrdersReturnType,
+  getCountOfOrdersFiledByJudgesInteractor,
+} from './getCountOfOrdersFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getOrdersFiledByJudgeInteractor } from './getOrdersFiledByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-export const mockOrdersIssuedByJudge = [
+export const mockCountOfFormattedOrdersIssuedByJudge = [
   { count: 2, documentType: 'Order', eventCode: 'O' },
   {
     count: 1,
@@ -23,14 +25,12 @@ export const mockOrdersIssuedByJudge = [
   },
 ];
 
-export const mockOrdersFiledTotal = 9;
-
-export const mockOrdersAggregated: OrdersReturnType = {
-  aggregations: mockOrdersIssuedByJudge,
-  total: mockOrdersFiledTotal,
+export const mockCountOfOrdersIssuedByJudge: OrdersReturnType = {
+  aggregations: mockCountOfFormattedOrdersIssuedByJudge,
+  total: 9,
 };
 
-describe('getOrdersFiledByJudgeInteractor', () => {
+describe('getCountOfOrdersFiledByJudgesInteractor', () => {
   const mockValidRequest = {
     endDate: '03/21/2020',
     judges: [judgeUser.name],
@@ -48,20 +48,25 @@ describe('getOrdersFiledByJudgeInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
     applicationContext
       .getPersistenceGateway()
-      .fetchEventCodesCountForJudges.mockResolvedValue(mockOrdersAggregated);
+      .fetchEventCodesCountForJudges.mockResolvedValue(
+        mockCountOfOrdersIssuedByJudge,
+      );
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
-      getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest),
+      getCountOfOrdersFiledByJudgesInteractor(
+        applicationContext,
+        mockValidRequest,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      getOrdersFiledByJudgeInteractor(applicationContext, {
+      getCountOfOrdersFiledByJudgesInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
         judges: [judgeUser.name],
         startDate: 'yabbadabbadoo',
@@ -70,7 +75,7 @@ describe('getOrdersFiledByJudgeInteractor', () => {
   });
 
   it('should return the orders filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    const orders = await getOrdersFiledByJudgeInteractor(
+    const orders = await getCountOfOrdersFiledByJudgesInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -88,11 +93,14 @@ describe('getOrdersFiledByJudgeInteractor', () => {
       },
     });
 
-    expect(orders).toEqual(mockOrdersAggregated);
+    expect(orders).toEqual(mockCountOfOrdersIssuedByJudge);
   });
 
   it('should exclude certain order event codes when calling fetchEventCodesCountForJudges', async () => {
-    await getOrdersFiledByJudgeInteractor(applicationContext, mockValidRequest);
+    await getCountOfOrdersFiledByJudgesInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
 
     expect(
       applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges

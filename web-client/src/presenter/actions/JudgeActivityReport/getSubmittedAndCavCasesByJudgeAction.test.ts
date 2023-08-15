@@ -1,12 +1,12 @@
 import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../judgeActivityReportState';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
-import { judgeUser } from '../../../../../shared/src/test/mockUsers';
-import { presenter } from '../../presenter-mock';
+import { judgeUser } from '@shared/test/mockUsers';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getSubmittedAndCavCasesByJudgeAction', () => {
