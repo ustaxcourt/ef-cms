@@ -280,6 +280,7 @@
     "artillery": "2.0.0-35",
     "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "autoprefixer": "^10.4.14",
+    "aws-sdk-client-mock": "^3.0.0",
     "axios-retry": "^3.6.0",
     "babel-jest": "^29.6.2",
     "babel-loader": "^9.1.3",
