@@ -1,7 +1,7 @@
 import { COURT_ISSUED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
-  getDocumentFilters,
-  getShouldFilters,
+  computeDocumentFilters,
+  computeShouldFilters,
 } from './helpers/searchQueryForAggregation';
 import { search } from './searchClient';
 
@@ -23,8 +23,8 @@ export const fetchEventCodesCountForJudges = async ({
     startDate: string;
   };
 }): Promise<ComputedAggs> => {
-  const documentFilter = getDocumentFilters({ params });
-  const shouldFilter = getShouldFilters({ params });
+  const documentFilters = computeDocumentFilters({ params });
+  const shouldFilters = computeShouldFilters({ params });
 
   const documentQuery = {
     body: {
@@ -37,9 +37,9 @@ export const fetchEventCodesCountForJudges = async ({
       },
       query: {
         bool: {
-          filter: documentFilter,
+          filter: documentFilters,
           minimum_should_match: 1,
-          should: shouldFilter,
+          should: shouldFilters,
         },
       },
       size: 0,
