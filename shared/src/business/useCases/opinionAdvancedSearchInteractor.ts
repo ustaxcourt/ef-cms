@@ -1,5 +1,6 @@
 import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
+import { IServerApplicationContext } from '../../../../web-api/src/applicationContext';
 import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
 import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
 import {
@@ -9,16 +10,8 @@ import {
 import { UnauthorizedError } from '../../errors/errors';
 import { omit } from 'lodash';
 
-/**
- * opinionAdvancedSearchInteractor
- *
- * @param {object} applicationContext api applicationContext
- * @param {object} providers providers object
- * @param {object} providers.keyword keyword used for searching opinions
- * @returns {object} the opinions data
- */
 export const opinionAdvancedSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: IServerApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -35,7 +28,7 @@ export const opinionAdvancedSearchInteractor = async (
     endDate: string;
     judge: string;
     keyword: string;
-    opinionTypes: string;
+    opinionTypes: string[];
     startDate: string;
   },
 ) => {
