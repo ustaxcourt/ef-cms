@@ -1,15 +1,20 @@
+import { FetchEventCodesParamsType } from '../fetchEventCodesCountForJudges';
 import {
   OPINION_JUDGE_FIELD,
   ORDER_JUDGE_FIELD,
 } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 
-export const getShouldFilters = ({ params }) => {
-  const shouldFilter = [];
+export const computeShouldFilters = ({
+  params,
+}: {
+  params: FetchEventCodesParamsType;
+}) => {
+  const shouldFilters = [];
 
   if (params.judges) {
     params.judges.forEach(judgeName => {
-      let matchedQueryForJudge;
+      let matchedQueryForJudge: any;
 
       if (params.searchType === 'opinion') {
         matchedQueryForJudge = {
@@ -30,20 +35,20 @@ export const getShouldFilters = ({ params }) => {
         };
       }
 
-      shouldFilter.push(matchedQueryForJudge);
+      shouldFilters.push(matchedQueryForJudge);
     });
   }
 
-  return shouldFilter;
+  return shouldFilters;
 };
 
-export const getDocumentFilters = ({ params }) => {
-  const documentFilter: QueryDslQueryContainer[] = [
+export const computeDocumentFilters = ({ params }) => {
+  const documentFilters: QueryDslQueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
   ];
 
   if (params.endDate && params.startDate) {
-    documentFilter.push({
+    documentFilters.push({
       range: {
         'filingDate.S': {
           gte: `${params.startDate}||/h`,
@@ -54,10 +59,10 @@ export const getDocumentFilters = ({ params }) => {
   }
 
   if (params.searchType) {
-    documentFilter.push({
+    documentFilters.push({
       terms: { 'eventCode.S': params.documentEventCodes },
     });
   }
 
-  return documentFilter;
+  return documentFilters;
 };

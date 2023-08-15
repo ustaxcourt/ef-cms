@@ -1,13 +1,24 @@
-import {
-  ConsolidatedCasesGroupCountMapResponseType,
-  JudgeActivityReportCavAndSubmittedCasesRequest,
-} from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+
+export type JudgeActivityReportCavAndSubmittedCasesRequest = {
+  statuses: string[];
+  judges: string[];
+  pageNumber?: number;
+  pageSize?: number;
+};
+
+export type CavAndSubmittedCaseResponseType = {
+  foundCases: { docketNumber: string }[];
+};
+
+export type ConsolidatedCasesGroupCountMapResponseType = {
+  [leadDocketNumber: string]: number;
+};
 
 export type CavAndSubmittedFilteredCasesType = {
   caseStatusHistory: {

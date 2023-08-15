@@ -12,17 +12,13 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
   let judgeIdForRequest: string = ID_FOR_ALL_JUDGES;
 
   if (judgeName !== 'All Judges') {
-    const listOfJudges: Array<{
-      role?: string;
-      userId?: string;
-      name?: string;
-    }> = get(state.judges);
+    const listOfJudges = get(state.judges);
 
-    const { userId } = (listOfJudges || []).find(
+    const judgeInfo = listOfJudges.find(
       eachJudge => eachJudge.name === judgeName,
     );
 
-    judgeIdForRequest = userId;
+    judgeIdForRequest = judgeInfo!.userId;
   }
 
   const trialSessions = await applicationContext

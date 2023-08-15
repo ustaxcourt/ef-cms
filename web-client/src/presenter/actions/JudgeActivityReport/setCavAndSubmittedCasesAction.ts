@@ -1,9 +1,17 @@
+import {
+  CavAndSubmittedFilteredCasesType,
+  ConsolidatedCasesGroupCountMapResponseType,
+} from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setCavAndSubmittedCasesAction = ({
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  consolidatedCasesGroupCountMap: ConsolidatedCasesGroupCountMapResponseType;
+  totalCountForSubmittedAndCavCases: number;
+  cases: CavAndSubmittedFilteredCasesType[];
+}>) => {
   const {
     cases: submittedAndCavCasesByJudge,
     consolidatedCasesGroupCountMap,
