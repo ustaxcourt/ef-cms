@@ -180,7 +180,7 @@ resource "aws_acm_certificate" "api_gateway_cert_public" {
     Name          = "public-api-${var.current_color}.${var.dns_domain}"
     ProductDomain = "EFCMS Public API"
     Environment   = var.environment
-    Description   = "Certificate for public-api.${var.dns_domain}"
+    Description   = "Certificate for public-api-${var.current_color}.${var.dns_domain}"
     ManagedBy     = "terraform"
   }
 }
