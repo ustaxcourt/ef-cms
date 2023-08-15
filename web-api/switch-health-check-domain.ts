@@ -22,23 +22,23 @@ async function main() {
 
   const ssmCommand = new GetParametersCommand({
     Names: [
-      `terraform-${ENV}-east-${DEPLOYING_COLOR}-fqdn`,
-      `terraform-${ENV}-west-${DEPLOYING_COLOR}-fqdn`,
+      `terraform-${ENV}-east-${DEPLOYING_COLOR}-params`,
+      `terraform-${ENV}-west-${DEPLOYING_COLOR}-params`,
     ],
   });
   const ssmResponse = await ssmClient.send(ssmCommand);
   console.log('ssmResponse:', ssmResponse);
 
-  const fqdns: string[] = ssmResponse.Parameters!.map(param => {
-    return param.Value!;
+  const params = ssmResponse.Parameters!.map(param => {
+    return JSON.parse(param.Value!);
   });
 
   const client = new Route53Client({});
 
-  for (const fqdn of fqdns) {
+  for (const param of params) {
     const input: UpdateHealthCheckRequest = {
-      FullyQualifiedDomainName: fqdn,
-      HealthCheckId: id,
+      FullyQualifiedDomainName: param.fqdn,
+      HealthCheckId: param.healthCheckId,
     };
     console.log('route53 input:', input);
     const command = new UpdateHealthCheckCommand(input);
