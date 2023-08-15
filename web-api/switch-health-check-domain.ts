@@ -40,6 +40,7 @@ async function main() {
 
   for (const param of params) {
     const input: UpdateHealthCheckRequest = {
+      Disabled: false,
       FullyQualifiedDomainName: param.fqdn,
       HealthCheckId: param.healthCheckId,
     };
