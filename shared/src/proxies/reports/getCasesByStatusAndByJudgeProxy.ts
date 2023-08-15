@@ -1,4 +1,4 @@
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { post } from '../requests';
 
 /**

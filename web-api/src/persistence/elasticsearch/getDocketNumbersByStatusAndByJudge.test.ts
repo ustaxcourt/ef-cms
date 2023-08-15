@@ -2,7 +2,7 @@ import {
   CAV_AND_SUBMITTED_CASE_STATUS,
   MAX_ELASTICSEARCH_PAGINATION,
 } from '@shared/business/entities/EntityConstants';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@web-client/presenter/judgeActivityReportState';
+import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocketNumbersByStatusAndByJudge } from './getDocketNumbersByStatusAndByJudge';
 import { judgeUser } from '@shared/test/mockUsers';
