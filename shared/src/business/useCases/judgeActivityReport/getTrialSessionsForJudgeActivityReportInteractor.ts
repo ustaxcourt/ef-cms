@@ -1,8 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import {
-  JudgeActivityReportFilters,
-  TrialSessionReturnType,
-} from '@web-client/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -15,6 +12,19 @@ import {
 import { sum } from 'lodash';
 
 export const ID_FOR_ALL_JUDGES = 'judgeIdToRepresentAllJudgesSelection';
+
+export type TrialSessionTypes = {
+  [SESSION_TYPES.regular]: number;
+  [SESSION_TYPES.small]: number;
+  [SESSION_TYPES.hybrid]: number;
+  [SESSION_TYPES.special]: number;
+  [SESSION_TYPES.motionHearing]: number;
+};
+
+export type TrialSessionReturnType = {
+  aggregations: TrialSessionTypes;
+  total: number;
+};
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,

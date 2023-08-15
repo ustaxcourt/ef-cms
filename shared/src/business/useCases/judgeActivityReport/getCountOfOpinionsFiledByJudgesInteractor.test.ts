@@ -1,10 +1,10 @@
-import {
-  JudgeActivityReportFilters,
-  OpinionsReturnType,
-} from '@web-client/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import {
+  OpinionsReturnType,
+  getCountOfOpinionsFiledByJudgesInteractor,
+} from './getCountOfOpinionsFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getCountOfOpinionsFiledByJudgesInteractor } from './getCountOfOpinionsFiledByJudgesInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 export const mockCountOfFormattedOpinionsIssuedByJudge = [
