@@ -33,7 +33,10 @@ async function main() {
     return JSON.parse(param.Value!);
   });
 
-  const client = new Route53Client({ defaultsMode: 'cross-region' });
+  const client = new Route53Client({
+    defaultsMode: 'cross-region',
+    region: 'us-east-1',
+  });
 
   for (const param of params) {
     const input: UpdateHealthCheckRequest = {
