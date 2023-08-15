@@ -1,14 +1,14 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import {
   CasesClosedReturnType,
-  JudgeActivityReportFilters,
-} from '@web-client/presenter/judgeActivityReportState';
+  getCasesClosedByJudgeInteractor,
+} from './getCasesClosedByJudgeInteractor';
+import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../utilities/DateHandler';
-import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
 const mockClosedCases = 3;

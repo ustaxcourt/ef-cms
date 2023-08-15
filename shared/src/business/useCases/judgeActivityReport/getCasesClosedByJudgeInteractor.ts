@@ -1,13 +1,21 @@
-import {
-  CasesClosedReturnType,
-  JudgeActivityReportFilters,
-} from '@web-client/presenter/judgeActivityReportState';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+
+export type CasesClosedType = {
+  [CASE_STATUS_TYPES.closed]: number;
+  [CASE_STATUS_TYPES.closedDismissed]: number;
+};
+
+export type CasesClosedReturnType = {
+  aggregations: CasesClosedType;
+  total: number | undefined;
+};
 
 export const getCasesClosedByJudgeInteractor = async (
   applicationContext,

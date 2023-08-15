@@ -1,7 +1,5 @@
-import {
-  JudgeActivityReportFilters,
-  TrialSessionTypes,
-} from '../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import { TrialSessionTypes } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { post } from '../requests';
 
 export const getTrialSessionsForJudgeActivityReportInteractor = (

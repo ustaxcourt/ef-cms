@@ -1,14 +1,19 @@
 import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
 import {
   JudgeActivityReportFilters,
-  OpinionsReturnType,
-} from '@web-client/presenter/judgeActivityReportState';
+  OrdersAndOpinionResultCountTypes,
+} from './getCountOfOrdersFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+
+export type OpinionsReturnType = {
+  aggregations: OrdersAndOpinionResultCountTypes[];
+  total: number | undefined;
+};
 
 export const getCountOfOpinionsFiledByJudgesInteractor = async (
   applicationContext: IApplicationContext,
