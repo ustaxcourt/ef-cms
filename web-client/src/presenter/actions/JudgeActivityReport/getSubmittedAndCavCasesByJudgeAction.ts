@@ -12,7 +12,9 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  selectedPage: number;
+}>) => {
   const { judges } = get(state.judgeActivityReport.filters);
   const pageNumber = props.selectedPage;
 
