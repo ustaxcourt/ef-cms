@@ -14,21 +14,33 @@ import {
 import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { mockClient } from 'aws-sdk-client-mock';
 
-describe('deleteIfExists', () => {
-  let mockedStatusCode: number = 200;
-  let mockedClient;
+let mockedStatusCode: number = 200;
+let mockedCount: number = 0;
+const mockedClient = {
+  count: jest.fn().mockImplementation(() => ({
+    body: {
+      count: mockedCount,
+    },
+  })),
+  indices: {
+    delete: jest.fn(),
+    exists: jest
+      .fn()
+      .mockImplementation(() => ({ statusCode: mockedStatusCode })),
+  },
+};
+jest.mock('../../web-api/elasticsearch/client', () => ({
+  getClient: jest.fn().mockImplementation(() => mockedClient),
+}));
 
-  beforeAll(() => {
-    mockedClient = {
-      indices: {
-        delete: jest.fn(),
-        exists: jest
-          .fn()
-          .mockImplementation(() => ({ statusCode: mockedStatusCode })),
-      },
-    };
+const mockedOpenSearch = mockClient(OpenSearchClient);
+const mockedExit = jest
+  .spyOn(process, 'exit')
+  .mockImplementation((code?: number | undefined): never => {
+    throw new Error('process.exit: ' + code);
   });
 
+describe('deleteIfExists', () => {
   beforeEach(() => {
     mockedStatusCode = 200;
   });
@@ -61,40 +73,36 @@ describe('deleteIfExists', () => {
 
 describe('checkIfExists', () => {
   const mockedDomainName = 'foo';
-  const opensearchMock = mockClient(OpenSearchClient);
 
   beforeEach(() => {
-    opensearchMock.reset();
+    mockedOpenSearch.reset();
   });
 
   it('returns true if the domain name exists', async () => {
-    opensearchMock.on(DescribeDomainCommand).resolves({});
+    mockedOpenSearch.on(DescribeDomainCommand).resolves({});
     const result = await checkIfExists(mockedDomainName);
     expect(result).toBe(true);
   });
 
   it('returns false if the domain does not exist', async () => {
-    opensearchMock.on(DescribeDomainCommand).rejects({
+    mockedOpenSearch.on(DescribeDomainCommand).rejects({
       Code: 'ResourceNotFoundException',
     });
     const result = await checkIfExists(mockedDomainName);
     expect(result).toBe(false);
   });
+
+  it('throws an error if the describe domain command rejects with an error other than ResourceNotFoundException', async () => {
+    mockedOpenSearch.on(DescribeDomainCommand).rejects({
+      Code: 'InternalException',
+    });
+    await expect(checkIfExists(mockedDomainName)).rejects.toThrow();
+  });
 });
 
 describe('checkIfEmpty', () => {
-  let mockedClient;
-  let mockedCount;
-
   beforeEach(() => {
     mockedCount = 0;
-    mockedClient = {
-      count: jest.fn().mockImplementation(() => ({
-        body: {
-          count: mockedCount,
-        },
-      })),
-    };
   });
 
   it('returns true if the domain is empty', async () => {
@@ -111,33 +119,30 @@ describe('checkIfEmpty', () => {
 });
 
 describe('readyClusterForMigration', () => {
-  let mockedClient;
-  let mockedCount = 0;
-  let mockedStatusCode = 200;
-  let mockedExit = jest
-    .spyOn(process, 'exit')
-    .mockImplementation((code?: number | undefined): never => {
-      throw new Error('process.exit: ' + code);
-    });
+  let mockedDomainName = 'efcms-search-foo-bar';
 
-  beforeAll(() => {
-    mockedClient = {
-      count: jest.fn().mockImplementation(() => ({
-        body: {
-          count: mockedCount,
-        },
-      })),
-      indices: {
-        delete: jest.fn(),
-        exists: jest
-          .fn()
-          .mockImplementation(() => ({ statusCode: mockedStatusCode })),
-      },
-    };
+  beforeEach(() => {
+    mockedOpenSearch.reset();
+    mockedOpenSearch.on(DescribeDomainCommand).resolves({});
+  });
+
+  it('does not check to see if the cluster is empty if an invalid DomainName is passed in', async () => {
+    await readyClusterForMigration('invalid-name');
+    expect(mockedClient.count).not.toHaveBeenCalled();
+  });
+
+  it('does not check to see if the cluster is empty if it does not exist', async () => {
+    mockedOpenSearch.reset();
+    mockedOpenSearch.on(DescribeDomainCommand).rejects({
+      Code: 'ResourceNotFoundException',
+    });
+    await readyClusterForMigration(mockedDomainName);
+    expect(mockedClient.count).not.toHaveBeenCalled();
   });
 
   it('checks to see if the cluster is empty', async () => {
-    await readyClusterForMigration(mockedClient);
+    mockedCount = 0;
+    await readyClusterForMigration(mockedDomainName);
     expect(mockedClient.count).toHaveBeenCalled();
   });
 
@@ -147,7 +152,9 @@ describe('readyClusterForMigration', () => {
     });
 
     it('exits with a statusCode of 1', async () => {
-      await expect(readyClusterForMigration(mockedClient)).rejects.toThrow();
+      await expect(
+        readyClusterForMigration(mockedDomainName),
+      ).rejects.toThrow();
       expect(mockedExit).toHaveBeenCalledWith(1);
     });
   });
@@ -160,7 +167,7 @@ describe('readyClusterForMigration', () => {
     it.each(elasticsearchIndexes)(
       'checks if each index exists and deletes it',
       async index => {
-        await readyClusterForMigration(mockedClient);
+        await readyClusterForMigration(mockedDomainName);
         expect(mockedClient.indices.exists).toHaveBeenCalledWith({
           body: {},
           index,

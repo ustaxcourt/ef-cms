@@ -56,7 +56,32 @@ export const checkIfEmpty = async (client: {
   return res.body.count === 0;
 };
 
-export const readyClusterForMigration = async client => {
+export const getClientForDomainName = async DomainName => {
+  const [, , ENV, VERSION]: string[] = DomainName.split('-');
+  if (!ENV || !VERSION) {
+    console.error('Invalid Domain Name specified');
+    return;
+  }
+  const client = await getClient({ environmentName: ENV, version: VERSION });
+  return client;
+};
+
+export const readyClusterForMigration = async (DomainName?: string) => {
+  if (!DomainName) {
+    console.error('Please provide an Opensearch Domain to check');
+    return;
+  }
+
+  const exists = await checkIfExists(DomainName);
+  if (!exists) {
+    return;
+  }
+
+  const client = await getClientForDomainName(DomainName);
+  if (!client) {
+    return;
+  }
+
   const isEmpty = await checkIfEmpty(client);
   if (!isEmpty) {
     // get the count for the domain
@@ -64,30 +89,13 @@ export const readyClusterForMigration = async client => {
     process.exit(1);
   }
 
-  // if the clust er is empty, just delete the indices as they will be recreated soon
+  // if the cluster is empty, just delete the indices as they will be recreated soon
   // with latest and greatest mappings
   await Promise.all(
     elasticsearchIndexes.map(index => deleteIfExists({ client, index })),
   );
 };
 
-(async () => {
-  if (!process.argv[2]) {
-    console.log('Please provide an Opensearch Domain to check');
-    return;
-  }
-
-  const DomainName: string = process.argv[2];
-
-  const exists = await checkIfExists(DomainName);
-
-  if (!exists) {
-    // doesn't exist; nothing to do -- we are ready for a migration!
-    return;
-  }
-
-  // exists; make sure it's ready for a migration
-  const [, , ENV, VERSION]: string[] = DomainName.split('-');
-  const client = await getClient({ environmentName: ENV, version: VERSION });
-  await readyClusterForMigration(client);
-})();
+readyClusterForMigration(process.argv[2]).then(() => {
+  console.log('cluster is ready for migration');
+});
