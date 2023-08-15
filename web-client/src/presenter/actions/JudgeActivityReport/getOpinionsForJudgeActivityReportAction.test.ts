@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getOpinionsForJudgeActivityReportAction } from './getOpinionsForJudgeActivityReportAction';
 import { judgeUser } from '@shared/test/mockUsers';
-import { mockOpinionsAggregated } from '@shared/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor.test';
+import { mockCountOfOpinionsIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -14,7 +14,9 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
 
   applicationContext
     .getUseCases()
-    .getOpinionsFiledByJudgeInteractor.mockReturnValue(mockOpinionsAggregated);
+    .getCountOfOpinionsFiledByJudgesInteractor.mockReturnValue(
+      mockCountOfOpinionsIssuedByJudge,
+    );
 
   it('should make a call to return opinions by the provided judge in the date range provided from persistence', async () => {
     const result = await runAction(getOpinionsForJudgeActivityReportAction, {
@@ -33,14 +35,14 @@ describe('getOpinionsForJudgeActivityReportAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getOpinionsFiledByJudgeInteractor.mock
-        .calls[0][1],
+      applicationContext.getUseCases().getCountOfOpinionsFiledByJudgesInteractor
+        .mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
       judges: [mockJudgeName],
       startDate: mockStartDate,
     });
 
-    expect(result.output.opinions).toEqual(mockOpinionsAggregated);
+    expect(result.output.opinions).toEqual(mockCountOfOpinionsIssuedByJudge);
   });
 });
