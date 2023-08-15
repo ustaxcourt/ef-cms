@@ -211,9 +211,12 @@ export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): IPublicCaseDetailHelper => {
-  const { canAllowPrintableDocketRecord, docketEntries, isSealed } = get(
-    state.caseDetail,
-  );
+  const {
+    canAllowPrintableDocketRecord,
+    docketEntries,
+    docketNumber,
+    isSealed,
+  } = get(state.caseDetail);
 
   const isTerminalUser = get(state.isTerminalUser);
 
@@ -237,13 +240,19 @@ export const publicCaseDetailHelper = (
       });
     });
 
-  const { sortDirection } = get(state.sessionMetadata);
+  const { docketRecordSort } = get(state.sessionMetadata);
+  const sortOrder = docketRecordSort[docketNumber];
+
   const sortedFormattedDocketRecords = applicationContext
     .getUtilities()
-    .sortDocketEntries(
-      formattedDocketEntriesOnDocketRecord as any,
-      sortDirection,
-    );
+    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, sortOrder);
+
+  const sortLabelsMobile = {
+    byDate: 'Oldest to Newest',
+    byDateDesc: 'Newest to Oldest',
+  };
+
+  const sortLabelTextMobile = sortLabelsMobile[sortOrder];
 
   formattedDocketEntriesOnDocketRecord = filterDocketEntries(
     sortedFormattedDocketRecords,
@@ -254,5 +263,6 @@ export const publicCaseDetailHelper = (
     formattedDocketEntriesOnDocketRecord,
     isCaseSealed: !!isSealed,
     showPrintableDocketRecord: canAllowPrintableDocketRecord,
+    sortLabelTextMobile,
   };
 };

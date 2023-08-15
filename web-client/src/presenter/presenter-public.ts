@@ -37,6 +37,7 @@ import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/s
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/Public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
+import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
@@ -96,6 +97,7 @@ export const presenterSequences = {
   submitPublicOpinionAdvancedSearchSequence,
   submitPublicOrderAdvancedSearchSequence,
   toggleBetaBarSequence,
+  toggleMobileDocketSortSequence,
   toggleUsaBannerDetailsSequence,
   updateAdvancedOpinionSearchFormValueSequence,
   updateAdvancedOrderSearchFormValueSequence,
