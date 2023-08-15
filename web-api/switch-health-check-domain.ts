@@ -22,8 +22,8 @@ async function main() {
 
   const ssmCommand = new GetParametersCommand({
     Names: [
-      `terraform-${ENV}-east-${DEPLOYING_COLOR}-params`,
-      `terraform-${ENV}-west-${DEPLOYING_COLOR}-params`,
+      `terraform-${ENV}-us-east-1-${DEPLOYING_COLOR}-failover-params`,
+      `terraform-${ENV}-us-west-1-${DEPLOYING_COLOR}-failover-params`,
     ],
   });
   const ssmResponse = await ssmClient.send(ssmCommand);
