@@ -4,8 +4,8 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { judgeUser } from '@shared/test/mockUsers';
-import { mockOpinionsAggregated } from '@shared/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor.test';
-import { mockOrdersAggregated } from '@shared/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor.test';
+import { mockCountOfOpinionsIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
+import { mockCountOfOrdersIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setJudgeActivityReportDataAction } from './setJudgeActivityReportDataAction';
@@ -69,13 +69,13 @@ describe('setJudgeActivityReportDataAction', () => {
         presenter,
       },
       props: {
-        opinions: mockOpinionsAggregated,
+        opinions: mockCountOfOpinionsIssuedByJudge,
       },
       state: baseState,
     });
 
     expect(state.judgeActivityReport.judgeActivityReportData.opinions).toBe(
-      mockOpinionsAggregated,
+      mockCountOfOpinionsIssuedByJudge,
     );
   });
 
@@ -85,13 +85,13 @@ describe('setJudgeActivityReportDataAction', () => {
         presenter,
       },
       props: {
-        orders: mockOrdersAggregated,
+        orders: mockCountOfOrdersIssuedByJudge,
       },
       state: baseState,
     });
 
     expect(state.judgeActivityReport.judgeActivityReportData.orders).toBe(
-      mockOrdersAggregated,
+      mockCountOfOrdersIssuedByJudge,
     );
   });
 });

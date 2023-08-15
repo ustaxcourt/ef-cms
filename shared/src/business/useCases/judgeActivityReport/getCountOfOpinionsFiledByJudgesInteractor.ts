@@ -1,19 +1,19 @@
 import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
 import {
   JudgeActivityReportFilters,
-  OrdersReturnType,
+  OpinionsReturnType,
 } from '@web-client/presenter/judgeActivityReportState';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
-import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 
-export const getOrdersFiledByJudgeInteractor = async (
-  applicationContext,
+export const getCountOfOpinionsFiledByJudgesInteractor = async (
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportFilters,
-): Promise<OrdersReturnType> => {
+): Promise<OpinionsReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -26,20 +26,15 @@ export const getOrdersFiledByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
-  const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
-    eventCode => !excludedOrderEventCodes.includes(eventCode),
-  );
-
   return await applicationContext
     .getPersistenceGateway()
     .fetchEventCodesCountForJudges({
       applicationContext,
       params: {
-        documentEventCodes: orderEventCodesToSearch,
+        documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
         endDate: searchEntity.endDate,
         judges: searchEntity.judges,
-        searchType: 'order',
+        searchType: 'opinion',
         startDate: searchEntity.startDate,
       },
     });

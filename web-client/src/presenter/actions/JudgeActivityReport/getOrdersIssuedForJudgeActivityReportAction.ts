@@ -8,7 +8,7 @@ export const getOrdersIssuedForJudgeActivityReportAction = async ({
 
   const orders = await applicationContext
     .getUseCases()
-    .getOrdersFiledByJudgeInteractor(applicationContext, {
+    .getCountOfOrdersFiledByJudgesInteractor(applicationContext, {
       endDate,
       judges,
       startDate,

@@ -4,10 +4,10 @@ import {
 } from '@web-client/presenter/judgeActivityReportState';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getOpinionsFiledByJudgeInteractor } from './getOpinionsFiledByJudgeInteractor';
+import { getCountOfOpinionsFiledByJudgesInteractor } from './getCountOfOpinionsFiledByJudgesInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
-export const mockOpinionsFiledByJudge = [
+export const mockCountOfFormattedOpinionsIssuedByJudge = [
   { count: 177, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
   {
     count: 53,
@@ -20,12 +20,12 @@ export const mockOpinionsFiledByJudge = [
 
 export const mockOpinionsFiledTotal = 269;
 
-export const mockOpinionsAggregated: OpinionsReturnType = {
-  aggregations: mockOpinionsFiledByJudge,
+export const mockCountOfOpinionsIssuedByJudge: OpinionsReturnType = {
+  aggregations: mockCountOfFormattedOpinionsIssuedByJudge,
   total: mockOpinionsFiledTotal,
 };
 
-describe('getOpinionsFiledByJudgeInteractor', () => {
+describe('getCountOfOpinionsFiledByJudgesInteractor', () => {
   const mockStartDate = '02/12/2020';
   const mockEndDate = '03/21/2020';
   const mockJudges = [judgeUser.name];
@@ -40,20 +40,25 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .fetchEventCodesCountForJudges.mockResolvedValue(mockOpinionsAggregated);
+      .fetchEventCodesCountForJudges.mockResolvedValue(
+        mockCountOfOpinionsIssuedByJudge,
+      );
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
-      getOpinionsFiledByJudgeInteractor(applicationContext, mockValidRequest),
+      getCountOfOpinionsFiledByJudgesInteractor(
+        applicationContext,
+        mockValidRequest,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      getOpinionsFiledByJudgeInteractor(applicationContext, {
+      getCountOfOpinionsFiledByJudgesInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
         judges: [judgeUser.name],
         startDate: 'yabbadabbadoo',
@@ -62,7 +67,7 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
   });
 
   it('should make a call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    const opinions = await getOpinionsFiledByJudgeInteractor(
+    const opinions = await getCountOfOpinionsFiledByJudgesInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -80,6 +85,6 @@ describe('getOpinionsFiledByJudgeInteractor', () => {
       },
     });
 
-    expect(opinions).toEqual(mockOpinionsAggregated);
+    expect(opinions).toEqual(mockCountOfOpinionsIssuedByJudge);
   });
 });

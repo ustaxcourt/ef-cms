@@ -9,13 +9,13 @@ jest.mock('./searchClient');
 import { SeachClientResultsType, search } from './searchClient';
 import { judgeUser } from '@shared/test/mockUsers';
 import {
-  mockOpinionsFiledByJudge,
+  mockCountOfFormattedOpinionsIssuedByJudge,
   mockOpinionsFiledTotal,
-} from '@shared/business/useCases/judgeActivityReport/getOpinionsFiledByJudgeInteractor.test';
+} from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
 import {
+  mockCountOfFormattedOrdersIssuedByJudge,
   mockOrdersFiledTotal,
-  mockOrdersIssuedByJudge,
-} from '@shared/business/useCases/judgeActivityReport/getOrdersFiledByJudgeInteractor.test';
+} from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
 
 describe('fetchEventCodesCountForJudges', () => {
   const ordersAggsBucket = [
@@ -125,7 +125,7 @@ describe('fetchEventCodesCountForJudges', () => {
       },
     });
 
-    expect(aggregations).toMatchObject(mockOrdersIssuedByJudge);
+    expect(aggregations).toMatchObject(mockCountOfFormattedOrdersIssuedByJudge);
     expect(total).toEqual(mockOrdersFiledTotal);
   });
 
@@ -167,7 +167,9 @@ describe('fetchEventCodesCountForJudges', () => {
       },
     });
 
-    expect(aggregations).toMatchObject(mockOpinionsFiledByJudge);
+    expect(aggregations).toMatchObject(
+      mockCountOfFormattedOpinionsIssuedByJudge,
+    );
     expect(total).toEqual(mockOpinionsFiledTotal);
   });
 });

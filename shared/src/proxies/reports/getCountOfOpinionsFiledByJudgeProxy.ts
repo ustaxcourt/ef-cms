@@ -4,7 +4,7 @@ import {
 } from '@web-client/presenter/judgeActivityReportState';
 import { post } from '../requests';
 
-export const getOpinionsFiledByJudgeInteractor = (
+export const getCountOfOpinionsFiledByJudgesInteractor = (
   applicationContext,
   params: JudgeActivityReportFilters,
 ): Promise<OpinionsReturnType> => {
