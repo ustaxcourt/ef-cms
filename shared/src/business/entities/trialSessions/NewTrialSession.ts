@@ -2,17 +2,12 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TrialSession } from './TrialSession';
 import joi from 'joi';
 
-/**
- * constructor
- *
- * @param {object} rawSession the raw session data
- * @constructor
- */
 export class NewTrialSession extends TrialSession {
   public trialClerkId: string;
 
   constructor(rawSession: RawNewTrialSession, { applicationContext }) {
     super(rawSession, { applicationContext });
+
     this.trialClerkId = rawSession.trialClerkId;
   }
 
@@ -37,6 +32,4 @@ export class NewTrialSession extends TrialSession {
   }
 }
 
-declare global {
-  type RawNewTrialSession = ExcludeMethods<NewTrialSession>;
-}
+export type RawNewTrialSession = ExcludeMethods<NewTrialSession>;

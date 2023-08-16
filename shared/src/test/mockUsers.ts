@@ -7,7 +7,7 @@ import {
   ROLES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
-import { getJudgesChambers } from '../persistence/dynamo/chambers/getJudgesChambers';
+import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adcUser = {
   name: 'ADC',
@@ -91,7 +91,9 @@ export const docketClerkUser = {
   userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const docketClerk1User = {
+export const docketClerk1User: RawUser = {
+  email: 'docketclerk1@example.com',
+  entityName: 'User',
   name: 'Docketclerk1',
   role: ROLES.docketClerk,
   section: DOCKET_SECTION,

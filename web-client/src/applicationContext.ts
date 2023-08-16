@@ -19,7 +19,6 @@ import {
   isClosed,
   isLeadCase,
   isSealedCase,
-  isUserIdRepresentedByPrivatePractitioner,
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
@@ -65,7 +64,6 @@ import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenan
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
-import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 const {
@@ -182,12 +180,12 @@ import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
-} from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
+} from './business/chambers/getJudgesChambers';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConstants } from './getConstants';
 import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
-import { getDocument } from '../../shared/src/persistence/s3/getDocument';
+import { getDocument } from '@web-client/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
@@ -201,7 +199,7 @@ import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/m
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
 import { getIrsPractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getIrsPractitionersBySearchKeyProxy';
-import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { getItem } from './persistence/localStorage/getItem';
 import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeInSectionInteractor } from '../../shared/src/proxies/users/getJudgeInSectionProxy';
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
@@ -211,7 +209,7 @@ import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/proxies/repo
 import { getOrdersFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOrdersFiledByJudgeProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
-import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
+import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
 import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/document/getPdfFromUrlInteractor';
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionerDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getPractitionerDocumentDownloadUrlProxy';
@@ -219,8 +217,8 @@ import { getPractitionerDocumentInteractor } from '../../shared/src/proxies/getP
 import { getPractitionerDocumentsInteractor } from '../../shared/src/proxies/practitioners/getPractitionerDocumentsProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
-import { getScannerInterface } from '../../shared/src/persistence/dynamsoft/getScannerInterface';
-import { getScannerMockInterface } from '../../shared/src/persistence/dynamsoft/getScannerMockInterface';
+import { getScannerInterface } from './persistence/dynamsoft/getScannerInterface';
+import { getScannerMockInterface } from './persistence/dynamsoft/getScannerMockInterface';
 import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
@@ -246,7 +244,7 @@ import { refreshTokenInteractor } from '../../shared/src/proxies/auth/refreshTok
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
 import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
-import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { removeItem } from './persistence/localStorage/removeItem';
 import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
 import { removePdfFromDocketEntryInteractor } from '../../shared/src/proxies/documents/removePdfFromDocketEntryProxy';
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/proxies/removePetitionerAndUpdateCaptionProxy';
@@ -264,10 +262,11 @@ import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEn
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
+import { serveThirtyDayNoticeInteractor } from '../../shared/src/proxies/trialSessions/serveThirtyDayNoticeProxy';
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setDocumentTitleFromStampDataInteractor } from '../../shared/src/business/useCases/stampMotion/setDocumentTitleFromStampDataInteractor';
 import { setForHearingInteractor } from '../../shared/src/proxies/trialSessions/setForHearingProxy';
-import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
@@ -305,11 +304,11 @@ import { updateUserContactInformationInteractor } from '../../shared/src/proxies
 import { updateUserPendingEmailInteractor } from '../../shared/src/proxies/users/updateUserPendingEmailProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentAndMakeSafeInteractor } from '../../shared/src/business/useCases/uploadDocumentAndMakeSafeInteractor';
-import { uploadDocumentFromClient } from '../../shared/src/persistence/s3/uploadDocumentFromClient';
+import { uploadDocumentFromClient } from '@web-client/persistence/s3/uploadDocumentFromClient';
 import { uploadDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadDocumentInteractor';
 import { uploadExternalDocumentsInteractor } from '../../shared/src/business/useCases/externalDocument/uploadExternalDocumentsInteractor';
 import { uploadOrderDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/uploadOrderDocumentInteractor';
-import { uploadPdfFromClient } from '../../shared/src/persistence/s3/uploadPdfFromClient';
+import { uploadPdfFromClient } from '@web-client/persistence/s3/uploadPdfFromClient';
 import { validateAddDeficiencyStatisticsInteractor } from '../../shared/src/business/useCases/validateAddDeficiencyStatisticsInteractor';
 import { validateAddIrsPractitionerInteractor } from '../../shared/src/business/useCases/caseAssociation/validateAddIrsPractitionerInteractor';
 import { validateAddPetitionerInteractor } from '../../shared/src/business/useCases/validateAddPetitionerInteractor';
@@ -356,10 +355,12 @@ import deepFreeze from 'deep-freeze';
 let user;
 let broadcastChannel;
 
-const getCurrentUser = () => {
+const getCurrentUser = (): RawUser | RawPractitioner | RawIrsPractitioner => {
   return user;
 };
-const setCurrentUser = newUser => {
+const setCurrentUser = (
+  newUser: RawUser | RawPractitioner | RawIrsPractitioner,
+) => {
   user = newUser;
 };
 
@@ -523,6 +524,7 @@ const allUseCases = {
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
+  serveThirtyDayNoticeInteractor,
   setDocumentTitleFromStampDataInteractor,
   setForHearingInteractor,
   setItemInteractor,
@@ -780,10 +782,8 @@ const applicationContext = {
       isPending: DocketEntry.isPending,
       isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
-      isStandaloneRemoteSession,
       isStringISOFormatted,
       isTodayWithinGivenInterval,
-      isUserIdRepresentedByPrivatePractitioner,
       isUserPartOfGroup,
       isValidDateString,
       openUrlInNewTab,

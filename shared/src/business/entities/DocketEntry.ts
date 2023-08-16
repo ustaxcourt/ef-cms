@@ -4,6 +4,7 @@ import {
   DOCUMENT_NOTICE_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
+  MINUTE_ENTRIES_MAP,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   PARTIES_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
@@ -21,7 +22,6 @@ import {
 } from '../utilities/DateHandler';
 
 export class DocketEntry extends JoiValidationEntity {
-  public entityName: string;
   public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;
@@ -41,6 +41,7 @@ export class DocketEntry extends JoiValidationEntity {
   public documentType: string;
   public eventCode: string;
   public filedBy?: string;
+  public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
   public freeText2?: string;
@@ -83,17 +84,17 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenAt?: string;
   public trialLocation?: string;
   public supportingDocument?: string;
-  public userId: string;
+  public userId?: string;
   public privatePractitioners?: any[];
   public servedParties?: any[];
   public signedAt?: string;
-  public draftOrderState: object;
-  public stampData: object;
+  public draftOrderState?: object;
+  public stampData!: object;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
   public judgeUserId?: string;
-  public pending: boolean;
+  public pending?: boolean;
   public previousDocument?: {
     docketEntryId: string;
     documentTitle: string;
@@ -123,6 +124,7 @@ export class DocketEntry extends JoiValidationEntity {
     },
   ) {
     super('DocketEntry');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
@@ -155,6 +157,7 @@ export class DocketEntry extends JoiValidationEntity {
     this.documentType = rawDocketEntry.documentType;
     this.eventCode = rawDocketEntry.eventCode;
     this.filedBy = rawDocketEntry.filedBy;
+    this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
     this.freeText2 = rawDocketEntry.freeText2;
@@ -286,9 +289,9 @@ export class DocketEntry extends JoiValidationEntity {
    * @param {Array} servedParties the list of parties to serve the docket entry on
    * @returns {DocketEntry} the docket entry that was marked as served
    */
-  setAsServed(servedParties = null) {
+  setAsServed(servedParties: any[] | null = null) {
     this.servedAt = createISODateString();
-    this.draftOrderState = null;
+    this.draftOrderState = undefined;
 
     if (servedParties) {
       this.servedParties = servedParties;
@@ -439,11 +442,7 @@ export class DocketEntry extends JoiValidationEntity {
     );
   }
 
-  /**
-   * Determines if the docket entry is a court issued document
-   * @returns {Boolean} true if the docket entry is a court issued document, false otherwise
-   */
-  isCourtIssued() {
+  isCourtIssued(): boolean {
     return DocketEntry.isCourtIssued(this.eventCode);
   }
 
@@ -459,6 +458,11 @@ export class DocketEntry extends JoiValidationEntity {
    */
   setNumberOfPages(numberOfPages) {
     this.numberOfPages = numberOfPages;
+  }
+
+  setFiledBy(user: RawUser) {
+    this.userId = user.userId;
+    this.filedByRole = user.role;
   }
 
   /**
@@ -539,8 +543,23 @@ export class DocketEntry extends JoiValidationEntity {
     };
   }
 
+  static isMinuteEntry(rawDocketEntry: RawDocketEntry): boolean {
+    const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
+      key => MINUTE_ENTRIES_MAP[key].eventCode,
+    );
+
+    return MINUTE_ENTRIES_EVENT_CODES.includes(rawDocketEntry.eventCode);
+  }
+
   static isServed(rawDocketEntry: RawDocketEntry): boolean {
     return !!rawDocketEntry.servedAt || !!rawDocketEntry.isLegacyServed;
+  }
+
+  static isUnservable(rawDocketEntry: RawDocketEntry): boolean {
+    return (
+      DocketEntry.isMinuteEntry(rawDocketEntry) ||
+      UNSERVABLE_EVENT_CODES.includes(rawDocketEntry.eventCode)
+    );
   }
 }
 

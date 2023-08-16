@@ -1,16 +1,16 @@
 const {
   batchDelete,
   queryFull,
-} = require('../../src/persistence/dynamodbClientService');
+} = require('../../../web-api/src/persistence/dynamodbClientService');
 const {
   createApplicationContext,
 } = require('../../../web-api/src/applicationContext');
 const {
   createSectionOutboxRecords,
-} = require('../../src/persistence/dynamo/workitems/createSectionOutboxRecords');
+} = require('../../../web-api/src/persistence/dynamo/workitems/createSectionOutboxRecords');
 const {
   createUserOutboxRecord,
-} = require('../../src/persistence/dynamo/workitems/createUserOutboxRecord');
+} = require('../../../web-api/src/persistence/dynamo/workitems/createUserOutboxRecord');
 const { chunk } = require('lodash');
 const { readFileSync } = require('fs');
 const { sleep } = require('../../src/tools/helpers');

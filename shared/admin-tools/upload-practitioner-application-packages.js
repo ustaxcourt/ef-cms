@@ -11,9 +11,11 @@ const {
 const {
   createISODateString,
 } = require('../src/business/utilities/DateHandler');
+const {
+  searchAll,
+} = require('../../web-api/src/persistence/elasticsearch/searchClient');
 const { DateTime } = require('luxon');
 const { extname, parse } = require('path');
-const { searchAll } = require('../src/persistence/elasticsearch/searchClient');
 const { v4: uuidv4 } = require('uuid');
 
 const INPUT_DIR = `${process.env.HOME}/Documents/upload`;

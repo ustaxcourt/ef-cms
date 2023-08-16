@@ -75,5 +75,6 @@ export TF_VAR_number_of_days_to_keep_info_logs="${NUM_DAYS_TO_KEEP_LOGS}"
 if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 fi
+export TF_VAR_dawson_dev_trusted_role_arns="${DAWSON_DEV_TRUSTED_ROLE_ARNS}"
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
