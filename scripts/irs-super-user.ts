@@ -20,8 +20,8 @@ const cognito = new CognitoIdentityProviderClient({
 });
 
 const ClientId = process.env.IRS_CLIENT_ID;
-const email = process.env.IRS_SUPERUSER_EMAIL;
-const password = process.env.DEFAULT_ACCOUNT_PASS;
+const email = process.env.IRS_SUPERUSER_EMAIL!;
+const password = process.env.DEFAULT_ACCOUNT_PASS!;
 
 const initiateAuthCommand = new InitiateAuthCommand({
   AuthFlow: 'USER_PASSWORD_AUTH',
@@ -49,10 +49,10 @@ export const registerUser = async (): Promise<void> => {
     });
     await cognito.send(respondToAuthChallengeCommand);
     console.log('password changed');
-  }
 
-  authResponse = await cognito.send(initiateAuthCommand);
-  console.log('logged in second time');
+    authResponse = await cognito.send(initiateAuthCommand);
+    console.log('logged in second time');
+  }
 
   if (authResponse.ChallengeName === 'MFA_SETUP') {
     const associateSoftwareTokenCommand = new AssociateSoftwareTokenCommand({
@@ -71,7 +71,7 @@ export const registerUser = async (): Promise<void> => {
     const UserCode = await askQuestion('enter your MFA code\n');
 
     const verifySoftwareTokenCommand = new VerifySoftwareTokenCommand({
-      Session: authResponse.Session,
+      Session: associateSoftwareTokenResponse.Session, // authResponse.Session,
       UserCode,
     });
     await cognito.send(verifySoftwareTokenCommand);
@@ -97,7 +97,9 @@ export const login = async (): Promise<void> => {
     const authChallengeResponse = await cognito.send(
       respondToAuthChallengeCommand,
     );
-    console.log(authChallengeResponse);
+    console.log(
+      `\nSUCCESS: Use this token to authenticate:\n\n${authChallengeResponse.AuthenticationResult?.IdToken}`,
+    );
   }
 };
 
