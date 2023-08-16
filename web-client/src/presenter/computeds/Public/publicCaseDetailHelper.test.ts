@@ -144,8 +144,23 @@ describe('publicCaseDetailHelper', () => {
       },
       sessionMetadata: {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+        docketRecordSort: {},
       },
     };
+  });
+
+  describe('sortLabelTextMobile', () => {
+    it('should display "Oldest to Newest" when sort order is "byDate"', () => {
+      state.sessionMetadata.docketRecordSort = { '123-45': 'byDate' };
+      const result = runCompute(publicCaseDetailHelper, { state });
+      expect(result.sortLabelTextMobile).toEqual('Oldest to Newest');
+    });
+
+    it('should display "Newest to Oldest" when sort order is "byDateDesc"', () => {
+      state.sessionMetadata.docketRecordSort = { '123-45': 'byDateDesc' };
+      const result = runCompute(publicCaseDetailHelper, { state });
+      expect(result.sortLabelTextMobile).toEqual('Newest to Oldest');
+    });
   });
 
   describe('formattedDocketEntriesOnDocketRecord', () => {
@@ -251,6 +266,110 @@ describe('publicCaseDetailHelper', () => {
       ]);
     });
 
+    it('should be sorted newer to older when sort order is byDateDesc', () => {
+      state.sessionMetadata.docketRecordSort = { '123-45': 'byDateDesc' };
+      state.caseDetail.docketEntries = [
+        {
+          ...baseDocketEntry,
+          createdAt: '2018-11-21T20:49:28.192Z',
+          filingDate: '2018-11-21T20:49:28.192Z',
+          index: 4,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2018-10-21T20:49:28.192Z',
+          filingDate: '2018-10-21T20:49:28.192Z',
+          index: 1,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2018-10-25T20:49:28.192Z',
+          filingDate: '2018-10-25T20:49:28.192Z',
+          index: 3,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2018-10-25T20:49:28.192Z',
+          eventCode: 'O',
+          filingDate: '2018-10-25T20:49:28.192Z',
+          index: 2,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2018-12-25T20:49:28.192Z',
+          filingDate: '2018-12-25T20:49:28.192Z',
+          index: 5,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2018-12-25T20:49:28.192Z',
+          filingDate: '2018-12-25T20:49:28.192Z',
+          index: 6,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2019-12-24T20:49:28.192Z',
+          filingDate: '2019-12-24T20:49:28.192Z',
+          index: 7,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2019-12-24T20:49:28.192Z',
+          filingDate: '2019-12-24T20:49:28.192Z',
+          index: 8,
+        },
+        {
+          ...baseDocketEntry,
+          createdAt: '2019-12-25T20:49:28.192Z',
+          filingDate: '2019-12-25T20:49:28.192Z',
+          index: 9,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          createdAtFormatted: '12/25/19',
+          index: 9,
+        },
+
+        {
+          createdAtFormatted: '12/24/19',
+          index: 8,
+        },
+        {
+          createdAtFormatted: '12/24/19',
+          index: 7,
+        },
+        {
+          createdAtFormatted: '12/25/18',
+          index: 6,
+        },
+        {
+          createdAtFormatted: '12/25/18',
+          index: 5,
+        },
+        {
+          createdAtFormatted: '11/21/18',
+          index: 4,
+        },
+        {
+          createdAtFormatted: '10/25/18',
+          index: 3,
+        },
+        {
+          createdAtFormatted: '10/21/18',
+          index: 1,
+        },
+        {
+          createdAtFormatted: undefined,
+          index: 2,
+        },
+      ]);
+    });
+
     describe('filtering', () => {
       describe('docket record filtering', () => {
         const caseDetail = {
@@ -282,6 +401,7 @@ describe('publicCaseDetailHelper', () => {
               caseDetail,
               sessionMetadata: {
                 docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders,
+                docketRecordSort: {},
               },
             },
           });
@@ -298,6 +418,7 @@ describe('publicCaseDetailHelper', () => {
               caseDetail,
               sessionMetadata: {
                 docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.motions,
+                docketRecordSort: {},
               },
             },
           });
@@ -315,6 +436,7 @@ describe('publicCaseDetailHelper', () => {
               sessionMetadata: {
                 docketRecordFilter:
                   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+                docketRecordSort: {},
               },
             },
           });
@@ -1280,6 +1402,7 @@ describe('publicCaseDetailHelper', () => {
           sessionMetadata: {
             docketRecordFilter:
               PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+            docketRecordSort: {},
           },
         },
       });
@@ -1296,6 +1419,7 @@ describe('publicCaseDetailHelper', () => {
           sessionMetadata: {
             docketRecordFilter:
               PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+            docketRecordSort: {},
           },
         },
       });
@@ -1392,6 +1516,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
       },
       sessionMetadata: {
         docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+        docketRecordSort: {},
       },
     };
   });

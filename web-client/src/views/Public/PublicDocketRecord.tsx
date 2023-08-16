@@ -1,20 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { PublicDocketRecordHeader } from './PublicDocketRecordHeader';
 import { PublicFilingsAndProceedings } from './PublicFilingsAndProceedings';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const props = {
-  publicCaseDetailHelper:
-    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
-};
-
 export const PublicDocketRecord = connect(
-  props,
-  function ({ publicCaseDetailHelper }: typeof props) {
+  {
+    docketNumber: state.caseDetail.docketNumber,
+    publicCaseDetailHelper: state.publicCaseDetailHelper,
+  },
+  function ({ publicCaseDetailHelper }) {
     return (
       <>
         <PublicDocketRecordHeader />
