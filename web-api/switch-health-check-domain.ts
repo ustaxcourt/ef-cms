@@ -27,7 +27,6 @@ async function main() {
     ],
   });
   const ssmResponse = await ssmClient.send(ssmCommand);
-  console.log('ssmResponse:', ssmResponse);
 
   const params = ssmResponse.Parameters!.map(param => {
     return JSON.parse(param.Value!);
@@ -44,10 +43,8 @@ async function main() {
       FullyQualifiedDomainName: param.fqdn,
       HealthCheckId: param.healthCheckId,
     };
-    console.log('route53 input:', input);
     const command = new UpdateHealthCheckCommand(input);
-    const response = await client.send(command);
-    console.log('Response: ', response);
+    await client.send(command);
   }
 }
 
