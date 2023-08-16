@@ -220,9 +220,9 @@ export const DOCUMENT_SERVED_MESSAGES = {
 };
 
 export const VALIDATION_ERROR_MESSAGES = {
-  END_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
+  END_DATE_IN_THE_FUTURE_ERROR:
     'End date cannot be in the future. Enter a valid date.',
-  END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE:
+  END_DATE_PRIOR_TO_START_DATE_ERROR:
     'End date cannot be prior to start date. Enter a valid date.',
   START_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
     'Start date cannot be in the future. Enter a valid date.',
@@ -1578,9 +1578,6 @@ export const PENALTY_TYPES = {
 export const MAX_ELASTICSEARCH_PAGINATION = 10000;
 export const MAX_SEARCH_CLIENT_RESULTS = 200;
 export const MAX_SEARCH_RESULTS = 100;
-
-export const TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION =
-  'tempJudgeIdToRepresentAllJudgesSelection';
 
 export const isDocumentBriefType = (documentType: string) => {
   const documents = [

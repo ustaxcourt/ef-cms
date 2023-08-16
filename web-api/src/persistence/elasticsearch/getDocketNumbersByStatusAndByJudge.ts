@@ -1,7 +1,7 @@
 import {
   CavAndSubmittedCaseResponseType,
   JudgeActivityReportCavAndSubmittedCasesRequest,
-} from '../../../../web-client/src/presenter/judgeActivityReportState';
+} from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';

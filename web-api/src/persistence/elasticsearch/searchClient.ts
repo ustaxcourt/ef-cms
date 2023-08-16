@@ -7,9 +7,24 @@ import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
 
+type AggregationsType = {
+  [x: string]: {
+    buckets: {
+      doc_count: number;
+      key: string;
+    }[];
+  };
+};
+
+export type SeachClientResultsType = {
+  aggregations?: AggregationsType;
+  total: number;
+  results: any;
+};
+
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
-  const aggregations = get(body, 'aggregations');
+  const aggregations: AggregationsType = get(body, 'aggregations');
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
@@ -55,7 +70,7 @@ export const search = async <T>({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}) => {
+}): Promise<SeachClientResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()

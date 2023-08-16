@@ -1,83 +1,25 @@
 import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-} from '../../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
-  MOCK_CASE,
-  MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+  MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
+  MOCK_CAV_LEAD_CASE,
+  MOCK_SUBMITTED_CASE,
   MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD,
+  MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY,
   MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
-} from '../../../test/mockCase';
+} from '@shared/test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import {
-  docketClerkUser,
-  judgeUser,
-  petitionsClerkUser,
-} from '../../../test/mockUsers';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
-
-const docketEntryWithoutCaseHistory = '115-23';
-
-const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
-
-const mockSubmittedCase = {
-  ...MOCK_CASE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [
-    {
-      changedBy: docketClerkUser.name,
-      date: '2023-05-11T14:19:28.717Z',
-      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
-    },
-  ],
-  pk: `case|${MOCK_CASE.docketNumber}`,
-  sk: `case|${MOCK_CASE.docketNumber}`,
-};
-
-const mockSubmittedCaseWithoutCaseHistory = {
-  ...MOCK_CASE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [],
-  pk: `case|${docketEntryWithoutCaseHistory}`,
-  sk: `case|${docketEntryWithoutCaseHistory}`,
-};
-
-const mockCavLeadCase = {
-  ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [
-    {
-      changedBy: docketClerkUser.name,
-      date: '2023-05-13T14:19:28.717Z',
-      updatedCaseStatus: CASE_STATUS_TYPES.cav,
-    },
-  ],
-  pk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sortableDocketNumber: 2019000109,
-  status: CASE_STATUS_TYPES.cav,
-};
-
-const mockCavConsolidatedMemberCase = {
-  ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-  associatedJudge: judgeUser.name,
-  caseStatusHistory: [
-    {
-      changedBy: docketClerkUser.name,
-      date: '2023-05-13T14:19:28.717Z',
-      updatedCaseStatus: CASE_STATUS_TYPES.cav,
-    },
-  ],
-  pk: `case|${MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sk: `case|${MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber}`,
-  sortableDocketNumber: 2019000110,
-  status: CASE_STATUS_TYPES.cav,
-};
+import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
+  const docketEntryWithoutCaseHistory = '115-23';
+
+  const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
   let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
 
   let expectedConsolidatedCasesGroupCountMap = {};
@@ -107,27 +49,27 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCasesByStatusAndByJudgeInteractor(applicationContext, {
-        judgeName: judgeUser.name,
-        statuses: undefined as any,
+        judges: [judgeUser.name],
+        statuses: [undefined as any],
       }),
     ).rejects.toThrow();
   });
 
   it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the consolidated member case)', async () => {
     mockReturnedDocketNumbers = [
-      { docketNumber: mockSubmittedCase.docketNumber },
-      { docketNumber: mockCavLeadCase.docketNumber },
-      { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
-      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
+      { docketNumber: MOCK_CAV_LEAD_CASE.docketNumber },
+      { docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     const casesForLeadDocketNumber = [
-      mockCavLeadCase,
-      mockCavConsolidatedMemberCase,
+      MOCK_CAV_LEAD_CASE,
+      MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
     ];
 
     expectedConsolidatedCasesGroupCountMap = {
-      [`${mockCavLeadCase.docketNumber}`]: casesForLeadDocketNumber.length,
+      [`${MOCK_CAV_LEAD_CASE.docketNumber}`]: casesForLeadDocketNumber.length,
     };
 
     applicationContext
@@ -138,9 +80,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
-      .mockResolvedValueOnce(mockCavLeadCase)
-      .mockResolvedValueOnce(mockCavConsolidatedMemberCase);
+      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
+      .mockResolvedValueOnce(MOCK_CAV_LEAD_CASE)
+      .mockResolvedValueOnce(MOCK_CAV_CONSOLIDATED_MEMBER_CASE);
 
     applicationContext
       .getPersistenceGateway()
@@ -181,7 +123,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
   it(`should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the member case of consolidated cases and cases with ${prohibitedDocketEntries} docket entries)`, async () => {
     mockReturnedDocketNumbers = [
-      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         docketNumber:
           MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -195,18 +137,18 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
           MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       },
       { docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber },
-      { docketNumber: mockCavLeadCase.docketNumber },
-      { docketNumber: mockCavConsolidatedMemberCase.docketNumber },
-      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
+      { docketNumber: MOCK_CAV_LEAD_CASE.docketNumber },
+      { docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     const casesForLeadDocketNumber = [
-      mockCavLeadCase,
-      mockCavConsolidatedMemberCase,
+      MOCK_CAV_LEAD_CASE,
+      MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
     ];
 
     expectedConsolidatedCasesGroupCountMap = {
-      [`${mockCavLeadCase.docketNumber}`]: casesForLeadDocketNumber.length,
+      [`${MOCK_CAV_LEAD_CASE.docketNumber}`]: casesForLeadDocketNumber.length,
     };
 
     applicationContext
@@ -217,10 +159,10 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD)
-      .mockResolvedValueOnce(mockCavLeadCase)
-      .mockResolvedValueOnce(mockCavConsolidatedMemberCase)
+      .mockResolvedValueOnce(MOCK_CAV_LEAD_CASE)
+      .mockResolvedValueOnce(MOCK_CAV_CONSOLIDATED_MEMBER_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD);
@@ -278,7 +220,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
   it(`should return an array of 1 case and consolidatedCasesGroupMap (stripping out the cases with served ${prohibitedDocketEntries} docket entries and no consolidated cases)`, async () => {
     mockReturnedDocketNumbers = [
-      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         docketNumber:
           MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -292,7 +234,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
           MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       },
       { docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber },
-      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     applicationContext
@@ -303,7 +245,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD)
@@ -384,7 +326,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     ];
 
     mockReturnedDocketNumbers = [
-      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         docketNumber:
           MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -398,7 +340,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
           MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       },
       { docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber },
-      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     applicationContext
@@ -409,7 +351,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD)
@@ -423,7 +365,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: mockSubmittedCase.docketNumber,
+          docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
         }),
         expect.objectContaining({
           docketNumber:
@@ -491,7 +433,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     ];
 
     mockReturnedDocketNumbers = [
-      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         docketNumber:
           MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -505,7 +447,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
           MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       },
       { docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber },
-      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     applicationContext
@@ -516,7 +458,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD)
@@ -530,7 +472,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: mockSubmittedCase.docketNumber,
+          docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
         }),
         expect.objectContaining({
           docketNumber:
@@ -601,7 +543,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     ];
     mockReturnedDocketNumbers = [
-      { docketNumber: mockSubmittedCase.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         docketNumber:
           MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -615,7 +557,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
           MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       },
       { docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber },
-      { docketNumber: mockSubmittedCaseWithoutCaseHistory.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
 
     applicationContext
@@ -626,7 +568,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(mockSubmittedCase)
+      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD)
       .mockResolvedValueOnce(MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD)
@@ -640,7 +582,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: mockSubmittedCase.docketNumber,
+          docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
         }),
         expect.objectContaining({
           docketNumber:

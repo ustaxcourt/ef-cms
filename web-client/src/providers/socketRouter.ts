@@ -133,14 +133,6 @@ export const socketRouter = (app, onMessageCallbackFn) => {
       case 'retry_async_request':
         await app.getSequence('retryAsyncRequestSequence')(message);
         break;
-      case 'fetch_opinions_complete':
-      case 'fetch_orders_complete':
-        await app.getSequence(
-          'fetchOrdersAndOpinionsForJudgesCompleteSequence',
-        )({
-          ...message,
-        });
-        break;
     }
 
     (onMessageCallbackFn || noop)(message);

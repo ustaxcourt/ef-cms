@@ -1,14 +1,24 @@
-import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../entities/EntityConstants';
-import {
-  ConsolidatedCasesGroupCountMapResponseType,
-  JudgeActivityReportCavAndSubmittedCasesRequest,
-} from '../../../../../web-client/src/presenter/judgeActivityReportState';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+
+export type JudgeActivityReportCavAndSubmittedCasesRequest = {
+  statuses: string[];
+  judges: string[];
+  pageNumber?: number;
+  pageSize?: number;
+};
+
+export type CavAndSubmittedCaseResponseType = {
+  foundCases: { docketNumber: string }[];
+};
+
+export type ConsolidatedCasesGroupCountMapResponseType = {
+  [leadDocketNumber: string]: number;
+};
 
 export type CavAndSubmittedFilteredCasesType = {
   caseStatusHistory: {
@@ -80,11 +90,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  params.judges = params.judges || [];
-  params.statuses = params.statuses || [];
-  params.pageNumber = params.pageNumber || 0;
-  params.pageSize = params.pageSize || CAV_AND_SUBMITTED_CASES_PAGE_SIZE;
-
   const searchEntity = new JudgeActivityReportSearch(params);
   if (!searchEntity.isValid()) {
     throw new InvalidRequest();
@@ -101,12 +106,11 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     });
 
   const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(
-      async result =>
-        await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: result.docketNumber,
-        }),
+    submittedAndCavCasesResults.map(result =>
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: result.docketNumber,
+      }),
     ),
   );
 

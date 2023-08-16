@@ -45,8 +45,7 @@ describe('JudgeActivityReportSearch', () => {
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate:
-          VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR_MESSAGE,
+        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR,
       });
     });
 
@@ -73,7 +72,7 @@ describe('JudgeActivityReportSearch', () => {
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
+        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR,
       });
     });
 

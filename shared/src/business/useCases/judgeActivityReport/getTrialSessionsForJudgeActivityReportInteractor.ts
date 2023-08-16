@@ -1,5 +1,5 @@
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from '../../../../../web-client/src/presenter/judgeActivityReportState';
+import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -8,13 +8,28 @@ import {
 import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
-  TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION,
 } from '../../entities/EntityConstants';
+import { sum } from 'lodash';
+
+export const ID_FOR_ALL_JUDGES = 'judgeIdToRepresentAllJudgesSelection';
+
+export type TrialSessionTypes = {
+  [SESSION_TYPES.regular]: number;
+  [SESSION_TYPES.small]: number;
+  [SESSION_TYPES.hybrid]: number;
+  [SESSION_TYPES.special]: number;
+  [SESSION_TYPES.motionHearing]: number;
+};
+
+export type TrialSessionReturnType = {
+  aggregations: TrialSessionTypes;
+  total: number;
+};
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
   { endDate, judgeId, startDate }: JudgeActivityReportFilters,
-) => {
+): Promise<TrialSessionReturnType> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -38,9 +53,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     });
 
   const trialSessionsForSelectedJudge = trialSessions.filter(session => {
-    if (
-      searchEntity.judgeId !== TEMP_JUDGE_ID_TO_REPRESENT_ALL_JUDGES_SELECTION
-    )
+    if (searchEntity.judgeId !== ID_FOR_ALL_JUDGES)
       return session.judge?.userId === searchEntity.judgeId;
     else return session;
   });
@@ -106,12 +119,19 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     isTypeOf(SESSION_TYPES.special)(session),
   ).length;
 
-  return {
+  const aggregatedSessionTypes = {
     [SESSION_TYPES.regular]: regularSwingSessions + regularNonSwingSessions,
     [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
     [SESSION_TYPES.hybrid]: hybridSwingSessions + hybridNonSwingSessions,
     [SESSION_TYPES.special]: specialSessions,
     [SESSION_TYPES.motionHearing]: motionHearingSessions,
+  };
+
+  const trialSessionsHeldTotal = sum(Object.values(aggregatedSessionTypes));
+
+  return {
+    aggregations: aggregatedSessionTypes,
+    total: trialSessionsHeldTotal,
   };
 };
 

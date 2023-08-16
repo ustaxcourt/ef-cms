@@ -638,3 +638,55 @@ export const MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD = {
   sk: 'case|123-19',
   sortableDocketNumber: 2021000123,
 };
+
+export const MOCK_SUBMITTED_CASE: RawCase = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-11T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+    },
+  ],
+  pk: `case|${MOCK_CASE.docketNumber}`,
+  sk: `case|${MOCK_CASE.docketNumber}`,
+};
+
+export const MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY = {
+  ...MOCK_CASE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [],
+  pk: 'case|115-23',
+  sk: 'case|115-23',
+};
+
+export const MOCK_CAV_LEAD_CASE = {
+  ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-13T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.cav,
+    },
+  ],
+  pk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
+  sk: `case|${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}`,
+  sortableDocketNumber: 2019000109,
+  status: CASE_STATUS_TYPES.cav,
+};
+
+export const MOCK_CAV_CONSOLIDATED_MEMBER_CASE = {
+  ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  associatedJudge: judgeUser.name,
+  caseStatusHistory: [
+    {
+      changedBy: docketClerkUser.name,
+      date: '2023-05-13T14:19:28.717Z',
+      updatedCaseStatus: CASE_STATUS_TYPES.cav,
+    },
+  ],
+  sortableDocketNumber: 2019000110,
+  status: CASE_STATUS_TYPES.cav,
+};

@@ -54,14 +54,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(judgeActivityReportData.casesClosedByJudge).map(
-              ([status, count]) => (
-                <tr key={status}>
-                  <td>{status}</td>
-                  <td>{count}</td>
-                </tr>
-              ),
-            )}
+            {Object.entries(
+              judgeActivityReportData.casesClosedByJudge.aggregations,
+            ).map(([status, count]) => (
+              <tr key={status}>
+                <td>{status}</td>
+                <td>{count}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -88,14 +88,14 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {Object.entries(judgeActivityReportData.trialSessions).map(
-              ([sessionStatus, count]) => (
-                <tr key={sessionStatus}>
-                  <td>{sessionStatus}</td>
-                  <td>{count}</td>
-                </tr>
-              ),
-            )}
+            {Object.entries(
+              judgeActivityReportData.trialSessions.aggregations,
+            ).map(([sessionStatus, count]) => (
+              <tr key={sessionStatus}>
+                <td>{sessionStatus}</td>
+                <td>{count}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </>
@@ -122,7 +122,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.orders.map(
+            {judgeActivityReportData.orders.aggregations.map(
               ({ count, documentType, eventCode }) => (
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
@@ -133,7 +133,7 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
-        {judgeActivityReportData.orders.length === 0 && (
+        {judgeActivityReportData.ordersFiledTotal && (
           <p>There are no orders issued for the selected dates</p>
         )}
       </>
@@ -165,7 +165,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.opinions.map(
+            {judgeActivityReportData.opinions.aggregations.map(
               ({ count, documentType, eventCode }) => (
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
