@@ -128,8 +128,11 @@ export const getAuthToken = async () => {
   const cognito: CognitoIdentityProvider = new CognitoIdentityProvider({
     region: 'us-east-1',
   });
-  const UserPoolId: string | undefined = await getUserPoolId();
-  const ClientId: string | undefined = await getClientId(UserPoolId!);
+  const UserPoolId = await getUserPoolId();
+  if (!UserPoolId) {
+    throw new Error('No UserPoolId found');
+  }
+  const ClientId = await getClientId(UserPoolId);
 
   try {
     const response: AdminInitiateAuthCommandOutput =

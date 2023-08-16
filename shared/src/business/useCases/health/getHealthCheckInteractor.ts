@@ -36,7 +36,7 @@ export type ApplicationHealth = {
   s3: S3BucketsStatus;
 };
 
-export const getElasticSearchStatus = async ({
+const getElasticSearchStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -53,7 +53,7 @@ export const getElasticSearchStatus = async ({
   return true;
 };
 
-export const getDynamoStatus = async ({
+const getDynamoStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -69,7 +69,7 @@ export const getDynamoStatus = async ({
   }
 };
 
-export const getDeployDynamoStatus = async ({
+const getDeployDynamoStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -85,7 +85,7 @@ export const getDeployDynamoStatus = async ({
   }
 };
 
-export const getDynamsoftStatus = async ({
+const getDynamsoftStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -113,7 +113,7 @@ export const getDynamsoftStatus = async ({
   }
 };
 
-export const checkS3BucketsStatus = async ({
+const checkS3BucketsStatus = async ({
   applicationContext,
   bucketName,
 }: {
@@ -136,7 +136,7 @@ export const checkS3BucketsStatus = async ({
   }
 };
 
-export const getS3BucketStatus = async ({
+const getS3BucketStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -190,7 +190,7 @@ export const getS3BucketStatus = async ({
   return bucketStatus;
 };
 
-export const getCognitoStatus = async ({
+const getCognitoStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;
@@ -220,7 +220,7 @@ export const getCognitoStatus = async ({
   }
 };
 
-export const getEmailServiceStatus = async ({
+const getEmailServiceStatus = async ({
   applicationContext,
 }: {
   applicationContext: IApplicationContext;

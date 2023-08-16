@@ -35,7 +35,7 @@ const internalGet = async ({
 }: {
   applicationContext: IApplicationContext;
   endpoint: string;
-  params?: object;
+  params?: any;
 }) => {
   const response = await getResponse({
     applicationContext,
