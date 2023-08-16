@@ -19,3 +19,7 @@ output "puppeteer_layer_arn" {
 output "public_api_invoke_url" {
   value = aws_api_gateway_stage.api_public_stage.invoke_url
 }
+
+output "api_stage_name" {
+  value = aws_api_gateway_stage.api_public_stage.stage_name
+}
