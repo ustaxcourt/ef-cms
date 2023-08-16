@@ -103,7 +103,7 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(
+        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
           consolidatedGroupLeadCase11119,
         );
 
@@ -159,7 +159,9 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(consolidatedGroup);
+        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
+          consolidatedGroup,
+        );
 
       const userCases = await getCasesForUserInteractor(applicationContext);
 
@@ -191,7 +193,9 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(consolidatedGroup);
+        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
+          consolidatedGroup,
+        );
 
       const userCases = await getCasesForUserInteractor(applicationContext);
 
@@ -223,7 +227,9 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(consolidatedGroup);
+        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
+          consolidatedGroup,
+        );
 
       const userCases = await getCasesForUserInteractor(applicationContext);
 
@@ -279,7 +285,9 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(consolidatedGroup);
+        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
+          consolidatedGroup,
+        );
 
       const userCases = await getCasesForUserInteractor(applicationContext);
 
@@ -311,7 +319,7 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesByLeadDocketNumber.mockResolvedValue(
+        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
           consolidatedGroupLeadCase11119,
         );
 
