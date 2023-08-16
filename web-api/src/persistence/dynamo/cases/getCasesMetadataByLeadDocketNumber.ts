@@ -1,13 +1,13 @@
 import { query } from '../../dynamodbClientService';
 
-export const getCasesByLeadDocketNumber = async ({
+export const getCasesMetadataByLeadDocketNumber = async ({
   applicationContext,
   leadDocketNumber,
 }: {
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
 }) => {
-  let consolidatedCases = await query({
+  const consolidatedGroup = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -19,14 +19,12 @@ export const getCasesByLeadDocketNumber = async ({
     applicationContext,
   });
 
-  const cases = await Promise.all(
-    consolidatedCases.map(({ docketNumber }) =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+  return await Promise.all(
+    consolidatedGroup.map(({ docketNumber }) =>
+      applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel({
         applicationContext,
         docketNumber,
       }),
     ),
   );
-
-  return cases;
 };
