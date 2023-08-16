@@ -66,6 +66,7 @@ import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesB
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
 import { getCasesClosedByJudge } from './persistence/elasticsearch/getCasesClosedByJudge';
 import { getCasesForUser } from './persistence/dynamo/users/getCasesForUser';
+import { getCasesMetadataByLeadDocketNumber } from './persistence/dynamo/cases/getCasesMetadataByLeadDocketNumber';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getCognitoUserIdByEmail } from './persistence/cognito/getCognitoUserIdByEmail';
 import { getCompletedSectionInboxMessages } from './persistence/elasticsearch/messages/getCompletedSectionInboxMessages';
@@ -311,6 +312,7 @@ const gatewayMethods = {
   getCasesByLeadDocketNumber,
   getCasesByUserId,
   getCasesForUser,
+  getCasesMetadataByLeadDocketNumber,
   getClientId,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
