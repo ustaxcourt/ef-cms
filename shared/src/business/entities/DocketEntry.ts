@@ -289,7 +289,7 @@ export class DocketEntry extends JoiValidationEntity {
    * @param {Array} servedParties the list of parties to serve the docket entry on
    * @returns {DocketEntry} the docket entry that was marked as served
    */
-  setAsServed(servedParties: any[] = []) {
+  setAsServed(servedParties: any[] | null = null) {
     this.servedAt = createISODateString();
     this.draftOrderState = undefined;
 

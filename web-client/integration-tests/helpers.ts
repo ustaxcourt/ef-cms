@@ -879,7 +879,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   });
   presenter.providers.socket = { start, stop: stopSocket };
 
-  global.window = {
+  global.window ??= Object.create({
     ...dom.window,
     DOMParser: () => {
       return {
@@ -921,7 +921,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
     },
-  };
+  });
 
   cerebralTest = CerebralTest(presenter);
   cerebralTest.getSequence = seqName => obj =>
