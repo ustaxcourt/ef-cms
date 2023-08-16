@@ -1,9 +1,13 @@
+import { Converter } from 'aws-sdk/clients/dynamodb';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { getClient } from '../../../../../web-api/elasticsearch/client';
+const environmentName = process.argv[2] || 'exp1';
+const version = process.argv[3] || 'alpha';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -33,58 +37,16 @@ export type CavAndSubmittedFilteredCasesType = {
   petitioners: TPetitioner[];
 };
 
-const getConsolidatedCaseGroupCountMap = (
-  filteredCaseRecords,
-  consolidatedCasesGroupCountMap,
-) => {
-  filteredCaseRecords.forEach(caseRecord => {
-    if (caseRecord.leadDocketNumber) {
-      consolidatedCasesGroupCountMap.set(
-        caseRecord.leadDocketNumber,
-        caseRecord.consolidatedCases.length,
-      );
-    }
-  });
-};
-
-const hasUnwantedDocketEntryEventCode = docketEntries => {
-  const prohibitedDocketEntryEventCodes: string[] = [
-    'ODD',
-    'DEC',
-    'OAD',
-    'SDEC',
-  ];
-
-  return docketEntries.some(docketEntry => {
-    if (docketEntry.servedAt && !docketEntry.isStricken) {
-      return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
-    }
-
-    return false;
-  });
-};
-
-const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
-  const caseRecordsToReturn: Array<any> = [];
-
-  caseRecords.forEach(individualCaseRecord => {
-    if (!hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)) {
-      caseRecordsToReturn.push(individualCaseRecord);
-    }
-  });
-
-  return caseRecordsToReturn;
-};
-
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
-  consolidatedCasesGroupCountMap: ConsolidatedCasesGroupCountMapResponseType;
+  consolidatedCasesCounts: ConsolidatedCasesGroupCountMapResponseType;
   totalCount: number;
 }> => {
   const authorizedUser = applicationContext.getCurrentUser();
+  const esClient = await getClient({ environmentName, version }); // TODO: this will go away
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
@@ -95,90 +57,83 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { foundCases: submittedAndCavCasesResults } = await applicationContext
+  // 1. Get all of the cases that are Submitted and CAV status
+  const results = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
       params: {
-        judges: searchEntity.judges,
+        // no judge
         statuses: searchEntity.statuses,
       },
     });
 
-  const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(result =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: result.docketNumber,
-      }),
-    ),
+  // 2. Filter out any where leadDocketNumber exists and it doesn't equal the docket number
+  const cavAndSubmittedCases = results.body.hits.hits
+    .map(hit => Converter.unmarshall(hit['_source'])) // make them easier to work with
+    .filter(
+      hit =>
+        !hit['leadDocketNumber'] ||
+        hit['leadDocketNumber'] !== hit['docketNumber'],
+    );
+
+  // 3. Search for any case that has a docketNumber we've already identified as a CAV or Submitted
+  //    ... and has a document with 'eventCode.S': ['ODD', 'DEC', 'OAD', 'SDEC'],
+  // TODO: extract this into a new function
+  const results2 = await esClient.search({
+    body: {
+      _source: ['docketNumber'], // we only care about the docket number
+      query: {
+        bool: {
+          must: [
+            {
+              terms: {
+                'docketNumber.S': cavAndSubmittedCases.map(
+                  caseInfo => caseInfo.docketNumber,
+                ),
+              },
+            },
+            {
+              has_child: {
+                query: {
+                  terms: {
+                    'eventCode.S': ['ODD', 'DEC', 'OAD', 'SDEC'],
+                  },
+                },
+                type: 'document',
+              },
+            },
+          ],
+        },
+      },
+    },
+    index: 'efcms-docket-entry',
+    size: 10000,
+  });
+
+  // 4. Calculate the docket numbers to filter out from the search results
+  const casesToFilterOut = results2.body.hits.hits.map(
+    hit => hit['_source']['docketNumber'].S,
   );
 
-  // We need to filter out member cases returned from elasticsearch so we can get an accurate
-  // consolidated cases group count even when the case status of a member case does not match
-  // the lead case status.
-  const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
-    rawCaseRecords
-      .filter(
-        rawCaseRecord =>
-          !rawCaseRecord.leadDocketNumber ||
-          rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber,
-      )
-      .map(async rawCaseRecord => {
-        if (rawCaseRecord.leadDocketNumber) {
-          rawCaseRecord.consolidatedCases = await applicationContext
-            .getPersistenceGateway()
-            .getCasesByLeadDocketNumber({
-              applicationContext,
-              leadDocketNumber: rawCaseRecord.docketNumber,
-            });
-          return rawCaseRecord;
-        } else {
-          return rawCaseRecord;
-        }
-      }),
+  // 5. Calculate the final list of CAV and Submitted cases to return
+  const finalListOfCases = cavAndSubmittedCases.filter(
+    caseInfo => !casesToFilterOut.includes(caseInfo.docketNumber),
   );
-
-  const filteredCaseRecords = filterCasesWithUnwantedDocketEntryEventCodes(
-    rawCaseRecordsWithWithoutMemberCases,
-  );
-
-  const consolidatedCasesGroupCountMap = new Map();
-
-  getConsolidatedCaseGroupCountMap(
-    filteredCaseRecords,
-    consolidatedCasesGroupCountMap,
-  );
-
-  const formattedCaseRecords: CavAndSubmittedFilteredCasesType[] =
-    filteredCaseRecords
-      .map(caseRecord => ({
-        caseCaption: caseRecord.caseCaption,
-        caseStatusHistory: caseRecord.caseStatusHistory || [],
-        docketNumber: caseRecord.docketNumber,
-        docketNumberWithSuffix: caseRecord.docketNumberWithSuffix,
-        leadDocketNumber: caseRecord.leadDocketNumber,
-        petitioners: caseRecord.petitioners,
-        status: caseRecord.status,
-      }))
-      .filter(unfilteredCase => unfilteredCase.caseStatusHistory.length > 0);
 
   const itemOffset =
-    (searchEntity.pageNumber * searchEntity.pageSize) %
-    formattedCaseRecords.length;
+    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
 
   const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = formattedCaseRecords.slice(
+  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
     itemOffset,
     endOffset,
   );
 
   return {
     cases: formattedCaseRecordsForDisplay,
-    consolidatedCasesGroupCountMap: Object.fromEntries(
-      consolidatedCasesGroupCountMap,
-    ),
-    totalCount: formattedCaseRecords.length,
+    consolidatedCasesCounts: Object.fromEntries(consolidatedCasesCounts),
+    totalCount: finalListOfCases.length,
   };
 };

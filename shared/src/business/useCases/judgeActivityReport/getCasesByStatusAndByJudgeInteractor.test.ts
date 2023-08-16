@@ -115,7 +115,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual(
+    expect(result.consolidatedCasesCounts).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
     expect(result.totalCount).toEqual(2);
@@ -212,7 +212,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual(
+    expect(result.consolidatedCasesCounts).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
     expect(result.totalCount).toEqual(2);
@@ -287,7 +287,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual({});
+    expect(result.consolidatedCasesCounts).toEqual({});
     expect(result.totalCount).toEqual(1);
   });
 
@@ -393,7 +393,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual({});
+    expect(result.consolidatedCasesCounts).toEqual({});
     expect(result.totalCount).toEqual(5);
   });
 
@@ -500,7 +500,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual({});
+    expect(result.consolidatedCasesCounts).toEqual({});
     expect(result.totalCount).toEqual(5);
   });
 
@@ -609,7 +609,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual({});
+    expect(result.consolidatedCasesCounts).toEqual({});
     expect(result.totalCount).toEqual(5);
   });
 });
