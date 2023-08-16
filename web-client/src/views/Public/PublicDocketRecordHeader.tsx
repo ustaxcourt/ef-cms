@@ -2,7 +2,6 @@ import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordSort } from '../DocketRecord/DocketRecordSort';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
@@ -16,8 +15,6 @@ const props = {
   docketNumber: state.caseDetail.docketNumber,
   gotoPublicPrintableDocketRecordSequence:
     sequences.gotoPublicPrintableDocketRecordSequence,
-  publicCaseDetailHelper:
-    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
   sessionMetadata: state.sessionMetadata,
   showModal: state.modal.showModal,
   toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
@@ -35,7 +32,9 @@ export const PublicDocketRecordHeader = connect(
     showModal,
     toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
-  }: typeof props) {
+  }: typeof props & {
+    publicCaseDetailHelper: ReturnType<typeof state.publicCaseDetailHelper>;
+  }) {
     return (
       <React.Fragment>
         <div className="title">
