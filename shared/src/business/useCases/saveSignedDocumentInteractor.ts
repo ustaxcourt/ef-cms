@@ -16,7 +16,6 @@ const saveOriginalDocumentWithNewId = async ({
     .getDocument({
       applicationContext,
       key: originalDocketEntryId,
-      protocol: 'S3',
       useTempBucket: false,
     });
 
@@ -40,7 +39,6 @@ const replaceOriginalWithSignedDocument = async ({
     .getDocument({
       applicationContext,
       key: signedDocketEntryId,
-      protocol: 'S3',
       useTempBucket: false,
     });
 
@@ -103,10 +101,11 @@ export const saveSignedDocumentInteractor = async (
         isDraft: true,
         isPaper: false,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext },
     );
+
+    signedDocketEntryEntity.setFiledBy(user);
 
     signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
 
@@ -153,12 +152,14 @@ export const saveSignedDocumentInteractor = async (
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentIdBeforeSignature,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext },
     );
 
+    signedDocketEntryEntity.setFiledBy(user);
+
     signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+
     caseEntity.updateDocketEntry(signedDocketEntryEntity);
   }
 

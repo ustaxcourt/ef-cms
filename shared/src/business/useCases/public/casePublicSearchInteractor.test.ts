@@ -57,7 +57,6 @@ describe('casePublicSearchInteractor', () => {
         caseCaption: 'Test Case Caption One',
         createdAt: undefined,
         docketEntries: [],
-        docketEntriesEFiledByPractitioner: [],
         docketNumber: '123-19',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         docketNumberWithSuffix: '123-19S',

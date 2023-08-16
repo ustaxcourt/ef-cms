@@ -1,14 +1,11 @@
 import { CASE_CAPTION_POSTFIX } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 
-/**
- * Gets case caption parts from case data
- *
- * @param {object} caseDetail case detail object
- * @returns {object} case caption parts
- */
-
-export const getCaseCaptionMeta = ({ caseCaption = '' }) => {
+export const getCaseCaptionMeta = ({
+  caseCaption = '',
+}: {
+  caseCaption: string;
+}) => {
   const caseTitle = Case.getCaseTitle(caseCaption);
   const caseCaptionExtension = caseCaption
     .replace(caseTitle, '')

@@ -11,7 +11,6 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '../entities/EntityConstants';
-
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createCaseInteractor } from '../useCases/createCaseInteractor';
@@ -19,7 +18,6 @@ import { fileExternalDocumentInteractor } from '../useCases/externalDocument/fil
 import { getCaseInteractor } from '../useCases/getCaseInteractor';
 import { getContactPrimary } from '../entities/cases/Case';
 import { serveCaseToIrsInteractor } from '../useCases/serveCaseToIrs/serveCaseToIrsInteractor';
-
 // mock out ONLY the 'createISODateString' function while allowing original implementations
 import { createISODateString, formatNow } from '../utilities/DateHandler';
 
@@ -106,6 +104,7 @@ describe('fileExternalDocumentInteractor integration test', () => {
         documentType: 'Summary Opinion',
         entityName: 'DocketEntry',
         eventCode: 'SOP',
+        filedByRole: ROLES.judge,
         filingDate: '2011-02-22T00:01:00.000Z',
         index: 2,
         isDraft: false,

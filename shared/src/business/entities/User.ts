@@ -15,11 +15,11 @@ export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
   public email: string;
   public name: string;
-  public pendingEmail: string;
+  public pendingEmail?: string;
   public role: string;
-  public token: string;
+  public token?: string;
   public userId: string;
-  public isUpdatingInformation: string;
+  public isUpdatingInformation?: boolean;
   public contact?: {
     address1: string;
     address2: string;
@@ -33,7 +33,7 @@ export class User extends JoiValidationEntity {
   };
   public judgeFullName?: string;
   public judgeTitle?: string;
-  public section: string;
+  public section?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');

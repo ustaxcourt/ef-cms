@@ -5,7 +5,7 @@ export const countPagesInDocument = async ({
 }: {
   applicationContext: IApplicationContext;
   docketEntryId: string;
-  documentBytes: any;
+  documentBytes?: any;
 }) => {
   let bytes;
   const { PDFDocument } = await applicationContext.getPdfLib();
@@ -15,7 +15,6 @@ export const countPagesInDocument = async ({
     bytes = await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key: docketEntryId,
-      protocol: 'S3',
       useTempBucket: false,
     });
   }

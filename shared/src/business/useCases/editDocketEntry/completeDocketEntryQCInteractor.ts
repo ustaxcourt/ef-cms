@@ -23,7 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { withLocking } from '../../../persistence/dynamo/locks/acquireLock';
+import { withLocking } from '../../../../../web-api/src/persistence/dynamo/locks/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
@@ -301,10 +301,11 @@ const completeDocketEntryQC = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToUpdate.petitioners },
     );
+
+    noticeUpdatedDocketEntry.setFiledBy(user);
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext
       .getUseCaseHelpers()

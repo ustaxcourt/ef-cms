@@ -1,11 +1,37 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TrialSessionTypes,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
-const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
+type CreateTrialSessionOverrides = {
+  maxCases?: number;
+  sessionType?: TrialSessionTypes;
+  trialDay?: string;
+  trialYear?: string;
+  trialLocation?: string;
+  trialClerk?: { name: string; userId: string };
+  isSwingSession?: boolean;
+  trialMonth?: string;
+  swingSessionId?: string;
+  judge?: any;
+};
 
 export const docketClerkCreatesATrialSession = (
   cerebralTest,
-  overrides = {},
+  {
+    isSwingSession = false,
+    judge = undefined,
+    maxCases = 100,
+    sessionType = SESSION_TYPES.hybrid,
+    swingSessionId = undefined,
+    trialClerk = undefined,
+    trialDay = '12',
+    trialLocation = 'Seattle, Washington',
+    trialMonth = '12',
+    trialYear = '2025',
+  }: CreateTrialSessionOverrides = {},
 ) => {
   return it('Docket clerk starts a trial session', async () => {
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');
@@ -15,128 +41,73 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      maxCases: errorMessages.maxCases,
-      sessionType: errorMessages.sessionType,
-      startDate: errorMessages.startDate[1],
-      term: errorMessages.term,
-      termYear: errorMessages.termYear,
-      trialLocation: errorMessages.trialLocation,
+      maxCases: TrialSession.VALIDATION_ERROR_MESSAGES.maxCases,
+      sessionType: TrialSession.VALIDATION_ERROR_MESSAGES.sessionType,
+      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
+      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
+      termYear: TrialSession.VALIDATION_ERROR_MESSAGES.termYear,
+      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
     });
 
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'proceedingType',
-      value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'maxCases',
-      value: overrides.maxCases || 100,
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'sessionType',
-      value: overrides.sessionType || 'Hybrid',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateMonth',
-      value: '13',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateDay',
-      value: overrides.trialDay || '12',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateYear',
-      value: overrides.trialYear || '2025',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'estimatedEndDateMonth',
-      value: '01',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'estimatedEndDateDay',
-      value: '01',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'estimatedEndDateYear',
-      value: '1995',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'address1',
-      value: '123 Flavor Ave',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'city',
-      value: 'Seattle',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'state',
-      value: 'WA',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'postalCode',
-      value: '98101',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'chambersPhoneNumber',
-      value: '1234567890',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'judge',
-      value: overrides.judge || {
+    /* eslint-disable sort-keys-fix/sort-keys-fix */
+    const createTrialSessionForm = {
+      maxCases,
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      sessionType,
+      startDateDay: trialDay,
+      startDateMonth: '13',
+      startDateYear: trialYear,
+      estimatedEndDateMonth: '01',
+      estimatedEndDateDay: '01',
+      estimatedEndDateYear: '1995',
+      address1: '123 Flavor Ave',
+      city: 'Seattle',
+      state: 'WA',
+      postalCode: '98101',
+      chambersPhoneNumber: '1234567890',
+      judge: judge || {
         name: 'Cohen',
         userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
       },
-    });
+      trialClerk,
+    };
 
-    if (overrides.trialClerk) {
+    for (let [key, value] of Object.entries(createTrialSessionForm)) {
       await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'trialClerk',
-        value: overrides.trialClerk,
+        key,
+        value,
       });
     }
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      startDate: errorMessages.startDate[1],
-      term: errorMessages.term,
-      trialLocation: errorMessages.trialLocation,
+      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
+      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
+      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'startDateMonth',
-      value: overrides.trialMonth || '12',
+      value: trialMonth,
     });
 
-    if (!overrides.trialMonth) {
+    if (!trialMonth) {
       expect(cerebralTest.getState('form.term')).toEqual('Fall');
     }
-    expect(cerebralTest.getState('form.termYear')).toEqual(
-      overrides.trialYear || '2025',
-    );
+
+    expect(cerebralTest.getState('form.termYear')).toEqual(trialYear);
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
-      value: overrides.trialLocation || 'Seattle, Washington',
+      value: trialLocation,
     });
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      estimatedEndDate: errorMessages.estimatedEndDate[1],
+      estimatedEndDate:
+        TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[1],
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -144,34 +115,15 @@ export const docketClerkCreatesATrialSession = (
       value: '2050',
     });
 
-    if (overrides.trialDate) {
-      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'startDateMonth',
-        value: overrides.trialDate.month,
-      });
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'swingSession',
+      value: isSwingSession,
+    });
 
-      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'startDateDay',
-        value: overrides.trialDate.day,
-      });
-
-      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'startDateYear',
-        value: overrides.trialDate.year,
-      });
-    }
-
-    if (overrides.swingSession) {
-      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'swingSession',
-        value: true,
-      });
-
-      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'swingSessionId',
-        value: overrides.swingSessionId,
-      });
-    }
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'swingSessionId',
+      value: swingSessionId,
+    });
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
@@ -186,6 +138,7 @@ export const docketClerkCreatesATrialSession = (
     const lastCreatedTrialSessionId = cerebralTest.getState(
       'lastCreatedTrialSessionId',
     );
+
     expect(lastCreatedTrialSessionId).toBeDefined();
 
     cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;

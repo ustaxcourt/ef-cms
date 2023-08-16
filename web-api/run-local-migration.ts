@@ -1,5 +1,6 @@
 import { createApplicationContext } from './src/applicationContext';
 import { processItems } from './workflow-terraform/migration/main/lambdas/migration-segments';
+import { scanFull } from './utilities/scanFull';
 import AWS from 'aws-sdk';
 
 const applicationContext = createApplicationContext({});
@@ -20,20 +21,12 @@ const applicationContext = createApplicationContext({});
     service: dynamo,
   });
 
-  await documentClient
-    .scan({
-      ExclusiveStartKey: undefined,
-      Segment: 0,
-      TableName: process.env.SOURCE_TABLE!,
-      TotalSegments: 1,
-    })
-    .promise()
-    .then(async results => {
-      await processItems(applicationContext, {
-        documentClient,
-        items: results.Items,
-        ranMigrations: undefined,
-        segment: undefined,
-      });
-    });
+  const results = await scanFull(process.env.SOURCE_TABLE!, documentClient);
+
+  await processItems(applicationContext, {
+    documentClient,
+    items: results,
+    ranMigrations: undefined,
+    segment: undefined,
+  });
 })();

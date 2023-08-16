@@ -8,6 +8,7 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
 import { MOCK_USERS, docketClerkUser } from '../../../test/mockUsers';
 import { User } from '../../entities/User';
@@ -32,6 +33,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
@@ -45,6 +47,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -53,6 +56,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -61,6 +65,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
@@ -186,6 +191,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Petition',
           eventCode: 'P',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 1,
           isOnDocketRecord: true,
@@ -199,6 +205,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -207,6 +214,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
         {
@@ -215,6 +223,7 @@ describe('fileExternalDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          filedByRole: ROLES.petitioner,
           userId: '15fac684-d333-45c2-b414-4af63a7f7613',
         },
       ],
@@ -393,7 +402,7 @@ describe('fileExternalDocumentInteractor', () => {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Simultaneous Memoranda of Law',
           documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
           filedBy: 'Test Petitioner',
           primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
