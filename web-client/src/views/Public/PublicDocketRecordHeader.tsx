@@ -15,6 +15,7 @@ const props = {
   docketNumber: state.caseDetail.docketNumber,
   gotoPublicPrintableDocketRecordSequence:
     sequences.gotoPublicPrintableDocketRecordSequence,
+  publicCaseDetailHelper: state.publicCaseDetailHelper,
   sessionMetadata: state.sessionMetadata,
   showModal: state.modal.showModal,
   toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
