@@ -1,4 +1,3 @@
-import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
 import { Mobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
 import { PublicCaseDetailSubnavTabs } from './PublicCaseDetailSubnavTabs';
@@ -8,8 +7,7 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 const props = {
-  publicCaseDetailHelper:
-    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
+  publicCaseDetailHelper: state.publicCaseDetailHelper,
 };
 
 export const PublicCaseDetail = connect(

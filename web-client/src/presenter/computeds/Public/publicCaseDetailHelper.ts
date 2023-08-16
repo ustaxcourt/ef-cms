@@ -205,12 +205,13 @@ export interface IPublicCaseDetailHelper {
   formattedDocketEntriesOnDocketRecord: any[];
   isCaseSealed: boolean;
   showPrintableDocketRecord: boolean;
+  sortLabelTextMobile: string;
 }
 
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): IPublicCaseDetailHelper => {
+) => {
   const {
     canAllowPrintableDocketRecord,
     docketEntries,
@@ -252,7 +253,7 @@ export const publicCaseDetailHelper = (
     byDateDesc: 'Newest to Oldest',
   };
 
-  const sortLabelTextMobile = sortLabelsMobile[sortOrder];
+  const sortLabelTextMobile: string = sortLabelsMobile[sortOrder];
 
   formattedDocketEntriesOnDocketRecord = filterDocketEntries(
     sortedFormattedDocketRecords,
