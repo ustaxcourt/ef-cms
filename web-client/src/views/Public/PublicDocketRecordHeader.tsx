@@ -58,7 +58,14 @@ export const PublicDocketRecordHeader = connect(
         <NonMobile>
           <div className="grid-container padding-0 docket-record-header">
             <div className="grid-row grid-gap margin-bottom-2">
-              <div className="tablet:grid-col-3">
+              <div className="grid-col-3">
+                <NonMobile>
+                  <DocketRecordSort
+                    name={`docketRecordSort.${docketNumber}`}
+                    value={sessionMetadata.docketRecordSort[docketNumber]}
+                    onChange={updateSessionMetadataSequence}
+                  />
+                </NonMobile>{' '}
                 <Mobile>
                   <Button
                     link
@@ -72,15 +79,8 @@ export const PublicDocketRecordHeader = connect(
                     <FontAwesomeIcon icon="sort" size="sm" />
                   </Button>
                 </Mobile>
-                <NonMobile>
-                  <DocketRecordSort
-                    name={`docketRecordSort.${docketNumber}`}
-                    value={sessionMetadata.docketRecordSort[docketNumber]}
-                    onChange={updateSessionMetadataSequence}
-                  />
-                </NonMobile>
               </div>
-              <div className="tablet:grid-col-4">
+              <div className="grid-col-fill">
                 <label
                   className="dropdown-label-serif margin-right-3"
                   htmlFor="inline-select"
@@ -104,7 +104,7 @@ export const PublicDocketRecordHeader = connect(
                   )}
                 </BindedSelect>
               </div>
-              <div className="tablet:grid-col-8">
+              <div className="grid-col-4">
                 <Button
                   link
                   aria-hidden="true"
