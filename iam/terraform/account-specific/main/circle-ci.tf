@@ -294,6 +294,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
     },
     {
       "Action": [
+        "ssm:DeleteParameters",
+        "ssm:GetParameters",
+        "ssm:GetParameter",
+        "ssm:PutParameter"
+      ],
+      "Resource": "*",
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
         "ecs:DescribeServices",
         "ecs:UpdateService",
         "ecs:DeleteService"
