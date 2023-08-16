@@ -329,6 +329,7 @@ module "api-west-green" {
   validate = 0
   providers = {
     aws = aws.us-west-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
   node_version                   = var.green_node_version
@@ -402,6 +403,7 @@ module "api-west-blue" {
   validate = 0
   providers = {
     aws = aws.us-west-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
   node_version                   = var.blue_node_version

@@ -572,6 +572,7 @@ module "api-east-green" {
   validate = 1
   providers = {
     aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
   deploying_color                = var.deploying_color
@@ -644,6 +645,7 @@ module "api-east-blue" {
   validate = 1
   providers = {
     aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
   deploying_color                = var.deploying_color
