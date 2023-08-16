@@ -12,12 +12,22 @@ const check = (value: string | undefined, message: string) => {
   }
 };
 
-const { DEPLOYING_COLOR, ENV } = process.env;
+const { DEPLOYING_COLOR, ENABLE_HEALTH_CHECKS, ENV } = process.env;
 
 check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
 check(ENV, 'You must have ENV set in your environment');
+check(
+  ENABLE_HEALTH_CHECKS,
+  'You must have ENABLE_HEALTH_CHECKS set in your environment',
+);
 
 async function main() {
+  if (ENABLE_HEALTH_CHECKS !== '1') {
+    console.log(
+      'ENABLE_HEALTH_CHECKS is turned off, will not switch health check colors',
+    );
+    return;
+  }
   const ssmClient = new SSMClient({ region: 'us-east-1' });
 
   const ssmCommand = new GetParametersCommand({
@@ -27,6 +37,8 @@ async function main() {
     ],
   });
   const ssmResponse = await ssmClient.send(ssmCommand);
+
+  console.log('ssm response:', ssmResponse);
 
   const params = ssmResponse.Parameters!.map(param => {
     return JSON.parse(param.Value!);
@@ -44,7 +56,9 @@ async function main() {
       HealthCheckId: param.healthCheckId,
     };
     const command = new UpdateHealthCheckCommand(input);
-    await client.send(command);
+    const route53Response = await client.send(command);
+
+    console.log('route53 response:', route53Response);
   }
 }
 
