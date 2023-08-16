@@ -95,20 +95,6 @@ export const DocketRecordHeader = connect(
           <Mobile>
             <Button
               link
-              aria-hidden="true"
-              className="margin-top-1"
-              icon="print"
-              onClick={() => {
-                gotoPrintableDocketRecordSequence({
-                  docketNumber: formattedCaseDetail.docketNumber,
-                });
-              }}
-            >
-              Printable Docket Record
-            </Button>
-
-            <Button
-              link
               aria-label="docket record sort"
               className="mobile-sort-docket-button text-left"
               onClick={() => {
@@ -147,6 +133,20 @@ export const DocketRecordHeader = connect(
                 </BindedSelect>
               </div>
             </div>
+
+            <Button
+              link
+              aria-hidden="true"
+              className="margin-top-1"
+              icon="print"
+              onClick={() => {
+                gotoPrintableDocketRecordSequence({
+                  docketNumber: formattedCaseDetail.docketNumber,
+                });
+              }}
+            >
+              Printable Docket Record
+            </Button>
           </Mobile>
         </div>
         {showModal === 'OpenPrintableDocketRecordModal' && (

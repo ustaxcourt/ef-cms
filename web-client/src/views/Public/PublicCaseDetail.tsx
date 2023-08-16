@@ -1,4 +1,5 @@
 import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
+import { Mobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
 import { PublicCaseDetailSubnavTabs } from './PublicCaseDetailSubnavTabs';
 import { PublicDocketRecord } from './PublicDocketRecord';
@@ -17,6 +18,9 @@ export const PublicCaseDetail = connect(
     return (
       <>
         <PublicCaseDetailHeader />
+        <Mobile>
+          <section className="usa-section grid-container margin-top-2 padding-bottom-3"></section>
+        </Mobile>
         {!publicCaseDetailHelper.isCaseSealed && (
           <>
             <PublicCaseDetailSubnavTabs />
