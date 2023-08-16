@@ -7,7 +7,7 @@ describe('setNoticesForCalendaredTrialSessionAction', () => {
   let createObjectURLStub;
 
   beforeAll(() => {
-    global.window = global;
+    global.window ??= Object.create(global);
     global.Blob = () => {};
 
     createObjectURLStub = jest.fn().mockReturnValue('123456-abcdef');

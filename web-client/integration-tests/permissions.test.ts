@@ -183,13 +183,13 @@ const printableDocketRecordVisible = async () => {
 
 describe('Case permissions test', () => {
   beforeEach(() => {
-    global.window = {
+    global.window ??= Object.create({
       ...global.window,
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
       },
-    };
+    });
   });
 
   afterAll(() => {
