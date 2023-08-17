@@ -304,7 +304,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
 				"ssm:GetParameterHistory",
 				"ssm:GetParametersByPath",
 				"ssm:GetParameters",
-				"ssm:GetParameter",
+				"ssm:GetParameter"
       ],
       "Resource": "*",
       "Effect": "Allow"
