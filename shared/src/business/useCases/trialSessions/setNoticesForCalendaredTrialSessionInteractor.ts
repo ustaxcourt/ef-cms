@@ -15,7 +15,10 @@ const waitForJobToFinish = async ({ applicationContext, jobId }) => {
         applicationContext,
         jobId,
       });
-    ({ unfinishedCases } = jobStatus);
+
+    if (jobStatus) {
+      ({ unfinishedCases } = jobStatus);
+    }
 
     await applicationContext.getUtilities().sleep(5000);
   }
