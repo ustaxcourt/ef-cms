@@ -149,20 +149,6 @@ describe('publicCaseDetailHelper', () => {
     };
   });
 
-  describe('sortLabelTextMobile', () => {
-    it('should display "Oldest to Newest" when sort order is "byDate"', () => {
-      state.sessionMetadata.docketRecordSort = { '123-45': 'byDate' };
-      const result = runCompute(publicCaseDetailHelper, { state });
-      expect(result.sortLabelTextMobile).toEqual('Oldest to Newest');
-    });
-
-    it('should display "Newest to Oldest" when sort order is "byDateDesc"', () => {
-      state.sessionMetadata.docketRecordSort = { '123-45': 'byDateDesc' };
-      const result = runCompute(publicCaseDetailHelper, { state });
-      expect(result.sortLabelTextMobile).toEqual('Newest to Oldest');
-    });
-  });
-
   describe('formattedDocketEntriesOnDocketRecord', () => {
     it('should be sorted chronologically by date', () => {
       state.caseDetail.docketEntries = [
