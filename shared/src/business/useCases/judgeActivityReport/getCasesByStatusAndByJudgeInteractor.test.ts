@@ -20,7 +20,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   const docketEntryWithoutCaseHistory = '115-23';
 
   const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
-  let mockReturnedDocketNumbers: Array<{ docketNumber: string }> = [];
+  let mockReturnedDocketNumbers: Array<{
+    docketNumber: string;
+    leadDocketNumber?: string;
+  }> = [];
+  let mockReturnedCasesToFilterOut: Array<{
+    docketNumber: string;
+  }> = [];
 
   let expectedConsolidatedCasesGroupCountMap = {};
 
@@ -55,10 +61,21 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the consolidated member case)', async () => {
+  it.only('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the consolidated member case)', async () => {
     mockReturnedDocketNumbers = [
       { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
-      { docketNumber: MOCK_CAV_LEAD_CASE.docketNumber },
+      {
+        docketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
+      },
+      { docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber },
+      { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
+    ];
+
+    mockReturnedCasesToFilterOut = [
+      { docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
+      {
+        docketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
+      },
       { docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber },
       { docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber },
     ];
@@ -74,15 +91,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue({
-        foundCases: mockReturnedDocketNumbers,
-      });
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
+        mockReturnedDocketNumbers,
+      );
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce(MOCK_SUBMITTED_CASE)
-      .mockResolvedValueOnce(MOCK_CAV_LEAD_CASE)
-      .mockResolvedValueOnce(MOCK_CAV_CONSOLIDATED_MEMBER_CASE);
+      .getCasesByEventCodes.mockReturnValue(mockReturnedDocketNumbers);
+    // .mockResolvedValueOnce(MOCK_CAV_LEAD_CASE)
+    // .mockResolvedValueOnce(MOCK_CAV_CONSOLIDATED_MEMBER_CASE);
 
     applicationContext
       .getPersistenceGateway()
@@ -115,7 +132,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesCounts).toEqual(
+    expect(result.consolidatedCasesGroupCountMap).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
     expect(result.totalCount).toEqual(2);
@@ -212,7 +229,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesCounts).toEqual(
+    expect(result.consolidatedCasesGroupCountMap).toEqual(
       expectedConsolidatedCasesGroupCountMap,
     );
     expect(result.totalCount).toEqual(2);
@@ -287,7 +304,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesCounts).toEqual({});
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(1);
   });
 
@@ -393,7 +410,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesCounts).toEqual({});
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(5);
   });
 
@@ -500,7 +517,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesCounts).toEqual({});
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(5);
   });
 
@@ -609,7 +626,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesCounts).toEqual({});
+    expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(5);
   });
 });

@@ -94,6 +94,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       },
     });
 
+  console.log('casesToFilterOut', casesToFilterOut);
+
   const finalListOfCases = await Promise.all(
     cavAndSubmittedCases
       .filter(caseInfo => !casesToFilterOut.includes(caseInfo.docketNumber))
@@ -111,6 +113,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
         }
       }),
   );
+
+  console.log('finalListOfCases', finalListOfCases);
 
   const consolidatedCasesGroupCountMap = new Map();
 
