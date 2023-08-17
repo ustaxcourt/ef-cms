@@ -4,7 +4,7 @@ import {
 } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
-import { formatResults } from './searchClient';
+import { search } from './searchClient';
 
 export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
@@ -13,7 +13,15 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext: IApplicationContext;
   params: JudgeActivityReportCavAndSubmittedCasesRequest;
 }): Promise<CavAndSubmittedCaseResponseType> => {
-  const source = ['docketNumber'];
+  const source = [
+    'docketNumber',
+    'leadDocketNumber',
+    'caseCaption',
+    'caseStatusHistory',
+    'docketNumberWithSuffix',
+    'petitioners',
+    'status',
+  ];
 
   const mustFilters: QueryDslQueryContainer[] = [];
   const filters: QueryDslQueryContainer[] = [
@@ -22,7 +30,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     },
   ];
 
-  if (params.judges.length) {
+  if (params.judges) {
     const shouldArray: Object[] = [];
     params.judges.forEach(judge => {
       const associatedJudgeFilters = {
@@ -40,25 +48,26 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     mustFilters.push(shouldObject);
   }
 
-  const searchResults = await applicationContext.getSearchClient().search({
-    _source: source,
-    body: {
-      query: {
-        bool: {
-          filter: filters,
-          must: mustFilters,
+  const { results } = await search({
+    applicationContext,
+    searchParameters: {
+      body: {
+        _source: source,
+        query: {
+          bool: {
+            filter: filters,
+            must: mustFilters,
+          },
         },
+        sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
       },
-      sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
+      index: 'efcms-case',
+      size: MAX_ELASTICSEARCH_PAGINATION,
+      track_total_hits: true,
     },
-    index: 'efcms-case',
-    size: MAX_ELASTICSEARCH_PAGINATION,
-    track_total_hits: true,
   });
 
-  const { results } = formatResults(searchResults.body);
+  // console.log('searchResults', searchResults);
 
-  return {
-    foundCases: results,
-  };
+  return results;
 };
