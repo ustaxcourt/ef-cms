@@ -17,7 +17,7 @@ export const PublicDocketRecord = connect(
         <PublicDocketRecordHeader />
         <table
           aria-label="docket record"
-          className="usa-table case-detail ustc-table responsive-table"
+          className="usa-table case-detail ustc-table usa-table--stacked"
           id="docket-record-table"
         >
           <thead>

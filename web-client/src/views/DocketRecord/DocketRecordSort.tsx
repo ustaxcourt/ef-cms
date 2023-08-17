@@ -16,24 +16,24 @@ export function DocketRecordSort({ name, onChange, value }) {
     >
       {[
         {
-          label: 'oldest',
+          label: 'Oldest',
           value: 'byDate',
         },
         {
-          label: 'newest',
+          label: 'Newest',
           value: 'byDateDesc',
         },
         {
-          label: 'no. (ascending)',
+          label: 'No. (ascending)',
           value: 'byIndex',
         },
         {
-          label: 'no. (descending)',
+          label: 'No. (descending)',
           value: 'byIndexDesc',
         },
       ].map(item => (
         <option key={item.value} value={item.value}>
-          Sort by {item.label}
+          {item.label}
         </option>
       ))}
     </select>
