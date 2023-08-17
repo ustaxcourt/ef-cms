@@ -1,6 +1,5 @@
 import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { IServerApplicationContext } from '../../../../web-api/src/applicationContext';
 import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
 import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
 import {
@@ -11,7 +10,7 @@ import { UnauthorizedError } from '../../errors/errors';
 import { omit } from 'lodash';
 
 export const opinionAdvancedSearchInteractor = async (
-  applicationContext: IServerApplicationContext,
+  applicationContext: IApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
