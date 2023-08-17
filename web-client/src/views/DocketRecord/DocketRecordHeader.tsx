@@ -37,6 +37,13 @@ export const DocketRecordHeader = connect(
           <NonMobile>
             <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
               <div className="tablet:grid-col-3">
+                <label
+                  className="dropdown-label-serif margin-right-3"
+                  htmlFor="inline-select"
+                  id="docket-record-filter-label"
+                >
+                  Sort by
+                </label>
                 <DocketRecordSort
                   name={`docketRecordSort.${formattedCaseDetail.docketNumber}`}
                   value={

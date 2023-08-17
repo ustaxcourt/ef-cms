@@ -241,13 +241,6 @@ export const publicCaseDetailHelper = (
     .getUtilities()
     .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, sortOrder);
 
-  const sortLabelsMobile = {
-    byDate: 'Oldest to Newest',
-    byDateDesc: 'Newest to Oldest',
-  };
-
-  const sortLabelTextMobile: string = sortLabelsMobile[sortOrder];
-
   formattedDocketEntriesOnDocketRecord = filterDocketEntries(
     sortedFormattedDocketRecords,
     docketRecordFilter,
@@ -257,6 +250,5 @@ export const publicCaseDetailHelper = (
     formattedDocketEntriesOnDocketRecord,
     isCaseSealed: !!isSealed,
     showPrintableDocketRecord: canAllowPrintableDocketRecord,
-    sortLabelTextMobile,
   };
 };

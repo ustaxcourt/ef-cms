@@ -1,7 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { DocketRecordSort } from '../DocketRecord/DocketRecordSort';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
@@ -18,7 +17,6 @@ const props = {
   publicCaseDetailHelper: state.publicCaseDetailHelper,
   sessionMetadata: state.sessionMetadata,
   showModal: state.modal.showModal,
-  toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
   updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
 };
 
@@ -31,7 +29,6 @@ export const PublicDocketRecordHeader = connect(
     publicCaseDetailHelper,
     sessionMetadata,
     showModal,
-    toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }: typeof props & {
     publicCaseDetailHelper: ReturnType<typeof state.publicCaseDetailHelper>;
@@ -58,32 +55,24 @@ export const PublicDocketRecordHeader = connect(
         <NonMobile>
           <div className="grid-container padding-0 docket-record-header">
             <div className="grid-row grid-gap margin-bottom-2">
-              <div className="grid-col-3">
-                <NonMobile>
+              <div className="grid-col-12 display-flex flex-align-center">
+                <label
+                  className="dropdown-label-serif margin-right-3 margin-bottom-0"
+                  htmlFor="docket-record-sort"
+                  id="docket-record-sort-label"
+                >
+                  Sort by
+                </label>
+                <div className="margin-right-3">
                   <DocketRecordSort
                     name={`docketRecordSort.${docketNumber}`}
                     value={sessionMetadata.docketRecordSort[docketNumber]}
                     onChange={updateSessionMetadataSequence}
                   />
-                </NonMobile>{' '}
-                <Mobile>
-                  <Button
-                    link
-                    aria-label="docket record sort"
-                    className="mobile-sort-docket-button text-left"
-                    onClick={() => {
-                      toggleMobileDocketSortSequence();
-                    }}
-                  >
-                    {publicCaseDetailHelper.sortLabelTextMobile}
-                    <FontAwesomeIcon icon="sort" size="sm" />
-                  </Button>
-                </Mobile>
-              </div>
-              <div className="grid-col-fill">
+                </div>
                 <label
-                  className="dropdown-label-serif margin-right-3"
-                  htmlFor="inline-select"
+                  className="dropdown-label-serif margin-right-3 margin-bottom-0"
+                  htmlFor="document-filter-by"
                   id="docket-record-filter-label"
                 >
                   Filter by
@@ -93,7 +82,9 @@ export const PublicDocketRecordHeader = connect(
                   aria-label="docket record filter"
                   bind="sessionMetadata.docketRecordFilter"
                   className="select-left inline-select"
+                  id="document-filter-by"
                   name="docketRecordFilter"
+                  style={{ maxWidth: 180 }}
                 >
                   {Object.entries(PUBLIC_DOCKET_RECORD_FILTER_OPTIONS).map(
                     ([key, value]) => (
@@ -103,21 +94,6 @@ export const PublicDocketRecordHeader = connect(
                     ),
                   )}
                 </BindedSelect>
-              </div>
-              <div className="grid-col-4">
-                <Button
-                  link
-                  aria-hidden="true"
-                  className="show-on-mobile margin-top-1 text-left"
-                  icon="print"
-                  onClick={() => {
-                    gotoPublicPrintableDocketRecordSequence({
-                      docketNumber,
-                    });
-                  }}
-                >
-                  Printable Docket Record
-                </Button>
               </div>
             </div>
           </div>
@@ -129,8 +105,8 @@ export const PublicDocketRecordHeader = connect(
               <div className="grid-col-4">
                 <label
                   className="dropdown-label-serif margin-right-2"
-                  htmlFor="inline-select"
-                  id="docket-record-filter-label"
+                  htmlFor="docket-record-sort"
+                  id="docket-record-sort-label"
                 >
                   Sort by
                 </label>
@@ -148,7 +124,7 @@ export const PublicDocketRecordHeader = connect(
               <div className="grid-col-4">
                 <label
                   className="dropdown-label-serif"
-                  htmlFor="inline-select"
+                  htmlFor="document-filter-by"
                   id="docket-record-filter-label"
                 >
                   Filter by
@@ -159,7 +135,7 @@ export const PublicDocketRecordHeader = connect(
                   aria-describedby="docket-record-filter-label"
                   aria-label="docket record filter"
                   bind="sessionMetadata.docketRecordFilter"
-                  id="docket-record-filter"
+                  id="document-filter-by"
                   name="docketRecordFilter"
                 >
                   {Object.entries(PUBLIC_DOCKET_RECORD_FILTER_OPTIONS).map(
