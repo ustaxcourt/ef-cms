@@ -15,9 +15,10 @@ export const PublicDocketRecord = connect(
     return (
       <>
         <PublicDocketRecordHeader />
+
         <table
           aria-label="docket record"
-          className="usa-table case-detail ustc-table usa-table--stacked"
+          className="usa-table ustc-table usa-table--stacked"
           id="docket-record-table"
         >
           <thead>
@@ -47,7 +48,7 @@ export const PublicDocketRecord = connect(
                     <td className="center-column hide-on-mobile">
                       {entry.index}
                     </td>
-                    <td>
+                    <td data-label="Filed Date">
                       <span
                         className={classNames(
                           entry.isStricken && 'stricken-docket-record',
@@ -70,13 +71,13 @@ export const PublicDocketRecord = connect(
                         />
                       )}
                     </td>
-                    <td>
+                    <td data-label="Filings and Proceedings">
                       <PublicFilingsAndProceedings entry={entry} />
                     </td>
                     <td className="hide-on-mobile">{entry.numberOfPages}</td>
                     <td className="hide-on-mobile">{entry.filedBy}</td>
                     <td className="hide-on-mobile">{entry.action}</td>
-                    <td>
+                    <td data-label="Served">
                       {entry.showNotServed && (
                         <span className="text-secondary text-semibold">
                           Not served
@@ -87,7 +88,6 @@ export const PublicDocketRecord = connect(
                       )}
                     </td>
                     <td className="center-column hide-on-mobile">
-                      <span className="responsive-label">Parties</span>
                       {entry.servedPartiesCode}
                     </td>
                   </tr>
