@@ -299,6 +299,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
 				"ssm:DeleteParameter",
 				"ssm:DeleteParameters",
 				"ssm:UnlabelParameterVersion",
+        "ssm:ListTagsForResource",
 				"ssm:DescribeParameters",
 				"ssm:DescribeDocumentParameters",
 				"ssm:GetParameterHistory",
