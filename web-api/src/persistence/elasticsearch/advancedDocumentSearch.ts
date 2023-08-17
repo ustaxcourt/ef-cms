@@ -1,4 +1,4 @@
-import { DocketEntryMapping } from '../../../elasticsearch/mappings';
+import { DocketEntryMapping } from '../../../elasticsearch/index-types';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
