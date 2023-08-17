@@ -531,6 +531,33 @@ data "aws_dynamodb_table" "blue_dynamo_table" {
   name = var.blue_table_name
 }
 
+resource "aws_api_gateway_domain_name" "api_custom_main_east" {
+  depends_on               = [aws_acm_certificate.api_gateway_cert_east]
+  regional_certificate_arn = aws_acm_certificate.api_gateway_cert_east.arn
+  domain_name              = "api.${var.dns_domain}"
+  security_policy          = "TLS_1_2"
+  endpoint_configuration {
+    types = ["REGIONAL"]
+  }
+}
+
+resource "aws_route53_record" "api_route53_main_east_regional_record" {
+  name           = aws_api_gateway_domain_name.api_custom_main_east.domain_name
+  type           = "A"
+  zone_id        = data.aws_route53_zone.zone.id
+  set_identifier = "api_main_us_east_1"
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_custom_main_east.regional_zone_id
+    evaluate_target_health = true
+  }
+
+  latency_routing_policy {
+    region = "us-east-1"
+  }
+}
+
 module "api-east-waf" {
   environment = var.environment
   providers = {
