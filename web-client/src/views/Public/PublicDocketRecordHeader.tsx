@@ -126,23 +126,28 @@ export const PublicDocketRecordHeader = connect(
         <Mobile>
           <div className="grid-container padding-0 docket-record-header">
             <div className="grid-row">
-              <Button
-                link
-                aria-label="docket record sort"
-                className="mobile-sort-docket-button text-left"
-                onClick={() => {
-                  toggleMobileDocketSortSequence();
-                }}
-              >
-                {publicCaseDetailHelper.sortLabelTextMobile}
-                <FontAwesomeIcon icon="sort" size="sm" />
-              </Button>
+              <div className="grid-col-4">
+                <label
+                  className="dropdown-label-serif margin-right-2"
+                  htmlFor="inline-select"
+                  id="docket-record-filter-label"
+                >
+                  Sort by
+                </label>
+              </div>
+              <div className="grid-col-fill">
+                <DocketRecordSort
+                  name={`docketRecordSort.${docketNumber}`}
+                  value={sessionMetadata.docketRecordSort[docketNumber]}
+                  onChange={updateSessionMetadataSequence}
+                />
+              </div>
             </div>
 
             <div className="grid-row padding-y-075-rem">
-              <div className="grid-col-auto">
+              <div className="grid-col-4">
                 <label
-                  className="dropdown-label-serif margin-right-2"
+                  className="dropdown-label-serif"
                   htmlFor="inline-select"
                   id="docket-record-filter-label"
                 >
