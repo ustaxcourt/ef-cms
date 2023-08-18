@@ -9,30 +9,38 @@ const handleAxiosTimeout = axios => {
   return source;
 };
 
+type S3BucketsStatus = {
+  app: boolean;
+  appFailover: boolean;
+  eastDocuments: boolean;
+  eastQuarantine: boolean;
+  eastTempDocuments: boolean;
+  public: boolean;
+  publicFailover: boolean;
+  westDocuments: boolean;
+  westQuarantine: boolean;
+  westTempDocuments: boolean;
+};
+
+type DynamoTablesStatus = {
+  efcms: boolean;
+  efcmsDeploy: boolean;
+};
+
 export type ApplicationHealth = {
   cognito: boolean;
-  dynamo: {
-    efcms: boolean;
-    efcmsDeploy: boolean;
-  };
+  dynamo: DynamoTablesStatus;
   dynamsoft: boolean;
   elasticsearch: boolean;
   emailService: boolean;
-  s3: {
-    app: boolean;
-    appFailover: boolean;
-    eastDocuments: boolean;
-    eastQuarantine: boolean;
-    eastTempDocuments: boolean;
-    public: boolean;
-    publicFailover: boolean;
-    westDocuments: boolean;
-    westQuarantine: boolean;
-    westTempDocuments: boolean;
-  };
+  s3: S3BucketsStatus;
 };
 
-export const getElasticSearchStatus = async ({ applicationContext }) => {
+const getElasticSearchStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<boolean> => {
   try {
     await applicationContext.getPersistenceGateway().getFirstSingleCaseRecord({
       applicationContext,
@@ -45,7 +53,11 @@ export const getElasticSearchStatus = async ({ applicationContext }) => {
   return true;
 };
 
-export const getDynamoStatus = async ({ applicationContext }) => {
+const getDynamoStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<boolean> => {
   try {
     const dynamoStatus = await applicationContext
       .getPersistenceGateway()
@@ -57,7 +69,11 @@ export const getDynamoStatus = async ({ applicationContext }) => {
   }
 };
 
-export const getDeployDynamoStatus = async ({ applicationContext }) => {
+const getDeployDynamoStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<boolean> => {
   try {
     const deployDynamoStatus = await applicationContext
       .getPersistenceGateway()
@@ -69,7 +85,11 @@ export const getDeployDynamoStatus = async ({ applicationContext }) => {
   }
 };
 
-export const getDynamsoftStatus = async ({ applicationContext }) => {
+const getDynamsoftStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<boolean> => {
   const axios = applicationContext.getHttpClient();
 
   const source = handleAxiosTimeout(axios);
@@ -93,10 +113,13 @@ export const getDynamsoftStatus = async ({ applicationContext }) => {
   }
 };
 
-export const checkS3BucketsStatus = async ({
+const checkS3BucketsStatus = async ({
   applicationContext,
   bucketName,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  bucketName: string;
+}): Promise<boolean> => {
   try {
     await applicationContext
       .getStorageClient()
@@ -113,7 +136,11 @@ export const checkS3BucketsStatus = async ({
   }
 };
 
-export const getS3BucketStatus = async ({ applicationContext }) => {
+const getS3BucketStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<S3BucketsStatus> => {
   const efcmsDomain = process.env.EFCMS_DOMAIN;
   const currentColor = process.env.CURRENT_COLOR;
   const eastS3BucketName = `${efcmsDomain}-documents-${applicationContext.environment.stage}-${regionEast}`;
@@ -140,7 +167,18 @@ export const getS3BucketStatus = async ({ applicationContext }) => {
     westTempDocuments: westS3TempBucketName,
   };
 
-  let bucketStatus = {};
+  let bucketStatus: S3BucketsStatus = {
+    app: false,
+    appFailover: false,
+    eastDocuments: false,
+    eastQuarantine: false,
+    eastTempDocuments: false,
+    public: false,
+    publicFailover: false,
+    westDocuments: false,
+    westQuarantine: false,
+    westTempDocuments: false,
+  };
 
   for (const [key, value] of Object.entries(s3Buckets)) {
     bucketStatus[key] = await checkS3BucketsStatus({
@@ -152,7 +190,11 @@ export const getS3BucketStatus = async ({ applicationContext }) => {
   return bucketStatus;
 };
 
-export const getCognitoStatus = async ({ applicationContext }) => {
+const getCognitoStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<boolean> => {
   const axios = applicationContext.getHttpClient();
 
   const source = handleAxiosTimeout(axios);
@@ -161,7 +203,6 @@ export const getCognitoStatus = async ({ applicationContext }) => {
     const clientId = await applicationContext
       .getPersistenceGateway()
       .getClientId({
-        applicationContext,
         userPoolId: process.env.USER_POOL_ID,
       });
 
@@ -179,7 +220,12 @@ export const getCognitoStatus = async ({ applicationContext }) => {
   }
 };
 
-export const getEmailServiceStatus = async ({ applicationContext }) => {
+const getEmailServiceStatus = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<boolean> => {
+  // at risk of being throttled if used with a non-cached health check
   try {
     return await applicationContext
       .getPersistenceGateway()
