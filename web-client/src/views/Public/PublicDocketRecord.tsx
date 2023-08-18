@@ -118,6 +118,7 @@ export const PublicDocketRecord = connect(
                 entry => {
                   return (
                     <tr key={entry.index}>
+                      <td data-label="No.">{entry.index}</td>
                       <td data-label="Filings and Proceedings">
                         <PublicFilingsAndProceedings entry={entry} />
                       </td>
@@ -134,7 +135,6 @@ export const PublicDocketRecord = connect(
                           <span>{entry.servedAtFormatted}</span>
                         )}
                       </td>
-                      <td data-label="No.">{entry.index}</td>
                     </tr>
                   );
                 },
