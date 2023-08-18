@@ -118,7 +118,7 @@ describe('removeDuplicateLogInformation', () => {
         headers: {
           accept: '*/*',
           'accept-encoding': 'identity,gzip,deflate',
-          host: 'public-api-green.stg.ef-cms.ustaxcourt.gov',
+          host: 'public-api.stg.ef-cms.ustaxcourt.gov',
           'user-agent':
             'Amazon-Route53-Health-Check-Service (ref 9fbb1225-66df-4837-a0c8-12df057ff0eb; report http://amzn.to/1vsZADi)',
           'x-amzn-trace-id': 'Root=1-62ed6785-15b3374a2aa796500d42c17d',
@@ -165,7 +165,7 @@ describe('removeDuplicateLogInformation', () => {
       headers: {
         accept: '*/*',
         'accept-encoding': 'identity,gzip,deflate',
-        host: 'public-api-green.stg.ef-cms.ustaxcourt.gov',
+        host: 'public-api.stg.ef-cms.ustaxcourt.gov',
         'user-agent':
           'Amazon-Route53-Health-Check-Service (ref 9fbb1225-66df-4837-a0c8-12df057ff0eb; report http://amzn.to/1vsZADi)',
         'x-amzn-trace-id': 'Root=1-62ed6785-15b3374a2aa796500d42c17d',
