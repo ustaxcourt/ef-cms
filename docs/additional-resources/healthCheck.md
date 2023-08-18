@@ -35,10 +35,10 @@ Links
 - https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/resource-record-sets-choosing-alias-non-alias.html
 - https://docs.aws.amazon.com/apigateway/latest/developerguide/dns-failover.html#dns-failover-intial-setup
 - https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Create-alarm-on-metric-math-expression.html
+- https://docs.aws.amazon.com/pdfs/whitepapers/latest/blue-green-deployments/blue-green-deployments.pdf#welcome
 
 
 
-Look at example of primary.yml and secondary.yaml to see how to configure custom health checks.
 
 
 Requirements 
