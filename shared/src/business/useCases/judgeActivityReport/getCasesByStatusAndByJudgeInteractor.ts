@@ -94,11 +94,17 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       },
     });
 
-  console.log('casesToFilterOut', casesToFilterOut);
+  const formatedCasesToFilterOut = casesToFilterOut.map(
+    caseI => caseI.docketNumber,
+  );
 
   const finalListOfCases = await Promise.all(
     cavAndSubmittedCases
-      .filter(caseInfo => !casesToFilterOut.includes(caseInfo.docketNumber))
+      .filter(
+        caseInfo =>
+          !formatedCasesToFilterOut.includes(caseInfo.docketNumber) &&
+          caseInfo.caseStatusHistory,
+      )
       .map(async caseInfo => {
         if (caseInfo.leadDocketNumber) {
           caseInfo.consolidatedCases = await applicationContext
@@ -114,8 +120,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       }),
   );
 
-  console.log('finalListOfCases', finalListOfCases);
-
   const consolidatedCasesGroupCountMap = new Map();
 
   getConsolidatedCaseGroupCountMap(
@@ -123,21 +127,12 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
-  const formattedCaseRecords: CavAndSubmittedFilteredCasesType[] =
-    finalListOfCases
-      .map(caseRecord => ({
-        ...caseRecord,
-        caseStatusHistory: caseRecord.caseStatusHistory || [],
-      }))
-      .filter(unfilteredCase => unfilteredCase.caseStatusHistory.length > 0);
-
   const itemOffset =
-    (searchEntity.pageNumber * searchEntity.pageSize) %
-    formattedCaseRecords.length;
+    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
 
   const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = formattedCaseRecords.slice(
+  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
     itemOffset,
     endOffset,
   );
