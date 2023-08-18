@@ -231,10 +231,9 @@
   },
   "overrides": {
     "@cypress/request": "3.0.0",
-    "degenerator": "^5.0.0",
-    "meow": "^9.0.0",
+    "got": "12.1.0",
+    "meow": "^9.0.0",    
     "semver": "^7.5.2",
-    "socket.io-parser": "^4.2.3",
     "tough-cookie": "^4.1.3"
   },
   "devDependencies": {
@@ -264,7 +263,7 @@
     "@vendia/serverless-express": "^4.10.4",
     "adm-zip": "^0.5.10",
     "ajv": "^8.12.0",
-    "artillery": "2.0.0-36",
+    "artillery": "^1.7.9",
     "artillery-plugin-metrics-by-endpoint": "^1.2.0",
     "autoprefixer": "^10.4.15",
     "aws-sdk-client-mock": "^3.0.0",
