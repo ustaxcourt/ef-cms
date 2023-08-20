@@ -6,6 +6,8 @@ import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getDocketNumbersByStatusAndByJudge } from './getDocketNumbersByStatusAndByJudge';
 import { judgeUser } from '@shared/test/mockUsers';
+import { search } from './searchClient';
+jest.mock('./searchClient');
 
 describe('getDocketNumbersByStatusAndByJudge', () => {
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
@@ -14,60 +16,36 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
   };
 
   const responseResults = {
-    body: {
-      hits: {
-        hits: [
-          {
-            _id: 'case|11315-18_case|11315-18',
-            _index: 'efcms-case',
-            _score: null,
-            _source: { docketNumber: { S: '11315-18' } },
-            _type: '_doc',
-            sort: [2018011315],
-          },
-          {
-            _id: 'case|11316-18_case|11316-18',
-            _index: 'efcms-case',
-            _score: null,
-            _source: { docketNumber: { S: '11316-18' } },
-            _type: '_doc',
-            sort: [2018011316],
-          },
-        ],
-      },
-    },
+    results: [
+      { docketNumber: '11315-18' },
+      { docketNumber: { S: '11316-18' } },
+    ],
   };
 
   it('should make a persistence call to obtain all cases with a status of "Submitted" or "CAV" associated with the given judge', async () => {
-    applicationContext
-      .getSearchClient()
-      .search.mockReturnValue(responseResults);
+    search.mockReturnValue(responseResults);
 
-    const results = await getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      params: mockValidRequest,
-    });
+    const docketNumbersSearchResults = await getDocketNumbersByStatusAndByJudge(
+      {
+        applicationContext,
+        params: mockValidRequest,
+      },
+    );
+
+    expect(search.mock.calls[0][0].searchParameters.size).toEqual(
+      MAX_ELASTICSEARCH_PAGINATION,
+    );
 
     expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].size,
-    ).toEqual(MAX_ELASTICSEARCH_PAGINATION);
-
-    expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
-        .bool.must,
+      search.mock.calls[0][0].searchParameters.body.query.bool.should,
     ).toMatchObject(
       expect.arrayContaining([
-        {
-          bool: {
-            should: [{ match_phrase: { 'associatedJudge.S': judgeUser.name } }],
-          },
-        },
+        { match_phrase: { 'associatedJudge.S': judgeUser.name } },
       ]),
     );
 
     expect(
-      applicationContext.getSearchClient().search.mock.calls[0][0].body.query
-        .bool.filter,
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
     ).toMatchObject(
       expect.arrayContaining([
         {
@@ -76,15 +54,6 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
       ]),
     );
 
-    expect(results).toMatchObject({
-      foundCases: [
-        {
-          docketNumber: '11315-18',
-        },
-        {
-          docketNumber: '11316-18',
-        },
-      ],
-    });
+    expect(docketNumbersSearchResults).toMatchObject(responseResults);
   });
 });
