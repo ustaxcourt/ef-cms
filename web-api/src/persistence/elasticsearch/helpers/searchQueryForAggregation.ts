@@ -14,7 +14,15 @@ export const computeShouldFilters = ({
 
   if (params.judges) {
     params.judges.forEach(judgeName => {
-      let matchedQueryForJudge: any;
+      let matchedQueryForJudge = {
+        match: {
+          [`${ORDER_JUDGE_FIELD}.S`]: {
+            operator: 'and',
+            query: judgeName,
+          },
+        },
+      };
+      shouldFilters.push(matchedQueryForJudge);
 
       if (params.searchType === 'opinion') {
         matchedQueryForJudge = {
@@ -22,20 +30,8 @@ export const computeShouldFilters = ({
             [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
           },
         };
+        shouldFilters.push(matchedQueryForJudge);
       }
-
-      if (params.searchType === 'order') {
-        matchedQueryForJudge = {
-          match: {
-            [`${ORDER_JUDGE_FIELD}.S`]: {
-              operator: 'and',
-              query: judgeName,
-            },
-          },
-        };
-      }
-
-      shouldFilters.push(matchedQueryForJudge);
     });
   }
 

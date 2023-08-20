@@ -155,6 +155,14 @@ describe('fetchEventCodesCountForJudges', () => {
           minimum_should_match: 1,
           should: [
             {
+              match: {
+                [`${ORDER_JUDGE_FIELD}.S`]: {
+                  operator: 'and',
+                  query: judgeUser.name,
+                },
+              },
+            },
+            {
               match_phrase: {
                 [`${OPINION_JUDGE_FIELD}.S`]: judgeUser.name,
               },
