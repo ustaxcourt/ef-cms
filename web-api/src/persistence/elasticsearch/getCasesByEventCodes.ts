@@ -1,4 +1,4 @@
-import { MAX_ELASTICSEARCH_PAGINATION } from '../../../../shared/src/business/entities/EntityConstants';
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { search } from './searchClient';
 
 export const getCasesByEventCodes = async ({ applicationContext, params }) => {
@@ -18,8 +18,24 @@ export const getCasesByEventCodes = async ({ applicationContext, params }) => {
             {
               has_child: {
                 query: {
-                  terms: {
-                    'eventCode.S': params.eventCodes,
+                  bool: {
+                    filter: [
+                      {
+                        terms: {
+                          'eventCode.S': params.eventCodes,
+                        },
+                      },
+                      {
+                        exists: {
+                          field: 'servedAt',
+                        },
+                      },
+                      {
+                        term: {
+                          'isStricken.BOOL': false,
+                        },
+                      },
+                    ],
                   },
                 },
                 type: 'document',
