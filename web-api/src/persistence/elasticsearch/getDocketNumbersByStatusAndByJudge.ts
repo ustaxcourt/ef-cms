@@ -23,7 +23,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     'status',
   ];
 
-  const mustFilters: QueryDslQueryContainer[] = [];
+  const shouldFilters: QueryDslQueryContainer[] = [];
   const filters: QueryDslQueryContainer[] = [
     {
       terms: { 'status.S': params.statuses },
@@ -31,21 +31,14 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   ];
 
   if (params.judges) {
-    const shouldArray: Object[] = [];
     params.judges.forEach(judge => {
       const associatedJudgeFilters = {
         match_phrase: {
           'associatedJudge.S': judge,
         },
       };
-      shouldArray.push(associatedJudgeFilters);
+      shouldFilters.push(associatedJudgeFilters);
     });
-    const shouldObject: QueryDslQueryContainer = {
-      bool: {
-        should: shouldArray,
-      },
-    };
-    mustFilters.push(shouldObject);
   }
 
   const { results } = await search({
@@ -56,18 +49,15 @@ export const getDocketNumbersByStatusAndByJudge = async ({
         query: {
           bool: {
             filter: filters,
-            must: mustFilters,
+            should: shouldFilters,
           },
         },
         sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
       },
       index: 'efcms-case',
       size: MAX_ELASTICSEARCH_PAGINATION,
-      track_total_hits: true,
     },
   });
-
-  // console.log('searchResults', searchResults);
 
   return results;
 };
