@@ -4,18 +4,20 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * Generate Notice of Docket Change PDF
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketChangeInfo contains information about what has changed
- * @returns {Promise<*>} the promise of the document having been uploaded
- */
 export const generateNoticeOfDocketChangePdf = async ({
   applicationContext,
   docketChangeInfo,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  docketChangeInfo: {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketEntryIndex: string;
+    docketNumber: string;
+    filingParties: { after: string | undefined; before: string | undefined };
+    filingsAndProceedings: { after: string; before: string };
+  };
+}): Promise<string> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {
@@ -47,7 +49,7 @@ export const generateNoticeOfDocketChangePdf = async ({
 
   const docketEntryId = applicationContext.getUniqueId();
 
-  await new Promise((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
 
