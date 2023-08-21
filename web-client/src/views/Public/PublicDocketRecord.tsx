@@ -119,11 +119,11 @@ export const PublicDocketRecord = connect(
                   return (
                     <tr key={entry.index}>
                       <td data-label="No.">{entry.index}</td>
+                      <td data-label="Filed Date">
+                        {entry.createdAtFormatted}
+                      </td>
                       <td data-label="Filings and Proceedings">
                         <PublicFilingsAndProceedings entry={entry} />
-                      </td>
-                      <td data-label="Filed date">
-                        {entry.createdAtFormatted}
                       </td>
                       <td data-label="Served">
                         {entry.showNotServed && (
