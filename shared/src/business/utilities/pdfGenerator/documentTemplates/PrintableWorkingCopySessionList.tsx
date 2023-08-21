@@ -71,7 +71,7 @@ export const PrintableWorkingCopySessionList = ({
               </th>
               <th>Respondent Counsel</th>
               <th>PTM</th>
-              <th colSpan="2">Trial Status</th>
+              <th colSpan={2}>Trial Status</th>
             </tr>
           </thead>
           <tbody>
@@ -117,8 +117,8 @@ export const PrintableWorkingCopySessionList = ({
                     </td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
-                    <td colSpan="1"></td>
-                    <td colSpan="5">
+                    <td colSpan={1}></td>
+                    <td colSpan={5}>
                       {formattedCase.calendarNotes && (
                         <span>
                           <span className="text-bold margin-right-1">
@@ -130,8 +130,8 @@ export const PrintableWorkingCopySessionList = ({
                     </td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
-                    <td colSpan="1"></td>
-                    <td colSpan="5">
+                    <td colSpan={1}></td>
+                    <td colSpan={5}>
                       {showCaseNotes && formattedCase.userNotes && (
                         <span>
                           <span className="text-bold margin-right-1">
@@ -143,7 +143,7 @@ export const PrintableWorkingCopySessionList = ({
                     </td>
                   </tr>
                   <tr className="blank-note-row">
-                    <td colSpan="7"></td>
+                    <td colSpan={7}></td>
                   </tr>
                 </React.Fragment>
               );

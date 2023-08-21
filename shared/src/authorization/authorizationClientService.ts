@@ -317,7 +317,7 @@ export const AUTHORIZATION_MAP = {
  * @param {string} owner the user id of the owner of the item to verify
  * @returns {boolean} true if user is authorized, false otherwise
  */
-export const isAuthorized = (user, action, owner?) => {
+export const isAuthorized = (user, action, owner?): boolean => {
   if (!user) {
     return false;
   }
