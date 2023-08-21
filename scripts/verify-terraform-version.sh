@@ -2,7 +2,7 @@
 
 tf_version=$(terraform --version)
 
-if [[ ${tf_version} != *"1.5.4"* ]]; then
-  echo "Please set your terraform version to 1.5.4 before deploying."
+if [[ ${tf_version} != *"1.5.5"* ]]; then
+  echo "Please set your terraform version to 1.5.5 before deploying."
   exit 1
 fi
