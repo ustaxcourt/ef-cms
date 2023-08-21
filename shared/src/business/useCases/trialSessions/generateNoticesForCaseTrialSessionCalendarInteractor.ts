@@ -264,10 +264,8 @@ const setNoticeForCase = async ({
       eventCode: standingPretrialDocumentEventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      signedAt: applicationContext.getUtilities().createISODateString(),
-      signedByUserId: trialSessionEntity.judge.userId,
-      signedJudgeName: trialSessionEntity.judge.name,
     },
     { applicationContext },
   );

@@ -5,14 +5,6 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
 
-/**
- * getUsersInSectionInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the users
- * @returns {Promise} the promise of the getUsersInSection call
- */
 export const getUsersInSectionInteractor = async (
   applicationContext: IApplicationContext,
   { section }: { section: string },

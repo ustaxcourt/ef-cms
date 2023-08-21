@@ -1,9 +1,10 @@
+import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
-import { sum, sumBy } from 'lodash';
 
 interface IJudgeActivityReportHelper {
   closedCasesTotal: number | undefined;
-  filteredSubmittedAndCavCasesByJudge: any | undefined;
+  submittedAndCavCasesByJudge: any | undefined;
   isFormPristine: boolean | undefined;
   opinionsFiledTotal: number | undefined;
   ordersFiledTotal: number | undefined;
@@ -12,13 +13,18 @@ interface IJudgeActivityReportHelper {
   showResultsTables: boolean | undefined;
   showSelectDateRangeText: boolean | undefined;
   trialSessionsHeldTotal: number | undefined;
+  today: string;
+  showPaginator: boolean;
+  pageCount: number;
 }
 
 export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeName, startDate } = get(state.form);
+  const { endDate, judgeNameToDisplayForHeader, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
   const {
     casesClosedByJudge,
@@ -26,36 +32,22 @@ export const judgeActivityReportHelper = (
     opinions,
     orders,
     submittedAndCavCasesByJudge = [],
+    totalCountForSubmittedAndCavCases,
     trialSessions,
-  } = get(state.judgeActivityReportData);
+  } = get(state.judgeActivityReport.judgeActivityReportData);
 
-  let closedCasesTotal: number = 0,
-    trialSessionsHeldTotal: number = 0,
-    opinionsFiledTotal: number = 0,
-    ordersFiledTotal: number = 0,
-    resultsCount: number = 0,
+  let resultsCount: number = 0,
     showSelectDateRangeText: boolean = false;
 
   const hasFormBeenSubmitted: boolean =
     casesClosedByJudge && opinions && orders && trialSessions;
 
   if (hasFormBeenSubmitted) {
-    closedCasesTotal = sum(Object.values(casesClosedByJudge));
-
-    trialSessionsHeldTotal = sum(Object.values(trialSessions));
-
-    opinionsFiledTotal = sumBy(
-      opinions,
-      ({ count }: { count: number }) => count,
-    );
-
-    ordersFiledTotal = sumBy(orders, ({ count }: { count: number }) => count);
-
     resultsCount =
-      ordersFiledTotal +
-      opinionsFiledTotal +
-      trialSessionsHeldTotal +
-      closedCasesTotal;
+      orders.total +
+      opinions.total +
+      trialSessions.total +
+      casesClosedByJudge.total;
   } else {
     showSelectDateRangeText = true;
   }
@@ -67,7 +59,7 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader: string = `${judgeName} ${currentDate}`;
+  const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
@@ -76,14 +68,9 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.ISO,
     );
 
-  const filteredSubmittedAndCavCasesByJudge =
-    submittedAndCavCasesByJudge.filter(
-      unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
-    );
-
-  filteredSubmittedAndCavCasesByJudge.forEach(individualCase => {
+  submittedAndCavCasesByJudge.forEach(individualCase => {
     individualCase.formattedCaseCount =
-      consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
+      consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
       individualCase.consolidatedIconTooltipText = 'Lead case';
       individualCase.isLeadCase = true;
@@ -106,22 +93,30 @@ export const judgeActivityReportHelper = (
       );
   });
 
-  filteredSubmittedAndCavCasesByJudge.sort((a, b) => {
+  submittedAndCavCasesByJudge.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
   });
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
+  const pageCount = Math.ceil(
+    totalCountForSubmittedAndCavCases / CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+  );
 
   return {
-    closedCasesTotal,
-    filteredSubmittedAndCavCasesByJudge,
+    closedCasesTotal: casesClosedByJudge?.total || 0,
     isFormPristine: !endDate || !startDate,
-    opinionsFiledTotal,
-    ordersFiledTotal,
-    progressDescriptionTableTotal: filteredSubmittedAndCavCasesByJudge.length,
+    opinionsFiledTotal: opinions?.total || 0,
+    ordersFiledTotal: orders?.total || 0,
+    pageCount,
+    progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
     reportHeader,
+    showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
-    trialSessionsHeldTotal,
+    submittedAndCavCasesByJudge,
+    today,
+    trialSessionsHeldTotal: trialSessions?.total || 0,
   };
 };

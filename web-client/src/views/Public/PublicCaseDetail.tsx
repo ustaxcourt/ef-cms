@@ -1,4 +1,4 @@
-import { IPublicCaseDetailHelper } from '../../presenter/computeds/Public/publicCaseDetailHelper';
+import { Mobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
 import { PublicCaseDetailSubnavTabs } from './PublicCaseDetailSubnavTabs';
 import { PublicDocketRecord } from './PublicDocketRecord';
@@ -7,8 +7,7 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 const props = {
-  publicCaseDetailHelper:
-    state.publicCaseDetailHelper as unknown as IPublicCaseDetailHelper,
+  publicCaseDetailHelper: state.publicCaseDetailHelper,
 };
 
 export const PublicCaseDetail = connect(
@@ -17,6 +16,9 @@ export const PublicCaseDetail = connect(
     return (
       <>
         <PublicCaseDetailHeader />
+        <Mobile>
+          <section className="usa-section grid-container margin-top-2 padding-bottom-3"></section>
+        </Mobile>
         {!publicCaseDetailHelper.isCaseSealed && (
           <>
             <PublicCaseDetailSubnavTabs />
