@@ -6,7 +6,13 @@ export const fillInAndSubmitForm = () => {
   //wizard step 1
   cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
 
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(500);
+
   cy.get('button#submit-case').should('be.enabled').click();
+
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(500);
 
   //step 2
   cy.get('#petition-file').attachFile('../fixtures/w3-dummy.pdf');
