@@ -1,8 +1,6 @@
 name: E2E Cypress
 
 on:
-  schedule:
-    - cron: '0 * * * *'
   push:
     branches:
       - 'ustc-3866-flaky-cypress-click-cicd'
