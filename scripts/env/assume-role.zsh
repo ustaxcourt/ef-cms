@@ -18,6 +18,8 @@ if [ "${EXIT_CODE}" != "0" ]; then
   return 1
 fi
 
+unset AWS_PROFILE
+
 export AWS_ACCESS_KEY_ID=$(jq -r '.Credentials.AccessKeyId' <<< $AWS_SESSION_INFO)
 export AWS_SECRET_ACCESS_KEY=$(jq -r '.Credentials.SecretAccessKey' <<< $AWS_SESSION_INFO)
 export AWS_SESSION_TOKEN=$(jq -r '.Credentials.SessionToken' <<< $AWS_SESSION_INFO)

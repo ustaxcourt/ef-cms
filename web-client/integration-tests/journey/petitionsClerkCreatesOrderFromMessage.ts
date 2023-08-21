@@ -54,9 +54,8 @@ export const petitionsClerkCreatesOrderFromMessage = cerebralTest => {
       documentTitle: 'Order',
     });
 
-    const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
-      cerebralTest,
-    );
+    const { formattedDraftDocuments } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const draftOrder = formattedDraftDocuments.find(
       document => document.documentTitle === 'Order',
