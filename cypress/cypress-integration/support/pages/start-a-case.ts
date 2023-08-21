@@ -5,14 +5,7 @@ export const navigateTo = (username: string) => {
 export const fillInAndSubmitForm = () => {
   //wizard step 1
   cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
-
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(500);
-
-  cy.get('button#submit-case').should('be.enabled').click();
-
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(500);
+  cy.get('button#submit-case').trigger('click');
 
   //step 2
   cy.get('#petition-file').attachFile('../fixtures/w3-dummy.pdf');
@@ -21,7 +14,7 @@ export const fillInAndSubmitForm = () => {
   cy.get('#irs-notice-radios label').first().click();
   cy.get('#case-type').scrollIntoView();
   cy.get('#case-type').select('Notice of Deficiency');
-  cy.get('button#submit-case').should('be.enabled').click();
+  cy.get('button#submit-case').trigger('click');
 
   //step 3
   cy.get('label[for="Individual petitioner"]').scrollIntoView();
