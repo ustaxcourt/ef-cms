@@ -25,15 +25,15 @@ export function DocketRecordSort({ name, onChange, value }) {
           value: 'byDateDesc',
         },
         {
-          label: 'No. (ascending)',
+          label: 'Docket Number (Ascending)',
           value: 'byIndex',
         },
         {
-          label: 'No. (descending)',
+          label: 'Docket Number (Descending)',
           value: 'byIndexDesc',
         },
       ].map(item => (
-        <option key={item.value} value={item.value}>
+        <option key={item.value} role="option" value={item.value}>
           {item.label}
         </option>
       ))}
