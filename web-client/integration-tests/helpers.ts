@@ -1066,7 +1066,11 @@ export const waitForPage = async ({
   cerebralTest,
   expectedPage,
   maxWait = 10000,
-}) => {
+}: {
+  cerebralTest: any;
+  expectedPage: string;
+  maxWait?: number;
+}): Promise<void> => {
   const waitTime = await waitForCondition({
     booleanExpressionCondition: () =>
       cerebralTest.getState('currentPage') === expectedPage,
