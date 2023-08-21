@@ -1,8 +1,4 @@
 import { FetchEventCodesParamsType } from '../fetchEventCodesCountForJudges';
-import {
-  OPINION_JUDGE_FIELD,
-  ORDER_JUDGE_FIELD,
-} from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 
 export const computeShouldFilters = ({
@@ -10,28 +6,24 @@ export const computeShouldFilters = ({
 }: {
   params: FetchEventCodesParamsType;
 }) => {
-  const shouldFilters = [];
+  const shouldFilters: QueryDslQueryContainer[] = [];
 
   if (params.judges) {
     params.judges.forEach(judgeName => {
-      let matchedQueryForJudge = {
+      shouldFilters.push({
         match: {
-          [`${ORDER_JUDGE_FIELD}.S`]: {
+          ['signedJudgeName.S']: {
             operator: 'and',
             query: judgeName,
           },
         },
-      };
-      shouldFilters.push(matchedQueryForJudge);
+      });
 
-      if (params.searchType === 'opinion') {
-        matchedQueryForJudge = {
-          match_phrase: {
-            [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
-          },
-        };
-        shouldFilters.push(matchedQueryForJudge);
-      }
+      shouldFilters.push({
+        match: {
+          ['judge.S']: judgeName,
+        },
+      });
     });
   }
 
