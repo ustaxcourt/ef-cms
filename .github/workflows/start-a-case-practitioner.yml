@@ -47,7 +47,7 @@ jobs:
           export CYPRESS_AWS_ACCESS_KEY_ID=S3RVER
           export CYPRESS_AWS_SECRET_ACCESS_KEY=S3RVER
           export CYPRESS_CHECK_DEPLOY_DATE_INTERVAL=5000
-          cypress run --browser "edge" -C "cypress.config.ts" --spec cypress/cypress-integration/integration/start-a-case-practitioner.cy.ts
+          npx cypress run --browser "edge" -C "cypress.config.ts" --spec cypress/cypress-integration/integration/start-a-case-practitioner.cy.ts
       - name: Store Cypress Failure Videos
         if: always()
         uses: actions/upload-artifact@v3
