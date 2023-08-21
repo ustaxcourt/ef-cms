@@ -5,6 +5,7 @@ export function DocketRecordSort({ name, onChange, value }) {
     <select
       aria-label="docket record sort direction"
       className="usa-select margin-top-0 sort"
+      id="docket-record-sort"
       name={name}
       value={value}
       onChange={e => {
@@ -16,24 +17,24 @@ export function DocketRecordSort({ name, onChange, value }) {
     >
       {[
         {
-          label: 'oldest',
+          label: 'Oldest',
           value: 'byDate',
         },
         {
-          label: 'newest',
+          label: 'Newest',
           value: 'byDateDesc',
         },
         {
-          label: 'no. (ascending)',
+          label: 'Docket Number (Ascending)',
           value: 'byIndex',
         },
         {
-          label: 'no. (descending)',
+          label: 'Docket Number (Descending)',
           value: 'byIndexDesc',
         },
       ].map(item => (
-        <option key={item.value} value={item.value}>
-          Sort by {item.label}
+        <option key={item.value} role="option" value={item.value}>
+          {item.label}
         </option>
       ))}
     </select>
