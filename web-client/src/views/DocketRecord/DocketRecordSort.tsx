@@ -25,11 +25,11 @@ export function DocketRecordSort({ name, onChange, value }) {
           value: 'byDateDesc',
         },
         {
-          label: 'Docket Number (Ascending)',
+          label: 'Entry Number (Ascending)',
           value: 'byIndex',
         },
         {
-          label: 'Docket Number (Descending)',
+          label: 'Entry Number (Descending)',
           value: 'byIndexDesc',
         },
       ].map(item => (
