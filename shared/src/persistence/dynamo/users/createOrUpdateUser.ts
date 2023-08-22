@@ -158,7 +158,7 @@ export const createOrUpdateUser = async ({
   });
 
   if (!userExists) {
-    const baseCreateUserParams = {
+    const params = {
       MessageAction: 'SUPPRESS',
       TemporaryPassword: password,
       UserAttributes: [
@@ -183,26 +183,16 @@ export const createOrUpdateUser = async ({
       Username: user.email,
     };
 
-    const createUserParamsLocal = {
-      ...baseCreateUserParams,
-      DesiredDeliveryMediums: ['EMAIL'],
-      UserAttributes: [
-        ...baseCreateUserParams.UserAttributes,
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      Username: user.userId,
-    };
-
-    const createUserParams = process.env.USE_COGNITO_LOCAL
-      ? createUserParamsLocal
-      : baseCreateUserParams;
+    if (process.env.USE_COGNITO_LOCAL) {
+      params.additionalParams = {
+        Name: 'custom:userId',
+        Value: user.userId,
+      };
+    }
 
     const response = await applicationContext
       .getCognito()
-      .adminCreateUser(createUserParams)
+      .adminCreateUser(params)
       .promise();
 
     userId = process.env.USE_COGNITO_LOCAL

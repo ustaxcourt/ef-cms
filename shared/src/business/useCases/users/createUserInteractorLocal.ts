@@ -38,7 +38,7 @@ export const createUserInteractorLocal = async (
         Value: userId,
       },
     ],
-    Username: userId,
+    Username: user.email,
   };
 
   return await applicationContext.getCognito().signUp(params).promise();

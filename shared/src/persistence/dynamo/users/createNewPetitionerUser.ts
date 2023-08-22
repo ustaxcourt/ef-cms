@@ -63,24 +63,11 @@ export const createNewPetitionerUser = async ({
     Username: user.pendingEmail,
   };
 
-  const createUserParamsLocal = {
-    ...input,
-    DesiredDeliveryMediums: ['EMAIL'],
-    Username: user.userId,
-  };
-
   if (process.env.STAGE !== 'prod') {
     input.TemporaryPassword = process.env.DEFAULT_ACCOUNT_PASS;
   }
 
-  const createUserParams = process.env.USE_COGNITO_LOCAL
-    ? createUserParamsLocal
-    : input;
-
-  await applicationContext
-    .getCognito()
-    .adminCreateUser(createUserParams)
-    .promise();
+  await applicationContext.getCognito().adminCreateUser(input).promise();
 
   const newUser: RawUser = await createUserRecords({
     applicationContext,
