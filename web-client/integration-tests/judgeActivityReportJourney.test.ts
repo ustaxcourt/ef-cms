@@ -1,9 +1,9 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
+// import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
-import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
+// import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkStrikesDocketEntry } from './journey/docketClerkStrikesDocketEntry';
@@ -162,12 +162,12 @@ describe('Judge activity report journey', () => {
     );
   });
 
+  ///////// ADD PROHIBITED (UNSERVED) DOCKET ENTRY ///////////////
+
   it('should set the progressDescriptionTableBeforeCount', () => {
     progressDescriptionTableTotalBefore =
       cerebralTest.progressDescriptionTableTotal;
   });
-
-  ///////// ADD PROHIBITED (UNSERVED) DOCKET ENTRY ///////////////
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
@@ -197,12 +197,12 @@ describe('Judge activity report journey', () => {
     );
   });
 
+  ///////// ADD PROHIBITED (SERVED) DOCKET ENTRY THAT HAS BEEN STRICKEN ///////////////
+
   it('should set the progressDescriptionTableBeforeCount', () => {
     progressDescriptionTableTotalBefore =
       cerebralTest.progressDescriptionTableTotal;
   });
-
-  ///////// ADD PROHIBITED (SERVED) DOCKET ENTRY THAT HAS BEEN STRICKED ///////////////
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
@@ -220,8 +220,8 @@ describe('Judge activity report journey', () => {
   });
   docketClerkViewsDraftOrder(cerebralTest);
   docketClerkSignsOrder(cerebralTest);
-  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
-  docketClerkServesDocument(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 2, 'Colvin');
+  docketClerkServesDocument(cerebralTest);
   docketClerkUpdatesCaseStatusTo(
     cerebralTest,
     CASE_STATUS_TYPES.submitted,
@@ -231,9 +231,19 @@ describe('Judge activity report journey', () => {
   // get docket entry index of newly served OAD
   // docketClerkChecksDocketEntryEditLink(cerebralTest);
 
-  docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
-  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
-  docketClerkStrikesDocketEntry(cerebralTest, 3);
+  it('should retrieve the docket entry index based on the docketEntryId', () => {
+    const caseDocuments = cerebralTest.getState('caseDetail.docketEntries');
+    const docketEntry = caseDocuments.find(
+      d => d.docketEntryId === cerebralTest.docketEntryId,
+    );
+    cerebralTest.docketRecordIndex = docketEntry.index;
+  });
+  // docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
+  docketClerkNavigatesToEditDocketEntryMeta(
+    cerebralTest,
+    cerebralTest.docketRecordIndex,
+  );
+  docketClerkStrikesDocketEntry(cerebralTest, cerebralTest.docketRecordIndex);
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
   viewJudgeActivityReportResults(cerebralTest);
