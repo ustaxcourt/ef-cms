@@ -114,10 +114,6 @@ const generateChangeOfAddressForPractitioner = async ({
           practitionerObject.email = updatedEmail;
         }
 
-        // TODO: is this even needed any more?
-        // we new up another case from the existing case convert '' to null
-        caseEntity = new Case(caseEntity, { applicationContext });
-
         if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
           await prepareToGenerateAndServeDocketEntry({
             applicationContext,
