@@ -3,6 +3,7 @@ import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
+import PQueue from 'p-queue';
 
 type TUserContact = {
   address1: string;
@@ -75,9 +76,10 @@ const generateChangeOfAddressForPractitioner = async ({
   });
 
   const updatedCases = [];
+  const queue = new PQueue({ concurrency: 25 });
 
-  await Promise.all(
-    associatedUserCases.map(async caseInfo => {
+  for (let caseInfo of associatedUserCases) {
+    await queue.add(async () => {
       try {
         const { docketNumber } = caseInfo;
         const newData = contactInfo;
@@ -136,25 +138,18 @@ const generateChangeOfAddressForPractitioner = async ({
         applicationContext.logger.error(error);
       }
 
-      process.nextTick(() => {
-        completedCases++;
-        applicationContext
-          .getNotificationGateway()
-          .sendNotificationToUser({
-            applicationContext,
-            message: {
-              action: `${websocketMessagePrefix}_contact_update_progress`,
-              completedCases,
-              totalCases: associatedUserCases.length,
-            },
-            userId: requestUserId || user.userId,
-          })
-          .catch(err => {
-            applicationContext.logger.error(err);
-          });
+      completedCases++;
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: `${websocketMessagePrefix}_contact_update_progress`,
+          completedCases,
+          totalCases: associatedUserCases.length,
+        },
+        userId: requestUserId || user.userId,
       });
-    }),
-  );
+    });
+  }
 
   return updatedCases;
 };
