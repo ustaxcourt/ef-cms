@@ -187,15 +187,15 @@ export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
 ) => {
-  const docketNumbers: string[] = await applicationContext
+  const cases: RawCase[] = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getCasesForUser({
       applicationContext,
       userId,
     });
 
   return {
-    identifiers: docketNumbers?.map(item => `case|${item}`),
+    identifiers: cases?.map(item => `case|${item.docketNumber}`),
     ttl: 900,
   };
 };
