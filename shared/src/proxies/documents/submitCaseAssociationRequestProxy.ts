@@ -11,7 +11,15 @@ import { put } from '../requests';
  */
 export const submitCaseAssociationRequestInteractor = (
   applicationContext,
-  { consolidatedCasesDocketNumbers, docketNumber, filers },
+  {
+    consolidatedCasesDocketNumbers,
+    docketNumber,
+    filers,
+  }: {
+    consolidatedCasesDocketNumbers?: string[];
+    docketNumber: string;
+    filers?: string[];
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
   return put({

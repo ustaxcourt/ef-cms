@@ -39,7 +39,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
     });
   }
 
-  const validatedConsolidatedCases = [];
+  const validatedConsolidatedCases: RawCase[] = [];
   const isAssociatedWithGroup = isUserPartOfGroup({
     consolidatedCases,
     userId: user.userId,
@@ -67,7 +67,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
       const formattedPublicCase = formatPublicCase({
         applicationContext,
         rawCaseRecord: consolidatedCase,
-      });
+      }) as any;
       validatedConsolidatedCases.push(formattedPublicCase);
     }
   }

@@ -1,10 +1,11 @@
-import { Case, isSealedCase } from '../../entities/cases/Case';
 import { PublicCase } from '../../entities/cases/PublicCase';
 import {
+  SealedCase,
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } from '../../utilities/caseFilter';
 import { decorateForCaseStatus } from '../../useCases/getCaseInteractor';
+import { isSealedCase } from '../../entities/cases/Case';
 
 /**
  * formatPublicCase takes a rawCase and formats to a public case
@@ -20,13 +21,15 @@ export const formatPublicCase = ({
   rawCaseRecord,
 }: {
   applicationContext: IApplicationContext;
-  rawCaseRecord?: Case;
+  rawCaseRecord: RawCase;
 }) => {
+  let modifiedCaseRecord: SealedCase | RawCase = rawCaseRecord;
+
   if (isSealedCase(rawCaseRecord)) {
-    rawCaseRecord = caseSealedFormatter(rawCaseRecord);
-    rawCaseRecord.isSealed = true;
+    modifiedCaseRecord = caseSealedFormatter(rawCaseRecord);
+    modifiedCaseRecord.isSealed = true;
   } else {
-    rawCaseRecord.isSealed = false;
+    modifiedCaseRecord.isSealed = false;
   }
 
   rawCaseRecord = caseContactAddressSealedFormatter(rawCaseRecord, {});
