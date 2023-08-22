@@ -1,3 +1,5 @@
+import { pathsToModuleNameMapper } from 'ts-jest';
+import tsconfig from '../../../../../tsconfig.json';
 import type { Config } from 'jest';
 
 const config: Config = {
@@ -5,7 +7,10 @@ const config: Config = {
   collectCoverage: false,
   maxWorkers: 1, // because generating pdf is a heavy test, we are locking this to 1 to reduce load on the ci/cd runners
   moduleNameMapper: {
-    '^uuid$': require.resolve('uuid'),
+    ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
+      prefix: '<rootDir>/../../../../../',
+    }),
+    uuid: require.resolve('uuid'),
   },
   testMatch: [
     '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',

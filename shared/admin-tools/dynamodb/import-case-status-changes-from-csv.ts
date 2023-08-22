@@ -22,6 +22,7 @@ import {
 } from '../../src/business/utilities/DateHandler';
 import { createApplicationContext } from '../../../web-api/src/applicationContext';
 // eslint-disable-next-line import/no-unresolved
+import { SYSTEM_ROLE } from '../../src/business/entities/EntityConstants';
 import { parse } from 'csv-parse/sync';
 import fs from 'fs';
 
@@ -65,7 +66,7 @@ const putCaseStatusHistoryRecord = async ({
   }
   caseRecord.caseStatusHistory.L.push({
     M: {
-      changedBy: { S: 'System' },
+      changedBy: { S: SYSTEM_ROLE },
       date: { S: date },
       updatedCaseStatus: { S: updatedCaseStatus },
     },

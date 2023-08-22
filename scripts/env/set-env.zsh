@@ -48,6 +48,11 @@ sshhh=${quiet}
 
 # shellcheck disable=SC1090
 source "./scripts/env/environments/${environment}.env"
+EXIT_CODE="$?"
+if [ "${EXIT_CODE}" != "0" ]; then
+  return $EXIT_CODE
+fi
+
 
 if [[ $environment != "local" ]]; then
   source "./scripts/env/environments/00-common"

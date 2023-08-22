@@ -51,8 +51,13 @@ response=$(aws cognito-idp admin-initiate-auth \
   --auth-parameters USERNAME="${USTC_ADMIN_USER}"',PASSWORD'="${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
+aws cognito-idp admin-enable-user --user-pool-id "${USER_POOL_ID}" --username "${USTC_ADMIN_USER}"
+
 curl --header "Content-Type: application/json" \
   --header "Authorization: Bearer ${adminToken}" \
   --request POST \
-  --data "$(generate_post_data "service.agent.test@irs.gov" "irsSuperuser" "irsSuperuser" "IRS Superuser")" \
+  --data "$(generate_post_data "${IRS_SUPERUSER_EMAIL}" "irsSuperuser" "irsSuperuser" "IRS Superuser")" \
     "https://${restApiId}.execute-api.us-east-1.amazonaws.com/${ENV}/users"
+
+aws cognito-idp admin-disable-user --user-pool-id "${USER_POOL_ID}" --username "${USTC_ADMIN_USER}"
+

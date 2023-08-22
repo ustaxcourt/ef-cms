@@ -30,8 +30,8 @@ import { User } from '../entities/User';
 import { abbreviateState } from '../utilities/abbreviateState';
 import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '../../persistence/elasticsearch/bulkDeleteRecords';
-import { bulkIndexRecords } from '../../persistence/elasticsearch/bulkIndexRecords';
+import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';
+import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkIndexRecords';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -43,12 +43,12 @@ import {
   compareStrings,
 } from '../utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '../utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '../../persistence/dynamo/cases/createCase';
+import { createCase } from '../../../../web-api/src/persistence/dynamo/cases/createCase';
 import { createCaseAndAssociations } from '../useCaseHelper/caseAssociation/createCaseAndAssociations';
-import { createDocketNumber } from '../../persistence/dynamo/cases/docketNumberGenerator';
+import { createDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
-import { deleteRecord } from '../../persistence/elasticsearch/deleteRecord';
-import { deleteWorkItem } from '../../persistence/dynamo/workitems/deleteWorkItem';
+import { deleteRecord } from '../../../../web-api/src/persistence/elasticsearch/deleteRecord';
+import { deleteWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/deleteWorkItem';
 import { documentUrlTranslator } from '../../../src/business/utilities/documentUrlTranslator';
 import { fileAndServeDocumentOnOneCase } from '../useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { filterEmptyStrings } from '../utilities/filterEmptyStrings';
@@ -71,15 +71,15 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '../utilities/generateChangeOfAddressTemplate';
-import { getAllWebSocketConnections } from '../../persistence/dynamo/notifications/getAllWebSocketConnections';
-import { getCaseByDocketNumber } from '../../persistence/dynamo/cases/getCaseByDocketNumber';
-import { getCaseDeadlinesByDocketNumber } from '../../persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getAllWebSocketConnections } from '../../../../web-api/src/persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getCaseByDocketNumber } from '../../../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseDeadlinesByDocketNumber } from '../../../../web-api/src/persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import {
   getChambersSections,
   getChambersSectionsLabels,
   getJudgesChambers,
   getJudgesChambersWithLegacy,
-} from '../../persistence/dynamo/chambers/getJudgesChambers';
+} from '../../../../web-client/src/business/chambers/getJudgesChambers';
 import { getConstants } from '../../../../web-client/src/getConstants';
 import { getCropBox } from '../../../src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../utilities/getDescriptionDisplay';
@@ -87,43 +87,43 @@ import {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } from '../utilities/getWorkQueueFilters';
-import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
+import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionPersistence } from '../../../../web-api/src/persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
 import { getDocumentTitleWithAdditionalInfo } from '../../../src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from './getFakeFile';
 import { getFormattedPartiesNameAndTitle } from '../utilities/getFormattedPartiesNameAndTitle';
-import { getItem } from '../../persistence/localStorage/getItem';
-import { getSealedDocketEntryTooltip } from '../../../src/business/utilities/getSealedDocketEntryTooltip';
+import { getItem } from '@web-client/persistence/localStorage/getItem';
+import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '../../../src/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '../utilities/getTextByCount';
-import { getTrialSessionById } from '../../persistence/dynamo/trialSessions/getTrialSessionById';
-import { getUserById as getUserByIdPersistence } from '../../persistence/dynamo/users/getUserById';
+import { getTrialSessionById } from '../../../../web-api/src/persistence/dynamo/trialSessions/getTrialSessionById';
+import { getUserById as getUserByIdPersistence } from '../../../../web-api/src/persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '../useCaseHelper/getUserIdForNote';
-import { getWorkItemById as getWorkItemByIdPersistence } from '../../persistence/dynamo/workitems/getWorkItemById';
-import { incrementCounter } from '../../persistence/dynamo/helpers/incrementCounter';
-import { putWorkItemInOutbox } from '../../persistence/dynamo/workitems/putWorkItemInOutbox';
+import { getWorkItemById as getWorkItemByIdPersistence } from '../../../../web-api/src/persistence/dynamo/workitems/getWorkItemById';
+import { incrementCounter } from '../../../../web-api/src/persistence/dynamo/helpers/incrementCounter';
+import { putWorkItemInOutbox } from '../../../../web-api/src/persistence/dynamo/workitems/putWorkItemInOutbox';
 import { removeCounselFromRemovedPetitioner } from '../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
-import { removeItem } from '../../persistence/localStorage/removeItem';
-import { replaceBracketed } from '../utilities/replaceBracketed';
-import { saveWorkItem } from '../../persistence/dynamo/workitems/saveWorkItem';
+import { removeItem } from '@web-client/persistence/localStorage/removeItem';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import { saveWorkItem } from '../../../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sealCaseInteractor } from '../useCases/sealCaseInteractor';
 import { sealDocketEntryInteractor } from '../useCases/docketEntry/sealDocketEntryInteractor';
 import { serveCaseDocument } from '../utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '../utilities/setConsolidationFlagsForDisplay';
-import { setItem } from '../../persistence/localStorage/setItem';
-import { setNoticesForCalendaredTrialSessionInteractor } from '../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor';
+import { setItem } from '@web-client/persistence/localStorage/setItem';
+import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setPdfFormFields } from '../useCaseHelper/pdf/setPdfFormFields';
 import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../../src/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '../useCases/docketEntry/unsealDocketEntryInteractor';
-import { updateCase } from '../../persistence/dynamo/cases/updateCase';
+import { updateCase } from '../../../../web-api/src/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '../useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '../useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { updateCaseCorrespondence } from '../../persistence/dynamo/correspondence/updateCaseCorrespondence';
-import { updateDocketEntry } from '../../persistence/dynamo/documents/updateDocketEntry';
-import { updateUserRecords } from '../../persistence/dynamo/users/updateUserRecords';
+import { updateCaseCorrespondence } from '../../../../web-api/src/persistence/dynamo/correspondence/updateCaseCorrespondence';
+import { updateDocketEntry } from '../../../../web-api/src/persistence/dynamo/documents/updateDocketEntry';
+import { updateUserRecords } from '../../../../web-api/src/persistence/dynamo/users/updateUserRecords';
 import { uploadDocumentAndMakeSafeInteractor } from '../useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '../useCases/validatePenaltiesInteractor';
-import { verifyCaseForUser } from '../../persistence/dynamo/cases/verifyCaseForUser';
+import { verifyCaseForUser } from '../../../../web-api/src/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
 import sass from 'sass';

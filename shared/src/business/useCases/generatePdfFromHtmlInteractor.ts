@@ -52,7 +52,6 @@ export const generatePdfFromHtmlInteractor = async (
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,
       key,
-      protocol: 'S3',
       useTempBucket: true,
     });
   } else {
