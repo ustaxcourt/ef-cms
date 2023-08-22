@@ -1,25 +1,24 @@
-const {
-  SupportingDocumentInformationFactory,
-} = require('./SupportingDocumentInformationFactory');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('./ExternalDocumentInformationFactory');
+import { SupportingDocumentInformationFactory } from './SupportingDocumentInformationFactory';
+import { VALIDATION_ERROR_MESSAGES } from './ExternalDocumentInformationFactory';
 
 describe('SupportingDocumentInformationFactory', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
-      const documentInstance = SupportingDocumentInformationFactory({
-        certificateOfService: false,
-        supportingDocument: 'Brief in Support',
-        supportingDocumentFile: {},
-      });
+      const documentInstance = new SupportingDocumentInformationFactory(
+        {
+          certificateOfService: false,
+          supportingDocument: 'Brief in Support',
+          supportingDocumentFile: {},
+        },
+        VALIDATION_ERROR_MESSAGES,
+      );
       expect(documentInstance.attachments).toBe(false);
     });
   });
 
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      const extDoc = SupportingDocumentInformationFactory(
+      const extDoc = new SupportingDocumentInformationFactory(
         {},
         VALIDATION_ERROR_MESSAGES,
       );
@@ -30,7 +29,7 @@ describe('SupportingDocumentInformationFactory', () => {
     });
 
     it('should have an supportingDocumentFreeText error message if the supportingDocument is in supportingDocumentFreeTextCategories', () => {
-      const extDoc = SupportingDocumentInformationFactory(
+      const extDoc = new SupportingDocumentInformationFactory(
         {
           attachments: true,
           certificateOfService: false,
@@ -46,7 +45,7 @@ describe('SupportingDocumentInformationFactory', () => {
     });
 
     it('should be valid when all fields are present', () => {
-      const extDoc = SupportingDocumentInformationFactory(
+      const extDoc = new SupportingDocumentInformationFactory(
         {
           attachments: true,
           certificateOfService: false,
@@ -60,7 +59,7 @@ describe('SupportingDocumentInformationFactory', () => {
 
     describe('Has Certificate of Service', () => {
       it('should require certificate of service date be entered', () => {
-        const extDoc = SupportingDocumentInformationFactory(
+        const extDoc = new SupportingDocumentInformationFactory(
           {
             attachments: true,
             certificateOfService: true,
