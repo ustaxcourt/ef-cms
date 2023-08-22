@@ -1,3 +1,6 @@
+import { JoiValidationEntity } from "@shared/business/entities/JoiValidationEntity";
+import { ExternalDocumentBase } from "@shared/business/entities/externalDocument/ExternalDocumentBase";
+
 const joi = require('joi');
 const {
   addPropertyHelper,
@@ -125,19 +128,37 @@ const VALIDATION_ERROR_MESSAGES = {
   trialLocation: 'Select a preferred trial location.',
 };
 
-/**
- * External Document Information Factory entity
- *
- * @param {object} documentMetadata the document metadata
- * @constructor
- */
-function ExternalDocumentInformationFactory(documentMetadata) {
-  /**
-   * bare constructor for entity factory
-   */
-  function entityConstructor() {}
 
-  entityConstructor.prototype.init = function init(rawProps) {
+export class  ExternalDocumentInformationFactory extends JoiValidationEntity{
+ 
+  getErrorToMessageMap() {
+    throw new Error("Method not implemented.");
+  }
+  public attachments: string;
+  public casesParties?: object;
+  public certificateOfService: boolean;
+  public certificateOfServiceDate: string;
+  public documentType?: string;
+  public eventCode?: string;
+  public freeText?: string;
+  public hasSecondarySupportingDocuments: boolean;
+  public hasSupportingDocuments: boolean;
+  public lodged?: boolean;
+  public filers: string[];
+  public objections: string;
+  public ordinalValue?: string;
+  public partyIrsPractitioner: boolean;
+  public previousDocument?: ExternalDocumentBase;
+  public primaryDocumentFile: object;
+  public secondaryDocument: object;
+  public secondaryDocumentFile: object;
+  public secondarySupportingDocuments?: object[];
+  public selectedCases?: string[];
+  public supportingDocuments?: object[];
+
+
+  constructor(rawProps, validationRules) {
+    super('ExternalDocumentInformationFactory');
     this.attachments = rawProps.attachments || false;
     this.casesParties = rawProps.casesParties;
     this.certificateOfService = rawProps.certificateOfService;
@@ -160,6 +181,10 @@ function ExternalDocumentInformationFactory(documentMetadata) {
     this.secondarySupportingDocuments = rawProps.secondarySupportingDocuments;
     this.selectedCases = rawProps.selectedCases;
     this.supportingDocuments = rawProps.supportingDocuments;
+
+    this.scenario = rawPropsParam.scenario;
+    this.freeText2 = rawPropsParam.freeText2;
+    this.selectedCases = rawPropsParam.selectedCases;
 
     if (this.secondaryDocument) {
       this.secondaryDocument = SecondaryDocumentInformationFactory(
@@ -190,129 +215,129 @@ function ExternalDocumentInformationFactory(documentMetadata) {
         },
       );
     }
-  };
 
-  let schema = {
-    attachments: joi.boolean().required(),
-    casesParties: joi.object().optional(),
-    certificateOfService: joi.boolean().required(),
-    documentType: JoiValidationConstants.STRING.valid(
-      ...ALL_DOCUMENT_TYPES,
-    ).optional(),
-    eventCode: JoiValidationConstants.STRING.valid(
-      ...ALL_EVENT_CODES,
-    ).optional(),
-    freeText: JoiValidationConstants.STRING.optional(),
-    hasSupportingDocuments: joi.boolean().required(),
-    lodged: joi.boolean().optional(),
-    ordinalValue: JoiValidationConstants.STRING.optional(),
-    previousDocument: joi.object().optional(),
-    primaryDocumentFile: joi.object().required(),
-    primaryDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-  };
-
-  let schemaOptionalItems = {
-    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    filers: joi
-      .array()
-      .items(JoiValidationConstants.UUID.required())
-      .required(),
-    hasSecondarySupportingDocuments: joi.boolean(),
-    objections: JoiValidationConstants.STRING,
-    partyIrsPractitioner: joi.boolean(),
-    secondaryDocumentFile: joi.object(),
-    secondaryDocumentFileSize: joi
-      .number()
-      .optional()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .integer(),
-    secondarySupportingDocuments: joi.array().optional(),
-    selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
-    supportingDocuments: joi.array().optional(),
-  };
-
-  const addProperty = (itemName, itemSchema, itemErrorMessage) => {
-    addPropertyHelper({
-      VALIDATION_ERROR_MESSAGES,
-      itemErrorMessage,
-      itemName,
-      itemSchema,
-      schema,
-    });
-  };
-
-  const makeRequired = itemName => {
-    makeRequiredHelper({
-      itemName,
-      schema,
-      schemaOptionalItems,
-    });
-  };
-
-  if (documentMetadata.certificateOfService === true) {
-    makeRequired('certificateOfServiceDate');
   }
-
-  const objectionDocumentTypes = [
-    ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
-      return entry.documentType;
-    }),
-    'Motion to Withdraw Counsel (filed by petitioner)',
-    'Motion to Withdraw as Counsel',
-    'Application to Take Deposition',
-  ];
-
-  if (
-    objectionDocumentTypes.includes(documentMetadata.documentType) ||
-    (AMENDMENT_EVENT_CODES.includes(documentMetadata.eventCode) &&
-      objectionDocumentTypes.includes(
-        documentMetadata.previousDocument.documentType,
-      ))
-  ) {
-    makeRequired('objections');
-  }
-
-  if (
-    documentMetadata.scenario &&
-    documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h'
-  ) {
+  getValidationRules() {
+    let schema = {
+      attachments: joi.boolean().required(),
+      casesParties: joi.object().optional(),
+      certificateOfService: joi.boolean().required(),
+      documentType: JoiValidationConstants.STRING.valid(
+        ...ALL_DOCUMENT_TYPES,
+      ).optional(),
+      eventCode: JoiValidationConstants.STRING.valid(
+        ...ALL_EVENT_CODES,
+      ).optional(),
+      freeText: JoiValidationConstants.STRING.optional(),
+      hasSupportingDocuments: joi.boolean().required(),
+      lodged: joi.boolean().optional(),
+      ordinalValue: JoiValidationConstants.STRING.optional(),
+      previousDocument: joi.object().optional(),
+      primaryDocumentFile: joi.object().required(),
+    };
+  
+    let schemaOptionalItems = {
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
+      filers: joi
+        .array()
+        .items(JoiValidationConstants.UUID.required())
+        .required(),
+      hasSecondarySupportingDocuments: joi.boolean(),
+      objections: JoiValidationConstants.STRING,
+      partyIrsPractitioner: joi.boolean(),
+      secondaryDocumentFile: joi.object(),
+      secondarySupportingDocuments: joi.array().optional(),
+      selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
+      supportingDocuments: joi.array().optional(),
+    };
+  
+    const addProperty = (itemName, itemSchema, itemErrorMessage) => {
+      addPropertyHelper({
+        VALIDATION_ERROR_MESSAGES,
+        itemErrorMessage,
+        itemName,
+        itemSchema,
+        schema,
+      });
+    };
+  
+    const makeRequired = itemName => {
+      makeRequiredHelper({
+        itemName,
+        schema,
+        schemaOptionalItems,
+      });
+    };
+  
+    if (this.certificateOfService === true) {
+      makeRequired('certificateOfServiceDate');
+    }
+  
+    const objectionDocumentTypes = [
+      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+        return entry.documentType;
+      }),
+      'Motion to Withdraw Counsel (filed by petitioner)',
+      'Motion to Withdraw as Counsel',
+      'Application to Take Deposition',
+    ];
+  
     if (
-      documentMetadata.documentType === 'Motion for Leave to File Out of Time'
+      objectionDocumentTypes.includes(this.documentType) ||
+      (AMENDMENT_EVENT_CODES.includes(this.eventCode) &&
+        objectionDocumentTypes.includes(
+          this.previousDocument?.documentType,
+        ))
     ) {
-      makeRequired('secondaryDocumentFile');
+      makeRequired('objections');
     }
-
-    if (documentMetadata.secondaryDocumentFile) {
-      makeRequired('hasSecondarySupportingDocuments');
-    }
-  }
-
-  if (
-    documentMetadata.selectedCases &&
-    documentMetadata.selectedCases.length > 1
-  ) {
-    if (documentMetadata.partyIrsPractitioner !== true) {
-      const casesWithAPartySelected = reduce(
-        documentMetadata.casesParties,
-        (accArray, parties, docketNumber) => {
-          if (some(values(parties))) {
-            accArray.push(docketNumber);
-          }
-          return accArray;
-        },
-        [],
-      );
+  
+    if (
+      documentMetadata.scenario &&
+      documentMetadata.scenario.toLowerCase().trim() === 'nonstandard h'
+    ) {
       if (
-        !isEqual(
-          sortBy(documentMetadata.selectedCases),
-          sortBy(casesWithAPartySelected),
-        )
+        documentMetadata.documentType === 'Motion for Leave to File Out of Time'
+      ) {
+        makeRequired('secondaryDocumentFile');
+      }
+  
+      if (documentMetadata.secondaryDocumentFile) {
+        makeRequired('hasSecondarySupportingDocuments');
+      }
+    }
+  
+    if (
+      documentMetadata.selectedCases &&
+      documentMetadata.selectedCases.length > 1
+    ) {
+      if (documentMetadata.partyIrsPractitioner !== true) {
+        const casesWithAPartySelected = reduce(
+          documentMetadata.casesParties,
+          (accArray, parties, docketNumber) => {
+            if (some(values(parties))) {
+              accArray.push(docketNumber);
+            }
+            return accArray;
+          },
+          [],
+        );
+        if (
+          !isEqual(
+            sortBy(documentMetadata.selectedCases),
+            sortBy(casesWithAPartySelected),
+          )
+        ) {
+          addProperty(
+            'filers',
+            joi.array().items(joi.string().required()).required(),
+          );
+        }
+      }
+    } else {
+      if (
+        documentMetadata.filers.length === 0 &&
+        documentMetadata.partyIrsPractitioner !== true
       ) {
         addProperty(
           'filers',
@@ -320,17 +345,8 @@ function ExternalDocumentInformationFactory(documentMetadata) {
         );
       }
     }
-  } else {
-    if (
-      documentMetadata.filers.length === 0 &&
-      documentMetadata.partyIrsPractitioner !== true
-    ) {
-      addProperty(
-        'filers',
-        joi.array().items(joi.string().required()).required(),
-      );
-    }
   }
+  
 
   joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
 
