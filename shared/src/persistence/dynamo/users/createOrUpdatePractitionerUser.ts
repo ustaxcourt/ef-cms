@@ -89,7 +89,7 @@ export const createOrUpdatePractitionerUser = async ({
   });
 
   if (!userExists) {
-    let baseCreateUserParams = {
+    let params = {
       UserAttributes: [
         {
           Name: 'email_verified',
@@ -112,26 +112,16 @@ export const createOrUpdatePractitionerUser = async ({
       Username: userEmail,
     };
 
-    const createUserParamsLocal = {
-      ...baseCreateUserParams,
-      DesiredDeliveryMediums: ['EMAIL'],
-      UserAttributes: [
-        ...baseCreateUserParams.UserAttributes,
-        {
-          Name: 'custom:userId',
-          Value: user.userId,
-        },
-      ],
-      Username: user.userId,
-    };
-
-    const createUserParams = process.env.USE_COGNITO_LOCAL
-      ? createUserParamsLocal
-      : baseCreateUserParams;
+    if (process.env.USE_COGNITO_LOCAL) {
+      params.additionalAttributes = {
+        Name: 'custom:userId',
+        Value: user.userId,
+      };
+    }
 
     const response = await applicationContext
       .getCognito()
-      .adminCreateUser(createUserParams)
+      .adminCreateUser(params)
       .promise();
 
     if (process.env.USE_COGNITO_LOCAL) {

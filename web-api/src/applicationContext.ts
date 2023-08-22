@@ -42,6 +42,7 @@ import {
   getEnvironment,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
+import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 import { createLogger } from './createLogger';
 import { documentUrlTranslator } from '../../shared/src/business/utilities/documentUrlTranslator';
 import { exec } from 'child_process';
@@ -224,15 +225,17 @@ export const createApplicationContext = (
     getCognito: () => {
       if (environment.stage === 'local') {
         if (process.env.USE_COGNITO_LOCAL === 'true') {
-          return new CognitoIdentityServiceProvider({
-            endpoint: 'http://localhost:9229/',
-            httpOptions: {
-              connectTimeout: 3000,
-              timeout: 5000,
-            },
-            maxRetries: 3,
-            region: 'local',
-          });
+          return cognitoLocalWrapper(
+            new CognitoIdentityServiceProvider({
+              endpoint: 'http://localhost:9229/',
+              httpOptions: {
+                connectTimeout: 3000,
+                timeout: 5000,
+              },
+              maxRetries: 3,
+              region: 'local',
+            }),
+          );
         } else {
           return {
             adminCreateUser: () => ({
