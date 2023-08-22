@@ -3,19 +3,29 @@ export const navigateTo = (username: string) => {
 };
 
 export const fillInAndSubmitForm = () => {
-  //wizard step 1
-  cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.fixture('w3-dummy.pdf', null)
+    .then(Cypress.Buffer.from)
+    .then(pdfFile => {
+      const fileOptions = {
+        contents: pdfFile,
+        fileName: 'w3-dummy.pdf',
+        lastModified: Date.now(),
+        mimeType: 'application/pdf',
+      };
+
+      // wizard step 1
+      cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
+      cy.get('button#submit-case').trigger('click');
+
+      // wizard step 2
+      cy.get('#petition-file').selectFile(fileOptions);
+    });
 
   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(500);
-
-  cy.get('button#submit-case').trigger('click');
+  // cy.wait(500);
 
   // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(500);
-
-  //step 2
-  cy.get('#petition-file').attachFile('../fixtures/w3-dummy.pdf');
+  // cy.wait(500);
 
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
