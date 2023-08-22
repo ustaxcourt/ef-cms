@@ -637,6 +637,9 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
+      - delete-api-mappings:
+          requires:
+            - switch-colors
       - cleanup:
           requires:
             - switch-colors
