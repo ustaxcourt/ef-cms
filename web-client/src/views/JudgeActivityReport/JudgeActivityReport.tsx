@@ -237,7 +237,11 @@ export const JudgeActivityReport = connect(
                       />
                     </td>
                     <td>
-                      <CaseLink formattedCase={formattedCase} />
+                      <CaseLink
+                        formattedCase={formattedCase}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      />
                     </td>
                     <td>{formattedCase?.formattedCaseCount}</td>
                     <td>{formattedCase.caseCaption}</td>
