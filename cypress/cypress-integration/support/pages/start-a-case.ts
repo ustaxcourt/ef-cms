@@ -16,16 +16,16 @@ export const fillInAndSubmitForm = () => {
       // wizard step 1
       cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
 
+      // Fix flaky test
+      // https://github.com/ustaxcourt/ef-cms/issues/3866
       // eslint-disable-next-line cypress/no-unnecessary-waiting
       cy.wait(0);
+
       cy.get('button#submit-case').trigger('click');
 
       // wizard step 2
       cy.get('#petition-file').selectFile(fileOptions);
     });
-
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  // cy.wait(500);
 
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
