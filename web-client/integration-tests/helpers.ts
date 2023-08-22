@@ -4,6 +4,7 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -23,6 +24,11 @@ import {
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from '../../web-api/src/persistence/dynamo/locks/acquireLock';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -50,6 +56,7 @@ import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/sav
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
@@ -208,6 +215,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       return pdfLib;
     },
     getPersistenceGateway: () => ({
+      createLock,
       getCaseByDocketNumber,
       getCasesForUser,
       getDocketNumbersByUser,
@@ -216,7 +224,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           url: 'http://example.com',
         };
       },
+      getLock,
       getUserById,
+      removeLock,
       saveDocumentFromLambda,
       saveWorkItem,
       updateCase,
@@ -241,6 +251,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getUniqueId,
     getUseCaseHelpers: () => ({
+      acquireLock,
       countPagesInDocument,
       generateAndServeDocketEntry,
       generatePdfFromHtmlHelper,
@@ -273,11 +284,13 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       formatNow,
       getDocumentTypeForAddressChange,
       prepareDateFromString,
+      sleep,
     }),
     logger: {
       debug: () => {},
       error: () => {},
       info: () => {},
+      warn: () => {},
     },
   };
 
@@ -432,7 +445,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection: string | null = null,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',

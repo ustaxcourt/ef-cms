@@ -1501,6 +1501,53 @@
     "docketNumber": "101-20"
   },
   {
+    "date": null,
+    "stampData": {},
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatepractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irspractitioner@example.com"
+      }
+    ],
+    "isStricken": false,
+    "isPendingService": false,
+    "documentType": "Standing Pretrial Order",
+    "filingDate": "2023-08-15T16:48:20.679Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2023-08-15T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2023-08-15T16:47:51.688Z",
+    "documentContentsId": "20cdeb6a-5f13-48b0-b433-8c0b36be5eb1",
+    "numberOfPages": 2,
+    "scenario": "Type B",
+    "entityName": "DocketEntry",
+    "docketEntryId": "c7ea55fe-1716-47bb-b2c5-8112fea11d14",
+    "sk": "docket-entry|c7ea55fe-1716-47bb-b2c5-8112fea11d14",
+    "documentTitle": "Standing Pretrial Order",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "filedByRole": "docketclerk",
+    "index": 6,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "SPTO",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "test",
+    "servedPartiesCode": "B",
+    "editState": "{\"freeText\":\"test\",\"date\":null,\"documentType\":\"Standing Pretrial Order\",\"documentTitle\":\"Standing Pretrial Order\",\"generatedDocumentTitle\":\"Standing Pretrial Order\",\"eventCode\":\"SPTO\",\"scenario\":\"Type B\",\"docketEntryId\":\"c7ea55fe-1716-47bb-b2c5-8112fea11d14\",\"docketNumber\":\"102-67\"}",
+    "pk": "case|102-67",
+    "servedAt": "2023-08-15T16:48:20.679Z",
+    "docketNumber": "102-67"
+  },
+  {
     "isStricken": false,
     "documentType": "Petition",
     "filingDate": "2020-01-02T16:05:45.979Z",
@@ -31293,6 +31340,11 @@
     "sk": "e-consent-fields-enabled-feature-flag",
     "current": true,
     "pk": "e-consent-fields-enabled-feature-flag"
+  },
+  {
+    "sk": "entity-locking-feature-flag",
+    "current": true,
+    "pk": "entity-locking-feature-flag"
   },
   {
     "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
