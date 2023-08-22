@@ -6,7 +6,7 @@ const {
 } = require('../../web-api/src/applicationContext');
 const {
   getCaseByDocketNumber,
-} = require('../src/persistence/dynamo/cases/getCaseByDocketNumber');
+} = require('../../web-api/src/persistence/dynamo/cases/getCaseByDocketNumber');
 
 const DOCKET_NUMBER = process.argv[2];
 const OUTPUT_DIR = `${process.env.HOME}/Downloads/${DOCKET_NUMBER}`;

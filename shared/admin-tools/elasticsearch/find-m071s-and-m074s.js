@@ -6,8 +6,10 @@ requireEnvVars(['ENV', 'REGION']);
 const {
   createApplicationContext,
 } = require('../../../web-api/src/applicationContext');
+const {
+  search,
+} = require('../../../web-api/src/persistence/elasticsearch/searchClient');
 const { computeDate } = require('../../src/business/utilities/DateHandler');
-const { search } = require('../../src/persistence/elasticsearch/searchClient');
 
 const cachedCases = {};
 
