@@ -28,7 +28,7 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
-  public certificateOfService?: string;
+  public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
   public date?: string;
