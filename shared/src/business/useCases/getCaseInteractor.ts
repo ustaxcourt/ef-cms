@@ -13,11 +13,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
-import { User } from '../entities/User';
 import {
+  SealedCase,
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
 } from '../utilities/caseFilter';
+import { User } from '../entities/User';
 
 const getSealedCase = ({
   applicationContext,
@@ -86,15 +87,20 @@ const getCaseForExternalUser = ({
  * @param {Object} caseRecord the original caseRecord
  * @returns {Object} decorated caseRecord
  */
-export const decorateForCaseStatus = (caseRecord: Case) => {
+export const decorateForCaseStatus = <T extends RawCase | SealedCase>(
+  caseRecord: T,
+) => {
   // allow document service
-  caseRecord.canAllowDocumentService =
+  (caseRecord as any).canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
 
-  caseRecord.canAllowPrintableDocketRecord =
+  (caseRecord as any).canAllowPrintableDocketRecord =
     canAllowPrintableDocketRecord(caseRecord);
 
-  return caseRecord;
+  return caseRecord as T & {
+    canAllowDocumentService: boolean;
+    canAllowPrintableDocketRecord: boolean;
+  };
 };
 
 /**

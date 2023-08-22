@@ -241,7 +241,7 @@ describe('DocketEntry entity', () => {
       };
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(createdDocketEntry.getFormattedValidationErrors()),
+        Object.keys(createdDocketEntry.getFormattedValidationErrors()!),
       ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
     });
 
@@ -297,7 +297,9 @@ describe('DocketEntry entity', () => {
       );
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(createdDocketEntry.getFormattedValidationErrors()),
+        Object.keys(
+          createdDocketEntry.getFormattedValidationErrors() as object,
+        ),
       ).toEqual(['documentType', 'eventCode']);
     });
 
