@@ -7,7 +7,7 @@ import {
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
-  judges: string[];
+  judges: string[] | undefined;
   pageNumber?: number;
   pageSize?: number;
 };
