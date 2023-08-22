@@ -52,14 +52,14 @@ const generateChangeOfAddressForPractitioner = async ({
   user: any;
   websocketMessagePrefix?: string;
 }) => {
-  const docketNumbers = await applicationContext
+  const associatedUserCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getCasesForUser({
       applicationContext,
       userId: user.userId,
     });
 
-  if (docketNumbers.length === 0) {
+  if (associatedUserCases.length === 0) {
     return [];
   }
 
@@ -69,7 +69,7 @@ const generateChangeOfAddressForPractitioner = async ({
     message: {
       action: `${websocketMessagePrefix}_contact_update_progress`,
       completedCases,
-      totalCases: docketNumbers.length,
+      totalCases: associatedUserCases.length,
     },
     userId: requestUserId || user.userId,
   });
@@ -77,7 +77,7 @@ const generateChangeOfAddressForPractitioner = async ({
   const updatedCases = [];
 
   await Promise.all(
-    docketNumbers.map(async caseInfo => {
+    associatedUserCases.map(async caseInfo => {
       try {
         const { docketNumber } = caseInfo;
         const newData = contactInfo;
@@ -136,15 +136,22 @@ const generateChangeOfAddressForPractitioner = async ({
         applicationContext.logger.error(error);
       }
 
-      completedCases++;
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: `${websocketMessagePrefix}_contact_update_progress`,
-          completedCases,
-          totalCases: docketNumbers.length,
-        },
-        userId: requestUserId || user.userId,
+      process.nextTick(() => {
+        completedCases++;
+        applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: `${websocketMessagePrefix}_contact_update_progress`,
+              completedCases,
+              totalCases: associatedUserCases.length,
+            },
+            userId: requestUserId || user.userId,
+          })
+          .catch(err => {
+            applicationContext.logger.error(err);
+          });
       });
     }),
   );
