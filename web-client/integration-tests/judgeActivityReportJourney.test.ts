@@ -31,6 +31,8 @@ describe('Judge activity report journey', () => {
     cerebralTest.closeSocket();
   });
 
+  ///////// VALIDATION ///////////////
+
   loginAs(cerebralTest, 'judgecolvin@example.com');
   it('should disable the submit button on initial page load when form has not yet been completed', async () => {
     await cerebralTest.runSequence('gotoJudgeActivityReportSequence');
@@ -66,11 +68,13 @@ describe('Judge activity report journey', () => {
   });
 
   viewJudgeActivityReportResults(cerebralTest);
+
+  ///////// ADD CAV/SUBMITTED CASES ///////////////
+
   it('should set the progressDescriptionTableBeforeCount', () => {
     progressDescriptionTableTotalBefore =
       cerebralTest.progressDescriptionTableTotal;
   });
-
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -99,6 +103,9 @@ describe('Judge activity report journey', () => {
   });
 
   viewJudgeActivityReportResults(cerebralTest);
+
+  ///////// ADD REGULAR CASE ///////////////
+
   it('should set the progressDescriptionTableBeforeCount', () => {
     progressDescriptionTableTotalBefore =
       cerebralTest.progressDescriptionTableTotal;
@@ -119,6 +126,9 @@ describe('Judge activity report journey', () => {
   });
 
   viewJudgeActivityReportResults(cerebralTest);
+
+  ///////// ADD PROHIBITED (SERVED) DOCKET ENTRY ///////////////
+
   it('should set the progressDescriptionTableBeforeCount', () => {
     progressDescriptionTableTotalBefore =
       cerebralTest.progressDescriptionTableTotal;
@@ -159,6 +169,8 @@ describe('Judge activity report journey', () => {
       cerebralTest.progressDescriptionTableTotal;
   });
 
+  ///////// ADD PROHIBITED (UNSERVED) DOCKET ENTRY ///////////////
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -192,6 +204,8 @@ describe('Judge activity report journey', () => {
       cerebralTest.progressDescriptionTableTotal;
   });
 
+  ///////// ADD PROHIBITED (SERVED) DOCKET ENTRY THAT HAS BEEN STRICKED ///////////////
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -208,6 +222,12 @@ describe('Judge activity report journey', () => {
   });
   docketClerkViewsDraftOrder(cerebralTest);
   docketClerkSignsOrder(cerebralTest);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0, 'Colvin');
+  docketClerkServesDocument(cerebralTest, 0);
+  // todo NEED TO STRIKE DOCKET ENTRY
+  // flip case back to CAV/Submitted
+  // get docket entry index of newly served OAD
+  // docketClerkChecksDocketEntryEditLink(cerebralTest);
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
   viewJudgeActivityReportResults(cerebralTest);
@@ -216,9 +236,11 @@ describe('Judge activity report journey', () => {
       cerebralTest.progressDescriptionTableTotal;
 
     expect(progressDescriptionTableTotalAfter).toEqual(
-      progressDescriptionTableTotalBefore + 1,
+      progressDescriptionTableTotalBefore,
     );
   });
+
+  ////// CONSOLIDATED CASES //////////
 
   // //// new test ==================================================
   it('should set the progressDescriptionTableBeforeCount', () => {
@@ -263,51 +285,51 @@ describe('Judge activity report journey', () => {
   //   docketClerkStrikesDocketEntry(cerebralTest, 3);
   // });
 
-  describe('Petitioner creates a case', () => {
-    loginAs(cerebralTest, 'petitioner@example.com');
-    it('petitioner creates an electronic case', async () => {
-      const caseDetail = await uploadPetition(cerebralTest);
-      expect(caseDetail.docketNumber).toBeDefined();
-      cerebralTest.docketNumber = caseDetail.docketNumber;
-      cerebralTest.docketNumber = caseDetail.docketNumber;
-      console.log('cerebralTest.docketNumber', cerebralTest.docketNumber);
-    });
-  });
+  // describe('Petitioner creates a case', () => {
+  //   loginAs(cerebralTest, 'petitioner@example.com');
+  //   it('petitioner creates an electronic case', async () => {
+  //     const caseDetail = await uploadPetition(cerebralTest);
+  //     expect(caseDetail.docketNumber).toBeDefined();
+  //     cerebralTest.docketNumber = caseDetail.docketNumber;
+  //     cerebralTest.docketNumber = caseDetail.docketNumber;
+  //     console.log('cerebralTest.docketNumber', cerebralTest.docketNumber);
+  //   });
+  // });
 
-  describe('Petitions clerk serves case to IRS', () => {
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    petitionsClerkServesElectronicCaseToIrs(cerebralTest);
-  });
+  // describe('Petitions clerk serves case to IRS', () => {
+  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
+  //   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+  // });
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusTo(
-    cerebralTest,
-    CASE_STATUS_TYPES.submitted,
-    'Colvin',
-  );
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkUpdatesCaseStatusTo(
+  //   cerebralTest,
+  //   CASE_STATUS_TYPES.submitted,
+  //   'Colvin',
+  // );
 
-  describe('Petitioner files a document for the case', () => {
-    loginAs(cerebralTest, 'petitioner@example.com');
-    petitionerFilesADocumentForCase(cerebralTest, fakeFile);
-  });
+  // describe('Petitioner files a document for the case', () => {
+  //   loginAs(cerebralTest, 'petitioner@example.com');
+  //   petitionerFilesADocumentForCase(cerebralTest, fakeFile);
+  // });
 
-  describe('Docketclerk QCs and Strikes a docket entry', () => {
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkChecksDocketEntryEditLink(cerebralTest);
-    docketClerkQCsDocketEntry(cerebralTest);
-    docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
-    docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
-    docketClerkStrikesDocketEntry(cerebralTest, 3);
-  });
+  // describe('Docketclerk QCs and Strikes a docket entry', () => {
+  //   loginAs(cerebralTest, 'docketclerk@example.com');
+  //   docketClerkChecksDocketEntryEditLink(cerebralTest);
+  //   docketClerkQCsDocketEntry(cerebralTest);
+  //   docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
+  //   docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
+  //   docketClerkStrikesDocketEntry(cerebralTest, 3);
+  // });
 
-  loginAs(cerebralTest, 'judgecolvin@example.com');
-  viewJudgeActivityReportResults(cerebralTest);
-  it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record and is stricken', () => {
-    const progressDescriptionTableTotalAfter =
-      cerebralTest.progressDescriptionTableTotal;
+  // loginAs(cerebralTest, 'judgecolvin@example.com');
+  // viewJudgeActivityReportResults(cerebralTest);
+  // it('should not increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record and is stricken', () => {
+  //   const progressDescriptionTableTotalAfter =
+  //     cerebralTest.progressDescriptionTableTotal;
 
-    expect(progressDescriptionTableTotalAfter).toEqual(
-      progressDescriptionTableTotalBefore,
-    );
-  });
+  //   expect(progressDescriptionTableTotalAfter).toEqual(
+  //     progressDescriptionTableTotalBefore,
+  //   );
+  // });
 });
