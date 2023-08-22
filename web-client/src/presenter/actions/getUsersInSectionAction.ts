@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash';
 
 export const getUsersInSectionAction =
-  ({ section }) =>
+  ({ section }: { section?: string }) =>
   async ({ applicationContext, props }: ActionProps) => {
     const caseServicesSupervisorSelectedSection = props.section;
     const { CASE_SERVICES_SUPERVISOR_SECTION } =

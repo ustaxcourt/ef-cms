@@ -45,16 +45,17 @@ async function fetchConsolidatedGroupsAndNest({
   // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
   const consolidatedGroups = (
     await Promise.all(
-      cases
-        .filter(aCase => aCase.leadDocketNumber)
-        .map(aCase =>
-          applicationContext
-            .getPersistenceGateway()
-            .getCasesByLeadDocketNumber({
-              applicationContext,
-              leadDocketNumber: aCase.leadDocketNumber,
-            }),
-        ),
+      uniqBy(
+        cases.filter(aCase => aCase.leadDocketNumber),
+        'leadDocketNumber',
+      ).map(aCase =>
+        applicationContext
+          .getPersistenceGateway()
+          .getCasesMetadataByLeadDocketNumber({
+            applicationContext,
+            leadDocketNumber: aCase.leadDocketNumber!,
+          }),
+      ),
     )
   )
     .flat()
@@ -118,12 +119,14 @@ export const getCasesForUserInteractor = async (
 ) => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const allUserCases = (
-    await applicationContext.getPersistenceGateway().getCasesForUser({
+  let allUserCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
       applicationContext,
       userId,
-    })
-  ).map(aCase => {
+    });
+
+  allUserCases = allUserCases.map(aCase => {
     return { ...aCase, isRequestingUserAssociated: true } as TAssociatedCase;
   });
 
