@@ -13,6 +13,7 @@ const config: Config = {
     '!data-import/judge/bulkImportJudgeUsers.ts',
     '!irs-super-user.ts',
     '!compareTypescriptErrors.ts',
+    '!elasticsearch/ready-cluster-for-migration.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
