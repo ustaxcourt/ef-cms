@@ -6,10 +6,11 @@ export const docketClerkStrikesDocketEntry = (
     await cerebralTest.runSequence('strikeDocketEntrySequence');
 
     const caseDocuments = cerebralTest.getState('caseDetail.docketEntries');
+    console.log('caseDocuments', caseDocuments);
     const strickenDocument = caseDocuments.find(
       d => d.index === docketRecordIndex,
     );
-
+    console.log('strickenDocument', strickenDocument);
     expect(strickenDocument.isStricken).toEqual(true);
     expect(strickenDocument.strickenBy).toEqual('Test Docketclerk');
   });
