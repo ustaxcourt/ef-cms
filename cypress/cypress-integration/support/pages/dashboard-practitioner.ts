@@ -1,4 +1,4 @@
-export const navigateTo = username => {
+export const navigateTo = (username: string) => {
   cy.login(username, '/');
 };
 
