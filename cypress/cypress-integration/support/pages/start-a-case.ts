@@ -15,14 +15,13 @@ export const fillInAndSubmitForm = () => {
 
       // wizard step 1
       cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(500);
       cy.get('button#submit-case').trigger('click');
 
       // wizard step 2
       cy.get('#petition-file').selectFile(fileOptions);
     });
-
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  // cy.wait(500);
 
   // eslint-disable-next-line cypress/no-unnecessary-waiting
   // cy.wait(500);
