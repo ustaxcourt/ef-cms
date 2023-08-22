@@ -69,7 +69,7 @@ export class DocketEntry extends JoiValidationEntity {
   public ordinalValue?: string;
   public otherIteration?: string;
   public otherFilingParty?: string;
-  public partyIrsPractitioner?: string;
+  public partyIrsPractitioner?: boolean;
   public processingStatus: string;
   public receivedAt: string;
   public relationship?: string;
