@@ -6,9 +6,8 @@
  * @returns {Promise<array>} the array of responses from the interactor
  */
 export const sealInLowerEnvironment = async (applicationContext, records) => {
-  const isCurrentColorActive = await applicationContext.isCurrentColorActive(
-    applicationContext,
-  );
+  const isCurrentColorActive =
+    await applicationContext.isCurrentColorActive(applicationContext);
 
   if (!isCurrentColorActive) {
     return records.map(() => {});
