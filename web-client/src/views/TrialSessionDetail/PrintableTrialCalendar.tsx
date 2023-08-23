@@ -23,7 +23,7 @@ export const PrintableTrialCalendar = connect(
         <div className="big-blue-header">
           <div className="grid-container">
             <div className="margin-bottom-1">
-              <h1 tabIndex="-1">
+              <h1 tabIndex={-1}>
                 {formattedTrialSessionDetails.trialLocation}
               </h1>
               <span
