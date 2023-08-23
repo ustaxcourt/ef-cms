@@ -31,13 +31,17 @@ describe('determineEntitiesToLock', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue(['111-20', '222-20', '333-20']);
+      .getCasesForUser.mockReturnValue([
+        { docketNumber: '111-20' },
+        { docketNumber: '222-20' },
+        { docketNumber: '333-20' },
+      ]);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
     expect(
-      applicationContext.getPersistenceGateway().getCasesByUserId,
+      applicationContext.getPersistenceGateway().getCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
       userId: mockParams.userId,
@@ -111,7 +115,9 @@ describe('updateUserContactInformationInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([MOCK_CASE.docketNumber]);
+      .getCasesForUser.mockReturnValue([
+        { docketNumber: MOCK_CASE.docketNumber },
+      ]);
   });
 
   describe('locked', () => {

@@ -3,6 +3,7 @@ import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
+import PQueue from 'p-queue';
 
 type TUserContact = {
   address1: string;
@@ -52,14 +53,14 @@ const generateChangeOfAddressForPractitioner = async ({
   user: any;
   websocketMessagePrefix?: string;
 }) => {
-  const docketNumbers = await applicationContext
+  const associatedUserCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getCasesForUser({
       applicationContext,
       userId: user.userId,
     });
 
-  if (docketNumbers.length === 0) {
+  if (associatedUserCases.length === 0) {
     return [];
   }
 
@@ -69,15 +70,16 @@ const generateChangeOfAddressForPractitioner = async ({
     message: {
       action: `${websocketMessagePrefix}_contact_update_progress`,
       completedCases,
-      totalCases: docketNumbers.length,
+      totalCases: associatedUserCases.length,
     },
     userId: requestUserId || user.userId,
   });
 
   const updatedCases = [];
+  const queue = new PQueue({ concurrency: 25 });
 
-  await Promise.all(
-    docketNumbers.map(async caseInfo => {
+  for (let caseInfo of associatedUserCases) {
+    await queue.add(async () => {
       try {
         const { docketNumber } = caseInfo;
         const newData = contactInfo;
@@ -142,12 +144,12 @@ const generateChangeOfAddressForPractitioner = async ({
         message: {
           action: `${websocketMessagePrefix}_contact_update_progress`,
           completedCases,
-          totalCases: docketNumbers.length,
+          totalCases: associatedUserCases.length,
         },
         userId: requestUserId || user.userId,
       });
-    }),
-  );
+    });
+  }
 
   return updatedCases;
 };
