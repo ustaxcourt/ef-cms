@@ -8,7 +8,7 @@ export const IdleLogout = connect(
   function IdleLogout({ redirectToLoginSequence }) {
     return (
       <section className="usa-section grid-container">
-        <h1 tabIndex="-1">Session Timeout</h1>
+        <h1 tabIndex={-1}>Session Timeout</h1>
         <hr />
         <h2>You weren’t active so we logged you out.</h2>
         <p>

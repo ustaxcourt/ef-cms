@@ -33,7 +33,7 @@ export const StartCaseStep5 = connect(
     return (
       <>
         <Focus>
-          <h2 id="file-a-document-header" tabIndex="-1">
+          <h2 id="file-a-document-header" tabIndex={-1}>
             5. Review Your Case
           </h2>
         </Focus>
@@ -54,19 +54,13 @@ export const StartCaseStep5 = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-6 margin-bottom-05">
                       <div className="margin-bottom-2">
-                        <span
-                          className="usa-label usa-label-display"
-                          htmlFor="filing-type"
-                        >
+                        <span className="usa-label usa-label-display">
                           Type of notice/case
                         </span>
                         {startCaseHelper.formattedCaseType}
                         <div className="grid-row margin-top-3">
                           <div className="grid-col">
-                            <span
-                              className="usa-label usa-label-display"
-                              htmlFor="filing-petition"
-                            >
+                            <span className="usa-label usa-label-display">
                               Petition
                             </span>
                             <div>
@@ -87,19 +81,13 @@ export const StartCaseStep5 = connect(
                       </div>
                     </div>
                     <div className="tablet:grid-col-6 margin-bottom-1">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="filing-procedure"
-                      >
+                      <span className="usa-label usa-label-display">
                         Case procedure
                       </span>
                       {form.procedureType}
 
                       <div className="margin-top-3">
-                        <span
-                          className="usa-label usa-label-display"
-                          htmlFor="filing-location"
-                        >
+                        <span className="usa-label usa-label-display">
                           Requested trial location
                         </span>
                         {form.preferredTrialCity}
@@ -117,19 +105,13 @@ export const StartCaseStep5 = connect(
                   <div className="grid-row grid-gap">
                     <div className="tablet:grid-col-4 margin-bottom-1">
                       <>
-                        <span
-                          className="usa-label usa-label-display"
-                          htmlFor="filing-parties"
-                        >
+                        <span className="usa-label usa-label-display">
                           Party type
                         </span>
                         {form.partyType}
 
                         <div className="margin-top-3 margin-bottom-2">
-                          <span
-                            className="usa-label usa-label-display"
-                            htmlFor="filing-parties"
-                          >
+                          <span className="usa-label usa-label-display">
                             Statement of Taxpayer Identification
                           </span>
                           <div>
@@ -149,10 +131,7 @@ export const StartCaseStep5 = connect(
 
                         {form.corporateDisclosureFile && (
                           <div className="margin-top-3 margin-bottom-3">
-                            <span
-                              className="usa-label usa-label-display margin-top-3"
-                              htmlFor="filing-parties"
-                            >
+                            <span className="usa-label usa-label-display margin-top-3">
                               Corporate Disclosure Statement
                             </span>
                             <div>
@@ -216,10 +195,7 @@ export const StartCaseStep5 = connect(
               <h3 className="underlined">Service Information</h3>
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-12 margin-bottom-1">
-                  <span
-                    className="usa-label usa-label-display"
-                    htmlFor="filing-service-email"
-                  >
+                  <span className="usa-label usa-label-display">
                     Service email
                   </span>
                   {user.email}
