@@ -82,6 +82,7 @@ export const formatDocumentSearchResultRecord = (
     BENCH_OPINION_EVENT_CODE,
     OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
     ORDER_EVENT_CODES,
+    STANDING_PRETRIAL_EVENT_CODES,
   } = applicationContext.getConstants();
 
   result.formattedFiledDate = applicationContext
@@ -104,6 +105,8 @@ export const formatDocumentSearchResultRecord = (
     result.formattedJudgeName = result.judge
       ? applicationContext.getUtilities().getJudgeLastName(result.judge)
       : '';
+  } else if (STANDING_PRETRIAL_EVENT_CODES.includes(result.eventCode)) {
+    result.formattedJudgeName = result.judge;
   } else if (
     ORDER_EVENT_CODES.includes(result.eventCode) ||
     result.eventCode === BENCH_OPINION_EVENT_CODE
