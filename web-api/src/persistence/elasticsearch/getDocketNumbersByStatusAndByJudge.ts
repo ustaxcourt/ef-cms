@@ -1,17 +1,19 @@
-import {
-  CavAndSubmittedCaseResponseType,
-  JudgeActivityReportCavAndSubmittedCasesRequest,
-} from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { CavAndSubmittedCaseResponseType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
+
+export type DocketNumberByStatusRequest = {
+  statuses: string[];
+  judges?: string[];
+};
 
 export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
   params,
 }: {
   applicationContext: IApplicationContext;
-  params: JudgeActivityReportCavAndSubmittedCasesRequest;
+  params: DocketNumberByStatusRequest;
 }): Promise<CavAndSubmittedCaseResponseType> => {
   const source = [
     'docketNumber',
