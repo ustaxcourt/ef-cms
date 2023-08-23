@@ -109,7 +109,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
         if (caseInfo.leadDocketNumber) {
           caseInfo.consolidatedCases = await applicationContext
             .getPersistenceGateway()
-            .getCasesByLeadDocketNumber({
+            .getCasesMetadataByLeadDocketNumber({
               applicationContext,
               leadDocketNumber: caseInfo.docketNumber,
             });
@@ -132,10 +132,10 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
-    itemOffset,
-    endOffset,
-  );
+  const formattedCaseRecordsForDisplay = finalListOfCases
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    .map(({ consolidatedCases, ...rest }) => rest)
+    .slice(itemOffset, endOffset);
 
   return {
     cases: formattedCaseRecordsForDisplay,
