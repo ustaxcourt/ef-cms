@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
@@ -227,11 +228,6 @@ describe('Judge activity report journey', () => {
   );
 
   it('should retrieve the docket entry index based on the docketEntryId', () => {
-    console.log(
-      'docket entries to LOG',
-      cerebralTest.getState('caseDetail.docketEntries'),
-    );
-
     const caseDocuments = cerebralTest.getState('caseDetail.docketEntries');
     const docketEntry = caseDocuments.find(
       d => d.docketEntryId === cerebralTest.docketEntryId,
@@ -252,6 +248,30 @@ describe('Judge activity report journey', () => {
     const progressDescriptionTableTotalAfter =
       cerebralTest.progressDescriptionTableTotal;
 
+    expect(progressDescriptionTableTotalAfter).toEqual(
+      progressDescriptionTableTotalBefore + 1,
+    );
+  });
+
+  ///////// ADD CONSOLIDATED GROUP ///////////////
+  it('should set the progressDescriptionTableBeforeCount', () => {
+    progressDescriptionTableTotalBefore =
+      cerebralTest.progressDescriptionTableTotal;
+  });
+
+  createConsolidatedGroup(
+    cerebralTest,
+    { caseStatus: CASE_STATUS_TYPES.cav },
+    1,
+  );
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  viewJudgeActivityReportResults(cerebralTest);
+  it('should increase progressDescriptionTableTotal when a case has a Decision type docket entry on the docket record and is not served', () => {
+    const progressDescriptionTableTotalAfter =
+      cerebralTest.progressDescriptionTableTotal;
+
+    // expect only one new case (member cases should not appear on report)
     expect(progressDescriptionTableTotalAfter).toEqual(
       progressDescriptionTableTotalBefore + 1,
     );
