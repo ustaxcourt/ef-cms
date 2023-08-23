@@ -10,8 +10,8 @@ import {
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
+import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { VALIDATION_ERROR_MESSAGES } from '../externalDocument/ExternalDocumentInformationFactory';
 import joi from 'joi';
 
 export class DocketEntryFactory extends JoiValidationEntity {
@@ -99,7 +99,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
   }
 
   static VALIDATION_ERROR_MESSAGES = {
-    ...VALIDATION_ERROR_MESSAGES,
+    ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
     dateReceived: [
       {
         contains: 'must be less than or equal to',

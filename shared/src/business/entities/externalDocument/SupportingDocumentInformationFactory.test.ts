@@ -1,5 +1,5 @@
+import { ExternalDocumentInformationFactory } from './ExternalDocumentInformationFactory';
 import { SupportingDocumentInformationFactory } from './SupportingDocumentInformationFactory';
-import { VALIDATION_ERROR_MESSAGES } from './ExternalDocumentInformationFactory';
 
 describe('SupportingDocumentInformationFactory', () => {
   describe('constructor', () => {
@@ -10,7 +10,7 @@ describe('SupportingDocumentInformationFactory', () => {
           supportingDocument: 'Brief in Support',
           supportingDocumentFile: {},
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(documentInstance.attachments).toBe(false);
     });
@@ -20,11 +20,15 @@ describe('SupportingDocumentInformationFactory', () => {
     it('should have error messages for missing fields', () => {
       const extDoc = new SupportingDocumentInformationFactory(
         {},
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
-        supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
+        certificateOfService:
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+            .certificateOfService,
+        supportingDocument:
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+            .supportingDocument,
       });
     });
 
@@ -36,11 +40,12 @@ describe('SupportingDocumentInformationFactory', () => {
           supportingDocument: 'Affidavit in Support',
           supportingDocumentFile: {},
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual({
         supportingDocumentFreeText:
-          VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+            .supportingDocumentFreeText,
       });
     });
 
@@ -52,7 +57,7 @@ describe('SupportingDocumentInformationFactory', () => {
           supportingDocument: 'Brief in Support',
           supportingDocumentFile: {},
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
@@ -66,11 +71,12 @@ describe('SupportingDocumentInformationFactory', () => {
             supportingDocument: 'Brief in Support',
             supportingDocumentFile: {},
           },
-          VALIDATION_ERROR_MESSAGES,
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
         );
         expect(extDoc.getFormattedValidationErrors()).toEqual({
           certificateOfServiceDate:
-            VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .certificateOfServiceDate[1],
         });
       });
     });
