@@ -1,12 +1,12 @@
+import { ExternalDocumentInformationFactory } from './ExternalDocumentInformationFactory';
 import { SecondaryDocumentInformationFactory } from './SecondaryDocumentInformationFactory';
-import { VALIDATION_ERROR_MESSAGES } from './ExternalDocumentInformationFactory';
 
 describe('SecondaryDocumentInformationFactory', () => {
   describe('validation', () => {
     it('should be valid with an empty object', () => {
       const extDoc = new SecondaryDocumentInformationFactory(
         {},
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
@@ -18,10 +18,10 @@ describe('SecondaryDocumentInformationFactory', () => {
           documentType: 'Motion for New Trial',
           secondaryDocumentFile: {},
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()?.objections).toEqual(
-        VALIDATION_ERROR_MESSAGES.objections,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
       );
     });
 
@@ -31,7 +31,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           category: 'Motion',
           documentType: 'Motion for New Trial',
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
@@ -42,7 +42,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           category: 'Answer',
           documentType: 'Answer',
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
@@ -52,10 +52,12 @@ describe('SecondaryDocumentInformationFactory', () => {
         {
           secondaryDocumentFile: {},
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        certificateOfService: VALIDATION_ERROR_MESSAGES.certificateOfService,
+        certificateOfService:
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+            .certificateOfService,
       });
     });
 
@@ -66,7 +68,7 @@ describe('SecondaryDocumentInformationFactory', () => {
           certificateOfService: false,
           secondaryDocumentFile: {},
         },
-        VALIDATION_ERROR_MESSAGES,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
       );
       expect(extDoc.getFormattedValidationErrors()).toEqual(null);
     });
@@ -79,11 +81,12 @@ describe('SecondaryDocumentInformationFactory', () => {
             certificateOfService: true,
             secondaryDocumentFile: {},
           },
-          VALIDATION_ERROR_MESSAGES,
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
         );
         expect(extDoc.getFormattedValidationErrors()).toEqual({
           certificateOfServiceDate:
-            VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .certificateOfServiceDate[1],
         });
       });
 
@@ -94,7 +97,7 @@ describe('SecondaryDocumentInformationFactory', () => {
             certificateOfService: false,
             secondaryDocumentFile: {},
           },
-          VALIDATION_ERROR_MESSAGES,
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
         );
         expect(extDoc.getFormattedValidationErrors()).toEqual(null);
       });
