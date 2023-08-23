@@ -4,6 +4,7 @@ export const docketClerkStrikesDocketEntry = (
 ) => {
   return it('docket clerk strikes docket entry', async () => {
     await cerebralTest.runSequence('strikeDocketEntrySequence');
+    console.log('docketRecordIndex FOR STRIKING', docketRecordIndex);
 
     const caseDocuments = cerebralTest.getState('caseDetail.docketEntries');
     console.log('caseDocuments', caseDocuments);
