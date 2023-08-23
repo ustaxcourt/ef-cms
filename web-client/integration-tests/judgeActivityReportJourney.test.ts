@@ -242,7 +242,6 @@ describe('Judge activity report journey', () => {
       'cerebralTest.docketRecordIndex',
       cerebralTest.docketRecordIndex,
     );
-    console.log('typeof docketEntry.index', typeof docketEntry.index);
   });
   docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 7);
   docketClerkStrikesDocketEntry(cerebralTest, 7);

@@ -248,7 +248,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
     );
 
     cerebralTest.docketRecordEntry = newDocketEntry;
-    cerebralTest.docketEntryId = newDocketEntry.docketEntryId;
 
     expect(newDocketEntry).toBeTruthy();
     expect(newDocketEntry.index).toBeFalsy();
