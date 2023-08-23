@@ -106,6 +106,7 @@
     "clean:public": "rm -rf dist-public/",
     "clean": "./reset-dependencies.sh CLEAN_ONLY",
     "cypress:integration": "./scripts/run-cypress.sh",
+    "cypress:integration:file": "./scripts/run-cypress.sh -t",
     "cypress:integration:open": "./scripts/run-cypress.sh -o",
     "cypress:integration:public": "./scripts/run-cypress.sh -p",
     "cypress:integration:public:open": "./scripts/run-cypress.sh -po",
