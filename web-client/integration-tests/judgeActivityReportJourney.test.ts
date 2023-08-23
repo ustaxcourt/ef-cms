@@ -237,6 +237,11 @@ describe('Judge activity report journey', () => {
       d => d.docketEntryId === cerebralTest.docketEntryId,
     );
     cerebralTest.docketRecordIndex = docketEntry.index;
+    console.log('docketEntry', docketEntry);
+    console.log(
+      'cerebralTest.docketRecordIndex',
+      cerebralTest.docketRecordIndex,
+    );
   });
   docketClerkNavigatesToEditDocketEntryMeta(
     cerebralTest,
