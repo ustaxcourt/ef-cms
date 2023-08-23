@@ -227,18 +227,6 @@ describe('Judge activity report journey', () => {
     'Colvin',
   );
 
-  it('should retrieve the docket entry index based on the docketEntryId', () => {
-    const caseDocuments = cerebralTest.getState('caseDetail.docketEntries');
-    const docketEntry = caseDocuments.find(
-      d => d.docketEntryId === cerebralTest.docketEntryId,
-    );
-    cerebralTest.docketRecordIndex = docketEntry.index;
-    console.log('docketEntry', docketEntry);
-    console.log(
-      'cerebralTest.docketRecordIndex',
-      cerebralTest.docketRecordIndex,
-    );
-  });
   docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 7);
   docketClerkStrikesDocketEntry(cerebralTest, 7);
 

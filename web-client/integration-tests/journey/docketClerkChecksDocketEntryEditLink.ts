@@ -16,8 +16,5 @@ export const docketClerkChecksDocketEntryEditLink = (
       formattedDocketEntriesOnDocketRecord[data.index]
         .showEditDocketRecordEntry,
     ).toEqual(data.value);
-
-    console.log('lastIndex', lastIndex);
-    cerebralTest.docketRecordIndex = lastIndex;
   });
 };
