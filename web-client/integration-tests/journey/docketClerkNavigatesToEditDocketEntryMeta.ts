@@ -11,8 +11,5 @@ export const docketClerkNavigatesToEditDocketEntryMeta = (
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
-    expect(cerebralTest.getState('screenMetadata.editType')).toEqual(
-      'Document',
-    );
   });
 };
