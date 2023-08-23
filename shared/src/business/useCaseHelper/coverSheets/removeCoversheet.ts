@@ -20,7 +20,9 @@ export const removeCoversheet = async (
       })
       .promise());
   } catch (err) {
-    err.message = `${err.message} docket entry id is ${docketEntryId}`;
+    applicationContext.logger.error(`docket entry id is ${docketEntryId}`, {
+      err,
+    });
     throw err;
   }
 

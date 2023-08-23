@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.6.0
-define: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.10
+define: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.11
 
 commands:
   npm-and-cypress-install:
@@ -95,10 +95,6 @@ jobs:
           name: 'Deploy - Web Client - Terraform'
           command: |
             cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
-            HEALTH_CHECK_WEST_ID="$(terraform output -raw status_health_check_west_id)"
-            echo "export HEALTH_CHECK_WEST_ID=${HEALTH_CHECK_WEST_ID}" >> $BASH_ENV
-            HEALTH_CHECK_EAST_ID="$(terraform output -raw status_health_check_east_id)"
-            echo "export HEALTH_CHECK_EAST_ID=${HEALTH_CHECK_EAST_ID}" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
