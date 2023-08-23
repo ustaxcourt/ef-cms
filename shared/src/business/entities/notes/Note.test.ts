@@ -5,9 +5,9 @@ const { VALIDATION_ERROR_MESSAGES } = Note;
 describe('Note', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
-      // TODO: discuss with team what to do about this
-
-      const entity = new Note({});
+      // typing arguments of Note as any to avoid ts errors
+      const notesConfiguration: any = {};
+      const entity = new Note(notesConfiguration);
       expect(entity.getFormattedValidationErrors()).toEqual({
         notes: VALIDATION_ERROR_MESSAGES.notes,
       });

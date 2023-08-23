@@ -92,7 +92,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
     if (secondaryDocument) {
       this.secondaryDocument = ExternalDocumentFactory(secondaryDocument);
     }
-    //TODO: reconsider if this is a good idea
+
     this.scenario = rawPropsParam.scenario;
     this.freeText2 = rawPropsParam.freeText2;
     this.selectedCases = rawPropsParam.selectedCases;
