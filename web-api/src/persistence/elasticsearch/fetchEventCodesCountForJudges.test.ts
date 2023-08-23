@@ -1,15 +1,7 @@
-import {
-  OPINION_JUDGE_FIELD,
-  ORDER_EVENT_CODES,
-  ORDER_JUDGE_FIELD,
-} from '@shared/business/entities/EntityConstants';
+import { ORDER_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { fetchEventCodesCountForJudges } from './fetchEventCodesCountForJudges';
 import { judgeUser } from '@shared/test/mockUsers';
-import {
-  mockCountOfFormattedOpinionsIssuedByJudge,
-  mockOpinionsFiledTotal,
-} from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
 import { mockCountOfFormattedOrdersIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
 import { search } from './searchClient';
 jest.mock('./searchClient');
@@ -22,15 +14,6 @@ describe('fetchEventCodesCountForJudges', () => {
     { doc_count: 5, key: 'OSC' },
   ];
 
-  const opinionsAggsBucket = [
-    { doc_count: 177, key: 'MOP' },
-    { doc_count: 53, key: 'OST' },
-    { doc_count: 34, key: 'SOP' },
-    { doc_count: 30, key: 'TCOP' },
-  ];
-
-  const mockJudges = [judgeUser.name];
-
   const mockOrdersResults = {
     aggregations: {
       search_field_count: {
@@ -38,15 +21,6 @@ describe('fetchEventCodesCountForJudges', () => {
       },
     },
     total: 9,
-  };
-
-  const mockOpinionsResults = {
-    aggregations: {
-      search_field_count: {
-        buckets: opinionsAggsBucket,
-      },
-    },
-    total: mockOpinionsFiledTotal,
   };
 
   const documentQuery = {
@@ -76,12 +50,12 @@ describe('fetchEventCodesCountForJudges', () => {
   const params = {
     documentEventCodes: orderEventCodesToSearch,
     endDate: '2020-03-22T03:59:59.999Z',
-    judges: mockJudges,
+    judges: [judgeUser.name],
     searchType: 'order',
     startDate: '2020-02-12T05:00:00.000Z',
   };
 
-  it('returns searches for orders within a time range using selected judges', async () => {
+  it('returns searches for event codes within a time range using selected judges', async () => {
     search.mockReturnValue(mockOrdersResults);
 
     const { aggregations, total } = await fetchEventCodesCountForJudges({
@@ -111,10 +85,15 @@ describe('fetchEventCodesCountForJudges', () => {
           should: [
             {
               match: {
-                [`${ORDER_JUDGE_FIELD}.S`]: {
+                ['signedJudgeName.S']: {
                   operator: 'and',
                   query: judgeUser.name,
                 },
+              },
+            },
+            {
+              match: {
+                ['judge.S']: judgeUser.name,
               },
             },
           ],
@@ -124,49 +103,5 @@ describe('fetchEventCodesCountForJudges', () => {
 
     expect(aggregations).toMatchObject(mockCountOfFormattedOrdersIssuedByJudge);
     expect(total).toEqual(9);
-  });
-
-  it('returns searches for opinions within a time range using selected judges', async () => {
-    search.mockReturnValue(mockOpinionsResults);
-
-    const { aggregations, total } = await fetchEventCodesCountForJudges({
-      applicationContext,
-      params: { ...params, searchType: 'opinion' },
-    });
-
-    expect(search.mock.calls[0][0].searchParameters.body).toMatchObject({
-      ...documentQuery,
-      query: {
-        bool: {
-          filter: [
-            { term: { 'entityName.S': 'DocketEntry' } },
-            {
-              range: {
-                'filingDate.S': {
-                  gte: `${params.startDate}||/h`,
-                  lte: `${params.endDate}||/h`,
-                },
-              },
-            },
-            {
-              terms: { 'eventCode.S': params.documentEventCodes },
-            },
-          ],
-          minimum_should_match: 1,
-          should: [
-            {
-              match_phrase: {
-                [`${OPINION_JUDGE_FIELD}.S`]: judgeUser.name,
-              },
-            },
-          ],
-        },
-      },
-    });
-
-    expect(aggregations).toMatchObject(
-      mockCountOfFormattedOpinionsIssuedByJudge,
-    );
-    expect(total).toEqual(mockOpinionsFiledTotal);
   });
 });
