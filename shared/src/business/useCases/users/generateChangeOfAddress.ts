@@ -76,7 +76,7 @@ const generateChangeOfAddressForPractitioner = async ({
   });
 
   const updatedCases = [];
-  const queue = new PQueue({ concurrency: 25 });
+  const queue = new PQueue({ concurrency: 50 });
 
   for (let caseInfo of associatedUserCases) {
     await queue.add(async () => {
