@@ -10,7 +10,7 @@ export const docketClerkServesDocument = (cerebralTest, docketRecordIndex?) => {
       await getFormattedDocketEntriesForTest(cerebralTest);
 
     const docketEntryId =
-      cerebralTest.draftOrders && docketRecordIndex
+      cerebralTest.draftOrders && docketRecordIndex !== undefined
         ? cerebralTest.draftOrders[docketRecordIndex].docketEntryId
         : cerebralTest.docketEntryId;
 
@@ -38,8 +38,5 @@ export const docketClerkServesDocument = (cerebralTest, docketRecordIndex?) => {
     await waitForLoadingComponentToHide({ cerebralTest });
 
     await refreshElasticsearchIndex();
-
-    console.log('orderDocument', orderDocument);
-    cerebralTest.docketEntryId = orderDocument.docketEntryId;
   });
 };
