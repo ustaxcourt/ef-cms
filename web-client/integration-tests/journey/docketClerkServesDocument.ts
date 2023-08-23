@@ -40,5 +40,6 @@ export const docketClerkServesDocument = (cerebralTest, docketRecordIndex?) => {
     await refreshElasticsearchIndex();
 
     console.log('orderDocument', orderDocument);
+    cerebralTest.docketEntryId = orderDocument.docketEntryId;
   });
 };
