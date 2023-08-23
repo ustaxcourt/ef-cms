@@ -26,6 +26,8 @@ export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
+export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+
 export const LEGACY_DOCUMENT_TYPES = [
   {
     documentType: 'Designation of Counsel to Receive Service',
@@ -37,10 +39,6 @@ export const LEGACY_DOCUMENT_TYPES = [
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 export const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
-
-export const ORDER_JUDGE_FIELD = 'signedJudgeName';
-
-export const OPINION_JUDGE_FIELD = 'judge';
 
 export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 
