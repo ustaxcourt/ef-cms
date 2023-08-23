@@ -15,11 +15,12 @@ export type SeachClientResultsType = {
       }[];
     };
   };
-  total: number;
+  total?: number;
   results: any;
 };
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
