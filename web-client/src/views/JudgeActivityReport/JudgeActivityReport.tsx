@@ -6,6 +6,7 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
+import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
@@ -43,7 +44,8 @@ export const JudgeActivityReport = connect(
                 Cases Closed{' '}
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.closedCasesTotal}
+                Total:{' '}
+                {formatNumber(judgeActivityReportHelper.closedCasesTotal)}
               </div>
             </div>
           </caption>
@@ -59,7 +61,7 @@ export const JudgeActivityReport = connect(
             ).map(([status, count]) => (
               <tr key={status}>
                 <td>{status}</td>
-                <td>{count}</td>
+                <td>{formatNumber(count)}</td>
               </tr>
             ))}
           </tbody>
@@ -76,7 +78,8 @@ export const JudgeActivityReport = connect(
                 Sessions Held
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.trialSessionsHeldTotal}
+                Total:{' '}
+                {formatNumber(judgeActivityReportHelper.trialSessionsHeldTotal)}
               </div>
             </div>
           </caption>
@@ -93,7 +96,7 @@ export const JudgeActivityReport = connect(
             ).map(([sessionStatus, count]) => (
               <tr key={sessionStatus}>
                 <td>{sessionStatus}</td>
-                <td>{count}</td>
+                <td>{formatNumber(count)}</td>
               </tr>
             ))}
           </tbody>
@@ -110,7 +113,8 @@ export const JudgeActivityReport = connect(
                 Orders Issued
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.ordersFiledTotal}
+                Total:{' '}
+                {formatNumber(judgeActivityReportHelper.ordersFiledTotal)}
               </div>
             </div>
           </caption>
@@ -127,7 +131,7 @@ export const JudgeActivityReport = connect(
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
                   <td>{documentType}</td>
-                  <td>{count}</td>
+                  <td>{formatNumber(count)}</td>
                 </tr>
               ),
             )}
@@ -151,7 +155,8 @@ export const JudgeActivityReport = connect(
                 Opinions Issued
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.opinionsFiledTotal}
+                Total:{' '}
+                {formatNumber(judgeActivityReportHelper.opinionsFiledTotal)}
               </div>
             </div>
           </caption>
@@ -170,7 +175,7 @@ export const JudgeActivityReport = connect(
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
                   <td>{documentType}</td>
-                  <td>{count}</td>
+                  <td>{formatNumber(count)}</td>
                 </tr>
               ),
             )}
@@ -206,7 +211,10 @@ export const JudgeActivityReport = connect(
                 Submitted/CAV Cases
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
+                Total:{' '}
+                {formatNumber(
+                  judgeActivityReportHelper.progressDescriptionTableTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -237,12 +245,20 @@ export const JudgeActivityReport = connect(
                       />
                     </td>
                     <td>
-                      <CaseLink formattedCase={formattedCase} />
+                      <CaseLink
+                        formattedCase={formattedCase}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      />
                     </td>
-                    <td>{formattedCase?.formattedCaseCount}</td>
+                    <td>{formatNumber(formattedCase?.formattedCaseCount)}</td>
                     <td>{formattedCase.caseCaption}</td>
                     <td>{formattedCase.status}</td>
-                    <td>{formattedCase.daysElapsedSinceLastStatusChange}</td>
+                    <td>
+                      {formatNumber(
+                        formattedCase.daysElapsedSinceLastStatusChange,
+                      )}
+                    </td>
                   </tr>
                 );
               },

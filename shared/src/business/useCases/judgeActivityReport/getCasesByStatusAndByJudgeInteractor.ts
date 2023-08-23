@@ -7,7 +7,7 @@ import {
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
-  judges: string[];
+  judges: string[] | undefined;
   pageNumber?: number;
   pageSize?: number;
 };
@@ -47,35 +47,6 @@ const getConsolidatedCaseGroupCountMap = (
   });
 };
 
-const hasUnwantedDocketEntryEventCode = docketEntries => {
-  const prohibitedDocketEntryEventCodes: string[] = [
-    'ODD',
-    'DEC',
-    'OAD',
-    'SDEC',
-  ];
-
-  return docketEntries.some(docketEntry => {
-    if (docketEntry.servedAt && !docketEntry.isStricken) {
-      return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
-    }
-
-    return false;
-  });
-};
-
-const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
-  const caseRecordsToReturn: Array<any> = [];
-
-  caseRecords.forEach(individualCaseRecord => {
-    if (!hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)) {
-      caseRecordsToReturn.push(individualCaseRecord);
-    }
-  });
-
-  return caseRecordsToReturn;
-};
-
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
@@ -95,7 +66,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     throw new InvalidRequest();
   }
 
-  const { foundCases: submittedAndCavCasesResults } = await applicationContext
+  const caseRecords = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
@@ -105,71 +76,63 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       },
     });
 
-  const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(result =>
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: result.docketNumber,
-      }),
-    ),
+  const cavAndSubmittedCases = caseRecords.filter(
+    caseInfo =>
+      !caseInfo.leadDocketNumber ||
+      caseInfo.docketNumber === caseInfo.leadDocketNumber,
   );
 
-  // We need to filter out member cases returned from elasticsearch so we can get an accurate
-  // consolidated cases group count even when the case status of a member case does not match
-  // the lead case status.
-  const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
-    rawCaseRecords
+  const prohibitedDocketEntries = ['ODD', 'DEC', 'OAD', 'SDEC'];
+
+  const casesToFilterOut = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByEventCodes({
+      applicationContext,
+      params: {
+        cases: cavAndSubmittedCases,
+        eventCodes: prohibitedDocketEntries,
+      },
+    });
+
+  const formatedCasesToFilterOut = casesToFilterOut.map(
+    caseI => caseI.docketNumber,
+  );
+
+  const finalListOfCases = await Promise.all(
+    cavAndSubmittedCases
       .filter(
-        rawCaseRecord =>
-          !rawCaseRecord.leadDocketNumber ||
-          rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber,
+        caseInfo =>
+          !formatedCasesToFilterOut.includes(caseInfo.docketNumber) &&
+          caseInfo.caseStatusHistory,
       )
-      .map(async rawCaseRecord => {
-        if (rawCaseRecord.leadDocketNumber) {
-          rawCaseRecord.consolidatedCases = await applicationContext
+      .map(async caseInfo => {
+        if (caseInfo.leadDocketNumber) {
+          caseInfo.consolidatedCases = await applicationContext
             .getPersistenceGateway()
             .getCasesByLeadDocketNumber({
               applicationContext,
-              leadDocketNumber: rawCaseRecord.docketNumber,
+              leadDocketNumber: caseInfo.docketNumber,
             });
-          return rawCaseRecord;
+          return caseInfo;
         } else {
-          return rawCaseRecord;
+          return caseInfo;
         }
       }),
-  );
-
-  const filteredCaseRecords = filterCasesWithUnwantedDocketEntryEventCodes(
-    rawCaseRecordsWithWithoutMemberCases,
   );
 
   const consolidatedCasesGroupCountMap = new Map();
 
   getConsolidatedCaseGroupCountMap(
-    filteredCaseRecords,
+    finalListOfCases,
     consolidatedCasesGroupCountMap,
   );
 
-  const formattedCaseRecords: CavAndSubmittedFilteredCasesType[] =
-    filteredCaseRecords
-      .map(caseRecord => ({
-        caseCaption: caseRecord.caseCaption,
-        caseStatusHistory: caseRecord.caseStatusHistory || [],
-        docketNumber: caseRecord.docketNumber,
-        docketNumberWithSuffix: caseRecord.docketNumberWithSuffix,
-        leadDocketNumber: caseRecord.leadDocketNumber,
-        petitioners: caseRecord.petitioners,
-        status: caseRecord.status,
-      }))
-      .filter(unfilteredCase => unfilteredCase.caseStatusHistory.length > 0);
-
   const itemOffset =
-    (searchEntity.pageNumber * searchEntity.pageSize) %
-    formattedCaseRecords.length;
+    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
 
   const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = formattedCaseRecords.slice(
+  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
     itemOffset,
     endOffset,
   );
@@ -179,6 +142,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap: Object.fromEntries(
       consolidatedCasesGroupCountMap,
     ),
-    totalCount: formattedCaseRecords.length,
+    totalCount: finalListOfCases.length,
   };
 };

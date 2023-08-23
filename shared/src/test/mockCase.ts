@@ -657,6 +657,7 @@ export const MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY = {
   ...MOCK_CASE,
   associatedJudge: judgeUser.name,
   caseStatusHistory: [],
+  docketNumber: '115-23',
   pk: 'case|115-23',
   sk: 'case|115-23',
 };
