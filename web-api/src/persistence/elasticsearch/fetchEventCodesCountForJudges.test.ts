@@ -7,7 +7,7 @@ import { search } from './searchClient';
 jest.mock('./searchClient');
 
 describe('fetchEventCodesCountForJudges', () => {
-  const ordersAggsBucket = [
+  const aggsBucket = [
     { doc_count: 2, key: 'O' },
     { doc_count: 1, key: 'OAL' },
     { doc_count: 1, key: 'ODX' },
@@ -17,13 +17,13 @@ describe('fetchEventCodesCountForJudges', () => {
   const mockOrdersResults = {
     aggregations: {
       search_field_count: {
-        buckets: ordersAggsBucket,
+        buckets: aggsBucket,
       },
     },
     total: 9,
   };
 
-  const documentQuery = {
+  const documentQueryBody = {
     aggs: {
       search_field_count: {
         terms: {
@@ -64,7 +64,7 @@ describe('fetchEventCodesCountForJudges', () => {
     });
 
     expect(search.mock.calls[0][0].searchParameters.body).toMatchObject({
-      ...documentQuery,
+      ...documentQueryBody,
       query: {
         bool: {
           filter: [
