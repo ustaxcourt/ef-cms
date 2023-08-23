@@ -16,7 +16,7 @@ type AggregationsType = {
   };
 };
 
-export type SeachClientResultsType = {
+export type SearchClientResultsType = {
   aggregations?: AggregationsType;
   total: number;
   results: any;
@@ -70,7 +70,7 @@ export const search = async <T>({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}): Promise<SeachClientResultsType> => {
+}): Promise<SearchClientResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()
