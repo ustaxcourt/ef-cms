@@ -122,7 +122,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValueOnce(
+      .getCasesMetadataByLeadDocketNumber.mockResolvedValueOnce(
         casesForLeadDocketNumber,
       );
 
@@ -238,7 +238,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValueOnce(
+      .getCasesMetadataByLeadDocketNumber.mockResolvedValueOnce(
         casesForLeadDocketNumber,
       );
 

@@ -6,7 +6,7 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
-import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
+import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
 
@@ -45,7 +45,9 @@ export const JudgeActivityReport = connect(
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
-                {formatNumber(judgeActivityReportHelper.closedCasesTotal)}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.closedCasesTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -61,7 +63,7 @@ export const JudgeActivityReport = connect(
             ).map(([status, count]) => (
               <tr key={status}>
                 <td>{status}</td>
-                <td>{formatNumber(count)}</td>
+                <td>{formatPositiveNumber(count)}</td>
               </tr>
             ))}
           </tbody>
@@ -79,7 +81,9 @@ export const JudgeActivityReport = connect(
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
-                {formatNumber(judgeActivityReportHelper.trialSessionsHeldTotal)}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.trialSessionsHeldTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -96,7 +100,7 @@ export const JudgeActivityReport = connect(
             ).map(([sessionStatus, count]) => (
               <tr key={sessionStatus}>
                 <td>{sessionStatus}</td>
-                <td>{formatNumber(count)}</td>
+                <td>{formatPositiveNumber(count)}</td>
               </tr>
             ))}
           </tbody>
@@ -114,7 +118,9 @@ export const JudgeActivityReport = connect(
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
-                {formatNumber(judgeActivityReportHelper.ordersFiledTotal)}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.ordersFiledTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -131,7 +137,7 @@ export const JudgeActivityReport = connect(
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
                   <td>{documentType}</td>
-                  <td>{formatNumber(count)}</td>
+                  <td>{formatPositiveNumber(count)}</td>
                 </tr>
               ),
             )}
@@ -156,7 +162,9 @@ export const JudgeActivityReport = connect(
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
-                {formatNumber(judgeActivityReportHelper.opinionsFiledTotal)}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.opinionsFiledTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -175,7 +183,7 @@ export const JudgeActivityReport = connect(
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>
                   <td>{documentType}</td>
-                  <td>{formatNumber(count)}</td>
+                  <td>{formatPositiveNumber(count)}</td>
                 </tr>
               ),
             )}
@@ -212,7 +220,7 @@ export const JudgeActivityReport = connect(
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
-                {formatNumber(
+                {formatPositiveNumber(
                   judgeActivityReportHelper.progressDescriptionTableTotal,
                 )}
               </div>
@@ -251,11 +259,13 @@ export const JudgeActivityReport = connect(
                         target="_blank"
                       />
                     </td>
-                    <td>{formatNumber(formattedCase?.formattedCaseCount)}</td>
+                    <td>
+                      {formatPositiveNumber(formattedCase?.formattedCaseCount)}
+                    </td>
                     <td>{formattedCase.caseCaption}</td>
                     <td>{formattedCase.status}</td>
                     <td>
-                      {formatNumber(
+                      {formatPositiveNumber(
                         formattedCase.daysElapsedSinceLastStatusChange,
                       )}
                     </td>
