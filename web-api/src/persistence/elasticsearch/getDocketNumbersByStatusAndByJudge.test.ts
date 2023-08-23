@@ -2,15 +2,17 @@ import {
   CAV_AND_SUBMITTED_CASE_STATUS,
   MAX_ELASTICSEARCH_PAGINATION,
 } from '@shared/business/entities/EntityConstants';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import {
+  DocketNumberByStatusRequest,
+  getDocketNumbersByStatusAndByJudge,
+} from './getDocketNumbersByStatusAndByJudge';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getDocketNumbersByStatusAndByJudge } from './getDocketNumbersByStatusAndByJudge';
 import { judgeUser } from '@shared/test/mockUsers';
 import { search } from './searchClient';
 jest.mock('./searchClient');
 
 describe('getDocketNumbersByStatusAndByJudge', () => {
-  const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
+  const mockValidRequest: DocketNumberByStatusRequest = {
     judges: [judgeUser.name],
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
