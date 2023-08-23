@@ -1,9 +1,7 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-// import { docketClerkChecksDocketEntryEditLink } from './journey/docketClerkChecksDocketEntryEditLink';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkNavigatesToEditDocketEntryMeta } from './journey/docketClerkNavigatesToEditDocketEntryMeta';
-// import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkStrikesDocketEntry } from './journey/docketClerkStrikesDocketEntry';
@@ -227,18 +225,19 @@ describe('Judge activity report journey', () => {
     CASE_STATUS_TYPES.submitted,
     'Colvin',
   );
-  // todo NEED TO STRIKE DOCKET ENTRY
-  // get docket entry index of newly served OAD
-  // docketClerkChecksDocketEntryEditLink(cerebralTest);
 
   it('should retrieve the docket entry index based on the docketEntryId', () => {
+    console.log(
+      'docket entries to LOG',
+      cerebralTest.getState('caseDetail.docketEntries'),
+    );
+
     const caseDocuments = cerebralTest.getState('caseDetail.docketEntries');
     const docketEntry = caseDocuments.find(
       d => d.docketEntryId === cerebralTest.docketEntryId,
     );
     cerebralTest.docketRecordIndex = docketEntry.index;
   });
-  // docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
   docketClerkNavigatesToEditDocketEntryMeta(
     cerebralTest,
     cerebralTest.docketRecordIndex,
