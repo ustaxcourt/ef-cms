@@ -242,12 +242,10 @@ describe('Judge activity report journey', () => {
       'cerebralTest.docketRecordIndex',
       cerebralTest.docketRecordIndex,
     );
+    console.log('typeof docketEntry.index', typeof docketEntry.index);
   });
-  docketClerkNavigatesToEditDocketEntryMeta(
-    cerebralTest,
-    cerebralTest.docketRecordIndex,
-  );
-  docketClerkStrikesDocketEntry(cerebralTest, cerebralTest.docketRecordIndex);
+  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 7);
+  docketClerkStrikesDocketEntry(cerebralTest, 7);
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
   viewJudgeActivityReportResults(cerebralTest);
