@@ -31,7 +31,7 @@ export const SelectDocumentType = connect(
                   {fileDocumentHelper.formattedDocketNumbers}.
                 </Hint>
               )}
-              <h1 id="file-a-document-header" tabIndex="-1">
+              <h1 id="file-a-document-header" tabIndex={-1}>
                 What Document are You Filing?
               </h1>
 
