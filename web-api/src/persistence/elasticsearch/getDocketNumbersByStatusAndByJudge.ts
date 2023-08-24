@@ -51,6 +51,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
         query: {
           bool: {
             filter: filters,
+            minimum_should_match: 1,
             should: shouldFilters,
           },
         },
