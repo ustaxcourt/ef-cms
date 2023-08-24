@@ -1,5 +1,8 @@
+import {
+  COURT_ISSUED_EVENT_CODES,
+  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+} from '../../entities/EntityConstants';
 import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
-import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 import {
   OpinionsReturnType,
   getCountOfOpinionsFiledByJudgesInteractor,
@@ -17,10 +20,17 @@ export const mockCountOfFormattedOpinionsIssuedByJudge = [
   { count: 30, eventCode: 'TCOP' },
 ];
 
+const expectedResults = mockCountOfFormattedOpinionsIssuedByJudge.map(item => ({
+  ...item,
+  documentType: COURT_ISSUED_EVENT_CODES.find(
+    event => event.eventCode === item.eventCode,
+  ).documentType,
+}));
+
 export const mockOpinionsFiledTotal = 269;
 
 export const mockCountOfOpinionsIssuedByJudge = {
-  aggregations: mockCountOfFormattedOpinionsIssuedByJudge,
+  aggregations: expectedResults,
   total: mockOpinionsFiledTotal,
 };
 
