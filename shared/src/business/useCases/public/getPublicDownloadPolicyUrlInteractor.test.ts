@@ -1,6 +1,7 @@
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { PublicCase } from '../../entities/cases/PublicCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
@@ -19,7 +20,9 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       .getPublicDownloadPolicyUrl.mockReturnValue('localhost');
   });
 
-  it('should throw an error for a document that is not public accessible', async () => {
+  it('should throw an error for a document that is not publicly accessible', async () => {
+    jest.spyOn(PublicCase, 'isPrivateDocument').mockReturnValueOnce(true);
+
     await expect(
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
@@ -128,7 +131,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     expect(result).toEqual('localhost');
   });
 
-  it('should return a url for a document that is public accessible', async () => {
+  it('should return a url for a document that is publicly accessible', async () => {
     mockCase.docketEntries.push(
       new DocketEntry(
         {

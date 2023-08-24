@@ -9,7 +9,7 @@ describe('serveCaseToIrsAction', () => {
   let createObjectURLStub;
 
   beforeAll(() => {
-    global.window = global;
+    global.window ??= Object.create(global);
     global.Blob = () => {};
 
     pathPaperStub = jest.fn();
