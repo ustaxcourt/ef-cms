@@ -14,7 +14,7 @@ export const updateCase = async ({
   caseToUpdate,
 }: {
   applicationContext: IApplicationContext;
-  caseToUpdate: Case;
+  caseToUpdate: RawCase;
 }) => {
   const setLeadCase = caseToUpdate.leadDocketNumber
     ? { gsi1pk: `case|${caseToUpdate.leadDocketNumber}` }
