@@ -23,7 +23,7 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
   ];
 
   it('should make a persistence call to obtain all cases with a status of "Submitted" or "CAV" associated with the given judges', async () => {
-    search.mockReturnValue({ results: responseResults });
+    (search as jest.Mock).mockReturnValue({ results: responseResults });
 
     const docketNumbersSearchResults = await getDocketNumbersByStatusAndByJudge(
       {
@@ -32,12 +32,13 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
       },
     );
 
-    expect(search.mock.calls[0][0].searchParameters.size).toEqual(
-      MAX_ELASTICSEARCH_PAGINATION,
-    );
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.size,
+    ).toEqual(MAX_ELASTICSEARCH_PAGINATION);
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.should,
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .should,
     ).toMatchObject(
       expect.arrayContaining([
         { match_phrase: { 'associatedJudge.S': judgeUser.name } },
@@ -45,7 +46,8 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     );
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .filter,
     ).toMatchObject(
       expect.arrayContaining([
         {
@@ -54,27 +56,39 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
       ]),
     );
 
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .minimum_should_match,
+    ).toEqual(1);
+
     expect(docketNumbersSearchResults).toMatchObject(responseResults);
   });
 
   it('should make a persistence call to obtain all cases with a status of "Submitted" or "CAV" without judges', async () => {
-    search.mockReturnValue({ results: responseResults });
+    (search as jest.Mock).mockReturnValue({ results: responseResults });
 
     await getDocketNumbersByStatusAndByJudge({
       applicationContext,
       params: { ...mockValidRequest, judges: undefined },
     });
 
-    expect(search.mock.calls[0][0].searchParameters.size).toEqual(
-      MAX_ELASTICSEARCH_PAGINATION,
-    );
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.size,
+    ).toEqual(MAX_ELASTICSEARCH_PAGINATION);
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.should,
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .should,
     ).toMatchObject([]);
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .minimum_should_match,
+    ).toEqual(1);
+
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body.query.bool
+        .filter,
     ).toMatchObject(
       expect.arrayContaining([
         {
