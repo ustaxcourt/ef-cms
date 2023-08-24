@@ -5,6 +5,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
 export type JudgeActivityReportFilters = {
   endDate: string;
@@ -47,7 +48,7 @@ export const getCountOfOrdersFiledByJudgesInteractor = async (
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  return await applicationContext
+  const { aggregations, total } = await applicationContext
     .getPersistenceGateway()
     .fetchEventCodesCountForJudges({
       applicationContext,
@@ -59,4 +60,9 @@ export const getCountOfOrdersFiledByJudgesInteractor = async (
         startDate: searchEntity.startDate,
       },
     });
+
+  const computedAggregatedEventCodes =
+    addDocumentTypeToEventCodeAggregation(aggregations);
+
+  return { aggregations: computedAggregatedEventCodes, total };
 };
