@@ -11,8 +11,10 @@ export const submitRespondentCaseAssociationRequestAction = async ({
   applicationContext,
   get,
   props,
-}: ActionProps) => {
-  const { consolidatedCases, docketNumber } = get(state.caseDetail);
+}: ActionProps<{ fileAcrossConsolidatedGroup: boolean }>) => {
+  const { consolidatedCases, docketNumber } = get(
+    state.caseDetail,
+  ) as RawCase & { consolidatedCases: RawCase[] };
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
   const { fileAcrossConsolidatedGroup } = props;
