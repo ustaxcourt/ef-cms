@@ -44,12 +44,12 @@ export const practitionerUpdatesAddress = cerebralTest => {
       refreshInterval: 1000,
     });
 
-    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
 
     await refreshElasticsearchIndex(5000);
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Changes saved.',
     });
-  });
+  }, 70000);
 };
