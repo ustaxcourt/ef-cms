@@ -14,6 +14,14 @@ export const DocketRecordMobileHeader = ({
   gotoPrintableDocketRecordSequence,
   sessionMetadata,
   updateSessionMetadataSequence,
+}: {
+  docketNumber: string;
+  filterOptions: Record<string, string>;
+  gotoPrintableDocketRecordSequence: (options: {
+    docketNumber: string;
+  }) => void;
+  sessionMetadata: any;
+  updateSessionMetadataSequence: () => void;
 }) => {
   return (
     <div className="grid-container padding-0 docket-record-header">
@@ -86,6 +94,11 @@ export const NonMobileHeaderControls = ({
   filterOptions,
   sessionMetadata,
   updateSessionMetadataSequence,
+}: {
+  docketNumber: string;
+  filterOptions: Record<string, string>;
+  sessionMetadata: any;
+  updateSessionMetadataSequence: () => void;
 }) => {
   return (
     <>
