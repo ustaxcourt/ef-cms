@@ -9,6 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
+import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
 export type OpinionsReturnType = {
   aggregations: OrdersAndOpinionResultCountTypes[];
@@ -31,7 +32,7 @@ export const getCountOfOpinionsFiledByJudgesInteractor = async (
     throw new InvalidRequest();
   }
 
-  return await applicationContext
+  const { aggregations, total } = await applicationContext
     .getPersistenceGateway()
     .fetchEventCodesCountForJudges({
       applicationContext,
@@ -43,4 +44,9 @@ export const getCountOfOpinionsFiledByJudgesInteractor = async (
         startDate: searchEntity.startDate,
       },
     });
+
+  const computedAggregatedEventCodes =
+    addDocumentTypeToEventCodeAggregation(aggregations);
+
+  return { aggregations: computedAggregatedEventCodes, total };
 };
