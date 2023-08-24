@@ -330,6 +330,7 @@ export const baseState = {
   },
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
+  iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
@@ -403,16 +404,19 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
   validationErrors: {},
+  viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workitemAllCheckbox: false,
 };
 
 export const initialState = {

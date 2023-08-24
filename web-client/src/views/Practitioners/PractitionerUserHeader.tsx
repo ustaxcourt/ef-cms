@@ -13,7 +13,7 @@ export const PractitionerUserHeader = connect(
           <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-12">
-                <h1 className="captioned" tabIndex="-1">
+                <h1 className="captioned" tabIndex={-1}>
                   {practitionerDetailHelper.name}
                 </h1>
                 <span className="usa-tag">
