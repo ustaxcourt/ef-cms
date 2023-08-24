@@ -43,7 +43,7 @@ export const RequestAccess = connect(
           <h1
             className="margin-bottom-105"
             id="file-a-document-header"
-            tabIndex="-1"
+            tabIndex={-1}
           >
             Request Access to This Case
           </h1>

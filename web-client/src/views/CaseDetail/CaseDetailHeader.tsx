@@ -142,7 +142,7 @@ export const CaseDetailHeader = connect(
                 <div className="margin-bottom-1">
                   <h1
                     className="heading-2 captioned docket-number-header"
-                    tabIndex="-1"
+                    tabIndex={-1}
                   >
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
                       <Icon

@@ -16,7 +16,7 @@ export const Privacy = connect(
           <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-6">
-                <h1 className="captioned" tabIndex="-1">
+                <h1 className="captioned" tabIndex={-1}>
                   Privacy
                 </h1>
               </div>
