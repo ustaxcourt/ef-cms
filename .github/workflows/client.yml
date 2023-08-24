@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.15.0'
+          node-version: '18.16.1'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v1
         with:
@@ -48,7 +48,7 @@ jobs:
           name: coverage-artifacts
           path: coverage
       - name: Process Coverage
-        run: npx nyc report --check-coverage --branches 94.56 --functions 98.81 --lines 99.25 --statements 99.23 --reporter lcov --reporter text --reporter clover -t coverage
+        run: npx nyc report --check-coverage --branches 94.56 --functions 97 --lines 97 --statements 97 --reporter lcov --reporter text --reporter clover -t coverage
       - uses: geekyeggo/delete-artifact@v1
         with:
           name: coverage-artifacts

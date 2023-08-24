@@ -1,4 +1,1 @@
-module.exports = [
-  ...require('./efcms-local.json'),
-  ...require('./caseWithOver100PendingItems.json'),
-];
+export const seedEntries = require('./efcms-local.json');

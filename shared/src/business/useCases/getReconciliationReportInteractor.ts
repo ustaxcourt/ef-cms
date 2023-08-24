@@ -1,4 +1,4 @@
-import { DocketEntryDynamoRecord } from '../../persistence/dynamo/dynamoTypes';
+import { DocketEntryDynamoRecord } from '../../../../web-api/src/persistence/dynamo/dynamoTypes';
 import {
   FORMATS,
   PATTERNS,

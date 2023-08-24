@@ -84,22 +84,33 @@ if [[ $FORCE_MIGRATION == "--force" ]]; then
   fi
 fi
 
-
-
 EXISTS=$(check_dynamo_table_exists "${NEXT_TABLE}" us-east-1)
 if [[ "${EXISTS}" == "1" ]]; then
-  echo "error: expected the ${NEXT_TABLE} table to have been deleted from us-east-1 before running migration"
-  exit 1
+  NUM_ITEMS=$(aws dynamodb scan --table-name "${NEXT_TABLE}" --region us-west-1 --max-items 1 | jq .Count)
+  if [ "$NUM_ITEMS" != "0" ]; then
+    echo "error: expected the ${NEXT_TABLE} table to have been deleted or empty from us-east-1 before running migration ${NUM_ITEMS}"
+    exit 1
+  fi
+  echo "warn: the table ${NEXT_TABLE} (us-east-1) exists, but it is empty"
 fi
 
 EXISTS=$(check_dynamo_table_exists "${NEXT_TABLE}" us-west-1)
 if [[ "${EXISTS}" == "1" ]]; then
-  echo "error: expected the ${NEXT_TABLE} table to have been deleted from us-west-1 before running migration"
-  exit 1
+  NUM_ITEMS=$(aws dynamodb scan --table-name "${NEXT_TABLE}" --region us-west-1 --max-items 1 | jq .Count)
+  if [ "$NUM_ITEMS" != "0" ]; then
+    echo "error: expected the ${NEXT_TABLE} table to have been deleted or empty from us-west-1 before running migration ${NUM_ITEMS}"
+    exit 1
+  fi
+  echo "warn: the table ${NEXT_TABLE} (us-west-1) exists, but it is empty"
 fi
 
 EXISTS=$(check_opensearch_domain_exists "${NEXT_OPENSEARCH_DOMAIN}")
 if [[ "${EXISTS}" == "1" ]]; then
-  echo "error: expected the ${NEXT_OPENSEARCH_DOMAIN} elasticsearch cluster to have been deleted from us-east-1 before running migration"
-  exit 1
+  npx ts-node --transpile-only ./scripts/elasticsearch/ready-cluster-for-migration.ts "${NEXT_OPENSEARCH_DOMAIN}"
+  CLUSTER_IS_NOT_EMPTY="$?"
+  if [[ "${CLUSTER_IS_NOT_EMPTY}" == "1" ]]; then
+    echo "error: expected the ${NEXT_OPENSEARCH_DOMAIN} openserach cluster to have been deleted from us-east-1 before running migration"
+    exit 1
+  fi
+  echo "warn: the openserach cluster ${NEXT_OPENSEARCH_DOMAIN} exists, but it is empty"
 fi
