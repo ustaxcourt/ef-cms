@@ -47,7 +47,7 @@
     "english-ordinals": "^3.2.2",
     "esbuild": "^0.19.2",
     "esbuild-css-modules-plugin": "^2.7.1",
-    "esbuild-sass-plugin": "^2.12.0",
+    "esbuild-sass-plugin": "^2.13.0",
     "express": "^4.18.2",
     "form-data": "^4.0.0",
     "image-blob-reduce": "^4.1.0",
@@ -234,7 +234,7 @@
   "overrides": {
     "@cypress/request": "3.0.0",
     "got": "12.1.0",
-    "meow": "^9.0.0",    
+    "meow": "^9.0.0",
     "semver": "^7.5.2",
     "tough-cookie": "^4.1.3"
   },
