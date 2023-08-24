@@ -39,7 +39,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
     });
   }
 
-  const validatedConsolidatedCases = [];
+  const validatedConsolidatedCases: (RawCase | RawPublicCase)[] = [];
   const isAssociatedWithGroup = isUserPartOfGroup({
     consolidatedCases,
     userId: user.userId,

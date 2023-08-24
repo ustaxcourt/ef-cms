@@ -17,7 +17,9 @@ export const submitCaseAssociationRequestAction = async ({
     applicationContext.getConstants();
 
   const { primaryDocumentId } = props.documentsFiled;
-  const { consolidatedCases, docketNumber } = get(state.caseDetail);
+  const { consolidatedCases, docketNumber } = get(
+    state.caseDetail,
+  ) as RawCase & { consolidatedCases: RawCase[] };
   const user = applicationContext.getCurrentUser();
 
   let documentMetadata = get(state.form);
@@ -34,7 +36,7 @@ export const submitCaseAssociationRequestAction = async ({
     ],
   };
 
-  let consolidatedCasesDocketNumbers = [];
+  let consolidatedCasesDocketNumbers: string[] = [];
 
   if (
     documentMetadata.fileAcrossConsolidatedGroup &&
