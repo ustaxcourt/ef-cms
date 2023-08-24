@@ -46,7 +46,7 @@ function toRawObject(entity) {
  *
  * @returns {object} the formatted errors
  */
-function getFormattedValidationErrorsHelper(entity) {
+function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   const errors = entity.getValidationErrors();
   if (!errors) return null;
   for (let key of Object.keys(errors)) {
@@ -76,10 +76,10 @@ function getFormattedValidationErrorsHelper(entity) {
  *
  * @returns {object} the formatted errors
  */
-function getFormattedValidationErrors(entity): Record<string, any> | null {
+function getFormattedValidationErrors(entity): {} | null {
   const keys = Object.keys(entity);
   const obj = {};
-  let errors = null;
+  let errors: {} | null = null;
   if (entity.getFormattedValidationErrors) {
     errors = getFormattedValidationErrorsHelper(entity);
   }
@@ -176,9 +176,9 @@ export abstract class JoiValidationEntity {
         return transformed;
       };
       if (logErrors) {
-        applicationContext.logger.error('*** Entity with error: ***', this);
+        applicationContext?.logger.error('*** Entity with error: ***', this);
       }
-      const validationErrors = this.getValidationErrors();
+      const validationErrors = this.getValidationErrors()!;
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(stringifyTransform(validationErrors)),

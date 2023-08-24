@@ -14,6 +14,29 @@ const SectionWorkQueueInProgressRow = React.memo(
     showAssignedToColumn,
     showFiledByColumn,
     showSelectColumn,
+  }: {
+    item: {
+      selected: boolean;
+      workItemId: string;
+      consolidatedIconTooltipText: string;
+      inLeadCase: boolean;
+      inConsolidatedGroup: boolean;
+      showLeadCaseIcon: boolean;
+      received: string;
+      caseTitle: string;
+      docketEntry: {
+        filedBy: string;
+        descriptionDisplay: string;
+        documentType: string;
+      };
+      formattedCaseStatus: string;
+      assigneeName: string;
+      editLink: string;
+    };
+    selectWorkItemSequence: (workItem: { workItem: any }) => void;
+    showAssignedToColumn: boolean;
+    showFiledByColumn: boolean;
+    showSelectColumn: boolean;
   }) {
     return (
       <tbody>
@@ -86,8 +109,6 @@ export const SectionWorkQueueInProgress = connect(
     selectAssigneeSequence: sequences.selectAssigneeSequence,
     selectWorkItemSequence: sequences.selectWorkItemSequence,
     selectedWorkItemsLength: state.selectedWorkItems.length,
-    showSelectAllCheckbox: state.workQueueHelper.showSelectAllCheckbox,
-    showSelectColumn: state.workQueueHelper.showSelectColumn,
     toggleAllWorkItemCheckboxChangeSequence:
       sequences.toggleAllWorkItemCheckboxChangeSequence,
     users: state.users,
@@ -97,8 +118,6 @@ export const SectionWorkQueueInProgress = connect(
   function SectionWorkQueueInProgress({
     formattedWorkQueue,
     selectWorkItemSequence,
-    showSelectAllCheckbox,
-    showSelectColumn,
     toggleAllWorkItemCheckboxChangeSequence,
     users,
     workitemAllCheckbox,
@@ -114,10 +133,10 @@ export const SectionWorkQueueInProgress = connect(
         >
           <thead>
             <tr>
-              {showSelectColumn && (
+              {workQueueHelper.showSelectColumn && (
                 <>
                   <th className="message-select-control select-all-checkbox">
-                    {showSelectAllCheckbox && (
+                    {workQueueHelper.showSelectAllCheckbox && (
                       <>
                         <input
                           aria-label="select all work items"
