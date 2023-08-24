@@ -1,4 +1,3 @@
-import { COURT_ISSUED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import {
   computeDocumentFilters,
   computeShouldFilters,
@@ -55,14 +54,24 @@ export const fetchEventCodesCountForJudges = async ({
     searchParameters: documentQuery,
   });
 
-  const computedAggregatedEventCodes =
-    aggregations!.search_field_count.buckets.map(bucketObj => ({
-      count: bucketObj.doc_count,
-      documentType: COURT_ISSUED_EVENT_CODES.find(
-        event => event.eventCode === bucketObj.key,
-      )!.documentType,
-      eventCode: bucketObj.key,
-    }));
+  const bucketCountAggs = aggregations!.search_field_count.buckets.reduce(
+    (acc, bucketObj) => {
+      return {
+        ...acc,
+        [bucketObj.key]: bucketObj.doc_count,
+      };
+    },
+    {},
+  );
+
+  const computedAggregatedEventCodes = params.documentEventCodes.map(
+    eventCode => {
+      return {
+        count: bucketCountAggs[eventCode] || 0,
+        eventCode,
+      };
+    },
+  );
 
   return { aggregations: computedAggregatedEventCodes, total };
 };
