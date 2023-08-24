@@ -7,11 +7,18 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const userContactUpdateProgressAction = ({
+  get,
   props,
   store,
 }: ActionProps) => {
   const { completedCases, totalCases } = props;
 
+  const currentCompletedCases =
+    get(state.userContactEditProgress.completedCases) ?? 0;
+
   store.set(state.userContactEditProgress.totalCases, totalCases);
-  store.set(state.userContactEditProgress.completedCases, completedCases);
+  store.set(
+    state.userContactEditProgress.completedCases,
+    Math.max(completedCases, currentCompletedCases),
+  );
 };
