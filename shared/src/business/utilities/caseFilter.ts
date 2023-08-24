@@ -4,13 +4,16 @@ import {
 } from '../../authorization/authorizationClientService';
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
+
 const CASE_ATTRIBUTE_WHITELIST = [
   'docketNumber',
   'docketNumberSuffix',
   'isPaper',
   'isSealed',
   'sealedDate',
-];
+] as const;
+
+type CaseAttributeWhitelistKeys = (typeof CASE_ATTRIBUTE_WHITELIST)[number];
 
 const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'additionalName',
@@ -25,8 +28,10 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'title',
 ];
 
+export type SealedCase = Record<CaseAttributeWhitelistKeys, any>;
+
 export const caseSealedFormatter = caseRaw => {
-  return pick(caseRaw, CASE_ATTRIBUTE_WHITELIST);
+  return pick(caseRaw, CASE_ATTRIBUTE_WHITELIST) as SealedCase;
 };
 
 /**

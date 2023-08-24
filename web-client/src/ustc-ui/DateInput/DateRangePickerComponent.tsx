@@ -31,8 +31,8 @@ export const DateRangePickerComponent = ({
   endValue: string;
   formGroupCls?: string;
   rangePickerCls?: string;
-  onChangeEnd: (event: CustomEvent) => void;
-  onChangeStart: (event: CustomEvent) => void;
+  onChangeEnd: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChangeStart: (event: React.ChangeEvent<HTMLInputElement>) => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string;
