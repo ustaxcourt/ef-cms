@@ -1,7 +1,20 @@
 import { COURT_ISSUED_EVENT_CODES } from '../../entities/EntityConstants';
 
-export const addDocumentTypeToEventCodeAggregation = aggregations =>
-  aggregations.map(eventCodeObj => {
+interface AggregatedEventCode {
+  eventCode: string;
+  count: number;
+}
+
+interface AggregatedEventCodeWithDocumentType extends AggregatedEventCode {
+  documentType: string;
+}
+
+export const addDocumentTypeToEventCodeAggregation = (
+  aggregations?: AggregatedEventCode[],
+): AggregatedEventCodeWithDocumentType[] => {
+  if (!aggregations) return [];
+
+  return aggregations.map(eventCodeObj => {
     return {
       ...eventCodeObj,
       documentType: COURT_ISSUED_EVENT_CODES.find(
@@ -9,3 +22,4 @@ export const addDocumentTypeToEventCodeAggregation = aggregations =>
       )!.documentType,
     };
   });
+};
