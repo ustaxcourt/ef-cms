@@ -132,7 +132,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportData.orders.aggregations.map(
+            {judgeActivityReportHelper.orders.map(
               ({ count, documentType, eventCode }) => (
                 <tr key={eventCode}>
                   <td className="width-15">{eventCode}</td>

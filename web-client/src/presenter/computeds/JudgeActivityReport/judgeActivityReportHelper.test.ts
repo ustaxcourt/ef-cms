@@ -207,6 +207,47 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
+  describe('orders displayed', () => {
+    it('should only return a list of orders with a total count', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.orders.aggregations =
+        [
+          {
+            count: 1,
+            documentType: 'Order',
+            eventCode: 'O',
+          },
+          {
+            count: 5,
+            documentType: 'Order for Dismissal',
+            eventCode: 'ODS',
+          },
+          {
+            count: 0,
+            documentType: 'Order for Dismissal',
+            eventCode: 'OAD',
+          },
+        ];
+
+      const expectedResult = [
+        {
+          count: 1,
+          documentType: 'Order',
+          eventCode: 'O',
+        },
+        {
+          count: 5,
+          documentType: 'Order for Dismissal',
+          eventCode: 'ODS',
+        },
+      ];
+      const { orders } = runCompute(judgeActivityReportHelper, {
+        state: baseState,
+      });
+
+      expect(orders).toEqual(expectedResult);
+    });
+  });
+
   describe('reportHeader', () => {
     it('should return reportHeader that includes judge name and the currentDate in MMDDYY format', () => {
       (

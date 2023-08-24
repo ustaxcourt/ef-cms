@@ -1,5 +1,6 @@
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { OrdersReturnType } from '../../../../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
@@ -16,6 +17,7 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
+  orders: OrdersReturnType;
 }
 
 export const judgeActivityReportHelper = (
@@ -30,7 +32,7 @@ export const judgeActivityReportHelper = (
     casesClosedByJudge,
     consolidatedCasesGroupCountMap,
     opinions,
-    orders,
+    orders = [],
     submittedAndCavCasesByJudge = [],
     totalCountForSubmittedAndCavCases,
     trialSessions,
@@ -104,10 +106,13 @@ export const judgeActivityReportHelper = (
     totalCountForSubmittedAndCavCases / CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
   );
 
+  const ordersToDisplay = orders.aggregations?.filter(agg => agg.count);
+
   return {
     closedCasesTotal: casesClosedByJudge?.total || 0,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal: opinions?.total || 0,
+    orders: ordersToDisplay,
     ordersFiledTotal: orders?.total || 0,
     pageCount,
     progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
