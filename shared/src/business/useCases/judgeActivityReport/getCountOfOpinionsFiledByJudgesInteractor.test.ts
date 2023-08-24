@@ -8,19 +8,18 @@ import { applicationContext } from '../../test/createTestApplicationContext';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 export const mockCountOfFormattedOpinionsIssuedByJudge = [
-  { count: 177, documentType: 'Memorandum Opinion', eventCode: 'MOP' },
+  { count: 177, eventCode: 'MOP' },
   {
     count: 53,
-    documentType: 'Order of Service of Transcript (Bench Opinion)',
     eventCode: 'OST',
   },
-  { count: 34, documentType: 'Summary Opinion', eventCode: 'SOP' },
-  { count: 30, documentType: 'T.C. Opinion', eventCode: 'TCOP' },
+  { count: 34, eventCode: 'SOP' },
+  { count: 30, eventCode: 'TCOP' },
 ];
 
 export const mockOpinionsFiledTotal = 269;
 
-export const mockCountOfOpinionsIssuedByJudge: OpinionsReturnType = {
+export const mockCountOfOpinionsIssuedByJudge = {
   aggregations: mockCountOfFormattedOpinionsIssuedByJudge,
   total: mockOpinionsFiledTotal,
 };
@@ -67,10 +66,11 @@ describe('getCountOfOpinionsFiledByJudgesInteractor', () => {
   });
 
   it('should make a call to return the opinions filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    const opinions = await getCountOfOpinionsFiledByJudgesInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
+    const opinions: OpinionsReturnType =
+      await getCountOfOpinionsFiledByJudgesInteractor(
+        applicationContext,
+        mockValidRequest,
+      );
 
     expect(
       applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
