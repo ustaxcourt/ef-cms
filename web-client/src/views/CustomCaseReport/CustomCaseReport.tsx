@@ -9,6 +9,7 @@ import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
+import { focusPaginatorTop } from '@web-client/ustc-ui/Pagination/paginatorHelper';
 import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -39,16 +40,6 @@ export const CustomCaseReport = connect(
     const [hasRunCustomCaseReport, setHasRunCustomCaseReport] = useState(false);
     const [activePage, setActivePage] = useState(0);
     const paginatorTop = useRef(null);
-
-    const focusPaginatorTop = ref => {
-      setTimeout(() => {
-        window.scrollTo({
-          behavior: 'smooth',
-          left: 0,
-          top: ref.current.offsetTop - 20,
-        });
-      }, 100);
-    };
 
     return (
       <>
@@ -477,24 +468,24 @@ export const CustomCaseReport = connect(
             Clear Filters
           </Button>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
-          {customCaseInventoryReportHelper.pageCount > 1 && (
-            <div ref={paginatorTop}>
+          <div ref={paginatorTop}>
+            {customCaseInventoryReportHelper.pageCount > 1 && (
               <Paginator
                 breakClassName="hide"
                 forcePage={activePage}
                 marginPagesDisplayed={0}
                 pageCount={customCaseInventoryReportHelper.pageCount}
                 pageRangeDisplayed={0}
-                onPageChange={pageChange => {
+                onPageChange={async pageChange => {
                   setActivePage(pageChange.selected);
-                  getCustomCaseInventoryReportSequence({
+                  await getCustomCaseInventoryReportSequence({
                     selectedPage: pageChange.selected,
                   });
                   focusPaginatorTop(paginatorTop);
                 }}
               />
-            </div>
-          )}
+            )}
+          </div>
           <div className="text-right margin-bottom-2">
             <span className="text-bold" id="custom-case-result-count">
               Count: &nbsp;
@@ -513,9 +504,9 @@ export const CustomCaseReport = connect(
               marginPagesDisplayed={0}
               pageCount={customCaseInventoryReportHelper.pageCount}
               pageRangeDisplayed={0}
-              onPageChange={pageChange => {
+              onPageChange={async pageChange => {
                 setActivePage(pageChange.selected);
-                getCustomCaseInventoryReportSequence({
+                await getCustomCaseInventoryReportSequence({
                   selectedPage: pageChange.selected,
                 });
                 focusPaginatorTop(paginatorTop);
