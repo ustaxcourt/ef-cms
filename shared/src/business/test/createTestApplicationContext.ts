@@ -191,6 +191,9 @@ export const createTestApplicationContext = ({
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
+    calculateDifferenceInDays: jest
+      .fn()
+      .mockImplementation(DateHandler.calculateDifferenceInDays),
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),

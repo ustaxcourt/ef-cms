@@ -44,6 +44,7 @@ describe('fetchEventCodesCountForJudges', () => {
       search_field_count: {
         terms: {
           field: 'eventCode.S',
+          size: 10,
         },
       },
     },
@@ -86,6 +87,9 @@ describe('fetchEventCodesCountForJudges', () => {
       params,
     });
 
+    documentQueryBody.aggs.search_field_count.terms.size =
+      params.documentEventCodes.length;
+
     expect(
       (search as jest.Mock).mock.calls[0][0].searchParameters.body,
     ).toMatchObject({
@@ -94,6 +98,16 @@ describe('fetchEventCodesCountForJudges', () => {
         bool: {
           filter: [
             { term: { 'entityName.S': 'DocketEntry' } },
+            {
+              exists: {
+                field: 'servedAt',
+              },
+            },
+            {
+              term: {
+                'isStricken.BOOL': false,
+              },
+            },
             {
               range: {
                 'filingDate.S': {
@@ -151,6 +165,9 @@ describe('fetchEventCodesCountForJudges', () => {
       params,
     });
 
+    documentQueryBody.aggs.search_field_count.terms.size =
+      params.documentEventCodes.length;
+
     expect(
       (search as jest.Mock).mock.calls[0][0].searchParameters.body,
     ).toMatchObject({
@@ -159,6 +176,16 @@ describe('fetchEventCodesCountForJudges', () => {
         bool: {
           filter: [
             { term: { 'entityName.S': 'DocketEntry' } },
+            {
+              exists: {
+                field: 'servedAt',
+              },
+            },
+            {
+              term: {
+                'isStricken.BOOL': false,
+              },
+            },
             {
               range: {
                 'filingDate.S': {

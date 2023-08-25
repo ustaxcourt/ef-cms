@@ -31,8 +31,19 @@ export const computeShouldFilters = ({
 };
 
 export const computeDocumentFilters = ({ params }) => {
+  // add filters to return 'served'/'stricken' orders/opinions
   const documentFilters: QueryDslQueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
+    {
+      exists: {
+        field: 'servedAt',
+      },
+    },
+    {
+      term: {
+        'isStricken.BOOL': false,
+      },
+    },
   ];
 
   if (params.endDate && params.startDate) {
