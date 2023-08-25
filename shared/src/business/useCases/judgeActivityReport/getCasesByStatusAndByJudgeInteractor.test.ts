@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
   MOCK_CAV_LEAD_CASE,
@@ -13,7 +14,6 @@ import {
   MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
 } from '@shared/test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
@@ -43,9 +43,16 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
 
+  const currentDateInIsoFormat: string = applicationContext
+    .getUtilities()
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString(),
+      FORMATS.ISO,
+    );
+
   const expectedCaseStatus = {
     changedBy: 'Private Practitioner',
-    date: createISODateString(),
+    date: currentDateInIsoFormat,
     updatedCaseStatus: CASE_STATUS_TYPES.new,
   };
   const mockCaseInfo = {
@@ -135,9 +142,11 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
+          daysElapsedSinceLastStatusChange: 0,
           docketNumber: '101-18',
         }),
         expect.objectContaining({
+          daysElapsedSinceLastStatusChange: 0,
           docketNumber: '109-19',
         }),
       ]),
