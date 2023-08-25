@@ -63,13 +63,6 @@ export const judgeActivityReportHelper = (
 
   const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
-  const currentDateInIsoFormat: string = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      applicationContext.getConstants().DATE_FORMATS.ISO,
-    );
-
   submittedAndCavCasesByJudge.forEach(individualCase => {
     individualCase.formattedCaseCount =
       consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
@@ -78,28 +71,8 @@ export const judgeActivityReportHelper = (
       individualCase.isLeadCase = true;
       individualCase.inConsolidatedGroup = true;
     }
-
-    individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
-
-    const newestCaseStatusChangeIndex =
-      individualCase.caseStatusHistory.length - 1;
-
-    const dateOfLastCaseStatusChange =
-      individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
-
-    individualCase.daysElapsedSinceLastStatusChange = applicationContext
-      .getUtilities()
-      .calculateDifferenceInDays(
-        currentDateInIsoFormat,
-        dateOfLastCaseStatusChange,
-      );
   });
 
-  submittedAndCavCasesByJudge.sort((a, b) => {
-    return (
-      b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
-    );
-  });
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 
   const pageCount = Math.ceil(
