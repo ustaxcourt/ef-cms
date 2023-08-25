@@ -95,6 +95,16 @@ describe('fetchEventCodesCountForJudges', () => {
           filter: [
             { term: { 'entityName.S': 'DocketEntry' } },
             {
+              exists: {
+                field: 'servedAt',
+              },
+            },
+            {
+              term: {
+                'isStricken.BOOL': false,
+              },
+            },
+            {
               range: {
                 'filingDate.S': {
                   gte: `${params.startDate}||/h`,
@@ -159,6 +169,16 @@ describe('fetchEventCodesCountForJudges', () => {
         bool: {
           filter: [
             { term: { 'entityName.S': 'DocketEntry' } },
+            {
+              exists: {
+                field: 'servedAt',
+              },
+            },
+            {
+              term: {
+                'isStricken.BOOL': false,
+              },
+            },
             {
               range: {
                 'filingDate.S': {
