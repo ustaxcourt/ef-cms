@@ -40,7 +40,7 @@ export const StartCaseStep2 = connect(
     return (
       <>
         <Focus>
-          <h2 className="focusable margin-bottom-105" tabIndex="-1">
+          <h2 className="focusable margin-bottom-105" tabIndex={-1}>
             2. Your Petition
           </h2>
         </Focus>
