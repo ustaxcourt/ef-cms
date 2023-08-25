@@ -5,10 +5,8 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-const getConsolidatedCaseGroupCountMap = (
-  filteredCaseRecords,
-  consolidatedCasesGroupCountMap,
-) => {
+const getConsolidatedCaseGroupCountMap = filteredCaseRecords => {
+  const consolidatedCasesGroupCountMap = new Map();
   filteredCaseRecords.forEach(caseRecord => {
     if (caseRecord.leadDocketNumber) {
       consolidatedCasesGroupCountMap.set(
@@ -17,6 +15,7 @@ const getConsolidatedCaseGroupCountMap = (
       );
     }
   });
+  return consolidatedCasesGroupCountMap;
 };
 
 const hasUnwantedDocketEntryEventCode = docketEntries => {
@@ -120,12 +119,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     rawCaseRecordsWithWithoutMemberCases,
   );
 
-  const consolidatedCasesGroupCountMap = new Map();
-
-  getConsolidatedCaseGroupCountMap(
-    filteredCaseRecords,
-    consolidatedCasesGroupCountMap,
-  );
+  const consolidatedCasesGroupCountMap =
+    getConsolidatedCaseGroupCountMap(filteredCaseRecords);
 
   return {
     cases: Case.validateRawCollection(filteredCaseRecords, {

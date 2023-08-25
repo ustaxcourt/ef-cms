@@ -6,13 +6,25 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
-import { BindedSelect } from '@web-client/ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DeletePrimaryIssueModal } from '../CaseWorksheet/DeletePrimaryIssueModal';
 import React from 'react';
 
+function convertToDateInputValues(date: string) {
+  if (!date) {
+    return '';
+  }
+  const [month, day, year] = date.split('/');
+  return {
+    day,
+    month,
+    year,
+  };
+}
+
 export const SubmittedCavCasesTable = connect(
   {
+    STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
     openAddEditPrimaryIssueModalSequence:
       sequences.openAddEditPrimaryIssueModalSequence,
@@ -29,19 +41,10 @@ export const SubmittedCavCasesTable = connect(
     openAddEditPrimaryIssueModalSequence,
     openDeleteCasePrimaryIssueSequence,
     showModal,
+    STATUS_OF_MATTER_OPTIONS,
     submittedCavCasesTableHelper,
     updateSubmittedCavCaseDetailSequence,
   }) {
-    const StatusOfMatter = [
-      'Awaiting Consideration',
-      'Awaiting Supplemental Briefs',
-      'Drafting',
-      'Reviewing Draft',
-      'Submitted to Chief Judge',
-      'Revising Draft',
-      'Submitted to Reporter',
-      'Stayed',
-    ];
     return (
       <React.Fragment>
         <table
@@ -110,38 +113,39 @@ export const SubmittedCavCasesTable = connect(
                           className={'margin-bottom-0'}
                           id={'final-brief-due-date-date-picker'}
                           showDateHint={false}
-                          values={{
-                            day: '',
-                            month: '',
-                            year: '',
-                          }}
-                          onChange={() => {
+                          values={convertToDateInputValues(
+                            formattedCase.finalBriefDueDate,
+                          )}
+                          onValueChange={value => {
                             updateSubmittedCavCaseDetailSequence({
-                              // TODO: fix this
-                              finalBriefDueDate: 'thing',
+                              docketNumber: formattedCase.docketNumber,
+                              finalBriefDueDate: value === '' ? null : value,
                             });
                           }}
                         />
                       </td>
                       <td colSpan={2}>
-                        <BindedSelect
+                        <select
                           aria-describedby="status-of-matter"
-                          bind=""
+                          className="usa-select"
                           id="status-of-matter-dropdown"
                           name="statusOfMatter"
+                          value={formattedCase.statusOfMatter ?? ''}
                           onChange={e => {
                             updateSubmittedCavCaseDetailSequence({
-                              statusOfMatter: e,
+                              docketNumber: formattedCase.docketNumber,
+                              statusOfMatter:
+                                e.target.value === '' ? null : e.target.value,
                             });
                           }}
                         >
                           <option value="">- Select -</option>
-                          {StatusOfMatter.map(from => (
+                          {STATUS_OF_MATTER_OPTIONS.map(from => (
                             <option key={from} value={from}>
                               {from}
                             </option>
                           ))}
-                        </BindedSelect>
+                        </select>
                       </td>
                     </tr>
                     <tr className="wip-submitted-cav-cases-primary-issue-row">
