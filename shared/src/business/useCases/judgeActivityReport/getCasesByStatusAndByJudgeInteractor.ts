@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
@@ -127,6 +128,17 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     consolidatedCasesGroupCountMap,
   );
 
+  for (const eachCase of finalListOfCases) {
+    const daysElapsed = calculateDaysElapsed(applicationContext, eachCase);
+    eachCase.daysElapsedSinceLastStatusChange = daysElapsed;
+  }
+
+  finalListOfCases.sort((a, b) => {
+    return (
+      b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
+    );
+  });
+
   const itemOffset =
     (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
 
@@ -144,4 +156,31 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
     totalCount: finalListOfCases.length,
   };
+};
+
+const calculateDaysElapsed = (
+  applicationContext: IApplicationContext,
+  individualCase: RawCase,
+) => {
+  const currentDateInIsoFormat: string = applicationContext
+    .getUtilities()
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString(),
+      FORMATS.ISO,
+    );
+
+  individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+
+  const newestCaseStatusChangeIndex =
+    individualCase.caseStatusHistory.length - 1;
+
+  const dateOfLastCaseStatusChange =
+    individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+
+  return applicationContext
+    .getUtilities()
+    .calculateDifferenceInDays(
+      currentDateInIsoFormat,
+      dateOfLastCaseStatusChange,
+    );
 };
