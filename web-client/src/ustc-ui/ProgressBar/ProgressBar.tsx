@@ -12,7 +12,7 @@ export const ProgressBar = props => {
     <progress
       className="focusable usa-sr-only"
       max="100"
-      tabIndex="-1"
+      tabIndex={-1}
       value={value}
       {...optionalProps}
     >

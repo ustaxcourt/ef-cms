@@ -37,12 +37,14 @@ import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/s
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/Public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
+import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
+import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
@@ -95,12 +97,14 @@ export const presenterSequences = {
   submitPublicOpinionAdvancedSearchSequence,
   submitPublicOrderAdvancedSearchSequence,
   toggleBetaBarSequence,
+  toggleMobileDocketSortSequence,
   toggleUsaBannerDetailsSequence,
   updateAdvancedOpinionSearchFormValueSequence,
   updateAdvancedOrderSearchFormValueSequence,
   updateAdvancedSearchFormValueSequence,
   updateCaseAdvancedSearchByNameFormValueSequence,
   updateDocketNumberSearchFormSequence,
+  updateSessionMetadataSequence,
   validateCaseAdvancedSearchFormSequence,
   validateCaseDocketNumberSearchFormSequence,
   validateOpinionSearchSequence,
