@@ -93,10 +93,8 @@ import {
   calculateDifferenceInDays,
   calculateISODate,
   checkDate,
-  computeDate,
   createEndOfDayISO,
   createISODateString,
-  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -184,6 +182,8 @@ import {
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConstants } from './getConstants';
+import { getCountOfOpinionsFiledByJudgesInteractor } from '../../shared/src/proxies/reports/getCountOfOpinionsFiledByJudgeProxy';
+import { getCountOfOrdersFiledByJudgesInteractor } from '../../shared/src/proxies/reports/getCountOfOrdersFiledByJudgeProxy';
 import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
 import { getDocument } from '@web-client/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
@@ -205,8 +205,6 @@ import { getJudgeInSectionInteractor } from '../../shared/src/proxies/users/getJ
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
-import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOpinionsFiledByJudgeProxy';
-import { getOrdersFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOrdersFiledByJudgeProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
@@ -273,6 +271,7 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
@@ -328,7 +327,6 @@ import { validateEditPetitionerCounselInteractor } from '../../shared/src/busine
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateHearingNoteInteractor } from '../../shared/src/business/useCases/validateHearingNoteInteractor';
-import { validateJudgeActivityReportSearchInteractor } from '../../shared/src/business/useCases/judgeActivityReport/validateJudgeActivityReportSearchInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -451,6 +449,8 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getCountOfOpinionsFiledByJudgesInteractor,
+  getCountOfOrdersFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
@@ -470,8 +470,6 @@ const allUseCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
-  getOpinionsFiledByJudgeInteractor,
-  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
@@ -583,7 +581,6 @@ const allUseCases = {
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateHearingNoteInteractor,
-  validateJudgeActivityReportSearchInteractor,
   validateNoteInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -728,10 +725,8 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
-      computeDate,
       createEndOfDayISO,
       createISODateString,
-      createISODateStringFromObject,
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
@@ -792,6 +787,7 @@ const applicationContext = {
       setConsolidationFlagsForDisplay,
       setServiceIndicatorsForCase,
       setupPdfDocument,
+      sleep,
       sortDocketEntries,
       transformFormValueToTitleCaseOrdinal,
       userIsDirectlyAssociated,
