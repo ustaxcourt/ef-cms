@@ -249,6 +249,22 @@ describe('searchClient', () => {
     );
   });
 
+  it('searchAll should log an error and throw an error if the count query throws an error', async () => {
+    const mockError = new Error();
+    applicationContext.getSearchClient().count.mockImplementation(() => {
+      throw mockError;
+    });
+
+    await expect(
+      searchAll({
+        applicationContext,
+        searchParameters: {},
+      }),
+    ).rejects.toThrow();
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(mockError);
+  });
+
   it('should format and return the list of results when they are work item search results', async () => {
     applicationContext
       .getSearchClient()
