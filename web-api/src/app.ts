@@ -164,6 +164,7 @@ import { updateCaseDeadlineLambda } from './caseDeadline/updateCaseDeadlineLambd
 import { updateCaseDetailsLambda } from './cases/updateCaseDetailsLambda';
 import { updateCasePrimaryIssueLambda } from './trialSessions/updateCasePrimaryIssueLambda';
 import { updateCaseTrialSortTagsLambda } from './cases/updateCaseTrialSortTagsLambda';
+import { updateCaseWorksheetInfoLambda } from './trialSessions/updateCaseWorksheetInfoLambda';
 import { updateContactLambda } from './cases/updateContactLambda';
 import { updateCorrespondenceDocumentLambda } from './correspondence/updateCorrespondenceDocumentLambda';
 import { updateCounselOnCaseLambda } from './cases/updateCounselOnCaseLambda';
@@ -836,6 +837,10 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   app.post(
     '/update-case-primary-issue/:docketNumber',
     lambdaWrapper(updateCasePrimaryIssueLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/case-worksheet',
+    lambdaWrapper(updateCaseWorksheetInfoLambda),
   );
   app.post(
     '/async/trial-sessions/serve-thirty-day-notice',

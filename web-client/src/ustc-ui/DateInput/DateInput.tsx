@@ -44,7 +44,7 @@ export const DateInput = ({
   hideLegend?: boolean;
   onBlur?: () => void;
   onChange?: () => void;
-  onValueChange?: () => void;
+  onValueChange?: (value: any) => void;
   optional?: boolean;
   values: null | {
     day: string;

@@ -1,24 +1,29 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const updateSubmittedCavCaseDetailInStateAction = ({
+export const updateSubmittedCavCaseDetailAction = async ({
+  applicationContext,
+  get,
   props,
   store,
 }: ActionProps) => {
-  const { finalBriefDueDate, statusOfMatter } = props;
+  const { docketNumber, finalBriefDueDate, statusOfMatter } = props;
 
-  if (finalBriefDueDate) {
-    store.set(
-      state.judgeActivityReportData.submittedAndCavCasesByJudge[0]
-        .finalBriefDueDate,
+  await applicationContext
+    .getUseCases()
+    .updateCaseWorksheetInfoInteractor(applicationContext, {
+      docketNumber,
       finalBriefDueDate,
-    );
-  }
-
-  if (statusOfMatter) {
-    store.set(
-      state.judgeActivityReportData.submittedAndCavCasesByJudge[0]
-        .statusOfMatter,
       statusOfMatter,
+    });
+
+  const index = get(
+    state.judgeActivityReportData.submittedAndCavCasesByJudge,
+  ).findIndex(theCase => theCase.docketNumber === docketNumber);
+
+  if (statusOfMatter !== undefined) {
+    store.set(
+      state`judgeActivityReportData.submittedAndCavCasesByJudge.${index}.statusOfMatter`,
+      statusOfMatter === null ? '' : statusOfMatter,
     );
   }
 };
