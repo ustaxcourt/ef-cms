@@ -64,7 +64,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch(params);
   if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
+    throw new InvalidRequest('Invalid search terms');
   }
 
   const caseRecords = await applicationContext
