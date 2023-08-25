@@ -52,14 +52,14 @@ const generateChangeOfAddressForPractitioner = async ({
   user: any;
   websocketMessagePrefix?: string;
 }) => {
-  const docketNumbers = await applicationContext
+  const associatedUserCases = await applicationContext
     .getPersistenceGateway()
-    .getCasesByUserId({
+    .getCasesForUser({
       applicationContext,
       userId: user.userId,
     });
 
-  if (docketNumbers.length === 0) {
+  if (associatedUserCases.length === 0) {
     return [];
   }
 
@@ -69,87 +69,85 @@ const generateChangeOfAddressForPractitioner = async ({
     message: {
       action: `${websocketMessagePrefix}_contact_update_progress`,
       completedCases,
-      totalCases: docketNumbers.length,
+      totalCases: associatedUserCases.length,
     },
     userId: requestUserId || user.userId,
   });
 
   const updatedCases = [];
 
-  for (let caseInfo of docketNumbers) {
-    try {
-      const { docketNumber } = caseInfo;
-      const newData = contactInfo;
+  await Promise.all(
+    associatedUserCases.map(async caseInfo => {
+      try {
+        const { docketNumber } = caseInfo;
+        const newData = contactInfo;
 
-      const userCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-      let caseEntity = new Case(userCase, { applicationContext });
+        const userCase = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber,
+          });
+        let caseEntity = new Case(userCase, { applicationContext });
 
-      const practitionerName = updatedName || user.name;
-      const practitionerObject = caseEntity.privatePractitioners
-        .concat(caseEntity.irsPractitioners)
-        .find(practitioner => practitioner.userId === user.userId);
+        const practitionerName = updatedName || user.name;
+        const practitionerObject = caseEntity.privatePractitioners
+          .concat(caseEntity.irsPractitioners)
+          .find(practitioner => practitioner.userId === user.userId);
 
-      if (!practitionerObject) {
-        throw new Error(
-          `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
-        );
+        if (!practitionerObject) {
+          throw new Error(
+            `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+          );
+        }
+
+        const oldData = clone(practitionerObject.contact);
+
+        // This updates the case by reference!
+        practitionerObject.contact = contactInfo;
+        practitionerObject.firmName = firmName;
+        practitionerObject.name = practitionerName;
+
+        if (!oldData.email && updatedEmail) {
+          practitionerObject.serviceIndicator =
+            SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+          practitionerObject.email = updatedEmail;
+        }
+
+        if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
+          await prepareToGenerateAndServeDocketEntry({
+            applicationContext,
+            caseEntity,
+            newData,
+            oldData,
+            practitionerName,
+            user,
+          });
+        }
+
+        const updatedCase = await applicationContext
+          .getUseCaseHelpers()
+          .updateCaseAndAssociations({
+            applicationContext,
+            caseToUpdate: caseEntity,
+          });
+        updatedCases.push(updatedCase);
+      } catch (error) {
+        applicationContext.logger.error(error);
       }
 
-      const oldData = clone(practitionerObject.contact);
-
-      // This updates the case by reference!
-      practitionerObject.contact = contactInfo;
-      practitionerObject.firmName = firmName;
-      practitionerObject.name = practitionerName;
-
-      if (!oldData.email && updatedEmail) {
-        practitionerObject.serviceIndicator =
-          SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-        practitionerObject.email = updatedEmail;
-      }
-
-      // TODO: is this even needed any more?
-      // we new up another case from the existing case convert '' to null
-      caseEntity = new Case(caseEntity, { applicationContext });
-
-      if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
-        await prepareToGenerateAndServeDocketEntry({
-          applicationContext,
-          caseEntity,
-          newData,
-          oldData,
-          practitionerName,
-          user,
-        });
-      }
-
-      const updatedCase = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
-      updatedCases.push(updatedCase);
-    } catch (error) {
-      applicationContext.logger.error(error);
-    }
-
-    completedCases++;
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: `${websocketMessagePrefix}_contact_update_progress`,
-        completedCases,
-        totalCases: docketNumbers.length,
-      },
-      userId: requestUserId || user.userId,
-    });
-  }
+      completedCases++;
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        message: {
+          action: `${websocketMessagePrefix}_contact_update_progress`,
+          completedCases,
+          totalCases: associatedUserCases.length,
+        },
+        userId: requestUserId || user.userId,
+      });
+    }),
+  );
 
   return updatedCases;
 };

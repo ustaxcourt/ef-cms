@@ -60,7 +60,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([{ docketNumber }]);
+      .getCasesForUser.mockReturnValue([{ docketNumber }]);
 
     applicationContext
       .getPersistenceGateway()
@@ -117,7 +117,7 @@ describe('generateChangeOfAddress', () => {
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValueOnce([
+      .getCasesForUser.mockReturnValueOnce([
         { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
         mockCaseWithPrivatePractitioner,
       ]);

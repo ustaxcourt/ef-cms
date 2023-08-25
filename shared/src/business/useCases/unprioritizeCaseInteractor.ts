@@ -4,16 +4,16 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { withLocking } from '../useCaseHelper/acquireLock';
 
 /**
  * used for removing the high priority from a case
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to unprioritize
  * @returns {object} the case data
  */
-export const unprioritizeCaseInteractor = async (
+export const unprioritizeCase = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
@@ -64,3 +64,10 @@ export const unprioritizeCaseInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const unprioritizeCaseInteractor = withLocking(
+  unprioritizeCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
