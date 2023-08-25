@@ -44,6 +44,7 @@ describe('fetchEventCodesCountForJudges', () => {
       search_field_count: {
         terms: {
           field: 'eventCode.S',
+          size: 10,
         },
       },
     },
@@ -85,6 +86,9 @@ describe('fetchEventCodesCountForJudges', () => {
       applicationContext,
       params,
     });
+
+    documentQueryBody.aggs.search_field_count.terms.size =
+      params.documentEventCodes.length;
 
     expect(
       (search as jest.Mock).mock.calls[0][0].searchParameters.body,
@@ -160,6 +164,9 @@ describe('fetchEventCodesCountForJudges', () => {
       applicationContext,
       params,
     });
+
+    documentQueryBody.aggs.search_field_count.terms.size =
+      params.documentEventCodes.length;
 
     expect(
       (search as jest.Mock).mock.calls[0][0].searchParameters.body,

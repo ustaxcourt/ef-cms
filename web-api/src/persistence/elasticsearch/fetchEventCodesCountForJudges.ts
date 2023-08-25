@@ -33,6 +33,7 @@ export const fetchEventCodesCountForJudges = async ({
         search_field_count: {
           terms: {
             field: 'eventCode.S',
+            size: params.documentEventCodes.length,
           },
         },
       },
