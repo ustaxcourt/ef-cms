@@ -23,7 +23,7 @@ export const BeforeYouFileADocument = connect(
       <>
         <CaseDetailHeader hideActionButtons />
         <section className="usa-section before-filing-document grid-container">
-          <h2 className="captioned" tabIndex="-1">
+          <h2 className="captioned" tabIndex={-1}>
             Before You File a Document…
           </h2>
 

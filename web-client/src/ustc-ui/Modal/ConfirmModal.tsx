@@ -91,7 +91,7 @@ export const ConfirmModal = connect(
                 noCloseBtn ? 'mobile-lg:grid-col-12' : 'mobile-lg:grid-col-9',
               )}
             >
-              <h3 className="modal-header__title" tabIndex="-1">
+              <h3 className="modal-header__title" tabIndex={-1}>
                 {headerIcon && (
                   <FontAwesomeIcon
                     className={headerIconClassName}

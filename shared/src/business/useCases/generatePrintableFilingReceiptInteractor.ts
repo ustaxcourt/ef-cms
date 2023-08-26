@@ -66,7 +66,7 @@ export const generatePrintableFilingReceiptInteractor = async (
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber({
         applicationContext,
-        leadDocketNumber: caseEntity.leadDocketNumber,
+        leadDocketNumber: caseEntity.leadDocketNumber!,
       });
     consolidatedCasesDocketNumbers = consolidatedCases
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
