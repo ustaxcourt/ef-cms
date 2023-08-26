@@ -20,7 +20,7 @@ export const Interstitial = connect(
               <div className="grid-container">
                 <div className="grid-row">
                   <div className="tablet:grid-col-6">
-                    <h1 className="captioned" tabIndex="-1">
+                    <h1 className="captioned" tabIndex={-1}>
                       {alertHelper.responseCode &&
                         `Error  ${alertHelper.responseCode}`}
                       {!alertHelper.responseCode && 'Error'}
@@ -30,7 +30,7 @@ export const Interstitial = connect(
               </div>
             </div>
             <section className="usa-section grid-container">
-              <h1 tabIndex="-1">We’re experiencing technical problems</h1>
+              <h1 tabIndex={-1}>We’re experiencing technical problems</h1>
               <h2>Where do you go from here?</h2>
               <p>
                 Try again, or contact dawson.support@ustaxcourt.gov for

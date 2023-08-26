@@ -1,3 +1,4 @@
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
 
 /**
@@ -17,6 +18,12 @@ export const getCaseInventoryReport = async ({
   from = 0,
   pageSize,
   status,
+}: {
+  applicationContext: IApplicationContext;
+  associatedJudge?: string;
+  from?: number;
+  pageSize?: number;
+  status?: string;
 }) => {
   const source = [
     'associatedJudge',
@@ -38,7 +45,7 @@ export const getCaseInventoryReport = async ({
       from,
       query: {
         bool: {
-          must: [],
+          must: [] as QueryDslQueryContainer[],
           must_not: [
             {
               term: { 'status.S': 'Closed' },
@@ -57,7 +64,7 @@ export const getCaseInventoryReport = async ({
   };
 
   if (associatedJudge) {
-    searchParameters.body.query.bool.must.push({
+    searchParameters.body.query!.bool!.must.push({
       match_phrase: { 'associatedJudge.S': associatedJudge },
     });
   }

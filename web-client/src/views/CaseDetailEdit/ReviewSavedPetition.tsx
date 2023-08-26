@@ -54,7 +54,7 @@ export const ReviewSavedPetition = connect(
           id="ustc-start-a-case-form"
         >
           <Focus>
-            <h1 id="file-a-document-header" tabIndex="-1">
+            <h1 id="file-a-document-header" tabIndex={-1}>
               Review and Serve Petition
             </h1>
           </Focus>
