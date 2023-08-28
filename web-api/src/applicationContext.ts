@@ -285,9 +285,9 @@ export const createApplicationContext = (
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
-      CHANGE_OF_ADDRESS_CONCURRENCY: parseInt(
-        process.env.CHANGE_OF_ADDRESS_CONCURRENCY || '100',
-      ),
+      CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
+        ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
+        : undefined,
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
