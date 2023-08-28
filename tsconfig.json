@@ -34,7 +34,8 @@
     "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts",
     "./web-api/storage/fixtures/seed/cav-submitted-cases.ts",
-    "./web-api/workflow-terraform/migration/main/lambdas/**/*"
+    "./web-api/workflow-terraform/migration/main/lambdas/**/*",
+    "web-api/elasticsearch/index-types.ts"
   ],
   "exclude": ["node_modules"]
 }

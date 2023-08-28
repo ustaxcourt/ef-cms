@@ -7,6 +7,8 @@ import {
   describeTable,
   get,
   getDeployTableName,
+  getFromDeployTable,
+  getTableName,
   put,
   query,
   queryFull,
@@ -123,6 +125,84 @@ describe('dynamodbClientService', function () {
       .mockImplementation(() => mockDynamoClient);
   });
 
+  describe('getTableName', () => {
+    let currentEnvironment;
+    const testEnvironment = {
+      appEndpoint: '',
+      dynamoDbTableName: 'some-table',
+      stage: 'local',
+      tempDocumentsBucketName: 'some-temp-bucket',
+    };
+
+    beforeAll(() => {
+      currentEnvironment = applicationContext.environment;
+      applicationContext.getEnvironment = jest.fn().mockReturnValue({
+        dynamoDbTableName: 'some-other-table',
+      });
+    });
+
+    beforeEach(() => {
+      applicationContext.environment = testEnvironment;
+    });
+
+    afterAll(() => {
+      applicationContext.environment = currentEnvironment;
+    });
+
+    it('gets the table name based on the environment', () => {
+      const tableName = getTableName({ applicationContext });
+      expect(tableName).toBe('some-table');
+    });
+
+    it('gets the table name based on getEnvironment if application.environment is undefined', () => {
+      applicationContext.environment = undefined!;
+      const tableName = getTableName({ applicationContext });
+      expect(tableName).toBe('some-other-table');
+    });
+  });
+
+  describe('getDeployTableName', () => {
+    let currentEnvironment;
+    const testEnvironment = {
+      appEndpoint: '',
+      dynamoDbTableName: 'some-table',
+      stage: 'local',
+      tempDocumentsBucketName: 'some-temp-bucket',
+    };
+
+    beforeAll(() => {
+      currentEnvironment = applicationContext.environment;
+      applicationContext.getEnvironment = jest.fn().mockReturnValue({
+        stage: 'other',
+      });
+    });
+
+    beforeEach(() => {
+      applicationContext.environment = testEnvironment;
+    });
+
+    afterAll(() => {
+      applicationContext.environment = currentEnvironment;
+    });
+
+    it('returns environment.dynamoDbTableName if environment.stage is local', () => {
+      const tableName = getDeployTableName({ applicationContext });
+      expect(tableName).toBe('some-table');
+    });
+
+    it('falls back to getEnvironment() if applicationContext.environment is undefined if environment.stage is local', () => {
+      applicationContext.environment = undefined!;
+      const tableName = getDeployTableName({ applicationContext });
+      expect(tableName).toBe('efcms-deploy-other');
+    });
+
+    it('returns the table name based on environment.stage if not local', () => {
+      applicationContext.environment.stage = 'example';
+      const tableName = getDeployTableName({ applicationContext });
+      expect(tableName).toBe('efcms-deploy-example');
+    });
+  });
+
   describe('put', () => {
     it('should return the same Item property passed in in the params', async () => {
       const result = await put({
@@ -211,6 +291,54 @@ describe('dynamodbClientService', function () {
         .get.mockReturnValue({ promise: () => Promise.resolve({}) });
       const result = await get({ applicationContext });
       expect(result).toBeUndefined();
+    });
+  });
+
+  describe('getFromDeployTable', () => {
+    const mockItem = {
+      'aws:rep:updatetime': 'anytime',
+      current: 'foobar',
+      pk: 'foo',
+      sk: 'bar',
+    };
+
+    const mockParams = {
+      applicationContext,
+      pk: mockItem.pk,
+      sk: mockItem.sk,
+    };
+
+    const tableName = getDeployTableName({ applicationContext });
+
+    beforeEach(() => {
+      applicationContext.getDocumentClient({ useMasterRegion: true }).get = jest
+        .fn()
+        .mockReturnValue({
+          promise: () => Promise.resolve({ Item: mockItem }),
+        });
+    });
+
+    it('uses the master region', async () => {
+      await getFromDeployTable(mockParams);
+      expect(applicationContext.getDocumentClient).toHaveBeenCalledWith({
+        useMasterRegion: true,
+      });
+    });
+
+    it('gets the deploy table name', async () => {
+      await getFromDeployTable(mockParams);
+
+      expect(
+        applicationContext.getDocumentClient({ useMasterRegion: true }).get,
+      ).toHaveBeenCalledWith({ TableName: tableName, ...mockParams });
+    });
+
+    it('removes the AWS Global Fields', async () => {
+      const result = await getFromDeployTable(mockParams);
+      expect(result['aws:rep:updatetime']).toBeUndefined();
+      expect(result['pk']).toEqual(mockItem.pk);
+      expect(result['sk']).toEqual(mockItem.sk);
+      expect(result['current']).toEqual(mockItem.current);
     });
   });
 

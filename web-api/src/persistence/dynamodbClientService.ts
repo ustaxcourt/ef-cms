@@ -1,5 +1,6 @@
 import { TDynamoRecord } from './dynamo/dynamoTypes';
 import { chunk, isEmpty } from 'lodash';
+import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
 /**
  * PUT for dynamodb aws-sdk client
@@ -15,29 +16,6 @@ const removeAWSGlobalFields = item => {
     delete item['aws:rep:updatetime'];
   }
   return item;
-};
-
-/**
- * used to filter empty strings from values before storing in dynamo
- *
- * @param {object} params the params to filter empty strings from
- * @returns {object} the params with empty string values removed
- */
-const filterEmptyStrings = params => {
-  const removeEmpty = obj => {
-    Object.keys(obj).forEach(key => {
-      if (obj[key] && typeof obj[key] === 'object') {
-        removeEmpty(obj[key]);
-      } else if (obj[key] === '') {
-        delete obj[key];
-      }
-    });
-  };
-
-  if (params) {
-    removeEmpty(params);
-  }
-  return params;
 };
 
 export const getTableName = ({ applicationContext }): string =>

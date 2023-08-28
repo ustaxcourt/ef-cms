@@ -1,6 +1,6 @@
+import { DocketEntryMapping } from '../../../elasticsearch/index-types';
 import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { getJudgeFilterForOpinionSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch';
-import { getJudgeFilterForOrderSearch } from './advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { getSealedQuery } from './advancedDocumentSearchHelpers/getSealedQuery';
 import { getSortQuery } from './advancedDocumentSearchHelpers/getSortQuery';
 import { search } from './searchClient';
@@ -22,6 +22,21 @@ export const advancedDocumentSearch = async ({
   overrideResultSize,
   sortField,
   startDate,
+}: {
+  applicationContext: IApplicationContext;
+  caseTitleOrPetitioner?: string;
+  docketNumber?: string;
+  documentEventCodes: string[];
+  endDate?: string;
+  from?: number;
+  isExternalUser?: boolean;
+  isOpinionSearch?: boolean;
+  judge?: string;
+  keyword?: string;
+  omitSealed?: boolean;
+  overrideResultSize?: number;
+  sortField?: string;
+  startDate?: string;
 }) => {
   const sourceFields = [
     'caseCaption',
@@ -45,7 +60,7 @@ export const advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentMust = [];
+  const documentMust: QueryDslQueryContainer[] = [];
 
   if (keyword) {
     documentMust.push({
@@ -76,7 +91,9 @@ export const advancedDocumentSearch = async ({
     },
   };
 
-  let documentMustNot = [{ term: { 'isStricken.BOOL': true } }];
+  let documentMustNot: QueryDslQueryContainer[] = [
+    { term: { 'isStricken.BOOL': true } },
+  ];
   if (omitSealed) {
     const { sealedCaseQuery, sealedDocumentMustNotQuery } = getSealedQuery();
 
@@ -116,7 +133,7 @@ export const advancedDocumentSearch = async ({
     ];
   }
 
-  const documentFilter = [
+  const documentFilter: QueryDslQueryContainer[] = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
@@ -129,19 +146,25 @@ export const advancedDocumentSearch = async ({
 
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-    if (isOpinionSearch) {
-      const judgeFilter = getJudgeFilterForOpinionSearch({
-        judgeName,
-      });
-
-      documentFilter.push(judgeFilter);
-    } else {
-      const judgeFilter = getJudgeFilterForOrderSearch({
-        judgeName,
-      });
-
-      documentFilter.push(judgeFilter);
-    }
+    documentFilter.push({
+      bool: {
+        should: [
+          {
+            match: {
+              ['signedJudgeName.S']: {
+                operator: 'and',
+                query: judgeName,
+              },
+            },
+          },
+          {
+            match: {
+              ['judge.S']: judgeName,
+            },
+          },
+        ],
+      },
+    });
   }
 
   if (endDate && startDate) {
@@ -180,7 +203,7 @@ export const advancedDocumentSearch = async ({
     index: 'efcms-docket-entry',
   };
 
-  const { results, total } = await search({
+  const { results, total } = await search<DocketEntryMapping>({
     applicationContext,
     searchParameters: documentQuery,
   });
