@@ -1,5 +1,3 @@
-import { JoiValidationEntity } from '../JoiValidationEntity';
-
 import {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
@@ -12,6 +10,7 @@ import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants'
 import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
 import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 export class DocketEntryFactory extends JoiValidationEntity {
