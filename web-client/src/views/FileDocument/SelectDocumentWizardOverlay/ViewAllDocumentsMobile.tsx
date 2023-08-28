@@ -44,10 +44,10 @@ export const ViewAllDocumentsMobile = connect(
         <div className="grid-container">
           <div className="grid-row">
             <div className="grid-col-12">
-              <h1 className="margin-bottom-105" tabIndex="-1">
+              <h1 className="margin-bottom-105" tabIndex={-1}>
                 All Document Categories
               </h1>
-              <h2 className="margin-bottom-3" tabIndex="-1">
+              <h2 className="margin-bottom-3" tabIndex={-1}>
                 Select Document Category
               </h2>
             </div>

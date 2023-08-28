@@ -26,6 +26,7 @@ import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowA
 import { faPhone } from '@fortawesome/free-solid-svg-icons/faPhone';
 import { faPrint } from '@fortawesome/free-solid-svg-icons/faPrint';
 import { faSearch } from '@fortawesome/free-solid-svg-icons/faSearch';
+import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
 import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 
@@ -65,6 +66,7 @@ const appPublic = {
       faFilePdf,
       faSearch,
       faSync,
+      faSort,
       faTimesCircle,
       faInfoCircle,
       faCheckCircle,

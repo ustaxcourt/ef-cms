@@ -85,7 +85,7 @@ export class Case extends JoiValidationEntity {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public docketNumberSuffix?: string | null;
   public filingType: string;
   public hasVerifiedIrsNotice: boolean;
   public irsNoticeDate: string;
@@ -1706,7 +1706,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;
@@ -1719,7 +1719,7 @@ export class Case extends JoiValidationEntity {
         );
 
         const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
-          currentDate,
+          currentDate!,
           docketEntry.createdAt,
         );
 

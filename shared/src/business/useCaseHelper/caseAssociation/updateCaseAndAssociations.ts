@@ -472,8 +472,11 @@ const updateCaseDeadlines = async ({
 export const updateCaseAndAssociations = async ({
   applicationContext,
   caseToUpdate,
+}: {
+  applicationContext: IApplicationContext;
+  caseToUpdate: any;
 }) => {
-  const caseEntity = caseToUpdate.validate
+  const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, { applicationContext });
 

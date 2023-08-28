@@ -28,12 +28,13 @@ export const docketClerkRemovesSignatureFromMessage = cerebralTest => {
 
     expect(cerebralTest.getState('currentPage')).toEqual('MessageDetail');
 
-    const { formattedDraftDocuments } =
-      await getFormattedDocketEntriesForTest(cerebralTest);
+    const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
+      cerebralTest,
+    );
 
     const caseOrderDocument = formattedDraftDocuments.find(
       d => d.docketEntryId === orderDocument.documentId,
     );
-    expect(caseOrderDocument.signedAt).toEqual(null);
+    expect(caseOrderDocument.signedAt).toBeUndefined();
   });
 };

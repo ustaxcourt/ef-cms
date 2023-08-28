@@ -152,9 +152,9 @@ describe('DocketEntry entity', () => {
 
       docketEntry.unsignDocument();
 
-      expect(docketEntry.signedByUserId).toEqual(null);
-      expect(docketEntry.signedJudgeName).toEqual(null);
-      expect(docketEntry.signedAt).toEqual(null);
+      expect(docketEntry.signedByUserId).toBeUndefined();
+      expect(docketEntry.signedJudgeName).toBeUndefined();
+      expect(docketEntry.signedAt).toBeUndefined();
     });
   });
 
@@ -241,7 +241,7 @@ describe('DocketEntry entity', () => {
       };
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(createdDocketEntry.getFormattedValidationErrors()),
+        Object.keys(createdDocketEntry.getFormattedValidationErrors()!),
       ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
     });
 
@@ -297,7 +297,9 @@ describe('DocketEntry entity', () => {
       );
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(createdDocketEntry.getFormattedValidationErrors()),
+        Object.keys(
+          createdDocketEntry.getFormattedValidationErrors() as object,
+        ),
       ).toEqual(['documentType', 'eventCode']);
     });
 
