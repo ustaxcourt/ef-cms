@@ -8,6 +8,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { DeletePrimaryIssueModal } from '../CaseWorksheet/DeletePrimaryIssueModal';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React from 'react';
 
 function convertToDateInputValues(date: string) {
@@ -26,6 +27,7 @@ export const SubmittedCavCasesTable = connect(
   {
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
+    judgeDashboardCaseWorksheetErrors: state.judgeDashboardCaseWorksheetErrors,
     openAddEditPrimaryIssueModalSequence:
       sequences.openAddEditPrimaryIssueModalSequence,
     openDeleteCasePrimaryIssueSequence:
@@ -38,6 +40,7 @@ export const SubmittedCavCasesTable = connect(
 
   function SubmittedCavCasesTable({
     judgeActivityReportHelper,
+    judgeDashboardCaseWorksheetErrors,
     openAddEditPrimaryIssueModalSequence,
     openDeleteCasePrimaryIssueSequence,
     showModal,
@@ -108,21 +111,30 @@ export const SubmittedCavCasesTable = connect(
                           formattedCase.caseStatusHistory,
                         )}
                       </td>
-                      <td>
-                        <DateInput
-                          className={'margin-bottom-0'}
-                          id={'final-brief-due-date-date-picker'}
-                          showDateHint={false}
-                          values={convertToDateInputValues(
-                            formattedCase.finalBriefDueDate,
-                          )}
-                          onValueChange={value => {
-                            updateSubmittedCavCaseDetailSequence({
-                              docketNumber: formattedCase.docketNumber,
-                              finalBriefDueDate: value === '' ? null : value,
-                            });
-                          }}
-                        />
+                      <td className="display-flex flex-column flex-align-center">
+                        <FormGroup
+                          className="margin-bottom-0"
+                          errorText={
+                            judgeDashboardCaseWorksheetErrors[
+                              formattedCase.docketNumber
+                            ]?.finalBriefDueDate
+                          }
+                        >
+                          <DateInput
+                            className={'margin-bottom-0'}
+                            id={'final-brief-due-date-date-picker'}
+                            showDateHint={false}
+                            values={convertToDateInputValues(
+                              formattedCase.finalBriefDueDate,
+                            )}
+                            onValueChange={value => {
+                              updateSubmittedCavCaseDetailSequence({
+                                docketNumber: formattedCase.docketNumber,
+                                finalBriefDueDate: value === '' ? null : value,
+                              });
+                            }}
+                          />
+                        </FormGroup>
                       </td>
                       <td colSpan={2}>
                         <select

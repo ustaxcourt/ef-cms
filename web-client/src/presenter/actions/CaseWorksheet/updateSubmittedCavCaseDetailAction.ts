@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const updateSubmittedCavCaseDetailAction = async ({
+export const updateSubmittedCavCaseDetailAction = ({
   applicationContext,
   get,
   props,
@@ -8,13 +8,14 @@ export const updateSubmittedCavCaseDetailAction = async ({
 }: ActionProps) => {
   const { docketNumber, finalBriefDueDate, statusOfMatter } = props;
 
-  await applicationContext
-    .getUseCases()
-    .updateCaseWorksheetInfoInteractor(applicationContext, {
-      docketNumber,
-      finalBriefDueDate,
-      statusOfMatter,
+  store.unset(state.judgeDashboardCaseWorksheetErrors[docketNumber]);
+
+  if (!applicationContext.getUtilities().isValidDateString(finalBriefDueDate)) {
+    store.set(state.judgeDashboardCaseWorksheetErrors[docketNumber], {
+      finalBriefDueDate: 'Enter a valid due date.',
     });
+    return;
+  }
 
   const index = get(
     state.judgeActivityReportData.submittedAndCavCasesByJudge,
