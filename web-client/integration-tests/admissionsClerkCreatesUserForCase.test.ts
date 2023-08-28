@@ -1,6 +1,6 @@
 import { contactPrimaryFromState, loginAs, setupTest } from './helpers';
+import { faker } from '@faker-js/faker';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-const { faker } = require('@faker-js/faker');
 
 describe('admissions clerk creates user for case', () => {
   const cerebralTest = setupTest();
