@@ -3,6 +3,7 @@ import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
+import PQueue from 'p-queue';
 
 type TUserContact = {
   address1: string;
@@ -75,9 +76,10 @@ const generateChangeOfAddressForPractitioner = async ({
   });
 
   const updatedCases = [];
+  const queue = new PQueue({ concurrency: 50 });
 
-  await Promise.all(
-    associatedUserCases.map(async caseInfo => {
+  for (let caseInfo of associatedUserCases) {
+    await queue.add(async () => {
       try {
         const { docketNumber } = caseInfo;
         const newData = contactInfo;
@@ -146,8 +148,8 @@ const generateChangeOfAddressForPractitioner = async ({
         },
         userId: requestUserId || user.userId,
       });
-    }),
-  );
+    });
+  }
 
   return updatedCases;
 };
