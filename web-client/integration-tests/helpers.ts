@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
+import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
@@ -69,7 +70,6 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-import pdfLib from 'pdf-lib';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
