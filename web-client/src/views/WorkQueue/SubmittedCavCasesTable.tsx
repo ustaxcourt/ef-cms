@@ -1,14 +1,13 @@
+import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateInput } from '@web-client/ustc-ui/DateInput/DateInput';
+import { DeletePrimaryIssueModal } from '../CaseWorksheet/DeletePrimaryIssueModal';
+import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-
-import { AddEditPrimaryIssueModal } from '../CaseWorksheet/AddEditPrimaryIssueModal';
-import { Button } from '@web-client/ustc-ui/Button/Button';
-import { DeletePrimaryIssueModal } from '../CaseWorksheet/DeletePrimaryIssueModal';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React from 'react';
 
 function convertToDateInputValues(date: string) {
@@ -30,6 +29,7 @@ export const SubmittedCavCasesTable = connect(
     judgeDashboardCaseWorksheetErrors: state.judgeDashboardCaseWorksheetErrors,
     openAddEditPrimaryIssueModalSequence:
       sequences.openAddEditPrimaryIssueModalSequence,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     openDeleteCasePrimaryIssueSequence:
       sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
@@ -120,20 +120,23 @@ export const SubmittedCavCasesTable = connect(
                             ]?.finalBriefDueDate
                           }
                         >
-                          <DateInput
-                            className={'margin-bottom-0'}
-                            id={'final-brief-due-date-date-picker'}
-                            showDateHint={false}
-                            values={convertToDateInputValues(
-                              formattedCase.finalBriefDueDate,
-                            )}
-                            onValueChange={value => {
-                              updateSubmittedCavCaseDetailSequence({
-                                docketNumber: formattedCase.docketNumber,
-                                finalBriefDueDate: value === '' ? null : value,
-                              });
-                            }}
-                          />
+                          <div className="display-flex flex-align-center">
+                            <DateInput
+                              className={'margin-bottom-0'}
+                              id={'final-brief-due-date-date-picker'}
+                              showDateHint={false}
+                              values={convertToDateInputValues(
+                                formattedCase.finalBriefDueDate,
+                              )}
+                              onValueChange={value => {
+                                updateSubmittedCavCaseDetailSequence({
+                                  docketNumber: formattedCase.docketNumber,
+                                  finalBriefDueDate:
+                                    value === '' ? null : value,
+                                });
+                              }}
+                            />
+                          </div>
                         </FormGroup>
                       </td>
                       <td>
@@ -239,6 +242,7 @@ export const SubmittedCavCasesTable = connect(
             &quot;CAV&quot;
           </div>
         )}
+
         {showModal === 'AddEditPrimaryIssueModal' && (
           <AddEditPrimaryIssueModal />
         )}

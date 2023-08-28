@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const updateSubmittedCavCaseDetailAction = ({
+export const updateSubmittedCavCaseDetailAction = async ({
   applicationContext,
   get,
   props,
@@ -19,6 +19,14 @@ export const updateSubmittedCavCaseDetailAction = ({
     });
     return;
   }
+
+  await applicationContext
+    .getUseCases()
+    .updateCaseWorksheetInfoInteractor(applicationContext, {
+      docketNumber,
+      finalBriefDueDate,
+      statusOfMatter,
+    });
 
   const index = get(
     state.judgeActivityReportData.submittedAndCavCasesByJudge,
