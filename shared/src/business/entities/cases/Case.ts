@@ -372,6 +372,7 @@ export class Case extends JoiValidationEntity {
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.statusOfMatter = rawCase.statusOfMatter;
     this.finalBriefDueDate = rawCase.finalBriefDueDate;
+    this.primaryIssue = rawCase.primaryIssue;
 
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
     this.orderDesignatingPlaceOfTrial =
@@ -802,7 +803,6 @@ export class Case extends JoiValidationEntity {
       rawCase.sortableDocketNumber ||
       Case.getSortableDocketNumber(rawCase.docketNumber);
     this.trialDate = rawCase.trialDate;
-    this.primaryIssue = rawCase.primaryIssue;
     this.trialLocation = rawCase.trialLocation;
     this.trialSessionId = rawCase.trialSessionId;
     this.trialTime = rawCase.trialTime;
