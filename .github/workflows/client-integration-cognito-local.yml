@@ -28,7 +28,7 @@ jobs:
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18.15.0'
@@ -44,24 +44,17 @@ jobs:
           stack-version: 7.10.2
           security-enabled: false
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v2.0.1
+        uses: rrainn/dynamodb-action@v3.0.0
         with:
           port: 8000
           cors: '*'
-      - name: Web Client - Integration Tests
+      - name: Install Node Dependencies
+        run: npm ci
+      - name: Cognito-Local Integration Tests
         run: |
-          npm ci
           mkdir -p /tmp/web-client
           npm run start:api:cognito-local:ci > /tmp/web-client/server-output.txt &
-          ./wait-for-dynamo.sh
-          URL=http://localhost:4000/api/swagger ./wait-until.sh
-          URL=http://localhost:9200/efcms-case ./wait-until.sh
-          URL=http://localhost:9200/efcms-case-deadline ./wait-until.sh
-          URL=http://localhost:9200/efcms-docket-entry ./wait-until.sh
-          URL=http://localhost:9200/efcms-user ./wait-until.sh
-          URL=http://localhost:9200/efcms-message ./wait-until.sh
-          URL=http://localhost:9200/efcms-work-item ./wait-until.sh
-          URL=http://localhost:9000/ ./wait-until.sh
+          ./wait-until-services.sh
           export TESTFILES="web-client/integration-tests-cognito-local/*.test.ts"
           npm run test:client:integration:cognito-local:ci
       - name: Store Video Artifacts
