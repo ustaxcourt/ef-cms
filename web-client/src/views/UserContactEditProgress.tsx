@@ -16,7 +16,7 @@ export const UserContactEditProgress = connect(
             <div className="progress-user-contact-edit">
               <h3 id="progress-description">
                 Updating contact info in all cases. Please be patient as this
-                may take a while.
+                may take awhile.
               </h3>
               <ProgressBar
                 aria-labelledby="progress-description"
