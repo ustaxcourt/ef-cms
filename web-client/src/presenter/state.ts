@@ -336,6 +336,7 @@ export const baseState = {
   individualInboxCount: 0,
   isTerminalUser: false,
   judgeActivityReportData: {},
+  judgeDashboardCaseWorksheetErrors: {},
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
@@ -405,6 +406,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
