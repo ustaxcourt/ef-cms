@@ -20,6 +20,22 @@ parameters:
     default: test
     type: string
 
+  run_sync_s3_to_lower_env:
+    default: false
+    type: boolean
+
+  referrer:
+    default: ""
+    type: string
+
+  source_bucket:
+    default: ""
+    type: string
+
+  destination_bucket:
+    default: ""
+    type: string
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -605,6 +621,12 @@ jobs:
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+            if [[ -z "$PROD_DOCUMENTS_BUCKET_NAME" ]]; then
+              echo "Error: expected PROD_DOCUMENTS_BUCKET_NAME environment variable"
+              exit 1
+            fi
+            echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
           name: Disable Wait for Workflow Cron
           command: |
@@ -626,7 +648,10 @@ jobs:
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+              --data "{\"branch\":\"prod\", \"parameters\":{ \
+                \"run_build_and_deploy_with_context\":false, \
+                \"run_glue_to_lower_env\":true, \
+                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -637,6 +662,19 @@ jobs:
           name: Enable Wait for Workflow Cron
           command: |
             ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+      - run:
+          name: Kick off the sync-s3-to-lower-env workflow
+          command: |
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
 
   cleanup-glue-job:
     docker:
@@ -666,6 +704,72 @@ jobs:
           name: Enable Dynamodb Streams
           command: |
             ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+
+  sync-s3-buckets-with-timeout:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            REFERRER=<< pipeline.parameters.referrer >>
+            if [[ -z "$REFERRER" ]]; then
+              echo "Error: no referrer was provided"
+              exit 1
+            fi
+            SOURCE_BUCKET=<< pipeline.parameters.source_bucket >>
+            if [[ -z "$SOURCE_BUCKET" ]]; then
+              echo "Error: no source bucket was provided"
+              exit 1
+            fi
+            DESTINATION_BUCKET=<< pipeline.parameters.destination_bucket >>
+            if [[ -z "$DESTINATION_BUCKET" ]]; then
+              echo "Error: no destination bucket was provided"
+              exit 1
+            fi
+            echo "export REFERRER=${REFERRER}" >> $BASH_ENV
+            echo "export SOURCE_BUCKET=${SOURCE_BUCKET}" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${DESTINATION_BUCKET}" >> $BASH_ENV
+      - run:
+          name: Sync S3 buckets with timeout
+          command: |
+            timeout 59m aws s3 sync "s3://${SOURCE_BUCKET}" "s3://${DESTINATION_BUCKET}" --delete
+            EXIT_CODE="$?"
+            echo "export S3_SYNC_RESULT=${EXIT_CODE}" >> $BASH_ENV
+      - run:
+          name: Handle sync result
+          command: |
+            if [[ "$S3_SYNC_RESULT" -eq 124 ]]; then
+              echo "Timeout reached, re-launching workflow to continue sync"
+              curl --request POST \
+                --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+                --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+                --header "content-type: application/json" \
+                --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                  \"run_build_and_deploy\":false, \
+                  \"run_sync_s3_to_lower_env\":true, \
+                  \"referrer\":\"${REFERRER}\", \
+                  \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                  \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+              exit 0
+            fi
+            if [[ "$S3_SYNC_RESULT" -eq 0 ]]; then
+              echo "Sync completed, approving referrer"
+              export APPROVAL_JOB_NAME="wait-for-s3-sync"
+              export CIRCLE_WORKFLOW_ID="$REFERRER"
+              npx ts-node --transpile-only ./scripts/circleci/approve-pending-job.ts
+              exit 0
+            fi
+            echo "Error syncing S3 buckets, canceling referrer"
+            CIRCLE_WORKFLOW_ID="$REFERRER" npx ts-node --transpile-only ./scripts/circleci/cancel-workflow.ts
+            exit $S3_SYNC_RETURN_CODE
 
   ######################## GLUE JOB: Jobs that run in prod ########################
 
@@ -898,7 +1002,7 @@ workflows:
           type: approval
           requires:
             - initiate-glue-job
-      - wait-for-s3-queue-to-process:
+      - wait-for-s3-sync:
           <<: *only-test
           type: approval
           requires:
@@ -907,7 +1011,7 @@ workflows:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
-            - wait-for-s3-queue-to-process
+            - wait-for-s3-sync
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
@@ -923,3 +1027,9 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-glue-job
+
+  sync-s3-to-lower-env:
+    when: << pipeline.parameters.run_sync_s3_to_lower_env >>
+    jobs:
+      - sync-s3-buckets-with-timeout:
+          <<: *only-deployed-lower-environments
