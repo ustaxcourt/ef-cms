@@ -2,9 +2,6 @@ name: Node.js Client Integration Cognito Local
 
 on:
   pull_request:
-  push:
-    branches:
-      - dependency-updates
 
 jobs:
   client_integration:
@@ -15,23 +12,13 @@ jobs:
         ci_node_total: [1]
         ci_node_index: [0]
     env:
-      CI: true
-      SKIP_CACHE_INVALIDATION: true
-      TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
-      QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
-      DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
-      S3_ENDPOINT: http://localhost:9000
-      MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
-      AWS_ACCESS_KEY_ID: S3RVER
-      AWS_SECRET_ACCESS_KEY: S3RVER
-      CIRCLECI: true
       CI_NODE_TOTAL: ${{ matrix.ci_node_total }}
       CI_NODE_INDEX: ${{ matrix.ci_node_index }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: '18.15.0'
+          node-version: '18.16.1'
       - name: Configure sysctl limits
         run: |
           sudo swapoff -a
