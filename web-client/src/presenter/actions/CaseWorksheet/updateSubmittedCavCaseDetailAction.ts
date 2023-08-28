@@ -10,7 +10,10 @@ export const updateSubmittedCavCaseDetailAction = ({
 
   store.unset(state.judgeDashboardCaseWorksheetErrors[docketNumber]);
 
-  if (!applicationContext.getUtilities().isValidDateString(finalBriefDueDate)) {
+  if (
+    finalBriefDueDate &&
+    !applicationContext.getUtilities().isValidDateString(finalBriefDueDate)
+  ) {
     store.set(state.judgeDashboardCaseWorksheetErrors[docketNumber], {
       finalBriefDueDate: 'Enter a valid due date.',
     });

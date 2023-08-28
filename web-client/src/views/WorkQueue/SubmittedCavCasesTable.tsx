@@ -136,7 +136,7 @@ export const SubmittedCavCasesTable = connect(
                           />
                         </FormGroup>
                       </td>
-                      <td colSpan={2}>
+                      <td>
                         <select
                           aria-describedby="status-of-matter"
                           className="usa-select"
