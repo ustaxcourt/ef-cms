@@ -43,9 +43,7 @@ export const IRSNotice = connect(
             className="usa-fieldset margin-bottom-0"
             id="irs-verified-notice-radios"
           >
-            <legend htmlFor="irs-verified-notice-radios">
-              IRS Notice provided?
-            </legend>
+            <legend>IRS Notice provided?</legend>
             <div className="usa-radio usa-radio__inline">
               <input
                 aria-describedby="irs-verified-notice-radios"

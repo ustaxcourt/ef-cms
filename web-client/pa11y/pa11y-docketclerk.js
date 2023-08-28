@@ -272,7 +272,7 @@ module.exports = [
   },
   {
     actions: [
-      'wait for table.case-detail to be visible',
+      'wait for #docket-record-table to be visible',
       'click element button[data-test="seal-docket-entry-button-1"]',
       'wait for .modal-dialog to be visible',
     ],
@@ -282,7 +282,7 @@ module.exports = [
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/maintenance',
   {
     actions: [
-      'wait for table.case-detail to be visible',
+      'wait for #docket-record-table to be visible',
       'wait for button[data-test="document-viewer-link-A"] to be visible',
       'click element button[data-test="document-viewer-link-A"]',
       'click element button[data-test="serve-paper-filed-document"]',
