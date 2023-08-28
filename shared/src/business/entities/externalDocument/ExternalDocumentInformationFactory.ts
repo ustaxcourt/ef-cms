@@ -201,7 +201,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     ],
     supportingDocumentFreeText: 'Enter name',
     trialLocation: 'Select a preferred trial location.',
-  };
+  } as const;
 
   getValidationRules() {
     let schema = {

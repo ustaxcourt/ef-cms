@@ -120,7 +120,8 @@ export class DocketEntryFactory extends JoiValidationEntity {
       'Your document file size is empty.',
     ],
     secondaryDocumentFile: 'A file was not selected.',
-  };
+  } as const;
+
   getValidationRules() {
     const eFiledObjectionRequiredEventCodes = [
       ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
