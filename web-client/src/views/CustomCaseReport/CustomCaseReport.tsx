@@ -9,7 +9,7 @@ import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { focusPaginatorTop } from '@web-client/ustc-ui/Pagination/paginatorHelper';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
