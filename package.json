@@ -187,7 +187,7 @@
     "start:api": "USTC_ENV=dev ./run-local.sh",
     "start:api:docker": "USTC_ENV=dev ./run-api.sh",
     "start:api:cognito-local": "USTC_ENV=dev USE_COGNITO_LOCAL=true ./run-local.sh",
-    "start:api:cognito-local:ci": "CI=true USE_COGNITO_LOCAL=true ./run-local.sh",
+    "start:api:cognito-local:ci": "CI=true npm start:api:cognito-local",
     "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true NODE_ENV=production npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
     "start:client": "npm run start:client-host && WATCH=true IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn npm run start:client:esbuild",
