@@ -94,24 +94,4 @@ describe('createNewPetitionerUser', () => {
         .TemporaryPassword,
     ).toBe(process.env.DEFAULT_ACCOUNT_PASS);
   });
-
-  it('should modify the params sent to cognito adminCreateUser when USE_COGNITO_LOCAL is true', async () => {
-    process.env.USE_COGNITO_LOCAL = 'true';
-
-    await createNewPetitionerUser({
-      applicationContext,
-      user: mockUser as any,
-    });
-
-    expect(
-      applicationContext.getCognito().adminCreateUser.mock.calls[0][0],
-    ).toMatchObject(
-      expect.objectContaining({
-        DesiredDeliveryMediums: ['EMAIL'],
-        Username: mockUserId,
-      }),
-    );
-
-    process.env.USE_COGNITO_LOCAL = 'false';
-  });
 });

@@ -332,7 +332,6 @@ describe('createOrUpdatePractitionerUser', () => {
     expect(
       applicationContext.getCognito().adminCreateUser,
     ).toHaveBeenCalledWith({
-      DesiredDeliveryMediums: ['EMAIL'],
       UserAttributes: [
         {
           Name: 'email_verified',
@@ -350,13 +349,13 @@ describe('createOrUpdatePractitionerUser', () => {
           Name: 'name',
           Value: 'Test Private Practitioner',
         },
-        {
-          Name: 'custom:userId',
-          Value: privatePractitionerUser.userId,
-        },
       ],
       UserPoolId: 'localUserPoolId',
-      Username: privatePractitionerUser.userId,
+      Username: 'test@example.com',
+      additionalAttributes: {
+        Name: 'custom:userId',
+        Value: '9b52c605-edba-41d7-b045-d5f992a499d3',
+      },
     });
   });
 
