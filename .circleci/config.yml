@@ -20,14 +20,6 @@ parameters:
     default: test
     type: string
 
-  run_empty_s3_bucket:
-    default: false
-    type: boolean
-
-  bucket_name:
-    default: ''
-    type: string
-
 commands:
   npm-and-cypress-install:
     steps:
@@ -613,8 +605,6 @@ jobs:
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-            echo "export SOURCE_BUCKET_NAME=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
           name: Disable Wait for Workflow Cron
           command: |
@@ -639,20 +629,6 @@ jobs:
               --data "{\"branch\":\"prod\", \"parameters\":{\"run_build_and_deploy_with_context\":false, \"run_glue_to_lower_env\":true, \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
-          name: Deploy Process S3 Queue Lambda
-          command: |
-            cd web-api/workflow-terraform/process-s3-queue/main
-            ../bin/deploy-app.sh $ENV
-            S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
-            echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
-            S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
-            echo "export S3_BUCKET_DL_QUEUE_URL=${S3_BUCKET_DL_QUEUE_URL}" >> $BASH_ENV
-      - run:
-          name: Populate S3 Sync Queue
-          command: |
-            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/populate-sync-queue.ts
-            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/reset-s3-queue-is-empty-flag.ts
-      - run:
           name: Deploy Wait for Workflow Cron Lambda
           command: |
             export APPROVAL_JOB_NAME=wait-for-glue-workflow
@@ -661,14 +637,6 @@ jobs:
           name: Enable Wait for Workflow Cron
           command: |
             ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
-      - run:
-          name: Deploy Wait for S3 Sync Lambda
-          command: |
-            npm run deploy:wait-for-s3-queue-cron -- $ENV
-      - run:
-          name: Enable Wait for S3 Sync Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/enable.sh
 
   cleanup-glue-job:
     docker:
@@ -685,14 +653,6 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: Disable Wait for S3 Sync Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for S3 Sync Lambda
-          command: |
-            npm run destroy:wait-for-s3-queue-cron -- $ENV
-      - run:
           name: Disable Wait for Workflow Cron
           command: |
             ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
@@ -702,10 +662,6 @@ jobs:
             export APPROVAL_JOB_NAME=wait-for-glue-workflow
             export CIRCLE_PIPELINE_ID=noop
             npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Destroy Process S3 Queue Lambda
-          command: |
-            npm run destroy:process-s3-queue -- $ENV
       - run:
           name: Enable Dynamodb Streams
           command: |
@@ -768,78 +724,6 @@ jobs:
           name: Destroy Check Glue Job Run State Cron Lambda
           command: |
             npm run destroy:glue-cron -- $ENV
-
-  ######################## empty-s3-bucket workflow ########################
-
-  start-emptying-s3-bucket:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            BUCKET_NAME=<< pipeline.parameters.bucket_name >>
-            [ -z "$BUCKET_NAME" ] && echo "Error: missing bucket_name parameter" && exit 1
-            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
-      - run:
-          name: Deploy Process S3 Queue Lambda
-          command: |
-            cd web-api/workflow-terraform/process-s3-queue/main
-            ../bin/deploy-app.sh
-            S3_BUCKET_QUEUE_URL="$(terraform output -raw s3_bucket_queue_url)"
-            echo "export S3_BUCKET_QUEUE_URL=${S3_BUCKET_QUEUE_URL}" >> $BASH_ENV
-            S3_BUCKET_DL_QUEUE_URL="$(terraform output -raw s3_bucket_dl_queue_url)"
-            echo "export S3_BUCKET_DL_QUEUE_URL=${S3_BUCKET_DL_QUEUE_URL}" >> $BASH_ENV
-      - run:
-          name: Populate S3 Bucket Truncation Queue
-          command: |
-            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/populate-truncation-queue.ts
-            npx ts-node --transpile-only ./web-api/workflow-terraform/process-s3-queue/bin/reset-s3-queue-is-empty-flag.ts
-      - run:
-          name: Deploy Wait for S3 Truncation Lambda
-          command: |
-            export EMPTYING_BUCKET=1
-            npm run deploy:wait-for-s3-queue-cron -- $ENV
-      - run:
-          name: Enable Wait for S3 Truncation Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/enable.sh
-
-  finish-emptying-s3-bucket:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            BUCKET_NAME=<< pipeline.parameters.bucket_name >>
-            echo "export BUCKET_NAME=${BUCKET_NAME}" >> $BASH_ENV
-      - run:
-          name: Disable Wait for S3 Truncation Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-s3-queue-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for S3 Truncation Lambda
-          command: |
-            npm run destroy:wait-for-s3-queue-cron -- $ENV
-      - run:
-          name: Destroy Process S3 Queue Lambda
-          command: |
-            npm run destroy:process-s3-queue -- $ENV
 
 only-prod: &only-prod
   context: efcms-<< pipeline.git.branch >>
@@ -1039,15 +923,3 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-glue-job
-
-  empty-s3-bucket:
-    when: << pipeline.parameters.run_empty_s3_bucket >>
-    jobs:
-      - start-emptying-s3-bucket
-      - wait-for-s3-bucket-to-empty:
-          type: approval
-          requires:
-            - start-emptying-s3-bucket
-      - finish-emptying-s3-bucket:
-          requires:
-            - wait-for-s3-bucket-to-empty
