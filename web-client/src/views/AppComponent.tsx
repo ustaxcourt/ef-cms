@@ -233,7 +233,7 @@ export const AppComponent = connect(
             <a
               className="usa-skipnav"
               href="#main-content"
-              tabIndex="0"
+              tabIndex={0}
               onClick={focusMain}
             >
               Skip to main content

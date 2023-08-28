@@ -18,7 +18,7 @@ import { DocketEntry } from '../../../../../shared/src/business/entities/DocketE
 import { Get } from 'cerebral';
 import { getFilingsAndProceedings } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { prepareDateFromString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const getMeetsPolicyChangeRequirements = (
   entry: RawDocketEntry & { rootDocument: RawDocketEntry },
@@ -201,19 +201,16 @@ const filterDocketEntries = (
   }
 };
 
-export interface IPublicCaseDetailHelper {
-  formattedDocketEntriesOnDocketRecord: any[];
-  isCaseSealed: boolean;
-  showPrintableDocketRecord: boolean;
-}
-
 export const publicCaseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): IPublicCaseDetailHelper => {
-  const { canAllowPrintableDocketRecord, docketEntries, isSealed } = get(
-    state.caseDetail,
-  );
+) => {
+  const {
+    canAllowPrintableDocketRecord,
+    docketEntries,
+    docketNumber,
+    isSealed,
+  } = get(state.caseDetail);
 
   const isTerminalUser = get(state.isTerminalUser);
 
@@ -237,9 +234,12 @@ export const publicCaseDetailHelper = (
       });
     });
 
+  const { docketRecordSort } = get(state.sessionMetadata);
+  const sortOrder = docketRecordSort[docketNumber];
+
   const sortedFormattedDocketRecords = applicationContext
     .getUtilities()
-    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, 'byDate');
+    .sortDocketEntries(formattedDocketEntriesOnDocketRecord as any, sortOrder);
 
   formattedDocketEntriesOnDocketRecord = filterDocketEntries(
     sortedFormattedDocketRecords,

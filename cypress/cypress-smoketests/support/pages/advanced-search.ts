@@ -69,6 +69,11 @@ export const createOpinion = () => {
   cy.get('#upload-description').type('A Smoketest Opinion');
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#save-uploaded-pdf-button').scrollIntoView();
+
+  // Flaky test fix; attempting to wait 0ms to allow event loop to proceed
+  // https://github.com/flexion/ef-cms/issues/10135
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(0);
   cy.get('#save-uploaded-pdf-button').click();
 };
 
