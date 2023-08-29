@@ -2,8 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { FocusLock } from '../../ustc-ui/FocusLock/FocusLock';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
+import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
@@ -103,7 +102,7 @@ export const DocketRecordOverlay = connect(
                 Document Details
               </Button>
               <hr className="margin-top-1 margin-bottom-2" />
-              <h3 tabIndex="-1">{entry.descriptionDisplay}</h3>
+              <h3 tabIndex={-1}>{entry.descriptionDisplay}</h3>
               <Button
                 link
                 aria-label={'View PDF'}
