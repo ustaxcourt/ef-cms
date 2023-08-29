@@ -256,6 +256,7 @@
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
     "@sparticuz/chromium": "112.0.2",
     "@types/aws-lambda": "^8.10.119",
+    "@types/luxon": "^3.3.0",
     "@types/jest": "^29.5.4",
     "@types/lodash": "^4.14.197",
     "@types/node": "^20.5.6",
