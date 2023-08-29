@@ -527,10 +527,10 @@ export const createApplicationContext = (
     isAuthorized,
     isCurrentColorActive,
     logger: {
-      debug: (message, context) => logger.debug(message, { context }),
-      error: (message, context) => logger.error(message, { context }),
-      info: (message, context) => logger.info(message, { context }),
-      warn: (message, context) => logger.warn(message, { context }),
+      debug: (message, context?) => logger.debug(message, { context }),
+      error: (message, context?) => logger.error(message, { context }),
+      info: (message, context?) => logger.info(message, { context }),
+      warn: (message, context?) => logger.warn(message, { context }),
     },
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);
