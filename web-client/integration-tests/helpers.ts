@@ -866,7 +866,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   });
   presenter.providers.socket = { start, stop: stopSocket };
 
-  global.window = {
+  global.window ??= Object.create({
     ...dom.window,
     DOMParser: () => {
       return {
@@ -908,7 +908,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     pdfjsObj: {
       getData: () => Promise.resolve(getFakeFile(true)),
     },
-  };
+  });
 
   cerebralTest = CerebralTest(presenter);
   cerebralTest.getSequence = seqName => obj =>
@@ -1053,7 +1053,11 @@ export const waitForPage = async ({
   cerebralTest,
   expectedPage,
   maxWait = 10000,
-}) => {
+}: {
+  cerebralTest: any;
+  expectedPage: string;
+  maxWait?: number;
+}): Promise<void> => {
   const waitTime = await waitForCondition({
     booleanExpressionCondition: () =>
       cerebralTest.getState('currentPage') === expectedPage,
@@ -1089,7 +1093,7 @@ export const waitForExpectedItemToExist = async ({
 };
 
 // will run the cb every second until it returns true
-const waitUntil = cb => {
+export const waitUntil = cb => {
   return new Promise(resolve => {
     const waitUntilInternal = async () => {
       const value = await cb();

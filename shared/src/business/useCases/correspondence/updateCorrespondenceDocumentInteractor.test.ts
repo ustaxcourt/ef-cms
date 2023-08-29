@@ -37,6 +37,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
         documentTitle: 'Docket Record 1',
         documentType: 'Order that case is assigned',
         eventCode: 'OAJ',
+        filedByRole: ROLES.petitioner,
         filingDate: createISODateString(),
         index: 1,
         signedAt: '2019-03-01T21:40:46.415Z',

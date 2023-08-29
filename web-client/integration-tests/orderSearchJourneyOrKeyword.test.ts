@@ -19,13 +19,13 @@ describe('order search journey', () => {
   cerebralTest.draftOrders = [];
 
   beforeEach(() => {
-    global.window = {
+    global.window ??= Object.create({
       ...global.window,
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
       },
-    };
+    });
   });
 
   afterAll(() => {

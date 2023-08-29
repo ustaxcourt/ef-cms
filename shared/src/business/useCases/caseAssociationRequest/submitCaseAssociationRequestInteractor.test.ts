@@ -1,5 +1,5 @@
 import { COUNTRY_TYPES, ROLES } from '../../entities/EntityConstants';
-import { MOCK_CASE } from '../../../test/mockCase.ts';
+import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactPrimary } from '../../entities/cases/Case';
 import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';

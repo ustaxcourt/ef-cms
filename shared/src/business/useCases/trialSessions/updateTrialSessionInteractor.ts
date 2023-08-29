@@ -15,7 +15,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
   docketNumber,
   paperServicePdfsCombined,
   updatedTrialSessionEntity,
-  userId,
+  user,
 }) => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -85,7 +85,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          userId,
+          user,
         });
     }
 
@@ -245,7 +245,7 @@ export const updateTrialSessionInteractor = async (
         docketNumber: calendaredCase.docketNumber,
         paperServicePdfsCombined,
         updatedTrialSessionEntity,
-        userId: user.userId,
+        user,
       });
     }
 

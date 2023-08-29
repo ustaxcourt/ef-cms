@@ -108,10 +108,11 @@ export const addPaperFilingInteractor = async (
         isOnDocketRecord: true,
         mailingDate: documentMetadata.mailingDate,
         relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
+
+    docketEntryEntity.setFiledBy(user);
 
     const servedParties: any = aggregatePartiesForService(caseEntity);
 

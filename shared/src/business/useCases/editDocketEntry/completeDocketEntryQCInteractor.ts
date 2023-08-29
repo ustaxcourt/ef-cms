@@ -1,5 +1,4 @@
 import {
-  CASE_CAPTION_POSTFIX,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -177,7 +176,6 @@ const completeDocketEntryQC = async (
 
   const docketChangeInfo = {
     caseCaptionExtension,
-    caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${CASE_CAPTION_POSTFIX}`,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${
@@ -304,10 +302,11 @@ const completeDocketEntryQC = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToUpdate.petitioners },
     );
+
+    noticeUpdatedDocketEntry.setFiledBy(user);
 
     noticeUpdatedDocketEntry.numberOfPages = await applicationContext
       .getUseCaseHelpers()

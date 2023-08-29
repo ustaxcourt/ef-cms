@@ -10,6 +10,7 @@ import {
   CHIEF_JUDGE,
   CLOSED_CASE_STATUSES,
   CONTACT_TYPES,
+  CaseStatus,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -21,6 +22,7 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
+  SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
@@ -43,7 +45,6 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { PublicCase } from './PublicCase';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
@@ -111,7 +112,7 @@ export class Case extends JoiValidationEntity {
   public noticeOfTrialDate: string;
   public docketNumberWithSuffix: string;
   public canAllowDocumentService: string;
-  public canAllowPrintableDocketRecord: string;
+  public canAllowPrintableDocketRecord!: boolean;
   public archivedDocketEntries: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed: boolean;
@@ -123,7 +124,6 @@ export class Case extends JoiValidationEntity {
   public correspondence: any[];
   public archivedCorrespondences: any[];
   public hasPendingItems: boolean;
-  public docketEntriesEFiledByPractitioner: string[];
 
   constructor(
     rawCase: any,
@@ -161,8 +161,6 @@ export class Case extends JoiValidationEntity {
     this.assignDocketEntries(params);
     this.assignHearings(params);
     this.assignPractitioners(params);
-    this.docketEntriesEFiledByPractitioner =
-      PublicCase.getDocketEntriesEFiledByPractitioner(rawCase);
     this.assignFieldsForAllUsers(params);
     if (isNewCase) {
       const changedBy = rawCase.isPaper
@@ -181,7 +179,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} docketNumber the docket number to use
    * @returns {string|void} the sortable docket number
    */
-  static getSortableDocketNumber(docketNumber) {
+  static getSortableDocketNumber(docketNumber?: string) {
     if (!docketNumber) {
       return;
     }
@@ -1131,7 +1129,7 @@ export class Case extends JoiValidationEntity {
    */
   markAsSentToIRS() {
     this.setCaseStatus({
-      changedBy: 'System',
+      changedBy: SYSTEM_ROLE,
       updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
     });
 
@@ -1165,25 +1163,25 @@ export class Case extends JoiValidationEntity {
       this.initialCaption && lastCaption !== this.caseCaption && !this.isPaper;
 
     if (needsCaptionChangedRecord) {
-      const { userId } = applicationContext.getCurrentUser();
+      const user = applicationContext.getCurrentUser();
 
-      this.addDocketEntry(
-        new DocketEntry(
-          {
-            documentTitle: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
-            documentType:
-              MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
-            eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
-            filingDate: createISODateString(),
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            userId,
-          },
-          { applicationContext, petitioners: this.petitioners },
-        ),
+      const mincDocketEntry = new DocketEntry(
+        {
+          documentTitle: `Caption of case is amended from '${lastCaption} ${CASE_CAPTION_POSTFIX}' to '${this.caseCaption} ${CASE_CAPTION_POSTFIX}'`,
+          documentType: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.captionOfCaseIsAmended.eventCode,
+          filingDate: createISODateString(),
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { applicationContext, petitioners: this.petitioners },
       );
+
+      mincDocketEntry.setFiledBy(user);
+
+      this.addDocketEntry(mincDocketEntry);
     }
 
     return this;
@@ -1216,24 +1214,25 @@ export class Case extends JoiValidationEntity {
       lastDocketNumber !== newDocketNumber && !this.isPaper;
 
     if (needsDocketNumberChangeRecord) {
-      const { userId } = applicationContext.getCurrentUser();
+      const user = applicationContext.getCurrentUser();
 
-      this.addDocketEntry(
-        new DocketEntry(
-          {
-            documentTitle: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
-            documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,
-            eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
-            filingDate: createISODateString(),
-            isFileAttached: false,
-            isMinuteEntry: true,
-            isOnDocketRecord: true,
-            processingStatus: 'complete',
-            userId,
-          },
-          { applicationContext, petitioners: this.petitioners },
-        ),
+      const mindDocketEntry = new DocketEntry(
+        {
+          documentTitle: `Docket Number is amended from '${lastDocketNumber}' to '${newDocketNumber}'`,
+          documentType: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.documentType,
+          eventCode: MINUTE_ENTRIES_MAP.dockedNumberIsAmended.eventCode,
+          filingDate: createISODateString(),
+          isFileAttached: false,
+          isMinuteEntry: true,
+          isOnDocketRecord: true,
+          processingStatus: 'complete',
+        },
+        { applicationContext, petitioners: this.petitioners },
       );
+
+      mindDocketEntry.setFiledBy(user);
+
+      this.addDocketEntry(mindDocketEntry);
     }
 
     return this;
@@ -1421,17 +1420,15 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  /**
-   * remove case from trial, setting case status to generalDocketReadyForTrial
-   * @param {string} providers.updatedCaseStatus optional case status to set the case to
-   * @param {string} providers.associatedJudge optional associatedJudge to set on the case
-   * @returns {Case} the updated case entity
-   */
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
     changedBy,
     updatedCaseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
-  }) {
+  }: {
+    associatedJudge?: string;
+    changedBy?: string;
+    updatedCaseStatus?: CaseStatus;
+  }): Case {
     this.setAssociatedJudge(associatedJudge);
     this.setCaseStatus({
       changedBy,
@@ -1441,6 +1438,7 @@ export class Case extends JoiValidationEntity {
     this.trialLocation = undefined;
     this.trialSessionId = undefined;
     this.trialTime = undefined;
+
     return this;
   }
 
@@ -1499,7 +1497,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} updatedCaseStatus the case status to update
    * @returns {Case} the updated case entity
    */
-  setCaseStatus({ changedBy = 'System', updatedCaseStatus }) {
+  setCaseStatus({ changedBy = SYSTEM_ROLE, updatedCaseStatus }) {
     const previousCaseStatus = this.status;
     const date = createISODateString();
 
@@ -1803,7 +1801,7 @@ export class Case extends JoiValidationEntity {
     this.updateTrialSessionInformation(trialSessionEntity);
     if (trialSessionEntity.isCalendared === true) {
       this.setCaseStatus({
-        changedBy: 'System',
+        changedBy: SYSTEM_ROLE,
         updatedCaseStatus: CASE_STATUS_TYPES.calendared,
       });
     }

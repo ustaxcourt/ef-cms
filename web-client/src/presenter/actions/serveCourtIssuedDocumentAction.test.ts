@@ -4,7 +4,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { serveCourtIssuedDocumentAction } from './serveCourtIssuedDocumentAction';
 
 describe('serveCourtIssuedDocumentAction', () => {
-  global.window = global;
+  global.window ??= Object.create(global);
   global.Blob = () => {};
   let mockPdfUrl = { pdfUrl: 'www.example.com' };
   const clientConnectionId = 'ABC123';

@@ -138,10 +138,11 @@ export const updateContactInteractor = async (
         isOnDocketRecord: true,
         partyPrimary: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseEntity.petitioners },
     );
+
+    changeOfAddressDocketEntry.setFiledBy(user);
 
     const servedParties = aggregatePartiesForService(caseEntity);
 

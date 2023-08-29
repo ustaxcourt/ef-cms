@@ -278,6 +278,7 @@ export const baseState = {
   closedCases: [],
   cognitoLoginUrl: null,
   completeForm: {},
+  constants: {} as ReturnType<typeof getConstants>,
   currentJudges: [],
   currentPage: 'Interstitial',
   currentViewMetadata: {
@@ -306,6 +307,7 @@ export const baseState = {
       tab: null,
     },
   },
+
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
@@ -317,6 +319,7 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
+
   form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
@@ -327,6 +330,7 @@ export const baseState = {
   },
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
+  iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
@@ -400,16 +404,19 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
   validationErrors: {},
+  viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workitemAllCheckbox: false,
 };
 
 export const initialState = {

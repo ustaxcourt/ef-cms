@@ -24,13 +24,13 @@ describe('order search journey for docket number', () => {
   cerebralTest.createdCases = [];
 
   beforeEach(() => {
-    global.window = {
+    global.window ??= Object.create({
       ...global.window,
       localStorage: {
         removeItem: () => null,
         setItem: () => null,
       },
-    };
+    });
   });
 
   afterAll(() => {

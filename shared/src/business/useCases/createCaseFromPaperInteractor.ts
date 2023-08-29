@@ -150,10 +150,11 @@ export const createCaseFromPaperInteractor = async (
       isPaper: true,
       mailingDate: petitionEntity.mailingDate,
       receivedAt: caseToAdd.receivedAt,
-      userId: user.userId,
     },
     { applicationContext, petitioners: caseToAdd.petitioners },
   );
+
+  petitionDocketEntryEntity.setFiledBy(user);
 
   const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
     applicationContext,
@@ -181,10 +182,11 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    applicationForWaiverOfFilingFeeDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(applicationForWaiverOfFilingFeeDocketEntryEntity);
   }
@@ -211,10 +213,11 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    requestForPlaceOfTrialDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(requestForPlaceOfTrialDocketEntryEntity);
   }
@@ -234,10 +237,11 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    stinDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(stinDocketEntryEntity);
   }
@@ -256,10 +260,11 @@ export const createCaseFromPaperInteractor = async (
         isPaper: true,
         mailingDate: petitionEntity.mailingDate,
         receivedAt: caseToAdd.receivedAt,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    cdsDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }

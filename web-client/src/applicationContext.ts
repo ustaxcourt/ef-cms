@@ -355,10 +355,12 @@ const reduce = ImageBlobReduce({
 let user;
 let broadcastChannel;
 
-const getCurrentUser = () => {
+const getCurrentUser = (): RawUser | RawPractitioner | RawIrsPractitioner => {
   return user;
 };
-const setCurrentUser = newUser => {
+const setCurrentUser = (
+  newUser: RawUser | RawPractitioner | RawIrsPractitioner,
+) => {
   user = newUser;
 };
 

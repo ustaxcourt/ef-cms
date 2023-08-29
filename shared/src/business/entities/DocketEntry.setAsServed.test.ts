@@ -16,7 +16,7 @@ describe('setAsServed', () => {
     docketEntry.setAsServed();
 
     expect(docketEntry.servedAt).toBeDefined();
-    expect(docketEntry.draftOrderState).toEqual(null);
+    expect(docketEntry.draftOrderState).toBeUndefined();
   });
 
   it('sets the Document as served with served parties', () => {
