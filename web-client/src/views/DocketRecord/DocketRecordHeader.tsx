@@ -1,6 +1,6 @@
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DocketRecordSort } from './DocketRecordSort';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
@@ -8,6 +8,140 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import React from 'react';
+
+export const DocketRecordMobileHeader = ({
+  docketNumber,
+  filterOptions,
+  gotoPrintableDocketRecordSequence,
+  sessionMetadata,
+  updateSessionMetadataSequence,
+}: {
+  docketNumber: string;
+  filterOptions: Record<string, string>;
+  gotoPrintableDocketRecordSequence: (options: {
+    docketNumber: string;
+  }) => void;
+  sessionMetadata: any;
+  updateSessionMetadataSequence: () => void;
+}) => {
+  return (
+    <div className="grid-container padding-0 docket-record-header">
+      <div className="grid-row">
+        <div className="grid-col-4">
+          <label
+            className="dropdown-label-serif margin-right-2"
+            htmlFor="docket-record-sort"
+            id="docket-record-sort-label"
+          >
+            Sort by
+          </label>
+        </div>
+        <div className="grid-col-fill">
+          <DocketRecordSort
+            name={`docketRecordSort.${docketNumber}`}
+            value={sessionMetadata.docketRecordSort[docketNumber]}
+            onChange={updateSessionMetadataSequence}
+          />
+        </div>
+      </div>
+
+      <div className="grid-row padding-y-075-rem">
+        <div className="grid-col-4">
+          <label
+            className="dropdown-label-serif"
+            htmlFor="document-filter-by"
+            id="docket-record-filter-label"
+          >
+            Filter by
+          </label>
+        </div>
+        <div className="grid-col-fill">
+          <BindedSelect
+            aria-describedby="docket-record-filter-label"
+            aria-label="docket record filter"
+            bind="sessionMetadata.docketRecordFilter"
+            id="document-filter-by"
+            name="docketRecordFilter"
+          >
+            {Object.entries(filterOptions).map(([key, value]) => (
+              <option key={`filter-${key}`} value={value}>
+                {value}
+              </option>
+            ))}
+          </BindedSelect>
+        </div>
+      </div>
+      <div className="grid-row">
+        <Button
+          link
+          aria-hidden="true"
+          className="margin-top-1 text-left"
+          icon="print"
+          onClick={() => {
+            gotoPrintableDocketRecordSequence({
+              docketNumber,
+            });
+          }}
+        >
+          Printable Docket Record
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export const NonMobileHeaderControls = ({
+  docketNumber,
+  filterOptions,
+  sessionMetadata,
+  updateSessionMetadataSequence,
+}: {
+  docketNumber: string;
+  filterOptions: Record<string, string>;
+  sessionMetadata: any;
+  updateSessionMetadataSequence: () => void;
+}) => {
+  return (
+    <>
+      <label
+        className="dropdown-label-serif margin-right-3 margin-bottom-0"
+        htmlFor="docket-record-sort"
+        id="docket-record-sort-label"
+      >
+        Sort by
+      </label>
+      <div className="margin-right-3">
+        <DocketRecordSort
+          name={`docketRecordSort.${docketNumber}`}
+          value={sessionMetadata.docketRecordSort[docketNumber]}
+          onChange={updateSessionMetadataSequence}
+        />
+      </div>
+      <label
+        className="dropdown-label-serif margin-right-3 margin-bottom-0"
+        htmlFor="document-filter-by"
+        id="docket-record-filter-label"
+      >
+        Filter by
+      </label>
+      <BindedSelect
+        aria-describedby="docket-record-filter-label"
+        aria-label="docket record filter"
+        bind="sessionMetadata.docketRecordFilter"
+        className="select-left inline-select"
+        id="document-filter-by"
+        name="docketRecordFilter"
+        style={{ maxWidth: 180 }}
+      >
+        {Object.entries(filterOptions).map(([key, value]) => (
+          <option key={`filter-${key}`} value={value}>
+            {value}
+          </option>
+        ))}
+      </BindedSelect>
+    </>
+  );
+};
 
 export const DocketRecordHeader = connect(
   {
@@ -28,155 +162,56 @@ export const DocketRecordHeader = connect(
     gotoPrintableDocketRecordSequence,
     sessionMetadata,
     showModal,
-    toggleMobileDocketSortSequence,
     updateSessionMetadataSequence,
   }) {
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
           <NonMobile>
-            <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
-              <div className="tablet:grid-col-3">
-                <select
-                  aria-label="docket record"
-                  className="usa-select margin-top-0 sort"
-                  name={`docketRecordSort.${formattedCaseDetail.docketNumber}`}
-                  value={
-                    sessionMetadata.docketRecordSort[
-                      formattedCaseDetail.docketNumber
-                    ]
-                  }
-                  onChange={e => {
-                    updateSessionMetadataSequence({
-                      key: e.target.name,
-                      value: e.target.value,
-                    });
-                  }}
-                >
-                  {[
-                    {
-                      label: 'oldest',
-                      value: 'byDate',
-                    },
-                    {
-                      label: 'newest',
-                      value: 'byDateDesc',
-                    },
-                    {
-                      label: 'no. (ascending)',
-                      value: 'byIndex',
-                    },
-                    {
-                      label: 'no. (descending)',
-                      value: 'byIndexDesc',
-                    },
-                  ].map(item => (
-                    <option key={item.value} value={item.value}>
-                      Sort by {item.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div className="tablet:grid-col-fill">
-                <label
-                  className="dropdown-label-serif margin-right-3"
-                  htmlFor="inline-select"
-                  id="docket-record-filter-label"
-                >
-                  Filter by
-                </label>
-                <BindedSelect
-                  aria-describedby="docket-record-filter-label"
-                  aria-label="docket record filter"
-                  bind="sessionMetadata.docketRecordFilter"
-                  className="select-left inline-select docket-record-filter"
-                  name="docketRecordFilter"
-                >
-                  {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
-                    ([key, value]) => (
-                      <option key={`filter-${key}`} value={value}>
-                        {value}
-                      </option>
-                    ),
-                  )}
-                </BindedSelect>
-              </div>
-
-              {docketRecordHelper.showPrintableDocketRecord && (
-                <div className="tablet:grid-col-4 text-right">
-                  <Button
-                    link
-                    aria-label="printable docket record"
-                    icon="print"
-                    id="printable-docket-record-button"
-                    onClick={() => {
-                      gotoPrintableDocketRecordSequence({
-                        docketNumber: formattedCaseDetail.docketNumber,
-                      });
-                    }}
-                  >
-                    Printable Docket Record
-                  </Button>
+            <div className="grid-container padding-0 docket-record-header">
+              <div className="grid-row grid-gap margin-bottom-2">
+                <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
+                  <NonMobileHeaderControls
+                    docketNumber={formattedCaseDetail.docketNumber}
+                    filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
+                    sessionMetadata={sessionMetadata}
+                    updateSessionMetadataSequence={
+                      updateSessionMetadataSequence
+                    }
+                  />
                 </div>
-              )}
+
+                {docketRecordHelper.showPrintableDocketRecord && (
+                  <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+                    <Button
+                      link
+                      aria-label="printable docket record"
+                      icon="print"
+                      id="printable-docket-record-button"
+                      onClick={() => {
+                        gotoPrintableDocketRecordSequence({
+                          docketNumber: formattedCaseDetail.docketNumber,
+                        });
+                      }}
+                    >
+                      Printable Docket Record
+                    </Button>
+                  </div>
+                )}
+              </div>
             </div>
           </NonMobile>
 
           <Mobile>
-            <Button
-              link
-              aria-hidden="true"
-              className="margin-top-1"
-              icon="print"
-              onClick={() => {
-                gotoPrintableDocketRecordSequence({
-                  docketNumber: formattedCaseDetail.docketNumber,
-                });
-              }}
-            >
-              Printable Docket Record
-            </Button>
-
-            <Button
-              link
-              aria-label="docket record sort"
-              className="mobile-sort-docket-button text-left"
-              onClick={() => {
-                toggleMobileDocketSortSequence();
-              }}
-            >
-              {docketRecordHelper.sortLabelTextMobile}
-              <FontAwesomeIcon icon="sort" size="sm" />
-            </Button>
-
-            <div className="grid-row padding-y-075-rem">
-              <div className="grid-col-auto">
-                <label
-                  className="dropdown-label-serif margin-right-2"
-                  htmlFor="docket-record-filter"
-                  id="docket-record-filter-label"
-                >
-                  Filter by
-                </label>
-              </div>
-              <div className="grid-col-fill">
-                <BindedSelect
-                  aria-describedby="docket-record-filter-label"
-                  aria-label="docket record filter"
-                  bind="sessionMetadata.docketRecordFilter"
-                  id="docket-record-filter"
-                  name="docketRecordFilter"
-                >
-                  {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
-                    ([key, value]) => (
-                      <option key={`filter-${key}`} value={value}>
-                        {value}
-                      </option>
-                    ),
-                  )}
-                </BindedSelect>
-              </div>
-            </div>
+            <DocketRecordMobileHeader
+              docketNumber={formattedCaseDetail.docketNumber}
+              filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
+              gotoPrintableDocketRecordSequence={
+                gotoPrintableDocketRecordSequence
+              }
+              sessionMetadata={sessionMetadata}
+              updateSessionMetadataSequence={updateSessionMetadataSequence}
+            />
           </Mobile>
         </div>
         {showModal === 'OpenPrintableDocketRecordModal' && (

@@ -332,6 +332,7 @@ export const baseState = {
   },
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
+  iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
@@ -412,11 +413,13 @@ export const baseState = {
   userContactEditProgress: {},
   users: [],
   validationErrors: {},
+  viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workitemAllCheckbox: false,
 };
 
 export const initialState = {
