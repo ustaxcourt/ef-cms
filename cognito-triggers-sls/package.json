@@ -1,7 +1,6 @@
 {
   "name": "cognito-triggers-sls",
   "version": "2.2.0",
-  "description": "A Node.js starter for Serverless Framework with ES6 and TypeScript support",
   "main": "handler.js",
   "author": "",
   "license": "MIT",
