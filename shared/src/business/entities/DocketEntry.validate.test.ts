@@ -440,6 +440,16 @@ describe('validate', () => {
       },
       expectValidationErrors: ['redactionAcknowledgement'],
     },
+    {
+      description:
+        'should fail validation when the filedByRole is not defined and the entry is not draft',
+      docketEntry: {
+        ...A_VALID_DOCKET_ENTRY,
+        filedByRole: undefined,
+        isDraft: false,
+      },
+      expectValidationErrors: ['filedByRole'],
+    },
   ];
 
   invalidTests.forEach(item =>
@@ -454,9 +464,9 @@ describe('validate', () => {
 
       expect(docketEntry.isValid()).toBeFalsy();
       if (item.expectValidationErrors) {
-        expect(Object.keys(docketEntry.getFormattedValidationErrors())).toEqual(
-          item.expectValidationErrors,
-        );
+        expect(
+          Object.keys(docketEntry.getFormattedValidationErrors() as object),
+        ).toEqual(item.expectValidationErrors);
       }
     }),
   );

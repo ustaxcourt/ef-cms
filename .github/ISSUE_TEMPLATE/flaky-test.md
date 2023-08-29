@@ -1,6 +1,7 @@
 ---
 name: Flaky Test Report
-about: 'Template for documenting tests that have shown thesmelves to be flaky. These tests fail inconsistently and are often unrelated to the work you are doing. Often times a simple retry (or two) does the trick.'
+about: 'Template for documenting tests that fail inconsistently and are often unrelated to the work you are doing. Often times a simple retry (or two) does the trick.'
+
 title: 'FLAKY TEST: '
 labels: 'flaky-test'
 assignees: ''
@@ -17,7 +18,7 @@ assignees: ''
 
 Include any helpful output from the failure(s) here.
 
-## Workflows of Failrure(s)
+## Workflows of Failure(s)
 
 Paste any CircleCI or Github Actions runs where this test failed
 

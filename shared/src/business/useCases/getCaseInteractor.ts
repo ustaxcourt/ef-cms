@@ -86,7 +86,7 @@ const getCaseForExternalUser = ({
  * @param {Object} caseRecord the original caseRecord
  * @returns {Object} decorated caseRecord
  */
-export const decorateForCaseStatus = (caseRecord: Case) => {
+export const decorateForCaseStatus = (caseRecord: RawCase) => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);

@@ -1,13 +1,5 @@
 import { query } from '../../dynamodbClientService';
 
-/**
- * getCasesByLeadDocketNumber
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.leadDocketNumber the lead case docket number
- * @returns {Promise} the promise of the call to persistence
- */
 export const getCasesByLeadDocketNumber = async ({
   applicationContext,
   leadDocketNumber,

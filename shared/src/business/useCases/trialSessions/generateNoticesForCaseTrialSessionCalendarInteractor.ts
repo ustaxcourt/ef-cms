@@ -116,7 +116,7 @@ const serveNoticesForCase = async ({
  * @param {string} deconstructed.jobId the pdf we are generating
  * @param {object} deconstructed.trialSession the pdf data for the notice
  * @param {object} deconstructed.trialSessionEntity pdf-lib object
- * @param {string} deconstructed.userId the parties this document will be served to
+ * @param {object} deconstructed.user the person that initiated generation of notices
  */
 const setNoticeForCase = async ({
   applicationContext,
@@ -125,7 +125,7 @@ const setNoticeForCase = async ({
   jobId,
   trialSession,
   trialSessionEntity,
-  userId,
+  user,
 }) => {
   const caseEntity = new Case(caseRecord, { applicationContext });
   const { procedureType } = caseRecord;
@@ -198,10 +198,11 @@ const setNoticeForCase = async ({
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
-      userId,
     },
     { applicationContext },
   );
+
+  noticeOfTrialDocketEntry.setFiledBy(user);
 
   noticeOfTrialDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -263,14 +264,13 @@ const setNoticeForCase = async ({
       eventCode: standingPretrialDocumentEventCode,
       isFileAttached: true,
       isOnDocketRecord: true,
+      judge: trialSessionEntity.judge.name,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      signedAt: applicationContext.getUtilities().createISODateString(),
-      signedByUserId: trialSessionEntity.judge.userId,
-      signedJudgeName: trialSessionEntity.judge.name,
-      userId,
     },
     { applicationContext },
   );
+
+  standingPretrialDocketEntry.setFiledBy(user);
 
   standingPretrialDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
@@ -351,6 +351,11 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     return;
   }
 
+  const user = await applicationContext.getPersistenceGateway().getUserById({
+    applicationContext,
+    userId,
+  });
+
   await applicationContext
     .getPersistenceGateway()
     .setTrialSessionJobStatusForCase({
@@ -378,7 +383,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     jobId,
     trialSession,
     trialSessionEntity,
-    userId,
+    user,
   });
 
   await applicationContext.getPersistenceGateway().decrementJobCounter({

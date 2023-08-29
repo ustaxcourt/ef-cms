@@ -110,7 +110,7 @@ export const TextEditor = ({
           className="usa-sr-only"
           id="escape-focus-for-keyboard"
           ref={quillEscapeRef}
-          tabIndex="-1"
+          tabIndex={-1}
         />
       </Suspense>
     </>

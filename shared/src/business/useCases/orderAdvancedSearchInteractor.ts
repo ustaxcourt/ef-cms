@@ -14,19 +14,6 @@ import { User } from '../entities/User';
 import { caseSearchFilter } from '../utilities/caseFilter';
 import { omit } from 'lodash';
 
-/**
- * orderAdvancedSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.caseTitleOrPetitioner case title or petitioner to search for
- * @param {string} providers.docketNumber docket number
- * @param {string} providers.endDate ending date for date range
- * @param {string} providers.judge judge name to filter by
- * @param {string} providers.keyword keyword to search for
- * @param {string} providers.startDate start date for date range
- * @returns {object} the orders data
- */
 export const orderAdvancedSearchInteractor = async (
   applicationContext: IApplicationContext,
   {

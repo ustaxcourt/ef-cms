@@ -167,10 +167,11 @@ export const createCaseInteractor = async (
       isFileAttached: true,
       isOnDocketRecord: true,
       privatePractitioners,
-      userId: user.userId,
     },
     { applicationContext, petitioners: caseToAdd.petitioners },
   );
+
+  petitionDocketEntryEntity.setFiledBy(user);
 
   const newWorkItem = addPetitionDocketEntryToCase({
     applicationContext,
@@ -179,23 +180,26 @@ export const createCaseInteractor = async (
     user,
   });
 
-  caseToAdd.addDocketEntry(
-    new DocketEntry(
-      {
-        documentTitle: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        filingDate: caseToAdd.createdAt,
-        isFileAttached: false,
-        isMinuteEntry: true,
-        isOnDocketRecord: true,
-        processingStatus: 'complete',
-        userId: user.userId,
-      },
-      { applicationContext, petitioners: caseToAdd.petitioners },
-    ),
+  const requestPlaceOfTrialDocketEntry = new DocketEntry(
+    {
+      documentTitle: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
+      documentType: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+      eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+      filingDate: caseToAdd.createdAt,
+      isFileAttached: false,
+      isMinuteEntry: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+    },
+    {
+      applicationContext,
+      petitioners: caseToAdd.petitioners,
+    },
   );
+
+  requestPlaceOfTrialDocketEntry.setFiledBy(user);
+
+  caseToAdd.addDocketEntry(requestPlaceOfTrialDocketEntry);
 
   const stinDocketEntryEntity = new DocketEntry(
     {
@@ -210,10 +214,11 @@ export const createCaseInteractor = async (
       index: 0,
       isFileAttached: true,
       privatePractitioners,
-      userId: user.userId,
     },
     { applicationContext, petitioners: caseToAdd.petitioners },
   );
+
+  stinDocketEntryEntity.setFiledBy(user);
 
   caseToAdd.addDocketEntry(stinDocketEntryEntity);
 
@@ -231,10 +236,11 @@ export const createCaseInteractor = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         privatePractitioners,
-        userId: user.userId,
       },
       { applicationContext, petitioners: caseToAdd.petitioners },
     );
+
+    cdsDocketEntryEntity.setFiledBy(user);
 
     caseToAdd.addDocketEntry(cdsDocketEntryEntity);
   }

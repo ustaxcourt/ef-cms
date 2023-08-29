@@ -1,19 +1,25 @@
+import { Mobile } from '@web-client/ustc-ui/Responsive/Responsive';
 import { PublicCaseDetailHeader } from './PublicCaseDetailHeader';
 import { PublicCaseDetailSubnavTabs } from './PublicCaseDetailSubnavTabs';
 import { PublicDocketRecord } from './PublicDocketRecord';
 import { connect } from '@cerebral/react';
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
+const props = {
+  publicCaseDetailHelper: state.publicCaseDetailHelper,
+};
+
 export const PublicCaseDetail = connect(
-  {
-    formattedCaseDetail: state.publicCaseDetailHelper.formattedCaseDetail,
-  },
-  function PublicCaseDetail({ formattedCaseDetail }) {
+  props,
+  function ({ publicCaseDetailHelper }: typeof props) {
     return (
       <>
         <PublicCaseDetailHeader />
-        {!formattedCaseDetail.isCaseSealed && (
+        <Mobile>
+          <section className="usa-section grid-container margin-top-2 padding-bottom-3"></section>
+        </Mobile>
+        {!publicCaseDetailHelper.isCaseSealed && (
           <>
             <PublicCaseDetailSubnavTabs />
             <section className="usa-section grid-container">
@@ -22,7 +28,7 @@ export const PublicCaseDetail = connect(
           </>
         )}
 
-        {formattedCaseDetail.isCaseSealed && (
+        {publicCaseDetailHelper.isCaseSealed && (
           <>
             <div className="grid-container">
               <p className="margin-top-5 margin-bottom-5">

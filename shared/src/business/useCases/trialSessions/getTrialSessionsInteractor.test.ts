@@ -42,9 +42,8 @@ describe('getTrialSessionsInteractor', () => {
         MOCK_TRIAL_REGULAR,
       ]);
 
-    const trialSessionDTOs = await getTrialSessionsInteractor(
-      applicationContext,
-    );
+    const trialSessionDTOs =
+      await getTrialSessionsInteractor(applicationContext);
 
     trialSessionDTOs.forEach(trialSessionDTO => {
       expect(trialSessionDTO instanceof TrialSessionInfoDTO).toBe(true);

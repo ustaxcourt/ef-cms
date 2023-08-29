@@ -14,16 +14,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { orderBy } from 'lodash';
 
-/**
- * getOpinionsFiledByJudgeInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.endDate the date to end the search for judge activity
- * @param {string} providers.judgeName the name of the judge
- * @param {string} providers.startDate the date to start the search for judge activity
- * @returns {array} list of opinions filed by the judge in the given date range, sorted alphabetically ascending by event code
- */
 export const getOpinionsFiledByJudgeInteractor = async (
   applicationContext,
   {

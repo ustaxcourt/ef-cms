@@ -552,6 +552,34 @@ describe('advancedDocumentSearchHelper', () => {
       expect(result.formattedJudgeName).toEqual('Scott');
     });
 
+    it('sets formattedJudgeName to the judge field when the eventCode is SPOS', () => {
+      const mockJudgeName = 'Scott';
+      const mockResult = {
+        eventCode: 'SPOS',
+        judge: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual(mockJudgeName);
+    });
+
+    it('sets formattedJudgeName to the judge field when the eventCode is SPTO', () => {
+      const mockJudgeName = 'Scott';
+      const mockResult = {
+        eventCode: 'SPTO',
+        judge: mockJudgeName,
+      };
+
+      const result = formatDocumentSearchResultRecord(mockResult, '', {
+        applicationContext,
+      });
+
+      expect(result.formattedJudgeName).toEqual(mockJudgeName);
+    });
+
     it('sets numberOfPagesFormatted to n/a if numberOfPages is undefined', () => {
       const result = formatDocumentSearchResultRecord(
         {

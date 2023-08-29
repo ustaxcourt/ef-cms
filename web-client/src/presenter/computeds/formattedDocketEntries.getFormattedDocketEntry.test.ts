@@ -1,6 +1,7 @@
 import {
   BRIEF_EVENTCODES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
+  ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
@@ -23,7 +24,10 @@ describe('getFormattedDocketEntry', () => {
     applicationContext,
     docketNumber: MOCK_CASE.docketNumber,
     entry: simpleDocketEntry,
-    formattedCase: { ...MOCK_CASE, docketEntriesEFiledByPractitioner: [] },
+    formattedCase: {
+      ...MOCK_CASE,
+      filedByRole: ROLES.privatePractitioner,
+    },
     isExternalUser: false,
     permissions: {},
     userAssociatedWithCase: true,
@@ -439,7 +443,7 @@ describe('getFormattedDocketEntry', () => {
         filedAfterPolicyChange: true,
         formattedCase: {
           ...MOCK_CASE,
-          docketEntriesEFiledByPractitioner: [simpleDocketEntry.docketEntryId],
+          filedByRole: ROLES.privatePractitioner,
         },
         isExternalUser: true,
       });
@@ -458,7 +462,7 @@ describe('getFormattedDocketEntry', () => {
         filedAfterPolicyChange: false,
         formattedCase: {
           ...MOCK_CASE,
-          docketEntriesEFiledByPractitioner: [simpleDocketEntry.docketEntryId],
+          filedByRole: ROLES.privatePractitioner,
         },
         isExternalUser: true,
       });

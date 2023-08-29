@@ -20,7 +20,8 @@
     }
   },
   "ts-node": {
-    "files": true
+    "files": true,
+    "require": ["tsconfig-paths/register"]
   },
   "include": [
     "./types/**/*.d.ts",
@@ -30,7 +31,10 @@
     "./web-client/integration-tests/**/*",
     "./web-client/integration-tests-public/**/*",
     "./shared/admin-tools/dynamodb/import-case-status-changes-from-csv.ts",
-    "./web-client/integration-tests/fixtures/consolidated-cases.ts"
+    "./web-client/integration-tests/fixtures/consolidated-cases.ts",
+    "./web-api/storage/fixtures/seed/cav-submitted-cases.ts",
+    "./web-api/workflow-terraform/migration/main/lambdas/**/*",
+    "web-api/elasticsearch/index-types.ts"
   ],
   "exclude": ["node_modules"]
 }

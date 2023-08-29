@@ -5,11 +5,11 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('createOrderAction', () => {
   beforeAll(() => {
-    global.window = {
+    global.window ??= Object.create({
       DOMParser: class {
         constructor() {}
       },
-    };
+    });
 
     global.window.DOMParser.prototype.parseFromString = jest
       .fn()

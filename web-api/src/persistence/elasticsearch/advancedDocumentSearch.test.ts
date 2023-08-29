@@ -1,14 +1,16 @@
 /* eslint-disable max-lines */
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-
 import {
   BENCH_OPINION_EVENT_CODE,
   MAX_SEARCH_CLIENT_RESULTS,
   TODAYS_ORDERS_SORTS,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { advancedDocumentSearch } from './advancedDocumentSearch';
-import { search } from './searchClient';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { search as searchClient } from './searchClient';
 jest.mock('./searchClient');
+
+const search = searchClient as jest.Mock;
 
 describe('advancedDocumentSearch', () => {
   const SOURCE = {
@@ -57,15 +59,18 @@ describe('advancedDocumentSearch', () => {
     },
   });
 
-  const getCaseMappingQueryParams = (caseTitleOrPetitioner, docketNumber) => {
-    let query = {
+  const getCaseMappingQueryParams = (
+    caseTitleOrPetitioner?: string,
+    docketNumber?: string,
+  ) => {
+    let query: QueryDslQueryContainer = {
       bool: {
         filter: [],
       },
     };
 
     if (caseTitleOrPetitioner) {
-      query.bool.must = {
+      query.bool!.must = {
         simple_query_string: {
           default_operator: 'and',
           fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
@@ -76,7 +81,7 @@ describe('advancedDocumentSearch', () => {
     }
 
     if (docketNumber) {
-      query.bool.filter.push({
+      (query.bool!.filter! as QueryDslQueryContainer[]).push({
         term: {
           'docketNumber.S': docketNumber,
         },
@@ -143,9 +148,10 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge when searching for opinions', async () => {
+  it('should search for documents that have been signed or created by a specific judge when one is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
+      documentEventCodes: [],
       isOpinionSearch: true,
       judge: 'Judge Guy Fieri',
     });
@@ -159,45 +165,18 @@ describe('advancedDocumentSearch', () => {
             should: [
               {
                 match: {
-                  'judge.S': 'Guy Fieri',
-                },
-              },
-              {
-                match: {
                   'signedJudgeName.S': {
                     operator: 'and',
                     query: 'Guy Fieri',
                   },
                 },
               },
-            ],
-          },
-        }),
-      ]),
-    );
-  });
-
-  it('does a search for a signed judge when searching for orders', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: orderEventCodes,
-      judge: 'Judge Guy Fieri',
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toMatchObject(
-      expect.arrayContaining([
-        expect.objectContaining({
-          bool: {
-            should: {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
+              {
+                match: {
+                  'judge.S': 'Guy Fieri',
                 },
               },
-            },
+            ],
           },
         }),
       ]),
@@ -211,12 +190,6 @@ describe('advancedDocumentSearch', () => {
       omitSealed: true,
     });
 
-    const expectation = [
-      getCaseMappingQueryParams(), // match all parents
-    ];
-    expectation[0].has_parent.query.bool.must = [
-      { term: { 'isSealed.BOOL': true } },
-    ];
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
     ).toEqual([
@@ -241,6 +214,7 @@ describe('advancedDocumentSearch', () => {
   it('should not include docket entries in the search results when they are sealed to the "External" even when they are not sealed documents', async () => {
     await advancedDocumentSearch({
       applicationContext,
+      documentEventCodes: [],
       isExternalUser: true,
       omitSealed: false,
     });
@@ -296,7 +270,7 @@ describe('advancedDocumentSearch', () => {
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool.must,
     ).toMatchObject([
-      getCaseMappingQueryParams(null, '101-20'), // match all parents
+      getCaseMappingQueryParams(undefined, '101-20'), // match all parents
     ]);
 
     expect(
@@ -304,7 +278,7 @@ describe('advancedDocumentSearch', () => {
     ).toMatchObject({
       filter: expect.arrayContaining(orderQueryParams),
       must: [
-        getCaseMappingQueryParams(null, '101-20'), // match all parents
+        getCaseMappingQueryParams(undefined, '101-20'), // match all parents
       ],
     });
   });
@@ -439,7 +413,6 @@ describe('advancedDocumentSearch', () => {
   });
 
   it('should return the results and totalCount of results', async () => {
-    // applicationContextForClient.i;
     const result = await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
@@ -463,7 +436,7 @@ describe('advancedDocumentSearch', () => {
 
       expect(
         search.mock.calls[0][0].searchParameters.body.query.bool.filter[4].bool
-          .should[0].match,
+          .should[1].match,
       ).toMatchObject({
         'judge.S': 'Guy Fieri',
       });
