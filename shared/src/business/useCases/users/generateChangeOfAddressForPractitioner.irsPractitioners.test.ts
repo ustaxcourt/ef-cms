@@ -55,7 +55,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([{ docketNumber }]);
+      .getCasesForUser.mockReturnValue([{ docketNumber }]);
 
     applicationContext
       .getPersistenceGateway()
@@ -161,7 +161,7 @@ describe('generateChangeOfAddress', () => {
   it('should NOT send a notification to the user if they have no associated cases', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValueOnce([]);
+      .getCasesForUser.mockReturnValueOnce([]);
 
     await generateChangeOfAddress({
       applicationContext,
