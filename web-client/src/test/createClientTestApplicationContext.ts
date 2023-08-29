@@ -128,7 +128,6 @@ import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseF
 import path from 'path';
 import pug from 'pug';
 import sass from 'sass';
-import type { ClientApplicationContext } from '@web-client/applicationContext';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -652,5 +651,4 @@ const createTestApplicationContext = () => {
   it is because the cerebral testing framework expects all objects on the
   applicationContext to be functions.
 */
-export const applicationContextForClient: ClientApplicationContext =
-  createTestApplicationContext();
+export const applicationContextForClient: any = createTestApplicationContext();
