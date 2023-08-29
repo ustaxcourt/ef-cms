@@ -1,5 +1,5 @@
 const {
   checkForReadyForTrialCasesLambda,
-} = require('../../../src/cases/checkForReadyForTrialCasesLambda');
+} = require('../../../src/lambdas/cases/checkForReadyForTrialCasesLambda');
 
 exports.checkForReadyForTrialCasesHandler = checkForReadyForTrialCasesLambda;
