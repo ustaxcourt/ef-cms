@@ -321,6 +321,8 @@ export const baseState = {
   },
 
   form: {} as any,
+
+  fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -328,6 +330,7 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  health: undefined as any,
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   iframeSrc: '',
@@ -349,7 +352,12 @@ export const baseState = {
     casesProcessed: 0,
     totalCases: 0,
   },
-  notifications: {},
+  notifications: {} as {
+    qcSectionInboxCount: number;
+    qcSectionInProgressCount: number;
+    qcIndividualInboxCount: number;
+    qcIndividualInProgressCount: number;
+  },
   openCases: [],
   paperServiceStatusState: {
     pdfsAppended: 0,
@@ -401,6 +409,7 @@ export const baseState = {
     sortOrder: ASCENDING,
   },
   trialSession: {} as RawTrialSession,
+
   trialSessionJudge: {
     name: '',
   },
