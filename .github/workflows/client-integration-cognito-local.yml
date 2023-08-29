@@ -4,7 +4,7 @@ on:
   pull_request:
 
 jobs:
-  client_integration:
+  client_integration_cognito:
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
