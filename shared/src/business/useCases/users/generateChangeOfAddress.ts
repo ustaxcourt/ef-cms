@@ -81,8 +81,8 @@ const generateChangeOfAddressForPractitioner = async ({
       applicationContext.getConstants().CHANGE_OF_ADDRESS_CONCURRENCY || 100,
   });
 
-  for (let caseInfo of associatedUserCases) {
-    await queue.add(async () => {
+  for (const caseInfo of associatedUserCases) {
+    queue.add(async () => {
       try {
         const { docketNumber } = caseInfo;
         const newData = contactInfo;
@@ -153,6 +153,8 @@ const generateChangeOfAddressForPractitioner = async ({
       });
     });
   }
+
+  await queue.onEmpty();
 
   return updatedCases;
 };
