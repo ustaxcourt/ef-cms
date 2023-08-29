@@ -6,7 +6,7 @@ const {
 } = require('../../../src/lambdas/notifications/defaultLambda');
 const {
   disconnectLambda,
-} = require('../../../src/notifications/disconnectLambda');
+} = require('../../../src/lambdas/notifications/disconnectLambda');
 
 exports.connectHandler = connectLambda;
 exports.disconnectHandler = disconnectLambda;
