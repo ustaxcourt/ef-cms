@@ -1,4 +1,10 @@
-import { aggregateCaseItems } from '../helpers/aggregateCaseItems';
+import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+import {
+  aggregateCaseItems,
+  isCaseItem,
+  isIrsPractitionerItem,
+  isPrivatePractitionerItem,
+} from '../helpers/aggregateCaseItems';
 import { queryFull } from '../../dynamodbClientService';
 
 /**
@@ -28,5 +34,57 @@ export const getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  return aggregateCaseItems(caseItems) as RawCase;
+  const leadDocketNumber = caseItems.find(caseItem => isCaseItem(caseItem))
+    ?.leadDocketNumber;
+  let consolidatedCases;
+  if (leadDocketNumber) {
+    const consolidatedCaseItems = await queryFull({
+      ExpressionAttributeNames: {
+        '#gsi1pk': 'gsi1pk',
+      },
+      ExpressionAttributeValues: {
+        ':gsi1pk': `case|${leadDocketNumber}`,
+      },
+      IndexName: 'gsi1',
+      KeyConditionExpression: '#gsi1pk = :gsi1pk',
+      applicationContext,
+    });
+
+    consolidatedCases = aggregateConsolidatedCases(consolidatedCaseItems);
+  }
+
+  return { ...aggregateCaseItems(caseItems), consolidatedCases } as RawCase;
+};
+
+const aggregateConsolidatedCases = (
+  consolidatedCaseItems: any[],
+): ConsolidatedCaseDTO[] => {
+  const consolidatedCases = consolidatedCaseItems.filter(item =>
+    isCaseItem(item),
+  );
+
+  consolidatedCaseItems.forEach(item => {
+    if (isIrsPractitionerItem(item)) {
+      const caseWithPractitioner = consolidatedCases.find(aCase => {
+        return item.pk === aCase.pk;
+      });
+      if (!caseWithPractitioner.irsPractitioners) {
+        caseWithPractitioner.irsPractitioners = [item];
+      } else {
+        caseWithPractitioner.irsPractitioners.push(item);
+      }
+    }
+
+    if (isPrivatePractitionerItem(item)) {
+      const caseWithPractitioner = consolidatedCases.find(aCase => {
+        return item.pk === aCase.pk;
+      });
+      if (!caseWithPractitioner.privatePractitioners) {
+        caseWithPractitioner.privatePractitioners = [item];
+      } else {
+        caseWithPractitioner.privatePractitioners.push(item);
+      }
+    }
+  });
+  return consolidatedCases.map(aCase => new ConsolidatedCaseDTO(aCase));
 };
