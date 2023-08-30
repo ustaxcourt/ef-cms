@@ -30,7 +30,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       updatedCaseStatus: string;
     }[];
   }> = [];
-  let mockReturnedCasesToFilterOut: string[] = [];
+  let mockReturnedDocketNumbersToFilterOut: string[] = [];
 
   let expectedConsolidatedCasesGroupCountMap = {};
 
@@ -203,7 +203,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     ];
 
-    mockReturnedCasesToFilterOut = [
+    mockReturnedDocketNumbersToFilterOut = [
       MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
       MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -229,7 +229,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersWithServedEventCodes.mockReturnValue(
-        mockReturnedCasesToFilterOut,
+        mockReturnedDocketNumbersToFilterOut,
       );
 
     applicationContext
@@ -312,7 +312,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     ];
 
-    mockReturnedCasesToFilterOut = [
+    mockReturnedDocketNumbersToFilterOut = [
       MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
       MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
       MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
@@ -328,7 +328,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersWithServedEventCodes.mockReturnValue(
-        mockReturnedCasesToFilterOut,
+        mockReturnedDocketNumbersToFilterOut,
       );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
