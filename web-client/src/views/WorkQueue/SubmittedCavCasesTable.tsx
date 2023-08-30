@@ -14,7 +14,7 @@ function convertToDateInputValues(date: string) {
   if (!date) {
     return '';
   }
-  const [month, day, year] = date.split('/');
+  const [year, month, day] = date.split('-');
   return {
     day,
     month,
@@ -26,7 +26,6 @@ export const SubmittedCavCasesTable = connect(
   {
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
-    judgeDashboardCaseWorksheetErrors: state.judgeDashboardCaseWorksheetErrors,
     openAddEditPrimaryIssueModalSequence:
       sequences.openAddEditPrimaryIssueModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -34,18 +33,19 @@ export const SubmittedCavCasesTable = connect(
       sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
     submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
+    tableItemValidationErrors: state.tableItemValidationErrors,
     updateSubmittedCavCaseDetailSequence:
       sequences.updateSubmittedCavCaseDetailSequence,
   },
 
   function SubmittedCavCasesTable({
     judgeActivityReportHelper,
-    judgeDashboardCaseWorksheetErrors,
     openAddEditPrimaryIssueModalSequence,
     openDeleteCasePrimaryIssueSequence,
     showModal,
     STATUS_OF_MATTER_OPTIONS,
     submittedCavCasesTableHelper,
+    tableItemValidationErrors,
     updateSubmittedCavCaseDetailSequence,
   }) {
     return (
@@ -115,7 +115,7 @@ export const SubmittedCavCasesTable = connect(
                         <FormGroup
                           className="margin-bottom-0"
                           errorText={
-                            judgeDashboardCaseWorksheetErrors[
+                            tableItemValidationErrors[
                               formattedCase.docketNumber
                             ]?.finalBriefDueDate
                           }
@@ -123,7 +123,7 @@ export const SubmittedCavCasesTable = connect(
                           <div className="display-flex flex-align-center">
                             <DateInput
                               className={'margin-bottom-0'}
-                              id={'final-brief-due-date-date-picker'}
+                              id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
                               showDateHint={false}
                               values={convertToDateInputValues(
                                 formattedCase.finalBriefDueDate,
@@ -143,7 +143,7 @@ export const SubmittedCavCasesTable = connect(
                         <select
                           aria-describedby="status-of-matter"
                           className="usa-select"
-                          id="status-of-matter-dropdown"
+                          id={`status-of-matter-dropdown-${formattedCase.docketNumber}`}
                           name="statusOfMatter"
                           value={formattedCase.statusOfMatter ?? ''}
                           onChange={e => {

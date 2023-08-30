@@ -299,6 +299,7 @@ export class Case extends JoiValidationEntity {
     docketEntries: 'At least one valid docket entry is required',
     docketNumber: 'Docket number is required',
     filingType: 'Select on whose behalf you are filing',
+    finalBriefDueDate: 'Enter a valid due date',
     hasIrsNotice: 'Indicate whether you received an IRS notice',
     hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
     irsNoticeDate: [
@@ -508,6 +509,7 @@ export class Case extends JoiValidationEntity {
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
     ).optional(),
+    finalBriefDueDate: JoiValidationConstants.DATE.optional(),
     hasPendingItems: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()

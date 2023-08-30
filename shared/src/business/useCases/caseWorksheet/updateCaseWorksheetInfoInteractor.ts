@@ -4,15 +4,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-/**
- * updateUserCaseNoteInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update notes
- * @param {string} providers.notes the notes to update
- * @returns {object} the updated case note returned from persistence
- */
+
 export const updateCaseWorksheetInfoInteractor = async (
   applicationContext,
   {
@@ -37,6 +29,7 @@ export const updateCaseWorksheetInfoInteractor = async (
       docketNumber,
     });
 
+  // TODO: will this allow us to remove the date?
   if (finalBriefDueDate !== undefined) {
     caseRecord.finalBriefDueDate = finalBriefDueDate;
   }
