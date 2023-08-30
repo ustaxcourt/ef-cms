@@ -188,7 +188,11 @@ export const JudgeActivityReport = connect(
                 Progress Description
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Total: {judgeActivityReportHelper.progressDescriptionTableTotal}
+                Total:{' '}
+                {
+                  submittedAndCavCasesForJudgeHelper
+                    .filteredSubmittedAndCavCasesByJudge.length
+                }
               </div>
             </div>
           </caption>
@@ -231,7 +235,8 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
-        {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
+        {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge
+          .length === 0 && (
           <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
         )}
       </>
