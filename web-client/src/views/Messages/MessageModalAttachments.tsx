@@ -58,7 +58,19 @@ export const MessageModalAttachments = connect(
             {form.attachments.map(doc => {
               return (
                 <div className="margin-top-1" key={doc.documentId}>
-                  {doc.documentTitle}
+                  <div className="grid-row">
+                    <div className="grid-col-10">{doc.documentTitle}</div>
+                    <div className="grid-col-2">
+                      <Button
+                        link
+                        aria-label={`remove ${doc.documentTitle} selection`}
+                        className="modal-button-link"
+                        icon="times"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               );
             })}
