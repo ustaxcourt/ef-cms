@@ -377,7 +377,10 @@ export const isValidDateString = (
  * @param {string} timeStamp2 an ISO-8601 date string
  * @returns {number} the difference between two days, rounded to the nearest integer
  */
-export const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
+export const calculateDifferenceInDays = (
+  timeStamp1: string,
+  timeStamp2: string,
+): number => {
   const dt1 = DateTime.fromISO(timeStamp1, { zone: USTC_TZ })
     .set({
       hours: 12,
