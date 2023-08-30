@@ -82,7 +82,11 @@ const generateChangeOfAddressForPractitioner = async ({
 
   await applicationContext()
     .getPersistenceGateway()
-    .createChangeOfAddressJob({ applicationContext, jobId });
+    .createChangeOfAddressJob({
+      applicationContext,
+      docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
+      jobId,
+    });
 
   applicationContext.logger.info(`creating change of address job of ${jobId}`);
 
