@@ -399,7 +399,6 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
-  tableItemValidationErrors: {},
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,

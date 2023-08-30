@@ -33,11 +33,10 @@ export const SubmittedCavCasesTable = connect(
       sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
     submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
-    tableItemValidationErrors: state.tableItemValidationErrors,
     updateSubmittedCavCaseDetailSequence:
       sequences.updateSubmittedCavCaseDetailSequence,
+    validationErrors: state.validationErrors,
   },
-
   function SubmittedCavCasesTable({
     judgeActivityReportHelper,
     openAddEditPrimaryIssueModalSequence,
@@ -45,8 +44,8 @@ export const SubmittedCavCasesTable = connect(
     showModal,
     STATUS_OF_MATTER_OPTIONS,
     submittedCavCasesTableHelper,
-    tableItemValidationErrors,
     updateSubmittedCavCaseDetailSequence,
+    validationErrors,
   }) {
     return (
       <React.Fragment>
@@ -115,7 +114,9 @@ export const SubmittedCavCasesTable = connect(
                         <FormGroup
                           className="margin-bottom-0"
                           errorText={
-                            tableItemValidationErrors[
+                            validationErrors &&
+                            validationErrors.submittedCavCasesTable &&
+                            validationErrors.submittedCavCasesTable[
                               formattedCase.docketNumber
                             ]?.finalBriefDueDate
                           }

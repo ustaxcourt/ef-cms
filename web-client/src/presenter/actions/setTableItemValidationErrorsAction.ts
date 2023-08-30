@@ -6,5 +6,8 @@ export const setTableItemValidationErrorsAction = ({
 }: ActionProps) => {
   const { docketNumber, errors } = props;
 
-  store.set(state.tableItemValidationErrors[docketNumber], errors);
+  store.set(
+    state.validationErrors.submittedCavCasesTable[docketNumber],
+    errors,
+  );
 };
