@@ -18,6 +18,8 @@ export const JudgeActivityReport = connect(
       sequences.selectDateRangeFromJudgeActivityReportSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
+    submittedAndCavCasesForJudgeHelper:
+      state.submittedAndCavCasesForJudgeHelper,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
@@ -26,6 +28,7 @@ export const JudgeActivityReport = connect(
     judgeActivityReportHelper,
     selectDateRangeFromJudgeActivityReportSequence,
     submitJudgeActivityReportSequence,
+    submittedAndCavCasesForJudgeHelper,
     validationErrors,
   }) {
     const closedCases: () => JSX.Element = () => (
@@ -202,7 +205,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge.map(
+            {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge.map(
               (formattedCase, index) => {
                 return (
                   <tr key={index}>
