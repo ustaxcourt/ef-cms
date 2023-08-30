@@ -78,6 +78,14 @@ const generateChangeOfAddressForPractitioner = async ({
   const isChangeOfAddressLambdaEnabled =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key];
 
+  const jobId = applicationContext.getUniqueId();
+
+  await applicationContext()
+    .getPersistenceGateway()
+    .createChangeOfAddressJob({ applicationContext, jobId });
+
+  applicationContext.logger.info(`creating change of address job of ${jobId}`);
+
   if (isChangeOfAddressLambdaEnabled) {
     const { currentColor, region, stage } = applicationContext.environment;
     const client = new LambdaClient({
@@ -96,10 +104,12 @@ const generateChangeOfAddressForPractitioner = async ({
                 contactInfo,
                 docketNumber: caseInfo.docketNumber,
                 firmName,
+                jobId,
                 requestUserId,
                 updatedEmail,
                 updatedName,
                 user,
+                websocketMessagePrefix,
               }),
             ),
           }),
@@ -117,10 +127,12 @@ const generateChangeOfAddressForPractitioner = async ({
             contactInfo,
             docketNumber: caseInfo.docketNumber,
             firmName,
+            jobId,
             requestUserId,
             updatedEmail,
             updatedName,
             user,
+            websocketMessagePrefix,
           });
       }),
     );

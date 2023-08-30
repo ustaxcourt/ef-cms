@@ -17,6 +17,7 @@ import { confirmAuthCodeLocal } from './persistence/cognito/confirmAuthCodeLocal
 import { createCase } from './persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
+import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
 import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
@@ -142,6 +143,7 @@ import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda'
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
 import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
+import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
 import { setMessageAsRead } from './persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
@@ -281,6 +283,7 @@ const gatewayMethods = {
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createChangeOfAddressJob,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -371,6 +374,7 @@ const gatewayMethods = {
     : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  setChangeOfAddressCaseAsDone,
   updateUserCaseMapping,
   verifyCaseForUser,
   verifyPendingCaseForUser,
