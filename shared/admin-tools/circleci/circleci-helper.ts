@@ -87,12 +87,11 @@ export const getPipelineStatus = async ({
 
   let pipelineStatus;
   if (
-    pipelineStatusResponse &&
-    'items' in pipelineStatusResponse &&
-    pipelineStatusResponse.items &&
-    'status' in pipelineStatusResponse.items[0]
+    'items' in pipelineStatusResponse.data &&
+    pipelineStatusResponse.data.items &&
+    'status' in pipelineStatusResponse.data.items[0]
   ) {
-    pipelineStatus = pipelineStatusResponse.items[0].status;
+    pipelineStatus = pipelineStatusResponse.data.items[0].status;
   }
 
   return pipelineStatus;
