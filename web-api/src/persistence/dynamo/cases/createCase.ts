@@ -4,6 +4,7 @@ import { put } from '../../dynamodbClientService';
 export const fieldsToOmitBeforePersisting = [
   'archivedCorrespondences',
   'archivedDocketEntries',
+  'consolidatedCases',
   'correspondence',
   'docketEntries',
   'hearings',

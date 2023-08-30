@@ -1,13 +1,11 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCourtIssuedDocumentInitialDataAction } from '../actions/CourtIssuedDocketEntry/setCourtIssuedDocumentInitialDataAction';
 import { setDefaultServiceStampAction } from '../actions/CourtIssuedDocketEntry/setDefaultServiceStampAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
@@ -31,8 +29,6 @@ export const gotoAddCourtIssuedDocketEntrySequence = [
       setUsersByKeyAction('judges'),
       getCaseAction,
       setCaseAction,
-      getConsolidatedCasesByCaseAction,
-      setConsolidatedCasesForCaseAction,
       setDocketEntryIdAction,
       setCourtIssuedDocumentInitialDataAction,
       setDefaultServiceStampAction,
