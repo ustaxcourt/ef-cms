@@ -1,12 +1,7 @@
-import { Case } from '../../entities/cases/Case';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { clone } from 'lodash';
-import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
-import PQueue from 'p-queue';
 
-type TUserContact = {
+export type TUserContact = {
   address1: string;
   address2: string;
   address3: string;
@@ -76,33 +71,60 @@ const generateChangeOfAddressForPractitioner = async ({
     userId: requestUserId || user.userId,
   });
 
-  const { currentColor, region, stage } = applicationContext.environment;
-  const client = new LambdaClient({
-    region,
-  });
+  const featureFlags = await applicationContext
+    .getUseCases()
+    .getAllFeatureFlagsInteractor(applicationContext);
 
-  await Promise.all(
-    associatedUserCases.map(caseInfo => {
-      return client.send(
-        new InvokeCommand({
-          FunctionName: `change_of_address_${stage}_${currentColor}`,
-          InvocationType: 'RequestResponse',
-          Payload: Buffer.from(
-            JSON.stringify({
-              bypassDocketEntry,
-              contactInfo,
-              docketNumber: caseInfo.docketNumber,
-              firmName,
-              requestUserId,
-              updatedEmail,
-              updatedName,
-              user,
-            }),
-          ),
-        }),
-      );
-    }),
-  );
+  const isChangeOfAddressLambdaEnabled =
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key];
+
+  if (isChangeOfAddressLambdaEnabled) {
+    const { currentColor, region, stage } = applicationContext.environment;
+    const client = new LambdaClient({
+      region,
+    });
+
+    await Promise.all(
+      associatedUserCases.map(caseInfo => {
+        return client.send(
+          new InvokeCommand({
+            FunctionName: `change_of_address_${stage}_${currentColor}`,
+            InvocationType: 'RequestResponse',
+            Payload: Buffer.from(
+              JSON.stringify({
+                bypassDocketEntry,
+                contactInfo,
+                docketNumber: caseInfo.docketNumber,
+                firmName,
+                requestUserId,
+                updatedEmail,
+                updatedName,
+                user,
+              }),
+            ),
+          }),
+        );
+      }),
+    );
+  } else {
+    await Promise.all(
+      associatedUserCases.map(async caseInfo => {
+        return await applicationContext
+          .getUseCaseHelpers()
+          .generateChangeOfAddressHelper({
+            applicationContext,
+            bypassDocketEntry,
+            contactInfo,
+            docketNumber: caseInfo.docketNumber,
+            firmName,
+            requestUserId,
+            updatedEmail,
+            updatedName,
+            user,
+          });
+      }),
+    );
+  }
 };
 
 export { generateChangeOfAddressForPractitioner as generateChangeOfAddress };

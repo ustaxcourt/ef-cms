@@ -1,9 +1,9 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { CaseDeadline } from '../entities/CaseDeadline';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '@shared/business/entities/EntityConstants';
+import { TUserContact } from '@shared/business/useCases/users/generateChangeOfAddress';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@shared/business/useCaseHelper/service/createChangeItems';
@@ -29,13 +29,13 @@ export const generateChangeOfAddressHelper = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-  bypassDocketEntry: string;
-  contactInfo: string;
+  bypassDocketEntry: boolean;
+  contactInfo: TUserContact;
   firmName: string;
-  updatedEmail: string;
-  updatedName: string;
+  updatedEmail?: string;
+  updatedName?: string;
   user: RawPractitioner;
-  requestUserId: string;
+  requestUserId?: string;
 }) => {
   try {
     const newData = contactInfo;
