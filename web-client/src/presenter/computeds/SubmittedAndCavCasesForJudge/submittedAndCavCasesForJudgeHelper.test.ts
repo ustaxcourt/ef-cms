@@ -1,3 +1,4 @@
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { submittedAndCavCasesForJudgeHelper as submittedAndCavCasesForJudgeHelperComputed } from './submittedAndCavCasesForJudgeHelper';
@@ -16,23 +17,41 @@ describe('submittedAndCavCasesForJudgeHelper', () => {
     mockSubmittedAndCavCasesByJudge = [
       {
         caseStatusHistory: [
-          { date: '2022-02-15T05:00:00.000Z' },
-          { date: '2022-02-16T05:00:00.000Z' },
+          {
+            date: '2022-02-15T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+          },
+          {
+            date: '2022-02-16T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+          },
         ],
         docketNumber: '101-20',
         leadDocketNumber: '101-20',
       },
       {
         caseStatusHistory: [
-          { date: '2022-02-15T05:00:00.000Z' },
-          { date: '2022-02-26T05:00:00.000Z' },
+          {
+            date: '2022-02-15T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+          },
+          {
+            date: '2022-02-26T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.submitted,
+          },
         ],
         docketNumber: '110-15',
       },
       {
         caseStatusHistory: [
-          { date: '2022-02-15T05:00:00.000Z' },
-          { date: '2022-02-16T05:00:00.000Z' },
+          {
+            date: '2022-02-15T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+          },
+          {
+            date: '2022-02-06T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.cav,
+          },
         ],
         docketNumber: '202-11',
       },
@@ -133,6 +152,28 @@ describe('submittedAndCavCasesForJudgeHelper', () => {
       expect(filteredSubmittedAndCavCasesByJudge.length).toBe(
         mockSubmittedAndCavCasesByJudge.length - 1,
       );
+    });
+
+    it('should format the date each case was changed to status Submitted/CAV', () => {
+      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
+        .mockReturnValue(10)
+        .mockReturnValueOnce(5);
+
+      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        new Map([['101-20', 4]]);
+
+      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
+        submittedAndCavCasesForJudgeHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(filteredSubmittedAndCavCasesByJudge).toMatchObject([
+        { formattedSubmittedCavStatusChangedDate: '02/26/22' },
+        { formattedSubmittedCavStatusChangedDate: '02/06/22' },
+        { formattedSubmittedCavStatusChangedDate: '02/16/22' },
+      ]);
     });
   });
 });
