@@ -22,3 +22,22 @@ export const handler = async event => {
 
   return tempId;
 };
+
+/**
+ * changeOfAddressHandler
+ * @returns {string} id for the temporary stored pdf
+ */
+export const changeOfAddressHandler = async event => {
+  const applicationContext = createApplicationContext();
+
+  await applicationContext.getUseCaseHelpers().generateChangeOfAddressHelper({
+    applicationContext,
+    bypassDocketEntry: event.bypassDocketEntry,
+    contactInfo: event.contactInfo,
+    docketNumber: event.docketNumber,
+    firmName: event.firmName,
+    requestUserId: event.requestUserId,
+    updatedEmail: event.updatedEmail,
+    updatedName: event.updatedName,
+  });
+};
