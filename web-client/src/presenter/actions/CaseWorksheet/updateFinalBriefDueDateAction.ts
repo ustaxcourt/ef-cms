@@ -1,15 +1,14 @@
-export const updateSubmittedCavCaseDetailAction = async ({
+export const updateFinalBriefDueDateAction = async ({
   applicationContext,
   props,
 }: ActionProps) => {
-  const { docketNumber, finalBriefDueDate, statusOfMatter } = props;
+  const { docketNumber, finalBriefDueDate } = props;
 
   const updatedCase = await applicationContext
     .getUseCases()
     .updateCaseWorksheetInfoInteractor(applicationContext, {
       docketNumber,
       finalBriefDueDate,
-      statusOfMatter,
     });
 
   return { updatedCase };

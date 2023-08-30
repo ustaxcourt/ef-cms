@@ -1,12 +1,11 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { validateSubmittedCavCaseBriefDueDateAction } from './validateSubmittedCavCaseBriefDueDateAction';
+import { validateBriefDueDateAction } from './validateBriefDueDateAction';
 
-describe('validateSubmittedCavCaseBriefDueDateAction', () => {
+describe('validateBriefDueDateAction', () => {
   const TEST_DOCKET_NUMBER = '999-99';
-  const TEST_FINAL_BRIEF_DUE_DATE = '08/28/2023';
-  const TEST_STATUS_OF_MATTER = 'Drafting';
+  const TEST_BRIEF_DUE_DATE = '08/28/2023';
 
   let successStub;
   let errorStub;
@@ -23,19 +22,18 @@ describe('validateSubmittedCavCaseBriefDueDateAction', () => {
     };
   });
 
-  it('should return the success path with the computed final brief due date when the case updates are valid', async () => {
+  it('should return the success path with the validation key to unset in state when the updated case is valid', async () => {
     applicationContext
       .getUseCases()
       .validateCaseDetailInteractor.mockReturnValue(null);
 
-    await runAction(validateSubmittedCavCaseBriefDueDateAction as any, {
+    await runAction(validateBriefDueDateAction as any, {
       modules: {
         presenter,
       },
       props: {
         docketNumber: TEST_DOCKET_NUMBER,
-        finalBriefDueDate: TEST_FINAL_BRIEF_DUE_DATE,
-        statusOfMatter: TEST_STATUS_OF_MATTER,
+        finalBriefDueDate: TEST_BRIEF_DUE_DATE,
       },
       state: {
         judgeActivityReportData: {
@@ -53,10 +51,12 @@ describe('validateSubmittedCavCaseBriefDueDateAction', () => {
         .calls[0][1].caseDetail,
     ).toMatchObject({
       finalBriefDueDate: '2023-08-28',
-      statusOfMatter: TEST_STATUS_OF_MATTER,
     });
 
-    expect(successStub).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalledWith({
+      finalBriefDueDate: '2023-08-28',
+      validationKey: 'finalBriefDueDate',
+    });
     expect(errorStub).not.toHaveBeenCalled();
   });
 
@@ -67,14 +67,13 @@ describe('validateSubmittedCavCaseBriefDueDateAction', () => {
       .getUseCases()
       .validateCaseDetailInteractor.mockReturnValue(TEST_VALIDATION_ERRORS);
 
-    await runAction(validateSubmittedCavCaseBriefDueDateAction as any, {
+    await runAction(validateBriefDueDateAction as any, {
       modules: {
         presenter,
       },
       props: {
         docketNumber: TEST_DOCKET_NUMBER,
-        finalBriefDueDate: TEST_FINAL_BRIEF_DUE_DATE,
-        statusOfMatter: TEST_STATUS_OF_MATTER,
+        finalBriefDueDate: TEST_BRIEF_DUE_DATE,
       },
       state: {
         judgeActivityReportData: {
