@@ -13,7 +13,11 @@ exports.handler = async (input, context) => {
   const pipelineStatus = await getPipelineStatus({ apiToken, pipelineId });
   const results = { pipelineStatus };
 
-  if (!pipelineStatus || pipelineStatus === 'running') {
+  if (
+    !pipelineStatus ||
+    pipelineStatus === 'running' ||
+    pipelineStatus === 'on_hold'
+  ) {
     return succeed({ context, results });
   }
 
