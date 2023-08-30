@@ -1,39 +1,39 @@
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getCasesByEventCodes } from './getCasesByEventCodes';
+import { getDocketNumbersWithServedEventCodes } from './getDocketNumbersWithServedEventCodes';
 import { search } from './searchClient';
 jest.mock('./searchClient');
 
-describe('getCasesByEventCodes', () => {
+describe('getDocketNumbersWithServedEventCodes', () => {
   const prohibitedDocketEntries = ['ODD', 'DEC', 'OAD', 'SDEC'];
-  const mockCaseOne = '101-20';
+  const requestParams = {
+    cases: [MOCK_CASE],
+    eventCodes: prohibitedDocketEntries,
+  };
+
+  let mockReturnValue;
 
   beforeAll(() => {
-    search.mockReturnValue({ results: {}, total: 0 });
+    (search as jest.Mock).mockImplementation(() => mockReturnValue);
   });
 
   it('should search for all cases with prescribed docket entries that are served and not stricken', async () => {
-    const requestParams = {
-      cases: [
-        {
-          docketNumber: mockCaseOne,
-        },
-      ],
-      eventCodes: prohibitedDocketEntries,
-    };
-
-    await getCasesByEventCodes({
+    mockReturnValue = { results: [], total: 0 };
+    await getDocketNumbersWithServedEventCodes(
       applicationContext,
-      params: requestParams,
-    });
+      requestParams,
+    );
 
-    expect(search.mock.calls[0][0].searchParameters.body).toMatchObject({
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body,
+    ).toMatchObject({
       query: {
         bool: {
           must: [
             {
               terms: {
-                'docketNumber.S': [mockCaseOne],
+                'docketNumber.S': [MOCK_CASE.docketNumber],
               },
             },
             {
@@ -67,5 +67,28 @@ describe('getCasesByEventCodes', () => {
       },
       size: MAX_ELASTICSEARCH_PAGINATION,
     });
+  });
+
+  it('returns an empty array if nothing was found', async () => {
+    mockReturnValue = { results: [], total: 0 };
+    const result = await getDocketNumbersWithServedEventCodes(
+      applicationContext,
+      requestParams,
+    );
+
+    expect(result).toEqual([]);
+  });
+
+  it('returns an array  of docket numbers found', async () => {
+    mockReturnValue = {
+      results: [{ docketNumber: MOCK_CASE.docketNumber }],
+      total: 1,
+    };
+    const result = await getDocketNumbersWithServedEventCodes(
+      applicationContext,
+      requestParams,
+    );
+
+    expect(result).toEqual([MOCK_CASE.docketNumber]);
   });
 });
