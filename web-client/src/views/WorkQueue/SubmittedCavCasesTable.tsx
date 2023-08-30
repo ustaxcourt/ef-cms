@@ -25,24 +25,25 @@ function convertToDateInputValues(date: string) {
 export const SubmittedCavCasesTable = connect(
   {
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
-    judgeActivityReportHelper: state.judgeActivityReportHelper,
     openAddEditPrimaryIssueModalSequence:
       sequences.openAddEditPrimaryIssueModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     openDeleteCasePrimaryIssueSequence:
       sequences.openDeleteCasePrimaryIssueSequence,
     showModal: state.modal.showModal,
+    submittedAndCavCasesForJudgeHelper:
+      state.submittedAndCavCasesForJudgeHelper,
     submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
     updateSubmittedCavCaseDetailSequence:
       sequences.updateSubmittedCavCaseDetailSequence,
     validationErrors: state.validationErrors,
   },
   function SubmittedCavCasesTable({
-    judgeActivityReportHelper,
     openAddEditPrimaryIssueModalSequence,
     openDeleteCasePrimaryIssueSequence,
     showModal,
     STATUS_OF_MATTER_OPTIONS,
+    submittedAndCavCasesForJudgeHelper,
     submittedCavCasesTableHelper,
     updateSubmittedCavCaseDetailSequence,
     validationErrors,
@@ -77,7 +78,7 @@ export const SubmittedCavCasesTable = connect(
             </tr>
           </thead>
           <tbody>
-            {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
+            {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge
               .sort(submittedCavCasesTableHelper.daysInStatusSortHandler)
               .map(formattedCase => {
                 return (
@@ -236,7 +237,7 @@ export const SubmittedCavCasesTable = connect(
               })}
           </tbody>
         </table>
-        {judgeActivityReportHelper.filteredSubmittedAndCavCasesByJudge
+        {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge
           .length === 0 && (
           <div>
             There are no cases with a status of &quot;Submitted&quot; or

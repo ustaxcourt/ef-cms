@@ -114,6 +114,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
+import { submittedAndCavCasesForJudgeHelper } from '@web-client/presenter/computeds/SubmittedAndCavCasesForJudge/submittedAndCavCasesForJudgeHelper';
 import { submittedCavCasesTableHelper } from './computeds/JudgeActivityReport/submittedCavCasesTableHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
@@ -242,6 +243,7 @@ export const computeds = {
   startCaseInternalHelper,
   statisticsFormHelper,
   statisticsHelper,
+  submittedAndCavCasesForJudgeHelper,
   submittedCavCasesTableHelper,
   templateHelper,
   trialCitiesHelper,
@@ -309,10 +311,11 @@ export const baseState = {
       tab: null,
     },
   },
-
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
+
   // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
+
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
   fileUploadProgress: {
@@ -321,7 +324,6 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-
   form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
@@ -399,6 +401,7 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
