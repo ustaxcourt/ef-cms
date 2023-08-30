@@ -1,7 +1,14 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+type ComputedSubmittedAndCavCase = RawCase & {
+  consolidatedIconTooltipText: string;
+  isLeadCase: boolean;
+  inConsolidatedGroup: boolean;
+  formattedCaseCount: number;
+  daysElapsedSinceLastStatusChange: number;
+};
 interface ISubmittedAndCavCasesForJudgeHelper {
-  filteredSubmittedAndCavCasesByJudge: RawCase[];
+  filteredSubmittedAndCavCasesByJudge: ComputedSubmittedAndCavCase[];
 }
 
 export const submittedAndCavCasesForJudgeHelper = (
