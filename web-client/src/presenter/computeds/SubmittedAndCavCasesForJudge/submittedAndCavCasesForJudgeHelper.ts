@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type ComputedSubmittedAndCavCase = RawCase & {
@@ -10,6 +11,8 @@ type ComputedSubmittedAndCavCase = RawCase & {
 };
 interface ISubmittedAndCavCasesForJudgeHelper {
   filteredSubmittedAndCavCasesByJudge: ComputedSubmittedAndCavCase[];
+  pageCount: number;
+  showPaginator: boolean;
 }
 
 export const submittedAndCavCasesForJudgeHelper = (
@@ -78,7 +81,14 @@ export const submittedAndCavCasesForJudgeHelper = (
     );
   });
 
+  const pageCount = Math.ceil(
+    filteredSubmittedAndCavCasesByJudge.length /
+      CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+  );
+
   return {
     filteredSubmittedAndCavCasesByJudge,
+    pageCount,
+    showPaginator: pageCount > 1,
   };
 };
