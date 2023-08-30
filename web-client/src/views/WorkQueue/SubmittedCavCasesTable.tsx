@@ -34,8 +34,8 @@ export const SubmittedCavCasesTable = connect(
     submittedAndCavCasesForJudgeHelper:
       state.submittedAndCavCasesForJudgeHelper,
     submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
-    updateSubmittedCavCaseDetailSequence:
-      sequences.updateSubmittedCavCaseDetailSequence,
+    updateFinalBriefDueDateSequence: sequences.updateFinalBriefDueDateSequence,
+    updateStatusOfMatterSequence: sequences.updateStatusOfMatterSequence,
     validationErrors: state.validationErrors,
   },
   function SubmittedCavCasesTable({
@@ -45,7 +45,8 @@ export const SubmittedCavCasesTable = connect(
     STATUS_OF_MATTER_OPTIONS,
     submittedAndCavCasesForJudgeHelper,
     submittedCavCasesTableHelper,
-    updateSubmittedCavCaseDetailSequence,
+    updateFinalBriefDueDateSequence,
+    updateStatusOfMatterSequence,
     validationErrors,
   }) {
     return (
@@ -131,7 +132,7 @@ export const SubmittedCavCasesTable = connect(
                                 formattedCase.finalBriefDueDate,
                               )}
                               onValueChange={value => {
-                                updateSubmittedCavCaseDetailSequence({
+                                updateFinalBriefDueDateSequence({
                                   docketNumber: formattedCase.docketNumber,
                                   finalBriefDueDate:
                                     value === '' ? null : value,
@@ -149,7 +150,7 @@ export const SubmittedCavCasesTable = connect(
                           name="statusOfMatter"
                           value={formattedCase.statusOfMatter ?? ''}
                           onChange={e => {
-                            updateSubmittedCavCaseDetailSequence({
+                            updateStatusOfMatterSequence({
                               docketNumber: formattedCase.docketNumber,
                               statusOfMatter:
                                 e.target.value === '' ? null : e.target.value,

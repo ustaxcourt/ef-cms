@@ -1,16 +1,16 @@
 import { clearTableItemValidationErrorAction } from '../actions/CaseWorksheet/clearTableItemValidationErrorAction';
 import { setTableItemValidationErrorsAction } from '../actions/setTableItemValidationErrorsAction';
 import { setUpdatedCaseInStateAction } from '../actions/CaseWorksheet/setUpdatedCaseInStateAction';
-import { updateSubmittedCavCaseDetailAction } from '../actions/CaseWorksheet/updateSubmittedCavCaseDetailAction';
-import { validateSubmittedCavCaseBriefDueDateAction } from '../actions/CaseWorksheet/validateSubmittedCavCaseBriefDueDateAction';
+import { updateStatusOfMatterAction } from '@web-client/presenter/actions/CaseWorksheet/updateStatusOfMatterAction';
+import { validateStatusOfMatterAction } from '@web-client/presenter/actions/CaseWorksheet/validateStatusOfMatterAction';
 
-export const updateSubmittedCavCaseDetailSequence = [
-  validateSubmittedCavCaseBriefDueDateAction,
+export const updateStatusOfMatterSequence = [
+  validateStatusOfMatterAction,
   {
     error: [setTableItemValidationErrorsAction],
     success: [
       clearTableItemValidationErrorAction,
-      updateSubmittedCavCaseDetailAction,
+      updateStatusOfMatterAction,
       setUpdatedCaseInStateAction,
     ],
   },

@@ -509,7 +509,7 @@ export class Case extends JoiValidationEntity {
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
     ).optional(),
-    finalBriefDueDate: JoiValidationConstants.DATE.optional(),
+    finalBriefDueDate: JoiValidationConstants.DATE.allow('').optional(),
     hasPendingItems: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()

@@ -5,11 +5,13 @@ describe('clearTableItemValidationErrorAction', () => {
   it('should clear error object in state correctly', async () => {
     const TEST_DOCKET_NUMBER = 'TEST_NUMBER';
     const TEST_ERRORS = {
+      anotherTestProp: 'And anotha one.',
       testProp: 'value',
     };
     const { state } = await runAction(clearTableItemValidationErrorAction, {
       props: {
         docketNumber: TEST_DOCKET_NUMBER,
+        validationKey: 'testProp',
       },
       state: {
         validationErrors: {
@@ -20,6 +22,8 @@ describe('clearTableItemValidationErrorAction', () => {
 
     expect(
       state.validationErrors.submittedCavCasesTable[TEST_DOCKET_NUMBER],
-    ).toBeUndefined();
+    ).toEqual({
+      anotherTestProp: 'And anotha one.',
+    });
   });
 });
