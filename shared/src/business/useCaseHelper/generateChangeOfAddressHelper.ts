@@ -1,4 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import { Practitioner } from '../entities/Practitioner';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -22,10 +23,12 @@ export const generateChangeOfAddressHelper = async ({
   contactInfo,
   docketNumber,
   firmName,
+  jobId,
   requestUserId,
   updatedEmail,
   updatedName,
   user,
+  websocketMessagePrefix,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
@@ -34,8 +37,10 @@ export const generateChangeOfAddressHelper = async ({
   firmName: string;
   updatedEmail?: string;
   updatedName?: string;
+  jobId: string;
   user: RawPractitioner;
   requestUserId?: string;
+  websocketMessagePrefix: string;
 }) => {
   try {
     const newData = contactInfo;
@@ -94,10 +99,38 @@ export const generateChangeOfAddressHelper = async ({
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: 'user_contact_update_progress',
+      action: `${websocketMessagePrefix}_contact_update_progress`,
     },
     userId: requestUserId || user.userId,
   });
+
+  const updatedJob = await applicationContext()
+    .getPersistenceGateway()
+    .setChangeOfAddressCaseAsDone({ applicationContext, docketNumber, jobId });
+
+  const isDoneProcessing = updatedJob.remaining === 0;
+
+  if (isDoneProcessing) {
+    if (websocketMessagePrefix === 'user') {
+      const userEntity = new Practitioner({
+        ...user,
+        isUpdatingInformation: false,
+      });
+
+      await applicationContext.getPersistenceGateway().updateUser({
+        applicationContext,
+        user: userEntity.validate().toRawObject(),
+      });
+    }
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: `${websocketMessagePrefix}_contact_full_update_complete`,
+      },
+      userId: requestUserId,
+    });
+  }
 };
 
 /**

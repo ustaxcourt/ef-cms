@@ -36,9 +36,11 @@ export const changeOfAddressHandler = async event => {
     contactInfo: event.contactInfo,
     docketNumber: event.docketNumber,
     firmName: event.firmName,
+    jobId: event.jobId,
     requestUserId: event.requestUserId,
     updatedEmail: event.updatedEmail,
     updatedName: event.updatedName,
     user: event.user,
+    websocketMessagePrefix: event.websocketMessagePrefix,
   });
 };
