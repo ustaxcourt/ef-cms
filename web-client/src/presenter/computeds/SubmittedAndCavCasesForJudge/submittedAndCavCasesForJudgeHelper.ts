@@ -6,6 +6,7 @@ type ComputedSubmittedAndCavCase = RawCase & {
   inConsolidatedGroup: boolean;
   formattedCaseCount: number;
   daysElapsedSinceLastStatusChange: number;
+  formattedSubmittedCavStatusChangedDate: string;
 };
 interface ISubmittedAndCavCasesForJudgeHelper {
   filteredSubmittedAndCavCasesByJudge: ComputedSubmittedAndCavCase[];
@@ -25,6 +26,21 @@ export const submittedAndCavCasesForJudgeHelper = (
       applicationContext.getConstants().DATE_FORMATS.ISO,
     );
 
+  const getSubmittedOrCAVDate = (
+    caseStatusHistory: { updatedCaseStatus: string; date: string }[],
+  ): string => {
+    const foundDate = caseStatusHistory.find(statusHistory =>
+      ['Submitted', 'CAV'].includes(statusHistory.updatedCaseStatus),
+    )?.date;
+    if (!foundDate) return '';
+    return applicationContext
+      .getUtilities()
+      .formatDateString(
+        foundDate,
+        applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+      );
+  };
+
   const filteredSubmittedAndCavCasesByJudge =
     submittedAndCavCasesByJudge.filter(
       unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
@@ -39,17 +55,8 @@ export const submittedAndCavCasesForJudgeHelper = (
       individualCase.inConsolidatedGroup = true;
     }
 
-    individualCase.caseStatusHistory
-      .sort((a, b) => a.date - b.date)
-      .map(
-        csh =>
-          (csh.formattedDate = applicationContext
-            .getUtilities()
-            .formatDateString(
-              csh.date,
-              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-            )),
-      );
+    individualCase.formattedSubmittedCavStatusChangedDate =
+      getSubmittedOrCAVDate(individualCase.caseStatusHistory);
 
     const newestCaseStatusChangeIndex =
       individualCase.caseStatusHistory.length - 1;

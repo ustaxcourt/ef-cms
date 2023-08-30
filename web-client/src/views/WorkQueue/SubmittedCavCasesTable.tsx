@@ -33,7 +33,6 @@ export const SubmittedCavCasesTable = connect(
     showModal: state.modal.showModal,
     submittedAndCavCasesForJudgeHelper:
       state.submittedAndCavCasesForJudgeHelper,
-    submittedCavCasesTableHelper: state.submittedCavCasesTableHelper,
     updateFinalBriefDueDateSequence: sequences.updateFinalBriefDueDateSequence,
     updateStatusOfMatterSequence: sequences.updateStatusOfMatterSequence,
     validationErrors: state.validationErrors,
@@ -44,7 +43,6 @@ export const SubmittedCavCasesTable = connect(
     showModal,
     STATUS_OF_MATTER_OPTIONS,
     submittedAndCavCasesForJudgeHelper,
-    submittedCavCasesTableHelper,
     updateFinalBriefDueDateSequence,
     updateStatusOfMatterSequence,
     validationErrors,
@@ -79,9 +77,8 @@ export const SubmittedCavCasesTable = connect(
             </tr>
           </thead>
           <tbody>
-            {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge
-              .sort(submittedCavCasesTableHelper.daysInStatusSortHandler)
-              .map(formattedCase => {
+            {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge.map(
+              formattedCase => {
                 return (
                   <React.Fragment key={`info-${formattedCase.docketNumber}`}>
                     <tr>
@@ -99,7 +96,7 @@ export const SubmittedCavCasesTable = connect(
                       <td>
                         <CaseLink formattedCase={formattedCase} />
                       </td>
-                      <td>{formattedCase?.formattedCaseCount}</td>
+                      <td>{formattedCase.formattedCaseCount}</td>
                       <td>
                         {formattedCase.petitioners
                           .map(p => p.entityName)
@@ -108,9 +105,7 @@ export const SubmittedCavCasesTable = connect(
                       <td>{formattedCase.status}</td>
                       <td>{formattedCase.daysElapsedSinceLastStatusChange}</td>
                       <td>
-                        {submittedCavCasesTableHelper.getSubmittedOrCAVDate(
-                          formattedCase.caseStatusHistory,
-                        )}
+                        {formattedCase.formattedSubmittedCavStatusChangedDate}
                       </td>
                       <td className="display-flex flex-column flex-align-center">
                         <FormGroup
@@ -235,7 +230,8 @@ export const SubmittedCavCasesTable = connect(
                     </tr>
                   </React.Fragment>
                 );
-              })}
+              },
+            )}
           </tbody>
         </table>
         {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge
