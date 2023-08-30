@@ -7,8 +7,11 @@ jest.mock('./searchClient');
 
 describe('getDocketNumbersWithServedEventCodes', () => {
   const prohibitedDocketEntries = ['ODD', 'DEC', 'OAD', 'SDEC'];
-  const requestParams = {
-    cases: [MOCK_CASE],
+  const requestParams: {
+    cases: RawCase[];
+    eventCodes: string[];
+  } = {
+    cases: [],
     eventCodes: prohibitedDocketEntries,
   };
 
@@ -18,8 +21,9 @@ describe('getDocketNumbersWithServedEventCodes', () => {
     (search as jest.Mock).mockImplementation(() => mockReturnValue);
   });
 
-  it('should search for all cases with prescribed docket entries that are served and not stricken', async () => {
+  it('searches within specified for prescribed docket entries that are served and not stricken', async () => {
     mockReturnValue = { results: [], total: 0 };
+    requestParams.cases = [MOCK_CASE];
     await getDocketNumbersWithServedEventCodes(
       applicationContext,
       requestParams,
@@ -36,6 +40,54 @@ describe('getDocketNumbersWithServedEventCodes', () => {
                 'docketNumber.S': [MOCK_CASE.docketNumber],
               },
             },
+            {
+              has_child: {
+                query: {
+                  bool: {
+                    filter: [
+                      {
+                        terms: {
+                          'eventCode.S': prohibitedDocketEntries,
+                        },
+                      },
+                      {
+                        exists: {
+                          field: 'servedAt',
+                        },
+                      },
+                      {
+                        term: {
+                          'isStricken.BOOL': false,
+                        },
+                      },
+                    ],
+                  },
+                },
+                type: 'document',
+              },
+            },
+          ],
+        },
+      },
+      size: MAX_ELASTICSEARCH_PAGINATION,
+    });
+  });
+
+  it('searches for all cases with prescribed docket entries that are served and not stricken', async () => {
+    mockReturnValue = { results: [], total: 0 };
+    requestParams.cases = [];
+
+    await getDocketNumbersWithServedEventCodes(
+      applicationContext,
+      requestParams,
+    );
+
+    expect(
+      (search as jest.Mock).mock.calls[0][0].searchParameters.body,
+    ).toMatchObject({
+      query: {
+        bool: {
+          must: [
             {
               has_child: {
                 query: {
