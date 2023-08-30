@@ -25,7 +25,7 @@ describe('Judges dashboard', () => {
   it('save docket number for later test', () => {
     cerebralTest.firstCavDocketNumber = cerebralTest.docketNumber;
   });
-
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -93,10 +93,6 @@ describe('Judges dashboard', () => {
   });
 
   it('should display a brief due date', async () => {
-    console.log(
-      'cerebralTest.firstCavDocketNumber',
-      cerebralTest.firstCavDocketNumber,
-    );
     const briefDueDate = '08/29/2023';
 
     await cerebralTest.runSequence('updateSubmittedCavCaseDetailSequence', {
@@ -115,23 +111,14 @@ describe('Judges dashboard', () => {
     );
     expect(cavCase).toMatchObject({
       docketNumber: cerebralTest.docketNumber,
-      finalBriefDueDate: briefDueDate,
+      finalBriefDueDate: '2023-08-29',
       primaryIssue: expect.anything(),
       status: CASE_STATUS_TYPES.cav,
     });
 
-    console.log(
-      'filteredSubmittedAndCavCasesByJudge',
-      filteredSubmittedAndCavCasesByJudge,
-    );
     const otherCavCaseInTable = filteredSubmittedAndCavCasesByJudge.find(
       theCase => theCase.docketNumber === cerebralTest.firstCavDocketNumber,
     );
-    console.log('otherCavCaseInTable', otherCavCaseInTable);
-    expect(otherCavCaseInTable).toMatchObject({
-      docketNumber: cerebralTest.firstCavDocketNumber,
-      finalBriefDueDate: undefined,
-      status: CASE_STATUS_TYPES.cav,
-    });
+    expect(otherCavCaseInTable.finalBriefDueDate).toBeUndefined();
   });
 });

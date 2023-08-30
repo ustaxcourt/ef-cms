@@ -6,5 +6,5 @@ export const clearTableItemValidationErrorAction = ({
 }: ActionProps) => {
   const { docketNumber } = props;
 
-  store.unset(state.tableItemValidationErrors[docketNumber]);
+  store.unset(state.validationErrors.submittedCavCasesTable[docketNumber]);
 };
