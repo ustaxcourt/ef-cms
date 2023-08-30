@@ -39,5 +39,6 @@ export const changeOfAddressHandler = async event => {
     requestUserId: event.requestUserId,
     updatedEmail: event.updatedEmail,
     updatedName: event.updatedName,
+    user: event.user,
   });
 };
