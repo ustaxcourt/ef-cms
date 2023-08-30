@@ -76,7 +76,7 @@ const generateChangeOfAddressForPractitioner = async ({
     .getAllFeatureFlagsInteractor(applicationContext);
 
   const isChangeOfAddressLambdaEnabled =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_EXTERNAL_PDF_GENERATION.key];
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key];
 
   if (isChangeOfAddressLambdaEnabled) {
     const { currentColor, region, stage } = applicationContext.environment;
