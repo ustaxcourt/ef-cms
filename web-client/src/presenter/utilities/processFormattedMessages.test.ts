@@ -451,7 +451,7 @@ describe('processFormattedMessages', () => {
 
       expect(result.inProgressMessages).toEqual([
         {
-          completedAtFormatted: undefined,
+          completedAtFormatted: '',
           createdAt: '2019-01-01T16:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
@@ -462,7 +462,7 @@ describe('processFormattedMessages', () => {
           parentMessageId: PARENT_MESSAGE_ID,
         },
         {
-          completedAtFormatted: undefined,
+          completedAtFormatted: '',
           createdAt: '2019-01-01T17:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',

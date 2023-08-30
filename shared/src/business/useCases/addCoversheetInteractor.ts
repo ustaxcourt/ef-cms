@@ -16,19 +16,19 @@ import { addCoverToPdf } from './addCoverToPdf';
 export const addCoversheetInteractor = async (
   applicationContext: IApplicationContext,
   {
-    caseEntity = null,
+    caseEntity,
     docketEntryId,
     docketNumber,
-    filingDateUpdated,
-    replaceCoversheet,
-    useInitialData,
+    filingDateUpdated = false,
+    replaceCoversheet = false,
+    useInitialData = false,
   }: {
     caseEntity?: Case;
     docketEntryId: string;
     docketNumber: string;
-    filingDateUpdated: boolean;
-    replaceCoversheet: boolean;
-    useInitialData: boolean;
+    filingDateUpdated?: boolean;
+    replaceCoversheet?: boolean;
+    useInitialData?: boolean;
   },
 ) => {
   if (!caseEntity) {
@@ -109,7 +109,7 @@ export const addCoversheetInteractor = async (
       }
 
       const consolidatedCaseDocketEntryEntity =
-        consolidatedCaseEntity.getDocketEntryById({
+        consolidatedCaseEntity!.getDocketEntryById({
           docketEntryId,
         });
 

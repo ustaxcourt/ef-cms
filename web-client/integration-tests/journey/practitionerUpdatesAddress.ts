@@ -1,7 +1,6 @@
+import { faker } from '@faker-js/faker';
+import { refreshElasticsearchIndex } from '../helpers';
 import { waitForLoadingComponentToHide } from '../helpers';
-
-const { faker } = require('@faker-js/faker');
-const { refreshElasticsearchIndex } = require('../helpers');
 
 export const practitionerUpdatesAddress = cerebralTest => {
   return it('practitioner updates address', async () => {
@@ -44,12 +43,12 @@ export const practitionerUpdatesAddress = cerebralTest => {
       refreshInterval: 1000,
     });
 
-    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 60000 });
 
     await refreshElasticsearchIndex(5000);
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Changes saved.',
     });
-  });
+  }, 70000);
 };

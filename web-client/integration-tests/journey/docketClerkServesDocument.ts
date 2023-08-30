@@ -4,14 +4,15 @@ import {
   waitForLoadingComponentToHide,
 } from '../helpers';
 
-export const docketClerkServesDocument = (cerebralTest, docketRecordIndex) => {
-  return it(`Docket Clerk serves the order after the docket entry has been created ${docketRecordIndex}`, async () => {
+export const docketClerkServesDocument = (cerebralTest, docketRecordIndex?) => {
+  return it('Docket Clerk serves the order after the docket entry has been created', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const docketEntryId = cerebralTest.draftOrders
-      ? cerebralTest.draftOrders[docketRecordIndex].docketEntryId
-      : cerebralTest.docketEntryId;
+    const docketEntryId =
+      cerebralTest.draftOrders && docketRecordIndex !== undefined
+        ? cerebralTest.draftOrders[docketRecordIndex].docketEntryId
+        : cerebralTest.docketEntryId;
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
       doc => doc.docketEntryId === docketEntryId,
