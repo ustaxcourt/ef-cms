@@ -1,16 +1,16 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
-import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from '../src/presenter/computeds/JudgeActivityReport/judgeActivityReportHelper';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from '@web-client/presenter/test.cerebral';
+import { submittedAndCavCasesForJudgeHelper as submittedAndCavCasesForJudgeHelperComputed } from '@web-client/presenter/computeds/SubmittedAndCavCasesForJudge/submittedAndCavCasesForJudgeHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Judges dashboard', () => {
   const cerebralTest = setupTest();
 
-  const judgeActivityReportHelper = withAppContextDecorator(
-    judgeActivityReportHelperComputed,
+  const submittedAndCavCasesForJudgeHelper = withAppContextDecorator(
+    submittedAndCavCasesForJudgeHelperComputed,
   );
 
   afterAll(() => {
@@ -38,7 +38,7 @@ describe('Judges dashboard', () => {
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
 
     const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-      judgeActivityReportHelper,
+      submittedAndCavCasesForJudgeHelper,
       {
         state: cerebralTest.getState(),
       },
@@ -55,7 +55,7 @@ describe('Judges dashboard', () => {
 
   it('should create and display a primary issue for the CAV case in the table', async () => {
     let { filteredSubmittedAndCavCasesByJudge } = runCompute(
-      judgeActivityReportHelper,
+      submittedAndCavCasesForJudgeHelper,
       {
         state: cerebralTest.getState(),
       },
@@ -77,7 +77,7 @@ describe('Judges dashboard', () => {
     await cerebralTest.runSequence('updateCasePrimaryIssueSequence');
 
     ({ filteredSubmittedAndCavCasesByJudge } = runCompute(
-      judgeActivityReportHelper,
+      submittedAndCavCasesForJudgeHelper,
       {
         state: cerebralTest.getState(),
       },
@@ -95,13 +95,13 @@ describe('Judges dashboard', () => {
   it('should display a brief due date', async () => {
     const briefDueDate = '08/29/2023';
 
-    await cerebralTest.runSequence('updateSubmittedCavCaseDetailSequence', {
+    await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
       docketNumber: cerebralTest.docketNumber,
       finalBriefDueDate: briefDueDate,
     });
 
     const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-      judgeActivityReportHelper,
+      submittedAndCavCasesForJudgeHelper,
       {
         state: cerebralTest.getState(),
       },
@@ -118,7 +118,7 @@ describe('Judges dashboard', () => {
 
     const otherCavCaseInTable = filteredSubmittedAndCavCasesByJudge.find(
       theCase => theCase.docketNumber === cerebralTest.firstCavDocketNumber,
-    );
+    )!;
     expect(otherCavCaseInTable.finalBriefDueDate).toBeUndefined();
   });
 });
