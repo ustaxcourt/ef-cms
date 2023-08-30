@@ -1,4 +1,5 @@
 import { Case } from '../../entities/cases/Case';
+import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
@@ -75,144 +76,33 @@ const generateChangeOfAddressForPractitioner = async ({
     userId: requestUserId || user.userId,
   });
 
-  const updatedCases = [];
-  const queue = new PQueue({
-    concurrency:
-      applicationContext.getConstants().CHANGE_OF_ADDRESS_CONCURRENCY || 100,
+  const { currentColor, region, stage } = applicationContext.environment;
+  const client = new LambdaClient({
+    region,
   });
 
-  await queue.addAll(
-    associatedUserCases.map(caseInfo => async () => {
-      try {
-        const { docketNumber } = caseInfo;
-        const newData = contactInfo;
-
-        const userCase = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber,
-          });
-        let caseEntity = new Case(userCase, { applicationContext });
-
-        const practitionerName = updatedName || user.name;
-        const practitionerObject = caseEntity.privatePractitioners
-          .concat(caseEntity.irsPractitioners)
-          .find(practitioner => practitioner.userId === user.userId);
-
-        if (!practitionerObject) {
-          throw new Error(
-            `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
-          );
-        }
-
-        const oldData = clone(practitionerObject.contact);
-
-        // This updates the case by reference!
-        practitionerObject.contact = contactInfo;
-        practitionerObject.firmName = firmName;
-        practitionerObject.name = practitionerName;
-
-        if (!oldData.email && updatedEmail) {
-          practitionerObject.serviceIndicator =
-            SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-          practitionerObject.email = updatedEmail;
-        }
-
-        if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
-          await prepareToGenerateAndServeDocketEntry({
-            applicationContext,
-            caseEntity,
-            newData,
-            oldData,
-            practitionerName,
-            user,
-          });
-        }
-
-        const updatedCase = await applicationContext
-          .getUseCaseHelpers()
-          .updateCaseAndAssociations({
-            applicationContext,
-            caseToUpdate: caseEntity,
-          });
-        updatedCases.push(updatedCase);
-      } catch (error) {
-        applicationContext.logger.error(error);
-      }
-
-      completedCases++;
-      await applicationContext.getNotificationGateway().sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: `${websocketMessagePrefix}_contact_update_progress`,
-          completedCases,
-          totalCases: associatedUserCases.length,
-        },
-        userId: requestUserId || user.userId,
-      });
+  await Promise.all(
+    associatedUserCases.map(caseInfo => {
+      return client.send(
+        new InvokeCommand({
+          FunctionName: `change_of_address_${stage}_${currentColor}`,
+          InvocationType: 'RequestResponse',
+          Payload: Buffer.from(
+            JSON.stringify({
+              bypassDocketEntry,
+              contactInfo,
+              docketNumber: caseInfo.docketNumber,
+              firmName,
+              requestUserId,
+              updatedEmail,
+              updatedName,
+              user,
+            }),
+          ),
+        }),
+      );
     }),
   );
-
-  return updatedCases;
-};
-
-/**
- * This function prepares data to be passed to generateAndServeDocketEntry
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseEntity the instantiated Case class
- * @param {object} providers.newData the new practitioner contact information
- * @param {object} providers.oldData the old practitioner contact information (for comparison)
- * @param {object} providers.practitionerName the name of the practitioner
- * @param {object} providers.user the user object that includes userId, barNumber etc.
- * @returns {Promise<*>} resolves upon completion of docket entry service
- */
-const prepareToGenerateAndServeDocketEntry = async ({
-  applicationContext,
-  caseEntity,
-  newData,
-  oldData,
-  practitionerName,
-  user,
-}) => {
-  const documentType = applicationContext
-    .getUtilities()
-    .getDocumentTypeForAddressChange({
-      newData,
-      oldData,
-    });
-
-  if (!documentType) return;
-
-  const servedParties = aggregatePartiesForService(caseEntity);
-
-  const docketMeta = {} as any;
-  if (user.role === ROLES.privatePractitioner) {
-    docketMeta.privatePractitioners = [
-      {
-        name: practitionerName,
-      },
-    ];
-  } else if (user.role === ROLES.irsPractitioner) {
-    docketMeta.partyIrsPractitioner = true;
-  }
-
-  newData.name = practitionerName;
-  const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
-    applicationContext,
-    barNumber: user.barNumber,
-    caseEntity,
-    docketMeta,
-    documentType,
-    newData,
-    oldData,
-    servedParties,
-    user,
-  });
-
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };
 
 export { generateChangeOfAddressForPractitioner as generateChangeOfAddress };
