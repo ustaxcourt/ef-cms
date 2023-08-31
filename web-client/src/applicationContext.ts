@@ -175,6 +175,7 @@ import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadlin
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
+import { getCaseWorksheetsForJudgeInteractor } from '@shared/proxies/caseWorksheet/getCaseWorksheetsForJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import {
   getChambersSections,
@@ -447,6 +448,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCaseWorksheetsForJudgeInteractor,
   getCasesByStatusAndByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
