@@ -20,21 +20,23 @@ export const createChangeOfAddressJob = ({
 }) =>
   updateConsistent({
     ExpressionAttributeNames: {
+      '#allCases': 'allCases',
       '#jobId': 'jobId',
+      '#processed': 'processed',
       '#remaining': 'remaining',
-      '#status': 'status',
     },
     ExpressionAttributeValues: {
       ':jobId': jobId,
+      ':processed': [],
       ':remaining': docketNumbers.length,
       ':value': docketNumbers,
     },
     Key: {
-      pk: `change-of-address-job-${jobId}`,
-      sk: `change-of-address-job-${jobId}`,
+      pk: `change-of-address-job|${jobId}`,
+      sk: `change-of-address-job|${jobId}`,
     },
     ReturnValues: 'UPDATED_NEW',
     UpdateExpression:
-      'SET #allCases = :value AND SET #remaining = :remaining AND SET #jobId = :jobId',
+      'SET #allCases = :value, #remaining = :remaining, #jobId = :jobId, #processed = :processed',
     applicationContext,
   });
