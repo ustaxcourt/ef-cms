@@ -146,7 +146,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
-    this.consolidatedCases = rawCase.consolidatedCases;
+    this.consolidatedCases = rawCase.consolidatedCases || [];
 
     const currentUser = applicationContext.getCurrentUser();
 

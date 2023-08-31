@@ -36,7 +36,7 @@ export const getCaseByDocketNumber = async ({
 
   const leadDocketNumber = caseItems.find(caseItem => isCaseItem(caseItem))
     ?.leadDocketNumber;
-  let consolidatedCases;
+  let consolidatedCases: ConsolidatedCaseDTO[] = [];
   if (leadDocketNumber) {
     const consolidatedCaseItems = await queryFull({
       ExpressionAttributeNames: {
