@@ -22,7 +22,6 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
-  STATUS_OF_MATTER_OPTIONS,
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -105,7 +104,6 @@ export class Case extends JoiValidationEntity {
   public status: string;
   public sortableDocketNumber: number;
   public trialDate?: string;
-  public primaryIssue?: string;
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
@@ -119,8 +117,6 @@ export class Case extends JoiValidationEntity {
   public docketEntries: any[];
   public isSealed: boolean;
   public hearings: any[];
-  public statusOfMatter: string;
-  public finalBriefDueDate: string;
   public privatePractitioners: any[];
   public initialCaption: string;
   public irsPractitioners: any[];
@@ -299,7 +295,6 @@ export class Case extends JoiValidationEntity {
     docketEntries: 'At least one valid docket entry is required',
     docketNumber: 'Docket number is required',
     filingType: 'Select on whose behalf you are filing',
-    finalBriefDueDate: 'Enter a valid due date',
     hasIrsNotice: 'Indicate whether you received an IRS notice',
     hasVerifiedIrsNotice: 'Indicate whether you received an IRS notice',
     irsNoticeDate: [
@@ -371,10 +366,6 @@ export class Case extends JoiValidationEntity {
     this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-    this.statusOfMatter = rawCase.statusOfMatter;
-    this.finalBriefDueDate = rawCase.finalBriefDueDate;
-    this.primaryIssue = rawCase.primaryIssue;
-
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
     this.orderDesignatingPlaceOfTrial =
       rawCase.orderDesignatingPlaceOfTrial || false;
@@ -509,7 +500,6 @@ export class Case extends JoiValidationEntity {
       ...FILING_TYPES[ROLES.petitioner],
       ...FILING_TYPES[ROLES.privatePractitioner],
     ).optional(),
-    finalBriefDueDate: JoiValidationConstants.DATE.allow('').optional(),
     hasPendingItems: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
       .boolean()
@@ -665,9 +655,6 @@ export class Case extends JoiValidationEntity {
       )
       .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
-    primaryIssue: JoiValidationConstants.STRING.optional().description(
-      'Primary Issue for case.',
-    ),
     privatePractitioners: joi
       .array()
       .items(PrivatePractitioner.VALIDATION_RULES)
@@ -722,12 +709,6 @@ export class Case extends JoiValidationEntity {
       })
       .meta({ tags: ['Restricted'] })
       .description('Status of the case.'),
-    statusOfMatter: JoiValidationConstants.STRING.valid(
-      ...STATUS_OF_MATTER_OPTIONS,
-    )
-      .allow(null)
-      .optional()
-      .description('Status of Matter of the case.'),
     trialDate: joi
       .alternatives()
       .conditional('trialSessionId', {

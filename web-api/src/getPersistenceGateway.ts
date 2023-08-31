@@ -57,6 +57,7 @@ import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDea
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
+import { getCaseWorksheets } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheets';
 import {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
@@ -230,6 +231,7 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
+    getCaseWorksheets,
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,

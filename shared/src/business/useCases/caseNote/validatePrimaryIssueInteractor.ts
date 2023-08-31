@@ -1,4 +1,4 @@
-import { PrimaryIssue } from '../../entities/notes/PrimaryIssue';
+import { CaseWorksheet } from '../../entities/caseWorksheet/CaseWorksheet';
 
 /**
  * validateNote
@@ -12,7 +12,7 @@ export const validatePrimaryIssueInteractor = (
   applicationContext: IApplicationContext,
   { primaryIssue }: { primaryIssue: { notes?: string } },
 ) => {
-  const errors = new PrimaryIssue(primaryIssue, {
+  const errors = new CaseWorksheet(primaryIssue, {
     applicationContext,
   }).getFormattedValidationErrors();
   if (!errors) return null;
