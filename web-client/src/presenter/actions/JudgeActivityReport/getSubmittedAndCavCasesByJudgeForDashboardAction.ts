@@ -1,4 +1,3 @@
-import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -15,7 +14,6 @@ export const getSubmittedAndCavCasesByJudgeForDashboardAction = async ({
   selectedPage: number;
 }>) => {
   const { name } = get(state.judgeUser);
-  console.log('name', name);
 
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
@@ -24,13 +22,11 @@ export const getSubmittedAndCavCasesByJudgeForDashboardAction = async ({
       .getUseCases()
       .getCasesByStatusAndByJudgeInteractor(applicationContext, {
         judges: [name],
-        pageNumber: 1,
+        pageNumber: 0,
         // TODO: don't paginate for dashboard table?
-        pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+        pageSize: 10000,
         statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
       });
-
-  console.log('cases', cases);
 
   return {
     cases,
