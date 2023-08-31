@@ -20,11 +20,11 @@ export const submitCaseAssociationRequest = async (
   {
     consolidatedCasesDocketNumbers,
     docketNumber,
-    filers,
+    filers = [],
   }: {
     consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
-    filers?: string[];
+    filers: string[];
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

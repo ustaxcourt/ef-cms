@@ -13,12 +13,18 @@ export const userContactUpdateProgressAction = ({
 }: ActionProps) => {
   const { completedCases, totalCases } = props;
 
-  const currentCompletedCases =
-    get(state.userContactEditProgress.completedCases) ?? 0;
+  if (totalCases) {
+    store.set(state.userContactEditProgress.totalCases, totalCases);
+  }
 
-  store.set(state.userContactEditProgress.totalCases, totalCases);
-  store.set(
-    state.userContactEditProgress.completedCases,
-    Math.max(completedCases, currentCompletedCases),
-  );
+  if (completedCases !== undefined) {
+    store.set(state.userContactEditProgress.completedCases, completedCases);
+  } else {
+    const currentCompletedCases =
+      get(state.userContactEditProgress.completedCases) ?? 0;
+    store.set(
+      state.userContactEditProgress.completedCases,
+      currentCompletedCases + 1,
+    );
+  }
 };

@@ -120,7 +120,6 @@ export const DocketRecord = connect(
                           )}
                         </td>
                         <td className="center-column hide-on-mobile">
-                          <span className="responsive-label">Parties</span>
                           {entry.showServed && entry.servedPartiesCode}
                         </td>
                         {docketRecordHelper.showEditOrSealDocketRecordEntry && (
