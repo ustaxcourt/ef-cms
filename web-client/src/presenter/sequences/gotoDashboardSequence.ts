@@ -19,7 +19,6 @@ import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeActivityReportDataAction } from '../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
-import { setJudgeLastNameOnFormAction } from '../actions/JudgeActivityReport/setJudgeLastNameOnFormAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
@@ -76,7 +75,6 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  setJudgeLastNameOnFormAction,
                   getSubmittedAndCavCasesByJudgeAction,
                   setJudgeActivityReportDataAction,
                   setupCurrentPageAction('DashboardChambers'),
@@ -97,7 +95,6 @@ const goToDashboard = [
                   getMessages,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  setJudgeLastNameOnFormAction,
                   getSubmittedAndCavCasesByJudgeAction,
                   setJudgeActivityReportDataAction,
                   setupCurrentPageAction('DashboardJudge'),
