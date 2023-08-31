@@ -20,7 +20,7 @@ export const submittedAndCavCasesForJudgeHelper = (
   applicationContext: IApplicationContext,
 ): ISubmittedAndCavCasesForJudgeHelper => {
   const { consolidatedCasesGroupCountMap, submittedAndCavCasesByJudge = [] } =
-    get(state.judgeActivityReportData);
+    get(state.judgeActivityReport.judgeActivityReportData);
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
@@ -50,8 +50,9 @@ export const submittedAndCavCasesForJudgeHelper = (
     );
 
   filteredSubmittedAndCavCasesByJudge.forEach(individualCase => {
+    // TODO: figure out what changed - used to call .get on the object
     individualCase.formattedCaseCount =
-      consolidatedCasesGroupCountMap.get(individualCase.docketNumber) || 1;
+      consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
       individualCase.consolidatedIconTooltipText = 'Lead case';
       individualCase.isLeadCase = true;
