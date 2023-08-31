@@ -18,6 +18,7 @@ import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCasesAction } from '../actions/setCasesAction';
+import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeActivityReportDataAction } from '../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
@@ -102,7 +103,7 @@ const goToDashboard = [
                   setTrialSessionsAction,
 
                   getSubmittedAndCavCasesByJudgeForDashboardAction,
-                  setJudgeActivityReportDataAction,
+                  setCavAndSubmittedCasesAction,
                   setupCurrentPageAction('DashboardJudge'),
                 ],
                 petitioner: [
