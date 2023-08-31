@@ -18,6 +18,7 @@ import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionD
 import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
+import { setCaseWorksheetsByJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsByJudgeAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
@@ -102,9 +103,9 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-
                   getSubmittedAndCavCasesByJudgeForDashboardAction,
                   getSubmittedCavWorksheetsByJudgeAction,
+                  setCaseWorksheetsByJudgeAction,
                   setCavAndSubmittedCasesAction,
                   setupCurrentPageAction('DashboardJudge'),
                 ],

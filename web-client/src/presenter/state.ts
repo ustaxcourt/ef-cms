@@ -1,3 +1,4 @@
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -396,6 +397,9 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  submittedAndCavCases: {
+    worksheets: [] as RawCaseWorksheet[],
+  },
   submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
