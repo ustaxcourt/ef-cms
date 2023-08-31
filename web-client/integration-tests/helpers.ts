@@ -258,7 +258,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
         'external-order-search-enabled': true,
         'internal-opinion-search-enabled': true,
         'internal-order-search-enabled': true,
-        'multi-docketable-paper-filings': true,
         'redaction-acknowledgement-enabled': true,
         'updated-trial-status-types': true,
         'use-external-pdf-generation': false,

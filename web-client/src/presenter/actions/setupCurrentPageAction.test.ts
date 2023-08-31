@@ -9,7 +9,6 @@ describe('setupCurrentPageAction', () => {
     'consolidated-cases-group-access-petitioner': true,
     'document-visibility-policy-change-date': '2023-05-01',
     'e-consent-fields-enabled-feature-flag': true,
-    'multi-docketable-paper-filings': true,
   };
 
   beforeAll(() => {
