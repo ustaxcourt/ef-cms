@@ -7,9 +7,11 @@ export const setUpdatedCaseInStateAction = ({
 }: ActionProps) => {
   const { updatedCase } = props;
 
-  const { submittedAndCavCasesByJudge } = get(state.judgeActivityReportData);
+  const { submittedAndCavCasesByJudge } = get(
+    state.judgeActivityReport.judgeActivityReportData,
+  );
 
-  const index = submittedAndCavCasesByJudge.findIndex(
+  const index = submittedAndCavCasesByJudge!.findIndex(
     aCase => aCase.docketNumber === updatedCase.docketNumber,
   );
 

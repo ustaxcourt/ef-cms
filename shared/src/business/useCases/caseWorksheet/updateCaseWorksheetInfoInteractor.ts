@@ -22,6 +22,8 @@ export const updateCaseWorksheetInfoInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+	//fetch new entitie
+		//not the case (too complex)
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -38,10 +40,12 @@ export const updateCaseWorksheetInfoInteractor = async (
     caseRecord.statusOfMatter = statusOfMatter;
   }
 
+	//create new entity instead of case
   const updatedCaseRecord = new Case(caseRecord, {
     applicationContext,
   });
 
+	//create new helper to persist new entity to the database
   const validRawCaseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({

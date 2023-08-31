@@ -7,7 +7,9 @@ export const validateStatusOfMatterAction = async ({
   props,
 }: ActionProps) => {
   const { docketNumber, statusOfMatter } = props;
-  const { submittedAndCavCasesByJudge } = get(state.judgeActivityReportData);
+  const { submittedAndCavCasesByJudge } = get(
+    state.judgeActivityReport.judgeActivityReportData,
+  );
   const caseToValidate = submittedAndCavCasesByJudge.find(
     aCase => aCase.docketNumber === docketNumber,
   );

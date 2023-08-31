@@ -8,6 +8,7 @@ import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getSubmittedAndCavCasesByJudgeAction } from '../actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { getSubmittedAndCavCasesByJudgeForDashboardAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeForDashboardAction';
+import { getSubmittedCavWorksheetsByJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedCavWorksheetsByJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -103,6 +104,7 @@ const goToDashboard = [
                   setTrialSessionsAction,
 
                   getSubmittedAndCavCasesByJudgeForDashboardAction,
+                  getSubmittedCavWorksheetsByJudgeAction,
                   setCavAndSubmittedCasesAction,
                   setupCurrentPageAction('DashboardJudge'),
                 ],
