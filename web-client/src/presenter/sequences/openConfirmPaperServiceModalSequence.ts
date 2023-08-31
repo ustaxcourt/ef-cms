@@ -3,9 +3,7 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { getConstants } from '../../getConstants';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
-import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
@@ -16,9 +14,6 @@ import { setValidationErrorsAction } from '../actions/setValidationErrorsAction'
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
-
-const multiDocketablePaperFilings =
-  getConstants().ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS;
 
 export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
@@ -32,13 +27,7 @@ export const openConfirmPaperServiceModalSequence = [
   isDocketEntryMultiDocketableAction,
   {
     no: [],
-    yes: [
-      isFeatureFlagEnabledFactoryAction(multiDocketablePaperFilings),
-      {
-        no: [],
-        yes: [setMultiDocketingCheckboxesAction],
-      },
-    ],
+    yes: [setMultiDocketingCheckboxesAction],
   },
   setDocumentIsRequiredAction,
   generateTitleForPaperFilingAction,
