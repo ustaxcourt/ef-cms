@@ -1,5 +1,4 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
-import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 
 export type TUserContact = {
   address1: string;
@@ -80,44 +79,37 @@ const generateChangeOfAddressForPractitioner = async ({
 
   const jobId = applicationContext.getUniqueId();
 
-  await applicationContext()
-    .getPersistenceGateway()
-    .createChangeOfAddressJob({
-      applicationContext,
-      docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
-      jobId,
-    });
+  await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
+    applicationContext,
+    docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
+    jobId,
+  });
 
   applicationContext.logger.info(`creating change of address job of ${jobId}`);
 
   if (isChangeOfAddressLambdaEnabled) {
-    const { currentColor, region, stage } = applicationContext.environment;
-    const client = new LambdaClient({
-      region,
-    });
+    const sqs = await applicationContext.getMessagingClient();
 
     await Promise.all(
       associatedUserCases.map(caseInfo => {
-        return client.send(
-          new InvokeCommand({
-            FunctionName: `change_of_address_${stage}_${currentColor}`,
-            InvocationType: 'RequestResponse',
-            Payload: Buffer.from(
-              JSON.stringify({
-                bypassDocketEntry,
-                contactInfo,
-                docketNumber: caseInfo.docketNumber,
-                firmName,
-                jobId,
-                requestUserId,
-                updatedEmail,
-                updatedName,
-                user,
-                websocketMessagePrefix,
-              }),
-            ),
-          }),
-        );
+        return sqs
+          .sendMessage({
+            MessageBody: JSON.stringify({
+              bypassDocketEntry,
+              contactInfo,
+              docketNumber: caseInfo.docketNumber,
+              firmName,
+              jobId,
+              requestUser: applicationContext.getCurrentUser(),
+              requestUserId,
+              updatedEmail,
+              updatedName,
+              user,
+              websocketMessagePrefix,
+            }),
+            QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/change_of_address_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+          })
+          .promise();
       }),
     );
   } else {

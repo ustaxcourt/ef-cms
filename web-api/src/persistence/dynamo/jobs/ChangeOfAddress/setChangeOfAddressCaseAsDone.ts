@@ -20,21 +20,19 @@ export const setChangeOfAddressCaseAsDone = ({
 }) =>
   updateConsistent({
     ExpressionAttributeNames: {
-      '#decrementValue': 'decrementValue',
       '#processed': 'processed',
       '#remaining': 'remaining',
-      '#status': 'status',
     },
     ExpressionAttributeValues: {
       ':decrementValue': -1,
-      ':value': docketNumber,
+      ':value': [docketNumber],
     },
     Key: {
-      pk: `change-of-address-job-${jobId}`,
-      sk: `change-of-address-job-${jobId}`,
+      pk: `change-of-address-job|${jobId}`,
+      sk: `change-of-address-job|${jobId}`,
     },
     ReturnValues: 'UPDATED_NEW',
     UpdateExpression:
-      'SET #processed = list_append(#processed, :value) ADD #remaining #decrementValue',
+      'SET #processed = list_append(#processed, :value) ADD #remaining :decrementValue',
     applicationContext,
   });

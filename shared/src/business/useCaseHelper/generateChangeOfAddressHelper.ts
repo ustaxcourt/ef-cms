@@ -104,7 +104,7 @@ export const generateChangeOfAddressHelper = async ({
     userId: requestUserId || user.userId,
   });
 
-  const updatedJob = await applicationContext()
+  const updatedJob = await applicationContext
     .getPersistenceGateway()
     .setChangeOfAddressCaseAsDone({ applicationContext, docketNumber, jobId });
 
@@ -128,7 +128,7 @@ export const generateChangeOfAddressHelper = async ({
       message: {
         action: `${websocketMessagePrefix}_contact_full_update_complete`,
       },
-      userId: requestUserId,
+      userId: requestUserId || user.userId,
     });
   }
 };

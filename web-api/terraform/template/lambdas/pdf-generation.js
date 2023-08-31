@@ -28,19 +28,23 @@ export const handler = async event => {
  * @returns {string} id for the temporary stored pdf
  */
 export const changeOfAddressHandler = async event => {
-  const applicationContext = createApplicationContext();
+  const { Records } = event;
+  const { body } = Records[0];
+  const eventBody = JSON.parse(body);
+
+  const applicationContext = createApplicationContext(eventBody.requestUser);
 
   await applicationContext.getUseCaseHelpers().generateChangeOfAddressHelper({
     applicationContext,
-    bypassDocketEntry: event.bypassDocketEntry,
-    contactInfo: event.contactInfo,
-    docketNumber: event.docketNumber,
-    firmName: event.firmName,
-    jobId: event.jobId,
-    requestUserId: event.requestUserId,
-    updatedEmail: event.updatedEmail,
-    updatedName: event.updatedName,
-    user: event.user,
-    websocketMessagePrefix: event.websocketMessagePrefix,
+    bypassDocketEntry: eventBody.bypassDocketEntry,
+    contactInfo: eventBody.contactInfo,
+    docketNumber: eventBody.docketNumber,
+    firmName: eventBody.firmName,
+    jobId: eventBody.jobId,
+    requestUserId: eventBody.requestUserId,
+    updatedEmail: eventBody.updatedEmail,
+    updatedName: eventBody.updatedName,
+    user: eventBody.user,
+    websocketMessagePrefix: eventBody.websocketMessagePrefix,
   });
 };
