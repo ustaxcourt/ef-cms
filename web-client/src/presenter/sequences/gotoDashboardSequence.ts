@@ -7,6 +7,7 @@ import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserA
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getSubmittedAndCavCasesByJudgeAction } from '../actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
+import { getSubmittedAndCavCasesByJudgeForDashboardAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeForDashboardAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -75,6 +76,8 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
+
+                  //setup new formatted data structure to fetch cases
                   getSubmittedAndCavCasesByJudgeAction,
                   setJudgeActivityReportDataAction,
                   setupCurrentPageAction('DashboardChambers'),
@@ -93,9 +96,12 @@ const goToDashboard = [
                 judge: [
                   setMessageInboxPropsAction,
                   getMessages,
+                  getJudgeForCurrentUserAction,
+                  setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  getSubmittedAndCavCasesByJudgeAction,
+
+                  getSubmittedAndCavCasesByJudgeForDashboardAction,
                   setJudgeActivityReportDataAction,
                   setupCurrentPageAction('DashboardJudge'),
                 ],
