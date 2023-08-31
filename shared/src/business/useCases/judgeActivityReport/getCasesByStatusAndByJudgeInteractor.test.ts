@@ -14,6 +14,7 @@ import {
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import {
   docketClerkUser,
   judgeUser,
@@ -221,7 +222,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockResolvedValueOnce(
-        casesForLeadDocketNumber,
+        cloneDeep(casesForLeadDocketNumber),
       );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
@@ -278,7 +279,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockResolvedValueOnce(
-        casesForLeadDocketNumber,
+        cloneDeep(casesForLeadDocketNumber),
       );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
