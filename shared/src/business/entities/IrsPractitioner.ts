@@ -52,6 +52,4 @@ export class IrsPractitioner extends User {
   }
 }
 
-declare global {
-  type RawIrsPractitioner = ExcludeMethods<IrsPractitioner>;
-}
+export type RawIrsPractitioner = ExcludeMethods<IrsPractitioner>;

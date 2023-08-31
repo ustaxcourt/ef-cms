@@ -283,7 +283,7 @@ export const scan = async params => {
  * @param {object} params the params to update
  * @returns {object} the item that was updated
  */
-export const queryFull = async ({
+export const queryFull = async <T>({
   applicationContext,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
@@ -297,7 +297,7 @@ export const queryFull = async ({
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
   KeyConditionExpression: string;
-}): Promise<TDynamoRecord[]> => {
+}): Promise<TDynamoRecord<T>[]> => {
   let hasMoreResults = true;
   let lastKey = null;
   let allResults = [];

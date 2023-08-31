@@ -1,3 +1,4 @@
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { put } from '../../dynamodbClientService';
 
 export const updateIrsPractitionerOnCase = async ({
@@ -10,7 +11,7 @@ export const updateIrsPractitionerOnCase = async ({
   applicationContext: IApplicationContext;
   docketNumber: string;
   leadDocketNumber?: string;
-  practitioner: TPractitioner;
+  practitioner: RawIrsPractitioner;
   userId: string;
 }): Promise<void> => {
   const item: any = {
