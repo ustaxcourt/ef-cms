@@ -67,7 +67,7 @@ import { getCaseDeadlinesLambda } from './caseDeadline/getCaseDeadlinesLambda';
 import { getCaseExistsLambda } from './cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './cases/getCaseLambda';
-import { getCaseWorksheetInfoLambda } from '@web-api/caseWorksheet/getCaseWorksheetInfoLambda';
+import { getCaseWorksheetsForJudgeLambda } from '@web-api/caseWorksheet/getCaseWorksheetsForJudgeLambda';
 import { getCasesByStatusAndByJudgeLambda } from './reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
@@ -999,7 +999,7 @@ app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 /**
  * Case Worksheet
  */
-app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetInfoLambda));
+app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.

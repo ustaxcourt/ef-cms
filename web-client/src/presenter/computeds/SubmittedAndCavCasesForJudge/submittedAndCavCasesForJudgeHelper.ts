@@ -18,11 +18,12 @@ export const submittedAndCavCasesForJudgeHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): ISubmittedAndCavCasesForJudgeHelper => {
-  const {
-    consolidatedCasesGroupCountMap,
-    submittedAndCavCasesByJudge = [],
-    submittedAndCavWorksheetByJudge = [],
-  } = get(state.judgeActivityReport.judgeActivityReportData);
+  const { consolidatedCasesGroupCountMap, submittedAndCavCasesByJudge = [] } =
+    get(state.judgeActivityReport.judgeActivityReportData);
+
+  const { worksheets = [] } = get(state.submittedAndCavCases);
+  const worksheetsObj = {};
+  worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
@@ -51,26 +52,33 @@ export const submittedAndCavCasesForJudgeHelper = (
       unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
     );
 
-  filteredSubmittedAndCavCasesByJudge.forEach(individualCase => {
+  // should we map here instead?
+  filteredSubmittedAndCavCasesByJudge.forEach(aCase => {
     // TODO: figure out what changed - used to call .get on the object
-    individualCase.formattedCaseCount =
-      consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
-    if (individualCase.leadDocketNumber === individualCase.docketNumber) {
-      individualCase.consolidatedIconTooltipText = 'Lead case';
-      individualCase.isLeadCase = true;
-      individualCase.inConsolidatedGroup = true;
+    aCase.formattedCaseCount =
+      consolidatedCasesGroupCountMap[aCase.docketNumber] || 1;
+    if (aCase.leadDocketNumber === aCase.docketNumber) {
+      aCase.consolidatedIconTooltipText = 'Lead case';
+      aCase.isLeadCase = true;
+      aCase.inConsolidatedGroup = true;
     }
 
-    individualCase.formattedSubmittedCavStatusChangedDate =
-      getSubmittedOrCAVDate(individualCase.caseStatusHistory);
+    if (worksheetsObj[aCase.docketNumber]) {
+      Object.entries(worksheetsObj[aCase.docketNumber]).forEach(
+        ([key, value]) => (aCase[key] = value),
+      );
+    }
 
-    const newestCaseStatusChangeIndex =
-      individualCase.caseStatusHistory.length - 1;
+    aCase.formattedSubmittedCavStatusChangedDate = getSubmittedOrCAVDate(
+      aCase.caseStatusHistory,
+    );
+
+    const newestCaseStatusChangeIndex = aCase.caseStatusHistory.length - 1;
 
     const dateOfLastCaseStatusChange =
-      individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+      aCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
 
-    individualCase.daysElapsedSinceLastStatusChange = applicationContext
+    aCase.daysElapsedSinceLastStatusChange = applicationContext
       .getUtilities()
       .calculateDifferenceInDays(
         currentDateInIsoFormat,
