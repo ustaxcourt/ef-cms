@@ -15,12 +15,17 @@ interface ISubmittedAndCavCasesForJudgeHelper {
   showPaginator: boolean;
 }
 
+//TODO: fetch array of worksheets
+// join them
 export const submittedAndCavCasesForJudgeHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): ISubmittedAndCavCasesForJudgeHelper => {
-  const { consolidatedCasesGroupCountMap, submittedAndCavCasesByJudge = [] } =
-    get(state.judgeActivityReport.judgeActivityReportData);
+  const {
+    consolidatedCasesGroupCountMap,
+    submittedAndCavCasesByJudge = [],
+    submittedAndCavWorksheetByJudge = [],
+  } = get(state.judgeActivityReport.judgeActivityReportData);
 
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()

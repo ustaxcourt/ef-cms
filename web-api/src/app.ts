@@ -995,6 +995,11 @@ app
   .delete(lambdaWrapper(deleteAuthCookieLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 
+/**
+ * Case Worksheet
+ */
+app.get('/case-worksheet/:judge', lambdaWrapper(getCaseWorksheetInfoLambda));
+
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
 if (process.env.IS_LOCAL) {
