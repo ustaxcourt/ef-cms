@@ -68,7 +68,6 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
-import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';
 import qs from 'qs';
@@ -293,14 +292,6 @@ export const getFormattedDocumentQCMyInbox = async cerebralTest => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: cerebralTest.getState(),
-  });
-};
-
-const featureFlagHelperComputed = withAppContextDecorator(featureFlagHelper);
-
-export const getFeatureFlagHelper = cerebralTest => {
-  return runCompute(featureFlagHelperComputed, {
     state: cerebralTest.getState(),
   });
 };

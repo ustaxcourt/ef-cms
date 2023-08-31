@@ -92,11 +92,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
-  MULTI_DOCKETABLE_PAPER_FILINGS: {
-    disabledMessage:
-      'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
-    key: 'multi-docketable-paper-filings',
-  },
   REDACTION_ACKNOWLEDGEMENT_ENABLED: {
     key: 'redaction-acknowledgement-enabled',
   },
