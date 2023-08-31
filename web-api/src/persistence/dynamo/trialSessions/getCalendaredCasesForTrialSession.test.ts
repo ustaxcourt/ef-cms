@@ -57,6 +57,7 @@ describe('getCalendaredCasesForTrialSession', () => {
       {
         archivedCorrespondences: [],
         archivedDocketEntries: [],
+        consolidatedCases: [],
         correspondence: [],
         disposition: 'something',
         docketEntries: [
