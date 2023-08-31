@@ -78,6 +78,7 @@ import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getC
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
 import { getCaseInventoryReportInteractor } from '../../shared/src/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
+import { getCaseWorksheetInfoInteractor } from '@shared/business/useCases/caseWorksheet/getCaseWorksheetInfoInteractor';
 import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
 import { getCasesForUserInteractor } from '../../shared/src/business/useCases/getCasesForUserInteractor';
@@ -281,6 +282,7 @@ const useCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCaseWorksheetInfoInteractor,
   getCasesByStatusAndByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
