@@ -1,5 +1,6 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { OrdersReturnType } from '../../../../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
-import { sum, sumBy } from 'lodash';
 
 interface IJudgeActivityReportHelper {
   closedCasesTotal: number | undefined;
@@ -10,45 +11,37 @@ interface IJudgeActivityReportHelper {
   showResultsTables: boolean | undefined;
   showSelectDateRangeText: boolean | undefined;
   trialSessionsHeldTotal: number | undefined;
+  today: string;
+  orders: OrdersReturnType;
 }
 
 export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeName, startDate } = get(state.form);
-
-  const { casesClosedByJudge, opinions, orders, trialSessions } = get(
-    state.judgeActivityReportData,
+  const { endDate, judgeNameToDisplayForHeader, startDate } = get(
+    state.judgeActivityReport.filters,
   );
 
-  let closedCasesTotal: number = 0,
-    trialSessionsHeldTotal: number = 0,
-    opinionsFiledTotal: number = 0,
-    ordersFiledTotal: number = 0,
-    resultsCount: number = 0,
+  const {
+    casesClosedByJudge,
+    opinions,
+    orders = [],
+    trialSessions,
+  } = get(state.judgeActivityReport.judgeActivityReportData);
+
+  let resultsCount: number = 0,
     showSelectDateRangeText: boolean = false;
 
   const hasFormBeenSubmitted: boolean =
     casesClosedByJudge && opinions && orders && trialSessions;
 
   if (hasFormBeenSubmitted) {
-    closedCasesTotal = sum(Object.values(casesClosedByJudge));
-
-    trialSessionsHeldTotal = sum(Object.values(trialSessions));
-
-    opinionsFiledTotal = sumBy(
-      opinions,
-      ({ count }: { count: number }) => count,
-    );
-
-    ordersFiledTotal = sumBy(orders, ({ count }: { count: number }) => count);
-
     resultsCount =
-      ordersFiledTotal +
-      opinionsFiledTotal +
-      trialSessionsHeldTotal +
-      closedCasesTotal;
+      orders.total +
+      opinions.total +
+      trialSessions.total +
+      casesClosedByJudge.total;
   } else {
     showSelectDateRangeText = true;
   }
@@ -60,16 +53,22 @@ export const judgeActivityReportHelper = (
       applicationContext.getConstants().DATE_FORMATS.MMDDYY,
     );
 
-  const reportHeader: string = `${judgeName} ${currentDate}`;
+  const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
+
+  const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
+
+  const ordersToDisplay = orders.aggregations?.filter(agg => agg.count);
 
   return {
-    closedCasesTotal,
+    closedCasesTotal: casesClosedByJudge?.total || 0,
     isFormPristine: !endDate || !startDate,
-    opinionsFiledTotal,
-    ordersFiledTotal,
+    opinionsFiledTotal: opinions?.total || 0,
+    orders: ordersToDisplay,
+    ordersFiledTotal: orders?.total || 0,
     reportHeader,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
-    trialSessionsHeldTotal,
+    today,
+    trialSessionsHeldTotal: trialSessions?.total || 0,
   };
 };
