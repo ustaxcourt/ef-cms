@@ -1,3 +1,8 @@
+import {
+  CaseRecord,
+  IrsPractitionerOnCaseRecord,
+  PrivatePractitionerOnCaseRecord,
+} from '@web-api/persistence/dynamo/dynamoTypes';
 import { sortBy } from 'lodash';
 
 export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
@@ -17,7 +22,8 @@ export const isArchivedCorrespondenceItem = item =>
 export const isArchivedDocketEntryItem = item =>
   item.sk.startsWith('docket-entry|') && item.archived;
 
-export const isCaseItem = item => item.sk.startsWith('case|');
+export const isCaseItem = (item: any): item is CaseRecord =>
+  item.pk?.startsWith('case|') && item.sk.startsWith('case|');
 
 export const isCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && !item.archived;
@@ -29,11 +35,15 @@ export const isWorkItemItem = item => item.sk.startsWith('work-item|');
 
 export const isHearingItem = item => item.sk.startsWith('hearing|');
 
-export const isIrsPractitionerItem = item =>
-  item.sk.startsWith('irsPractitioner|');
+export const isIrsPractitionerItem = (
+  item: any,
+): item is IrsPractitionerOnCaseRecord =>
+  item.pk?.startsWith('case|') && item.sk?.startsWith('irsPractitioner|');
 
-export const isPrivatePractitionerItem = item =>
-  item.sk.startsWith('privatePractitioner|');
+export const isPrivatePractitionerItem = (
+  item: any,
+): item is PrivatePractitionerOnCaseRecord =>
+  item.pk?.startsWith('case|') && item.sk.startsWith('privatePractitioner|');
 
 export const aggregateCaseItems = caseAndCaseItems => {
   let archivedCorrespondences = [];

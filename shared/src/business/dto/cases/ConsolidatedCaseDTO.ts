@@ -14,11 +14,11 @@ export class ConsolidatedCaseDTO {
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
     this.entityName = rawCase.entityName;
-    this.irsPractitioners = rawCase.irsPractitioners;
+    this.irsPractitioners = rawCase.irsPractitioners || [];
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.isSealed = rawCase.isSealed;
-    this.petitioners = rawCase.petitioners;
-    this.privatePractitioners = rawCase.privatePractitioners;
+    this.petitioners = rawCase.petitioners || [];
+    this.privatePractitioners = rawCase.privatePractitioners || [];
   }
 
   public static getFields() {

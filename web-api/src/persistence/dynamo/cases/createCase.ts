@@ -10,7 +10,7 @@ export const fieldsToOmitBeforePersisting = [
   'hearings',
   'irsPractitioners',
   'privatePractitioners',
-];
+] as const;
 
 /**
  * createCase -- should usually be called via createCaseAndAssociations use-case helper.

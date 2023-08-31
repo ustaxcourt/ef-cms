@@ -1,3 +1,9 @@
+import {
+  CaseRecord,
+  IrsPractitionerOnCaseRecord,
+  PrivatePractitionerOnCaseRecord,
+  TDynamoRecord,
+} from '@web-api/persistence/dynamo/dynamoTypes';
 import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import {
   aggregateCaseItems,
@@ -7,22 +13,13 @@ import {
 } from '../helpers/aggregateCaseItems';
 import { queryFull } from '../../dynamodbClientService';
 
-/**
- * getCaseByDocketNumber
- * gets the full case when contents are under 400 kb
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number to get
- * @returns {object} the case details
- */
 export const getCaseByDocketNumber = async ({
   applicationContext,
   docketNumber,
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-}) => {
+}): Promise<RawCase> => {
   const caseItems = await queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -38,7 +35,9 @@ export const getCaseByDocketNumber = async ({
     ?.leadDocketNumber;
   let consolidatedCases: ConsolidatedCaseDTO[] = [];
   if (leadDocketNumber) {
-    const consolidatedCaseItems = await queryFull({
+    const consolidatedCaseItems = await queryFull<
+      IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
+    >({
       ExpressionAttributeNames: {
         '#gsi1pk': 'gsi1pk',
       },
@@ -53,38 +52,27 @@ export const getCaseByDocketNumber = async ({
     consolidatedCases = aggregateConsolidatedCases(consolidatedCaseItems);
   }
 
-  return { ...aggregateCaseItems(caseItems), consolidatedCases } as RawCase;
+  return { ...aggregateCaseItems(caseItems), consolidatedCases };
 };
 
 const aggregateConsolidatedCases = (
-  consolidatedCaseItems: any[],
+  consolidatedCaseItems: TDynamoRecord<
+    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
+  >[],
 ): ConsolidatedCaseDTO[] => {
-  const consolidatedCases = consolidatedCaseItems.filter(item =>
-    isCaseItem(item),
-  );
+  const caseMap: Map<string, ConsolidatedCaseDTO> = new Map();
+  consolidatedCaseItems
+    .filter((item): item is CaseRecord => isCaseItem(item))
+    .forEach(item => caseMap.set(item.pk, new ConsolidatedCaseDTO(item)));
 
   consolidatedCaseItems.forEach(item => {
     if (isIrsPractitionerItem(item)) {
-      const caseWithPractitioner = consolidatedCases.find(aCase => {
-        return item.pk === aCase.pk;
-      });
-      if (!caseWithPractitioner.irsPractitioners) {
-        caseWithPractitioner.irsPractitioners = [item];
-      } else {
-        caseWithPractitioner.irsPractitioners.push(item);
-      }
+      caseMap.get(item.pk)?.irsPractitioners.push(item);
     }
-
     if (isPrivatePractitionerItem(item)) {
-      const caseWithPractitioner = consolidatedCases.find(aCase => {
-        return item.pk === aCase.pk;
-      });
-      if (!caseWithPractitioner.privatePractitioners) {
-        caseWithPractitioner.privatePractitioners = [item];
-      } else {
-        caseWithPractitioner.privatePractitioners.push(item);
-      }
+      caseMap.get(item.pk)?.privatePractitioners.push(item);
     }
   });
-  return consolidatedCases.map(aCase => new ConsolidatedCaseDTO(aCase));
+
+  return [...caseMap.values()];
 };

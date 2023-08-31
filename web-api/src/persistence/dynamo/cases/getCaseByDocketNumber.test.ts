@@ -188,24 +188,195 @@ describe('getCaseByDocketNumber', () => {
     });
   });
 
-  it('should return default object if nothing is returned from the client query request', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
-      promise: () => Promise.resolve({ Items: [] }),
-    });
+  it('should return an array of correctly composed consolidated cases attached to the case', async () => {
+    const leadDocketNumber = '123-20';
+    const docketNumber1 = '124-20';
+    const firstQueryResult = [
+      {
+        name: 'Judge Fieri',
+        pk: `case|${leadDocketNumber}`,
+        role: ROLES.legacyJudge,
+        sk: 'user|ce92c582-186f-45a7-a5f5-e1cec03521ad',
+        userId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+      },
+      {
+        docketNumber: leadDocketNumber,
+        gsi1pk: `case|${leadDocketNumber}`,
+        judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+        leadDocketNumber,
+        pk: `case|${leadDocketNumber}`,
+        sk: `case|${leadDocketNumber}`,
+        status: CASE_STATUS_TYPES.new,
+      },
+      {
+        pk: `case|${leadDocketNumber}`,
+        sk: 'hearing|123',
+        trialSessionId: '123',
+      },
+      {
+        gsi1pk: `case|${leadDocketNumber}`,
+        pk: `case|${leadDocketNumber}`,
+        sk: 'irsPractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        gsi1pk: `case|${leadDocketNumber}`,
+        pk: `case|${leadDocketNumber}`,
+        sk: 'privatePractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        archived: false,
+        docketEntryId: 'abc-123',
+        pk: `case|${leadDocketNumber}`,
+        sk: 'docket-entry|123',
+      },
+    ];
+    const secondQueryResult = [
+      {
+        docketNumber: leadDocketNumber,
+        gsi1pk: `case|${leadDocketNumber}`,
+        judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+        leadDocketNumber,
+        pk: `case|${leadDocketNumber}`,
+        sk: `case|${leadDocketNumber}`,
+        status: CASE_STATUS_TYPES.new,
+      },
+      {
+        gsi1pk: `case|${leadDocketNumber}`,
+        pk: `case|${leadDocketNumber}`,
+        sk: 'irsPractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        gsi1pk: `case|${leadDocketNumber}`,
+        pk: `case|${leadDocketNumber}`,
+        sk: 'privatePractitioner|123',
+        userId: 'abc-123',
+      },
+      {
+        docketNumber: docketNumber1,
+        gsi1pk: `case|${leadDocketNumber}`,
+        judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+        leadDocketNumber,
+        pk: `case|${docketNumber1}`,
+        sk: `case|${docketNumber1}`,
+        status: CASE_STATUS_TYPES.new,
+      },
+      {
+        gsi1pk: `case|${leadDocketNumber}`,
+        pk: `case|${docketNumber1}`,
+        sk: 'irsPractitioner|124',
+        userId: 'abc-124',
+      },
+      {
+        gsi1pk: `case|${leadDocketNumber}`,
+        pk: `case|${docketNumber1}`,
+        sk: 'privatePractitioner|124',
+        userId: 'abc-124',
+      },
+    ];
+    applicationContext
+      .getDocumentClient()
+      .query.mockReturnValueOnce({
+        promise: () => Promise.resolve({ Items: firstQueryResult }),
+      })
+      .mockReturnValueOnce({
+        promise: () => Promise.resolve({ Items: secondQueryResult }),
+      });
 
     const result = await getCaseByDocketNumber({
       applicationContext,
-      docketNumber: '99999-99',
+      docketNumber: leadDocketNumber,
     });
 
     expect(result).toEqual({
       archivedCorrespondences: [],
       archivedDocketEntries: [],
+      associatedJudge: 'Judge Fieri',
+      consolidatedCases: [
+        {
+          docketNumber: leadDocketNumber,
+          irsPractitioners: [
+            {
+              gsi1pk: `case|${leadDocketNumber}`,
+              pk: 'case|123-20',
+              sk: 'irsPractitioner|123',
+              userId: 'abc-123',
+            },
+          ],
+          leadDocketNumber,
+          petitioners: [],
+          privatePractitioners: [
+            {
+              gsi1pk: `case|${leadDocketNumber}`,
+              pk: 'case|123-20',
+              sk: 'privatePractitioner|123',
+              userId: 'abc-123',
+            },
+          ],
+        },
+        {
+          docketNumber: docketNumber1,
+          irsPractitioners: [
+            {
+              gsi1pk: `case|${leadDocketNumber}`,
+              pk: `case|${docketNumber1}`,
+              sk: 'irsPractitioner|124',
+              userId: 'abc-124',
+            },
+          ],
+          leadDocketNumber,
+          petitioners: [],
+          privatePractitioners: [
+            {
+              gsi1pk: `case|${leadDocketNumber}`,
+              pk: `case|${docketNumber1}`,
+              sk: 'privatePractitioner|124',
+              userId: 'abc-124',
+            },
+          ],
+        },
+      ],
       correspondence: [],
-      docketEntries: [],
-      hearings: [],
-      irsPractitioners: [],
-      privatePractitioners: [],
+      docketEntries: [
+        {
+          archived: false,
+          docketEntryId: 'abc-123',
+          pk: `case|${leadDocketNumber}`,
+          sk: 'docket-entry|123',
+        },
+      ],
+      docketNumber: '123-20',
+      gsi1pk: `case|${leadDocketNumber}`,
+      hearings: [
+        {
+          pk: `case|${leadDocketNumber}`,
+          sk: 'hearing|123',
+          trialSessionId: '123',
+        },
+      ],
+      irsPractitioners: [
+        {
+          gsi1pk: `case|${leadDocketNumber}`,
+          pk: `case|${leadDocketNumber}`,
+          sk: 'irsPractitioner|123',
+          userId: 'abc-123',
+        },
+      ],
+      judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
+      leadDocketNumber,
+      pk: 'case|123-20',
+      privatePractitioners: [
+        {
+          gsi1pk: `case|${leadDocketNumber}`,
+          pk: `case|${leadDocketNumber}`,
+          sk: 'privatePractitioner|123',
+          userId: 'abc-123',
+        },
+      ],
+      sk: `case|${leadDocketNumber}`,
+      status: CASE_STATUS_TYPES.new,
     });
   });
 });
