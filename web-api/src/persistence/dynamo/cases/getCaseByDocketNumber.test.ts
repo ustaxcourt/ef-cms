@@ -29,6 +29,7 @@ describe('getCaseByDocketNumber', () => {
     expect(result).toEqual({
       archivedCorrespondences: [],
       archivedDocketEntries: [],
+      consolidatedCases: [],
       correspondence: [],
       docketEntries: [],
       docketNumber: '123-20',
@@ -126,6 +127,7 @@ describe('getCaseByDocketNumber', () => {
         },
       ],
       associatedJudge: 'Judge Fieri',
+      consolidatedCases: [],
       correspondence: [
         {
           archived: false,
@@ -180,6 +182,7 @@ describe('getCaseByDocketNumber', () => {
     expect(result).toEqual({
       archivedCorrespondences: [],
       archivedDocketEntries: [],
+      consolidatedCases: [],
       correspondence: [],
       docketEntries: [],
       hearings: [],

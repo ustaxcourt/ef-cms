@@ -8,6 +8,7 @@ export class ConsolidatedCaseDTO {
   public leadDocketNumber: string;
   public petitioners: object[];
   public privatePractitioners: object[];
+  public sortableDocketNumber: number;
 
   constructor(rawCase: any) {
     this.caseCaption = rawCase.caseCaption;
@@ -19,6 +20,7 @@ export class ConsolidatedCaseDTO {
     this.isSealed = rawCase.isSealed;
     this.petitioners = rawCase.petitioners || [];
     this.privatePractitioners = rawCase.privatePractitioners || [];
+    this.sortableDocketNumber = rawCase.sortableDocketNumber;
   }
 
   public static getFields() {
