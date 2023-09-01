@@ -1,74 +1,78 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
-import cloneDeep from 'lodash';
 
 describe('getCasesForUserInteractor', () => {
   const userId = MOCK_CASE.petitioners[0].contactId;
+  let leadCase;
+  let memberCase1;
+  let memberCase2;
+  let consolidatedGroupLeadCase11119: any[];
+  let unconsolidatedCase1;
+  let unconsolidatedCase2;
+  let unconsolidatedCase3;
+  let unconsolidatedClosedCase1;
+  let unconsolidatedClosedCase2;
 
-  const leadCase = {
-    ...MOCK_CASE,
-    createdAt: '2019-12-11T15:25:09.284Z',
-    docketNumber: '111-19',
-    leadDocketNumber: '111-19',
-  };
-  const memberCase1 = {
-    ...MOCK_CASE,
-    createdAt: '2019-12-11T15:25:55.006Z',
-    docketNumber: '112-19',
-    leadDocketNumber: '111-19',
-  };
-  const memberCase2 = {
-    ...MOCK_CASE,
-    createdAt: '2019-12-11T16:02:31.173Z',
-    docketNumber: '113-19',
-    leadDocketNumber: '111-19',
-  };
-  const unconsolidatedCase1 = {
-    ...MOCK_CASE,
-    createdAt: '2020-01-21T16:41:39.474Z',
-    docketNumber: '102-20',
-  };
-  const unconsolidatedCase2 = {
-    ...MOCK_CASE,
-    createdAt: '2019-08-16T17:29:10.132Z',
-    docketNumber: '107-19',
-  };
-  const unconsolidatedCase3 = {
-    ...MOCK_CASE,
-    createdAt: '2019-03-01T22:53:50.097Z',
-    docketNumber: '103-19',
-  };
-  const unconsolidatedClosedCase1 = {
-    ...MOCK_CASE,
-    closedDate: '2019-03-01T22:53:50.097Z',
-    docketNumber: '130-22',
-    status: CASE_STATUS_TYPES.closed,
-  };
-  const unconsolidatedClosedCase2 = {
-    ...MOCK_CASE,
-    closedDate: '2018-03-01T22:53:50.097Z',
-    docketNumber: '140-22',
-    status: CASE_STATUS_TYPES.closed,
-  };
+  beforeEach(() => {
+    leadCase = cloneDeep({
+      ...MOCK_CASE,
+      createdAt: '2019-12-11T15:25:09.284Z',
+      docketNumber: '111-19',
+      leadDocketNumber: '111-19',
+    });
+    memberCase1 = cloneDeep({
+      ...MOCK_CASE,
+      createdAt: '2019-12-11T15:25:55.006Z',
+      docketNumber: '112-19',
+      leadDocketNumber: '111-19',
+    });
+    memberCase2 = cloneDeep({
+      ...MOCK_CASE,
+      createdAt: '2019-12-11T16:02:31.173Z',
+      docketNumber: '113-19',
+      leadDocketNumber: '111-19',
+    });
+    unconsolidatedCase1 = cloneDeep({
+      ...MOCK_CASE,
+      createdAt: '2020-01-21T16:41:39.474Z',
+      docketNumber: '102-20',
+    });
+    unconsolidatedCase2 = cloneDeep({
+      ...MOCK_CASE,
+      createdAt: '2019-08-16T17:29:10.132Z',
+      docketNumber: '107-19',
+    });
+    unconsolidatedCase3 = cloneDeep({
+      ...MOCK_CASE,
+      createdAt: '2019-03-01T22:53:50.097Z',
+      docketNumber: '103-19',
+    });
+    unconsolidatedClosedCase1 = cloneDeep({
+      ...MOCK_CASE,
+      closedDate: '2019-03-01T22:53:50.097Z',
+      docketNumber: '130-22',
+      status: CASE_STATUS_TYPES.closed,
+    });
+    unconsolidatedClosedCase2 = cloneDeep({
+      ...MOCK_CASE,
+      closedDate: '2018-03-01T22:53:50.097Z',
+      docketNumber: '140-22',
+      status: CASE_STATUS_TYPES.closed,
+    });
 
-  // const consolidatedGroupLeadCase11119 = [leadCase, memberCase1, memberCase2];
+    consolidatedGroupLeadCase11119 = [leadCase, memberCase1, memberCase2];
 
-  beforeAll(() => {
     applicationContext.getCurrentUser.mockResolvedValue({
       userId,
     });
   });
-  describe.only('Consolidated cases', () => {
+  describe('Consolidated cases', () => {
     it('should return the expected associated cases combined with the consolidated group cases for 111-19', async () => {
-      const tempMemberCase1 = cloneDeep({ ...memberCase1, petitioners: [] });
-      const tempLeadCase = cloneDeep({ ...leadCase, petitioners: [] });
-      const tempConsolidatedGroupLeadCase11119 = [
-        tempLeadCase,
-        tempMemberCase1,
-        memberCase2,
-      ];
+      memberCase1.petitioners = [];
+      leadCase.petitioners = [];
 
       applicationContext
         .getPersistenceGateway()
@@ -84,7 +88,7 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          tempConsolidatedGroupLeadCase11119,
+          consolidatedGroupLeadCase11119,
         );
 
       const userCases = await getCasesForUserInteractor(applicationContext);
@@ -135,7 +139,8 @@ describe('getCasesForUserInteractor', () => {
       ];
       applicationContext
         .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValueOnce(consolidatedGroup);
+        .getCasesForUser.mockResolvedValue(consolidatedGroup);
+
       applicationContext
         .getPersistenceGateway()
         .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
@@ -168,7 +173,7 @@ describe('getCasesForUserInteractor', () => {
       ];
       applicationContext
         .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValueOnce([memberCase1]);
+        .getCasesForUser.mockResolvedValue([memberCase1]);
 
       applicationContext
         .getPersistenceGateway()
@@ -202,7 +207,7 @@ describe('getCasesForUserInteractor', () => {
       ];
       applicationContext
         .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValueOnce([leadCase]);
+        .getCasesForUser.mockResolvedValue([leadCase]);
 
       applicationContext
         .getPersistenceGateway()
@@ -260,10 +265,7 @@ describe('getCasesForUserInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValueOnce([
-          leadCase,
-          ...unconsolidatedCases,
-        ]);
+        .getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
 
       applicationContext
         .getPersistenceGateway()
@@ -285,13 +287,8 @@ describe('getCasesForUserInteractor', () => {
     });
 
     it('should not include docket entries for consolidated cases', async () => {
-      const tempMemberCase1 = cloneDeep({ ...memberCase1, petitioners: [] });
-      const tempLeadCase = cloneDeep({ ...leadCase, petitioners: [] });
-      const tempConsolidatedGroupLeadCase11119 = [
-        tempLeadCase,
-        tempMemberCase1,
-        memberCase2,
-      ];
+      memberCase1.petitioners = [];
+      leadCase.petitioners = [];
 
       applicationContext
         .getPersistenceGateway()
@@ -307,7 +304,7 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          tempConsolidatedGroupLeadCase11119,
+          consolidatedGroupLeadCase11119,
         );
 
       const userCases = await getCasesForUserInteractor(applicationContext);

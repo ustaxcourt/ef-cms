@@ -13,7 +13,7 @@ export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
   caseCaption: 'Test Petitioner, Petitioner',
   caseType: CASE_TYPES_MAP.other,
-  // consolidatedCases: [],
+  consolidatedCases: [],
   correspondence: [],
   createdAt: '2018-03-01T21:40:46.415Z',
   docketEntries: MOCK_DOCUMENTS,
