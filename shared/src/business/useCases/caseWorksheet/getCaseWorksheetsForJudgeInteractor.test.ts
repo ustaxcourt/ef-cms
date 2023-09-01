@@ -6,7 +6,7 @@ import { getCaseWorksheetsForJudgeInteractor } from './getCaseWorksheetsForJudge
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCaseWorksheetsForJudgeInteractor', () => {
-  it('should throw an erorr when the user does not have permission to the case worksheet feature', async () => {
+  it('should throw an error when the user does not have permission to the case worksheet feature', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
@@ -14,8 +14,9 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should call persistence method and return all CAV and submitted case worksheets for a judge', async () => {
+  it('should fetch from persistence and return all case worksheets for the provided judge', async () => {
     const TEST_WORKSHEET: RawCaseWorksheet = {
+      caseWorksheetId: '59a01b23-20b6-4313-8f41-6b9774abdf3e',
       docketNumber: '123-45',
       entityName: 'CaseWorksheet',
       finalBriefDueDate: '2023-08-29',
@@ -28,7 +29,6 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
         ...TEST_WORKSHEET,
       },
     ];
-
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
     applicationContext
       .getPersistenceGateway()

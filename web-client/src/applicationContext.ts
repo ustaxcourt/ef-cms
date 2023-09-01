@@ -323,6 +323,7 @@ import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
+import { validateCaseWorksheetInteractor } from '../../shared/src/business/useCases/caseWorksheet/validateCaseWorksheetInteractor';
 import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
 import { validateCreateMessageInteractor } from '../../shared/src/business/useCases/messages/validateCreateMessageInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
@@ -342,7 +343,6 @@ import { validatePetitionInteractor } from '../../shared/src/business/useCases/v
 import { validatePetitionerInformationFormInteractor } from '../../shared/src/business/useCases/validatePetitionerInformationFormInteractor';
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
-import { validatePrimaryIssueInteractor } from '../../shared/src/business/useCases/caseNote/validatePrimaryIssueInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
 import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
@@ -581,6 +581,7 @@ const allUseCases = {
   validateCaseAssociationRequestInteractor,
   validateCaseDeadlineInteractor,
   validateCaseDetailInteractor,
+  validateCaseWorksheetInteractor,
   validateCourtIssuedDocketEntryInteractor,
   validateCreateMessageInteractor,
   validateDocketEntryInteractor,
@@ -600,7 +601,6 @@ const allUseCases = {
   validatePetitionerInformationFormInteractor,
   validatePetitionerInteractor,
   validatePractitionerInteractor,
-  validatePrimaryIssueInteractor,
   validateSearchDeadlinesInteractor,
   validateStampInteractor,
   validateStartCaseWizardInteractor,

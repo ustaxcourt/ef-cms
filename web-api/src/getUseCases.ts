@@ -182,7 +182,7 @@ import { updateCaseDeadlineInteractor } from '../../shared/src/business/useCases
 import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/updateCaseDetailsInteractor';
 import { updateCasePrimaryIssueInteractor } from '../../shared/src/business/useCases/caseWorksheet/updateCasePrimaryIssueInteractor';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor';
-import { updateCaseWorksheetInfoInteractor } from '../../shared/src/business/useCases/caseWorksheet/updateCaseWorksheetInfoInteractor';
+import { updateCaseWorksheetInteractor } from '../../shared/src/business/useCases/caseWorksheet/updateCaseWorksheetInteractor';
 import { updateContactInteractor } from '../../shared/src/business/useCases/updateContactInteractor';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor';
 import { updateCounselOnCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor';
@@ -387,7 +387,7 @@ const useCases = {
   updateCaseDetailsInteractor,
   updateCasePrimaryIssueInteractor,
   updateCaseTrialSortTagsInteractor,
-  updateCaseWorksheetInfoInteractor,
+  updateCaseWorksheetInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
   updateCounselOnCaseInteractor,
