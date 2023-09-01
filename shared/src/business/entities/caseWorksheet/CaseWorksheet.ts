@@ -3,21 +3,25 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 export class CaseWorksheet extends JoiValidationEntity {
+  public caseWorksheetId: string;
   public docketNumber: string;
+  public finalBriefDueDate?: string;
   public primaryIssue?: string;
   public statusOfMatter?: string;
-  public finalBriefDueDate?: string;
 
-  constructor(rawProps) {
+  constructor(rawProps, { applicationContext }) {
     super('CaseWorksheet');
 
+    this.caseWorksheetId =
+      rawProps.caseWorksheetId || applicationContext.getUniqueId();
     this.docketNumber = rawProps.docketNumber;
+    this.finalBriefDueDate = rawProps.finalBriefDueDate;
     this.primaryIssue = rawProps.primaryIssue;
     this.statusOfMatter = rawProps.statusOfMatter;
-    this.finalBriefDueDate = rawProps.finalBriefDueDate;
   }
 
   static VALIDATION_RULES = {
+    caseWorksheetId: JoiValidationConstants.UUID.required(),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
     finalBriefDueDate: JoiValidationConstants.DATE.allow('').optional(),
     primaryIssue: JoiValidationConstants.STRING.optional(), // TODO: should this allow ''?

@@ -11,8 +11,8 @@ export const validatePrimaryIssueAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validatePrimaryIssueInteractor(applicationContext, {
-      primaryIssue,
+    .validateCaseWorksheetInteractor({
+      caseWorksheet: { primaryIssue },
     });
 
   if (!errors) {
