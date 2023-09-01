@@ -33,12 +33,17 @@ export const updateMessageModalAttachmentsAction = ({
       // This is the first attachment, so we should update the subject
       store.set(state.modal.form.subject, documentTitle.slice(0, 250));
     }
-
-    attachments.push({
-      documentId,
-      documentTitle,
-    });
-
+    if (props.action === 'add') {
+      attachments.push({
+        documentId,
+        documentTitle,
+      });
+    } else if (props.action === 'remove') {
+      const foundIndex = attachments.findIndex(
+        attachment => attachment.documentId == props.documentId,
+      );
+      attachments.splice(foundIndex, 1);
+    }
     store.set(state.modal.form.attachments, attachments);
   }
 };

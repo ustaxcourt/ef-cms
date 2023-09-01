@@ -66,6 +66,13 @@ export const MessageModalAttachments = connect(
                         aria-label={`remove ${doc.documentTitle} selection`}
                         className="modal-button-link"
                         icon="times"
+                        style={{ lineHeight: '0', padding: '0' }}
+                        onClick={() => {
+                          updateMessageModalAttachmentsSequence({
+                            action: 'remove',
+                            documentId: doc.documentId,
+                          });
+                        }}
                       >
                         Remove
                       </Button>
@@ -88,6 +95,7 @@ export const MessageModalAttachments = connect(
               name="document"
               onChange={e => {
                 updateMessageModalAttachmentsSequence({
+                  action: 'add',
                   documentId: e.target.value,
                 });
                 updateScreenMetadataSequence({
