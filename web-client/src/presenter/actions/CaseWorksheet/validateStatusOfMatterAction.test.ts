@@ -11,7 +11,7 @@ describe('validateStatusOfMatterAction', () => {
   let successStub;
   let errorStub;
 
-  beforeAll(() => {
+  beforeEach(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -23,11 +23,7 @@ describe('validateStatusOfMatterAction', () => {
     };
   });
 
-  it('should return the success path with the validation key to unset in state when the updated case is valid', async () => {
-    applicationContext
-      .getUseCases()
-      .validateCaseDetailInteractor.mockReturnValue(null);
-
+  it('should use the docket number from props to validate/create a new case worksheet when one does not already exist for the case', async () => {
     await runAction(validateStatusOfMatterAction as any, {
       modules: {
         presenter,
@@ -37,8 +33,30 @@ describe('validateStatusOfMatterAction', () => {
         statusOfMatter: TEST_STATUS_OF_MATTER,
       },
       state: {
-        judgeActivityReportData: {
-          submittedAndCavCasesByJudge: [
+        submittedAndCavCases: {
+          worksheets: [],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateCaseWorksheetInteractor.mock
+        .calls[0][0].caseWorksheet.docketNumber,
+    ).toEqual(TEST_DOCKET_NUMBER);
+  });
+
+  it('should return the success path with the validation key to unset in state when the updated case worksheet is valid', async () => {
+    await runAction(validateStatusOfMatterAction as any, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketNumber: TEST_DOCKET_NUMBER,
+        statusOfMatter: TEST_STATUS_OF_MATTER,
+      },
+      state: {
+        submittedAndCavCases: {
+          worksheets: [
             {
               docketNumber: TEST_DOCKET_NUMBER,
             },
@@ -48,12 +66,11 @@ describe('validateStatusOfMatterAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+      applicationContext.getUseCases().validateCaseWorksheetInteractor.mock
+        .calls[0][0].caseWorksheet,
     ).toMatchObject({
       statusOfMatter: TEST_STATUS_OF_MATTER,
     });
-
     expect(successStub).toHaveBeenCalledWith({
       validationKey: 'statusOfMatter',
     });
@@ -61,11 +78,11 @@ describe('validateStatusOfMatterAction', () => {
   });
 
   it('should return the error path with the error message when the final brief due date is invalid', async () => {
-    const TEST_VALIDATION_ERRORS = { statusOfMatter: 'Enter a valid date' };
+    const TEST_VALIDATION_ERRORS = { finalBriefDueDate: 'Enter a valid date' };
 
     applicationContext
       .getUseCases()
-      .validateCaseDetailInteractor.mockReturnValue(TEST_VALIDATION_ERRORS);
+      .validateCaseWorksheetInteractor.mockReturnValue(TEST_VALIDATION_ERRORS);
 
     await runAction(validateStatusOfMatterAction as any, {
       modules: {
@@ -73,11 +90,11 @@ describe('validateStatusOfMatterAction', () => {
       },
       props: {
         docketNumber: TEST_DOCKET_NUMBER,
-        statusOfMatter: TEST_STATUS_OF_MATTER,
+        finalBriefDueDate: 'abcdef', // Final brief due date should be a date string formatted as 'YYYY-MM-DD'
       },
       state: {
-        judgeActivityReportData: {
-          submittedAndCavCasesByJudge: [
+        submittedAndCavCases: {
+          worksheets: [
             {
               docketNumber: TEST_DOCKET_NUMBER,
             },

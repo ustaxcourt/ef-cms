@@ -7,6 +7,7 @@ export const validateStatusOfMatterAction = async ({
   props,
 }: ActionProps) => {
   const { docketNumber, statusOfMatter } = props;
+
   const caseWorksheets = get(state.submittedAndCavCases.worksheets);
 
   const worksheet = caseWorksheets.find(
@@ -17,7 +18,7 @@ export const validateStatusOfMatterAction = async ({
     .getUseCases()
     .validateCaseWorksheetInteractor({
       caseWorksheet: {
-        ...worksheet!,
+        ...worksheet,
         statusOfMatter,
       },
     });
