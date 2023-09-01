@@ -1,15 +1,16 @@
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setTableItemValidationErrorsAction } from './setTableItemValidationErrorsAction';
 
 describe('setTableItemValidationErrorsAction', () => {
   it('should set error object in state correctly', async () => {
-    const TEST_DOCKET_NUMBER = 'TEST_NUMBER';
     const TEST_ERRORS = {
       testProp: 'value',
     };
+
     const { state } = await runAction(setTableItemValidationErrorsAction, {
       props: {
-        docketNumber: TEST_DOCKET_NUMBER,
+        docketNumber: MOCK_CASE.docketNumber,
         errors: TEST_ERRORS,
       },
       state: {
@@ -18,7 +19,7 @@ describe('setTableItemValidationErrorsAction', () => {
     });
 
     expect(
-      state.validationErrors.submittedCavCasesTable[TEST_DOCKET_NUMBER],
+      state.validationErrors.submittedCavCasesTable[MOCK_CASE.docketNumber],
     ).toEqual(TEST_ERRORS);
   });
 });
