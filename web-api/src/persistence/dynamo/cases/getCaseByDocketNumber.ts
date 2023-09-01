@@ -31,8 +31,9 @@ export const getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  const leadDocketNumber = caseItems.find(caseItem => isCaseItem(caseItem))
-    ?.leadDocketNumber;
+  const leadDocketNumber = caseItems.find((caseItem): caseItem is CaseRecord =>
+    isCaseItem(caseItem),
+  )?.leadDocketNumber;
   let consolidatedCases: ConsolidatedCaseDTO[] = [];
   if (leadDocketNumber) {
     const consolidatedCaseItems = await queryFull<
