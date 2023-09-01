@@ -583,10 +583,6 @@ app.use(logger());
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
   );
-  app.get(
-    '/cases/:docketNumber/consolidated-cases',
-    lambdaWrapper(getConsolidatedCasesByCaseLambda),
-  );
   app.post(
     '/cases/:docketNumber/serve-to-irs',
     lambdaWrapper(serveCaseToIrsLambda),
