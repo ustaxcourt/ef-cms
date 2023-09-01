@@ -59,6 +59,15 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
+                    <div className="grid-col-9">{doc.documentTitle}</div>
+                  </div>
+                </div>
+              );
+            })}
+            {form.draftAttachments.map(doc => {
+              return (
+                <div className="margin-top-1" key={doc.documentId}>
+                  <div className="grid-row">
                     <div className="grid-col-10">{doc.documentTitle}</div>
                     <div className="grid-col-2">
                       <Button

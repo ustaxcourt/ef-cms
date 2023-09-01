@@ -28,6 +28,7 @@ export const setReplyToMessageModalDialogModalStateAction = ({
 
   store.set(state.modal.form, {
     attachments: formattedAttachments,
+    draftAttachments: [],
     parentMessageId: mostRecentMessage.parentMessageId,
     subject: mostRecentMessage.subject,
     to: mostRecentMessage.from,

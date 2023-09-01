@@ -19,6 +19,7 @@ export const messageModalHelper = (
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
   const attachments = get(state.modal.form.attachments);
+  const draftAttachments = get(state.modal.form.draftAttachments);
 
   const { correspondence, draftDocuments, formattedDocketEntries } =
     applicationContext
@@ -37,7 +38,7 @@ export const messageModalHelper = (
     entry.title = entry.documentTitle || entry.documentType;
   });
 
-  const currentAttachmentCount = attachments.length;
+  const currentAttachmentCount = attachments.length + draftAttachments.length;
   const canAddDocument =
     currentAttachmentCount < CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT;
   const shouldShowAddDocumentForm =
@@ -84,6 +85,6 @@ export const messageModalHelper = (
     sectionListWithoutSupervisorRole,
     showAddDocumentForm: canAddDocument && shouldShowAddDocumentForm,
     showAddMoreDocumentsButton: canAddDocument && !shouldShowAddDocumentForm,
-    showMessageAttachments: attachments.length > 0,
+    showMessageAttachments: currentAttachmentCount > 0,
   };
 };

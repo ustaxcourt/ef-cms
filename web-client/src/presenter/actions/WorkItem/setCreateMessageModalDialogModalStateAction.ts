@@ -12,5 +12,6 @@ export const setCreateMessageModalDialogModalStateAction = ({
   store.set(state.modal.validationErrors, {});
   store.set(state.modal.form, {
     attachments: [],
+    draftAttachments: [],
   });
 };

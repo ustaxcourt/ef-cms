@@ -27,4 +27,6 @@ export const updateMessageModalAfterQCAction = ({
       documentTitle,
     },
   ]);
+
+  store.set(state.modal.form.draftAttachments, []);
 };
