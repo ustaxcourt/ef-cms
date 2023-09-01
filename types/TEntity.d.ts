@@ -23,7 +23,7 @@ type TPetitioner = {
   sealedAndUnavailable: boolean;
   serviceIndicator: string;
   state: string;
-  title: string;
+  title?: string;
 };
 
 type TCaseNote = {
