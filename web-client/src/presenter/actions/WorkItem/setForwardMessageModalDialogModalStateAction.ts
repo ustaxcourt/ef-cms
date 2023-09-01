@@ -28,6 +28,7 @@ export const setForwardMessageModalDialogModalStateAction = ({
 
   store.set(state.modal.form, {
     attachments: formattedAttachments,
+    draftAttachments: [],
     from: mostRecentMessage.from,
     fromSection: mostRecentMessage.fromSection,
     fromUserId: mostRecentMessage.fromUserId,

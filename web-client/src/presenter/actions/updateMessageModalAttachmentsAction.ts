@@ -13,7 +13,7 @@ export const updateMessageModalAttachmentsAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { attachments } = get(state.modal.form);
+  const { attachments, draftAttachments } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
 
@@ -34,16 +34,17 @@ export const updateMessageModalAttachmentsAction = ({
       store.set(state.modal.form.subject, documentTitle.slice(0, 250));
     }
     if (props.action === 'add') {
-      attachments.push({
+      draftAttachments.push({
         documentId,
         documentTitle,
       });
     } else if (props.action === 'remove') {
-      const foundIndex = attachments.findIndex(
+      const foundIndex = draftAttachments.findIndex(
         attachment => attachment.documentId == props.documentId,
       );
-      attachments.splice(foundIndex, 1);
+      draftAttachments.splice(foundIndex, 1);
     }
-    store.set(state.modal.form.attachments, attachments);
+
+    store.set(state.modal.form.draftAttachments, draftAttachments);
   }
 };

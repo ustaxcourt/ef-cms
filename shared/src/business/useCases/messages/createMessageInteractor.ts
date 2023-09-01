@@ -6,24 +6,12 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * creates a message on a case
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.message the message text
- * @param {string} providers.subject the message subject
- * @param {string} providers.toSection the section of the user receiving the message
- * @param {string} providers.toUserId the user id of the user receiving the message
- * @returns {object} the created message
- */
 export const createMessageInteractor = async (
   applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
+    draftAttachments,
     message,
     subject,
     toSection,
@@ -31,6 +19,7 @@ export const createMessageInteractor = async (
   }: {
     attachments: any;
     docketNumber: string;
+    draftAttachments: any;
     message: string;
     subject: string;
     toSection: string;
@@ -55,6 +44,8 @@ export const createMessageInteractor = async (
   const toUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
+
+  attachments = [...attachments, ...draftAttachments];
 
   const validatedRawMessage = new Message(
     {
