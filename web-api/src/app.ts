@@ -72,7 +72,6 @@ import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLamb
 import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
-import { getConsolidatedCasesByCaseLambda } from './cases/getConsolidatedCasesByCaseLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseInventoryReportLambda } from './reports/getCustomCaseInventoryReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './documents/getDocumentContentsForDocketEntryLambda';
