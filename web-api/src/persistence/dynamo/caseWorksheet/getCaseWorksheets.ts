@@ -23,9 +23,3 @@ export const getCaseWorksheets = async (
 
   return caseWorksheets;
 };
-
-// {
-//   pk: 'case|<DOCKET_NUMBER>',
-//   sk: 'case-worksheet|<CASE_WORKSHEET_ID>'
-//   gsi1pk: 'judge-case-worksheet|<JUDGE_USER_ID>'
-// }

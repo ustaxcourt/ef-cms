@@ -1,18 +1,10 @@
-import {
-  CaseWorksheet,
-  RawCaseWorksheet,
-} from '../../entities/caseWorksheet/CaseWorksheet';
+import { CaseWorksheet } from '../../entities/caseWorksheet/CaseWorksheet';
 
-export const validateCaseWorksheetInteractor = ({
-  caseWorksheet,
-}: {
-  caseWorksheet: RawCaseWorksheet;
-}) => {
+export const validateCaseWorksheetInteractor = ({ caseWorksheet }) => {
   const errors = new CaseWorksheet(
     caseWorksheet,
   ).getFormattedValidationErrors();
 
   if (!errors) return null;
-
   return errors;
 };

@@ -6,9 +6,11 @@ export const updateFinalBriefDueDateAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .updateCaseWorksheetInfoInteractor(applicationContext, {
+    .updateCaseWorksheetInteractor(applicationContext, {
       docketNumber,
-      finalBriefDueDate,
+      updatedProps: {
+        finalBriefDueDate,
+      },
     });
 
   return { updatedCase };

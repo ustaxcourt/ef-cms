@@ -8,14 +8,12 @@ export const validateBriefDueDateAction = async ({
 }: ActionProps) => {
   console.log('validateBriefDueDateAction');
   const { docketNumber, finalBriefDueDate } = props;
-  const { submittedAndCavCasesByJudge } = get(
-    state.judgeActivityReport.judgeActivityReportData,
-  );
-  const caseToValidate = submittedAndCavCasesByJudge!.find(
-    aCase => aCase.docketNumber === docketNumber,
-  );
 
-  console.log('caseToValidate', caseToValidate);
+  const caseWorksheets = get(state.submittedAndCavCases.worksheets);
+
+  const worksheet = caseWorksheets.find(
+    ws => ws.docketNumber === docketNumber,
+  ) || { docketNumber };
 
   let computedDate = '';
   if (finalBriefDueDate) {
@@ -23,25 +21,14 @@ export const validateBriefDueDateAction = async ({
     computedDate = `${year}-${month}-${day}`;
   }
 
-  console.log('computedDate', computedDate);
-  console.log('caseToValidate.caseType', caseToValidate?.caseType);
-
-
-	//TODO: create new interactor to validate new entity to be saved in DB
-		//biref due date
-		//status of matter
-		//primary issue
   const errors = await applicationContext
     .getUseCases()
-    .validateCaseDetailInteractor(applicationContext, {
-      caseDetail: {
-        ...caseToValidate,
+    .validateCaseWorksheetInteractor({
+      caseWorksheet: {
+        ...worksheet!,
         finalBriefDueDate: computedDate,
       },
-      useCaseEntity: true,
     });
-
-  console.log('errors', errors);
 
   if (!errors) {
     return path.success({

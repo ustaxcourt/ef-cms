@@ -1,13 +1,15 @@
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type ComputedSubmittedAndCavCase = RawCase & {
-  consolidatedIconTooltipText: string;
-  isLeadCase: boolean;
-  inConsolidatedGroup: boolean;
-  formattedCaseCount: number;
-  daysElapsedSinceLastStatusChange: number;
-  formattedSubmittedCavStatusChangedDate: string;
-};
+type ComputedSubmittedAndCavCase = RawCase &
+  RawCaseWorksheet & {
+    consolidatedIconTooltipText: string;
+    isLeadCase: boolean;
+    inConsolidatedGroup: boolean;
+    formattedCaseCount: number;
+    daysElapsedSinceLastStatusChange: number;
+    formattedSubmittedCavStatusChangedDate: string;
+  };
 interface ISubmittedAndCavCasesForJudgeHelper {
   filteredSubmittedAndCavCasesByJudge: ComputedSubmittedAndCavCase[];
 }
@@ -22,7 +24,7 @@ export const submittedAndCavCasesForJudgeHelper = (
     get(state.judgeActivityReport.judgeActivityReportData);
 
   const { worksheets = [] } = get(state.submittedAndCavCases);
-  const worksheetsObj = {};
+  const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
   worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
 
   const currentDateInIsoFormat: string = applicationContext

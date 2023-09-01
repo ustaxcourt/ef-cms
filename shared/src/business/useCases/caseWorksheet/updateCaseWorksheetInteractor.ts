@@ -1,7 +1,4 @@
-import {
-  CaseWorksheet,
-  RawCaseWorksheet,
-} from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -10,7 +7,10 @@ import { UnauthorizedError } from '../../../errors/errors';
 
 export const updateCaseWorksheetInteractor = async (
   applicationContext: IApplicationContext,
-  { updatedCaseWorksheet }: { updatedCaseWorksheet: RawCaseWorksheet },
+  {
+    docketNumber,
+    updatedProps,
+  }: { docketNumber: string; updatedProps: { [key: string]: string } },
 ): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
@@ -18,13 +18,21 @@ export const updateCaseWorksheetInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseWorksheet = new CaseWorksheet(updatedCaseWorksheet, {
-    applicationContext,
+  const caseWorksheet = (await applicationContext
+    .getPersistenceGateway()
+    .getCaseWorksheet({
+      applicationContext,
+      docketNumber,
+    })) || { docketNumber };
+
+  const caseWorksheetEntity = new CaseWorksheet({
+    ...caseWorksheet,
+    ...updatedProps,
   }).validate();
 
   await applicationContext.getPersistenceGateway().updateCaseWorksheet({
     applicationContext,
-    caseWorksheet: caseWorksheet.toRawObject(),
+    caseWorksheet: caseWorksheetEntity.toRawObject(),
     judgeUserId: user.userId,
   });
 };
