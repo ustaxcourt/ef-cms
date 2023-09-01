@@ -14,8 +14,6 @@ interface ISubmittedAndCavCasesForJudgeHelper {
   filteredSubmittedAndCavCasesByJudge: ComputedSubmittedAndCavCase[];
 }
 
-//TODO: fetch array of worksheets
-// join them
 export const submittedAndCavCasesForJudgeHelper = (
   get: any,
   applicationContext: IApplicationContext,
