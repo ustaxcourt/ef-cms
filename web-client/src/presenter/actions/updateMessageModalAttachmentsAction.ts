@@ -29,7 +29,7 @@ export const updateMessageModalAttachmentsAction = ({
       .getUtilities()
       .getDescriptionDisplay(document);
 
-    if (attachments.length === 0) {
+    if (attachments.length + draftAttachments.length === 0) {
       // This is the first attachment, so we should update the subject
       store.set(state.modal.form.subject, documentTitle.slice(0, 250));
     }
