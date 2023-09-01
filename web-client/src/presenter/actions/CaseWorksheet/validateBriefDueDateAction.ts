@@ -6,9 +6,7 @@ export const validateBriefDueDateAction = async ({
   path,
   props,
 }: ActionProps) => {
-  console.log('validateBriefDueDateAction');
   const { docketNumber, finalBriefDueDate } = props;
-
   const caseWorksheets = get(state.submittedAndCavCases.worksheets);
 
   const worksheet = caseWorksheets.find(

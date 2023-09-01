@@ -7,21 +7,19 @@ export const validateStatusOfMatterAction = async ({
   props,
 }: ActionProps) => {
   const { docketNumber, statusOfMatter } = props;
-  const { submittedAndCavCasesByJudge } = get(
-    state.judgeActivityReport.judgeActivityReportData,
-  );
-  const caseToValidate = submittedAndCavCasesByJudge.find(
-    aCase => aCase.docketNumber === docketNumber,
-  );
+  const caseWorksheets = get(state.submittedAndCavCases.worksheets);
+
+  const worksheet = caseWorksheets.find(
+    ws => ws.docketNumber === docketNumber,
+  ) || { docketNumber };
 
   const errors = await applicationContext
     .getUseCases()
-    .validateCaseDetailInteractor(applicationContext, {
-      caseDetail: {
-        ...caseToValidate,
+    .validateCaseWorksheetInteractor({
+      caseWorksheet: {
+        ...worksheet!,
         statusOfMatter,
       },
-      useCaseEntity: true,
     });
 
   if (!errors) {

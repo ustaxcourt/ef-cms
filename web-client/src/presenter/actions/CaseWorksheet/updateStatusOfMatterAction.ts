@@ -4,7 +4,7 @@ export const updateStatusOfMatterAction = async ({
 }: ActionProps) => {
   const { docketNumber, statusOfMatter } = props;
 
-  const updatedCase = await applicationContext
+  const updatedWorksheet = await applicationContext
     .getUseCases()
     .updateCaseWorksheetInteractor(applicationContext, {
       docketNumber,
@@ -13,5 +13,5 @@ export const updateStatusOfMatterAction = async ({
       },
     });
 
-  return { updatedCase };
+  return { updatedWorksheet };
 };

@@ -4,7 +4,7 @@ export const updateFinalBriefDueDateAction = async ({
 }: ActionProps) => {
   const { docketNumber, finalBriefDueDate } = props;
 
-  const updatedCase = await applicationContext
+  const caseWorksheet = await applicationContext
     .getUseCases()
     .updateCaseWorksheetInteractor(applicationContext, {
       docketNumber,
@@ -13,5 +13,5 @@ export const updateFinalBriefDueDateAction = async ({
       },
     });
 
-  return { updatedCase };
+  return { caseWorksheet };
 };

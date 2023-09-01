@@ -1,4 +1,7 @@
-import { CaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import {
+  CaseWorksheet,
+  RawCaseWorksheet,
+} from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -11,7 +14,7 @@ export const updateCaseWorksheetInteractor = async (
     docketNumber,
     updatedProps,
   }: { docketNumber: string; updatedProps: { [key: string]: string } },
-): Promise<void> => {
+): Promise<RawCaseWorksheet> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_WORKSHEET)) {
@@ -35,4 +38,6 @@ export const updateCaseWorksheetInteractor = async (
     caseWorksheet: caseWorksheetEntity.toRawObject(),
     judgeUserId: user.userId,
   });
+
+  return caseWorksheetEntity.toRawObject();
 };

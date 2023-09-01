@@ -5,18 +5,18 @@ export const setUpdatedCaseInStateAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { updatedCase } = props;
+  const { updatedWorksheet } = props;
 
-  const { submittedAndCavCasesByJudge } = get(
-    state.judgeActivityReport.judgeActivityReportData,
+  const worksheets = get(state.submittedAndCavCases.worksheets);
+
+  const index = worksheets.findIndex(
+    ws => ws.docketNumber === updatedWorksheet.docketNumber,
   );
 
-  const index = submittedAndCavCasesByJudge!.findIndex(
-    aCase => aCase.docketNumber === updatedCase.docketNumber,
-  );
-
-  store.set(
-    state.judgeActivityReportData.submittedAndCavCasesByJudge[index],
-    updatedCase,
-  );
+  if (index !== -1) {
+    store.set(state.submittedAndCavCases.worksheets[index], updatedWorksheet);
+  } else {
+    worksheets.push(updatedWorksheet);
+    store.set(state.submittedAndCavCases.worksheets, worksheets);
+  }
 };
