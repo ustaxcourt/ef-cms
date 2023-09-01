@@ -14,7 +14,7 @@ export const updateCaseWorksheet = async ({
     Item: {
       gsi1pk: `judge-case-worksheet|${judgeUserId}`,
       pk: `case|${caseWorksheet.docketNumber}`,
-      sk: `case-worksheet|${caseWorksheet.caseWorksheetId}`,
+      sk: `case-worksheet|${caseWorksheet.docketNumber}`,
       ...caseWorksheet,
     },
     applicationContext,

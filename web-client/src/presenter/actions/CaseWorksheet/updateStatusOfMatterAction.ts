@@ -6,9 +6,11 @@ export const updateStatusOfMatterAction = async ({
 
   const updatedCase = await applicationContext
     .getUseCases()
-    .updateCaseWorksheetInfoInteractor(applicationContext, {
+    .updateCaseWorksheetInteractor(applicationContext, {
       docketNumber,
-      statusOfMatter,
+      updatedProps: {
+        statusOfMatter,
+      },
     });
 
   return { updatedCase };
