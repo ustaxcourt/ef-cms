@@ -19,6 +19,7 @@ export const forwardMessageInteractor = async (
   {
     attachments,
     docketNumber,
+    draftAttachments,
     message,
     parentMessageId,
     subject,
@@ -27,6 +28,7 @@ export const forwardMessageInteractor = async (
   }: {
     attachments: any;
     docketNumber: string;
+    draftAttachments: any;
     message: string;
     parentMessageId: string;
     subject: string;
@@ -37,6 +39,7 @@ export const forwardMessageInteractor = async (
   return await replyToMessage(applicationContext, {
     attachments,
     docketNumber,
+    draftAttachments,
     message,
     parentMessageId,
     subject,
