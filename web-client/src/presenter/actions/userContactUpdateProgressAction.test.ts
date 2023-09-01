@@ -40,7 +40,7 @@ describe('userContactUpdateProgressAction', () => {
     });
 
     expect(result.state.userContactEditProgress).toEqual({
-      completedCases: 100,
+      completedCases: 3,
       totalCases: 15,
     });
   });
