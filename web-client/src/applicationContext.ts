@@ -183,7 +183,6 @@ import {
   getJudgesChambers,
 } from './business/chambers/getJudgesChambers';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
-import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConstants } from './getConstants';
 import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
 import { getDocument } from '@web-client/persistence/s3/getDocument';
@@ -450,7 +449,6 @@ const allUseCases = {
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
-  getConsolidatedCasesByCaseInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
