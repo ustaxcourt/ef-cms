@@ -111,6 +111,10 @@ describe('updateUserContactInformationInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
+      .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
+
+    applicationContext
+      .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
     applicationContext
