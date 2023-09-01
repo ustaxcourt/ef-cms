@@ -7,8 +7,6 @@ export const getSubmittedCavWorksheetsByJudgeAction = async ({
     .getUseCases()
     .getCaseWorksheetsForJudgeInteractor(applicationContext);
 
-  console.log('worksheets', worksheets);
-
   return {
     worksheets,
   };

@@ -1,9 +1,9 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setOpenDeleteCasePrimaryIssueModalStateAction } from '../actions/CaseWorksheet/setOpenDeleteCasePrimaryIssueModalStateAction';
+import { setDeletePrimaryIssueModalStateAction } from '@web-client/presenter/actions/CaseWorksheet/setDeletePrimaryIssueModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
-export const openDeleteCasePrimaryIssueSequence = [
+export const openDeletePrimaryIssueSequence = [
   clearModalStateAction,
-  setOpenDeleteCasePrimaryIssueModalStateAction,
+  setDeletePrimaryIssueModalStateAction,
   setShowModalFactoryAction('DeletePrimaryIssueModal'),
 ];

@@ -163,7 +163,6 @@ import { unsealDocketEntryLambda } from './documents/unsealDocketEntryLambda';
 import { updateCaseContextLambda } from './cases/updateCaseContextLambda';
 import { updateCaseDeadlineLambda } from './caseDeadline/updateCaseDeadlineLambda';
 import { updateCaseDetailsLambda } from './cases/updateCaseDetailsLambda';
-import { updateCasePrimaryIssueLambda } from './trialSessions/updateCasePrimaryIssueLambda';
 import { updateCaseTrialSortTagsLambda } from './cases/updateCaseTrialSortTagsLambda';
 import { updateCaseWorksheetInfoLambda } from './trialSessions/updateCaseWorksheetInfoLambda';
 import { updateContactLambda } from './cases/updateContactLambda';
@@ -835,10 +834,6 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
   );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
-  app.post(
-    '/update-case-primary-issue/:docketNumber',
-    lambdaWrapper(updateCasePrimaryIssueLambda),
-  );
   app.post(
     '/cases/:docketNumber/case-worksheet',
     lambdaWrapper(updateCaseWorksheetInfoLambda),

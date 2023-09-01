@@ -286,7 +286,6 @@ import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocket
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
-import { updateCasePrimaryIssueInteractor } from '../../shared/src/proxies/caseWorksheet/updateCasePrimaryIssueProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCaseWorksheetInteractor } from '../../shared/src/proxies/caseWorksheet/updateCaseWorksheetProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
@@ -546,7 +545,6 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
-  updateCasePrimaryIssueInteractor,
   updateCaseTrialSortTagsInteractor,
   updateCaseWorksheetInteractor,
   updateContactInteractor,

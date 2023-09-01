@@ -344,7 +344,7 @@ export const baseState = {
   modal: {
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  },
+  } as Record<string, string | undefined>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,
