@@ -44,7 +44,7 @@ describe('createUserInteractorLocal', () => {
           Value: userId,
         },
       ],
-      Username: userId,
+      Username: email,
     };
 
     const result = await createUserInteractorLocal(applicationContext, {
