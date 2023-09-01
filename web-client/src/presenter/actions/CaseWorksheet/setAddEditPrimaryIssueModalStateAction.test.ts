@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setAddEditPrimaryIssueModalStateAction } from './setAddEditPrimaryIssueModalStateAction';
+import { setAddEditPrimaryIssueModalStateAction } from '@web-client/presenter/actions/CaseWorksheet/setAddEditPrimaryIssueModalStateAction';
 
 describe('setAddEditPrimaryIssueModalStateAction', () => {
   presenter.providers.applicationContext = applicationContext;

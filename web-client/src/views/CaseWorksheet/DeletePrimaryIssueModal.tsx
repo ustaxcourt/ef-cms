@@ -15,9 +15,9 @@ export const DeletePrimaryIssueModal = connect(
         cancelLabel="No, Cancel"
         confirmLabel="Yes, Delete"
         preventCancelOnBlur={true}
-        title="Are You Sure You Want to Delete This Note?"
+        title="Are You Sure You Want to Delete This Primary Issue?"
         onCancelSequence="clearModalSequence"
-        onConfirmSequence="deleteCasePrimaryIssueSequence"
+        onConfirmSequence="deletePrimaryIssueSequence"
       >
         <p>This action cannot be undone.</p>
       </ConfirmModal>

@@ -13,7 +13,7 @@ export const updateCaseWorksheetInteractor = async (
   {
     docketNumber,
     updatedProps,
-  }: { docketNumber: string; updatedProps: Record<string, string> },
+  }: { docketNumber: string; updatedProps: Record<string, string | undefined> },
 ): Promise<RawCaseWorksheet> => {
   const user = applicationContext.getCurrentUser();
 

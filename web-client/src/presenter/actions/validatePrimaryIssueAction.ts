@@ -5,14 +5,12 @@ export const validatePrimaryIssueAction = ({
   get,
   path,
 }: ActionProps) => {
-  const primaryIssue = {
-    ...get(state.modal),
-  };
+  const { docketNumber, primaryIssue } = get(state.modal);
 
   const errors = applicationContext
     .getUseCases()
     .validateCaseWorksheetInteractor({
-      caseWorksheet: { primaryIssue },
+      caseWorksheet: { docketNumber, primaryIssue },
     });
 
   if (!errors) {

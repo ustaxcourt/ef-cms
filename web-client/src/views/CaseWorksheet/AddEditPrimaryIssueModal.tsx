@@ -10,7 +10,7 @@ export const AddEditPrimaryIssueModal = connect(
     modal: state.modal,
     validationErrors: state.validationErrors,
   },
-  function AddEditSessionNoteModal({ modal, validationErrors }) {
+  function AddEditPrimaryIssueModal({ modal, validationErrors }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
@@ -19,20 +19,21 @@ export const AddEditPrimaryIssueModal = connect(
         preventCancelOnBlur={true}
         title="Add/Edit Primary Issue"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updateCasePrimaryIssueSequence"
+        onConfirmSequence="updatePrimaryIssueSequence"
       >
         <h5 className="margin-bottom-4">{modal.heading}</h5>
+
         <FormGroup
           className="margin-bottom-2"
-          errorText={validationErrors.notes || validationErrors.caseNote}
+          errorText={validationErrors.primaryIssue}
         >
-          <label className="usa-label" htmlFor="case-notes">
+          <label className="usa-label" htmlFor="primary-issue">
             {modal.notesLabel}
           </label>
           <BindedTextarea
             aria-label="notes"
-            bind="modal.notes"
-            id="case-notes"
+            bind="modal.primaryIssue"
+            id="primary-issue"
           />
         </FormGroup>
       </ConfirmModal>

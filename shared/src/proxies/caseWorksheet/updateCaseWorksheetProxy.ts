@@ -2,14 +2,17 @@ import { post } from '../requests';
 
 export const updateCaseWorksheetInteractor = (
   applicationContext,
-  body: {
+  {
+    docketNumber,
+    updatedProps,
+  }: {
     docketNumber: string;
-    updatedProps: { [key: string]: string };
+    updatedProps: Record<string, string | undefined>;
   },
 ) => {
   return post({
     applicationContext,
-    body,
-    endpoint: `/cases/${body.docketNumber}/case-worksheet`,
+    body: { docketNumber, updatedProps },
+    endpoint: `/cases/${docketNumber}/case-worksheet`,
   });
 };
