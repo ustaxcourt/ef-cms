@@ -414,7 +414,7 @@ export const baseState = {
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
-  validationErrors: {},
+  validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},
