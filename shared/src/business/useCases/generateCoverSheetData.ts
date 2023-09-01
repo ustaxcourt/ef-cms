@@ -18,6 +18,10 @@ export const formatCaseTitle = ({
   applicationContext,
   caseEntity,
   useInitialData,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: Case;
+  useInitialData?: boolean;
 }) => {
   const caseCaption = useInitialData
     ? caseEntity.initialCaption
