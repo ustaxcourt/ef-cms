@@ -16,7 +16,8 @@ describe('updateCaseWorksheetInteractor', () => {
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
-        updatedCaseWorksheet: mockCaseWorksheet,
+        docketNumber: mockCaseWorksheet.docketNumber,
+        updatedProps: {},
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -26,33 +27,39 @@ describe('updateCaseWorksheetInteractor', () => {
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
-        updatedCaseWorksheet: {
-          ...mockCaseWorksheet,
-          finalBriefDueDate: 'abc',
-        }, // finalBriefDueDate should be a date formatted as YYYY-MM-DD
+        docketNumber: mockCaseWorksheet.docketNumber,
+        updatedProps: {
+          finalBriefDueDate: 'abc', // finalBriefDueDate should be a date formatted as YYYY-MM-DD
+        },
       }),
     ).rejects.toThrow(InvalidEntityError);
   });
 
-  it('should persist the case worksheet when the updates are valid', async () => {
+  it('should persist and return the updated case worksheet when the updates are valid', async () => {
+    const mockFinalBriefDueDate = '2023-08-29';
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
 
-    await updateCaseWorksheetInteractor(applicationContext, {
-      updatedCaseWorksheet: mockCaseWorksheet,
+    const result = await updateCaseWorksheetInteractor(applicationContext, {
+      docketNumber: mockCaseWorksheet.docketNumber,
+      updatedProps: {
+        finalBriefDueDate: mockFinalBriefDueDate,
+      },
     });
 
+    const expectedUpdatedCaseWorksheet = {
+      ...mockCaseWorksheet,
+      finalBriefDueDate: mockFinalBriefDueDate,
+    };
     expect(
       applicationContext.getPersistenceGateway().updateCaseWorksheet,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
-      caseWorksheet: {
-        ...mockCaseWorksheet,
-        caseWorksheetId: expect.anything(),
-        entityName: 'CaseWorksheet',
-        finalBriefDueDate: undefined,
-        statusOfMatter: undefined,
-      },
+      caseWorksheet: expectedUpdatedCaseWorksheet,
       judgeUserId: judgeUser.userId,
     });
+    expect(result).toEqual(expectedUpdatedCaseWorksheet);
   });
 });
