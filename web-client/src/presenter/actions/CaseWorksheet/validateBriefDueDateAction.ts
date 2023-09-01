@@ -5,13 +5,14 @@ export const validateBriefDueDateAction = async ({
   get,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{ docketNumber: string; finalBriefDueDate: string }>) => {
   const { docketNumber, finalBriefDueDate } = props;
-  const caseWorksheets = get(state.submittedAndCavCases.worksheets);
 
-  const worksheet = caseWorksheets.find(
-    ws => ws.docketNumber === docketNumber,
-  ) || { docketNumber };
+  const { worksheets } = get(state.submittedAndCavCases);
+
+  const worksheet = worksheets.find(ws => ws.docketNumber === docketNumber) || {
+    docketNumber,
+  };
 
   let computedDate = '';
   if (finalBriefDueDate) {

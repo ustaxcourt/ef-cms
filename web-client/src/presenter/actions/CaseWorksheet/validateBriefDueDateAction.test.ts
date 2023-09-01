@@ -1,16 +1,16 @@
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateBriefDueDateAction } from './validateBriefDueDateAction';
 
 describe('validateBriefDueDateAction', () => {
-  const TEST_DOCKET_NUMBER = '999-99';
   const TEST_BRIEF_DUE_DATE = '08/28/2023';
 
   let successStub;
   let errorStub;
 
-  beforeAll(() => {
+  beforeEach(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
 
@@ -22,24 +22,46 @@ describe('validateBriefDueDateAction', () => {
     };
   });
 
+  it('should use the docket number from props to validate/create a new case worksheet when one does not already exist for the case', async () => {
+    await runAction(validateBriefDueDateAction as any, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketNumber: MOCK_CASE.docketNumber,
+        finalBriefDueDate: TEST_BRIEF_DUE_DATE,
+      },
+      state: {
+        submittedAndCavCases: {
+          worksheets: [],
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateCaseWorksheetInteractor.mock
+        .calls[0][0].caseWorksheet.docketNumber,
+    ).toEqual(MOCK_CASE.docketNumber);
+  });
+
   it('should return the success path with the validation key to unset in state when the updated case is valid', async () => {
     applicationContext
       .getUseCases()
-      .validateCaseDetailInteractor.mockReturnValue(null);
+      .validateCaseWorksheetInteractor.mockReturnValue(null);
 
     await runAction(validateBriefDueDateAction as any, {
       modules: {
         presenter,
       },
       props: {
-        docketNumber: TEST_DOCKET_NUMBER,
+        docketNumber: MOCK_CASE.docketNumber,
         finalBriefDueDate: TEST_BRIEF_DUE_DATE,
       },
       state: {
-        judgeActivityReportData: {
-          submittedAndCavCasesByJudge: [
+        submittedAndCavCases: {
+          worksheets: [
             {
-              docketNumber: TEST_DOCKET_NUMBER,
+              docketNumber: MOCK_CASE.docketNumber,
             },
           ],
         },
@@ -47,12 +69,11 @@ describe('validateBriefDueDateAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().validateCaseDetailInteractor.mock
-        .calls[0][1].caseDetail,
+      applicationContext.getUseCases().validateCaseWorksheetInteractor.mock
+        .calls[0][0].caseWorksheet,
     ).toMatchObject({
       finalBriefDueDate: '2023-08-28',
     });
-
     expect(successStub).toHaveBeenCalledWith({
       finalBriefDueDate: '2023-08-28',
       validationKey: 'finalBriefDueDate',
@@ -65,21 +86,21 @@ describe('validateBriefDueDateAction', () => {
 
     applicationContext
       .getUseCases()
-      .validateCaseDetailInteractor.mockReturnValue(TEST_VALIDATION_ERRORS);
+      .validateCaseWorksheetInteractor.mockReturnValue(TEST_VALIDATION_ERRORS);
 
     await runAction(validateBriefDueDateAction as any, {
       modules: {
         presenter,
       },
       props: {
-        docketNumber: TEST_DOCKET_NUMBER,
+        docketNumber: MOCK_CASE.docketNumber,
         finalBriefDueDate: TEST_BRIEF_DUE_DATE,
       },
       state: {
-        judgeActivityReportData: {
-          submittedAndCavCasesByJudge: [
+        submittedAndCavCases: {
+          worksheets: [
             {
-              docketNumber: TEST_DOCKET_NUMBER,
+              docketNumber: MOCK_CASE.docketNumber,
             },
           ],
         },

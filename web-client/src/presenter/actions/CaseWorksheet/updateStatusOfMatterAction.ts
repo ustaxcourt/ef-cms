@@ -1,7 +1,10 @@
 export const updateStatusOfMatterAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps<{
+  docketNumber: string;
+  statusOfMatter: string;
+}>) => {
   const { docketNumber, statusOfMatter } = props;
 
   const updatedWorksheet = await applicationContext

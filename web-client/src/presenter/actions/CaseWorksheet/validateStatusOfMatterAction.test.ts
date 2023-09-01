@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
@@ -5,7 +6,6 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateStatusOfMatterAction } from './validateStatusOfMatterAction';
 
 describe('validateStatusOfMatterAction', () => {
-  const TEST_DOCKET_NUMBER = '999-99';
   const TEST_STATUS_OF_MATTER = STATUS_OF_MATTER_OPTIONS[0];
 
   let successStub;
@@ -29,7 +29,7 @@ describe('validateStatusOfMatterAction', () => {
         presenter,
       },
       props: {
-        docketNumber: TEST_DOCKET_NUMBER,
+        docketNumber: MOCK_CASE.docketNumber,
         statusOfMatter: TEST_STATUS_OF_MATTER,
       },
       state: {
@@ -42,7 +42,7 @@ describe('validateStatusOfMatterAction', () => {
     expect(
       applicationContext.getUseCases().validateCaseWorksheetInteractor.mock
         .calls[0][0].caseWorksheet.docketNumber,
-    ).toEqual(TEST_DOCKET_NUMBER);
+    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should return the success path with the validation key to unset in state when the updated case worksheet is valid', async () => {
@@ -51,14 +51,14 @@ describe('validateStatusOfMatterAction', () => {
         presenter,
       },
       props: {
-        docketNumber: TEST_DOCKET_NUMBER,
+        docketNumber: MOCK_CASE.docketNumber,
         statusOfMatter: TEST_STATUS_OF_MATTER,
       },
       state: {
         submittedAndCavCases: {
           worksheets: [
             {
-              docketNumber: TEST_DOCKET_NUMBER,
+              docketNumber: MOCK_CASE.docketNumber,
             },
           ],
         },
@@ -89,14 +89,14 @@ describe('validateStatusOfMatterAction', () => {
         presenter,
       },
       props: {
-        docketNumber: TEST_DOCKET_NUMBER,
+        docketNumber: MOCK_CASE.docketNumber,
         finalBriefDueDate: 'abcdef', // Final brief due date should be a date string formatted as 'YYYY-MM-DD'
       },
       state: {
         submittedAndCavCases: {
           worksheets: [
             {
-              docketNumber: TEST_DOCKET_NUMBER,
+              docketNumber: MOCK_CASE.docketNumber,
             },
           ],
         },
