@@ -13,7 +13,7 @@ export const updateCaseWorksheetInteractor = async (
   {
     docketNumber,
     updatedProps,
-  }: { docketNumber: string; updatedProps: { [key: string]: string } },
+  }: { docketNumber: string; updatedProps: Record<string, string> },
 ): Promise<RawCaseWorksheet> => {
   const user = applicationContext.getCurrentUser();
 
@@ -21,16 +21,17 @@ export const updateCaseWorksheetInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseWorksheet = (await applicationContext
+  const caseWorksheet = await applicationContext
     .getPersistenceGateway()
     .getCaseWorksheet({
       applicationContext,
       docketNumber,
-    })) || { docketNumber };
+    });
 
   const caseWorksheetEntity = new CaseWorksheet({
     ...caseWorksheet,
     ...updatedProps,
+    docketNumber,
   }).validate();
 
   await applicationContext.getPersistenceGateway().updateCaseWorksheet({
