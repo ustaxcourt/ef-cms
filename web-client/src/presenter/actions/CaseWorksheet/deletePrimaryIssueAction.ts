@@ -4,7 +4,6 @@ export const deletePrimaryIssueAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  console.log('hey im going to delete');
   const { docketNumber } = get(state.modal);
 
   const updatedWorksheet = await applicationContext
@@ -12,6 +11,6 @@ export const deletePrimaryIssueAction = async ({
     .deletePrimaryIssueInteractor(applicationContext, {
       docketNumber: docketNumber!,
     });
-  console.log('updatedWorksheet', updatedWorksheet);
-  return { updatedWorksheet: { ...updatedWorksheet } };
+
+  return { updatedWorksheet };
 };

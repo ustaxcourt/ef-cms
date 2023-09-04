@@ -1,4 +1,5 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type ComputedSubmittedAndCavCase = RawCase &
@@ -47,10 +48,11 @@ export const submittedAndCavCasesForJudgeHelper = (
       );
   };
 
-  const filteredSubmittedAndCavCasesByJudge =
+  const filteredSubmittedAndCavCasesByJudge = cloneDeep(
     submittedAndCavCasesByJudge.filter(
       unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
-    );
+    ),
+  );
 
   // should we map here instead?
   filteredSubmittedAndCavCasesByJudge.forEach(aCase => {
