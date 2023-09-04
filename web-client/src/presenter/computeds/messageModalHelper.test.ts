@@ -72,6 +72,7 @@ describe('messageModalHelper', () => {
     modal: {
       form: {
         attachments: [],
+        draftAttachments: [],
       },
     },
     screenMetadata: {},

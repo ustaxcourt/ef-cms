@@ -65,4 +65,19 @@ describe('updateMessageModalAfterQCAction', () => {
       { documentId: mockDocketEntryId, documentTitle: mockDocumentTitle },
     ]);
   });
+
+  it('set state.modal.form.draftAttachments to an empty array', async () => {
+    const result = await runAction(updateMessageModalAfterQCAction, {
+      modules: { presenter },
+      state: {
+        docketEntryId: mockDocketEntryId,
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+        modal: { form: undefined },
+      },
+    });
+
+    expect(result.state.modal.form.draftAttachments).toEqual([]);
+  });
 });
