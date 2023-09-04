@@ -67,16 +67,20 @@ describe('messageModalHelper', () => {
     },
   ];
 
-  const baseState = {
-    caseDetail: {},
-    modal: {
-      form: {
-        attachments: [],
-        draftAttachments: [],
+  let baseState;
+
+  beforeEach(() => {
+    baseState = {
+      caseDetail: {},
+      modal: {
+        form: {
+          attachments: [],
+          draftAttachments: [],
+        },
       },
-    },
-    screenMetadata: {},
-  };
+      screenMetadata: {},
+    };
+  });
 
   const messageModalHelper = withAppContextDecorator(
     messageModalHelperComputed,
@@ -100,6 +104,7 @@ describe('messageModalHelper', () => {
 
     it('should set a title on each entry from the documentTitle or documentType', () => {
       applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [{}],
         draftDocuments: mockDraftDocuments,
         formattedDocketEntries: [],
       });
@@ -120,13 +125,15 @@ describe('messageModalHelper', () => {
   });
 
   describe('documents', () => {
-    it('should include only documents that are on the docket record', () => {
+    beforeAll(() => {
       applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
         correspondence: [],
         draftDocuments: [],
         formattedDocketEntries: mockDocketEntries,
       });
+    });
 
+    it('should include only documents that are on the docket record', () => {
       const { documents } = runCompute(messageModalHelper, {
         state: baseState,
       });
@@ -139,11 +146,6 @@ describe('messageModalHelper', () => {
     });
 
     it('should set a title on each entry from either the descriptionDisplay or documentType', () => {
-      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
-        draftDocuments: [],
-        formattedDocketEntries: mockDocketEntries,
-      });
-
       const { documents } = runCompute(messageModalHelper, {
         state: baseState,
       });
@@ -154,6 +156,47 @@ describe('messageModalHelper', () => {
       expect(documents[1].title).toEqual(
         mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription.documentType,
       );
+    });
+
+    it('should should set isAlreadyAttached to true if the document has already been selected', () => {
+      baseState.modal.form.attachments = [
+        {
+          docketEntryId:
+            mockDocketEntryWithFileAttachedOnDocketRecord.documentId,
+        },
+      ];
+      baseState.modal.form.draftAttachments = [];
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+      expect(documents[0].isAlreadyAttached).toEqual(true);
+    });
+
+    it('should should set isAlreadyAttached to false if the document has not been selected', () => {
+      baseState.modal.form.attachments = [];
+      baseState.modal.form.draftAttachments = [];
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+      expect(documents[0].isAlreadyAttached).toEqual(false);
+    });
+
+    it('should should set isAlreadyAttached to true if the draft attachment has already been selected', () => {
+      baseState.modal.form.draftAttachments = [
+        {
+          docketEntryId:
+            mockDocketEntryWithFileAttachedOnDocketRecord.documentId,
+        },
+      ];
+
+      baseState.modal.form.attachments = [];
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+      expect(documents[0].isAlreadyAttached).toEqual(true);
     });
   });
 
@@ -265,6 +308,8 @@ describe('messageModalHelper', () => {
 
   describe('showAddDocumentForm', () => {
     it("should be true when the message doesn't have any attachments", () => {
+      console.log('baseState', baseState);
+
       const { showAddDocumentForm } = runCompute(messageModalHelper, {
         state: baseState,
       });
