@@ -12,7 +12,7 @@ describe('updateFinalBriefDueDateAction', () => {
 
     applicationContext
       .getUseCases()
-      .updateCaseWorksheetInfoInteractor.mockReturnValue(null);
+      .updateCaseWorksheetInteractor.mockReturnValue(null);
 
     await runAction(updateFinalBriefDueDateAction, {
       modules: {
@@ -26,11 +26,11 @@ describe('updateFinalBriefDueDateAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().updateCaseWorksheetInfoInteractor.mock
+      applicationContext.getUseCases().updateCaseWorksheetInteractor.mock
         .calls[0][1],
     ).toMatchObject({
       docketNumber: TEST_DOCKET_NUMBER,
-      finalBriefDueDate: TEST_FINAL_BRIEF_DUE_DATE,
+      updatedProps: { finalBriefDueDate: TEST_FINAL_BRIEF_DUE_DATE },
     });
   });
 });
