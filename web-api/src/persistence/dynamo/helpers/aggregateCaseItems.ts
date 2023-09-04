@@ -2,7 +2,9 @@ import {
   CaseRecord,
   IrsPractitionerOnCaseRecord,
   PrivatePractitionerOnCaseRecord,
+  TDynamoRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
+import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { sortBy } from 'lodash';
 
 export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
@@ -115,4 +117,26 @@ export const aggregateCaseItems = caseAndCaseItems => {
     irsPractitioners,
     privatePractitioners,
   };
+};
+
+export const aggregateConsolidatedCaseItems = (
+  consolidatedCaseItems: TDynamoRecord<
+    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
+  >[],
+): ConsolidatedCaseDTO[] => {
+  const caseMap: Map<string, ConsolidatedCaseDTO> = new Map();
+  consolidatedCaseItems
+    .filter((item): item is CaseRecord => isCaseItem(item))
+    .forEach(item => caseMap.set(item.pk, new ConsolidatedCaseDTO(item)));
+
+  consolidatedCaseItems.forEach(item => {
+    if (isIrsPractitionerItem(item)) {
+      caseMap.get(item.pk)?.irsPractitioners.push(item);
+    }
+    if (isPrivatePractitionerItem(item)) {
+      caseMap.get(item.pk)?.privatePractitioners.push(item);
+    }
+  });
+
+  return [...caseMap.values()];
 };

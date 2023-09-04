@@ -9,6 +9,7 @@ import {
   isDocumentBriefType,
 } from '../EntityConstants';
 import { Case, isSealedCase } from './Case';
+import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -37,7 +38,8 @@ export class PublicCase extends JoiValidationEntity {
   public isSealed: boolean;
   public petitioners: any[] | undefined;
   public irsPractitioners?: any[];
-  public privatePractitioners: any;
+  public privatePractitioners?: any[];
+  public consolidatedCases?: ConsolidatedCaseDTO[];
 
   private _score?: string;
 
@@ -88,6 +90,7 @@ export class PublicCase extends JoiValidationEntity {
       );
 
       this.leadDocketNumber = rawCase.leadDocketNumber;
+      this.consolidatedCases = rawCase.consolidatedCases;
     } else if (!this.isSealed) {
       this.petitioners = [];
       rawCase.petitioners.map(petitioner => {
