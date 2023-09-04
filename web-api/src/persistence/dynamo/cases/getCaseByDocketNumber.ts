@@ -43,7 +43,7 @@ export const getCaseByDocketNumber = async ({
         '#gsi1pk': 'gsi1pk',
       },
       ExpressionAttributeValues: {
-        ':gsi1pk': `case|${leadDocketNumber}`,
+        ':gsi1pk': `leadCase|${leadDocketNumber}`,
       },
       IndexName: 'gsi1',
       KeyConditionExpression: '#gsi1pk = :gsi1pk',

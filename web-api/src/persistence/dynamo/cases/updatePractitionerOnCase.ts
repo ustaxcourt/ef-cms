@@ -20,7 +20,7 @@ export const updateIrsPractitionerOnCase = async ({
     sk: `irsPractitioner|${userId}`,
   };
   if (leadDocketNumber) {
-    item.gsi1pk = `case|${leadDocketNumber}`;
+    item.gsi1pk = `leadCase|${leadDocketNumber}`;
   }
 
   await put({
@@ -48,7 +48,7 @@ export const updatePrivatePractitionerOnCase = async ({
     sk: `privatePractitioner|${userId}`,
   };
   if (leadDocketNumber) {
-    item.gsi1pk = `case|${leadDocketNumber}`;
+    item.gsi1pk = `leadCase|${leadDocketNumber}`;
   }
 
   await put({
