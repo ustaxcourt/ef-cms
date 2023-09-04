@@ -1,7 +1,7 @@
 import { BigHeader } from '../BigHeader';
+import { CaseWorksheets } from '../CaseWorksheet/CaseWorksheets';
 import { ErrorNotification } from '../ErrorNotification';
 import { RecentMessages } from '../WorkQueue/RecentMessages';
-import { SubmittedCavCases } from '../WorkQueue/SubmittedCavCases';
 import { SuccessNotification } from '../SuccessNotification';
 import { TrialSessionsSummary } from '../TrialSessions/TrialSessionsSummary';
 import { connect } from '@cerebral/react';
@@ -20,7 +20,7 @@ export const DashboardChambers = connect(
 
           <TrialSessionsSummary />
           <RecentMessages />
-          <SubmittedCavCases />
+          <CaseWorksheets />
         </section>
       </>
     );

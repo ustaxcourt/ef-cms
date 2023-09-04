@@ -15,8 +15,6 @@ export const setJudgeActivityReportDataAction = ({
 }>) => {
   const { casesClosedByJudge, opinions, orders, trialSessions } = props;
 
-  store.set(state.judgeDashboardCaseWorksheetErrors, {});
-
   store.set(
     state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
     casesClosedByJudge,
