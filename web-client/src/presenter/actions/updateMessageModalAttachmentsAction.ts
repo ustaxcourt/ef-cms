@@ -1,12 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * updates the current message form data's attachments field
- * @param {object} providers the providers object
- * @param {object} providers.get the get function to retrieve values from state
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object
- */
 export const updateMessageModalAttachmentsAction = ({
   applicationContext,
   get,
