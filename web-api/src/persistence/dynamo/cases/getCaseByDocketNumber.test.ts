@@ -204,7 +204,7 @@ describe('getCaseByDocketNumber', () => {
       },
       {
         docketNumber: leadDocketNumber,
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
         leadDocketNumber,
         pk: `case|${leadDocketNumber}`,
@@ -217,13 +217,13 @@ describe('getCaseByDocketNumber', () => {
         trialSessionId: '123',
       },
       {
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         pk: `case|${leadDocketNumber}`,
         sk: 'irsPractitioner|123',
         userId: 'abc-123',
       },
       {
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         pk: `case|${leadDocketNumber}`,
         sk: 'privatePractitioner|123',
         userId: 'abc-123',
@@ -238,7 +238,7 @@ describe('getCaseByDocketNumber', () => {
     const secondQueryResult = [
       {
         docketNumber: leadDocketNumber,
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
         leadDocketNumber,
         pk: `case|${leadDocketNumber}`,
@@ -246,20 +246,20 @@ describe('getCaseByDocketNumber', () => {
         status: CASE_STATUS_TYPES.new,
       },
       {
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         pk: `case|${leadDocketNumber}`,
         sk: 'irsPractitioner|123',
         userId: 'abc-123',
       },
       {
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         pk: `case|${leadDocketNumber}`,
         sk: 'privatePractitioner|123',
         userId: 'abc-123',
       },
       {
         docketNumber: docketNumber1,
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
         leadDocketNumber,
         pk: `case|${docketNumber1}`,
@@ -267,13 +267,13 @@ describe('getCaseByDocketNumber', () => {
         status: CASE_STATUS_TYPES.new,
       },
       {
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         pk: `case|${docketNumber1}`,
         sk: 'irsPractitioner|124',
         userId: 'abc-124',
       },
       {
-        gsi1pk: `case|${leadDocketNumber}`,
+        gsi1pk: `leadCase|${leadDocketNumber}`,
         pk: `case|${docketNumber1}`,
         sk: 'privatePractitioner|124',
         userId: 'abc-124',
@@ -302,7 +302,7 @@ describe('getCaseByDocketNumber', () => {
           docketNumber: leadDocketNumber,
           irsPractitioners: [
             {
-              gsi1pk: `case|${leadDocketNumber}`,
+              gsi1pk: `leadCase|${leadDocketNumber}`,
               pk: 'case|123-20',
               sk: 'irsPractitioner|123',
               userId: 'abc-123',
@@ -312,7 +312,7 @@ describe('getCaseByDocketNumber', () => {
           petitioners: [],
           privatePractitioners: [
             {
-              gsi1pk: `case|${leadDocketNumber}`,
+              gsi1pk: `leadCase|${leadDocketNumber}`,
               pk: 'case|123-20',
               sk: 'privatePractitioner|123',
               userId: 'abc-123',
@@ -323,7 +323,7 @@ describe('getCaseByDocketNumber', () => {
           docketNumber: docketNumber1,
           irsPractitioners: [
             {
-              gsi1pk: `case|${leadDocketNumber}`,
+              gsi1pk: `leadCase|${leadDocketNumber}`,
               pk: `case|${docketNumber1}`,
               sk: 'irsPractitioner|124',
               userId: 'abc-124',
@@ -333,7 +333,7 @@ describe('getCaseByDocketNumber', () => {
           petitioners: [],
           privatePractitioners: [
             {
-              gsi1pk: `case|${leadDocketNumber}`,
+              gsi1pk: `leadCase|${leadDocketNumber}`,
               pk: `case|${docketNumber1}`,
               sk: 'privatePractitioner|124',
               userId: 'abc-124',
@@ -351,7 +351,7 @@ describe('getCaseByDocketNumber', () => {
         },
       ],
       docketNumber: '123-20',
-      gsi1pk: `case|${leadDocketNumber}`,
+      gsi1pk: `leadCase|${leadDocketNumber}`,
       hearings: [
         {
           pk: `case|${leadDocketNumber}`,
@@ -361,7 +361,7 @@ describe('getCaseByDocketNumber', () => {
       ],
       irsPractitioners: [
         {
-          gsi1pk: `case|${leadDocketNumber}`,
+          gsi1pk: `leadCase|${leadDocketNumber}`,
           pk: `case|${leadDocketNumber}`,
           sk: 'irsPractitioner|123',
           userId: 'abc-123',
@@ -372,7 +372,7 @@ describe('getCaseByDocketNumber', () => {
       pk: 'case|123-20',
       privatePractitioners: [
         {
-          gsi1pk: `case|${leadDocketNumber}`,
+          gsi1pk: `leadCase|${leadDocketNumber}`,
           pk: `case|${leadDocketNumber}`,
           sk: 'privatePractitioner|123',
           userId: 'abc-123',
