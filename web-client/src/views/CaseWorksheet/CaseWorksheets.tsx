@@ -174,7 +174,7 @@ export const CaseWorksheets = connect(
                               icon="plus-circle"
                               onClick={() => {
                                 openAddEditPrimaryIssueModalSequence({
-                                  case: formattedCase,
+                                  docketNumber: formattedCase.docketNumber,
                                 });
                               }}
                             >
@@ -190,7 +190,7 @@ export const CaseWorksheets = connect(
                                   icon="edit"
                                   onClick={() => {
                                     openAddEditPrimaryIssueModalSequence({
-                                      case: formattedCase,
+                                      docketNumber: formattedCase.docketNumber,
                                     });
                                   }}
                                 >

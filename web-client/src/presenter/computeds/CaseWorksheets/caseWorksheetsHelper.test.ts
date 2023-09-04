@@ -1,15 +1,15 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from './caseWorksheetsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { SubmittedAndCavCasesForJudgeHelper as submittedAndCavCasesForJudgeHelperComputed } from './caseWorksheetsHelper';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-describe('SubmittedAndCavCasesForJudgeHelper', () => {
+describe('caseWorksheetsHelper', () => {
   let baseState;
   let mockSubmittedAndCavCasesByJudge;
 
-  const submittedAndCavCasesForJudgeHelper = withAppContextDecorator(
-    submittedAndCavCasesForJudgeHelperComputed,
+  const caseWorksheetsHelper = withAppContextDecorator(
+    caseWorksheetsHelperComputed,
   );
 
   beforeEach(() => {
@@ -68,120 +68,105 @@ describe('SubmittedAndCavCasesForJudgeHelper', () => {
     };
   });
 
-  describe('filteredSubmittedAndCavCasesByJudge', () => {
-    it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
-        .mockReturnValueOnce(5);
+  it('should return caseWorksheetsFormatted off of state.submittedAndCavCasesByJudge with computed values', () => {
+    applicationContext
+      .getUtilities()
+      .calculateDifferenceInDays.mockReturnValue(10)
+      .mockReturnValueOnce(5);
 
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+    baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+      new Map([['101-20', 4]]);
 
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        submittedAndCavCasesForJudgeHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      const leadCase = filteredSubmittedAndCavCasesByJudge.find(caseRecord => {
-        return caseRecord.leadDocketNumber;
-      })!;
-
-      const unconsolidatedCases = filteredSubmittedAndCavCasesByJudge.filter(
-        caseRecord => {
-          return !caseRecord.leadDocketNumber;
-        },
-      );
-
-      expect(filteredSubmittedAndCavCasesByJudge.length).toBe(3);
-      expect(leadCase.consolidatedIconTooltipText).toBe('Lead case');
-      expect(leadCase.isLeadCase).toBe(true);
-      expect(leadCase.inConsolidatedGroup).toBe(true);
-      expect(leadCase.formattedCaseCount).toBe(4);
-      expect(leadCase.daysElapsedSinceLastStatusChange).toBe(5);
-
-      expect(unconsolidatedCases.length).toBe(2);
-      unconsolidatedCases.forEach(unconsolidatedCase => {
-        expect(unconsolidatedCase.formattedCaseCount).toBe(1);
-        expect(unconsolidatedCase.daysElapsedSinceLastStatusChange).toBe(10);
-      });
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: baseState,
     });
 
-    it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
-        .mockReturnValueOnce(5);
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+    const leadCase = caseWorksheetsFormatted.find(caseRecord => {
+      return caseRecord.leadDocketNumber;
+    })!;
 
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        submittedAndCavCasesForJudgeHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(filteredSubmittedAndCavCasesByJudge.length).toBe(3);
-      expect(
-        filteredSubmittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
-      ).toBe(10);
-      expect(
-        filteredSubmittedAndCavCasesByJudge[1].daysElapsedSinceLastStatusChange,
-      ).toBe(10);
-      expect(
-        filteredSubmittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
-      ).toBe(5);
+    const unconsolidatedCases = caseWorksheetsFormatted.filter(caseRecord => {
+      return !caseRecord.leadDocketNumber;
     });
 
-    it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange with cases without caseStatusHistory filtered out', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
-        .mockReturnValueOnce(5);
+    expect(caseWorksheetsFormatted.length).toBe(3);
+    expect(leadCase.consolidatedIconTooltipText).toBe('Lead case');
+    expect(leadCase.isLeadCase).toBe(true);
+    expect(leadCase.inConsolidatedGroup).toBe(true);
+    expect(leadCase.formattedCaseCount).toBe(4);
+    expect(leadCase.daysElapsedSinceLastStatusChange).toBe(5);
 
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
-      baseState.judgeActivityReportData.submittedAndCavCasesByJudge.push({
-        caseStatusHistory: [],
-        docketNumber: '215-11',
-      });
+    expect(unconsolidatedCases.length).toBe(2);
+    unconsolidatedCases.forEach(unconsolidatedCase => {
+      expect(unconsolidatedCase.formattedCaseCount).toBe(1);
+      expect(unconsolidatedCase.daysElapsedSinceLastStatusChange).toBe(10);
+    });
+  });
 
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        submittedAndCavCasesForJudgeHelper,
-        {
-          state: baseState,
-        },
-      );
+  it('should return caseWorksheetsFormatted off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
+    applicationContext
+      .getUtilities()
+      .calculateDifferenceInDays.mockReturnValue(10)
+      .mockReturnValueOnce(5);
+    baseState.judgeActivityReportData.consolidatedCasesGroupCountMap = new Map([
+      ['101-20', 4],
+    ]);
 
-      expect(filteredSubmittedAndCavCasesByJudge.length).toBe(
-        mockSubmittedAndCavCasesByJudge.length - 1,
-      );
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: baseState,
     });
 
-    it('should format the date each case was changed to status Submitted/CAV', () => {
-      applicationContext
-        .getUtilities()
-        .calculateDifferenceInDays.mockReturnValue(10)
-        .mockReturnValueOnce(5);
+    expect(caseWorksheetsFormatted.length).toBe(3);
+    expect(caseWorksheetsFormatted[0].daysElapsedSinceLastStatusChange).toBe(
+      10,
+    );
+    expect(caseWorksheetsFormatted[1].daysElapsedSinceLastStatusChange).toBe(
+      10,
+    );
+    expect(caseWorksheetsFormatted[2].daysElapsedSinceLastStatusChange).toBe(5);
+  });
 
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        new Map([['101-20', 4]]);
+  it('should return caseWorksheetsFormatted off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange with cases without caseStatusHistory filtered out', () => {
+    applicationContext
+      .getUtilities()
+      .calculateDifferenceInDays.mockReturnValue(10)
+      .mockReturnValueOnce(5);
 
-      const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-        submittedAndCavCasesForJudgeHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(filteredSubmittedAndCavCasesByJudge).toMatchObject([
-        { formattedSubmittedCavStatusChangedDate: '02/26/22' },
-        { formattedSubmittedCavStatusChangedDate: '02/06/22' },
-        { formattedSubmittedCavStatusChangedDate: '02/16/22' },
-      ]);
+    baseState.judgeActivityReportData.consolidatedCasesGroupCountMap = new Map([
+      ['101-20', 4],
+    ]);
+    baseState.judgeActivityReportData.submittedAndCavCasesByJudge.push({
+      caseStatusHistory: [],
+      docketNumber: '215-11',
     });
+
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: baseState,
+    });
+
+    expect(caseWorksheetsFormatted.length).toBe(
+      mockSubmittedAndCavCasesByJudge.length - 1,
+    );
+  });
+
+  it('should format the date each case was changed to status Submitted/CAV', () => {
+    applicationContext
+      .getUtilities()
+      .calculateDifferenceInDays.mockReturnValue(10)
+      .mockReturnValueOnce(5);
+
+    baseState.judgeActivityReportData.consolidatedCasesGroupCountMap = new Map([
+      ['101-20', 4],
+    ]);
+
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: baseState,
+    });
+
+    expect(caseWorksheetsFormatted).toMatchObject([
+      { formattedSubmittedCavStatusChangedDate: '02/26/22' },
+      { formattedSubmittedCavStatusChangedDate: '02/06/22' },
+      { formattedSubmittedCavStatusChangedDate: '02/16/22' },
+    ]);
   });
 });

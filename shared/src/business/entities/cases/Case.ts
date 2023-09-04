@@ -990,7 +990,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} caseCaption the original case caption
    * @returns {string} caseTitle the case caption with the postfix removed
    */
-  static getCaseTitle(caseCaption) {
+  static getCaseTitle(caseCaption): string {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
   }
 
