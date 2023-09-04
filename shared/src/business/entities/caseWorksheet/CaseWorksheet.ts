@@ -33,6 +33,10 @@ export class CaseWorksheet extends JoiValidationEntity {
     primaryIssue: 'Add primary issue', // TODO: should we change this error message?
   };
 
+  deletePrimaryIssue(): void {
+    delete this.primaryIssue;
+  }
+
   getValidationRules() {
     return CaseWorksheet.VALIDATION_RULES;
   }

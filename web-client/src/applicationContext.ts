@@ -351,6 +351,7 @@ import { validateUserContactInteractor } from '../../shared/src/business/useCase
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 
+import { deletePrimaryIssueInteractor } from '@shared/proxies/caseWorksheet/deletePrimaryIssueProxy';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
@@ -413,6 +414,7 @@ const allUseCases = {
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
   deletePractitionerDocumentInteractor,
+  deletePrimaryIssueInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   dismissNOTTReminderForTrialInteractor,

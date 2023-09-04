@@ -40,6 +40,7 @@ import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/cas
 import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor';
 import { deletePractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/deletePractitionerDocumentInteractor';
+import { deletePrimaryIssueInteractor } from '@shared/business/useCases/caseWorksheet/deletePrimaryIssueInteractor';
 import { deleteTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteUserCaseNoteInteractor';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/business/useCases/trialSessions/dismissNOTTReminderForTrialInteractor';
@@ -243,6 +244,7 @@ const useCases = {
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
   deletePractitionerDocumentInteractor,
+  deletePrimaryIssueInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   dismissNOTTReminderForTrialInteractor,
