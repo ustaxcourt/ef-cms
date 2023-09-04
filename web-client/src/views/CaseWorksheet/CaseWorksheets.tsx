@@ -94,14 +94,10 @@ export const CaseWorksheets = connect(
                       <CaseLink formattedCase={formattedCase} />
                     </td>
                     <td>{formattedCase.formattedCaseCount}</td>
-                    <td>
-                      {formattedCase.petitioners.map(p => p.entityName).join()}
-                    </td>
+                    <td>{formattedCase.caseTitle}</td>
                     <td>{formattedCase.status}</td>
-                    <td>{formattedCase.daysElapsedSinceLastStatusChange}</td>
-                    <td>
-                      {formattedCase.formattedSubmittedCavStatusChangedDate}
-                    </td>
+                    <td>{formattedCase.daysSinceLastStatusChange}</td>
+                    <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
                     <td className="display-flex flex-column flex-align-center">
                       <FormGroup
                         className="margin-bottom-0"
@@ -119,7 +115,7 @@ export const CaseWorksheets = connect(
                             id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
                             showDateHint={false}
                             values={convertToDateInputValues(
-                              formattedCase.finalBriefDueDate,
+                              formattedCase.worksheet.finalBriefDueDate,
                             )}
                             onValueChange={value => {
                               updateFinalBriefDueDateSequence({
@@ -137,7 +133,7 @@ export const CaseWorksheets = connect(
                         className="usa-select"
                         id={`status-of-matter-dropdown-${formattedCase.docketNumber}`}
                         name="statusOfMatter"
-                        value={formattedCase.statusOfMatter ?? ''}
+                        value={formattedCase.worksheet.statusOfMatter ?? ''}
                         onChange={e => {
                           updateStatusOfMatterSequence({
                             docketNumber: formattedCase.docketNumber,
@@ -168,10 +164,10 @@ export const CaseWorksheets = connect(
                             paddingRight: '12px',
                           }}
                         >
-                          {formattedCase.primaryIssue}
+                          {formattedCase.worksheet.primaryIssue}
                         </div>
                         <div className="grid-col-1">
-                          {!formattedCase.primaryIssue && (
+                          {!formattedCase.worksheet.primaryIssue && (
                             <Button
                               link
                               className="float-right"
@@ -186,7 +182,7 @@ export const CaseWorksheets = connect(
                             </Button>
                           )}
 
-                          {formattedCase.primaryIssue && (
+                          {formattedCase.worksheet.primaryIssue && (
                             <div className="grid">
                               <div>
                                 <Button
