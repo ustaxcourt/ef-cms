@@ -402,6 +402,9 @@ export const baseState = {
   },
   showValidation: false,
   submittedAndCavCases: {
+    consolidatedCasesGroupCountMap: {} as any,
+    submittedAndCavCasesByJudge: [] as any,
+    // TODO: this should get moved to currentViewMetadata
     worksheets: [] as RawCaseWorksheet[],
   },
   submittedAndCavCasesForJudge: [],
@@ -413,9 +416,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
-
   user: null,
-  // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
   validationErrors: {} as Record<string, string>,

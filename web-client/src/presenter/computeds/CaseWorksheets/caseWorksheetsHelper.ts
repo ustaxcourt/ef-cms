@@ -21,10 +21,11 @@ export const caseWorksheetsHelper = (
 ): ICaseWorksheetsHelper => {
   const { isLeadCase } = applicationContext.getUtilities();
 
-  const { consolidatedCasesGroupCountMap, submittedAndCavCasesByJudge = [] } =
-    get(state.judgeActivityReport.judgeActivityReportData);
-
-  const { worksheets = [] } = get(state.submittedAndCavCases);
+  const {
+    consolidatedCasesGroupCountMap,
+    submittedAndCavCasesByJudge = [],
+    worksheets = [],
+  } = get(state.submittedAndCavCases);
 
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
   worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
@@ -37,7 +38,6 @@ export const caseWorksheetsHelper = (
     );
 
   const caseWorksheetsFormatted = submittedAndCavCasesByJudge.map(aCase => {
-    // TODO: figure out what changed - used to call .get on the object
     const formattedCaseCount =
       consolidatedCasesGroupCountMap[aCase.docketNumber] || 1;
 

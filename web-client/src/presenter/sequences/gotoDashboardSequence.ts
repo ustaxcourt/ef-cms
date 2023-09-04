@@ -6,8 +6,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
-import { getSubmittedAndCavCasesByJudgeAction } from '../actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
-import { getSubmittedAndCavCasesByJudgeForDashboardAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeForDashboardAction';
+import { getSubmittedAndCavCasesByJudgeForDashboardAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
 import { getSubmittedCavWorksheetsByJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedCavWorksheetsByJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { getUserAction } from '../actions/getUserAction';
@@ -20,13 +19,12 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseWorksheetsByJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsByJudgeAction';
 import { setCasesAction } from '../actions/setCasesAction';
-import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
-import { setJudgeActivityReportDataAction } from '../actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
+import { setSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setSubmittedAndCavCasesForJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
@@ -79,10 +77,10 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-
-                  //setup new formatted data structure to fetch cases
-                  getSubmittedAndCavCasesByJudgeAction,
-                  setJudgeActivityReportDataAction,
+                  getSubmittedAndCavCasesByJudgeForDashboardAction,
+                  setSubmittedAndCavCasesForJudgeAction,
+                  getSubmittedCavWorksheetsByJudgeAction,
+                  setCaseWorksheetsByJudgeAction,
                   setupCurrentPageAction('DashboardChambers'),
                 ],
                 general: [navigateToSectionDocumentQCAction],
@@ -104,9 +102,9 @@ const goToDashboard = [
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
                   getSubmittedAndCavCasesByJudgeForDashboardAction,
+                  setSubmittedAndCavCasesForJudgeAction,
                   getSubmittedCavWorksheetsByJudgeAction,
                   setCaseWorksheetsByJudgeAction,
-                  setCavAndSubmittedCasesAction,
                   setupCurrentPageAction('DashboardJudge'),
                 ],
                 petitioner: [
