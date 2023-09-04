@@ -19,6 +19,7 @@ describe('createMessageInteractor', () => {
       createMessageInteractor(applicationContext, {
         attachments: [],
         docketNumber: '101-20',
+        draftAttachments: [],
         message: 'hello world',
         subject: 'what is up',
         toSection: DOCKET_SECTION,
@@ -28,12 +29,17 @@ describe('createMessageInteractor', () => {
   });
 
   it('creates the message', async () => {
+    const mockAttachments = [
+      {
+        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+      },
+    ];
+    const mockDraftAttachments = [
+      {
+        documentId: 'b1130321-0a69-43bc-b3eb-64a18f079873',
+      },
+    ];
     const messageData = {
-      attachments: [
-        {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
-        },
-      ],
       docketNumber: '101-20',
       isRepliedTo: false,
       message: "How's it going?",
@@ -70,6 +76,8 @@ describe('createMessageInteractor', () => {
 
     await createMessageInteractor(applicationContext, {
       ...messageData,
+      attachments: mockAttachments,
+      draftAttachments: mockDraftAttachments,
     });
 
     expect(
@@ -80,6 +88,7 @@ describe('createMessageInteractor', () => {
         .message,
     ).toMatchObject({
       ...messageData,
+      attachments: [...mockAttachments, ...mockDraftAttachments],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Guy Fieri',
       docketNumber: '101-20',
