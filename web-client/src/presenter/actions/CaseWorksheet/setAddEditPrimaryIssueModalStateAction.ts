@@ -1,18 +1,20 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setAddEditPrimaryIssueModalStateAction = ({
+  get,
   props,
   store,
 }: ActionProps<{
-  case: { docketNumber: string; primaryIssue: string; petitioners: any[] };
+  docketNumber: string;
 }>) => {
-  const { docketNumber, primaryIssue } = props.case;
+  const { docketNumber } = props;
 
-  const petitioners = props.case.petitioners.map(p => p.entityName).join();
+  const { worksheets = [] } = get(state.submittedAndCavCases);
 
-  const headingString = `Docket ${docketNumber}: ${petitioners}`;
+  const caseWorksheet = worksheets.find(ws => ws.docketNumber === docketNumber);
 
-  store.set(state.modal.docketNumber, props.case.docketNumber);
-  store.set(state.modal.heading, headingString);
+  const primaryIssue = caseWorksheet?.primaryIssue || '';
+
+  store.set(state.modal.docketNumber, docketNumber);
   store.set(state.modal.primaryIssue, primaryIssue);
 };

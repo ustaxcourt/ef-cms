@@ -7,29 +7,30 @@ import React from 'react';
 
 export const AddEditPrimaryIssueModal = connect(
   {
-    modal: state.modal,
+    addEditPrimaryIssueModalHelper: state.addEditPrimaryIssueModalHelper,
     validationErrors: state.validationErrors,
   },
-  function AddEditPrimaryIssueModal({ modal, validationErrors }) {
+  function AddEditPrimaryIssueModal({
+    addEditPrimaryIssueModalHelper,
+    validationErrors,
+  }) {
     return (
       <ConfirmModal
         cancelLabel="Cancel"
-        className="add-edit-note-modal"
         confirmLabel="Save"
         preventCancelOnBlur={true}
         title="Add/Edit Primary Issue"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence="updatePrimaryIssueSequence"
       >
-        <h5 className="margin-bottom-4">{modal.heading}</h5>
+        <h5 className="margin-bottom-4">
+          {addEditPrimaryIssueModalHelper.title}
+        </h5>
 
         <FormGroup
           className="margin-bottom-2"
           errorText={validationErrors.primaryIssue}
         >
-          <label className="usa-label" htmlFor="primary-issue">
-            {modal.notesLabel}
-          </label>
           <BindedTextarea
             aria-label="notes"
             bind="modal.primaryIssue"

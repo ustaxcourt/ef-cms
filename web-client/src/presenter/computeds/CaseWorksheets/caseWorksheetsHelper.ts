@@ -24,8 +24,6 @@ export const caseWorksheetsHelper = (
   const { consolidatedCasesGroupCountMap, submittedAndCavCasesByJudge = [] } =
     get(state.judgeActivityReport.judgeActivityReportData);
 
-  console.log(submittedAndCavCasesByJudge);
-
   const { worksheets = [] } = get(state.submittedAndCavCases);
 
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
