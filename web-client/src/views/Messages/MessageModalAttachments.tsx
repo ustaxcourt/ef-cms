@@ -10,7 +10,11 @@ const getDocumentOption = doc => {
   const documentTitle = doc.title.substr(0, 100);
 
   return (
-    <option key={doc.docketEntryId} value={`${doc.docketEntryId}`}>
+    <option
+      disabled={doc.isAlreadyAttached}
+      key={doc.docketEntryId}
+      value={`${doc.docketEntryId}`}
+    >
       {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
@@ -20,7 +24,11 @@ const getCorrespondenceOption = doc => {
   const title = doc.documentTitle || doc.documentType;
   const documentTitle = title.substr(0, 100);
   return (
-    <option key={doc.correspondenceId} value={`${doc.correspondenceId}`}>
+    <option
+      disabled={doc.isAlreadyAttached}
+      key={doc.correspondenceId}
+      value={`${doc.correspondenceId}`}
+    >
       {documentTitle}
     </option>
   );
