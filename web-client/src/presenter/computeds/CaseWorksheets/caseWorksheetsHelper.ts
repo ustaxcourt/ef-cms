@@ -2,31 +2,33 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type ComputedSubmittedAndCavCase = RawCase &
-  RawCaseWorksheet & {
-    consolidatedIconTooltipText: string;
-    isLeadCase: boolean;
-    inConsolidatedGroup: boolean;
-    formattedCaseCount: number;
-    daysElapsedSinceLastStatusChange: number;
-    formattedSubmittedCavStatusChangedDate: string;
-  };
-interface ISubmittedAndCavCasesForJudgeHelper {
-  filteredSubmittedAndCavCasesByJudge: ComputedSubmittedAndCavCase[];
+type CaseWorksheetTableRow = RawCase & {
+  worksheet: RawCaseWorksheet;
+  consolidatedIconTooltipText: string;
+  isLeadCase: boolean;
+  inConsolidatedGroup: boolean;
+  formattedCaseCount: number;
+  daysElapsedSinceLastStatusChange: number;
+  formattedSubmittedCavStatusChangedDate: string;
+};
+
+interface ICaseWorksheetsHelper {
+  caseWorksheetsFormatted: CaseWorksheetTableRow[];
 }
 
-export const submittedAndCavCasesForJudgeHelper = (
+export const caseWorksheetsHelper = (
   get: any,
   applicationContext: IApplicationContext,
-): ISubmittedAndCavCasesForJudgeHelper => {
+): ICaseWorksheetsHelper => {
   const { consolidatedCasesGroupCountMap, submittedAndCavCasesByJudge = [] } =
     get(state.judgeActivityReport.judgeActivityReportData);
 
   const { worksheets = [] } = get(state.submittedAndCavCases);
+
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
   worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
 
-  const currentDateInIsoFormat: string = applicationContext
+  const today = applicationContext
     .getUtilities()
     .formatDateString(
       applicationContext.getUtilities().prepareDateFromString(),
@@ -48,14 +50,14 @@ export const submittedAndCavCasesForJudgeHelper = (
       );
   };
 
-  const filteredSubmittedAndCavCasesByJudge = cloneDeep(
+  const caseWorksheetsFormatted = cloneDeep(
     submittedAndCavCasesByJudge.filter(
       unfilteredCase => unfilteredCase.caseStatusHistory.length > 0,
     ),
   );
 
   // should we map here instead?
-  filteredSubmittedAndCavCasesByJudge.forEach(aCase => {
+  caseWorksheetsFormatted.forEach(aCase => {
     // TODO: figure out what changed - used to call .get on the object
     aCase.formattedCaseCount =
       consolidatedCasesGroupCountMap[aCase.docketNumber] || 1;
@@ -66,9 +68,7 @@ export const submittedAndCavCasesForJudgeHelper = (
     }
 
     if (worksheetsObj[aCase.docketNumber]) {
-      Object.entries(worksheetsObj[aCase.docketNumber]).forEach(
-        ([key, value]) => (aCase[key] = value),
-      );
+      aCase.worksheet = worksheetsObj[aCase.docketNumber];
     }
 
     aCase.formattedSubmittedCavStatusChangedDate = getSubmittedOrCAVDate(
@@ -82,19 +82,16 @@ export const submittedAndCavCasesForJudgeHelper = (
 
     aCase.daysElapsedSinceLastStatusChange = applicationContext
       .getUtilities()
-      .calculateDifferenceInDays(
-        currentDateInIsoFormat,
-        dateOfLastCaseStatusChange,
-      );
+      .calculateDifferenceInDays(today, dateOfLastCaseStatusChange);
   });
 
-  filteredSubmittedAndCavCasesByJudge.sort((a, b) => {
+  caseWorksheetsFormatted.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
   });
 
   return {
-    filteredSubmittedAndCavCasesByJudge,
+    caseWorksheetsFormatted,
   };
 };

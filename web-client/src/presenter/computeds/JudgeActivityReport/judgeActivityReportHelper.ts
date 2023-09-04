@@ -13,12 +13,17 @@ interface IJudgeActivityReportHelper {
   trialSessionsHeldTotal: number | undefined;
   today: string;
   orders: OrdersReturnType;
+  showPaginator: boolean;
+  pageCount: number;
 }
 
 export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
+  const { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } =
+    applicationContext.getConstants();
+
   const { endDate, judgeNameToDisplayForHeader, startDate } = get(
     state.judgeActivityReport.filters,
   );
@@ -27,6 +32,7 @@ export const judgeActivityReportHelper = (
     casesClosedByJudge,
     opinions,
     orders = [],
+    totalCountForSubmittedAndCavCases,
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
 
@@ -35,7 +41,6 @@ export const judgeActivityReportHelper = (
 
   const hasFormBeenSubmitted: boolean =
     casesClosedByJudge && opinions && orders && trialSessions;
-
   if (hasFormBeenSubmitted) {
     resultsCount =
       orders.total +
@@ -59,13 +64,19 @@ export const judgeActivityReportHelper = (
 
   const ordersToDisplay = orders.aggregations?.filter(agg => agg.count);
 
+  const pageCount = Math.ceil(
+    totalCountForSubmittedAndCavCases / CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+  );
+
   return {
     closedCasesTotal: casesClosedByJudge?.total || 0,
     isFormPristine: !endDate || !startDate,
     opinionsFiledTotal: opinions?.total || 0,
     orders: ordersToDisplay,
     ordersFiledTotal: orders?.total || 0,
+    pageCount,
     reportHeader,
+    showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
     today,

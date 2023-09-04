@@ -363,6 +363,7 @@ describe('judgeActivityReportHelper', () => {
       const result = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
+
       expect(result.pageCount).toBe(1);
       expect(result.showPaginator).toBe(false);
     });
@@ -377,6 +378,7 @@ describe('judgeActivityReportHelper', () => {
       const result = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
+
       expect(result.pageCount).toBe(2);
       expect(result.showPaginator).toBe(true);
     });

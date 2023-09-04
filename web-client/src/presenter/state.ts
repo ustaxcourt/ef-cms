@@ -26,6 +26,7 @@ import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByN
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -116,7 +117,7 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
-import { submittedAndCavCasesForJudgeHelper } from '@web-client/presenter/computeds/SubmittedAndCavCasesForJudge/submittedAndCavCasesForJudgeHelper';
+import { submittedAndCavCasesHelper } from '@web-client/presenter/computeds/JudgeActivityReport/submittedAndCavCasesHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -160,6 +161,7 @@ export const computeds = {
   caseSearchNoMatchesHelper,
   caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
+  caseWorksheetsHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
   contactsHelper,
@@ -244,7 +246,7 @@ export const computeds = {
   startCaseInternalHelper,
   statisticsFormHelper,
   statisticsHelper,
-  submittedAndCavCasesForJudgeHelper,
+  submittedAndCavCasesHelper,
   templateHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,

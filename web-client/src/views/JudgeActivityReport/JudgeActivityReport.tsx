@@ -22,8 +22,7 @@ export const JudgeActivityReport = connect(
       sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
-    submittedAndCavCasesForJudgeHelper:
-      state.submittedAndCavCasesForJudgeHelper,
+    submittedAndCavCasesHelper: state.submittedAndCavCasesHelper,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
@@ -34,7 +33,7 @@ export const JudgeActivityReport = connect(
     judgeActivityReportJudges,
     setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
-    submittedAndCavCasesForJudgeHelper,
+    submittedAndCavCasesHelper,
     validationErrors,
   }) {
     const [activePage, setActivePage] = useState(0);
@@ -224,8 +223,8 @@ export const JudgeActivityReport = connect(
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
                 {
-                  submittedAndCavCasesForJudgeHelper
-                    .filteredSubmittedAndCavCasesByJudge.length
+                  submittedAndCavCasesHelper.filteredSubmittedAndCavCasesByJudge
+                    .length
                 }
               </div>
             </div>
@@ -243,7 +242,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge.map(
+            {submittedAndCavCasesHelper.filteredSubmittedAndCavCasesByJudge.map(
               formattedCase => {
                 return (
                   <tr key={formattedCase.docketNumber}>
@@ -279,12 +278,12 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
-        {submittedAndCavCasesForJudgeHelper.showPaginator && (
+        {submittedAndCavCasesHelper.showPaginator && (
           <Paginator
             breakClassName="hide"
             forcePage={activePage}
             marginPagesDisplayed={0}
-            pageCount={submittedAndCavCasesForJudgeHelper.pageCount}
+            pageCount={submittedAndCavCasesHelper.pageCount}
             pageRangeDisplayed={0}
             onPageChange={pageChange => {
               setActivePage(pageChange.selected);
@@ -294,7 +293,7 @@ export const JudgeActivityReport = connect(
             }}
           />
         )}
-        {submittedAndCavCasesForJudgeHelper.filteredSubmittedAndCavCasesByJudge
+        {submittedAndCavCasesHelper.filteredSubmittedAndCavCasesByJudge
           .length === 0 && (
           <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
         )}

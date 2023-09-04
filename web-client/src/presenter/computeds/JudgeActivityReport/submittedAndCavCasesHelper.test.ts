@@ -1,16 +1,15 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { submittedAndCavCasesForJudgeHelper as submittedAndCavCasesForJudgeHelperComputed } from './submittedAndCavCasesForJudgeHelper';
+import { SubmittedAndCavCasesForJudgeHelper as submittedAndCavCasesForJudgeHelperComputed } from './submittedAndCavCasesHelper';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-describe('submittedAndCavCasesForJudgeHelper', () => {
+describe('SubmittedAndCavCasesForJudgeHelper', () => {
   let baseState;
   let mockSubmittedAndCavCasesByJudge;
 
   const submittedAndCavCasesForJudgeHelper = withAppContextDecorator(
     submittedAndCavCasesForJudgeHelperComputed,
-    { ...applicationContext },
   );
 
   beforeEach(() => {
@@ -58,19 +57,25 @@ describe('submittedAndCavCasesForJudgeHelper', () => {
     ];
 
     baseState = {
-      judgeActivityReportData: {
-        submittedAndCavCasesByJudge: mockSubmittedAndCavCasesByJudge,
+      judgeActivityReport: {
+        judgeActivityReportData: {
+          submittedAndCavCasesByJudge: mockSubmittedAndCavCasesByJudge,
+        },
+      },
+      submittedAndCavCases: {
+        worksheets: [],
       },
     };
   });
 
   describe('filteredSubmittedAndCavCasesByJudge', () => {
     it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
-      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
-        .mockReturnValue(10)
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
         .mockReturnValueOnce(5);
 
-      baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
         new Map([['101-20', 4]]);
 
       const { filteredSubmittedAndCavCasesByJudge } = runCompute(
@@ -105,8 +110,9 @@ describe('submittedAndCavCasesForJudgeHelper', () => {
     });
 
     it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
-      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
-        .mockReturnValue(10)
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
         .mockReturnValueOnce(5);
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
         new Map([['101-20', 4]]);
@@ -131,8 +137,9 @@ describe('submittedAndCavCasesForJudgeHelper', () => {
     });
 
     it('should return filteredSubmittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange with cases without caseStatusHistory filtered out', () => {
-      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
-        .mockReturnValue(10)
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =
@@ -155,8 +162,9 @@ describe('submittedAndCavCasesForJudgeHelper', () => {
     });
 
     it('should format the date each case was changed to status Submitted/CAV', () => {
-      (applicationContext.getUtilities().calculateDifferenceInDays as jest.Mock)
-        .mockReturnValue(10)
+      applicationContext
+        .getUtilities()
+        .calculateDifferenceInDays.mockReturnValue(10)
         .mockReturnValueOnce(5);
 
       baseState.judgeActivityReportData.consolidatedCasesGroupCountMap =

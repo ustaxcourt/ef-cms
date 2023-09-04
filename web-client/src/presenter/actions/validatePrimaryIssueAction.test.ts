@@ -21,7 +21,7 @@ describe('validatePrimaryIssueAction', () => {
   it('should return the success path when the primary issue note is valid', () => {
     applicationContext
       .getUseCases()
-      .validatePrimaryIssueInteractor.mockReturnValue(null);
+      .validateCaseWorksheetInteractor.mockReturnValue(null);
 
     runAction(validatePrimaryIssueAction, {
       modules: {
@@ -40,7 +40,7 @@ describe('validatePrimaryIssueAction', () => {
     const validationError = { testProp: true };
     applicationContext
       .getUseCases()
-      .validatePrimaryIssueInteractor.mockReturnValue(validationError);
+      .validateCaseWorksheetInteractor.mockReturnValue(validationError);
 
     runAction(validatePrimaryIssueAction, {
       modules: {
