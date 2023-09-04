@@ -21,7 +21,7 @@ export const changePasswordLocalInteractor = async (
       NEW_PASSWORD: newPassword,
       USERNAME: userEmail,
     },
-    ClientId: 'bvjrggnd3co403c0aahscinne',
+    ClientId: process.env.COGNITO_CLIENT_ID,
     Session: sessionId,
   };
 

@@ -4,7 +4,6 @@ import { confirmSignUpLocalInteractor } from './confirmSignUpLocalInteractor';
 describe('confirmSignUpLocalInteractor', () => {
   const confirmationCode = '123456';
   const userEmail = 'example@example.com';
-  const ClientId = 'bvjrggnd3co403c0aahscinne';
 
   // cognito returns an empty 200 on success
   const confirmSignUpResult = {};
@@ -23,7 +22,6 @@ describe('confirmSignUpLocalInteractor', () => {
     expect(
       applicationContext.getCognito().confirmSignUp.mock.calls[0][0],
     ).toMatchObject({
-      ClientId,
       ConfirmationCode: confirmationCode,
       Username: userEmail,
     });
