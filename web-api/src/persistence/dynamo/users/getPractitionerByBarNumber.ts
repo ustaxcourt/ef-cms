@@ -6,7 +6,7 @@ export const getPractitionerByBarNumber = async ({
 }: {
   applicationContext: IApplicationContext;
   barNumber: string;
-}) => {
+}): Promise<TPractitioner | undefined> => {
   const upperCaseBarNumber = barNumber.toUpperCase();
   const users = [
     ...(await getRecordsViaMapping({

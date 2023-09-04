@@ -1,3 +1,4 @@
+import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
@@ -269,7 +270,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(docketEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'HEAR',
-      servedAtFormatted: undefined,
+      servedAtFormatted: '',
       showNotServed: false,
       showServed: false,
       trialLocation: 'Birmingham, AL',
@@ -295,9 +296,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
     expect(orderEntry.index).toBeUndefined();
     expect(orderEntry).toMatchObject({
-      createdAtFormatted: undefined,
+      createdAtFormatted: '',
       eventCode: 'O',
-      servedAtFormatted: undefined,
+      servedAtFormatted: '',
       showNotServed: true,
     });
   });
@@ -472,7 +473,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  const today = applicationContext.getUtilities().formatNow('MMDDYYYY');
+  const today = applicationContext.getUtilities().formatNow(FORMATS.MMDDYYYY);
   const [todayMonth, todayDay, todayYear] = today.split('/');
 
   docketClerkAddsDocketEntryWithoutFile(cerebralTest, {
