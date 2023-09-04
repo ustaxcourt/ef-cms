@@ -14,7 +14,7 @@ export const createUserInteractorLocal = async (
   const userId = applicationContext.getUniqueId();
 
   const params = {
-    ClientId: 'bvjrggnd3co403c0aahscinne',
+    ClientId: process.env.COGNITO_CLIENT_ID,
     Password: user.password,
     UserAttributes: [
       {

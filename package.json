@@ -168,7 +168,7 @@
     "migrate:local": "DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://0.0.0.0:9000 AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SOURCE_TABLE=efcms-local DESTINATION_TABLE=efcms-local-1 ts-node --transpile-only ./web-api/run-local-migration.ts",
     "migration:cleanup": "./scripts/dynamo/update-deploy-table-after-migration.sh",
     "pending-color-switch": "./web-client/pending-color-switch.sh",
-    "postinstall": "husky install",
+    "postinstall": "husky install && cd cognito-triggers-sls && npm ci",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
     "reset-cases": "./clear-env.sh",

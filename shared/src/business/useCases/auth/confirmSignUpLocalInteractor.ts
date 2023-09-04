@@ -14,7 +14,7 @@ export const confirmSignUpLocalInteractor = async (
   }: { confirmationCode: string; userEmail: string },
 ) => {
   const params = {
-    ClientId: 'bvjrggnd3co403c0aahscinne',
+    ClientId: process.env.COGNITO_CLIENT_ID,
     ConfirmationCode: confirmationCode,
     Username: userEmail,
   };

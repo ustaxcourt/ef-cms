@@ -21,7 +21,7 @@ export const authenticateUserInteractor = async (
         PASSWORD: cognitoLocal,
         USERNAME: code,
       },
-      ClientId: 'bvjrggnd3co403c0aahscinne',
+      ClientId: process.env.COGNITO_CLIENT_ID,
     };
 
     let result;
