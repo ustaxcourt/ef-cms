@@ -39,5 +39,6 @@ export const migrateItems = async (
 
     itemsAfter.push(item);
   }
+
   return itemsAfter;
 };
