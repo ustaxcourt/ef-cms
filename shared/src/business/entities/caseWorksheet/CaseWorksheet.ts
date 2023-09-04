@@ -30,7 +30,7 @@ export class CaseWorksheet extends JoiValidationEntity {
 
   static VALIDATION_ERROR_MESSAGES = {
     finalBriefDueDate: 'Enter a valid due date',
-    primaryIssue: 'Add primary issue', // TODO: should we change this error message?
+    primaryIssue: 'Add primary issue',
   };
 
   deletePrimaryIssue(): void {
