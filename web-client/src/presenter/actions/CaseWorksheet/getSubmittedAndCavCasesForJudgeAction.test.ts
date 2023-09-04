@@ -1,11 +1,11 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getSubmittedAndCavCasesByJudgeForDashboardAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeForDashboardAction';
+import { getSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getSubmittedAndCavCasesByJudgeForDashboardAction', () => {
+describe('getSubmittedAndCavCasesForJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return items as props', async () => {
@@ -26,7 +26,7 @@ describe('getSubmittedAndCavCasesByJudgeForDashboardAction', () => {
         consolidatedCasesGroupCountMap,
         totalCountForSubmittedAndCavCases,
       },
-    } = await runAction(getSubmittedAndCavCasesByJudgeForDashboardAction, {
+    } = await runAction(getSubmittedAndCavCasesForJudgeAction, {
       modules: {
         presenter,
       },
