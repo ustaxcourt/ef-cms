@@ -11,10 +11,10 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';
 import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * updateUserContactInformationHelper
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
@@ -98,39 +98,23 @@ const updateUserContactInformationHelper = async (
     userId: user.userId,
   });
 
-  // prevent the progress bar component from showing when updating ONLY the firmName
   await generateChangeOfAddress({
     applicationContext,
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
-  });
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'user_contact_full_update_complete',
-    },
-    userId: user.userId,
-  });
-
-  userEntity.isUpdatingInformation = false;
-
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
+    websocketMessagePrefix: 'user',
   });
 };
 
 /**
  * updateUserContactInformationInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  */
-export const updateUserContactInformationInteractor = async (
+export const updateUserContactInformation = async (
   applicationContext: IApplicationContext,
   {
     contactInfo,
@@ -166,3 +150,43 @@ export const updateUserContactInformationInteractor = async (
     throw error;
   }
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_user_contact_information',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+) => {
+  const cases: RawCase[] = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
+      applicationContext,
+      userId,
+    });
+
+  return {
+    identifiers: cases?.map(item => `case|${item.docketNumber}`),
+    ttl: 900,
+  };
+};
+
+export const updateUserContactInformationInteractor = withLocking(
+  updateUserContactInformation,
+  determineEntitiesToLock,
+  handleLockError,
+);

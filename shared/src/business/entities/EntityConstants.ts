@@ -92,6 +92,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
   MULTI_DOCKETABLE_PAPER_FILINGS: {
     disabledMessage:
       'Paper filed docket entries are not being duplicated across consolidated cases temporarily.',
@@ -103,6 +106,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   UPDATED_TRIAL_STATUS_TYPES: {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
+  },
+  USE_CHANGE_OF_ADDRESS_LAMBDA: {
+    disabledMessage:
+      'A flag to know when to use the change of address lambda for processing.',
+    key: 'use-change-of-address-lambda',
   },
   USE_EXTERNAL_PDF_GENERATION: {
     disabledMessage:
@@ -451,9 +459,18 @@ export const SERIATIM_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const MODIFIED_BRIEF_DOCUMENT_EVENT_CODES = [
+  'AMAT',
+  'ADMT',
+  'REDC',
+  'SPML',
+  'SUPM',
+];
+
 export const BRIEF_EVENTCODES = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
+  ...MODIFIED_BRIEF_DOCUMENT_EVENT_CODES,
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
@@ -1467,6 +1484,7 @@ export const ALL_EVENT_CODES = flatten([
 ])
   .map(item => item.eventCode)
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
+  .concat(LEGACY_DOCUMENT_TYPES.map(item => item.eventCode))
   .sort();
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
@@ -1490,6 +1508,7 @@ export const ALL_DOCUMENT_TYPES_MAP = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
+    ...LEGACY_DOCUMENT_TYPES,
   ];
   return documentTypes;
 })();
