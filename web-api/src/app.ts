@@ -38,6 +38,7 @@ import { deleteCaseNoteLambda } from './caseNote/deleteCaseNoteLambda';
 import { deleteCounselFromCaseLambda } from './cases/deleteCounselFromCaseLambda';
 import { deleteDeficiencyStatisticLambda } from './cases/deleteDeficiencyStatisticLambda';
 import { deletePractitionerDocumentLambda } from './practitioners/deletePractitionerDocumentLambda';
+import { deletePrimaryIssueLambda } from '@web-api/caseWorksheet/deletePrimaryIssueLambda';
 import { deleteTrialSessionLambda } from './trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './caseNote/deleteUserCaseNoteLambda';
 import { dismissNOTTReminderForTrialLambda } from './trialSessions/dismissNOTTReminderForTrialLambda';
@@ -995,6 +996,10 @@ app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
  * Case Worksheet
  */
 app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
+app.post(
+  '/case-worksheet/:docketNumber/primary-issue/delete',
+  lambdaWrapper(deletePrimaryIssueLambda),
+);
 
 // This endpoint is used for testing purpose only which exposes the
 // CRON lambda which runs nightly to update cases to be ready for trial.
