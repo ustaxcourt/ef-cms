@@ -30,6 +30,6 @@ describe('setAddEditPrimaryIssueModalStateAction', () => {
 
     expect(state.modal.docketNumber).toBe(TEST_DOCKET_NUMBER);
     expect(state.modal.heading).toBe('Docket 999-99: entityName1,entityName2');
-    expect(state.modal.notes).toBe(TEST_PRIMARY_ISSUE);
+    expect(state.modal.primaryIssue).toBe(TEST_PRIMARY_ISSUE);
   });
 });
