@@ -836,10 +836,6 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   );
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
   app.post(
-    '/cases/:docketNumber/case-worksheet',
-    lambdaWrapper(updateCaseWorksheetInfoLambda),
-  );
-  app.post(
     '/async/trial-sessions/serve-thirty-day-notice',
     lambdaWrapper(serveThirtyDayNoticeLambda, { isAsync: true }),
   );
@@ -999,6 +995,10 @@ app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
 app.post(
   '/case-worksheet/:docketNumber/primary-issue/delete',
   lambdaWrapper(deletePrimaryIssueLambda),
+);
+app.post(
+  '/cases/:docketNumber/case-worksheet',
+  lambdaWrapper(updateCaseWorksheetInfoLambda),
 );
 
 // This endpoint is used for testing purpose only which exposes the
