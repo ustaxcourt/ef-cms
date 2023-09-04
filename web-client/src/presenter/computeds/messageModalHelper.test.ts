@@ -284,6 +284,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}], // 1/2 documents attached
+              draftAttachments: [],
             },
           },
           screenMetadata: {
@@ -307,6 +308,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}], // 1/2 documents attached
+              draftAttachments: [],
             },
           },
           screenMetadata: {
@@ -329,7 +331,8 @@ describe('messageModalHelper', () => {
           caseDetail: {},
           modal: {
             form: {
-              attachments: [{}, {}], // 2/2 documents attached
+              attachments: [{}],
+              draftAttachments: [{}], // 2/2 documents attached
             },
           },
           screenMetadata: {
@@ -355,6 +358,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}], // 1/2 documents attached
+              draftAttachments: [],
             },
           },
           screenMetadata: {},
@@ -375,7 +379,8 @@ describe('messageModalHelper', () => {
           caseDetail: {},
           modal: {
             form: {
-              attachments: [{}, {}], // 2/2 documents attached
+              attachments: [{}],
+              draftAttachments: [{}], // 2/2 documents attached
             },
           },
           screenMetadata: {},
@@ -402,6 +407,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}],
+              draftAttachments: [],
             },
           },
           screenMetadata: {},
@@ -438,6 +444,7 @@ describe('messageModalHelper', () => {
             modal: {
               form: {
                 attachments: [{}, {}], // 2/2 documents attached
+                draftAttachments: [],
               },
             },
             screenMetadata: {},
@@ -462,6 +469,7 @@ describe('messageModalHelper', () => {
             modal: {
               form: {
                 attachments: [{}],
+                draftAttachments: [],
               },
             },
             screenMetadata: {},
