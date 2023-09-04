@@ -2,14 +2,12 @@ import {
   CaseRecord,
   IrsPractitionerOnCaseRecord,
   PrivatePractitionerOnCaseRecord,
-  TDynamoRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
 import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import {
   aggregateCaseItems,
+  aggregateConsolidatedCaseItems,
   isCaseItem,
-  isIrsPractitionerItem,
-  isPrivatePractitionerItem,
 } from '../helpers/aggregateCaseItems';
 import { queryFull } from '../../dynamodbClientService';
 
@@ -50,30 +48,8 @@ export const getCaseByDocketNumber = async ({
       applicationContext,
     });
 
-    consolidatedCases = aggregateConsolidatedCases(consolidatedCaseItems);
+    consolidatedCases = aggregateConsolidatedCaseItems(consolidatedCaseItems);
   }
 
   return { ...aggregateCaseItems(caseItems), consolidatedCases };
-};
-
-const aggregateConsolidatedCases = (
-  consolidatedCaseItems: TDynamoRecord<
-    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
-  >[],
-): ConsolidatedCaseDTO[] => {
-  const caseMap: Map<string, ConsolidatedCaseDTO> = new Map();
-  consolidatedCaseItems
-    .filter((item): item is CaseRecord => isCaseItem(item))
-    .forEach(item => caseMap.set(item.pk, new ConsolidatedCaseDTO(item)));
-
-  consolidatedCaseItems.forEach(item => {
-    if (isIrsPractitionerItem(item)) {
-      caseMap.get(item.pk)?.irsPractitioners.push(item);
-    }
-    if (isPrivatePractitionerItem(item)) {
-      caseMap.get(item.pk)?.privatePractitioners.push(item);
-    }
-  });
-
-  return [...caseMap.values()];
 };
