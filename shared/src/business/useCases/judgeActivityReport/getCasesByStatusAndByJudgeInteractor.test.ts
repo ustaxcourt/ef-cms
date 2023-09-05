@@ -14,7 +14,6 @@ import {
   MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
 } from '@shared/test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { cloneDeep } from 'lodash';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
@@ -235,8 +234,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValueOnce(
-        cloneDeep(casesForLeadDocketNumber),
+      .getCasesMetadataByLeadDocketNumber.mockResolvedValueOnce(
+        casesForLeadDocketNumber,
       );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
