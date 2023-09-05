@@ -11,21 +11,15 @@ describe('getSubmittedAndCavCasesForJudgeAction', () => {
   it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return items as props', async () => {
     const TEST_CASES = [];
     const TEST_CONSOLIDATED_CASES_GROUP_COUNT_MAP = 'IDK_TYPE_OF_THIS';
-    const TEST_TOTAL_COUNT = 12345;
     applicationContext
       .getUseCases()
       .getCasesByStatusAndByJudgeInteractor.mockResolvedValue({
         cases: TEST_CASES,
         consolidatedCasesGroupCountMap: TEST_CONSOLIDATED_CASES_GROUP_COUNT_MAP,
-        totalCount: TEST_TOTAL_COUNT,
       });
 
     const {
-      output: {
-        cases,
-        consolidatedCasesGroupCountMap,
-        totalCountForSubmittedAndCavCases,
-      },
+      output: { cases, consolidatedCasesGroupCountMap },
     } = await runAction(getSubmittedAndCavCasesForJudgeAction, {
       modules: {
         presenter,
@@ -48,6 +42,5 @@ describe('getSubmittedAndCavCasesForJudgeAction', () => {
     expect(consolidatedCasesGroupCountMap).toEqual(
       TEST_CONSOLIDATED_CASES_GROUP_COUNT_MAP,
     );
-    expect(totalCountForSubmittedAndCavCases).toEqual(TEST_TOTAL_COUNT);
   });
 });
