@@ -1,4 +1,5 @@
 import { updateConsistent } from '../../../dynamodbClientService';
+import promiseRetry from 'promise-retry';
 
 /**
  * setTrialSessionProcessingStatus
@@ -18,25 +19,27 @@ export const createChangeOfAddressJob = ({
   jobId: string;
   docketNumbers: string[];
 }) =>
-  updateConsistent({
-    ExpressionAttributeNames: {
-      '#allCases': 'allCases',
-      '#jobId': 'jobId',
-      '#processed': 'processed',
-      '#remaining': 'remaining',
-    },
-    ExpressionAttributeValues: {
-      ':jobId': jobId,
-      ':processed': [],
-      ':remaining': docketNumbers.length,
-      ':value': docketNumbers,
-    },
-    Key: {
-      pk: `change-of-address-job|${jobId}`,
-      sk: `change-of-address-job|${jobId}`,
-    },
-    ReturnValues: 'UPDATED_NEW',
-    UpdateExpression:
-      'SET #allCases = :value, #remaining = :remaining, #jobId = :jobId, #processed = :processed',
-    applicationContext,
-  });
+  promiseRetry(retry =>
+    updateConsistent({
+      ExpressionAttributeNames: {
+        '#allCases': 'allCases',
+        '#jobId': 'jobId',
+        '#processed': 'processed',
+        '#remaining': 'remaining',
+      },
+      ExpressionAttributeValues: {
+        ':jobId': jobId,
+        ':processed': [],
+        ':remaining': docketNumbers.length,
+        ':value': docketNumbers,
+      },
+      Key: {
+        pk: `change-of-address-job|${jobId}`,
+        sk: `change-of-address-job|${jobId}`,
+      },
+      ReturnValues: 'UPDATED_NEW',
+      UpdateExpression:
+        'SET #allCases = :value, #remaining = :remaining, #jobId = :jobId, #processed = :processed',
+      applicationContext,
+    }).catch(retry),
+  );
