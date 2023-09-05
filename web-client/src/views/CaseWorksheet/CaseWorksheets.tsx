@@ -129,7 +129,7 @@ export const CaseWorksheets = connect(
                     </td>
                     <td>
                       <select
-                        aria-describedby="status-of-matter"
+                        aria-label="status of matter"
                         className="usa-select"
                         id={`status-of-matter-dropdown-${formattedCase.docketNumber}`}
                         name="statusOfMatter"
