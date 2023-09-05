@@ -5,8 +5,9 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
-export const removeCaseFromTrialInteractor = async (
+export const removeCaseFromTrial = async (
   applicationContext: IApplicationContext,
   {
     associatedJudge,
@@ -98,3 +99,13 @@ export const removeCaseFromTrialInteractor = async (
 
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
+
+export const removeCaseFromTrialInteractor = withLocking(
+  removeCaseFromTrial,
+  (
+    _applicationContext: IApplicationContext,
+    { docketNumber }: { docketNumber: string },
+  ) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

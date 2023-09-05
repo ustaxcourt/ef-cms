@@ -4,6 +4,7 @@
  */
 export const NotFoundError = class NotFoundError extends Error {
   public statusCode: number;
+  public skipLogging?: boolean;
   /**
    * constructor
    * @param {string} message the error message
@@ -55,6 +56,8 @@ export const UnknownUserError = class UnknownUserError extends Error {
  */
 export const UnauthorizedError = class UnauthorizedError extends Error {
   public statusCode: number;
+  public skipLogging?: boolean;
+
   /**
    * constructor
    * @param {string} message the error message
@@ -97,6 +100,22 @@ export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error
     super(message);
 
     this.statusCode = 500;
+  }
+};
+
+export const ServiceUnavailableError = class ServiceUnavailableError extends Error {
+  /**
+   * constructor
+   *
+   * @param {string} message the error message
+   */
+  public statusCode: number;
+  retryAfter?: number;
+  constructor(message = 'Service Unavailable', retryAfter = 3000) {
+    super(message);
+
+    this.retryAfter = retryAfter;
+    this.statusCode = 503;
   }
 };
 

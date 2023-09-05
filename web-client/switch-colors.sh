@@ -35,6 +35,7 @@ npx ts-node --transpile-only ./web-client/switch-api-colors.js
 npx ts-node --transpile-only ./web-client/switch-public-api-colors.js
 npx ts-node --transpile-only ./web-api/switch-cognito-triggers-color.ts
 npx ts-node --transpile-only ./web-api/switch-bounce-handler-colors.js
+npx ts-node --transpile-only ./web-api/switch-health-check-domain.ts
 
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'"${DEPLOYING_COLOR}"'"}}'
 
