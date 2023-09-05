@@ -3,7 +3,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const clearTableItemValidationErrorAction = ({
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{ docketNumber: string; validationKey: string }>) => {
   const { docketNumber, validationKey } = props;
 
   store.unset(

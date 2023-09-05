@@ -16,7 +16,6 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
 
   it('should fetch from persistence and return all case worksheets for the provided judge', async () => {
     const TEST_WORKSHEET: RawCaseWorksheet = {
-      caseWorksheetId: '59a01b23-20b6-4313-8f41-6b9774abdf3e',
       docketNumber: '123-45',
       entityName: 'CaseWorksheet',
       finalBriefDueDate: '2023-08-29',

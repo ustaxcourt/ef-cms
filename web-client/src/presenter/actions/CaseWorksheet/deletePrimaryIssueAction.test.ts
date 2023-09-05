@@ -11,10 +11,10 @@ describe('deletePrimaryIssueAction', () => {
     const RETURNED_WORKSHEET = {
       docketNumber: MOCK_CASE.docketNumber,
     };
-
     applicationContext
       .getUseCases()
       .deletePrimaryIssueInteractor.mockResolvedValue(RETURNED_WORKSHEET);
+
     const {
       output: { updatedWorksheet },
     } = await runAction(deletePrimaryIssueAction, {
@@ -34,7 +34,6 @@ describe('deletePrimaryIssueAction', () => {
     ).toEqual({
       docketNumber: MOCK_CASE.docketNumber,
     });
-
     expect(updatedWorksheet).toBe(RETURNED_WORKSHEET);
   });
 });

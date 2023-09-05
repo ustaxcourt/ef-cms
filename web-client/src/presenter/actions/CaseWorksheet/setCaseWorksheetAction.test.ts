@@ -4,13 +4,13 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCaseWorksheetAction } from './setCaseWorksheetAction';
 
 describe('setUpdatedCaseInStateAction', () => {
-  it('should add the updated worksheet to the list of worksheets in state when it does not already exist in the list', async () => {
-    const mockCaseWorksheet: RawCaseWorksheet = {
-      docketNumber: MOCK_CASE.docketNumber,
-      entityName: 'CaseWorksheet',
-      primaryIssue: 'Superstition ain`t the way',
-    };
+  const mockCaseWorksheet: RawCaseWorksheet = {
+    docketNumber: MOCK_CASE.docketNumber,
+    entityName: 'CaseWorksheet',
+    primaryIssue: 'Superstition ain`t the way',
+  };
 
+  it('should add the updated worksheet to the list of worksheets in state when it does not already exist in the list', async () => {
     const { state } = await runAction(setCaseWorksheetAction, {
       props: {
         updatedWorksheet: mockCaseWorksheet,
@@ -26,11 +26,6 @@ describe('setUpdatedCaseInStateAction', () => {
   });
 
   it('should update the existing in state when it already exists in the list', async () => {
-    const mockCaseWorksheet: RawCaseWorksheet = {
-      docketNumber: MOCK_CASE.docketNumber,
-      entityName: 'CaseWorksheet',
-      primaryIssue: 'Superstition ain`t the way',
-    };
     const mockCaseWorksheet2: RawCaseWorksheet = {
       docketNumber: '102-18',
       entityName: 'CaseWorksheet',
