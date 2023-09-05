@@ -19,12 +19,18 @@ describe('Judges dashboard', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
+
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
+  docketClerkUpdatesCaseStatusTo(
+    cerebralTest,
+    CASE_STATUS_TYPES.submitted,
+    'Colvin',
+  );
 
   it('save docket number for later test', () => {
     cerebralTest.firstCavDocketNumber = cerebralTest.docketNumber;
   });
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest);
 
@@ -32,9 +38,9 @@ describe('Judges dashboard', () => {
   docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-
-  it('should display the CAV case', async () => {
+  it('should display the CAV and Submitted case table on the dashboard', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
+
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
 
     const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
@@ -50,7 +56,7 @@ describe('Judges dashboard', () => {
     });
   });
 
-  it('should create and display a primary issue for the CAV case in the table', async () => {
+  it('should set state and display a primary issue set by the user', async () => {
     let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
     });
@@ -83,7 +89,7 @@ describe('Judges dashboard', () => {
     });
   });
 
-  it('should set state with updated brief due date set by user', async () => {
+  it('should persist and display a final brief due date set by user', async () => {
     const briefDueDate = '08/29/2023';
 
     await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
@@ -112,15 +118,14 @@ describe('Judges dashboard', () => {
     expect(otherCavCaseInTable.worksheet.finalBriefDueDate).toBeUndefined();
   });
 
-  it('should setup error message state for when an invalid brief due date is set', async () => {
-    //assert no existing errors in state
-    //state.validationErrors.submittedCavCasesTable[docketNumber]
-    let tableItemErrors =
-      cerebralTest.getState('state.validationErrors.submittedCavCasesTable') ||
-      {};
-    expect(tableItemErrors[cerebralTest.docketNumber]).toBeUndefined();
+  it('should display an error message when an invalid brief due date is set', async () => {
+    const caseWorksheetTableErrors = cerebralTest.getState(
+      'validationErrors.submittedCavCasesTable',
+    );
+    expect(
+      caseWorksheetTableErrors[cerebralTest.docketNumber]?.finalBriefDueDate,
+    ).toBeUndefined();
 
-    // set date to an invalid date\
     const invalidBriefDueDate = '08/29/TEST';
 
     await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
@@ -128,15 +133,14 @@ describe('Judges dashboard', () => {
       finalBriefDueDate: invalidBriefDueDate,
     });
 
-    // check error message in state
-    tableItemErrors = cerebralTest.getState(
-      'state.validationErrors.submittedCavCasesTable',
+    const caseWorksheetTableErrorsAfter = cerebralTest.getState(
+      'validationErrors.submittedCavCasesTable',
     );
-    expect(tableItemErrors[cerebralTest.docketNumber]).toMatchObject({
-      finalBriefDueDate: 'abc',
+    expect(caseWorksheetTableErrorsAfter[cerebralTest.docketNumber]).toEqual({
+      finalBriefDueDate: 'Enter a valid due date',
     });
-    //assert
   });
+
   //edit primary
   //invalid not
   //delete primary
