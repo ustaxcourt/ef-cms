@@ -351,6 +351,112 @@ describe('judgeActivityReportHelper', () => {
     });
   });
 
+  describe('progressDescriptionTableTotal', () => {
+    mockSubmittedAndCavCasesByJudge = [];
+    it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        {};
+
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+
+      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
+        mockSubmittedAndCavCasesByJudge.length;
+
+      const { progressDescriptionTableTotal } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(progressDescriptionTableTotal).toBe(
+        mockSubmittedAndCavCasesByJudge.length,
+      );
+    });
+  });
+
+  describe('submittedAndCavCasesByJudge', () => {
+    beforeEach(() => {
+      mockSubmittedAndCavCasesByJudge = [
+        {
+          daysElapsedSinceLastStatusChange: 1,
+          docketNumber: '101-20',
+          leadDocketNumber: '101-20',
+        },
+        {
+          daysElapsedSinceLastStatusChange: 1,
+          docketNumber: '110-15',
+        },
+        {
+          daysElapsedSinceLastStatusChange: 1,
+          docketNumber: '202-11',
+        },
+      ];
+    });
+
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        { '101-20': 4 };
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      const leadCase = submittedAndCavCasesByJudge.find(caseRecord => {
+        return caseRecord.leadDocketNumber;
+      });
+
+      const unconsolidatedCases = submittedAndCavCasesByJudge.filter(
+        caseRecord => {
+          return !caseRecord.leadDocketNumber;
+        },
+      );
+
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
+      expect(leadCase.consolidatedIconTooltipText).toBe('Lead case');
+      expect(leadCase.isLeadCase).toBe(true);
+      expect(leadCase.inConsolidatedGroup).toBe(true);
+      expect(leadCase.formattedCaseCount).toBe(4);
+      expect(leadCase.daysElapsedSinceLastStatusChange).toBe(1);
+
+      expect(unconsolidatedCases.length).toBe(2);
+      unconsolidatedCases.forEach(unconsolidatedCase => {
+        expect(unconsolidatedCase.formattedCaseCount).toBe(1);
+        expect(unconsolidatedCase.daysElapsedSinceLastStatusChange).toBe(1);
+      });
+    });
+
+    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
+      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
+        { '101-20': 4 };
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
+      expect(
+        submittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
+      ).toBe(1);
+      expect(
+        submittedAndCavCasesByJudge[1].daysElapsedSinceLastStatusChange,
+      ).toBe(1);
+      expect(
+        submittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
+      ).toBe(1);
+    });
+  });
+
   describe('pageCount and showPaginator', () => {
     it('should return a pageCount of 1 and showPaginator as false for single page display', () => {
       baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
@@ -363,7 +469,6 @@ describe('judgeActivityReportHelper', () => {
       const result = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
-
       expect(result.pageCount).toBe(1);
       expect(result.showPaginator).toBe(false);
     });
@@ -378,7 +483,6 @@ describe('judgeActivityReportHelper', () => {
       const result = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
-
       expect(result.pageCount).toBe(2);
       expect(result.showPaginator).toBe(true);
     });
