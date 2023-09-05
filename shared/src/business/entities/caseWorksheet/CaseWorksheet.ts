@@ -20,7 +20,7 @@ export class CaseWorksheet extends JoiValidationEntity {
   static VALIDATION_RULES = {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
     finalBriefDueDate: JoiValidationConstants.DATE.allow('').optional(),
-    primaryIssue: JoiValidationConstants.STRING.optional(), // TODO: should this allow ''?
+    primaryIssue: JoiValidationConstants.STRING.optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
       ...STATUS_OF_MATTER_OPTIONS,
     )

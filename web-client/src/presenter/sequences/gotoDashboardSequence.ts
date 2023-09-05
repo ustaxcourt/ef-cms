@@ -6,8 +6,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
-import { getSubmittedAndCavCasesByJudgeForDashboardAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
-import { getSubmittedCavWorksheetsByJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedCavWorksheetsByJudgeAction';
+import { getSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -77,9 +76,8 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  getSubmittedAndCavCasesByJudgeForDashboardAction,
+                  getSubmittedAndCavCasesForJudgeAction,
                   setSubmittedAndCavCasesForJudgeAction,
-                  getSubmittedCavWorksheetsByJudgeAction,
                   setCaseWorksheetsByJudgeAction,
                   setupCurrentPageAction('DashboardChambers'),
                 ],
@@ -101,9 +99,8 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  getSubmittedAndCavCasesByJudgeForDashboardAction,
+                  getSubmittedAndCavCasesForJudgeAction,
                   setSubmittedAndCavCasesForJudgeAction,
-                  getSubmittedCavWorksheetsByJudgeAction,
                   setCaseWorksheetsByJudgeAction,
                   setupCurrentPageAction('DashboardJudge'),
                 ],

@@ -34,11 +34,13 @@ export const updateCaseWorksheetInteractor = async (
     docketNumber,
   }).validate();
 
+  const rawCaseWorksheet = caseWorksheetEntity.toRawObject();
+
   await applicationContext.getPersistenceGateway().updateCaseWorksheet({
     applicationContext,
-    caseWorksheet: caseWorksheetEntity.toRawObject(),
+    caseWorksheet: rawCaseWorksheet,
     judgeUserId: user.userId,
   });
 
-  return caseWorksheetEntity.toRawObject();
+  return rawCaseWorksheet;
 };

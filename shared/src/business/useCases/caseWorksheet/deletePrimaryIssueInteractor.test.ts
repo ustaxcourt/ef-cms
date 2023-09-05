@@ -3,6 +3,7 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deletePrimaryIssueInteractor } from './deletePrimaryIssueInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
+import { omit } from 'lodash';
 
 describe('deletePrimaryIssueInteractor', () => {
   const mockCaseWorksheet: RawCaseWorksheet = {
@@ -33,26 +34,17 @@ describe('deletePrimaryIssueInteractor', () => {
 
   it('should call the persistence method with the primaryIssue deleted from the worksheet', async () => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
-    const TEST_WORKSHEET = {
-      docketNumber: '111-11',
-      primaryIssue: 'TEST_PRIMARY_ISSUE',
-    };
     applicationContext
       .getPersistenceGateway()
-      .getCaseWorksheet.mockReturnValue(TEST_WORKSHEET);
+      .getCaseWorksheet.mockReturnValue(mockCaseWorksheet);
 
     const worksheet = await deletePrimaryIssueInteractor(applicationContext, {
-      docketNumber: '111-11',
+      docketNumber: mockCaseWorksheet.docketNumber,
     });
 
     const EXPECTED_WORKSHEET = {
-      docketNumber: '111-11',
-      entityName: 'CaseWorksheet',
-      finalBriefDueDate: undefined,
-      statusOfMatter: undefined,
+      ...omit(mockCaseWorksheet, 'primaryIssue'),
     };
-
     expect(
       applicationContext.getPersistenceGateway().updateCaseWorksheet,
     ).toHaveBeenCalledWith({
@@ -60,7 +52,6 @@ describe('deletePrimaryIssueInteractor', () => {
       caseWorksheet: EXPECTED_WORKSHEET,
       judgeUserId: judgeUser.userId,
     });
-
     expect(worksheet).toEqual(EXPECTED_WORKSHEET);
   });
 });
