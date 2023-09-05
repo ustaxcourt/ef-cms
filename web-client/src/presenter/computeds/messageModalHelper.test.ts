@@ -22,7 +22,7 @@ describe('messageModalHelper', () => {
 
   const mockDocketEntryWithFileAttachedOnDocketRecord = {
     descriptionDisplay: 'Hello with additional info',
-    documentId: mockDocketEntryIdOnDocketRecord,
+    docketEntryId: mockDocketEntryIdOnDocketRecord,
     documentType: 'Petition',
     index: 1,
     isFileAttached: true,
@@ -30,7 +30,7 @@ describe('messageModalHelper', () => {
   };
 
   const mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription = {
-    documentId: mockDocketEntryIdAlsoOnDocketRecord,
+    docketEntryId: mockDocketEntryIdAlsoOnDocketRecord,
     documentTitle: 'Some Document',
     index: 2,
     isFileAttached: true,
@@ -44,7 +44,7 @@ describe('messageModalHelper', () => {
   ];
 
   const mockDraftDocketEntry = {
-    documentId: '345',
+    docketEntryId: '345',
     documentTitle: 'Order to do something',
     documentType: 'Order',
     isDraft: true,
@@ -139,8 +139,8 @@ describe('messageModalHelper', () => {
       });
 
       expect(documents).toMatchObject([
-        { documentId: mockDocketEntryIdOnDocketRecord },
-        { documentId: mockDocketEntryIdAlsoOnDocketRecord },
+        { docketEntryId: mockDocketEntryIdOnDocketRecord },
+        { docketEntryId: mockDocketEntryIdAlsoOnDocketRecord },
       ]);
       expect(documents.length).toEqual(2);
     });
@@ -161,8 +161,8 @@ describe('messageModalHelper', () => {
     it('should should set isAlreadyAttached to true if the document has already been selected', () => {
       baseState.modal.form.attachments = [
         {
-          docketEntryId:
-            mockDocketEntryWithFileAttachedOnDocketRecord.documentId,
+          documentId:
+            mockDocketEntryWithFileAttachedOnDocketRecord.docketEntryId,
         },
       ];
       baseState.modal.form.draftAttachments = [];
@@ -186,8 +186,8 @@ describe('messageModalHelper', () => {
     it('should should set isAlreadyAttached to true if the draft attachment has already been selected', () => {
       baseState.modal.form.draftAttachments = [
         {
-          docketEntryId:
-            mockDocketEntryWithFileAttachedOnDocketRecord.documentId,
+          documentId:
+            mockDocketEntryWithFileAttachedOnDocketRecord.docketEntryId,
         },
       ];
 
