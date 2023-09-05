@@ -123,13 +123,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValue([]);
-
-    applicationContext
-      .getPersistenceGateway()
       .getCasesMetadataByLeadDocketNumber.mockResolvedValueOnce(
         casesForLeadDocketNumber,
       );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersWithServedEventCodes.mockReturnValue([]);
 
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,

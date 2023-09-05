@@ -46,7 +46,6 @@ import { editPetitionerInformationHelper } from './computeds/editPetitionerInfor
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -178,7 +177,6 @@ export const computeds = {
   editStatisticFormHelper,
   externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
-  featureFlagHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,

@@ -1,3 +1,10 @@
+import {
+  CaseRecord,
+  IrsPractitionerOnCaseRecord,
+  PrivatePractitionerOnCaseRecord,
+  TDynamoRecord,
+} from '@web-api/persistence/dynamo/dynamoTypes';
+import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { sortBy } from 'lodash';
 
 export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
@@ -17,7 +24,8 @@ export const isArchivedCorrespondenceItem = item =>
 export const isArchivedDocketEntryItem = item =>
   item.sk.startsWith('docket-entry|') && item.archived;
 
-export const isCaseItem = item => item.sk.startsWith('case|');
+export const isCaseItem = (item: any): item is CaseRecord =>
+  item.pk?.startsWith('case|') && item.sk.startsWith('case|');
 
 export const isCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && !item.archived;
@@ -29,11 +37,15 @@ export const isWorkItemItem = item => item.sk.startsWith('work-item|');
 
 export const isHearingItem = item => item.sk.startsWith('hearing|');
 
-export const isIrsPractitionerItem = item =>
-  item.sk.startsWith('irsPractitioner|');
+export const isIrsPractitionerItem = (
+  item: any,
+): item is IrsPractitionerOnCaseRecord =>
+  item.pk?.startsWith('case|') && item.sk?.startsWith('irsPractitioner|');
 
-export const isPrivatePractitionerItem = item =>
-  item.sk.startsWith('privatePractitioner|');
+export const isPrivatePractitionerItem = (
+  item: any,
+): item is PrivatePractitionerOnCaseRecord =>
+  item.pk?.startsWith('case|') && item.sk.startsWith('privatePractitioner|');
 
 export const aggregateCaseItems = caseAndCaseItems => {
   let archivedCorrespondences = [];
@@ -105,4 +117,26 @@ export const aggregateCaseItems = caseAndCaseItems => {
     irsPractitioners,
     privatePractitioners,
   };
+};
+
+export const aggregateConsolidatedCaseItems = (
+  consolidatedCaseItems: TDynamoRecord<
+    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
+  >[],
+): ConsolidatedCaseDTO[] => {
+  const caseMap: Map<string, ConsolidatedCaseDTO> = new Map();
+  consolidatedCaseItems
+    .filter((item): item is CaseRecord => isCaseItem(item))
+    .forEach(item => caseMap.set(item.pk, new ConsolidatedCaseDTO(item)));
+
+  consolidatedCaseItems.forEach(item => {
+    if (isIrsPractitionerItem(item)) {
+      caseMap.get(item.pk)?.irsPractitioners.push(item);
+    }
+    if (isPrivatePractitionerItem(item)) {
+      caseMap.get(item.pk)?.privatePractitioners.push(item);
+    }
+  });
+
+  return [...caseMap.values()];
 };

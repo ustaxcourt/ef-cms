@@ -72,7 +72,6 @@ import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLamb
 import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
-import { getConsolidatedCasesByCaseLambda } from './cases/getConsolidatedCasesByCaseLambda';
 import { getCountOfOpinionsFiledByJudgeLambda } from './reports/getCountOfOpinionsFiledByJudgeLambda';
 import { getCountOfOrdersFiledByJudgeLambda } from './reports/getCountOfOrdersFiledByJudgeLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
@@ -583,10 +582,6 @@ app.use(logger());
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
-  );
-  app.get(
-    '/cases/:docketNumber/consolidated-cases',
-    lambdaWrapper(getConsolidatedCasesByCaseLambda),
   );
   app.post(
     '/cases/:docketNumber/serve-to-irs',

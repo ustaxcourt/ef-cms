@@ -26,6 +26,7 @@ import {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
+import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
@@ -124,6 +125,7 @@ export class Case extends JoiValidationEntity {
   public correspondence: any[];
   public archivedCorrespondences: any[];
   public hasPendingItems: boolean;
+  public consolidatedCases: ConsolidatedCaseDTO[];
 
   constructor(
     rawCase: any,
@@ -144,6 +146,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
+    this.consolidatedCases = rawCase.consolidatedCases || [];
 
     const currentUser = applicationContext.getCurrentUser();
 
