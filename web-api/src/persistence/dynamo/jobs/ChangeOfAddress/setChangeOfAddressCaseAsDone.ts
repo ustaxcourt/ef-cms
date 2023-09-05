@@ -1,4 +1,5 @@
 import { updateConsistent } from '../../../dynamodbClientService';
+import promiseRetry from 'promise-retry';
 
 /**
  * setTrialSessionProcessingStatus
@@ -18,21 +19,23 @@ export const setChangeOfAddressCaseAsDone = ({
   jobId: string;
   docketNumber: string;
 }) =>
-  updateConsistent({
-    ExpressionAttributeNames: {
-      '#processed': 'processed',
-      '#remaining': 'remaining',
-    },
-    ExpressionAttributeValues: {
-      ':decrementValue': -1,
-      ':value': [docketNumber],
-    },
-    Key: {
-      pk: `change-of-address-job|${jobId}`,
-      sk: `change-of-address-job|${jobId}`,
-    },
-    ReturnValues: 'UPDATED_NEW',
-    UpdateExpression:
-      'SET #processed = list_append(#processed, :value) ADD #remaining :decrementValue',
-    applicationContext,
-  });
+  promiseRetry(retry =>
+    updateConsistent({
+      ExpressionAttributeNames: {
+        '#processed': 'processed',
+        '#remaining': 'remaining',
+      },
+      ExpressionAttributeValues: {
+        ':decrementValue': -1,
+        ':value': [docketNumber],
+      },
+      Key: {
+        pk: `change-of-address-job|${jobId}`,
+        sk: `change-of-address-job|${jobId}`,
+      },
+      ReturnValues: 'UPDATED_NEW',
+      UpdateExpression:
+        'SET #processed = list_append(#processed, :value) ADD #remaining :decrementValue',
+      applicationContext,
+    }).catch(retry),
+  );
