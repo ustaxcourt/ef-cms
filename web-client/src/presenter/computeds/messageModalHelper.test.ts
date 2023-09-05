@@ -308,8 +308,6 @@ describe('messageModalHelper', () => {
 
   describe('showAddDocumentForm', () => {
     it("should be true when the message doesn't have any attachments", () => {
-      console.log('baseState', baseState);
-
       const { showAddDocumentForm } = runCompute(messageModalHelper, {
         state: baseState,
       });
