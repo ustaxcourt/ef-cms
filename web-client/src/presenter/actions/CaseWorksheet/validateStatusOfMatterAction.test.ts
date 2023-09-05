@@ -24,7 +24,7 @@ describe('validateStatusOfMatterAction', () => {
   });
 
   it('should use the docket number from props to validate/create a new case worksheet when one does not already exist for the case', async () => {
-    await runAction(validateStatusOfMatterAction as any, {
+    await runAction(validateStatusOfMatterAction, {
       modules: {
         presenter,
       },
@@ -46,7 +46,7 @@ describe('validateStatusOfMatterAction', () => {
   });
 
   it('should return the success path with the validation key to unset in state when the updated case worksheet is valid', async () => {
-    await runAction(validateStatusOfMatterAction as any, {
+    await runAction(validateStatusOfMatterAction, {
       modules: {
         presenter,
       },
@@ -84,7 +84,7 @@ describe('validateStatusOfMatterAction', () => {
       .getUseCases()
       .validateCaseWorksheetInteractor.mockReturnValue(TEST_VALIDATION_ERRORS);
 
-    await runAction(validateStatusOfMatterAction as any, {
+    await runAction(validateStatusOfMatterAction, {
       modules: {
         presenter,
       },
