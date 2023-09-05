@@ -22,7 +22,6 @@ export const JudgeActivityReport = connect(
       sequences.setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
-    submittedAndCavCasesHelper: state.submittedAndCavCasesHelper,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
@@ -33,7 +32,6 @@ export const JudgeActivityReport = connect(
     judgeActivityReportJudges,
     setJudgeActivityReportFiltersSequence,
     submitJudgeActivityReportSequence,
-    submittedAndCavCasesHelper,
     validationErrors,
   }) {
     const [activePage, setActivePage] = useState(0);
@@ -65,7 +63,7 @@ export const JudgeActivityReport = connect(
             ).map(([status, count]) => (
               <tr key={status}>
                 <td>{status}</td>
-                <td>{formatPositiveNumber(count as number)}</td>
+                <td>{formatPositiveNumber(count)}</td>
               </tr>
             ))}
           </tbody>
@@ -102,7 +100,7 @@ export const JudgeActivityReport = connect(
             ).map(([sessionStatus, count]) => (
               <tr key={sessionStatus}>
                 <td>{sessionStatus}</td>
-                <td>{formatPositiveNumber(count as number)}</td>
+                <td>{formatPositiveNumber(count)}</td>
               </tr>
             ))}
           </tbody>
@@ -222,10 +220,9 @@ export const JudgeActivityReport = connect(
               </div>
               <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
                 Total:{' '}
-                {
-                  submittedAndCavCasesHelper.filteredSubmittedAndCavCasesByJudge
-                    .length
-                }
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.progressDescriptionTableTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -242,7 +239,7 @@ export const JudgeActivityReport = connect(
             </tr>
           </thead>
           <tbody>
-            {submittedAndCavCasesHelper.filteredSubmittedAndCavCasesByJudge.map(
+            {judgeActivityReportHelper.submittedAndCavCasesByJudge.map(
               formattedCase => {
                 return (
                   <tr key={formattedCase.docketNumber}>
@@ -278,12 +275,12 @@ export const JudgeActivityReport = connect(
             )}
           </tbody>
         </table>
-        {submittedAndCavCasesHelper.showPaginator && (
+        {judgeActivityReportHelper.showPaginator && (
           <Paginator
             breakClassName="hide"
             forcePage={activePage}
             marginPagesDisplayed={0}
-            pageCount={submittedAndCavCasesHelper.pageCount}
+            pageCount={judgeActivityReportHelper.pageCount}
             pageRangeDisplayed={0}
             onPageChange={pageChange => {
               setActivePage(pageChange.selected);
@@ -293,8 +290,7 @@ export const JudgeActivityReport = connect(
             }}
           />
         )}
-        {submittedAndCavCasesHelper.filteredSubmittedAndCavCasesByJudge
-          .length === 0 && (
+        {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
           <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
         )}
       </>
@@ -421,5 +417,3 @@ export const JudgeActivityReport = connect(
     );
   },
 );
-
-JudgeActivityReport.displayName = 'JudgeActivityReport';

@@ -118,7 +118,6 @@ import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
 import { statisticsHelper } from './computeds/statisticsHelper';
-import { submittedAndCavCasesHelper } from '@web-client/presenter/computeds/JudgeActivityReport/submittedAndCavCasesHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
@@ -248,7 +247,6 @@ export const computeds = {
   startCaseInternalHelper,
   statisticsFormHelper,
   statisticsHelper,
-  submittedAndCavCasesHelper,
   templateHelper,
   trialCitiesHelper,
   trialSessionDetailsHelper,
