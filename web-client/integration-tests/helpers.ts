@@ -1,9 +1,11 @@
 /* eslint-disable max-lines */
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
+import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -23,6 +25,15 @@ import {
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from '../../web-api/src/persistence/dynamo/locks/acquireLock';
+import {
+  fakeData,
+  getFakeFile,
+} from '../../shared/src/business/test/getFakeFile';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -48,8 +59,10 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
 import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
+import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
@@ -63,12 +76,6 @@ import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/com
 import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
-const pdfLib = require('pdf-lib');
-import {
-  fakeData,
-  getFakeFile,
-} from '../../shared/src/business/test/getFakeFile';
-import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
@@ -207,6 +214,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       return pdfLib;
     },
     getPersistenceGateway: () => ({
+      createLock,
       getCaseByDocketNumber,
       getCasesForUser,
       getDocketNumbersByUser,
@@ -215,7 +223,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           url: 'http://example.com',
         };
       },
+      getLock,
       getUserById,
+      removeLock,
       saveDocumentFromLambda,
       saveWorkItem,
       updateCase,
@@ -240,6 +250,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getUniqueId,
     getUseCaseHelpers: () => ({
+      acquireLock,
       countPagesInDocument,
       generateAndServeDocketEntry,
       generatePdfFromHtmlHelper,
@@ -271,11 +282,13 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       formatNow,
       getDocumentTypeForAddressChange,
       prepareDateFromString,
+      sleep,
     }),
     logger: {
       debug: () => {},
       error: () => {},
       info: () => {},
+      warn: () => {},
     },
   };
 
@@ -422,7 +435,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection: string | null = null,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
