@@ -1,5 +1,4 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from './caseWorksheetsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -15,6 +14,7 @@ describe('caseWorksheetsHelper', () => {
   beforeEach(() => {
     submittedAndCavCasesByJudge = [
       {
+        caseCaption: 'Scooby Doo, Petitioner',
         caseStatusHistory: [
           {
             date: '2022-02-15T05:00:00.000Z',
@@ -29,6 +29,7 @@ describe('caseWorksheetsHelper', () => {
         leadDocketNumber: '101-20',
       },
       {
+        caseCaption: 'Velma Jinkies, Petitioner',
         caseStatusHistory: [
           {
             date: '2022-02-15T05:00:00.000Z',
@@ -42,6 +43,7 @@ describe('caseWorksheetsHelper', () => {
         docketNumber: '110-15',
       },
       {
+        caseCaption: 'Fred Dude, Petitioner',
         caseStatusHistory: [
           {
             date: '2022-02-15T05:00:00.000Z',
@@ -60,16 +62,60 @@ describe('caseWorksheetsHelper', () => {
       submittedAndCavCases: {
         consolidatedCasesGroupCountMap: {},
         submittedAndCavCasesByJudge,
-        worksheets: [],
+        worksheets: [{ docketNumber: '110-15', primaryIssue: 'ZOINKS!' }],
       },
     };
   });
 
-  it('should return caseWorksheetsFormatted TODO', () => {
+  it('should return caseWorksheetsFormatted with all appropiate data', () => {
     const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: baseState,
     });
 
-    expect(caseWorksheetsFormatted).toEqual('a');
+    const EXPECTED_FORMATTED_CASE_WORKSHEETS = [
+      {
+        caseTitle: 'Fred Dude',
+        consolidatedIconTooltipText: '',
+        daysSinceLastStatusChange: 576,
+        docketNumber: '202-11',
+        docketNumberWithSuffix: undefined,
+        formattedCaseCount: 1,
+        formattedSubmittedCavStatusDate: '02/06/22',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        status: undefined,
+        worksheet: {},
+      },
+      {
+        caseTitle: 'Scooby Doo',
+        consolidatedIconTooltipText: 'Lead case',
+        daysSinceLastStatusChange: 566,
+        docketNumber: '101-20',
+        docketNumberWithSuffix: undefined,
+        formattedCaseCount: 1,
+        formattedSubmittedCavStatusDate: '02/16/22',
+        inConsolidatedGroup: true,
+        isLeadCase: true,
+        status: undefined,
+        worksheet: {},
+      },
+      {
+        caseTitle: 'Velma Jinkies',
+        consolidatedIconTooltipText: '',
+        daysSinceLastStatusChange: 556,
+        docketNumber: '110-15',
+        docketNumberWithSuffix: undefined,
+        formattedCaseCount: 1,
+        formattedSubmittedCavStatusDate: '02/26/22',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        status: undefined,
+        worksheet: {
+          docketNumber: '110-15',
+          primaryIssue: 'ZOINKS!',
+        },
+      },
+    ];
+    expect(caseWorksheetsFormatted).toEqual(EXPECTED_FORMATTED_CASE_WORKSHEETS);
   });
 });
