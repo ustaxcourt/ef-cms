@@ -83,7 +83,7 @@ describe('Judges dashboard', () => {
     });
   });
 
-  it('should display a brief due date', async () => {
+  it('should set state with updated brief due date set by user', async () => {
     const briefDueDate = '08/29/2023';
 
     await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
@@ -111,4 +111,35 @@ describe('Judges dashboard', () => {
     )!;
     expect(otherCavCaseInTable.worksheet.finalBriefDueDate).toBeUndefined();
   });
+
+  it('should setup error message state for when an invalid brief due date is set', async () => {
+    //assert no existing errors in state
+    //state.validationErrors.submittedCavCasesTable[docketNumber]
+    let tableItemErrors =
+      cerebralTest.getState('state.validationErrors.submittedCavCasesTable') ||
+      {};
+    expect(tableItemErrors[cerebralTest.docketNumber]).toBeUndefined();
+
+    // set date to an invalid date\
+    const invalidBriefDueDate = '08/29/TEST';
+
+    await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      finalBriefDueDate: invalidBriefDueDate,
+    });
+
+    // check error message in state
+    tableItemErrors = cerebralTest.getState(
+      'state.validationErrors.submittedCavCasesTable',
+    );
+    expect(tableItemErrors[cerebralTest.docketNumber]).toMatchObject({
+      finalBriefDueDate: 'abc',
+    });
+    //assert
+  });
+  //edit primary
+  //invalid not
+  //delete primary
+  //invalid brief date
+  //status of matter persistence
 });
