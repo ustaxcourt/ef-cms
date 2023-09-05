@@ -7,7 +7,6 @@ describe('createUserInteractorLocal', () => {
   const userId = 'abc123';
   const password = 'Pa$$word!';
   const user = { email, name, password };
-  const ClientId = 'bvjrggnd3co403c0aahscinne';
 
   // cognito returns an empty 200 on success
   const confirmSignUpResult = {};
@@ -20,7 +19,6 @@ describe('createUserInteractorLocal', () => {
 
   it('should call cognito signUp with correctly formatted parameters and return the result', async () => {
     const expectedParams = {
-      ClientId,
       Password: password,
       UserAttributes: [
         {
