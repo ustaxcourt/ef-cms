@@ -1,6 +1,7 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
+import { getCaseWorksheetsAction } from '@web-client/presenter/actions/CaseWorksheet/getCaseWorksheetsAction';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
@@ -76,6 +77,7 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
+                  getCaseWorksheetsAction,
                   getSubmittedAndCavCasesForJudgeAction,
                   setSubmittedAndCavCasesForJudgeAction,
                   setCaseWorksheetsByJudgeAction,
@@ -99,6 +101,7 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
+                  getCaseWorksheetsAction,
                   getSubmittedAndCavCasesForJudgeAction,
                   setSubmittedAndCavCasesForJudgeAction,
                   setCaseWorksheetsByJudgeAction,
