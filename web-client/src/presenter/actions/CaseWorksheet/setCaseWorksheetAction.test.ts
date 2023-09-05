@@ -41,7 +41,7 @@ describe('setUpdatedCaseInStateAction', () => {
           worksheets: [
             mockCaseWorksheet2,
             {
-              docketNumber: MOCK_CASE.docketNumber,
+              ...mockCaseWorksheet,
               primaryIssue:
                 'When you believe in things that you don`t understand',
             },

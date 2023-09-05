@@ -1,7 +1,7 @@
 export const updateFinalBriefDueDateAction = async ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps<{ docketNumber: string; finalBriefDueDate: string }>) => {
   const { docketNumber, finalBriefDueDate } = props;
 
   const updatedWorksheet = await applicationContext
