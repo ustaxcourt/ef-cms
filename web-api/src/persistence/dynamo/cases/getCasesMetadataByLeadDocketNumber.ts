@@ -1,3 +1,4 @@
+import { isCaseItem } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
 import { query } from '../../dynamodbClientService';
 
 export const getCasesMetadataByLeadDocketNumber = async ({
@@ -12,7 +13,7 @@ export const getCasesMetadataByLeadDocketNumber = async ({
       '#gsi1pk': 'gsi1pk',
     },
     ExpressionAttributeValues: {
-      ':gsi1pk': `case|${leadDocketNumber}`,
+      ':gsi1pk': `leadCase|${leadDocketNumber}`,
     },
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
@@ -20,7 +21,7 @@ export const getCasesMetadataByLeadDocketNumber = async ({
   });
 
   return await Promise.all(
-    consolidatedGroup.map(({ docketNumber }) =>
+    consolidatedGroup.filter(isCaseItem).map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel({
         applicationContext,
         docketNumber,
