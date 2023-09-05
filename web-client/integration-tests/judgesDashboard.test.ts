@@ -56,7 +56,7 @@ describe('Judges dashboard', () => {
     });
   });
 
-  it('should set state and display a primary issue set by the user', async () => {
+  it('should persist and display a primary issue set by the user', async () => {
     let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
     });
@@ -89,6 +89,91 @@ describe('Judges dashboard', () => {
     });
   });
 
+  it('should allow the user to edit a pre-existing primary issue', async () => {
+    let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    let cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+
+    await cerebralTest.runSequence('openAddEditPrimaryIssueModalSequence', {
+      docketNumber: cavCase!.docketNumber,
+    });
+
+    const existingPrimaryIssue = cerebralTest.getState('modal.primaryIssue');
+    expect(existingPrimaryIssue).toEqual('I can be your hero baby');
+
+    const updatedPrimaryIssue = 'Her name is Noel';
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'modal.primaryIssue',
+      value: updatedPrimaryIssue,
+    });
+
+    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+
+    ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    }));
+    cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    expect(cavCase).toMatchObject({
+      docketNumber: cerebralTest.docketNumber,
+      status: CASE_STATUS_TYPES.cav,
+      worksheet: { primaryIssue: updatedPrimaryIssue },
+    });
+  });
+
+  it('should display an error message when the user enters an invalid primary issue', async () => {
+    let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    let cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    await cerebralTest.runSequence('openAddEditPrimaryIssueModalSequence', {
+      docketNumber: cavCase!.docketNumber,
+    });
+
+    const invalidPrimaryIssue = ''; // primaryIssue can't be an empty string
+
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'modal.primaryIssue',
+      value: invalidPrimaryIssue,
+    });
+
+    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+
+    const validationErrors = cerebralTest.getState('validationErrors');
+    expect(validationErrors.primaryIssue).toEqual('Add primary issue');
+  });
+
+  it('should persist and remove a primary issue from the table when it is deleted by the user', async () => {
+    let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    let cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    expect(cavCase?.worksheet.primaryIssue).toBeDefined();
+
+    await cerebralTest.runSequence('openDeletePrimaryIssueSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('deletePrimaryIssueSequence');
+
+    ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    }));
+    cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+
+    expect(cavCase?.worksheet.primaryIssue).toBeUndefined();
+  });
+
   it('should persist and display a final brief due date set by user', async () => {
     const briefDueDate = '08/29/2023';
 
@@ -108,7 +193,6 @@ describe('Judges dashboard', () => {
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
         finalBriefDueDate: '2023-08-29',
-        primaryIssue: expect.anything(),
       },
     });
 
@@ -141,9 +225,5 @@ describe('Judges dashboard', () => {
     });
   });
 
-  //edit primary
-  //invalid not
-  //delete primary
-  //invalid brief date
-  //status of matter persistence
+  it('should persist and display a status of matter set by the user', async () => {});
 });
