@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -28,7 +29,10 @@ describe('validatePrimaryIssueAction', () => {
         presenter,
       },
       state: {
-        modal: {},
+        modal: {
+          docketNumber: MOCK_CASE.docketNumber,
+          primaryIssue: 'abcdefg',
+        },
       },
     });
 
@@ -47,7 +51,10 @@ describe('validatePrimaryIssueAction', () => {
         presenter,
       },
       state: {
-        modal: {},
+        modal: {
+          docketNumber: MOCK_CASE.docketNumber,
+          primaryIssue: 12345, // primaryIssue must be a string
+        },
       },
     });
 

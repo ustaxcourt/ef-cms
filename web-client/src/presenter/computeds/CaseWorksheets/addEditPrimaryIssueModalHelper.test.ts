@@ -12,13 +12,11 @@ describe('addEditPrimaryIssueModalHelper', () => {
   it('should return the title of the modal, formatted to include the docket number and case title of the case the user is adding a primary issue to', () => {
     const { title } = runCompute(addEditPrimaryIssueModalHelper, {
       state: {
-        judgeActivityReport: {
-          judgeActivityReportData: {
-            submittedAndCavCasesByJudge: [MOCK_CASE],
-          },
-        },
         modal: {
           docketNumber: MOCK_CASE.docketNumber,
+        },
+        submittedAndCavCases: {
+          submittedAndCavCasesByJudge: [MOCK_CASE],
         },
       },
     });

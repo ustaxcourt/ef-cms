@@ -8,9 +8,7 @@ export const addEditPrimaryIssueModalHelper = (
 ): { title: string } => {
   const { docketNumber } = get(state.modal);
 
-  const { submittedAndCavCasesByJudge = [] } = get(
-    state.judgeActivityReport.judgeActivityReportData,
-  );
+  const { submittedAndCavCasesByJudge = [] } = get(state.submittedAndCavCases);
 
   const subjectCase = submittedAndCavCasesByJudge.find(
     aCase => aCase.docketNumber === docketNumber,
