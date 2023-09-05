@@ -1,6 +1,11 @@
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const setCaseWorksheetAction = ({ get, props, store }: ActionProps) => {
+export const setCaseWorksheetAction = ({
+  get,
+  props,
+  store,
+}: ActionProps<{ updatedWorksheet: RawCaseWorksheet }>) => {
   const { updatedWorksheet } = props;
 
   const worksheets = get(state.submittedAndCavCases.worksheets);

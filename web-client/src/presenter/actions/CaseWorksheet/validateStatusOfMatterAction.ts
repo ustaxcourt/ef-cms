@@ -5,14 +5,14 @@ export const validateStatusOfMatterAction = async ({
   get,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{ docketNumber: string; statusOfMatter: string }>) => {
   const { docketNumber, statusOfMatter } = props;
 
-  const caseWorksheets = get(state.submittedAndCavCases.worksheets);
+  const { worksheets } = get(state.submittedAndCavCases);
 
-  const worksheet = caseWorksheets.find(
-    ws => ws.docketNumber === docketNumber,
-  ) || { docketNumber };
+  const worksheet = worksheets.find(ws => ws.docketNumber === docketNumber) || {
+    docketNumber,
+  };
 
   const errors = await applicationContext
     .getUseCases()
