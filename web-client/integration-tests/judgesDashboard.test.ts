@@ -1,16 +1,16 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { submittedAndCavCasesForJudgeHelper as submittedAndCavCasesForJudgeHelperComputed } from '@web-client/presenter/computeds/SubmittedAndCavCasesForJudge/submittedAndCavCasesForJudgeHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Judges dashboard', () => {
   const cerebralTest = setupTest();
 
-  const submittedAndCavCasesForJudgeHelper = withAppContextDecorator(
-    submittedAndCavCasesForJudgeHelperComputed,
+  const caseWorksheetsHelper = withAppContextDecorator(
+    caseWorksheetsHelperComputed,
   );
 
   afterAll(() => {
@@ -37,14 +37,11 @@ describe('Judges dashboard', () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
 
-    const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-      submittedAndCavCasesForJudgeHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    );
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
 
-    const cavCase = filteredSubmittedAndCavCasesByJudge.find(
+    const cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
     );
     expect(cavCase).toMatchObject({
@@ -54,41 +51,35 @@ describe('Judges dashboard', () => {
   });
 
   it('should create and display a primary issue for the CAV case in the table', async () => {
-    let { filteredSubmittedAndCavCasesByJudge } = runCompute(
-      submittedAndCavCasesForJudgeHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    );
-    let cavCase = filteredSubmittedAndCavCasesByJudge.find(
+    let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    let cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
     );
 
     await cerebralTest.runSequence('openAddEditPrimaryIssueModalSequence', {
-      case: cavCase,
+      docketNumber: cavCase!.docketNumber,
     });
 
     const expectedPrimaryIssue = 'I can be your hero baby';
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'modal.notes',
+      key: 'modal.primaryIssue',
       value: expectedPrimaryIssue,
     });
 
-    await cerebralTest.runSequence('updateCasePrimaryIssueSequence');
+    await cerebralTest.runSequence('updatePrimaryIssueSequence');
 
-    ({ filteredSubmittedAndCavCasesByJudge } = runCompute(
-      submittedAndCavCasesForJudgeHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    ));
-    cavCase = filteredSubmittedAndCavCasesByJudge.find(
+    ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    }));
+    cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
     );
     expect(cavCase).toMatchObject({
       docketNumber: cerebralTest.docketNumber,
-      primaryIssue: expectedPrimaryIssue,
       status: CASE_STATUS_TYPES.cav,
+      worksheet: { primaryIssue: expectedPrimaryIssue },
     });
   });
 
@@ -100,25 +91,24 @@ describe('Judges dashboard', () => {
       finalBriefDueDate: briefDueDate,
     });
 
-    const { filteredSubmittedAndCavCasesByJudge } = runCompute(
-      submittedAndCavCasesForJudgeHelper,
-      {
-        state: cerebralTest.getState(),
-      },
-    );
-    const cavCase = filteredSubmittedAndCavCasesByJudge.find(
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    const cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
     );
     expect(cavCase).toMatchObject({
       docketNumber: cerebralTest.docketNumber,
-      finalBriefDueDate: '2023-08-29',
-      primaryIssue: expect.anything(),
       status: CASE_STATUS_TYPES.cav,
+      worksheet: {
+        finalBriefDueDate: '2023-08-29',
+        primaryIssue: expect.anything(),
+      },
     });
 
-    const otherCavCaseInTable = filteredSubmittedAndCavCasesByJudge.find(
+    const otherCavCaseInTable = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.firstCavDocketNumber,
     )!;
-    expect(otherCavCaseInTable.finalBriefDueDate).toBeUndefined();
+    expect(otherCavCaseInTable.worksheet.finalBriefDueDate).toBeUndefined();
   });
 });
