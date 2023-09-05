@@ -5,7 +5,7 @@ export const validateStatusOfMatterAction = async ({
   get,
   path,
   props,
-}: ActionProps) => {
+}: ActionProps<{ docketNumber: string; statusOfMatter: string }>) => {
   const { docketNumber, statusOfMatter } = props;
 
   const caseWorksheets = get(state.submittedAndCavCases.worksheets);
