@@ -1,4 +1,10 @@
-import { query } from '../../dynamodbClientService';
+import {
+  CaseRecord,
+  IrsPractitionerOnCaseRecord,
+  PrivatePractitionerOnCaseRecord,
+} from '@web-api/persistence/dynamo/dynamoTypes';
+import { isCaseItem } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { queryFull } from '../../dynamodbClientService';
 
 export const getCasesByLeadDocketNumber = async ({
   applicationContext,
@@ -7,7 +13,9 @@ export const getCasesByLeadDocketNumber = async ({
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
 }) => {
-  let consolidatedCases = await query({
+  let consolidatedCases = await queryFull<
+    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
+  >({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
@@ -20,7 +28,7 @@ export const getCasesByLeadDocketNumber = async ({
   });
 
   const cases = await Promise.all(
-    consolidatedCases.map(({ docketNumber }) =>
+    consolidatedCases.filter(isCaseItem).map(({ docketNumber }) =>
       applicationContext.getPersistenceGateway().getCaseByDocketNumber({
         applicationContext,
         docketNumber,
