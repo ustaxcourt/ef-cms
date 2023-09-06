@@ -56,7 +56,6 @@ export const getCountOfOrdersFiledByJudgesInteractor = async (
         documentEventCodes: orderEventCodesToSearch,
         endDate: searchEntity.endDate,
         judges: searchEntity.judges,
-        searchType: 'order',
         startDate: searchEntity.startDate,
       },
     });
