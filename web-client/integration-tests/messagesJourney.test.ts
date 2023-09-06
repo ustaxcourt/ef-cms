@@ -166,6 +166,7 @@ describe('messages journey', () => {
     ]);
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: docketEntryWithLongTitle.docketEntryId,
     });
 

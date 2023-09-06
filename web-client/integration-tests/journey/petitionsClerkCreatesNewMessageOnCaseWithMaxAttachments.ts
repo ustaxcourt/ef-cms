@@ -44,6 +44,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
       cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
       await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+        action: 'add',
         documentId: cerebralTest.testMessageDocumentId,
       });
 
