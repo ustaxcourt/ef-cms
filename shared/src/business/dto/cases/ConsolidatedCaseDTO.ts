@@ -9,7 +9,6 @@ import {
   CASE_PRIVATE_PRACTITIONERS_RULE,
   CASE_SORTABLE_DOCKET_NUMBER_RULE,
 } from '@shared/business/entities/EntityValidationConstants';
-import { JoiValidationConstants } from '../../entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
 export class ConsolidatedCaseDTO extends JoiValidationEntity {
@@ -42,9 +41,6 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
     caseCaption: CASE_CAPTION_RULE,
     docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberWithSuffix: CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
-    entityName: JoiValidationConstants.STRING.valid(
-      'ConsolidatedCaseDTO',
-    ).required(),
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isSealed: CASE_IS_SEALED_RULE,
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
