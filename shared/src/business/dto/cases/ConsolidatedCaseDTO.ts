@@ -1,4 +1,18 @@
-export class ConsolidatedCaseDTO {
+import {
+  CASE_CAPTION_RULE,
+  CASE_DOCKET_NUMBER_RULE,
+  CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
+  CASE_IRS_PRACTITIONERS_RULE,
+  CASE_IS_SEALED_RULE,
+  CASE_LEAD_DOCKET_NUMBER_RULE,
+  CASE_PETITIONERS_RULE,
+  CASE_PRIVATE_PRACTITIONERS_RULE,
+  CASE_SORTABLE_DOCKET_NUMBER_RULE,
+} from '@shared/business/entities/EntityValidationConstants';
+import { JoiValidationConstants } from '../../entities/JoiValidationConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+
+export class ConsolidatedCaseDTO extends JoiValidationEntity {
   public caseCaption: string;
   public docketNumber: string;
   public isSealed: boolean;
@@ -11,6 +25,7 @@ export class ConsolidatedCaseDTO {
   public sortableDocketNumber: number;
 
   constructor(rawCase: any) {
+    super('ConsolidatedCaseDTO');
     this.caseCaption = rawCase.caseCaption;
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
@@ -23,7 +38,32 @@ export class ConsolidatedCaseDTO {
     this.sortableDocketNumber = rawCase.sortableDocketNumber;
   }
 
-  public static getFields() {
+  static VALIDATION_RULES = {
+    caseCaption: CASE_CAPTION_RULE,
+    docketNumber: CASE_DOCKET_NUMBER_RULE,
+    docketNumberWithSuffix: CASE_DOCKET_NUMBER_WITH_SUFFIX_RULE,
+    entityName: JoiValidationConstants.STRING.valid(
+      'ConsolidatedCaseDTO',
+    ).required(),
+    irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
+    isSealed: CASE_IS_SEALED_RULE,
+    leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
+    petitioners: CASE_PETITIONERS_RULE,
+    privatePractitioners: CASE_PRIVATE_PRACTITIONERS_RULE,
+    sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
+  } as const;
+
+  static VALIDATION_ERROR_MESSAGES = {} as const;
+
+  static getFields() {
     return Object.getOwnPropertyNames.call(Object, new ConsolidatedCaseDTO({}));
+  }
+
+  getValidationRules() {
+    return ConsolidatedCaseDTO.VALIDATION_RULES;
+  }
+
+  getErrorToMessageMap() {
+    return ConsolidatedCaseDTO.VALIDATION_ERROR_MESSAGES;
   }
 }
