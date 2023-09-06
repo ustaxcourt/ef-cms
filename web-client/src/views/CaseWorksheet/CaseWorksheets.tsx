@@ -163,69 +163,64 @@ export const CaseWorksheets = connect(
                     </td>
                   </tr>
                   <tr>
-                    <td className="grid-container" colSpan={12}>
-                      <div className="grid-row">
-                        <div className="grid-col-3 text-right">
-                          <b>Primary Issue:</b>
-                        </div>
-                        <div
-                          className="grid-col-8"
-                          style={{
-                            paddingLeft: '12px',
-                            paddingRight: '12px',
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <span className="text-bold margin-right-1">
+                        Primary Issue:
+                      </span>
+                      {formattedCase.worksheet.primaryIssue}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      {!formattedCase.worksheet.primaryIssue && (
+                        <Button
+                          link
+                          icon="plus-circle"
+                          onClick={() => {
+                            openAddEditPrimaryIssueModalSequence({
+                              docketNumber: formattedCase.docketNumber,
+                            });
                           }}
                         >
-                          {formattedCase.worksheet.primaryIssue}
-                        </div>
-                        <div className="grid-col-1">
-                          {!formattedCase.worksheet.primaryIssue && (
+                          Add Issue
+                        </Button>
+                      )}
+                      {formattedCase.worksheet.primaryIssue && (
+                        <div>
+                          <div>
                             <Button
                               link
-                              className="float-right"
-                              icon="plus-circle"
+                              icon="edit"
                               onClick={() => {
                                 openAddEditPrimaryIssueModalSequence({
                                   docketNumber: formattedCase.docketNumber,
                                 });
                               }}
                             >
-                              Add Issue
+                              Edit Issue
                             </Button>
-                          )}
-
-                          {formattedCase.worksheet.primaryIssue && (
-                            <div className="grid">
-                              <div>
-                                <Button
-                                  link
-                                  icon="edit"
-                                  onClick={() => {
-                                    openAddEditPrimaryIssueModalSequence({
-                                      docketNumber: formattedCase.docketNumber,
-                                    });
-                                  }}
-                                >
-                                  Edit Issue
-                                </Button>
-                              </div>
-                              <div>
-                                <Button
-                                  link
-                                  className="red-warning"
-                                  icon="trash"
-                                  onClick={() => {
-                                    openDeletePrimaryIssueSequence({
-                                      docketNumber: formattedCase.docketNumber,
-                                    });
-                                  }}
-                                >
-                                  Delete Issue
-                                </Button>
-                              </div>
-                            </div>
-                          )}
+                          </div>
+                          <div>
+                            <Button
+                              link
+                              className="red-warning"
+                              icon="trash"
+                              onClick={() => {
+                                openDeletePrimaryIssueSequence({
+                                  docketNumber: formattedCase.docketNumber,
+                                });
+                              }}
+                            >
+                              Delete Issue
+                            </Button>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -233,6 +228,7 @@ export const CaseWorksheets = connect(
             })}
           </tbody>
         </table>
+
         {caseWorksheetsHelper.caseWorksheetsFormatted.length === 0 && (
           <div>
             There are no cases with a status of &quot;Submitted&quot; or
