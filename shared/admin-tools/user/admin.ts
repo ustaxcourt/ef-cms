@@ -1,4 +1,7 @@
-import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import {
+  AdminInitiateAuthCommandOutput,
+  CognitoIdentityProvider,
+} from '@aws-sdk/client-cognito-identity-provider';
 import {
   checkEnvVar,
   generatePassword,
@@ -122,27 +125,33 @@ export const getAuthToken = async () => {
   );
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
-  const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
+  const cognito: CognitoIdentityProvider = new CognitoIdentityProvider({
+    region: 'us-east-1',
+  });
   const UserPoolId = await getUserPoolId();
+  if (!UserPoolId) {
+    throw new Error('No UserPoolId found');
+  }
   const ClientId = await getClientId(UserPoolId);
 
   try {
-    const response = await cognito.adminInitiateAuth({
-      AuthFlow: 'ADMIN_NO_SRP_AUTH',
-      AuthParameters: {
-        PASSWORD: USTC_ADMIN_PASS!,
-        USERNAME: USTC_ADMIN_USER!,
-      },
-      ClientId,
-      UserPoolId,
-    });
+    const response: AdminInitiateAuthCommandOutput =
+      await cognito.adminInitiateAuth({
+        AuthFlow: 'ADMIN_NO_SRP_AUTH',
+        AuthParameters: {
+          PASSWORD: USTC_ADMIN_PASS!,
+          USERNAME: USTC_ADMIN_USER!,
+        },
+        ClientId,
+        UserPoolId,
+      });
     if (
       !response ||
-      typeof response.AuthenticationResult.IdToken === 'undefined'
+      typeof response.AuthenticationResult!.IdToken === 'undefined'
     ) {
       throw 'Could not get token!';
     }
-    cachedAuthToken = response['AuthenticationResult']['IdToken'];
+    cachedAuthToken = response['AuthenticationResult']!['IdToken'];
     return cachedAuthToken;
   } catch (err) {
     console.error(`ERROR: ${err}`);
@@ -182,7 +191,7 @@ export const createDawsonUser = async ({
   setPermanentPassword = false,
   user,
 }: {
-  deployingColorUrl?: string;
+  deployingColorUrl: string;
   setPermanentPassword?: boolean;
   user: {
     password?: string;
@@ -202,9 +211,8 @@ export const createDawsonUser = async ({
     },
   };
 
-  const url = deployingColorUrl ?? `https://api.${EFCMS_DOMAIN}/users`;
   try {
-    await axios.post(url, user, headers);
+    await axios.post(deployingColorUrl, user, headers);
 
     if (setPermanentPassword) {
       await setPassword({
