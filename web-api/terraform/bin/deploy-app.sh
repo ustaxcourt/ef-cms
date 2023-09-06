@@ -9,6 +9,9 @@ MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 export DEPLOYING_COLOR
 export MIGRATE_FLAG
 
+# TODO: REMOVE ME 
+DEPLOYING_COLOR="blue"
+
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 if [ -z "${SECRETS_LOADED}" ]; then
   pushd ../../../
