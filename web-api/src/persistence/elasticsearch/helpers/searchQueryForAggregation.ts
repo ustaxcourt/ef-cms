@@ -57,7 +57,7 @@ export const computeDocumentFilters = ({ params }) => {
     });
   }
 
-  if (params.searchType) {
+  if (params.documentEventCodes && params.documentEventCodes.length) {
     documentFilters.push({
       terms: { 'eventCode.S': params.documentEventCodes },
     });
