@@ -4,8 +4,14 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('forwardMessageAction', () => {
+  const mockDocumentId = 'b1130321-0a76-43bc-b3eb-64a18f079873';
   beforeAll(() => {
     applicationContext.getUseCases().forwardMessageInteractor.mockReturnValue({
+      attachments: [
+        { documentId: '546ea14f-833f-4576-a547-8ceb7f6282a2' },
+        { documentId: 'eab4fc75-ef58-4966-a043-8a83e9a61391' },
+        { documentId: mockDocumentId },
+      ],
       docketNumber: '123-45',
       parentMessageId: '123',
     });
@@ -26,7 +32,7 @@ describe('forwardMessageAction', () => {
           form: {
             attachments: [
               {
-                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+                documentId: mockDocumentId,
                 documentTitle: 'Petition',
               },
             ],
@@ -47,7 +53,7 @@ describe('forwardMessageAction', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentId: mockDocumentId,
           documentTitle: 'Petition',
         },
       ],
@@ -60,7 +66,7 @@ describe('forwardMessageAction', () => {
     expect(result.output).toHaveProperty('parentMessageId');
     expect(result.output).toMatchObject({
       messageViewerDocumentToDisplay: {
-        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+        documentId: mockDocumentId,
       },
     });
   });
