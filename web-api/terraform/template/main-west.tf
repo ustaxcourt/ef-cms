@@ -6,12 +6,12 @@ resource "aws_s3_bucket" "api_lambdas_bucket_west" {
   tags = {
     environment = var.environment
   }
-  
-    server_side_encryption_configuration {
+
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-          sse_algorithm = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -277,6 +277,20 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
   provider   = aws.us-west-1
 }
 
+data "aws_s3_bucket_object" "cron_blue_west_object" {
+  depends_on = [null_resource.cron_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "cron_blue.js.zip"
+  provider   = aws.us-west-1
+}
+
+data "aws_s3_bucket_object" "cron_green_west_object" {
+  depends_on = [null_resource.cron_west_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_west.id
+  key        = "cron_green.js.zip"
+  provider   = aws.us-west-1
+}
+
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   depends_on               = [aws_acm_certificate.api_gateway_cert_west]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
@@ -305,7 +319,6 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
   type           = "A"
   zone_id        = data.aws_route53_zone.zone.id
   set_identifier = "api_main_us_west_1"
-  provider       = aws.us-west-1
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_west.regional_domain_name
@@ -324,7 +337,6 @@ resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
   type           = "A"
   zone_id        = data.aws_route53_zone.zone.id
   set_identifier = "public_api_main_us_west_1"
-  provider       = aws.us-west-1
 
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
@@ -353,7 +365,7 @@ module "api-west-green" {
   pdf_generation_object     = null_resource.pdf_generation_west_object
   websockets_object         = null_resource.websockets_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
-  cron_object               = ""
+  cron_object               = null_resource.cron_west_object
   maintenance_notify_object = null_resource.maintenance_notify_west_object
   streams_object            = ""
   source                    = "../api/"
@@ -375,6 +387,7 @@ module "api-west-green" {
   validate = 0
   providers = {
     aws = aws.us-west-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
   node_version                   = var.green_node_version
@@ -388,11 +401,12 @@ module "api-west-green" {
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_green_west_object.etag
   use_layers                     = var.green_use_layers
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_green_west_object.etag
-  cron_object_hash               = ""
+  cron_object_hash               = data.aws_s3_bucket_object.cron_green_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_green_west_object.etag
   streams_object_hash            = ""
   pool_arn                       = aws_cognito_user_pool.pool.arn
-  create_cron                    = 0
+  create_check_case_cron         = 0
+  create_health_check_cron       = 1
   create_streams                 = 0
   create_maintenance_notify      = 1
   stream_arn                     = ""
@@ -400,7 +414,9 @@ module "api-west-green" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
-  status_health_check_id         = var.status_health_check_west_id
+  enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
@@ -423,7 +439,7 @@ module "api-west-blue" {
   send_emails_object        = null_resource.send_emails_west_object
   trial_session_object      = null_resource.trial_session_west_object
   puppeteer_layer_object    = null_resource.puppeteer_layer_west_object
-  cron_object               = ""
+  cron_object               = null_resource.cron_west_object
   maintenance_notify_object = null_resource.maintenance_notify_west_object
   streams_object            = ""
   source                    = "../api/"
@@ -445,6 +461,7 @@ module "api-west-blue" {
   validate = 0
   providers = {
     aws = aws.us-west-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
   node_version                   = var.blue_node_version
@@ -458,10 +475,11 @@ module "api-west-blue" {
   trial_session_object_hash      = data.aws_s3_bucket_object.trial_session_blue_west_object.etag
   websockets_object_hash         = data.aws_s3_bucket_object.websockets_blue_west_object.etag
   puppeteer_object_hash          = data.aws_s3_bucket_object.puppeteer_blue_west_object.etag
-  cron_object_hash               = ""
+  cron_object_hash               = data.aws_s3_bucket_object.cron_blue_west_object.etag
   maintenance_notify_object_hash = data.aws_s3_bucket_object.maintenance_notify_blue_west_object.etag
   streams_object_hash            = ""
-  create_cron                    = 0
+  create_check_case_cron         = 0
+  create_health_check_cron       = 1
   create_streams                 = 0
   pool_arn                       = aws_cognito_user_pool.pool.arn
   create_maintenance_notify      = 1
@@ -470,7 +488,9 @@ module "api-west-blue" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
-  status_health_check_id         = var.status_health_check_west_id
+  enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = ""
