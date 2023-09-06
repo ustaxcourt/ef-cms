@@ -165,7 +165,7 @@ import { updateCaseContextLambda } from './cases/updateCaseContextLambda';
 import { updateCaseDeadlineLambda } from './caseDeadline/updateCaseDeadlineLambda';
 import { updateCaseDetailsLambda } from './cases/updateCaseDetailsLambda';
 import { updateCaseTrialSortTagsLambda } from './cases/updateCaseTrialSortTagsLambda';
-import { updateCaseWorksheetInfoLambda } from './trialSessions/updateCaseWorksheetInfoLambda';
+import { updateCaseWorksheetLambda } from './caseWorksheet/updateCaseWorksheetLambda';
 import { updateContactLambda } from './cases/updateContactLambda';
 import { updateCorrespondenceDocumentLambda } from './correspondence/updateCorrespondenceDocumentLambda';
 import { updateCounselOnCaseLambda } from './cases/updateCounselOnCaseLambda';
@@ -609,7 +609,7 @@ app.use(logger());
   app.post('/cases', lambdaWrapper(createCaseLambda));
   app.post(
     '/cases/:docketNumber/case-worksheet',
-    lambdaWrapper(updateCaseWorksheetInfoLambda),
+    lambdaWrapper(updateCaseWorksheetLambda),
   );
 }
 
