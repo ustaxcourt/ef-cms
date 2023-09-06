@@ -92,18 +92,14 @@ jobs:
           command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
-          name: 'Deploy - Web Client - Terraform'
-          command: |
-            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
-            HEALTH_CHECK_WEST_ID="$(terraform output -raw status_health_check_west_id)"
-            echo "export HEALTH_CHECK_WEST_ID=${HEALTH_CHECK_WEST_ID}" >> $BASH_ENV
-            HEALTH_CHECK_EAST_ID="$(terraform output -raw status_health_check_east_id)"
-            echo "export HEALTH_CHECK_EAST_ID=${HEALTH_CHECK_EAST_ID}" >> $BASH_ENV
-      - run:
-          no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
             cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
+      - run:
+          no_output_timeout: 20m
+          name: 'Deploy - Web Client - Terraform'
+          command: |
+            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
