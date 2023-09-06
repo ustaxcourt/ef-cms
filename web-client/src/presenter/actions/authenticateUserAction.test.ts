@@ -79,12 +79,11 @@ describe('authenticateUserAction', () => {
   describe('cognitoLocal', () => {
     it('should prepare state for the change password form when authenticateUserInteractor returns NEW_PASSWORD_REQUIRED', async () => {
       const code = 'abc@efg.com';
-      const cognitoLocal = 'Password!';
+      const password = 'Password!';
       const sessionId = 'asd4wd2csdfsd';
 
       const mockAlertError = {
-        alertError: 'NEW_PASSWORD_REQUIRED',
-        sessionId,
+        alertError: { message: 'NEW_PASSWORD_REQUIRED', sessionId },
       };
 
       applicationContext
@@ -99,7 +98,7 @@ describe('authenticateUserAction', () => {
         },
         props: {
           code,
-          cognitoLocal,
+          password,
         },
         state: {},
       });

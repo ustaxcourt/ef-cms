@@ -9,11 +9,11 @@ import { post } from '../requests';
  */
 export const authenticateUserInteractor = (
   applicationContext,
-  { code, cognitoLocal },
+  { code, password },
 ) => {
   return post({
     applicationContext,
-    body: { code, cognitoLocal },
+    body: { code, password },
     endpoint: '/auth/login',
     options: {
       withCredentials: true,

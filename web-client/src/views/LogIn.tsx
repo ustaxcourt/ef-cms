@@ -42,7 +42,7 @@ export const LogIn = connect(
             cognitoLocalEnabled &&
               loginWithCognitoLocalSequence({
                 code: form.email,
-                cognitoLocal: form.password,
+                password: form.password,
               });
           }}
         >

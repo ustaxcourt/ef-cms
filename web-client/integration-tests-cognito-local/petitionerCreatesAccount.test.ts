@@ -69,7 +69,7 @@ describe('Petitioner creates new account', () => {
 
     await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
       code: userName,
-      cognitoLocal: password,
+      password,
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');
@@ -79,7 +79,7 @@ describe('Petitioner creates new account', () => {
 
   userSuccessfullyUpdatesEmailAddress(
     cerebralTest,
-    'practitioner',
+    'petitioner',
     updatedEmailAddress,
   );
   userVerifiesUpdatedEmailAddress(cerebralTest, 'petitioner');
@@ -98,7 +98,7 @@ describe('Petitioner creates new account', () => {
 
     await cerebralTest.runSequence('loginWithCognitoLocalSequence', {
       code: updatedEmailAddress,
-      cognitoLocal: password,
+      password,
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardPetitioner');

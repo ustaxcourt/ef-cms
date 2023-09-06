@@ -13,32 +13,27 @@ export const authenticateUserAction = async ({
   props,
   store,
 }: ActionProps) => {
-  const { code, cognitoLocal } = props;
+  const { code, password } = props;
 
   const response = await applicationContext
     .getUseCases()
     .authenticateUserInteractor(applicationContext, {
       code,
-      cognitoLocal,
+      password,
     });
 
   if (response.alertError) {
-    // TODO: consider creating authenticateUserLocalAction
-    if (response.alertError === 'NEW_PASSWORD_REQUIRED') {
+    console.log('response', response);
+    if (response.alertError.message === 'NEW_PASSWORD_REQUIRED') {
       store.set(state.cognitoLocal.userEmail, code);
-      store.set(state.cognitoLocal.sessionId, response.sessionId);
+      store.set(state.cognitoLocal.sessionId, response.alertError.sessionId);
 
       return path.newPasswordRequired({
         path: '/change-password-local',
       });
     }
     return path.no({
-      alertError: {
-        message: response.alertError.message,
-        title: response.alertError.title
-          ? response.alertError.title
-          : response.alertError,
-      },
+      alertError: response.alertError,
     });
   } else {
     return path.yes({ token: response.token });
