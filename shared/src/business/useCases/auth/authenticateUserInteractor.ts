@@ -8,47 +8,12 @@
  */
 export const authenticateUserInteractor = async (
   applicationContext: IApplicationContext,
-  { code, cognitoLocal }: { code: string; cognitoLocal?: string },
+  { code, password }: { code: string; password?: string },
 ) => {
-  let refreshToken;
-  let token;
-  let alertError;
+  const { alertError, refreshToken, token } = await applicationContext
+    .getPersistenceGateway()
+    .confirmAuthCode({ applicationContext, code, password });
 
-  if (cognitoLocal) {
-    const params = {
-      AuthFlow: 'USER_PASSWORD_AUTH',
-      AuthParameters: {
-        PASSWORD: cognitoLocal,
-        USERNAME: code,
-      },
-      ClientId: process.env.COGNITO_CLIENT_ID,
-    };
-
-    let result;
-    try {
-      result = await applicationContext
-        .getCognito()
-        .initiateAuth(params)
-        .promise();
-    } catch (e) {
-      return {
-        alertError: e.message,
-      };
-    }
-
-    if (result.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
-      return { alertError: 'NEW_PASSWORD_REQUIRED', sessionId: result.Session };
-    }
-    const { IdToken } = result.AuthenticationResult;
-
-    token = IdToken;
-    // intentionally setting refreshToken to IdToken to avoid using refreshToken which is missing userId
-    refreshToken = IdToken;
-  } else {
-    ({ alertError, refreshToken, token } = await applicationContext
-      .getPersistenceGateway()
-      .confirmAuthCode({ applicationContext, code }));
-  }
   return {
     alertError,
     refreshToken,
