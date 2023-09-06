@@ -46,13 +46,13 @@ export const CaseWorksheets = connect(
     validationErrors,
   }) {
     return (
-      <React.Fragment>
+      <div className="margin-top-6">
         <div className="grid-container padding-0 margin-bottom-3">
           <div className="grid-row">
-            <div className="grid-col-9">
+            <div className="grid-col-10">
               <h1 className="margin-bottom-0">Submitted/CAV Cases</h1>
             </div>
-            <div className="display-flex flex-align-end flex-justify-end grid-col-3 text-right">
+            <div className="display-flex flex-align-end flex-justify-end grid-col-2">
               <span className="text-semibold">
                 Count: {caseWorksheetsHelper.caseWorksheetsFormatted.length}
               </span>
@@ -60,14 +60,11 @@ export const CaseWorksheets = connect(
           </div>
         </div>
 
-        <table
-          aria-describedby="submitted-cav-cases-tab"
-          className="usa-table ustc-table"
-        >
+        <table className="usa-table ustc-table">
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number" className="small">
+              <th className="small">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
               <th>No. of Cases</th>
@@ -75,16 +72,8 @@ export const CaseWorksheets = connect(
               <th>Case Status</th>
               <th>Days in Status</th>
               <th>Status Date</th>
-              <th>
-                <label htmlFor="final-brief-due-date-date-picker">
-                  Final Brief Due Date
-                </label>
-              </th>
-              <th>
-                <label htmlFor="status-of-matter-dropdown">
-                  Status of Matter
-                </label>
-              </th>
+              <th>Final Brief Due Date</th>
+              <th>Status of Matter</th>
             </tr>
           </thead>
           <tbody>
@@ -120,22 +109,20 @@ export const CaseWorksheets = connect(
                           ]?.finalBriefDueDate
                         }
                       >
-                        <div className="display-flex flex-align-center">
-                          <DateInput
-                            className={'margin-bottom-0'}
-                            id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
-                            showDateHint={false}
-                            values={convertToDateInputValues(
-                              formattedCase.worksheet.finalBriefDueDate,
-                            )}
-                            onValueChange={value => {
-                              updateFinalBriefDueDateSequence({
-                                docketNumber: formattedCase.docketNumber,
-                                finalBriefDueDate: value === '' ? null : value,
-                              });
-                            }}
-                          />
-                        </div>
+                        <DateInput
+                          className={'margin-bottom-0'}
+                          id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
+                          showDateHint={false}
+                          values={convertToDateInputValues(
+                            formattedCase.worksheet.finalBriefDueDate,
+                          )}
+                          onValueChange={value => {
+                            updateFinalBriefDueDateSequence({
+                              docketNumber: formattedCase.docketNumber,
+                              finalBriefDueDate: value === '' ? null : value,
+                            });
+                          }}
+                        />
                       </FormGroup>
                     </td>
                     <td>
@@ -239,9 +226,8 @@ export const CaseWorksheets = connect(
         {showModal === 'AddEditPrimaryIssueModal' && (
           <AddEditPrimaryIssueModal />
         )}
-
         {showModal === 'DeletePrimaryIssueModal' && <DeletePrimaryIssueModal />}
-      </React.Fragment>
+      </div>
     );
   },
 );
