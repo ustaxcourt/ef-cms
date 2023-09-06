@@ -9,7 +9,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('Judges Chambers dashboard', () => {
+describe('Case Worksheets Journey', () => {
   const cerebralTest = setupTest();
 
   const caseWorksheetsHelper = withAppContextDecorator(
