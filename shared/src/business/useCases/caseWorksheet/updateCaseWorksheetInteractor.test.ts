@@ -1,7 +1,11 @@
 import { InvalidEntityError, UnauthorizedError } from '../../../errors/errors';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
+import {
+  colvinsChambersUser,
+  judgeColvin,
+  petitionsClerkUser,
+} from '@shared/test/mockUsers';
 import { updateCaseWorksheetInteractor } from './updateCaseWorksheetInteractor';
 
 describe('updateCaseWorksheetInteractor', () => {
@@ -23,7 +27,10 @@ describe('updateCaseWorksheetInteractor', () => {
   });
 
   it('should throw an error when the updated case worksheet is invalid', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    applicationContext.getCurrentUser.mockReturnValue(judgeColvin);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(judgeColvin);
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
@@ -37,7 +44,10 @@ describe('updateCaseWorksheetInteractor', () => {
 
   it('should persist and return the updated case worksheet when the updates are valid', async () => {
     const mockFinalBriefDueDate = '2023-08-29';
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    applicationContext.getCurrentUser.mockReturnValue(judgeColvin);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(judgeColvin);
     applicationContext
       .getPersistenceGateway()
       .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
@@ -54,11 +64,54 @@ describe('updateCaseWorksheetInteractor', () => {
       finalBriefDueDate: mockFinalBriefDueDate,
     };
     expect(
+      applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
+    ).not.toHaveBeenCalled();
+    expect(
       applicationContext.getPersistenceGateway().updateCaseWorksheet,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       caseWorksheet: expectedUpdatedCaseWorksheet,
-      judgeUserId: judgeUser.userId,
+      judgeUserId: judgeColvin.userId,
+    });
+    expect(result).toEqual(expectedUpdatedCaseWorksheet);
+  });
+
+  it('should persist the updated case worksheet when the updates are valid, using the judge`s userId in the section when the current user is a chambers user', async () => {
+    const mockFinalBriefDueDate = '2023-08-29';
+    applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(colvinsChambersUser);
+    await applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockResolvedValue(judgeColvin);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
+
+    const result = await updateCaseWorksheetInteractor(applicationContext, {
+      docketNumber: mockCaseWorksheet.docketNumber,
+      updatedProps: {
+        finalBriefDueDate: mockFinalBriefDueDate,
+      },
+    });
+
+    const expectedUpdatedCaseWorksheet = {
+      ...mockCaseWorksheet,
+      finalBriefDueDate: mockFinalBriefDueDate,
+    };
+    expect(
+      applicationContext.getUseCaseHelpers().getJudgeInSectionHelper.mock
+        .calls[0][1],
+    ).toEqual({
+      section: colvinsChambersUser.section,
+    });
+    expect(
+      applicationContext.getPersistenceGateway().updateCaseWorksheet,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      caseWorksheet: expectedUpdatedCaseWorksheet,
+      judgeUserId: judgeColvin.userId,
     });
     expect(result).toEqual(expectedUpdatedCaseWorksheet);
   });
