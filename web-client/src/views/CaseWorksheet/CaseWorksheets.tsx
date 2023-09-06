@@ -47,7 +47,18 @@ export const CaseWorksheets = connect(
   }) {
     return (
       <React.Fragment>
-        <h1>Submitted/CAV Cases</h1>
+        <div className="grid-container padding-0 margin-bottom-3">
+          <div className="grid-row">
+            <div className="grid-col-9">
+              <h1 className="margin-bottom-0">Submitted/CAV Cases</h1>
+            </div>
+            <div className="display-flex flex-align-end flex-justify-end grid-col-3 text-right">
+              <span className="text-semibold">
+                Count: {caseWorksheetsHelper.caseWorksheetsFormatted.length}
+              </span>
+            </div>
+          </div>
+        </div>
 
         <table
           aria-describedby="submitted-cav-cases-tab"
@@ -98,7 +109,7 @@ export const CaseWorksheets = connect(
                     <td>{formattedCase.status}</td>
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
-                    <td className="display-flex flex-column flex-align-center">
+                    <td>
                       <FormGroup
                         className="margin-bottom-0"
                         errorText={
@@ -151,7 +162,7 @@ export const CaseWorksheets = connect(
                       </select>
                     </td>
                   </tr>
-                  <tr className="wip-submitted-cav-cases-primary-issue-row">
+                  <tr>
                     <td className="grid-container" colSpan={12}>
                       <div className="grid-row">
                         <div className="grid-col-3 text-right">
