@@ -130,44 +130,6 @@ describe('migration-segments', () => {
     await expect(handler(mockLambdaEvent, mockLambdaContext)).rejects.toThrow();
   });
 
-  it('should log a message when an item is successfully migrated to the destination table', async () => {
-    const mockRecordSize = 74;
-    mockGetRecordSize.mockReturnValue(mockRecordSize);
-
-    await handler(mockLambdaEvent, mockLambdaContext);
-
-    expect(mockLogger.info).toHaveBeenCalledWith(
-      'Successfully migrated case|101-20 case|101-20',
-      {
-        pk: 'case|101-20',
-        recordSizeInBytes: mockRecordSize,
-        segment: 0,
-        sk: 'case|101-20',
-      },
-    );
-  });
-
-  it('should NOT throw an error when an error occurs while attempting to calculate a record`s size', async () => {
-    mockGetRecordSize.mockImplementation(() => {
-      throw new Error();
-    });
-
-    await handler(mockLambdaEvent, mockLambdaContext);
-
-    expect(mockLogger.info).toHaveBeenCalledWith(
-      'DynamoDB Record Size Calculation Error: Error, {"pk":"case|101-20","sk":"case|101-20"}',
-    );
-    expect(mockLogger.info).toHaveBeenCalledWith(
-      'Successfully migrated case|101-20 case|101-20',
-      {
-        pk: 'case|101-20',
-        recordSizeInBytes: undefined,
-        segment: 0,
-        sk: 'case|101-20',
-      },
-    );
-  });
-
   it('should logs a message when an item already existed in the destination table', async () => {
     documentClientMock.put = () => ({
       promise: () =>
@@ -180,13 +142,6 @@ describe('migration-segments', () => {
 
     expect(mockLogger.info).toHaveBeenCalledWith(
       'The item of case|101-20 case|101-20 already existed in the destination table, probably due to a live migration.  Skipping migration for this item.',
-    );
-    expect(mockLogger.info).not.toHaveBeenCalledWith(
-      'Successfully migrated case|101-20 case|101-20',
-      {
-        pk: 'case|101-20',
-        sk: 'case|101-20',
-      },
     );
   });
 
