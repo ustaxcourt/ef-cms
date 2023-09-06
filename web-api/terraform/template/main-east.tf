@@ -5,12 +5,12 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   tags = {
     environment = var.environment
   }
-  
-    server_side_encryption_configuration {
+
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
-          sse_algorithm = "AES256"
+        sse_algorithm = "AES256"
       }
     }
   }
@@ -626,6 +626,7 @@ module "api-east-green" {
   validate = 1
   providers = {
     aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "green"
   deploying_color                = var.deploying_color
@@ -641,13 +642,16 @@ module "api-east-green" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_green_east_object.etag
   streams_object_hash            = data.aws_s3_bucket_object.streams_green_east_object.etag
   use_layers                     = var.green_use_layers
-  create_cron                    = 1
+  create_check_case_cron         = 1
+  create_health_check_cron       = 1
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.green_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
-  status_health_check_id         = var.status_health_check_east_id
+  enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
+
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object      = null_resource.seal_in_lower_east_object
@@ -695,6 +699,7 @@ module "api-east-blue" {
   validate = 1
   providers = {
     aws = aws.us-east-1
+    aws.us-east-1 = aws.us-east-1
   }
   current_color                  = "blue"
   deploying_color                = var.deploying_color
@@ -710,13 +715,15 @@ module "api-east-blue" {
   cron_object_hash               = data.aws_s3_bucket_object.cron_blue_east_object.etag
   streams_object_hash            = data.aws_s3_bucket_object.streams_blue_east_object.etag
   use_layers                     = var.blue_use_layers
-  create_cron                    = 1
+  create_check_case_cron         = 1
+  create_health_check_cron       = 1
   create_streams                 = 1
   stream_arn                     = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
-  status_health_check_id         = var.status_health_check_east_id
+  enable_health_checks           = var.enable_health_checks
+  health_check_id                = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : null
 
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
