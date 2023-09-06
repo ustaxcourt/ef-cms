@@ -1,5 +1,10 @@
+import {
+  CaseRecord,
+  IrsPractitionerOnCaseRecord,
+  PrivatePractitionerOnCaseRecord,
+} from '@web-api/persistence/dynamo/dynamoTypes';
 import { isCaseItem } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
-import { query } from '../../dynamodbClientService';
+import { queryFull } from '../../dynamodbClientService';
 
 export const getCasesMetadataByLeadDocketNumber = async ({
   applicationContext,
@@ -8,7 +13,9 @@ export const getCasesMetadataByLeadDocketNumber = async ({
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
 }) => {
-  const consolidatedGroup = await query({
+  const consolidatedGroup = await queryFull<
+    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
+  >({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
     },
