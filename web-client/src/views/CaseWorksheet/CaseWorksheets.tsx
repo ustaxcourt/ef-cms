@@ -46,17 +46,25 @@ export const CaseWorksheets = connect(
     validationErrors,
   }) {
     return (
-      <React.Fragment>
-        <h1>Submitted/CAV Cases</h1>
+      <div className="margin-top-6">
+        <div className="grid-container padding-0 margin-bottom-3">
+          <div className="grid-row">
+            <div className="grid-col-10">
+              <h1 className="margin-bottom-0">Submitted/CAV Cases</h1>
+            </div>
+            <div className="display-flex flex-align-end flex-justify-end grid-col-2">
+              <span className="text-semibold">
+                Count: {caseWorksheetsHelper.caseWorksheetsFormatted.length}
+              </span>
+            </div>
+          </div>
+        </div>
 
-        <table
-          aria-describedby="submitted-cav-cases-tab"
-          className="usa-table ustc-table"
-        >
+        <table className="usa-table ustc-table">
           <thead>
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number" className="small">
+              <th className="small">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
               <th>No. of Cases</th>
@@ -64,16 +72,8 @@ export const CaseWorksheets = connect(
               <th>Case Status</th>
               <th>Days in Status</th>
               <th>Status Date</th>
-              <th>
-                <label htmlFor="final-brief-due-date-date-picker">
-                  Final Brief Due Date
-                </label>
-              </th>
-              <th>
-                <label htmlFor="status-of-matter-dropdown">
-                  Status of Matter
-                </label>
-              </th>
+              <th>Final Brief Due Date</th>
+              <th>Status of Matter</th>
             </tr>
           </thead>
           <tbody>
@@ -98,7 +98,7 @@ export const CaseWorksheets = connect(
                     <td>{formattedCase.status}</td>
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
-                    <td className="display-flex flex-column flex-align-center">
+                    <td>
                       <FormGroup
                         className="margin-bottom-0"
                         errorText={
@@ -109,22 +109,20 @@ export const CaseWorksheets = connect(
                           ]?.finalBriefDueDate
                         }
                       >
-                        <div className="display-flex flex-align-center">
-                          <DateInput
-                            className={'margin-bottom-0'}
-                            id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
-                            showDateHint={false}
-                            values={convertToDateInputValues(
-                              formattedCase.worksheet.finalBriefDueDate,
-                            )}
-                            onValueChange={value => {
-                              updateFinalBriefDueDateSequence({
-                                docketNumber: formattedCase.docketNumber,
-                                finalBriefDueDate: value === '' ? null : value,
-                              });
-                            }}
-                          />
-                        </div>
+                        <DateInput
+                          className={'margin-bottom-0'}
+                          id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
+                          showDateHint={false}
+                          values={convertToDateInputValues(
+                            formattedCase.worksheet.finalBriefDueDate,
+                          )}
+                          onValueChange={value => {
+                            updateFinalBriefDueDateSequence({
+                              docketNumber: formattedCase.docketNumber,
+                              finalBriefDueDate: value === '' ? null : value,
+                            });
+                          }}
+                        />
                       </FormGroup>
                     </td>
                     <td>
@@ -151,70 +149,65 @@ export const CaseWorksheets = connect(
                       </select>
                     </td>
                   </tr>
-                  <tr className="wip-submitted-cav-cases-primary-issue-row">
-                    <td className="grid-container" colSpan={12}>
-                      <div className="grid-row">
-                        <div className="grid-col-3 text-right">
-                          <b>Primary Issue:</b>
-                        </div>
-                        <div
-                          className="grid-col-8"
-                          style={{
-                            paddingLeft: '12px',
-                            paddingRight: '12px',
+                  <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      <span className="text-bold margin-right-1">
+                        Primary Issue:
+                      </span>
+                      {formattedCase.worksheet.primaryIssue}
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                      {!formattedCase.worksheet.primaryIssue && (
+                        <Button
+                          link
+                          icon="plus-circle"
+                          onClick={() => {
+                            openAddEditPrimaryIssueModalSequence({
+                              docketNumber: formattedCase.docketNumber,
+                            });
                           }}
                         >
-                          {formattedCase.worksheet.primaryIssue}
-                        </div>
-                        <div className="grid-col-1">
-                          {!formattedCase.worksheet.primaryIssue && (
+                          Add Issue
+                        </Button>
+                      )}
+                      {formattedCase.worksheet.primaryIssue && (
+                        <div>
+                          <div>
                             <Button
                               link
-                              className="float-right"
-                              icon="plus-circle"
+                              icon="edit"
                               onClick={() => {
                                 openAddEditPrimaryIssueModalSequence({
                                   docketNumber: formattedCase.docketNumber,
                                 });
                               }}
                             >
-                              Add Issue
+                              Edit Issue
                             </Button>
-                          )}
-
-                          {formattedCase.worksheet.primaryIssue && (
-                            <div className="grid">
-                              <div>
-                                <Button
-                                  link
-                                  icon="edit"
-                                  onClick={() => {
-                                    openAddEditPrimaryIssueModalSequence({
-                                      docketNumber: formattedCase.docketNumber,
-                                    });
-                                  }}
-                                >
-                                  Edit Issue
-                                </Button>
-                              </div>
-                              <div>
-                                <Button
-                                  link
-                                  className="red-warning"
-                                  icon="trash"
-                                  onClick={() => {
-                                    openDeletePrimaryIssueSequence({
-                                      docketNumber: formattedCase.docketNumber,
-                                    });
-                                  }}
-                                >
-                                  Delete Issue
-                                </Button>
-                              </div>
-                            </div>
-                          )}
+                          </div>
+                          <div>
+                            <Button
+                              link
+                              className="red-warning"
+                              icon="trash"
+                              onClick={() => {
+                                openDeletePrimaryIssueSequence({
+                                  docketNumber: formattedCase.docketNumber,
+                                });
+                              }}
+                            >
+                              Delete Issue
+                            </Button>
+                          </div>
                         </div>
-                      </div>
+                      )}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -222,6 +215,7 @@ export const CaseWorksheets = connect(
             })}
           </tbody>
         </table>
+
         {caseWorksheetsHelper.caseWorksheetsFormatted.length === 0 && (
           <div>
             There are no cases with a status of &quot;Submitted&quot; or
@@ -232,9 +226,8 @@ export const CaseWorksheets = connect(
         {showModal === 'AddEditPrimaryIssueModal' && (
           <AddEditPrimaryIssueModal />
         )}
-
         {showModal === 'DeletePrimaryIssueModal' && <DeletePrimaryIssueModal />}
-      </React.Fragment>
+      </div>
     );
   },
 );

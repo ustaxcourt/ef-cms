@@ -1,12 +1,15 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  STATUS_OF_MATTER_OPTIONS,
+} from '../../shared/src/business/entities/EntityConstants';
 import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('Judges dashboard', () => {
+describe('Case Worksheets Journey', () => {
   const cerebralTest = setupTest();
 
   const caseWorksheetsHelper = withAppContextDecorator(
@@ -28,7 +31,7 @@ describe('Judges dashboard', () => {
   );
 
   it('save docket number for later test', () => {
-    cerebralTest.firstCavDocketNumber = cerebralTest.docketNumber;
+    cerebralTest.submittedCaseDocketNumber = cerebralTest.docketNumber;
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -38,7 +41,8 @@ describe('Judges dashboard', () => {
   docketClerkUpdatesCaseStatusTo(cerebralTest, CASE_STATUS_TYPES.cav, 'Colvin');
 
   loginAs(cerebralTest, 'judgecolvin@example.com');
-  it('should display the CAV and Submitted case table on the dashboard', async () => {
+  it('should display the case worksheets table on the dashboard', async () => {
+    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoDashboardSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual('DashboardJudge');
@@ -47,9 +51,17 @@ describe('Judges dashboard', () => {
       state: cerebralTest.getState(),
     });
 
+    const submittedCase = caseWorksheetsFormatted.find(
+      theCase =>
+        theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
+    );
     const cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
     );
+    expect(submittedCase).toMatchObject({
+      docketNumber: cerebralTest.submittedCaseDocketNumber,
+      status: CASE_STATUS_TYPES.submitted,
+    });
     expect(cavCase).toMatchObject({
       docketNumber: cerebralTest.docketNumber,
       status: CASE_STATUS_TYPES.cav,
@@ -197,7 +209,8 @@ describe('Judges dashboard', () => {
     });
 
     const otherCavCaseInTable = caseWorksheetsFormatted.find(
-      theCase => theCase.docketNumber === cerebralTest.firstCavDocketNumber,
+      theCase =>
+        theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
     )!;
     expect(otherCavCaseInTable.worksheet.finalBriefDueDate).toBeUndefined();
   });
@@ -225,5 +238,119 @@ describe('Judges dashboard', () => {
     });
   });
 
-  it('should persist and display a status of matter set by the user', async () => {});
+  it('should persist and display a status of matter set by the user', async () => {
+    await cerebralTest.runSequence('updateStatusOfMatterSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
+    });
+
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    const cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    expect(cavCase).toMatchObject({
+      docketNumber: cerebralTest.docketNumber,
+      status: CASE_STATUS_TYPES.cav,
+      worksheet: {
+        statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
+      },
+    });
+  });
+
+  loginAs(cerebralTest, 'colvinschambers@example.com');
+  it('should display the case worksheets table on the dashboard, including changes to case worksheets that the judge has made', async () => {
+    await cerebralTest.runSequence('gotoDashboardSequence');
+
+    expect(cerebralTest.getState('currentPage')).toEqual('DashboardChambers');
+
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    const submittedCase = caseWorksheetsFormatted.find(
+      theCase =>
+        theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
+    );
+    const cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    expect(submittedCase).toMatchObject({
+      docketNumber: cerebralTest.submittedCaseDocketNumber,
+      status: CASE_STATUS_TYPES.submitted,
+    });
+    expect(cavCase).toMatchObject({
+      docketNumber: cerebralTest.docketNumber,
+      status: CASE_STATUS_TYPES.cav,
+      worksheet: {
+        finalBriefDueDate: '2023-08-29',
+        statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
+      },
+    });
+  });
+
+  it('should persist and display updates a chambers user makes to a case worksheet', async () => {
+    let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+    let submittedCase = caseWorksheetsFormatted.find(
+      theCase =>
+        theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
+    );
+
+    await cerebralTest.runSequence('openAddEditPrimaryIssueModalSequence', {
+      docketNumber: submittedCase!.docketNumber,
+    });
+
+    const expectedPrimaryIssue =
+      'But I don`t feel like dancin`, no sir, no dancin` today';
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'modal.primaryIssue',
+      value: expectedPrimaryIssue,
+    });
+
+    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+
+    ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    }));
+    submittedCase = caseWorksheetsFormatted.find(
+      theCase =>
+        theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
+    );
+    expect(submittedCase).toMatchObject({
+      docketNumber: cerebralTest.submittedCaseDocketNumber,
+      status: CASE_STATUS_TYPES.submitted,
+      worksheet: { primaryIssue: expectedPrimaryIssue },
+    });
+  });
+
+  loginAs(cerebralTest, 'judgecolvin@example.com');
+  it('should display the case worksheets table on the dashboard, including changes to case worksheets that chambers users have made', async () => {
+    await cerebralTest.runSequence('gotoDashboardSequence');
+
+    const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    const submittedCase = caseWorksheetsFormatted.find(
+      theCase =>
+        theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
+    );
+    const cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    expect(submittedCase).toMatchObject({
+      docketNumber: cerebralTest.submittedCaseDocketNumber,
+      status: CASE_STATUS_TYPES.submitted,
+      worksheet: {
+        primaryIssue: 'But I don`t feel like dancin`, no sir, no dancin` today',
+      },
+    });
+    expect(cavCase).toMatchObject({
+      docketNumber: cerebralTest.docketNumber,
+      status: CASE_STATUS_TYPES.cav,
+    });
+  });
 });

@@ -2,8 +2,12 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  colvinsChambersUser,
+  judgeColvin,
+  petitionsClerkUser,
+} from '@shared/test/mockUsers';
 import { getCaseWorksheetsForJudgeInteractor } from './getCaseWorksheetsForJudgeInteractor';
-import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCaseWorksheetsForJudgeInteractor', () => {
   it('should throw an error when the user does not have permission to the case worksheet feature', async () => {
@@ -14,7 +18,7 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('should fetch from persistence and return all case worksheets for the provided judge', async () => {
+  it('should fetch from persistence and return all case worksheets for the judge in the users` section when the current user is a chambers user', async () => {
     const TEST_WORKSHEET: RawCaseWorksheet = {
       docketNumber: '123-45',
       entityName: 'CaseWorksheet',
@@ -28,7 +32,13 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
         ...TEST_WORKSHEET,
       },
     ];
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+    applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(colvinsChambersUser);
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockResolvedValue(judgeColvin);
     applicationContext
       .getPersistenceGateway()
       .getCaseWorksheets.mockReturnValue(TEST_RAW_WORKSHEETS);
@@ -41,6 +51,26 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseWorksheets.mock
         .calls[0][1],
-    ).toEqual({ judgeId: judgeUser.userId });
+    ).toEqual({ judgeId: judgeColvin.userId });
+  });
+
+  it('should fetch from persistence and return all case worksheets for the current user when the current user is a judge', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(judgeColvin);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockResolvedValue(judgeColvin);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseWorksheets.mockReturnValue([]);
+
+    await getCaseWorksheetsForJudgeInteractor(applicationContext);
+
+    expect(
+      applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCaseWorksheets.mock
+        .calls[0][1],
+    ).toEqual({ judgeId: judgeColvin.userId });
   });
 });

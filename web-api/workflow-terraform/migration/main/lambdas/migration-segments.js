@@ -12,7 +12,6 @@ const {
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
 const { createLogger } = require('../../../../src/createLogger');
-const { getRecordSize } = require('./utilities/getRecordSize');
 const { migrationsToRun } = require('./migrationsToRun');
 
 const MAX_DYNAMO_WRITE_SIZE = 25;
@@ -51,11 +50,6 @@ const scanTableSegment = async (
       })
       .promise()
       .then(async results => {
-        applicationContext.logger.info('scanned table segment', {
-          numberOfItems: results.Items.length,
-          segment,
-          totalSegments,
-        });
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
         await exports.processItems(applicationContext, {
@@ -100,7 +94,7 @@ exports.migrateRecords = async (
 
 exports.processItems = async (
   applicationContext,
-  { documentClient, items, ranMigrations, segment },
+  { documentClient, items, ranMigrations },
 ) => {
   try {
     items = await exports.migrateRecords(applicationContext, {
@@ -137,32 +131,6 @@ exports.processItems = async (
               }
             })
             .catch(retry);
-        }).then(res => {
-          if (res !== 'already-migrated') {
-            const marshalledItem = AWS.DynamoDB.Converter.marshall(item);
-
-            let recordSize;
-            try {
-              recordSize = getRecordSize(marshalledItem);
-            } catch (e) {
-              applicationContext.logger.info(
-                `DynamoDB Record Size Calculation Error: ${e}, ${JSON.stringify(
-                  marshalledItem,
-                )}`,
-              );
-            }
-
-            applicationContext.logger.info(
-              `Successfully migrated ${item.pk} ${item.sk}`,
-              {
-                pk: item.pk,
-                recordSizeInBytes: recordSize,
-                segment,
-                sk: item.sk,
-              },
-            );
-          }
-          return res;
         }),
       );
     }

@@ -7,6 +7,9 @@ WORKDIR /home/app
 # needed to install jre successfully
 RUN mkdir -p /usr/share/man/man1
 
+# delete duplicate list if it exists
+RUN [ -f /etc/apt/sources.list.d/microsoft-edge.list ] && rm /etc/apt/sources.list.d/microsoft-edge-stable.list
+
 RUN apt-get update
 
 RUN apt-get install -y \
@@ -34,7 +37,7 @@ RUN apt-get install -y build-essential
 RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
 
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.12.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.13.13.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip

@@ -7,7 +7,7 @@ import { updateFinalBriefDueDateAction } from './updateFinalBriefDueDateAction';
 describe('updateFinalBriefDueDateAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should persist the brief due date to the backend', async () => {
+  it('should persist the brief due date to the backend when the current user is a chambers user', async () => {
     const TEST_FINAL_BRIEF_DUE_DATE = '08/28/2023';
     applicationContext
       .getUseCases()
