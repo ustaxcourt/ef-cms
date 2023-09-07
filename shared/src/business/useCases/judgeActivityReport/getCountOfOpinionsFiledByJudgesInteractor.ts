@@ -40,7 +40,6 @@ export const getCountOfOpinionsFiledByJudgesInteractor = async (
         documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
         endDate: searchEntity.endDate,
         judges: searchEntity.judges,
-        searchType: 'opinion',
         startDate: searchEntity.startDate,
       },
     });
