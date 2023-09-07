@@ -2,7 +2,7 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListRowTrialSession } from './CaseListRowTrialSession';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
-import { connect } from '@cerebral/react';
+import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
@@ -10,7 +10,6 @@ import classNames from 'classnames';
 
 export const WorkingCopySessionList = connect(
   {
-    casesShownCount: state.trialSessionWorkingCopyHelper.casesShownCount,
     sort: state.trialSessionWorkingCopy.sort,
     sortOrder: state.trialSessionWorkingCopy.sortOrder,
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
@@ -18,7 +17,6 @@ export const WorkingCopySessionList = connect(
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
   function WorkingCopySessionList({
-    casesShownCount,
     sort,
     sortOrder,
     toggleWorkingCopySortSequence,
@@ -122,7 +120,7 @@ export const WorkingCopySessionList = connect(
             })}
           </tbody>
         </table>
-        {casesShownCount === 0 && (
+        {trialSessionWorkingCopyHelper.casesShownCount === 0 && (
           <p>Please select a trial status to show cases.</p>
         )}
       </div>

@@ -1349,12 +1349,13 @@ export const SECTIONS = sortBy([
   TRIAL_CLERKS_SECTION,
 ]);
 
-export const TRIAL_STATUS_TYPES = {
+export const TRIAL_STATUS_TYPES: TrialStatusOption = {
   basisReached: {
     deprecated: false,
     displayOrder: 1,
     legacyLabel: 'A Basis Reached',
     label: 'Basis Reached',
+    new: false,
   },
   probableSettlement: {
     deprecated: false,
@@ -1384,38 +1385,54 @@ export const TRIAL_STATUS_TYPES = {
     deprecated: false,
     displayOrder: 2,
     label: 'Recall',
+    new: false,
   },
   continued: {
     deprecated: false,
     displayOrder: 4,
     label: 'Continued',
+    new: false,
   },
   rule122: {
     deprecated: false,
     displayOrder: 6,
     label: 'Rule 122',
+    new: false,
   },
   submittedCAV: {
     deprecated: false,
     displayOrder: 8,
     legacyLabel: 'Taken Under Advisement',
     label: 'Submitted/CAV',
+    new: false,
   },
   setForTrial: {
     deprecated: true,
     displayOrder: 999,
     label: 'Set for Trial',
+    new: false,
   },
   dismissed: {
     deprecated: true,
     displayOrder: 999,
     label: 'Dismissed',
+    new: false,
   },
   settled: {
     deprecated: true,
     displayOrder: 999,
     label: 'Settled',
+    new: false,
   },
+};
+export type TrialStatusOption = {
+  [key: string]: {
+    deprecated: boolean;
+    displayOrder: number;
+    new: boolean;
+    label: string;
+    legacyLabel?: string;
+  };
 };
 
 export const SCAN_MODES = {

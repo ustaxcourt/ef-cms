@@ -1,3 +1,10 @@
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  TRIAL_STATUS_TYPES,
+  TrialStatusOption,
+} from '@shared/business/entities/EntityConstants';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { omitBy, partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -10,15 +17,18 @@ const compareCasesByPractitioner = (a, b) => {
   return aCount - bCount;
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
-  const { ALLOWLIST_FEATURE_FLAGS, TRIAL_STATUS_TYPES } =
-    applicationContext.getConstants();
-
+): {
+  casesShownCount: number;
+  formattedCases: any[];
+  showPrintButton: boolean;
+  trialStatusFilters: { key: string; label: string }[];
+  trialStatusOptions: TrialStatusOption;
+  unassignedLabel: 'Unassigned' | 'Trial Status';
+  updatedTrialSessionTypesEnabled: boolean;
+} => {
   const trialSession = get(state.trialSession);
   const { caseMetadata, filters, sort, sortOrder, userNotes } = get(
     state.trialSessionWorkingCopy,
@@ -83,13 +93,13 @@ export const trialSessionWorkingCopyHelper = (
 
   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
     if (caseToUpdate.isLeadCase) {
-      caseToUpdate.consolidatedCases = memberConsolidatedCases.filter(
+      caseToUpdate.nestedConsolidatedCases = memberConsolidatedCases.filter(
         memberCase => {
           return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
         },
       );
 
-      caseToUpdate.consolidatedCases.sort(
+      caseToUpdate.nestedConsolidatedCases.sort(
         applicationContext.getUtilities().compareCasesByDocketNumber,
       );
     }
@@ -154,7 +164,7 @@ export const trialSessionWorkingCopyHelper = (
         label:
           !updatedTrialSessionTypesEnabled &&
           trialStatusOptions[option].legacyLabel
-            ? trialStatusOptions[option].legacyLabel
+            ? trialStatusOptions[option].legacyLabel!
             : trialStatusOptions[option].label,
       };
     })
