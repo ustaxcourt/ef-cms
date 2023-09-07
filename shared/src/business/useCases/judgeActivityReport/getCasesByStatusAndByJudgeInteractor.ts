@@ -34,10 +34,8 @@ export type CavAndSubmittedFilteredCasesType = {
   petitioners: TPetitioner[];
 };
 
-const getConsolidatedCaseGroupCountMap = (
-  filteredCaseRecords,
-  consolidatedCasesGroupCountMap,
-) => {
+const getConsolidatedCaseGroupCountMap = filteredCaseRecords => {
+  const consolidatedCasesGroupCountMap = new Map();
   filteredCaseRecords.forEach(caseRecord => {
     if (caseRecord.leadDocketNumber) {
       consolidatedCasesGroupCountMap.set(
@@ -46,6 +44,7 @@ const getConsolidatedCaseGroupCountMap = (
       );
     }
   });
+  return consolidatedCasesGroupCountMap;
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
@@ -114,12 +113,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
       }),
   );
 
-  const consolidatedCasesGroupCountMap = new Map();
-
-  getConsolidatedCaseGroupCountMap(
-    finalListOfCases,
-    consolidatedCasesGroupCountMap,
-  );
+  const consolidatedCasesGroupCountMap =
+    getConsolidatedCaseGroupCountMap(finalListOfCases);
 
   for (const eachCase of finalListOfCases) {
     const daysElapsed = calculateDaysElapsed(applicationContext, eachCase);

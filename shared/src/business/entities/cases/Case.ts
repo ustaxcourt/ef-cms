@@ -369,7 +369,6 @@ export class Case extends JoiValidationEntity {
     this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
     this.orderDesignatingPlaceOfTrial =
       rawCase.orderDesignatingPlaceOfTrial || false;
@@ -680,7 +679,6 @@ export class Case extends JoiValidationEntity {
     sealedDate: JoiValidationConstants.ISO_DATE.optional()
       .allow(null)
       .description('When the case was sealed from the public.'),
-
     sortableDocketNumber: joi
       .number()
       .required()
@@ -995,7 +993,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} caseCaption the original case caption
    * @returns {string} caseTitle the case caption with the postfix removed
    */
-  static getCaseTitle(caseCaption) {
+  static getCaseTitle(caseCaption): string {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
   }
 

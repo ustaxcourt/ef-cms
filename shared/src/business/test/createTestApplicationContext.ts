@@ -706,6 +706,7 @@ Object.entries(applicationContext).forEach(([key, value]) => {
   }
 });
 interface TestClientApplicationContext extends ClientApplicationContext {
+  getUtilities: typeof applicationContext.getUtilities;
   getUseCases: typeof applicationContext.getUseCases;
   getPersistenceGateway: typeof applicationContext.getPersistenceGateway;
 }
