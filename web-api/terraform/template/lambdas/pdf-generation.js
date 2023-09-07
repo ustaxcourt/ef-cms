@@ -34,6 +34,10 @@ export const changeOfAddressHandler = async event => {
 
   const applicationContext = createApplicationContext(eventBody.requestUser);
 
+  applicationContext.logger.info(
+    `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
+  );
+
   await applicationContext.getUseCaseHelpers().generateChangeOfAddressHelper({
     applicationContext,
     bypassDocketEntry: eventBody.bypassDocketEntry,

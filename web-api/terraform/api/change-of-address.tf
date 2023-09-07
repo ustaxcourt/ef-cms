@@ -29,7 +29,7 @@ resource "aws_lambda_event_source_mapping" "change_of_address_mapping" {
 
 resource "aws_sqs_queue" "change_of_address_queue" {
   name                       = "change_of_address_queue_${var.environment}_${var.current_color}"
-  visibility_timeout_seconds = "30"
+  visibility_timeout_seconds = "90"
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.change_of_address_dl_queue.arn
