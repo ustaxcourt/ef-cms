@@ -59,7 +59,7 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsDraftOrder(cerebralTest, 0);
+  docketClerkViewsDraftOrder(cerebralTest);
   docketClerkGetsDocketEntryByEventCode(cerebralTest, 'O');
   docketClerkSignsOrder(cerebralTest);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);

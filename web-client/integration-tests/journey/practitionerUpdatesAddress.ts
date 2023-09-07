@@ -1,7 +1,6 @@
+import { faker } from '@faker-js/faker';
+import { refreshElasticsearchIndex } from '../helpers';
 import { waitForLoadingComponentToHide } from '../helpers';
-
-const { faker } = require('@faker-js/faker');
-const { refreshElasticsearchIndex } = require('../helpers');
 
 export const practitionerUpdatesAddress = cerebralTest => {
   return it('practitioner updates address', async () => {

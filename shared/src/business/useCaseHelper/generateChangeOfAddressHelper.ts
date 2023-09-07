@@ -111,6 +111,10 @@ export const generateChangeOfAddressHelper = async ({
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
+    applicationContext.logger.info(
+      `"change-of-address-job|${jobId}" job finished`,
+    );
+
     if (websocketMessagePrefix === 'user') {
       const userEntity = new Practitioner({
         ...user,

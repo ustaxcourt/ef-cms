@@ -69,7 +69,7 @@ variable "trial_session_object_hash" {
   type = any
 }
 
-variable "trial_session_object" { 
+variable "trial_session_object" {
   type = any
 }
 
@@ -133,7 +133,11 @@ variable "streams_object_hash" {
   type = string
 }
 
-variable "create_cron" {
+variable "create_health_check_cron" {
+  type = number
+}
+
+variable "create_check_case_cron" {
   type = number
 }
 
@@ -150,7 +154,7 @@ variable "stream_arn" {
 }
 
 variable "create_triggers" {
-  type = number  
+  type    = number
   default = 1
 }
 
@@ -186,7 +190,7 @@ variable "lower_env_account_id" {
   type = string
 }
 
-variable "create_bounce_handler" { 
+variable "create_bounce_handler" {
   type = number
 }
 
@@ -203,10 +207,15 @@ variable "node_version" {
 }
 
 variable "use_layers" {
-  type = bool
+  type    = bool
   default = true
 }
 
-variable "status_health_check_id" {
+variable "enable_health_checks" {
+  // e.g. "1" or "0"
+  type = string
+}
+
+variable "health_check_id" {
   type = string
 }
