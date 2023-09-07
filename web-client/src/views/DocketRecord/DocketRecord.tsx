@@ -177,7 +177,7 @@ export const DocketRecord = connect(
             </thead>
             <tbody>
               {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
-                entry => {
+                (entry, arrayIndex) => {
                   return (
                     <tr key={entry.index}>
                       <td data-label="No.">{entry.index}</td>
@@ -185,7 +185,10 @@ export const DocketRecord = connect(
                         {entry.createdAtFormatted}
                       </td>
                       <td data-label="Filings and Proceedings">
-                        <FilingsAndProceedings entry={entry} />
+                        <FilingsAndProceedings
+                          arrayIndex={arrayIndex}
+                          entry={entry}
+                        />
                       </td>
                       <td data-label="Served">
                         {entry.showNotServed && (
