@@ -1,17 +1,17 @@
 import { genericHandler } from '../genericHandler';
 
 /**
- * gets all opinions filed by judge for their activity report
+ * gets all orders filed by judge for their activity report
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getOpinionsFiledByJudgeLambda = event =>
+export const getCountOfOrdersFiledByJudgeLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getOpinionsFiledByJudgeInteractor(applicationContext, {
+        .getCountOfOrdersFiledByJudgesInteractor(applicationContext, {
           ...JSON.parse(event.body),
         });
     },

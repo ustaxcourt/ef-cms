@@ -1,3 +1,4 @@
+import { faker } from '@faker-js/faker';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -9,7 +10,6 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
 import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesEmailAddressToOneAlreadyInUse';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
-const { faker } = require('@faker-js/faker');
 
 describe('Modify Petitioner Email', () => {
   const cerebralTest = setupTest();
