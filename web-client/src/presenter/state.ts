@@ -72,6 +72,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialJudgeActivityReportState } from './judgeActivityReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -309,7 +310,6 @@ export const baseState = {
   },
 
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
@@ -334,7 +334,7 @@ export const baseState = {
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
-  judgeActivityReportData: {},
+  judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
