@@ -80,6 +80,9 @@ describe('Case Worksheets Journey', () => {
       docketNumber: cavCase!.docketNumber,
     });
 
+    const { modal } = cerebralTest.getState();
+    expect(modal.showModal).toEqual('AddEditPrimaryIssueModal');
+
     const expectedPrimaryIssue = 'I can be your hero baby';
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'modal.primaryIssue',
@@ -87,6 +90,9 @@ describe('Case Worksheets Journey', () => {
     });
 
     await cerebralTest.runSequence('updatePrimaryIssueSequence');
+
+    const { modal: modal2 } = cerebralTest.getState();
+    expect(modal2.showModal).toBeUndefined();
 
     ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
