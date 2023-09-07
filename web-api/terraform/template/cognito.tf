@@ -108,7 +108,7 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
 
   generate_secret                      = false
-  refresh_token_validity               = 30
+  refresh_token_validity               = 60
   allowed_oauth_flows_user_pool_client = true
 
   callback_urls = [
@@ -241,7 +241,7 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  refresh_token_validity               = 30
+  refresh_token_validity               = 60
   allowed_oauth_flows_user_pool_client = true
 
   callback_urls = [
