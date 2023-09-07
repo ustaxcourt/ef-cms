@@ -1,17 +1,17 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { sequence } from 'cerebral';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
+import { setJudgeActivityReportFiltersAction } from '../actions/JudgeActivityReport/setJudgeActivityReportFiltersAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { updateDateFromPickerFromFormAction } from '../actions/JudgeActivityReport/updateDateFromPickerFromFormAction';
 import { validateJudgeActivityReportSearchAction } from '../actions/JudgeActivityReport/validateJudgeActivityReportSearchAction';
 
-export const selectDateRangeFromJudgeActivityReportSequence = sequence<{
+export const setJudgeActivityReportFiltersSequence = sequence<{
   endDate?: string;
   startDate?: string;
 }>([
-  updateDateFromPickerFromFormAction,
+  setJudgeActivityReportFiltersAction,
   shouldValidateAction,
   {
     ignore: [],
