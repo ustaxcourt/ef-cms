@@ -3,13 +3,6 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 
-/**
- * UserCase Entity
- * represents a user-to-case mapping record
- *
- * @param {object} rawUserCase the raw user-case data
- * @constructor
- */
 export class UserCase extends JoiValidationEntity {
   public caseCaption: string;
   public createdAt: string;
@@ -21,6 +14,7 @@ export class UserCase extends JoiValidationEntity {
 
   constructor(rawUserCase) {
     super('UserCase');
+
     this.caseCaption = rawUserCase.caseCaption;
     this.createdAt = rawUserCase.createdAt || createISODateString();
     this.docketNumber = rawUserCase.docketNumber;
@@ -48,6 +42,4 @@ export class UserCase extends JoiValidationEntity {
   }
 }
 
-declare global {
-  type RawUserCase = ExcludeMethods<UserCase>;
-}
+export type RawUserCase = ExcludeMethods<UserCase>;

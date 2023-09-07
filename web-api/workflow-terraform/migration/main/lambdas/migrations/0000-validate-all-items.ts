@@ -1,9 +1,8 @@
-const {
-  createApplicationContext,
-} = require('../../../../../src/applicationContext');
+import { createApplicationContext } from '../../../../../src/applicationContext';
+
 const applicationContext = createApplicationContext({});
 
-const migrateItems = items => {
+export const migrateItems = items => {
   for (const item of items) {
     const entityConstructor = applicationContext.getEntityByName(
       item.entityName,
@@ -17,5 +16,3 @@ const migrateItems = items => {
   }
   return items;
 };
-
-exports.migrateItems = migrateItems;
