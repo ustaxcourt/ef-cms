@@ -164,8 +164,8 @@ const getCaseRow = ({
           </td>
         </tr>
       )}
-      {formattedCase.consolidatedCases &&
-        formattedCase.consolidatedCases.map(memberCase =>
+      {formattedCase.nestedConsolidatedCases &&
+        formattedCase.nestedConsolidatedCases.map(memberCase =>
           getCaseRow({
             formattedCase: memberCase,
             indentMemberCase: true,
