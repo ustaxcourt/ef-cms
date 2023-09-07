@@ -26,6 +26,7 @@ describe('judgeActivityReportHelper', () => {
       {
         daysElapsedSinceLastStatusChange: 1,
         docketNumber: '101-20',
+        formattedCaseCount: 4,
       },
       {
         daysElapsedSinceLastStatusChange: 1,
@@ -354,9 +355,6 @@ describe('judgeActivityReportHelper', () => {
   describe('progressDescriptionTableTotal', () => {
     mockSubmittedAndCavCasesByJudge = [];
     it('should be the sum of the number of cases off state.submittedAndCavCasesByJudge', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        {};
-
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
@@ -382,22 +380,23 @@ describe('judgeActivityReportHelper', () => {
         {
           daysElapsedSinceLastStatusChange: 1,
           docketNumber: '101-20',
+          formattedCaseCount: 4,
           leadDocketNumber: '101-20',
         },
         {
           daysElapsedSinceLastStatusChange: 1,
           docketNumber: '110-15',
+          formattedCaseCount: 1,
         },
         {
           daysElapsedSinceLastStatusChange: 1,
           docketNumber: '202-11',
+          formattedCaseCount: 1,
         },
       ];
     });
 
     it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge with computed values', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        { '101-20': 4 };
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
@@ -433,8 +432,6 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        { '101-20': 4 };
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
       const { submittedAndCavCasesByJudge } = runCompute(
@@ -459,8 +456,6 @@ describe('judgeActivityReportHelper', () => {
 
   describe('pageCount and showPaginator', () => {
     it('should return a pageCount of 1 and showPaginator as false for single page display', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        {};
       baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
         mockTotalCountForSubmittedAndCavCases;
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
@@ -474,8 +469,6 @@ describe('judgeActivityReportHelper', () => {
     });
 
     it('should return a pageCount of 2 and showPaginator as true for multi-paginated page display', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.consolidatedCasesGroupCountMap =
-        {};
       baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases = 115;
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
