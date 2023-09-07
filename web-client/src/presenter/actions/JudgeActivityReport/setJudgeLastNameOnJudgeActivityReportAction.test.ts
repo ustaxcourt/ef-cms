@@ -4,7 +4,7 @@ import {
   judgeUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 import { setJudgeLastNameOnJudgeActivityReportAction } from './setJudgeLastNameOnJudgeActivityReportAction';
 
 describe('setJudgeLastNameOnJudgeActivityReportAction', () => {
