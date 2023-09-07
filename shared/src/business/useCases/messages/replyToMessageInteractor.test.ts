@@ -22,6 +22,11 @@ describe('replyToMessageInteractor', () => {
           },
         ],
         docketNumber: '101-20',
+        draftAttachments: [
+          {
+            documentId: 'b1130321-0a69-43bc-b3eb-64a18f079211',
+          },
+        ],
         message: "How's it going?",
         parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
         subject: 'Hey!',
@@ -32,12 +37,17 @@ describe('replyToMessageInteractor', () => {
   });
 
   it('creates the message reply and marks the parent message as replied to', async () => {
+    const mockAttachments = [
+      {
+        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+      },
+    ];
+    const mockDraftAttachments = [
+      {
+        documentId: 'b1130321-0a69-43bc-b3eb-64a18f079873',
+      },
+    ];
     const messageData = {
-      attachments: [
-        {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
-        },
-      ],
       docketNumber: '101-20',
       message: "How's it going?",
       parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
@@ -75,6 +85,8 @@ describe('replyToMessageInteractor', () => {
 
     await replyToMessageInteractor(applicationContext, {
       ...messageData,
+      attachments: mockAttachments,
+      draftAttachments: mockDraftAttachments,
     });
 
     expect(
@@ -85,6 +97,7 @@ describe('replyToMessageInteractor', () => {
         .message,
     ).toMatchObject({
       ...messageData,
+      attachments: [...mockAttachments, ...mockDraftAttachments],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Guy Fieri',
       docketNumber: '101-20',
