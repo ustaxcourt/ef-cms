@@ -6,25 +6,12 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-/**
- * calls persistence methods to create a reply state for a message
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.message the message text
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @param {string} providers.subject the message subject
- * @param {string} providers.toSection the section of the user receiving the message
- * @param {string} providers.toUserId the user id of the user receiving the message
- * @returns {object} validated raw message object
- */
 export const replyToMessage = async (
   applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
+    draftAttachments,
     message,
     parentMessageId,
     subject,
@@ -33,6 +20,7 @@ export const replyToMessage = async (
   }: {
     attachments: any;
     docketNumber: string;
+    draftAttachments: any;
     message: string;
     parentMessageId: string;
     subject: string;
@@ -64,6 +52,8 @@ export const replyToMessage = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
+  attachments = [...attachments, ...draftAttachments];
+
   const validatedRawMessage = new Message(
     {
       attachments,
@@ -94,25 +84,12 @@ export const replyToMessage = async (
   return validatedRawMessage;
 };
 
-/**
- * replies to a message
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {array} providers.attachments array of objects containing documentId and documentTitle
- * @param {string} providers.docketNumber the docket number of the case
- * @param {string} providers.message the message text
- * @param {string} providers.parentMessageId the id of the parent message for the thread
- * @param {string} providers.subject the message subject
- * @param {string} providers.toSection the section of the user receiving the message
- * @param {string} providers.toUserId the user id of the user receiving the message
- * @returns {object} the message
- */
 export const replyToMessageInteractor = (
   applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
+    draftAttachments,
     message,
     parentMessageId,
     subject,
@@ -120,6 +97,7 @@ export const replyToMessageInteractor = (
     toUserId,
   }: {
     attachments: any;
+    draftAttachments: any;
     docketNumber: string;
     message: string;
     parentMessageId: string;
@@ -131,6 +109,7 @@ export const replyToMessageInteractor = (
   return replyToMessage(applicationContext, {
     attachments,
     docketNumber,
+    draftAttachments,
     message,
     parentMessageId,
     subject,
