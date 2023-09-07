@@ -92,8 +92,6 @@ import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceMo
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
-import { getOpinionsFiledByJudgeLambda } from './lambdas/reports/getOpinionsFiledByJudgeLambda';
-import { getOrdersFiledByJudgeLambda } from './lambdas/reports/getOrdersFiledByJudgeLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
@@ -862,11 +860,11 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   );
   app.post(
     '/judge-activity-report/opinions',
-    lambdaWrapper(getOpinionsFiledByJudgeLambda),
+    lambdaWrapper(getCountOfOpinionsFiledByJudgeLambda),
   );
   app.post(
     '/judge-activity-report/orders',
-    lambdaWrapper(getOrdersFiledByJudgeLambda),
+    lambdaWrapper(getCountOfOrdersFiledByJudgeLambda),
   );
 }
 

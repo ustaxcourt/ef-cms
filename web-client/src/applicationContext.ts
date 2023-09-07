@@ -166,6 +166,8 @@ import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConstants } from './getConstants';
+import { getCountOfOpinionsFiledByJudgesInteractor } from '../../shared/src/proxies/reports/getCountOfOpinionsFiledByJudgeProxy';
+import { getCountOfOrdersFiledByJudgesInteractor } from '../../shared/src/proxies/reports/getCountOfOrdersFiledByJudgeProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
@@ -196,8 +198,6 @@ import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenan
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
-import { getOpinionsFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOpinionsFiledByJudgeProxy';
-import { getOrdersFiledByJudgeInteractor } from '../../shared/src/proxies/reports/getOrdersFiledByJudgeProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '@web-client/persistence/s3/getPdfFromUrl';
@@ -324,7 +324,6 @@ import { validateEditPetitionerCounselInteractor } from '../../shared/src/busine
 import { validateExternalDocumentInformationInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInformationInteractor';
 import { validateExternalDocumentInteractor } from '../../shared/src/business/useCases/externalDocument/validateExternalDocumentInteractor';
 import { validateHearingNoteInteractor } from '../../shared/src/business/useCases/validateHearingNoteInteractor';
-import { validateJudgeActivityReportSearchInteractor } from '../../shared/src/business/useCases/judgeActivityReport/validateJudgeActivityReportSearchInteractor';
 import { validateNoteInteractor } from '../../shared/src/business/useCases/caseNote/validateNoteInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
 import { validateOrderAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOrderAdvancedSearchInteractor';
@@ -451,6 +450,8 @@ const allUseCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getCountOfOpinionsFiledByJudgesInteractor,
+  getCountOfOrdersFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
@@ -470,8 +471,6 @@ const allUseCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
-  getOpinionsFiledByJudgeInteractor,
-  getOrdersFiledByJudgeInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
@@ -583,7 +582,6 @@ const allUseCases = {
   validateExternalDocumentInformationInteractor,
   validateExternalDocumentInteractor,
   validateHearingNoteInteractor,
-  validateJudgeActivityReportSearchInteractor,
   validateNoteInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,

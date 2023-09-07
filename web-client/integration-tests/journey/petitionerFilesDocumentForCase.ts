@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
@@ -13,8 +13,11 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      category:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     await cerebralTest.runSequence(
@@ -27,7 +30,9 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     await cerebralTest.runSequence(
@@ -78,7 +83,9 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     await cerebralTest.runSequence(
@@ -114,8 +121,11 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        category: VALIDATION_ERROR_MESSAGES.category,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+        category:
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
+        documentType:
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+            .documentType[1],
       },
     });
 
@@ -160,7 +170,9 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+        freeText:
+          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+            .freeText[0].message,
       },
     });
 
@@ -197,9 +209,14 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     ]);
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      objections:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
     });
 
     await cerebralTest.runSequence(
@@ -219,14 +236,22 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
-      objections: VALIDATION_ERROR_MESSAGES.objections,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .certificateOfServiceDate[1],
+      objections:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
+          supportingDocument:
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocument,
         },
       ],
     });
@@ -244,13 +269,20 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[1],
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .certificateOfServiceDate[1],
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
+          supportingDocument:
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocument,
         },
       ],
     });
@@ -282,13 +314,20 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
-        VALIDATION_ERROR_MESSAGES.certificateOfServiceDate[0].message,
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .certificateOfServiceDate[0].message,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
+          supportingDocument:
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocument,
         },
       ],
     });
@@ -305,12 +344,18 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
-          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
+          supportingDocument:
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocument,
         },
       ],
     });
@@ -352,15 +397,21 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocumentFile,
           supportingDocumentFreeText:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocumentFreeText,
         },
       ],
     });
@@ -377,13 +428,18 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       'validateExternalDocumentInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile: VALIDATION_ERROR_MESSAGES.primaryDocumentFile,
-      secondaryDocumentFile: VALIDATION_ERROR_MESSAGES.secondaryDocumentFile,
+      primaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .primaryDocumentFile,
+      secondaryDocumentFile:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .secondaryDocumentFile,
       supportingDocuments: [
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocumentFile,
         },
       ],
     });
@@ -426,7 +482,9 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
       secondarySupportingDocuments: [
         {
           index: 0,
-          supportingDocument: VALIDATION_ERROR_MESSAGES.supportingDocument,
+          supportingDocument:
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocument,
         },
       ],
     });
@@ -475,9 +533,11 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocumentFile,
           supportingDocumentFreeText:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFreeText,
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocumentFreeText,
         },
       ],
     });
