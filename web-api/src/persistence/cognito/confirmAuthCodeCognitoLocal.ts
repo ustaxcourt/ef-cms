@@ -29,19 +29,22 @@ export const confirmAuthCodeCognitoLocal = async ({
   };
 
   let result;
+
   try {
     result = await applicationContext
       .getCognito()
       .initiateAuth(params)
       .promise();
   } catch (e) {
-    console.log('error!!!!!?', e.message);
     return {
       alertError: { message: e.message, title: e.message },
     };
   }
 
-  if (result.ChallengeName === 'NEW_PASSWORD_REQUIRED') {
+  if (
+    result.ChallengeName &&
+    result.ChallengeName === 'NEW_PASSWORD_REQUIRED'
+  ) {
     return {
       alertError: {
         message: 'NEW_PASSWORD_REQUIRED',
@@ -56,12 +59,12 @@ export const confirmAuthCodeCognitoLocal = async ({
       refreshToken: result.AuthenticationResult.IdToken,
       token: result.AuthenticationResult.IdToken,
     };
-  } else {
-    return {
-      alertError: {
-        message: 'Login credentials not found.',
-        title: 'Login error!',
-      },
-    };
   }
+
+  return {
+    alertError: {
+      message: 'Login credentials not found.',
+      title: 'Login error!',
+    },
+  };
 };
