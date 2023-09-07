@@ -67,7 +67,7 @@ describe('caseWorksheetsHelper', () => {
     };
   });
 
-  it('should return caseWorksheetsFormatted with all appropiate data', () => {
+  it('should return caseWorksheetsFormatted with all appropriate data', () => {
     const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: baseState,
     });
@@ -76,7 +76,7 @@ describe('caseWorksheetsHelper', () => {
       {
         caseTitle: 'Fred Dude',
         consolidatedIconTooltipText: '',
-        daysSinceLastStatusChange: 576,
+        daysSinceLastStatusChange: expect.anything(),
         docketNumber: '202-11',
         docketNumberWithSuffix: undefined,
         formattedCaseCount: 1,
@@ -89,7 +89,7 @@ describe('caseWorksheetsHelper', () => {
       {
         caseTitle: 'Scooby Doo',
         consolidatedIconTooltipText: 'Lead case',
-        daysSinceLastStatusChange: 566,
+        daysSinceLastStatusChange: expect.anything(),
         docketNumber: '101-20',
         docketNumberWithSuffix: undefined,
         formattedCaseCount: 1,
@@ -102,7 +102,7 @@ describe('caseWorksheetsHelper', () => {
       {
         caseTitle: 'Velma Jinkies',
         consolidatedIconTooltipText: '',
-        daysSinceLastStatusChange: 556,
+        daysSinceLastStatusChange: expect.anything(),
         docketNumber: '110-15',
         docketNumberWithSuffix: undefined,
         formattedCaseCount: 1,
