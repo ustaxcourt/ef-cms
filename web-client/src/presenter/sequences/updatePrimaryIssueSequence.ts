@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { setCaseWorksheetAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -14,6 +15,7 @@ export const updatePrimaryIssueSequence = [
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
+      clearModalAction,
       stopShowValidationAction,
       clearAlertsAction,
       updatePrimaryIssueAction,
