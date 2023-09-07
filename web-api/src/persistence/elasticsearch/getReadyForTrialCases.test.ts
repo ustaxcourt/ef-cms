@@ -1,4 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  ANSWER_DOCUMENT_CODES,
+  CASE_STATUS_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getReadyForTrialCases } from './getReadyForTrialCases';
 jest.mock('./searchClient');
@@ -26,8 +29,8 @@ describe('getReadyForTrialCases', () => {
         ],
         must: [
           {
-            term: {
-              'documentType.S': 'Answer',
+            terms: {
+              'eventCode.S': ANSWER_DOCUMENT_CODES,
             },
           },
           {

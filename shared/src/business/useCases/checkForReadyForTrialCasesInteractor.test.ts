@@ -107,7 +107,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it("should update cases to 'ready for trial' that meet requirements", async () => {
+  it("should update cases to 'ready for trial' that meet requirements, removing duplicate cases before updating", async () => {
     /**
      * Requirements:
      * 1. Case has status 'General Docket - Not at Issue'
@@ -130,6 +130,8 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getReadyForTrialCases.mockReturnValue([
+        { docketNumber: '101-20' },
+        { docketNumber: '101-20' },
         { docketNumber: '101-20' },
         { docketNumber: '320-21' },
       ]);
