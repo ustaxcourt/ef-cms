@@ -6,9 +6,21 @@ import { get } from 'lodash';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
-
+export type SeachClientResultsType = {
+  aggregations?: {
+    [x: string]: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+    };
+  };
+  total?: number;
+  results: any;
+};
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
@@ -42,6 +54,7 @@ export const formatResults = <T>(body: Record<string, any>) => {
   });
 
   return {
+    aggregations,
     results,
     total,
   };
@@ -53,7 +66,7 @@ export const search = async <T>({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}) => {
+}): Promise<SeachClientResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()

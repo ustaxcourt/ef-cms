@@ -5,8 +5,9 @@ import {
   SCENARIOS,
 } from '../EntityConstants';
 import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
+import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { VALIDATION_ERROR_MESSAGES } from '../externalDocument/ExternalDocumentInformationFactory';
+import { SupportingDocumentInformationFactory } from '@shared/business/entities/externalDocument/SupportingDocumentInformationFactory';
 import joi from 'joi';
 
 export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDocument {
@@ -47,7 +48,7 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory(
+        return new SupportingDocumentInformationFactory(
           item,
           CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES,
         );
@@ -91,7 +92,7 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
   };
 
   static VALIDATION_ERROR_MESSAGES = {
-    ...VALIDATION_ERROR_MESSAGES,
+    ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
     documentTitleTemplate: 'Select a document',
     eventCode: 'Select a document',
     filers: 'Select a party',
