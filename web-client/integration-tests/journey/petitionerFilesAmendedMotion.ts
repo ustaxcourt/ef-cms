@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
@@ -102,7 +102,8 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
+      objections:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
     });
 
     const helper = runCompute(withAppContextDecorator(fileDocumentHelper), {

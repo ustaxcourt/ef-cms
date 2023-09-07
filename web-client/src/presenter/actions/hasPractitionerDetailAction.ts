@@ -1,4 +1,4 @@
-const { isEmpty } = require('lodash');
+import { isEmpty } from 'lodash';
 
 /**
  * returns the next path based on whether props.practitionerDetail is set

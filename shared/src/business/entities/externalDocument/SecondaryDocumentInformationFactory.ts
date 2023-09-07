@@ -1,29 +1,22 @@
-const joi = require('joi');
-const {
-  joiValidationDecorator,
-  validEntityDecorator,
-} = require('../JoiValidationDecorator');
-const { includes } = require('lodash');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
-const { makeRequiredHelper } = require('./externalDocumentHelpers');
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import { includes } from 'lodash';
+import { makeRequiredHelper } from './externalDocumentHelpers';
+import joi from 'joi';
 
-/**
- * Secondary Document Information Factory entity
- *
- * @param {object} documentMetadata the document metadata
- * @param {object} VALIDATION_ERROR_MESSAGES the error to message map constant
- * @constructor
- */
-function SecondaryDocumentInformationFactory(
-  documentMetadata,
-  VALIDATION_ERROR_MESSAGES,
-) {
-  /**
-   * bare constructor for entity factory
-   */
-  function entityConstructor() {}
+export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
+  public attachments: string;
+  public category: string;
+  public certificateOfService?: boolean;
+  public certificateOfServiceDate: string;
+  public documentType: string;
+  public objections: string;
+  public secondaryDocumentFile?: object;
 
-  entityConstructor.prototype.init = function init(rawProps) {
+  private secondaryDocumentErrorMessages: object;
+
+  constructor(rawProps, errorMessages) {
+    super('SecondaryDocumentInformationFactory');
     this.attachments = rawProps.attachments || false;
     this.category = rawProps.category;
     this.certificateOfService = rawProps.certificateOfService;
@@ -31,51 +24,54 @@ function SecondaryDocumentInformationFactory(
     this.documentType = rawProps.documentType;
     this.objections = rawProps.objections;
     this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
-  };
 
-  let schema = {};
-
-  let schemaOptionalItems = {
-    attachments: joi.boolean(),
-    certificateOfService: joi.boolean(),
-    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-    objections: JoiValidationConstants.STRING,
-  };
-
-  const makeRequired = itemName => {
-    makeRequiredHelper({
-      itemName,
-      schema,
-      schemaOptionalItems,
-    });
-  };
-
-  if (documentMetadata.secondaryDocumentFile) {
-    makeRequired('attachments');
-    makeRequired('certificateOfService');
-
-    if (documentMetadata.certificateOfService === true) {
-      makeRequired('certificateOfServiceDate');
-    }
-
-    if (
-      documentMetadata.category === 'Motion' ||
-      includes(
-        [
-          'Motion to Withdraw Counsel',
-          'Motion to Withdraw As Counsel',
-          'Application to Take Deposition',
-        ],
-        documentMetadata.documentType,
-      )
-    ) {
-      makeRequired('objections');
-    }
+    this.secondaryDocumentErrorMessages = errorMessages;
   }
 
-  joiValidationDecorator(entityConstructor, schema, VALIDATION_ERROR_MESSAGES);
+  getValidationRules() {
+    let schema = {};
 
-  return new (validEntityDecorator(entityConstructor))(documentMetadata);
+    let schemaOptionalItems = {
+      attachments: joi.boolean(),
+      certificateOfService: joi.boolean(),
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
+      objections: JoiValidationConstants.STRING,
+    };
+
+    const makeRequired = itemName => {
+      makeRequiredHelper({
+        itemName,
+        schema,
+        schemaOptionalItems,
+      });
+    };
+
+    if (this.secondaryDocumentFile) {
+      makeRequired('attachments');
+      makeRequired('certificateOfService');
+
+      if (this.certificateOfService === true) {
+        makeRequired('certificateOfServiceDate');
+      }
+
+      if (
+        this.category === 'Motion' ||
+        includes(
+          [
+            'Motion to Withdraw Counsel',
+            'Motion to Withdraw As Counsel',
+            'Application to Take Deposition',
+          ],
+          this.documentType,
+        )
+      ) {
+        makeRequired('objections');
+      }
+    }
+    return schema;
+  }
+
+  getErrorToMessageMap() {
+    return this.secondaryDocumentErrorMessages;
+  }
 }
-
-module.exports = { SecondaryDocumentInformationFactory };

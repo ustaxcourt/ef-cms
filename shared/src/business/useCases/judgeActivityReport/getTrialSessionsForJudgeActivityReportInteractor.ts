@@ -1,7 +1,5 @@
-import {
-  InvalidRequest,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -11,28 +9,27 @@ import {
   SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../entities/EntityConstants';
+import { sum } from 'lodash';
 
-/**
- * getTrialSessionsForJudgeActivityReportInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers.endDate the report end date
- * @param {object} providers.judgeId the judgeId to query for
- * @param {object} providers.startDate the report start date
- * @returns {Object} the counts of the different session types held for the judge
- */
+export const ID_FOR_ALL_JUDGES = 'judgeIdToRepresentAllJudgesSelection';
+
+export type TrialSessionTypes = {
+  [SESSION_TYPES.regular]: number;
+  [SESSION_TYPES.small]: number;
+  [SESSION_TYPES.hybrid]: number;
+  [SESSION_TYPES.special]: number;
+  [SESSION_TYPES.motionHearing]: number;
+};
+
+export type TrialSessionReturnType = {
+  aggregations: TrialSessionTypes;
+  total: number;
+};
+
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
-  {
-    endDate,
-    judgeId,
-    startDate,
-  }: {
-    judgeId: string;
-    endDate: string;
-    startDate: string;
-  },
-) => {
+  { endDate, judgeId, startDate }: JudgeActivityReportFilters,
+): Promise<TrialSessionReturnType> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
@@ -55,9 +52,14 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       applicationContext,
     });
 
-  const judgeSessionsInDateRange = trialSessions.filter(
+  const trialSessionsForSelectedJudge = trialSessions.filter(session => {
+    if (searchEntity.judgeId !== ID_FOR_ALL_JUDGES)
+      return session.judge?.userId === searchEntity.judgeId;
+    else return session;
+  });
+
+  const judgeSessionsInDateRange = trialSessionsForSelectedJudge.filter(
     session =>
-      session.judge?.userId === searchEntity.judgeId &&
       session.startDate <= searchEntity.endDate &&
       session.startDate >= searchEntity.startDate,
   );
@@ -117,12 +119,19 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     isTypeOf(SESSION_TYPES.special)(session),
   ).length;
 
-  return {
+  const aggregatedSessionTypes = {
     [SESSION_TYPES.regular]: regularSwingSessions + regularNonSwingSessions,
     [SESSION_TYPES.small]: smallNonSwingSessions + smallSwingSessions,
     [SESSION_TYPES.hybrid]: hybridSwingSessions + hybridNonSwingSessions,
     [SESSION_TYPES.special]: specialSessions,
     [SESSION_TYPES.motionHearing]: motionHearingSessions,
+  };
+
+  const trialSessionsHeldTotal = sum(Object.values(aggregatedSessionTypes));
+
+  return {
+    aggregations: aggregatedSessionTypes,
+    total: trialSessionsHeldTotal,
   };
 };
 

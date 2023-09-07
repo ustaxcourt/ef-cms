@@ -1,7 +1,5 @@
-const {
-  ROLE_PERMISSIONS,
-} = require('../../shared/src/authorization/authorizationClientService');
-const { ifHasAccess, route, router } = require('./router');
+import { ROLE_PERMISSIONS } from '@shared/authorization/authorizationClientService';
+import { ifHasAccess, route, router } from '@web-client/router';
 
 describe('router', () => {
   const getUserMock = jest.fn();
