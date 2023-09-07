@@ -126,7 +126,7 @@ describe('updateMessageModalAttachmentsAction', () => {
   });
 
   it('sets the form subject field if this is the first attachment to be added', async () => {
-    let result = await runAction(updateMessageModalAttachmentsAction, {
+    const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
         action: 'add',
