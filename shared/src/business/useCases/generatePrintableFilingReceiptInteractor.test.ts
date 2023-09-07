@@ -31,6 +31,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       sortableDocketNumber: 2023000104,
     },
   ];
+  const mockCase = { ...MOCK_CASE, consolidatedCases: mockConsolidatedCases };
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(
@@ -38,7 +39,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+      .getCaseByDocketNumber.mockReturnValue(mockCase);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
@@ -48,7 +49,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
   it('should call the Receipt of Filing document generator', async () => {
     await generatePrintableFilingReceiptInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       documentsFiled: {
         primaryDocumentId: mockPrimaryDocketEntryId,
       },
@@ -68,7 +69,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
   it('should populate filedBy on the receipt of filing', async () => {
     await generatePrintableFilingReceiptInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
@@ -90,15 +91,15 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
     const expectedFilingDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(MOCK_CASE.docketEntries[0].filingDate, 'DATE_TIME_TZ');
+      .formatDateString(mockCase.docketEntries[0].filingDate, 'DATE_TIME_TZ');
 
-    expect(receiptMockCall.filedBy).toBe(getContactPrimary(MOCK_CASE).name);
+    expect(receiptMockCall.filedBy).toBe(getContactPrimary(mockCase).name);
     expect(receiptMockCall.filedAt).toBe(expectedFilingDateFormatted);
   });
 
   it('acquires document information', async () => {
     await generatePrintableFilingReceiptInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
@@ -124,7 +125,7 @@ describe('generatePrintableFilingReceiptInteractor', () => {
 
   it('formats certificateOfServiceDate', async () => {
     await generatePrintableFilingReceiptInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       documentsFiled: {
         certificateOfService: true,
         certificateOfServiceDate: '2019-08-25T05:00:00.000Z',
@@ -142,12 +143,8 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should call the Receipt of Filing document generator with consolidatedCases array populated when fileAcrossConsolidatedGroup is true', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValue(mockConsolidatedCases);
-
     await generatePrintableFilingReceiptInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
@@ -166,9 +163,6 @@ describe('generatePrintableFilingReceiptInteractor', () => {
     const receiptMockCall =
       applicationContext.getDocumentGenerators().receiptOfFiling.mock
         .calls[0][0].data; // 'data' property of first arg (an object) of first call
-    expect(
-      applicationContext.getPersistenceGateway().getCasesByLeadDocketNumber,
-    ).toHaveBeenCalled();
     expect(receiptMockCall.consolidatedCasesDocketNumbers).toEqual(
       expect.arrayContaining([
         mockConsolidatedCases[1].docketNumber,
@@ -180,12 +174,8 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should call the Receipt of Filing document generator with consolidatedCases array unpopulated (emptyArray) when fileAcrossConsolidatedGroup is true', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValue(mockConsolidatedCases);
-
     await generatePrintableFilingReceiptInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
+      docketNumber: mockCase.docketNumber,
       documentsFiled: {
         hasSecondarySupportingDocuments: true,
         hasSupportingDocuments: true,
@@ -205,8 +195,8 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       applicationContext.getDocumentGenerators().receiptOfFiling.mock
         .calls[0][0].data; // 'data' property of first arg (an object) of first call
     expect(
-      applicationContext.getPersistenceGateway().getCasesByLeadDocketNumber,
-    ).not.toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalledTimes(1);
     expect(receiptMockCall.consolidatedCasesDocketNumbers.length).toEqual(0);
   });
 });

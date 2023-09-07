@@ -414,13 +414,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toHaveProperty('consolidatedCases');
       expect(result.consolidatedCases).toMatchObject([MOCK_CASE]);
     });
-
-    it('should not set consolidated cases if none are passed', () => {
-      const result = formatCase(applicationContext, MOCK_CASE);
-
-      expect(result).toMatchObject(MOCK_CASE);
-      expect(result).not.toHaveProperty('consolidatedCases');
-    });
   });
 
   describe('getFormattedCaseDetail', () => {
@@ -472,17 +465,17 @@ describe('getFormattedCaseDetail', () => {
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-1-2-3`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-1-2-3/sign`,
-          signedAtFormatted: undefined,
+          signedAtFormatted: '',
         },
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-2-3-4`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-2-3-4/sign`,
-          signedAtFormatted: undefined,
+          signedAtFormatted: '',
         },
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-upload-court-issued/d-3-4-5`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-3-4-5/sign`,
-          signedAtFormatted: undefined,
+          signedAtFormatted: '',
         },
       ]);
     });

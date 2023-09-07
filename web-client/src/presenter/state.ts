@@ -46,7 +46,6 @@ import { editPetitionerInformationHelper } from './computeds/editPetitionerInfor
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -72,6 +71,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialJudgeActivityReportState } from './judgeActivityReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -177,7 +177,6 @@ export const computeds = {
   editStatisticFormHelper,
   externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
-  featureFlagHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,
@@ -309,7 +308,6 @@ export const baseState = {
   },
 
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
@@ -321,6 +319,8 @@ export const baseState = {
   },
 
   form: {} as any,
+
+  fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -328,13 +328,14 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  health: undefined as any,
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
-  judgeActivityReportData: {},
+  judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
@@ -349,7 +350,12 @@ export const baseState = {
     casesProcessed: 0,
     totalCases: 0,
   },
-  notifications: {},
+  notifications: {} as {
+    qcSectionInboxCount: number;
+    qcSectionInProgressCount: number;
+    qcIndividualInboxCount: number;
+    qcIndividualInProgressCount: number;
+  },
   openCases: [],
   paperServiceStatusState: {
     pdfsAppended: 0,
@@ -401,6 +407,7 @@ export const baseState = {
     sortOrder: ASCENDING,
   },
   trialSession: {} as RawTrialSession,
+
   trialSessionJudge: {
     name: '',
   },

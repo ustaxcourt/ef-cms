@@ -72,7 +72,8 @@ import { getCasesClosedByJudgeLambda } from './reports/getCasesClosedByJudgeLamb
 import { getCasesForUserLambda } from './cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './messages/getCompletedMessagesForUserLambda';
-import { getConsolidatedCasesByCaseLambda } from './cases/getConsolidatedCasesByCaseLambda';
+import { getCountOfOpinionsFiledByJudgeLambda } from './reports/getCountOfOpinionsFiledByJudgeLambda';
+import { getCountOfOrdersFiledByJudgeLambda } from './reports/getCountOfOrdersFiledByJudgeLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseInventoryReportLambda } from './reports/getCustomCaseInventoryReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './documents/getDocumentContentsForDocketEntryLambda';
@@ -92,8 +93,6 @@ import { getMaintenanceModeLambda } from './maintenance/getMaintenanceModeLambda
 import { getMessageThreadLambda } from './messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './messages/getMessagesForCaseLambda';
 import { getNotificationsLambda } from './users/getNotificationsLambda';
-import { getOpinionsFiledByJudgeLambda } from './reports/getOpinionsFiledByJudgeLambda';
-import { getOrdersFiledByJudgeLambda } from './reports/getOrdersFiledByJudgeLambda';
 import { getOutboxMessagesForSectionLambda } from './messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './messages/getOutboxMessagesForUserLambda';
 import { getPractitionerByBarNumberLambda } from './practitioners/getPractitionerByBarNumberLambda';
@@ -584,10 +583,6 @@ app.use(logger());
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
   );
-  app.get(
-    '/cases/:docketNumber/consolidated-cases',
-    lambdaWrapper(getConsolidatedCasesByCaseLambda),
-  );
   app.post(
     '/cases/:docketNumber/serve-to-irs',
     lambdaWrapper(serveCaseToIrsLambda),
@@ -862,11 +857,11 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
   );
   app.post(
     '/judge-activity-report/opinions',
-    lambdaWrapper(getOpinionsFiledByJudgeLambda),
+    lambdaWrapper(getCountOfOpinionsFiledByJudgeLambda),
   );
   app.post(
     '/judge-activity-report/orders',
-    lambdaWrapper(getOrdersFiledByJudgeLambda),
+    lambdaWrapper(getCountOfOrdersFiledByJudgeLambda),
   );
 }
 

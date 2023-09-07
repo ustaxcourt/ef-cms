@@ -1,3 +1,4 @@
+import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { post } from '../requests';
 
 /**
@@ -10,20 +11,15 @@ import { post } from '../requests';
  */
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext,
-  {
-    judgeName,
-    statuses,
-  }: {
-    judgeName: string;
-    statuses: string[];
-  },
-) => {
+  params: JudgeActivityReportCavAndSubmittedCasesRequest,
+): Promise<{
+  cases: RawCase[];
+  consolidatedCasesGroupCountMap: any;
+  totalCount: number;
+}> => {
   return post({
     applicationContext,
-    body: {
-      judgeName,
-      statuses,
-    },
+    body: params,
     endpoint: '/judge-activity-report/open-cases',
   });
 };

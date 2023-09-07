@@ -26,6 +26,7 @@ import {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
+import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
@@ -85,7 +86,7 @@ export class Case extends JoiValidationEntity {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public docketNumberSuffix?: string | null;
   public filingType: string;
   public hasVerifiedIrsNotice: boolean;
   public irsNoticeDate: string;
@@ -124,6 +125,7 @@ export class Case extends JoiValidationEntity {
   public correspondence: any[];
   public archivedCorrespondences: any[];
   public hasPendingItems: boolean;
+  public consolidatedCases: ConsolidatedCaseDTO[];
 
   constructor(
     rawCase: any,
@@ -144,6 +146,7 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
+    this.consolidatedCases = rawCase.consolidatedCases || [];
 
     const currentUser = applicationContext.getCurrentUser();
 
@@ -1706,7 +1709,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;
@@ -1719,7 +1722,7 @@ export class Case extends JoiValidationEntity {
         );
 
         const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
-          currentDate,
+          currentDate!,
           docketEntry.createdAt,
         );
 
