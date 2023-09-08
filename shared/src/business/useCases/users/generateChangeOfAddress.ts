@@ -100,7 +100,10 @@ const generateChangeOfAddressForPractitioner = async ({
               docketNumber: caseInfo.docketNumber,
               firmName,
               jobId,
-              requestUser: applicationContext.getCurrentUser(),
+              requestUser: {
+                ...applicationContext.getCurrentUser(),
+                token: undefined,
+              },
               requestUserId,
               updatedEmail,
               updatedName,
