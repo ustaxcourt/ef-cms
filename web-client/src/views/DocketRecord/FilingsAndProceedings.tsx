@@ -9,7 +9,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 type FilingsAndProceedingsProps = {
-  arrayIndex: string;
   entry: {
     descriptionDisplay: string;
     isStricken: boolean;
@@ -27,7 +26,6 @@ type FilingsAndProceedingsProps = {
 export const FilingsAndProceedings: React.FunctionComponent<FilingsAndProceedingsProps> =
   connect(
     {
-      arrayIndex: props.arrayIndex,
       caseDetail: state.caseDetail,
       caseDetailHelper: state.caseDetailHelper,
       changeTabAndSetViewerDocumentToDisplaySequence:
@@ -39,7 +37,6 @@ export const FilingsAndProceedings: React.FunctionComponent<FilingsAndProceeding
         sequences.showDocketRecordDetailModalSequence,
     },
     function FilingsAndProceedings({
-      arrayIndex,
       caseDetail,
       caseDetailHelper,
       changeTabAndSetViewerDocumentToDisplaySequence,
@@ -75,7 +72,7 @@ export const FilingsAndProceedings: React.FunctionComponent<FilingsAndProceeding
                 className="padding-0 border-0"
                 onClick={() => {
                   showDocketRecordDetailModalSequence({
-                    docketRecordIndex: arrayIndex,
+                    entry,
                     showModal: 'DocketRecordOverlay',
                     useSameTab: true,
                   });

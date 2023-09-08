@@ -1,9 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { setDocketRecordIndexAction } from '../actions/setDocketRecordIndexAction';
+import { setDocketRecordOverlayModalStateAction } from '@web-client/presenter/actions/DocketEntry/setDocketRecordOverlayModalStateAction';
 import { setShowModalAction } from '../actions/setShowModalAction';
 
 export const showDocketRecordDetailModalSequence = [
   clearAlertsAction,
-  setDocketRecordIndexAction,
+  setDocketRecordOverlayModalStateAction,
   setShowModalAction,
 ];
