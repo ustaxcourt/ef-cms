@@ -150,19 +150,13 @@ export const CaseWorksheets = connect(
                     </td>
                   </tr>
                   <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>
+                    <td colSpan={3}></td>
+                    <td colSpan={5}>
                       <span className="text-bold margin-right-1">
                         Primary Issue:
                       </span>
                       {formattedCase.worksheet.primaryIssue}
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                     <td>
                       {!formattedCase.worksheet.primaryIssue && (
                         <Button
