@@ -345,6 +345,7 @@ export const baseState = {
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
+    docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
   } as Record<string, string | undefined>,
