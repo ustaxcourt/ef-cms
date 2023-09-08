@@ -65,7 +65,7 @@ export const DocketRecord = connect(
               </thead>
               <tbody>
                 {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
-                  (entry, arrayIndex) => {
+                  entry => {
                     return (
                       <tr
                         className={classNames(
@@ -99,10 +99,7 @@ export const DocketRecord = connect(
                           ))}
                         </td>
                         <td>
-                          <FilingsAndProceedings
-                            arrayIndex={arrayIndex}
-                            entry={entry}
-                          />
+                          <FilingsAndProceedings entry={entry} />
                         </td>
                         <td className="hide-on-mobile number-of-pages">
                           {entry.numberOfPages}
@@ -137,7 +134,7 @@ export const DocketRecord = connect(
                               <Button
                                 link
                                 className={entry.isSealed && 'red-warning'}
-                                data-test={`seal-docket-entry-button-${arrayIndex}`}
+                                data-test={`seal-docket-entry-button-${entry.index}`}
                                 icon={entry.sealIcon}
                                 tooltip={entry.sealButtonTooltip}
                                 onClick={() => {
@@ -177,7 +174,7 @@ export const DocketRecord = connect(
             </thead>
             <tbody>
               {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.map(
-                (entry, arrayIndex) => {
+                entry => {
                   return (
                     <tr key={entry.index}>
                       <td data-label="No.">{entry.index}</td>
@@ -185,10 +182,7 @@ export const DocketRecord = connect(
                         {entry.createdAtFormatted}
                       </td>
                       <td data-label="Filings and Proceedings">
-                        <FilingsAndProceedings
-                          arrayIndex={arrayIndex}
-                          entry={entry}
-                        />
+                        <FilingsAndProceedings entry={entry} />
                       </td>
                       <td data-label="Served">
                         {entry.showNotServed && (
