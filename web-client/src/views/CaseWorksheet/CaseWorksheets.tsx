@@ -161,6 +161,7 @@ export const CaseWorksheets = connect(
                       {!formattedCase.worksheet.primaryIssue && (
                         <Button
                           link
+                          className="add-primary-issue"
                           icon="plus-circle"
                           onClick={() => {
                             openAddEditPrimaryIssueModalSequence({
@@ -189,7 +190,7 @@ export const CaseWorksheets = connect(
                           <div>
                             <Button
                               link
-                              className="red-warning"
+                              className="red-warning delete-primary-issue"
                               icon="trash"
                               onClick={() => {
                                 openDeletePrimaryIssueSequence({
