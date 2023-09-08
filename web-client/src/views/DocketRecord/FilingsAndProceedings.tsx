@@ -69,7 +69,12 @@ export const FilingsAndProceedings: React.FunctionComponent<FilingsAndProceeding
               <Button
                 link
                 aria-roledescription="button to view document details"
-                className="padding-0 border-0 text-left"
+                className={classNames(
+                  'text-left',
+                  'padding-0',
+                  'border-0',
+                  entry.isStricken && 'stricken-docket-record',
+                )}
                 onClick={() => {
                   showDocketRecordDetailModalSequence({
                     entry,
