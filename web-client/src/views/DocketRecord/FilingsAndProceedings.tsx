@@ -69,7 +69,7 @@ export const FilingsAndProceedings: React.FunctionComponent<FilingsAndProceeding
               <Button
                 link
                 aria-roledescription="button to view document details"
-                className="padding-0 border-0"
+                className="padding-0 border-0 text-left"
                 onClick={() => {
                   showDocketRecordDetailModalSequence({
                     entry,
