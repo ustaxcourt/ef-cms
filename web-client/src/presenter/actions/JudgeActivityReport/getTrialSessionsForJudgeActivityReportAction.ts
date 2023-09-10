@@ -1,29 +1,31 @@
+import { ID_FOR_ALL_JUDGES } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Fetches the trial sessions within a date range for the judge activity report
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting the getCase use case
- * @returns {object} contains the trial sessions returned from the use case
- */
 export const getTrialSessionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, startDate } = get(state.form);
+  const { endDate, judgeName, startDate } = get(
+    state.judgeActivityReport.filters,
+  );
 
-  const { role, userId } = applicationContext.getCurrentUser();
-  const { USER_ROLES } = applicationContext.getConstants();
-  const chambersJudgeUser = get(state.judgeUser);
-  const isChambersUser = role === USER_ROLES.chambers;
-  const judgeId =
-    isChambersUser && chambersJudgeUser ? chambersJudgeUser.userId : userId;
+  let judgeIdForRequest: string = ID_FOR_ALL_JUDGES;
+
+  if (judgeName !== 'All Judges') {
+    const listOfJudges = get(state.judges);
+
+    const judgeInfo = listOfJudges.find(
+      eachJudge => eachJudge.name === judgeName,
+    );
+
+    judgeIdForRequest = judgeInfo!.userId;
+  }
 
   const trialSessions = await applicationContext
     .getUseCases()
     .getTrialSessionsForJudgeActivityReportInteractor(applicationContext, {
       endDate,
-      judgeId,
+      judgeId: judgeIdForRequest,
       startDate,
     });
 

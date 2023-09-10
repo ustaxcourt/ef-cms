@@ -71,12 +71,7 @@ function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   return errors;
 }
 
-/**
- * returns all of the validation errors after being converted to their formatted output
- *
- * @returns {object} the formatted errors
- */
-function getFormattedValidationErrors(entity): {} | null {
+function getFormattedValidationErrors(entity): Record<string, string> | null {
   const keys = Object.keys(entity);
   const obj = {};
   let errors: {} | null = null;
