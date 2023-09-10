@@ -2,6 +2,7 @@ import {
   ADVANCED_SEARCH_TABS,
   COUNTRY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { faker } from '@faker-js/faker';
 import {
   loginAs,
   setupTest as setupTestClient,
@@ -10,7 +11,6 @@ import {
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
-const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
