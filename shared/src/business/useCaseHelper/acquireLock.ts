@@ -1,5 +1,5 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../business/entities/EntityConstants';
-import { ServiceUnavailableError } from '../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 
 export const checkLock = async ({
   applicationContext,

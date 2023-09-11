@@ -2,7 +2,7 @@ import {
   CaseWorksheet,
   RawCaseWorksheet,
 } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
