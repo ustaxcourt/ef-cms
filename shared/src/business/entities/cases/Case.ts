@@ -11,6 +11,7 @@ import {
   CLOSED_CASE_STATUSES,
   CONTACT_TYPES,
   CaseStatus,
+  CaseType,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -38,7 +39,10 @@ import {
   CASE_STATUS_RULE,
   DOCKET_ENTRY_VALIDATION_RULES,
 } from '../EntityValidationConstants';
-import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+import {
+  ConsolidatedCaseDTO,
+  RawConsolidatedCaseDTO,
+} from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
@@ -82,34 +86,34 @@ export class Case extends JoiValidationEntity {
   public highPriorityReason?: string;
   public judgeUserId?: string;
   public litigationCosts?: number;
-  public qcCompleteForTrial: boolean;
-  public noticeOfAttachments: boolean;
-  public orderDesignatingPlaceOfTrial: boolean;
-  public orderForAmendedPetition: boolean;
-  public orderForAmendedPetitionAndFilingFee: boolean;
-  public orderForFilingFee: boolean;
-  public orderForCds: boolean;
-  public orderForRatification: boolean;
-  public orderToShowCause: boolean;
+  public qcCompleteForTrial?: Record<string, any>;
+  public noticeOfAttachments?: boolean;
+  public orderDesignatingPlaceOfTrial?: boolean;
+  public orderForAmendedPetition?: boolean;
+  public orderForAmendedPetitionAndFilingFee?: boolean;
+  public orderForFilingFee?: boolean;
+  public orderForCds?: boolean;
+  public orderForRatification?: boolean;
+  public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
   public caseCaption: string;
-  public caseType: string;
+  public caseType: CaseType;
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
-  public filingType: string;
-  public hasVerifiedIrsNotice: boolean;
-  public irsNoticeDate: string;
-  public isPaper: boolean;
+  public filingType?: string;
+  public hasVerifiedIrsNotice?: boolean;
+  public irsNoticeDate?: string;
+  public isPaper?: boolean;
   public leadDocketNumber?: string;
-  public mailingDate: string;
+  public mailingDate?: string;
   public partyType: string;
   public petitionPaymentDate?: string;
-  public petitionPaymentMethod: string;
+  public petitionPaymentMethod?: string;
   public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
-  public preferredTrialCity: string;
+  public preferredTrialCity?: string;
   public procedureType: string;
   public receivedAt: string;
   public sealedDate?: string;
@@ -119,24 +123,24 @@ export class Case extends JoiValidationEntity {
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
-  public useSameAsPrimary: string;
-  public initialDocketNumberSuffix: string;
-  public noticeOfTrialDate: string;
-  public docketNumberWithSuffix: string;
-  public canAllowDocumentService: string;
+  public useSameAsPrimary?: string;
+  public initialDocketNumberSuffix?: string;
+  public noticeOfTrialDate?: string;
+  public docketNumberWithSuffix?: string;
+  public canAllowDocumentService?: boolean;
   public canAllowPrintableDocketRecord!: boolean;
-  public archivedDocketEntries: RawDocketEntry[];
+  public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
-  public isSealed: boolean;
+  public isSealed?: boolean;
   public hearings: any[];
-  public privatePractitioners: any[];
-  public initialCaption: string;
-  public irsPractitioners: any[];
-  public statistics: any[];
-  public correspondence: any[];
-  public archivedCorrespondences: any[];
-  public hasPendingItems: boolean;
-  public consolidatedCases: ConsolidatedCaseDTO[];
+  public privatePractitioners?: any[];
+  public initialCaption?: string;
+  public irsPractitioners?: any[];
+  public statistics?: any[];
+  public correspondence?: any[];
+  public archivedCorrespondences?: any[];
+  public hasPendingItems?: boolean;
+  public consolidatedCases: RawConsolidatedCaseDTO[] = [];
 
   constructor(
     rawCase: any,
