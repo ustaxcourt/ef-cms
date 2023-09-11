@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,
