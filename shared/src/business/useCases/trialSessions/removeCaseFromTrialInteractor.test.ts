@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';

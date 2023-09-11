@@ -1,5 +1,5 @@
 import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
