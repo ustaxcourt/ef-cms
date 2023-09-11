@@ -6,7 +6,7 @@ export const addEditPrimaryIssueModalHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): { title: string } => {
-  const { docketNumber } = get(state.modal);
+  const { docketNumber } = get(state.form);
 
   const { submittedAndCavCasesByJudge = [] } = get(state.submittedAndCavCases);
 
