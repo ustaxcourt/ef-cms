@@ -48,7 +48,7 @@ import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
-import { UnprocessableEntityError } from '../../../errors/errors';
+import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
