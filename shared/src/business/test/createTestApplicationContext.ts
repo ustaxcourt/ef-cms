@@ -16,7 +16,6 @@ import {
   isSealedCase,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
 import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
@@ -187,6 +186,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
+    calculateDifferenceInDays: jest
+      .fn()
+      .mockImplementation(DateHandler.calculateDifferenceInDays),
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
@@ -667,25 +669,3 @@ export const createTestApplicationContext = ({ user } = {}) => {
 };
 
 export const applicationContext = createTestApplicationContext();
-
-/*
-  If you receive an error when testing cerebral that says:
-  `The property someProperty passed to Provider is not a method`
-  it is because the cerebral testing framework expects all objects on the
-  applicationContext to be functions.  The code below walks the original
-  applicationContext and adds ONLY the functions to the
-  applicationContextForClient.
-*/
-const intermediary = {};
-Object.entries(applicationContext).forEach(([key, value]) => {
-  if (typeof value === 'function') {
-    intermediary[key] = value;
-  }
-});
-interface TestClientApplicationContext extends ClientApplicationContext {
-  getUseCases: typeof applicationContext.getUseCases;
-  getPersistenceGateway: typeof applicationContext.getPersistenceGateway;
-}
-
-export const applicationContextForClient =
-  intermediary as TestClientApplicationContext;
