@@ -21,11 +21,9 @@ export const caseWorksheetsHelper = (
 ): ICaseWorksheetsHelper => {
   const { isLeadCase } = applicationContext.getUtilities();
 
-  const {
-    consolidatedCasesGroupCountMap,
-    submittedAndCavCasesByJudge = [],
-    worksheets = [],
-  } = get(state.submittedAndCavCases);
+  const { submittedAndCavCasesByJudge = [], worksheets = [] } = get(
+    state.submittedAndCavCases,
+  );
 
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
   worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
@@ -38,9 +36,6 @@ export const caseWorksheetsHelper = (
     );
 
   const caseWorksheetsFormatted = submittedAndCavCasesByJudge.map(aCase => {
-    const formattedCaseCount =
-      consolidatedCasesGroupCountMap[aCase.docketNumber] || 1;
-
     const formattedSubmittedCavStatusDate = getSubmittedOrCAVDate(
       applicationContext,
       aCase.caseStatusHistory,
@@ -57,7 +52,7 @@ export const caseWorksheetsHelper = (
       daysSinceLastStatusChange,
       docketNumber: aCase.docketNumber,
       docketNumberWithSuffix: aCase.docketNumberWithSuffix,
-      formattedCaseCount,
+      formattedCaseCount: aCase.formattedCaseCount,
       formattedSubmittedCavStatusDate,
       inConsolidatedGroup: !!isLeadCase(aCase),
       isLeadCase: isLeadCase(aCase),
