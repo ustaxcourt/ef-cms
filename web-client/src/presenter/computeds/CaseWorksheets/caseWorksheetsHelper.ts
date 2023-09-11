@@ -8,7 +8,7 @@ type CaseWorksheetTableRow = RawCase & {
   isLeadCase: boolean;
   inConsolidatedGroup: boolean;
   formattedCaseCount: number;
-  daysElapsedSinceLastStatusChange: number;
+  daysSinceLastStatusChange: number;
   formattedSubmittedCavStatusChangedDate: string;
 };
 
