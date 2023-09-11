@@ -1,11 +1,13 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
+  CASE_STATUS_TYPES,
   TRIAL_STATUS_TYPES,
   TrialStatusOption,
 } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { omitBy, partition, pickBy } from 'lodash';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { omitBy, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -15,6 +17,26 @@ const compareCasesByPractitioner = (a, b) => {
     (b.privatePractitioners && b.privatePractitioners.length && 1) || 0;
 
   return aCount - bCount;
+};
+
+const isLeadOrSoloCase = (aCase: RawCase) =>
+  isLeadCase(aCase) || !aCase.leadDocketNumber;
+
+const appendNestedConsolidatedCases = (
+  leadsAndSolo: RawCase,
+  formattedCases: { docketNumber: string }[],
+) => {
+  return {
+    ...leadsAndSolo,
+    nestedConsolidatedCases: leadsAndSolo.consolidatedCases
+      .filter(caseDTO => caseDTO.status === CASE_STATUS_TYPES.calendared)
+      .filter(caseDTO => caseDTO.leadDocketNumber !== caseDTO.docketNumber)
+      .map(caseDTO =>
+        formattedCases.find(
+          calenCase => calenCase.docketNumber === caseDTO.docketNumber,
+        ),
+      ),
+  };
 };
 
 export const trialSessionWorkingCopyHelper = (
@@ -30,14 +52,18 @@ export const trialSessionWorkingCopyHelper = (
   updatedTrialSessionTypesEnabled: boolean;
 } => {
   const trialSession = get(state.trialSession);
-  const { caseMetadata, filters, sort, sortOrder, userNotes } = get(
-    state.trialSessionWorkingCopy,
-  );
+  const {
+    caseMetadata,
+    filters,
+    sort,
+    sortOrder,
+    userNotes = {},
+  } = get(state.trialSessionWorkingCopy);
 
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
-  let formattedCases = (trialSession.calendaredCases || [])
+  const formattedCases = (trialSession.calendaredCases || [])
     .slice()
     .filter(
       calendaredCase =>
@@ -59,76 +85,37 @@ export const trialSessionWorkingCopyHelper = (
         .getUtilities()
         .formatCaseForTrialSession({ applicationContext, caseItem }),
     )
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
-
-  Object.keys(userNotes || {}).forEach(docketNumber => {
-    const caseToUpdate = formattedCases.find(
-      aCase => aCase.docketNumber === docketNumber,
-    );
-    if (caseToUpdate) {
-      caseToUpdate.userNotes = userNotes[docketNumber].notes;
-    }
-  });
-
-  trialSession.caseOrder.forEach(aCase => {
-    if (aCase.calendarNotes) {
-      const caseToUpdate = formattedCases.find(
-        theCase => theCase.docketNumber === aCase.docketNumber,
-      );
-      if (caseToUpdate) {
-        caseToUpdate.calendarNotes = aCase.calendarNotes;
+    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .map(aCase => {
+      if (userNotes[aCase.docketNumber]) {
+        aCase.userNotes = userNotes[aCase.docketNumber].notes;
       }
-    }
-  });
-
-  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
-    formattedCases,
-    calendaredCase => {
-      return (
-        !calendaredCase.leadDocketNumber ||
-        applicationContext.getUtilities().isLeadCase(calendaredCase)
+      return aCase;
+    })
+    .map(aCase => {
+      const trialSessionCase = trialSession.caseOrder?.find(
+        orderCase => orderCase.docketNumber === aCase.docketNumber,
       );
-    },
-  );
+      if (trialSessionCase) {
+        aCase.calendarNotes = trialSessionCase.calendarNotes;
+      }
 
-  leadAndUnconsolidatedCases.forEach(caseToUpdate => {
-    if (caseToUpdate.isLeadCase) {
-      caseToUpdate.nestedConsolidatedCases = memberConsolidatedCases.filter(
-        memberCase => {
-          return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
-        },
-      );
+      return aCase;
+    });
 
-      caseToUpdate.nestedConsolidatedCases.sort(
-        applicationContext.getUtilities().compareCasesByDocketNumber,
-      );
-    }
-  });
-
-  let casesAssociatedWithTrialSession = leadAndUnconsolidatedCases;
-
-  memberConsolidatedCases.forEach(memberCase => {
-    const leadCaseAssociatedWithTrialSession = leadAndUnconsolidatedCases.find(
-      c => c.docketNumber === memberCase.leadDocketNumber,
-    );
-    if (!leadCaseAssociatedWithTrialSession) {
-      casesAssociatedWithTrialSession.push(memberCase);
-    }
-  });
-
-  casesAssociatedWithTrialSession.sort(
-    applicationContext.getUtilities().compareCasesByDocketNumber,
-  );
+  const casesWithNestedConsolidatedCases = formattedCases
+    .filter(isLeadOrSoloCase)
+    .map(aCase => appendNestedConsolidatedCases(aCase, formattedCases));
 
   if (sort === 'practitioner') {
-    casesAssociatedWithTrialSession.sort(compareCasesByPractitioner);
+    casesWithNestedConsolidatedCases.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    casesAssociatedWithTrialSession.reverse();
+    casesWithNestedConsolidatedCases.reverse();
   }
 
-  const updatedTrialSessionTypesEnabled = get(
+  const updatedTrialSessionTypesEnabled: boolean = get(
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key],
   );
 
@@ -177,7 +164,7 @@ export const trialSessionWorkingCopyHelper = (
 
   return {
     casesShownCount: formattedCases.length,
-    formattedCases: casesAssociatedWithTrialSession,
+    formattedCases: casesWithNestedConsolidatedCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
     trialStatusOptions,
