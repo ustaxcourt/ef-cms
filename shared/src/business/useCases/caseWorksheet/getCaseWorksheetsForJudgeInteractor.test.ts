@@ -1,6 +1,6 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { STATUS_OF_MATTER_OPTIONS } from '@shared/business/entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   colvinsChambersUser,

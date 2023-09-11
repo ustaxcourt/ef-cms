@@ -10,7 +10,7 @@ import {
 } from '../entities/EntityConstants';
 import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { MOCK_CASE } from '../../test/mockCase';
-import { UnauthorizedError } from '@shared/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   calculateISODate,

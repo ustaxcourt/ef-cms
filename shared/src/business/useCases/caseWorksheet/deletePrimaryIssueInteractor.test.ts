@@ -1,4 +1,4 @@
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deletePrimaryIssueInteractor } from './deletePrimaryIssueInteractor';

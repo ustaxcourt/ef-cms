@@ -4,7 +4,10 @@ import {
 } from '../../entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
