@@ -1,9 +1,11 @@
+import { clearFormAction } from '@web-client/presenter/actions/clearFormAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setAddEditPrimaryIssueModalStateAction } from '@web-client/presenter/actions/CaseWorksheet/setAddEditPrimaryIssueModalStateAction';
+import { setAddEditCaseWorksheetModalStateAction } from '@web-client/presenter/actions/CaseWorksheet/setAddEditCaseWorksheetModalStateAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openAddEditPrimaryIssueModalSequence = [
   clearModalStateAction,
-  setAddEditPrimaryIssueModalStateAction,
+  clearFormAction,
+  setAddEditCaseWorksheetModalStateAction,
   setShowModalFactoryAction('AddEditPrimaryIssueModal'),
 ];

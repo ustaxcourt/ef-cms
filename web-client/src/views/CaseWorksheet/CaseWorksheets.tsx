@@ -74,6 +74,7 @@ export const CaseWorksheets = connect(
               <th>Status Date</th>
               <th>Final Brief Due Date</th>
               <th>Status of Matter</th>
+              <th aria-hidden="true"></th>
             </tr>
           </thead>
           <tbody>
@@ -102,67 +103,21 @@ export const CaseWorksheets = connect(
                     <td>{formattedCase.status}</td>
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
+                    <td>{formattedCase.worksheet.finalBriefDueDate}</td>
+                    <td>{formattedCase.worksheet.statusOfMatter}</td>
                     <td>
-                      <FormGroup
-                        className="margin-bottom-0"
-                        errorText={
-                          validationErrors &&
-                          validationErrors.submittedCavCasesTable &&
-                          validationErrors.submittedCavCasesTable[
-                            formattedCase.docketNumber
-                          ]?.finalBriefDueDate
-                        }
-                      >
-                        <DateInput
-                          className={'margin-bottom-0'}
-                          id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
-                          showDateHint={false}
-                          values={convertToDateInputValues(
-                            formattedCase.worksheet.finalBriefDueDate,
-                          )}
-                          onValueChange={value => {
-                            updateFinalBriefDueDateSequence({
-                              docketNumber: formattedCase.docketNumber,
-                              finalBriefDueDate: value === '' ? null : value,
-                            });
-                          }}
-                        />
-                      </FormGroup>
-                    </td>
-                    <td>
-                      <select
-                        aria-label="status of matter"
-                        className="usa-select"
-                        id={`status-of-matter-dropdown-${formattedCase.docketNumber}`}
-                        name="statusOfMatter"
-                        value={formattedCase.worksheet.statusOfMatter ?? ''}
-                        onChange={e => {
-                          updateStatusOfMatterSequence({
+                      <Button
+                        link
+                        icon="edit"
+                        onClick={() => {
+                          openAddEditPrimaryIssueModalSequence({
                             docketNumber: formattedCase.docketNumber,
-                            statusOfMatter:
-                              e.target.value === '' ? null : e.target.value,
                           });
                         }}
                       >
-                        <option value="">- Select -</option>
-                        {STATUS_OF_MATTER_OPTIONS.map(from => (
-                          <option key={from} value={from}>
-                            {from}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td colSpan={3}></td>
-                    <td colSpan={5}>
-                      <span className="text-bold margin-right-1">
-                        Primary Issue:
-                      </span>
-                      {formattedCase.worksheet.primaryIssue}
-                    </td>
-                    <td>
-                      {!formattedCase.worksheet.primaryIssue && (
+                        Edit
+                      </Button>
+                      {/* {!formattedCase.worksheet.primaryIssue && (
                         <Button
                           link
                           className="add-primary-issue"
@@ -175,8 +130,8 @@ export const CaseWorksheets = connect(
                         >
                           Add Issue
                         </Button>
-                      )}
-                      {formattedCase.worksheet.primaryIssue && (
+                      )} */}
+                      {/* {formattedCase.worksheet.primaryIssue && (
                         <div>
                           <div>
                             <Button
@@ -206,7 +161,16 @@ export const CaseWorksheets = connect(
                             </Button>
                           </div>
                         </div>
-                      )}
+                      )} */}
+                    </td>
+                  </tr>
+                  <tr>
+                    <td colSpan={3}></td>
+                    <td colSpan={5}>
+                      <span className="text-bold margin-right-1">
+                        Primary Issue:
+                      </span>
+                      {formattedCase.worksheet.primaryIssue}
                     </td>
                   </tr>
                 </React.Fragment>
