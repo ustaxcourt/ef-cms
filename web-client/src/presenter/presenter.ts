@@ -94,6 +94,7 @@ import { deleteDeficiencyStatisticsSequence } from './sequences/deleteDeficiency
 import { deleteJudgesCaseNoteFromCaseDetailSequence } from './sequences/deleteJudgesCaseNoteFromCaseDetailSequence';
 import { deleteOtherStatisticsSequence } from './sequences/deleteOtherStatisticsSequence';
 import { deletePractitionerDocumentSequence } from './sequences/deletePractitionerDocumentSequence';
+import { deletePrimaryIssueSequence } from './sequences/deletePrimaryIssueSequence';
 import { deleteTrialSessionSequence } from './sequences/deleteTrialSessionSequence';
 import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence';
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
@@ -223,6 +224,7 @@ import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumb
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
+import { openAddEditPrimaryIssueModalSequence } from './sequences/openAddEditPrimaryIssueModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
 import { openAddEditUserCaseNoteModalFromListSequence } from './sequences/openAddEditUserCaseNoteModalFromListSequence';
@@ -264,6 +266,7 @@ import { openCreateOrderChooseTypeModalSequence } from './sequences/openCreateOr
 import { openDeleteCaseDeadlineModalSequence } from './sequences/openDeleteCaseDeadlineModalSequence';
 import { openDeleteCaseNoteConfirmModalSequence } from './sequences/openDeleteCaseNoteConfirmModalSequence';
 import { openDeletePractitionerDocumentConfirmModalSequence } from './sequences/openDeletePractitionerDocumentConfirmModalSequence';
+import { openDeletePrimaryIssueSequence } from './sequences/openDeletePrimaryIssueSequence';
 import { openDeleteSessionNoteConfirmModalSequence } from './sequences/openDeleteSessionNoteConfirmModalSequence';
 import { openDeleteUserCaseNoteConfirmModalSequence } from './sequences/openDeleteUserCaseNoteConfirmModalSequence';
 import { openEditCaseDeadlineModalSequence } from './sequences/openEditCaseDeadlineModalSequence';
@@ -460,6 +463,7 @@ import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntr
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
+import { updateFinalBriefDueDateSequence } from '@web-client/presenter/sequences/updateFinalBriefDueDateSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
@@ -473,6 +477,7 @@ import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updat
 import { updatePaperServiceProgressSequence } from './sequences/updatePaperServiceProgressSequence';
 import { updatePartyViewTabSequence } from './sequences/updatePartyViewTabSequence';
 import { updatePetitionPaymentFormValueSequence } from './sequences/updatePetitionPaymentFormValueSequence';
+import { updatePrimaryIssueSequence } from './sequences/updatePrimaryIssueSequence';
 import { updateQcCompleteForTrialSequence } from './sequences/updateQcCompleteForTrialSequence';
 import { updateScreenMetadataSequence } from './sequences/updateScreenMetadataSequence';
 import { updateSearchTermSequence } from './sequences/updateSearchTermSequence';
@@ -481,6 +486,7 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
+import { updateStatusOfMatterSequence } from '@web-client/presenter/sequences/updateStatusOfMatterSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
@@ -627,6 +633,7 @@ export const presenterSequences = {
   deleteJudgesCaseNoteFromCaseDetailSequence,
   deleteOtherStatisticsSequence,
   deletePractitionerDocumentSequence,
+  deletePrimaryIssueSequence,
   deleteTrialSessionSequence,
   deleteUploadedPdfSequence,
   deleteUserCaseNoteFromWorkingCopySequence,
@@ -754,6 +761,7 @@ export const presenterSequences = {
   openAddEditCalendarNoteModalSequence,
   openAddEditCaseNoteModalSequence,
   openAddEditHearingNoteModalSequence,
+  openAddEditPrimaryIssueModalSequence,
   openAddEditSessionNoteModalSequence,
   openAddEditUserCaseNoteModalFromDetailSequence,
   openAddEditUserCaseNoteModalFromListSequence,
@@ -795,6 +803,7 @@ export const presenterSequences = {
   openDeleteCaseDeadlineModalSequence,
   openDeleteCaseNoteConfirmModalSequence,
   openDeletePractitionerDocumentConfirmModalSequence,
+  openDeletePrimaryIssueSequence,
   openDeleteSessionNoteConfirmModalSequence,
   openDeleteUserCaseNoteConfirmModalSequence,
   openEditCaseDeadlineModalSequence,
@@ -990,6 +999,7 @@ export const presenterSequences = {
   updateDocketEntryMetaDocumentFormValueSequence,
   updateDocketNumberSearchFormSequence,
   updateFileDocumentWizardFormValueSequence,
+  updateFinalBriefDueDateSequence,
   updateFormValueAndCaseCaptionSequence,
   updateFormValueAndSecondaryContactInfoSequence,
   updateFormValueSequence,
@@ -1003,6 +1013,7 @@ export const presenterSequences = {
   updatePaperServiceProgressSequence,
   updatePartyViewTabSequence,
   updatePetitionPaymentFormValueSequence,
+  updatePrimaryIssueSequence,
   updateQcCompleteForTrialSequence,
   updateScreenMetadataSequence,
   updateSearchTermSequence,
@@ -1011,6 +1022,7 @@ export const presenterSequences = {
   updateStartCaseFormValueSequence,
   updateStartCaseInternalPartyTypeSequence,
   updateStatisticsFormValueSequence,
+  updateStatusOfMatterSequence,
   updateTrialSessionCompleteSequence,
   updateTrialSessionFormDataSequence,
   updateTrialSessionSequence,

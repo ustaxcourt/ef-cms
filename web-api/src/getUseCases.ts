@@ -40,6 +40,7 @@ import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/cas
 import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/business/useCases/caseStatistics/deleteDeficiencyStatisticInteractor';
 import { deletePractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/deletePractitionerDocumentInteractor';
+import { deletePrimaryIssueInteractor } from '@shared/business/useCases/caseWorksheet/deletePrimaryIssueInteractor';
 import { deleteTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/deleteTrialSessionInteractor';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteUserCaseNoteInteractor';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/business/useCases/trialSessions/dismissNOTTReminderForTrialInteractor';
@@ -78,7 +79,8 @@ import { getCaseDeadlinesInteractor } from '../../shared/src/business/useCases/g
 import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getCaseExistsInteractor';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
-import { getCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
+import { getCaseInventoryReportInteractor } from '@web-api/business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
+import { getCaseWorksheetsForJudgeInteractor } from '@shared/business/useCases/caseWorksheet/getCaseWorksheetsForJudgeInteractor';
 import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
 import { getCasesForUserInteractor } from '../../shared/src/business/useCases/getCasesForUserInteractor';
@@ -182,6 +184,7 @@ import { updateCaseContextInteractor } from '../../shared/src/business/useCases/
 import { updateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/updateCaseDeadlineInteractor';
 import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/updateCaseDetailsInteractor';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor';
+import { updateCaseWorksheetInteractor } from '../../shared/src/business/useCases/caseWorksheet/updateCaseWorksheetInteractor';
 import { updateContactInteractor } from '../../shared/src/business/useCases/updateContactInteractor';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/updateCorrespondenceDocumentInteractor';
 import { updateCounselOnCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/updateCounselOnCaseInteractor';
@@ -243,6 +246,7 @@ const useCases = {
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
   deletePractitionerDocumentInteractor,
+  deletePrimaryIssueInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   dismissNOTTReminderForTrialInteractor,
@@ -282,6 +286,7 @@ const useCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCaseWorksheetsForJudgeInteractor,
   getCasesByStatusAndByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
@@ -386,6 +391,7 @@ const useCases = {
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
   updateCaseTrialSortTagsInteractor,
+  updateCaseWorksheetInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
   updateCounselOnCaseInteractor,
