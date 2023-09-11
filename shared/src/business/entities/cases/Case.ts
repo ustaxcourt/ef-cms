@@ -35,6 +35,7 @@ import {
   CASE_PETITIONERS_RULE,
   CASE_PRIVATE_PRACTITIONERS_RULE,
   CASE_SORTABLE_DOCKET_NUMBER_RULE,
+  CASE_STATUS_RULE,
   DOCKET_ENTRY_VALIDATION_RULES,
 } from '../EntityValidationConstants';
 import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
@@ -112,7 +113,7 @@ export class Case extends JoiValidationEntity {
   public procedureType: string;
   public receivedAt: string;
   public sealedDate?: string;
-  public status: string;
+  public status: CaseStatus;
   public sortableDocketNumber: number;
   public trialDate?: string;
   public trialLocation?: string;
@@ -685,19 +686,7 @@ export class Case extends JoiValidationEntity {
         }),
       })
       .description('List of Statistic Entities for the case.'),
-    status: joi
-      .alternatives()
-      .conditional('closedDate', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.STRING.valid(
-          ...Object.values(CASE_STATUS_TYPES),
-        ).optional(),
-        then: JoiValidationConstants.STRING.required().valid(
-          ...CLOSED_CASE_STATUSES,
-        ),
-      })
-      .meta({ tags: ['Restricted'] })
-      .description('Status of the case.'),
+    status: CASE_STATUS_RULE,
     trialDate: joi
       .alternatives()
       .conditional('trialSessionId', {
