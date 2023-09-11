@@ -156,7 +156,7 @@ import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import { getCaseWorksheetsForJudgeInteractor } from '@shared/proxies/caseWorksheet/getCaseWorksheetsForJudgeProxy';
 import { getCasesByStatusAndByJudgeInteractor } from '@shared/proxies/reports/getCasesByStatusAndByJudgeProxy';
-import { getCasesClosedByJudgeInteractor } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
+import { getCasesClosedByJudgeInteractor } from '@shared/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import {
   getChambersSections,
