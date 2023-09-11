@@ -6,7 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';

@@ -53,7 +53,7 @@ import { presenter } from '../src/presenter/presenter';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { saveDocumentFromLambda } from '../../web-api/src/persistence/s3/saveDocumentFromLambda';
 import { saveWorkItem } from '../../web-api/src/persistence/dynamo/workitems/saveWorkItem';
-import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
+import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
