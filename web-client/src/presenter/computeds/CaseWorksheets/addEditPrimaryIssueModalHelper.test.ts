@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { addEditPrimaryIssueModalHelper as addEditPrimaryIssueModalHelperComputed } from './addEditPrimaryIssueModalHelper';
-import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
