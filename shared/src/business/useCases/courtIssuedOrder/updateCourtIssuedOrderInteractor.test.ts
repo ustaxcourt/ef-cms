@@ -6,7 +6,7 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_LOCK } from '../../../test/mockLock';
-import { ServiceUnavailableError } from '../../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';

@@ -6,8 +6,8 @@ import {
 import {
   UnauthorizedError,
   UnprocessableEntityError,
-} from '../../errors/errors';
-import { withLocking } from '../useCaseHelper/acquireLock';
+} from '../../../../web-api/src/errors/errors';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * sealCaseContactAddress

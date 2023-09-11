@@ -9,7 +9,7 @@ import {
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../errors/errors';
+} from '@web-api/errors/errors';
 import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDocketEntryInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { clerkOfCourtUser, judgeUser } from '../../../test/mockUsers';

@@ -10,7 +10,7 @@ import { MOCK_LOCK } from '../../test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../errors/errors';
+} from '../../../../web-api/src/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';

@@ -3,8 +3,10 @@ import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
-import { ServiceUnavailableError } from '../../../errors/errors';
-import { UnauthorizedError } from '../../../errors/errors';
+import {
+  ServiceUnavailableError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';

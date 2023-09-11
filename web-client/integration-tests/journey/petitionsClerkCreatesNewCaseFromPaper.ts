@@ -1,5 +1,5 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
   applicationContext.getConstants();

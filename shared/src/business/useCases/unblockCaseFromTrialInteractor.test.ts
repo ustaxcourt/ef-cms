@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
-import { ServiceUnavailableError } from '../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
 

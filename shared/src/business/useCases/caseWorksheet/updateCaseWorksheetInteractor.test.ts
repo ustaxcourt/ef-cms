@@ -1,4 +1,4 @@
-import { InvalidEntityError, UnauthorizedError } from '../../../errors/errors';
+import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
