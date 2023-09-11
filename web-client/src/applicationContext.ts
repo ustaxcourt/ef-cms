@@ -22,7 +22,6 @@ import {
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
-import { ConsolidatedCaseDTO } from '../../shared/src/business/dto/cases/ConsolidatedCaseDTO';
 import {
   DocketEntry,
   getServedPartiesCode,
@@ -642,9 +641,6 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
-  getDTOs: () => ({
-    ConsolidatedCaseDTO,
-  }),
   getEnvironment,
   getError: e => {
     return ErrorFactory.getError(e);

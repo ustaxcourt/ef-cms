@@ -68,3 +68,5 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
     return ConsolidatedCaseDTO.VALIDATION_ERROR_MESSAGES;
   }
 }
+
+export type RawConsolidatedCaseDTO = ExcludeMethods<ConsolidatedCaseDTO>;
