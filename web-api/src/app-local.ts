@@ -1,10 +1,10 @@
 import { server as WebSocketServer } from 'websocket';
 import { Writable } from 'stream';
-import { connectLambda } from './notifications/connectLambda';
-import { disconnectLambda } from './notifications/disconnectLambda';
+import { connectLambda } from './lambdas/notifications/connectLambda';
+import { disconnectLambda } from './lambdas/notifications/disconnectLambda';
 import { app as localApiApp } from './app';
 import { app as localPublicApiApp } from './app-public';
-import { processStreamRecordsLambda } from './streams/processStreamRecordsLambda';
+import { processStreamRecordsLambda } from './lambdas/streams/processStreamRecordsLambda';
 import { v4 as uuid } from 'uuid';
 import AWS from 'aws-sdk';
 import DynamoDBReadable from 'dynamodb-streams-readable';

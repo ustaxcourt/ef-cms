@@ -4,7 +4,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 describe('Petitions clerk creates Estate case with long additionalName', () => {
