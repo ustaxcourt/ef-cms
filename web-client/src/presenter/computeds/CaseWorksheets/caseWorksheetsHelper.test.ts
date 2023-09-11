@@ -26,6 +26,7 @@ describe('caseWorksheetsHelper', () => {
           },
         ],
         docketNumber: '101-20',
+        formattedCaseCount: 1,
         leadDocketNumber: '101-20',
       },
       {
@@ -41,6 +42,7 @@ describe('caseWorksheetsHelper', () => {
           },
         ],
         docketNumber: '110-15',
+        formattedCaseCount: 0,
       },
       {
         caseCaption: 'Fred Dude, Petitioner',
@@ -55,12 +57,12 @@ describe('caseWorksheetsHelper', () => {
           },
         ],
         docketNumber: '202-11',
+        formattedCaseCount: 0,
       },
     ];
 
     baseState = {
       submittedAndCavCases: {
-        consolidatedCasesGroupCountMap: {},
         submittedAndCavCasesByJudge,
         worksheets: [{ docketNumber: '110-15', primaryIssue: 'ZOINKS!' }],
       },
@@ -79,7 +81,7 @@ describe('caseWorksheetsHelper', () => {
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '202-11',
         docketNumberWithSuffix: undefined,
-        formattedCaseCount: 1,
+        formattedCaseCount: 0,
         formattedSubmittedCavStatusDate: '02/06/22',
         inConsolidatedGroup: false,
         isLeadCase: false,
@@ -105,7 +107,7 @@ describe('caseWorksheetsHelper', () => {
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '110-15',
         docketNumberWithSuffix: undefined,
-        formattedCaseCount: 1,
+        formattedCaseCount: 0,
         formattedSubmittedCavStatusDate: '02/26/22',
         inConsolidatedGroup: false,
         isLeadCase: false,
