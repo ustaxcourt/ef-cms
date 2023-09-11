@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { submitPublicOpinionAdvancedSearchAction } from './submitPublicOpinionAdvancedSearchAction';
