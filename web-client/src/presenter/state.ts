@@ -72,6 +72,7 @@ import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
 import { initialJudgeActivityReportState } from './judgeActivityReportState';
+import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -402,7 +403,7 @@ export const baseState = {
   trialSessionJudge: {
     name: '',
   },
-
+  trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

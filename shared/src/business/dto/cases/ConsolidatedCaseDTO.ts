@@ -8,7 +8,9 @@ import {
   CASE_PETITIONERS_RULE,
   CASE_PRIVATE_PRACTITIONERS_RULE,
   CASE_SORTABLE_DOCKET_NUMBER_RULE,
+  CASE_STATUS_RULE,
 } from '@shared/business/entities/EntityValidationConstants';
+import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
 export class ConsolidatedCaseDTO extends JoiValidationEntity {
@@ -22,6 +24,7 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
   public petitioners: object[];
   public privatePractitioners: object[];
   public sortableDocketNumber: number;
+  public status: CaseStatus;
 
   constructor(rawCase: any) {
     super('ConsolidatedCaseDTO');
@@ -35,6 +38,7 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
     this.petitioners = rawCase.petitioners || [];
     this.privatePractitioners = rawCase.privatePractitioners || [];
     this.sortableDocketNumber = rawCase.sortableDocketNumber;
+    this.status = rawCase.status;
   }
 
   static VALIDATION_RULES = {
@@ -47,6 +51,7 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
     petitioners: CASE_PETITIONERS_RULE,
     privatePractitioners: CASE_PRIVATE_PRACTITIONERS_RULE,
     sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
+    status: CASE_STATUS_RULE,
   } as const;
 
   static VALIDATION_ERROR_MESSAGES = {} as const;
