@@ -1,37 +1,34 @@
+import { CasesClosedReturnType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
+import { OpinionsReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor';
+import { OrdersReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import { TrialSessionTypes } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Sets data used to populate the tables for the judge activity report on state
- * @param {object} providers the providers object
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object
- */
 export const setJudgeActivityReportDataAction = ({
   props,
   store,
-}: ActionProps) => {
-  const {
-    casesClosedByJudge,
-    consolidatedCasesGroupCountMap,
-    opinions,
-    orders,
-    submittedAndCavCasesByJudge,
-    trialSessions,
-  } = props;
+}: ActionProps<{
+  casesClosedByJudge: CasesClosedReturnType;
+  opinions: OpinionsReturnType;
+  orders: OrdersReturnType;
+  trialSessions: TrialSessionTypes;
+}>) => {
+  const { casesClosedByJudge, opinions, orders, trialSessions } = props;
 
   store.set(
-    state.judgeActivityReportData.casesClosedByJudge,
+    state.judgeActivityReport.judgeActivityReportData.casesClosedByJudge,
     casesClosedByJudge,
   );
-  store.set(state.judgeActivityReportData.trialSessions, trialSessions);
-  store.set(state.judgeActivityReportData.opinions, opinions);
-  store.set(state.judgeActivityReportData.orders, orders);
+
   store.set(
-    state.judgeActivityReportData.submittedAndCavCasesByJudge,
-    submittedAndCavCasesByJudge,
+    state.judgeActivityReport.judgeActivityReportData.trialSessions,
+    trialSessions,
   );
+
   store.set(
-    state.judgeActivityReportData.consolidatedCasesGroupCountMap,
-    consolidatedCasesGroupCountMap,
+    state.judgeActivityReport.judgeActivityReportData.opinions,
+    opinions,
   );
+
+  store.set(state.judgeActivityReport.judgeActivityReportData.orders, orders);
 };
