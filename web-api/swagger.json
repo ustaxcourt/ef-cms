@@ -7534,7 +7534,6 @@
     },
     "/case-worksheet/{docketNumber}/primary-issue/delete": {
       "post": {
-        "tags": ["case-worksheet"],
         "summary": "delete a primary issue from a case worksheet",
         "description": "Delete a primary issue from a case worksheet.\n",
         "produces": ["application/json"],
@@ -7578,7 +7577,6 @@
     },
     "/case-worksheet": {
       "get": {
-        "tags": ["case-worksheet"],
         "summary": "get all case worksheets for the specified judge",
         "description": "Get all case worksheets for the specified judge.\n",
         "produces": ["application/json"],
@@ -7622,7 +7620,6 @@
     },
     "/cases/{docketNumber}/case-worksheet": {
       "post": {
-        "tags": ["case-worksheet"],
         "summary": "update a case worksheet",
         "description": "Update a case worksheet.\n",
         "produces": ["application/json"],
