@@ -3,7 +3,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatTrialSessionDisplayOptions } from './addToTrialSessionModalHelper';
 import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
 import { runCompute } from '@web-client/presenter/test.cerebral';

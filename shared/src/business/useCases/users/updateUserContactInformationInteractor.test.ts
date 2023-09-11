@@ -6,7 +6,7 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 import { MOCK_USERS } from '../../../test/mockUsers';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { entityName as practitionerEntityName } from '../../entities/Practitioner';
