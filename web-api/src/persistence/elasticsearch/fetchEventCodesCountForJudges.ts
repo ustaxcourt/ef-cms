@@ -28,7 +28,7 @@ export const fetchEventCodesCountForJudges = async ({
 }: {
   applicationContext: IApplicationContext;
   params: FetchEventCodesParamsType;
-}): Promise<AggregatedEventCodes> => {
+}): Promise<AggregatedEventCodesType> => {
   const documentFilters = computeDocumentFilters({ params });
   const shouldFilters = computeShouldFilters({ params });
 
