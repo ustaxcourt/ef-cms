@@ -1,6 +1,7 @@
 import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { getSubmittedOrCAVDate } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
@@ -67,6 +68,23 @@ export const judgeActivityReportHelper = (
       individualCase.consolidatedIconTooltipText = 'Lead case';
       individualCase.isLeadCase = true;
       individualCase.inConsolidatedGroup = true;
+    }
+
+    individualCase.statusDate = getSubmittedOrCAVDate(
+      applicationContext,
+      individualCase.caseStatusHistory,
+    );
+
+    if (individualCase.caseWorksheet) {
+      individualCase.caseWorksheet.formattedFinalBriefDueDate = individualCase
+        .caseWorksheet.finalBriefDueDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(
+              individualCase.caseWorksheet.finalBriefDueDate,
+              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+            )
+        : '';
     }
   });
 

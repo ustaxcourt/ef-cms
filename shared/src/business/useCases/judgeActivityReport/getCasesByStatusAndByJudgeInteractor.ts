@@ -8,6 +8,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
 import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
@@ -55,7 +57,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   }
 
   // get all of the cases
-  const caseRecords: RawCase[] = await getCases(
+  const caseRecords: RawCaseWithWorksheet[] = await getCases(
     applicationContext,
     searchEntity,
   );
@@ -127,10 +129,14 @@ const calculateDaysElapsed = (
     );
 };
 
+type RawCaseWithWorksheet = RawCase & {
+  caseWorksheet: RawCaseWorksheet;
+};
+
 const getCases = async (
   applicationContext: IApplicationContext,
   searchEntity: JudgeActivityReportSearch,
-): Promise<RawCase[]> => {
+): Promise<RawCaseWithWorksheet[]> => {
   // first get all cases for the specified judges and statuses
   const allCaseRecords = await applicationContext
     .getPersistenceGateway()
@@ -151,11 +157,27 @@ const getCases = async (
       eventCodes: ['ODD', 'DEC', 'OAD', 'SDEC'],
     });
 
-  return allCaseRecords.filter(
+  const filteredCaseRecords = allCaseRecords.filter(
     caseInfo =>
       !docketNumbersFilterOut.includes(caseInfo.docketNumber) &&
       caseInfo.caseStatusHistory,
   );
+
+  const completeCaseRecords = await Promise.all(
+    filteredCaseRecords.map(async caseRecord => {
+      const caseWorksheet = await getCaseWorksheet({
+        applicationContext,
+        docketNumber: caseRecord.docketNumber,
+      });
+
+      return {
+        ...caseRecord,
+        caseWorksheet,
+      } as unknown as RawCaseWithWorksheet;
+    }),
+  );
+
+  return completeCaseRecords;
 };
 
 const calculateNumberOfConsolidatedCases = async (
