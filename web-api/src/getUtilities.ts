@@ -12,7 +12,6 @@ import {
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -56,7 +55,6 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
-  formatCaseForTrialSession,
   formatDateString,
   formatJudgeName,
   formatNow,
