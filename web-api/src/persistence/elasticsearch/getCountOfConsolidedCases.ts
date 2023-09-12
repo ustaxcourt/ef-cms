@@ -21,6 +21,5 @@ export const getCountOfConsolidedCases = async ({
     },
   });
 
-  console.log(results);
   return results;
 };
