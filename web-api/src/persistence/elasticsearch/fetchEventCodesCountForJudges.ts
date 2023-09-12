@@ -13,7 +13,6 @@ export type FetchEventCodesParamsType = {
   endDate: string;
   documentEventCodes: any;
   judges: string[];
-  searchType: string;
   startDate: string;
 };
 

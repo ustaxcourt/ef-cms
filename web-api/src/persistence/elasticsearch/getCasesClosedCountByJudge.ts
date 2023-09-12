@@ -75,12 +75,5 @@ export const getCasesClosedCountByJudge = async ({
         [CASE_STATUS_TYPES.closedDismissed]: 0,
       };
 
-  const judgeNameToLog =
-    judges.length > 1 ? 'all judges' : `judge ${judges[0]}`;
-
-  applicationContext.logger.info(
-    `Found ${total} closed cases associated with ${judgeNameToLog}`,
-  );
-
   return { aggregations: results, total };
 };

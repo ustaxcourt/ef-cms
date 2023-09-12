@@ -1,4 +1,4 @@
-import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
 import {
@@ -56,7 +56,6 @@ export const getCountOfOrdersFiledByJudgesInteractor = async (
         documentEventCodes: orderEventCodesToSearch,
         endDate: searchEntity.endDate,
         judges: searchEntity.judges,
-        searchType: 'order',
         startDate: searchEntity.startDate,
       },
     });
