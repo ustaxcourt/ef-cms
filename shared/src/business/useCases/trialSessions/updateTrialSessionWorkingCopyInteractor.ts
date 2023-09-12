@@ -6,7 +6,7 @@ import {
   RawTrialSessionWorkingCopy,
   TrialSessionWorkingCopy,
 } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
