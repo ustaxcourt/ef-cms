@@ -91,10 +91,14 @@ export const CaseWorksheets = connect(
                       />
                     </td>
                     <td>
-                      <CaseLink formattedCase={formattedCase} />
+                      <CaseLink
+                        formattedCase={formattedCase}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      />
                     </td>
                     <td>{formattedCase.formattedCaseCount}</td>
-                    <td>{formattedCase.caseTitle}</td>
+                    <td>{formattedCase.caseCaption}</td>
                     <td>{formattedCase.status}</td>
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
@@ -161,6 +165,7 @@ export const CaseWorksheets = connect(
                       {!formattedCase.worksheet.primaryIssue && (
                         <Button
                           link
+                          className="add-primary-issue"
                           icon="plus-circle"
                           onClick={() => {
                             openAddEditPrimaryIssueModalSequence({
@@ -189,7 +194,7 @@ export const CaseWorksheets = connect(
                           <div>
                             <Button
                               link
-                              className="red-warning"
+                              className="red-warning delete-primary-issue"
                               icon="trash"
                               onClick={() => {
                                 openDeletePrimaryIssueSequence({
@@ -213,7 +218,7 @@ export const CaseWorksheets = connect(
         {caseWorksheetsHelper.caseWorksheetsFormatted.length === 0 && (
           <div>
             There are no cases with a status of &quot;Submitted&quot; or
-            &quot;CAV&quot;
+            &quot;CAV&quot;.
           </div>
         )}
 

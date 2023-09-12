@@ -1,4 +1,5 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
 type CaseWorksheetTableRow = RawCase & {
@@ -7,7 +8,7 @@ type CaseWorksheetTableRow = RawCase & {
   isLeadCase: boolean;
   inConsolidatedGroup: boolean;
   formattedCaseCount: number;
-  daysElapsedSinceLastStatusChange: number;
+  daysSinceLastStatusChange: number;
   formattedSubmittedCavStatusChangedDate: string;
 };
 
@@ -52,9 +53,11 @@ export const caseWorksheetsHelper = (
       .calculateDifferenceInDays(today, lastStatusChange);
 
     return {
-      caseTitle: applicationContext.getCaseTitle(aCase.caseCaption),
+      caseCaption: aCase.caseCaption,
       consolidatedIconTooltipText: isLeadCase(aCase) ? 'Lead case' : '',
-      daysSinceLastStatusChange,
+      daysSinceLastStatusChange: formatPositiveNumber(
+        daysSinceLastStatusChange,
+      ),
       docketNumber: aCase.docketNumber,
       docketNumberWithSuffix: aCase.docketNumberWithSuffix,
       formattedCaseCount,

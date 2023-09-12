@@ -56,4 +56,24 @@ module.exports = [
     notes: 'checks a11y of print trial session working copy modal',
     url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
   },
+  {
+    actions: [
+      'wait for .add-primary-issue to be visible',
+      'click element .add-primary-issue',
+      'wait for .modal-screen to be visible',
+      'click element #confirm',
+    ],
+    notes: 'checks a11y of add/edit primary issue modal',
+    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
+  },
+  {
+    actions: [
+      'wait for .delete-primary-issue to be visible',
+      'click element .delete-primary-issue',
+      'wait for .modal-screen to be visible',
+      'click element #confirm',
+    ],
+    notes: 'checks a11y of delete primary issue modal',
+    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
+  },
 ];
