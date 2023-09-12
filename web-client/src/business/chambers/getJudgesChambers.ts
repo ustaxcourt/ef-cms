@@ -16,11 +16,6 @@ const JUDGES_CHAMBERS = {
     label: 'Carluzzo’s Chambers',
     section: 'carluzzosChambers',
   },
-  CHOIS_CHAMBERS_SECTION: {
-    judgeFullName: 'Eunkyong Choi',
-    label: 'Choi’s Chambers',
-    section: 'choisChambers',
-  },
   COHENS_CHAMBERS_SECTION: {
     judgeFullName: 'Mary Ann Cohen',
     label: 'Cohen’s Chambers',
@@ -40,6 +35,11 @@ const JUDGES_CHAMBERS = {
     judgeFullName: 'Maurice B. Foley',
     label: 'Foley’s Chambers',
     section: 'foleysChambers',
+  },
+  FRIEDS_CHAMBERS_SECTION: {
+    judgeFullName: 'Zachary S. Fried',
+    label: 'Fried’s Chambers',
+    section: 'friedsChambers',
   },
   GALES_CHAMBERS_SECTION: {
     judgeFullName: 'Joseph H. Gale',
@@ -135,6 +135,11 @@ const JUDGES_CHAMBERS = {
     judgeFullName: 'Robert P. Ruwe',
     label: 'Ruwe’s Chambers',
     section: 'ruwesChambers',
+  },
+  SIEGELS_CHAMBERS_SECTION: {
+    judgeFullName: 'Jennifer E. Siegel',
+    label: 'Siegel’s Chambers',
+    section: 'siegelsChambers',
   },
   THORNTONS_CHAMBERS_SECTION: {
     judgeFullName: 'Michael B. Thornton',
