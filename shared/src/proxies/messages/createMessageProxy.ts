@@ -1,7 +1,8 @@
+import { MessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { post } from '../requests';
 
 export const createMessageInteractor = (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
@@ -10,7 +11,7 @@ export const createMessageInteractor = (
     subject,
     toSection,
     toUserId,
-  },
+  }: MessageType,
 ) => {
   return post({
     applicationContext,

@@ -6,6 +6,20 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
+export type MessageType = {
+  attachments: {
+    documentId: string;
+  }[];
+  docketNumber: string;
+  draftAttachments: {
+    documentId: string;
+  }[];
+  message: string;
+  subject: string;
+  toSection: string;
+  toUserId: string;
+};
+
 export const createMessageInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -16,16 +30,8 @@ export const createMessageInteractor = async (
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    docketNumber: string;
-    draftAttachments: any;
-    message: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: MessageType,
+): Promise<RawMessage> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {

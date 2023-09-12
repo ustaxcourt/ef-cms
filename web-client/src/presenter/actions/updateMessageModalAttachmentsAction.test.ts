@@ -146,7 +146,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.subject).toEqual('Petition');
   });
 
-  it('not change form subject field if there is already a attachment', async () => {
+  it('not change form subject field if there is already an attachment', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
