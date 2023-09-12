@@ -48,6 +48,12 @@ export const uploadCourtIssuedDocumentAndEditViaDocumentQC = attempt => {
   const freeText = `court document ${attempt}`;
   cy.get('#upload-description').clear().type(freeText);
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
+
+  // Fix flaky test
+  // https://github.com/flexion/ef-cms/issues/10144
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(0);
+
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.get('#document-type .select-react-element__input-container input')
