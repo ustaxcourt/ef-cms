@@ -1,6 +1,7 @@
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { DateInput } from '@web-client/ustc-ui/DateInput/DateInput';
+import { DateInputThatActuallyWorks } from '@web-client/ustc-ui/DateInput/DateInputThatActuallyWorks';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
@@ -35,17 +36,17 @@ export const AddEditCaseWorksheetModal = connect(
         <h5 className="margin-bottom-4">
           {addEditPrimaryIssueModalHelper.title}
         </h5>
-        <FormGroup className="margin-bottom-0">
-          <DateInput
-            errorText={validationErrors.finalBriefDueDate}
-            id={'final-brief-due-date'}
-            label="Final Brief Due Date"
-            showDateHint={false}
-            values={form}
-            onBlur={validateCaseWorksheetSequence}
-            onChange={updateFormValueSequence}
-          />
-        </FormGroup>
+
+        <DateInputThatActuallyWorks
+          errorText={validationErrors.finalBriefDueDate}
+          onChange={e => {
+            updateFormValueSequence({
+              key: 'finalBriefDueDate',
+              value: e.target.value,
+            });
+          }}
+        />
+
         <FormGroup>
           <select
             aria-label="status of matter"

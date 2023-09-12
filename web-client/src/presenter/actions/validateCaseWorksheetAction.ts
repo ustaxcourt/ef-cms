@@ -1,19 +1,13 @@
-import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const validateCaseWorksheetAction = ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const { docketNumber, primaryIssue, statusOfMatter } = get(state.form);
-
-  console.log(props.computedDate, '&&&&');
-
-  const finalBriefDueDate = applicationContext
-    .getUtilities()
-    .formatDateString(props.computedDate, FORMATS.YYYYMMDD);
+  const { docketNumber, finalBriefDueDate, primaryIssue, statusOfMatter } = get(
+    state.form,
+  );
 
   const errors = applicationContext
     .getUseCases()
@@ -25,6 +19,8 @@ export const validateCaseWorksheetAction = ({
         statusOfMatter,
       },
     });
+
+  console.log('errors are', errors);
 
   if (!errors) {
     return path.success();
