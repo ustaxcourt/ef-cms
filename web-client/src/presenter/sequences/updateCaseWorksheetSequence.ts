@@ -1,26 +1,31 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearFormAction } from '@web-client/presenter/actions/clearFormAction';
 import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { getComputedFormDateFactoryAction } from '@web-client/presenter/actions/getComputedFormDateFactoryAction';
 import { setCaseWorksheetAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
-import { updatePrimaryIssueAction } from '../actions/CaseWorksheet/updatePrimaryIssueAction';
-import { validatePrimaryIssueAction } from '../actions/validatePrimaryIssueAction';
+import { updateCaseWorksheetAction } from '@web-client/presenter/actions/CaseWorksheet/updateCaseWorksheetAction';
+import { validateCaseWorksheetAction } from '../actions/validateCaseWorksheetAction';
 
-export const updatePrimaryIssueSequence = [
+export const updateCaseWorksheetSequence = [
+  clearAlertsAction,
   startShowValidationAction,
-  validatePrimaryIssueAction,
+  getComputedFormDateFactoryAction(undefined),
+  validateCaseWorksheetAction,
   {
     error: [setValidationErrorsAction],
     success: showProgressSequenceDecorator([
       clearModalAction,
       stopShowValidationAction,
       clearAlertsAction,
-      updatePrimaryIssueAction,
+      updateCaseWorksheetAction,
       setCaseWorksheetAction,
       clearModalStateAction,
+      clearFormAction,
     ]),
   },
 ];

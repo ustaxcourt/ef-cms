@@ -16,7 +16,7 @@ import { validateCaseDeadlineAction } from '../actions/CaseDeadline/validateCase
 export const createCaseDeadlineSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction(undefined),
   validateCaseDeadlineAction,
   {
     error: [setValidationErrorsAction],
