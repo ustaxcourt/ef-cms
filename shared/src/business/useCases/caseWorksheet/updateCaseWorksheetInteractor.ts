@@ -12,13 +12,12 @@ import { User } from '@shared/business/entities/User';
 export const updateCaseWorksheetInteractor = async (
   applicationContext: IApplicationContext,
   {
-    docketNumber,
-    updatedProps,
+    worksheet,
   }: {
-    docketNumber: string;
-    updatedProps: Record<string, string | undefined>;
+    worksheet: RawCaseWorksheet;
   },
 ): Promise<RawCaseWorksheet> => {
+  console.log('&&&& ', worksheet);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_WORKSHEET)) {
@@ -41,18 +40,7 @@ export const updateCaseWorksheetInteractor = async (
       });
   }
 
-  const caseWorksheet = await applicationContext
-    .getPersistenceGateway()
-    .getCaseWorksheet({
-      applicationContext,
-      docketNumber,
-    });
-
-  const caseWorksheetEntity = new CaseWorksheet({
-    ...caseWorksheet,
-    ...updatedProps,
-    docketNumber,
-  }).validate();
+  const caseWorksheetEntity = new CaseWorksheet(worksheet).validate();
 
   const rawCaseWorksheet = caseWorksheetEntity.toRawObject();
 

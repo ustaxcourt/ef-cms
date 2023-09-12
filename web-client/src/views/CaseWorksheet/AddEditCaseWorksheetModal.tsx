@@ -6,19 +6,21 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const AddEditPrimaryIssueModal = connect(
+export const AddEditCaseWorksheetModal = connect(
   {
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     addEditPrimaryIssueModalHelper: state.addEditPrimaryIssueModalHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseWorksheetSequence: sequences.validateCaseWorksheetSequence,
     validationErrors: state.validationErrors,
   },
-  function AddEditPrimaryIssueModal({
+  function AddEditCaseWorksheetModal({
     addEditPrimaryIssueModalHelper,
     form,
     STATUS_OF_MATTER_OPTIONS,
     updateFormValueSequence,
+    validateCaseWorksheetSequence,
     validationErrors,
   }) {
     return (
@@ -28,38 +30,20 @@ export const AddEditPrimaryIssueModal = connect(
         preventCancelOnBlur={true}
         title="Add/Edit Case Worksheet"
         onCancelSequence="clearModalFormSequence"
-        onConfirmSequence="updatePrimaryIssueSequence"
+        onConfirmSequence="updateCaseWorksheetSequence"
       >
         <h5 className="margin-bottom-4">
           {addEditPrimaryIssueModalHelper.title}
         </h5>
         <FormGroup className="margin-bottom-0">
-          {/* <DateInput
-            errorText={validationErrors.deadlineDate}
-            id="deadline-date"
-            label="Due date"
-            values={form}
-            onBlur={validateCaseDeadlineSequence}
-            onChange={updateFormValueSequence}
-          /> */}
-
           <DateInput
             errorText={validationErrors.finalBriefDueDate}
             id={'final-brief-due-date'}
             label="Final Brief Due Date"
             showDateHint={false}
             values={form}
-            // onBlur={validateCaseDeadlineSequence}
-            // onChange={updateFormValueSequence}
-            // values={convertToDateInputValues(
-            //   formattedCase.worksheet.finalBriefDueDate,
-            // )}
-            // onValueChange={value => {
-            //   updateFinalBriefDueDateSequence({
-            //     docketNumber: formattedCase.docketNumber,
-            //     finalBriefDueDate: value === '' ? null : value,
-            //   });
-            // }}
+            onBlur={validateCaseWorksheetSequence}
+            onChange={updateFormValueSequence}
           />
         </FormGroup>
         <FormGroup>
@@ -100,4 +84,4 @@ export const AddEditPrimaryIssueModal = connect(
   },
 );
 
-AddEditPrimaryIssueModal.displayName = 'AddEditPrimaryIssueModal';
+AddEditCaseWorksheetModal.displayName = 'AddEditCaseWorksheetModal';

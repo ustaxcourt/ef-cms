@@ -1,49 +1,23 @@
-import { AddEditPrimaryIssueModal } from './AddEditPrimaryIssueModal';
+import { AddEditCaseWorksheetModal } from './AddEditCaseWorksheetModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { DateInput } from '@web-client/ustc-ui/DateInput/DateInput';
-import { DeletePrimaryIssueModal } from './DeletePrimaryIssueModal';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-function convertToDateInputValues(date: string) {
-  if (!date) {
-    return '';
-  }
-  const [year, month, day] = date.split('-');
-  return {
-    day,
-    month,
-    year,
-  };
-}
-
 export const CaseWorksheets = connect(
   {
-    STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     caseWorksheetsHelper: state.caseWorksheetsHelper,
-    openAddEditPrimaryIssueModalSequence:
-      sequences.openAddEditPrimaryIssueModalSequence,
-    openCleanModalSequence: sequences.openCleanModalSequence,
-    openDeletePrimaryIssueSequence: sequences.openDeletePrimaryIssueSequence,
+    openAddEditCaseWorksheetModalSequence:
+      sequences.openAddEditCaseWorksheetModalSequence,
     showModal: state.modal.showModal,
-    updateFinalBriefDueDateSequence: sequences.updateFinalBriefDueDateSequence,
-    updateStatusOfMatterSequence: sequences.updateStatusOfMatterSequence,
-    validationErrors: state.validationErrors,
   },
   function CaseWorksheets({
     caseWorksheetsHelper,
-    openAddEditPrimaryIssueModalSequence,
-    openDeletePrimaryIssueSequence,
+    openAddEditCaseWorksheetModalSequence,
     showModal,
-    STATUS_OF_MATTER_OPTIONS,
-    updateFinalBriefDueDateSequence,
-    updateStatusOfMatterSequence,
-    validationErrors,
   }) {
     return (
       <div className="margin-top-6">
@@ -110,58 +84,13 @@ export const CaseWorksheets = connect(
                         link
                         icon="edit"
                         onClick={() => {
-                          openAddEditPrimaryIssueModalSequence({
+                          openAddEditCaseWorksheetModalSequence({
                             docketNumber: formattedCase.docketNumber,
                           });
                         }}
                       >
                         Edit
                       </Button>
-                      {/* {!formattedCase.worksheet.primaryIssue && (
-                        <Button
-                          link
-                          className="add-primary-issue"
-                          icon="plus-circle"
-                          onClick={() => {
-                            openAddEditPrimaryIssueModalSequence({
-                              docketNumber: formattedCase.docketNumber,
-                            });
-                          }}
-                        >
-                          Add Issue
-                        </Button>
-                      )} */}
-                      {/* {formattedCase.worksheet.primaryIssue && (
-                        <div>
-                          <div>
-                            <Button
-                              link
-                              icon="edit"
-                              onClick={() => {
-                                openAddEditPrimaryIssueModalSequence({
-                                  docketNumber: formattedCase.docketNumber,
-                                });
-                              }}
-                            >
-                              Edit Issue
-                            </Button>
-                          </div>
-                          <div>
-                            <Button
-                              link
-                              className="red-warning delete-primary-issue"
-                              icon="trash"
-                              onClick={() => {
-                                openDeletePrimaryIssueSequence({
-                                  docketNumber: formattedCase.docketNumber,
-                                });
-                              }}
-                            >
-                              Delete Issue
-                            </Button>
-                          </div>
-                        </div>
-                      )} */}
                     </td>
                   </tr>
                   <tr>
@@ -186,10 +115,9 @@ export const CaseWorksheets = connect(
           </div>
         )}
 
-        {showModal === 'AddEditPrimaryIssueModal' && (
-          <AddEditPrimaryIssueModal />
+        {showModal === 'AddEditCaseWorksheetModal' && (
+          <AddEditCaseWorksheetModal />
         )}
-        {showModal === 'DeletePrimaryIssueModal' && <DeletePrimaryIssueModal />}
       </div>
     );
   },
