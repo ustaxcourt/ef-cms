@@ -6,22 +6,11 @@ export const getJudgeActivityReportCountsAction = async ({
 }: ActionProps) => {
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
 
-  const response = await applicationContext
+  return await applicationContext
     .getUseCases()
     .getCountOfCaseDocumentsFiledByJudgesInteractor(applicationContext, {
       endDate,
       judges,
       startDate,
     });
-
-  return {
-    opinions: {
-      aggregations: response.opinionAggregations,
-      total: response.opinionTotal,
-    },
-    orders: {
-      aggregations: response.orderAggregations,
-      total: response.orderTotal,
-    },
-  };
 };

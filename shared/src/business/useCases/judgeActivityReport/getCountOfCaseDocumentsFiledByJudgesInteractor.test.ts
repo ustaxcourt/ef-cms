@@ -24,25 +24,15 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
     startDate: mockStartDate,
   };
 
-  const mockEventCodeOpinionCount = {
-    aggregations: mockCountOfOpinionsIssuedByJudge.opinionAggregations,
-    total: mockCountOfOpinionsIssuedByJudge.opinionTotal,
-  };
-
-  const mockEventCodeOrderCount = {
-    aggregations: mockCountOfOrdersIssuedByJudge.orderAggregations,
-    total: mockCountOfOrdersIssuedByJudge.orderTotal,
-  };
-
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
     applicationContext
       .getPersistenceGateway()
       .fetchEventCodesCountForJudges.mockResolvedValueOnce(
-        mockEventCodeOpinionCount,
+        mockCountOfOpinionsIssuedByJudge,
       )
-      .mockResolvedValueOnce(mockEventCodeOrderCount);
+      .mockResolvedValueOnce(mockCountOfOrdersIssuedByJudge);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -98,8 +88,8 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
     });
 
     expect(results).toEqual({
-      ...mockCountOfOpinionsIssuedByJudge,
-      ...mockCountOfOrdersIssuedByJudge,
+      opinions: mockCountOfOpinionsIssuedByJudge,
+      orders: mockCountOfOrdersIssuedByJudge,
     });
   });
 

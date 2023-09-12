@@ -18,8 +18,8 @@ export const mockCountOfOpinionsWithDocType =
 export const mockOpinionsFiledTotal = 269;
 
 export const mockCountOfOpinionsIssuedByJudge = {
-  opinionAggregations: mockCountOfOpinionsWithDocType,
-  opinionTotal: mockOpinionsFiledTotal,
+  aggregations: mockCountOfOpinionsWithDocType,
+  total: mockOpinionsFiledTotal,
 };
 
 export const mockCountOfFormattedOrdersIssuedByJudge = [
@@ -66,6 +66,6 @@ export const mockCountOfOrdersWithDocType =
   );
 
 export const mockCountOfOrdersIssuedByJudge = {
-  orderAggregations: mockCountOfOrdersWithDocType,
-  orderTotal: 7,
+  aggregations: mockCountOfOrdersWithDocType,
+  total: 7,
 };

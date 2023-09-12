@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
