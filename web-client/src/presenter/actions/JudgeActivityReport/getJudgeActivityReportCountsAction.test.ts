@@ -18,16 +18,12 @@ describe('getJudgeActivityReportCountsAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockReturnValue(
-        mockCountOfOrdersIssuedByJudge,
-      );
+      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockReturnValue({
+        orders: mockCountOfOrdersIssuedByJudge,
+      });
   });
 
   it('should make a call to retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
-    const expectedOrderResult = {
-      aggregations: mockCountOfOrdersIssuedByJudge.orderAggregations,
-      total: mockCountOfOrdersIssuedByJudge.orderTotal,
-    };
     const result = await runAction(getJudgeActivityReportCountsAction, {
       modules: {
         presenter,
@@ -52,20 +48,15 @@ describe('getJudgeActivityReportCountsAction', () => {
       startDate: mockStartDate,
     });
 
-    expect(result.output.orders).toEqual(expectedOrderResult);
+    expect(result.output.orders).toEqual(mockCountOfOrdersIssuedByJudge);
   });
 
   it('should make a call to return opinions by the provided judge in the date range provided from persistence', async () => {
-    const mockExpectedOpinionResult = {
-      aggregations: mockCountOfOpinionsIssuedByJudge.opinionAggregations,
-      total: mockCountOfOpinionsIssuedByJudge.opinionTotal,
-    };
-
     applicationContext
       .getUseCases()
-      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockReturnValueOnce(
-        mockCountOfOpinionsIssuedByJudge,
-      );
+      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockReturnValueOnce({
+        opinions: mockCountOfOpinionsIssuedByJudge,
+      });
     const result = await runAction(getJudgeActivityReportCountsAction, {
       modules: {
         presenter,
@@ -90,6 +81,6 @@ describe('getJudgeActivityReportCountsAction', () => {
       startDate: mockStartDate,
     });
 
-    expect(result.output.opinions).toEqual(mockExpectedOpinionResult);
+    expect(result.output.opinions).toEqual(mockCountOfOpinionsIssuedByJudge);
   });
 });

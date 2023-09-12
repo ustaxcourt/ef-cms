@@ -17,10 +17,15 @@ export type CaseDocumentsCountType = {
 };
 
 export type CaseDocumentsAggregationReturnType = {
-  orderAggregations: CaseDocumentsCountType[];
-  opinionAggregations: CaseDocumentsCountType[];
-  orderTotal: number | undefined;
-  opinionTotal: number | undefined;
+  orders: {
+    aggregations: CaseDocumentsCountType[];
+    total: number | undefined;
+  };
+
+  opinions: {
+    aggregations: CaseDocumentsCountType[];
+    total: number | undefined;
+  };
 };
 
 // TODO: refactor JudgeActivityReportFilters to be only types for request to BE
@@ -82,9 +87,13 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
     addDocumentTypeToEventCodeAggregation(orderAggregationCount);
 
   return {
-    opinionAggregations: computedAggregatedOpinionEventCodes,
-    opinionTotal,
-    orderAggregations: computedAggregatedOrderEventCodes,
-    orderTotal,
+    opinions: {
+      aggregations: computedAggregatedOpinionEventCodes,
+      total: opinionTotal,
+    },
+    orders: {
+      aggregations: computedAggregatedOrderEventCodes,
+      total: orderTotal,
+    },
   };
 };
