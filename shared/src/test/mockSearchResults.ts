@@ -1,4 +1,4 @@
-import { COURT_ISSUED_EVENT_CODES } from '@shared/business/entities/EntityConstants';
+import { addDocumentTypeToEventCodeAggregation } from '@shared/business/useCases/judgeActivityReport/addDocumentTypeToEventCodeAggregation';
 
 export const mockCountOfFormattedOpinionsIssuedByJudge = [
   { count: 177, eventCode: 'MOP' },
@@ -10,17 +10,15 @@ export const mockCountOfFormattedOpinionsIssuedByJudge = [
   { count: 30, eventCode: 'TCOP' },
 ];
 
+export const mockCountOfOpinionsWithDocType =
+  addDocumentTypeToEventCodeAggregation(
+    mockCountOfFormattedOpinionsIssuedByJudge,
+  );
+
 export const mockOpinionsFiledTotal = 269;
 
-const expectedResults = mockCountOfFormattedOpinionsIssuedByJudge.map(item => ({
-  ...item,
-  documentType: COURT_ISSUED_EVENT_CODES.find(
-    event => event.eventCode === item.eventCode,
-  ).documentType,
-}));
-
 export const mockCountOfOpinionsIssuedByJudge = {
-  opinionAggregations: expectedResults,
+  opinionAggregations: mockCountOfOpinionsWithDocType,
   opinionTotal: mockOpinionsFiledTotal,
 };
 
@@ -62,7 +60,12 @@ export const mockCountOfFormattedOrdersIssuedByJudge = [
   { count: 0, eventCode: 'ODJ' },
 ];
 
+export const mockCountOfOrdersWithDocType =
+  addDocumentTypeToEventCodeAggregation(
+    mockCountOfFormattedOrdersIssuedByJudge,
+  );
+
 export const mockCountOfOrdersIssuedByJudge = {
-  orderAggregations: mockCountOfFormattedOrdersIssuedByJudge,
+  orderAggregations: mockCountOfOrdersWithDocType,
   orderTotal: 7,
 };

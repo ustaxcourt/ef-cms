@@ -1,9 +1,9 @@
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
+  JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
+import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -49,11 +49,6 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
     throw new InvalidRequest('The Search Params for judges are invalid');
   }
 
-  const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
-  const orderEventCodesToSearch = ORDER_EVENT_CODES.filter(
-    eventCode => !excludedOrderEventCodes.includes(eventCode),
-  );
-
   const { aggregations: opinionAggregationCount, total: opinionTotal } =
     await applicationContext
       .getPersistenceGateway()
@@ -76,7 +71,7 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
       .fetchEventCodesCountForJudges({
         applicationContext,
         params: {
-          documentEventCodes: orderEventCodesToSearch,
+          documentEventCodes: JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
           endDate: searchEntity.endDate,
           judges: searchEntity.judges,
           startDate: searchEntity.startDate,
