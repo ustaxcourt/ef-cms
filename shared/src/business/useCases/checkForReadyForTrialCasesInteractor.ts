@@ -13,7 +13,7 @@ export const checkForReadyForTrialCasesInteractor = async (
 ) => {
   applicationContext.logger.debug('Time', createISODateString());
 
-  const docketNumbers = await applicationContext
+  const docketNumbers: { docketNumber: string }[] = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
 
@@ -96,9 +96,10 @@ export const checkForReadyForTrialCasesInteractor = async (
     });
   };
 
-  const updatedCases = caseCatalog.map(checkReadyForTrial);
+  const caseUpdatePromises: Promise<void>[] =
+    caseCatalog.map(checkReadyForTrial);
 
-  await Promise.all(updatedCases);
+  await Promise.all(caseUpdatePromises);
 
   applicationContext.logger.debug('Time', createISODateString());
 };
