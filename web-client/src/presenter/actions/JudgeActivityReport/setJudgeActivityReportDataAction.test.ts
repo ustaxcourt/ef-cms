@@ -1,8 +1,8 @@
 import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
-} from '@shared/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockCountOfOpinionsIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
 import { mockCountOfOrdersIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
