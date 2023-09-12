@@ -33,7 +33,7 @@ import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsea
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../utilities/getFormattedTrialSessionDetails';
 import {

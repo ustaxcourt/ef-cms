@@ -37,7 +37,7 @@ import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRe
 import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import {

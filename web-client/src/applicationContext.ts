@@ -77,7 +77,7 @@ import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
