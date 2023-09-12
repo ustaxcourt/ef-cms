@@ -2,7 +2,7 @@ import { CUSTOM_CASE_INVENTORY_PAGE_SIZE } from '../../../../../shared/src/busin
 import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportResponse,
-} from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+} from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

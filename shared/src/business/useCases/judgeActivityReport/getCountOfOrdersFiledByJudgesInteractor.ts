@@ -1,4 +1,4 @@
-import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import { ORDER_EVENT_CODES } from '../../entities/EntityConstants';
 import {
