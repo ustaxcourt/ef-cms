@@ -3,7 +3,7 @@ import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
-import AWS from 'aws-sdk';
+import { unmarshall } from '@aws-sdk/util-dynamodb';
 
 const CHUNK_SIZE = 10000;
 export type SeachClientResultsType = {
@@ -24,9 +24,7 @@ export const formatResults = <T>(body: Record<string, any>) => {
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
-    const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
-      hit['_source'],
-    );
+    const sourceUnmarshalled = unmarshall(hit['_source']);
     sourceUnmarshalled['_score'] = hit['_score'];
 
     const isDocketEntryResultWithParentCaseMapping =
