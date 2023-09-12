@@ -1,6 +1,6 @@
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { OrdersReturnType } from '../../../../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
@@ -17,7 +17,7 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
-  orders: OrdersReturnType;
+  orders: AggregatedEventCodesType;
 }
 
 export const judgeActivityReportHelper = (

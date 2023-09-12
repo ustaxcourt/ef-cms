@@ -293,7 +293,6 @@ const useCases = {
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
-
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForSectionInteractor,

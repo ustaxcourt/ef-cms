@@ -76,8 +76,6 @@ import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getComp
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getConsolidatedCasesByCaseLambda } from './lambdas/cases/getConsolidatedCasesByCaseLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
-import { getCountOfOpinionsFiledByJudgeLambda } from '@web-api/lambdas/reports/getCountOfOpinionsFiledByJudgeLambda';
-import { getCountOfOrdersFiledByJudgeLambda } from '@web-api/lambdas/reports/getCountOfOrdersFiledByJudgeLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
@@ -891,14 +889,6 @@ app.get(
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
   );
-  // app.post(
-  //   '/judge-activity-report/opinions',
-  //   lambdaWrapper(getCountOfOpinionsFiledByJudgeLambda),
-  // );
-  // app.post(
-  //   '/judge-activity-report/orders',
-  //   lambdaWrapper(getCountOfOrdersFiledByJudgeLambda),
-  // );
 }
 
 /**

@@ -1,3 +1,4 @@
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
@@ -10,22 +11,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
-export type CaseDocumentsCountType = {
-  count: number;
-  documentType: string | undefined;
-  eventCode: string;
-};
-
 export type CaseDocumentsAggregationReturnType = {
-  orders: {
-    aggregations: CaseDocumentsCountType[];
-    total: number | undefined;
-  };
-
-  opinions: {
-    aggregations: CaseDocumentsCountType[];
-    total: number | undefined;
-  };
+  orders: AggregatedEventCodesType;
+  opinions: AggregatedEventCodesType;
 };
 
 // TODO: refactor JudgeActivityReportFilters to be only types for request to BE
