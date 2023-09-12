@@ -308,7 +308,6 @@ export const baseState = {
       tab: null,
     },
   },
-
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
   docketEntryId: null,
   docketRecordIndex: 0,
@@ -319,7 +318,6 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-
   form: {} as any,
   // shared object for creating new entities, clear before using
   header: {
@@ -341,6 +339,7 @@ export const baseState = {
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
+    docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
   },
