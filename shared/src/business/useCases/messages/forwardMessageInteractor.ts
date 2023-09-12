@@ -1,7 +1,10 @@
-import { replyToMessage } from './replyToMessageInteractor';
+import {
+  MessageWithAParentType,
+  replyToMessage,
+} from './replyToMessageInteractor';
 
 export const forwardMessageInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
@@ -11,17 +14,8 @@ export const forwardMessageInteractor = async (
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    docketNumber: string;
-    draftAttachments: any;
-    message: string;
-    parentMessageId: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: MessageWithAParentType,
+): Promise<RawMessage> => {
   return await replyToMessage(applicationContext, {
     attachments,
     docketNumber,
