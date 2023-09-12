@@ -7,17 +7,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 
-// TODO: refactor JudgeActivityReportFilters to be only types for request to BE
-export type JudgeActivityReportFilters = {
-  endDate: string;
-  startDate: string;
-  judgeName?: string;
-  judgeId?: string;
-  judges?: string[];
-  judgeNameToDisplayForHeader?: string;
-  searchType: string;
-};
-
 export type OrdersAndOpinionResultCountTypes = {
   count: number;
   documentType: string | undefined;

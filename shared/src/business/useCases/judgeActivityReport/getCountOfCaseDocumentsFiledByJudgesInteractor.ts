@@ -17,8 +17,10 @@ export type CaseDocumentsCountType = {
 };
 
 export type CaseDocumentsAggregationReturnType = {
-  aggregations: CaseDocumentsCountType[];
-  total: number | undefined;
+  orderAggregations: CaseDocumentsCountType[];
+  opinionAggregations: CaseDocumentsCountType[];
+  orderTotal: number | undefined;
+  opinionTotal: number | undefined;
 };
 
 // TODO: refactor JudgeActivityReportFilters to be only types for request to BE
@@ -29,7 +31,6 @@ export type JudgeActivityReportFilters = {
   judgeId?: string;
   judges?: string[];
   judgeNameToDisplayForHeader?: string;
-  searchType: string;
 };
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
@@ -53,30 +54,42 @@ export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
     eventCode => !excludedOrderEventCodes.includes(eventCode),
   );
 
-  let computeDocumentEventCodes; // type
+  const { aggregations: opinionAggregationCount, total: opinionTotal } =
+    await applicationContext
+      .getPersistenceGateway()
+      .fetchEventCodesCountForJudges({
+        applicationContext,
+        params: {
+          documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+          endDate: searchEntity.endDate,
+          judges: searchEntity.judges,
+          startDate: searchEntity.startDate,
+        },
+      });
 
-  if (params.searchType === 'order') {
-    computeDocumentEventCodes = orderEventCodesToSearch;
-  }
+  const computedAggregatedOpinionEventCodes =
+    addDocumentTypeToEventCodeAggregation(opinionAggregationCount);
 
-  if (params.searchType === 'opinion') {
-    computeDocumentEventCodes = OPINION_EVENT_CODES_WITH_BENCH_OPINION;
-  }
+  const { aggregations: orderAggregationCount, total: orderTotal } =
+    await applicationContext
+      .getPersistenceGateway()
+      .fetchEventCodesCountForJudges({
+        applicationContext,
+        params: {
+          documentEventCodes: orderEventCodesToSearch,
+          endDate: searchEntity.endDate,
+          judges: searchEntity.judges,
+          startDate: searchEntity.startDate,
+        },
+      });
 
-  const { aggregations, total } = await applicationContext
-    .getPersistenceGateway()
-    .fetchEventCodesCountForJudges({
-      applicationContext,
-      params: {
-        documentEventCodes: computeDocumentEventCodes,
-        endDate: searchEntity.endDate,
-        judges: searchEntity.judges,
-        startDate: searchEntity.startDate,
-      },
-    });
+  const computedAggregatedOrderEventCodes =
+    addDocumentTypeToEventCodeAggregation(orderAggregationCount);
 
-  const computedAggregatedEventCodes =
-    addDocumentTypeToEventCodeAggregation(aggregations);
-
-  return { aggregations: computedAggregatedEventCodes, total };
+  return {
+    opinionAggregations: computedAggregatedOpinionEventCodes,
+    opinionTotal,
+    orderAggregations: computedAggregatedOrderEventCodes,
+    orderTotal,
+  };
 };

@@ -1,5 +1,7 @@
-import { CaseDocumentsAggregationReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
-import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import {
+  CaseDocumentsAggregationReturnType,
+  JudgeActivityReportFilters,
+} from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { get } from '../requests';
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = (
