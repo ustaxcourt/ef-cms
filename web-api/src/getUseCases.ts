@@ -87,6 +87,7 @@ import { getCasesForUserInteractor } from '../../shared/src/business/useCases/ge
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor';
+import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getCountOfOpinionsFiledByJudgesInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor';
 import { getCountOfOrdersFiledByJudgesInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
@@ -293,6 +294,7 @@ const useCases = {
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
   getConsolidatedCasesByCaseInteractor,
+  getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCountOfOpinionsFiledByJudgesInteractor,
   getCountOfOrdersFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
