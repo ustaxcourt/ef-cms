@@ -11,7 +11,7 @@ export const checkForReadyForTrialCasesInteractor = async (
 ) => {
   applicationContext.logger.debug('Time', createISODateString());
 
-  const docketNumbers = await applicationContext
+  const docketNumbers: { docketNumber: string }[] = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
 
@@ -36,7 +36,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     }
   };
 
-  const caseUpdatePromises: Promise[] = [];
+  const caseUpdatePromises: Promise<void>[] = [];
 
   for (let caseRecord of caseCatalog) {
     const { docketNumber } = caseRecord;
