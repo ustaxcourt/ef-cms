@@ -90,7 +90,6 @@ describe('getCountOfOpinionsFiledByJudgesInteractor', () => {
         documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
         endDate: '2020-03-22T03:59:59.999Z',
         judges: mockJudges,
-        searchType: 'opinion',
         startDate: '2020-02-12T05:00:00.000Z',
       },
     });

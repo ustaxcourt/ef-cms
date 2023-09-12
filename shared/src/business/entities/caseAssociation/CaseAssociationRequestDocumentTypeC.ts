@@ -43,7 +43,7 @@ export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return SupportingDocumentInformationFactory(
+        return new SupportingDocumentInformationFactory(
           item,
           CaseAssociationRequestDocumentTypeC.VALIDATION_ERROR_MESSAGES,
         );
