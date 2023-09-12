@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
 
@@ -174,13 +174,13 @@ export const updatePractitionerUserInteractor = async (
       user: oldUser,
       websocketMessagePrefix: 'admin',
     });
+  } else {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'admin_contact_full_update_complete',
+      },
+      userId: requestUser.userId,
+    });
   }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'admin_contact_full_update_complete',
-    },
-    userId: requestUser.userId,
-  });
 };
