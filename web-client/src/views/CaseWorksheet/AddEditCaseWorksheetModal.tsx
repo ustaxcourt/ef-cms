@@ -39,6 +39,8 @@ export const AddEditCaseWorksheetModal = connect(
 
         <DateInputThatActuallyWorks
           errorText={validationErrors.finalBriefDueDate}
+          formGroupClassNames={'width-half'}
+          label={'Final brief due date'}
           onChange={e => {
             updateFormValueSequence({
               key: 'finalBriefDueDate',
@@ -48,9 +50,17 @@ export const AddEditCaseWorksheetModal = connect(
         />
 
         <FormGroup>
+          <label
+            className="usa-label"
+            htmlFor="status-of-matter"
+            id="status-of-matter-label"
+          >
+            Status of matter
+          </label>
           <select
-            aria-label="status of matter"
+            aria-labelledby="status-of-matter-label"
             className="usa-select"
+            id="status-of-matter"
             name="statusOfMatter"
             value={form.statusOfMatter}
             onChange={e => {
@@ -68,12 +78,20 @@ export const AddEditCaseWorksheetModal = connect(
             ))}
           </select>
         </FormGroup>
+
         <FormGroup
           className="margin-bottom-2"
           errorText={validationErrors.primaryIssue}
         >
+          <label
+            className="usa-label"
+            htmlFor="primary-issue"
+            id="primary-issue-label"
+          >
+            Primary issue
+          </label>
           <BindedTextarea
-            aria-label="notes"
+            aria-labelledby="primary-issue-label"
             bind="form.primaryIssue"
             id="primary-issue"
           />

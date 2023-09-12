@@ -2,7 +2,12 @@ import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 
-export const DateInputThatActuallyWorks = ({ errorText, onChange }) => {
+export const DateInputThatActuallyWorks = ({
+  errorText,
+  formGroupClassNames,
+  label,
+  onChange,
+}) => {
   const formGroupInputRef = useRef<HTMLInputElement>(null);
   const dateInputRef = useRef<HTMLInputElement>(null);
 
@@ -22,20 +27,20 @@ export const DateInputThatActuallyWorks = ({ errorText, onChange }) => {
   }, [formGroupInputRef]);
 
   return (
-    <FormGroup errorText={errorText} formGroupRef={formGroupInputRef}>
-      <label
-        className="usa-label"
-        htmlFor="appointment-date"
-        id="appointment-date-label"
-      >
-        Appointment date
+    <FormGroup
+      className={formGroupClassNames}
+      errorText={errorText}
+      formGroupRef={formGroupInputRef}
+    >
+      <label className="usa-label" htmlFor="date-picker" id="date-picker-label">
+        {label}
       </label>
       <div className="usa-date-picker">
         <input
-          aria-labelledby="appointment-date-label"
+          aria-labelledby="date-picker-label"
           className="usa-input"
-          id="appointment-date"
-          name="appointment-date"
+          id="date-picker"
+          name="date-picker"
           ref={dateInputRef}
           type="text"
         />
