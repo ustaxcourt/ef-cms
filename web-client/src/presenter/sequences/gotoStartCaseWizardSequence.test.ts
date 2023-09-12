@@ -3,7 +3,7 @@ import {
   DEFAULT_PROCEDURE_TYPE,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoStartCaseWizardSequence } from '../sequences/gotoStartCaseWizardSequence';
 import { presenter } from '../presenter-mock';
 
