@@ -130,7 +130,7 @@ export const AdvancedSearch = connect(
               <select
                 aria-label="advanced search type"
                 className="usa-select"
-                id="advanced-search-type-mobile-selector"
+                data-test="advanced-search-type-mobile-selector"
                 value={advancedSearchTab}
                 onChange={e => {
                   cerebralBindSimpleSetStateSequence({
@@ -142,7 +142,9 @@ export const AdvancedSearch = connect(
                 <option value={searchTabs.CASE}>Case</option>
                 <option value={searchTabs.ORDER}>Order</option>
                 <option value={searchTabs.OPINION}>Opinion</option>
-                <option value={searchTabs.PRACTITIONER}>Practitioner</option>
+                {advancedSearchHelper.showPractitionerSearch && (
+                  <option value={searchTabs.PRACTITIONER}>Practitioner</option>
+                )}
               </select>
             </div>
             {(!advancedSearchTab || advancedSearchTab === searchTabs.CASE) && (
