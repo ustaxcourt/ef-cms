@@ -8,7 +8,7 @@ export const forwardMessageAction = async ({
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
-  const { attachments, parentMessageId } = await applicationContext
+  const { parentMessageId } = await applicationContext
     .getUseCases()
     .forwardMessageInteractor(applicationContext, {
       docketNumber,
@@ -17,9 +17,9 @@ export const forwardMessageAction = async ({
     });
 
   let messageViewerDocumentToDisplay;
-  if (attachments) {
+  if (form.attachments.length) {
     messageViewerDocumentToDisplay = {
-      documentId: attachments[attachments.length - 1].documentId,
+      documentId: form.attachments[0].documentId,
     };
   }
 
