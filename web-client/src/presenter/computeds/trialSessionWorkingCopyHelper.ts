@@ -5,6 +5,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { omitBy, partition, pickBy } from 'lodash';
@@ -54,6 +55,18 @@ const isCaseTrialStatusEnabledInFilters = (
   return isCaseWithoutTrialStatus || isCaseTrialStatusFilterEnabled;
 };
 
+const appendUserNotes = <T>(
+  aCase: { docketNumber: string } & T,
+  userNotesDictionary: {
+    [docketNumber: string]: UserCaseNote;
+  },
+): T & { userNotes: string } => {
+  const userNotes: string = userNotesDictionary[aCase.docketNumber]
+    ? userNotesDictionary[aCase.docketNumber].notes
+    : '';
+  return { ...aCase, userNotes };
+};
+
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -94,13 +107,7 @@ export const trialSessionWorkingCopyHelper = (
         .formatCaseForTrialSession({ applicationContext, caseItem }),
     )
     .sort(compareCasesByDocketNumber)
-    .map(aCase => {
-      let userNotes1: string = '';
-      if (userNotes[aCase.docketNumber]) {
-        userNotes1 = userNotes[aCase.docketNumber].notes;
-      }
-      return { ...aCase, userNotes: userNotes1 };
-    })
+    .map(aCase => appendUserNotes(aCase, userNotes))
     .map(aCase => {
       const trialSessionCase = trialSession.caseOrder?.find(
         orderCase => orderCase.docketNumber === aCase.docketNumber,
