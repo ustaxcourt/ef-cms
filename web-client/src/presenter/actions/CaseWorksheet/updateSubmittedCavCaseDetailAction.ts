@@ -10,16 +10,6 @@ export const updateSubmittedCavCaseDetailAction = async ({
 
   store.unset(state.judgeDashboardCaseWorksheetErrors[docketNumber]);
 
-  // if (
-  //   finalBriefDueDate !== '' &&
-  //   !applicationContext.getUtilities().isValidDateString(finalBriefDueDate)
-  // ) {
-  //   store.set(state.judgeDashboardCaseWorksheetErrors[docketNumber], {
-  //     finalBriefDueDate: 'Enter a valid due date.',
-  //   });
-  //   return;
-  // }
-
   await applicationContext
     .getUseCases()
     .updateCaseWorksheetInfoInteractor(applicationContext, {
