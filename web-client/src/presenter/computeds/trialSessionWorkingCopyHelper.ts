@@ -5,6 +5,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
@@ -67,6 +68,17 @@ const appendUserNotes = <T>(
   return { ...aCase, userNotes };
 };
 
+const appendCalendarNotes = <T>(
+  aCase: { docketNumber: string } & T,
+  trialSession: TrialSessionState,
+): T & { calendarNotes: string } => {
+  const trialSessionCase = trialSession.caseOrder?.find(
+    orderCase => orderCase.docketNumber === aCase.docketNumber,
+  );
+  const calendarNotes = trialSessionCase ? trialSessionCase.calendarNotes : '';
+  return { ...aCase, calendarNotes: calendarNotes || '' };
+};
+
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -108,18 +120,7 @@ export const trialSessionWorkingCopyHelper = (
     )
     .sort(compareCasesByDocketNumber)
     .map(aCase => appendUserNotes(aCase, userNotes))
-    .map(aCase => {
-      const trialSessionCase = trialSession.caseOrder?.find(
-        orderCase => orderCase.docketNumber === aCase.docketNumber,
-      );
-      let calendarNotes: string | undefined;
-      if (trialSessionCase) {
-        // eslint-disable-next-line prefer-destructuring
-        calendarNotes = trialSessionCase.calendarNotes;
-      }
-
-      return { ...aCase, calendarNotes };
-    })
+    .map(aCase => appendCalendarNotes(aCase, trialSession))
     .map(aCase => {
       const nestedConsolidatedCases: (typeof aCase)[] = [];
       return { ...aCase, nestedConsolidatedCases };
