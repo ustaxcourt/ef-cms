@@ -1,7 +1,3 @@
-import {
-  CaseWorksheet,
-  RawCaseWorksheet,
-} from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   InvalidRequest,
@@ -12,6 +8,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
@@ -173,11 +170,10 @@ const getCases = async (
           applicationContext,
           docketNumber: caseRecord.docketNumber,
         });
-      const caseWorkSheetEntity = new CaseWorksheet(caseWorksheet);
 
       return {
         ...caseRecord,
-        ...caseWorkSheetEntity,
+        caseWorksheet,
       } as unknown as RawCaseWithWorksheet;
     }),
   );
