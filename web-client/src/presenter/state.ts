@@ -4,7 +4,7 @@ import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocke
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
-import { addEditPrimaryIssueModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditPrimaryIssueModalHelper';
+import { addEditCaseWorksheetModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditCaseWorksheetModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -139,7 +139,7 @@ export const computeds = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addDocketNumbersModalHelper,
-  addEditPrimaryIssueModalHelper,
+  addEditCaseWorksheetModalHelper,
   addToTrialSessionModalHelper,
   addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,

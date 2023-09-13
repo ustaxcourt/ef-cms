@@ -462,7 +462,6 @@ import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntr
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
 import { updateFileDocumentWizardFormValueSequence } from './sequences/updateFileDocumentWizardFormValueSequence';
-import { updateFinalBriefDueDateSequence } from '@web-client/presenter/sequences/updateFinalBriefDueDateSequence';
 import { updateFormValueAndCaseCaptionSequence } from './sequences/updateFormValueAndCaseCaptionSequence';
 import { updateFormValueAndSecondaryContactInfoSequence } from './sequences/updateFormValueAndSecondaryContactInfoSequence';
 import { updateFormValueSequence } from './sequences/updateFormValueSequence';
@@ -484,7 +483,6 @@ import { updateSessionMetadataSequence } from './sequences/updateSessionMetadata
 import { updateStartCaseFormValueSequence } from './sequences/updateStartCaseFormValueSequence';
 import { updateStartCaseInternalPartyTypeSequence } from './sequences/updateStartCaseInternalPartyTypeSequence';
 import { updateStatisticsFormValueSequence } from './sequences/updateStatisticsFormValueSequence';
-import { updateStatusOfMatterSequence } from '@web-client/presenter/sequences/updateStatusOfMatterSequence';
 import { updateTrialSessionCompleteSequence } from './sequences/updateTrialSessionCompleteSequence';
 import { updateTrialSessionFormDataSequence } from './sequences/updateTrialSessionFormDataSequence';
 import { updateTrialSessionSequence } from './sequences/updateTrialSessionSequence';
@@ -997,7 +995,6 @@ export const presenterSequences = {
   updateDocketEntryMetaDocumentFormValueSequence,
   updateDocketNumberSearchFormSequence,
   updateFileDocumentWizardFormValueSequence,
-  updateFinalBriefDueDateSequence,
   updateFormValueAndCaseCaptionSequence,
   updateFormValueAndSecondaryContactInfoSequence,
   updateFormValueSequence,
@@ -1019,7 +1016,6 @@ export const presenterSequences = {
   updateStartCaseFormValueSequence,
   updateStartCaseInternalPartyTypeSequence,
   updateStatisticsFormValueSequence,
-  updateStatusOfMatterSequence,
   updateTrialSessionCompleteSequence,
   updateTrialSessionFormDataSequence,
   updateTrialSessionSequence,

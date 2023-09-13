@@ -38,7 +38,6 @@ import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
 import { deleteCounselFromCaseLambda } from './lambdas/cases/deleteCounselFromCaseLambda';
 import { deleteDeficiencyStatisticLambda } from './lambdas/cases/deleteDeficiencyStatisticLambda';
 import { deletePractitionerDocumentLambda } from './lambdas/practitioners/deletePractitionerDocumentLambda';
-import { deletePrimaryIssueLambda } from '@web-api/lambdas/caseWorksheet/deletePrimaryIssueLambda';
 import { deleteTrialSessionLambda } from './lambdas/trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './lambdas/caseNote/deleteUserCaseNoteLambda';
 import { dismissNOTTReminderForTrialLambda } from './lambdas/trialSessions/dismissNOTTReminderForTrialLambda';
@@ -618,10 +617,6 @@ app.use(logger());
  */
 {
   app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
-  app.post(
-    '/case-worksheet/:docketNumber/primary-issue/delete',
-    lambdaWrapper(deletePrimaryIssueLambda),
-  );
 }
 
 /**
