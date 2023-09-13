@@ -6,18 +6,24 @@ export const updateCaseWorksheetAction = async ({
   get,
   props,
 }: ActionProps) => {
-  const { docketNumber, primaryIssue, statusOfMatter } = get(state.form);
+  const { docketNumber, finalBriefDueDate, primaryIssue, statusOfMatter } = get(
+    state.form,
+  );
 
-  const finalBriefDueDate = applicationContext
+  const initialLuxonObject = applicationContext
     .getUtilities()
-    .formatDateString(props.computedDate, FORMATS.YYYYMMDD);
+    .prepareDateFromString(finalBriefDueDate, FORMATS.MMDDYYYY);
+
+  const finalBriefDueDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(initialLuxonObject, FORMATS.YYYYMMDD);
 
   const updatedWorksheet = await applicationContext
     .getUseCases()
     .updateCaseWorksheetInteractor(applicationContext, {
       worksheet: {
         docketNumber,
-        finalBriefDueDate,
+        finalBriefDueDate: finalBriefDueDateFormatted,
         primaryIssue,
         statusOfMatter,
       },

@@ -2,7 +2,6 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '@web-client/presenter/actions/clearFormAction';
 import { clearModalAction } from '@web-client/presenter/actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getComputedFormDateFactoryAction } from '@web-client/presenter/actions/getComputedFormDateFactoryAction';
 import { setCaseWorksheetAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -14,7 +13,6 @@ import { validateCaseWorksheetAction } from '../actions/validateCaseWorksheetAct
 export const updateCaseWorksheetSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction(undefined),
   validateCaseWorksheetAction,
   {
     error: [setValidationErrorsAction],
