@@ -1,5 +1,4 @@
 import { CasesClosedType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { ConsolidatedCasesGroupCountMapResponseType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import {
   JudgeActivityReportFilters,
   OrdersReturnType,
@@ -12,7 +11,6 @@ export type JudgeActivityReportState = {
   judgeActivityReportData: {
     trialSessions?: TrialSessionReturnType;
     casesClosedByJudge?: CasesClosedType;
-    consolidatedCasesGroupCountMap?: ConsolidatedCasesGroupCountMapResponseType;
     opinions?: OpinionsReturnType;
     orders?: OrdersReturnType;
     submittedAndCavCasesByJudge?: RawCase[];
