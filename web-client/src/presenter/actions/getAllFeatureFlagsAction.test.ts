@@ -1,7 +1,7 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getAllFeatureFlagsAction } from './getAllFeatureFlagsAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getAllFeatureFlagsAction', () => {
   const mockFeatureFlagsObject = {

@@ -1,7 +1,7 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
-import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
-import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
