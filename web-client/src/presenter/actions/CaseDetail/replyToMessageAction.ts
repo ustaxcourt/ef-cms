@@ -13,6 +13,7 @@ export const replyToMessageAction = async ({
     .replyToMessageInteractor(applicationContext, {
       docketNumber,
       ...form,
+      attachments: [...form.attachments, ...form.draftAttachments],
     });
 
   let messageViewerDocumentToDisplay;
