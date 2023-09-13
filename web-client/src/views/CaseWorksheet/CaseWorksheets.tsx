@@ -77,7 +77,9 @@ export const CaseWorksheets = connect(
                     <td>{formattedCase.status}</td>
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
-                    <td>{formattedCase.worksheet.finalBriefDueDate}</td>
+                    <td>
+                      {formattedCase.worksheet.finalBriefDueDateFormatted}
+                    </td>
                     <td>{formattedCase.worksheet.statusOfMatter}</td>
                     <td>
                       <Button

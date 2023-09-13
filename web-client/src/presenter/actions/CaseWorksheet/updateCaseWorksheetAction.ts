@@ -10,20 +10,12 @@ export const updateCaseWorksheetAction = async ({
     state.form,
   );
 
-  const initialLuxonObject = applicationContext
-    .getUtilities()
-    .prepareDateFromString(finalBriefDueDate, FORMATS.MMDDYYYY);
-
-  const finalBriefDueDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(initialLuxonObject, FORMATS.YYYYMMDD);
-
   const updatedWorksheet = await applicationContext
     .getUseCases()
     .updateCaseWorksheetInteractor(applicationContext, {
       worksheet: {
         docketNumber,
-        finalBriefDueDate: finalBriefDueDateFormatted,
+        finalBriefDueDate,
         primaryIssue,
         statusOfMatter,
       },
