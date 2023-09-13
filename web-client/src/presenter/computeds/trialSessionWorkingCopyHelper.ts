@@ -75,7 +75,7 @@ export const trialSessionWorkingCopyHelper = (
   } = get(state.trialSessionWorkingCopy);
 
   //get an array of strings of the trial statuses that are set to true
-  const trueFilters = Object.keys(pickBy(filters));
+  const enabledTrialStatusFilters = Object.keys(pickBy(filters));
 
   const formattedCases = (trialSession.calendaredCases || [])
     .slice()
@@ -84,7 +84,7 @@ export const trialSessionWorkingCopyHelper = (
       isCaseTrialStatusEnabledInFilters(
         calendaredCase,
         caseMetadata,
-        trueFilters,
+        enabledTrialStatusFilters,
       ),
     )
     .map(caseItem =>
