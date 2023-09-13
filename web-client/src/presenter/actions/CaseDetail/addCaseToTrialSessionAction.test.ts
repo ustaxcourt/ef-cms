@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { addCaseToTrialSessionAction } from './addCaseToTrialSessionAction';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 

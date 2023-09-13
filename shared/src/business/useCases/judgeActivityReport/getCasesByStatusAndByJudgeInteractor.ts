@@ -1,5 +1,8 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  InvalidRequest,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -84,25 +87,18 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const prohibitedDocketEntries = ['ODD', 'DEC', 'OAD', 'SDEC'];
 
-  const casesToFilterOut = await applicationContext
+  const docketNumbersFilterOut = await applicationContext
     .getPersistenceGateway()
-    .getCasesByEventCodes({
-      applicationContext,
-      params: {
-        cases: cavAndSubmittedCases,
-        eventCodes: prohibitedDocketEntries,
-      },
+    .getDocketNumbersWithServedEventCodes(applicationContext, {
+      cases: cavAndSubmittedCases,
+      eventCodes: prohibitedDocketEntries,
     });
-
-  const formatedCasesToFilterOut = casesToFilterOut.map(
-    caseI => caseI.docketNumber,
-  );
 
   const finalListOfCases = await Promise.all(
     cavAndSubmittedCases
       .filter(
         caseInfo =>
-          !formatedCasesToFilterOut.includes(caseInfo.docketNumber) &&
+          !docketNumbersFilterOut.includes(caseInfo.docketNumber) &&
           caseInfo.caseStatusHistory,
       )
       .map(async caseInfo => {
