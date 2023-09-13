@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { InvalidEntityError } from '../../errors/errors';
+import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -71,12 +71,7 @@ function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   return errors;
 }
 
-/**
- * returns all of the validation errors after being converted to their formatted output
- *
- * @returns {object} the formatted errors
- */
-function getFormattedValidationErrors(entity): {} | null {
+function getFormattedValidationErrors(entity): Record<string, string> | null {
   const keys = Object.keys(entity);
   const obj = {};
   let errors: {} | null = null;

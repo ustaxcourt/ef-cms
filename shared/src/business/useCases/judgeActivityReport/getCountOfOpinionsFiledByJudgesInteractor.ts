@@ -1,4 +1,4 @@
-import { InvalidRequest, UnauthorizedError } from '@shared/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   JudgeActivityReportFilters,
   OrdersAndOpinionResultCountTypes,
@@ -40,7 +40,6 @@ export const getCountOfOpinionsFiledByJudgesInteractor = async (
         documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
         endDate: searchEntity.endDate,
         judges: searchEntity.judges,
-        searchType: 'opinion',
         startDate: searchEntity.startDate,
       },
     });

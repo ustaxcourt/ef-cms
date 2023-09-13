@@ -17,6 +17,7 @@ import { confirmAuthCodeLocal } from './persistence/cognito/confirmAuthCodeLocal
 import { createCase } from './persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
+import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
 import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
@@ -64,7 +65,6 @@ import {
   getDocketNumbersByUser,
 } from './persistence/dynamo/cases/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from './persistence/dynamo/cases/getCasesByDocketNumbers';
-import { getCasesByEventCodes } from './persistence/elasticsearch/getCasesByEventCodes';
 import { getCasesByFilters } from './persistence/elasticsearch/getCasesByFilters';
 import { getCasesByLeadDocketNumber } from './persistence/dynamo/cases/getCasesByLeadDocketNumber';
 import { getCasesByUserId } from './persistence/elasticsearch/getCasesByUserId';
@@ -80,6 +80,7 @@ import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus'
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
+import { getDocketNumbersWithServedEventCodes } from './persistence/elasticsearch/getDocketNumbersWithServedEventCodes';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -147,6 +148,7 @@ import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda'
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
 import { saveWorkItem } from './persistence/dynamo/workitems/saveWorkItem';
 import { saveWorkItemForDocketClerkFilingExternalDocument } from './persistence/dynamo/workitems/saveWorkItemForDocketClerkFilingExternalDocument';
+import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
 import { setMessageAsRead } from './persistence/dynamo/messages/setMessageAsRead';
 import { setPriorityOnAllWorkItems } from './persistence/dynamo/workitems/setPriorityOnAllWorkItems';
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
@@ -290,6 +292,7 @@ const gatewayMethods = {
   confirmAuthCode: process.env.IS_LOCAL
     ? confirmAuthCodeLocal
     : confirmAuthCode,
+  createChangeOfAddressJob,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
@@ -316,7 +319,6 @@ const gatewayMethods = {
   getCaseMetadataWithCounsel,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
-  getCasesByEventCodes,
   getCasesByFilters,
   getCasesByLeadDocketNumber,
   getCasesByUserId,
@@ -332,6 +334,7 @@ const gatewayMethods = {
   getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
+  getDocketNumbersWithServedEventCodes,
   getDocument,
   getDocumentIdFromSQSMessage,
   getDocumentQCInboxForSection,
@@ -384,6 +387,7 @@ const gatewayMethods = {
     : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   updateUserCaseMapping,
   verifyCaseForUser,
