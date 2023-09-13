@@ -1,7 +1,7 @@
 import { isLeadCase as isLeadCaseImport } from '../entities/cases/Case';
 
 export const setConsolidationFlagsForDisplay = <T>(
-  caseItem: { leadDocketNumber?: string } & T,
+  caseItem: { docketNumber: string; leadDocketNumber?: string } & T,
   theCases: { docketNumber: string }[] = [],
 ): T & {
   inConsolidatedGroup: boolean;
