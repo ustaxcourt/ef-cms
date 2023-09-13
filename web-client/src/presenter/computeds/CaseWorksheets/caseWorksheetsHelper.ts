@@ -29,7 +29,15 @@ export const caseWorksheetsHelper = (
   } = get(state.submittedAndCavCases);
 
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
-  worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
+  worksheets.forEach(ws => {
+    ws.finalBriefDueDate = applicationContext
+      .getUtilities()
+      .formatDateString(
+        ws.finalBriefDueDate,
+        applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+      );
+    worksheetsObj[ws.docketNumber] = ws;
+  });
 
   const today = applicationContext
     .getUtilities()
