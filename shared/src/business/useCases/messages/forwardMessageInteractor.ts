@@ -1,7 +1,5 @@
-import {
-  MessageWithAParentType,
-  replyToMessage,
-} from './replyToMessageInteractor';
+import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
+import { replyToMessage } from './replyToMessageInteractor';
 
 export const forwardMessageInteractor = async (
   applicationContext: IApplicationContext,
@@ -14,7 +12,7 @@ export const forwardMessageInteractor = async (
     subject,
     toSection,
     toUserId,
-  }: MessageWithAParentType,
+  }: ReplyMessageType,
 ): Promise<RawMessage> => {
   return await replyToMessage(applicationContext, {
     attachments,

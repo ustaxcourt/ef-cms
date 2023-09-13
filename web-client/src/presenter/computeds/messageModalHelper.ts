@@ -32,7 +32,10 @@ export const messageModalHelper = (
       .getUtilities()
       .getFormattedCaseDetail({ applicationContext, caseDetail });
 
-  const documents: RawDocketEntry & { isAlreadyAttached: boolean }[] = [];
+  const documents: (RawDocketEntry & {
+    isAlreadyAttached: boolean;
+    title: string;
+  })[] = [];
   for (let entry of formattedDocketEntries) {
     if (entry.isFileAttached && entry.isOnDocketRecord) {
       entry.title = entry.descriptionDisplay || entry.documentType;

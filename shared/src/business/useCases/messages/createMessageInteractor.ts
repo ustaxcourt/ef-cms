@@ -10,7 +10,6 @@ export type MessageType = {
   attachments: {
     documentId: string;
   }[];
-  docketNumber: string;
   draftAttachments: {
     documentId: string;
   }[];
@@ -18,6 +17,15 @@ export type MessageType = {
   subject: string;
   toSection: string;
   toUserId: string;
+};
+
+export type MessageWithMetaData = MessageType & {
+  docketNumber: string;
+};
+
+export type ReplyMessageType = MessageType & {
+  parentMessageId: string;
+  docketNumber: string;
 };
 
 export const createMessageInteractor = async (
@@ -30,7 +38,7 @@ export const createMessageInteractor = async (
     subject,
     toSection,
     toUserId,
-  }: MessageType,
+  }: MessageWithMetaData,
 ): Promise<RawMessage> => {
   const authorizedUser = applicationContext.getCurrentUser();
 

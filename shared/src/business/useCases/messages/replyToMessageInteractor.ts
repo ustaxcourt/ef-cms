@@ -1,15 +1,11 @@
 import { Case } from '../../entities/cases/Case';
 import { Message } from '../../entities/Message';
-import { MessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
-
-export type MessageWithAParentType = MessageType & {
-  parentMessageId: string;
-};
 
 export const replyToMessage = async (
   applicationContext: IApplicationContext,
@@ -22,7 +18,7 @@ export const replyToMessage = async (
     subject,
     toSection,
     toUserId,
-  }: MessageWithAParentType,
+  }: ReplyMessageType,
 ): Promise<RawMessage> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -91,7 +87,7 @@ export const replyToMessageInteractor = (
     subject,
     toSection,
     toUserId,
-  }: MessageWithAParentType,
+  }: ReplyMessageType,
 ): Promise<RawMessage> => {
   return replyToMessage(applicationContext, {
     attachments,
