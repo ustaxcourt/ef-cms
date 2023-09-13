@@ -87,8 +87,6 @@ export const trialSessionWorkingCopyHelper = (
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
   trialStatusOptions: TrialStatusOption;
-  unassignedLabel: 'Unassigned' | 'Trial Status';
-  updatedTrialSessionTypesEnabled: boolean;
 } => {
   const trialSession = get(state.trialSession);
   const {
@@ -170,7 +168,5 @@ export const trialSessionWorkingCopyHelper = (
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
     trialStatusOptions: TRIAL_STATUS_TYPES,
-    unassignedLabel: 'Unassigned',
-    updatedTrialSessionTypesEnabled: true,
   };
 };
