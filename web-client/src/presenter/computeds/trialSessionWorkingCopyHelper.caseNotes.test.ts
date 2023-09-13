@@ -121,6 +121,6 @@ describe('trial session working copy computed', () => {
       formattedCases.find(
         ({ docketNumber }) => docketNumber === mockCaseWithoutNotes,
       ).userNotes,
-    ).toBeUndefined();
+    ).toEqual('');
   });
 });
