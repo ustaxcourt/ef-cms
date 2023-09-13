@@ -11,73 +11,6 @@ import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
-const compareCasesByPractitioner = (a, b) => {
-  const aCount =
-    (a.privatePractitioners && a.privatePractitioners.length && 1) || 0;
-  const bCount =
-    (b.privatePractitioners && b.privatePractitioners.length && 1) || 0;
-
-  return aCount - bCount;
-};
-const isMemberCaseWithoutCalendaredLead = (
-  aCase: RawCase,
-  scheduledCases: RawCase[],
-): boolean => {
-  const leadCase = scheduledCases.find(
-    scheduledCase => scheduledCase.docketNumber === aCase.leadDocketNumber,
-  );
-  return !leadCase;
-};
-
-const isSoloCase = (aCase: RawCase): boolean => !aCase.leadDocketNumber;
-
-const isTopLevelCase = (aCase: RawCase, scheduledCases: RawCase[]): boolean =>
-  isLeadCase(aCase) ||
-  isSoloCase(aCase) ||
-  isMemberCaseWithoutCalendaredLead(aCase, scheduledCases);
-
-const isOpenCaseInATrial = (aCase: RawCase): boolean =>
-  !isClosed(aCase) && aCase.removedFromTrial !== true;
-
-const isCaseTrialStatusEnabledInFilters = (
-  calendaredCase: RawCase,
-  caseMetadata: { [docketNumber: string]: { trialStatus: string } },
-  enabledTrialStatusFilters: string[],
-): boolean => {
-  const isCaseWithoutTrialStatus =
-    enabledTrialStatusFilters.includes('statusUnassigned') &&
-    !caseMetadata[calendaredCase.docketNumber]?.trialStatus;
-
-  const isCaseTrialStatusFilterEnabled = enabledTrialStatusFilters.includes(
-    caseMetadata[calendaredCase.docketNumber]?.trialStatus,
-  );
-
-  return isCaseWithoutTrialStatus || isCaseTrialStatusFilterEnabled;
-};
-
-const appendUserNotes = <T>(
-  aCase: { docketNumber: string } & T,
-  userNotesDictionary: {
-    [docketNumber: string]: UserCaseNote;
-  },
-): T & { userNotes: string } => {
-  const userNotes: string = userNotesDictionary[aCase.docketNumber]
-    ? userNotesDictionary[aCase.docketNumber].notes
-    : '';
-  return { ...aCase, userNotes };
-};
-
-const appendCalendarNotes = <T>(
-  aCase: { docketNumber: string } & T,
-  trialSession: TrialSessionState,
-): T & { calendarNotes: string } => {
-  const trialSessionCase = trialSession.caseOrder?.find(
-    orderCase => orderCase.docketNumber === aCase.docketNumber,
-  );
-  const calendarNotes = trialSessionCase ? trialSessionCase.calendarNotes : '';
-  return { ...aCase, calendarNotes: calendarNotes || '' };
-};
-
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -170,3 +103,77 @@ export const trialSessionWorkingCopyHelper = (
     trialStatusOptions: TRIAL_STATUS_TYPES,
   };
 };
+
+function compareCasesByPractitioner(a, b) {
+  const aCount =
+    (a.privatePractitioners && a.privatePractitioners.length && 1) || 0;
+  const bCount =
+    (b.privatePractitioners && b.privatePractitioners.length && 1) || 0;
+
+  return aCount - bCount;
+}
+
+function isMemberCaseWithoutCalendaredLead(
+  aCase: RawCase,
+  scheduledCases: RawCase[],
+): boolean {
+  const leadCase = scheduledCases.find(
+    scheduledCase => scheduledCase.docketNumber === aCase.leadDocketNumber,
+  );
+  return !leadCase;
+}
+
+function isSoloCase(aCase: RawCase): boolean {
+  return !aCase.leadDocketNumber;
+}
+
+function isTopLevelCase(aCase: RawCase, scheduledCases: RawCase[]): boolean {
+  return (
+    isLeadCase(aCase) ||
+    isSoloCase(aCase) ||
+    isMemberCaseWithoutCalendaredLead(aCase, scheduledCases)
+  );
+}
+
+function isOpenCaseInATrial(aCase: RawCase): boolean {
+  return !isClosed(aCase) && aCase.removedFromTrial !== true;
+}
+
+function isCaseTrialStatusEnabledInFilters(
+  calendaredCase: RawCase,
+  caseMetadata: { [docketNumber: string]: { trialStatus: string } },
+  enabledTrialStatusFilters: string[],
+): boolean {
+  const isCaseWithoutTrialStatus =
+    enabledTrialStatusFilters.includes('statusUnassigned') &&
+    !caseMetadata[calendaredCase.docketNumber]?.trialStatus;
+
+  const isCaseTrialStatusFilterEnabled = enabledTrialStatusFilters.includes(
+    caseMetadata[calendaredCase.docketNumber]?.trialStatus,
+  );
+
+  return isCaseWithoutTrialStatus || isCaseTrialStatusFilterEnabled;
+}
+
+function appendUserNotes<T>(
+  aCase: { docketNumber: string } & T,
+  userNotesDictionary: {
+    [docketNumber: string]: UserCaseNote;
+  },
+): T & { userNotes: string } {
+  const userNotes: string = userNotesDictionary[aCase.docketNumber]
+    ? userNotesDictionary[aCase.docketNumber].notes
+    : '';
+  return { ...aCase, userNotes };
+}
+
+function appendCalendarNotes<T>(
+  aCase: { docketNumber: string } & T,
+  trialSession: TrialSessionState,
+): T & { calendarNotes: string } {
+  const trialSessionCase = trialSession.caseOrder?.find(
+    orderCase => orderCase.docketNumber === aCase.docketNumber,
+  );
+  const calendarNotes = trialSessionCase ? trialSessionCase.calendarNotes : '';
+  return { ...aCase, calendarNotes: calendarNotes || '' };
+}
