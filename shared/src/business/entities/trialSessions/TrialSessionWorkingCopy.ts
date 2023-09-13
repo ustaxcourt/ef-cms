@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 export class TrialSessionWorkingCopy extends JoiValidationEntity {
-  public caseMetadata: object;
+  public caseMetadata: { [docketNumber: string]: { trialStatus: string } };
   public filters: {
     basisReached: boolean;
     continued: boolean;
