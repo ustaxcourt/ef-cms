@@ -30,7 +30,6 @@ export const judgeActivityReportHelper = (
 
   const {
     casesClosedByJudge,
-    consolidatedCasesGroupCountMap,
     opinions,
     orders = [],
     submittedAndCavCasesByJudge = [],
@@ -64,8 +63,6 @@ export const judgeActivityReportHelper = (
   const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
   submittedAndCavCasesByJudge.forEach(individualCase => {
-    individualCase.formattedCaseCount =
-      consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
       individualCase.consolidatedIconTooltipText = 'Lead case';
       individualCase.isLeadCase = true;
