@@ -1,12 +1,12 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { post } from '../requests';
 
 export const replyToMessageInteractor = (
-  applicationContext,
+  applicationContext: ClientApplicationContext,
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
@@ -19,7 +19,6 @@ export const replyToMessageInteractor = (
     body: {
       attachments,
       docketNumber,
-      draftAttachments,
       message,
       subject,
       toSection,

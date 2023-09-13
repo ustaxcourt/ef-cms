@@ -14,6 +14,10 @@ describe('replyToMessageAction', () => {
   });
 
   it('should call replyToMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
+    const documentIdForFirstAttachment = 'b1130321-0a76-43bc-b3eb-64a18f079873';
+
+    const documentIdForSecondAttachment = 'b1130321-0a76-43bc-b3eb-64a18f55555';
+
     const result = await runAction(replyToMessageAction, {
       modules: {
         presenter,
@@ -26,8 +30,14 @@ describe('replyToMessageAction', () => {
           form: {
             attachments: [
               {
-                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+                documentId: documentIdForFirstAttachment,
                 documentTitle: 'Petition',
+              },
+            ],
+            draftAttachments: [
+              {
+                documentId: documentIdForSecondAttachment,
+                documentTitle: 'Petition Title',
               },
             ],
             message: 'You there!',
@@ -47,8 +57,12 @@ describe('replyToMessageAction', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentId: documentIdForFirstAttachment,
           documentTitle: 'Petition',
+        },
+        {
+          documentId: documentIdForSecondAttachment,
+          documentTitle: 'Petition Title',
         },
       ],
       docketNumber: '123-45',
@@ -60,7 +74,7 @@ describe('replyToMessageAction', () => {
     expect(result.output).toHaveProperty('parentMessageId');
     expect(result.output).toMatchObject({
       messageViewerDocumentToDisplay: {
-        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+        documentId: documentIdForFirstAttachment,
       },
     });
   });
