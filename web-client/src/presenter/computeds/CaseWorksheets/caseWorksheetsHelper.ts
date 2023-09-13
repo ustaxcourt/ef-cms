@@ -70,7 +70,7 @@ export const caseWorksheetsHelper = (
   };
 };
 
-const getSubmittedOrCAVDate = (
+export const getSubmittedOrCAVDate = (
   applicationContext: IApplicationContext,
   caseStatusHistory: { updatedCaseStatus: string; date: string }[],
 ): string => {
