@@ -59,6 +59,12 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     petitioners: [],
     status: CASE_STATUS_TYPES.cav,
   };
+  const mockCaseWorksheet = {
+    docketNumber: '101-20',
+    finalBriefDueDate: '01-01-2022',
+    primaryIssue: 'nothing',
+    statusOfMatter: STATUS_OF_MATTER_OPTIONS[1],
+  } as RawCaseWorksheet;
 
   beforeAll(() => {
     applicationContext.getSearchClient().count = jest.fn();
@@ -69,15 +75,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       );
     applicationContext
       .getPersistenceGateway()
-      .getCaseWorksheet.mockImplementation(
-        () =>
-          ({
-            docketNumber: '101-20',
-            finalBriefDueDate: '01-01-2022',
-            primaryIssue: 'nothing',
-            statusOfMatter: STATUS_OF_MATTER_OPTIONS[1],
-          }) as RawCaseWorksheet,
-      );
+      .getCaseWorksheet.mockImplementation(() => mockCaseWorksheet);
   });
 
   beforeEach(() => {
@@ -212,25 +210,10 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
   it('should add a caseWorksheet field to cases returned', async () => {
     mockReturnedDocketNumbers = [
-      { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
+      { ...mockCaseInfo, docketNumber: '101-23' },
       {
         ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
+        docketNumber: '102-23',
       },
     ];
 
@@ -256,34 +239,16 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: '101-18',
+          caseWorksheet: mockCaseWorksheet,
+          docketNumber: '101-23',
+        }),
+        expect.objectContaining({
+          caseWorksheet: mockCaseWorksheet,
+          docketNumber: '102-23',
         }),
       ]),
     );
 
-    expect(result.cases).not.toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketNumber: docketEntryWithoutCaseHistory,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-        }),
-      ]),
-    );
-
-    expect(result.totalCount).toEqual(1);
+    expect(result.totalCount).toEqual(2);
   });
 });
