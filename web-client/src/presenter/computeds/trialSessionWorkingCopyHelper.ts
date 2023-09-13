@@ -1,15 +1,14 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   TRIAL_STATUS_TYPES,
   TrialStatusOption,
 } from '@shared/business/entities/EntityConstants';
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
-import { omitBy, partition, pickBy } from 'lodash';
+import { partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -147,51 +146,22 @@ export const trialSessionWorkingCopyHelper = (
     topLevelCases.reverse();
   }
 
-  const updatedTrialSessionTypesEnabled: boolean = get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key],
-  );
-
-  const unassignedLabel = updatedTrialSessionTypesEnabled
-    ? 'Unassigned'
-    : 'Trial Status';
-
-  const trialStatusOptions = omitBy(TRIAL_STATUS_TYPES, statusType => {
-    if (updatedTrialSessionTypesEnabled !== true) {
-      return statusType.new === true;
-    }
-  });
-
-  const trialStatusFilters = Object.keys(trialStatusOptions)
-    .filter(option => {
-      if (updatedTrialSessionTypesEnabled) {
-        return !trialStatusOptions[option].deprecated;
-      }
-      return option;
-    })
+  const trialStatusFilters = Object.keys(TRIAL_STATUS_TYPES)
+    .filter(option => !TRIAL_STATUS_TYPES[option].deprecated)
     .sort((a, b) => {
-      if (updatedTrialSessionTypesEnabled) {
-        return (
-          trialStatusOptions[a].displayOrder -
-          trialStatusOptions[b].displayOrder
-        );
-      }
-      return 0;
+      return (
+        TRIAL_STATUS_TYPES[a].displayOrder - TRIAL_STATUS_TYPES[b].displayOrder
+      );
     })
     .map(option => {
       return {
         key: option,
-        label:
-          !updatedTrialSessionTypesEnabled &&
-          trialStatusOptions[option].legacyLabel
-            ? trialStatusOptions[option].legacyLabel!
-            : trialStatusOptions[option].label,
+        label: TRIAL_STATUS_TYPES[option].label,
       };
     })
     .concat({
       key: 'statusUnassigned',
-      label: updatedTrialSessionTypesEnabled
-        ? 'Unassigned'
-        : 'Status unassigned',
+      label: 'Unassigned',
     });
 
   return {
@@ -199,8 +169,8 @@ export const trialSessionWorkingCopyHelper = (
     formattedCases: topLevelCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
-    trialStatusOptions,
-    unassignedLabel,
-    updatedTrialSessionTypesEnabled,
+    trialStatusOptions: TRIAL_STATUS_TYPES,
+    unassignedLabel: 'Unassigned',
+    updatedTrialSessionTypesEnabled: true,
   };
 };
