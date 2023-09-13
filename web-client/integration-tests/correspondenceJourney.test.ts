@@ -58,7 +58,6 @@ describe('Adds correspondence to a case', () => {
     docketClerkDeletesCorrespondence(
       cerebralTest,
       `${firstCorrespondenceTitle} dc`,
-      'DocketClerk',
     );
   });
 
