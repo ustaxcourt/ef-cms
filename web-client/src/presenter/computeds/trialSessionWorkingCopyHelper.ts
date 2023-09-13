@@ -37,6 +37,22 @@ const isTopLevelCase = (aCase: RawCase, scheduledCases: RawCase[]): boolean =>
 const isOpenCaseInATrial = (aCase: RawCase): boolean =>
   !isClosed(aCase) && aCase.removedFromTrial !== true;
 
+const isCaseTrialStatusEnabledInFilters = (
+  calendaredCase: RawCase,
+  caseMetadata: { [docketNumber: string]: { trialStatus: string } },
+  enabledTrialStatusFilters: string[],
+): boolean => {
+  const isCaseWithoutTrialStatus =
+    enabledTrialStatusFilters.includes('statusUnassigned') &&
+    !caseMetadata[calendaredCase.docketNumber]?.trialStatus;
+
+  const isCaseTrialStatusFilterEnabled = enabledTrialStatusFilters.includes(
+    caseMetadata[calendaredCase.docketNumber]?.trialStatus,
+  );
+
+  return isCaseWithoutTrialStatus || isCaseTrialStatusFilterEnabled;
+};
+
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -64,15 +80,12 @@ export const trialSessionWorkingCopyHelper = (
   const formattedCases = (trialSession.calendaredCases || [])
     .slice()
     .filter(isOpenCaseInATrial)
-    .filter(
-      calendaredCase =>
-        (trueFilters.includes('statusUnassigned') &&
-          (!caseMetadata[calendaredCase.docketNumber] ||
-            !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
-        (caseMetadata[calendaredCase.docketNumber] &&
-          trueFilters.includes(
-            caseMetadata[calendaredCase.docketNumber].trialStatus,
-          )),
+    .filter(calendaredCase =>
+      isCaseTrialStatusEnabledInFilters(
+        calendaredCase,
+        caseMetadata,
+        trueFilters,
+      ),
     )
     .map(caseItem =>
       applicationContext
