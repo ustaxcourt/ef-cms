@@ -3,7 +3,7 @@ import {
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { filingPartiesFormHelper as filingPartiesFormHelperComputed } from './filingPartiesFormHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
