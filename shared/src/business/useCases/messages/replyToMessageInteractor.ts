@@ -12,7 +12,6 @@ export const replyToMessage = async (
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
@@ -43,8 +42,6 @@ export const replyToMessage = async (
   const toUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
-
-  attachments = [...attachments, ...draftAttachments];
 
   const validatedRawMessage = new Message(
     {
@@ -81,7 +78,6 @@ export const replyToMessageInteractor = (
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
@@ -92,7 +88,6 @@ export const replyToMessageInteractor = (
   return replyToMessage(applicationContext, {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
