@@ -9,8 +9,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
-import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -165,10 +163,12 @@ const getCases = async (
 
   const completeCaseRecords = await Promise.all(
     filteredCaseRecords.map(async caseRecord => {
-      const caseWorksheet = await getCaseWorksheet({
-        applicationContext,
-        docketNumber: caseRecord.docketNumber,
-      });
+      const caseWorksheet = await applicationContext
+        .getPersistenceGateway()
+        .getCaseWorksheet({
+          applicationContext,
+          docketNumber: caseRecord.docketNumber,
+        });
 
       return {
         ...caseRecord,
@@ -188,8 +188,10 @@ const calculateNumberOfConsolidatedCases = async (
     return 0;
   }
 
-  return await getCountOfConsolidedCases({
-    applicationContext,
-    leadDocketNumber: caseInfo.leadDocketNumber,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .getCountOfConsolidedCases({
+      applicationContext,
+      leadDocketNumber: caseInfo.leadDocketNumber,
+    });
 };
