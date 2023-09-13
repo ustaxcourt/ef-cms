@@ -32,18 +32,4 @@ describe('CaseWorksheet', () => {
       ).toBeDefined();
     });
   });
-
-  describe('deletePrimaryIssue', () => {
-    it('should delete the primary issue when deletePrimaryIssue method is called', () => {
-      const worksheet = new CaseWorksheet({
-        primaryIssue: 'TEST_PRIMARY_ISSUE',
-      });
-
-      expect(worksheet.primaryIssue).toBeDefined();
-
-      worksheet.deletePrimaryIssue();
-
-      expect(worksheet.primaryIssue).toBeUndefined();
-    });
-  });
 });

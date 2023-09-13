@@ -1,16 +1,16 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { addEditPrimaryIssueModalHelper as addEditPrimaryIssueModalHelperComputed } from './addEditPrimaryIssueModalHelper';
-import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { addEditCaseWorksheetModalHelper as addEditCaseWorksheetModalHelperComputed } from './addEditCaseWorksheetModalHelper';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-describe('addEditPrimaryIssueModalHelper', () => {
-  const addEditPrimaryIssueModalHelper = withAppContextDecorator(
-    addEditPrimaryIssueModalHelperComputed,
+describe('addEditCaseWorksheetModalHelper', () => {
+  const addEditCaseWorksheetModalHelper = withAppContextDecorator(
+    addEditCaseWorksheetModalHelperComputed,
   );
 
   it('should return the title of the modal, formatted to include the docket number and case title of the case the user is adding a primary issue to', () => {
-    const { title } = runCompute(addEditPrimaryIssueModalHelper, {
+    const { title } = runCompute(addEditCaseWorksheetModalHelper, {
       state: {
         modal: {
           docketNumber: MOCK_CASE.docketNumber,

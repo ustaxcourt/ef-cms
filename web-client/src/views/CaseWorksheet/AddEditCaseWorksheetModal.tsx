@@ -1,6 +1,5 @@
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { DateInput } from '@web-client/ustc-ui/DateInput/DateInput';
 import { DateInputThatActuallyWorks } from '@web-client/ustc-ui/DateInput/DateInputThatActuallyWorks';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
@@ -10,14 +9,14 @@ import React from 'react';
 export const AddEditCaseWorksheetModal = connect(
   {
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
-    addEditPrimaryIssueModalHelper: state.addEditPrimaryIssueModalHelper,
+    addEditCaseWorksheetModalHelper: state.addEditCaseWorksheetModalHelper,
     form: state.form,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseWorksheetSequence: sequences.validateCaseWorksheetSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCaseWorksheetModal({
-    addEditPrimaryIssueModalHelper,
+    addEditCaseWorksheetModalHelper,
     form,
     STATUS_OF_MATTER_OPTIONS,
     updateFormValueSequence,
@@ -34,7 +33,7 @@ export const AddEditCaseWorksheetModal = connect(
         onConfirmSequence="updateCaseWorksheetSequence"
       >
         <h5 className="margin-bottom-4">
-          {addEditPrimaryIssueModalHelper.title}
+          {addEditCaseWorksheetModalHelper.title}
         </h5>
 
         <DateInputThatActuallyWorks
