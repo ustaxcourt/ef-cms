@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 
 export const DateInputThatActuallyWorks = ({
+  defaultValue,
   errorText,
   formGroupClassNames,
   label,
@@ -35,7 +36,7 @@ export const DateInputThatActuallyWorks = ({
       <label className="usa-label" htmlFor="date-picker" id="date-picker-label">
         {label}
       </label>
-      <div className="usa-date-picker">
+      <div className="usa-date-picker" data-default-value={defaultValue}>
         <input
           aria-labelledby="date-picker-label"
           className="usa-input"

@@ -20,7 +20,6 @@ export const AddEditCaseWorksheetModal = connect(
     form,
     STATUS_OF_MATTER_OPTIONS,
     updateFormValueSequence,
-    validateCaseWorksheetSequence,
     validationErrors,
   }) {
     return (

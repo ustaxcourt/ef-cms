@@ -30,13 +30,15 @@ export const caseWorksheetsHelper = (
 
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
   worksheets.forEach(ws => {
-    ws.finalBriefDueDate = applicationContext
-      .getUtilities()
-      .formatDateString(
-        ws.finalBriefDueDate,
-        applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-      );
-    worksheetsObj[ws.docketNumber] = ws;
+    worksheetsObj[ws.docketNumber] = {
+      ...ws,
+      finalBriefDueDateFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(
+          ws.finalBriefDueDate,
+          applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+        ),
+    };
   });
 
   const today = applicationContext
