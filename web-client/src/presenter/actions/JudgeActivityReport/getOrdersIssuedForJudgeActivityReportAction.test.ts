@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getOrdersIssuedForJudgeActivityReportAction } from './getOrdersIssuedForJudgeActivityReportAction';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { mockCountOfOrdersIssuedByJudge } from '../../../../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
