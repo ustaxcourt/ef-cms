@@ -19,13 +19,13 @@ const compareCasesByPractitioner = (a, b) => {
   return aCount - bCount;
 };
 
-const isLeadOrSoloCase = (aCase: RawCase) =>
+const isLeadOrSoloCase = (aCase: RawCase): boolean =>
   isLeadCase(aCase) || !aCase.leadDocketNumber;
 
 const appendNestedConsolidatedCases = (
   leadsAndSolo: RawCase,
-  formattedCases: { docketNumber: string }[],
-) => {
+  formattedCases: Array<RawCase>,
+): RawCase & { nestedConsolidatedCases: RawCase[] } => {
   return {
     ...leadsAndSolo,
     nestedConsolidatedCases: leadsAndSolo.consolidatedCases
@@ -87,20 +87,23 @@ export const trialSessionWorkingCopyHelper = (
     )
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
     .map(aCase => {
+      let userNotes1: string = '';
       if (userNotes[aCase.docketNumber]) {
-        aCase.userNotes = userNotes[aCase.docketNumber].notes;
+        userNotes1 = userNotes[aCase.docketNumber].notes;
       }
-      return aCase;
+      return { ...aCase, userNotes: userNotes1 };
     })
     .map(aCase => {
       const trialSessionCase = trialSession.caseOrder?.find(
         orderCase => orderCase.docketNumber === aCase.docketNumber,
       );
+      let calendarNotes: string | undefined;
       if (trialSessionCase) {
-        aCase.calendarNotes = trialSessionCase.calendarNotes;
+        // eslint-disable-next-line prefer-destructuring
+        calendarNotes = trialSessionCase.calendarNotes;
       }
 
-      return aCase;
+      return { ...aCase, calendarNotes };
     });
 
   const casesWithNestedConsolidatedCases = formattedCases

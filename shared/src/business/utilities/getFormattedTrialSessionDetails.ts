@@ -45,7 +45,7 @@ export const setPretrialMemorandumFiler = ({ caseItem }): string => {
 export const formatCaseForTrialSession = ({
   applicationContext,
   caseItem,
-  eligibleCases,
+  eligibleCases = [],
   setFilingPartiesCode = false,
 }: {
   applicationContext: IApplicationContext;

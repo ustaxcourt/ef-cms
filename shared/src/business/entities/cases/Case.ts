@@ -2054,8 +2054,10 @@ export const hasPartyWithServiceType = function (rawCase, serviceType) {
 
 export const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
-export const isLeadCase = rawCase =>
-  rawCase.docketNumber === rawCase.leadDocketNumber;
+export const isLeadCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
 
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>
