@@ -26,8 +26,6 @@ export const getComputedFormDateFactoryAction = (
       year: formYear,
     });
 
-    console.log('computedDate');
-
     return { [stateKey]: computedDate };
   };
 

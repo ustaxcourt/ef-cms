@@ -19,9 +19,7 @@ export class CaseWorksheet extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-    finalBriefDueDate: JoiValidationConstants.DATE.allow('')
-      .invalid(null)
-      .optional(),
+    finalBriefDueDate: JoiValidationConstants.DATE.allow('').optional(),
     primaryIssue: JoiValidationConstants.STRING.allow('').optional(),
     statusOfMatter: JoiValidationConstants.STRING.valid(
       ...STATUS_OF_MATTER_OPTIONS,
@@ -32,7 +30,6 @@ export class CaseWorksheet extends JoiValidationEntity {
 
   static VALIDATION_ERROR_MESSAGES = {
     finalBriefDueDate: 'Enter a valid due date',
-    primaryIssue: 'Add primary issue',
   };
 
   getValidationRules() {
