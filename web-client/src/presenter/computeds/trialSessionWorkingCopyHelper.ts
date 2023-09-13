@@ -1,13 +1,12 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  CASE_STATUS_TYPES,
   TRIAL_STATUS_TYPES,
   TrialStatusOption,
 } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
-import { omitBy, pickBy } from 'lodash';
+import { omitBy, partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -18,26 +17,22 @@ const compareCasesByPractitioner = (a, b) => {
 
   return aCount - bCount;
 };
-
-const isLeadOrSoloCase = (aCase: RawCase): boolean =>
-  isLeadCase(aCase) || !aCase.leadDocketNumber;
-
-const appendNestedConsolidatedCases = (
-  leadsAndSolo: RawCase,
-  formattedCases: Array<RawCase>,
-): RawCase & { nestedConsolidatedCases: RawCase[] } => {
-  return {
-    ...leadsAndSolo,
-    nestedConsolidatedCases: leadsAndSolo.consolidatedCases
-      .filter(caseDTO => caseDTO.status === CASE_STATUS_TYPES.calendared)
-      .filter(caseDTO => caseDTO.leadDocketNumber !== caseDTO.docketNumber)
-      .map(caseDTO =>
-        formattedCases.find(
-          calenCase => calenCase.docketNumber === caseDTO.docketNumber,
-        ),
-      ),
-  };
+const isMemberCaseWithoutCalendaredLead = (
+  aCase: RawCase,
+  scheduledCases: RawCase[],
+): boolean => {
+  const leadCase = scheduledCases.find(
+    scheduledCase => scheduledCase.docketNumber === aCase.leadDocketNumber,
+  );
+  return !leadCase;
 };
+
+const isSoloCase = (aCase: RawCase): boolean => !aCase.leadDocketNumber;
+
+const isTopLevelCase = (aCase: RawCase, scheduledCases: RawCase[]): boolean =>
+  isLeadCase(aCase) ||
+  isSoloCase(aCase) ||
+  isMemberCaseWithoutCalendaredLead(aCase, scheduledCases);
 
 export const trialSessionWorkingCopyHelper = (
   get: Get,
@@ -104,18 +99,31 @@ export const trialSessionWorkingCopyHelper = (
       }
 
       return { ...aCase, calendarNotes };
+    })
+    .map(aCase => {
+      const nestedConsolidatedCases: (typeof aCase)[] = [];
+      return { ...aCase, nestedConsolidatedCases };
     });
 
-  const casesWithNestedConsolidatedCases = formattedCases
-    .filter(isLeadOrSoloCase)
-    .map(aCase => appendNestedConsolidatedCases(aCase, formattedCases));
+  const [topLevelCases, memberConsolidatedCases] = partition(
+    formattedCases,
+    aCase => isTopLevelCase(aCase, formattedCases),
+  );
+
+  memberConsolidatedCases.forEach(mCase => {
+    const topCase = topLevelCases.find(
+      c => c.docketNumber === mCase.leadDocketNumber,
+    )!;
+
+    topCase.nestedConsolidatedCases.push(mCase);
+  });
 
   if (sort === 'practitioner') {
-    casesWithNestedConsolidatedCases.sort(compareCasesByPractitioner);
+    topLevelCases.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    casesWithNestedConsolidatedCases.reverse();
+    topLevelCases.reverse();
   }
 
   const updatedTrialSessionTypesEnabled: boolean = get(
@@ -167,7 +175,7 @@ export const trialSessionWorkingCopyHelper = (
 
   return {
     casesShownCount: formattedCases.length,
-    formattedCases: casesWithNestedConsolidatedCases,
+    formattedCases: topLevelCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
     trialStatusOptions,
