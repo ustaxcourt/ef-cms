@@ -1,4 +1,4 @@
-import { genericHandler } from '../genericHandler';
+import { genericHandler } from '../../genericHandler';
 
 export const deletePrimaryIssueLambda = event =>
   genericHandler(event, ({ applicationContext }) => {
