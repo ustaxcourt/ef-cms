@@ -5,7 +5,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { omitBy, partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -34,6 +34,9 @@ const isTopLevelCase = (aCase: RawCase, scheduledCases: RawCase[]): boolean =>
   isSoloCase(aCase) ||
   isMemberCaseWithoutCalendaredLead(aCase, scheduledCases);
 
+const isOpenCaseInATrial = (aCase: RawCase): boolean =>
+  !isClosed(aCase) && aCase.removedFromTrial !== true;
+
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -60,11 +63,7 @@ export const trialSessionWorkingCopyHelper = (
 
   const formattedCases = (trialSession.calendaredCases || [])
     .slice()
-    .filter(
-      calendaredCase =>
-        !applicationContext.getUtilities().isClosed(calendaredCase) &&
-        calendaredCase.removedFromTrial !== true,
-    )
+    .filter(isOpenCaseInATrial)
     .filter(
       calendaredCase =>
         (trueFilters.includes('statusUnassigned') &&
