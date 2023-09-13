@@ -174,13 +174,13 @@ export const updatePractitionerUserInteractor = async (
       user: oldUser,
       websocketMessagePrefix: 'admin',
     });
+  } else {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'admin_contact_full_update_complete',
+      },
+      userId: requestUser.userId,
+    });
   }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'admin_contact_full_update_complete',
-    },
-    userId: requestUser.userId,
-  });
 };
