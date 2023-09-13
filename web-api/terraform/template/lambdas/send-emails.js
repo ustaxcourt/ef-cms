@@ -1,6 +1,6 @@
 const {
   sendWithRetry,
-} = require('../../../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
+} = require('../../../src/dispatchers/ses/sendBulkTemplatedEmail');
 const { createApplicationContext } = require('../../../src/applicationContext');
 
 exports.handler = async event => {

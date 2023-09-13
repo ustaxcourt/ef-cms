@@ -1,5 +1,5 @@
 import { PARTY_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactsHelper as contactsHelperComputed } from './contactsHelper';
 import { privatePractitionerUser } from '../../../../shared/src/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';

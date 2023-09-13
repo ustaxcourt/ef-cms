@@ -1,7 +1,7 @@
 import {
   CaseInventory,
   GetCaseInventoryReportRequest,
-} from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+} from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 // eslint-disable-next-line import/no-unresolved
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { formatResults } from './searchClient';
