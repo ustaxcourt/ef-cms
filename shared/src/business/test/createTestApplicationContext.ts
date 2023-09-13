@@ -480,6 +480,7 @@ export const createTestApplicationContext = ({
       .fn()
       .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
+    getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest.fn(),
