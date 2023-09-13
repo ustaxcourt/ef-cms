@@ -8,7 +8,7 @@ import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 export const JudgeActivityReport = connect(
   {
@@ -195,13 +195,13 @@ export const JudgeActivityReport = connect(
     };
 
     const SubmittedCavCasesTable = () => {
-      const tableRef = useRef<HTMLTableElement | null>(null);
       return (
         <>
           {judgeActivityReportHelper.showPaginator && (
             <Paginator
               breakClassName="hide"
               forcePage={activePage}
+              id="paginatorTop"
               marginPagesDisplayed={0}
               pageCount={judgeActivityReportHelper.pageCount}
               pageRangeDisplayed={0}
@@ -210,14 +210,15 @@ export const JudgeActivityReport = connect(
                 await getCavAndSubmittedCasesForJudgesSequence({
                   selectedPage: pageChange.selected,
                 });
-                tableRef.current?.scrollIntoView();
+                window.document
+                  .getElementById('paginatorTop')
+                  ?.scrollIntoView();
               }}
             />
           )}
           <table
             aria-describedby="progressDescription"
             className="usa-table ustc-table"
-            ref={tableRef}
           >
             <caption id="progressDescription">
               <div className="grid-row display-flex flex-row flex-align-end">
@@ -313,14 +314,18 @@ export const JudgeActivityReport = connect(
             <Paginator
               breakClassName="hide"
               forcePage={activePage}
+              id="paginatorBottom"
               marginPagesDisplayed={0}
               pageCount={judgeActivityReportHelper.pageCount}
               pageRangeDisplayed={0}
-              onPageChange={pageChange => {
+              onPageChange={async pageChange => {
                 setActivePage(pageChange.selected);
-                getCavAndSubmittedCasesForJudgesSequence({
+                await getCavAndSubmittedCasesForJudgesSequence({
                   selectedPage: pageChange.selected,
                 });
+                window.document
+                  .getElementById('paginatorTop')
+                  ?.scrollIntoView();
               }}
             />
           )}
