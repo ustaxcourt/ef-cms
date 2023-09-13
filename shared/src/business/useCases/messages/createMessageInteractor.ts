@@ -10,9 +10,6 @@ export type MessageType = {
   attachments: {
     documentId: string;
   }[];
-  draftAttachments: {
-    documentId: string;
-  }[];
   message: string;
   subject: string;
   toSection: string;
@@ -33,7 +30,6 @@ export const createMessageInteractor = async (
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     subject,
     toSection,
@@ -58,8 +54,6 @@ export const createMessageInteractor = async (
   const toUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
-
-  attachments = [...attachments, ...draftAttachments];
 
   const validatedRawMessage = new Message(
     {
