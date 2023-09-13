@@ -1,3 +1,7 @@
+import {
+  CaseWorksheet,
+  RawCaseWorksheet,
+} from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   InvalidRequest,
@@ -8,8 +12,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
 import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
@@ -165,14 +167,17 @@ const getCases = async (
 
   const completeCaseRecords = await Promise.all(
     filteredCaseRecords.map(async caseRecord => {
-      const caseWorksheet = await getCaseWorksheet({
-        applicationContext,
-        docketNumber: caseRecord.docketNumber,
-      });
+      const caseWorksheet = await applicationContext
+        .getPersistenceGateway()
+        .getCaseWorksheet({
+          applicationContext,
+          docketNumber: caseRecord.docketNumber,
+        });
+      const caseWorkSheetEntity = new CaseWorksheet(caseWorksheet);
 
       return {
         ...caseRecord,
-        caseWorksheet,
+        ...caseWorkSheetEntity,
       } as unknown as RawCaseWithWorksheet;
     }),
   );
