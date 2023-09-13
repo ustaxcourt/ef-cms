@@ -5,6 +5,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { omitBy, partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -92,7 +93,7 @@ export const trialSessionWorkingCopyHelper = (
         .getUtilities()
         .formatCaseForTrialSession({ applicationContext, caseItem }),
     )
-    .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
+    .sort(compareCasesByDocketNumber)
     .map(aCase => {
       let userNotes1: string = '';
       if (userNotes[aCase.docketNumber]) {
