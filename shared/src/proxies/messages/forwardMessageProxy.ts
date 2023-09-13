@@ -1,4 +1,4 @@
-import { MessageWithAParentType } from '@shared/business/useCases/messages/replyToMessageInteractor';
+import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { post } from '../requests';
 
 export const forwardMessageInteractor = (
@@ -12,7 +12,7 @@ export const forwardMessageInteractor = (
     subject,
     toSection,
     toUserId,
-  }: MessageWithAParentType,
+  }: ReplyMessageType,
 ) => {
   return post({
     applicationContext,
