@@ -13,7 +13,6 @@ export const AddEditCaseWorksheetModal = connect(
     form: state.form,
     updateDateValueSequence: sequences.updateDateValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateCaseWorksheetSequence: sequences.validateCaseWorksheetSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCaseWorksheetModal({
@@ -22,7 +21,6 @@ export const AddEditCaseWorksheetModal = connect(
     STATUS_OF_MATTER_OPTIONS,
     updateDateValueSequence,
     updateFormValueSequence,
-    validateCaseWorksheetSequence,
     validationErrors,
   }) {
     return (
@@ -49,7 +47,6 @@ export const AddEditCaseWorksheetModal = connect(
               key: 'finalBriefDueDate',
               value: e.target.value,
             });
-            validateCaseWorksheetSequence();
           }}
         />
 
