@@ -4,16 +4,15 @@ export const generateEntryOfAppearancePdfAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { docketNumber, petitioners, user } = get(state.caseDetail);
-  const form = get(state.form);
+  const { docketNumber, petitioners } = get(state.caseDetail);
+  const { filers } = get(state.form);
 
   const pdfUrl = await applicationContext
     .getUseCases()
     .generateEntryOfAppearancePdfInteractor(applicationContext, {
       docketNumber,
-      form,
+      filers,
       petitioners,
-      user,
     });
 
   return { pdfUrl };
