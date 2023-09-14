@@ -80,19 +80,19 @@ describe('Case Worksheets Journey', () => {
       docketNumber: cavCase!.docketNumber,
     });
 
-    const { modal } = cerebralTest.getState();
-    expect(modal.showModal).toEqual('AddEditCaseWorksheetModal');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'AddEditCaseWorksheetModal',
+    );
 
     const expectedPrimaryIssue = 'I can be your hero baby';
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'modal.primaryIssue',
+      key: 'form.primaryIssue',
       value: expectedPrimaryIssue,
     });
 
-    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
 
-    const { modal: modal2 } = cerebralTest.getState();
-    expect(modal2.showModal).toBeUndefined();
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
 
     ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
@@ -103,7 +103,11 @@ describe('Case Worksheets Journey', () => {
     expect(cavCase).toMatchObject({
       docketNumber: cerebralTest.docketNumber,
       status: CASE_STATUS_TYPES.cav,
-      worksheet: { primaryIssue: expectedPrimaryIssue },
+      worksheet: {
+        docketNumber: cerebralTest.docketNumber,
+        entityName: 'CaseWorksheet',
+        primaryIssue: expectedPrimaryIssue,
+      },
     });
   });
 
@@ -119,16 +123,17 @@ describe('Case Worksheets Journey', () => {
       docketNumber: cavCase!.docketNumber,
     });
 
-    const existingPrimaryIssue = cerebralTest.getState('modal.primaryIssue');
-    expect(existingPrimaryIssue).toEqual('I can be your hero baby');
+    expect(cerebralTest.getState('form.primaryIssue')).toEqual(
+      'I can be your hero baby',
+    );
 
     const updatedPrimaryIssue = 'Her name is Noel';
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'modal.primaryIssue',
+      key: 'form.primaryIssue',
       value: updatedPrimaryIssue,
     });
 
-    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
 
     ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
@@ -143,62 +148,51 @@ describe('Case Worksheets Journey', () => {
     });
   });
 
-  it('should display an error message when the user enters an invalid primary issue', async () => {
+  it('should allow the user to clear the primary issue', async () => {
     let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
     });
     let cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
     );
-    await cerebralTest.runSequence('openAddEditCaseWorksheetModalSequence', {
-      docketNumber: cavCase!.docketNumber,
-    });
+    expect(cavCase?.worksheet.primaryIssue).toBeDefined();
 
-    const invalidPrimaryIssue = ''; // primaryIssue can't be an empty string
+    await cerebralTest.runSequence('openAddEditCaseWorksheetModalSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
 
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'modal.primaryIssue',
-      value: invalidPrimaryIssue,
+      key: 'form.primaryIssue',
+      value: '',
     });
 
-    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
 
-    const validationErrors = cerebralTest.getState('validationErrors');
-    expect(validationErrors.primaryIssue).toEqual('Add primary issue');
+    ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
+      state: cerebralTest.getState(),
+    }));
+    cavCase = caseWorksheetsFormatted.find(
+      theCase => theCase.docketNumber === cerebralTest.docketNumber,
+    );
+    expect(cavCase?.worksheet.primaryIssue).toBe('');
   });
-
-  // it('should persist and remove a primary issue from the table when it is deleted by the user', async () => {
-  //   let { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
-  //     state: cerebralTest.getState(),
-  //   });
-  //   let cavCase = caseWorksheetsFormatted.find(
-  //     theCase => theCase.docketNumber === cerebralTest.docketNumber,
-  //   );
-  //   expect(cavCase?.worksheet.primaryIssue).toBeDefined();
-
-  //   await cerebralTest.runSequence('openDeletePrimaryIssueSequence', {
-  //     docketNumber: cerebralTest.docketNumber,
-  //   });
-
-  //   await cerebralTest.runSequence('TODO,FIX');
-
-  //   ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
-  //     state: cerebralTest.getState(),
-  //   }));
-  //   cavCase = caseWorksheetsFormatted.find(
-  //     theCase => theCase.docketNumber === cerebralTest.docketNumber,
-  //   );
-
-  //   expect(cavCase?.worksheet.primaryIssue).toBeUndefined();
-  // });
 
   it('should persist and display a final brief due date set by user', async () => {
     const briefDueDate = '08/29/2023';
 
-    await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
+    await cerebralTest.runSequence('openAddEditCaseWorksheetModalSequence', {
       docketNumber: cerebralTest.docketNumber,
-      finalBriefDueDate: briefDueDate,
     });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'finalBriefDueDate',
+        value: briefDueDate,
+      },
+    );
+
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
 
     const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
@@ -221,34 +215,41 @@ describe('Case Worksheets Journey', () => {
     expect(otherCavCaseInTable.worksheet.finalBriefDueDate).toBeUndefined();
   });
 
-  it('should display an error message when an invalid brief due date is set', async () => {
-    const caseWorksheetTableErrors = cerebralTest.getState(
-      'validationErrors.submittedCavCasesTable',
-    );
-    expect(
-      caseWorksheetTableErrors[cerebralTest.docketNumber]?.finalBriefDueDate,
-    ).toBeUndefined();
-
-    const invalidBriefDueDate = '08/29/TEST';
-
-    await cerebralTest.runSequence('updateFinalBriefDueDateSequence', {
+  it('should display an error message when the user enters an invalid final brief due date', async () => {
+    await cerebralTest.runSequence('openAddEditCaseWorksheetModalSequence', {
       docketNumber: cerebralTest.docketNumber,
-      finalBriefDueDate: invalidBriefDueDate,
     });
 
-    const caseWorksheetTableErrorsAfter = cerebralTest.getState(
-      'validationErrors.submittedCavCasesTable',
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'finalBriefDueDate',
+        value: 'abcdefghi', // not a valid date
+      },
     );
-    expect(caseWorksheetTableErrorsAfter[cerebralTest.docketNumber]).toEqual({
+
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
       finalBriefDueDate: 'Enter a valid due date',
     });
+
+    await cerebralTest.runSequence('dismissAddEditCaseWorksheetModalSequence');
   });
 
   it('should persist and display a status of matter set by the user', async () => {
-    await cerebralTest.runSequence('updateStatusOfMatterSequence', {
+    await cerebralTest.runSequence('openAddEditCaseWorksheetModalSequence', {
       docketNumber: cerebralTest.docketNumber,
-      statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
     });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'statusOfMatter',
+      value: STATUS_OF_MATTER_OPTIONS[0],
+    });
+
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
 
     const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
@@ -260,6 +261,8 @@ describe('Case Worksheets Journey', () => {
       docketNumber: cerebralTest.docketNumber,
       status: CASE_STATUS_TYPES.cav,
       worksheet: {
+        docketNumber: cerebralTest.docketNumber,
+        finalBriefDueDate: '2023-08-29',
         statusOfMatter: STATUS_OF_MATTER_OPTIONS[0],
       },
     });
@@ -274,7 +277,6 @@ describe('Case Worksheets Journey', () => {
     const { caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
     });
-
     const submittedCase = caseWorksheetsFormatted.find(
       theCase =>
         theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
@@ -312,11 +314,11 @@ describe('Case Worksheets Journey', () => {
     const expectedPrimaryIssue =
       'But I don`t feel like dancin`, no sir, no dancin` today';
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'modal.primaryIssue',
+      key: 'form.primaryIssue',
       value: expectedPrimaryIssue,
     });
 
-    await cerebralTest.runSequence('updatePrimaryIssueSequence');
+    await cerebralTest.runSequence('updateCaseWorksheetSequence');
 
     ({ caseWorksheetsFormatted } = runCompute(caseWorksheetsHelper, {
       state: cerebralTest.getState(),
