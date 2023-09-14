@@ -1,8 +1,8 @@
-const {
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import {
   addPropertyHelper,
   makeRequiredHelper,
-} = require('./externalDocumentHelpers');
-const { JoiValidationConstants } = require('../JoiValidationConstants');
+} from './externalDocumentHelpers';
 
 describe('external document helpers', () => {
   describe('addPropertyHelper', () => {
@@ -10,11 +10,13 @@ describe('external document helpers', () => {
       const schema = {
         something: true,
       };
+
       addPropertyHelper({
         itemName: 'somethingElse',
         itemSchema: false,
         schema,
       });
+
       expect(schema.somethingElse).toEqual(false);
     });
 
@@ -25,6 +27,7 @@ describe('external document helpers', () => {
       const errorToMessageMap = {
         something: 'You had an error with something.',
       };
+
       addPropertyHelper({
         errorToMessageMap,
         itemErrorMessage: 'You had an error with something else.',
@@ -32,6 +35,7 @@ describe('external document helpers', () => {
         itemSchema: false,
         schema,
       });
+
       expect(schema.somethingElse).toEqual(false);
       expect(errorToMessageMap.somethingElse).toEqual(
         'You had an error with something else.',

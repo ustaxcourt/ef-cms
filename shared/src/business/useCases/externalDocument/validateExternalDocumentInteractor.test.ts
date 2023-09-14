@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
+import { ExternalDocumentInformationFactory } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
 import { validateExternalDocumentInteractor } from './validateExternalDocumentInteractor';
 
 describe('validateExternalDocumentInteractor', () => {
@@ -8,8 +8,11 @@ describe('validateExternalDocumentInteractor', () => {
     });
 
     expect(errors).toEqual({
-      category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      category:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
   });
 

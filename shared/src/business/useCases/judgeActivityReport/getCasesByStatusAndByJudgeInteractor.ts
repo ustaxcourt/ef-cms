@@ -1,138 +1,173 @@
-import { Case } from '../../entities/cases/Case';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  InvalidRequest,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
 
-const getConsolidatedCaseGroupCountMap = (
-  filteredCaseRecords,
-  consolidatedCasesGroupCountMap,
-) => {
-  filteredCaseRecords.forEach(caseRecord => {
-    if (caseRecord.leadDocketNumber) {
-      consolidatedCasesGroupCountMap.set(
-        caseRecord.leadDocketNumber,
-        caseRecord.consolidatedCases.length,
-      );
-    }
-  });
+export type JudgeActivityReportCavAndSubmittedCasesRequest = {
+  statuses: string[];
+  judges: string[];
+  pageNumber?: number;
+  pageSize?: number;
 };
 
-const hasUnwantedDocketEntryEventCode = docketEntries => {
-  const prohibitedDocketEntryEventCodes: string[] = [
-    'ODD',
-    'DEC',
-    'OAD',
-    'SDEC',
-  ];
-
-  return docketEntries.some(docketEntry => {
-    if (docketEntry.servedAt && !docketEntry.isStricken) {
-      return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
-    }
-
-    return false;
-  });
+export type CavAndSubmittedCaseResponseType = {
+  foundCases: { docketNumber: string }[];
 };
 
-const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
-  const caseRecordsToReturn: Array<any> = [];
-
-  caseRecords.forEach(individualCaseRecord => {
-    if (!hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)) {
-      caseRecordsToReturn.push(individualCaseRecord);
-    }
-  });
-
-  return caseRecordsToReturn;
+export type CavAndSubmittedFilteredCasesType = {
+  caseStatusHistory: {
+    date: string;
+    changedBy: string;
+    updatedCaseStatus: string;
+  }[];
+  caseCaption: string;
+  daysElapsedSinceLastStatusChange: number;
+  docketNumber: string;
+  leadDocketNumber?: string;
+  formattedCaseCount: number;
+  petitioners: TPetitioner[];
+  status: string;
 };
 
-/**
- * getCasesByStatusAndByJudgeInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judgeName the name of the judge
- * @param {array} providers.statuses statuses of cases for judge activity
- * @returns {object} errors (null if no errors)
- */
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext,
-  {
-    judgeName,
-    statuses,
-  }: {
-    judgeName: string;
-    statuses: string[];
-  },
-) => {
+  params: JudgeActivityReportCavAndSubmittedCasesRequest,
+): Promise<{
+  cases: CavAndSubmittedFilteredCasesType[];
+  totalCount: number;
+}> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const submittedAndCavCasesResults = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      judgeName,
-      statuses,
-    });
+  const searchEntity = new JudgeActivityReportSearch(params);
+  if (!searchEntity.isValid()) {
+    throw new InvalidRequest('Invalid search terms');
+  }
 
-  const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(async result => {
-      return await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: result.docketNumber,
-        });
+  // get all of the cases
+  const caseRecords: RawCase[] = await getCases(
+    applicationContext,
+    searchEntity,
+  );
+
+  const daysElapsedSinceLastStatusChange: number[] = caseRecords.map(
+    caseRecord => calculateDaysElapsed(applicationContext, caseRecord),
+  );
+
+  const numConsolidatedCases: number[] = await Promise.all(
+    caseRecords.map(caseRecord =>
+      calculateNumberOfConsolidatedCases(applicationContext, caseRecord),
+    ),
+  );
+
+  const finalListOfCases: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+    (caseRecord, i) => ({
+      ...caseRecord,
+      daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
+      formattedCaseCount: numConsolidatedCases[i],
     }),
   );
 
-  // We need to filter out member cases returned from elasticsearch so we can get an accurate
-  // consolidated cases group count even when the case status of a member case does not match
-  // the lead case status.
-  const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
-    rawCaseRecords
-      .filter(
-        rawCaseRecord =>
-          !rawCaseRecord.leadDocketNumber ||
-          rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber,
-      )
-      .map(async rawCaseRecord => {
-        if (rawCaseRecord.leadDocketNumber) {
-          rawCaseRecord.consolidatedCases = await applicationContext
-            .getPersistenceGateway()
-            .getCasesByLeadDocketNumber({
-              applicationContext,
-              leadDocketNumber: rawCaseRecord.docketNumber,
-            });
-          return rawCaseRecord;
-        } else {
-          return rawCaseRecord;
-        }
-      }),
-  );
+  finalListOfCases.sort((a, b) => {
+    return (
+      b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
+    );
+  });
 
-  const filteredCaseRecords = filterCasesWithUnwantedDocketEntryEventCodes(
-    rawCaseRecordsWithWithoutMemberCases,
-  );
+  const itemOffset =
+    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
 
-  const consolidatedCasesGroupCountMap = new Map();
+  const endOffset = itemOffset + searchEntity.pageSize;
 
-  getConsolidatedCaseGroupCountMap(
-    filteredCaseRecords,
-    consolidatedCasesGroupCountMap,
+  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
+    itemOffset,
+    endOffset,
   );
 
   return {
-    cases: Case.validateRawCollection(filteredCaseRecords, {
-      applicationContext,
-    }),
-    consolidatedCasesGroupCountMap: Object.fromEntries(
-      consolidatedCasesGroupCountMap,
-    ),
+    cases: formattedCaseRecordsForDisplay,
+    totalCount: finalListOfCases.length,
   };
+};
+
+const calculateDaysElapsed = (
+  applicationContext: IApplicationContext,
+  individualCase: RawCase,
+) => {
+  const currentDateInIsoFormat: string = applicationContext
+    .getUtilities()
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString(),
+      FORMATS.ISO,
+    );
+
+  individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+
+  const newestCaseStatusChangeIndex =
+    individualCase.caseStatusHistory.length - 1;
+
+  const dateOfLastCaseStatusChange =
+    individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+
+  return applicationContext
+    .getUtilities()
+    .calculateDifferenceInDays(
+      currentDateInIsoFormat,
+      dateOfLastCaseStatusChange,
+    );
+};
+
+const getCases = async (
+  applicationContext: IApplicationContext,
+  searchEntity: JudgeActivityReportSearch,
+): Promise<RawCase[]> => {
+  // first get all cases for the specified judges and statuses
+  const allCaseRecords = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByStatusAndByJudge({
+      applicationContext,
+      params: {
+        excludeMemberCases: true,
+        judges: searchEntity.judges,
+        statuses: searchEntity.statuses,
+      },
+    });
+
+  // filter out cases with decision documents
+  const docketNumbersFilterOut = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersWithServedEventCodes(applicationContext, {
+      cases: allCaseRecords,
+      eventCodes: ['ODD', 'DEC', 'OAD', 'SDEC'],
+    });
+
+  return allCaseRecords.filter(
+    caseInfo =>
+      !docketNumbersFilterOut.includes(caseInfo.docketNumber) &&
+      caseInfo.caseStatusHistory,
+  );
+};
+
+const calculateNumberOfConsolidatedCases = async (
+  applicationContext: IApplicationContext,
+  caseInfo: RawCase,
+): Promise<number> => {
+  if (!caseInfo.leadDocketNumber) {
+    return 0;
+  }
+
+  return await getCountOfConsolidedCases({
+    applicationContext,
+    leadDocketNumber: caseInfo.leadDocketNumber,
+  });
 };

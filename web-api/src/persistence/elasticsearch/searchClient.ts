@@ -6,9 +6,24 @@ import { get } from 'lodash';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
+export type SeachClientResultsType = {
+  aggregations?: {
+    [x: string]: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+    };
+  };
+  total?: number;
+  results: any;
+};
+
+export type SearClientCountResultsType = number;
 
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
@@ -42,9 +57,28 @@ export const formatResults = <T>(body: Record<string, any>) => {
   });
 
   return {
+    aggregations,
     results,
     total,
   };
+};
+
+export const count = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: Search;
+}): Promise<SearClientCountResultsType> => {
+  try {
+    const response = await applicationContext
+      .getSearchClient()
+      .count(searchParameters);
+    return get(response.body, 'count', 0);
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
+  }
 };
 
 export const search = async <T>({
@@ -53,7 +87,7 @@ export const search = async <T>({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}) => {
+}): Promise<SeachClientResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()

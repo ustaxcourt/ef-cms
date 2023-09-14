@@ -6,7 +6,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';
@@ -98,27 +98,12 @@ const updateUserContactInformationHelper = async (
     userId: user.userId,
   });
 
-  // prevent the progress bar component from showing when updating ONLY the firmName
   await generateChangeOfAddress({
     applicationContext,
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
-  });
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'user_contact_full_update_complete',
-    },
-    userId: user.userId,
-  });
-
-  userEntity.isUpdatingInformation = false;
-
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
+    websocketMessagePrefix: 'user',
   });
 };
 
