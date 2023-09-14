@@ -20,7 +20,7 @@ export const setJudgeLastNameOnJudgeActivityReportAction = ({
 
     judgeName = applicationContext
       .getUtilities()
-      .getJudgeLastName(userSectionInfo.judgeFullName);
+      .getJudgeLastName(userSectionInfo!.judgeFullName);
   } else {
     judgeName = user.name;
   }
