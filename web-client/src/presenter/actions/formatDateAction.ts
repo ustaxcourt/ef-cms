@@ -1,5 +1,3 @@
-// change the date from MM/DD/YYYY to YYYY-MM-DD
-
 export const formatDateAction = ({
   applicationContext,
   props,
