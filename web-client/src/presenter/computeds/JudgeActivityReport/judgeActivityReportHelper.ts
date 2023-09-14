@@ -70,10 +70,12 @@ export const judgeActivityReportHelper = (
       individualCase.inConsolidatedGroup = true;
     }
 
-    individualCase.statusDate = getSubmittedOrCAVDate(
-      applicationContext,
-      individualCase.caseStatusHistory,
-    );
+    individualCase.statusDate = individualCase.caseStatusHistory
+      ? getSubmittedOrCAVDate(
+          applicationContext,
+          individualCase.caseStatusHistory,
+        )
+      : '';
 
     if (individualCase.caseWorksheet) {
       individualCase.caseWorksheet.formattedFinalBriefDueDate = individualCase

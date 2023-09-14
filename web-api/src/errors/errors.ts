@@ -4,6 +4,7 @@
  */
 export const NotFoundError = class NotFoundError extends Error {
   public statusCode: number;
+  public skipLogging?: boolean;
   /**
    * constructor
    * @param {string} message the error message
@@ -55,6 +56,8 @@ export const UnknownUserError = class UnknownUserError extends Error {
  */
 export const UnauthorizedError = class UnauthorizedError extends Error {
   public statusCode: number;
+  public skipLogging?: boolean;
+
   /**
    * constructor
    * @param {string} message the error message
