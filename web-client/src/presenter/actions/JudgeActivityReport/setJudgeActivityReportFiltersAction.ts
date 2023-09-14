@@ -12,9 +12,9 @@ export const setJudgeActivityReportFiltersAction = ({
     store.set(state.judgeActivityReport.judgeName, selectedJudge);
   }
   if (filterStartDate || filterStartDate === '') {
-    store.set(state.judgeActivityReport.filters.startDate, props.startDate);
+    store.set(state.judgeActivityReport.filters.startDate, filterStartDate);
   }
   if (filterEndDate || filterEndDate === '') {
-    store.set(state.judgeActivityReport.filters.endDate, props.endDate);
+    store.set(state.judgeActivityReport.filters.endDate, filterEndDate);
   }
 };
