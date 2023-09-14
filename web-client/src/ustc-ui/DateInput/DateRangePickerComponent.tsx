@@ -115,8 +115,6 @@ export const DateRangePickerComponent = ({
   }, [endValue]);
 
   useEffect(() => {
-    console.log('dateInputRef useEffect');
-
     if (startDateInputRef.current && endDateInputRef.current) {
       const dateEndInput = window.document.getElementById(
         `${endName}-date-end`,
@@ -128,7 +126,6 @@ export const DateRangePickerComponent = ({
       const dateStartInput = window.document.getElementById(
         `${startName}-date-start`,
       );
-      console.log('dateStartInput ', dateStartInput);
 
       if (dateStartInput) {
         dateStartInput.addEventListener('change', onChangeStart);

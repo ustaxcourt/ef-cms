@@ -41,7 +41,7 @@ export const AddEditCaseWorksheetModal = connect(
           errorText={validationErrors.finalBriefDueDate}
           formGroupClassNames={'width-half'}
           id="final-brief-due-date"
-          label={'Final brief due date'}
+          label="Final brief due date"
           onChange={e => {
             updateDateValueSequence({
               key: 'finalBriefDueDate',
@@ -94,11 +94,10 @@ export const AddEditCaseWorksheetModal = connect(
           <BindedTextarea
             aria-labelledby="primary-issue-label"
             bind="form.primaryIssue"
+            className="resize-vertical-only"
             id="primary-issue"
           />
         </FormGroup>
-
-        {console.log('**** ', form)}
       </ConfirmModal>
     );
   },
