@@ -1,6 +1,7 @@
 import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+  STATUS_OF_MATTER_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
@@ -11,6 +12,7 @@ import {
   MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
 } from '@shared/test/mockCase';
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
@@ -57,6 +59,12 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     petitioners: [],
     status: CASE_STATUS_TYPES.cav,
   };
+  const mockCaseWorksheet = {
+    docketNumber: '101-20',
+    finalBriefDueDate: '01-01-2022',
+    primaryIssue: 'nothing',
+    statusOfMatter: STATUS_OF_MATTER_OPTIONS[1],
+  } as RawCaseWorksheet;
 
   beforeAll(() => {
     applicationContext.getSearchClient().count = jest.fn();
@@ -65,6 +73,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getDocketNumbersByStatusAndByJudge.mockImplementation(
         () => mockReturnedDocketNumbers,
       );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseWorksheet.mockImplementation(() => mockCaseWorksheet);
   });
 
   beforeEach(() => {
@@ -110,7 +121,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     });
   });
 
-  it(`should return an array of 1 case (stripping out the cases with served ${prohibitedDocketEntries} docket entries and no consolidated cases)`, async () => {
+  it(`should return an array of 1 case (stripping out the cases with served ${prohibitedDocketEntries} docket entries, no consolidated cases, or no caseStatusHistory)`, async () => {
     mockReturnedDocketNumbers = [
       { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
@@ -195,5 +206,49 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     );
 
     expect(result.totalCount).toEqual(1);
+  });
+
+  it('should add a caseWorksheet field to cases returned', async () => {
+    mockReturnedDocketNumbers = [
+      { ...mockCaseInfo, docketNumber: '101-23' },
+      {
+        ...mockCaseInfo,
+        docketNumber: '102-23',
+      },
+    ];
+
+    mockReturnedDocketNumbersToFilterOut = [];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
+        mockReturnedDocketNumbers,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersWithServedEventCodes.mockReturnValue(
+        mockReturnedDocketNumbersToFilterOut,
+      );
+
+    const result = await getCasesByStatusAndByJudgeInteractor(
+      applicationContext,
+      mockValidRequest,
+    );
+
+    expect(result.cases).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          caseWorksheet: mockCaseWorksheet,
+          docketNumber: '101-23',
+        }),
+        expect.objectContaining({
+          caseWorksheet: mockCaseWorksheet,
+          docketNumber: '102-23',
+        }),
+      ]),
+    );
+
+    expect(result.totalCount).toEqual(2);
   });
 });

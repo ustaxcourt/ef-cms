@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_SUBMITTED_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
@@ -24,15 +25,18 @@ describe('judgeActivityReportHelper', () => {
   beforeEach(() => {
     mockSubmittedAndCavCasesByJudge = [
       {
+        ...MOCK_SUBMITTED_CASE,
         daysElapsedSinceLastStatusChange: 1,
         docketNumber: '101-20',
         formattedCaseCount: 4,
       },
       {
+        ...MOCK_SUBMITTED_CASE,
         daysElapsedSinceLastStatusChange: 1,
         docketNumber: '103-20',
       },
       {
+        ...MOCK_SUBMITTED_CASE,
         daysElapsedSinceLastStatusChange: 1,
         docketNumber: '102-20',
       },
@@ -378,12 +382,14 @@ describe('judgeActivityReportHelper', () => {
     beforeEach(() => {
       mockSubmittedAndCavCasesByJudge = [
         {
+          ...MOCK_SUBMITTED_CASE,
           daysElapsedSinceLastStatusChange: 1,
           docketNumber: '101-20',
           formattedCaseCount: 4,
           leadDocketNumber: '101-20',
         },
         {
+          ...MOCK_SUBMITTED_CASE,
           daysElapsedSinceLastStatusChange: 1,
           docketNumber: '110-15',
           formattedCaseCount: 1,
@@ -451,6 +457,32 @@ describe('judgeActivityReportHelper', () => {
       expect(
         submittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
       ).toBe(1);
+    });
+
+    it('should return calculate statusDate using the case caseStatusHistory if available', () => {
+      const expectedStatusDate = applicationContext
+        .getUtilities()
+        .formatDateString(
+          MOCK_SUBMITTED_CASE.caseStatusHistory[0].date,
+          applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+        );
+      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        mockSubmittedAndCavCasesByJudge;
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state: baseState,
+        },
+      );
+
+      expect(submittedAndCavCasesByJudge.length).toBe(3);
+      expect(submittedAndCavCasesByJudge[0].statusDate).toBe(
+        expectedStatusDate,
+      );
+      expect(submittedAndCavCasesByJudge[1].statusDate).toBe(
+        expectedStatusDate,
+      );
+      expect(submittedAndCavCasesByJudge[2].statusDate).toBe('');
     });
   });
 
