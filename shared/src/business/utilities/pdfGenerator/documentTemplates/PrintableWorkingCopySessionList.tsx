@@ -11,7 +11,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const PrintableWorkingCopySessionList = ({
-  areUpdatedTrialSessionTypesEnabled,
   filters,
   formattedCases,
   formattedTrialSession,
@@ -109,12 +108,7 @@ export const PrintableWorkingCopySessionList = ({
                       ))}
                     </td>
                     <td>{formattedCase.filingPartiesCode}</td>
-                    <td>
-                      {generateCaseStatus(
-                        formattedCase.trialStatus,
-                        areUpdatedTrialSessionTypesEnabled,
-                      )}
-                    </td>
+                    <td>{generateCaseStatus(formattedCase.trialStatus)}</td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan={1}></td>
