@@ -60,6 +60,7 @@ describe('setForwardMessageModalDialogModalStateAction', () => {
             documentTitle: 'Petition',
           },
         ],
+        draftAttachments: [],
         from: 'test user 1',
         fromSection: PETITIONS_SECTION,
         fromUserId: '589002b0-dacd-4e84-874a-52d9898623c3',

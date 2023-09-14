@@ -1,11 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * updates the message form data's attachments field based on the document being QCd
- * @param {object} providers the providers object
- * @param {object} providers.get the get function to retrieve values from state
- * @param {object} providers.store the cerebral store object
- */
 export const updateMessageModalAfterQCAction = ({
   applicationContext,
   get,
@@ -27,4 +21,6 @@ export const updateMessageModalAfterQCAction = ({
       documentTitle,
     },
   ]);
+
+  store.set(state.modal.form.draftAttachments, []);
 };

@@ -39,6 +39,7 @@ export const docketClerkCreatesMessageWithCorrespondence = cerebralTest => {
     );
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: correspondence.correspondenceId,
     });
 
