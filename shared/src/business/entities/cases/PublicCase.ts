@@ -90,7 +90,9 @@ export class PublicCase extends JoiValidationEntity {
       );
 
       this.leadDocketNumber = rawCase.leadDocketNumber;
-      this.consolidatedCases = rawCase.consolidatedCases;
+      this.consolidatedCases = (rawCase.consolidatedCases || []).map(
+        consolidatedCase => new ConsolidatedCaseDTO(consolidatedCase),
+      );
     } else if (!this.isSealed) {
       this.petitioners = [];
       rawCase.petitioners.map(petitioner => {
