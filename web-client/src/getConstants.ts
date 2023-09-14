@@ -143,6 +143,11 @@ const EXTERNAL_USER_DASHBOARD_TABS = {
   OPEN: 'Open',
 };
 
+export const GENERATION_TYPES = {
+  AUTO: 'auto',
+  MANUAL: 'manual',
+};
+
 const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
 const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
 const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
@@ -222,6 +227,7 @@ export const getConstants = () => ({
     qcSectionInProgress: 'qc-section-in-progress',
     qcSectionInbox: 'qc-section-inbox',
   },
+  GENERATION_TYPES,
   GENERIC_ORDER_EVENT_CODE,
   HYBRID_SESSION_TYPES,
   IDLE_STATUS: { ACTIVE: 'active', IDLE: 'idle' },

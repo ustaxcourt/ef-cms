@@ -1,6 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
+import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
 import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -26,6 +27,7 @@ export const reviewRequestAccessInformationSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
+      generateEntryOfAppearancePdfAction,
       generateCaseAssociationTitleAction,
       generateTitleForSupportingDocumentsAction,
       stopShowValidationAction,

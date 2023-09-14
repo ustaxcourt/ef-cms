@@ -3,8 +3,8 @@ import { ExternalConsolidatedGroupCards } from '../FileDocument/ExternalConsolid
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
-import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
+import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -48,10 +48,14 @@ export const RequestAccessReview = connect(
           information appears the way you want it to.
         </p>
 
-        <Hint>
-          Don’t forget to check your PDF(s) to ensure all personal information
-          has been removed or redacted.
-        </Hint>
+        <WarningNotificationComponent
+          alertWarning={{
+            message:
+              "Don't forget to check your document(s) to ensure personal information has been removed or redacted.",
+          }}
+          dismissable={false}
+          scrollToTop={false}
+        />
 
         <div className="grid-container padding-x-0">
           <div className="grid-row grid-gap">
