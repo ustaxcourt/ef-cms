@@ -1,30 +1,34 @@
-import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_CASE, MOCK_CONSOLIDATED_CASE_SUMMARY } from '../../test/mockCase';
 import { MOCK_USERS } from '../../test/mockUsers';
+import { RawConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
 import { getContactPrimary } from '../entities/cases/Case';
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
-  const mockConsolidatedCases = [
+  const mockConsolidatedCases: RawConsolidatedCaseDTO[] = [
     {
+      ...MOCK_CONSOLIDATED_CASE_SUMMARY,
       docketNumber: '103-23',
       entityName: 'Case',
       leadDocketNumber: '101-18',
       sortableDocketNumber: 2023000103,
     },
     {
-      ...MOCK_CASE,
+      ...MOCK_CONSOLIDATED_CASE_SUMMARY,
       docketNumber: '101-18',
       leadDocketNumber: '101-18',
     },
     {
+      ...MOCK_CONSOLIDATED_CASE_SUMMARY,
       docketNumber: '102-23',
       entityName: 'Case',
       leadDocketNumber: '101-18',
       sortableDocketNumber: 2023000102,
     },
     {
+      ...MOCK_CONSOLIDATED_CASE_SUMMARY,
       docketNumber: '104-23',
       entityName: 'Case',
       leadDocketNumber: '101-18',

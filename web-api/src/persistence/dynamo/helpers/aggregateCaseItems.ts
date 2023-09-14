@@ -4,7 +4,10 @@ import {
   PrivatePractitionerOnCaseRecord,
   TDynamoRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
-import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+import {
+  ConsolidatedCaseDTO,
+  RawConsolidatedCaseDTO,
+} from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import { sortBy } from 'lodash';
 
 export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
@@ -123,11 +126,13 @@ export const aggregateConsolidatedCaseItems = (
   consolidatedCaseItems: TDynamoRecord<
     IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
   >[],
-): ConsolidatedCaseDTO[] => {
-  const caseMap: Map<string, ConsolidatedCaseDTO> = new Map();
+): RawConsolidatedCaseDTO[] => {
+  const caseMap: Map<string, RawConsolidatedCaseDTO> = new Map();
   consolidatedCaseItems
     .filter((item): item is CaseRecord => isCaseItem(item))
-    .forEach(item => caseMap.set(item.pk, new ConsolidatedCaseDTO(item)));
+    .forEach(item =>
+      caseMap.set(item.pk, new ConsolidatedCaseDTO(item).toRawObject()),
+    );
 
   consolidatedCaseItems.forEach(item => {
     if (isIrsPractitionerItem(item)) {
