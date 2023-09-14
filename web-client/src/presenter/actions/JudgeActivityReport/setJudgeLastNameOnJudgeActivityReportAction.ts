@@ -25,9 +25,6 @@ export const setJudgeLastNameOnJudgeActivityReportAction = ({
     judgeName = user.name;
   }
 
-  store.set(state.judgeActivityReport.filters.judgeName, judgeName);
-  store.set(
-    state.judgeActivityReport.filters.judgeNameToDisplayForHeader,
-    judgeName,
-  );
+  store.set(state.judgeActivityReport.judgeName, judgeName);
+  store.set(state.judgeActivityReport.judgeNameToDisplayForHeader, judgeName);
 };

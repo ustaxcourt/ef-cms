@@ -9,12 +9,12 @@ export const setJudgeActivityReportFiltersAction = ({
   const selectedJudge: string = props.judgeName;
 
   if (selectedJudge) {
-    store.set(state.judgeActivityReport.filters.judgeName, selectedJudge);
+    store.set(state.judgeActivityReport.judgeName, selectedJudge);
   }
   if (filterStartDate || filterStartDate === '') {
-    store.set(state.judgeActivityReport.filters.startDate, filterStartDate);
+    store.set(state.judgeActivityReport.filters.startDate, props.startDate);
   }
   if (filterEndDate || filterEndDate === '') {
-    store.set(state.judgeActivityReport.filters.endDate, filterEndDate);
+    store.set(state.judgeActivityReport.filters.endDate, props.endDate);
   }
 };
