@@ -37,7 +37,7 @@ export type CavAndSubmittedFilteredCasesType = {
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
