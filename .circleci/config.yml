@@ -12,6 +12,10 @@ parameters:
     default: true
     type: boolean
 
+  run_glue_to_test:
+    default: false
+    type: boolean
+
   run_glue_to_lower_env:
     default: false
     type: boolean
@@ -954,7 +958,9 @@ workflows:
 
   glue-to-test:
     when:
-      equal: [ glue-to-test-schedule, << pipeline.schedule.name >> ]
+      or:
+        - equal: [ glue-to-test-schedule, << pipeline.schedule.name >> ]
+        - << pipeline.parameters.run_glue_to_test >>
     jobs:
       - delete-existing-data:
           <<: *only-test
