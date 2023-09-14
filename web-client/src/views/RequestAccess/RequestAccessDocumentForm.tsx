@@ -2,10 +2,10 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../../ustc-ui/Hint/Hint';
+import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
 import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
 import { SupportingDocuments } from '../FileDocument/SupportingDocuments';
-import { TextView } from '../../ustc-ui/Text/TextView';
+import { TextView } from '@web-client/ustc-ui/Text/TextView';
 import { WhatCanIIncludeModalOverlay } from '../FileDocument/WhatCanIIncludeModalOverlay';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -41,13 +41,9 @@ export const RequestAccessDocumentForm = connect(
     return (
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
-        <Hint>
-          Remember to remove or redact all personal information (such as Social
-          Security Numbers, Taxpayer Identification Numbers, or Employer
-          Identification Numbers) from your documents.
-        </Hint>
+        <PIIRedactedWarning />
 
-        <div className="blue-container">
+        <div>
           <FormGroup errorText={validationErrors?.primaryDocumentFile}>
             <label
               className={classNames(

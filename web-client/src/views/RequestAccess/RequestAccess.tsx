@@ -56,7 +56,7 @@ export const RequestAccess = connect(
             Type of Document You’re Filing
           </h2>
         </div>
-        <div className="blue-container">
+        <div>
           <FormGroup errorText={validationErrors.documentType}>
             <label
               className="usa-label"
@@ -105,10 +105,10 @@ export const RequestAccess = connect(
               }}
             />
           </FormGroup>
-          <RequestAccessDocumentForm />
           {requestAccessHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
+          <RequestAccessDocumentForm />
           {allowExternalConsolidatedGroupFiling && (
             <ExternalConsolidatedCaseGroupFilingCard />
           )}
