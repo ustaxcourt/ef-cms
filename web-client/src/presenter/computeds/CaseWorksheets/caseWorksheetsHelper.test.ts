@@ -60,7 +60,6 @@ describe('caseWorksheetsHelper', () => {
 
     baseState = {
       submittedAndCavCases: {
-        consolidatedCasesGroupCountMap: {},
         submittedAndCavCasesByJudge,
         worksheets: [{ docketNumber: '110-15', primaryIssue: 'ZOINKS!' }],
       },

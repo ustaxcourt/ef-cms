@@ -15,5 +15,5 @@ export const setAddEditCaseWorksheetModalStateAction = ({
     ws => ws.docketNumber === docketNumber,
   ) || { docketNumber };
 
-  store.set(state.form, caseWorksheet);
+  store.set(state.form, { ...caseWorksheet });
 };

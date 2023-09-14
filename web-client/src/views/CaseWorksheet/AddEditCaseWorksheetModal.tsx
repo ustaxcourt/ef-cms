@@ -30,7 +30,7 @@ export const AddEditCaseWorksheetModal = connect(
         confirmLabel="Save"
         preventCancelOnBlur={true}
         title="Add/Edit Case Worksheet"
-        onCancelSequence="clearModalFormSequence"
+        onCancelSequence="dismissAddEditCaseWorksheetModalSequence"
         onConfirmSequence="updateCaseWorksheetSequence"
       >
         <h5 className="margin-bottom-4">
