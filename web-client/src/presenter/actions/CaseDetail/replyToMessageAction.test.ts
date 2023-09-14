@@ -4,8 +4,18 @@ import { replyToMessageAction } from './replyToMessageAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('replyToMessageAction', () => {
+  const forwardedDocOne = '546ea14f-833f-4576-a547-8ceb7f6282a2';
+  const forwardedDocTwo = 'eab4fc75-ef58-4966-a043-8a83e9a61391';
+
+  const firstAttachedMessage = 'b1130321-0a76-43bc-b3eb-64a18f079873';
+
   beforeAll(() => {
     applicationContext.getUseCases().replyToMessageInteractor.mockReturnValue({
+      attachments: [
+        { documentId: forwardedDocOne },
+        { documentId: forwardedDocTwo },
+        { documentId: firstAttachedMessage },
+      ],
       docketNumber: '123-45',
       parentMessageId: '123',
     });
@@ -14,9 +24,7 @@ describe('replyToMessageAction', () => {
   });
 
   it('should call replyToMessageInteractor with the expected parameters and return the alertSuccess and parentMessageId', async () => {
-    const documentIdForFirstAttachment = 'b1130321-0a76-43bc-b3eb-64a18f079873';
-
-    const documentIdForSecondAttachment = 'b1130321-0a76-43bc-b3eb-64a18f55555';
+    const selectedDocumentIdOne = 'b1135321-0a76-43bc-b3eb-64a18f55555';
 
     const result = await runAction(replyToMessageAction, {
       modules: {
@@ -30,13 +38,13 @@ describe('replyToMessageAction', () => {
           form: {
             attachments: [
               {
-                documentId: documentIdForFirstAttachment,
+                documentId: firstAttachedMessage,
                 documentTitle: 'Petition',
               },
             ],
             draftAttachments: [
               {
-                documentId: documentIdForSecondAttachment,
+                documentId: selectedDocumentIdOne,
                 documentTitle: 'Petition Title',
               },
             ],
@@ -57,11 +65,11 @@ describe('replyToMessageAction', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: documentIdForFirstAttachment,
+          documentId: firstAttachedMessage,
           documentTitle: 'Petition',
         },
         {
-          documentId: documentIdForSecondAttachment,
+          documentId: selectedDocumentIdOne,
           documentTitle: 'Petition Title',
         },
       ],
@@ -74,7 +82,7 @@ describe('replyToMessageAction', () => {
     expect(result.output).toHaveProperty('parentMessageId');
     expect(result.output).toMatchObject({
       messageViewerDocumentToDisplay: {
-        documentId: documentIdForFirstAttachment,
+        documentId: firstAttachedMessage,
       },
     });
   });
