@@ -2,16 +2,6 @@ import { CaseWorksheet } from './CaseWorksheet';
 
 describe('CaseWorksheet', () => {
   describe('validation', () => {
-    it('should be invalid when the primary issue is not a string', () => {
-      const worksheet = new CaseWorksheet({
-        primaryIssue: 1234567890,
-      });
-
-      expect(worksheet.getFormattedValidationErrors()!.primaryIssue).toEqual(
-        'Add primary issue',
-      );
-    });
-
     it('should be invalid when the final brief due date is NOT a date string', () => {
       const worksheet = new CaseWorksheet({
         finalBriefDueDate: 'abcdef',

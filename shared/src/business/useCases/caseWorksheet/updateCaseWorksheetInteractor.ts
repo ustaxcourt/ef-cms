@@ -17,7 +17,6 @@ export const updateCaseWorksheetInteractor = async (
     worksheet: RawCaseWorksheet;
   },
 ): Promise<RawCaseWorksheet> => {
-  console.log('&&&& ', worksheet);
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_WORKSHEET)) {

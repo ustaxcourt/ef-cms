@@ -1,4 +1,4 @@
-import { InvalidEntityError, UnauthorizedError } from '../../../errors/errors';
+import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
@@ -20,8 +20,7 @@ describe('updateCaseWorksheetInteractor', () => {
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
-        docketNumber: mockCaseWorksheet.docketNumber,
-        updatedProps: {},
+        worksheet: mockCaseWorksheet,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -34,8 +33,8 @@ describe('updateCaseWorksheetInteractor', () => {
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
-        docketNumber: mockCaseWorksheet.docketNumber,
-        updatedProps: {
+        worksheet: {
+          ...mockCaseWorksheet,
           finalBriefDueDate: 'abc', // finalBriefDueDate should be a date formatted as YYYY-MM-DD
         },
       }),
@@ -53,9 +52,9 @@ describe('updateCaseWorksheetInteractor', () => {
       .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
 
     const result = await updateCaseWorksheetInteractor(applicationContext, {
-      docketNumber: mockCaseWorksheet.docketNumber,
-      updatedProps: {
-        finalBriefDueDate: mockFinalBriefDueDate,
+      worksheet: {
+        ...mockCaseWorksheet,
+        finalBriefDueDate: mockFinalBriefDueDate, // finalBriefDueDate should be a date formatted as YYYY-MM-DD
       },
     });
 
@@ -90,9 +89,9 @@ describe('updateCaseWorksheetInteractor', () => {
       .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
 
     const result = await updateCaseWorksheetInteractor(applicationContext, {
-      docketNumber: mockCaseWorksheet.docketNumber,
-      updatedProps: {
-        finalBriefDueDate: mockFinalBriefDueDate,
+      worksheet: {
+        ...mockCaseWorksheet,
+        finalBriefDueDate: mockFinalBriefDueDate, // finalBriefDueDate should be a date formatted as YYYY-MM-DD
       },
     });
 
