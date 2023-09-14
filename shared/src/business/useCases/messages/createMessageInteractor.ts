@@ -6,26 +6,36 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
+export type MessageType = {
+  attachments: {
+    documentId: string;
+  }[];
+  message: string;
+  subject: string;
+  toSection: string;
+  toUserId: string;
+};
+
+export type MessageWithMetaData = MessageType & {
+  docketNumber: string;
+};
+
+export type ReplyMessageType = MessageType & {
+  parentMessageId: string;
+  docketNumber: string;
+};
+
 export const createMessageInteractor = async (
   applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    docketNumber: string;
-    draftAttachments: any;
-    message: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: MessageWithMetaData,
+): Promise<RawMessage> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -44,8 +54,6 @@ export const createMessageInteractor = async (
   const toUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
-
-  attachments = [...attachments, ...draftAttachments];
 
   const validatedRawMessage = new Message(
     {

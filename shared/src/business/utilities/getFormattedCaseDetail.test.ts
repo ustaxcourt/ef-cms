@@ -484,6 +484,7 @@ describe('getFormattedCaseDetail', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
               docketEntryId: 'd-1-2-3',
@@ -519,6 +520,7 @@ describe('getFormattedCaseDetail', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
       caseDetail: {
+        ...MOCK_CASE,
         petitionPaymentDate: '2019-03-01T21:40:46.415Z',
         petitionPaymentMethod: 'check',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
@@ -532,6 +534,7 @@ describe('getFormattedCaseDetail', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
       caseDetail: {
+        ...MOCK_CASE,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
       },
@@ -543,7 +546,10 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for an unpaid petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
-      caseDetail: { petitionPaymentStatus: PAYMENT_STATUS.UNPAID },
+      caseDetail: {
+        ...MOCK_CASE,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      },
     });
 
     expect(result.filingFee).toEqual(`${PAYMENT_STATUS.UNPAID}  `);
