@@ -43,7 +43,7 @@ Follow these steps to perform a glue job manually.
    ```
 1. After the glue job and S3 documents sync are both complete, re-enable the DynamoDB streams so the newly-glued data will be indexed in OpenSearch:
    ```zsh
-   ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+   ./shared/admin-tools/dynamodb/toggle-streams.sh --on
    ```
 
 ## Automated Glue Jobs
