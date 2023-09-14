@@ -54,7 +54,7 @@ describe('updateCaseWorksheetInteractor', () => {
     const result = await updateCaseWorksheetInteractor(applicationContext, {
       worksheet: {
         ...mockCaseWorksheet,
-        finalBriefDueDate: mockFinalBriefDueDate, // finalBriefDueDate should be a date formatted as YYYY-MM-DD
+        finalBriefDueDate: mockFinalBriefDueDate,
       },
     });
 
@@ -91,7 +91,7 @@ describe('updateCaseWorksheetInteractor', () => {
     const result = await updateCaseWorksheetInteractor(applicationContext, {
       worksheet: {
         ...mockCaseWorksheet,
-        finalBriefDueDate: mockFinalBriefDueDate, // finalBriefDueDate should be a date formatted as YYYY-MM-DD
+        finalBriefDueDate: mockFinalBriefDueDate,
       },
     });
 

@@ -1,9 +1,9 @@
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setCaseWorksheetsByJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsByJudgeAction';
+import { setCaseWorksheetsForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsForJudgeAction';
 
-describe('setCaseWorksheetsByJudgeAction', () => {
+describe('setCaseWorksheetsForJudgeAction', () => {
   it('should add the case worksheets to state', async () => {
     const mockCaseWorksheets: RawCaseWorksheet[] = [
       {
@@ -13,7 +13,7 @@ describe('setCaseWorksheetsByJudgeAction', () => {
       },
     ];
 
-    const { state } = await runAction(setCaseWorksheetsByJudgeAction, {
+    const { state } = await runAction(setCaseWorksheetsForJudgeAction, {
       props: {
         worksheets: mockCaseWorksheets,
       },
