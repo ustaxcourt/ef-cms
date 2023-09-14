@@ -7,7 +7,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setFormValueAction = ({ props, store }: ActionProps) => {
-  console.log('props: ', props.key, props.value);
   if (props.value !== '' && props.value !== null) {
     store.set(state.form[props.key], props.value);
   } else {
