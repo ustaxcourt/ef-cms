@@ -43,172 +43,220 @@ export const RequestAccessDocumentForm = connect(
         <h2 className="margin-top-4">Tell Us About This Document</h2>
         <PIIRedactedWarning />
 
-        <div>
-          <FormGroup errorText={validationErrors?.primaryDocumentFile}>
-            <label
-              className={classNames(
-                'usa-label ustc-upload with-hint',
-                requestAccessHelper.showPrimaryDocumentValid && 'validated',
-              )}
-              htmlFor="primary-document"
-              id="primary-document-label"
-            >
-              Upload your document
-              <span className="success-message padding-left-1">
-                <FontAwesomeIcon icon="check-circle" size="sm" />
-              </span>
-            </label>
-            <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
-            </span>
-            <StateDrivenFileInput
-              aria-describedby="primary-document-label"
-              id="primary-document"
-              name="primaryDocumentFile"
-              updateFormValueSequence="updateCaseAssociationFormValueSequence"
-              validationSequence="validateCaseAssociationRequestSequence"
-            />
-          </FormGroup>
-
-          <div className="usa-form-group margin-bottom-0">
+        {form.eventCode === 'EA' && (
+          <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
-              <legend>
-                Select extra items to include with your document
-                <Button
-                  link
-                  className="margin-top-1"
-                  onClick={() =>
-                    openCleanModalSequence({
-                      showModal: 'WhatCanIIncludeModalOverlay',
-                    })
-                  }
-                >
-                  <FontAwesomeIcon
-                    className="margin-right-05"
-                    icon="question-circle"
-                    size="1x"
-                  />
-                  What can I include with my document?
-                </Button>
-              </legend>
-
-              <div className="usa-checkbox">
+              <div className="usa-radio usa-radio__inline">
                 <input
-                  checked={form.attachments || false}
-                  className="usa-checkbox__input"
-                  id="primaryDocument-attachments"
-                  name="attachments"
-                  type="checkbox"
-                  onChange={e => {
+                  checked={form.generationType === 'auto'}
+                  className="usa-radio__input"
+                  id="auto-generation"
+                  name="generationType"
+                  type="radio"
+                  onChange={() => {
                     updateCaseAssociationFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
+                      key: 'generationType',
+                      value: 'auto',
                     });
-                    validateCaseAssociationRequestSequence();
                   }}
                 />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="primaryDocument-attachments"
-                >
-                  Attachment(s)
+                <label className="usa-radio__label" htmlFor="auto-generation">
+                  Auto-generate Entry of Appearance PDF (Use only if you do not
+                  need to add attachments or a Certificate of Service)
                 </label>
               </div>
-              <div className="usa-checkbox">
-                <input
-                  checked={form.certificateOfService || false}
-                  className="usa-checkbox__input"
-                  id="primaryDocument-certificateOfService"
-                  name="certificateOfService"
-                  type="checkbox"
-                  onChange={e => {
-                    updateCaseAssociationFormValueSequence({
-                      key: e.target.name,
-                      value: e.target.checked,
-                    });
-                    validateCaseAssociationRequestSequence();
-                  }}
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor="primaryDocument-certificateOfService"
-                >
-                  Certificate of Service
-                </label>
-              </div>
-            </fieldset>
 
-            {form.certificateOfService && (
-              <DateInput
-                errorText={validationErrors?.certificateOfServiceDate}
-                id="service-date"
-                label="Service date"
-                names={{
-                  day: 'certificateOfServiceDay',
-                  month: 'certificateOfServiceMonth',
-                  year: 'certificateOfServiceYear',
+              <input
+                checked={form.generationType === 'manual'}
+                className="usa-radio__input"
+                id="manual-generation"
+                name="generationType"
+                type="radio"
+                onChange={() => {
+                  updateCaseAssociationFormValueSequence({
+                    key: 'generationType',
+                    value: 'manual',
+                  });
                 }}
-                values={{
-                  day: form.certificateOfServiceDay,
-                  month: form.certificateOfServiceMonth,
-                  year: form.certificateOfServiceYear,
-                }}
-                onBlur={validateCaseAssociationRequestSequence}
-                onChange={updateCaseAssociationFormValueSequence}
               />
-            )}
+              <label className="usa-radio__label" htmlFor="manual-generation">
+                Upload PDF form
+              </label>
+            </fieldset>
           </div>
+        )}
 
-          {requestAccessHelper.documentWithObjections && (
-            <FormGroup errorText={validationErrors?.objections}>
-              <fieldset className="usa-fieldset margin-bottom-0">
-                <legend id="objections-legend">
-                  Are there any objections to this document?
-                </legend>
-                {OBJECTIONS_OPTIONS.map(option => (
-                  <div className="usa-radio usa-radio__inline" key={option}>
+        {form.generationType === 'manual' && (
+          <>
+            <div>
+              <FormGroup errorText={validationErrors?.primaryDocumentFile}>
+                <label
+                  className={classNames(
+                    'usa-label ustc-upload with-hint',
+                    requestAccessHelper.showPrimaryDocumentValid && 'validated',
+                  )}
+                  htmlFor="primary-document"
+                  id="primary-document-label"
+                >
+                  Upload your document
+                  <span className="success-message padding-left-1">
+                    <FontAwesomeIcon icon="check-circle" size="sm" />
+                  </span>
+                </label>
+                <span className="usa-hint">
+                  File must be in PDF format (.pdf). Max file size{' '}
+                  {constants.MAX_FILE_SIZE_MB}MB.
+                </span>
+                <StateDrivenFileInput
+                  aria-describedby="primary-document-label"
+                  id="primary-document"
+                  name="primaryDocumentFile"
+                  updateFormValueSequence="updateCaseAssociationFormValueSequence"
+                  validationSequence="validateCaseAssociationRequestSequence"
+                />
+              </FormGroup>
+
+              <div className="usa-form-group margin-bottom-0">
+                <fieldset className="usa-fieldset margin-bottom-0">
+                  <legend>
+                    Select extra items to include with your document
+                    <Button
+                      link
+                      className="margin-top-1"
+                      onClick={() =>
+                        openCleanModalSequence({
+                          showModal: 'WhatCanIIncludeModalOverlay',
+                        })
+                      }
+                    >
+                      <FontAwesomeIcon
+                        className="margin-right-05"
+                        icon="question-circle"
+                        size="1x"
+                      />
+                      What can I include with my document?
+                    </Button>
+                  </legend>
+
+                  <div className="usa-checkbox">
                     <input
-                      aria-describedby="objections-legend"
-                      checked={form.objections === option}
-                      className="usa-radio__input"
-                      id={`objections-${option}`}
-                      name="objections"
-                      type="radio"
-                      value={option}
+                      checked={form.attachments || false}
+                      className="usa-checkbox__input"
+                      id="primaryDocument-attachments"
+                      name="attachments"
+                      type="checkbox"
                       onChange={e => {
                         updateCaseAssociationFormValueSequence({
                           key: e.target.name,
-                          value: e.target.value,
+                          value: e.target.checked,
                         });
                         validateCaseAssociationRequestSequence();
                       }}
                     />
                     <label
-                      className="usa-radio__label"
-                      htmlFor={`objections-${option}`}
+                      className="usa-checkbox__label"
+                      htmlFor="primaryDocument-attachments"
                     >
-                      {option}
+                      Attachment(s)
                     </label>
                   </div>
-                ))}
-              </fieldset>
-            </FormGroup>
-          )}
-        </div>
+                  <div className="usa-checkbox">
+                    <input
+                      checked={form.certificateOfService || false}
+                      className="usa-checkbox__input"
+                      id="primaryDocument-certificateOfService"
+                      name="certificateOfService"
+                      type="checkbox"
+                      onChange={e => {
+                        updateCaseAssociationFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                        validateCaseAssociationRequestSequence();
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      htmlFor="primaryDocument-certificateOfService"
+                    >
+                      Certificate of Service
+                    </label>
+                  </div>
+                </fieldset>
 
-        {requestAccessHelper.documentWithSupportingDocuments && (
-          <div>
-            <SupportingDocuments />
-            <TextView
-              bind="validationErrors.hasSupportingDocuments"
-              className="usa-error-message"
-            />
-          </div>
-        )}
+                {form.certificateOfService && (
+                  <DateInput
+                    className="margin-top-2"
+                    errorText={validationErrors?.certificateOfServiceDate}
+                    id="service-date"
+                    label="Service date"
+                    names={{
+                      day: 'certificateOfServiceDay',
+                      month: 'certificateOfServiceMonth',
+                      year: 'certificateOfServiceYear',
+                    }}
+                    values={{
+                      day: form.certificateOfServiceDay,
+                      month: form.certificateOfServiceMonth,
+                      year: form.certificateOfServiceYear,
+                    }}
+                    onBlur={validateCaseAssociationRequestSequence}
+                    onChange={updateCaseAssociationFormValueSequence}
+                  />
+                )}
+              </div>
 
-        {showModal === 'WhatCanIIncludeModalOverlay' && (
-          <WhatCanIIncludeModalOverlay />
+              {requestAccessHelper.documentWithObjections && (
+                <FormGroup errorText={validationErrors?.objections}>
+                  <fieldset className="usa-fieldset margin-top-2">
+                    <legend id="objections-legend">
+                      Are there any objections to this document?
+                    </legend>
+                    {OBJECTIONS_OPTIONS.map(option => (
+                      <div className="usa-radio usa-radio__inline" key={option}>
+                        <input
+                          aria-describedby="objections-legend"
+                          checked={form.objections === option}
+                          className="usa-radio__input"
+                          id={`objections-${option}`}
+                          name="objections"
+                          type="radio"
+                          value={option}
+                          onChange={e => {
+                            updateCaseAssociationFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                            validateCaseAssociationRequestSequence();
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          htmlFor={`objections-${option}`}
+                        >
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                  </fieldset>
+                </FormGroup>
+              )}
+            </div>
+
+            {requestAccessHelper.documentWithSupportingDocuments && (
+              <div>
+                <SupportingDocuments />
+                <TextView
+                  bind="validationErrors.hasSupportingDocuments"
+                  className="usa-error-message"
+                />
+              </div>
+            )}
+
+            {showModal === 'WhatCanIIncludeModalOverlay' && (
+              <WhatCanIIncludeModalOverlay />
+            )}
+          </>
         )}
       </>
     );
