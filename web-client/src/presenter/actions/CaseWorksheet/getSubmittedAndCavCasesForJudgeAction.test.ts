@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';

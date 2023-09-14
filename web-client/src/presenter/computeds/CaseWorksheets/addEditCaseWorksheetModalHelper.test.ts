@@ -12,7 +12,7 @@ describe('addEditCaseWorksheetModalHelper', () => {
   it('should return the title of the modal, formatted to include the docket number and case title of the case the user is adding a primary issue to', () => {
     const { title } = runCompute(addEditCaseWorksheetModalHelper, {
       state: {
-        modal: {
+        form: {
           docketNumber: MOCK_CASE.docketNumber,
         },
         submittedAndCavCases: {
