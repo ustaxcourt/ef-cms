@@ -458,6 +458,7 @@ import { updateChambersInCreateMessageModalSequence } from './sequences/updateCh
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
+import { updateDateValueSequence } from './sequences/updateDateValueSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
@@ -991,6 +992,7 @@ export const presenterSequences = {
   updateCourtIssuedDocketEntryFormValueSequence,
   updateCreateOrderModalFormValueSequence,
   updateDateRangeForDeadlinesSequence,
+  updateDateValueSequence,
   updateDocketEntryFormValueSequence,
   updateDocketEntryMetaDocumentFormValueSequence,
   updateDocketNumberSearchFormSequence,

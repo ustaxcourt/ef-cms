@@ -9,6 +9,8 @@ export const validateCaseWorksheetAction = ({
     state.form,
   );
 
+  console.log('finalBriefDueDate ', finalBriefDueDate);
+
   const errors = applicationContext
     .getUseCases()
     .validateCaseWorksheetInteractor({
