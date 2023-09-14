@@ -38,6 +38,7 @@ export const AddEditCaseWorksheetModal = connect(
         <DateInputThatActuallyWorks
           errorText={validationErrors.finalBriefDueDate}
           formGroupClassNames={'width-half'}
+          id="final-bried-due-date"
           label={'Final brief due date'}
           onChange={e => {
             console.log(e.target.value);

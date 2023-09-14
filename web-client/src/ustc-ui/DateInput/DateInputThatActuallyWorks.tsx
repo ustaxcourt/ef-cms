@@ -6,24 +6,29 @@ export const DateInputThatActuallyWorks = ({
   defaultValue,
   errorText,
   formGroupClassNames,
+  id,
   label,
   onChange,
 }) => {
   const formGroupInputRef = useRef<HTMLInputElement>(null);
-  const dateInputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    if (dateInputRef.current) {
-      // const datePickerInput = dateInputRef.current.getRootNode();
-      console.log(dateInputRef.current.value, '&&&&');
-      dateInputRef.current.addEventListener('change', onChange);
-      dateInputRef.current.addEventListener('input', onChange);
-    }
-  }, [dateInputRef]);
 
   useEffect(() => {
     if (formGroupInputRef.current) {
+      /**
+       * The way USWDS date-picker works is it'll search the page for a usa-date-picker and
+       * modify the dom by inserting another input.  This causes a hidden input called
+       * usa-date-picker__input-input to be created in place of the input defined in this
+       * JSX file, and also a usa-date-picker__external-input which is the one that the users
+       * see in the UI and can type into.  This effect hooks into that visible input so that
+       * we can get the actual visible value of the input.
+       */
       datePicker.on(formGroupInputRef.current);
+      const myDatePicker = formGroupInputRef.current.querySelector(
+        `#${id}-picker.usa-date-picker__external-input`,
+      );
+      if (!myDatePicker) throw new Error('could not find expected date picker');
+      myDatePicker.addEventListener('change', onChange);
+      myDatePicker.addEventListener('input', onChange);
     }
   }, [formGroupInputRef]);
 
@@ -33,17 +38,19 @@ export const DateInputThatActuallyWorks = ({
       errorText={errorText}
       formGroupRef={formGroupInputRef}
     >
-      <label className="usa-label" htmlFor="date-picker" id="date-picker-label">
+      <label
+        className="usa-label"
+        htmlFor={`${id}-picker`}
+        id={`${id}-date-picker-label`}
+      >
         {label}
       </label>
       <div className="usa-date-picker" data-default-value={defaultValue}>
         <input
           aria-labelledby="date-picker-label"
           className="usa-input"
-          data-hello="world"
-          id="date-picker"
-          name="date-picker"
-          ref={dateInputRef}
+          id={`${id}-picker`}
+          name={`${id}-date-picker`}
           type="text"
         />
       </div>
