@@ -4,12 +4,17 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('forwardMessageAction', () => {
+  const forwardedDocOne = '546ea14f-833f-4576-a547-8ceb7f6282a2';
+  const forwardedDocTwo = 'eab4fc75-ef58-4966-a043-8a83e9a61391';
+  const firstAttachedMessageId = 'b1130321-0a76-43bc-b3eb-64a18f079873';
+
+  const selectedDocumentIdOne = 'b1135321-0a76-43bc-b3eb-64a18f55555';
   beforeAll(() => {
     applicationContext.getUseCases().forwardMessageInteractor.mockReturnValue({
       attachments: [
-        { documentId: '546ea14f-833f-4576-a547-8ceb7f6282a2' },
-        { documentId: 'eab4fc75-ef58-4966-a043-8a83e9a61391' },
-        { documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873' },
+        { documentId: forwardedDocOne },
+        { documentId: forwardedDocTwo },
+        { documentId: firstAttachedMessageId },
       ],
       docketNumber: '123-45',
       parentMessageId: '123',
@@ -31,13 +36,13 @@ describe('forwardMessageAction', () => {
           form: {
             attachments: [
               {
-                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+                documentId: firstAttachedMessageId,
                 documentTitle: 'Petition',
               },
             ],
             draftAttachments: [
               {
-                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+                documentId: selectedDocumentIdOne,
                 documentTitle: 'Petition Two',
               },
             ],
@@ -58,11 +63,11 @@ describe('forwardMessageAction', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentId: firstAttachedMessageId,
           documentTitle: 'Petition',
         },
         {
-          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          documentId: selectedDocumentIdOne,
           documentTitle: 'Petition Two',
         },
       ],
@@ -75,7 +80,7 @@ describe('forwardMessageAction', () => {
     expect(result.output).toHaveProperty('parentMessageId');
     expect(result.output).toMatchObject({
       messageViewerDocumentToDisplay: {
-        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+        documentId: firstAttachedMessageId,
       },
     });
   });
