@@ -13,7 +13,6 @@ describe('generateCaseStatus', () => {
     { key: 'motionToDismiss', label: 'Motion' },
   ];
 
-  //TODO FIGURE OUT WHY THIS DIDNT FAIL!!!!!!
   it('should return "Unassigned" if trial status has not been selected', () => {
     const trialStatus = undefined;
     const result = generateCaseStatus(trialStatus);
