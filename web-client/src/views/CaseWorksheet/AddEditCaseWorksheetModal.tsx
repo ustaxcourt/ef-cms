@@ -11,6 +11,7 @@ export const AddEditCaseWorksheetModal = connect(
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     addEditCaseWorksheetModalHelper: state.addEditCaseWorksheetModalHelper,
     form: state.form,
+    updateDateValueSequence: sequences.updateDateValueSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateCaseWorksheetSequence: sequences.validateCaseWorksheetSequence,
     validationErrors: state.validationErrors,
@@ -19,7 +20,9 @@ export const AddEditCaseWorksheetModal = connect(
     addEditCaseWorksheetModalHelper,
     form,
     STATUS_OF_MATTER_OPTIONS,
+    updateDateValueSequence,
     updateFormValueSequence,
+    validateCaseWorksheetSequence,
     validationErrors,
   }) {
     return (
@@ -36,16 +39,17 @@ export const AddEditCaseWorksheetModal = connect(
         </h5>
 
         <DateInputThatActuallyWorks
+          defaultValue={form.finalBriefDueDate}
           errorText={validationErrors.finalBriefDueDate}
           formGroupClassNames={'width-half'}
-          id="final-bried-due-date"
+          id="final-brief-due-date"
           label={'Final brief due date'}
           onChange={e => {
-            console.log(e.target.value);
-            // updateFormValueSequence({
-            //   key: 'finalBriefDueDate',
-            //   value: e.target.value,
-            // });
+            updateDateValueSequence({
+              key: 'finalBriefDueDate',
+              value: e.target.value,
+            });
+            validateCaseWorksheetSequence();
           }}
         />
 
