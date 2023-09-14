@@ -318,6 +318,7 @@ describe('getCaseByDocketNumber', () => {
               userId: 'abc-123',
             },
           ],
+          status: CASE_STATUS_TYPES.new,
         },
         {
           docketNumber: docketNumber1,
@@ -339,6 +340,7 @@ describe('getCaseByDocketNumber', () => {
               userId: 'abc-124',
             },
           ],
+          status: CASE_STATUS_TYPES.new,
         },
       ],
       correspondence: [],
