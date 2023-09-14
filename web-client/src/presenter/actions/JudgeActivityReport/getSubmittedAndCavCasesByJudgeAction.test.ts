@@ -31,8 +31,6 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
     };
 
-  const mockConsolidatedCasesGroupCount = { '101-22': 3 };
-
   let mockReturnedCases;
   let mockCustomCaseReportResponse;
 
@@ -49,7 +47,6 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
 
     mockCustomCaseReportResponse = {
       cases: mockReturnedCases,
-      consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
       totalCount: mockTotalCountOfSubmittedAndCavCases,
     };
 
@@ -82,9 +79,6 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       ).mock.calls[0][1],
     ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);
-    expect(result.output.consolidatedCasesGroupCountMap).toMatchObject({
-      '101-22': 3,
-    });
     expect(result.output.totalCountForSubmittedAndCavCases).toEqual(
       mockTotalCountOfSubmittedAndCavCases,
     );
