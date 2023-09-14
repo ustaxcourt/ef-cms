@@ -1,11 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * sets the state.modal.showModal from props
- * @param {object} providers the providers object
- * @param {object} providers.store the cerebral store used for setting state.users
- * @param {object} providers.props the cerebral props object used for getting the props.users
- */
-export const setShowModalAction = ({ props, store }: ActionProps) => {
+export const setShowModalAction = ({
+  props,
+  store,
+}: ActionProps<{ showModal: string }>) => {
   store.set(state.modal.showModal, props.showModal);
 };
