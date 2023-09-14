@@ -11,15 +11,16 @@ export const AddEditCaseWorksheetModal = connect(
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     addEditCaseWorksheetModalHelper: state.addEditCaseWorksheetModalHelper,
     form: state.form,
-    updateDateValueSequence: sequences.updateDateValueSequence,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCaseWorksheetModal({
     addEditCaseWorksheetModalHelper,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     STATUS_OF_MATTER_OPTIONS,
-    updateDateValueSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -43,7 +44,7 @@ export const AddEditCaseWorksheetModal = connect(
           id="final-brief-due-date"
           label="Final brief due date"
           onChange={e => {
-            updateDateValueSequence({
+            formatAndUpdateDateFromDatePickerSequence({
               key: 'finalBriefDueDate',
               value: e.target.value,
             });

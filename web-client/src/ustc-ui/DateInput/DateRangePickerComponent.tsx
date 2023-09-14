@@ -126,7 +126,6 @@ export const DateRangePickerComponent = ({
       const dateStartInput = window.document.getElementById(
         `${startName}-date-start`,
       );
-
       if (dateStartInput) {
         dateStartInput.addEventListener('change', onChangeStart);
         dateStartInput.addEventListener('input', onChangeStart);

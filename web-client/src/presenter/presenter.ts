@@ -109,6 +109,7 @@ import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificatio
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
+import { formatAndUpdateDateFromDatePickerSequence } from './sequences/formatAndUpdateDateFromDatePickerSequence';
 import { forwardMessageSequence } from './sequences/forwardMessageSequence';
 import { gatewayTimeoutErrorSequence } from './sequences/gatewayTimeoutErrorSequence';
 import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
@@ -458,7 +459,6 @@ import { updateChambersInCreateMessageModalSequence } from './sequences/updateCh
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
-import { updateDateValueSequence } from './sequences/updateDateValueSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
 import { updateDocketEntryMetaDocumentFormValueSequence } from './sequences/updateDocketEntryMetaDocumentFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
@@ -646,6 +646,7 @@ export const presenterSequences = {
   fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
   filterCaseDeadlinesByJudgeSequence,
   formCancelToggleCancelSequence,
+  formatAndUpdateDateFromDatePickerSequence,
   forwardMessageSequence,
   generateCaseCaptionSequence,
   generatePdfFromScanSessionSequence,
@@ -992,7 +993,6 @@ export const presenterSequences = {
   updateCourtIssuedDocketEntryFormValueSequence,
   updateCreateOrderModalFormValueSequence,
   updateDateRangeForDeadlinesSequence,
-  updateDateValueSequence,
   updateDocketEntryFormValueSequence,
   updateDocketEntryMetaDocumentFormValueSequence,
   updateDocketNumberSearchFormSequence,

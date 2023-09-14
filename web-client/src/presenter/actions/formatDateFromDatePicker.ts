@@ -1,7 +1,9 @@
-export const formatDateAction = ({
+export const formatDateFromDatePicker = ({
   applicationContext,
   props,
-}: ActionProps) => {
+}: ActionProps<{ key: string; value: string }>):
+  | { key: string; value: string }
+  | undefined => {
   if (props.value) {
     const finalBriefDueDate = applicationContext
       .getUtilities()

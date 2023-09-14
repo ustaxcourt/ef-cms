@@ -1,13 +1,13 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { formatDateAction } from './formatDateAction';
+import { formatDateFromDatePicker } from './formatDateFromDatePicker';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('formatDateAction', () => {
+describe('formatDateFromDatePicker', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should return formatted date as `YYYY-MM-DD` when passed a date', async () => {
-    const { output } = await runAction(formatDateAction, {
+    const { output } = await runAction(formatDateFromDatePicker, {
       modules: {
         presenter,
       },
@@ -24,7 +24,7 @@ describe('formatDateAction', () => {
   });
 
   it('should not attempt to format an empty string when the date has been cleared', async () => {
-    const { output } = await runAction(formatDateAction, {
+    const { output } = await runAction(formatDateFromDatePicker, {
       modules: {
         presenter,
       },
