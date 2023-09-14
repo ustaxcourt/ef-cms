@@ -4,15 +4,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('forwardMessageAction', () => {
-  const mockDocumentIdOne = 'b1130321-0a76-43bc-b3eb-64a18f079873';
-  const mockDocumentIdTwo = 'b1130321-0a76-43bc-b3eb-64a18f079873';
-
   beforeAll(() => {
     applicationContext.getUseCases().forwardMessageInteractor.mockReturnValue({
       attachments: [
         { documentId: '546ea14f-833f-4576-a547-8ceb7f6282a2' },
         { documentId: 'eab4fc75-ef58-4966-a043-8a83e9a61391' },
-        { documentId: mockDocumentIdOne },
+        { documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873' },
       ],
       docketNumber: '123-45',
       parentMessageId: '123',
@@ -34,13 +31,13 @@ describe('forwardMessageAction', () => {
           form: {
             attachments: [
               {
-                documentId: mockDocumentIdOne,
+                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
                 documentTitle: 'Petition',
               },
             ],
             draftAttachments: [
               {
-                documentId: mockDocumentIdTwo,
+                documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
                 documentTitle: 'Petition Two',
               },
             ],
@@ -61,11 +58,11 @@ describe('forwardMessageAction', () => {
     ).toMatchObject({
       attachments: [
         {
-          documentId: mockDocumentIdOne,
+          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
           documentTitle: 'Petition',
         },
         {
-          documentId: mockDocumentIdTwo,
+          documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
           documentTitle: 'Petition Two',
         },
       ],
@@ -78,7 +75,7 @@ describe('forwardMessageAction', () => {
     expect(result.output).toHaveProperty('parentMessageId');
     expect(result.output).toMatchObject({
       messageViewerDocumentToDisplay: {
-        documentId: mockDocumentIdOne,
+        documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
       },
     });
   });
