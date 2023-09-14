@@ -40,10 +40,11 @@ export const AddEditCaseWorksheetModal = connect(
           formGroupClassNames={'width-half'}
           label={'Final brief due date'}
           onChange={e => {
-            updateFormValueSequence({
-              key: 'finalBriefDueDate',
-              value: e.target.value,
-            });
+            console.log(e.target.value);
+            // updateFormValueSequence({
+            //   key: 'finalBriefDueDate',
+            //   value: e.target.value,
+            // });
           }}
         />
 

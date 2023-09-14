@@ -14,10 +14,10 @@ export const DateInputThatActuallyWorks = ({
 
   useEffect(() => {
     if (dateInputRef.current) {
-      const datePickerInput = dateInputRef.current.getRootNode();
-
-      datePickerInput.addEventListener('change', onChange);
-      datePickerInput.addEventListener('input', onChange);
+      // const datePickerInput = dateInputRef.current.getRootNode();
+      console.log(dateInputRef.current.value, '&&&&');
+      dateInputRef.current.addEventListener('change', onChange);
+      dateInputRef.current.addEventListener('input', onChange);
     }
   }, [dateInputRef]);
 
@@ -40,6 +40,7 @@ export const DateInputThatActuallyWorks = ({
         <input
           aria-labelledby="date-picker-label"
           className="usa-input"
+          data-hello="world"
           id="date-picker"
           name="date-picker"
           ref={dateInputRef}
