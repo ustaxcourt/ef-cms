@@ -2,12 +2,19 @@ import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/genera
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
 export const entryOfAppearance = async ({ applicationContext, data }) => {
-  const { docketNumber, filers, petitioners, practitionerInformation } = data;
+  const {
+    docketNumber,
+    docketNumberWithSuffix,
+    filers,
+    petitioners,
+    practitionerInformation,
+  } = data;
 
   const EntryOfAppearanceTemplate = reactTemplateGenerator({
     componentName: 'EntryOfAppearance',
     data: {
       docketNumber,
+      docketNumberWithSuffix,
       filers,
       petitioners,
       practitionerInformation,

@@ -6,6 +6,7 @@ import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocume
 import { navigateToRequestAccessReviewAction } from '../actions/navigateToRequestAccessReviewAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
+import { setPdfPreviewUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSupportingDocumentScenarioAction } from '../actions/FileDocument/setSupportingDocumentScenarioAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -28,6 +29,7 @@ export const reviewRequestAccessInformationSequence = [
     ],
     success: [
       generateEntryOfAppearancePdfAction,
+      setPdfPreviewUrlAction,
       generateCaseAssociationTitleAction,
       generateTitleForSupportingDocumentsAction,
       stopShowValidationAction,
