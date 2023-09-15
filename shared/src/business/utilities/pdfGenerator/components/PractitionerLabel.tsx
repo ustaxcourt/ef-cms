@@ -12,9 +12,7 @@ export const PractitionerLabel = ({
   name,
   phone,
   postalCode,
-  secondaryName,
   state,
-  title,
 }) => {
   return (
     <div className="address-label">
@@ -22,12 +20,6 @@ export const PractitionerLabel = ({
         {'@media print{@page {margin-bottom: 2cm}}'}
       </style>
       <div>{name}</div>
-      {secondaryName && (
-        <div>
-          c/o {secondaryName}
-          {title && <span>, {title}</span>}
-        </div>
-      )}
       <div>{address1}</div>
       {address2 && <div>{address2}</div>}
       {address3 && <div>{address3}</div>}

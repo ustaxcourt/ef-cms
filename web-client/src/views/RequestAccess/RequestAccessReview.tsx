@@ -23,6 +23,7 @@ export const RequestAccessReview = connect(
     showModal: state.modal.showModal,
     submitCaseAssociationRequestSequence:
       sequences.submitCaseAssociationRequestSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function RequestAccessReview({
     fileDocumentHelper,
@@ -33,6 +34,7 @@ export const RequestAccessReview = connect(
     requestAccessHelper,
     showModal,
     submitCaseAssociationRequestSequence,
+    updateFormValueSequence,
   }) {
     return (
       <React.Fragment>
@@ -74,6 +76,7 @@ export const RequestAccessReview = connect(
                         </label>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
+                            {/* TODO: undo this */}
                             {!pdfPreviewUrl && (
                               <PDFPreviewButton
                                 file={form.primaryDocumentFile}
@@ -135,6 +138,7 @@ export const RequestAccessReview = connect(
                               </h3>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
+                                  {/* TODO: undo this */}
                                   {!pdfPreviewUrl && (
                                     <PDFPreviewButton
                                       file={item.supportingDocumentFile}
@@ -232,9 +236,60 @@ export const RequestAccessReview = connect(
             </div>
           </div>
         </div>
+
+        {fileDocumentHelper.EARedactionAcknowledgement && (
+          <div className="grid-row grid-gap">
+            <span className="margin-bottom-1 font-sans-pro">
+              <b>Please read and acknowledge before submitting your filing</b>
+            </span>
+            <div className="tablet:grid-col-12">
+              <div className="card">
+                <div className="content-wrapper usa-checkbox">
+                  <input
+                    aria-describedby="redaction-acknowledgement-label"
+                    checked={form.redactionAcknowledgement || false}
+                    className="usa-checkbox__input"
+                    id="redaction-acknowledgement"
+                    name="redactionAcknowledgement"
+                    type="checkbox"
+                    onChange={e => {
+                      updateFormValueSequence({
+                        key: e.target.name,
+                        value: e.target.checked,
+                      });
+                    }}
+                  />
+                  <label
+                    className="usa-checkbox__label"
+                    htmlFor="redaction-acknowledgement"
+                    id="redaction-acknowledgement-label"
+                  >
+                    <b>
+                      All documents I am filing have been redacted in accordance
+                      with{' '}
+                      <a
+                        href="https://ustaxcourt.gov/resources/ropp/Rule-27_Amended_03202023.pdf"
+                        rel="noreferrer"
+                        target="_blank"
+                      >
+                        Rule 27
+                      </a>
+                      .
+                    </b>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {pdfPreviewUrl && <PdfPreview />}
 
         <Button
+          disabled={
+            fileDocumentHelper.EARedactionAcknowledgement &&
+            !form.redactionAcknowledgement
+          }
           id="submit-document"
           type="submit"
           onClick={() => {
