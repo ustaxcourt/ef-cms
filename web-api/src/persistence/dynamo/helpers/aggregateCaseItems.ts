@@ -5,9 +5,9 @@ import {
   TDynamoRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
 import {
-  ConsolidatedCaseDTO,
-  RawConsolidatedCaseDTO,
-} from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+  ConsolidatedCaseSummary,
+  RawConsolidatedCaseSummary,
+} from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { sortBy } from 'lodash';
 
 export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
@@ -126,12 +126,12 @@ export const aggregateConsolidatedCaseItems = (
   consolidatedCaseItems: TDynamoRecord<
     IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
   >[],
-): RawConsolidatedCaseDTO[] => {
-  const caseMap: Map<string, RawConsolidatedCaseDTO> = new Map();
+): RawConsolidatedCaseSummary[] => {
+  const caseMap: Map<string, RawConsolidatedCaseSummary> = new Map();
   consolidatedCaseItems
     .filter((item): item is CaseRecord => isCaseItem(item))
     .forEach(item =>
-      caseMap.set(item.pk, new ConsolidatedCaseDTO(item).toRawObject()),
+      caseMap.set(item.pk, new ConsolidatedCaseSummary(item).toRawObject()),
     );
 
   consolidatedCaseItems.forEach(item => {
