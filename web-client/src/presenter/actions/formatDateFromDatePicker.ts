@@ -17,7 +17,7 @@ export const formatDateFromDatePicker = ({
     const formattedDate = applicationContext
       .getUtilities()
       .formatDateString(finalBriefDueDate, props.toFormat);
-    console.log('formattedDate', formattedDate);
+
     return {
       key: props.key,
       value: formattedDate,
