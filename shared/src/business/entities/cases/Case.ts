@@ -40,9 +40,9 @@ import {
   DOCKET_ENTRY_VALIDATION_RULES,
 } from '../EntityValidationConstants';
 import {
-  ConsolidatedCaseDTO,
-  RawConsolidatedCaseDTO,
-} from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+  ConsolidatedCaseSummary,
+  RawConsolidatedCaseSummary,
+} from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
@@ -140,7 +140,7 @@ export class Case extends JoiValidationEntity {
   public correspondence?: any[];
   public archivedCorrespondences?: any[];
   public hasPendingItems?: boolean;
-  public consolidatedCases: RawConsolidatedCaseDTO[] = [];
+  public consolidatedCases: RawConsolidatedCaseSummary[] = [];
 
   constructor(
     rawCase: any,
@@ -485,7 +485,7 @@ export class Case extends JoiValidationEntity {
     }),
     consolidatedCases: joi
       .array()
-      .items(ConsolidatedCaseDTO.VALIDATION_RULES)
+      .items(ConsolidatedCaseSummary.VALIDATION_RULES)
       .required()
       .description('List of consolidated cases for the case.'),
     correspondence: joi
@@ -908,7 +908,7 @@ export class Case extends JoiValidationEntity {
   private assignConsolidatedCases({ rawCase }): void {
     const consolidatedCases = rawCase.consolidatedCases || [];
     this.consolidatedCases = consolidatedCases.map(
-      consolidatedCase => new ConsolidatedCaseDTO(consolidatedCase),
+      consolidatedCase => new ConsolidatedCaseSummary(consolidatedCase),
     );
   }
 

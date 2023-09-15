@@ -8,7 +8,7 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_CASE } from '../../test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -747,7 +747,9 @@ describe('getDownloadPolicyUrlInteractor', () => {
       leadDocketNumber: MOCK_CASE.docketNumber,
       petitioners: [casePetitioner],
     };
-    leadMockCase.consolidatedCases = [new ConsolidatedCaseDTO(leadMockCase)];
+    leadMockCase.consolidatedCases = [
+      new ConsolidatedCaseSummary(leadMockCase),
+    ];
 
     beforeEach(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);

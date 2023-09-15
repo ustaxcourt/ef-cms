@@ -1,13 +1,13 @@
 import { MOCK_CASE, MOCK_CONSOLIDATED_CASE_SUMMARY } from '../../test/mockCase';
 import { MOCK_USERS } from '../../test/mockUsers';
-import { RawConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
 import { getContactPrimary } from '../entities/cases/Case';
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
-  const mockConsolidatedCases: RawConsolidatedCaseDTO[] = [
+  const mockConsolidatedCases: RawConsolidatedCaseSummary[] = [
     {
       ...MOCK_CONSOLIDATED_CASE_SUMMARY,
       docketNumber: '103-23',
