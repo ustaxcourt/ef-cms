@@ -1,7 +1,9 @@
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
+import { addEditPrimaryIssueModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditPrimaryIssueModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -24,6 +26,7 @@ import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByN
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -136,6 +139,7 @@ export const computeds = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addDocketNumbersModalHelper,
+  addEditPrimaryIssueModalHelper,
   addToTrialSessionModalHelper,
   addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,
@@ -158,6 +162,7 @@ export const computeds = {
   caseSearchNoMatchesHelper,
   caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
+  caseWorksheetsHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
   contactsHelper,
@@ -344,7 +349,7 @@ export const baseState = {
     docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  },
+  } as Record<string, string | undefined>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,
@@ -402,6 +407,13 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  submittedAndCavCases: {
+    consolidatedCasesGroupCountMap: {} as any,
+    submittedAndCavCasesByJudge: [] as any,
+    // TODO: this should get moved to currentViewMetadata
+    worksheets: [] as RawCaseWorksheet[],
+  },
+  submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
@@ -412,10 +424,9 @@ export const baseState = {
   },
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   user: null,
-  // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
-  validationErrors: {},
+  validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},
