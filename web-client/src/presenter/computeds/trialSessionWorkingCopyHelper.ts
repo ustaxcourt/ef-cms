@@ -1,9 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import {
-  TRIAL_STATUS_TYPES,
-  TrialStatusOption,
-} from '@shared/business/entities/EntityConstants';
+import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
@@ -19,7 +16,6 @@ export const trialSessionWorkingCopyHelper = (
   formattedCases: any[];
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
-  trialStatusOptions: TrialStatusOption;
 } => {
   const trialSession = get(state.trialSession);
   const {
@@ -78,7 +74,6 @@ export const trialSessionWorkingCopyHelper = (
   }
 
   const trialStatusFilters = Object.keys(TRIAL_STATUS_TYPES)
-    .filter(option => !TRIAL_STATUS_TYPES[option].deprecated)
     .sort((a, b) => {
       return (
         TRIAL_STATUS_TYPES[a].displayOrder - TRIAL_STATUS_TYPES[b].displayOrder
@@ -100,7 +95,6 @@ export const trialSessionWorkingCopyHelper = (
     formattedCases: topLevelCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
-    trialStatusOptions: TRIAL_STATUS_TYPES,
   };
 };
 

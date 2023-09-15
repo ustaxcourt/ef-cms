@@ -1355,7 +1355,6 @@ export const TRIAL_STATUS_TYPES: TrialStatusOption = {
   basisReached: {
     deprecated: false,
     displayOrder: 1,
-    legacyLabel: 'A Basis Reached',
     label: 'Basis Reached',
     new: false,
   },
@@ -1404,10 +1403,11 @@ export const TRIAL_STATUS_TYPES: TrialStatusOption = {
   submittedCAV: {
     deprecated: false,
     displayOrder: 8,
-    legacyLabel: 'Taken Under Advisement',
     label: 'Submitted/CAV',
     new: false,
   },
+};
+export const DEPRECATED_TRIAL_STATUS_TYPES: TrialStatusOption = {
   setForTrial: {
     deprecated: true,
     displayOrder: 999,
@@ -1427,13 +1427,16 @@ export const TRIAL_STATUS_TYPES: TrialStatusOption = {
     new: false,
   },
 };
+export const ALL_TRIAL_STATUS_TYPES: TrialStatusOption = {
+  ...TRIAL_STATUS_TYPES,
+  ...DEPRECATED_TRIAL_STATUS_TYPES,
+};
 export type TrialStatusOption = {
   [key: string]: {
     deprecated: boolean;
     displayOrder: number;
     new: boolean;
     label: string;
-    legacyLabel?: string;
   };
 };
 
