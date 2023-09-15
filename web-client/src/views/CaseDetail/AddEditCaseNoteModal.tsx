@@ -24,7 +24,7 @@ export const AddEditCaseNoteModal = connect(
         className="add-edit-procedural-note-modal"
         confirmLabel="Save"
         preventCancelOnBlur={true}
-        title="Edit Details"
+        title="Add/Edit Case Notes"
         onCancelSequence="clearModalFormSequence"
         onConfirmSequence={onConfirmSequence}
       >
