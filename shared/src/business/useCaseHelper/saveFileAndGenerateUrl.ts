@@ -11,6 +11,10 @@ export const saveFileAndGenerateUrl = async ({
   applicationContext,
   file,
   useTempBucket = false,
+}: {
+  applicationContext: IApplicationContext;
+  file: Blob;
+  useTempBucket?: boolean;
 }) => {
   const fileId = applicationContext.getUniqueId();
 

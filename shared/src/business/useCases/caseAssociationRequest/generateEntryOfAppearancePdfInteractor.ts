@@ -13,14 +13,18 @@ export const generateEntryOfAppearancePdfInteractor = async (
     caseTitle,
     docketNumberWithSuffix,
     filers,
+
     petitioners,
   }: {
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumber: string;
     docketNumberWithSuffix: string;
-    filers: any[];
-    petitioners: any[];
+    filers: string[];
+    petitioners: {
+      contactId: string;
+      name: string;
+    }[];
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -36,6 +40,15 @@ export const generateEntryOfAppearancePdfInteractor = async (
       userId: user.userId,
     });
 
+  const filersWithNames = filers
+    .map(filerId => {
+      const petitioner = petitioners.find(pe => pe.contactId === filerId);
+      return petitioner ? petitioner.name : null;
+    })
+    .filter(Boolean);
+
+  console.log('practitionerInformation, ', practitionerInformation);
+
   const file = await applicationContext
     .getDocumentGenerators()
     .entryOfAppearance({
@@ -44,8 +57,8 @@ export const generateEntryOfAppearancePdfInteractor = async (
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
-        filers,
-        petitioners,
+        filers: filersWithNames,
+        // petitioners,
         practitionerInformation,
       },
     });

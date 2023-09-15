@@ -4,18 +4,21 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const generateEntryOfAppearancePdfAction = async ({
   applicationContext,
   get,
+  props,
 }: ActionProps) => {
   const { GENERATION_TYPES } = get(state.constants);
+
+  const { petitioners } = props;
 
   if (get(state.form.generationType) === GENERATION_TYPES.AUTO) {
     const caseDetail = get(state.caseDetail);
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-    const { docketNumber, docketNumberWithSuffix, petitioners } = caseDetail;
+    const { docketNumber, docketNumberWithSuffix } = caseDetail;
 
     const { filers } = get(state.form);
 
-    const pdfUrl = await applicationContext
+    const { url } = await applicationContext
       .getUseCases()
       .generateEntryOfAppearancePdfInteractor(applicationContext, {
         caseCaptionExtension,
@@ -26,6 +29,6 @@ export const generateEntryOfAppearancePdfAction = async ({
         petitioners,
       });
 
-    return { pdfUrl };
+    return { pdfUrl: url };
   }
 };
