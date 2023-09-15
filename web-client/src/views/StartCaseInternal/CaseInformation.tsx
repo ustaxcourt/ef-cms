@@ -1,4 +1,5 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
 import { ProcedureType } from '../StartCase/ProcedureType';
@@ -10,9 +11,12 @@ import React from 'react';
 
 export const CaseInformation = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     clearPreferredTrialCitySequence: sequences.clearPreferredTrialCitySequence,
     constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     startCaseInternalHelper: state.startCaseInternalHelper,
     trialCitiesHelper: state.trialCitiesHelper,
     updateFormValueSequence: sequences.updateFormValueSequence,
@@ -27,7 +31,9 @@ export const CaseInformation = connect(
   function CaseInformation({
     clearPreferredTrialCitySequence,
     constants,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     startCaseInternalHelper,
     updateFormValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
@@ -37,22 +43,20 @@ export const CaseInformation = connect(
   }) {
     return (
       <div className="blue-container">
-        <DateInput
+        <DateSelector
+          defaultValue={form.receivedAt}
           errorText={validationErrors.receivedAt}
+          formGroupClassNames={''}
           id="date-received"
-          label="Date received"
-          names={{
-            day: 'receivedAtDay',
-            month: 'receivedAtMonth',
-            year: 'receivedAtYear',
+          label="Date receivedddd"
+          onChange={e => {
+            formatAndUpdateDateFromDatePickerSequence({
+              key: 'receivedAt',
+              toFormat: DATE_FORMATS.ISO,
+              value: e.target.value,
+            });
+            validatePetitionFromPaperSequence();
           }}
-          values={{
-            day: form.receivedAtDay,
-            month: form.receivedAtMonth,
-            year: form.receivedAtYear,
-          }}
-          onBlur={validatePetitionFromPaperSequence}
-          onChange={updateFormValueSequence}
         />
         <FormGroup errorText={validationErrors.mailingDate}>
           <label className="usa-label" htmlFor="mailing-date">

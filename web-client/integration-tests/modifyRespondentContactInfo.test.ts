@@ -10,9 +10,9 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 import { respondentUpdatesAddress } from './journey/respondentUpdatesAddress';
 import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/respondentViewsCaseDetailNoticeOfChangeOfAddress';
 
-const cerebralTest = setupTest();
-
 describe('Modify Respondent Contact Information', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });

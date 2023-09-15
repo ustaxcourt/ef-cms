@@ -1,7 +1,9 @@
+import { TimeFormats } from '@shared/business/utilities/DateHandler';
+
 export const formatDateFromDatePicker = ({
   applicationContext,
   props,
-}: ActionProps<{ key: string; value: string }>):
+}: ActionProps<{ key: string; value: string; toFormat: TimeFormats }>):
   | { key: string; value: string }
   | undefined => {
   if (props.value) {
@@ -14,11 +16,8 @@ export const formatDateFromDatePicker = ({
 
     const formattedDate = applicationContext
       .getUtilities()
-      .formatDateString(
-        finalBriefDueDate,
-        applicationContext.getConstants().DATE_FORMATS.YYYYMMDD,
-      );
-
+      .formatDateString(finalBriefDueDate, props.toFormat);
+    console.log('formattedDate', formattedDate);
     return {
       key: props.key,
       value: formattedDate,
