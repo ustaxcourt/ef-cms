@@ -1356,55 +1356,46 @@ export const TRIAL_STATUS_TYPES: TrialStatusOption = {
     deprecated: false,
     displayOrder: 1,
     label: 'Basis Reached',
-    new: false,
   },
   probableSettlement: {
     deprecated: false,
     displayOrder: 3,
-    new: true,
     label: 'Probable Settlement',
   },
   probableTrial: {
     deprecated: false,
     displayOrder: 5,
-    new: true,
     label: 'Probable Trial',
   },
   definiteTrial: {
     deprecated: false,
     displayOrder: 7,
-    new: true,
     label: 'Definite Trial',
   },
   motionToDismiss: {
     deprecated: false,
     displayOrder: 9,
-    new: true,
     label: 'Motion',
   },
   recall: {
     deprecated: false,
     displayOrder: 2,
     label: 'Recall',
-    new: false,
   },
   continued: {
     deprecated: false,
     displayOrder: 4,
     label: 'Continued',
-    new: false,
   },
   rule122: {
     deprecated: false,
     displayOrder: 6,
     label: 'Rule 122',
-    new: false,
   },
   submittedCAV: {
     deprecated: false,
     displayOrder: 8,
     label: 'Submitted/CAV',
-    new: false,
   },
 };
 export const DEPRECATED_TRIAL_STATUS_TYPES: TrialStatusOption = {
@@ -1412,19 +1403,16 @@ export const DEPRECATED_TRIAL_STATUS_TYPES: TrialStatusOption = {
     deprecated: true,
     displayOrder: 999,
     label: 'Set for Trial',
-    new: false,
   },
   dismissed: {
     deprecated: true,
     displayOrder: 999,
     label: 'Dismissed',
-    new: false,
   },
   settled: {
     deprecated: true,
     displayOrder: 999,
     label: 'Settled',
-    new: false,
   },
 };
 export const ALL_TRIAL_STATUS_TYPES: TrialStatusOption = {
@@ -1435,7 +1423,6 @@ export type TrialStatusOption = {
   [key: string]: {
     deprecated: boolean;
     displayOrder: number;
-    new: boolean;
     label: string;
   };
 };
