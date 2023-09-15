@@ -17,7 +17,7 @@ import { partition } from 'lodash';
 export const generatePractitionerCaseListPdfInteractor = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
-): Promise<void> => {
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)) {
