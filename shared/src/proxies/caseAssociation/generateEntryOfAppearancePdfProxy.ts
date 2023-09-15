@@ -20,7 +20,10 @@ export const generateEntryOfAppearancePdfInteractor = (
     filers,
     petitioners,
   },
-) => {
+): Promise<{
+  fileId: string;
+  url: string;
+}> => {
   return post({
     applicationContext,
     body: {

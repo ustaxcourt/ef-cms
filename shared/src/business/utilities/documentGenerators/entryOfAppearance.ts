@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
@@ -8,20 +9,20 @@ export const entryOfAppearance = async ({ applicationContext, data }) => {
     docketNumber,
     docketNumberWithSuffix,
     filers,
-    // petitioners,
-    // practitionerInformation,
+    practitionerInformation,
   } = data;
+  const date = applicationContext.getUtilities().formatNow(FORMATS.MMDDYY);
 
   const EntryOfAppearanceTemplate = reactTemplateGenerator({
     componentName: 'EntryOfAppearance',
     data: {
       caseCaptionExtension,
       caseTitle,
+      date,
       docketNumber,
       docketNumberWithSuffix,
       filers,
-      //   petitioners,
-      //   practitionerInformation,
+      practitionerInformation,
     },
   });
 
