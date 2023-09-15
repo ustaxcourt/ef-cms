@@ -65,7 +65,7 @@ export const caseWorksheetsHelper = (
       ),
       docketNumber: aCase.docketNumber,
       docketNumberWithSuffix: aCase.docketNumberWithSuffix,
-      formattedCaseCount: aCase.formattedCaseCount,
+      formattedCaseCount: aCase.formattedCaseCount || 1,
       formattedSubmittedCavStatusDate,
       inConsolidatedGroup: !!isLeadCase(aCase),
       isLeadCase: isLeadCase(aCase),
