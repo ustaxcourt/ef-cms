@@ -3,7 +3,7 @@ import {
   IrsPractitionerOnCaseRecord,
   PrivatePractitionerOnCaseRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
-import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
+import { RawConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
   aggregateCaseItems,
   aggregateConsolidatedCaseItems,
@@ -32,7 +32,7 @@ export const getCaseByDocketNumber = async ({
   const leadDocketNumber = caseItems.find((caseItem): caseItem is CaseRecord =>
     isCaseItem(caseItem),
   )?.leadDocketNumber;
-  let consolidatedCases: ConsolidatedCaseDTO[] = [];
+  let consolidatedCases: RawConsolidatedCaseSummary[] = [];
   if (leadDocketNumber) {
     const consolidatedCaseItems = await queryFull<
       IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
