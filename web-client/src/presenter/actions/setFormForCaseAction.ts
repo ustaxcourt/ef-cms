@@ -14,26 +14,6 @@ export const setFormForCaseAction = ({
 }: ActionProps) => {
   const caseDetail = props.caseDetail || get(state.caseDetail);
 
-  const deconstructedIrsNoticeDate = applicationContext
-    .getUtilities()
-    .deconstructDate(caseDetail.irsNoticeDate);
-
-  if (deconstructedIrsNoticeDate) {
-    store.set(state.form.irsMonth, deconstructedIrsNoticeDate.month);
-    store.set(state.form.irsDay, deconstructedIrsNoticeDate.day);
-    store.set(state.form.irsYear, deconstructedIrsNoticeDate.year);
-  }
-
-  const deconstructedReceivedAt = applicationContext
-    .getUtilities()
-    .deconstructDate(caseDetail.receivedAt);
-
-  if (caseDetail.isPaper && deconstructedReceivedAt) {
-    store.set(state.form.receivedAtMonth, deconstructedReceivedAt.month);
-    store.set(state.form.receivedAtDay, deconstructedReceivedAt.day);
-    store.set(state.form.receivedAtYear, deconstructedReceivedAt.year);
-  }
-
   const deconstructedPetitionPaymentDate = applicationContext
     .getUtilities()
     .deconstructDate(caseDetail.petitionPaymentDate);
