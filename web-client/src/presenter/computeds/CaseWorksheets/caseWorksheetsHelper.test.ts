@@ -114,6 +114,7 @@ describe('caseWorksheetsHelper', () => {
         status: undefined,
         worksheet: {
           docketNumber: '110-15',
+          finalBriefDueDateFormatted: '',
           primaryIssue: 'ZOINKS!',
         },
       },
