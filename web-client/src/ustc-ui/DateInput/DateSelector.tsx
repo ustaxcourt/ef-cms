@@ -1,6 +1,6 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
-import datePicker from '@uswds/uswds/packages/usa-date-picker/src';
+import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
 
 export const DateSelector = ({
   defaultValue,
