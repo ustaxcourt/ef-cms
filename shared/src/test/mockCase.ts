@@ -7,6 +7,10 @@ import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } from '../business/entities/EntityConstants';
+import {
+  ConsolidatedCaseSummary,
+  RawConsolidatedCaseSummary,
+} from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
 import { docketClerkUser, judgeUser } from './mockUsers';
 
@@ -54,6 +58,9 @@ export const MOCK_CASE: RawCase = {
   sortableDocketNumber: 2018000101,
   status: CASE_STATUS_TYPES.new,
 };
+
+export const MOCK_CONSOLIDATED_CASE_SUMMARY: RawConsolidatedCaseSummary =
+  new ConsolidatedCaseSummary(MOCK_CASE).toRawObject();
 
 const mockDocketEntriesWithoutStipDecision = MOCK_DOCUMENTS.slice(0, 3);
 

@@ -452,6 +452,7 @@ describe('processFormattedMessages', () => {
       expect(result.inProgressMessages).toEqual([
         {
           completedAtFormatted: '',
+          consolidatedIconTooltipText: '',
           createdAt: '2019-01-01T16:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
@@ -460,9 +461,11 @@ describe('processFormattedMessages', () => {
           message: 'This is a test message one',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
+          shouldIndent: false,
         },
         {
           completedAtFormatted: '',
+          consolidatedIconTooltipText: '',
           createdAt: '2019-01-01T17:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
@@ -471,6 +474,7 @@ describe('processFormattedMessages', () => {
           message: 'This is a test message three',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
+          shouldIndent: false,
         },
       ]);
     });
