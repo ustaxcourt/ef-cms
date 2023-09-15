@@ -20,8 +20,7 @@ describe('updateCaseWorksheetInteractor', () => {
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
-        docketNumber: mockCaseWorksheet.docketNumber,
-        updatedProps: {},
+        worksheet: mockCaseWorksheet,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -34,8 +33,8 @@ describe('updateCaseWorksheetInteractor', () => {
 
     await expect(
       updateCaseWorksheetInteractor(applicationContext, {
-        docketNumber: mockCaseWorksheet.docketNumber,
-        updatedProps: {
+        worksheet: {
+          ...mockCaseWorksheet,
           finalBriefDueDate: 'abc', // finalBriefDueDate should be a date formatted as YYYY-MM-DD
         },
       }),
@@ -53,8 +52,8 @@ describe('updateCaseWorksheetInteractor', () => {
       .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
 
     const result = await updateCaseWorksheetInteractor(applicationContext, {
-      docketNumber: mockCaseWorksheet.docketNumber,
-      updatedProps: {
+      worksheet: {
+        ...mockCaseWorksheet,
         finalBriefDueDate: mockFinalBriefDueDate,
       },
     });
@@ -90,8 +89,8 @@ describe('updateCaseWorksheetInteractor', () => {
       .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
 
     const result = await updateCaseWorksheetInteractor(applicationContext, {
-      docketNumber: mockCaseWorksheet.docketNumber,
-      updatedProps: {
+      worksheet: {
+        ...mockCaseWorksheet,
         finalBriefDueDate: mockFinalBriefDueDate,
       },
     });

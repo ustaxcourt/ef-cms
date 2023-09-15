@@ -27,7 +27,17 @@ export const caseWorksheetsHelper = (
   );
 
   const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
-  worksheets.forEach(ws => (worksheetsObj[ws.docketNumber] = ws));
+  worksheets.forEach(ws => {
+    worksheetsObj[ws.docketNumber] = {
+      ...ws,
+      finalBriefDueDateFormatted: applicationContext
+        .getUtilities()
+        .formatDateString(
+          ws.finalBriefDueDate,
+          applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+        ),
+    };
+  });
 
   const today = applicationContext
     .getUtilities()
@@ -55,7 +65,7 @@ export const caseWorksheetsHelper = (
       ),
       docketNumber: aCase.docketNumber,
       docketNumberWithSuffix: aCase.docketNumberWithSuffix,
-      formattedCaseCount: aCase.formattedCaseCount || 1,
+      formattedCaseCount: aCase.formattedCaseCount,
       formattedSubmittedCavStatusDate,
       inConsolidatedGroup: !!isLeadCase(aCase),
       isLeadCase: isLeadCase(aCase),

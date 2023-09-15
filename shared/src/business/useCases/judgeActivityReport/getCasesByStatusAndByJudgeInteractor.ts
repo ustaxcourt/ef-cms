@@ -74,7 +74,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     (caseRecord, i) => ({
       ...caseRecord,
       daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
-      formattedCaseCount: numConsolidatedCases[i],
+      formattedCaseCount: numConsolidatedCases[i] || 1,
     }),
   );
 

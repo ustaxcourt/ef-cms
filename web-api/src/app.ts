@@ -38,7 +38,6 @@ import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
 import { deleteCounselFromCaseLambda } from './lambdas/cases/deleteCounselFromCaseLambda';
 import { deleteDeficiencyStatisticLambda } from './lambdas/cases/deleteDeficiencyStatisticLambda';
 import { deletePractitionerDocumentLambda } from './lambdas/practitioners/deletePractitionerDocumentLambda';
-import { deletePrimaryIssueLambda } from '@web-api/caseWorksheet/deletePrimaryIssueLambda';
 import { deleteTrialSessionLambda } from './lambdas/trialSessions/deleteTrialSessionLambda';
 import { deleteUserCaseNoteLambda } from './lambdas/caseNote/deleteUserCaseNoteLambda';
 import { dismissNOTTReminderForTrialLambda } from './lambdas/trialSessions/dismissNOTTReminderForTrialLambda';
@@ -68,7 +67,7 @@ import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesL
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
-import { getCaseWorksheetsForJudgeLambda } from '@web-api/caseWorksheet/getCaseWorksheetsForJudgeLambda';
+import { getCaseWorksheetsForJudgeLambda } from '@web-api/lambdas/caseWorksheet/getCaseWorksheetsForJudgeLambda';
 import { getCasesByStatusAndByJudgeLambda } from './lambdas/reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
@@ -164,7 +163,7 @@ import { updateCaseContextLambda } from './lambdas/cases/updateCaseContextLambda
 import { updateCaseDeadlineLambda } from './lambdas/caseDeadline/updateCaseDeadlineLambda';
 import { updateCaseDetailsLambda } from './lambdas/cases/updateCaseDetailsLambda';
 import { updateCaseTrialSortTagsLambda } from './lambdas/cases/updateCaseTrialSortTagsLambda';
-import { updateCaseWorksheetLambda } from '@web-api/caseWorksheet/updateCaseWorksheetLambda';
+import { updateCaseWorksheetLambda } from '@web-api/lambdas/caseWorksheet/updateCaseWorksheetLambda';
 import { updateContactLambda } from './lambdas/cases/updateContactLambda';
 import { updateCorrespondenceDocumentLambda } from './lambdas/correspondence/updateCorrespondenceDocumentLambda';
 import { updateCounselOnCaseLambda } from './lambdas/cases/updateCounselOnCaseLambda';
@@ -613,10 +612,6 @@ app.use(logger());
  */
 {
   app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
-  app.post(
-    '/case-worksheet/:docketNumber/primary-issue/delete',
-    lambdaWrapper(deletePrimaryIssueLambda),
-  );
 }
 
 /**
