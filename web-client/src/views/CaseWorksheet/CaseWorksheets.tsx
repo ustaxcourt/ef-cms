@@ -98,8 +98,8 @@ export const CaseWorksheets = connect(
                   </tr>
                   <tr>
                     <td colSpan={3}></td>
-                    <td colSpan={5}>
-                      <span className="text-bold margin-right-1">
+                    <td colSpan={7}>
+                      <span className="text-semibold margin-right-1">
                         Primary Issue:
                       </span>
                       {formattedCase.worksheet.primaryIssue}

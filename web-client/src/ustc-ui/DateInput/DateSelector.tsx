@@ -58,4 +58,4 @@ export const DateSelector = ({
   );
 };
 
-DateSelector.displayName = 'DateInputThatActuallyWorks';
+DateSelector.displayName = 'DateSelector';
