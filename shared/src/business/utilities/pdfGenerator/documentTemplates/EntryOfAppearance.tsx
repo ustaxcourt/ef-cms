@@ -44,9 +44,7 @@ export const EntryOfAppearance = ({
               name={practitionerInformation.name}
               phone={practitionerInformation.contact.phone}
               postalCode={practitionerInformation.contact.postalCode}
-              secondaryName={practitionerInformation.contact.secondaryName}
               state={practitionerInformation.contact.state}
-              title={practitionerInformation.title}
             />
           </div>
         </div>
@@ -61,12 +59,12 @@ export const EntryOfAppearance = ({
   );
 };
 
-const joinWithCommasAnd = (lst: string[]): string => {
-  if (lst.length === 0) {
+const joinWithCommasAnd = (names: string[]): string => {
+  if (names.length === 0) {
     return '';
-  } else if (lst.length === 1) {
-    return lst[0];
+  } else if (names.length === 1) {
+    return names[0];
   } else {
-    return lst.slice(0, -1).join(', ') + ' & ' + lst[lst.length - 1];
+    return names.slice(0, -1).join(', ') + ' & ' + names[names.length - 1];
   }
 };
