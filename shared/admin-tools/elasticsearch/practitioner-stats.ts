@@ -13,9 +13,7 @@ const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 const fromDate = computeDate({ day: 1, month: 1, year });
 const toDate = computeDate({ day: 1, month: 1, year: year + 1 });
 
-const getAllPractitioners = async ({
-  applicationContext,
-}): Promise<Array<any>> => {
+const getAllPractitioners = async ({ applicationContext }) => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
