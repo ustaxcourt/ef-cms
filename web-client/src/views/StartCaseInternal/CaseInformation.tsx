@@ -45,7 +45,6 @@ export const CaseInformation = connect(
         <DateSelector
           defaultValue={form.receivedAt}
           errorText={validationErrors.receivedAt}
-          formGroupClassNames={''}
           id="date-received"
           label="Date received"
           onChange={e => {
