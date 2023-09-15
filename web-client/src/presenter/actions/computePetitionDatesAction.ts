@@ -29,13 +29,5 @@ export const computePetitionDatesAction = ({
       year: form.paymentDateWaivedYear,
     });
 
-  const irsNoticeDate = applicationContext
-    .getUtilities()
-    .validateDateAndCreateISO({
-      day: form.irsDay,
-      month: form.irsMonth,
-      year: form.irsYear,
-    });
-
-  return { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate };
+  return { petitionPaymentDate, petitionPaymentWaivedDate };
 };

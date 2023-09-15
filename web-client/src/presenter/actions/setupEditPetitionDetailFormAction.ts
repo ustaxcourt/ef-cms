@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -54,14 +55,11 @@ export const setupEditPetitionDetailFormAction = ({
   }
 
   if (caseDetail.irsNoticeDate) {
-    const [irsYear, irsMonth, irsDay] = applicationContext
+    const irsNoticeDate = applicationContext
       .getUtilities()
-      .formatDateString(caseDetail.irsNoticeDate, 'YYYYMMDD')
-      .split('-');
+      .formatDateString(caseDetail.irsNoticeDate, FORMATS.YYYYMMDD);
 
-    store.set(state.form.irsYear, irsYear);
-    store.set(state.form.irsMonth, irsMonth);
-    store.set(state.form.irsDay, irsDay);
+    store.set(state.form.irsNoticeDate, irsNoticeDate);
   }
 
   if (caseDetail.statistics) {

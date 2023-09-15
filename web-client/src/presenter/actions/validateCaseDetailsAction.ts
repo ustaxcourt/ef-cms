@@ -10,7 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.get the cerebral get function used for getting state.form
  * @returns {object} the next path based on if validation was successful or error
  */
-
 export const validateCaseDetailsAction = ({
   applicationContext,
   get,
@@ -19,8 +18,7 @@ export const validateCaseDetailsAction = ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-  const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =
-    props;
+  const { petitionPaymentDate, petitionPaymentWaivedDate } = props;
 
   let errors = applicationContext
     .getUseCases()
@@ -28,7 +26,6 @@ export const validateCaseDetailsAction = ({
       caseDetail: {
         ...caseDetail,
         ...form,
-        irsNoticeDate,
         petitionPaymentDate,
         petitionPaymentWaivedDate,
         preferredTrialCity: form.preferredTrialCity

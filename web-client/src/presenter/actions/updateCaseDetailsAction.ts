@@ -15,15 +15,13 @@ export const updateCaseDetailsAction = async ({
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const form = get(state.form);
-  const { irsNoticeDate, petitionPaymentDate, petitionPaymentWaivedDate } =
-    props;
+  const { petitionPaymentDate, petitionPaymentWaivedDate } = props;
 
   const updatedCase = await applicationContext
     .getUseCases()
     .updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
         ...form,
-        irsNoticeDate,
         petitionPaymentDate,
         petitionPaymentWaivedDate,
         preferredTrialCity: form.preferredTrialCity

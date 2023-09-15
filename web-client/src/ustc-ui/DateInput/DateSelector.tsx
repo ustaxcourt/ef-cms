@@ -4,6 +4,7 @@ import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-
 
 export const DateSelector = ({
   defaultValue,
+  displayOptionalHintText,
   errorText,
   formGroupClassNames,
   id,
@@ -43,7 +44,10 @@ export const DateSelector = ({
         htmlFor={`${id}-picker`}
         id={`${id}-date-picker-label`}
       >
-        {label}
+        {label}{' '}
+        {displayOptionalHintText && (
+          <span className="usa-hint">(optional)</span>
+        )}
       </label>
       <div className="usa-date-picker" data-default-value={defaultValue}>
         <input
