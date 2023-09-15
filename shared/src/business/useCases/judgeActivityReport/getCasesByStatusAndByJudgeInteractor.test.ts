@@ -4,8 +4,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
-  MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
-  MOCK_CAV_LEAD_CASE,
   MOCK_SUBMITTED_CASE,
   MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY,
@@ -31,8 +29,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     }[];
   }> = [];
   let mockReturnedDocketNumbersToFilterOut: string[] = [];
-
-  let expectedConsolidatedCasesGroupCountMap = {};
 
   const mockValidRequest = {
     judges: [judgeUser.name],
@@ -62,6 +58,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     status: CASE_STATUS_TYPES.cav,
   };
 
+  beforeAll(() => {
+    applicationContext.getSearchClient().count = jest.fn();
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockImplementation(
+        () => mockReturnedDocketNumbers,
+      );
+  });
+
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
   });
@@ -86,204 +91,26 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the consolidated member case)', async () => {
-    mockReturnedDocketNumbers = [
-      { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
-        leadDocketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber,
-        leadDocketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        caseStatusHistory: undefined,
-        docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
-      },
-    ];
-
-    const casesForLeadDocketNumber = [
-      MOCK_CAV_LEAD_CASE,
-      MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
-    ];
-
-    expectedConsolidatedCasesGroupCountMap = {
-      [`${MOCK_CAV_LEAD_CASE.docketNumber}`]: casesForLeadDocketNumber.length,
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesMetadataByLeadDocketNumber.mockResolvedValueOnce(
-        casesForLeadDocketNumber,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValue([]);
-
-    const result = await getCasesByStatusAndByJudgeInteractor(
+  it('calls getDocketNumbersByStatusAndByJudge with excludeMemberCases flag = true (stripping out the consolidated member case)', async () => {
+    await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
 
-    expect(result.cases.length).toEqual(2);
-    expect(result.cases).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          daysElapsedSinceLastStatusChange: 0,
-          docketNumber: '101-18',
-        }),
-        expect.objectContaining({
-          daysElapsedSinceLastStatusChange: 0,
-          docketNumber: '109-19',
-        }),
-      ]),
-    );
-
-    expect(result.cases).not.toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketNumber: docketEntryWithoutCaseHistory,
-        }),
-      ]),
-    );
-
-    expect(result.consolidatedCasesGroupCountMap).toEqual(
-      expectedConsolidatedCasesGroupCountMap,
-    );
-    expect(result.totalCount).toEqual(2);
-  });
-
-  it(`should return an array of 2 cases and consolidatedCasesGroupMap (stripping out the member case of consolidated cases and cases with ${prohibitedDocketEntries} docket entries)`, async () => {
-    mockReturnedDocketNumbers = [
-      { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
-        leadDocketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_CAV_CONSOLIDATED_MEMBER_CASE.docketNumber,
-        leadDocketNumber: MOCK_CAV_LEAD_CASE.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        caseStatusHistory: undefined,
-        docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
-      },
-    ];
-
-    mockReturnedDocketNumbersToFilterOut = [
-      MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
-    ];
-
-    const casesForLeadDocketNumber = [
-      MOCK_CAV_LEAD_CASE,
-      MOCK_CAV_CONSOLIDATED_MEMBER_CASE,
-    ];
-
-    expectedConsolidatedCasesGroupCountMap = {
-      [`${MOCK_CAV_LEAD_CASE.docketNumber}`]: casesForLeadDocketNumber.length,
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValue(
-        mockReturnedDocketNumbersToFilterOut,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesMetadataByLeadDocketNumber.mockResolvedValueOnce(
-        casesForLeadDocketNumber,
-      );
-
-    const result = await getCasesByStatusAndByJudgeInteractor(
+    expect(
+      applicationContext.getPersistenceGateway()
+        .getDocketNumbersByStatusAndByJudge,
+    ).toHaveBeenCalledWith({
       applicationContext,
-      mockValidRequest,
-    );
-
-    expect(result.cases).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketNumber: '101-18',
-        }),
-        expect.objectContaining({
-          docketNumber: '109-19',
-        }),
-      ]),
-    );
-
-    expect(result.cases).not.toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketNumber: docketEntryWithoutCaseHistory,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-        }),
-      ]),
-    );
-
-    expect(result.consolidatedCasesGroupCountMap).toEqual(
-      expectedConsolidatedCasesGroupCountMap,
-    );
-    expect(result.totalCount).toEqual(2);
+      params: {
+        excludeMemberCases: true,
+        judges: mockValidRequest.judges,
+        statuses: mockValidRequest.statuses,
+      },
+    });
   });
 
-  it(`should return an array of 1 case and consolidatedCasesGroupMap (stripping out the cases with served ${prohibitedDocketEntries} docket entries and no consolidated cases)`, async () => {
+  it(`should return an array of 1 case (stripping out the cases with served ${prohibitedDocketEntries} docket entries and no consolidated cases)`, async () => {
     mockReturnedDocketNumbers = [
       { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
@@ -367,7 +194,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       ]),
     );
 
-    expect(result.consolidatedCasesGroupCountMap).toEqual({});
     expect(result.totalCount).toEqual(1);
   });
 });

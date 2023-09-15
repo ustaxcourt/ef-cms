@@ -4,6 +4,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { ReplyMessageType } from '@shared/business/useCases/messages/createMessageInteractor';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 export const replyToMessage = async (
@@ -11,23 +12,13 @@ export const replyToMessage = async (
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    docketNumber: string;
-    draftAttachments: any;
-    message: string;
-    parentMessageId: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: ReplyMessageType,
+): Promise<RawMessage> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
@@ -51,8 +42,6 @@ export const replyToMessage = async (
   const toUser = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
-
-  attachments = [...attachments, ...draftAttachments];
 
   const validatedRawMessage = new Message(
     {
@@ -89,27 +78,16 @@ export const replyToMessageInteractor = (
   {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
     toSection,
     toUserId,
-  }: {
-    attachments: any;
-    draftAttachments: any;
-    docketNumber: string;
-    message: string;
-    parentMessageId: string;
-    subject: string;
-    toSection: string;
-    toUserId: string;
-  },
-) => {
+  }: ReplyMessageType,
+): Promise<RawMessage> => {
   return replyToMessage(applicationContext, {
     attachments,
     docketNumber,
-    draftAttachments,
     message,
     parentMessageId,
     subject,
