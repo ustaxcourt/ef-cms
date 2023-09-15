@@ -92,6 +92,6 @@ export const generateEntryOfAppearancePdfInteractor = async (
   return await saveFileAndGenerateUrl({
     applicationContext,
     file,
-    useTempBucket: false,
+    useTempBucket: true,
   });
 };
