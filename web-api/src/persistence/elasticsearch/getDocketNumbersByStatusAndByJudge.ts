@@ -1,4 +1,3 @@
-import { CavAndSubmittedCaseResponseType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
@@ -6,6 +5,7 @@ import { search } from './searchClient';
 export type DocketNumberByStatusRequest = {
   statuses: string[];
   judges?: string[];
+  excludeMemberCases?: boolean;
 };
 
 export const getDocketNumbersByStatusAndByJudge = async ({
@@ -14,7 +14,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
 }: {
   applicationContext: IApplicationContext;
   params: DocketNumberByStatusRequest;
-}): Promise<CavAndSubmittedCaseResponseType> => {
+}): Promise<RawCase[]> => {
   const source = [
     'docketNumber',
     'leadDocketNumber',
@@ -61,6 +61,14 @@ export const getDocketNumbersByStatusAndByJudge = async ({
       size: MAX_ELASTICSEARCH_PAGINATION,
     },
   });
+
+  if (params.excludeMemberCases) {
+    return results.filter(
+      caseInfo =>
+        !caseInfo.leadDocketNumber ||
+        caseInfo.docketNumber === caseInfo.leadDocketNumber,
+    );
+  }
 
   return results;
 };

@@ -17,14 +17,18 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
     statuses: CAV_AND_SUBMITTED_CASE_STATUS,
   };
 
-  const responseResults = [
-    { docketNumber: '11315-18' },
-    { docketNumber: { S: '11316-18' } },
-  ];
+  const standaloneCase = { docketNumber: '11315-18' };
+  const leadCase = { docketNumber: '11316-18', leadDocketNumber: '11316-18' };
+  const memberCase = { docketNumber: '11317-18', leadDocketNumber: '11316-18' };
+  const responseResults = [standaloneCase, leadCase, memberCase];
+
+  beforeAll(() => {
+    (search as jest.Mock).mockImplementation(() => ({
+      results: responseResults,
+    }));
+  });
 
   it('should make a persistence call to obtain all cases with a status of "Submitted" or "CAV" associated with the given judges', async () => {
-    (search as jest.Mock).mockReturnValue({ results: responseResults });
-
     const docketNumbersSearchResults = await getDocketNumbersByStatusAndByJudge(
       {
         applicationContext,
@@ -65,8 +69,6 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
   });
 
   it('should make a persistence call to obtain all cases with a status of "Submitted" or "CAV" without judges', async () => {
-    (search as jest.Mock).mockReturnValue({ results: responseResults });
-
     await getDocketNumbersByStatusAndByJudge({
       applicationContext,
       params: { ...mockValidRequest, judges: undefined },
@@ -96,5 +98,28 @@ describe('getDocketNumbersByStatusAndByJudge', () => {
         },
       ]),
     );
+  });
+
+  it('excludes member cases if the flag is set to true', async () => {
+    const results = await getDocketNumbersByStatusAndByJudge({
+      applicationContext,
+      params: {
+        ...mockValidRequest,
+        excludeMemberCases: true,
+      },
+    });
+
+    expect(results).toEqual(expect.arrayContaining([standaloneCase, leadCase]));
+    expect(results).not.toEqual(expect.arrayContaining([memberCase]));
+  });
+
+  it('includes member cases by default', async () => {
+    const results = await getDocketNumbersByStatusAndByJudge({
+      applicationContext,
+      params: mockValidRequest,
+    });
+
+    expect(results).toEqual(expect.arrayContaining([standaloneCase, leadCase]));
+    expect(results).toEqual(expect.arrayContaining([memberCase]));
   });
 });

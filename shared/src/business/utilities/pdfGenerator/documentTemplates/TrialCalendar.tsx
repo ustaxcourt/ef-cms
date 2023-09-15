@@ -60,11 +60,11 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
             <div className="clear"></div>
           </div>
           <div className="card-content">
-            <div className="width-half">
+            <div className="width-half wrap-text-content">
               <strong>Court Reporter</strong>
               <div>{sessionDetail.courtReporter}</div>
             </div>
-            <div className="width-half">
+            <div className="width-half wrap-text-content">
               <strong>IRS Calendar Admin</strong>
               <div>{sessionDetail.irsCalendarAdministrator}</div>
             </div>

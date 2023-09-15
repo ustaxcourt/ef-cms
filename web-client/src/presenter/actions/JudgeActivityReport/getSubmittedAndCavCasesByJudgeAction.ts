@@ -20,19 +20,17 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
-  const { cases, consolidatedCasesGroupCountMap, totalCount } =
-    await applicationContext
-      .getUseCases()
-      .getCasesByStatusAndByJudgeInteractor(applicationContext, {
-        judges,
-        pageNumber,
-        pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-        statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
-      });
+  const { cases, totalCount } = await applicationContext
+    .getUseCases()
+    .getCasesByStatusAndByJudgeInteractor(applicationContext, {
+      judges,
+      pageNumber,
+      pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+    });
 
   return {
     cases,
-    consolidatedCasesGroupCountMap,
     totalCountForSubmittedAndCavCases: totalCount,
   };
 };
