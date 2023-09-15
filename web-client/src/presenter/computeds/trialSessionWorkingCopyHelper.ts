@@ -1,19 +1,28 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  FormattedTrialSessionCase,
+  compareCasesByDocketNumber,
+} from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
 import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
-import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+
+export type TrialSessionWorkingCopyCase = FormattedTrialSessionCase & {
+  userNotes: string;
+  calendarNotes: string;
+  nestedConsolidatedCases: TrialSessionWorkingCopyCase[];
+};
 
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
   casesShownCount: number;
-  formattedCases: any[];
+  formattedCases: TrialSessionWorkingCopyCase[];
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
 } => {
@@ -48,7 +57,7 @@ export const trialSessionWorkingCopyHelper = (
     .map(aCase => appendUserNotes(aCase, userNotes))
     .map(aCase => appendCalendarNotes(aCase, trialSession))
     .map(aCase => {
-      const nestedConsolidatedCases: (typeof aCase)[] = [];
+      const nestedConsolidatedCases: TrialSessionWorkingCopyCase[] = [];
       return { ...aCase, nestedConsolidatedCases };
     });
 

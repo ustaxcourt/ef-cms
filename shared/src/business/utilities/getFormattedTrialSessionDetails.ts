@@ -42,6 +42,17 @@ export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   return filingPartiesCode;
 };
 
+export type FormattedTrialSessionCase = RawCase & {
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  shouldIndent: boolean;
+  isLeadCase: boolean;
+  caseTitle: string;
+  removedFromTrialDateFormatted: string;
+  filingPartiesCode: string;
+  isDocketSuffixHighPriority: boolean;
+};
+
 export const formatCaseForTrialSession = ({
   applicationContext,
   caseItem,
@@ -52,16 +63,7 @@ export const formatCaseForTrialSession = ({
   caseItem: RawCase;
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
-}): RawCase & {
-  inConsolidatedGroup: boolean;
-  consolidatedIconTooltipText: string;
-  shouldIndent: boolean;
-  isLeadCase: boolean;
-  caseTitle: string;
-  removedFromTrialDateFormatted: string;
-  filingPartiesCode: string;
-  isDocketSuffixHighPriority: boolean;
-} => {
+}): FormattedTrialSessionCase => {
   let removedFromTrialDateFormatted = '';
   let filingPartiesCode = '';
   const caseTitle = applicationContext.getCaseTitle(caseItem.caseCaption || '');
