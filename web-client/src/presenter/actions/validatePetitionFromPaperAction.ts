@@ -74,8 +74,6 @@ export const validatePetitionFromPaperAction = ({
 
   const form = get(state.form);
 
-  console.log('receivedAt ', form.receivedAt);
-
   let errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor(applicationContext, {

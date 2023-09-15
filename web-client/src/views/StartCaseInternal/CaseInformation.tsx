@@ -1,4 +1,3 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PetitionPaymentForm } from '../CaseDetail/PetitionPaymentForm';
@@ -48,7 +47,7 @@ export const CaseInformation = connect(
           errorText={validationErrors.receivedAt}
           formGroupClassNames={''}
           id="date-received"
-          label="Date receivedddd"
+          label="Date received"
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'receivedAt',

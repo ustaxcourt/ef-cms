@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupPercentDone = (files, store) => {
@@ -83,23 +82,11 @@ export const createCaseFromPaperAction = async ({
     stinFile,
   } = get(state.form);
 
-  const receivedAt = // AAAA-BB-CC
-    (props.receivedAt &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.receivedAt)
-        .toISOString()) ||
-    null;
-
-  const form = omit(
-    {
-      ...get(state.form),
-      petitionPaymentDate: props.petitionPaymentDate,
-      petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
-      receivedAt,
-    },
-    ['receivedAtYear', 'receivedAtMonth', 'receivedAtDay'],
-  );
+  const form = {
+    ...get(state.form),
+    petitionPaymentDate: props.petitionPaymentDate,
+    petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
+  };
 
   const progressFunctions = setupPercentDone(
     {
