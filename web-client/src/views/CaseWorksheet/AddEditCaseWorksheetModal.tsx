@@ -33,7 +33,7 @@ export const AddEditCaseWorksheetModal = connect(
         cancelLabel="Cancel"
         confirmLabel="Save"
         preventCancelOnBlur={true}
-        title="Add/Edit Case Worksheet"
+        title="Edit Details"
         onCancelSequence="dismissAddEditCaseWorksheetModalSequence"
         onConfirmSequence="updateCaseWorksheetSequence"
       >
