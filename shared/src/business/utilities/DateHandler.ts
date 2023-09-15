@@ -33,6 +33,7 @@ export const FORMATS = {
 } as const;
 const FORMATS1 = Object.values(FORMATS);
 export type TimeFormats = (typeof FORMATS1)[number];
+export type TimeFormatNames = keyof typeof FORMATS;
 
 export const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
@@ -233,10 +234,10 @@ export const createISODateStringFromObject = options => {
  * @returns {string|void} a formatted date string
  */
 export const formatDateString = (
-  dateString: string,
-  formatArg: TimeFormats = FORMATS.ISO,
-): string => {
-  if (!dateString) return '';
+  dateString,
+  formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
+) => {
+  if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {

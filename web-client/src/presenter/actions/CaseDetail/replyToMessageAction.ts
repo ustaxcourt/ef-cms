@@ -8,17 +8,20 @@ export const replyToMessageAction = async ({
 
   const docketNumber = get(state.caseDetail.docketNumber);
 
+  const computedAttachments = [...form.attachments, ...form.draftAttachments];
+
   const { parentMessageId } = await applicationContext
     .getUseCases()
     .replyToMessageInteractor(applicationContext, {
       docketNumber,
       ...form,
+      attachments: computedAttachments,
     });
 
   let messageViewerDocumentToDisplay;
-  if (form.attachments.length) {
+  if (computedAttachments.length) {
     messageViewerDocumentToDisplay = {
-      documentId: form.attachments[0].documentId,
+      documentId: computedAttachments[0].documentId,
     };
   }
 

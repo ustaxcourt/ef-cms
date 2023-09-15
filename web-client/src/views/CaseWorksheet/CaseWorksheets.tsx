@@ -1,49 +1,23 @@
-import { AddEditPrimaryIssueModal } from './AddEditPrimaryIssueModal';
+import { AddEditCaseWorksheetModal } from './AddEditCaseWorksheetModal';
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { DateInput } from '@web-client/ustc-ui/DateInput/DateInput';
-import { DeletePrimaryIssueModal } from './DeletePrimaryIssueModal';
-import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-function convertToDateInputValues(date: string) {
-  if (!date) {
-    return '';
-  }
-  const [year, month, day] = date.split('-');
-  return {
-    day,
-    month,
-    year,
-  };
-}
-
 export const CaseWorksheets = connect(
   {
-    STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     caseWorksheetsHelper: state.caseWorksheetsHelper,
-    openAddEditPrimaryIssueModalSequence:
-      sequences.openAddEditPrimaryIssueModalSequence,
-    openCleanModalSequence: sequences.openCleanModalSequence,
-    openDeletePrimaryIssueSequence: sequences.openDeletePrimaryIssueSequence,
+    openAddEditCaseWorksheetModalSequence:
+      sequences.openAddEditCaseWorksheetModalSequence,
     showModal: state.modal.showModal,
-    updateFinalBriefDueDateSequence: sequences.updateFinalBriefDueDateSequence,
-    updateStatusOfMatterSequence: sequences.updateStatusOfMatterSequence,
-    validationErrors: state.validationErrors,
   },
   function CaseWorksheets({
     caseWorksheetsHelper,
-    openAddEditPrimaryIssueModalSequence,
-    openDeletePrimaryIssueSequence,
+    openAddEditCaseWorksheetModalSequence,
     showModal,
-    STATUS_OF_MATTER_OPTIONS,
-    updateFinalBriefDueDateSequence,
-    updateStatusOfMatterSequence,
-    validationErrors,
   }) {
     return (
       <div className="margin-top-6">
@@ -74,6 +48,7 @@ export const CaseWorksheets = connect(
               <th>Status Date</th>
               <th>Final Brief Due Date</th>
               <th>Status of Matter</th>
+              <th aria-hidden="true"></th>
             </tr>
           </thead>
           <tbody>
@@ -103,54 +78,22 @@ export const CaseWorksheets = connect(
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
                     <td>
-                      <FormGroup
-                        className="margin-bottom-0"
-                        errorText={
-                          validationErrors &&
-                          validationErrors.submittedCavCasesTable &&
-                          validationErrors.submittedCavCasesTable[
-                            formattedCase.docketNumber
-                          ]?.finalBriefDueDate
-                        }
-                      >
-                        <DateInput
-                          className={'margin-bottom-0'}
-                          id={`final-brief-due-date-date-picker-${formattedCase.docketNumber}`}
-                          showDateHint={false}
-                          values={convertToDateInputValues(
-                            formattedCase.worksheet.finalBriefDueDate,
-                          )}
-                          onValueChange={value => {
-                            updateFinalBriefDueDateSequence({
-                              docketNumber: formattedCase.docketNumber,
-                              finalBriefDueDate: value === '' ? null : value,
-                            });
-                          }}
-                        />
-                      </FormGroup>
+                      {formattedCase.worksheet.finalBriefDueDateFormatted}
                     </td>
+                    <td>{formattedCase.worksheet.statusOfMatter}</td>
                     <td>
-                      <select
-                        aria-label="status of matter"
-                        className="usa-select"
-                        id={`status-of-matter-dropdown-${formattedCase.docketNumber}`}
-                        name="statusOfMatter"
-                        value={formattedCase.worksheet.statusOfMatter ?? ''}
-                        onChange={e => {
-                          updateStatusOfMatterSequence({
+                      <Button
+                        link
+                        data-test="add-edit-case-worksheet"
+                        icon="edit"
+                        onClick={() => {
+                          openAddEditCaseWorksheetModalSequence({
                             docketNumber: formattedCase.docketNumber,
-                            statusOfMatter:
-                              e.target.value === '' ? null : e.target.value,
                           });
                         }}
                       >
-                        <option value="">- Select -</option>
-                        {STATUS_OF_MATTER_OPTIONS.map(from => (
-                          <option key={from} value={from}>
-                            {from}
-                          </option>
-                        ))}
-                      </select>
+                        Edit
+                      </Button>
                     </td>
                   </tr>
                   <tr>
@@ -160,53 +103,6 @@ export const CaseWorksheets = connect(
                         Primary Issue:
                       </span>
                       {formattedCase.worksheet.primaryIssue}
-                    </td>
-                    <td>
-                      {!formattedCase.worksheet.primaryIssue && (
-                        <Button
-                          link
-                          className="add-primary-issue"
-                          icon="plus-circle"
-                          onClick={() => {
-                            openAddEditPrimaryIssueModalSequence({
-                              docketNumber: formattedCase.docketNumber,
-                            });
-                          }}
-                        >
-                          Add Issue
-                        </Button>
-                      )}
-                      {formattedCase.worksheet.primaryIssue && (
-                        <div>
-                          <div>
-                            <Button
-                              link
-                              icon="edit"
-                              onClick={() => {
-                                openAddEditPrimaryIssueModalSequence({
-                                  docketNumber: formattedCase.docketNumber,
-                                });
-                              }}
-                            >
-                              Edit Issue
-                            </Button>
-                          </div>
-                          <div>
-                            <Button
-                              link
-                              className="red-warning delete-primary-issue"
-                              icon="trash"
-                              onClick={() => {
-                                openDeletePrimaryIssueSequence({
-                                  docketNumber: formattedCase.docketNumber,
-                                });
-                              }}
-                            >
-                              Delete Issue
-                            </Button>
-                          </div>
-                        </div>
-                      )}
                     </td>
                   </tr>
                 </React.Fragment>
@@ -222,10 +118,9 @@ export const CaseWorksheets = connect(
           </div>
         )}
 
-        {showModal === 'AddEditPrimaryIssueModal' && (
-          <AddEditPrimaryIssueModal />
+        {showModal === 'AddEditCaseWorksheetModal' && (
+          <AddEditCaseWorksheetModal />
         )}
-        {showModal === 'DeletePrimaryIssueModal' && <DeletePrimaryIssueModal />}
       </div>
     );
   },

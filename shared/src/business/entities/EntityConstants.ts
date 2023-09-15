@@ -130,7 +130,7 @@ export const SERVICE_INDICATOR_TYPES = {
 
 export const STATUS_OF_MATTER_OPTIONS = [
   'Awaiting Consideration',
-  'Awaiting Supplemental Briefs',
+  'Awaiting Briefs',
   'Drafting',
   'Reviewing Draft',
   'Submitted to Chief Judge',
