@@ -70,9 +70,11 @@ export const validatePetitionFromPaperAction = ({
   path,
   props,
 }: ActionProps) => {
-  const { petitionPaymentDate, petitionPaymentWaivedDate, receivedAt } = props;
+  const { petitionPaymentDate, petitionPaymentWaivedDate } = props;
 
   const form = get(state.form);
+
+  console.log('receivedAt ', form.receivedAt);
 
   let errors = applicationContext
     .getUseCases()
@@ -81,7 +83,6 @@ export const validatePetitionFromPaperAction = ({
         ...form,
         petitionPaymentDate,
         petitionPaymentWaivedDate,
-        receivedAt,
       },
     });
 

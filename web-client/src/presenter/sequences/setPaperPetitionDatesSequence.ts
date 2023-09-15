@@ -4,8 +4,8 @@ import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFa
 
 export const setPaperPetitionDatesSequence = [
   // receivedAt
-  getComputedFormDateFactoryAction('receivedAt', true),
-  setComputeFormDateFactoryAction('receivedAt'),
+  // getComputedFormDateFactoryAction('receivedAt', true),
+  // setComputeFormDateFactoryAction('receivedAt'),
   // irsNoticeDate
   getComputedFormDateFactoryAction('irs', true),
   setComputeFormDateFactoryAction('irsNoticeDate'),
