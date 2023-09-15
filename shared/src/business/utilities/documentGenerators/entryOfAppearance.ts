@@ -3,21 +3,25 @@ import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTempl
 
 export const entryOfAppearance = async ({ applicationContext, data }) => {
   const {
+    caseCaptionExtension,
+    caseTitle,
     docketNumber,
     docketNumberWithSuffix,
     filers,
-    petitioners,
-    practitionerInformation,
+    // petitioners,
+    // practitionerInformation,
   } = data;
 
   const EntryOfAppearanceTemplate = reactTemplateGenerator({
     componentName: 'EntryOfAppearance',
     data: {
+      caseCaptionExtension,
+      caseTitle,
       docketNumber,
       docketNumberWithSuffix,
       filers,
-      petitioners,
-      practitionerInformation,
+      //   petitioners,
+      //   practitionerInformation,
     },
   });
 

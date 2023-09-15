@@ -1,22 +1,31 @@
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const generateEntryOfAppearancePdfAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { docketNumber, docketNumberWithSuffix, petitioners } = get(
-    state.caseDetail,
-  );
-  const { filers } = get(state.form);
+  const { GENERATION_TYPES } = get(state.constants);
 
-  const pdfUrl = await applicationContext
-    .getUseCases()
-    .generateEntryOfAppearancePdfInteractor(applicationContext, {
-      docketNumber,
-      docketNumberWithSuffix,
-      filers,
-      petitioners,
-    });
+  if (get(state.form.generationType) === GENERATION_TYPES.AUTO) {
+    const caseDetail = get(state.caseDetail);
+    const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  return { pdfUrl };
+    const { docketNumber, docketNumberWithSuffix, petitioners } = caseDetail;
+
+    const { filers } = get(state.form);
+
+    const pdfUrl = await applicationContext
+      .getUseCases()
+      .generateEntryOfAppearancePdfInteractor(applicationContext, {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumber,
+        docketNumberWithSuffix,
+        filers,
+        petitioners,
+      });
+
+    return { pdfUrl };
+  }
 };
