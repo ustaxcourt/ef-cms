@@ -743,7 +743,7 @@ jobs:
       - run:
           name: Sync S3 buckets with timeout
           command: |
-            ./scripts/sync-s3-buckets-with-timeout.sh
+            ./scripts/sync-s3-buckets-with-timeout.sh 175m
 
   ######################## GLUE JOB: Jobs that run in prod ########################
 

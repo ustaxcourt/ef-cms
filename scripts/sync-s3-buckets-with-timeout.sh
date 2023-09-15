@@ -11,7 +11,9 @@
   "REFERRER" \
   "SOURCE_BUCKET"
 
-timeout 59m aws s3 sync "s3://${SOURCE_BUCKET}" "s3://${DESTINATION_BUCKET}" --delete
+EXPIRATION="${1:-59m}"
+
+timeout "$EXPIRATION" aws s3 sync "s3://${SOURCE_BUCKET}" "s3://${DESTINATION_BUCKET}" --delete
 S3_SYNC_RESULT="$?"
 
 if [[ "$S3_SYNC_RESULT" -eq 124 ]]; then
