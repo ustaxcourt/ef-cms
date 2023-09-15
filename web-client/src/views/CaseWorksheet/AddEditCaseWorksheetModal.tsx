@@ -1,6 +1,6 @@
 import { BindedTextarea } from '../../ustc-ui/BindedTextarea/BindedTextarea';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
-import { DateInputThatActuallyWorks } from '@web-client/ustc-ui/DateInput/DateInputThatActuallyWorks';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
@@ -37,7 +37,7 @@ export const AddEditCaseWorksheetModal = connect(
           {addEditCaseWorksheetModalHelper.title}
         </h5>
 
-        <DateInputThatActuallyWorks
+        <DateSelector
           defaultValue={form.finalBriefDueDate}
           errorText={validationErrors.finalBriefDueDate}
           formGroupClassNames={'width-half'}
