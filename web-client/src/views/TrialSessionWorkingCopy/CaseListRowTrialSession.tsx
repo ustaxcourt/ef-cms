@@ -1,3 +1,4 @@
+import { ALL_TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
@@ -6,7 +7,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TextView } from '../../ustc-ui/Text/TextView';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
 const getCaseRow = ({
@@ -14,7 +14,6 @@ const getCaseRow = ({
   indentMemberCase = false,
   trialSequences,
   trialSessionWorkingCopyStatus,
-  trialStatusOptions,
 }) => {
   return (
     <React.Fragment key={formattedCase.docketNumber}>
@@ -67,14 +66,14 @@ const getCaseRow = ({
             }}
           >
             <option value="">-Unassigned-</option>
-            {Object.keys(trialStatusOptions).map(key => {
+            {Object.keys(ALL_TRIAL_STATUS_TYPES).map(key => {
               if (
-                !trialStatusOptions[key].deprecated ||
+                !ALL_TRIAL_STATUS_TYPES[key].deprecated ||
                 trialSessionWorkingCopyStatus === key
               )
                 return (
                   <option key={key} value={key}>
-                    {trialStatusOptions[key].label}
+                    {ALL_TRIAL_STATUS_TYPES[key].label}
                   </option>
                 );
             })}
@@ -160,7 +159,6 @@ const getCaseRow = ({
             indentMemberCase: true,
             trialSequences,
             trialSessionWorkingCopyStatus,
-            trialStatusOptions,
           }),
         )}
     </React.Fragment>
@@ -175,7 +173,6 @@ export const CaseListRowTrialSession = connect(
       sequences.openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence:
       sequences.openDeleteUserCaseNoteConfirmModalSequence,
-    trialStatusOptions: state.trialSessionWorkingCopyHelper.trialStatusOptions,
   },
   ({
     autoSaveTrialSessionWorkingCopySequence,
@@ -183,7 +180,6 @@ export const CaseListRowTrialSession = connect(
     openAddEditUserCaseNoteModalFromListSequence,
     openDeleteUserCaseNoteConfirmModalSequence,
     trialSessionWorkingCopy,
-    trialStatusOptions,
   }) => {
     return getCaseRow({
       formattedCase,
@@ -195,7 +191,6 @@ export const CaseListRowTrialSession = connect(
       trialSessionWorkingCopyStatus:
         trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber]
           ?.trialStatus,
-      trialStatusOptions,
     });
   },
 );

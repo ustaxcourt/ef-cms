@@ -1,5 +1,4 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { TRIAL_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
@@ -25,65 +24,6 @@ describe('trial session working copy computed', () => {
     trialClerk: { name: 'Test Trial Clerk' },
     trialLocation: 'Houston, Texas',
   };
-
-  describe('trialStatus', () => {
-    it('should omit new trial status types when UPDATED_TRIAL_STATUS_TYPES feature fg is inactive', () => {
-      const { trialStatusOptions } = runCompute(trialSessionWorkingCopyHelper, {
-        state: {
-          featureFlags: {
-            'updated-trial-status-types': false,
-          },
-          trialSession: {
-            ...MOCK_TRIAL_SESSION,
-            calendaredCases: [MOCK_CASE],
-            caseOrder: [],
-          },
-          trialSessionWorkingCopy: {
-            caseMetadata: {},
-            filters: { statusUnassigned: true },
-            sort: 'docket',
-            sortOrder: 'asc',
-            userNotes: {},
-          },
-        },
-      });
-
-      expect(trialStatusOptions).toMatchObject({
-        basisReached: {},
-        continued: {},
-        dismissed: {},
-        recall: {},
-        rule122: {},
-        setForTrial: {},
-        settled: {},
-        submittedCAV: {},
-      });
-    });
-  });
-
-  it('should return all status types when UPDATED_TRIAL_STATUS_TYPES feature flag is active', () => {
-    const { trialStatusOptions } = runCompute(trialSessionWorkingCopyHelper, {
-      state: {
-        featureFlags: {
-          'updated-trial-status-types': true,
-        },
-        trialSession: {
-          ...MOCK_TRIAL_SESSION,
-          calendaredCases: [MOCK_CASE],
-          caseOrder: [],
-        },
-        trialSessionWorkingCopy: {
-          caseMetadata: {},
-          filters: { statusUnassigned: true },
-          sort: 'docket',
-          sortOrder: 'asc',
-          userNotes: {},
-        },
-      },
-    });
-
-    expect(trialStatusOptions).toEqual(TRIAL_STATUS_TYPES);
-  });
 
   it('should omit deprecated trial status types and sort trialStatusFilters by displayOrder when UPDATED_TRIAL_STATUS_TYPES feature flag is active', () => {
     const { trialStatusFilters } = runCompute(trialSessionWorkingCopyHelper, {
