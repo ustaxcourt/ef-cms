@@ -5,13 +5,8 @@ export const setSubmittedAndCavCasesForJudgeAction = ({
   store,
 }: ActionProps<{
   cases: any[];
-  consolidatedCasesGroupCountMap: Record<string, any>;
 }>) => {
-  const { cases, consolidatedCasesGroupCountMap } = props;
+  const { cases } = props;
 
   store.set(state.submittedAndCavCases.submittedAndCavCasesByJudge, cases);
-  store.set(
-    state.submittedAndCavCases.consolidatedCasesGroupCountMap,
-    consolidatedCasesGroupCountMap,
-  );
 };

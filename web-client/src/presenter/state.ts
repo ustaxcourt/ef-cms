@@ -407,7 +407,6 @@ export const baseState = {
   },
   showValidation: false,
   submittedAndCavCases: {
-    consolidatedCasesGroupCountMap: {} as any,
     submittedAndCavCasesByJudge: [] as any,
     // TODO: this should get moved to currentViewMetadata
     worksheets: [] as RawCaseWorksheet[],
