@@ -3,14 +3,21 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { saveFileAndGenerateUrl } from '@shared/business/useCaseHelper/saveFileAndGenerateUrl';
 
 export const generateEntryOfAppearancePdfInteractor = async (
   applicationContext: IApplicationContext,
   {
-    docketNumber,
+    // docketNumber,
+    docketNumberWithSuffix,
     filers,
     petitioners,
-  }: { docketNumber: string; filers: any[]; petitioners: any[] },
+  }: {
+    docketNumber: string;
+    docketNumberWithSuffix: string;
+    filers: any[];
+    petitioners: any[];
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -30,42 +37,42 @@ export const generateEntryOfAppearancePdfInteractor = async (
     .entryOfAppearance({
       applicationContext,
       data: {
-        docketNumber,
+        docketNumberWithSuffix,
         filers,
         petitioners,
         practitionerInformation,
       },
     });
 
-  const docketEntryId = applicationContext.getUniqueId();
+  // const docketEntryId = applicationContext.getUniqueId();
 
-  await new Promise<void>((resolve, reject) => {
-    const documentsBucket = applicationContext.getDocumentsBucketName();
-    const s3Client = applicationContext.getStorageClient();
+  // await new Promise<void>((resolve, reject) => {
+  //   const documentsBucket = applicationContext.getDocumentsBucketName();
+  //   const s3Client = applicationContext.getStorageClient();
 
-    const params = {
-      Body: file,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: docketEntryId,
-    };
+  //   const params = {
+  //     Body: file,
+  //     Bucket: documentsBucket,
+  //     ContentType: 'application/pdf',
+  //     Key: docketEntryId,
+  //   };
 
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error(
-          'An error occurred while attempting to upload to S3',
-          err,
-        );
-        reject(err);
-      }
+  //   s3Client.upload(params, function (err) {
+  //     if (err) {
+  //       applicationContext.logger.error(
+  //         'An error occurred while attempting to upload to S3',
+  //         err,
+  //       );
+  //       reject(err);
+  //     }
 
-      resolve();
-    });
-  });
-
-  // return await saveFileAndGenerateUrl({
-  //   applicationContext,
-  //   file,
-  //   useTempBucket: false,
+  //     resolve();
+  //   });
   // });
+
+  return await saveFileAndGenerateUrl({
+    applicationContext,
+    file,
+    useTempBucket: false,
+  });
 };
