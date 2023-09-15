@@ -3,10 +3,11 @@ const {
   cancelWorkflow,
 } = require('../../../../../shared/admin-tools/circleci/circleci-helper');
 const {
-  FAILURE_STATES,
   getRunStateOfMostRecentJobRun,
-  RUNNING_STATES,
 } = require('../../../../../shared/admin-tools/aws/glueHelper');
+
+const FAILURE_STATES = ['ERROR', 'FAILED', 'STOPPED', 'TIMEOUT'];
+const RUNNING_STATES = ['RUNNING', 'STARTING', 'STOPPING', 'WAITING'];
 
 exports.handler = async (input, context) => {
   const mostRecentRunState = await getRunStateOfMostRecentJobRun();
