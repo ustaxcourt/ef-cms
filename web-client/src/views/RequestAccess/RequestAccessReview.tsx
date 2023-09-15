@@ -4,6 +4,7 @@ import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { PDFPreviewButton } from '../PDFPreviewButton';
+import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotificationComponent } from '@web-client/views/WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -17,6 +18,7 @@ export const RequestAccessReview = connect(
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
+    pdfPreviewUrl: state.pdfPreviewUrl,
     requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
     submitCaseAssociationRequestSequence:
@@ -27,6 +29,7 @@ export const RequestAccessReview = connect(
     form,
     formCancelToggleCancelSequence,
     navigateBackSequence,
+    pdfPreviewUrl,
     requestAccessHelper,
     showModal,
     submitCaseAssociationRequestSequence,
@@ -71,10 +74,12 @@ export const RequestAccessReview = connect(
                         </label>
                         <div className="grid-row">
                           <div className="grid-col flex-auto">
-                            <PDFPreviewButton
-                              file={form.primaryDocumentFile}
-                              title={form.documentTitle}
-                            />
+                            {!pdfPreviewUrl && (
+                              <PDFPreviewButton
+                                file={form.primaryDocumentFile}
+                                title={form.documentTitle}
+                              />
+                            )}
                           </div>
                         </div>
                       </div>
@@ -130,10 +135,12 @@ export const RequestAccessReview = connect(
                               </h3>
                               <div className="grid-row">
                                 <div className="grid-col flex-auto">
-                                  <PDFPreviewButton
-                                    file={item.supportingDocumentFile}
-                                    title={item.documentTitle}
-                                  />
+                                  {!pdfPreviewUrl && (
+                                    <PDFPreviewButton
+                                      file={item.supportingDocumentFile}
+                                      title={item.documentTitle}
+                                    />
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -225,6 +232,7 @@ export const RequestAccessReview = connect(
             </div>
           </div>
         </div>
+        {pdfPreviewUrl && <PdfPreview />}
 
         <Button
           id="submit-document"

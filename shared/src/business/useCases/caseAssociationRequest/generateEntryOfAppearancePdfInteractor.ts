@@ -9,10 +9,14 @@ export const generateEntryOfAppearancePdfInteractor = async (
   applicationContext: IApplicationContext,
   {
     // docketNumber,
+    caseCaptionExtension,
+    caseTitle,
     docketNumberWithSuffix,
     filers,
     petitioners,
   }: {
+    caseCaptionExtension: string;
+    caseTitle: string;
     docketNumber: string;
     docketNumberWithSuffix: string;
     filers: any[];
@@ -21,7 +25,7 @@ export const generateEntryOfAppearancePdfInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ARCHIVE_DOCUMENT)) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
@@ -37,6 +41,8 @@ export const generateEntryOfAppearancePdfInteractor = async (
     .entryOfAppearance({
       applicationContext,
       data: {
+        caseCaptionExtension,
+        caseTitle,
         docketNumberWithSuffix,
         filers,
         petitioners,

@@ -12,11 +12,24 @@ import { post } from '../requests';
  */
 export const generateEntryOfAppearancePdfInteractor = (
   applicationContext,
-  { docketNumber, docketNumberWithSuffix, filers, petitioners },
+  {
+    caseCaptionExtension,
+    caseTitle,
+    docketNumber,
+    docketNumberWithSuffix,
+    filers,
+    petitioners,
+  },
 ) => {
   return post({
     applicationContext,
-    body: { docketNumberWithSuffix, filers, petitioners },
+    body: {
+      caseCaptionExtension,
+      caseTitle,
+      docketNumberWithSuffix,
+      filers,
+      petitioners,
+    },
     endpoint: `/cases/${docketNumber}/generate-entry-of-appearance`,
   });
 };
