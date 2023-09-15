@@ -13,7 +13,7 @@ import {
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
-export class ConsolidatedCaseDTO extends JoiValidationEntity {
+export class ConsolidatedCaseSummary extends JoiValidationEntity {
   public caseCaption: string;
   public docketNumber: string;
   public isSealed: boolean;
@@ -27,7 +27,7 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
   public status: CaseStatus;
 
   constructor(rawCase: any) {
-    super('ConsolidatedCaseDTO');
+    super('ConsolidatedCaseSummary');
     this.caseCaption = rawCase.caseCaption;
     this.docketNumber = rawCase.docketNumber;
     this.docketNumberWithSuffix = rawCase.docketNumberWithSuffix;
@@ -57,16 +57,20 @@ export class ConsolidatedCaseDTO extends JoiValidationEntity {
   static VALIDATION_ERROR_MESSAGES = {} as const;
 
   static getFields() {
-    return Object.getOwnPropertyNames.call(Object, new ConsolidatedCaseDTO({}));
+    return Object.getOwnPropertyNames.call(
+      Object,
+      new ConsolidatedCaseSummary({}),
+    );
   }
 
   getValidationRules() {
-    return ConsolidatedCaseDTO.VALIDATION_RULES;
+    return ConsolidatedCaseSummary.VALIDATION_RULES;
   }
 
   getErrorToMessageMap() {
-    return ConsolidatedCaseDTO.VALIDATION_ERROR_MESSAGES;
+    return ConsolidatedCaseSummary.VALIDATION_ERROR_MESSAGES;
   }
 }
 
-export type RawConsolidatedCaseDTO = ExcludeMethods<ConsolidatedCaseDTO>;
+export type RawConsolidatedCaseSummary =
+  ExcludeMethods<ConsolidatedCaseSummary>;

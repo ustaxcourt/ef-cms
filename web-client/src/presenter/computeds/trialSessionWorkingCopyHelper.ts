@@ -1,25 +1,30 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 import {
-  TRIAL_STATUS_TYPES,
-  TrialStatusOption,
-} from '@shared/business/entities/EntityConstants';
+  FormattedTrialSessionCase,
+  compareCasesByDocketNumber,
+} from '@shared/business/utilities/getFormattedTrialSessionDetails';
+import { Get } from 'cerebral';
+import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
-import { compareCasesByDocketNumber } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition, pickBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+
+export type TrialSessionWorkingCopyCase = FormattedTrialSessionCase & {
+  userNotes: string;
+  calendarNotes: string;
+  nestedConsolidatedCases: TrialSessionWorkingCopyCase[];
+};
 
 export const trialSessionWorkingCopyHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
   casesShownCount: number;
-  formattedCases: any[];
+  formattedCases: TrialSessionWorkingCopyCase[];
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
-  trialStatusOptions: TrialStatusOption;
 } => {
   const trialSession = get(state.trialSession);
   const {
@@ -52,7 +57,7 @@ export const trialSessionWorkingCopyHelper = (
     .map(aCase => appendUserNotes(aCase, userNotes))
     .map(aCase => appendCalendarNotes(aCase, trialSession))
     .map(aCase => {
-      const nestedConsolidatedCases: (typeof aCase)[] = [];
+      const nestedConsolidatedCases: TrialSessionWorkingCopyCase[] = [];
       return { ...aCase, nestedConsolidatedCases };
     });
 
@@ -78,7 +83,6 @@ export const trialSessionWorkingCopyHelper = (
   }
 
   const trialStatusFilters = Object.keys(TRIAL_STATUS_TYPES)
-    .filter(option => !TRIAL_STATUS_TYPES[option].deprecated)
     .sort((a, b) => {
       return (
         TRIAL_STATUS_TYPES[a].displayOrder - TRIAL_STATUS_TYPES[b].displayOrder
@@ -100,7 +104,6 @@ export const trialSessionWorkingCopyHelper = (
     formattedCases: topLevelCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
-    trialStatusOptions: TRIAL_STATUS_TYPES,
   };
 };
 
