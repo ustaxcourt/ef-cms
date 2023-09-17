@@ -1,5 +1,5 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -44,6 +44,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
       cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
       await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+        action: 'add',
         documentId: cerebralTest.testMessageDocumentId,
       });
 
@@ -57,6 +58,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
         await cerebralTest.runSequence(
           'updateMessageModalAttachmentsSequence',
           {
+            action: 'add',
             documentId: cerebralTest.testMessageDocumentId,
           },
         );

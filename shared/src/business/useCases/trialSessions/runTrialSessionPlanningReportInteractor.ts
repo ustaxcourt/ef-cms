@@ -7,7 +7,7 @@ import {
   TRIAL_CITIES,
   US_STATES,
 } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { capitalize, invert } from 'lodash';
 
 export const getPreviousTerm = (currentTerm, currentYear) => {

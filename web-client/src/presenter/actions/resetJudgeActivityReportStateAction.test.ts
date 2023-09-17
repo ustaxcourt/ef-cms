@@ -3,7 +3,7 @@ import {
   initialJudgeActivityReportState,
 } from '../judgeActivityReportState';
 import { resetJudgeActivityReportStateAction } from './resetJudgeActivityReportStateAction';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('resetJudgeActivityReportStateAction', () => {
   it('resets the judge activity report back to its default state', async () => {

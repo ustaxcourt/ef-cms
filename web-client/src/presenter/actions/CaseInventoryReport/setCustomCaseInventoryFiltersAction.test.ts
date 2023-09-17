@@ -2,7 +2,7 @@ import {
   CustomCaseInventoryReportState,
   initialCustomCaseInventoryReportState,
 } from '../../customCaseInventoryReportState';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';

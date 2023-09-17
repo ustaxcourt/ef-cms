@@ -7,7 +7,7 @@ import {
   isAssociatedUser,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { NotFoundError } from '../../errors/errors';
+import { NotFoundError } from '../../../../web-api/src/errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
 import {
   ROLE_PERMISSIONS,

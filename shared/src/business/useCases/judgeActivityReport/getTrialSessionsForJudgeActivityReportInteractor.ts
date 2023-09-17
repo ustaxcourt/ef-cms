@@ -1,4 +1,4 @@
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {

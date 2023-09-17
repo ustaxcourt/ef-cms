@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCavAndSubmittedCasesAction } from './setCavAndSubmittedCasesAction';
@@ -6,7 +6,6 @@ import { setCavAndSubmittedCasesAction } from './setCavAndSubmittedCasesAction';
 describe('setCavAndSubmittedCasesAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const mockConsolidatedCasesGroupCount = { '101-20': 3 };
   const totalCountForSubmittedAndCavCases = 15;
   const mockCases = [{ docketNumber: '101-20' }, { docketNumber: '102-20' }];
 
@@ -17,13 +16,11 @@ describe('setCavAndSubmittedCasesAction', () => {
       },
       props: {
         cases: mockCases,
-        consolidatedCasesGroupCountMap: mockConsolidatedCasesGroupCount,
         totalCountForSubmittedAndCavCases,
       },
       state: {
         judgeActivityReport: {
           judgeActivityReportData: {
-            consolidatedCasesGroupCountMap: undefined,
             submittedAndCavCasesByJudge: undefined,
             totalCountForSubmittedAndCavCases: undefined,
           },
@@ -35,11 +32,6 @@ describe('setCavAndSubmittedCasesAction', () => {
       state.judgeActivityReport.judgeActivityReportData
         .submittedAndCavCasesByJudge,
     ).toEqual(mockCases);
-
-    expect(
-      state.judgeActivityReport.judgeActivityReportData
-        .consolidatedCasesGroupCountMap,
-    ).toEqual(mockConsolidatedCasesGroupCount);
 
     expect(
       state.judgeActivityReport.judgeActivityReportData

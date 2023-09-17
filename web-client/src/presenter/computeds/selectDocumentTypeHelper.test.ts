@@ -6,7 +6,7 @@ import {
   getPreviouslyFiledDocuments,
 } from './selectDocumentTypeHelper';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 describe('selectDocumentTypeHelper', () => {
   describe('getOptionsForCategory', () => {

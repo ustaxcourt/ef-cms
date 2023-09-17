@@ -3,7 +3,7 @@ import {
   CaseStatus,
   CaseType,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { CustomCaseInventoryReportFilters } from '../../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { CustomCaseInventoryReportFilters } from '../../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**

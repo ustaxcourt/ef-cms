@@ -1,8 +1,4 @@
 /* eslint-disable max-lines */
-import ImageBlobReduce from 'image-blob-reduce';
-const reduce = ImageBlobReduce({
-  pica: ImageBlobReduce.pica({ features: ['js'] }),
-});
 import { BroadcastChannel } from 'broadcast-channel';
 import {
   Case,
@@ -347,9 +343,13 @@ import { validateUpdateUserEmailInteractor } from '../../shared/src/business/use
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
-
+import ImageBlobReduce from 'image-blob-reduce';
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
+
+const reduce = ImageBlobReduce({
+  pica: ImageBlobReduce.pica({ features: ['js'] }),
+});
 
 let user;
 let broadcastChannel;
