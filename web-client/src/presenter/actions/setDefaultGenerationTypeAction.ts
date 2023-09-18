@@ -2,11 +2,10 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export const setDefaultGenerationTypeAction = ({
   applicationContext,
-  get,
   props,
   store,
 }: ActionProps) => {
-  const { GENERATION_TYPES, USER_ROLES } = get(state.constants);
+  const { GENERATION_TYPES, USER_ROLES } = applicationContext.getConstants();
   const user = applicationContext.getCurrentUser();
 
   if (props.key === 'eventCode') {
