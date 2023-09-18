@@ -8,8 +8,9 @@ export const formatDateFromDatePicker = ({
   | undefined => {
   if (props.value) {
     const [month, day, year] = props.value.split('/');
-    const formattedMonth = month.length === 1 ? `0${month}` : month;
-    const formattedDay = day.length === 1 ? `0${day}` : day;
+
+    const formattedMonth = month?.length === 1 ? `0${month}` : month;
+    const formattedDay = day?.length === 1 ? `0${day}` : day;
 
     const zeroPaddedDate = `${formattedMonth}/${formattedDay}/${year}`;
 
