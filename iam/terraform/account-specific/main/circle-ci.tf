@@ -309,13 +309,13 @@ resource "aws_iam_policy" "circle_ci_policy" {
 EOF
 }
 
-resource "aws_iam_user_policy_attachment" "circle_ci_route52_policy_attachment" {
+resource "aws_iam_user_policy_attachment" "circle_ci_route53_policy_attachment" {
   user       = aws_iam_user.circle_ci.name
-  policy_arn = aws_iam_policy.circle_ci_route52_policy.arn
+  policy_arn = aws_iam_policy.circle_ci_route53_policy.arn
 }
 
-resource "aws_iam_policy" "circle_ci_route52_policy" {
-  name = "circle_ci_route52_policy"
+resource "aws_iam_policy" "circle_ci_route53_policy" {
+  name = "circle_ci_route53_policy"
 
   policy = <<EOF
 {
