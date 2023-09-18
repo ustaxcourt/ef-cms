@@ -36,4 +36,21 @@ describe('formatDateFromDatePicker', () => {
 
     expect(output).toEqual(undefined);
   });
+
+  it('should format the date correctly, when month and day is only one digit', async () => {
+    const { output } = await runAction(formatDateFromDatePicker, {
+      modules: {
+        presenter,
+      },
+      props: {
+        key: 'finalBriefDueDate',
+        value: '9/9/2023',
+      },
+    });
+
+    expect(output).toEqual({
+      key: 'finalBriefDueDate',
+      value: '2023-09-09',
+    });
+  });
 });
