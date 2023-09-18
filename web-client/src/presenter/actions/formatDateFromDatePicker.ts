@@ -5,10 +5,17 @@ export const formatDateFromDatePicker = ({
   | { key: string; value: string }
   | undefined => {
   if (props.value) {
+    const [month, day, year] = props.value.split('/');
+
+    const formattedMonth = month?.length === 1 ? `0${month}` : month;
+    const formattedDay = day?.length === 1 ? `0${day}` : day;
+
+    const zeroPaddedDate = `${formattedMonth}/${formattedDay}/${year}`;
+
     const finalBriefDueDate = applicationContext
       .getUtilities()
       .prepareDateFromString(
-        props.value,
+        zeroPaddedDate,
         applicationContext.getConstants().DATE_FORMATS.MMDDYYYY,
       );
 
