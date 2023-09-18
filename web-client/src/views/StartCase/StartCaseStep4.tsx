@@ -45,7 +45,7 @@ export const StartCaseStep4 = connect(
     return (
       <>
         <Focus>
-          <h2 className="focusable margin-bottom-105" tabIndex="-1">
+          <h2 className="focusable margin-bottom-105" tabIndex={-1}>
             4. What Case Procedure Should You Choose for Trial?
           </h2>
         </Focus>

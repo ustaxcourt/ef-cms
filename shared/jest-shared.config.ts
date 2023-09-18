@@ -9,7 +9,6 @@ const config: Config = {
     'src/**/*.{js,ts}',
     '!src/sharedAppContext.ts',
     '!src/applicationContextForTests.ts',
-    '!src/**/getScannerMockInterface.ts',
     '!src/business/test/**/*.ts',
     '!src/business/assets/*.ts',
     '!src/proxies/**/*.ts',

@@ -6,12 +6,6 @@ import {
   deconstructDate,
 } from '../../utilities/DateHandler';
 
-/**
- * getTodaysOpinionsInteractor
- *
- * @param {object} applicationContext application context object
- * @returns {array} an array of opinions (if any)
- */
 export const getTodaysOpinionsInteractor = async (
   applicationContext: IApplicationContext,
 ) => {

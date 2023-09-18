@@ -2,6 +2,7 @@
 
 ENV=$1
 
+
 DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
@@ -22,6 +23,7 @@ fi
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
+[ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
@@ -40,6 +42,7 @@ echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
+echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
 echo "  - ENV=${ENV}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
@@ -171,8 +174,7 @@ export TF_VAR_blue_node_version=$BLUE_NODE_VERSION
 export TF_VAR_green_use_layers=$GREEN_USE_LAYERS
 export TF_VAR_blue_use_layers=$BLUE_USE_LAYERS
 export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
-export TF_VAR_status_health_check_west_id=$HEALTH_CHECK_WEST_ID
-export TF_VAR_status_health_check_east_id=$HEALTH_CHECK_EAST_ID
+export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan

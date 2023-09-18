@@ -43,7 +43,7 @@ export const StartCaseStep3 = connect(
     return (
       <>
         <Focus>
-          <h2 className="focusable margin-bottom-105" tabIndex="-1">
+          <h2 className="focusable margin-bottom-105" tabIndex={-1}>
             3. Who Are You Filing This Petition For?
           </h2>
         </Focus>
@@ -62,7 +62,7 @@ export const StartCaseStep3 = connect(
                   className="usa-fieldset usa-sans"
                   id="filing-type-radios"
                 >
-                  <legend htmlFor="filing-type-radios" id="filing-type-legend">
+                  <legend id="filing-type-legend">
                     I am filing this petition on behalf of …
                   </legend>
                   {startCaseHelper.filingTypes.map((filingType, idx) => (
@@ -109,10 +109,7 @@ export const StartCaseStep3 = connect(
                 className="usa-fieldset usa-sans"
                 id="deceased-spouse-radios"
               >
-                <legend
-                  htmlFor="deceased-spouse-radios"
-                  id="deceased-spouse-legend"
-                >
+                <legend id="deceased-spouse-legend">
                   {startCaseHelper.deceasedSpouseLegend}
                 </legend>
                 {['Yes', 'No'].map((isSpouseDeceased, idx) => (
@@ -156,10 +153,7 @@ export const StartCaseStep3 = connect(
               )}
             >
               <fieldset className="usa-fieldset" id="business-type-radios">
-                <legend
-                  htmlFor="business-type-radios"
-                  id="business-type-legend"
-                >
+                <legend id="business-type-legend">
                   What type of business are you filing for?
                 </legend>
                 {[
@@ -205,7 +199,7 @@ export const StartCaseStep3 = connect(
               )}
             >
               <fieldset className="usa-fieldset" id="other-type-radios">
-                <legend htmlFor="other-type-radios" id="other-type-legend">
+                <legend id="other-type-legend">
                   What other type of taxpayer are you filing for?
                 </legend>
                 {[
@@ -256,7 +250,7 @@ export const StartCaseStep3 = connect(
                   className="usa-fieldset usa-sans"
                   id="estate-type-radios"
                 >
-                  <legend htmlFor="estate-type-radios" id="estate-type-legend">
+                  <legend id="estate-type-legend">
                     What type of estate or trust are you filing for?
                   </legend>
                   {[
@@ -303,10 +297,7 @@ export const StartCaseStep3 = connect(
                   className="usa-fieldset"
                   id="minorIncompetent-type-radios"
                 >
-                  <legend
-                    htmlFor="minorIncompetent-type-radios"
-                    id="minorIncompetent-type-legend"
-                  >
+                  <legend id="minorIncompetent-type-legend">
                     {startCaseHelper.minorIncompetentLegend}
                   </legend>
                   {[

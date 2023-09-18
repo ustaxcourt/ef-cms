@@ -7,7 +7,7 @@ import { MOCK_LOCK } from '../../../test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../errors/errors';
+} from '../../../../../web-api/src/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';

@@ -208,28 +208,22 @@ const NavigationItems = (
 export const Header = connect(
   {
     headerHelper: state.headerHelper,
-    isAccountMenuOpen: state.menuHelper.isAccountMenuOpen,
-    isDocumentQCMenuOpen: state.menuHelper.isDocumentQCMenuOpen,
-    isMessagesMenuOpen: state.menuHelper.isMessagesMenuOpen,
-    isReportsMenuOpen: state.menuHelper.isReportsMenuOpen,
+    menuHelper: state.menuHelper,
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
-    showBetaBar: state.templateHelper.showBetaBar,
     showMobileMenu: state.header.showMobileMenu,
     signOutSequence: sequences.signOutSequence,
+    templateHelper: state.templateHelper,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
     user: state.user,
   },
   function Header({
     headerHelper,
-    isAccountMenuOpen,
-    isDocumentQCMenuOpen,
-    isMessagesMenuOpen,
-    isReportsMenuOpen,
+    menuHelper,
     resetHeaderAccordionsSequence,
-    showBetaBar,
     showMobileMenu,
     signOutSequence,
+    templateHelper,
     toggleBetaBarSequence,
     toggleMobileMenuSequence,
     user,
@@ -265,7 +259,7 @@ export const Header = connect(
     return (
       <>
         <div ref={headerRef}>
-          {showBetaBar && BetaBar(toggleBetaBarSequence)}
+          {templateHelper.showBetaBar && BetaBar(toggleBetaBarSequence)}
           <div className="grid-container no-mobile-padding">
             <header
               className="usa-header usa-header--basic ustc-header"
@@ -303,15 +297,15 @@ export const Header = connect(
                   </Button>
                   {user &&
                     NavigationItems(headerHelper, {
-                      isDocumentQCMenuOpen,
-                      isMessagesMenuOpen,
-                      isReportsMenuOpen,
+                      isDocumentQCMenuOpen: menuHelper.isDocumentQCMenuOpen,
+                      isMessagesMenuOpen: menuHelper.isMessagesMenuOpen,
+                      isReportsMenuOpen: menuHelper.isReportsMenuOpen,
                       signOutSequence,
                       toggleMobileMenuSequence,
                     })}
                   {headerHelper.showSearchInHeader && <SearchBox />}
                   {headerHelper.showAccountMenu && (
-                    <AccountMenu isExpanded={isAccountMenuOpen} />
+                    <AccountMenu isExpanded={menuHelper.isAccountMenuOpen} />
                   )}
                 </nav>
               </div>

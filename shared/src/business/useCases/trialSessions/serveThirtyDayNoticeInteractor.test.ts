@@ -1,5 +1,8 @@
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  InvalidRequest,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
 import { RawTrialSession } from '../../entities/trialSessions/TrialSession';

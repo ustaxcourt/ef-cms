@@ -19,7 +19,7 @@
     "eventCode": "SPOS",
     "documentType": "Standing Pretrial Order for Small Case",
     "documentTitle": "Standing Pretrial Order for Small Case",
-    "scenario": "Type A",
+    "scenario": "Type B",
     "isOrder": true,
     "requiresSignature": false
   },
@@ -27,7 +27,7 @@
     "eventCode": "SPTO",
     "documentType": "Standing Pretrial Order",
     "documentTitle": "Standing Pretrial Order",
-    "scenario": "Type A",
+    "scenario": "Type B",
     "isOrder": true,
     "requiresSignature": false
   },

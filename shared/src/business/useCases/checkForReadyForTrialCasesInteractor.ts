@@ -1,8 +1,9 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { ServiceUnavailableError } from '../../errors/errors';
+import { ServiceUnavailableError } from '../../../../web-api/src/errors/errors';
 import { acquireLock } from '../useCaseHelper/acquireLock';
 import { createISODateString } from '../utilities/DateHandler';
+import { uniqBy } from 'lodash';
 
 /**
  * @param {object} applicationContext the application context
@@ -12,9 +13,11 @@ export const checkForReadyForTrialCasesInteractor = async (
 ) => {
   applicationContext.logger.debug('Time', createISODateString());
 
-  const caseCatalog = await applicationContext
+  const docketNumbers: { docketNumber: string }[] = await applicationContext
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
+
+  const caseCatalog = uniqBy(docketNumbers, 'docketNumber');
 
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
@@ -93,9 +96,10 @@ export const checkForReadyForTrialCasesInteractor = async (
     });
   };
 
-  const updatedCases = caseCatalog.map(checkReadyForTrial);
+  const caseUpdatePromises: Promise<void>[] =
+    caseCatalog.map(checkReadyForTrial);
 
-  await Promise.all(updatedCases);
+  await Promise.all(caseUpdatePromises);
 
   applicationContext.logger.debug('Time', createISODateString());
 };

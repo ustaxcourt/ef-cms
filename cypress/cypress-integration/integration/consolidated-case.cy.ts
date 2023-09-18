@@ -13,7 +13,7 @@ describe('Docket clerk views consolidated case', function () {
         'have.value',
         'byDate',
       );
-      cy.get('select[name="docketRecordSort.111-19"]').select('Sort by newest');
+      cy.get('select[name="docketRecordSort.111-19"]').select('Newest');
       cy.get('#tab-document-view').click();
       cy.get('#tab-docket-sub-record').click();
       cy.get('select[name="docketRecordSort.111-19"]').should(

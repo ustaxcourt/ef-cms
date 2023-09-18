@@ -9,14 +9,6 @@ import {
   deconstructDate,
 } from '../../utilities/DateHandler';
 
-/**
- * getTodaysOrdersInteractor
- *
- * @param {object} applicationContext application context object
- * @param {object} providers the providers object containing page
- * @param {string} providers.page the page of the order to get
- * @returns {array} an array of orders (if any)
- */
 export const getTodaysOrdersInteractor = async (
   applicationContext: IApplicationContext,
   { page, todaysOrdersSort }: { page: number; todaysOrdersSort: string },

@@ -34,7 +34,7 @@ export const ViewAllDocumentsDesktop = connect(
               <h1
                 className="margin-bottom-05"
                 id="view-all-document-header"
-                tabIndex="-1"
+                tabIndex={-1}
               >
                 All Document Categories
               </h1>

@@ -1,4 +1,7 @@
-import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  ANSWER_DOCUMENT_CODES,
+  CASE_STATUS_TYPES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getReadyForTrialCases } from './getReadyForTrialCases';
 jest.mock('./searchClient');
@@ -6,7 +9,8 @@ import { search } from './searchClient';
 
 describe('getReadyForTrialCases', () => {
   it('should search for docket entries of type `Answer` which were served greater than 45 days ago and whose case status is `General Docket - Not at Issue`', async () => {
-    search.mockResolvedValue({
+    const mockSearch = search as jest.Mock;
+    mockSearch.mockResolvedValue({
       results: [{ docketNumber: '102-20' }, { docketNumber: '134-30' }],
       total: 2,
     });
@@ -15,7 +19,9 @@ describe('getReadyForTrialCases', () => {
       applicationContext,
     });
 
-    expect(search.mock.calls[0][0].searchParameters.body.query).toMatchObject({
+    expect(
+      mockSearch.mock.calls[0][0].searchParameters.body.query,
+    ).toMatchObject({
       bool: {
         filter: [
           {
@@ -26,8 +32,8 @@ describe('getReadyForTrialCases', () => {
         ],
         must: [
           {
-            term: {
-              'documentType.S': 'Answer',
+            terms: {
+              'eventCode.S': ANSWER_DOCUMENT_CODES,
             },
           },
           {

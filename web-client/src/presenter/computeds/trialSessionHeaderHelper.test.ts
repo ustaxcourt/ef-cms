@@ -3,7 +3,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../shared/src/business/entities/User';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';

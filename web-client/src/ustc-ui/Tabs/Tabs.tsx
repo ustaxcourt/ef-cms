@@ -8,7 +8,7 @@ import { getDefaultAttribute, map } from '../Utils/ElementChildren';
 import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import classNames from 'classnames';
 
 const renderTabFactory = ({
@@ -103,6 +103,19 @@ export function TabsComponent({
   onSelect,
   simpleSetter,
   value,
+}: {
+  asSwitch?: boolean;
+  bind?: string;
+  boxed?: any;
+  children: ReactNode;
+  className?: string;
+  defaultActiveTab?: string;
+  headingLevel?: string;
+  id?: string;
+  marginBottom?: boolean;
+  onSelect?: any;
+  simpleSetter?: any;
+  value?: any;
 }) {
   // TODO - Refactor how tab selection sets documentSelectedForScan
   let activeKey, setTab;

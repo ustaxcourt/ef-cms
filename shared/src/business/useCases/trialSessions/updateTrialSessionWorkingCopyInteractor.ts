@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 /**
  * updateTrialSessionWorkingCopyInteractor

@@ -7,10 +7,11 @@ import {
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
+
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../errors/errors';
+} from '../../../../web-api/src/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getPetitionerById } from '../entities/cases/Case';
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';

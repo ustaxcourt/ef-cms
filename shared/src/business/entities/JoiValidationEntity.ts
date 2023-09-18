@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { InvalidEntityError } from '../../errors/errors';
+import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -46,7 +46,7 @@ function toRawObject(entity) {
  *
  * @returns {object} the formatted errors
  */
-function getFormattedValidationErrorsHelper(entity) {
+function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   const errors = entity.getValidationErrors();
   if (!errors) return null;
   for (let key of Object.keys(errors)) {
@@ -71,15 +71,10 @@ function getFormattedValidationErrorsHelper(entity) {
   return errors;
 }
 
-/**
- * returns all of the validation errors after being converted to their formatted output
- *
- * @returns {object} the formatted errors
- */
-function getFormattedValidationErrors(entity): Record<string, any> | null {
+function getFormattedValidationErrors(entity): Record<string, string> | null {
   const keys = Object.keys(entity);
   const obj = {};
-  let errors = null;
+  let errors: {} | null = null;
   if (entity.getFormattedValidationErrors) {
     errors = getFormattedValidationErrorsHelper(entity);
   }
@@ -176,9 +171,9 @@ export abstract class JoiValidationEntity {
         return transformed;
       };
       if (logErrors) {
-        applicationContext.logger.error('*** Entity with error: ***', this);
+        applicationContext?.logger.error('*** Entity with error: ***', this);
       }
-      const validationErrors = this.getValidationErrors();
+      const validationErrors = this.getValidationErrors()!;
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(stringifyTransform(validationErrors)),

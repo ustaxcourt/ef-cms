@@ -52,14 +52,14 @@ export const ViewDocumentCategory = connect(
               <h1
                 className="margin-bottom-105"
                 id="view-all-document-header"
-                tabIndex="-1"
+                tabIndex={-1}
               >
                 {modal.category}
               </h1>
               <h2
                 className="margin-bottom-205"
                 id="view-all-document-sub-header"
-                tabIndex="-1"
+                tabIndex={-1}
               >
                 Select document type
               </h2>
