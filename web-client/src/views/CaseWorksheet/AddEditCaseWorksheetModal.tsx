@@ -38,6 +38,7 @@ export const AddEditCaseWorksheetModal = connect(
         </h5>
 
         <DateSelector
+          showDateHint
           defaultValue={form.finalBriefDueDate}
           errorText={validationErrors.finalBriefDueDate}
           formGroupClassNames={'width-half'}
