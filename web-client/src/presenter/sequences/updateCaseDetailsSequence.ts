@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computePetitionDatesAction } from '../actions/computePetitionDatesAction';
 import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -18,7 +17,6 @@ export const updateCaseDetailsSequence = [
   clearAlertsAction,
   startShowValidationAction,
   computeStatisticDatesAction,
-  computePetitionDatesAction,
   validateCaseDetailsAction,
   {
     error: [setAlertErrorAction, setValidationErrorsAction],

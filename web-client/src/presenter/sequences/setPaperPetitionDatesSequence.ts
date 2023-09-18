@@ -1,10 +1,3 @@
 import { computeStatisticDatesAction } from '../actions/StartCaseInternal/computeStatisticDatesAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 
-export const setPaperPetitionDatesSequence = [
-  // paymentDateWaived
-  getComputedFormDateFactoryAction('paymentDateWaived', true),
-  setComputeFormDateFactoryAction('petitionPaymentWaivedDate'),
-  computeStatisticDatesAction,
-];
+export const setPaperPetitionDatesSequence = [computeStatisticDatesAction];

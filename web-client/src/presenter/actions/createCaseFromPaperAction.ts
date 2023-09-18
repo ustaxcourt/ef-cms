@@ -59,19 +59,10 @@ export const setupPercentDone = (files, store) => {
   return uploadProgressCallbackMap;
 };
 
-/**
- * invokes the filePetition useCase.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function used for getting petition
- * @param {object} providers.props the cerebral props object
- * @returns {object} the next path based on if creation was successful or error
- */
 export const createCaseFromPaperAction = async ({
   applicationContext,
   get,
   path,
-  props,
   store,
 }: ActionProps) => {
   const {
@@ -81,11 +72,6 @@ export const createCaseFromPaperAction = async ({
     requestForPlaceOfTrialFile,
     stinFile,
   } = get(state.form);
-
-  const form = {
-    ...get(state.form),
-    petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
-  };
 
   const progressFunctions = setupPercentDone(
     {
@@ -110,7 +96,7 @@ export const createCaseFromPaperAction = async ({
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,
-        petitionMetadata: form,
+        petitionMetadata: get(state.form),
         petitionUploadProgress: progressFunctions.petition,
         requestForPlaceOfTrialFile,
         requestForPlaceOfTrialUploadProgress: progressFunctions.trial,

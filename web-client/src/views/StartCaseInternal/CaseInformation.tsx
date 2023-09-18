@@ -175,8 +175,6 @@ export const CaseInformation = connect(
         </FormGroup>
         <PetitionPaymentForm
           bind="form"
-          dateBind="form"
-          updateDateSequence={updateFormValueSequence}
           updateSequence={updatePetitionPaymentFormValueSequence}
           validateSequence={validatePetitionFromPaperSequence}
           validationErrorsBind="validationErrors"

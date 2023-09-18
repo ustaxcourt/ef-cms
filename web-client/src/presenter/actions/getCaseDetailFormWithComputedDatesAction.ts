@@ -11,31 +11,12 @@ export const getCaseDetailFormWithComputedDatesAction = ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const {
-    paymentDateWaivedDay,
-    paymentDateWaivedMonth,
-    paymentDateWaivedYear,
-  } = {
-    ...get(state.form),
-  };
-
   const form = omit(
     {
       ...get(state.form),
     },
-    [
-      'paymentDateWaivedYear',
-      'paymentDateWaivedMonth',
-      'paymentDateWaivedDay',
-      'trialCities',
-    ],
+    ['trialCities'],
   );
-
-  form.petitionPaymentWaivedDate = applicationContext
-    .getUtilities()
-    .checkDate(
-      `${paymentDateWaivedYear}-${paymentDateWaivedMonth}-${paymentDateWaivedDay}`,
-    );
 
   if (form.statistics) {
     form.statistics.forEach(statistic => {

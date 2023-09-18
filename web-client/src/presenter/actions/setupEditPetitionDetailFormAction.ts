@@ -13,7 +13,6 @@ export const setupEditPetitionDetailFormAction = ({
   store,
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
-  const paymentStatus = applicationContext.getConstants().PAYMENT_STATUS;
 
   store.set(state.form, {
     caseType: caseDetail.caseType,
@@ -21,25 +20,11 @@ export const setupEditPetitionDetailFormAction = ({
     petitionPaymentDate: caseDetail.petitionPaymentDate,
     petitionPaymentMethod: caseDetail.petitionPaymentMethod,
     petitionPaymentStatus: caseDetail.petitionPaymentStatus,
+    petitionPaymentWaivedDate: caseDetail.petitionPaymentWaivedDate,
     preferredTrialCity: caseDetail.preferredTrialCity,
     procedureType: caseDetail.procedureType,
     statistics: caseDetail.statistics,
   });
-
-  if (caseDetail.petitionPaymentStatus === paymentStatus.WAIVED) {
-    const [
-      paymentDateWaivedYear,
-      paymentDateWaivedMonth,
-      paymentDateWaivedDay,
-    ] = applicationContext
-      .getUtilities()
-      .formatDateString(caseDetail.petitionPaymentWaivedDate, 'YYYYMMDD')
-      .split('-');
-
-    store.set(state.form.paymentDateWaivedYear, paymentDateWaivedYear);
-    store.set(state.form.paymentDateWaivedMonth, paymentDateWaivedMonth);
-    store.set(state.form.paymentDateWaivedDay, paymentDateWaivedDay);
-  }
 
   if (caseDetail.irsNoticeDate) {
     const irsNoticeDate = applicationContext
