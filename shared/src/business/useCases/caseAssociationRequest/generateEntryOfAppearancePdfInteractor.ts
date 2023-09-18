@@ -4,7 +4,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
-import { saveFileAndGenerateUrl } from '@shared/business/useCaseHelper/saveFileAndGenerateUrl';
 
 export const generateEntryOfAppearancePdfInteractor = async (
   applicationContext: IApplicationContext,
@@ -38,7 +37,7 @@ export const generateEntryOfAppearancePdfInteractor = async (
       userId: user.userId,
     });
 
-  const filersWithNames: string[] =
+  const filerNames: string[] =
     user.role === ROLES.irsPractitioner
       ? ['Respondent']
       : (filers
@@ -56,12 +55,12 @@ export const generateEntryOfAppearancePdfInteractor = async (
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
-        filers: filersWithNames,
+        filers: filerNames,
         practitionerInformation,
       },
     });
 
-  return await saveFileAndGenerateUrl({
+  return await applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl({
     applicationContext,
     file,
     useTempBucket: true,
