@@ -1,4 +1,3 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
@@ -11,7 +10,6 @@ export const PetitionPaymentForm = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     bind: state[props.bind],
-    dateBind: state[props.dateBind],
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     paymentStatus: state.constants.PAYMENT_STATUS,
@@ -20,10 +18,8 @@ export const PetitionPaymentForm = connect(
   function PetitionPaymentForm({
     bind,
     DATE_FORMATS,
-    dateBind,
     formatAndUpdateDateFromDatePickerSequence,
     paymentStatus,
-    updateDateSequence,
     updateSequence,
     validateSequence,
     validationErrors,
@@ -152,22 +148,19 @@ export const PetitionPaymentForm = connect(
         )}
 
         {bind.petitionPaymentStatus === paymentStatus.WAIVED && (
-          <DateInput
+          <DateSelector
+            defaultValue={bind.petitionPaymentWaivedDate}
             errorText={validationErrors.petitionPaymentWaivedDate}
             id="payment-date-waived"
             label="Date waived"
-            names={{
-              day: 'paymentDateWaivedDay',
-              month: 'paymentDateWaivedMonth',
-              year: 'paymentDateWaivedYear',
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: 'petitionPaymentWaivedDate',
+                toFormat: DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateSequence();
             }}
-            values={{
-              day: dateBind.paymentDateWaivedDay,
-              month: dateBind.paymentDateWaivedMonth,
-              year: dateBind.paymentDateWaivedYear,
-            }}
-            onBlur={validateSequence}
-            onChange={updateDateSequence}
           />
         )}
       </>
