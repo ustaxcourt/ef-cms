@@ -15,7 +15,6 @@ export const updateTrialSessionSequence = [
   clearPdfPreviewUrlAction,
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction('startDate', null, 'computedStartDate'),
   getComputedFormDateFactoryAction(
     'estimatedEndDate',
     null,

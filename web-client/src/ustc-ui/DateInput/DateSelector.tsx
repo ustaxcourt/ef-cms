@@ -17,7 +17,7 @@ export const DateSelector = ({
   defaultValue: string | undefined;
   displayOptionalHintText?: boolean;
   errorText: string;
-  formGroupClassNames: string;
+  formGroupClassNames?: string;
   minDate?: string;
   hintText?: string;
   id: string;
