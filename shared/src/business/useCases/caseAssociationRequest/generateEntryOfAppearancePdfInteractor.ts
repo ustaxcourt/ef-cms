@@ -1,3 +1,4 @@
+import { ROLES } from '../../entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -8,7 +9,6 @@ import { saveFileAndGenerateUrl } from '@shared/business/useCaseHelper/saveFileA
 export const generateEntryOfAppearancePdfInteractor = async (
   applicationContext: IApplicationContext,
   {
-    // docketNumber,
     caseCaptionExtension,
     caseTitle,
     docketNumberWithSuffix,
@@ -40,14 +40,15 @@ export const generateEntryOfAppearancePdfInteractor = async (
       userId: user.userId,
     });
 
-  const filersWithNames = filers
-    .map(filerId => {
-      const petitioner = petitioners.find(pe => pe.contactId === filerId);
-      return petitioner ? petitioner.name : null;
-    })
-    .filter(Boolean);
-
-  console.log('practitionerInformation, ', practitionerInformation);
+  const filersWithNames: string[] =
+    user.role === ROLES.irsPractitioner
+      ? ['Respondent']
+      : (filers
+          .map(filerId => {
+            const petitioner = petitioners.find(pe => pe.contactId === filerId);
+            return petitioner ? petitioner.name : null;
+          })
+          .filter(Boolean) as string[]);
 
   const file = await applicationContext
     .getDocumentGenerators()
