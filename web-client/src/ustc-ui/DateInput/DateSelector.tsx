@@ -9,6 +9,7 @@ export const DateSelector = ({
   id,
   label,
   onChange,
+  showDateHint = false,
 }) => {
   const formGroupInputRef = useRef<HTMLInputElement>(null);
 
@@ -45,9 +46,14 @@ export const DateSelector = ({
       >
         {label}
       </label>
+      {showDateHint && (
+        <div className="usa-hint" id={`${id}-date-hint`}>
+          MM/DD/YYYY
+        </div>
+      )}
       <div className="usa-date-picker" data-default-value={defaultValue}>
         <input
-          aria-labelledby="date-picker-label"
+          aria-describedby={`date-picker-label ${id}-date-hint`}
           className="usa-input"
           id={`${id}-picker`}
           name={`${id}-date-picker`}
