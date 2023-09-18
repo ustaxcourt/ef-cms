@@ -16,11 +16,6 @@ export const validateTrialSessionAction = ({
   path,
   props,
 }: ActionProps) => {
-  const startDate = preparedDateToISOString(
-    applicationContext,
-    props.computedStartDate,
-  );
-
   const estimatedEndDate = preparedDateToISOString(
     applicationContext,
     props.computedEstimatedEndDate,
@@ -30,14 +25,7 @@ export const validateTrialSessionAction = ({
     {
       ...get(state.form),
     },
-    [
-      'startDateYear',
-      'startDateMonth',
-      'startDateDay',
-      'estimatedEndDateDay',
-      'estimatedEndDateMonth',
-      'estimatedEndDateYear',
-    ],
+    ['estimatedEndDateDay', 'estimatedEndDateMonth', 'estimatedEndDateYear'],
   );
 
   let errors = applicationContext
@@ -46,7 +34,6 @@ export const validateTrialSessionAction = ({
       trialSession: {
         ...trialSession,
         estimatedEndDate,
-        startDate,
       },
     });
 
