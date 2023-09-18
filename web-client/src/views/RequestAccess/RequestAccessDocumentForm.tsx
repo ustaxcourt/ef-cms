@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { Hint } from '../../ustc-ui/Hint/Hint';
@@ -15,9 +15,10 @@ import classNames from 'classnames';
 
 export const RequestAccessDocumentForm = connect(
   {
-    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
@@ -30,7 +31,7 @@ export const RequestAccessDocumentForm = connect(
   function RequestAccessDocumentForm({
     constants,
     form,
-    OBJECTIONS_OPTIONS,
+    formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
     requestAccessHelper,
     showModal,
@@ -142,24 +143,20 @@ export const RequestAccessDocumentForm = connect(
                 </label>
               </div>
             </fieldset>
-
             {form.certificateOfService && (
-              <DateInput
+              <DateSelector
+                defaultValue={form.certificateOfServiceDate}
                 errorText={validationErrors?.certificateOfServiceDate}
                 id="service-date"
                 label="Service date"
-                names={{
-                  day: 'certificateOfServiceDay',
-                  month: 'certificateOfServiceMonth',
-                  year: 'certificateOfServiceYear',
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: 'certificateOfServiceDate',
+                    toFormat: constants.DATE_FORMATS.ISO,
+                    value: e.target.value,
+                  });
+                  validateCaseAssociationRequestSequence();
                 }}
-                values={{
-                  day: form.certificateOfServiceDay,
-                  month: form.certificateOfServiceMonth,
-                  year: form.certificateOfServiceYear,
-                }}
-                onBlur={validateCaseAssociationRequestSequence}
-                onChange={updateCaseAssociationFormValueSequence}
               />
             )}
           </div>
@@ -170,7 +167,7 @@ export const RequestAccessDocumentForm = connect(
                 <legend id="objections-legend">
                   Are there any objections to this document?
                 </legend>
-                {OBJECTIONS_OPTIONS.map(option => (
+                {constants.OBJECTIONS_OPTIONS.map(option => (
                   <div className="usa-radio usa-radio__inline" key={option}>
                     <input
                       aria-describedby="objections-legend"

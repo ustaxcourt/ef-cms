@@ -12,14 +12,6 @@ export const computeCertificateOfServiceFormDateAction = ({
   get,
   store,
 }: ActionProps) => {
-  let month = get(state.form.certificateOfServiceMonth);
-  let day = get(state.form.certificateOfServiceDay);
-  let year = get(state.form.certificateOfServiceYear);
-  store.set(
-    state.form.certificateOfServiceDate,
-    applicationContext.getUtilities().computeDate({ day, month, year }),
-  );
-
   const secondaryDocument = get(state.form.secondaryDocument);
 
   if (secondaryDocument) {
