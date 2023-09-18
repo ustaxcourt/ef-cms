@@ -4,6 +4,7 @@ import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-
 
 export const DateSelector = ({
   defaultValue,
+  disabled = false,
   displayOptionalHintText = false,
   errorText,
   formGroupClassNames,
@@ -17,6 +18,7 @@ export const DateSelector = ({
   defaultValue: string | undefined;
   displayOptionalHintText?: boolean;
   errorText: string;
+  disabled: boolean;
   formGroupClassNames?: string;
   minDate?: string;
   hintText?: string;
@@ -46,6 +48,17 @@ export const DateSelector = ({
       myDatePicker.addEventListener('input', onChange);
     }
   }, [formGroupInputRef]);
+
+  useEffect(() => {
+    if (formGroupInputRef.current) {
+      const input = formGroupInputRef.current.querySelector('.usa-date-picker');
+      if (disabled) {
+        datePicker.disable(input);
+      } else {
+        datePicker.enable(input);
+      }
+    }
+  });
 
   return (
     <FormGroup
