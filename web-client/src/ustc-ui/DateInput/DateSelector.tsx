@@ -7,10 +7,23 @@ export const DateSelector = ({
   displayOptionalHintText = false,
   errorText,
   formGroupClassNames,
+  hintText = undefined,
   id,
   label,
+  minDate,
   onChange,
   showDateHint = false,
+}: {
+  defaultValue: string | undefined;
+  displayOptionalHintText?: boolean;
+  errorText: string;
+  formGroupClassNames: string;
+  minDate?: string;
+  hintText?: string;
+  id: string;
+  label: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  showDateHint?: boolean;
 }) => {
   const formGroupInputRef = useRef<HTMLInputElement>(null);
 
@@ -49,13 +62,18 @@ export const DateSelector = ({
         {displayOptionalHintText && (
           <span className="usa-hint">(optional)</span>
         )}
+        {hintText && <span className="usa-hint">{hintText}</span>}
       </label>
       {showDateHint && (
         <div className="usa-hint" id={`${id}-date-hint`}>
           MM/DD/YYYY
         </div>
       )}
-      <div className="usa-date-picker" data-default-value={defaultValue}>
+      <div
+        className="usa-date-picker"
+        data-default-value={defaultValue}
+        data-min-date={minDate}
+      >
         <input
           aria-describedby={`date-picker-label ${id}-date-hint`}
           className="usa-input"

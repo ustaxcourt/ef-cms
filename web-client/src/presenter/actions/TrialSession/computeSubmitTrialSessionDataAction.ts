@@ -12,17 +12,16 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store function
  */
 export const computeSubmitTrialSessionDataAction = ({
+  applicationContext,
   get,
   store,
 }: ActionProps) => {
   const form = get(state.form);
 
   computeTermAndUpdateState(
-    {
-      month: form.startDateMonth,
-      year: form.startDateYear,
-    },
+    { startDate: form.startDate },
     store,
+    applicationContext,
   );
 
   compute24HrTimeAndUpdateState(

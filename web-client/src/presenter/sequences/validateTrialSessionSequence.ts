@@ -6,12 +6,11 @@ import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateTrialSessionAction } from '../actions/TrialSession/validateTrialSessionAction';
 
 export const validateTrialSessionSequence = [
-  computeTrialSessionFormDataAction,
   shouldValidateAction,
   {
     ignore: [],
     validate: [
-      getComputedFormDateFactoryAction('startDate', null, 'computedStartDate'),
+      computeTrialSessionFormDataAction,
       getComputedFormDateFactoryAction(
         'estimatedEndDate',
         null,

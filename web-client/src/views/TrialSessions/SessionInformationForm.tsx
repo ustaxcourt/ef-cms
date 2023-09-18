@@ -1,4 +1,5 @@
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -8,9 +9,12 @@ import classNames from 'classnames';
 
 export const SessionInformationForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     TRIAL_SESSION_SCOPE_TYPES: state.constants.TRIAL_SESSION_SCOPE_TYPES,
     addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     formattedTrialSessions: state.formattedTrialSessions,
     updateFormValueSequence: sequences.updateFormValueSequence,
     updateTrialSessionFormDataSequence:
@@ -21,7 +25,9 @@ export const SessionInformationForm = connect(
   function SessionInformationForm({
     addingTrialSession,
     addTrialSessionInformationHelper,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
     updateFormValueSequence,
@@ -73,7 +79,7 @@ export const SessionInformationForm = connect(
 
           <div className="grid-row grid-gap-6">
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
-              <DateInput
+              <DateSelector
                 errorText={validationErrors.startDate}
                 hintText={
                   addTrialSessionInformationHelper.isStandaloneSession
@@ -83,24 +89,28 @@ export const SessionInformationForm = connect(
                 id="start-date"
                 label="Start date"
                 minDate={addTrialSessionInformationHelper.today}
-                names={{
-                  day: 'startDateDay',
-                  month: 'startDateMonth',
-                  year: 'startDateYear',
+                showDateHint={true}
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: 'startDate',
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
+                  });
+                  validateTrialSessionSequence();
                 }}
-                placeholder="MM/DD/YYYY"
-                showDateHint={false}
-                titleHintText="(MM/DD/YYYY)"
-                useHintNoWrap={true}
-                values={{
+              />
+            </div>
+
+            {/* names={{
+                   day: 'startDateDay',
+                   month: 'startDateMonth',
+                   year: 'startDateYear',
+                 }}
+                      values={{
                   day: form.startDateDay,
                   month: form.startDateMonth,
                   year: form.startDateYear,
-                }}
-                onBlur={validateTrialSessionSequence}
-                onChange={updateTrialSessionFormDataSequence}
-              />
-            </div>
+                }} */}
 
             {!addTrialSessionInformationHelper.isStandaloneSession && (
               <div className="grid-col-12 tablet:grid-col-9">
