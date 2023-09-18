@@ -16,11 +16,6 @@ export const createTrialSessionAction = async ({
   path,
   props,
 }: ActionProps) => {
-  const startDate = preparedDateToISOString(
-    applicationContext,
-    props.computedStartDate,
-  );
-
   const estimatedEndDate = preparedDateToISOString(
     applicationContext,
     props.computedEstimatedEndDate,
@@ -30,14 +25,7 @@ export const createTrialSessionAction = async ({
     {
       ...get(state.form),
     },
-    [
-      'startDateYear',
-      'startDateMonth',
-      'startDateDay',
-      'estimatedEndDateYear',
-      'estimatedEndDateMonth',
-      'estimatedEndDateDay',
-    ],
+    ['estimatedEndDateYear', 'estimatedEndDateMonth', 'estimatedEndDateDay'],
   );
 
   let result;
@@ -45,7 +33,7 @@ export const createTrialSessionAction = async ({
     result = await applicationContext
       .getUseCases()
       .createTrialSessionInteractor(applicationContext, {
-        trialSession: { ...trialSession, estimatedEndDate, startDate },
+        trialSession: { ...trialSession, estimatedEndDate },
       });
   } catch (err) {
     return path.error({

@@ -17,11 +17,6 @@ export const updateTrialSessionAction = async ({
   path,
   props,
 }: ActionProps) => {
-  const startDate = preparedDateToISOString(
-    applicationContext,
-    props.computedStartDate,
-  );
-
   const estimatedEndDate = preparedDateToISOString(
     applicationContext,
     props.computedEstimatedEndDate,
@@ -31,21 +26,14 @@ export const updateTrialSessionAction = async ({
     {
       ...get(state.form),
     },
-    [
-      'startDateYear',
-      'startDateMonth',
-      'startDateDay',
-      'estimatedEndDateYear',
-      'estimatedEndDateMonth',
-      'estimatedEndDateDay',
-    ],
+    ['estimatedEndDateYear', 'estimatedEndDateMonth', 'estimatedEndDateDay'],
   );
 
   try {
     await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
-        trialSession: { ...trialSession, estimatedEndDate, startDate },
+        trialSession: { ...trialSession, estimatedEndDate },
       });
   } catch (err) {
     return path.error({
