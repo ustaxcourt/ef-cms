@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formatDateFromDatePicker } from './formatDateFromDatePicker';
 import { presenter } from '../presenter-mock';
@@ -13,6 +14,7 @@ describe('formatDateFromDatePicker', () => {
       },
       props: {
         key: 'finalBriefDueDate',
+        toFormat: FORMATS.YYYYMMDD,
         value: '08/29/2023',
       },
     });
@@ -30,6 +32,7 @@ describe('formatDateFromDatePicker', () => {
       },
       props: {
         key: 'finalBriefDueDate',
+        toFormat: FORMATS.YYYYMMDD,
         value: '',
       },
     });
@@ -44,6 +47,7 @@ describe('formatDateFromDatePicker', () => {
       },
       props: {
         key: 'finalBriefDueDate',
+        toFormat: FORMATS.YYYYMMDD,
         value: '9/9/2023',
       },
     });
