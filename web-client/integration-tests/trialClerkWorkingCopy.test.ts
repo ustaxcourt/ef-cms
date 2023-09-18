@@ -82,7 +82,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     2,
   );
 
-  it('save scheduledLeadCaseDocketNumber', async () => {
+  it('save Lead Case and member case docket numbers', async () => {
     createdDocketNumbers.push(
       cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries[0],
     );
@@ -95,7 +95,7 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
     preferredTrialCity: trialLocation,
     procedureType: SESSION_TYPES.small,
   });
-  it('save scheduledLeadCaseDocketNumber', async () => {
+  it('save member case that has no lead case in trial session', async () => {
     createdDocketNumbers.push(
       cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries[1],
     );
@@ -109,37 +109,38 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   trialClerkViewsTrialSessionWorkingCopy(cerebralTest, {
     expectedNumberOfCases: 4,
   });
-  it('assertions', () => {
+
+  it('Trial Session Working Copy Table Formatting', () => {
     const helperData = runCompute(trialSessionWorkingCopyHelper, {
       state: cerebralTest.getState(),
     });
 
     expect(helperData.formattedCases.length).toEqual(3);
-    expect(helperData.formattedCases[0].shouldIndent).toEqual(false);
-    expect(helperData.formattedCases[0].inConsolidatedGroup).toEqual(false);
-    expect(helperData.formattedCases[0].isLeadCase).toEqual(false);
+    const [
+      soloCase,
+      leadCaseWithAGroupedCase,
+      memberCaseWithNoLeadInTrialSession,
+    ] = helperData.formattedCases;
 
-    expect(helperData.formattedCases[1].shouldIndent).toEqual(false);
-    expect(helperData.formattedCases[1].inConsolidatedGroup).toEqual(true);
-    expect(helperData.formattedCases[1].isLeadCase).toEqual(true);
+    expect(soloCase.shouldIndent).toEqual(false);
+    expect(soloCase.inConsolidatedGroup).toEqual(false);
+    expect(soloCase.isLeadCase).toEqual(false);
 
-    expect(helperData.formattedCases[1].nestedConsolidatedCases.length).toEqual(
-      1,
+    expect(leadCaseWithAGroupedCase.shouldIndent).toEqual(false);
+    expect(leadCaseWithAGroupedCase.inConsolidatedGroup).toEqual(true);
+    expect(leadCaseWithAGroupedCase.isLeadCase).toEqual(true);
+
+    expect(leadCaseWithAGroupedCase.nestedConsolidatedCases.length).toEqual(1);
+    const groupedCase = leadCaseWithAGroupedCase.nestedConsolidatedCases[0];
+    expect(groupedCase.shouldIndent).toEqual(true);
+    expect(groupedCase.inConsolidatedGroup).toEqual(true);
+    expect(groupedCase.isLeadCase).toEqual(false);
+
+    expect(memberCaseWithNoLeadInTrialSession.shouldIndent).toEqual(false);
+    expect(memberCaseWithNoLeadInTrialSession.inConsolidatedGroup).toEqual(
+      true,
     );
-    expect(
-      helperData.formattedCases[1].nestedConsolidatedCases[0].shouldIndent,
-    ).toEqual(true);
-    expect(
-      helperData.formattedCases[1].nestedConsolidatedCases[0]
-        .inConsolidatedGroup,
-    ).toEqual(true);
-    expect(
-      helperData.formattedCases[1].nestedConsolidatedCases[0].isLeadCase,
-    ).toEqual(false);
-
-    expect(helperData.formattedCases[2].shouldIndent).toEqual(false);
-    expect(helperData.formattedCases[2].inConsolidatedGroup).toEqual(true);
-    expect(helperData.formattedCases[2].isLeadCase).toEqual(false);
+    expect(memberCaseWithNoLeadInTrialSession.isLeadCase).toEqual(false);
   });
 
   trialClerkAddsNotesFromWorkingCopyCaseList(cerebralTest);
