@@ -72,6 +72,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialJudgeActivityReportState } from './judgeActivityReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -307,9 +308,7 @@ export const baseState = {
       tab: null,
     },
   },
-
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
@@ -319,8 +318,9 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-
   form: {} as any,
+
+  fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -328,18 +328,21 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  health: undefined as any,
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
+  iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
-  judgeActivityReportData: {},
+  judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
+    docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
   },
@@ -348,7 +351,12 @@ export const baseState = {
     casesProcessed: 0,
     totalCases: 0,
   },
-  notifications: {},
+  notifications: {} as {
+    qcSectionInboxCount: number;
+    qcSectionInProgressCount: number;
+    qcIndividualInboxCount: number;
+    qcIndividualInProgressCount: number;
+  },
   openCases: [],
   paperServiceStatusState: {
     pdfsAppended: 0,
@@ -400,19 +408,23 @@ export const baseState = {
     sortOrder: ASCENDING,
   },
   trialSession: {} as RawTrialSession,
+
   trialSessionJudge: {
     name: '',
   },
+
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
   validationErrors: {},
+  viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
   workQueue: [],
   workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workitemAllCheckbox: false,
 };
 
 export const initialState = {

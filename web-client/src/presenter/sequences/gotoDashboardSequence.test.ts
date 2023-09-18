@@ -1,6 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoDashboardSequence } from '../sequences/gotoDashboardSequence';
 import { presenter } from '../presenter-mock';
 

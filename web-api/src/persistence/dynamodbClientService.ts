@@ -1,5 +1,6 @@
 import { TDynamoRecord } from './dynamo/dynamoTypes';
 import { chunk, isEmpty } from 'lodash';
+import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
 /**
  * PUT for dynamodb aws-sdk client
@@ -15,29 +16,6 @@ const removeAWSGlobalFields = item => {
     delete item['aws:rep:updatetime'];
   }
   return item;
-};
-
-/**
- * used to filter empty strings from values before storing in dynamo
- *
- * @param {object} params the params to filter empty strings from
- * @returns {object} the params with empty string values removed
- */
-const filterEmptyStrings = params => {
-  const removeEmpty = obj => {
-    Object.keys(obj).forEach(key => {
-      if (obj[key] && typeof obj[key] === 'object') {
-        removeEmpty(obj[key]);
-      } else if (obj[key] === '') {
-        delete obj[key];
-      }
-    });
-  };
-
-  if (params) {
-    removeEmpty(params);
-  }
-  return params;
 };
 
 export const getTableName = ({ applicationContext }): string =>
@@ -79,11 +57,6 @@ export const describeDeployTable = async ({ applicationContext }) => {
   return await dynamoClient.describeTable(params).promise();
 };
 
-/**
- *
- * @param {object} params the params to put
- * @returns {object} the item that was put
- */
 export const put = ({
   applicationContext,
   Item,
@@ -103,11 +76,6 @@ export const put = ({
     .then(() => Item);
 };
 
-/**
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
 export const update = ({
   applicationContext,
   ConditionExpression,
@@ -227,12 +195,23 @@ export const getFromDeployTable = params => {
     });
 };
 
-/**
- * GET for aws-sdk dynamodb client
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
+export const putInDeployTable = async (
+  applicationContext: IApplicationContext,
+  item: TDynamoRecord,
+): Promise<void> => {
+  await applicationContext
+    .getDocumentClient({
+      useMasterRegion: true,
+    })
+    .put({
+      Item: item,
+      TableName: getDeployTableName({
+        applicationContext,
+      }),
+    })
+    .promise();
+};
+
 export const query = ({
   applicationContext,
   ConsistentRead = false,
@@ -302,12 +281,6 @@ export const scan = async params => {
   return allItems;
 };
 
-/**
- * GET for aws-sdk dynamodb client
- *
- * @param {object} params the params to update
- * @returns {object} the item that was updated
- */
 export const queryFull = async ({
   applicationContext,
   ConsistentRead = false,

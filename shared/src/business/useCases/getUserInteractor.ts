@@ -2,7 +2,7 @@ import {
   IrsPractitioner,
   entityName as irsPractitionerEntityName,
 } from '../entities/IrsPractitioner';
-import { NotFoundError } from '../../errors/errors';
+import { NotFoundError } from '../../../../web-api/src/errors/errors';
 import {
   Practitioner,
   entityName as practitionerEntityName,

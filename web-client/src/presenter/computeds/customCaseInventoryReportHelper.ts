@@ -7,7 +7,7 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../../shared/src/business/entities/cases/Case';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { CustomCaseInventoryReportFilters } from '../../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { CustomCaseInventoryReportFilters } from '../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { FORMATS } from '../../../../shared/src/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { InputOption } from '@web-client/ustc-ui/Utils/types';

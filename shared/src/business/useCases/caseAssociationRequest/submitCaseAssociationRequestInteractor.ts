@@ -3,7 +3,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
@@ -20,11 +20,11 @@ export const submitCaseAssociationRequest = async (
   {
     consolidatedCasesDocketNumbers,
     docketNumber,
-    filers,
+    filers = [],
   }: {
     consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
-    filers?: string[];
+    filers: string[];
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
