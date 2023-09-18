@@ -1,3 +1,4 @@
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -19,7 +20,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
   store.set(state.form.certificateOfService, false);
   store.set(state.form.hasSupportingDocuments, false);
   store.set(state.form.hasSecondarySupportingDocuments, false);
-  store.set(state.form.generationType, 'manual');
+  store.set(state.form.generationType, GENERATION_TYPES.MANUAL);
   store.set(state.form.practitioner, []);
 
   const filersMap = {};
