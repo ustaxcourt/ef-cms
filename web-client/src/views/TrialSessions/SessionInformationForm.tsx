@@ -1,4 +1,3 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
@@ -16,7 +15,6 @@ export const SessionInformationForm = connect(
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     formattedTrialSessions: state.formattedTrialSessions,
-    updateFormValueSequence: sequences.updateFormValueSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -30,7 +28,6 @@ export const SessionInformationForm = connect(
     formatAndUpdateDateFromDatePickerSequence,
     formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
-    updateFormValueSequence,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -101,17 +98,6 @@ export const SessionInformationForm = connect(
                 }}
               />
             </div>
-
-            {/* names={{
-                   day: 'startDateDay',
-                   month: 'startDateMonth',
-                   year: 'startDateYear',
-                 }}
-                      values={{
-                  day: form.startDateDay,
-                  month: form.startDateMonth,
-                  year: form.startDateYear,
-                }} */}
 
             {!addTrialSessionInformationHelper.isStandaloneSession && (
               <div className="grid-col-12 tablet:grid-col-9">
@@ -204,7 +190,9 @@ export const SessionInformationForm = connect(
 
           <div className="grid-row grid-gap-6">
             <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
-              <DateInput
+              <DateSelector
+                defaultValue={form.estimatedEndDate}
+                displayOptionalHintText={true}
                 errorText={validationErrors.estimatedEndDate}
                 hintText={
                   addTrialSessionInformationHelper.isStandaloneSession
@@ -214,29 +202,12 @@ export const SessionInformationForm = connect(
                 id="estimated-end-date"
                 label="Estimated end date"
                 minDate={addTrialSessionInformationHelper.today}
-                names={{
-                  day: 'estimatedEndDateDay',
-                  month: 'estimatedEndDateMonth',
-                  year: 'estimatedEndDateYear',
-                }}
-                optional={true}
-                placeholder="MM/DD/YYYY"
-                showDateHint={false}
-                useHintNoWrap={true}
-                values={{
-                  day: form.estimatedEndDateDay,
-                  month: form.estimatedEndDateMonth,
-                  year: form.estimatedEndDateYear,
-                }}
-                onBlur={validateTrialSessionSequence}
-                onChange={opts => {
-                  updateTrialSessionFormDataSequence(opts);
-                  validateTrialSessionSequence();
-                }}
-                onValueChange={value => {
-                  updateFormValueSequence({
-                    key: 'estimatedEndDateText',
-                    value,
+                showDateHint={true}
+                onChange={e => {
+                  formatAndUpdateDateFromDatePickerSequence({
+                    key: 'estimatedEndDate',
+                    toFormat: DATE_FORMATS.ISO,
+                    value: e.target.value,
                   });
                   validateTrialSessionSequence();
                 }}
