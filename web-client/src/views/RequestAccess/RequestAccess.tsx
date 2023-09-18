@@ -111,9 +111,10 @@ export const RequestAccess = connect(
             <PartiesRepresenting />
           )}
           <RequestAccessDocumentForm />
-          {allowExternalConsolidatedGroupFiling && (
-            <ExternalConsolidatedCaseGroupFilingCard />
-          )}
+          {allowExternalConsolidatedGroupFiling &&
+            form.generationType === 'manual' && (
+              <ExternalConsolidatedCaseGroupFilingCard />
+            )}
           <div className="margin-top-5">
             <Button
               id="submit-document"
