@@ -13,14 +13,6 @@ export const computePetitionDatesAction = ({
 }: ActionProps) => {
   const form = get(state.form);
 
-  const petitionPaymentDate = applicationContext
-    .getUtilities()
-    .validateDateAndCreateISO({
-      day: form.paymentDateDay,
-      month: form.paymentDateMonth,
-      year: form.paymentDateYear,
-    });
-
   const petitionPaymentWaivedDate = applicationContext
     .getUtilities()
     .validateDateAndCreateISO({
@@ -29,5 +21,5 @@ export const computePetitionDatesAction = ({
       year: form.paymentDateWaivedYear,
     });
 
-  return { petitionPaymentDate, petitionPaymentWaivedDate };
+  return { petitionPaymentWaivedDate };
 };

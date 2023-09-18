@@ -84,7 +84,6 @@ export const createCaseFromPaperAction = async ({
 
   const form = {
     ...get(state.form),
-    petitionPaymentDate: props.petitionPaymentDate,
     petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
   };
 

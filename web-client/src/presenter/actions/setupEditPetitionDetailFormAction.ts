@@ -18,6 +18,8 @@ export const setupEditPetitionDetailFormAction = ({
   store.set(state.form, {
     caseType: caseDetail.caseType,
     hasVerifiedIrsNotice: caseDetail.hasVerifiedIrsNotice,
+    petitionPaymentDate: caseDetail.petitionPaymentDate,
+    petitionPaymentMethod: caseDetail.petitionPaymentMethod,
     petitionPaymentStatus: caseDetail.petitionPaymentStatus,
     preferredTrialCity: caseDetail.preferredTrialCity,
     procedureType: caseDetail.procedureType,
@@ -37,21 +39,6 @@ export const setupEditPetitionDetailFormAction = ({
     store.set(state.form.paymentDateWaivedYear, paymentDateWaivedYear);
     store.set(state.form.paymentDateWaivedMonth, paymentDateWaivedMonth);
     store.set(state.form.paymentDateWaivedDay, paymentDateWaivedDay);
-  } else if (caseDetail.petitionPaymentStatus === paymentStatus.PAID) {
-    const [paymentDateYear, paymentDateMonth, paymentDateDay] =
-      applicationContext
-        .getUtilities()
-        .formatDateString(caseDetail.petitionPaymentDate, 'YYYYMMDD')
-        .split('-');
-
-    store.set(state.form.paymentDateYear, paymentDateYear);
-    store.set(state.form.paymentDateMonth, paymentDateMonth);
-    store.set(state.form.paymentDateDay, paymentDateDay);
-
-    store.set(
-      state.form.petitionPaymentMethod,
-      caseDetail.petitionPaymentMethod,
-    );
   }
 
   if (caseDetail.irsNoticeDate) {
