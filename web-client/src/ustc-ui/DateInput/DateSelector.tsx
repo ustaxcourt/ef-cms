@@ -4,7 +4,7 @@ import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-
 
 export const DateSelector = ({
   defaultValue,
-  displayOptionalHintText,
+  displayOptionalHintText = false,
   errorText,
   formGroupClassNames,
   id,
