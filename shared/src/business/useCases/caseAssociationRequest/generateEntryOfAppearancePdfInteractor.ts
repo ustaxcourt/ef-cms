@@ -13,12 +13,10 @@ export const generateEntryOfAppearancePdfInteractor = async (
     caseTitle,
     docketNumberWithSuffix,
     filers,
-
     petitioners,
   }: {
     caseCaptionExtension: string;
     caseTitle: string;
-    docketNumber: string;
     docketNumberWithSuffix: string;
     filers: string[];
     petitioners: {
@@ -59,36 +57,9 @@ export const generateEntryOfAppearancePdfInteractor = async (
         caseTitle,
         docketNumberWithSuffix,
         filers: filersWithNames,
-        // petitioners,
         practitionerInformation,
       },
     });
-
-  // const docketEntryId = applicationContext.getUniqueId();
-
-  // await new Promise<void>((resolve, reject) => {
-  //   const documentsBucket = applicationContext.getDocumentsBucketName();
-  //   const s3Client = applicationContext.getStorageClient();
-
-  //   const params = {
-  //     Body: file,
-  //     Bucket: documentsBucket,
-  //     ContentType: 'application/pdf',
-  //     Key: docketEntryId,
-  //   };
-
-  //   s3Client.upload(params, function (err) {
-  //     if (err) {
-  //       applicationContext.logger.error(
-  //         'An error occurred while attempting to upload to S3',
-  //         err,
-  //       );
-  //       reject(err);
-  //     }
-
-  //     resolve();
-  //   });
-  // });
 
   return await saveFileAndGenerateUrl({
     applicationContext,
