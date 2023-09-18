@@ -11,6 +11,7 @@ export const entryOfAppearance = async ({ applicationContext, data }) => {
     filers,
     practitionerInformation,
   } = data;
+
   const date = applicationContext.getUtilities().formatNow(FORMATS.MMDDYY);
 
   const EntryOfAppearanceTemplate = reactTemplateGenerator({
