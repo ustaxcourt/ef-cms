@@ -14,22 +14,6 @@ export const setFormForCaseAction = ({
 }: ActionProps) => {
   const caseDetail = props.caseDetail || get(state.caseDetail);
 
-  const deconstructedPetitionPaymentDate = applicationContext
-    .getUtilities()
-    .deconstructDate(caseDetail.petitionPaymentDate);
-
-  if (deconstructedPetitionPaymentDate) {
-    store.set(
-      state.form.paymentDateMonth,
-      deconstructedPetitionPaymentDate.month,
-    );
-    store.set(state.form.paymentDateDay, deconstructedPetitionPaymentDate.day);
-    store.set(
-      state.form.paymentDateYear,
-      deconstructedPetitionPaymentDate.year,
-    );
-  }
-
   const deconstructedPetitionPaymentWaivedDate = applicationContext
     .getUtilities()
     .deconstructDate(caseDetail.petitionPaymentWaivedDate);
