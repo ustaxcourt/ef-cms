@@ -70,7 +70,7 @@ export const validatePetitionFromPaperAction = ({
   path,
   props,
 }: ActionProps) => {
-  const { petitionPaymentDate, petitionPaymentWaivedDate } = props;
+  const { petitionPaymentWaivedDate } = props;
 
   const form = get(state.form);
 
@@ -79,7 +79,6 @@ export const validatePetitionFromPaperAction = ({
     .validatePetitionFromPaperInteractor(applicationContext, {
       petition: {
         ...form,
-        petitionPaymentDate,
         petitionPaymentWaivedDate,
       },
     });

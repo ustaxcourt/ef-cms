@@ -3,9 +3,6 @@ import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDate
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 
 export const setPaperPetitionDatesSequence = [
-  // petitionPaymentDate
-  getComputedFormDateFactoryAction('paymentDate', true),
-  setComputeFormDateFactoryAction('petitionPaymentDate'),
   // paymentDateWaived
   getComputedFormDateFactoryAction('paymentDateWaived', true),
   setComputeFormDateFactoryAction('petitionPaymentWaivedDate'),

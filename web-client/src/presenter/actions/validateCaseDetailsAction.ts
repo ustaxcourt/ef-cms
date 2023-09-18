@@ -18,7 +18,7 @@ export const validateCaseDetailsAction = ({
 }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
-  const { petitionPaymentDate, petitionPaymentWaivedDate } = props;
+  const { petitionPaymentWaivedDate } = props;
 
   let errors = applicationContext
     .getUseCases()
@@ -26,7 +26,6 @@ export const validateCaseDetailsAction = ({
       caseDetail: {
         ...caseDetail,
         ...form,
-        petitionPaymentDate,
         petitionPaymentWaivedDate,
         preferredTrialCity: form.preferredTrialCity
           ? form.preferredTrialCity
