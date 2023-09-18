@@ -4,16 +4,20 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { computeDate } from '../../src/business/utilities/DateHandler';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { computeDate } from '@shared/business/utilities/DateHandler';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
-const fromDate = computeDate({ day: 1, month: 1, year });
-const toDate = computeDate({ day: 1, month: 1, year: year + 1 });
+const fromDate = computeDate({ day: 1, month: 1, year })!;
+const toDate = computeDate({ day: 1, month: 1, year: year + 1 })!;
 
-const getAllPractitioners = async ({ applicationContext }) => {
+const getAllPractitioners = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}): Promise<Array<any>> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -34,7 +38,13 @@ const getAllPractitioners = async ({ applicationContext }) => {
   return results;
 };
 
-const getUniqueValues = ({ arrayOfObjects, keyToFilter }) => {
+const getUniqueValues = ({
+  arrayOfObjects,
+  keyToFilter,
+}: {
+  arrayOfObjects: {}[];
+  keyToFilter: string;
+}) => {
   const uniqueValues = {};
   for (const someObj of arrayOfObjects) {
     if (keyToFilter in someObj) {
