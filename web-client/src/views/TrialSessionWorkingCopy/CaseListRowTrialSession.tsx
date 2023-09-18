@@ -11,7 +11,6 @@ import React from 'react';
 
 const getCaseRow = ({
   formattedCase,
-  indentMemberCase = false,
   trialSequences,
   trialSessionWorkingCopyStatus,
 }) => {
@@ -19,7 +18,7 @@ const getCaseRow = ({
     <React.Fragment key={formattedCase.docketNumber}>
       <tr className="hoverable vertical-align-middle-row">
         <td className="consolidated-case-column">
-          <div className={indentMemberCase ? 'margin-left-2' : ''}>
+          <div className={formattedCase.shouldIndent ? 'margin-left-2' : ''}>
             <ConsolidatedCaseIcon
               consolidatedIconTooltipText={
                 formattedCase.consolidatedIconTooltipText
@@ -30,7 +29,7 @@ const getCaseRow = ({
           </div>
         </td>
         <td>
-          <div className={indentMemberCase ? 'margin-left-2' : ''}>
+          <div className={formattedCase.shouldIndent ? 'margin-left-2' : ''}>
             <CaseLink formattedCase={formattedCase} />
           </div>
         </td>
@@ -156,7 +155,6 @@ const getCaseRow = ({
         formattedCase.nestedConsolidatedCases.map(memberCase =>
           getCaseRow({
             formattedCase: memberCase,
-            indentMemberCase: true,
             trialSequences,
             trialSessionWorkingCopyStatus,
           }),
