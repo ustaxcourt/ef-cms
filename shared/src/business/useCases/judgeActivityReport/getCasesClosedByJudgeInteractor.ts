@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
@@ -13,12 +13,12 @@ export type CasesClosedType = {
 };
 
 export type CasesClosedReturnType = {
-  aggregations: CasesClosedType;
+  aggregations: CasesClosedType | {};
   total: number | undefined;
 };
 
 export const getCasesClosedByJudgeInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportFilters,
 ): Promise<CasesClosedReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();

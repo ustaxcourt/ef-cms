@@ -13,7 +13,7 @@ import joi from 'joi';
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
-  public email: string;
+  public email?: string;
   public name: string;
   public pendingEmail?: string;
   public role: string;
@@ -22,8 +22,8 @@ export class User extends JoiValidationEntity {
   public isUpdatingInformation?: boolean;
   public contact?: {
     address1: string;
-    address2: string;
-    address3: string;
+    address2?: string;
+    address3?: string;
     city: string;
     country: string;
     countryType: string;
@@ -138,8 +138,12 @@ export class User extends JoiValidationEntity {
     state: 'Enter state',
   };
 
-  isChambersUser() {
-    return this.section.includes('Chambers');
+  isChambersUser(): boolean {
+    return !!this.section?.includes('Chambers');
+  }
+
+  isJudgeUser(): boolean {
+    return this.role === ROLES.judge;
   }
 
   static isExternalUser(role) {

@@ -13,6 +13,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { get } from 'lodash';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  *
@@ -22,7 +23,7 @@ import { get } from 'lodash';
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the document is updated
  */
-export const updateCourtIssuedOrderInteractor = async (
+export const updateCourtIssuedOrder = async (
   applicationContext,
   { docketEntryIdToEdit, documentMetadata },
 ) => {
@@ -136,3 +137,10 @@ export const updateCourtIssuedOrderInteractor = async (
 
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
+
+export const updateCourtIssuedOrderInteractor = withLocking(
+  updateCourtIssuedOrder,
+  (_applicationContext: IApplicationContext, { documentMetadata }) => ({
+    identifiers: [`case|${documentMetadata.docketNumber}`],
+  }),
+);

@@ -1,4 +1,4 @@
-import { NotFoundError, UnauthorizedError } from '../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES } from '../../../shared/src/business/entities/EntityConstants';
 import {
   getAuthHeader,

@@ -1,92 +1,39 @@
+import {
+  FORMATS,
+  formatNow,
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import { TDynamoRecord } from '../dynamoTypes';
 import { getTableName } from '../../dynamodbClientService';
 
-/**
- * will wrap a function with logic to acquire a lock and delete a lock after finishing.
- *
- * @param {function} cb the original function to wrap
- * @param {function} getLockName a function which is passes the original args for getting the lock suffix
- * @param {error} onLockError the error object to throw if a lock is already in use
- * @returns {object} the item that was retrieved
- */
-export function withLocking(
-  cb: (applicationContext: IApplicationContext, options: any) => any,
-  getLockName,
-  onLockError,
-) {
-  return async function (
-    applicationContext: IApplicationContext,
-    options: any,
-  ) {
-    const lockName = getLockName(options);
+export type TLockDynamoRecord = TDynamoRecord & { timestamp: string };
 
-    let results;
-    try {
-      await applicationContext
-        .getPersistenceGateway()
-        .acquireLock({ applicationContext, lockName })
-        .catch(err => {
-          if (err.code === 'ConditionalCheckFailedException') {
-            throw onLockError;
-          } else {
-            throw err;
-          }
-        });
-      results = await cb(applicationContext, options);
-    } catch (error) {
-      if (error.code !== 'ConditionalCheckFailedException') {
-        await applicationContext
-          .getPersistenceGateway()
-          .deleteLock({ applicationContext, lockName });
-      }
-      throw error;
-    }
-    return results;
-  };
-}
 /**
- * tries to acquire a lock from a dynamodb table
+ * tries to createLock a lock from a dynamodb table
  */
-export async function acquireLock({
+export async function createLock({
   applicationContext,
-  lockName,
+  identifier,
+  ttl = 30,
 }: {
   applicationContext: IApplicationContext;
-  lockName: string;
-}) {
-  const lockTtl = 10000;
-
-  const { Item: lock } = await applicationContext
-    .getDocumentClient({
-      useMasterRegion: true,
-    })
-    .get({
-      Key: {
-        pk: `lock-${lockName}`,
-        sk: `lock-${lockName}`,
-      },
-      TableName: getTableName({
-        applicationContext,
-      }),
-    })
-    .promise();
-
-  if (lock && lock.ttl <= Date.now()) {
-    await deleteLock({ applicationContext, lockName });
-  }
+  identifier: string;
+  ttl?: number;
+}): Promise<void> {
+  const now = formatNow();
+  const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  const item: TLockDynamoRecord = {
+    pk: identifier,
+    sk: 'lock',
+    timestamp: now,
+    ttl: ttl + nowUnix,
+  };
 
   await applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
     .put({
-      ConditionExpression: 'attribute_not_exists(lockName)',
-      Item: {
-        gsi1pk: 'lock',
-        lockName: `lock-${lockName}`,
-        pk: `lock-${lockName}`,
-        sk: `lock-${lockName}`,
-        ttl: Date.now() + lockTtl,
-      },
+      Item: item,
       TableName: getTableName({
         applicationContext,
       }),
@@ -97,25 +44,63 @@ export async function acquireLock({
 /**
  *
  */
-export async function deleteLock({
+export async function removeLock({
   applicationContext,
-  lockName,
+  identifiers,
 }: {
   applicationContext: IApplicationContext;
-  lockName: string;
-}) {
-  await applicationContext
+  identifiers: string[];
+}): Promise<void> {
+  await Promise.all(
+    identifiers.map(identifierToUnlock =>
+      applicationContext
+        .getDocumentClient({
+          useMasterRegion: true,
+        })
+        .delete({
+          Key: {
+            pk: identifierToUnlock,
+            sk: 'lock',
+          },
+          TableName: getTableName({
+            applicationContext,
+          }),
+        })
+        .promise(),
+    ),
+  );
+}
+
+/**
+ *
+ */
+export async function getLock({
+  applicationContext,
+  identifier,
+}: {
+  applicationContext: IApplicationContext;
+  identifier: string;
+}): Promise<undefined | TLockDynamoRecord> {
+  const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
+  const res = await applicationContext
     .getDocumentClient({
       useMasterRegion: true,
     })
-    .delete({
+    .get({
+      ConsistentRead: true,
       Key: {
-        pk: `lock-${lockName}`,
-        sk: `lock-${lockName}`,
+        pk: identifier,
+        sk: 'lock',
       },
       TableName: getTableName({
         applicationContext,
       }),
+      applicationContext,
     })
     .promise();
+
+  if (!res?.Item || res.Item.ttl < now) {
+    return undefined;
+  }
+  return res.Item;
 }
