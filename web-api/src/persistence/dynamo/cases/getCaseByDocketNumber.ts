@@ -9,6 +9,7 @@ import {
   aggregateConsolidatedCaseItems,
   isCaseItem,
 } from '../helpers/aggregateCaseItems';
+import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '../../dynamodbClientService';
 
 export const getCaseByDocketNumber = async ({
@@ -51,5 +52,8 @@ export const getCaseByDocketNumber = async ({
     consolidatedCases = aggregateConsolidatedCaseItems(consolidatedCaseItems);
   }
 
-  return { ...aggregateCaseItems(caseItems), consolidatedCases };
+  return purgeDynamoKeys({
+    ...aggregateCaseItems(caseItems),
+    consolidatedCases,
+  });
 };

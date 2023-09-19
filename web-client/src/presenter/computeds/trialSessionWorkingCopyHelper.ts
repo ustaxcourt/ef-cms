@@ -49,9 +49,11 @@ export const trialSessionWorkingCopyHelper = (
       ),
     )
     .map(caseItem =>
-      applicationContext
-        .getUtilities()
-        .formatCaseForTrialSession({ applicationContext, caseItem }),
+      applicationContext.getUtilities().formatCaseForTrialSession({
+        applicationContext,
+        caseItem,
+        eligibleCases: trialSession.calendaredCases,
+      }),
     )
     .sort(compareCasesByDocketNumber)
     .map(aCase => appendUserNotes(aCase, userNotes))
