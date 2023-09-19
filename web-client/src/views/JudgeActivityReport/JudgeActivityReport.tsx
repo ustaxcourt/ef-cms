@@ -6,9 +6,10 @@ import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePicke
 import { ErrorNotification } from '../ErrorNotification';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { connect } from '@cerebral/react';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 
 export const JudgeActivityReport = connect(
   {
@@ -35,6 +36,7 @@ export const JudgeActivityReport = connect(
     validationErrors,
   }) {
     const [activePage, setActivePage] = useState(0);
+    const paginatorTop = useRef(null);
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
@@ -194,21 +196,24 @@ export const JudgeActivityReport = connect(
 
     const progressDescription: () => JSX.Element = () => (
       <>
-        {judgeActivityReportHelper.showPaginator && (
-          <Paginator
-            breakClassName="hide"
-            forcePage={activePage}
-            marginPagesDisplayed={0}
-            pageCount={judgeActivityReportHelper.pageCount}
-            pageRangeDisplayed={0}
-            onPageChange={pageChange => {
-              setActivePage(pageChange.selected);
-              getCavAndSubmittedCasesForJudgesSequence({
-                selectedPage: pageChange.selected,
-              });
-            }}
-          />
-        )}
+        <div ref={paginatorTop}>
+          {judgeActivityReportHelper.showPaginator && (
+            <Paginator
+              breakClassName="hide"
+              forcePage={activePage}
+              marginPagesDisplayed={0}
+              pageCount={judgeActivityReportHelper.pageCount}
+              pageRangeDisplayed={0}
+              onPageChange={async pageChange => {
+                setActivePage(pageChange.selected);
+                await getCavAndSubmittedCasesForJudgesSequence({
+                  selectedPage: pageChange.selected,
+                });
+                focusPaginatorTop(paginatorTop);
+              }}
+            />
+          )}
+        </div>
         <table
           aria-describedby="progressDescription"
           className="usa-table ustc-table"
@@ -282,11 +287,12 @@ export const JudgeActivityReport = connect(
             marginPagesDisplayed={0}
             pageCount={judgeActivityReportHelper.pageCount}
             pageRangeDisplayed={0}
-            onPageChange={pageChange => {
+            onPageChange={async pageChange => {
               setActivePage(pageChange.selected);
-              getCavAndSubmittedCasesForJudgesSequence({
+              await getCavAndSubmittedCasesForJudgesSequence({
                 selectedPage: pageChange.selected,
               });
+              focusPaginatorTop(paginatorTop);
             }}
           />
         )}
