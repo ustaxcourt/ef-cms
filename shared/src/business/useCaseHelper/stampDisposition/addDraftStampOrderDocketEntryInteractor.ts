@@ -10,7 +10,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { Stamp } from '../../entities/Stamp';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
 import { withLocking } from '../../useCaseHelper/acquireLock';
 

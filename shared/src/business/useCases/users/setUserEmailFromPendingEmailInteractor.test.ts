@@ -2,7 +2,7 @@ import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_PRACTITIONER, validUser } from '../../../test/mockUsers';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { ServiceUnavailableError } from '../../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getContactPrimary } from '../../entities/cases/Case';
 import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';

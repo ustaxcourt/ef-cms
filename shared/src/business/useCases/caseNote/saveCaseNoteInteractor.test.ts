@@ -1,7 +1,7 @@
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
-import { ServiceUnavailableError } from '../../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';

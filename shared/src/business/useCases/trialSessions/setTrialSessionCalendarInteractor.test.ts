@@ -5,7 +5,7 @@ import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { ServiceUnavailableError } from '../../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';

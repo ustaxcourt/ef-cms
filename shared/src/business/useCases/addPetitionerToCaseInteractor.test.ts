@@ -10,7 +10,7 @@ import { MOCK_LOCK } from '../../test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../errors/errors';
+} from '@web-api/errors/errors';
 import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
 

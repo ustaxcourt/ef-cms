@@ -4,7 +4,7 @@ import {
   MOCK_PRACTITIONER,
   admissionsClerkUser,
 } from '../../../test/mockUsers';
-import { ServiceUnavailableError } from '../../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   determineEntitiesToLock,

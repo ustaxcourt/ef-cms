@@ -1,6 +1,6 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '../../business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../test/mockLock';
-import { ServiceUnavailableError } from '../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { acquireLock, checkLock, removeLock, withLocking } from './acquireLock';
 import { applicationContext } from '../test/createTestApplicationContext';
 

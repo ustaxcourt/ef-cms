@@ -6,7 +6,7 @@ import {
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_LOCK } from '../../../test/mockLock';
 import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
-import { ServiceUnavailableError } from '../../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 

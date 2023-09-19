@@ -7,7 +7,7 @@ import {
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_LOCK } from '../../test/mockLock';
-import { ServiceUnavailableError } from '../../errors/errors';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 
 import { applicationContext } from '../test/createTestApplicationContext';
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
