@@ -63,29 +63,21 @@ describe('getCalendaredCasesForTrialSession', () => {
         docketEntries: [
           {
             docketEntryId: 'abc-123',
-            pk: `case|${MOCK_CASE.docketNumber}`,
-            sk: 'docket-entry|123',
           },
         ],
         docketNumber: MOCK_CASE.docketNumber,
         hearings: [],
         irsPractitioners: [
           {
-            pk: `case|${MOCK_CASE.docketNumber}`,
-            sk: 'irsPractitioner|123',
             userId: 'abc-123',
           },
         ],
-        pk: `case|${MOCK_CASE.docketNumber}`,
         privatePractitioners: [
           {
-            pk: `case|${MOCK_CASE.docketNumber}`,
-            sk: 'privatePractitioner|123',
             userId: 'abc-123',
           },
         ],
         removedFromTrial: true,
-        sk: `case|${MOCK_CASE.docketNumber}`,
         status: CASE_STATUS_TYPES.new,
       },
     ]);
