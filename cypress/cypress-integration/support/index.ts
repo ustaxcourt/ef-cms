@@ -1,5 +1,4 @@
 import './commands';
-import 'cypress-real-events/support';
 
 before(() => {
   // Skip subsequent tests in spec when one fails.
