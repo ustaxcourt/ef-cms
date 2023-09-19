@@ -70,24 +70,11 @@ export const EditDocketEntryMetaFormDocument = connect(
             ))}
           </fieldset>
         </FormGroup>
-        {/*
-
-                  // names={{
-          //   day: 'filingDateDay',
-          //   month: 'filingDateMonth',
-          //   year: 'filingDateYear',
-          // }}
-          // values={{
-          //   day: form.filingDateDay,
-          //   month: form.filingDateMonth,
-          //   year: form.filingDateYear,
-          // }}
-        */}
         <DateSelector
           defaultValue={form.filingDate}
           errorText={validationErrors.filingDate}
           id="filing-date"
-          label="Filed date!@!"
+          label="Filed date  !! @"
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'filingDate',
