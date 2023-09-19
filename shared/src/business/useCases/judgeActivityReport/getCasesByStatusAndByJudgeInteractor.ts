@@ -9,7 +9,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -38,7 +37,7 @@ export type CavAndSubmittedFilteredCasesType = {
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
@@ -189,8 +188,10 @@ const calculateNumberOfConsolidatedCases = async (
     return 0;
   }
 
-  return await getCountOfConsolidedCases({
-    applicationContext,
-    leadDocketNumber: caseInfo.leadDocketNumber,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .getCountOfConsolidedCases({
+      applicationContext,
+      leadDocketNumber: caseInfo.leadDocketNumber,
+    });
 };

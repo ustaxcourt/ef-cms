@@ -16,14 +16,11 @@ export type CaseDocumentsAggregationReturnType = {
   opinions: AggregatedEventCodesType;
 };
 
-// TODO: refactor JudgeActivityReportFilters to be only types for request to BE
 export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
-  judgeName?: string;
   judgeId?: string;
-  judges?: string[];
-  judgeNameToDisplayForHeader?: string;
+  judges: string[];
 };
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (

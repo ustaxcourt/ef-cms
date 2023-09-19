@@ -11,7 +11,6 @@ import { withAppContextDecorator } from '../../../withAppContext';
 
 describe('judgeActivityReportHelper', () => {
   let mockJudgeActivityReport;
-  let judgeActivityReportFilters;
   let baseState;
 
   const mockTotalCountForSubmittedAndCavCases = 15;
@@ -100,14 +99,11 @@ describe('judgeActivityReportHelper', () => {
       },
     };
 
-    judgeActivityReportFilters = {
-      judgeNameToDisplayForHeader: judgeUser.name,
-    };
-
     baseState = {
       judgeActivityReport: {
-        filters: judgeActivityReportFilters,
+        filters: {},
         judgeActivityReportData: mockJudgeActivityReport,
+        judgeNameToDisplayForHeader: judgeUser.name,
       },
       validationErrors: {
         endDate: undefined,
@@ -141,7 +137,6 @@ describe('judgeActivityReportHelper', () => {
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
-              ...judgeActivityReportFilters,
               endDate: '01/02/2020',
               startDate: '',
             },
@@ -159,7 +154,6 @@ describe('judgeActivityReportHelper', () => {
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
-              ...judgeActivityReportFilters,
               endDate: '',
               startDate: '01/02/2020',
             },
@@ -177,7 +171,6 @@ describe('judgeActivityReportHelper', () => {
           judgeActivityReport: {
             ...baseState.judgeActivityReport,
             filters: {
-              ...judgeActivityReportFilters,
               endDate: '01/02/2020',
               startDate: '01/02/2020',
             },
