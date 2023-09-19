@@ -51,7 +51,7 @@ export const AddEditCaseWorksheetModal = connect(
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'finalBriefDueDate',
-              toFormat: DATE_FORMATS.YYYMMDD,
+              toFormat: DATE_FORMATS.YYYYMMDD,
               value: e.target.value,
             });
             validateCaseWorksheetSequence();
