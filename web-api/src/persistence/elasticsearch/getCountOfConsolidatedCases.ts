@@ -20,5 +20,6 @@ export const getCountOfConsolidedCases = async ({
       index: 'efcms-case',
     },
   });
+
   return results;
 };
