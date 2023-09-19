@@ -190,7 +190,7 @@ const calculateNumberOfConsolidatedCases = async (
 
   return await applicationContext
     .getPersistenceGateway()
-    .getCountOfConsolidedCases({
+    .getCountOfConsolidatedCases({
       applicationContext,
       leadDocketNumber: caseInfo.leadDocketNumber,
     });
