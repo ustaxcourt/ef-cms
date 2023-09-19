@@ -9,39 +9,39 @@ Follow these steps to perform a glue job manually.
 1. With local environment variables pointed to the target lower environment, edit values in the `deploy` table to configure the `alpha` table as both the current and destination table and set `migration` to `false`:
    ```zsh
    . scripts/env/set-env.zsh ustc-test
-   aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":false}}'
-   aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
-   aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"destination-table-version"},"sk":{"S":"destination-table-version"},"current":{"S":"alpha"}}'
+   ./scripts/setup-deploy-table-for-glue-job.sh
    ```
 1. Refresh your local environment variables with the new values you just wrote to the `deploy` table:
    ```zsh
    . scripts/env/set-env.zsh ustc-test
    ```
-1. Delete all existing DynamoDB tables and OpenSearch clusters in the target lower environment, waiting a few minutes between issuing each command:
+1. Delete all existing DynamoDB tables and OpenSearch clusters in the target lower environment:
    ```zsh
-   aws dynamodb delete-table --table-name "efcms-${ENV}-alpha" --region us-west-1
-   aws dynamodb delete-table --table-name "efcms-${ENV}-alpha" --region us-east-1
-   aws es delete-elasticsearch-domain --domain-name "efcms-search-${ENV}-alpha" --region us-east-1
-   aws dynamodb delete-table --table-name "efcms-${ENV}-beta" --region us-west-1
-   aws dynamodb delete-table --table-name "efcms-${ENV}-beta" --region us-east-1
-   aws es delete-elasticsearch-domain --domain-name "efcms-search-${ENV}-beta" --region us-east-1
+   ./scripts/delete-all-persistence.sh
    ```
 1. Run a deployment in this lower environment to create new, empty DynamoDB tables and an empty OpenSearch cluster. The easiest way to do this is to re-run the most recent `build-and-deploy` workflow to this environment in CircleCI.
 1. After the deployment completes, disable streams in the newly-created DynamoDB tables:
    ```zsh
    ./shared/admin-tools/dynamodb/toggle-streams.sh --off
    ```
-1. In a **new terminal session** with environment variables pointed to the production environment, start the glue job, then close the terminal session:
+1. In a **new terminal session** with environment variables pointed to the production environment, start the glue job:
    ```zsh
    . scripts/env/set-env.zsh ustc-prod
-   LOWER_ENV=test aws glue start-job-run --job-name mock_emails --arguments "--source_table=${SOURCE_TABLE},--destination_table=efcms-${LOWER_ENV}-alpha" --region us-east-1
-   exit
+   LOWER_ENV=test npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
    ```
 1. Back in the terminal session with environment variables pointed to the target lower environment, synchronize the S3 documents buckets:
    ```zsh
    aws s3 sync "s3://${PROD_DOCUMENTS_BUCKET_NAME}" "s3://${DOCUMENTS_BUCKET_NAME}" --delete --region us-east-1
    ```
-1. After the glue job and S3 documents sync are both complete, re-enable the DynamoDB streams so the newly-glued data will be indexed in OpenSearch:
+1. Wait for the glue job and S3 documents sync to complete before proceeding. The S3 sync will output each copy/delete operation to the terminal, so you will know when it is finished. You will need to periodically check on the glue job's status in the terminal session with environment variables pointed to the production environment:
+   ```zsh
+   npx ts-node --transpile-only scripts/glue/glue-job-status.ts
+   ```
+   Once the `JobRunState` is `SUCCEEDED`, close the terminal session:
+   ```zsh
+   exit
+   ```
+1. After the glue job and S3 documents sync are both complete, re-enable the target lower environment's DynamoDB streams so the newly-glued data will start indexing in OpenSearch:
    ```zsh
    ./shared/admin-tools/dynamodb/toggle-streams.sh --on
    ```
