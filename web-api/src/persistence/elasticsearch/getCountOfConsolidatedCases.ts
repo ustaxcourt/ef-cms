@@ -1,6 +1,6 @@
 import { count } from './searchClient';
 
-export const getCountOfConsolidedCases = async ({
+export const getCountOfConsolidatedCases = async ({
   applicationContext,
   leadDocketNumber,
 }: {
@@ -20,5 +20,6 @@ export const getCountOfConsolidedCases = async ({
       index: 'efcms-case',
     },
   });
+
   return results;
 };
