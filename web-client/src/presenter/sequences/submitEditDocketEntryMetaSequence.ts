@@ -4,7 +4,6 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearOtherIterationAction } from '../actions/clearOtherIterationAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
@@ -30,7 +29,6 @@ import { validateDocumentAction } from '../actions/EditDocketRecordEntry/validat
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   setFilersFromFilersMapAction,
-  computeFilingFormDateAction,
   computeCertificateOfServiceFormDateAction,
   getComputedFormDateFactoryAction(null),
   setFormDateAction,
