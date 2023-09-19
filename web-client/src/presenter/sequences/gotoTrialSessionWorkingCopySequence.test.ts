@@ -3,7 +3,7 @@ import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { gotoTrialSessionWorkingCopySequence } from '../sequences/gotoTrialSessionWorkingCopySequence';
 import { presenter } from '../presenter-mock';
 

@@ -67,6 +67,13 @@ export const mockDocketEntrySearchResult = {
       successful: 1,
       total: 1,
     },
+    aggregations: {
+      closed_cases: {
+        buckets: [],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+    },
     hits: {
       hits: [
         {

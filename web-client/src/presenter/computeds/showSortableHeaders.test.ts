@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { showSortableHeaders as showSortableHeadersComputed } from './showSortableHeaders';
 import { withAppContextDecorator } from '../../withAppContext';

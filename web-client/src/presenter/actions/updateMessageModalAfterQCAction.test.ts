@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateMessageModalAfterQCAction } from './updateMessageModalAfterQCAction';
@@ -64,5 +64,20 @@ describe('updateMessageModalAfterQCAction', () => {
     expect(result.state.modal.form.attachments).toEqual([
       { documentId: mockDocketEntryId, documentTitle: mockDocumentTitle },
     ]);
+  });
+
+  it('set state.modal.form.draftAttachments to an empty array', async () => {
+    const result = await runAction(updateMessageModalAfterQCAction, {
+      modules: { presenter },
+      state: {
+        docketEntryId: mockDocketEntryId,
+        form: {
+          documentTitle: mockDocumentTitle,
+        },
+        modal: { form: undefined },
+      },
+    });
+
+    expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 });

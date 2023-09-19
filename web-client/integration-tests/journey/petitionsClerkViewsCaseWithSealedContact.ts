@@ -1,7 +1,4 @@
-const {
-  contactPrimaryFromState,
-  contactSecondaryFromState,
-} = require('../helpers');
+import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 
 export const petitionsClerkViewsCaseWithSealedContact = (
   cerebralTest,
