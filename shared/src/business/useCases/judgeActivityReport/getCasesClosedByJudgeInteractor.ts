@@ -13,12 +13,12 @@ export type CasesClosedType = {
 };
 
 export type CasesClosedReturnType = {
-  aggregations: CasesClosedType;
+  aggregations: CasesClosedType | {};
   total: number | undefined;
 };
 
 export const getCasesClosedByJudgeInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportFilters,
 ): Promise<CasesClosedReturnType> => {
   const authorizedUser = applicationContext.getCurrentUser();

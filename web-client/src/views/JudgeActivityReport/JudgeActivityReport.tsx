@@ -14,6 +14,7 @@ export const JudgeActivityReport = connect(
   {
     getCavAndSubmittedCasesForJudgesSequence:
       sequences.getCavAndSubmittedCasesForJudgesSequence,
+    judgeActivityReport: state.judgeActivityReport,
     judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
     judgeActivityReportFilters: state.judgeActivityReport.filters,
     judgeActivityReportHelper: state.judgeActivityReportHelper,
@@ -26,6 +27,7 @@ export const JudgeActivityReport = connect(
   },
   function JudgeActivityReport({
     getCavAndSubmittedCasesForJudgesSequence,
+    judgeActivityReport,
     judgeActivityReportData,
     judgeActivityReportFilters,
     judgeActivityReportHelper,
@@ -387,7 +389,7 @@ export const JudgeActivityReport = connect(
                   aria-label="judge"
                   className="usa-select select-left width-card-lg"
                   name="associatedJudge"
-                  value={judgeActivityReportFilters.judgeName}
+                  value={judgeActivityReport.judgeName}
                   onChange={e =>
                     setJudgeActivityReportFiltersSequence({
                       judgeName: e.target.value,
