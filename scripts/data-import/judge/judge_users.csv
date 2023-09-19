@@ -9,6 +9,7 @@ Cantrel,Judge,Cantrel,legacy.judge.cantrel@example.com,legacyJudge,legacyJudgesC
 Carluzzo,Chief Special Trial Judge,Lewis R. Carluzzo,stjudge.carluzzo@example.com,judge,carluzzosChambers
 Chabot,Judge,Chabot,legacy.judge.chabot@example.com,legacyJudge,legacyJudgesChambers
 Chiechi,Judge,Chiechi,legacy.judge.chiechi@example.com,legacyJudge,legacyJudgesChambers
+Choi,Special Trial Judge,Eunkyong Choi,legacy.stjudge.choi@example.com,legacyJudge,legacyJudgesChambers
 Clapp,Judge,Clapp,legacy.judge.clapp@example.com,legacyJudge,legacyJudgesChambers
 Cohen,Judge,Mary Ann Cohen,judge.cohen@example.com,judge,cohensChambers
 Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers
@@ -20,6 +21,7 @@ Dinan,Special Trial Judge,Dinan,legacy.judge.dinan@example.com,legacyJudge,legac
 Drennen,Judge,Drennen,legacy.judge.drennen@example.com,legacyJudge,legacyJudgesChambers
 Fay,Judge,Fay,legacy.judge.fay@example.com,legacyJudge,legacyJudgesChambers
 Featherston,Judge,Featherston,legacy.judge.featherston@example.com,legacyJudge,legacyJudgesChambers
+Fried,Special Trial Judge,Zachary S. Fried,stjudge.fried@example.com,judge,friedsChambers
 Foley,Chief Judge,Maurice B. Foley,judge.foley@example.com,judge,foleysChambers
 Gale,Judge,Joseph H. Gale,judge.gale@example.com,judge,galesChambers
 Galloway,Special Trial Judge,Galloway,legacy.judge.galloway@example.com,legacyJudge,legacyJudgesChambers
@@ -40,6 +42,7 @@ Jones,Judge,Courtney D. Jones,judge.jones@example.com,judge,jonesChambers
 Kerrigan,Judge,Kathleen Kerrigan,judge.kerrigan@example.com,judge,kerrigansChambers
 Korner,Judge,Korner,legacy.judge.korner@example.com,legacyJudge,legacyJudgesChambers
 Kroupa,Judge,Kroupa,legacy.judge.kroupa@example.com,legacyJudge,legacyJudgesChambers
+Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@example.com,judge,landysChambers
 Laro,Judge,Laro,legacy.judge.laro@example.com,legacyJudge,legacyJudgesChambers
 Lauber,Judge,Albert G. Lauber,judge.lauber@example.com,judge,laubersChambers
 Leyden,Special Trial Judge,Diana L. Leyden,stjudge.leyden@example.com,judge,leydensChambers
@@ -62,6 +65,7 @@ Raum,Judge,Raum,legacy.judge.raum@example.com,legacyJudge,legacyJudgesChambers
 Ruwe,Judge,Robert P. Ruwe,judge.ruwe@example.com,judge,ruwesChambers
 Scott,Judge,Scott,legacy.judge.scott@example.com,legacyJudge,legacyJudgesChambers
 Shields,Judge,Shields,legacy.judge.shields@example.com,legacyJudge,legacyJudgesChambers
+Siegel,Special Trial Judge,Jennifer E. Siegel,stjudge.siegel@example.com,judge,siegelsChambers
 Simpson,Judge,Simpson,legacy.judge.simpson@example.com,legacyJudge,legacyJudgesChambers
 Sterrett,Judge,Sterrett,legacy.judge.sterrett@example.com,legacyJudge,legacyJudgesChambers
 Swift,Judge,Swift,legacy.judge.swift@example.com,legacyJudge,legacyJudgesChambers
@@ -81,5 +85,3 @@ Wiles,Judge,Wiles,legacy.judge.wiles@example.com,legacyJudge,legacyJudgesChamber
 Williams,Judge,Williams,legacy.judge.williams@example.com,legacyJudge,legacyJudgesChambers
 Wolfe,Special Trial Judge,Wolfe,legacy.judge.wolfe@example.com,legacyJudge,legacyJudgesChambers
 Wright,Judge,Wright,legacy.judge.wright@example.com,legacyJudge,legacyJudgesChambers
-Choi,Special Trial Judge,Eunkyong Choi,stjudge.choi@dawson.ustaxcourt.gov,judge,choisChambers
-Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@dawson.ustaxcourt.gov,judge,landysChambers

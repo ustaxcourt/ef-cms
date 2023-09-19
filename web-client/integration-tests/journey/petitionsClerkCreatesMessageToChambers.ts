@@ -40,6 +40,7 @@ export const petitionsClerkCreatesMessageToChambers = cerebralTest => {
     cerebralTest.testMessageDocumentId = messageDocument.docketEntryId;
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: messageDocument.docketEntryId,
     });
 
