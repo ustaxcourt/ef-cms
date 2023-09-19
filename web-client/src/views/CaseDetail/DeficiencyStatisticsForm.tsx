@@ -107,7 +107,7 @@ export const DeficiencyStatisticsForm = connect(
                   defaultValue={form.lastDateOfPeriod}
                   errorText={validationErrors.lastDateOfPeriod}
                   id="last-date-of-period"
-                  label="Last date of period asdfasdf"
+                  label="Last date of period"
                   onChange={e => {
                     formatAndUpdateDateFromDatePickerSequence({
                       key: 'lastDateOfPeriod',
