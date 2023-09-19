@@ -35,9 +35,7 @@ describe('getCaseByDocketNumber', () => {
       docketNumber: '123-20',
       hearings: [],
       irsPractitioners: [],
-      pk: 'case|123-20',
       privatePractitioners: [],
-      sk: 'case|123-20',
       status: CASE_STATUS_TYPES.new,
     });
   });
@@ -114,16 +112,12 @@ describe('getCaseByDocketNumber', () => {
         {
           archived: true,
           correspondenceId: 'abc-123',
-          pk: 'case|123-20',
-          sk: 'correspondence|123',
         },
       ],
       archivedDocketEntries: [
         {
           archived: true,
           docketEntryId: 'abc-123',
-          pk: 'case|123-20',
-          sk: 'docket-entry|123',
         },
       ],
       associatedJudge: 'Judge Fieri',
@@ -132,39 +126,27 @@ describe('getCaseByDocketNumber', () => {
         {
           archived: false,
           correspondenceId: 'abc-124',
-          pk: 'case|123-20',
-          sk: 'correspondence|124',
         },
       ],
       docketEntries: [
         {
           archived: false,
           docketEntryId: 'abc-124',
-          pk: 'case|123-20',
-          sk: 'docket-entry|124',
         },
       ],
       docketNumber: '123-20',
       hearings: [
         {
-          pk: 'case|123-20',
-          sk: 'hearing|123',
           trialSessionId: '123',
         },
       ],
-      irsPractitioners: [
-        { pk: 'case|123-20', sk: 'irsPractitioner|123', userId: 'abc-123' },
-      ],
+      irsPractitioners: [{ userId: 'abc-123' }],
       judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
-      pk: 'case|123-20',
       privatePractitioners: [
         {
-          pk: 'case|123-20',
-          sk: 'privatePractitioner|123',
           userId: 'abc-123',
         },
       ],
-      sk: 'case|23',
       status: CASE_STATUS_TYPES.new,
     });
   });
@@ -302,9 +284,6 @@ describe('getCaseByDocketNumber', () => {
           docketNumber: leadDocketNumber,
           irsPractitioners: [
             {
-              gsi1pk: `leadCase|${leadDocketNumber}`,
-              pk: 'case|123-20',
-              sk: 'irsPractitioner|123',
               userId: 'abc-123',
             },
           ],
@@ -312,9 +291,6 @@ describe('getCaseByDocketNumber', () => {
           petitioners: [],
           privatePractitioners: [
             {
-              gsi1pk: `leadCase|${leadDocketNumber}`,
-              pk: 'case|123-20',
-              sk: 'privatePractitioner|123',
               userId: 'abc-123',
             },
           ],
@@ -324,9 +300,6 @@ describe('getCaseByDocketNumber', () => {
           docketNumber: docketNumber1,
           irsPractitioners: [
             {
-              gsi1pk: `leadCase|${leadDocketNumber}`,
-              pk: `case|${docketNumber1}`,
-              sk: 'irsPractitioner|124',
               userId: 'abc-124',
             },
           ],
@@ -334,9 +307,6 @@ describe('getCaseByDocketNumber', () => {
           petitioners: [],
           privatePractitioners: [
             {
-              gsi1pk: `leadCase|${leadDocketNumber}`,
-              pk: `case|${docketNumber1}`,
-              sk: 'privatePractitioner|124',
               userId: 'abc-124',
             },
           ],
@@ -348,39 +318,26 @@ describe('getCaseByDocketNumber', () => {
         {
           archived: false,
           docketEntryId: 'abc-123',
-          pk: `case|${leadDocketNumber}`,
-          sk: 'docket-entry|123',
         },
       ],
       docketNumber: '123-20',
-      gsi1pk: `leadCase|${leadDocketNumber}`,
       hearings: [
         {
-          pk: `case|${leadDocketNumber}`,
-          sk: 'hearing|123',
           trialSessionId: '123',
         },
       ],
       irsPractitioners: [
         {
-          gsi1pk: `leadCase|${leadDocketNumber}`,
-          pk: `case|${leadDocketNumber}`,
-          sk: 'irsPractitioner|123',
           userId: 'abc-123',
         },
       ],
       judgeUserId: 'ce92c582-186f-45a7-a5f5-e1cec03521ad',
       leadDocketNumber,
-      pk: 'case|123-20',
       privatePractitioners: [
         {
-          gsi1pk: `leadCase|${leadDocketNumber}`,
-          pk: `case|${leadDocketNumber}`,
-          sk: 'privatePractitioner|123',
           userId: 'abc-123',
         },
       ],
-      sk: `case|${leadDocketNumber}`,
       status: CASE_STATUS_TYPES.new,
     });
   });
