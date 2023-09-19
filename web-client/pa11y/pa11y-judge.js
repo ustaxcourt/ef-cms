@@ -58,22 +58,12 @@ module.exports = [
   },
   {
     actions: [
-      'wait for .add-primary-issue to be visible',
-      'click element .add-primary-issue',
+      'wait for button[data-test="add-edit-case-worksheet"] to be visible',
+      'click element button[data-test="add-edit-case-worksheet"]',
       'wait for .modal-screen to be visible',
       'click element #confirm',
     ],
-    notes: 'checks a11y of add/edit primary issue modal',
-    url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
-  },
-  {
-    actions: [
-      'wait for .delete-primary-issue to be visible',
-      'click element .delete-primary-issue',
-      'wait for .modal-screen to be visible',
-      'click element #confirm',
-    ],
-    notes: 'checks a11y of delete primary issue modal',
+    notes: 'checks a11y of add/edit case worksheet modal',
     url: 'http://localhost:1234/log-in?code=judgecolvin@example.com&path=/',
   },
 ];

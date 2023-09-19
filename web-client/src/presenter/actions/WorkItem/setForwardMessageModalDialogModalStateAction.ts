@@ -1,13 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * set the modal state
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the applicationContext
- * @param {object} providers.get the cerebral get method
- * @param {object} providers.props the cerebral props
- * @param {object} providers.store the cerebral store
- */
 export const setForwardMessageModalDialogModalStateAction = ({
   applicationContext,
   get,
@@ -28,6 +20,7 @@ export const setForwardMessageModalDialogModalStateAction = ({
 
   store.set(state.modal.form, {
     attachments: formattedAttachments,
+    draftAttachments: [],
     from: mostRecentMessage.from,
     fromSection: mostRecentMessage.fromSection,
     fromUserId: mostRecentMessage.fromUserId,
