@@ -13,14 +13,17 @@ export type JudgeActivityReportState = {
     submittedAndCavCasesByJudge?: RawCase[];
     totalCountForSubmittedAndCavCases?: number;
   };
+  judgeNameToDisplayForHeader: string;
+  judgeName: string;
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
-    judgeName: '',
     judges: [],
     startDate: '',
   },
   judgeActivityReportData: {},
+  judgeName: '',
+  judgeNameToDisplayForHeader: '',
 };

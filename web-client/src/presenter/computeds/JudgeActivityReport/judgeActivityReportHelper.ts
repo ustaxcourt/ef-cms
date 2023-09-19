@@ -25,9 +25,9 @@ export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeNameToDisplayForHeader, startDate } = get(
-    state.judgeActivityReport.filters,
-  );
+  const { endDate, startDate } = get(state.judgeActivityReport.filters);
+
+  const { judgeNameToDisplayForHeader } = get(state.judgeActivityReport);
 
   const {
     casesClosedByJudge,
