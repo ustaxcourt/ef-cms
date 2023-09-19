@@ -22,6 +22,9 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'EA',
       },
       state: {
+        caseDetail: {
+          leadDocketNumber: undefined,
+        },
         form: {
           generationType: GENERATION_TYPES.MANUAL,
         },
@@ -42,6 +45,9 @@ describe('setDefaultGenerationTypeAction', () => {
       },
       state: {
         allowExternalConsolidatedGroupFiling: false,
+        caseDetail: {
+          leadDocketNumber: undefined,
+        },
         form: {
           fileAcrossConsolidatedGroup: false,
           generationType: GENERATION_TYPES.AUTO,
@@ -65,6 +71,9 @@ describe('setDefaultGenerationTypeAction', () => {
       },
       state: {
         allowExternalConsolidatedGroupFiling: false,
+        caseDetail: {
+          leadDocketNumber: '101-20',
+        },
         form: {
           fileAcrossConsolidatedGroup: false,
           generationType: GENERATION_TYPES.AUTO,
@@ -85,6 +94,9 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'Substitution of Counsel',
       },
       state: {
+        caseDetail: {
+          leadDocketNumber: undefined,
+        },
         form: {
           generationType: GENERATION_TYPES.AUTO,
         },
@@ -104,6 +116,9 @@ describe('setDefaultGenerationTypeAction', () => {
       },
       state: {
         allowExternalConsolidatedGroupFiling: false,
+        caseDetail: {
+          leadDocketNumber: '101-20',
+        },
         form: {
           fileAcrossConsolidatedGroup: false,
           generationType: GENERATION_TYPES.MANUAL,
@@ -125,6 +140,9 @@ describe('setDefaultGenerationTypeAction', () => {
       },
       state: {
         allowExternalConsolidatedGroupFiling: false,
+        caseDetail: {
+          leadDocketNumber: undefined,
+        },
         form: {
           fileAcrossConsolidatedGroup: false,
           generationType: GENERATION_TYPES.MANUAL,
