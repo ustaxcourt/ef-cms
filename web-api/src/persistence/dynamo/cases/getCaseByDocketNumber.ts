@@ -52,8 +52,8 @@ export const getCaseByDocketNumber = async ({
     consolidatedCases = aggregateConsolidatedCaseItems(consolidatedCaseItems);
   }
 
-  return purgeDynamoKeys({
-    ...aggregateCaseItems(caseItems),
-    consolidatedCases,
-  });
+  return {
+    ...purgeDynamoKeys(aggregateCaseItems(caseItems)),
+    consolidatedCases: purgeDynamoKeys(consolidatedCases),
+  };
 };
