@@ -1,29 +1,43 @@
-import { isLeadCase } from '../entities/cases/Case';
+import { isLeadCase as isLeadCaseImport } from '../entities/cases/Case';
 
-export const setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
-  const newCaseItem = { ...caseItem };
+export const setConsolidationFlagsForDisplay = <T>(
+  caseItem: { docketNumber: string; leadDocketNumber?: string } & T,
+  theCases: { docketNumber: string }[] = [],
+): T & {
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  shouldIndent: boolean;
+  isLeadCase: boolean;
+} => {
+  let isLeadCase = false;
+  let inConsolidatedGroup = false;
+  let shouldIndent = false;
+  let consolidatedIconTooltipText = '';
 
-  newCaseItem.inConsolidatedGroup = newCaseItem.isLeadCase = false;
-
-  if (newCaseItem.leadDocketNumber) {
-    newCaseItem.inConsolidatedGroup = true;
-    newCaseItem.consolidatedIconTooltipText = 'Consolidated case';
-
-    if (isLeadCase(caseItem)) {
-      newCaseItem.isLeadCase = true;
-      newCaseItem.consolidatedIconTooltipText = 'Lead case';
+  if (caseItem.leadDocketNumber) {
+    inConsolidatedGroup = true;
+    consolidatedIconTooltipText = 'Consolidated case';
+    if (isLeadCaseImport(caseItem)) {
+      isLeadCase = true;
+      consolidatedIconTooltipText = 'Lead case';
     } else {
       const leadCase = theCases.find(
-        theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
+        theCase => theCase.docketNumber === caseItem.leadDocketNumber,
       );
 
       if (leadCase) {
-        newCaseItem.shouldIndent = true;
+        shouldIndent = true;
       } else {
-        delete newCaseItem.shouldIndent;
+        shouldIndent = false;
       }
     }
   }
 
-  return newCaseItem;
+  return {
+    ...caseItem,
+    consolidatedIconTooltipText,
+    inConsolidatedGroup,
+    isLeadCase,
+    shouldIndent,
+  };
 };
