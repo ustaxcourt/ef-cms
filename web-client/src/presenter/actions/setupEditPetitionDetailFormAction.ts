@@ -27,6 +27,7 @@ export const setupEditPetitionDetailFormAction = ({
   });
 
   if (caseDetail.irsNoticeDate) {
+    // does this date need formatting?
     const irsNoticeDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.irsNoticeDate, FORMATS.YYYYMMDD);
