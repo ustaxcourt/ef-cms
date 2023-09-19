@@ -35,11 +35,25 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
-5. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+5. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
+	- ./iam/terraform/account-specific/main/main.tf
+	- ./iam/terraform/environment-specific/main/main.tf
+	- ./shared/admin-tools/glue/glue_migrations/main.tf
+	- ./shared/admin-tools/glue/remote_role/main.tf
+	- ./web-api/terraform/main/main.tf
+	- ./web-api/workflow-terraform/migration/main/main.tf
+	- ./web-api/workflow-terraform/migration-cron/main/main.tf
+	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
+	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
+	- ./web-client/terraform/main/main.tf
 
-6. Check through the list of caveats to see if any of the documented issues have been resolved.
+	> aws = "latest version"
 
-7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+6. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+
+7. Check through the list of caveats to see if any of the documented issues have been resolved.
+
+8. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Caveats
 
