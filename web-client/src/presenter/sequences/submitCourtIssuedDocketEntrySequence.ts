@@ -1,6 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
@@ -28,7 +27,6 @@ export const submitCourtIssuedDocketEntrySequence = [
   clearAlertsAction,
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
-  computeFilingFormDateAction,
   validateCourtIssuedDocketEntryAction,
   {
     error: [
