@@ -24,8 +24,6 @@ export const validateDocketEntrySequence = [
           setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
         ],
       },
-      getComputedFormDateFactoryAction('dateReceived'),
-      setComputeFormDateFactoryAction('dateReceived'),
       setFilersFromFilersMapAction,
       validateDocketEntryAction,
       {

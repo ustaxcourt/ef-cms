@@ -22,17 +22,6 @@ export const validateDocketEntryAction = ({
   });
 
   if (
-    entryMetadata.dateReceivedYear &&
-    entryMetadata.dateReceivedYear.toString().length !== 4
-  ) {
-    if (!errors) {
-      errors = {};
-    }
-
-    errors.dateReceived = errors.dateReceived || 'Enter a four-digit year';
-  }
-
-  if (
     entryMetadata.serviceDateYear &&
     entryMetadata.serviceDateYear.toString().length !== 4
   ) {
