@@ -7,13 +7,12 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('generateEntryOfAppearancePdfAction', () => {
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-
     applicationContext
       .getUseCases()
-      .generateEntryOfAppearancePdfInteractor.mockReturnValue({
-        pdfUrl: 'http://example.com',
+      .generateEntryOfAppearancePdfInteractor.mockResolvedValue({
+        url: 'http://example.com',
       });
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should try to generate a pdf and return the url when the generationType is auto', async () => {
@@ -31,10 +30,9 @@ describe('generateEntryOfAppearancePdfAction', () => {
           docketNumberWithSuffix: '101-20S',
           petitioners: [],
         },
-        constants: {
-          GENERATION_TYPES,
+        form: {
+          generationType: GENERATION_TYPES.AUTO,
         },
-        form: {},
       },
     });
 

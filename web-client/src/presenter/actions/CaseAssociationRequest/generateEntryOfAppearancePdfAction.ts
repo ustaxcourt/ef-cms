@@ -6,11 +6,13 @@ export const generateEntryOfAppearancePdfAction = async ({
   get,
   props,
 }: ActionProps) => {
-  const { GENERATION_TYPES } = get(state.constants);
+  const { GENERATION_TYPES } = applicationContext.getConstants();
 
   const { petitioners } = props;
 
-  if (get(state.form.generationType) === GENERATION_TYPES.AUTO) {
+  const { generationType } = get(state.form);
+
+  if (generationType === GENERATION_TYPES.AUTO) {
     const caseDetail = get(state.caseDetail);
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
