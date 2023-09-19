@@ -29,8 +29,6 @@ export const openConfirmPaperServiceModalSequence = [
   getComputedFormDateFactoryAction('serviceDate'),
   setComputeFormDateFactoryAction('serviceDate'),
   computeCertificateOfServiceFormDateAction,
-  getComputedFormDateFactoryAction('dateReceived'),
-  setComputeFormDateFactoryAction('dateReceived'),
   isDocketEntryMultiDocketableAction,
   {
     no: [],

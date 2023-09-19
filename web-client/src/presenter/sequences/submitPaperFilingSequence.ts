@@ -37,8 +37,6 @@ export const submitPaperFilingSequence = [
       getComputedFormDateFactoryAction('serviceDate'),
       setComputeFormDateFactoryAction('serviceDate'),
       computeCertificateOfServiceFormDateAction,
-      getComputedFormDateFactoryAction('dateReceived'),
-      setComputeFormDateFactoryAction('dateReceived'),
       setDocumentIsRequiredAction,
       generateTitleForPaperFilingAction,
       setFilersFromFilersMapAction,
