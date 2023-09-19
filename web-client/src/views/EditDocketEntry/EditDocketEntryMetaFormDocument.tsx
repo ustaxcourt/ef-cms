@@ -74,7 +74,7 @@ export const EditDocketEntryMetaFormDocument = connect(
           defaultValue={form.filingDate}
           errorText={validationErrors.filingDate}
           id="filing-date"
-          label="Filed date  !! @"
+          label="Filed date"
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'filingDate',
