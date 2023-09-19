@@ -164,8 +164,7 @@ import { getClinicLetterKey } from '../../shared/src/business/utilities/getClini
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getConstants } from './getConstants';
-import { getCountOfOpinionsFiledByJudgesInteractor } from '../../shared/src/proxies/reports/getCountOfOpinionsFiledByJudgeProxy';
-import { getCountOfOrdersFiledByJudgesInteractor } from '../../shared/src/proxies/reports/getCountOfOrdersFiledByJudgeProxy';
+import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getCustomCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCustomCaseInventoryReportProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
@@ -281,7 +280,7 @@ import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCase
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
 import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
-import { updateCaseWorksheetInteractor } from '../../shared/src/proxies/caseWorksheet/updateCaseWorksheetProxy';
+import { updateCaseWorksheetInteractor } from '@shared/proxies/caseWorksheet/updateCaseWorksheetProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
 import { updateCounselOnCaseInteractor } from '../../shared/src/proxies/caseAssociation/updateCounselOnCaseProxy';
@@ -316,7 +315,7 @@ import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/
 import { validateCaseAssociationRequestInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/validateCaseAssociationRequestInteractor';
 import { validateCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/validateCaseDeadlineInteractor';
 import { validateCaseDetailInteractor } from '../../shared/src/business/useCases/validateCaseDetailInteractor';
-import { validateCaseWorksheetInteractor } from '../../shared/src/business/useCases/caseWorksheet/validateCaseWorksheetInteractor';
+import { validateCaseWorksheetInteractor } from '@shared/business/useCases/caseWorksheet/validateCaseWorksheetInteractor';
 import { validateCourtIssuedDocketEntryInteractor } from '../../shared/src/business/useCases/courtIssuedDocument/validateCourtIssuedDocketEntryInteractor';
 import { validateCreateMessageInteractor } from '../../shared/src/business/useCases/messages/validateCreateMessageInteractor';
 import { validateDocketEntryInteractor } from '../../shared/src/business/useCases/docketEntry/validateDocketEntryInteractor';
@@ -451,8 +450,7 @@ const allUseCases = {
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
-  getCountOfOpinionsFiledByJudgesInteractor,
-  getCountOfOrdersFiledByJudgesInteractor,
+  getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,

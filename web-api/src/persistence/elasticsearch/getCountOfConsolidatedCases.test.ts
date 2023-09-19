@@ -1,12 +1,12 @@
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { count } from './searchClient';
-import { getCountOfConsolidedCases } from './getCountOfConsolidedCases';
+import { getCountOfConsolidatedCases } from './getCountOfConsolidatedCases';
 jest.mock('./searchClient');
 
-describe('getCountOfConsolidedCases', () => {
+describe('getCountOfConsolidatedCases', () => {
   const leadDocketNumber = '101-23';
   it('performs a count query to identify the number of cases in a consolidated case', async () => {
-    await getCountOfConsolidedCases({ applicationContext, leadDocketNumber });
+    await getCountOfConsolidatedCases({ applicationContext, leadDocketNumber });
     expect(count).toHaveBeenCalledWith({
       applicationContext,
       searchParameters: {
@@ -24,7 +24,7 @@ describe('getCountOfConsolidedCases', () => {
   it('returns a number', async () => {
     (count as jest.Mock).mockReturnValue(5);
 
-    const result = await getCountOfConsolidedCases({
+    const result = await getCountOfConsolidatedCases({
       applicationContext,
       leadDocketNumber,
     });
