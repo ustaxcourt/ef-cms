@@ -774,7 +774,7 @@ jobs:
       - run:
           name: Start Glue Job
           command: |
-            npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+            npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |

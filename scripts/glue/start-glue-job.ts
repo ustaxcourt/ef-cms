@@ -1,6 +1,6 @@
-// usage: npx ts-node --transpile-only shared/admin-tools/glue/start-glue-job.ts efcms-test-alpha
+// usage: npx ts-node --transpile-only scripts/glue/start-glue-job.ts efcms-test-alpha
 
-import { requireEnvVars } from '../util';
+import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars(['ENV', 'SOURCE_TABLE']);
 
 if (process.env.ENV !== 'prod') {
@@ -16,7 +16,7 @@ if (!destinationTable) {
 
 const sourceTable = process.env.SOURCE_TABLE;
 
-import { startGlueJob } from '../aws/glueHelper';
+import { startGlueJob } from '../../shared/admin-tools/aws/glueHelper';
 
 (async () => {
   // @ts-ignore TS2322 - process will have exited during requireEnvVars call if SOURCE_TABLE is not set
