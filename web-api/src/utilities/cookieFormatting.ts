@@ -1,10 +1,10 @@
 import cookie from 'cookie';
 
 export const createCookieString = (
-  cookieKey,
-  cookieValue,
-  expiresDateTime,
-  domain,
+  cookieKey: string,
+  cookieValue: string,
+  expiresDateTime: string,
+  domain?: string,
   secure = true,
   httpOnly = true,
 ) => {
@@ -18,8 +18,8 @@ export const createCookieString = (
 };
 
 export const deleteCookieString = (
-  cookieKey,
-  domain,
+  cookieKey: string,
+  domain?: string,
   secure = true,
   httpOnly = true,
 ) => {
@@ -32,6 +32,6 @@ export const deleteCookieString = (
   });
 };
 
-export const parseCookieString = cookieString => {
+export const parseCookieString = (cookieString: string) => {
   return cookie.parse(cookieString);
 };

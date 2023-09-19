@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { updateMessageModalAttachmentsAction } from './updateMessageModalAttachmentsAction';
@@ -30,10 +30,11 @@ describe('updateMessageModalAttachmentsAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('appends the given document meta from props to the form.modal.attachments array', async () => {
+  it('appends the given document meta in props to the form.modal.attachments array', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
+        action: 'add',
         documentId: '123',
       },
       state: {
@@ -41,20 +42,24 @@ describe('updateMessageModalAttachmentsAction', () => {
         modal: {
           form: {
             attachments: [],
+            draftAttachments: [],
           },
         },
       },
     });
 
-    expect(result.state.modal.form.attachments).toEqual([
+    expect(result.state.modal.form.attachments).toEqual([]);
+
+    expect(result.state.modal.form.draftAttachments).toEqual([
       { documentId: '123', documentTitle: 'Petition' },
     ]);
   });
 
-  it('appends the given document meta from state to the form.modal.attachments array', async () => {
+  it('should not change draftAttachments when the action is not add or remove', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
+        action: 'something',
         documentId: '123',
       },
       state: {
@@ -62,41 +67,46 @@ describe('updateMessageModalAttachmentsAction', () => {
         modal: {
           form: {
             attachments: [],
+            draftAttachments: [],
           },
         },
       },
     });
 
-    expect(result.state.modal.form.attachments).toEqual([
-      { documentId: '123', documentTitle: 'Petition' },
-    ]);
+    expect(result.state.modal.form.attachments).toEqual([]);
+    expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 
-  it('can return case correspondence from the available documents', async () => {
+  it('removes the given document meta in props from the form.modal.attachments array', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
-        documentId: '234', // correspondence doc
+        action: 'remove',
+        documentId: '123',
       },
       state: {
         caseDetail,
         modal: {
           form: {
             attachments: [],
+            draftAttachments: [
+              { documentId: '123', documentTitle: 'Petition' },
+            ],
           },
         },
       },
     });
 
-    expect(result.state.modal.form.attachments).toEqual([
-      { documentId: '234', documentTitle: 'Test Correspondence' },
-    ]);
+    expect(result.state.modal.form.attachments).toEqual([]);
+
+    expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 
   it('does not modify the array if no documentId is given', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
+        action: 'add',
         documentId: '',
         documentTitle: '',
       },
@@ -105,18 +115,21 @@ describe('updateMessageModalAttachmentsAction', () => {
         modal: {
           form: {
             attachments: [],
+            draftAttachments: [],
           },
         },
       },
     });
 
     expect(result.state.modal.form.attachments).toEqual([]);
+    expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 
   it('sets the form subject field if this is the first attachment to be added', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
+        action: 'add',
         documentId: '123',
       },
       state: {
@@ -124,6 +137,89 @@ describe('updateMessageModalAttachmentsAction', () => {
         modal: {
           form: {
             attachments: [],
+            draftAttachments: [],
+          },
+        },
+      },
+    });
+
+    expect(result.state.modal.form.subject).toEqual('Petition');
+  });
+
+  it('not change form subject field if there is already an attachment', async () => {
+    const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        action: 'add',
+        documentId: '345',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [
+              {
+                docketEntryId: '123',
+                documentType: 'Petition',
+              },
+            ],
+            draftAttachments: [],
+            subject: 'Petition',
+          },
+        },
+      },
+    });
+
+    expect(result.state.modal.form.subject).toEqual('Petition');
+  });
+
+  it('not change form subject field if there is already a draft attachment', async () => {
+    const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        action: 'add',
+        documentId: '123',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [],
+            draftAttachments: [
+              {
+                docketEntryId: '456',
+                documentType: 'New Petition',
+              },
+            ],
+            subject: 'New Petition',
+          },
+        },
+      },
+    });
+
+    expect(result.state.modal.form.subject).toEqual('New Petition');
+  });
+
+  it('not change form subject field if all draft attachments are removed', async () => {
+    const result = await runAction(updateMessageModalAttachmentsAction, {
+      modules: { presenter },
+      props: {
+        action: 'remove',
+        documentId: '123',
+      },
+      state: {
+        caseDetail,
+        modal: {
+          form: {
+            attachments: [],
+            draftAttachments: [
+              {
+                docketEntryId: '123',
+                documentTitle: 'Petition',
+                documentType: 'New Petition',
+              },
+            ],
+            subject: 'Petition',
           },
         },
       },
@@ -136,6 +232,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
+        action: 'add',
         documentId: '345',
       },
       state: {
@@ -143,35 +240,16 @@ describe('updateMessageModalAttachmentsAction', () => {
         modal: {
           form: {
             attachments: [],
+            draftAttachments: [],
           },
         },
       },
     });
 
     expect(
-      result.state.modal.form.attachments[0].documentTitle.length,
+      result.state.modal.form.draftAttachments[0].documentTitle.length,
     ).toBeGreaterThan(250);
     expect(result.state.modal.form.subject.length).toEqual(250);
-  });
-
-  it('does NOT set the form subject field if this is NOT the first attachment to be added', async () => {
-    const result = await runAction(updateMessageModalAttachmentsAction, {
-      modules: { presenter },
-      props: {
-        documentId: '123',
-      },
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}], // already contains one attachment
-            subject: 'Testing',
-          },
-        },
-      },
-    });
-
-    expect(result.state.modal.form.subject).toEqual('Testing');
   });
 
   it('calls getDescriptionDisplay and returns a generated document title', async () => {
@@ -183,6 +261,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     const { state } = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
+        action: 'add',
         documentId: '123',
       },
       state: {
@@ -190,6 +269,7 @@ describe('updateMessageModalAttachmentsAction', () => {
         modal: {
           form: {
             attachments: [{}], // already contains one attachment
+            draftAttachments: [],
             subject: 'Testing',
           },
         },
@@ -202,7 +282,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(
       applicationContext.getUtilities().getDescriptionDisplay.mock.calls[0][0],
     ).toMatchObject({ docketEntryId: '123', documentType: 'Petition' });
-    expect(state.modal.form.attachments[1].documentTitle).toEqual(
+    expect(state.modal.form.draftAttachments[0].documentTitle).toEqual(
       mockDocumentTitle,
     );
   });

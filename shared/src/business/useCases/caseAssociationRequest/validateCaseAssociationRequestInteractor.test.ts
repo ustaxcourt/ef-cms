@@ -6,7 +6,7 @@ describe('validateCaseAssociationRequest', () => {
       caseAssociationRequest: { filers: [] },
     });
 
-    expect(Object.keys(errors)).toEqual([
+    expect(Object.keys(errors!)).toEqual([
       'certificateOfService',
       'documentTitleTemplate',
       'documentType',

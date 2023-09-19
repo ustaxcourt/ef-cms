@@ -1,4 +1,9 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  FORMATS,
+  calculateISODate,
+} from '../../../../../shared/src/business/utilities/DateHandler';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateJudgeActivityReportSearchAction } from './validateJudgeActivityReportSearchAction';
@@ -18,14 +23,26 @@ describe('validateJudgeActivityReportSearchAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should return the success path when the search critera are all valid', () => {
-    runAction(validateJudgeActivityReportSearchAction, {
+  const futureDateIso = calculateISODate({
+    howMuch: +1,
+    units: 'days',
+  });
+
+  const futureDate = applicationContext
+    .getUtilities()
+    .formatDateString(futureDateIso, FORMATS.MMDDYY);
+
+  it('should return the success path when the search critera are all valid', async () => {
+    await runAction(validateJudgeActivityReportSearchAction as any, {
       modules: { presenter },
       state: {
-        form: {
-          endDate: '02/02/2022',
-          judgeName: 'Colvin',
-          startDate: '02/01/2022',
+        judgeActivityReport: {
+          filters: {
+            endDate: '02/02/2022',
+            judgeName: judgeUser.name,
+            judges: [judgeUser.name],
+            startDate: '02/01/2022',
+          },
         },
       },
     });
@@ -33,20 +50,17 @@ describe('validateJudgeActivityReportSearchAction', () => {
     expect(mockSuccessPath).toHaveBeenCalled();
   });
 
-  it('should return the error path when the search critera are NOT valid', () => {
-    applicationContext
-      .getUseCases()
-      .validateJudgeActivityReportSearchInteractor.mockReturnValue({
-        endDate: 'End date is required.',
-      });
-
-    runAction(validateJudgeActivityReportSearchAction, {
+  it('should return the error path when the search critera are NOT valid', async () => {
+    await runAction(validateJudgeActivityReportSearchAction, {
       modules: { presenter },
       state: {
-        form: {
-          endDate: undefined,
-          judgeName: 'Colvin',
-          startDate: '02/01/2022',
+        judgeActivityReport: {
+          filters: {
+            endDate: futureDate,
+            judgeName: judgeUser.name,
+            judges: [judgeUser.name],
+            startDate: '02/01/2022',
+          },
         },
       },
     });

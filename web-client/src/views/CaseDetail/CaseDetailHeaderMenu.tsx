@@ -27,7 +27,7 @@ export const CaseDetailHeaderMenu = connect(
     addToTrialSessionModalHelper: state.addToTrialSessionModalHelper,
     caseDetail: state.caseDetail,
     caseDetailHeaderHelper: state.caseDetailHeaderHelper,
-    isCaseDetailMenuOpen: state.menuHelper.isCaseDetailMenuOpen,
+    menuHelper: state.menuHelper,
     navigateToPathSequence: sequences.navigateToPathSequence,
     openAddEditCaseNoteModalSequence:
       sequences.openAddEditCaseNoteModalSequence,
@@ -49,7 +49,7 @@ export const CaseDetailHeaderMenu = connect(
     addToTrialSessionModalHelper,
     caseDetail,
     caseDetailHeaderHelper,
-    isCaseDetailMenuOpen,
+    menuHelper,
     navigateToPathSequence,
     openAddEditCaseNoteModalSequence,
     openCaseInNewTabSequence,
@@ -254,11 +254,11 @@ export const CaseDetailHeaderMenu = connect(
           <li
             className={classNames(
               'usa-nav__primary-item',
-              isCaseDetailMenuOpen && 'usa-nav__submenu--open',
+              menuHelper.isCaseDetailMenuOpen && 'usa-nav__submenu--open',
             )}
           >
             <button
-              aria-expanded={isCaseDetailMenuOpen}
+              aria-expanded={menuHelper.isCaseDetailMenuOpen}
               className="usa-accordion__button usa-nav__link hidden-underline case-detail-menu__button text-no-wrap"
               id="case-detail-menu-button"
               onClick={() => {
@@ -267,11 +267,13 @@ export const CaseDetailHeaderMenu = connect(
             >
               Create{' '}
               <FontAwesomeIcon
-                icon={isCaseDetailMenuOpen ? 'caret-up' : 'caret-down'}
+                icon={
+                  menuHelper.isCaseDetailMenuOpen ? 'caret-up' : 'caret-down'
+                }
               />
             </button>
 
-            {isCaseDetailMenuOpen && caseMenu()}
+            {menuHelper.isCaseDetailMenuOpen && caseMenu()}
           </li>
         </ul>
         {showModal === 'CreateCaseDeadlineModalDialog' && (

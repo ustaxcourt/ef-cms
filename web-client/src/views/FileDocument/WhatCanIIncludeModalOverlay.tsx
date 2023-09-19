@@ -99,7 +99,7 @@ export const WhatCanIIncludeModalOverlay = connect(
                 <h1
                   className="margin-bottom-205"
                   id="what-can-i-include-header"
-                  tabIndex="-1"
+                  tabIndex={-1}
                 >
                   What can I include with my document?
                 </h1>

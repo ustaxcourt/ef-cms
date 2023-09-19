@@ -7,13 +7,17 @@ import {
 import { checkEnvVar, getUserPoolId } from '../util';
 import joi from 'joi';
 
-const { EFCMS_DOMAIN, ENV } = process.env;
+const { DEPLOYING_COLOR, EFCMS_DOMAIN, ENV } = process.env;
 
 checkEnvVar(
   EFCMS_DOMAIN,
   'Please have EFCMS_DOMAIN set up in your local environment',
 );
 checkEnvVar(ENV, 'Please have ENV set up in your local environment');
+checkEnvVar(
+  DEPLOYING_COLOR,
+  'Please have DEPLOYING_COLOR set up in your local environment',
+);
 
 const usage = error => {
   if (error) {
@@ -78,11 +82,11 @@ const checkParams = params => {
           'reportersOffice',
           'ashfordsChambers',
           'buchsChambers',
-          'choisChambers',
           'cohensChambers',
           'colvinsChambers',
           'copelandsChambers',
           'foleysChambers',
+          'friedsChambers',
           'galesChambers',
           'goekesChambers',
           'greavesChambers',
@@ -99,6 +103,7 @@ const checkParams = params => {
           'negasChambers',
           'parisChambers',
           'pughsChambers',
+          'siegelsChambers',
           'thorntonsChambers',
           'torosChambers',
           'urdasChambers',
@@ -149,7 +154,10 @@ const sendWelcomeEmail = async email => {
   };
   checkParams(params);
   await activateAdminAccount();
-  await createDawsonUser({ user: params });
+  await createDawsonUser({
+    deployingColorUrl: `https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/users`,
+    user: params,
+  }); // Need to pass in the api url
   await deactivateAdminAccount();
   await sendWelcomeEmail(params.email);
 })();

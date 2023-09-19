@@ -1,5 +1,8 @@
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -83,7 +86,7 @@ export const addConsolidatedCase = async (
     return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
   });
 
-  const updateCasePromises: Promise<any>[] = [];
+  const updateCasePromises: Promise<RawCase>[] = [];
   casesToUpdate.forEach(caseInCasesToUpdate => {
     const caseEntity = new Case(caseInCasesToUpdate, { applicationContext });
     caseEntity.setLeadCase(newLeadCase.docketNumber);

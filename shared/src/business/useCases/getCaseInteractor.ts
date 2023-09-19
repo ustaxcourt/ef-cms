@@ -7,7 +7,7 @@ import {
   isAssociatedUser,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { NotFoundError } from '../../errors/errors';
+import { NotFoundError } from '../../../../web-api/src/errors/errors';
 import { PublicCase } from '../entities/cases/PublicCase';
 import {
   ROLE_PERMISSIONS,
@@ -86,7 +86,7 @@ const getCaseForExternalUser = ({
  * @param {Object} caseRecord the original caseRecord
  * @returns {Object} decorated caseRecord
  */
-export const decorateForCaseStatus = (caseRecord: Case) => {
+export const decorateForCaseStatus = (caseRecord: RawCase) => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);

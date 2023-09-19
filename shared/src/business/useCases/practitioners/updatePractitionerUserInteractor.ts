@@ -1,4 +1,7 @@
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import { Practitioner } from '../../entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
@@ -178,15 +181,15 @@ export const updatePractitionerUser = async (
       user: oldUser,
       websocketMessagePrefix: 'admin',
     });
+  } else {
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'admin_contact_full_update_complete',
+      },
+      userId: requestUser.userId,
+    });
   }
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'admin_contact_full_update_complete',
-    },
-    userId: requestUser.userId,
-  });
 };
 
 export const handleLockError = async (

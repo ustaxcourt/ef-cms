@@ -33,7 +33,7 @@ export const StartCaseStep1 = connect(
           <h2
             className="focusable margin-bottom-2"
             id="start-case-header"
-            tabIndex="-1"
+            tabIndex={-1}
           >
             1. Statement of Taxpayer Identification Number (STIN)
           </h2>

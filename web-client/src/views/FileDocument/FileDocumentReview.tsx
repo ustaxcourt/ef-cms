@@ -197,7 +197,7 @@ export const FileDocumentReview = connect(
           <h1
             className="heading-1 margin-bottom-0"
             id="file-a-document-header"
-            tabIndex="-1"
+            tabIndex={-1}
           >
             Review Your Filing
           </h1>

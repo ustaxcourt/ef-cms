@@ -1,4 +1,5 @@
 import {
+  CAV_AND_SUBMITTED_CASE_STATUS,
   CURRENT_YEAR,
   DOCKET_NUMBER_MATCHER,
   MAX_FILE_SIZE_BYTES,
@@ -30,6 +31,12 @@ export const JoiValidationConstants = Object.freeze({
   DOCUMENT_TITLE: STRING.max(3000),
   EMAIL: STRING.email({ tlds: false }).max(100),
   ISO_DATE: joi.date().iso().format([DATE_FORMATS.ISO]),
+  JUDGES_STATUSES: joi.array().items(
+    joi
+      .string()
+      .required()
+      .valid(...CAV_AND_SUBMITTED_CASE_STATUS),
+  ),
   MAX_FILE_SIZE_BYTES: joi.number().integer().min(1).max(MAX_FILE_SIZE_BYTES),
   STRING,
   TWENTYFOUR_HOUR_MINUTES: STRING.regex(

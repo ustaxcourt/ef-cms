@@ -5,13 +5,12 @@ import {
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src/presenter/computeds/caseDetailSubnavHelper';
-import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
-
 import { fakeFile, loginAs, setupTest } from './helpers';
+import { faker } from '@faker-js/faker';
 import { petitionsClerkServesPaperCaseToIRS } from './petitionsClerkServesPaperCaseToIRS';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
-const { faker } = require('@faker-js/faker');
 
 describe('Petitions Clerk Serves Paper Petition With System Generated Documents', () => {
   const cerebralTest = setupTest();
