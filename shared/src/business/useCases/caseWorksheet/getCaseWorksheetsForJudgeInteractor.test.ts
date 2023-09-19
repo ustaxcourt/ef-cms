@@ -43,9 +43,8 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
       .getPersistenceGateway()
       .getCaseWorksheets.mockReturnValue(TEST_RAW_WORKSHEETS);
 
-    const result = await getCaseWorksheetsForJudgeInteractor(
-      applicationContext,
-    );
+    const result =
+      await getCaseWorksheetsForJudgeInteractor(applicationContext);
 
     const EXPECTED_WORKSHEETS = [TEST_WORKSHEET];
     expect(result).toEqual(EXPECTED_WORKSHEETS);
