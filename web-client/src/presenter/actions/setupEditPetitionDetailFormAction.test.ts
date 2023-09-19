@@ -9,7 +9,7 @@ describe('setupEditPetitionDetailFormAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('sets the payment waived date on the form as month, day, year if payment status is waived', async () => {
+  it('sets the payment waived date on the form if payment status is waived', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -28,16 +28,14 @@ describe('setupEditPetitionDetailFormAction', () => {
 
     expect(result.state.form).toEqual({
       caseType: 'some case type',
-      paymentDateWaivedDay: '01',
-      paymentDateWaivedMonth: '03',
-      paymentDateWaivedYear: '2019',
       petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+      petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
       preferredTrialCity: 'Fresno, California',
       procedureType: 'Small',
     });
   });
 
-  it('sets the payment paid date on the form as month, day, year if payment status is paid', async () => {
+  it('sets the payment paid date on the form if payment status is paid', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -52,9 +50,7 @@ describe('setupEditPetitionDetailFormAction', () => {
     });
 
     expect(result.state.form).toEqual({
-      paymentDateDay: '01',
-      paymentDateMonth: '03',
-      paymentDateYear: '2019',
+      petitionPaymentDate: '2019-03-01T21:40:46.415Z',
       petitionPaymentStatus: PAYMENT_STATUS.PAID,
     });
   });
@@ -77,7 +73,7 @@ describe('setupEditPetitionDetailFormAction', () => {
     });
   });
 
-  it('sets the IRS notice date on the form as month, day, year if it is present', async () => {
+  it('sets the IRS notice date on the form if it is present', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -90,11 +86,7 @@ describe('setupEditPetitionDetailFormAction', () => {
       },
     });
 
-    expect(result.state.form).toEqual({
-      irsDay: '01',
-      irsMonth: '03',
-      irsYear: '2019',
-    });
+    expect(result.state.form.irsNoticeDate).toEqual('2019-03-01');
   });
 
   it('sets hasVerifiedIrsNotice on the form from caseDetail', async () => {
