@@ -92,6 +92,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
   },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
+  },
   REDACTION_ACKNOWLEDGEMENT_ENABLED: {
     key: 'redaction-acknowledgement-enabled',
   },
@@ -120,6 +123,17 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
 };
+
+export const STATUS_OF_MATTER_OPTIONS = [
+  'Awaiting Consideration',
+  'Awaiting Briefs',
+  'Drafting',
+  'Reviewing Draft',
+  'Submitted to Chief Judge',
+  'Revising Draft',
+  'Submitted to Reporter',
+  'Stayed',
+];
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -447,9 +461,18 @@ export const SERIATIM_DOCUMENT_EVENT_CODES = [
   }),
 ];
 
+export const MODIFIED_BRIEF_DOCUMENT_EVENT_CODES = [
+  'AMAT',
+  'ADMT',
+  'REDC',
+  'SPML',
+  'SUPM',
+];
+
 export const BRIEF_EVENTCODES = [
   ...SIMULTANEOUS_DOCUMENT_EVENT_CODES,
   ...SERIATIM_DOCUMENT_EVENT_CODES,
+  ...MODIFIED_BRIEF_DOCUMENT_EVENT_CODES,
 ];
 
 export const AMICUS_BRIEF_EVENT_CODE = 'AMBR';
@@ -1471,6 +1494,7 @@ export const ALL_EVENT_CODES = flatten([
 ])
   .map(item => item.eventCode)
   .concat(COURT_ISSUED_EVENT_CODES.map(item => item.eventCode))
+  .concat(LEGACY_DOCUMENT_TYPES.map(item => item.eventCode))
   .sort();
 
 export const ALL_DOCUMENT_TYPES_MAP = (() => {
@@ -1494,6 +1518,7 @@ export const ALL_DOCUMENT_TYPES_MAP = (() => {
     ...signedTypes,
     ...systemGeneratedTypes,
     ...minuteEntryTypes,
+    ...LEGACY_DOCUMENT_TYPES,
   ];
   return documentTypes;
 })();

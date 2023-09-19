@@ -101,7 +101,7 @@ export class Case extends JoiValidationEntity {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
   public irsNoticeDate?: string;
@@ -383,7 +383,6 @@ export class Case extends JoiValidationEntity {
     this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
     this.orderDesignatingPlaceOfTrial =
       rawCase.orderDesignatingPlaceOfTrial || false;
@@ -980,7 +979,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} caseCaption the original case caption
    * @returns {string} caseTitle the case caption with the postfix removed
    */
-  static getCaseTitle(caseCaption) {
+  static getCaseTitle(caseCaption): string {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
   }
 
@@ -1694,7 +1693,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;
@@ -1707,7 +1706,7 @@ export class Case extends JoiValidationEntity {
         );
 
         const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
-          currentDate,
+          currentDate!,
           docketEntry.createdAt,
         );
 

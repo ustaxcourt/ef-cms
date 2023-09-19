@@ -15,7 +15,7 @@ export type DocketEntryMapping = {
   irsPractitioners: { userId: string }[];
   isFileAttached: boolean;
   isLegacyServed: boolean;
-  isSealed: boolean;
+  isSealed: boolean | undefined;
   isStricken: boolean;
   judge: string;
   numberOfPages: number;
@@ -28,5 +28,8 @@ export type DocketEntryMapping = {
   servedAt: string;
   servedPartiesCode: string;
   signedJudgeName: string;
+  isCaseSealed: boolean;
+  isDocketEntrySealed: boolean;
   status: string;
+  _score: number;
 };

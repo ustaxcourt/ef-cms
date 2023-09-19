@@ -330,10 +330,12 @@ const createTestApplicationContext = () => {
   });
 
   const mockGetHttpClientReturnValue = {
+    delete: jest.fn(),
     get: () => ({
       data: 'url',
     }),
     post: jest.fn(),
+    put: jest.fn(),
   };
 
   const mockGetUseCases = appContextProxy({
