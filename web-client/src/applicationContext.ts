@@ -102,7 +102,6 @@ import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/dele
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
 import { deleteDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/deleteDeficiencyStatisticProxy';
 import { deletePractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/deletePractitionerDocumentProxy';
-import { deletePrimaryIssueInteractor } from '@shared/proxies/caseWorksheet/deletePrimaryIssueProxy';
 import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/deleteTrialSessionProxy';
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
@@ -155,8 +154,8 @@ import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsP
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
 import { getCaseWorksheetsForJudgeInteractor } from '@shared/proxies/caseWorksheet/getCaseWorksheetsForJudgeProxy';
-import { getCasesByStatusAndByJudgeInteractor } from '@shared/proxies/reports/getCasesByStatusAndByJudgeProxy';
-import { getCasesClosedByJudgeInteractor } from '@shared/proxies/reports/getCasesClosedByJudgeProxy';
+import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesByStatusAndByJudgeProxy';
+import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import {
   getChambersSections,
@@ -413,7 +412,6 @@ const allUseCases = {
   deleteCounselFromCaseInteractor,
   deleteDeficiencyStatisticInteractor,
   deletePractitionerDocumentInteractor,
-  deletePrimaryIssueInteractor,
   deleteTrialSessionInteractor,
   deleteUserCaseNoteInteractor,
   dismissNOTTReminderForTrialInteractor,

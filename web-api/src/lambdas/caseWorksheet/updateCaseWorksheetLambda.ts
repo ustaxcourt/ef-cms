@@ -1,4 +1,4 @@
-import { genericHandler } from '../genericHandler';
+import { genericHandler } from '../../genericHandler';
 
 export const updateCaseWorksheetLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
