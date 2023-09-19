@@ -1,4 +1,4 @@
-module.exports.addPropertyHelper = ({
+export const addPropertyHelper = ({
   errorToMessageMap,
   itemErrorMessage,
   itemName,
@@ -11,7 +11,7 @@ module.exports.addPropertyHelper = ({
   }
 };
 
-module.exports.makeRequiredHelper = ({
+export const makeRequiredHelper = ({
   itemName,
   schema,
   schemaOptionalItems,

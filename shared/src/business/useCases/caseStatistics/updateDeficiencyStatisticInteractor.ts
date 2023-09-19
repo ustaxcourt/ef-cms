@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { Statistic } from '../../entities/Statistic';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 /**
  * updateDeficiencyStatisticInteractor

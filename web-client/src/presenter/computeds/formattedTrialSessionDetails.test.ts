@@ -5,7 +5,7 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { chambersUser, judgeUser } from '../../../../shared/src/test/mockUsers';
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from './formattedTrialSessionDetails';
 import { omit } from 'lodash';

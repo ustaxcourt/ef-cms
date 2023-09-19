@@ -28,7 +28,15 @@ export const head = async ({ applicationContext, endpoint, params }) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response body data
  */
-const internalGet = async ({ applicationContext, endpoint, params }) => {
+const internalGet = async ({
+  applicationContext,
+  endpoint,
+  params,
+}: {
+  applicationContext: IApplicationContext;
+  endpoint: string;
+  params?: any;
+}) => {
   const response = await getResponse({
     applicationContext,
     endpoint,

@@ -13,12 +13,12 @@ import { User } from './User';
 import joi from 'joi';
 
 export class Practitioner extends User {
-  public additionalPhone: string;
+  public additionalPhone?: string;
   public admissionsDate: string;
   public admissionsStatus: string;
   public barNumber: string;
   public birthYear: string;
-  public confirmEmail: string;
+  public confirmEmail?: string;
   public employer: string;
   public firmName: string;
   public firstName: string;

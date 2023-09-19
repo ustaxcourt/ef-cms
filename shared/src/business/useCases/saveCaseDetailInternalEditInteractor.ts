@@ -7,7 +7,7 @@ import {
 import {
   UnauthorizedError,
   UnprocessableEntityError,
-} from '../../errors/errors';
+} from '../../../../web-api/src/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
 

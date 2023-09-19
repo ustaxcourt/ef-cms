@@ -1,4 +1,4 @@
-import { GetCaseInventoryReportRequest } from '../../business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+import { GetCaseInventoryReportRequest } from '../../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { get } from '../requests';
 
 /**

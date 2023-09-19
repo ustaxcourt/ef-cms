@@ -1,5 +1,5 @@
 import { addConsolidatedProperties } from './addConsolidatedProperties';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 describe('addConsolidatedProperties', () => {
   const mockLeadDocketNumber = '101-20';

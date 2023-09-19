@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 export const userNavigatesToCreateCaseConfirmation = cerebralTest => {
   it('user sees the case confirmation pdf', async () => {

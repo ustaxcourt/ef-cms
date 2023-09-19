@@ -99,7 +99,7 @@ resource "aws_lambda_permission" "apigw_public_lambda" {
 }
 
 resource "aws_api_gateway_deployment" "api_public_deployment" {
-  rest_api_id       = aws_api_gateway_rest_api.gateway_for_api_public.id
+  rest_api_id = aws_api_gateway_rest_api.gateway_for_api_public.id
 
   triggers = {
     redeployment = sha1(jsonencode([
@@ -124,7 +124,7 @@ resource "aws_api_gateway_stage" "api_public_stage" {
     destination_arn = aws_cloudwatch_log_group.api_public_stage_logs.arn
 
     format = jsonencode({
-      level = "info"
+      level   = "info"
       message = "API Gateway Access Log"
 
       environment = {
@@ -134,35 +134,35 @@ resource "aws_api_gateway_stage" "api_public_stage" {
 
       requestId = {
         apiGateway = "$context.requestId"
-        lambda = "$context.integration.requestId"
+        lambda     = "$context.integration.requestId"
         authorizer = "$context.authorizer.requestId"
       }
 
       request = {
         headers = {
           x-forwarded-for = "$context.identity.sourceIp"
-          user-agent = "$context.identity.userAgent"
+          user-agent      = "$context.identity.userAgent"
         }
         method = "$context.httpMethod"
-        url = "$context.path"
+        url    = "$context.path"
       }
 
       authorizer = {
-        error = "$context.authorizer.error"
+        error          = "$context.authorizer.error"
         responseTimeMs = "$context.authorizer.integrationLatency"
-        statusCode = "$context.authorizer.status"
+        statusCode     = "$context.authorizer.status"
       }
 
       response = {
         responseTimeMs = "$context.responseLatency"
         responseLength = "$context.responseLength"
-        statusCode = "$context.status"
+        statusCode     = "$context.status"
       }
 
       metadata = {
-        apiId = "$context.apiId"
+        apiId        = "$context.apiId"
         resourcePath = "$context.resourcePath"
-        resourceId = "$context.resourceId"
+        resourceId   = "$context.resourceId"
       }
     })
   }
@@ -218,24 +218,6 @@ resource "aws_api_gateway_domain_name" "api_public_custom" {
   }
 }
 
-
-resource "aws_route53_record" "api_public_route53_regional_record" {
-  name           = aws_api_gateway_domain_name.api_public_custom.domain_name
-  type           = "A"
-  zone_id        = var.zone_id
-  set_identifier = "api_public_${var.region}_${var.current_color}"
-
-  alias {
-    name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
-    zone_id                = aws_api_gateway_domain_name.api_public_custom.regional_zone_id
-    evaluate_target_health = true
-  }
-
-  latency_routing_policy {
-    region = var.region
-  }
-}
-
 resource "aws_api_gateway_base_path_mapping" "api_public_mapping" {
   api_id      = aws_api_gateway_rest_api.gateway_for_api_public.id
   stage_name  = aws_api_gateway_stage.api_public_stage.stage_name
@@ -248,8 +230,26 @@ resource "aws_api_gateway_method_settings" "api_public_default" {
   method_path = "*/*"
 
   settings {
-    throttling_burst_limit = 5000 // concurrent request limit
-    throttling_rate_limit = 10000 // per second
+    throttling_burst_limit = 5000  // concurrent request limit
+    throttling_rate_limit  = 10000 // per second
+  }
+}
+
+resource "aws_route53_record" "api_public_route53_regional_record" {
+  name            = aws_api_gateway_domain_name.api_public_custom.domain_name
+  type            = "A"
+  zone_id         = var.zone_id
+  set_identifier  = "api_public_${var.region}_${var.current_color}"
+  health_check_id = var.health_check_id
+
+  alias {
+    name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
+    zone_id                = aws_api_gateway_domain_name.api_public_custom.regional_zone_id
+    evaluate_target_health = true
+  }
+
+  latency_routing_policy {
+    region = var.region
   }
 }
 

@@ -1,6 +1,4 @@
-const {
-  CASE_STATUS_TYPES,
-} = require('../../../shared/src/business/entities/EntityConstants');
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const docketClerkSetsCaseReadyForTrial = cerebralTest => {
   return it('Docket clerk sets a case ready for trial', async () => {
