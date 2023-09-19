@@ -1,10 +1,9 @@
 import { MOCK_CASE } from '../../../test/mockCase';
-import { MOCK_LOCK } from '../../../test/mockLock';
 import {
   NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../errors/errors';
+} from '../../../../../web-api/src/errors/errors';
 import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';

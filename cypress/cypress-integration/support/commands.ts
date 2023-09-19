@@ -58,7 +58,7 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
   /**
    *
    */
-  function waitAndSee(iteration) {
+  function waitAndSee(iteration: number) {
     didDOMChange = false;
 
     const thenTimeout = 8000;
@@ -88,3 +88,22 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
 
   waitAndSee(0);
 });
+
+export {};
+
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login: (
+        username: string,
+        path?: string,
+      ) => Chainable<JQuery<HTMLElement>>;
+      waitUntilSettled: (maxTries?: number) => void;
+      showsErrorMessage: (shows?: boolean) => void;
+      showsSuccessMessage: (shows?: boolean) => void;
+      showsSpinner: (shows?: boolean) => void;
+      waitAndSee: (iteration: number) => void;
+      goToRoute: (args: any) => void;
+    }
+  }
+}

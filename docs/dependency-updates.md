@@ -6,7 +6,7 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 
 > After changes are made to any dependencies, deploy to an experimental environment to verify that all tests pass!
 
-## Library Update Steps
+## Library Update Steps 
 
 1. `npm update --save`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
 

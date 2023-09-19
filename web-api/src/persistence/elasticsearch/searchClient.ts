@@ -1,3 +1,4 @@
+import { Search } from '@opensearch-project/opensearch/api/requestParams';
 import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
@@ -5,12 +6,27 @@ import { get } from 'lodash';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
+export type SeachClientResultsType = {
+  aggregations?: {
+    [x: string]: {
+      buckets: {
+        doc_count: number;
+        key: string;
+      }[];
+    };
+  };
+  total?: number;
+  results: any;
+};
 
-export const formatResults = body => {
-  const total = get(body, 'hits.total.value', 0);
+export type SearClientCountResultsType = number;
+
+export const formatResults = <T>(body: Record<string, any>) => {
+  const total: number = get(body, 'hits.total.value', 0);
+  const aggregations = get(body, 'aggregations');
 
   let caseMap = {};
-  const results = get(body, 'hits.hits', []).map(hit => {
+  const results: T[] = get(body, 'hits.hits', []).map(hit => {
     const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
       hit['_source'],
     );
@@ -41,22 +57,46 @@ export const formatResults = body => {
   });
 
   return {
+    aggregations,
     results,
     total,
   };
 };
 
-export const search = async ({ applicationContext, searchParameters }) => {
-  let body;
+export const count = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: Search;
+}): Promise<SearClientCountResultsType> => {
   try {
-    ({ body } = await applicationContext
+    const response = await applicationContext
       .getSearchClient()
-      .search(searchParameters));
+      .count(searchParameters);
+    return get(response.body, 'count', 0);
   } catch (searchError) {
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');
   }
-  return formatResults(body);
+};
+
+export const search = async <T>({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: Search;
+}): Promise<SeachClientResultsType> => {
+  try {
+    const response = await applicationContext
+      .getSearchClient()
+      .search(searchParameters);
+    return formatResults<T>(response.body);
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
+  }
 };
 
 export const searchAll = async ({ applicationContext, searchParameters }) => {

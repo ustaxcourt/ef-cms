@@ -3,7 +3,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCreateMessageModalDialogModalStateAction } from './setCreateMessageModalDialogModalStateAction';
 
 describe('setCreateMessageModalDialogModalStateAction', () => {
-  it('should set the modal docketNumber state', async () => {
+  it('should define the validationErrors, attachments, and draftAttachments in modal state', async () => {
     const result = await runAction(
       setCreateMessageModalDialogModalStateAction,
       {
@@ -18,6 +18,7 @@ describe('setCreateMessageModalDialogModalStateAction', () => {
     expect(result.state.modal).toEqual({
       form: {
         attachments: [],
+        draftAttachments: [],
       },
       validationErrors: {},
     });

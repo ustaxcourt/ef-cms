@@ -37,6 +37,7 @@ export const CaseSearchBox = connect(
                     {caseSearchBoxHelper.showAdvancedSearch && (
                       <a
                         className="usa-link float-right"
+                        data-test="advanced-search-link"
                         href="/search"
                         id="advanced-search-button"
                       >
