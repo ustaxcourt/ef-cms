@@ -9,7 +9,7 @@ export const validateCourtIssuedDocketEntrySequence = [
   {
     ignore: [],
     validate: [
-      getComputedFormDateFactoryAction(null),
+      getComputedFormDateFactoryAction(null), // TODO: Remove this?
       validateCourtIssuedDocketEntryAction,
       {
         error: [setValidationErrorsAction],
