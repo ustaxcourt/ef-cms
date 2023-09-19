@@ -1,16 +1,23 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const validatePrimaryIssueAction = ({
+export const validateCaseWorksheetAction = ({
   applicationContext,
   get,
   path,
 }: ActionProps) => {
-  const { docketNumber, primaryIssue } = get(state.modal);
+  const { docketNumber, finalBriefDueDate, primaryIssue, statusOfMatter } = get(
+    state.form,
+  );
 
   const errors = applicationContext
     .getUseCases()
     .validateCaseWorksheetInteractor({
-      caseWorksheet: { docketNumber, primaryIssue },
+      caseWorksheet: {
+        docketNumber,
+        finalBriefDueDate,
+        primaryIssue,
+        statusOfMatter,
+      },
     });
 
   if (!errors) {

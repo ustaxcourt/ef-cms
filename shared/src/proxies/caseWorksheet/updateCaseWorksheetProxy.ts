@@ -1,18 +1,17 @@
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { post } from '../requests';
 
 export const updateCaseWorksheetInteractor = (
   applicationContext,
   {
-    docketNumber,
-    updatedProps,
+    worksheet,
   }: {
-    docketNumber: string;
-    updatedProps: Record<string, string | undefined>;
+    worksheet: RawCaseWorksheet;
   },
 ) => {
   return post({
     applicationContext,
-    body: { docketNumber, updatedProps },
-    endpoint: `/cases/${docketNumber}/case-worksheet`,
+    body: { worksheet },
+    endpoint: `/cases/${worksheet.docketNumber}/case-worksheet`,
   });
 };

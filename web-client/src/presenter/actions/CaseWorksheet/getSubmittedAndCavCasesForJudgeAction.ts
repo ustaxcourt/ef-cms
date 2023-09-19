@@ -8,7 +8,7 @@ export const getSubmittedAndCavCasesForJudgeAction = async ({
 
   const { name } = get(state.judgeUser);
 
-  const { cases, consolidatedCasesGroupCountMap } = await applicationContext
+  const { cases } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judges: [name],
@@ -20,6 +20,5 @@ export const getSubmittedAndCavCasesForJudgeAction = async ({
 
   return {
     cases,
-    consolidatedCasesGroupCountMap,
   };
 };
