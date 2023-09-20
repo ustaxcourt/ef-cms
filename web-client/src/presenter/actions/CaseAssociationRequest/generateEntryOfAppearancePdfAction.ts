@@ -4,11 +4,10 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const generateEntryOfAppearancePdfAction = async ({
   applicationContext,
   get,
-  props,
 }: ActionProps) => {
   const { GENERATION_TYPES } = applicationContext.getConstants();
 
-  const { petitioners } = props;
+  const { petitioners } = get(state.caseDetail);
 
   const { generationType } = get(state.form);
 
