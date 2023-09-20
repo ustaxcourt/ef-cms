@@ -10,6 +10,28 @@ export const EntryOfAppearance = ({
   docketNumberWithSuffix,
   filers,
   practitionerInformation,
+}: {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  date: string;
+  docketNumberWithSuffix: string;
+  filers: string[];
+  practitionerInformation: {
+    contact: {
+      address1: string;
+      address2?: string;
+      address3?: string;
+      city: string;
+      country: string;
+      countryType: string;
+      phone: string;
+      postalCode: string;
+      state: string;
+    };
+    barNumber: string;
+    email: string;
+    name: string;
+  };
 }) => {
   const filersString = joinWithCommasAnd(filers);
   return (
