@@ -1,6 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
@@ -19,7 +18,6 @@ export const saveCourtIssuedDocketEntrySequence = [
     yes: [
       clearAlertsAction,
       startShowValidationAction,
-      getComputedFormDateFactoryAction(null),
       validateCourtIssuedDocketEntryAction,
       {
         error: [
