@@ -1,6 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
@@ -28,7 +27,6 @@ export const openConfirmPaperServiceModalSequence = [
   startShowValidationAction,
   getComputedFormDateFactoryAction('serviceDate'),
   setComputeFormDateFactoryAction('serviceDate'),
-  computeCertificateOfServiceFormDateAction,
   isDocketEntryMultiDocketableAction,
   {
     no: [],

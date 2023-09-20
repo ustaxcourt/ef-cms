@@ -1,5 +1,4 @@
 import { chooseMetaTypePathAction } from '../actions/EditDocketRecordEntry/chooseMetaTypePathAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitlePreviewAction } from '../actions/EditDocketRecordEntry/generateTitlePreviewAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
@@ -15,7 +14,6 @@ export const updateDocketEntryMetaDocumentFormValueSequence = [
     document: [
       getComputedFormDateFactoryAction('serviceDate'),
       setComputeFormDateFactoryAction('serviceDate'),
-      computeCertificateOfServiceFormDateAction,
       generateTitlePreviewAction,
     ],
     noDocument: [],

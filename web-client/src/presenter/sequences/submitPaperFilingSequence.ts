@@ -1,7 +1,6 @@
 import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { docketEntryFileUploadSequenceDecorator } from '../utilities/docketEntryFileUploadSequenceDecorator';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -36,7 +35,6 @@ export const submitPaperFilingSequence = [
       startShowValidationAction,
       getComputedFormDateFactoryAction('serviceDate'),
       setComputeFormDateFactoryAction('serviceDate'),
-      computeCertificateOfServiceFormDateAction,
       setDocumentIsRequiredAction,
       generateTitleForPaperFilingAction,
       setFilersFromFilersMapAction,
