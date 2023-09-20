@@ -1,3 +1,5 @@
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { TestEntity } from '@shared/business/entities/joiValidationEntity/test/TestEntity';
 import { TestEntityUpdated } from '@shared/business/entities/joiValidationEntity/test/TestEntityUpdated';
 
@@ -88,6 +90,39 @@ describe('Joi Entity', () => {
           expect(errors.propUsingReference).toEqual(
             'LEGACY_CUSTOM propUsingReference must be grater than referencedProp.',
           );
+        });
+      });
+
+      describe('remove unhelpful error messages from contact validations', () => {
+        class TestCaseEntity extends JoiValidationEntity {
+          public contactType: string;
+          getValidationRules() {
+            return {
+              contactType: JoiValidationConstants.STRING.valid(
+                'VALID_1',
+                'VALID_2',
+                'VALID_3',
+              ).required(),
+            };
+          }
+          getErrorToMessageMap() {
+            return {
+              contactType:
+                'contantType does not match any of the allowed types',
+            };
+          }
+
+          constructor(rawTestCase) {
+            super('TestCaseEntity');
+            this.contactType = rawTestCase.contactType;
+          }
+        }
+
+        it('should remove unhelpful error messages that end with "does not match any of the allowed types"', () => {
+          const testCaseEntity = new TestCaseEntity({ contactType: 'INVALID' });
+
+          const errors = testCaseEntity.getFormattedValidationErrors()!;
+          expect(errors).toEqual(null);
         });
       });
     });
