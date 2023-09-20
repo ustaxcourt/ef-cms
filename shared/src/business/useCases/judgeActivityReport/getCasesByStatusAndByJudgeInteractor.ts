@@ -22,19 +22,9 @@ export type CavAndSubmittedCaseResponseType = {
   foundCases: { docketNumber: string }[];
 };
 
-export type CavAndSubmittedFilteredCasesType = {
-  caseStatusHistory: {
-    date: string;
-    changedBy: string;
-    updatedCaseStatus: string;
-  }[];
-  caseCaption: string;
+export type CavAndSubmittedFilteredCasesType = RawCase & {
   daysElapsedSinceLastStatusChange: number;
-  docketNumber: string;
-  leadDocketNumber?: string;
   formattedCaseCount: number;
-  petitioners: TPetitioner[];
-  status: string;
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
