@@ -113,7 +113,7 @@ export const SupportingDocumentInclusionsForm = connect(
           <DateSelector
             defaultValue={data.certificateOfServiceDate}
             errorText={validationData?.certificateOfServiceDate}
-            id={`${type}-${index}-service-date`} // do something?
+            id={`${type}-${index}-service-date`}
             label="Service date"
             onChange={e => {
               formatAndUpdateDateFromDatePickerSequence({
