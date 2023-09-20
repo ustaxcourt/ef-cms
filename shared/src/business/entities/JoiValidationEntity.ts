@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
-import { getFormattedValidationErrors_NEW } from '@shared/business/entities/JoiValidationEntity.new.getFormattedValidationErrors';
+import { getFormattedValidationErrors_NEW } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
