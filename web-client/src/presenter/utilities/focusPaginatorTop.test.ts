@@ -7,7 +7,9 @@ describe('focusPaginatorTop', () => {
 
     const mockRef = {
       current: {
-        offsetTop: 0,
+        getBoundingClientRect: () => {
+          return { top: 0 };
+        },
       },
     };
 
