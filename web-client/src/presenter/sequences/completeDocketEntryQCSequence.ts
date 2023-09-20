@@ -43,8 +43,6 @@ export const completeDocketEntryQCSequence = [
         ],
       },
       computeCertificateOfServiceFormDateAction,
-      getComputedFormDateFactoryAction('dateReceived'),
-      setComputeFormDateFactoryAction('dateReceived'),
       getComputedFormDateFactoryAction('serviceDate'),
       setComputeFormDateFactoryAction('serviceDate'),
       setFilersFromFilersMapAction,
