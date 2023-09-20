@@ -1,5 +1,4 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
@@ -31,7 +30,6 @@ export const openCompleteAndSendMessageModalSequence = [
           setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
         ],
       },
-      computeCertificateOfServiceFormDateAction,
       getComputedFormDateFactoryAction('serviceDate'),
       setComputeFormDateFactoryAction('serviceDate'),
       setFilersFromFilersMapAction,
