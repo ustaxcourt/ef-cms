@@ -14,7 +14,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
 }: ActionProps) => {
   store.set(
     state.form.fileAcrossConsolidatedGroup,
-    !!get(state.allowExternalConsolidatedGroupFiling),
+    get(state.allowExternalConsolidatedGroupFilingHelper),
   );
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
