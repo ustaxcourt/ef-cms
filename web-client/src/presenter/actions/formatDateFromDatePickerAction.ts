@@ -1,11 +1,12 @@
 import { TimeFormats } from '@shared/business/utilities/DateHandler';
 
-export const formatDateFromDatePicker = ({
+export const formatDateFromDatePickerAction = ({
   applicationContext,
   props,
 }: ActionProps<{ key: string; value: string; toFormat: TimeFormats }>):
   | { key: string; value: string }
   | undefined => {
+  console.log('props', props);
   if (props.value) {
     const [month, day, year] = props.value.split('/');
 
