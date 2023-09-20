@@ -7,11 +7,11 @@ terraform {
   }
 
   required_providers {
-    aws = "5.16.1"
+    aws = "5.17.1"
   }
 }
 
-module glue_migration {
+module "glue_migration" {
   source            = "./glue"
   number_of_workers = var.number_of_workers
   source_table      = var.source_table
