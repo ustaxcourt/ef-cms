@@ -62,7 +62,7 @@ export const PrimaryDocumentForm = connect(
               validationSequence="validateExternalDocumentInformationSequence"
             />
           </FormGroup>
-
+          {console.log(validationErrors, '&&&&')}
           <InclusionsForm
             bind="form"
             type="primaryDocument"

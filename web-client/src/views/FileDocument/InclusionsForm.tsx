@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { props } from 'cerebral';
@@ -10,9 +10,12 @@ import classNames from 'classnames';
 
 export const InclusionsForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
     data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     type: props.type,
     updateFileDocumentWizardFormValueSequence:
@@ -23,8 +26,10 @@ export const InclusionsForm = connect(
   },
   function InclusionsForm({
     data,
+    DATE_FORMATS,
     DOCUMENT_RELATIONSHIPS,
     fileDocumentHelper,
+    formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
     type,
     updateFileDocumentWizardFormValueSequence,
@@ -116,36 +121,22 @@ export const InclusionsForm = connect(
             </div>
           </fieldset>
         </div>
+        {console.log(validationData)}
+
         {data.certificateOfService && (
-          <DateInput
-            className={`${type}-service-date`}
+          <DateSelector
+            defaultValue={data.certificateOfServiceDate}
             errorText={validationData?.certificateOfServiceDate}
             id={`${type}-service-date`}
             label="Service date"
-            names={{
-              day: `${
-                type === DOCUMENT_RELATIONSHIPS.PRIMARY
-                  ? 'certificateOfServiceDay'
-                  : `${type}.certificateOfServiceDay`
-              }`,
-              month: `${
-                type === DOCUMENT_RELATIONSHIPS.PRIMARY
-                  ? 'certificateOfServiceMonth'
-                  : `${type}.certificateOfServiceMonth`
-              }`,
-              year: `${
-                type === DOCUMENT_RELATIONSHIPS.PRIMARY
-                  ? 'certificateOfServiceYear'
-                  : `${type}.certificateOfServiceYear`
-              }`,
+            onChange={e => {
+              formatAndUpdateDateFromDatePickerSequence({
+                key: `${type}.certificateOfServiceDate`,
+                toFormat: DATE_FORMATS.ISO,
+                value: e.target.value,
+              });
+              validateExternalDocumentInformationSequence();
             }}
-            values={{
-              day: data.certificateOfServiceDay,
-              month: data.certificateOfServiceMonth,
-              year: data.certificateOfServiceYear,
-            }}
-            onBlur={validateExternalDocumentInformationSequence}
-            onChange={updateFileDocumentWizardFormValueSequence}
           />
         )}
       </>
