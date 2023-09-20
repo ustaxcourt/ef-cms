@@ -5,6 +5,17 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
+export type EntryOfAppearanceProps = {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+  filers: string[];
+  petitioners: {
+    contactId: string;
+    name: string;
+  }[];
+};
+
 export const generateEntryOfAppearancePdfInteractor = async (
   applicationContext: IApplicationContext,
   {
@@ -13,16 +24,7 @@ export const generateEntryOfAppearancePdfInteractor = async (
     docketNumberWithSuffix,
     filers,
     petitioners,
-  }: {
-    caseCaptionExtension: string;
-    caseTitle: string;
-    docketNumberWithSuffix: string;
-    filers: string[];
-    petitioners: {
-      contactId: string;
-      name: string;
-    }[];
-  },
+  }: EntryOfAppearanceProps,
 ) => {
   const user = applicationContext.getCurrentUser();
 
