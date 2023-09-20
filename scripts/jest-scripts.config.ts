@@ -8,10 +8,11 @@ const config: Config = {
   collectCoverageFrom: [
     '**/*.{js,ts}',
     '!circleci/*.ts',
+    '!compareTypescriptErrors.ts',
     '!coverage/**',
     '!data-import/judge/bulkImportJudgeUsers.ts',
     '!elasticsearch/ready-cluster-for-migration.ts',
-    '!compareTypescriptErrors.ts',
+    '!glue/**',
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
     '!set-maintenance-mode-locally.js',
