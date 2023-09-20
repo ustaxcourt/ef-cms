@@ -33,7 +33,6 @@ describe('setDefaultGenerationTypeAction', () => {
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.AUTO);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(false);
-    expect(state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set the generation type to manual and leave consolidated filing state values untouched when the changed event code is NOT EA and the user is NOT an IRS Practitioner', async () => {
@@ -44,7 +43,6 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'SOC',
       },
       state: {
-        allowExternalConsolidatedGroupFiling: false,
         caseDetail: {
           leadDocketNumber: undefined,
         },
@@ -57,7 +55,6 @@ describe('setDefaultGenerationTypeAction', () => {
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(false);
-    expect(state.allowExternalConsolidatedGroupFiling).toEqual(false);
   });
 
   it('should set the generation type to manual and set consolidated filing state values to true when the changed event code is NOT EA and the user is an IRS Practitioner', async () => {
@@ -70,7 +67,6 @@ describe('setDefaultGenerationTypeAction', () => {
         value: 'SOC',
       },
       state: {
-        allowExternalConsolidatedGroupFiling: false,
         caseDetail: {
           leadDocketNumber: '101-20',
         },
@@ -83,7 +79,6 @@ describe('setDefaultGenerationTypeAction', () => {
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(true);
-    expect(state.allowExternalConsolidatedGroupFiling).toEqual(true);
   });
 
   it('should not modify the existing generation type for non eventCode/generationType props', async () => {
@@ -115,7 +110,6 @@ describe('setDefaultGenerationTypeAction', () => {
         value: GENERATION_TYPES.MANUAL,
       },
       state: {
-        allowExternalConsolidatedGroupFiling: false,
         caseDetail: {
           leadDocketNumber: '101-20',
         },
@@ -127,7 +121,6 @@ describe('setDefaultGenerationTypeAction', () => {
     });
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
-    expect(state.allowExternalConsolidatedGroupFiling).toEqual(true);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(true);
   });
 
@@ -139,7 +132,6 @@ describe('setDefaultGenerationTypeAction', () => {
         value: GENERATION_TYPES.MANUAL,
       },
       state: {
-        allowExternalConsolidatedGroupFiling: false,
         caseDetail: {
           leadDocketNumber: undefined,
         },
@@ -151,7 +143,6 @@ describe('setDefaultGenerationTypeAction', () => {
     });
 
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
-    expect(state.allowExternalConsolidatedGroupFiling).toEqual(false);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(false);
   });
 });
