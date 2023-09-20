@@ -37,7 +37,7 @@ export const JudgeActivityReport = connect(
     validationErrors,
   }) {
     const [activePage, setActivePage] = useState(0);
-    const ClosedCases: () => JSX.Element = () => (
+    const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
           <caption id="casesClosed">
@@ -73,7 +73,7 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const TrialSessionsHeld: () => JSX.Element = () => (
+    const trialSessionsHeld: () => JSX.Element = () => (
       <>
         <table aria-describedby="sessionsHeld" className="usa-table ustc-table">
           <caption id="sessionsHeld">
@@ -110,7 +110,7 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const OrdersIssued: () => JSX.Element = () => (
+    const ordersIssued: () => JSX.Element = () => (
       <>
         <table aria-describedby="ordersIssued" className="usa-table ustc-table">
           <caption id="ordersIssued">
@@ -151,7 +151,7 @@ export const JudgeActivityReport = connect(
       </>
     );
 
-    const OpinionsIssued = () => {
+    const opinionsIssued = () => {
       return (
         <>
           <table
@@ -196,7 +196,7 @@ export const JudgeActivityReport = connect(
       );
     };
 
-    const SubmittedCavCasesTable = () => {
+    const submittedCavCasesTable = () => {
       return (
         <>
           {judgeActivityReportHelper.showPaginator && (
@@ -431,27 +431,17 @@ export const JudgeActivityReport = connect(
           ) : judgeActivityReportHelper.showResultsTables ? (
             <>
               <div className="grid-row grid-gap">
-                <div className="grid-col-6">
-                  <ClosedCases />
-                </div>
-                <div className="grid-col-6">
-                  <TrialSessionsHeld />
-                </div>
+                <div className="grid-col-6">{closedCases()}</div>
+                <div className="grid-col-6">{trialSessionsHeld()}</div>
               </div>
 
               <div className="grid-row grid-gap">
-                <div className="grid-col-6">
-                  <OrdersIssued />
-                </div>
-                <div className="grid-col-6">
-                  <OpinionsIssued />
-                </div>
+                <div className="grid-col-6">{ordersIssued()}</div>
+                <div className="grid-col-6">{opinionsIssued()}</div>
               </div>
 
               <div className="grid-row grid-gap">
-                <div className="grid-col-12">
-                  <SubmittedCavCasesTable />
-                </div>
+                <div className="grid-col-12">{submittedCavCasesTable()}</div>
               </div>
             </>
           ) : (
@@ -460,9 +450,7 @@ export const JudgeActivityReport = connect(
                 There is no activity for the selected dates
               </div>
               <div className="grid-row grid-gap">
-                <div className="grid-col-12">
-                  <SubmittedCavCasesTable />
-                </div>
+                <div className="grid-col-12">{submittedCavCasesTable()}</div>
               </div>
             </>
           )}
