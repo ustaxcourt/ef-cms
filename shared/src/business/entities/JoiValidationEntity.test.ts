@@ -77,9 +77,16 @@ describe('Joi Entity', () => {
         propUsingReference: joi
           .number()
           .min(joi.ref('referencedProp'))
-          .required(),
+          .required()
+          .messages({
+            'number.min':
+              'NEW_CUSTOM propUsingReference must be grater than referencedProp.',
+          }),
         referencedProp: joi.number().required(),
-        singleErrorMessage: joi.string().min(2).required(),
+        singleErrorMessage: joi.string().min(2).required().messages({
+          'any.required': 'NEW_CUSTOM singleErrorMessage default message.',
+          'string.min': 'NEW_CUSTOM singleErrorMessage default message.',
+        }),
       };
     }
 
@@ -211,11 +218,57 @@ describe('Joi Entity', () => {
             singleErrorMessage: 'APPROVED',
           });
 
-          const errors = testEntity.getFormattedValidationErrors()!;
+          const errors = testEntity.getFormattedValidationErrors_NEW()!;
 
           expect(Object.keys(errors).length).toEqual(1);
           expect(errors.arrayErrorMessage).toEqual(
             'NEW_CUSTOM arrayErrorMessage is required.',
+          );
+        });
+      });
+
+      describe('singleErrorMessage', () => {
+        it('should return default message when "singleErrorMessage" does not meet min length', () => {
+          const testEntity = new TestEntityUpdated({
+            arrayErrorMessage: 'APPROVED',
+            singleErrorMessage: 'a',
+          });
+
+          const errors = testEntity.getFormattedValidationErrors_NEW()!;
+
+          expect(Object.keys(errors).length).toEqual(1);
+          expect(errors.singleErrorMessage).toEqual(
+            'NEW_CUSTOM singleErrorMessage default message.',
+          );
+        });
+
+        it('should return default message when "singleErrorMessage" is not defined', () => {
+          const testEntity = new TestEntityUpdated({
+            arrayErrorMessage: 'APPROVED',
+          });
+
+          const errors = testEntity.getFormattedValidationErrors_NEW()!;
+
+          expect(Object.keys(errors).length).toEqual(1);
+          expect(errors.singleErrorMessage).toEqual(
+            'NEW_CUSTOM singleErrorMessage default message.',
+          );
+        });
+      });
+
+      describe('references', () => {
+        it('should display correct error message when using joi.ref correctly', () => {
+          const testEntity = new TestEntityUpdated({
+            arrayErrorMessage: 'APPROVED',
+            propUsingReference: 4,
+            singleErrorMessage: 'APPROVED',
+          });
+
+          const errors = testEntity.getFormattedValidationErrors_NEW()!;
+
+          expect(Object.keys(errors).length).toEqual(1);
+          expect(errors.propUsingReference).toEqual(
+            'NEW_CUSTOM propUsingReference must be grater than referencedProp.',
           );
         });
       });
