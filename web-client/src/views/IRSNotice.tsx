@@ -11,9 +11,8 @@ import React from 'react';
 
 export const IRSNotice = connect(
   {
-    CASE_TYPES: state.constants.CASE_TYPES,
-    DATE_FORMATS: state.constants.DATE_FORMATS,
     caseDetailEditHelper: state.caseDetailEditHelper,
+    constants: state.constants,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
@@ -26,9 +25,8 @@ export const IRSNotice = connect(
     validationErrors: state.validationErrors,
   },
   function IRSNotice({
-    CASE_TYPES,
     caseDetailEditHelper,
-    DATE_FORMATS,
+    constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     refreshStatisticsSequence,
@@ -115,7 +113,7 @@ export const IRSNotice = connect(
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'irsNoticeDate',
-              toFormat: DATE_FORMATS.ISO,
+              toFormat: constants.DATE_FORMATS.ISO,
               value: e.target.value,
             });
             validation();
@@ -130,7 +128,7 @@ export const IRSNotice = connect(
 
         <CaseTypeSelect
           allowDefaultOption={true}
-          caseTypes={CASE_TYPES}
+          caseTypes={constants.CASE_TYPES}
           legend="Type of case"
           validation={validationName}
           value={form.caseType}
