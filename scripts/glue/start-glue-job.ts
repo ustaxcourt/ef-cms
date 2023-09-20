@@ -14,11 +14,10 @@ if (!destinationTable) {
   process.exit();
 }
 
-const sourceTable = process.env.SOURCE_TABLE;
+const sourceTable = process.env.SOURCE_TABLE!;
 
 import { startGlueJob } from '../../shared/admin-tools/aws/glueHelper';
 
 (async () => {
-  // @ts-ignore TS2322 - process will have exited during requireEnvVars call if SOURCE_TABLE is not set
   await startGlueJob({ destinationTable, sourceTable });
 })();
