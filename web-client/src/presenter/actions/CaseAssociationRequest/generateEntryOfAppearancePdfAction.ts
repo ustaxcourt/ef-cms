@@ -16,7 +16,7 @@ export const generateEntryOfAppearancePdfAction = async ({
     const caseDetail = get(state.caseDetail);
     const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-    const { docketNumber, docketNumberWithSuffix } = caseDetail;
+    const { docketNumberWithSuffix } = caseDetail;
 
     const { filers } = get(state.form);
 
@@ -25,7 +25,6 @@ export const generateEntryOfAppearancePdfAction = async ({
       .generateEntryOfAppearancePdfInteractor(applicationContext, {
         caseCaptionExtension,
         caseTitle,
-        docketNumber,
         docketNumberWithSuffix,
         filers,
         petitioners,

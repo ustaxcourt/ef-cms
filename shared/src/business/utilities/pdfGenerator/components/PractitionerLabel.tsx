@@ -13,6 +13,19 @@ export const PractitionerLabel = ({
   phone,
   postalCode,
   state,
+}: {
+  address1: string;
+  address2?: string;
+  address3?: string;
+  barNumber: string;
+  city: string;
+  country: string;
+  countryType: string;
+  email: string;
+  name: string;
+  phone: string;
+  postalCode: string;
+  state: string;
 }) => {
   return (
     <div className="address-label">
