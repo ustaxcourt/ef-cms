@@ -27,7 +27,7 @@ export const setDefaultGenerationTypeAction = ({
 
   if (props.key === 'generationType') {
     if (
-      props.value === 'manual' &&
+      props.value === GENERATION_TYPES.MANUAL &&
       user.role === USER_ROLES.irsPractitioner &&
       !!leadDocketNumber
     ) {
