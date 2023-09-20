@@ -1,21 +1,16 @@
-import { FunctionComponent } from 'react';
-import { IReactComponent, connect as cerebralConnect } from '@cerebral/react';
+import { connect as cerebralConnect } from '@cerebral/react';
+import type { ClientApplicationContext } from '@web-client/applicationContext';
+import type { FunctionComponent } from 'react';
+import type { Get } from 'cerebral';
 
-type FunctionKeys<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? K : never;
-}[keyof T];
+type FakeConnectType = <PassedProps = {}>(
+  depsMap: any,
+  component: FunctionComponent<any>,
+) => FunctionComponent<PassedProps>;
+export const connect = cerebralConnect as unknown as FakeConnectType;
 
-type FunctionsOnly<T> = {
-  [K in FunctionKeys<T>]: T[K] extends (...args: any[]) => infer R ? R : never;
-};
-
-type NonFunctionKeys<T> = {
-  [K in keyof T]: T[K] extends (...args: any[]) => any ? never : K;
-}[keyof T];
-
-type NonFunctionsOnly<T> = Pick<T, NonFunctionKeys<T>>;
-
-export const connect = cerebralConnect as unknown as <Deps>(
-  depsMap: Deps,
-  component: FunctionComponent<FunctionsOnly<Deps> & NonFunctionsOnly<Deps>>,
-) => IReactComponent;
+export function computed<Helper>(
+  helper: (get: Get, applicationContext: ClientApplicationContext) => Helper,
+): Helper {
+  return helper as unknown as Helper;
+}
