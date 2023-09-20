@@ -55,6 +55,18 @@ describe('Joi Entity', () => {
 
   describe('getFormattedValidationErrors', () => {
     describe('LEGACY IMPLEMENTATION', () => {
+      it('should return null if there are no errors in validation', () => {
+        const testEntity = new TestEntity({
+          arrayErrorMessage: 'APPROVED',
+          propUsingReference: 10,
+          singleErrorMessage: 'APPROVED',
+        });
+
+        const errors = testEntity.getFormattedValidationErrors()!;
+
+        expect(errors).toEqual(null);
+      });
+
       describe('arrayErrorMessage', () => {
         it('should return correct error message when "arrayErrorMessage" does not meet min length', () => {
           const testEntity = new TestEntity({
@@ -126,6 +138,24 @@ describe('Joi Entity', () => {
           expect(Object.keys(errors).length).toEqual(1);
           expect(errors.propUsingReference).toEqual(
             'LEGACY_CUSTOM propUsingReference must be grater than referencedProp.',
+          );
+        });
+      });
+    });
+
+    describe('NEW IMPLEMENTATION', () => {
+      describe('arrayErrorMessage', () => {
+        it('should return correct error message when "arrayErrorMessage" does not meet min length', () => {
+          const testEntity = new TestEntity({
+            arrayErrorMessage: 'a',
+            singleErrorMessage: 'APPROVED',
+          });
+
+          const errors = testEntity.getFormattedValidationErrors_NEW()!;
+
+          expect(Object.keys(errors).length).toEqual(11111);
+          expect(errors.arrayErrorMessage).toEqual(
+            'LEGACY_CUSTOM singleErrorMessage must be at least 2 characters long.',
           );
         });
       });
