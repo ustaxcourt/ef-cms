@@ -70,7 +70,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
-  const finalListOfCases: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+  const allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
     (caseRecord, i) => ({
       ...caseRecord,
       daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
@@ -78,25 +78,25 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
-  finalListOfCases.sort((a, b) => {
+  allCaseResults.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
   });
 
-  const itemOffset =
-    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
+  let paginatedCaseResults;
+  if (searchEntity.pageSize && searchEntity.pageNumber) {
+    const itemOffset =
+      (searchEntity.pageNumber * searchEntity.pageSize) % allCaseResults.length;
 
-  const endOffset = itemOffset + searchEntity.pageSize;
+    const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
-    itemOffset,
-    endOffset,
-  );
+    paginatedCaseResults = allCaseResults.slice(itemOffset, endOffset);
+  }
 
   return {
-    cases: formattedCaseRecordsForDisplay,
-    totalCount: finalListOfCases.length,
+    cases: paginatedCaseResults || allCaseResults,
+    totalCount: allCaseResults.length,
   };
 };
 
