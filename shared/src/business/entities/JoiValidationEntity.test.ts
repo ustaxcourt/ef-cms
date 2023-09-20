@@ -33,12 +33,12 @@ describe('Joi Entity', () => {
         arrayErrorMessage: [
           {
             contains: 'is required',
-            message: 'LEGACY_CUSTOM singleErrorMessage is required.',
+            message: 'LEGACY_CUSTOM arrayErrorMessage is required.',
           },
           {
             contains: 'length must be at least',
             message:
-              'LEGACY_CUSTOM singleErrorMessage must be at least 2 characters long.',
+              'LEGACY_CUSTOM arrayErrorMessage must be at least 2 characters long.',
           },
         ],
         propUsingReference: [
@@ -50,6 +50,41 @@ describe('Joi Entity', () => {
         ],
         singleErrorMessage: 'LEGACY_CUSTOM singleErrorMessage default message.',
       };
+    }
+  }
+
+  class TestEntityUpdated extends JoiValidationEntity {
+    public arrayErrorMessage: string;
+    public singleErrorMessage: string;
+
+    public referencedProp: number = 5;
+    public propUsingReference: number;
+
+    constructor(rawData: any) {
+      super('TestEntity');
+      this.arrayErrorMessage = rawData.arrayErrorMessage;
+      this.singleErrorMessage = rawData.singleErrorMessage;
+      this.propUsingReference = rawData.propUsingReference || 10;
+    }
+
+    getValidationRules() {
+      return {
+        arrayErrorMessage: joi.string().min(2).required().messages({
+          'any.required': 'NEW_CUSTOM arrayErrorMessage is required.',
+          'string.min':
+            'NEW_CUSTOM arrayErrorMessage must be at least 2 characters long.',
+        }),
+        propUsingReference: joi
+          .number()
+          .min(joi.ref('referencedProp'))
+          .required(),
+        referencedProp: joi.number().required(),
+        singleErrorMessage: joi.string().min(2).required(),
+      };
+    }
+
+    getErrorToMessageMap() {
+      return {};
     }
   }
 
@@ -78,7 +113,7 @@ describe('Joi Entity', () => {
 
           expect(Object.keys(errors).length).toEqual(1);
           expect(errors.arrayErrorMessage).toEqual(
-            'LEGACY_CUSTOM singleErrorMessage must be at least 2 characters long.',
+            'LEGACY_CUSTOM arrayErrorMessage must be at least 2 characters long.',
           );
         });
 
@@ -91,7 +126,7 @@ describe('Joi Entity', () => {
 
           expect(Object.keys(errors).length).toEqual(1);
           expect(errors.arrayErrorMessage).toEqual(
-            'LEGACY_CUSTOM singleErrorMessage is required.',
+            'LEGACY_CUSTOM arrayErrorMessage is required.',
           );
         });
       });
@@ -144,18 +179,43 @@ describe('Joi Entity', () => {
     });
 
     describe('NEW IMPLEMENTATION', () => {
+      it('should return null if there are no errors in validation', () => {
+        const testEntity = new TestEntityUpdated({
+          arrayErrorMessage: 'APPROVED',
+          propUsingReference: 10,
+          singleErrorMessage: 'APPROVED',
+        });
+
+        const errors = testEntity.getFormattedValidationErrors_NEW()!;
+
+        expect(errors).toEqual(null);
+      });
+
       describe('arrayErrorMessage', () => {
         it('should return correct error message when "arrayErrorMessage" does not meet min length', () => {
-          const testEntity = new TestEntity({
+          const testEntity = new TestEntityUpdated({
             arrayErrorMessage: 'a',
             singleErrorMessage: 'APPROVED',
           });
 
           const errors = testEntity.getFormattedValidationErrors_NEW()!;
 
-          expect(Object.keys(errors).length).toEqual(11111);
+          expect(Object.keys(errors).length).toEqual(1);
           expect(errors.arrayErrorMessage).toEqual(
-            'LEGACY_CUSTOM singleErrorMessage must be at least 2 characters long.',
+            'NEW_CUSTOM arrayErrorMessage must be at least 2 characters long.',
+          );
+        });
+
+        it('should return correct error message when "arrayErrorMessage" is not defined', () => {
+          const testEntity = new TestEntityUpdated({
+            singleErrorMessage: 'APPROVED',
+          });
+
+          const errors = testEntity.getFormattedValidationErrors()!;
+
+          expect(Object.keys(errors).length).toEqual(1);
+          expect(errors.arrayErrorMessage).toEqual(
+            'NEW_CUSTOM arrayErrorMessage is required.',
           );
         });
       });

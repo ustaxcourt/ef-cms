@@ -71,6 +71,36 @@ function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
   return errors;
 }
 
+type JoiErrorDetail = {
+  message: string;
+  context: { key: string };
+};
+
+function getFormattedValidationErrorsHelper_NEW(entity: JoiValidationEntity): {
+  [key: string]: string;
+} | null {
+  const errors = entity.getValidationErrors_NEW();
+  if (!errors) return null;
+
+  const { details }: { details: JoiErrorDetail[] } = errors;
+  const finalErrorMessages = {};
+  details.forEach(d => {
+    finalErrorMessages[d.context.key] = d.message;
+  });
+  return finalErrorMessages;
+}
+
+function getFormattedValidationErrors_NEW(
+  entity,
+): Record<string, string> | null {
+  let errors: {} | null = null;
+
+  if (entity.getFormattedValidationErrors) {
+    errors = getFormattedValidationErrorsHelper_NEW(entity);
+  }
+  return errors;
+}
+
 function getFormattedValidationErrors(entity): Record<string, string> | null {
   const keys = Object.keys(entity);
   const obj = {};
@@ -145,6 +175,17 @@ export abstract class JoiValidationEntity {
     return errors;
   }
 
+  getValidationErrors_NEW() {
+    const rules = this.getValidationRules();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    const { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+    if (!error) return null;
+    return error;
+  }
+
   isValid() {
     const validationErrors = this.getFormattedValidationErrors();
     return isEmpty(validationErrors);
@@ -186,6 +227,10 @@ export abstract class JoiValidationEntity {
 
   getFormattedValidationErrors() {
     return getFormattedValidationErrors(this);
+  }
+
+  getFormattedValidationErrors_NEW() {
+    return getFormattedValidationErrors_NEW(this);
   }
 
   toRawObject() {
