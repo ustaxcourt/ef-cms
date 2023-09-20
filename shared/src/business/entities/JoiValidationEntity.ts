@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
+import { getFormattedValidationErrors_NEW } from '@shared/business/entities/JoiValidationEntity.new.getFormattedValidationErrors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -67,36 +68,6 @@ function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
     } else if (errorMap) {
       errors[key] = errorMap;
     }
-  }
-  return errors;
-}
-
-type JoiErrorDetail = {
-  message: string;
-  context: { key: string };
-};
-
-function getFormattedValidationErrorsHelper_NEW(entity: JoiValidationEntity): {
-  [key: string]: string;
-} | null {
-  const errors = entity.getValidationErrors_NEW();
-  if (!errors) return null;
-
-  const { details }: { details: JoiErrorDetail[] } = errors;
-  const finalErrorMessages = {};
-  details.forEach(d => {
-    finalErrorMessages[d.context.key] = d.message;
-  });
-  return finalErrorMessages;
-}
-
-function getFormattedValidationErrors_NEW(
-  entity,
-): Record<string, string> | null {
-  let errors: {} | null = null;
-
-  if (entity.getFormattedValidationErrors) {
-    errors = getFormattedValidationErrorsHelper_NEW(entity);
   }
   return errors;
 }
