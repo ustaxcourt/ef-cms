@@ -60,6 +60,8 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     searchEntity,
   );
 
+  console.log('caseRecords', caseRecords);
+
   const daysElapsedSinceLastStatusChange: number[] = caseRecords.map(
     caseRecord => calculateDaysElapsed(applicationContext, caseRecord),
   );

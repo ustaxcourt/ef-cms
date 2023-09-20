@@ -148,12 +148,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
-        mockReturnedDocketNumbers,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
       .getDocketNumbersWithServedEventCodes.mockReturnValue(
         mockReturnedDocketNumbersToFilterOut,
       );
@@ -195,5 +189,51 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     );
 
     expect(result.totalCount).toEqual(1);
+  });
+
+  it.only('should return all results when page number and page size are not provided', async () => {
+    // arrange: a set of data is returned by the database, and no page number and no page size
+    mockReturnedDocketNumbers = [
+      { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
+      {
+        ...mockCaseInfo,
+        docketNumber:
+          MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
+      },
+      {
+        ...mockCaseInfo,
+        docketNumber:
+          MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
+      },
+      {
+        ...mockCaseInfo,
+        docketNumber:
+          MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
+      },
+      {
+        ...mockCaseInfo,
+        docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
+      },
+    ];
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersWithServedEventCodes.mockReturnValue([]);
+
+    // act: call interactor
+    const result = await getCasesByStatusAndByJudgeInteractor(
+      applicationContext,
+      {
+        judges: [judgeUser.name],
+        pageNumber: undefined,
+        pageSize: undefined,
+        statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      },
+    );
+
+    // assert: all results are returned
+    expect(result).toMatchObject({
+      cases: mockReturnedDocketNumbers,
+      totalCount: mockReturnedDocketNumbers.length,
+    });
   });
 });
