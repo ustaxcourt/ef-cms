@@ -212,8 +212,9 @@ export const SecondarySupportingDocumentForm = connect(
 
               <SupportingDocumentInclusionsForm
                 bind={`form.secondarySupportingDocuments.${index}`}
-                type={`secondarySupportingDocuments.${index}`}
-                validationBind={`validationErrors.supportingDocument${index}`}
+                index={index}
+                type={'secondarySupportingDocuments'}
+                validationBind={`validationErrors.secondarySupportingDocuments.${index}`}
               />
             </>
           )}
