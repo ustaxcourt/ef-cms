@@ -113,7 +113,7 @@ resource "aws_cognito_user_pool_client" "client" {
   token_validity_units {
     access_token  = "hours"
     id_token      = "hours"
-    refresh_token = "hours"
+    refresh_token = "days"
   }
   refresh_token_validity = 1
   access_token_validity  = 1
@@ -253,7 +253,7 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   token_validity_units {
     access_token  = "hours"
     id_token      = "hours"
-    refresh_token = "hours"
+    refresh_token = "days"
   }
   refresh_token_validity = 1
   access_token_validity  = 1
