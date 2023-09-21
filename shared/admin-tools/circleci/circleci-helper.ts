@@ -10,13 +10,16 @@ const findPendingJob = async ({
   jobName: string;
   workflowId: string;
 }): Promise<string> => {
-  const getAllJobs = {
+  const getAllJobsRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'GET',
     url: `https://circleci.com/api/v2/workflow/${workflowId}/job`,
   };
 
-  const allJobsInWorkflow = await axios.get(getAllJobs.url, getAllJobs);
+  const allJobsInWorkflow = await axios.get(
+    getAllJobsRequest.url,
+    getAllJobsRequest,
+  );
 
   const jobWithApprovalNeeded = find(allJobsInWorkflow.data.items, o => {
     return o.name === jobName;
@@ -25,7 +28,7 @@ const findPendingJob = async ({
   return jobWithApprovalNeeded.approval_request_id;
 };
 
-exports.approvePendingJob = async ({
+export const approvePendingJob = async ({
   apiToken,
   jobName,
   workflowId,
@@ -33,33 +36,63 @@ exports.approvePendingJob = async ({
   apiToken: string;
   jobName: string;
   workflowId: string;
-}) => {
+}): Promise<void> => {
   const approvalRequestId = await findPendingJob({
     apiToken,
     jobName,
     workflowId,
   });
-  const approveJob = {
+  const approveJobRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
     url: `https://circleci.com/api/v2/workflow/${workflowId}/approve/${approvalRequestId}`,
   };
 
-  await axios.post(approveJob.url, {}, approveJob);
+  await axios.post(approveJobRequest.url, {}, approveJobRequest);
 };
 
-exports.cancelWorkflow = async ({
+export const cancelWorkflow = async ({
   apiToken,
   workflowId,
 }: {
   apiToken: string;
   workflowId: string;
-}) => {
-  const cancelWorkflow = {
+}): Promise<void> => {
+  const cancelWorkflowRequest = {
     headers: { 'Circle-Token': apiToken },
     method: 'POST',
     url: `https://circleci.com/api/v2/workflow/${workflowId}/cancel`,
   };
 
-  await axios.post(cancelWorkflow.url, {}, cancelWorkflow);
+  await axios.post(cancelWorkflowRequest.url, {}, cancelWorkflowRequest);
+};
+
+export const getPipelineStatus = async ({
+  apiToken,
+  pipelineId,
+}: {
+  apiToken: string;
+  pipelineId: string;
+}): Promise<string | undefined> => {
+  const pipelineStatusRequest = {
+    headers: { 'Circle-Token': apiToken },
+    method: 'GET',
+    url: `https://circleci.com/api/v2/pipeline/${pipelineId}/workflow`,
+  };
+
+  const pipelineStatusResponse = await axios.get(
+    pipelineStatusRequest.url,
+    pipelineStatusRequest,
+  );
+
+  let pipelineStatus;
+  if (
+    'items' in pipelineStatusResponse.data &&
+    pipelineStatusResponse.data.items &&
+    'status' in pipelineStatusResponse.data.items[0]
+  ) {
+    pipelineStatus = pipelineStatusResponse.data.items[0].status;
+  }
+
+  return pipelineStatus;
 };
