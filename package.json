@@ -290,7 +290,7 @@
     "crypto-browserify": "^3.12.0",
     "css-loader": "^6.8.1",
     "csv-parse": "^5.5.0",
-    "cypress": "^12.17.4",
+    "cypress": "^13.2.0",
     "cypress-file-upload": "^5.0.8",
     "decimal.js": "^10.4.3",
     "dynamodb-admin": "^4.5.0",
