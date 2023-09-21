@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
-import { getFormattedValidationErrors_NEW } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
+import {
+  JoiErrorDetail,
+  getFormattedValidationErrors_NEW,
+} from '@shared/business/entities/joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -146,7 +149,7 @@ export abstract class JoiValidationEntity {
     return errors;
   }
 
-  getValidationErrors_NEW() {
+  getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
     const rules = this.getValidationRules();
     const schema = rules.validate ? rules : joi.object().keys(rules);
     const { error } = schema.validate(this, {

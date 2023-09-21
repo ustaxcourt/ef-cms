@@ -1,6 +1,6 @@
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
-type JoiErrorDetail = {
+export type JoiErrorDetail = {
   message: string;
   context: { key: string };
 };
