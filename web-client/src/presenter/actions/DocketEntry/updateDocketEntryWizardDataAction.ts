@@ -81,9 +81,6 @@ export const updateDocketEntryWizardDataAction = ({
         }
       }
       store.unset(state.form.serviceDate);
-      store.unset(state.form.serviceDateDay);
-      store.unset(state.form.serviceDateMonth);
-      store.unset(state.form.serviceDateYear);
       store.unset(state.form.trialLocation);
       store.unset(state.form.ordinalValue);
       store.unset(state.form.otherIteration);

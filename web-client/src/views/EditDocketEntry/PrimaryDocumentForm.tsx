@@ -71,16 +71,15 @@ export const PrimaryDocumentForm = connect(
               ))}
             </fieldset>
           </FormGroup>
-
           {addDocketEntryHelper.showDateReceivedEdit && (
             <DateSelector
-              defaultValue={form.dateReceived}
-              errorText={validationErrors.dateReceived}
+              defaultValue={form.receivedAt}
+              errorText={validationErrors.receivedAt}
               id="date-received"
               label="Date received"
               onChange={e => {
                 formatAndUpdateDateFromDatePickerSequence({
-                  key: 'dateReceived',
+                  key: 'receivedAt',
                   toFormat: constants.DATE_FORMATS.ISO,
                   value: e.target.value,
                 });
