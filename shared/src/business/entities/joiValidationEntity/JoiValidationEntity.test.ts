@@ -101,6 +101,12 @@ describe('Joi Entity', () => {
         });
       });
 
+      // THIS IS WHERE I LEFT OF
+      // THIS IS A TEST WHERE WE ARE MAKING SURE THE RECURSIVENESS OF AN ARRAY
+      // IT IS NOT PASSING SO WE NEED TO FIGURE OUT WHY IT IS NOT OUTPUTING THE EXPECTED ERRORS OBJECT
+      // ONCE THIS IS PASSING WITH THE CORRECT ASSERTIONS, UNCOMMENT THE ARRAY PART ON THE NEW METHOD
+      // ADD THIS TEST ON THE NEW IMPLEMENTATION DESCRIBE AND USE THE NEW METHOD
+      // IT SHOUDL OUTPUT THE SAME ERRORS OBJECT
       describe('nested entities', () => {
         it('should return an array of errors when there is an error in a nested entity list', () => {
           const testCaseEntity = new TestCaseEntity({
