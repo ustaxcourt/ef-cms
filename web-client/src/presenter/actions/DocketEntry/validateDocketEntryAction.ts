@@ -22,17 +22,6 @@ export const validateDocketEntryAction = ({
   });
 
   if (
-    entryMetadata.serviceDateYear &&
-    entryMetadata.serviceDateYear.toString().length !== 4
-  ) {
-    if (!errors) {
-      errors = {};
-    }
-
-    errors.serviceDate = errors.serviceDate || 'Enter a four-digit year';
-  }
-
-  if (
     entryMetadata.eventCode === AMICUS_BRIEF_EVENT_CODE &&
     isEmpty(entryMetadata.otherFilingParty)
   ) {
