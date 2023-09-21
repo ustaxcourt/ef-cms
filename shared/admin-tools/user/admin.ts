@@ -9,6 +9,7 @@ import {
   getUserPoolId,
 } from '../util';
 import axios from 'axios';
+
 const { EFCMS_DOMAIN, ENV, USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
 let cachedAuthToken;
@@ -41,7 +42,8 @@ export const activateAdminAccount = async () => {
       Username: USTC_ADMIN_USER,
     });
   } catch (err) {
-    switch (err.code) {
+    const { code }: any = err;
+    switch (code) {
       case 'UserNotFoundException':
         console.error(
           `ERROR: Admin User: ${USTC_ADMIN_USER} does not exist for ${ENV}`,
@@ -103,9 +105,10 @@ export const verifyAdminUserDisabled = async ({ attempt }) => {
       }
     }
   } catch (err) {
-    if (err.code !== 'UserNotFoundException') {
+    const { code, message }: any = err;
+    if (code !== 'UserNotFoundException') {
       console.log('err', err);
-      console.error(err.message);
+      console.error(message);
       process.exit(1);
     }
   }
@@ -241,7 +244,8 @@ export const createAdminAccount = async () => {
       return;
     }
   } catch (err) {
-    if (err.code !== 'UserNotFoundException') {
+    const { code }: any = err;
+    if (code !== 'UserNotFoundException') {
       console.error(err);
       process.exit(1);
     }
