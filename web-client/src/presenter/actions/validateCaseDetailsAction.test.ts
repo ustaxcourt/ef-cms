@@ -31,12 +31,10 @@ describe('validateCaseDetailsAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        petitionPaymentDate: '2019-09-06T04:00:00.000Z',
-      },
       state: {
         caseDetail: MOCK_CASE,
         form: {
+          petitionPaymentDate: '2019-09-06T04:00:00.000Z',
           petitionPaymentMethod: 'check',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
         },
@@ -81,11 +79,11 @@ describe('validateCaseDetailsAction', () => {
       modules: {
         presenter,
       },
-      props: { petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: MOCK_CASE,
         form: {
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+          petitionPaymentWaivedDate: '2001-01-01T05:00:00.000Z',
         },
       },
     });
@@ -105,10 +103,11 @@ describe('validateCaseDetailsAction', () => {
       modules: {
         presenter,
       },
-      props: { irsNoticeDate: '2001-01-01T05:00:00.000Z' },
       state: {
         caseDetail: MOCK_CASE,
-        form: {},
+        form: {
+          irsNoticeDate: '2001-01-01T05:00:00.000Z',
+        },
       },
     });
 

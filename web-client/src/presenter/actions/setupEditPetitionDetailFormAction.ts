@@ -34,29 +34,4 @@ export const setupEditPetitionDetailFormAction = ({
 
     store.set(state.form.irsNoticeDate, irsNoticeDate);
   }
-
-  if (caseDetail.statistics) {
-    caseDetail.statistics.forEach((statistic, index) => {
-      if (statistic.lastDateOfPeriod) {
-        const deconstructedLastDateOfPeriod = applicationContext
-          .getUtilities()
-          .deconstructDate(statistic.lastDateOfPeriod);
-
-        if (deconstructedLastDateOfPeriod) {
-          store.set(
-            state.form.statistics[index].lastDateOfPeriodMonth,
-            deconstructedLastDateOfPeriod.month,
-          );
-          store.set(
-            state.form.statistics[index].lastDateOfPeriodDay,
-            deconstructedLastDateOfPeriod.day,
-          );
-          store.set(
-            state.form.statistics[index].lastDateOfPeriodYear,
-            deconstructedLastDateOfPeriod.year,
-          );
-        }
-      }
-    });
-  }
 };
