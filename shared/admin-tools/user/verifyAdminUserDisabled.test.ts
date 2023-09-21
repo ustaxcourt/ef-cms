@@ -17,13 +17,16 @@ describe('verifyAdminUserDisabled', () => {
     jest.spyOn(console, 'error');
 
     CognitoIdentityProvider.prototype = {
+      ...CognitoIdentityProvider.prototype,
       adminDisableUser: jest.fn().mockResolvedValue({}),
       adminGetUser: jest.fn().mockResolvedValue({
         Enabled: false,
       }),
+      destroy: jest.fn().mockResolvedValue({}),
       listUserPools: jest.fn().mockResolvedValue({
         UserPools: [{ Id: 'asdfb', Name: `efcms-${process.env.ENV}` }],
       }),
+      send: jest.fn().mockResolvedValue({}),
     };
   });
 
