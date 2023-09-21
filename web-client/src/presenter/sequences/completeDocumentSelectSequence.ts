@@ -1,12 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearOtherIterationAction } from '../actions/clearOtherIterationAction';
 import { defaultSecondaryDocumentAction } from '../actions/FileDocument/defaultSecondaryDocumentAction';
-import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateToFileADocumentAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
-import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
 import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from '../actions/FileDocument/setIsExternalConsolidatedCaseGroupEnabledValueAction';
@@ -18,16 +15,6 @@ import { validateSelectDocumentTypeAction } from '../actions/validateSelectDocum
 
 export const completeDocumentSelectSequence = [
   startShowValidationAction,
-  getComputedFormDateFactoryAction('serviceDate'),
-  setComputeFormDateFactoryAction('serviceDate'),
-  formHasSecondaryDocumentAction,
-  {
-    no: [],
-    yes: [
-      getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
-      setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
-    ],
-  },
   defaultSecondaryDocumentAction,
   refreshExternalDocumentTitleFromEventCodeAction,
   generateTitleAction,
