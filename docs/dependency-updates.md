@@ -67,7 +67,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Keep `@sparticuz/chromium` locked to 112.0.2 and `puppeteer` locked to 19.8.5 as 114+ and 20+ were causing pdf generation timeout bugs. (https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10087).
 
-- When updating puppeteer or puppeteer core in the project make sure to also match versions in web-api/runtimes/puppeteer/package.json as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
+- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
 
 #### s3rver
 - As of 7/26/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813).
@@ -75,8 +75,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### pdfjs-dist
 
-- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 
 ### Incrementing the Node Cache Key Version
 
-It's rare to need to increment or change the cache key. One reason you may want to do so is if something happens while storing the cache which corrupts it. For example, a few months ago a package failed to install while the cache was being stored. CircleCI had no idea that the installation didn't go according to plan and saved the corrupted cache. In this case, we incremented the cache key version so that CircleCI was forced to reinstall the node dependencies and save them under the new key. The cache key can be updated by searching within config.yml for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
+It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them under the new key. The cache key can be updated by searching within config.yml for `vX-npm` and `vX-cypress` where X is the current version of the cache key, then increment the version found.
