@@ -1,5 +1,4 @@
-import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import { TestCaseEntity } from '@shared/business/entities/joiValidationEntity/test/TestCaseEntity';
 import { TestEntity } from '@shared/business/entities/joiValidationEntity/test/TestEntity';
 import { TestEntityUpdated } from '@shared/business/entities/joiValidationEntity/test/TestEntityUpdated';
 
@@ -94,30 +93,6 @@ describe('Joi Entity', () => {
       });
 
       describe('remove unhelpful error messages from contact validations', () => {
-        class TestCaseEntity extends JoiValidationEntity {
-          public contactType: string;
-          getValidationRules() {
-            return {
-              contactType: JoiValidationConstants.STRING.valid(
-                'VALID_1',
-                'VALID_2',
-                'VALID_3',
-              ).required(),
-            };
-          }
-          getErrorToMessageMap() {
-            return {
-              contactType:
-                'contantType does not match any of the allowed types',
-            };
-          }
-
-          constructor(rawTestCase) {
-            super('TestCaseEntity');
-            this.contactType = rawTestCase.contactType;
-          }
-        }
-
         it('should remove unhelpful error messages that end with "does not match any of the allowed types"', () => {
           const testCaseEntity = new TestCaseEntity({ contactType: 'INVALID' });
 
