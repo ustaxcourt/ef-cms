@@ -9,7 +9,11 @@ export class TestCaseEntity extends JoiValidationEntity {
         'VALID_1',
         'VALID_2',
         'VALID_3',
-      ).required(),
+      )
+        .required()
+        .messages({
+          'any.only': 'contantType does not match any of the allowed types',
+        }),
     };
   }
   getErrorToMessageMap() {

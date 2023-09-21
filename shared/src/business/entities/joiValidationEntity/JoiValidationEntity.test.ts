@@ -189,6 +189,15 @@ describe('Joi Entity', () => {
           );
         });
       });
+
+      describe('remove unhelpful error messages from contact validations', () => {
+        it('should remove unhelpful error messages that end with "does not match any of the allowed types"', () => {
+          const testCaseEntity = new TestCaseEntity({ contactType: 'INVALID' });
+
+          const errors = testCaseEntity.getFormattedValidationErrors_NEW()!;
+          expect(errors).toEqual(null);
+        });
+      });
     });
   });
 });
