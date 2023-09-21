@@ -134,7 +134,7 @@ describe('generateCoverSheetData', () => {
       filingDateUpdated: false,
     } as any);
 
-    expect(result.dateReceived).toEqual('04/19/19 10:45 am');
+    expect(result.receivedAt).toEqual('04/19/19 10:45 am');
   });
 
   it('should append the received date as an empty string to the coversheet when the document does not have a valid createdAt and is electronically filed', async () => {
@@ -149,7 +149,7 @@ describe('generateCoverSheetData', () => {
       filingDateUpdated: false,
     } as any);
 
-    expect(result.dateReceived).toEqual('');
+    expect(result.receivedAt).toEqual('');
   });
 
   it('should append the received date WITHOUT time to the coversheet when the document is paper filed', async () => {
@@ -163,7 +163,7 @@ describe('generateCoverSheetData', () => {
       },
     } as any);
 
-    expect(result.dateReceived).toEqual('04/19/19');
+    expect(result.receivedAt).toEqual('04/19/19');
   });
 
   it('should NOT append the received date to the coversheet when the document does not have a valid createdAt and is filed by paper', async () => {
@@ -177,7 +177,7 @@ describe('generateCoverSheetData', () => {
       },
     } as any);
 
-    expect(result.dateReceived).toEqual('');
+    expect(result.receivedAt).toEqual('');
   });
 
   it('should append the servedDate of the document to the coversheet when it is defined as "MM/DD/YY"', async () => {
@@ -355,20 +355,20 @@ describe('generateCoverSheetData', () => {
     expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
   });
 
-  it('should NOT append dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', async () => {
+  it('should NOT append receivedAt, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
       docketEntryEntity: {
         ...testingCaseData.docketEntries[0],
-        dateReceived: '2012-04-20T14:45:15.595Z',
         electronicallyFiled: true,
         eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
+        receivedAt: '2012-04-20T14:45:15.595Z',
         servedAt: '2019-04-20T14:45:15.595Z',
       },
     } as any);
 
-    expect(result.dateReceived).toBeUndefined();
+    expect(result.receivedAt).toBeUndefined();
     expect(result.electronicallyFiled).toBeUndefined();
     expect(result.dateServed).toBeUndefined();
   });
@@ -384,10 +384,10 @@ describe('generateCoverSheetData', () => {
       filingDateUpdated: true,
     } as any);
 
-    expect(result.dateReceived).toBe('05/19/19');
+    expect(result.receivedAt).toBe('05/19/19');
   });
 
-  it('should append dateReceived as createdAt date when the filingDateUpdated is false', async () => {
+  it('should append receivedAt as createdAt date when the filingDateUpdated is false', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -400,7 +400,7 @@ describe('generateCoverSheetData', () => {
       filingDateUpdated: false,
     } as any);
 
-    expect(result.dateReceived).toBe('02/15/19');
+    expect(result.receivedAt).toBe('02/15/19');
   });
 
   it('should append documentType as documentTitle to the coversheet when documentTitle is undefined', async () => {
