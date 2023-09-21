@@ -92,7 +92,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Sid": "Acm",
       "Effect": "Allow",
       "Action": [
-				"acm:GetCertificate",
+        "acm:GetCertificate",
         "acm:RequestCertificate",
         "acm:ListCertificates",
         "acm:AddTagsToCertificate",
@@ -276,18 +276,18 @@ resource "aws_iam_policy" "circle_ci_policy" {
     },
     {
       "Action": [
-				"ssm:PutParameter",
-				"ssm:LabelParameterVersion",
-				"ssm:DeleteParameter",
-				"ssm:DeleteParameters",
-				"ssm:UnlabelParameterVersion",
+        "ssm:PutParameter",
+        "ssm:LabelParameterVersion",
+        "ssm:DeleteParameter",
+        "ssm:DeleteParameters",
+        "ssm:UnlabelParameterVersion",
         "ssm:ListTagsForResource",
-				"ssm:DescribeParameters",
-				"ssm:DescribeDocumentParameters",
-				"ssm:GetParameterHistory",
-				"ssm:GetParametersByPath",
-				"ssm:GetParameters",
-				"ssm:GetParameter"
+        "ssm:DescribeParameters",
+        "ssm:DescribeDocumentParameters",
+        "ssm:GetParameterHistory",
+        "ssm:GetParametersByPath",
+        "ssm:GetParameters",
+        "ssm:GetParameter"
       ],
       "Resource": "*",
       "Effect": "Allow"
@@ -300,6 +300,16 @@ resource "aws_iam_policy" "circle_ci_policy" {
       ],
       "Resource": [
         "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:service/clamav_fargate_cluster_*/clamav_service_*"
+      ],
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "glue:GetJobRuns",
+        "glue:StartJobRun"
+      ],
+      "Resource": [
+        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
       ],
       "Effect": "Allow"
     }
