@@ -9,6 +9,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
+import { isEmpty } from 'lodash';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -21,19 +22,9 @@ export type CavAndSubmittedCaseResponseType = {
   foundCases: { docketNumber: string }[];
 };
 
-export type CavAndSubmittedFilteredCasesType = {
-  caseStatusHistory: {
-    date: string;
-    changedBy: string;
-    updatedCaseStatus: string;
-  }[];
-  caseCaption: string;
+export type CavAndSubmittedFilteredCasesType = RawCase & {
   daysElapsedSinceLastStatusChange: number;
-  docketNumber: string;
-  leadDocketNumber?: string;
   formattedCaseCount: number;
-  petitioners: TPetitioner[];
-  status: string;
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
@@ -59,8 +50,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     applicationContext,
     searchEntity,
   );
-
-  console.log('caseRecords', caseRecords);
 
   const daysElapsedSinceLastStatusChange: number[] = caseRecords.map(
     caseRecord => calculateDaysElapsed(applicationContext, caseRecord),
@@ -98,7 +87,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   return {
     cases: paginatedCaseResults || allCaseResults,
-    totalCount: allCaseResults.length,
+    totalCount: (paginatedCaseResults || allCaseResults).length,
   };
 };
 
@@ -106,6 +95,10 @@ const calculateDaysElapsed = (
   applicationContext: IApplicationContext,
   individualCase: RawCase,
 ) => {
+  if (isEmpty(individualCase.caseStatusHistory)) {
+    return 0;
+  }
+
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
     .formatDateString(

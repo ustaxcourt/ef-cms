@@ -2,8 +2,8 @@ import {
   CASE_STATUS_TYPES,
   CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
+  MOCK_CASE,
   MOCK_SUBMITTED_CASE,
   MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY,
@@ -16,19 +16,9 @@ import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJud
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
-  const docketEntryWithoutCaseHistory = '115-23';
+  let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
 
-  const prohibitedDocketEntries = 'ODD, DEC, SDEC, OAD';
-  let mockReturnedDocketNumbers: Array<{
-    docketNumber: string;
-    leadDocketNumber?: string;
-    caseStatusHistory?: {
-      changedBy: string;
-      date: string;
-      updatedCaseStatus: string;
-    }[];
-  }> = [];
-  let mockReturnedDocketNumbersToFilterOut: string[] = [];
+  let mockGetDocketNumbersWithServedEventCodesResult: string[] = [];
 
   const mockValidRequest = {
     judges: [judgeUser.name],
@@ -37,35 +27,33 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
 
-  const currentDateInIsoFormat: string = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      FORMATS.ISO,
-    );
-
-  const expectedCaseStatus = {
-    changedBy: 'Private Practitioner',
-    date: currentDateInIsoFormat,
-    updatedCaseStatus: CASE_STATUS_TYPES.new,
-  };
   const mockCaseInfo = {
+    ...MOCK_CASE,
     caseCaption: 'CASE CAPTION',
-    caseStatusHistory: [expectedCaseStatus],
+    caseStatusHistory: [
+      {
+        changedBy: 'Private Practitioner',
+        date: '2018-07-25T00:00:00.000-04:00',
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      },
+    ],
     docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
     docketNumberWithSuffix: `${MOCK_SUBMITTED_CASE.docketNumber}R`,
     petitioners: [],
     status: CASE_STATUS_TYPES.cav,
   };
 
-  beforeAll(() => {
-    applicationContext.getSearchClient().count = jest.fn();
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockImplementation(
-        () => mockReturnedDocketNumbers,
-      );
-  });
+  applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersByStatusAndByJudge.mockImplementation(
+      () => mockGetDocketNumbersByStatusAndByJudgeResult,
+    );
+
+  applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersWithServedEventCodes.mockImplementation(
+      () => mockGetDocketNumbersWithServedEventCodesResult,
+    );
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
@@ -110,8 +98,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     });
   });
 
-  it(`should return an array of 1 case (stripping out the cases with served ${prohibitedDocketEntries} docket entries and no consolidated cases)`, async () => {
-    mockReturnedDocketNumbers = [
+  it('should return an array of 1 case (stripping out the cases with served ODD, DEC, SDEC, OAD docket entries and no consolidated cases)', async () => {
+    mockGetDocketNumbersByStatusAndByJudgeResult = [
       { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         ...mockCaseInfo,
@@ -134,23 +122,16 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
       {
         ...mockCaseInfo,
-        caseStatusHistory: undefined,
+        caseStatusHistory: [],
         docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
       },
     ];
-
-    mockReturnedDocketNumbersToFilterOut = [
-      MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
+    mockGetDocketNumbersWithServedEventCodesResult = [
       MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
       MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
+      MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
+      MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
     ];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValue(
-        mockReturnedDocketNumbersToFilterOut,
-      );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
@@ -160,40 +141,19 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: '101-18',
+          docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
+        }),
+        expect.objectContaining({
+          docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
         }),
       ]),
     );
-
-    expect(result.cases).not.toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketNumber: docketEntryWithoutCaseHistory,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber:
-            MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-        }),
-        expect.objectContaining({
-          docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-        }),
-      ]),
-    );
-
-    expect(result.totalCount).toEqual(1);
+    expect(result.totalCount).toEqual(2);
   });
 
-  it.only('should return all results when page number and page size are not provided', async () => {
-    // arrange: a set of data is returned by the database, and no page number and no page size
-    mockReturnedDocketNumbers = [
+  it('should paginate the results when page number and page size are provided', async () => {
+    const mockPageSize = 1;
+    mockGetDocketNumbersByStatusAndByJudgeResult = [
       { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         ...mockCaseInfo,
@@ -205,21 +165,38 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         docketNumber:
           MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
       },
+    ];
+    mockGetDocketNumbersWithServedEventCodesResult = [];
+
+    const result = await getCasesByStatusAndByJudgeInteractor(
+      applicationContext,
+      {
+        judges: [judgeUser.name],
+        pageNumber: 1,
+        pageSize: mockPageSize,
+        statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      },
+    );
+
+    expect(result.totalCount).toBe(mockPageSize);
+  });
+
+  it('should return all results when page number and page size are not provided', async () => {
+    mockGetDocketNumbersByStatusAndByJudgeResult = [
+      { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
         ...mockCaseInfo,
         docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
+          MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
       },
       {
         ...mockCaseInfo,
-        docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
+        docketNumber:
+          MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
       },
     ];
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValue([]);
+    mockGetDocketNumbersWithServedEventCodesResult = [];
 
-    // act: call interactor
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
       {
@@ -230,10 +207,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     );
 
-    // assert: all results are returned
-    expect(result).toMatchObject({
-      cases: mockReturnedDocketNumbers,
-      totalCount: mockReturnedDocketNumbers.length,
-    });
+    expect(result.totalCount).toBe(
+      mockGetDocketNumbersByStatusAndByJudgeResult.length,
+    );
   });
 });
