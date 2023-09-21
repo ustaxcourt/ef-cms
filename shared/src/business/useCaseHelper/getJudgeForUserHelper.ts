@@ -1,3 +1,4 @@
+import { InvalidRequest } from '@web-api/errors/errors';
 import { User } from '@shared/business/entities/User';
 
 export type GetJudgeForUser = (
@@ -26,7 +27,7 @@ export const getJudgeForUserHelper: GetJudgeForUser = async (
       });
 
     if (!judgeUser) {
-      throw new Error(
+      throw new InvalidRequest(
         `Could not find Judge for Chambers Section ${userEntity.section}`,
       );
     }
@@ -34,5 +35,7 @@ export const getJudgeForUserHelper: GetJudgeForUser = async (
     return judgeUser;
   }
 
-  throw new Error('Could not get Judge User ID for non Judge or Chambers User');
+  throw new InvalidRequest(
+    'Could not get Judge User ID for non Judge or Chambers User',
+  );
 };
