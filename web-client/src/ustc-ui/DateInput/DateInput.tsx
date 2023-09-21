@@ -36,7 +36,7 @@ export const DateInput = ({
   };
   id: string;
   hintText?: string | undefined;
-  label: string;
+  label?: string;
   placeholder?: string;
   showDateHint?: boolean;
   titleHintText?: string;
@@ -44,7 +44,7 @@ export const DateInput = ({
   hideLegend?: boolean;
   onBlur?: () => void;
   onChange?: () => void;
-  onValueChange?: () => void;
+  onValueChange?: (value: any) => void;
   optional?: boolean;
   values: null | {
     day: string;
