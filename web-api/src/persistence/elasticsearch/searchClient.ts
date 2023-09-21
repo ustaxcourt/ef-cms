@@ -18,11 +18,22 @@ type AggregationsType = {
 
 export type SearchClientResultsType = {
   aggregations?: AggregationsType;
+  expected?: number;
   total: number;
   results: any;
 };
 
-export type SearClientCountResultsType = number;
+export type SearchAllParametersType = {
+  index?: string;
+  body?: {
+    _source?: string[];
+    query?: any;
+    sort?: any;
+  };
+  size?: number;
+};
+
+export type SearchClientCountResultsType = number;
 
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
@@ -72,7 +83,7 @@ export const count = async ({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}): Promise<SearClientCountResultsType> => {
+}): Promise<SearchClientCountResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -102,7 +113,13 @@ export const search = async <T>({
   }
 };
 
-export const searchAll = async ({ applicationContext, searchParameters }) => {
+export const searchAll = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: SearchAllParametersType;
+}): Promise<SearchClientResultsType> => {
   const index = searchParameters.index || '';
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;
@@ -125,7 +142,7 @@ export const searchAll = async ({ applicationContext, searchParameters }) => {
   let search_after = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries
 
-  const expected = get(countQ, 'body.count', 0);
+  const expected: number = get(countQ, 'body.count', 0);
 
   let i = 0;
   let results = [];
