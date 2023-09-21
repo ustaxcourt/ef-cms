@@ -100,6 +100,25 @@ describe('Joi Entity', () => {
           expect(errors).toEqual(null);
         });
       });
+
+      describe('nested entities', () => {
+        it('should return an array of errors when there is an error in a nested entity list', () => {
+          const testCaseEntity = new TestCaseEntity({
+            caseList: [{}, { contactType: 'INVALID' }, {}],
+          });
+
+          const errors = testCaseEntity.getFormattedValidationErrors()!;
+          expect(errors).toEqual({
+            caseList: [
+              {
+                contactType:
+                  'contantType does not match any of the allowed types',
+                index: 1,
+              },
+            ],
+          });
+        });
+      });
     });
 
     describe('NEW IMPLEMENTATION', () => {
