@@ -6,7 +6,7 @@ import { get } from 'lodash';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
-export type SeachClientResultsType = {
+export type SearchClientResultsType = {
   aggregations?: {
     [x: string]: {
       buckets: {
@@ -15,11 +15,21 @@ export type SeachClientResultsType = {
       }[];
     };
   };
+  expected?: number;
   total?: number;
   results: any;
 };
+export type SearchAllParametersType = {
+  index?: string;
+  body?: {
+    _source?: string[];
+    query?: any;
+    sort?: any;
+  };
+  size?: number;
+};
 
-export type SearClientCountResultsType = number;
+export type SearchClientCountResultsType = number;
 
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
@@ -69,7 +79,7 @@ export const count = async ({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}): Promise<SearClientCountResultsType> => {
+}): Promise<SearchClientCountResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -87,7 +97,7 @@ export const search = async <T>({
 }: {
   applicationContext: IApplicationContext;
   searchParameters: Search;
-}): Promise<SeachClientResultsType> => {
+}): Promise<SearchClientResultsType> => {
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -99,7 +109,13 @@ export const search = async <T>({
   }
 };
 
-export const searchAll = async ({ applicationContext, searchParameters }) => {
+export const searchAll = async ({
+  applicationContext,
+  searchParameters,
+}: {
+  applicationContext: IApplicationContext;
+  searchParameters: SearchAllParametersType;
+}): Promise<SearchClientResultsType> => {
   const index = searchParameters.index || '';
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;

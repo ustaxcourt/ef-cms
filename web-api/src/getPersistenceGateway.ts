@@ -58,6 +58,8 @@ import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDea
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
+import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
+import { getCaseWorksheets } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheets';
 import {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
@@ -156,6 +158,7 @@ import { updateAttributeOnDynamoRecord } from './persistence/dynamo/workitems/up
 import { updateCase } from './persistence/dynamo/cases/updateCase';
 import { updateCaseCorrespondence } from './persistence/dynamo/correspondence/updateCaseCorrespondence';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
+import { updateCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/updateCaseWorksheet';
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
@@ -234,6 +237,8 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
+    getCaseWorksheet,
+    getCaseWorksheets,
     getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
@@ -263,6 +268,7 @@ const gatewayMethods = {
     updateCase,
     updateCaseCorrespondence,
     updateCaseHearing,
+    updateCaseWorksheet,
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
