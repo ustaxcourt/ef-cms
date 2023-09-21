@@ -1,6 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
-  chambersUser,
+  colvinsChambersUser,
   judgeUser,
 } from '../../../../../shared/src/test/mockUsers';
 import { presenter } from '../../presenter-mock';
@@ -29,7 +29,7 @@ describe('setJudgeLastNameOnJudgeActivityReportAction', () => {
   });
 
   it('should set state.judgeActivityReport.filters.judgeName (and judgeNameToDisplayForHeader) to the last name of the judge of the chambers when the current user is a chambers user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(chambersUser);
+    applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
 
     const { state } = await runAction(
       setJudgeLastNameOnJudgeActivityReportAction,
