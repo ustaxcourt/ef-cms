@@ -6,7 +6,10 @@ export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext: ClientApplicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
-  cases: RawCase[];
+  cases: (RawCase & {
+    daysElapsedSinceLastStatusChange: number;
+    formattedCaseCount: number;
+  })[];
   totalCount: number;
 }> => {
   return post({

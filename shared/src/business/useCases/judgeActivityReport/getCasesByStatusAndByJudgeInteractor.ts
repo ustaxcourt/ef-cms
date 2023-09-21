@@ -9,6 +9,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { isEmpty } from 'lodash';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -21,19 +22,9 @@ export type CavAndSubmittedCaseResponseType = {
   foundCases: { docketNumber: string }[];
 };
 
-export type CavAndSubmittedFilteredCasesType = {
-  caseStatusHistory: {
-    date: string;
-    changedBy: string;
-    updatedCaseStatus: string;
-  }[];
-  caseCaption: string;
+export type CavAndSubmittedFilteredCasesType = RawCase & {
   daysElapsedSinceLastStatusChange: number;
-  docketNumber: string;
-  leadDocketNumber?: string;
   formattedCaseCount: number;
-  petitioners: TPetitioner[];
-  status: string;
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
@@ -70,7 +61,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
-  const finalListOfCases: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+  const allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
     (caseRecord, i) => ({
       ...caseRecord,
       daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
@@ -78,25 +69,25 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
-  finalListOfCases.sort((a, b) => {
+  allCaseResults.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
   });
 
-  const itemOffset =
-    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
+  let paginatedCaseResults;
+  if (searchEntity.pageSize && searchEntity.pageNumber) {
+    const itemOffset =
+      (searchEntity.pageNumber * searchEntity.pageSize) % allCaseResults.length;
 
-  const endOffset = itemOffset + searchEntity.pageSize;
+    const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
-    itemOffset,
-    endOffset,
-  );
+    paginatedCaseResults = allCaseResults.slice(itemOffset, endOffset);
+  }
 
   return {
-    cases: formattedCaseRecordsForDisplay,
-    totalCount: finalListOfCases.length,
+    cases: paginatedCaseResults || allCaseResults,
+    totalCount: (paginatedCaseResults || allCaseResults).length,
   };
 };
 
@@ -104,6 +95,10 @@ const calculateDaysElapsed = (
   applicationContext: IApplicationContext,
   individualCase: RawCase,
 ) => {
+  if (isEmpty(individualCase.caseStatusHistory)) {
+    return 0;
+  }
+
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
     .formatDateString(
