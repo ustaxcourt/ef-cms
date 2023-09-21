@@ -3,6 +3,8 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 
 export class TestCaseEntity extends JoiValidationEntity {
   public contactType: string;
+  public caseList: TestCaseEntity[];
+
   getValidationRules() {
     return {
       contactType: JoiValidationConstants.STRING.valid(
@@ -24,6 +26,9 @@ export class TestCaseEntity extends JoiValidationEntity {
 
   constructor(rawTestCase) {
     super('TestCaseEntity');
-    this.contactType = rawTestCase.contactType;
+    this.contactType = rawTestCase.contactType || 'VALID_1';
+    this.caseList = (rawTestCase.caseList || []).map(
+      d => new TestCaseEntity(d),
+    );
   }
 }
