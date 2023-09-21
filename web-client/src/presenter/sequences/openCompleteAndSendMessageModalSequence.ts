@@ -1,13 +1,10 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { formHasSecondaryDocumentAction } from '../actions/FileDocument/formHasSecondaryDocumentAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { isWorkItemAlreadyCompletedAction } from '../actions/isWorkItemAlreadyCompletedAction';
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPreviousDocumentDocketEntryAction } from '../actions/FileDocument/setPreviousDocumentDocketEntryAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
@@ -22,16 +19,6 @@ export const openCompleteAndSendMessageModalSequence = [
   isWorkItemAlreadyCompletedAction,
   {
     no: [
-      formHasSecondaryDocumentAction,
-      {
-        no: [],
-        yes: [
-          getComputedFormDateFactoryAction('secondaryDocument.serviceDate'),
-          setComputeFormDateFactoryAction('secondaryDocument.serviceDate'),
-        ],
-      },
-      getComputedFormDateFactoryAction('serviceDate'),
-      setComputeFormDateFactoryAction('serviceDate'),
       setFilersFromFilersMapAction,
       validateDocketEntryAction,
       {

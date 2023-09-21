@@ -6,7 +6,6 @@ export const formatDateFromDatePickerAction = ({
 }: ActionProps<{ key: string; value: string; toFormat: TimeFormats }>):
   | { key: string; value: string }
   | undefined => {
-  console.log('props', props);
   if (props.value) {
     const [month, day, year] = props.value.split('/');
 

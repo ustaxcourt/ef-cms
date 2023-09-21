@@ -33,12 +33,12 @@ export const validateDocumentAction = ({
           entryMetadata: formMetadata,
         }),
       },
-      ['dateReceived', 'filers'],
+      ['receivedAt', 'filers'],
     );
 
     errorDisplayOrder = [
       ...errorDisplayOrder,
-      'dateReceived',
+      'receivedAt',
       'eventCode',
       'freeText',
       'freeText2',
