@@ -130,6 +130,17 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
+export const STATUS_OF_MATTER_OPTIONS = [
+  'Awaiting Consideration',
+  'Awaiting Briefs',
+  'Drafting',
+  'Reviewing Draft',
+  'Submitted to Chief Judge',
+  'Revising Draft',
+  'Submitted to Reporter',
+  'Stayed',
+];
+
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
   PENDING: 'pending',
