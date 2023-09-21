@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 
@@ -17,28 +18,29 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
       key: 'hasVerifiedIrsNotice',
       value: false,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsDay',
-      value: '24',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2050',
-    });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'irsNoticeDate',
+        toFormat: FORMATS.ISO,
+        value: '12/24/2050',
+      },
+    );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
       irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2017',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'irsNoticeDate',
+        toFormat: FORMATS.ISO,
+        value: '12/24/2017',
+      },
+    );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
