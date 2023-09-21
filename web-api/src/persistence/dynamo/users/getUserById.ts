@@ -1,18 +1,13 @@
 import * as client from '../../dynamodbClientService';
+import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 
-/**
- * getUserById
- *
- * @param {string} userId the id of the user
- * @returns {*} result returned from persistence
- */
 export const getUserById = ({
   applicationContext,
   userId,
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}) =>
+}): Promise<TDynamoRecord> =>
   client.get({
     Key: {
       pk: `user|${userId}`,
