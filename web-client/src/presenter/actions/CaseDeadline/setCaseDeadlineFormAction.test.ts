@@ -45,10 +45,8 @@ describe('setCaseDeadlineFormAction', () => {
 
     expect(result.state.form).toMatchObject({
       caseDeadlineId: 'caseDeadlineId-1',
-      day: '25',
+      deadlineDate: '2019-07-25',
       description: 'Case Deadline Description',
-      month: '7',
-      year: '2019',
     });
   });
 });
