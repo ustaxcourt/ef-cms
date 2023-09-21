@@ -10,8 +10,7 @@ import classNames from 'classnames';
 
 export const InclusionsForm = connect(
   {
-    DATE_FORMATS: state.constants.DATE_FORMATS,
-    DOCUMENT_RELATIONSHIPS: state.constants.DOCUMENT_RELATIONSHIPS,
+    constants: state.constants,
     data: state[props.bind],
     fileDocumentHelper: state.fileDocumentHelper,
     formatAndUpdateDateFromDatePickerSequence:
@@ -25,9 +24,8 @@ export const InclusionsForm = connect(
     validationData: state[props.validationBind],
   },
   function InclusionsForm({
+    constants,
     data,
-    DATE_FORMATS,
-    DOCUMENT_RELATIONSHIPS,
     fileDocumentHelper,
     formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
@@ -71,7 +69,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__input"
                 id={`${type}-attachments`}
                 name={`${
-                  type === DOCUMENT_RELATIONSHIPS.PRIMARY
+                  type === constants.DOCUMENT_RELATIONSHIPS.PRIMARY
                     ? 'attachments'
                     : `${type}.attachments`
                 }`}
@@ -98,7 +96,7 @@ export const InclusionsForm = connect(
                 className="usa-checkbox__input"
                 id={`${type}-certificateOfService`}
                 name={`${
-                  type === DOCUMENT_RELATIONSHIPS.PRIMARY
+                  type === constants.DOCUMENT_RELATIONSHIPS.PRIMARY
                     ? 'certificateOfService'
                     : `${type}.certificateOfService`
                 }`}
@@ -121,8 +119,6 @@ export const InclusionsForm = connect(
             </div>
           </fieldset>
         </div>
-        {console.log(validationData)}
-
         {data.certificateOfService && (
           <DateSelector
             defaultValue={data.certificateOfServiceDate}
@@ -131,8 +127,11 @@ export const InclusionsForm = connect(
             label="Service date"
             onChange={e => {
               formatAndUpdateDateFromDatePickerSequence({
-                key: `${type}.certificateOfServiceDate`,
-                toFormat: DATE_FORMATS.ISO,
+                key:
+                  type === constants.DOCUMENT_RELATIONSHIPS.PRIMARY
+                    ? 'certificateOfServiceDate'
+                    : `${type}.certificateOfServiceDate`,
+                toFormat: constants.DATE_FORMATS.ISO,
                 value: e.target.value,
               });
               validateExternalDocumentInformationSequence();
