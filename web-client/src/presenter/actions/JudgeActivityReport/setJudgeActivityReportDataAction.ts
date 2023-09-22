@@ -1,6 +1,5 @@
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { CasesClosedReturnType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { OpinionsReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor';
-import { OrdersReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
 import { TrialSessionTypes } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -9,8 +8,8 @@ export const setJudgeActivityReportDataAction = ({
   store,
 }: ActionProps<{
   casesClosedByJudge: CasesClosedReturnType;
-  opinions: OpinionsReturnType;
-  orders: OrdersReturnType;
+  opinions: AggregatedEventCodesType;
+  orders: AggregatedEventCodesType;
   trialSessions: TrialSessionTypes;
 }>) => {
   const { casesClosedByJudge, opinions, orders, trialSessions } = props;
