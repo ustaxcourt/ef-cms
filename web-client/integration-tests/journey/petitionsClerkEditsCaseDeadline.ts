@@ -1,4 +1,5 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -46,20 +47,14 @@ I'll be gone
 In a day or two`,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: overrides.month || '4',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: overrides.day || '1',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: overrides.year || '2035',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'deadlineDate',
+        toFormat: FORMATS.ISO,
+        value: '04/01/2035',
+      },
+    );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
