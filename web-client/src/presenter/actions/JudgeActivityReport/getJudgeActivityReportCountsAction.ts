@@ -1,18 +1,16 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getOrdersIssuedForJudgeActivityReportAction = async ({
+export const getJudgeActivityReportCountsAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
 
-  const orders = await applicationContext
+  return await applicationContext
     .getUseCases()
-    .getCountOfOrdersFiledByJudgesInteractor(applicationContext, {
+    .getCountOfCaseDocumentsFiledByJudgesInteractor(applicationContext, {
       endDate,
       judges,
       startDate,
     });
-
-  return { orders };
 };
