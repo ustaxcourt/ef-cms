@@ -144,10 +144,10 @@ const EXTERNAL_USER_DASHBOARD_TABS = {
   OPEN: 'Open',
 };
 
-export const GENERATION_TYPES = {
+export const GENERATION_TYPES = Object.freeze({
   AUTO: 'auto',
   MANUAL: 'manual',
-};
+});
 
 const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
 const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';

@@ -14,11 +14,11 @@ import classNames from 'classnames';
 
 export const RequestAccess = connect(
   {
+    GENERATION_TYPES: state.constants.GENERATION_TYPES,
     allowExternalConsolidatedGroupFiling:
       state.allowExternalConsolidatedGroupFiling,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    petitioners: state.formattedCaseDetail.petitioners,
     requestAccessHelper: state.requestAccessHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
@@ -32,7 +32,7 @@ export const RequestAccess = connect(
     allowExternalConsolidatedGroupFiling,
     form,
     formCancelToggleCancelSequence,
-    petitioners,
+    GENERATION_TYPES,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -112,7 +112,7 @@ export const RequestAccess = connect(
           )}
           <RequestAccessDocumentForm />
           {allowExternalConsolidatedGroupFiling &&
-            form.generationType === 'manual' && (
+            form.generationType === GENERATION_TYPES.MANUAL && (
               <ExternalConsolidatedCaseGroupFilingCard />
             )}
           <div className="margin-top-5">
@@ -120,7 +120,7 @@ export const RequestAccess = connect(
               id="submit-document"
               type="submit"
               onClick={() => {
-                reviewRequestAccessInformationSequence({ petitioners });
+                reviewRequestAccessInformationSequence();
               }}
             >
               Review Filing

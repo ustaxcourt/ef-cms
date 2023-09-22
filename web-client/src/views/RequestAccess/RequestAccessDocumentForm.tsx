@@ -15,7 +15,6 @@ import classNames from 'classnames';
 
 export const RequestAccessDocumentForm = connect(
   {
-    OBJECTIONS_OPTIONS: state.constants.OBJECTIONS_OPTIONS,
     constants: state.constants,
     form: state.form,
     openCleanModalSequence: sequences.openCleanModalSequence,
@@ -42,13 +41,14 @@ export const RequestAccessDocumentForm = connect(
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
         <PIIRedactedWarning />
-
         {form.eventCode === 'EA' && (
           <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
               <div className="usa-radio usa-radio__inline">
                 <input
-                  checked={form.generationType === 'auto'}
+                  checked={
+                    form.generationType === constants.GENERATION_TYPES.AUTO
+                  }
                   className="usa-radio__input"
                   id="auto-generation"
                   name="generationType"
@@ -56,7 +56,7 @@ export const RequestAccessDocumentForm = connect(
                   onChange={() => {
                     updateCaseAssociationFormValueSequence({
                       key: 'generationType',
-                      value: 'auto',
+                      value: constants.GENERATION_TYPES.AUTO,
                     });
                   }}
                 />
@@ -67,7 +67,9 @@ export const RequestAccessDocumentForm = connect(
               </div>
 
               <input
-                checked={form.generationType === 'manual'}
+                checked={
+                  form.generationType === constants.GENERATION_TYPES.MANUAL
+                }
                 className="usa-radio__input"
                 id="manual-generation"
                 name="generationType"
@@ -75,7 +77,7 @@ export const RequestAccessDocumentForm = connect(
                 onChange={() => {
                   updateCaseAssociationFormValueSequence({
                     key: 'generationType',
-                    value: 'manual',
+                    value: constants.GENERATION_TYPES.MANUAL,
                   });
                 }}
               />
@@ -85,8 +87,7 @@ export const RequestAccessDocumentForm = connect(
             </fieldset>
           </div>
         )}
-
-        {form.generationType === 'manual' && (
+        {form.generationType === constants.GENERATION_TYPES.MANUAL && (
           <>
             <div>
               <FormGroup errorText={validationErrors?.primaryDocumentFile}>

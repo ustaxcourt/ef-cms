@@ -10,7 +10,6 @@ export const setDefaultGenerationTypeAction = ({
   const user = applicationContext.getCurrentUser();
   const { leadDocketNumber } = get(state.caseDetail);
 
-  // TODO: REFACTOR ME
   if (props.key === 'eventCode') {
     if (props.value === 'EA') {
       store.set(state.form.generationType, GENERATION_TYPES.AUTO);
@@ -27,7 +26,7 @@ export const setDefaultGenerationTypeAction = ({
 
   if (props.key === 'generationType') {
     if (
-      props.value === 'manual' &&
+      props.value === GENERATION_TYPES.MANUAL &&
       user.role === USER_ROLES.irsPractitioner &&
       !!leadDocketNumber
     ) {

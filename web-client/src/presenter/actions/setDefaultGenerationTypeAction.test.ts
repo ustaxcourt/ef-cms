@@ -112,7 +112,7 @@ describe('setDefaultGenerationTypeAction', () => {
       modules: { presenter },
       props: {
         key: 'generationType',
-        value: 'manual',
+        value: GENERATION_TYPES.MANUAL,
       },
       state: {
         allowExternalConsolidatedGroupFiling: false,
@@ -136,7 +136,7 @@ describe('setDefaultGenerationTypeAction', () => {
       modules: { presenter },
       props: {
         key: 'generationType',
-        value: 'manual',
+        value: GENERATION_TYPES.MANUAL,
       },
       state: {
         allowExternalConsolidatedGroupFiling: false,
