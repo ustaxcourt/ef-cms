@@ -16,7 +16,7 @@ export const RequestAccess = connect(
   {
     GENERATION_TYPES: state.constants.GENERATION_TYPES,
     allowExternalConsolidatedGroupFiling:
-      state.allowExternalConsolidatedGroupFiling,
+      state.allowExternalConsolidatedGroupFilingHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     requestAccessHelper: state.requestAccessHelper,
