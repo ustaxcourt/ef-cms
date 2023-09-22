@@ -11,7 +11,7 @@ const NonstandardDateInput = ({
   DATE_FORMATS,
   form,
   formatAndUpdateDateFromDatePickerSequence,
-  updateCourtIssuedDocketEntryFormValueSequence,
+  updateCourtIssuedDocketEntryTitleSequence,
   validateCourtIssuedDocketEntrySequence,
   validationErrors,
 }) => (
@@ -26,7 +26,7 @@ const NonstandardDateInput = ({
         toFormat: DATE_FORMATS.ISO,
         value: e.target.value,
       });
-      updateCourtIssuedDocketEntryFormValueSequence();
+      updateCourtIssuedDocketEntryTitleSequence();
       validateCourtIssuedDocketEntrySequence();
     }}
   />
@@ -43,6 +43,8 @@ export const CourtIssuedNonstandardForm = connect(
     judgeUsers: state.judges,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
+    updateCourtIssuedDocketEntryTitleSequence:
+      sequences.updateCourtIssuedDocketEntryTitleSequence,
     validateCourtIssuedDocketEntrySequence:
       sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
@@ -54,6 +56,7 @@ export const CourtIssuedNonstandardForm = connect(
     formatAndUpdateDateFromDatePickerSequence,
     judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence,
+    updateCourtIssuedDocketEntryTitleSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) {
@@ -69,8 +72,8 @@ export const CourtIssuedNonstandardForm = connect(
             formatAndUpdateDateFromDatePickerSequence={
               formatAndUpdateDateFromDatePickerSequence
             }
-            updateCourtIssuedDocketEntryFormValueSequence={
-              updateCourtIssuedDocketEntryFormValueSequence
+            updateCourtIssuedDocketEntryTitleSequence={
+              updateCourtIssuedDocketEntryTitleSequence
             }
             validateCourtIssuedDocketEntrySequence={
               validateCourtIssuedDocketEntrySequence
@@ -227,8 +230,8 @@ export const CourtIssuedNonstandardForm = connect(
             formatAndUpdateDateFromDatePickerSequence={
               formatAndUpdateDateFromDatePickerSequence
             }
-            updateCourtIssuedDocketEntryFormValueSequence={
-              updateCourtIssuedDocketEntryFormValueSequence
+            updateCourtIssuedDocketEntryTitleSequence={
+              updateCourtIssuedDocketEntryTitleSequence
             }
             validateCourtIssuedDocketEntrySequence={
               validateCourtIssuedDocketEntrySequence

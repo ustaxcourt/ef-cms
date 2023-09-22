@@ -1,13 +1,11 @@
 import { clearCourtIssuedDocketEntryFormValuesAction } from '../actions/CourtIssuedDocketEntry/clearCourtIssuedDocketEntryFormValuesAction';
-import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
-import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { setDefaultFreeTextForCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/setDefaultFreeTextForCourtIssuedDocketEntryAction';
 import { setFormValueAction } from '../actions/setFormValueAction';
+import { updateCourtIssuedDocketEntryTitleSequence } from '@web-client/presenter/sequences/updateCourtIssuedDocketEntryTitleSequence';
 
 export const updateCourtIssuedDocketEntryFormValueSequence = [
   setFormValueAction,
   clearCourtIssuedDocketEntryFormValuesAction,
   setDefaultFreeTextForCourtIssuedDocketEntryAction,
-  computeJudgeNameWithTitleAction,
-  generateCourtIssuedDocumentTitleAction,
+  updateCourtIssuedDocketEntryTitleSequence,
 ];
