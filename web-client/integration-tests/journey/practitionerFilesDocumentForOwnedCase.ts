@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
@@ -79,24 +80,11 @@ export const practitionerFilesDocumentForOwnedCase = (
     );
 
     await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'certificateOfServiceMonth',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceDay',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceYear',
-        value: '2000',
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2000',
       },
     );
 
