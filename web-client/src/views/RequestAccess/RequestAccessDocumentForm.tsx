@@ -41,14 +41,13 @@ export const RequestAccessDocumentForm = connect(
       <>
         <h2 className="margin-top-4">Tell Us About This Document</h2>
         <PIIRedactedWarning />
-
         {form.eventCode === 'EA' && (
           <div className="usa-form-group">
             <fieldset className="usa-fieldset margin-bottom-0">
               <div className="usa-radio usa-radio__inline">
                 <input
                   checked={
-                    form.generationType === constants.GENERATION_TYPES.auto
+                    form.generationType === constants.GENERATION_TYPES.AUTO
                   }
                   className="usa-radio__input"
                   id="auto-generation"
@@ -57,7 +56,7 @@ export const RequestAccessDocumentForm = connect(
                   onChange={() => {
                     updateCaseAssociationFormValueSequence({
                       key: 'generationType',
-                      value: constants.GENERATION_TYPES.auto,
+                      value: constants.GENERATION_TYPES.AUTO,
                     });
                   }}
                 />
@@ -88,7 +87,6 @@ export const RequestAccessDocumentForm = connect(
             </fieldset>
           </div>
         )}
-
         {form.generationType === constants.GENERATION_TYPES.MANUAL && (
           <>
             <div>

@@ -19,7 +19,6 @@ export const RequestAccess = connect(
       state.allowExternalConsolidatedGroupFiling,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
-    petitioners: state.formattedCaseDetail.petitioners,
     requestAccessHelper: state.requestAccessHelper,
     reviewRequestAccessInformationSequence:
       sequences.reviewRequestAccessInformationSequence,
@@ -34,7 +33,6 @@ export const RequestAccess = connect(
     form,
     formCancelToggleCancelSequence,
     GENERATION_TYPES,
-    petitioners,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -122,7 +120,7 @@ export const RequestAccess = connect(
               id="submit-document"
               type="submit"
               onClick={() => {
-                reviewRequestAccessInformationSequence({ petitioners });
+                reviewRequestAccessInformationSequence();
               }}
             >
               Review Filing

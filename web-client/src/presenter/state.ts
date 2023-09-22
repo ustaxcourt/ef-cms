@@ -392,7 +392,7 @@ export const baseState = {
     isScanning: false,
     selectedBatchIndex: 0,
   },
-  screenMetadata: {},
+  screenMetadata: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
