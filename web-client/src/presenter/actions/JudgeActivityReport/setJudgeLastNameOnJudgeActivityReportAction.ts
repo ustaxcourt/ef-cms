@@ -20,14 +20,11 @@ export const setJudgeLastNameOnJudgeActivityReportAction = ({
 
     judgeName = applicationContext
       .getUtilities()
-      .getJudgeLastName(userSectionInfo.judgeFullName);
+      .getJudgeLastName(userSectionInfo!.judgeFullName);
   } else {
     judgeName = user.name;
   }
 
-  store.set(state.judgeActivityReport.filters.judgeName, judgeName);
-  store.set(
-    state.judgeActivityReport.filters.judgeNameToDisplayForHeader,
-    judgeName,
-  );
+  store.set(state.judgeActivityReport.judgeName, judgeName);
+  store.set(state.judgeActivityReport.judgeNameToDisplayForHeader, judgeName);
 };
