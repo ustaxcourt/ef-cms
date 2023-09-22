@@ -1,4 +1,5 @@
 import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
@@ -11,9 +12,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
     procedureType = 'Small',
-    receivedAtDay = '01',
-    receivedAtMonth = '01',
-    receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
   } = {},
   formOverrides = [],
@@ -24,18 +22,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   };
 
   let formValues = [
-    {
-      key: 'receivedAtMonth',
-      value: receivedAtMonth,
-    },
-    {
-      key: 'receivedAtDay',
-      value: receivedAtDay,
-    },
-    {
-      key: 'receivedAtYear',
-      value: receivedAtYear,
-    },
     {
       key: 'mailingDate',
       value: 'Some Day',
@@ -134,18 +120,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: paymentStatus,
     },
     {
-      key: 'paymentDateWaivedDay',
-      value: '05',
-    },
-    {
-      key: 'paymentDateWaivedMonth',
-      value: '05',
-    },
-    {
-      key: 'paymentDateWaivedYear',
-      value: '2005',
-    },
-    {
       key: 'orderForRatification',
       value: true,
     },
@@ -166,6 +140,24 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   it('should default to parties tab when creating a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2001',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentWaivedDate',
+        toFormat: FORMATS.ISO,
+        value: '05/05/2005',
+      },
+    );
 
     expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
     expect(
