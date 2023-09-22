@@ -1,4 +1,5 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
+import { allowExternalConsolidatedGroupFilingHelper } from '@web-client/presenter/computeds/allowExternalConsolidatedGroupFilingHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -14,7 +15,7 @@ export const setDefaultFileDocumentFormValuesAction = ({
 }: ActionProps) => {
   store.set(
     state.form.fileAcrossConsolidatedGroup,
-    get(state.allowExternalConsolidatedGroupFilingHelper),
+    allowExternalConsolidatedGroupFilingHelper(get, applicationContext),
   );
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
