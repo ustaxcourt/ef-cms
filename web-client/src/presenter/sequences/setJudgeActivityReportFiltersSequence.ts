@@ -10,6 +10,7 @@ import { validateJudgeActivityReportSearchAction } from '../actions/JudgeActivit
 export const setJudgeActivityReportFiltersSequence = sequence<{
   endDate?: string;
   startDate?: string;
+  judgeName?: string;
 }>([
   setJudgeActivityReportFiltersAction,
   shouldValidateAction,
