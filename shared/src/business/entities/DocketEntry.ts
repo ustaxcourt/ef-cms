@@ -335,7 +335,7 @@ export class DocketEntry extends JoiValidationEntity {
       !DocketEntry.isServed(this);
 
     if (shouldGenerateFiledBy) {
-      let partiesArray = [];
+      let partiesArray: string[] = [];
       const privatePractitionerIsFiling = this.privatePractitioners?.some(
         practitioner => practitioner.partyPrivatePractitioner,
       );
@@ -349,7 +349,7 @@ export class DocketEntry extends JoiValidationEntity {
       } else {
         this.partyIrsPractitioner && partiesArray.push('Resp.');
 
-        const petitionersArray = [];
+        const petitionersArray: string[] = [];
         this.filers.forEach(contactId =>
           petitioners.forEach(p => {
             if (p.contactId === contactId) {
@@ -365,7 +365,7 @@ export class DocketEntry extends JoiValidationEntity {
         }
       }
 
-      const filedByArray = [];
+      const filedByArray: string[] = [];
       if (partiesArray.length) {
         filedByArray.push(partiesArray.join(' & '));
       }

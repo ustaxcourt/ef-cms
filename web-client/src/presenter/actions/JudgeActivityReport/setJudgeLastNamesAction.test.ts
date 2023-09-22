@@ -9,7 +9,7 @@ describe('setJudgeLastNamesAction', () => {
   const secondJudgeUser = { ...judgeUser, name: 'Buch' };
   const mockJudgesInState = [judgeUser, secondJudgeUser];
 
-  it('should set judges on judgeActivityReport filter to the populated list of judges in app state judgeName is "All Judges"', async () => {
+  it('should set state.judgeActivityReport.filters.judges to current judges populated in state if judgeName is "All Judges"', async () => {
     const { state } = await runAction(setJudgeLastNamesAction as any, {
       modules: {
         presenter,
@@ -17,9 +17,7 @@ describe('setJudgeLastNamesAction', () => {
       props: {},
       state: {
         judgeActivityReport: {
-          filters: {
-            judgeName: 'All Judges',
-          },
+          judgeName: 'All Judges',
         },
         judges: mockJudgesInState,
       },
@@ -32,16 +30,14 @@ describe('setJudgeLastNamesAction', () => {
   });
 
   it('should set judgeActivityReport.filters.judges to the selected judge name', async () => {
-    const { state } = await runAction(setJudgeLastNamesAction as any, {
+    const { state } = await runAction(setJudgeLastNamesAction, {
       modules: {
         presenter,
       },
       props: {},
       state: {
         judgeActivityReport: {
-          filters: {
-            judgeName: judgeUser.name,
-          },
+          judgeName: judgeUser.name,
         },
         judges: mockJudgesInState,
       },
@@ -50,7 +46,7 @@ describe('setJudgeLastNamesAction', () => {
     expect(state.judgeActivityReport.filters.judges).toEqual([judgeUser.name]);
   });
 
-  it('should set judges last name on state.judgeActivityReport.filters', async () => {
+  it('should set state.judgeActivityReport.judgeNameToDisplayForHeader to the selected judge', async () => {
     const { state } = await runAction(setJudgeLastNamesAction, {
       modules: {
         presenter,
@@ -58,15 +54,13 @@ describe('setJudgeLastNamesAction', () => {
       props: {},
       state: {
         judgeActivityReport: {
-          filters: {
-            judgeName: judgeUser.name,
-          },
+          judgeName: judgeUser.name,
         },
         judges: mockJudgesInState,
       },
     });
 
-    expect(state.judgeActivityReport.filters.judgeNameToDisplayForHeader).toBe(
+    expect(state.judgeActivityReport.judgeNameToDisplayForHeader).toBe(
       judgeUser.name,
     );
   });

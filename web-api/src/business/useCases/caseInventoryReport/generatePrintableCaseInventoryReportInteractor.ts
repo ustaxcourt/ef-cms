@@ -2,17 +2,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
-/**
- * generatePrintableCaseInventoryReportInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.associatedJudge the judge to filter by
- * @param {string} providers.status the status to filter by
- * @returns {Array} the url of the document
- */
 export const generatePrintableCaseInventoryReportInteractor = async (
   applicationContext: IApplicationContext,
   { associatedJudge, status }: { associatedJudge?: string; status?: string },
