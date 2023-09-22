@@ -93,7 +93,7 @@ describe('requestAccessHelper', () => {
 
   it('does not generate a formatted service date if a service date is not entered on the form', () => {
     const result = runCompute(requestAccessHelper, { state });
-    expect(result.certificateOfServiceDateFormatted).toBeUndefined();
+    expect(result.certificateOfServiceDateFormatted).toEqual('');
   });
 
   it('returns correct number of document options for user role privatePractitioner', () => {
