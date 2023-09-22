@@ -1,4 +1,5 @@
 import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 import { requestAccessHelper as requestAccessHelperComputed } from '../../src/presenter/computeds/requestAccessHelper';
@@ -109,18 +110,14 @@ export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
         CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '5000',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/5000',
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
