@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
@@ -19,18 +20,6 @@ export const docketClerkAddsPretrialMemorandumToCase = (
     });
 
     const pretrialMemorandum = [
-      {
-        key: 'dateReceivedMonth',
-        value: 4,
-      },
-      {
-        key: 'dateReceivedDay',
-        value: 30,
-      },
-      {
-        key: 'dateReceivedYear',
-        value: 2001,
-      },
       {
         key: 'primaryDocumentFile',
         value: fakeFile,
@@ -59,6 +48,15 @@ export const docketClerkAddsPretrialMemorandumToCase = (
         item,
       );
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '4/30/2001',
+      },
+    );
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

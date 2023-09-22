@@ -9,7 +9,7 @@ import {
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   cerebralTest,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
   return it('docket clerk adds paper filed docket entry and saves for later', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
