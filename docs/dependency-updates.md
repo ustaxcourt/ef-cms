@@ -79,4 +79,5 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### Incrementing the Node Cache Key Version
 
-It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them under the new key. The cache key can be updated by searching within config.yml for `vX-npm` and `vX-cypress` where X is the current version of the cache key, then increment the version found.
+It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
+
