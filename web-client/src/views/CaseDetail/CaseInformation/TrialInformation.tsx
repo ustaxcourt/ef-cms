@@ -95,7 +95,7 @@ export const TrialInformation = connect(
                   </tr>
                   {caseDetail.highPriorityReason && (
                     <tr>
-                      <td colSpan="4">{caseDetail.highPriorityReason}</td>
+                      <td colSpan={4}>{caseDetail.highPriorityReason}</td>
                     </tr>
                   )}
                 </tbody>
@@ -166,7 +166,7 @@ export const TrialInformation = connect(
                   </tr>
                   {caseDetail.trialSessionNotes && (
                     <tr>
-                      <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                      <td colSpan={4}>{caseDetail.trialSessionNotes}</td>
                     </tr>
                   )}
                 </tbody>
@@ -310,7 +310,7 @@ export const TrialInformation = connect(
                   </tr>
                   {caseDetail.trialSessionNotes && (
                     <tr>
-                      <td colSpan="4">{caseDetail.trialSessionNotes}</td>
+                      <td colSpan={4}>{caseDetail.trialSessionNotes}</td>
                     </tr>
                   )}
                 </tbody>

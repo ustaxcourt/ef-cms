@@ -1,4 +1,4 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 
 export const respondentAddsStipulatedDecision = (
   cerebralTest,
@@ -13,8 +13,11 @@ export const respondentAddsStipulatedDecision = (
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      category:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     await cerebralTest.runSequence(
@@ -27,7 +30,9 @@ export const respondentAddsStipulatedDecision = (
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     const documentToSelect = {

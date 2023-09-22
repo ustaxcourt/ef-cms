@@ -4,11 +4,19 @@ import { EConsent } from '../StartCaseInternal/EConsent';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { InternationalAddress } from './InternationalAddress';
 import { PaperPetitionEmail } from '../StartCaseInternal/PaperPetitionEmail';
+import { props as cerebralProps } from 'cerebral';
 import { connect } from '@cerebral/react';
-import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+
+const props = cerebralProps as unknown as {
+  contactsHelper: string;
+  bind: string;
+  onBlur: string;
+  onChange: string;
+  parentView: string;
+};
 
 export const ContactPrimary = connect(
   {
@@ -36,7 +44,14 @@ export const ContactPrimary = connect(
     onChangeSequence,
     parentView,
     updateFormValueAndSecondaryContactInfoSequence,
-    validationErrors = {},
+    validationErrors = {} as {
+      contactPrimary?: {
+        secondaryName: string;
+        inCareOf: string;
+        name: string;
+        phone: string;
+      };
+    },
     wrapperClassName,
   }) {
     const secondaryName = () => (

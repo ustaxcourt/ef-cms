@@ -10,7 +10,7 @@ export const BigHeader = connect(
     return (
       <div className="big-blue-header">
         <div className="grid-container">
-          <h1 tabIndex="-1">{text}</h1>
+          <h1 tabIndex={-1}>{text}</h1>
         </div>
       </div>
     );

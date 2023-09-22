@@ -33,7 +33,7 @@ export default defineConfig({
   },
   requestTimeout: 12000,
   screenshotsFolder: 'cypress/cypress-integration/screenshots',
-  video: false,
+  video: true,
   videosFolder: 'cypress/cypress-integration/videos',
   viewportHeight: 900,
   viewportWidth: 1200,

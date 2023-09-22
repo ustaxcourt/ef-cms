@@ -19,7 +19,7 @@ export const BeforeStartingCase = connect(
           <div className="grid-container">
             <div className="grid-row">
               <div className="tablet:grid-col-6">
-                <h1 className="captioned" tabIndex="-1">
+                <h1 className="captioned" tabIndex={-1}>
                   <NonMobile>Create a case</NonMobile>
                   <Mobile>How to Create a case</Mobile>
                 </h1>
@@ -28,7 +28,7 @@ export const BeforeStartingCase = connect(
           </div>
         </div>
         <section className="usa-section before-starting-case grid-container">
-          <h2 className="captioned margin-bottom-2" tabIndex="-1">
+          <h2 className="captioned margin-bottom-2" tabIndex={-1}>
             Instructions For Creating a Case
           </h2>
           <p className="margin-bottom-5">

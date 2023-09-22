@@ -16,7 +16,7 @@ import { UserCase } from '../../entities/UserCase';
 export const associatePrivatePractitionerToCase = async ({
   applicationContext,
   docketNumber,
-  representing,
+  representing = [],
   serviceIndicator,
   user,
 }: {

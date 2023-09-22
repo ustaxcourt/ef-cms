@@ -390,4 +390,23 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         .mock.calls[1][0].status,
     ).toEqual('processed');
   });
+
+  it('should set the presiding judge on the generated SPTO and persist it to the case', async () => {
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    const generatedTrialNotice = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'SPTO',
+      );
+    expect(generatedTrialNotice).toMatchObject({
+      judge: 'Judge Yggdrasil',
+      signedAt: undefined,
+      signedByUserId: undefined,
+      signedJudgeName: undefined,
+    });
+  });
 });

@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { loadPdfSequence } from '../../sequences/PDFPreviewModal/loadPdfSequence';
 import { presenter } from '../../presenter-mock';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';

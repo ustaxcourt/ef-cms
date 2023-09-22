@@ -1,42 +1,38 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { docketClerkUser, irsSuperuserUser } from '../../../test/mockUsers';
 import { generateNoticeOfDocketChangePdf } from './generateNoticeOfDocketChangePdf';
-jest.mock('../../../authorization/authorizationClientService');
-import { isAuthorized } from '../../../authorization/authorizationClientService';
-
-const docketChangeInfo = {
-  caseCaptionWithPostfix:
-    'This is a Case Caption v. Commissioner of Internal Revenue, Respondent',
-  docketEntryIndex: '3',
-  docketNumber: '123-19X',
-  filingParties: { after: 'Cody', before: 'Joe' },
-  filingsAndProceedings: { after: 'Sausage', before: 'Pepperoni' },
-};
 
 describe('generateNoticeOfDocketChangePdf', () => {
+  const docketChangeInfo = {
+    caseCaptionExtension:
+      'Bert & Ernie, Petitioners v. Commissioner of Internal Revenue, Respondent',
+    caseTitle: 'Bert & Ernie',
+    docketEntryIndex: '3',
+    docketNumber: '123-19X',
+    filingParties: { after: 'Cody', before: 'Joe' },
+    filingsAndProceedings: { after: 'Sausage', before: 'Pepperoni' },
+  };
+
   beforeEach(() => {
-    isAuthorized.mockReturnValue(true);
-    applicationContext.logger.error = jest.fn();
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
     applicationContext.getStorageClient.mockReturnValue({
       upload: (params, callback) => callback(null, true),
     });
   });
 
-  it('requires permissions', async () => {
-    isAuthorized.mockReturnValue(false);
-    let result, error;
-    try {
-      result = await generateNoticeOfDocketChangePdf({
+  it('should throw an error when the user does not have permission to generate a notice of docket change', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser); // IRS Superuser does not have this permission
+
+    await expect(
+      generateNoticeOfDocketChangePdf({
         applicationContext,
         docketChangeInfo,
-      });
-    } catch (err) {
-      error = err;
-    }
-    expect(result).not.toBeDefined();
-    expect(error.message).toEqual('Unauthorized');
+      }),
+    ).rejects.toThrow('Unauthorized');
   });
 
-  it('calls the Notice of Docket Change document generator', async () => {
+  it('should call the document generator to create the Notice of Docket Change PDF', async () => {
     applicationContext.getUniqueId.mockReturnValue('uniqueId');
 
     const result = await generateNoticeOfDocketChangePdf({
@@ -50,7 +46,7 @@ describe('generateNoticeOfDocketChangePdf', () => {
     expect(result).toEqual('uniqueId');
   });
 
-  it('fails and logs if the s3 upload fails', async () => {
+  it('should log an error when the generated PDF can`t be uploaded to s3', async () => {
     applicationContext.getStorageClient.mockReturnValue({
       upload: (params, callback) => callback('there was an error uploading'),
     });

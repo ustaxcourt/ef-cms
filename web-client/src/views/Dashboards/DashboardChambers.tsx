@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { CaseWorksheets } from '../CaseWorksheet/CaseWorksheets';
 import { ErrorNotification } from '../ErrorNotification';
 import { RecentMessages } from '../WorkQueue/RecentMessages';
 import { SuccessNotification } from '../SuccessNotification';
@@ -19,6 +20,7 @@ export const DashboardChambers = connect(
 
           <TrialSessionsSummary />
           <RecentMessages />
+          <CaseWorksheets />
         </section>
       </>
     );

@@ -56,9 +56,8 @@ export const docketClerkEditsOrderFromMessage = cerebralTest => {
     });
     expect(messageDetailFormatted.attachments.length).toEqual(2);
 
-    const { formattedDraftDocuments } = await getFormattedDocketEntriesForTest(
-      cerebralTest,
-    );
+    const { formattedDraftDocuments } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
     const caseOrderDocument = formattedDraftDocuments.find(
       d => d.docketEntryId === orderDocument.documentId,

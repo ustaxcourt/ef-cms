@@ -59,13 +59,13 @@ import { isAuthorized } from '../../shared/src/authorization/authorizationClient
 import { isCurrentColorActive } from './persistence/dynamo/helpers/isCurrentColorActive';
 import { retrySendNotificationToConnections } from '../../shared/src/notifications/retrySendNotificationToConnections';
 import { scan } from './persistence/dynamodbClientService';
-import { sendBulkTemplatedEmail } from '../../shared/src/dispatchers/ses/sendBulkTemplatedEmail';
+import { sendBulkTemplatedEmail } from './dispatchers/ses/sendBulkTemplatedEmail';
 import { sendEmailEventToQueue } from './persistence/messages/sendEmailEventToQueue';
-import { sendNotificationOfSealing } from '../../shared/src/dispatchers/sns/sendNotificationOfSealing';
+import { sendNotificationOfSealing } from './dispatchers/sns/sendNotificationOfSealing';
 import { sendNotificationToConnection } from '../../shared/src/notifications/sendNotificationToConnection';
 import { sendNotificationToUser } from '../../shared/src/notifications/sendNotificationToUser';
 import { sendSetTrialSessionCalendarEvent } from './persistence/messages/sendSetTrialSessionCalendarEvent';
-import { sendSlackNotification } from '../../shared/src/dispatchers/slack/sendSlackNotification';
+import { sendSlackNotification } from './dispatchers/slack/sendSlackNotification';
 import { sendUpdatePetitionerCasesMessage } from './persistence/messages/sendUpdatePetitionerCasesMessage';
 import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCases/users/updatePetitionerCasesInteractor';
 import { v4 as uuidv4 } from 'uuid';
@@ -285,6 +285,9 @@ export const createApplicationContext = (
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
+      CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
+        ? parseInt(process.env.CHANGE_OF_ADDRESS_CONCURRENCY)
+        : undefined,
       CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
@@ -524,10 +527,10 @@ export const createApplicationContext = (
     isAuthorized,
     isCurrentColorActive,
     logger: {
-      debug: (message, context) => logger.debug(message, { context }),
-      error: (message, context) => logger.error(message, { context }),
-      info: (message, context) => logger.info(message, { context }),
-      warn: (message, context) => logger.warn(message, { context }),
+      debug: (message, context?) => logger.debug(message, { context }),
+      error: (message, context?) => logger.error(message, { context }),
+      info: (message, context?) => logger.info(message, { context }),
+      warn: (message, context?) => logger.warn(message, { context }),
     },
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);

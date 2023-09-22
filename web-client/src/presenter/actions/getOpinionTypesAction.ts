@@ -1,5 +1,5 @@
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../../../shared/src/business/entities/EntityConstants';
-const courtIssuedEventCodes = require('../../../../shared/src/tools/courtIssuedEventCodes.json');
+import courtIssuedEventCodes from '../../../../shared/src/tools/courtIssuedEventCodes.json';
 
 /**
  * get the opinion document types

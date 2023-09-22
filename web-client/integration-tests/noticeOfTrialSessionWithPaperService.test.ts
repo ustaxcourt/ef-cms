@@ -35,7 +35,7 @@ describe('Generate Notices of Trial Session with Paper Service', () => {
     procedureType: 'Small', // should generate a Standing Pretrial Order for Small Cases
     trialLocation,
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

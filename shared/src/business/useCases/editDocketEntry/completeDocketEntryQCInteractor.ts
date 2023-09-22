@@ -1,5 +1,4 @@
 import {
-  CASE_CAPTION_POSTFIX,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
@@ -7,7 +6,10 @@ import {
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { InvalidRequest, UnauthorizedError } from '../../../errors/errors';
+import {
+  InvalidRequest,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -174,7 +176,6 @@ const completeDocketEntryQC = async (
 
   const docketChangeInfo = {
     caseCaptionExtension,
-    caseCaptionWithPostfix: `${caseToUpdate.caseCaption} ${CASE_CAPTION_POSTFIX}`,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
     docketNumber: `${caseToUpdate.docketNumber}${

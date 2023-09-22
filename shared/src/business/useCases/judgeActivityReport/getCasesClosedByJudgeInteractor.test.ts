@@ -1,31 +1,49 @@
 import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import {
+  CasesClosedReturnType,
+  getCasesClosedByJudgeInteractor,
+} from './getCasesClosedByJudgeInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getCasesClosedByJudgeInteractor } from './getCasesClosedByJudgeInteractor';
+import {
+  createEndOfDayISO,
+  createStartOfDayISO,
+} from '../../utilities/DateHandler';
 import { judgeUser, petitionsClerkUser } from '../../../test/mockUsers';
 
-describe('getCasesClosedByJudgeInteractor', () => {
-  const mockClosedCases = [
-    {
-      status: CASE_STATUS_TYPES.closed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closedDismissed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closedDismissed,
-    },
-    {
-      status: CASE_STATUS_TYPES.closedDismissed,
-    },
-  ];
+const mockClosedCases = 3;
+const mockClosedDismissedCases = 2;
 
-  const mockValidRequest = {
-    endDate: '03/21/2020',
-    judgeName: judgeUser.name,
-    startDate: '02/12/2020',
+export const casesClosedResults: CasesClosedReturnType = {
+  aggregations: {
+    [CASE_STATUS_TYPES.closed]: mockClosedCases,
+    [CASE_STATUS_TYPES.closedDismissed]: mockClosedDismissedCases,
+  },
+  total: 5,
+};
+
+describe('getCasesClosedByJudgeInteractor', () => {
+  const mockEndDate = '03/21/2020';
+  const mockStartDate = '02/12/2020';
+
+  let [month, day, year] = mockStartDate.split('/');
+  const calculatedStartDate = createStartOfDayISO({
+    day,
+    month,
+    year,
+  });
+
+  [month, day, year] = mockEndDate.split('/');
+  const calculatedEndDate = createEndOfDayISO({
+    day,
+    month,
+    year,
+  });
+
+  const mockValidRequest: JudgeActivityReportFilters = {
+    endDate: calculatedEndDate,
+    judges: [judgeUser.name],
+    startDate: calculatedStartDate,
   };
 
   beforeEach(() => {
@@ -37,7 +55,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesClosedByJudge.mockResolvedValue(mockClosedCases);
+      .getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
   });
 
   it('should return an error when the user is not authorized to generate the report', async () => {
@@ -52,21 +70,27 @@ describe('getCasesClosedByJudgeInteractor', () => {
     await expect(
       getCasesClosedByJudgeInteractor(applicationContext, {
         endDate: 'baddabingbaddaboom',
-        judgeName: judgeUser.name,
+        judges: [judgeUser.name],
         startDate: 'yabbadabbadoo',
       }),
     ).rejects.toThrow();
   });
 
-  it('should return the cases closed organized by status', async () => {
-    const result = await getCasesClosedByJudgeInteractor(
+  it('should return cases closed count organized by each closed status for selected judges', async () => {
+    const closedCases = await getCasesClosedByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
 
-    expect(result).toEqual({
-      [CASE_STATUS_TYPES.closed]: 2,
-      [CASE_STATUS_TYPES.closedDismissed]: 3,
+    expect(
+      applicationContext.getPersistenceGateway().getCasesClosedCountByJudge.mock
+        .calls[0][0],
+    ).toMatchObject({
+      endDate: calculatedEndDate,
+      judges: [judgeUser.name],
+      startDate: calculatedStartDate,
     });
+
+    expect(closedCases).toEqual(casesClosedResults);
   });
 });

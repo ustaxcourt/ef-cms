@@ -19,7 +19,7 @@ describe('Generate Notices of Trial Session with Electronically Service', () => 
     procedureType: 'Regular', // should generate a Standing Pretrial Order
     trialLocation,
   };
-  const createdDocketNumbers = [];
+  const createdDocketNumbers: string[] = [];
 
   afterAll(() => {
     cerebralTest.closeSocket();

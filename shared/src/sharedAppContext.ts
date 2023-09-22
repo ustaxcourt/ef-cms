@@ -20,7 +20,7 @@ export const getPublicSiteUrl = () => {
   return process.env.PUBLIC_SITE_URL || 'http://localhost:5678';
 };
 
-export const getUniqueId = () => {
+export const getUniqueId = (): string => {
   return uuidv4();
 };
 

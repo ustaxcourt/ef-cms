@@ -28,5 +28,5 @@ export const getCaseByDocketNumber = async ({
     applicationContext,
   });
 
-  return aggregateCaseItems(caseItems);
+  return aggregateCaseItems(caseItems) as RawCase;
 };

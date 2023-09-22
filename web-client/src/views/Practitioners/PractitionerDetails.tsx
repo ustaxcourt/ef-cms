@@ -53,19 +53,13 @@ export const PractitionerDetails = connect(
                 <div className="grid-row grid-gap">
                   <div className="tablet:grid-col-6 margin-bottom-1">
                     <div className="tablet:margin-bottom-0 margin-bottom-205">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-name"
-                      >
+                      <span className="usa-label usa-label-display">
                         Practitioner name
                       </span>
                       <div className="margin-bottom-4">
                         {practitionerDetailHelper.name}
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-practitioner-type"
-                      >
+                      <span className="usa-label usa-label-display">
                         Practitioner type
                       </span>
                       {practitionerDetailHelper.practitionerType}
@@ -73,19 +67,13 @@ export const PractitionerDetails = connect(
                   </div>
                   <div className="tablet:grid-col-6 margin-bottom-1">
                     <div className="tablet:margin-bottom-0 margin-bottom-205">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-birth-year"
-                      >
+                      <span className="usa-label usa-label-display">
                         Birth year
                       </span>
                       <div className="margin-bottom-4">
                         {practitionerDetailHelper.birthYear}
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-employer"
-                      >
+                      <span className="usa-label usa-label-display">
                         Employer
                       </span>
                       {practitionerDetailHelper.employer}
@@ -102,28 +90,19 @@ export const PractitionerDetails = connect(
                 <div className="grid-row grid-gap">
                   <div className="tablet:grid-col-6 margin-bottom-1">
                     <div className="tablet:margin-bottom-0 margin-bottom-205">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-name"
-                      >
+                      <span className="usa-label usa-label-display">
                         Firm name
                       </span>
                       <div className="margin-bottom-4">
                         {practitionerDetailHelper.firmNameFormatted}
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-practitioner-type"
-                      >
+                      <span className="usa-label usa-label-display">
                         Phone number
                       </span>
                       <div className="margin-bottom-4">
                         {practitionerDetailHelper.contact.phone}
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-practitioner-type"
-                      >
+                      <span className="usa-label usa-label-display">
                         Email address
                       </span>
                       {practitionerDetailHelper.emailFormatted && (
@@ -148,10 +127,7 @@ export const PractitionerDetails = connect(
                   </div>
                   <div className="tablet:grid-col-6 margin-bottom-1">
                     <div className="tablet:margin-bottom-0 margin-bottom-205">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-name"
-                      >
+                      <span className="usa-label usa-label-display">
                         Address
                       </span>
                       <div className="margin-bottom-4">
@@ -176,10 +152,7 @@ export const PractitionerDetails = connect(
                           {practitionerDetailHelper.contact.postalCode}
                         </div>
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="practitioner-practitioner-type"
-                      >
+                      <span className="usa-label usa-label-display">
                         Additional phone number
                       </span>
                       <div className="margin-bottom-4">
@@ -200,19 +173,13 @@ export const PractitionerDetails = connect(
                 <div className="grid-row grid-gap">
                   <div className="tablet:grid-col-6 margin-bottom-1">
                     <div className="tablet:margin-bottom-0 margin-bottom-205">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="admissions-bar-number"
-                      >
+                      <span className="usa-label usa-label-display">
                         Bar number
                       </span>
                       <div className="margin-bottom-4">
                         {practitionerDetailHelper.barNumber}
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="original-bar-state"
-                      >
+                      <span className="usa-label usa-label-display">
                         Original bar state
                       </span>
                       {practitionerDetailHelper.originalBarState}
@@ -220,19 +187,13 @@ export const PractitionerDetails = connect(
                   </div>
                   <div className="tablet:grid-col-6 margin-bottom-1">
                     <div className="tablet:margin-bottom-0 margin-bottom-205">
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="admissions-status"
-                      >
+                      <span className="usa-label usa-label-display">
                         Admission status
                       </span>
                       <div className="margin-bottom-4">
                         {practitionerDetailHelper.admissionsStatus}
                       </div>
-                      <span
-                        className="usa-label usa-label-display"
-                        htmlFor="admission-date"
-                      >
+                      <span className="usa-label usa-label-display">
                         Admission date
                       </span>
                       {practitionerDetailHelper.admissionsDateFormatted}

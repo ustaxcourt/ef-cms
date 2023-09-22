@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';

@@ -1,43 +1,73 @@
-export const navigateTo = username => {
+export const navigateTo = (username: string) => {
   cy.login(username, '/file-a-petition/step-1');
 };
 
 export const fillInAndSubmitForm = () => {
-  //wizard step 1
-  cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.fixture('w3-dummy.pdf', null)
+    .then(Cypress.Buffer.from)
+    .then(pdfFile => {
+      const fileOptions = {
+        contents: pdfFile,
+        fileName: 'w3-dummy.pdf',
+        lastModified: Date.now(),
+        mimeType: 'application/pdf',
+      };
 
-  cy.get('button#submit-case').click();
+      // wizard step 1
+      cy.get('input#stin-file').should('be.enabled').selectFile(fileOptions);
 
-  //step 2
-  cy.get('#petition-file').attachFile('../fixtures/w3-dummy.pdf');
+      // Fix flaky test
+      // https://github.com/ustaxcourt/ef-cms/issues/3866
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(0);
+
+      cy.get('button#submit-case').trigger('click');
+
+      // wizard step 2
+      cy.get('#petition-file').selectFile(fileOptions);
+    });
 
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get('#irs-notice-radios label').first().click();
-  cy.get('#case-type').scrollIntoView().select('Notice of Deficiency');
-  cy.get('button#submit-case').click();
+  cy.get('#case-type').scrollIntoView();
+  cy.get('#case-type').select('Notice of Deficiency');
+  cy.get('button#submit-case').trigger('click');
 
   //step 3
-  cy.get('label[for="Individual petitioner"]').scrollIntoView().click();
-  cy.get('input#name').scrollIntoView().type('John');
-  cy.get('input[name="contactPrimary.address1"]')
-    .scrollIntoView()
-    .type('111 South West St.');
-  cy.get('input[name="contactPrimary.city"]').scrollIntoView().type('Orlando');
-  cy.get('select[name="contactPrimary.state"]').scrollIntoView().select('AL');
-  cy.get('input[name="contactPrimary.postalCode"]')
-    .scrollIntoView()
-    .type('12345');
-  cy.get('input#phone').scrollIntoView().type('1111111111');
-  cy.get('button#submit-case').click();
+  cy.get('label[for="Individual petitioner"]').scrollIntoView();
+  cy.get('label[for="Individual petitioner"]').click();
+
+  cy.get('input#name').scrollIntoView();
+  cy.get('input#name').type('John');
+
+  cy.get('input[name="contactPrimary.address1"]').scrollIntoView();
+  cy.get('input[name="contactPrimary.address1"]').type('111 South West St.');
+
+  cy.get('input[name="contactPrimary.city"]').scrollIntoView();
+  cy.get('input[name="contactPrimary.city"]').type('Orlando');
+
+  cy.get('select[name="contactPrimary.state"]').scrollIntoView();
+  cy.get('select[name="contactPrimary.state"]').select('AL');
+
+  cy.get('input[name="contactPrimary.postalCode"]').scrollIntoView();
+  cy.get('input[name="contactPrimary.postalCode"]').type('12345');
+
+  cy.get('input#phone').scrollIntoView();
+  cy.get('input#phone').type('1111111111');
+
+  cy.get('button#submit-case').should('be.enabled').click();
 
   //step 4
   cy.get('#procedure-type-radios').scrollIntoView();
   cy.get('#procedure-type-radios label').first().click();
-  cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
-  cy.get('button#submit-case').scrollIntoView().click();
+  cy.get('#preferred-trial-city').scrollIntoView();
+  cy.get('#preferred-trial-city').select('Mobile, Alabama');
+  cy.get('button#submit-case').scrollIntoView();
+  cy.get('button#submit-case').click();
 
   // step 5
-  cy.get('button#submit-case').scrollIntoView().click();
+  cy.get('button#submit-case').scrollIntoView();
+  cy.get('button#submit-case').click();
 
   // wait for elasticsearch to refresh
   const SLEEP = 3000;

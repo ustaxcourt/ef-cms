@@ -62,7 +62,7 @@ export const MessagesSectionOutbox = connect(
             <tr>
               <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan="2">
+                <th aria-label="Docket Number" className="small" colSpan={2}>
                   <SortableColumnHeaderButton
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
@@ -75,7 +75,7 @@ export const MessagesSectionOutbox = connect(
                 </th>
               )}
               {!showSortableHeaders && (
-                <th aria-label="Docket Number" className="small" colSpan="2">
+                <th aria-label="Docket Number" className="small" colSpan={2}>
                   Docket No.
                 </th>
               )}
@@ -137,7 +137,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({ message }) {
             showLeadCaseIcon={message.isLeadCase}
           />
         </td>
-        <td className="message-queue-row small" colSpan="2">
+        <td className="message-queue-row small" colSpan={2}>
           {message.docketNumberWithSuffix}
         </td>
         <td className="message-queue-row small">

@@ -1,5 +1,5 @@
 /* eslint-disable */
-exports.coverLogo = [
+export const coverLogo = [
   137,
   80,
   78,

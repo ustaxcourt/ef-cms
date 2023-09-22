@@ -2,11 +2,18 @@ import {
   waitForExpectedItem,
   waitForLoadingComponentToHide,
   waitForModalsToHide,
+  waitForPage,
 } from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
   cerebralTest,
-  overrides = {},
+  {
+    hasPaper = false,
+    judge = {
+      name: 'Cohen',
+      userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
+    },
+  } = {},
 ) => {
   return it('petitions clerk completes a trial session before calendaring', async () => {
     await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
@@ -49,15 +56,17 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
-      value: overrides.judge || {
-        name: 'Cohen',
-        userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
-      },
+      value: judge,
     });
 
     await cerebralTest.runSequence('updateTrialSessionSequence');
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
       trialSessionId: cerebralTest.trialSessionId,
+    });
+    await waitForPage({
+      cerebralTest,
+      expectedPage: 'TrialSessionDetail',
+      maxWait: 20000,
     });
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
@@ -66,7 +75,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await waitForLoadingComponentToHide({ cerebralTest });
     await waitForModalsToHide({ cerebralTest, maxWait: 120000 });
 
-    if (overrides.hasPaper) {
+    if (hasPaper) {
       await waitForExpectedItem({
         cerebralTest,
         currentItem: 'currentPage',

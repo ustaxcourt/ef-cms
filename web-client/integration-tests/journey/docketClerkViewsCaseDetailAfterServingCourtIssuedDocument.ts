@@ -3,7 +3,7 @@ import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityC
 export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
   cerebralTest,
   draftOrderIndex,
-  expectedCaseStatus,
+  expectedCaseStatus?,
 ) => {
   return it('Docketclerk views case detail after serving court-issued document', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

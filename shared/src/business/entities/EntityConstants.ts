@@ -26,6 +26,8 @@ export const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
 
 export const AMENDMENT_EVENT_CODES = ['AMAT', 'ADMT'];
 
+export const STANDING_PRETRIAL_EVENT_CODES = ['SPOS', 'SPTO'];
+
 export const LEGACY_DOCUMENT_TYPES = [
   {
     documentType: 'Designation of Counsel to Receive Service',
@@ -37,10 +39,6 @@ export const LEGACY_DOCUMENT_TYPES = [
 export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
 export const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
-
-export const ORDER_JUDGE_FIELD = 'signedJudgeName';
-
-export const OPINION_JUDGE_FIELD = 'judge';
 
 export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 
@@ -106,6 +104,11 @@ export const ALLOWLIST_FEATURE_FLAGS = {
     disabledMessage: 'Currently using legacy trial status types.',
     key: 'updated-trial-status-types',
   },
+  USE_CHANGE_OF_ADDRESS_LAMBDA: {
+    disabledMessage:
+      'A flag to know when to use the change of address lambda for processing.',
+    key: 'use-change-of-address-lambda',
+  },
   USE_EXTERNAL_PDF_GENERATION: {
     disabledMessage:
       'A flag to tell the code to directly generation pdfs or to do in an external lambda.',
@@ -126,6 +129,17 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
 };
+
+export const STATUS_OF_MATTER_OPTIONS = [
+  'Awaiting Consideration',
+  'Awaiting Briefs',
+  'Drafting',
+  'Reviewing Draft',
+  'Submitted to Chief Judge',
+  'Revising Draft',
+  'Submitted to Reporter',
+  'Stayed',
+];
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -189,6 +203,14 @@ export const CASE_STATUS_TYPES = {
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
 
+export const CAV_AND_SUBMITTED_CASE_STATUS = [
+  CASE_STATUS_TYPES.cav,
+  CASE_STATUS_TYPES.submitted,
+];
+
+export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
+  typeof CAV_AND_SUBMITTED_CASE_STATUS;
+
 export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
@@ -208,6 +230,15 @@ export const DOCUMENT_SERVED_MESSAGES = {
     'Document filed and is accessible from the Docket Record.',
   GENERIC: 'Document served.',
   SELECTED_CASES: 'Document served to selected cases in group.',
+};
+
+export const VALIDATION_ERROR_MESSAGES = {
+  END_DATE_IN_THE_FUTURE_ERROR:
+    'End date cannot be in the future. Enter a valid date.',
+  END_DATE_PRIOR_TO_START_DATE_ERROR:
+    'End date cannot be prior to start date. Enter a valid date.',
+  START_DATE_IN_THE_FUTURE_ERROR_MESSAGE:
+    'Start date cannot be in the future. Enter a valid date.',
 };
 
 export const DOCUMENT_SEARCH_SORT = {
@@ -382,6 +413,13 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
   'NTD',
   'NOT',
+);
+
+export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
+  eventCode => {
+    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    return !excludedOrderEventCodes.includes(eventCode);
+  },
 );
 
 export const EXTERNAL_DOCUMENT_TYPES = flatten(
@@ -921,6 +959,7 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
+export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',

@@ -45,7 +45,7 @@ export const WhatDocumentIsThis = connect(
               <h1
                 className="margin-bottom-105"
                 id="view-all-document-header"
-                tabIndex="-1"
+                tabIndex={-1}
               >
                 What is this document for?
               </h1>
@@ -64,7 +64,7 @@ export const WhatDocumentIsThis = connect(
               <div className="grid-container">
                 <div className="grid-row">
                   <div className="grid-col-12">
-                    <h2 className="margin-top-4 margin-bottom-3" tabIndex="-1">
+                    <h2 className="margin-top-4 margin-bottom-3" tabIndex={-1}>
                       {reason}
                     </h2>
                   </div>

@@ -6,7 +6,7 @@ import {
   ROLES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { UnauthorizedError } from '../../errors/errors';
+import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';

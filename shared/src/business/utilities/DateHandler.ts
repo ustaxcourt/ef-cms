@@ -31,6 +31,7 @@ export const FORMATS = {
 } as const;
 const FORMATS1 = Object.values(FORMATS);
 export type TimeFormats = (typeof FORMATS1)[number];
+export type TimeFormatNames = keyof typeof FORMATS;
 
 export const PATTERNS = {
   'H:MM': /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/, // hour can be specified with either one OR two digits.
@@ -240,7 +241,7 @@ export const createISODateStringFromObject = options => {
  */
 export const formatDateString = (
   dateString,
-  formatArg: TimeFormats = FORMATS.ISO,
+  formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ) => {
   if (!dateString) return;
   let formatString = FORMATS[formatArg] || formatArg;
@@ -377,7 +378,10 @@ export const isValidDateString = (
  * @param {string} timeStamp2 an ISO-8601 date string
  * @returns {number} the difference between two days, rounded to the nearest integer
  */
-export const calculateDifferenceInDays = (timeStamp1, timeStamp2) => {
+export const calculateDifferenceInDays = (
+  timeStamp1: string,
+  timeStamp2: string,
+): number => {
   const dt1 = DateTime.fromISO(timeStamp1, { zone: USTC_TZ })
     .set({
       hours: 12,

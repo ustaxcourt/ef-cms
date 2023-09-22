@@ -9,7 +9,7 @@ import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
-import { formatNumber } from '../../../../shared/src/business/utilities/formatNumber';
+import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
@@ -485,7 +485,7 @@ export const CustomCaseReport = connect(
             <span className="text-bold" id="custom-case-result-count">
               Count: &nbsp;
             </span>
-            {formatNumber(totalCases)}
+            {formatPositiveNumber(totalCases)}
           </div>
           <ReportTable
             cases={customCaseInventoryReportHelper.cases}

@@ -3,7 +3,7 @@ import {
   MOCK_TRIAL_REGULAR,
 } from '../../../test/mockTrial';
 import { TrialSessionInfoDTO } from '../../dto/trialSessions/TrialSessionInfoDTO';
-import { UnauthorizedError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { getTrialSessionsInteractor } from './getTrialSessionsInteractor';
 import { omit } from 'lodash';
@@ -42,9 +42,8 @@ describe('getTrialSessionsInteractor', () => {
         MOCK_TRIAL_REGULAR,
       ]);
 
-    const trialSessionDTOs = await getTrialSessionsInteractor(
-      applicationContext,
-    );
+    const trialSessionDTOs =
+      await getTrialSessionsInteractor(applicationContext);
 
     trialSessionDTOs.forEach(trialSessionDTO => {
       expect(trialSessionDTO instanceof TrialSessionInfoDTO).toBe(true);

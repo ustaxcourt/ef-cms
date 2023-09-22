@@ -1,7 +1,8 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { STANDING_PRETRIAL_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const todaysOrdersHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -33,16 +34,22 @@ export const todaysOrdersHelper = (
     .getUtilities()
     .formatDateString(currentDate, 'MONTH_DAY_YEAR');
 
-  const formattedOrders = todaysOrders.map(order => ({
-    ...order,
-    formattedFilingDate: applicationContext
-      .getUtilities()
-      .formatDateString(order.filingDate, 'MMDDYY'),
-    formattedJudgeName: applicationContext
-      .getUtilities()
-      .getJudgeLastName(order.signedJudgeName),
-    numberOfPagesFormatted: order.numberOfPages ?? 'n/a',
-  }));
+  const formattedOrders = todaysOrders.map(order => {
+    const judgeName = STANDING_PRETRIAL_EVENT_CODES.includes(order.eventCode)
+      ? order.judge
+      : order.signedJudgeName;
+
+    return {
+      ...order,
+      formattedFilingDate: applicationContext
+        .getUtilities()
+        .formatDateString(order.filingDate, 'MMDDYY'),
+      formattedJudgeName: applicationContext
+        .getUtilities()
+        .getJudgeLastName(judgeName),
+      numberOfPagesFormatted: order.numberOfPages ?? 'n/a',
+    };
+  });
 
   const hasResults = formattedOrders.length > 0;
 
