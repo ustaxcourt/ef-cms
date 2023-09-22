@@ -147,6 +147,18 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
     ];
 
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
+        mockGetDocketNumbersByStatusAndByJudgeResult,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
+        mockGetDocketNumbersWithServedEventCodesResult,
+      );
+
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
       mockValidRequest,
@@ -182,6 +194,18 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     ];
     mockGetDocketNumbersWithServedEventCodesResult = [];
 
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
+        mockGetDocketNumbersByStatusAndByJudgeResult,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
+        mockGetDocketNumbersWithServedEventCodesResult,
+      );
+
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
       {
@@ -192,7 +216,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     );
 
-    expect(result.totalCount).toBe(mockPageSize);
+    expect(result.totalCount).toBe(
+      mockGetDocketNumbersByStatusAndByJudgeResult.length,
+    );
   });
 
   it('should return all results when page number and page size are not provided', async () => {
@@ -210,6 +236,18 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     ];
     mockGetDocketNumbersWithServedEventCodesResult = [];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
+        mockGetDocketNumbersByStatusAndByJudgeResult,
+      );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
+        mockGetDocketNumbersWithServedEventCodesResult,
+      );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
@@ -239,13 +277,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValue(
+      .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
         mockGetDocketNumbersByStatusAndByJudgeResult,
       );
 
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValue(
+      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
         mockGetDocketNumbersWithServedEventCodesResult,
       );
 
