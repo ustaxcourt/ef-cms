@@ -1,6 +1,6 @@
 import { count } from './searchClient';
 
-export const getCountOfConsolidedCases = async ({
+export const getCountOfConsolidatedCases = async ({
   applicationContext,
   leadDocketNumber,
 }: {
