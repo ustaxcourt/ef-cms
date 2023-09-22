@@ -4,6 +4,7 @@ import ReactPaginate from 'react-paginate';
 export const Paginator = ({
   breakClassName,
   forcePage,
+  id,
   marginPagesDisplayed = 3,
   onPageChange,
   pageCount,
@@ -12,13 +13,18 @@ export const Paginator = ({
   breakClassName?: string;
   marginPagesDisplayed?: number;
   pageCount: number;
+  id?: string;
   pageRangeDisplayed: number;
   onPageChange: (selectedItem: { selected: number }) => void;
   forcePage: number;
 }) => {
   return (
     <>
-      <nav aria-label="Pagination" className="usa-pagination margin-bottom-0">
+      <nav
+        aria-label="Pagination"
+        className="usa-pagination margin-bottom-0"
+        id={id}
+      >
         <ReactPaginate
           activeLinkClassName="paginator-current"
           breakClassName={`usa-pagination__item ${breakClassName}`}
