@@ -145,4 +145,26 @@ describe('setDefaultGenerationTypeAction', () => {
     expect(state.form.generationType).toEqual(GENERATION_TYPES.MANUAL);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(false);
   });
+
+  it('should set all consolidated filing state values to false when generationType = auto is passed as props', async () => {
+    const { state } = await runAction(setDefaultGenerationTypeAction, {
+      modules: { presenter },
+      props: {
+        key: 'generationType',
+        value: GENERATION_TYPES.AUTO,
+      },
+      state: {
+        allowExternalConsolidatedGroupFiling: true,
+        caseDetail: {
+          leadDocketNumber: undefined,
+        },
+        form: {
+          fileAcrossConsolidatedGroup: true,
+        },
+      },
+    });
+
+    expect(state.allowExternalConsolidatedGroupFiling).toEqual(false);
+    expect(state.form.fileAcrossConsolidatedGroup).toEqual(false);
+  });
 });
