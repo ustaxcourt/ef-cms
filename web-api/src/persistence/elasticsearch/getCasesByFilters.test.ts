@@ -6,7 +6,7 @@ import {
 import {
   CustomCaseInventoryReportFilters,
   GetCaseInventoryReportRequest,
-} from 'shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+} from '@web-api/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   emptyResults,

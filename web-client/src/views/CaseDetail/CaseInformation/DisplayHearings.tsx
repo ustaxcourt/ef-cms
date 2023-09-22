@@ -63,7 +63,7 @@ export const DisplayHearings = connect(
         </tr>
         {hearing.calendarNotes && (
           <tr>
-            <td colSpan="4">{hearing.calendarNotes}</td>
+            <td colSpan={4}>{hearing.calendarNotes}</td>
           </tr>
         )}
       </tbody>

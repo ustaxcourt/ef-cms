@@ -1,5 +1,8 @@
 import { Case } from '../../entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -48,7 +51,7 @@ export const addConsolidatedCaseInteractor = async (
     );
   }
 
-  let allCasesToConsolidate = [];
+  let allCasesToConsolidate: RawCase[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
@@ -82,7 +85,7 @@ export const addConsolidatedCaseInteractor = async (
     return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
   });
 
-  const updateCasePromises = [];
+  const updateCasePromises: Promise<RawCase>[] = [];
   casesToUpdate.forEach(caseInCasesToUpdate => {
     const caseEntity = new Case(caseInCasesToUpdate, { applicationContext });
     caseEntity.setLeadCase(newLeadCase.docketNumber);

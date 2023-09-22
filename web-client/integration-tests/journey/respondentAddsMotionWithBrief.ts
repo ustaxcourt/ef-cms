@@ -1,5 +1,5 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const respondentAddsMotionWithBrief = (
@@ -17,8 +17,11 @@ export const respondentAddsMotionWithBrief = (
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: VALIDATION_ERROR_MESSAGES.category,
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      category:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     await cerebralTest.runSequence(
@@ -31,7 +34,9 @@ export const respondentAddsMotionWithBrief = (
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
+      documentType:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+          .documentType[1],
     });
 
     const documentToSelect = {
@@ -140,12 +145,14 @@ export const respondentAddsMotionWithBrief = (
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
+      objections:
+        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
       supportingDocuments: [
         {
           index: 0,
           supportingDocumentFile:
-            VALIDATION_ERROR_MESSAGES.supportingDocumentFile,
+            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
+              .supportingDocumentFile,
         },
       ],
     });

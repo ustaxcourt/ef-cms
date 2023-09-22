@@ -1,5 +1,5 @@
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,
@@ -82,9 +82,8 @@ describe('Create a work item', () => {
   it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
     await refreshElasticsearchIndex();
 
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+    const documentQCSectionInbox =
+      await getFormattedDocumentQCSectionInbox(cerebralTest);
 
     decisionWorkItem = documentQCSectionInbox.find(
       workItem => workItem.docketNumber === caseDetail.docketNumber,
@@ -101,9 +100,8 @@ describe('Create a work item', () => {
   });
 
   it('have the docketclerk assign those 4 items to self', async () => {
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+    const documentQCSectionInbox =
+      await getFormattedDocumentQCSectionInbox(cerebralTest);
     const decisionWorkItems = documentQCSectionInbox.filter(
       workItem => workItem.docketNumber === caseDetail.docketNumber,
     );
@@ -160,9 +158,8 @@ describe('Create a work item', () => {
       return workItem.workItemId === decisionWorkItem.workItemId;
     });
 
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+    const documentQCSectionInbox =
+      await getFormattedDocumentQCSectionInbox(cerebralTest);
 
     const foundInSectionInbox = documentQCSectionInbox.find(workItem => {
       return workItem.workItemId === decisionWorkItem.workItemId;
@@ -189,9 +186,8 @@ describe('Create a work item', () => {
   });
 
   it('docket clerk completes QC of a document and sends a message', async () => {
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+    const documentQCSectionInbox =
+      await getFormattedDocumentQCSectionInbox(cerebralTest);
 
     decisionWorkItem = documentQCSectionInbox.find(
       workItem => workItem.docketNumber === caseDetail.docketNumber,
@@ -297,9 +293,8 @@ describe('Create a work item', () => {
   });
 
   it('docket clerk completes QC of a document, updates freeText, and sends a message', async () => {
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+    const documentQCSectionInbox =
+      await getFormattedDocumentQCSectionInbox(cerebralTest);
 
     const ratificationWorkItem = documentQCSectionInbox.find(
       workItem => workItem.docketNumber === caseDetail.docketNumber,
@@ -400,9 +395,8 @@ describe('Create a work item', () => {
   });
 
   it('docket clerk updates freeText and completes QC', async () => {
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+    const documentQCSectionInbox =
+      await getFormattedDocumentQCSectionInbox(cerebralTest);
 
     const ratificationWorkItem = documentQCSectionInbox.find(
       workItem => workItem.docketNumber === caseDetail.docketNumber,

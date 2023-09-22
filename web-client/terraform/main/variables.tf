@@ -43,17 +43,17 @@ variable "zone_name" {
 }
 
 variable "statuspage_dns_record" {
-  type = string
+  type    = string
   default = ""
 }
 
 variable "enable_health_checks" {
+  // e.g. "1" or "0"
   type = string
-  default = "1"
 }
 
 
 variable "viewer_protocol_policy" {
-  type = string
+  type    = string
   default = "redirect-to-https"
 }

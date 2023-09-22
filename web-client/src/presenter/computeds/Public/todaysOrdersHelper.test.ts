@@ -27,6 +27,34 @@ describe('todaysOrdersHelper', () => {
     };
   });
 
+  it('should set the formattedJudgeName based on the judge field when the document is a SPOS', () => {
+    const result = runCompute(todaysOrdersHelper, {
+      state: {
+        todaysOrders: {
+          results: [
+            {
+              caseCaption: 'Sauceboss, Petitioner',
+              docketEntryId: 'document-id-123',
+              docketNumber: '123-20',
+              documentType: 'Order',
+              eventCode: 'SPOS',
+              filingDate: '2020-06-11T20:17:10.646Z',
+              judge: 'Cohen',
+              signedJudgeName: 'Guy Fieri',
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedOrders).toMatchObject([
+      {
+        caseCaption: 'Sauceboss, Petitioner',
+        formattedFilingDate: '06/11/20',
+        formattedJudgeName: 'Cohen',
+      },
+    ]);
+  });
+
   it('should return the formattedOrders as an array', () => {
     const result = runCompute(todaysOrdersHelper, { state });
     expect(Array.isArray(result.formattedOrders)).toBeTruthy();

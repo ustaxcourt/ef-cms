@@ -2,7 +2,7 @@ import {
   NotFoundError,
   UnauthorizedError,
   UnsanitizedEntityError,
-} from '../../../shared/src/errors/errors';
+} from '@web-api/errors/errors';
 import { createApplicationContext } from '../applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';

@@ -108,8 +108,16 @@ resource "aws_cognito_user_pool_client" "client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH"]
 
   generate_secret                      = false
-  refresh_token_validity               = 30
   allowed_oauth_flows_user_pool_client = true
+
+  token_validity_units {
+    access_token  = "hours"
+    id_token      = "hours"
+    refresh_token = "days"
+  }
+  refresh_token_validity = 1
+  access_token_validity  = 1
+  id_token_validity      = 1
 
   callback_urls = [
     "http://localhost:1234/log-in",
@@ -241,8 +249,15 @@ resource "aws_cognito_user_pool_client" "irs_client" {
   explicit_auth_flows = ["ADMIN_NO_SRP_AUTH", "USER_PASSWORD_AUTH"]
 
   generate_secret                      = false
-  refresh_token_validity               = 30
   allowed_oauth_flows_user_pool_client = true
+  token_validity_units {
+    access_token  = "hours"
+    id_token      = "hours"
+    refresh_token = "days"
+  }
+  refresh_token_validity = 1
+  access_token_validity  = 1
+  id_token_validity      = 1
 
   callback_urls = [
     "http://localhost:1234/log-in",
