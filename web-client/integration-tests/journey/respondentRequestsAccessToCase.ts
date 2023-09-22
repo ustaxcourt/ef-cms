@@ -1,4 +1,5 @@
 import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -82,18 +83,14 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
           .certificateOfServiceDate[1],
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '5000',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/5000',
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
@@ -102,10 +99,14 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
           .certificateOfServiceDate[0].message,
     });
 
-    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '2000',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2000',
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
