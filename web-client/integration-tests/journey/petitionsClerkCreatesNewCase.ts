@@ -5,6 +5,7 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { fakeFile } from '../helpers';
 
 export const petitionsClerkCreatesNewCase = (
@@ -55,19 +56,14 @@ export const petitionsClerkCreatesNewCase = (
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
     ).toBeUndefined();
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtMonth',
-      value: overrides.receivedAtMonth,
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtDay',
-      value: overrides.receivedAtDay,
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'receivedAtYear',
-      value: overrides.receivedAtYear,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: `${overrides?.receivedAtMonth}/${overrides?.receivedAtDay}/${overrides?.receivedAtYear}`,
+      },
+    );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'mailingDate',
@@ -82,7 +78,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: overrides.trialLocation,
+      value: overrides?.trialLocation,
     });
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
@@ -149,7 +145,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: overrides.procedureType,
+      value: overrides?.procedureType,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -202,18 +198,14 @@ export const petitionsClerkCreatesNewCase = (
       value: PAYMENT_STATUS.PAID,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateDay',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateMonth',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateYear',
-      value: '2001',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2001',
+      },
+    );
 
     await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentMethod',
@@ -230,10 +222,10 @@ export const petitionsClerkCreatesNewCase = (
 
     const docketNumber = cerebralTest.getState('caseDetail.docketNumber');
     const receivedDocketNumberYear = docketNumber.slice(-2);
-    const expectedDocketNumberYear = overrides.receivedAtYear.slice(-2);
+    const expectedDocketNumberYear = overrides?.receivedAtYear?.slice(-2);
     expect(receivedDocketNumberYear).toBe(expectedDocketNumberYear);
 
-    if (overrides.shouldServe) {
+    if (overrides?.shouldServe) {
       await cerebralTest.runSequence('serveCaseToIrsSequence');
     }
 
@@ -243,7 +235,7 @@ export const petitionsClerkCreatesNewCase = (
       'caseDetail.docketNumber',
     );
     expect(cerebralTest.getState('caseDetail.preferredTrialCity')).toEqual(
-      overrides.trialLocation,
+      overrides?.trialLocation,
     );
     if (cerebralTest.casesReadyForTrial) {
       cerebralTest.casesReadyForTrial.push(cerebralTest.docketNumber);

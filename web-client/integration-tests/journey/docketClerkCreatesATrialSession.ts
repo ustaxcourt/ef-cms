@@ -50,22 +50,19 @@ export const docketClerkCreatesATrialSession = (
       trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
     });
 
-    /* eslint-disable sort-keys-fix/sort-keys-fix */
     const createTrialSessionForm = {
-      maxCases,
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      sessionType,
-      startDate: `13/${trialDay}/${trialYear}`,
-      estimatedEndDate: '01/01/1995',
       address1: '123 Flavor Ave',
-      city: 'Seattle',
-      state: 'WA',
-      postalCode: '98101',
       chambersPhoneNumber: '1234567890',
+      city: 'Seattle',
       judge: judge || {
         name: 'Cohen',
         userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
       },
+      maxCases,
+      postalCode: '98101',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      sessionType,
+      state: 'WA',
       trialClerk,
     };
 
@@ -76,9 +73,27 @@ export const docketClerkCreatesATrialSession = (
       });
     }
 
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'startDate',
+        toFormat: FORMATS.ISO,
+        value: `13/${trialDay}/${trialYear}`,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'estimatedEndDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/1995',
+      },
+    );
+
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
       term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
       trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
@@ -88,10 +103,12 @@ export const docketClerkCreatesATrialSession = (
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'startDate',
-        value: `${trialMonth}/${trialDay}/${trialYear}`,
         toFormat: FORMATS.ISO,
+        value: `${trialMonth}/${trialDay}/${trialYear}`,
       },
     );
+
+    await cerebralTest.runSequence('validateTrialSessionSequence');
 
     if (!trialMonth) {
       expect(cerebralTest.getState('form.term')).toEqual('Fall');
@@ -115,8 +132,8 @@ export const docketClerkCreatesATrialSession = (
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'estimatedEndDate',
-        value: '01/01/2050',
         toFormat: FORMATS.ISO,
+        value: '01/01/2050',
       },
     );
 

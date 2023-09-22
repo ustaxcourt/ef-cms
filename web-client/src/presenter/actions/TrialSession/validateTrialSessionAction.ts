@@ -11,9 +11,6 @@ export const validateTrialSessionAction = ({
       trialSession: get(state.form),
     });
 
-  const form = get(state.form);
-  console.log('THIS IS THE FORM@@@@@@@@@@@@@@@,', form);
-
   if (!errors) {
     return path.success();
   } else {
