@@ -1,4 +1,5 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
@@ -39,20 +40,14 @@ I'll be gone
 In a day or two`,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: overrides.month || '8',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: overrides.day || '12',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: overrides.year || '2025',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'deadlineDate',
+        toFormat: FORMATS.ISO,
+        value: '08/12/2025',
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
