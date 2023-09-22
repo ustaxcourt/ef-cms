@@ -164,7 +164,6 @@ describe('setDefaultGenerationTypeAction', () => {
       },
     });
 
-    expect(state.allowExternalConsolidatedGroupFiling).toEqual(false);
     expect(state.form.fileAcrossConsolidatedGroup).toEqual(false);
   });
 });

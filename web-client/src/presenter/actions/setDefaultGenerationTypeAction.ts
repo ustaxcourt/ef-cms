@@ -33,7 +33,6 @@ export const setDefaultGenerationTypeAction = ({
 
     if (props.value === GENERATION_TYPES.AUTO) {
       store.set(state.form.fileAcrossConsolidatedGroup, false);
-      store.set(state.allowExternalConsolidatedGroupFiling, false);
     }
   }
 };

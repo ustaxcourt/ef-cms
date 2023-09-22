@@ -61,7 +61,7 @@ export const RequestAccessDocumentForm = connect(
                 />
                 <label className="usa-radio__label" htmlFor="auto-generation">
                   Auto-generate Entry of Appearance PDF (Use only if you do not
-                  need to add attachments or a Certificate of Service)
+                  need to add attachments or a Certificate of Service.)
                 </label>
               </div>
 
