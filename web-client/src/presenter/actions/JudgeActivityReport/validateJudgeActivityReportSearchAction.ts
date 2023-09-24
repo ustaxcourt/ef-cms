@@ -5,9 +5,9 @@ export const validateJudgeActivityReportSearchAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { endDate, judgeName, judges, startDate } = get(
-    state.judgeActivityReport.filters,
-  );
+  const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
+
+  const { judgeName } = get(state.judgeActivityReport);
   const errors = new JudgeActivityReportSearch({
     endDate,
     judgeName,

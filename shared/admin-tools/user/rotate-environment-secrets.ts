@@ -99,7 +99,7 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   console.log('✅ Secrets updated');
 };
 
-rotateSecrets(ENV).then(() => {
+rotateSecrets(ENV!).then(() => {
   console.log(
     '🏁 All done. Be sure to run setup-test-users.sh or wait for the next deploy',
   );
