@@ -87,7 +87,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   return {
     cases: paginatedCaseResults || allCaseResults,
-    totalCount: (paginatedCaseResults || allCaseResults).length,
+    totalCount: allCaseResults.length,
   };
 };
 
