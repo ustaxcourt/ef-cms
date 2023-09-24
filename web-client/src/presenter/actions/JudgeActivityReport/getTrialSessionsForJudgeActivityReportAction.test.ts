@@ -31,7 +31,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       );
   });
 
-  it('should call the interactor to set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types based on the selected judge id', async () => {
+  it('should retrieve trialSessions types based on a selected judges id', async () => {
     const { output } = await runAction(
       getTrialSessionsForJudgeActivityReportAction,
       {
@@ -43,9 +43,9 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
-              judgeName,
               startDate: mockStartDate,
             },
+            judgeName,
           },
           judges: mockJudges,
         },
@@ -64,28 +64,24 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
     expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
   });
 
-  it('should set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types for all judges if no selected judge id is prescribed', async () => {
-    const { output } = await runAction(
-      getTrialSessionsForJudgeActivityReportAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {},
-        state: {
-          judgeActivityReport: {
-            filters: {
-              endDate: mockEndDate,
-              judgeName: 'All Judges',
-              startDate: mockStartDate,
-            },
-          },
-          judges: mockJudges,
-        },
+  it('should retrieve ALL trialSession types if no selected judge id is prescribed', async () => {
+    await runAction(getTrialSessionsForJudgeActivityReportAction, {
+      modules: {
+        presenter,
       },
-    );
+      props: {},
+      state: {
+        judgeActivityReport: {
+          filters: {
+            endDate: mockEndDate,
+            startDate: mockStartDate,
+          },
+          judgeName: 'All Judges',
+        },
+        judges: mockJudges,
+      },
+    });
 
-    expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
     expect(
       applicationContext.getUseCases()
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
