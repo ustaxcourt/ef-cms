@@ -1,20 +1,5 @@
 #trial-calendar {
-  .column {
-    display: flex;
-    flex: 1;
-
-    .width-half {
-      width: 50%;
-
-      &:first-child {
-        margin-right: 6px;
-      }
-
-      &:last-child {
-        margin-left: 6px;
-      }
-    }
-  }
+  page: narrow;
 
   .card {
     border: 1px solid #ccc;
