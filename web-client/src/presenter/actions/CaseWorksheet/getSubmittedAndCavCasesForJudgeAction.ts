@@ -3,7 +3,12 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getSubmittedAndCavCasesForJudgeAction = async ({
   applicationContext,
   get,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  cases: (RawCase & {
+    daysElapsedSinceLastStatusChange: number;
+    formattedCaseCount: number;
+  })[];
+}> => {
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
   const { name } = get(state.judgeUser);
@@ -12,9 +17,6 @@ export const getSubmittedAndCavCasesForJudgeAction = async ({
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judges: [name],
-      pageNumber: 0,
-      // TODO: don't paginate for dashboard table?
-      pageSize: 10000,
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
     });
 

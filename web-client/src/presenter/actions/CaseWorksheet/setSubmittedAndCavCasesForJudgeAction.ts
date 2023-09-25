@@ -4,7 +4,10 @@ export const setSubmittedAndCavCasesForJudgeAction = ({
   props,
   store,
 }: ActionProps<{
-  cases: any[];
+  cases: (RawCase & {
+    daysElapsedSinceLastStatusChange: number;
+    formattedCaseCount: number;
+  })[];
 }>) => {
   const { cases } = props;
 

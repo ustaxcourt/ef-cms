@@ -32,8 +32,6 @@ describe('getSubmittedAndCavCasesForJudgeAction', () => {
         .calls[0][1],
     ).toEqual({
       judges: [judgeUser.name],
-      pageNumber: 0,
-      pageSize: 10000,
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
     });
     expect(cases).toEqual(TEST_CASES);
