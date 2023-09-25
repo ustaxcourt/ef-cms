@@ -12,6 +12,10 @@ parameters:
     default: true
     type: boolean
 
+  run_build_and_deploy_empty:
+    default: false
+    type: boolean
+
   run_glue_to_test:
     default: false
     type: boolean
@@ -591,7 +595,9 @@ jobs:
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_build_and_deploy_empty\":true}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -951,6 +957,24 @@ workflows:
           requires:
             - backup-source-dynamo-table
             - delete-api-mappings
+
+  build-and-deploy-empty:
+    when: << pipeline.parameters.run_build_and_deploy_empty >>
+    jobs:
+      - deploy:
+          <<: *only-deployed-lower-environments
+      - switch-colors:
+          <<: *only-deployed-lower-environments
+          requires:
+            - deploy
+      - delete-api-mappings:
+          <<: *only-deployed-lower-environments
+          requires:
+            - switch-colors
+      - cleanup:
+          <<: *only-deployed-lower-environments
+          requires:
+            - switch-colors
 
   glue-to-test:
     when:
