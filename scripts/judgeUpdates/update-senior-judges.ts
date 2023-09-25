@@ -1,3 +1,4 @@
+import { User } from '@shared/business/entities/User';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
@@ -63,12 +64,13 @@ async function searchForAllJudges(applicationContext) {
     const userToUpdate = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
-
-    userToUpdate.judgeTitle = 'Senior Judge';
+    const userEntity = new User(userToUpdate);
+    userEntity.judgeTitle = 'Senior Judge';
 
     console.log('userToUpdate', userToUpdate);
-    // applicationContext
-    //   .getPersistenceGateway()
-    //   .updateUser({ applicationContext, user: userToUpdate });
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: userEntity.validate().toRawObject(),
+    });
   }
 })();
