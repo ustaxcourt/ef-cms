@@ -14,6 +14,9 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     formOrdersAndNotices = {},
     paymentStatus = PAYMENT_STATUS.WAIVED,
     procedureType = 'Small',
+    receivedAtDay = '01',
+    receivedAtMonth = '01',
+    receivedAtYear = '2001',
     trialLocation = 'Birmingham, Alabama',
   } = {},
   formOverrides = [],
@@ -141,25 +144,8 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
   it('should default to parties tab when creating a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
+
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
-
-    await cerebralTest.runSequence(
-      'formatAndUpdateDateFromDatePickerSequence',
-      {
-        key: 'receivedAt',
-        toFormat: FORMATS.ISO,
-        value: '01/01/2001',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'formatAndUpdateDateFromDatePickerSequence',
-      {
-        key: 'petitionPaymentWaivedDate',
-        toFormat: FORMATS.ISO,
-        value: '05/05/2005',
-      },
-    );
 
     expect(cerebralTest.getState('currentPage')).toEqual('StartCaseInternal');
     expect(
@@ -197,10 +183,30 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
         value: true,
       },
     );
+
     await cerebralTest.runSequence(
       'updateFormValueAndCaseCaptionSequence',
       primaryContactName,
     );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: `${receivedAtMonth}/${receivedAtDay}/${receivedAtYear}`,
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentWaivedDate',
+        toFormat: FORMATS.ISO,
+        value: '5/5/2005',
+      },
+    );
+
     await cerebralTest.runSequence('validatePetitionFromPaperSequence');
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(

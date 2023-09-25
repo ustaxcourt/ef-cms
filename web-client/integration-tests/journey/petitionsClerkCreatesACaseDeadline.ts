@@ -2,8 +2,6 @@ import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
 
-const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
-
 export const petitionsClerkCreatesACaseDeadline = (
   cerebralTest,
   overrides = {},
@@ -21,8 +19,8 @@ export const petitionsClerkCreatesACaseDeadline = (
     await cerebralTest.runSequence('createCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
-      description: VALIDATION_ERROR_MESSAGES.description[1],
+      deadlineDate: CaseDeadline.VALIDATION_ERROR_MESSAGES.deadlineDate,
+      description: CaseDeadline.VALIDATION_ERROR_MESSAGES.description[1],
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -40,19 +38,22 @@ I'll be gone
 In a day or two`,
     });
 
+    const deadlineDate =
+      `${overrides.month}/${overrides.day}/${overrides.year}` || '08/12/2025';
     await cerebralTest.runSequence(
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'deadlineDate',
         toFormat: FORMATS.ISO,
-        value: '08/12/2025',
+        value: deadlineDate,
       },
     );
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: VALIDATION_ERROR_MESSAGES.description[0].message,
+      description:
+        CaseDeadline.VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
