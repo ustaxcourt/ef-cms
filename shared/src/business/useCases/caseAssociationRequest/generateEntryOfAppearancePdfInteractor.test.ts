@@ -83,7 +83,11 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toHaveBeenCalledWith(
-      expect.objectContaining({ file: mockFile, useTempBucket: true }),
+      expect.objectContaining({
+        URLTTL: 60 * 60 * 24,
+        file: mockFile,
+        useTempBucket: true,
+      }),
     );
     expect(result).toEqual(mockPdfUrl);
   });
