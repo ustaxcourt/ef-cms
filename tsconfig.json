@@ -34,7 +34,8 @@
     "./web-client/integration-tests/**/*",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts",
     "./web-client/integration-tests-public/**/*",
-    "./web-client/src/**/*"
+    "./web-client/src/**/*",
+    "./scripts/judgeUpdates/update-senior-judges.ts"
   ],
   "exclude": ["node_modules"]
 }
