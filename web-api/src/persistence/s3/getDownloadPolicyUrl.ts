@@ -9,11 +9,13 @@ export const getDownloadPolicyUrl = ({
   applicationContext,
   filename,
   key,
+  URLTTL = 120,
   useTempBucket = false,
 }: {
   applicationContext: IApplicationContext;
   filename?: string;
   key: string;
+  URLTTL?: number;
   useTempBucket?: boolean;
 }): Promise<{ url: string }> => {
   const bucketName = useTempBucket
@@ -25,7 +27,7 @@ export const getDownloadPolicyUrl = ({
       'getObject',
       {
         Bucket: bucketName,
-        Expires: 120,
+        Expires: URLTTL,
         Key: key,
         ResponseContentDisposition: filename
           ? `inline;filename="${filename}"`
