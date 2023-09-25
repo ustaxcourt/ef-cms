@@ -4,10 +4,25 @@ export const setJudgeLastNamesAction = ({ get, store }: ActionProps) => {
   const { judgeName } = get(state.judgeActivityReport);
   const judges = get(state.judges);
 
-  const namesOfCurrentJudges = judges.map(judge => judge.name);
+  let judgesToQueryFor: string[] = [];
 
-  const judgesToQueryFor =
-    judgeName === 'All Judges' ? namesOfCurrentJudges : [judgeName];
+  if (judgeName === 'All Judges') {
+    judgesToQueryFor = judges.map(judge => judge.name);
+  } else if (judgeName === 'All Senior Judges') {
+    judgesToQueryFor = judges
+      .filter(judge => judge.judgeTitle?.includes('Senior Judge'))
+      .map(judge => judge.name);
+  } else if (judgeName === 'All Special Trial Judges') {
+    judgesToQueryFor = judges
+      .filter(judge => judge.judgeTitle?.includes('Special Trial Judge'))
+      .map(judge => judge.name);
+  } else if (judgeName === 'All Regular Judges') {
+    judgesToQueryFor = judges
+      .filter(judge => judge.judgeTitle === 'Judge')
+      .map(judge => judge.name);
+  } else {
+    judgesToQueryFor = [judgeName];
+  }
 
   store.set(state.judgeActivityReport.filters.judges, judgesToQueryFor);
   store.set(state.judgeActivityReport.judgeNameToDisplayForHeader, judgeName);

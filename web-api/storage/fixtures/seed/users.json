@@ -48,7 +48,7 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "email": "judgecolvin@example.com",
     "judgeFullName": "John O. Colvin",
-    "judgeTitle": "Judge",
+    "judgeTitle": "Senior Judge",
     "entityName": "User"
   },
   {
@@ -107,7 +107,7 @@
     "userId": "dabbad04-18d0-43ec-bafb-654e83405416",
     "email": "judgecohen@example.com",
     "judgeFullName": "Mary Ann Cohen",
-    "judgeTitle": "Judge",
+    "judgeTitle": "Senior Judge",
     "entityName": "User"
   },
   {
