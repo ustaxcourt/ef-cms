@@ -5,9 +5,9 @@ export const getTrialSessionsForJudgeActivityReportAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const { endDate, judgeName, startDate } = get(
-    state.judgeActivityReport.filters,
-  );
+  const { endDate, startDate } = get(state.judgeActivityReport.filters);
+
+  const { judgeName } = get(state.judgeActivityReport);
 
   let judgeIdForRequest: string = ID_FOR_ALL_JUDGES;
 
