@@ -5,8 +5,6 @@ import {
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 
-const { VALIDATION_ERROR_MESSAGES } = Case;
-
 export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
   return it('Petitions clerk submits paper case to IRS', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -30,19 +28,23 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
       {
         key: 'petitionPaymentDate',
         toFormat: FORMATS.ISO,
-        value: '12/25/2018',
+        value: '12/24/2018',
       },
     );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
+      irsNoticeDate: Case.VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2017',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'irsNoticeDate',
+        toFormat: FORMATS.ISO,
+        value: '12/24/2017',
+      },
+    );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -59,7 +61,7 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
 
     // check that save occurred
     expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2017-12-24T05:00:00.000Z',
+      '2017-12-24T00:00:00.000-05:00',
     );
     expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,

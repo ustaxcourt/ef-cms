@@ -4,14 +4,12 @@ import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presente
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
-
-const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
-
 export const petitionsClerkEditsCaseDeadline = (
   cerebralTest,
   overrides = {},
 ) => {
+  const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
   return it('Petitions clerk edits a case deadline', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -27,9 +25,7 @@ export const petitionsClerkEditsCaseDeadline = (
     });
 
     expect(cerebralTest.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(cerebralTest.getState('form.month')).toBeTruthy();
-    expect(cerebralTest.getState('form.day')).toBeTruthy();
-    expect(cerebralTest.getState('form.year')).toBeTruthy();
+    expect(cerebralTest.getState('form.date')).toBeTruthy();
     expect(cerebralTest.getState('form.description')).toBeTruthy();
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -61,7 +57,8 @@ In a day or two`,
     await cerebralTest.runSequence('updateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: VALIDATION_ERROR_MESSAGES.description[0].message,
+      description:
+        CaseDeadline.VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
