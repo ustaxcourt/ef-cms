@@ -6,8 +6,6 @@ export const docketClerkVerifiesEditCourtIssuedNonstandardFields =
       );
 
       expect(cerebralTest.getState('form.freeText')).toEqual('be free');
-      expect(cerebralTest.getState('form.month')).toEqual('4');
-      expect(cerebralTest.getState('form.day')).toEqual('4');
-      expect(cerebralTest.getState('form.year')).toEqual('2050');
+      expect(cerebralTest.getState('form.date')).toEqual('04/04/2050');
     });
   };

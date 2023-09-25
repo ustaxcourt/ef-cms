@@ -1,3 +1,5 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+
 export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
   cerebralTest,
   docketRecordIndex = 2,
@@ -19,24 +21,11 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     );
 
     await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'serviceDateMonth',
-        value: '05',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'serviceDateDay',
-        value: '10',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'serviceDateYear',
-        value: '2005',
+        key: 'serviceDateDate',
+        toFormat: FORMATS.ISO,
+        value: '05/10/2005',
       },
     );
 
@@ -65,24 +54,11 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     expect(cerebralTest.getState('form.numberOfPages')).toEqual(3);
 
     await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateDay',
-        value: '13',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateMonth',
-        value: '07',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2002',
+        key: 'filingDateDate',
+        toFormat: FORMATS.ISO,
+        value: '07/13/2002',
       },
     );
 

@@ -1,9 +1,11 @@
-import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  COUNTRY_TYPES,
+  DEFAULT_PROCEDURE_TYPE,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-
-const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
-  applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
