@@ -68,6 +68,9 @@ export const viewJudgeActivityReportResults = (
       }),
     );
 
+    const { totalCountForSubmittedAndCavCases: initialTotal } =
+      cerebralTest.getState('judgeActivityReport.judgeActivityReportData');
+
     await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
       selectedPage: 1,
     });
@@ -79,5 +82,11 @@ export const viewJudgeActivityReportResults = (
         submittedAndCavCasesByJudge: expect.anything(),
       }),
     );
+
+    expect(
+      cerebralTest.getState(
+        'judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases',
+      ),
+    ).toEqual(initialTotal);
   });
 };
