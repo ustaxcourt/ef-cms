@@ -10,11 +10,14 @@
 export const saveFileAndGenerateUrl = async ({
   applicationContext,
   file,
+  URLTTL,
   useTempBucket = false,
 }: {
   applicationContext: IApplicationContext;
   file: Blob;
   useTempBucket?: boolean;
+  // time to live of link in seconds
+  URLTTL?: number;
 }) => {
   const fileId = applicationContext.getUniqueId();
 
@@ -28,6 +31,7 @@ export const saveFileAndGenerateUrl = async ({
   const { url } = await applicationContext
     .getPersistenceGateway()
     .getDownloadPolicyUrl({
+      URLTTL,
       applicationContext,
       key: fileId,
       useTempBucket,
