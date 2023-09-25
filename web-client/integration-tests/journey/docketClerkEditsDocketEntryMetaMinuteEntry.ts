@@ -16,14 +16,6 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = cerebralTest => {
     await cerebralTest.runSequence(
       'updateDocketEntryMetaDocumentFormValueSequence',
       {
-        key: 'filingDateYear',
-        value: '2020',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
         key: 'documentTitle',
         value: 'Request for Place of Trial at Boise, Idaho',
       },
