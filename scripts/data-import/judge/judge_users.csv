@@ -11,8 +11,8 @@ Chabot,Judge,Chabot,legacy.judge.chabot@example.com,legacyJudge,legacyJudgesCham
 Chiechi,Judge,Chiechi,legacy.judge.chiechi@example.com,legacyJudge,legacyJudgesChambers
 Choi,Special Trial Judge,Eunkyong Choi,legacy.stjudge.choi@example.com,legacyJudge,legacyJudgesChambers
 Clapp,Judge,Clapp,legacy.judge.clapp@example.com,legacyJudge,legacyJudgesChambers
-Cohen,Judge,Mary Ann Cohen,judge.cohen@example.com,judge,cohensChambers
-Colvin,Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers
+Cohen,Senior Judge,Mary Ann Cohen,judge.cohen@example.com,judge,cohensChambers
+Colvin,Senior Judge,John O. Colvin,judge.colvin@example.com,judge,colvinsChambers
 Copeland,Judge,Elizabeth A. Copeland,judge.copeland@example.com,judge,copelandsChambers
 Couvillion,Special Trial Judge,Couvillion,legacy.judge.couvillion@example.com,legacyJudge,legacyJudgesChambers
 Dawson,Judge,Dawson,legacy.judge.dawson@example.com,legacyJudge,legacyJudgesChambers
@@ -26,17 +26,17 @@ Foley,Chief Judge,Maurice B. Foley,judge.foley@example.com,judge,foleysChambers
 Gale,Judge,Joseph H. Gale,judge.gale@example.com,judge,galesChambers
 Galloway,Special Trial Judge,Galloway,legacy.judge.galloway@example.com,legacyJudge,legacyJudgesChambers
 Gerber,Judge,Gerber,legacy.judge.gerber@example.com,legacyJudge,legacyJudgesChambers
-Goeke,Judge,Joseph Robert Goeke,judge.goeke@example.com,judge,goekesChambers
+Goeke,Senior Judge,Joseph Robert Goeke,judge.goeke@example.com,judge,goekesChambers
 Goffe,Judge,Goffe,legacy.judge.goffe@example.com,legacyJudge,legacyJudgesChambers
 Goldberg,Special Trial Judge,Goldberg,legacy.judge.goldberg@example.com,legacyJudge,legacyJudgesChambers
 Greaves,Judge,Travis A. Greaves,judge.greaves@example.com,judge,greavesChambers
 Gussis,Special Trial Judge,Gussis,legacy.judge.gussis@example.com,legacyJudge,legacyJudgesChambers
-Gustafson,Judge,David Gustafson,judge.gustafson@example.com,judge,gustafsonsChambers
+Gustafson,Senior Judge,David Gustafson,judge.gustafson@example.com,judge,gustafsonsChambers
 Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,legacyJudge,legacyJudgesChambers
 Haines,Judge,Haines,legacy.judge.haines@example.com,legacyJudge,legacyJudgesChambers
-Halpern,Judge,James S. Halpern,judge.halpern@example.com,judge,halpernsChambers
+Halpern,Senior Judge,James S. Halpern,judge.halpern@example.com,judge,halpernsChambers
 Hamblen,Judge,Hamblen,legacy.judge.hamblen@example.com,legacyJudge,legacyJudgesChambers
-Holmes,Judge,Mark V. Holmes,judge.holmes@example.com,judge,holmesChambers
+Holmes,Senior Judge,Mark V. Holmes,judge.holmes@example.com,judge,holmesChambers
 Jacobs,Judge,Jacobs,legacy.judge.jacobs@example.com,legacyJudge,legacyJudgesChambers
 Jones,Judge,Courtney D. Jones,judge.jones@example.com,judge,jonesChambers
 Kerrigan,Judge,Kathleen Kerrigan,judge.kerrigan@example.com,judge,kerrigansChambers
@@ -44,10 +44,10 @@ Korner,Judge,Korner,legacy.judge.korner@example.com,legacyJudge,legacyJudgesCham
 Kroupa,Judge,Kroupa,legacy.judge.kroupa@example.com,legacyJudge,legacyJudgesChambers
 Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@example.com,judge,landysChambers
 Laro,Judge,Laro,legacy.judge.laro@example.com,legacyJudge,legacyJudgesChambers
-Lauber,Judge,Albert G. Lauber,judge.lauber@example.com,judge,laubersChambers
+Lauber,Senior Judge,Albert G. Lauber,judge.lauber@example.com,judge,laubersChambers
 Leyden,Special Trial Judge,Diana L. Leyden,stjudge.leyden@example.com,judge,leydensChambers
 Marshall,Judge,Alina I. Marshall,judge.marshall@example.com,judge,marshallsChambers
-Marvel,Judge,L. Paige Marvel,judge.marvel@example.com,judge,marvelsChambers
+Marvel,Senior Judge,L. Paige Marvel,judge.marvel@example.com,judge,marvelsChambers
 Morrison,Judge,Richard T. Morrison,judge.morrison@example.com,judge,morrisonsChambers
 Nameroff,Judge,Nameroff,legacy.judge.nameroff@example.com,legacyJudge,legacyJudgesChambers
 Nega,Judge,Joseph W. Nega,judge.nega@example.com,judge,negasChambers
@@ -70,11 +70,11 @@ Simpson,Judge,Simpson,legacy.judge.simpson@example.com,legacyJudge,legacyJudgesC
 Sterrett,Judge,Sterrett,legacy.judge.sterrett@example.com,legacyJudge,legacyJudgesChambers
 Swift,Judge,Swift,legacy.judge.swift@example.com,legacyJudge,legacyJudgesChambers
 Tannenwald,Judge,Tannenwald,legacy.judge.tannenwald@example.com,legacyJudge,legacyJudgesChambers
-Thornton,Judge,Michael B. Thornton,judge.thornton@example.com,judge,thorntonsChambers
+Thornton,Senior Judge,Michael B. Thornton,judge.thornton@example.com,judge,thorntonsChambers
 Toro,Judge,Emin Toro,judge.toro@example.com,judge,torosChambers
 Urda,Judge,Patrick J. Urda,judge.urda@example.com,judge,urdasChambers
 Vandervort,Special Trial Judge,Vandervort,legacy.judge.vandervort@example.com,legacyJudge,legacyJudgesChambers
-Vasquez,Judge,Juan F. Vasquez,judge.vasquez@example.com,judge,vasquezsChambers
+Vasquez,Senior Judge,Juan F. Vasquez,judge.vasquez@example.com,judge,vasquezsChambers
 Weiler,Judge,Christian N. Weiler,judge.weiler@example.com,judge,weilersChambers
 Wells,Judge,Thomas B. Wells,judge.wells@example.com,judge,wellsChambers
 Whalen,Judge,Whalen,legacy.judge.whalen@example.com,legacyJudge,legacyJudgesChambers
