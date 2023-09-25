@@ -6,11 +6,37 @@ import { setJudgeLastNamesAction } from './setJudgeLastNamesAction';
 
 describe('setJudgeLastNamesAction', () => {
   presenter.providers.applicationContext = applicationContext;
-  const secondJudgeUser = { ...judgeUser, name: 'Buch' };
-  const mockJudgesInState = [judgeUser, secondJudgeUser];
+
+  const allJudges: RawUser[] = [
+    {
+      ...judgeUser,
+      judgeTitle: 'Judge',
+      name: 'Some Regular Judge',
+    },
+    {
+      ...judgeUser,
+      judgeTitle: 'Chief Judge',
+      name: 'Some Chief Judge',
+    },
+    {
+      ...judgeUser,
+      judgeTitle: 'Special Trial Judge',
+      name: 'Some Special Trial Judge',
+    },
+    {
+      ...judgeUser,
+      judgeTitle: 'Chief Special Trial Judge',
+      name: 'Some Chief Special Trial Judge',
+    },
+    {
+      ...judgeUser,
+      judgeTitle: 'Senior Judge',
+      name: 'Some Senior Judge',
+    },
+  ];
 
   it('should set state.judgeActivityReport.filters.judges to current judges populated in state if judgeName is "All Judges"', async () => {
-    const { state } = await runAction(setJudgeLastNamesAction as any, {
+    const { state } = await runAction(setJudgeLastNamesAction, {
       modules: {
         presenter,
       },
@@ -19,13 +45,71 @@ describe('setJudgeLastNamesAction', () => {
         judgeActivityReport: {
           judgeName: 'All Judges',
         },
-        judges: mockJudgesInState,
+        judges: allJudges,
+      },
+    });
+
+    expect(state.judgeActivityReport.filters.judges).toEqual(
+      allJudges.map(j => j.name),
+    );
+  });
+
+  it('should set state.judgeActivityReport.filters.judges to senior judges populated in state if judgeName is "All Senior Judges"', async () => {
+    const { state } = await runAction(setJudgeLastNamesAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        judgeActivityReport: {
+          judgeName: 'All Senior Judges',
+        },
+        judges: allJudges,
       },
     });
 
     expect(state.judgeActivityReport.filters.judges).toEqual([
-      judgeUser.name,
-      secondJudgeUser.name,
+      'Some Senior Judge',
+    ]);
+  });
+
+  it('should set state.judgeActivityReport.filters.judges to Special Trial Judges judges populated in state if judgeName is "All Special Trial Judges"', async () => {
+    const { state } = await runAction(setJudgeLastNamesAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        judgeActivityReport: {
+          judgeName: 'All Special Trial Judges',
+        },
+        judges: allJudges,
+      },
+    });
+
+    expect(state.judgeActivityReport.filters.judges).toEqual([
+      'Some Special Trial Judge',
+      'Some Chief Special Trial Judge',
+    ]);
+  });
+
+  it('should set state.judgeActivityReport.filters.judges to regular judges populated in state if judgeName is "All Regular Judges"', async () => {
+    const { state } = await runAction(setJudgeLastNamesAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        judgeActivityReport: {
+          judgeName: 'All Regular Judges',
+        },
+        judges: allJudges,
+      },
+    });
+
+    expect(state.judgeActivityReport.filters.judges).toEqual([
+      'Some Regular Judge',
+      'Some Chief Judge',
     ]);
   });
 
@@ -39,7 +123,7 @@ describe('setJudgeLastNamesAction', () => {
         judgeActivityReport: {
           judgeName: judgeUser.name,
         },
-        judges: mockJudgesInState,
+        judges: allJudges,
       },
     });
 
@@ -56,7 +140,7 @@ describe('setJudgeLastNamesAction', () => {
         judgeActivityReport: {
           judgeName: judgeUser.name,
         },
-        judges: mockJudgesInState,
+        judges: allJudges,
       },
     });
 

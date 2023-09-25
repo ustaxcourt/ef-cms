@@ -5,13 +5,13 @@ import { post } from '../requests';
 
 export const getTrialSessionsForJudgeActivityReportInteractor = (
   applicationContext: ClientApplicationContext,
-  { endDate, judgeId, startDate }: JudgeActivityReportFilters,
+  { endDate, judges, startDate }: JudgeActivityReportFilters,
 ): Promise<TrialSessionTypes> =>
   post({
     applicationContext,
     body: {
       endDate,
-      judgeId,
+      judges,
       startDate,
     },
     endpoint: '/judge-activity-report/trial-sessions',
