@@ -28,7 +28,7 @@ export type TrialSessionReturnType = {
 
 export const getTrialSessionsForJudgeActivityReportInteractor = async (
   applicationContext: IApplicationContext,
-  { endDate, judgeId, startDate }: JudgeActivityReportFilters,
+  { endDate, judges, startDate }: JudgeActivityReportFilters,
 ): Promise<TrialSessionReturnType> => {
   const user = applicationContext.getCurrentUser();
 
@@ -38,12 +38,14 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
 
   const searchEntity = new JudgeActivityReportSearch({
     endDate,
-    judgeId,
+    judges,
     startDate,
   });
 
   if (!searchEntity.isValid()) {
-    throw new InvalidRequest();
+    throw new InvalidRequest(
+      'the judge activity report search entity was invalid',
+    );
   }
 
   const trialSessions = await applicationContext
@@ -52,13 +54,16 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
       applicationContext,
     });
 
-  const trialSessionsForSelectedJudge = trialSessions.filter(session => {
-    if (searchEntity.judgeId !== ID_FOR_ALL_JUDGES)
-      return session.judge?.userId === searchEntity.judgeId;
-    else return session;
+  const trialSessionsForSelectedJudges = trialSessions.filter(session => {
+    console.log(session.judge);
+    if (judges && session.judge) {
+      return searchEntity.judges.includes(session.judge.name);
+    } else {
+      return true;
+    }
   });
 
-  const judgeSessionsInDateRange = trialSessionsForSelectedJudge.filter(
+  const judgeSessionsInDateRange = trialSessionsForSelectedJudges.filter(
     session =>
       session.startDate <= searchEntity.endDate &&
       session.startDate >= searchEntity.startDate,
