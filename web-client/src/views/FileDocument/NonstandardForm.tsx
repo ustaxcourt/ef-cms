@@ -153,7 +153,7 @@ export const NonstandardForm = connect(
             defaultValue={form[`${namespace}serviceDate`]}
             errorText={validationErrors?.serviceDate}
             id="date-of-service"
-            label="Service datddde"
+            label="Service date"
             onChange={e => {
               formatAndUpdateDateFromDatePickerSequence({
                 key: `${namespace}serviceDate`,
