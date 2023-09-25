@@ -43,6 +43,10 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
+  it('should save the bar number of private practitioner 2', () => {
+    cerebralTest.barNumber = 'GL1111';
+  });
   petitionsClerkAddsPractitionersToCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -52,14 +56,14 @@ describe('noticeOfChangeOfAddressQCJourney', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkDoesNotViewQCItemForNCAForRepresentedPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkDoesNotViewQCItemForNCAForCaseWithNoPaperService(cerebralTest);
   docketClerkEditsServiceIndicatorForPetitioner(cerebralTest);
 
-  loginAs(cerebralTest, 'privatepractitioner@example.com');
+  loginAs(cerebralTest, 'privatepractitioner2@example.com');
   practitionerUpdatesAddress(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
