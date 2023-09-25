@@ -1,14 +1,12 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { OBJECTIONS_OPTIONS_MAP } from '@shared/business/entities/EntityConstants';
 import { contactPrimaryFromState } from '../helpers';
 
 export const practitionerFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
-  const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
-
   return it('Practitioner files document for owned case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: caseDocketNumber || cerebralTest.docketNumber,
