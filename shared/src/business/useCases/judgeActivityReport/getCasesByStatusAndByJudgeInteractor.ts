@@ -8,7 +8,8 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { getCountOfConsolidedCases } from '@web-api/persistence/elasticsearch/getCountOfConsolidedCases';
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { isEmpty } from 'lodash';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
@@ -21,23 +22,13 @@ export type CavAndSubmittedCaseResponseType = {
   foundCases: { docketNumber: string }[];
 };
 
-export type CavAndSubmittedFilteredCasesType = {
-  caseStatusHistory: {
-    date: string;
-    changedBy: string;
-    updatedCaseStatus: string;
-  }[];
-  caseCaption: string;
+export type CavAndSubmittedFilteredCasesType = RawCase & {
   daysElapsedSinceLastStatusChange: number;
-  docketNumber: string;
-  leadDocketNumber?: string;
   formattedCaseCount: number;
-  petitioners: TPetitioner[];
-  status: string;
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
@@ -55,7 +46,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   }
 
   // get all of the cases
-  const caseRecords: RawCase[] = await getCases(
+  const caseRecords: RawCaseWithWorksheet[] = await getCases(
     applicationContext,
     searchEntity,
   );
@@ -70,7 +61,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
-  const finalListOfCases: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+  const allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
     (caseRecord, i) => ({
       ...caseRecord,
       daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
@@ -78,25 +69,25 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
-  finalListOfCases.sort((a, b) => {
+  allCaseResults.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
   });
 
-  const itemOffset =
-    (searchEntity.pageNumber * searchEntity.pageSize) % finalListOfCases.length;
+  let paginatedCaseResults;
+  if (searchEntity.pageSize && searchEntity.pageNumber) {
+    const itemOffset =
+      (searchEntity.pageNumber * searchEntity.pageSize) % allCaseResults.length;
 
-  const endOffset = itemOffset + searchEntity.pageSize;
+    const endOffset = itemOffset + searchEntity.pageSize;
 
-  const formattedCaseRecordsForDisplay = finalListOfCases.slice(
-    itemOffset,
-    endOffset,
-  );
+    paginatedCaseResults = allCaseResults.slice(itemOffset, endOffset);
+  }
 
   return {
-    cases: formattedCaseRecordsForDisplay,
-    totalCount: finalListOfCases.length,
+    cases: paginatedCaseResults || allCaseResults,
+    totalCount: allCaseResults.length,
   };
 };
 
@@ -104,6 +95,10 @@ const calculateDaysElapsed = (
   applicationContext: IApplicationContext,
   individualCase: RawCase,
 ) => {
+  if (isEmpty(individualCase.caseStatusHistory)) {
+    return 0;
+  }
+
   const currentDateInIsoFormat: string = applicationContext
     .getUtilities()
     .formatDateString(
@@ -127,10 +122,14 @@ const calculateDaysElapsed = (
     );
 };
 
+type RawCaseWithWorksheet = RawCase & {
+  caseWorksheet: RawCaseWorksheet;
+};
+
 const getCases = async (
   applicationContext: IApplicationContext,
   searchEntity: JudgeActivityReportSearch,
-): Promise<RawCase[]> => {
+): Promise<RawCaseWithWorksheet[]> => {
   // first get all cases for the specified judges and statuses
   const allCaseRecords = await applicationContext
     .getPersistenceGateway()
@@ -151,11 +150,29 @@ const getCases = async (
       eventCodes: ['ODD', 'DEC', 'OAD', 'SDEC'],
     });
 
-  return allCaseRecords.filter(
+  const filteredCaseRecords = allCaseRecords.filter(
     caseInfo =>
       !docketNumbersFilterOut.includes(caseInfo.docketNumber) &&
       caseInfo.caseStatusHistory,
   );
+
+  const completeCaseRecords = await Promise.all(
+    filteredCaseRecords.map(async caseRecord => {
+      const caseWorksheet = await applicationContext
+        .getPersistenceGateway()
+        .getCaseWorksheet({
+          applicationContext,
+          docketNumber: caseRecord.docketNumber,
+        });
+
+      return {
+        ...caseRecord,
+        caseWorksheet,
+      } as unknown as RawCaseWithWorksheet;
+    }),
+  );
+
+  return completeCaseRecords;
 };
 
 const calculateNumberOfConsolidatedCases = async (
@@ -166,8 +183,10 @@ const calculateNumberOfConsolidatedCases = async (
     return 0;
   }
 
-  return await getCountOfConsolidedCases({
-    applicationContext,
-    leadDocketNumber: caseInfo.leadDocketNumber,
-  });
+  return await applicationContext
+    .getPersistenceGateway()
+    .getCountOfConsolidatedCases({
+      applicationContext,
+      leadDocketNumber: caseInfo.leadDocketNumber,
+    });
 };
