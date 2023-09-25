@@ -1,5 +1,5 @@
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
-import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
 
 export const TrialCalendar = ({ cases = [], sessionDetail }) => {
@@ -10,70 +10,69 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
         subtitle={`${sessionDetail.startDate} ${sessionDetail.sessionType}`}
         title={sessionDetail.trialLocation}
       />
-
-      <div className="column">
-        <div className="card width-half">
-          <div className="card-header">Trial Information</div>
-          <div className="card-content">
-            <div className="width-half" id="start-time">
-              <strong>Start Time</strong>
-              <br />
-              {sessionDetail.startTime}
+      <section className="usa-section grid-container">
+        <div className="grid-row">
+          <div className="grid-col-6 card">
+            <div className="card-header">Trial Information</div>
+            <div className="card-content">
+              <div className="width-half" id="start-time">
+                <strong>Start Time</strong>
+                <br />
+                {sessionDetail.startTime}
+              </div>
+              <div className="width-half" id="location">
+                <strong>Location</strong>
+                {sessionDetail.noLocationEntered && (
+                  <div>No location entered</div>
+                )}
+                {!sessionDetail.noLocationEntered && (
+                  <>
+                    {sessionDetail.courthouseName && (
+                      <div>{sessionDetail.courthouseName}</div>
+                    )}
+                    {sessionDetail.address1 && (
+                      <div>{sessionDetail.address1}</div>
+                    )}
+                    {sessionDetail.address2 && (
+                      <div>{sessionDetail.address2}</div>
+                    )}
+                    {sessionDetail.formattedCityStateZip && (
+                      <div>{sessionDetail.formattedCityStateZip}</div>
+                    )}
+                  </>
+                )}
+              </div>
+              <div className="clear"></div>
             </div>
-            <div className="width-half" id="location">
-              <strong>Location</strong>
-              {sessionDetail.noLocationEntered && (
-                <div>No location entered</div>
-              )}
-              {!sessionDetail.noLocationEntered && (
-                <>
-                  {sessionDetail.courthouseName && (
-                    <div>{sessionDetail.courthouseName}</div>
-                  )}
-                  {sessionDetail.address1 && (
-                    <div>{sessionDetail.address1}</div>
-                  )}
-                  {sessionDetail.address2 && (
-                    <div>{sessionDetail.address2}</div>
-                  )}
-                  {sessionDetail.formattedCityStateZip && (
-                    <div>{sessionDetail.formattedCityStateZip}</div>
-                  )}
-                </>
-              )}
+          </div>
+          <div className="card grid-col-6">
+            <div className="card-header">Assignments</div>
+            <div className="card-content">
+              <div className="width-half">
+                <strong>Judge</strong>
+                <div>{sessionDetail.judge}</div>
+              </div>
+              <div className="width-half">
+                <strong>Trial Clerk</strong>
+                <div>{sessionDetail.trialClerk}</div>
+              </div>
+              <div className="clear"></div>
             </div>
-            <div className="clear"></div>
+            <div className="card-content">
+              <div className="width-half wrap-text-content">
+                <strong>Court Reporter</strong>
+                <div>{sessionDetail.courtReporter}</div>
+              </div>
+              <div className="width-half wrap-text-content">
+                <strong>IRS Calendar Admin</strong>
+                <div>{sessionDetail.irsCalendarAdministrator}</div>
+              </div>
+              <div className="clear"></div>
+            </div>
           </div>
         </div>
-
-        <div className="card width-half" id="assignments">
-          <div className="card-header">Assignments</div>
-          <div className="card-content">
-            <div className="width-half">
-              <strong>Judge</strong>
-              <div>{sessionDetail.judge}</div>
-            </div>
-            <div className="width-half">
-              <strong>Trial Clerk</strong>
-              <div>{sessionDetail.trialClerk}</div>
-            </div>
-            <div className="clear"></div>
-          </div>
-          <div className="card-content">
-            <div className="width-half wrap-text-content">
-              <strong>Court Reporter</strong>
-              <div>{sessionDetail.courtReporter}</div>
-            </div>
-            <div className="width-half wrap-text-content">
-              <strong>IRS Calendar Admin</strong>
-              <div>{sessionDetail.irsCalendarAdministrator}</div>
-            </div>
-            <div className="clear"></div>
-          </div>
-        </div>
-      </div>
+      </section>
       <div className="clear"></div>
-
       <div className="card margin-top-0" id="notes">
         <div className="card-header">Session Notes</div>
         <div className="card-content">{sessionDetail.notes}</div>
