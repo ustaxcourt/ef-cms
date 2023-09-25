@@ -53,6 +53,7 @@ import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExtern
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
+import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
@@ -73,7 +74,6 @@ import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJ
 import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
-import { getConsolidatedCasesByCaseLambda } from './lambdas/cases/getConsolidatedCasesByCaseLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
@@ -594,10 +594,6 @@ app.use(logger());
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
   );
-  app.get(
-    '/cases/:docketNumber/consolidated-cases',
-    lambdaWrapper(getConsolidatedCasesByCaseLambda),
-  );
   app.post(
     '/cases/:docketNumber/serve-to-irs',
     lambdaWrapper(serveCaseToIrsLambda),
@@ -605,6 +601,10 @@ app.use(logger());
   app.put(
     '/cases/:docketNumber',
     lambdaWrapper(saveCaseDetailInternalEditLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/generate-entry-of-appearance',
+    lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));

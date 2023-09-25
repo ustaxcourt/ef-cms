@@ -186,17 +186,19 @@ export const advancedDocumentSearch = async ({
     });
   }
 
+  const searchQuery: QueryDslQueryContainer = {
+    bool: {
+      filter: documentFilter,
+      must: documentMust,
+      must_not: documentMustNot,
+    },
+  };
+
   const documentQuery = {
     body: {
       _source: sourceFields,
       from,
-      query: {
-        bool: {
-          filter: documentFilter,
-          must: documentMust,
-          must_not: documentMustNot,
-        },
-      },
+      query: searchQuery,
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
       sort: getSortQuery(sortField),
     },
