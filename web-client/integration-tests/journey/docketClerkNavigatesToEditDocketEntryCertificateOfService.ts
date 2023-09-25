@@ -11,23 +11,24 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     });
 
     expect(cerebralTest.getState('form.numberOfPages')).toEqual(2);
-
     expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
     expect(
       cerebralTest.getState('screenMetadata.documentTitlePreview'),
     ).toEqual('Certificate of Service of Petition 03-03-2003');
     expect(cerebralTest.getState('form.serviceDate')).toEqual(
-      '2003-03-03T05:00:00.000Z',
+      '2003-03-03T00:00:00.000-05:00',
     );
 
     await cerebralTest.runSequence(
       'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'serviceDateDate',
+        key: 'serviceDate',
         toFormat: FORMATS.ISO,
         value: '05/10/2005',
       },
     );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     expect(
       cerebralTest.getState('screenMetadata.documentTitlePreview'),
@@ -41,7 +42,6 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });
@@ -92,7 +92,6 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
       message: 'Docket entry changes saved.',
     });

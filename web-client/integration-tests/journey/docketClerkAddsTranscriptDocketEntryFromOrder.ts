@@ -1,4 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { TRANSCRIPT_EVENT_CODE } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -9,8 +10,6 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
   draftOrderIndex,
   date,
 ) => {
-  const { TRANSCRIPT_EVENT_CODE } = applicationContext.getConstants();
-
   return it('Docket Clerk adds a docket entry for a transcript from the given order', async () => {
     let caseDetailFormatted;
 
@@ -79,6 +78,8 @@ export const docketClerkAddsTranscriptDocketEntryFromOrder = (
         value: `${date.month}/${date.day}/${date.year}`,
       },
     );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     const today = applicationContext.getUtilities().getMonthDayYearInETObj();
     await cerebralTest.runSequence(

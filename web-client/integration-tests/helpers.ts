@@ -683,7 +683,7 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
 
 export const uploadProposedStipulatedDecision = async (
   cerebralTest,
-  configObject,
+  configObject?,
 ) => {
   const defaultForm = {
     attachments: false,

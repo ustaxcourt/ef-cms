@@ -38,14 +38,16 @@ I'll be gone
 In a day or two`,
     });
 
-    const deadlineDate =
-      `${overrides.month}/${overrides.day}/${overrides.year}` || '08/12/2025';
+    const deadlineMonth = overrides.month || '08';
+    const deadlineDay = overrides.day || '12';
+    const deadlineYear = overrides.year || '2025';
+
     await cerebralTest.runSequence(
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'deadlineDate',
         toFormat: FORMATS.ISO,
-        value: deadlineDate,
+        value: `${deadlineMonth}/${deadlineDay}/${deadlineYear}`,
       },
     );
 

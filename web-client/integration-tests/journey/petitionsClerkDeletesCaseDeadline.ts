@@ -21,7 +21,7 @@ export const petitionsClerkDeletesCaseDeadline = cerebralTest => {
     });
 
     expect(cerebralTest.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(cerebralTest.getState('form.date')).toBeTruthy();
+    expect(cerebralTest.getState('form.deadlineDate')).toBeTruthy();
     expect(cerebralTest.getState('form.description')).toBeTruthy();
 
     await cerebralTest.runSequence('deleteCaseDeadlineSequence');
