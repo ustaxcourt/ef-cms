@@ -133,6 +133,17 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
+export const STATUS_OF_MATTER_OPTIONS = [
+  'Awaiting Consideration',
+  'Awaiting Briefs',
+  'Drafting',
+  'Reviewing Draft',
+  'Submitted to Chief Judge',
+  'Revising Draft',
+  'Submitted to Reporter',
+  'Stayed',
+];
+
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
   PENDING: 'pending',
@@ -405,6 +416,13 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
   'NTD',
   'NOT',
+);
+
+export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
+  eventCode => {
+    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    return !excludedOrderEventCodes.includes(eventCode);
+  },
 );
 
 export const EXTERNAL_DOCUMENT_TYPES = flatten(
