@@ -66,9 +66,8 @@ const getUniqueValues = ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const allPractitioners: RawPractitioner[] = await getAllPractitioners({
-    applicationContext,
-  });
+  const allPractitioners: RawPractitioner[] =
+    await getAllPractitioners(applicationContext);
   const admittedInYear = allPractitioners.filter(p => {
     return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
   });
