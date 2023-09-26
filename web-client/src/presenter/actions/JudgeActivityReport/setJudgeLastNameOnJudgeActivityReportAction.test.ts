@@ -1,9 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import {
-  chambersUser,
-  judgeUser,
-} from '../../../../../shared/src/test/mockUsers';
-import { presenter } from '../../presenter-mock';
+import { colvinsChambersUser, judgeUser } from '@shared/test/mockUsers';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setJudgeLastNameOnJudgeActivityReportAction } from './setJudgeLastNameOnJudgeActivityReportAction';
 
@@ -22,14 +19,14 @@ describe('setJudgeLastNameOnJudgeActivityReportAction', () => {
       },
     );
 
-    expect(state.judgeActivityReport.filters.judgeName).toBe(judgeUser.name);
-    expect(state.judgeActivityReport.filters.judgeNameToDisplayForHeader).toBe(
+    expect(state.judgeActivityReport.judgeName).toBe(judgeUser.name);
+    expect(state.judgeActivityReport.judgeNameToDisplayForHeader).toBe(
       judgeUser.name,
     );
   });
 
   it('should set state.judgeActivityReport.filters.judgeName (and judgeNameToDisplayForHeader) to the last name of the judge of the chambers when the current user is a chambers user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(chambersUser);
+    applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
 
     const { state } = await runAction(
       setJudgeLastNameOnJudgeActivityReportAction,
@@ -40,9 +37,9 @@ describe('setJudgeLastNameOnJudgeActivityReportAction', () => {
       },
     );
 
-    expect(state.judgeActivityReport.filters.judgeNameToDisplayForHeader).toBe(
+    expect(state.judgeActivityReport.judgeNameToDisplayForHeader).toBe(
       'Colvin',
     );
-    expect(state.judgeActivityReport.filters.judgeName).toBe('Colvin');
+    expect(state.judgeActivityReport.judgeName).toBe('Colvin');
   });
 });
