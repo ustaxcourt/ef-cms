@@ -40,6 +40,7 @@ import {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } from '../support/pages/reports';
+import { serveCaseToIrs } from '../support/pages/create-paper-case';
 import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
@@ -54,8 +55,8 @@ const testData = {
 };
 const { login } = getEnvironmentSpecificFunctions();
 
-let firstDocketNumber;
-let secondDocketNumber;
+let firstDocketNumber: string;
+let secondDocketNumber: string;
 const caseTestData = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
@@ -78,7 +79,7 @@ describe('Petitions Clerk', () => {
   });
 
   describe('Petitioner creates cases', () => {
-    let petitionerToken;
+    let petitionerToken: string;
 
     describe('Petitioner', () => {
       before(() => {
@@ -193,6 +194,10 @@ describe('Petitions Clerk', () => {
       goToCaseOverview(firstDocketNumber);
     });
 
+    it('serve first case to irs', () => {
+      serveCaseToIrs();
+    });
+
     it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
       manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
@@ -200,6 +205,10 @@ describe('Petitions Clerk', () => {
 
     it('view case detail for second case', () => {
       goToCaseOverview(secondDocketNumber);
+    });
+
+    it('serve second case to irs', () => {
+      serveCaseToIrs();
     });
 
     it('manually block second case', () => {
@@ -249,7 +258,7 @@ describe('Petitions Clerk', () => {
     });
 
     it('set second case as High Priority for a trial session', () => {
-      setCaseAsReadyForTrial(secondDocketNumber);
+      setCaseAsReadyForTrial();
       setCaseAsHighPriority();
     });
 
