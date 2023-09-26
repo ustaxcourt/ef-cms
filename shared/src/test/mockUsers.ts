@@ -18,7 +18,7 @@ export const adcUser = {
   userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const chambersUser = {
+export const colvinsChambersUser = {
   name: 'Chandler Chambers',
   role: ROLES.chambers,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
@@ -69,6 +69,14 @@ export const judgeUser = {
   name: 'Sotomayor',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+};
+
+export const judgeColvin = {
+  judgeFullName: 'John O. Colvin',
+  name: 'Colvin',
+  role: ROLES.judge,
+  section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
+  userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
 };
 
 export const petitionerUser = {

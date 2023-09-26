@@ -159,7 +159,9 @@ export const updateConsistent = params => {
  */
 export const get = params => {
   return params.applicationContext
-    .getDocumentClient()
+    .getDocumentClient({
+      useMasterRegion: !!params.ConsistentRead,
+    })
     .get({
       TableName: getTableName({
         applicationContext: params.applicationContext,

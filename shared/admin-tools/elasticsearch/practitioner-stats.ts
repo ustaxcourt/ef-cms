@@ -22,7 +22,7 @@ const toDate = validateDateAndCreateISO({
 });
 
 const getAllPractitioners = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
 ): Promise<Array<RawPractitioner>> => {
   const { results } = await searchAll({
     applicationContext,
@@ -44,7 +44,13 @@ const getAllPractitioners = async (
   return results;
 };
 
-const getUniqueValues = ({ arrayOfObjects, keyToFilter }) => {
+const getUniqueValues = ({
+  arrayOfObjects,
+  keyToFilter,
+}: {
+  arrayOfObjects: {}[];
+  keyToFilter: string;
+}) => {
   const uniqueValues = {};
   for (const someObj of arrayOfObjects) {
     if (keyToFilter in someObj) {

@@ -7,10 +7,10 @@ requireEnvVars([
 ]);
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DynamoDB } from 'aws-sdk';
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../src/business/entities/EntityConstants';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
+import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
+import { createApplicationContext } from '@web-api/applicationContext';
 import { getUserPoolId, getVersion } from '../util';
-import { search } from '../../../web-api/src/persistence/elasticsearch/searchClient';
+import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
 const dynamo = new DynamoDB({ region: process.env.REGION });
@@ -41,7 +41,8 @@ const createOrUpdateCognitoUser = async ({
 
     userExists = true;
   } catch (err) {
-    if (err.code !== 'UserNotFoundException') {
+    const { code }: any = err;
+    if (code !== 'UserNotFoundException') {
       console.error(`ERROR checking for cognito user for ${name}:`, err);
       return;
     }
