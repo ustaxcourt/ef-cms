@@ -55953,5 +55953,13 @@
     ],
     "sk": "docket-entry|06115c26-ecd8-425a-b58b-4d25649f1d46",
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "sk": "case-worksheet|400-22",
+    "pk": "case|400-22",
+    "docketNumber": "400-22",
+    "entityName": "CaseWorksheet",
+    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
+    "primaryIssue": "Trumpet!\nThe trumpet!\nMambo Number 5!"
   }
 ]

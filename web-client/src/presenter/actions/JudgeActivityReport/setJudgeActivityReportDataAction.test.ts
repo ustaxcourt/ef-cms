@@ -4,8 +4,10 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { judgeUser } from '@shared/test/mockUsers';
-import { mockCountOfOpinionsIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor.test';
-import { mockCountOfOrdersIssuedByJudge } from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor.test';
+import {
+  mockCountOfOpinionsIssuedByJudge,
+  mockCountOfOrdersIssuedByJudge,
+} from '@shared/test/mockSearchResults';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setJudgeActivityReportDataAction } from './setJudgeActivityReportDataAction';
