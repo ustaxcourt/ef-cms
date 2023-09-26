@@ -37,19 +37,20 @@ async function searchForAllJudges(applicationContext) {
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  // 1. fetch all judge users
   const judgeUsers = await searchForAllJudges(applicationContext);
 
-  // 2. find only the senior judges
   const seniorJudgeNames = [
     'Cohen',
     'Colvin',
+    'Gale',
     'Goeke',
     'Gustafson',
     'Halpern',
     'Holmes',
     'Lauber',
     'Marvel',
+    'Morrison',
+    'Paris',
     'Thornton',
     'Vasquez',
   ];
@@ -60,7 +61,6 @@ async function searchForAllJudges(applicationContext) {
   for (let judge of seniorJudges) {
     const { userId } = judge;
 
-    // 4. update the judge's title in dynamo
     const userToUpdate = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
