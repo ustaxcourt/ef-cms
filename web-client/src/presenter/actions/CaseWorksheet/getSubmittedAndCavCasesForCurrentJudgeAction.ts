@@ -1,6 +1,6 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getSubmittedAndCavCasesForJudgeAction = async ({
+export const getSubmittedAndCavCasesForCurrentJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps): Promise<{

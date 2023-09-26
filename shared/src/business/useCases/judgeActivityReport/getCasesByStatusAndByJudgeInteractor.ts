@@ -17,6 +17,10 @@ export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   judges: string[];
   pageNumber?: number;
   pageSize?: number;
+  sortBy?: {
+    key: string;
+    direction: 'ASC' | 'DESC';
+  };
 };
 
 export type CavAndSubmittedFilteredCasesType = SubmittedCAVTableFields & {
@@ -135,6 +139,7 @@ const getCases = async (
       params: {
         excludeMemberCases: true,
         judges: searchEntity.judges,
+        sortBy: searchEntity.sortBy,
         statuses: searchEntity.statuses,
       },
     });

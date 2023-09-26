@@ -5,6 +5,7 @@ import { search } from './searchClient';
 export type DocketNumberByStatusRequest = {
   statuses: string[];
   judges?: string[];
+  sortBy: { key: string; direction: 'asc' | 'desc' };
   excludeMemberCases?: boolean;
 };
 
@@ -37,6 +38,13 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     },
   ];
 
+  const sortKeyMap = {
+    // daysInStatus: 'NOCLUE.N',
+    docketNumber: 'sortableDocketNumber.N',
+    judge: 'associatedJudge.S',
+  };
+  const sortKey = sortKeyMap[params.sortBy.key];
+
   if (params.judges) {
     params.judges.forEach(judge => {
       const associatedJudgeFilters = {
@@ -60,7 +68,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
             should: shouldFilters,
           },
         },
-        sort: [{ 'sortableDocketNumber.N': { order: 'asc' } }],
+        sort: [{ [sortKey]: { order: params.sortBy.direction } }],
       },
       index: 'efcms-case',
       size: MAX_ELASTICSEARCH_PAGINATION,
