@@ -243,13 +243,14 @@ export const JudgeActivityReport = connect(
                   </span>
                 </th>
                 <th aria-label="docket number">Docket No.</th>
-                <th aria-label="opinion type">No. of Cases</th>
-                <th aria-label="event total">Petitioner(s)</th>
-                <th aria-label="event total">Case Status</th>
-                <th aria-label="event total">Days in Status</th>
-                <th aria-label="event total">Status Date</th>
-                <th aria-label="event total">Final Brief Due Date</th>
-                <th aria-label="event total">Status of Matter</th>
+                <th aria-label="number of cases">No. of Cases</th>
+                <th aria-label="judge">Judge</th>
+                <th aria-label="petitioners">Petitioner(s)</th>
+                <th aria-label="case status">Case Status</th>
+                <th aria-label="days in status">Days in Status</th>
+                <th aria-label="status date">Status Date</th>
+                <th aria-label="final brief due date">Final Brief Due Date</th>
+                <th aria-label="status of matter">Status of Matter</th>
               </tr>
             </thead>
             <tbody>
@@ -281,6 +282,7 @@ export const JudgeActivityReport = connect(
                             formattedCase?.formattedCaseCount,
                           )}
                         </td>
+                        <td>Jar Jar Binks</td>
                         <td>{formattedCase.caseCaption}</td>
                         <td>{formattedCase.status}</td>
                         <td>
