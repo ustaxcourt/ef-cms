@@ -20,7 +20,7 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
-import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
+import { practitionerRequestsAccessToCaseManual } from './journey/practitionerRequestsAccessToCaseManual';
 
 describe('Docket Clerk Document QC Journey', () => {
   const cerebralTest = setupTest();
@@ -98,7 +98,7 @@ describe('Docket Clerk Document QC Journey', () => {
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
-  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
+  practitionerRequestsAccessToCaseManual(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAssignWorkItemToSelf(cerebralTest);

@@ -54,10 +54,8 @@ import {
   calculateDifferenceInDays,
   calculateISODate,
   checkDate,
-  computeDate,
   createEndOfDayISO,
   createISODateString,
-  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -135,6 +133,7 @@ import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
+import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
@@ -268,6 +267,7 @@ import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { strikeDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/strikeDocketEntryProxy';
 import { submitCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitCaseAssociationRequestProxy';
 import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/proxies/documents/submitPendingCaseAssociationRequestProxy';
@@ -428,6 +428,7 @@ const allUseCases = {
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
+  generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
@@ -609,7 +610,7 @@ tryCatchDecorator(allUseCases);
 const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_MAP_429,
-});
+}) as ReturnType<typeof getConstants>;
 
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
@@ -725,10 +726,8 @@ const applicationContext = {
       compareCasesByDocketNumber,
       compareISODateStrings,
       compareStrings,
-      computeDate,
       createEndOfDayISO,
       createISODateString,
-      createISODateStringFromObject,
       createStartOfDayISO,
       dateStringsCompared,
       deconstructDate,
@@ -789,6 +788,7 @@ const applicationContext = {
       setConsolidationFlagsForDisplay,
       setServiceIndicatorsForCase,
       setupPdfDocument,
+      sleep,
       sortDocketEntries,
       transformFormValueToTitleCaseOrdinal,
       userIsDirectlyAssociated,

@@ -53,6 +53,7 @@ import { fileExternalDocumentToCaseLambda } from './lambdas/documents/fileExtern
 import { forwardMessageLambda } from './lambdas/messages/forwardMessageLambda';
 import { generateDocketRecordPdfLambda } from './lambdas/cases/generateDocketRecordPdfLambda';
 import { generateDraftStampOrderLambda } from './lambdas/documents/generateDraftStampOrderLambda';
+import { generateEntryOfAppearancePdfLambda } from '@web-api/lambdas/caseAssociations/generateEntryOfAppearancePdfLambda';
 import { generatePractitionerCaseListPdfLambda } from './lambdas/cases/generatePractitionerCaseListPdfLambda';
 import { generatePrintableCaseInventoryReportLambda } from './lambdas/reports/generatePrintableCaseInventoryReportLambda';
 import { generatePrintableFilingReceiptLambda } from './lambdas/documents/generatePrintableFilingReceiptLambda';
@@ -600,6 +601,10 @@ app.use(logger());
   app.put(
     '/cases/:docketNumber',
     lambdaWrapper(saveCaseDetailInternalEditLambda),
+  );
+  app.post(
+    '/cases/:docketNumber/generate-entry-of-appearance',
+    lambdaWrapper(generateEntryOfAppearancePdfLambda),
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
