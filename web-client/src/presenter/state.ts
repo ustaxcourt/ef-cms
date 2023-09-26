@@ -1,3 +1,7 @@
+import {
+  JudgeActivityReportState,
+  initialJudgeActivityReportState,
+} from './judgeActivityReportState';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -75,7 +79,6 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
-import { initialJudgeActivityReportState } from './judgeActivityReportState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -340,7 +343,9 @@ export const baseState = {
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
-  judgeActivityReport: cloneDeep(initialJudgeActivityReportState),
+  judgeActivityReport: cloneDeep(
+    initialJudgeActivityReportState,
+  ) as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
@@ -361,6 +366,7 @@ export const baseState = {
     qcSectionInProgressCount: number;
     qcIndividualInboxCount: number;
     qcIndividualInProgressCount: number;
+    unreadMessageCount?: number;
   },
   openCases: [],
   paperServiceStatusState: {

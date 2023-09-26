@@ -74,8 +74,7 @@ import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
 import { getConsolidatedCasesByCaseLambda } from './lambdas/cases/getConsolidatedCasesByCaseLambda';
-import { getCountOfOpinionsFiledByJudgeLambda } from '@web-api/lambdas/reports/getCountOfOpinionsFiledByJudgeLambda';
-import { getCountOfOrdersFiledByJudgeLambda } from '@web-api/lambdas/reports/getCountOfOrdersFiledByJudgeLambda';
+import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
 import { getDocumentContentsForDocketEntryLambda } from './lambdas/documents/getDocumentContentsForDocketEntryLambda';
@@ -342,6 +341,10 @@ app.use(logger());
       key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
     }),
     lambdaWrapper(orderAdvancedSearchLambda),
+  );
+  app.get(
+    '/case-documents/count',
+    lambdaWrapper(getCountOfCaseDocumentsFiledByJudgesLambda),
   );
   // POST
   app.post(
@@ -880,14 +883,6 @@ app.get(
   app.post(
     '/judge-activity-report/trial-sessions',
     lambdaWrapper(getTrialSessionsForJudgeActivityReportLambda),
-  );
-  app.post(
-    '/judge-activity-report/opinions',
-    lambdaWrapper(getCountOfOpinionsFiledByJudgeLambda),
-  );
-  app.post(
-    '/judge-activity-report/orders',
-    lambdaWrapper(getCountOfOrdersFiledByJudgeLambda),
   );
 }
 

@@ -3,7 +3,7 @@ import {
   CasesClosedReturnType,
   getCasesClosedByJudgeInteractor,
 } from './getCasesClosedByJudgeInteractor';
-import { JudgeActivityReportFilters } from './getCountOfOrdersFiledByJudgesInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   createEndOfDayISO,

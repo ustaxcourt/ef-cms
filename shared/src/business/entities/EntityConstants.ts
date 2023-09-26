@@ -415,6 +415,13 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   'NOT',
 );
 
+export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
+  eventCode => {
+    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    return !excludedOrderEventCodes.includes(eventCode);
+  },
+);
+
 export const EXTERNAL_DOCUMENT_TYPES = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 ).map(t => t.documentType);
