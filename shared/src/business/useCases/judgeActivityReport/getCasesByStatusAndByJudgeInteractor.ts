@@ -19,11 +19,7 @@ export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   pageSize?: number;
 };
 
-export type CavAndSubmittedCaseResponseType = {
-  foundCases: { docketNumber: string }[];
-};
-
-export type CavAndSubmittedFilteredCasesType = RawCase & {
+export type CavAndSubmittedFilteredCasesType = SubmittedCAVTableFields & {
   daysElapsedSinceLastStatusChange: number;
   formattedCaseCount: number;
 };
