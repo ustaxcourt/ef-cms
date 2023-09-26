@@ -90,7 +90,7 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
       <table>
         <thead>
           <tr>
-            <th>Docket No.</th>
+            <th className="padding-left-2px no-wrap">Docket No.</th>
             <th>Case Title</th>
             <th>Petitioner Counsel</th>
             <th>Respondent Counsel</th>
@@ -102,7 +102,7 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
             const memberCase = isMemberCase(caseDetail);
 
             return (
-              <tr key={caseDetail.docketNumberWithSuffix}>
+              <tr key={caseDetail.docketNumber}>
                 <td
                   className={`${
                     memberCase ? 'margin-left-2' : ''
@@ -115,8 +115,10 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
                       }`,
                     )}
                     style={{ marginRight: '0.3rem' }}
-                  ></div>
-                  {caseDetail.docketNumberWithSuffix}
+                  >
+                    {' '}
+                  </div>
+                  <div> {caseDetail.docketNumberWithSuffix}</div>
                 </td>
                 <td>{caseDetail.caseTitle}</td>
                 <td>

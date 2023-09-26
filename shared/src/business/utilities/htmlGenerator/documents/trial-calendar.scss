@@ -42,4 +42,9 @@
   .wrap-text-content {
     word-break: break-word;
   }
+
+  .docket-number-with-icon {
+    display: flex;
+    flex-direction: row;
+  }
 }
