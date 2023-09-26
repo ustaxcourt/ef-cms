@@ -1,18 +1,10 @@
 import { compareCasesByDocketNumber } from '../../utilities/getFormattedTrialSessionDetails';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
-/**
- * generateTrialCalendarPdfInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id for the trial session
- * @returns {string} trial session calendar pdf url
- */
 export const generateTrialCalendarPdfInteractor = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
-) => {
+): Promise<{ fileId: string; url: string }> => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
