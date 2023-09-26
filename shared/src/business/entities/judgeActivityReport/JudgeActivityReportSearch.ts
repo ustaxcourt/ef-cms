@@ -27,6 +27,10 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public pageSize: number;
   public searchAfter: number;
   public pageNumber: number;
+  public sortBy?: {
+    key: string;
+    direction: 'asc' | 'desc';
+  };
 
   protected tomorrow: string;
 
@@ -40,6 +44,10 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.pageSize = rawProps.pageSize;
     this.searchAfter = rawProps.searchAfter;
     this.pageNumber = rawProps.pageNumber;
+    this.sortBy = rawProps.sortBy ?? {
+      direction: 'asc',
+      key: 'docetNumber',
+    };
 
     this.tomorrow = calculateISODate({
       howMuch: +1,
@@ -102,6 +110,13 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .description(
         'The last docket number to be used to make the next set of calls per page number',
       ),
+    sortBy: joi
+      .object()
+      .keys({
+        direction: joi.string().required(),
+        key: joi.string().required(),
+      })
+      .optional(),
     startDate: JoiValidationConstants.ISO_DATE.max('now').description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
     ),
