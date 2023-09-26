@@ -5,7 +5,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const TrialCalendar = ({ cases = [], sessionDetail }) => {
-  console.log('cases', cases);
   return (
     <div id="trial-calendar">
       <PrimaryHeader />
