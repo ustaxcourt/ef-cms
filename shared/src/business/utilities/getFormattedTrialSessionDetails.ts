@@ -121,10 +121,13 @@ export const getFormattedTrialSessionDetails = ({
 }) => {
   if (!trialSession) return undefined;
 
-  const allCases = (trialSession.calendaredCases || []).map(caseItem =>
+  const eligibleCases = trialSession.calendaredCases || [];
+
+  const allCases = eligibleCases.map(caseItem =>
     formatCase({
       applicationContext,
       caseItem,
+      eligibleCases,
       setFilingPartiesCode: true,
     }),
   );
