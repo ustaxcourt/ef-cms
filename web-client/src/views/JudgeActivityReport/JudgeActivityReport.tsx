@@ -282,7 +282,7 @@ export const JudgeActivityReport = connect(
                             formattedCase?.formattedCaseCount,
                           )}
                         </td>
-                        <td>Jar Jar Binks</td>
+                        <td>{formattedCase.associatedJudge}</td>
                         <td>{formattedCase.caseCaption}</td>
                         <td>{formattedCase.status}</td>
                         <td>
