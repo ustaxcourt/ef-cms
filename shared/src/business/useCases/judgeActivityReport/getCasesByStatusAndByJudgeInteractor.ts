@@ -9,6 +9,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { isEmpty } from 'lodash';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
@@ -46,7 +47,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   }
 
   // get all of the cases
-  const caseRecords: RawCaseWithWorksheet[] = await getCases(
+  const caseRecords: SubmittedCAVTableDataWithWorksheet[] = await getCases(
     applicationContext,
     searchEntity,
   );
@@ -122,14 +123,14 @@ const calculateDaysElapsed = (
     );
 };
 
-type RawCaseWithWorksheet = RawCase & {
+type SubmittedCAVTableDataWithWorksheet = SubmittedCAVTableFields & {
   caseWorksheet: RawCaseWorksheet;
 };
 
 const getCases = async (
   applicationContext: IApplicationContext,
   searchEntity: JudgeActivityReportSearch,
-): Promise<RawCaseWithWorksheet[]> => {
+): Promise<SubmittedCAVTableDataWithWorksheet[]> => {
   // first get all cases for the specified judges and statuses
   const allCaseRecords = await applicationContext
     .getPersistenceGateway()
@@ -168,7 +169,7 @@ const getCases = async (
       return {
         ...caseRecord,
         caseWorksheet,
-      } as unknown as RawCaseWithWorksheet;
+      } as unknown as SubmittedCAVTableDataWithWorksheet;
     }),
   );
 
