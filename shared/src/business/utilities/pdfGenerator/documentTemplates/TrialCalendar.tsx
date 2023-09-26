@@ -1,8 +1,11 @@
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
+import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterList';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialCalendar = ({ cases = [], sessionDetail }) => {
+  console.log('cases', cases);
   return (
     <div id="trial-calendar">
       <PrimaryHeader />
@@ -95,33 +98,51 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
           </tr>
         </thead>
         <tbody>
-          {cases.map(caseDetail => (
-            <tr key={caseDetail.docketNumberWithSuffix}>
-              <td>{caseDetail.docketNumberWithSuffix}</td>
-              <td>{caseDetail.caseTitle}</td>
-              <td>
-                {caseDetail.petitionerCounsel &&
-                  caseDetail.petitionerCounsel.map(counsel => (
-                    <div
-                      key={`counsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
-                    >
-                      {counsel}
-                    </div>
-                  ))}
-              </td>
-              <td>
-                {caseDetail.respondentCounsel &&
-                  caseDetail.respondentCounsel.map(counsel => (
-                    <div
-                      key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
-                    >
-                      {counsel}
-                    </div>
-                  ))}
-              </td>
-              <td>{caseDetail.calendarNotes}</td>
-            </tr>
-          ))}
+          {cases.map(caseDetail => {
+            const memberCase = isMemberCase(caseDetail);
+
+            return (
+              <tr key={caseDetail.docketNumberWithSuffix}>
+                <td
+                  className={`${
+                    memberCase ? 'margin-left-2' : ''
+                  } docket-number-with-icon`}
+                >
+                  <div
+                    className={classNames(
+                      `${caseDetail.isLeadCase && 'lead-consolidated-icon'} ${
+                        memberCase && 'consolidated-icon'
+                      }`,
+                    )}
+                    style={{ marginRight: '0.3rem' }}
+                  ></div>
+                  {caseDetail.docketNumberWithSuffix}
+                </td>
+                <td>{caseDetail.caseTitle}</td>
+                <td>
+                  {caseDetail.petitionerCounsel &&
+                    caseDetail.petitionerCounsel.map(counsel => (
+                      <div
+                        key={`counsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
+                      >
+                        {counsel}
+                      </div>
+                    ))}
+                </td>
+                <td>
+                  {caseDetail.respondentCounsel &&
+                    caseDetail.respondentCounsel.map(counsel => (
+                      <div
+                        key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
+                      >
+                        {counsel}
+                      </div>
+                    ))}
+                </td>
+                <td>{caseDetail.calendarNotes}</td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

@@ -12,13 +12,6 @@ export const generateTrialCalendarPdfInteractor = async (
       trialSessionId,
     });
 
-  const formattedTrialSession = applicationContext
-    .getUtilities()
-    .getFormattedTrialSessionDetails({
-      applicationContext,
-      trialSession,
-    });
-
   const calendaredCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
@@ -26,10 +19,17 @@ export const generateTrialCalendarPdfInteractor = async (
       trialSessionId,
     });
 
-  const formattedOpenCases = formatCases({
-    applicationContext,
-    calendaredCases,
-  });
+  const formattedTrialSession = applicationContext
+    .getUtilities()
+    .getFormattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...trialSession,
+        calendaredCases,
+      },
+    });
+
+  const formattedOpenCases = formattedTrialSession.openCases;
 
   formattedTrialSession.caseOrder.forEach(aCase => {
     if (aCase.calendarNotes) {
