@@ -674,7 +674,6 @@ export class Case extends JoiValidationEntity {
     sealedDate: JoiValidationConstants.ISO_DATE.optional()
       .allow(null)
       .description('When the case was sealed from the public.'),
-
     sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
     statistics: joi
       .array()
