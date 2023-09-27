@@ -122,6 +122,7 @@ describe('Joi Entity', () => {
                 index: 1,
               },
             ],
+            contactType: 'LEGACY_CUSTOM: invalid contact type',
           });
         });
 
@@ -259,6 +260,7 @@ describe('Joi Entity', () => {
                 index: 1,
               },
             ],
+            contactType: 'NEW_CUSTOM: invalid contact type',
           });
         });
 
