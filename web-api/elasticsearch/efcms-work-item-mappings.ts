@@ -1,4 +1,6 @@
-module.exports = {
+import { createHash } from 'crypto';
+
+export const efcmsWorkItemMappings = {
   properties: {
     'assigneeId.S': {
       type: 'keyword',
@@ -50,3 +52,9 @@ module.exports = {
     },
   },
 };
+
+export const efcmsWorkItemMappingsHash: string = createHash('md5')
+  .update(JSON.stringify(efcmsWorkItemMappings), 'utf8')
+  .digest('hex');
+
+export const efcmsWorkItemIndex: string = `efcms-work-item-${efcmsWorkItemMappingsHash}`;

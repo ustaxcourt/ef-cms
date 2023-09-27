@@ -6,8 +6,9 @@
  * we might do this for after a migration
  */
 
-// @path
-const elasticsearchMappings = require('../../../web-api/elasticsearch/elasticsearch-mappings');
+const {
+  elasticsearchMappings,
+} = require('../../../web-api/elasticsearch/elasticsearch-mappings');
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const environmentName = process.argv[2] || 'exp1';

@@ -56,7 +56,7 @@ export const checkIfEmpty = async (client: {
   return res.body.count === 0;
 };
 
-export const getClientForDomainName = async DomainName => {
+export const getClientForDomainName = async (DomainName: string) => {
   const [, , ENV, VERSION]: string[] = DomainName.split('-');
   if (!ENV || !VERSION) {
     console.error('Invalid Domain Name specified');
@@ -88,6 +88,8 @@ export const readyClusterForMigration = async (DomainName?: string) => {
     console.log('cluster is NOT empty; exiting with status code 1');
     process.exit(1);
   }
+
+  // TODO: query cluster for list of indices
 
   // if the cluster is empty, just delete the indices as they will be recreated soon
   // with latest and greatest mappings

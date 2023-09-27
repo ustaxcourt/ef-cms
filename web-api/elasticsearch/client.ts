@@ -1,13 +1,16 @@
-const AWS = require('aws-sdk');
-const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
-const { Client } = require('@opensearch-project/opensearch');
-const { getVersion } = require('../../shared/admin-tools/util');
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { Client } from '@opensearch-project/opensearch';
+import { DomainInfoList } from 'aws-sdk/clients/es';
+import { getVersion } from '../../shared/admin-tools/util';
+import AWS from 'aws-sdk';
 
 const es = new AWS.ES({
   region: 'us-east-1',
 });
 
-const getHost = async DomainName => {
+export const getHost = async (
+  DomainName: string,
+): Promise<string | undefined> => {
   try {
     const result = await es
       .describeElasticsearchDomain({
@@ -18,18 +21,16 @@ const getHost = async DomainName => {
   } catch (err) {
     console.error(`could not find resource for ${DomainName}`, err);
   }
+  return;
 };
 
-/**
- * This gets an Elasticsearch Client to perform search queries
- *
- * @param {Object} providers providers
- * @param {String} providers.environmentName The name of the environment
- * @param {String} providers.version The name of the currently deployed stack (alpha or beta)
- * @returns {elasticsearch.Client} An instance of an Elasticsearch Client
- */
-
-const getClient = async ({ environmentName, version }) => {
+export const getClient = async ({
+  environmentName,
+  version,
+}: {
+  environmentName: string;
+  version: string;
+}): Promise<Client> => {
   version = version || (await getVersion());
   const domainName =
     version === 'info' ? 'info' : `efcms-search-${environmentName}-${version}`;
@@ -43,7 +44,9 @@ const getClient = async ({ environmentName, version }) => {
             if (err) {
               reject(err);
             } else {
-              resolve(credentials);
+              if (credentials) {
+                resolve(credentials);
+              }
             }
           });
         }),
@@ -54,14 +57,12 @@ const getClient = async ({ environmentName, version }) => {
   });
 };
 
-/**
- * get the domains on the account.
- *
- * @returns {Array} an array of domain names on the account
- */
-const listDomains = async () => {
-  const res = await es.listDomainNames().promise();
-  return res;
+export const listDomains = async (): Promise<DomainInfoList | undefined> => {
+  try {
+    const res = await es.listDomainNames().promise();
+    return res.DomainNames;
+  } catch (err) {
+    console.error('unable to list elasticsearch domains', err);
+  }
+  return;
 };
-
-module.exports = { getClient, getHost, listDomains };

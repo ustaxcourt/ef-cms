@@ -1,9 +1,21 @@
-const efcmsCaseDeadlineMappings = require('./efcms-case-deadline-mappings');
-const efcmsCaseMappings = require('./efcms-case-mappings');
-const efcmsDocketEntryMappings = require('./efcms-docket-entry-mappings');
-const efcmsMessageMappings = require('./efcms-message-mappings');
-const efcmsUserMappings = require('./efcms-user-mappings');
-const efcmsWorkItemMappings = require('./efcms-work-item-mappings');
+import {
+  efcmsCaseDeadlineIndex,
+  efcmsCaseDeadlineMappings,
+} from './efcms-case-deadline-mappings';
+import { efcmsCaseIndex, efcmsCaseMappings } from './efcms-case-mappings';
+import {
+  efcmsDocketEntryIndex,
+  efcmsDocketEntryMappings,
+} from './efcms-docket-entry-mappings';
+import {
+  efcmsMessageIndex,
+  efcmsMessageMappings,
+} from './efcms-message-mappings';
+import { efcmsUserIndex, efcmsUserMappings } from './efcms-user-mappings';
+import {
+  efcmsWorkItemIndex,
+  efcmsWorkItemMappings,
+} from './efcms-work-item-mappings';
 
 /*
 
@@ -23,11 +35,11 @@ This setting will prevent analysis during indexing.
 
 */
 
-module.exports = {
-  ['efcms-case']: efcmsCaseMappings,
-  ['efcms-case-deadline']: efcmsCaseDeadlineMappings,
-  ['efcms-docket-entry']: efcmsDocketEntryMappings,
-  ['efcms-message']: efcmsMessageMappings,
-  ['efcms-user']: efcmsUserMappings,
-  ['efcms-work-item']: efcmsWorkItemMappings,
+export const elasticsearchMappings = {
+  [efcmsCaseDeadlineIndex]: efcmsCaseDeadlineMappings,
+  [efcmsCaseIndex]: efcmsCaseMappings,
+  [efcmsDocketEntryIndex]: efcmsDocketEntryMappings,
+  [efcmsMessageIndex]: efcmsMessageMappings,
+  [efcmsUserIndex]: efcmsUserMappings,
+  [efcmsWorkItemIndex]: efcmsWorkItemMappings,
 };

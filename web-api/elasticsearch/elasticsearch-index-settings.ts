@@ -1,23 +1,31 @@
-(async () => {
-  const AWS = require('aws-sdk');
-  const { elasticsearchIndexes } = require('./elasticsearch-indexes');
-  AWS.config.region = 'us-east-1';
-  const mappings = require('./elasticsearch-mappings');
-  const { AwsSigv4Signer } = require('@opensearch-project/opensearch/aws');
-  const { Client } = require('@opensearch-project/opensearch');
-  const { settings } = require('./elasticsearch-settings');
+import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws';
+import { Client } from '@opensearch-project/opensearch';
+import { elasticsearchIndexes } from './elasticsearch-indexes';
+import { elasticsearchMappings } from './elasticsearch-mappings';
+import { esSettingsType } from './elasticsearch-settings';
+import { settings } from './elasticsearch-settings';
+import AWS from 'aws-sdk';
 
-  const environment = {
+(async () => {
+  AWS.config.region = 'us-east-1';
+  if (AWS.config.httpOptions) {
+    AWS.config.httpOptions.timeout = 300000;
+  }
+
+  const environment: {
+    elasticsearchEndpoint: string;
+    region: string;
+    stage: string;
+  } = {
+    elasticsearchEndpoint: process.argv[2],
     region: 'us-east-1',
     stage: process.env.ENV || 'local',
   };
 
-  AWS.config.httpOptions.timeout = 300000;
-
-  const overriddenNumberOfReplicasIfNonProd =
-    process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS;
-  const deployingEnvironment = process.env.ENV;
-  environment.elasticsearchEndpoint = process.argv[2];
+  const overriddenNumberOfReplicasIfNonProd: number = Number(
+    process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS,
+  );
+  const deployingEnvironment: string = process.env.ENV!;
 
   const openSearchClient = new Client({
     ...AwsSigv4Signer({
@@ -27,7 +35,9 @@
             if (err) {
               reject(err);
             } else {
-              resolve(credentials);
+              if (credentials) {
+                resolve(credentials);
+              }
             }
           });
         }),
@@ -39,16 +49,15 @@
         : `https://${environment.elasticsearchEndpoint}:443`,
   });
 
-  const esSettings = settings({
+  const esSettings: esSettingsType = settings({
     environment: deployingEnvironment,
     overriddenNumberOfReplicasIfNonProd,
   });
 
   await Promise.all(
-    elasticsearchIndexes.map(async index => {
+    elasticsearchIndexes.map(async (index: string) => {
       try {
         const { body: indexExists } = await openSearchClient.indices.exists({
-          body: {},
           index,
         });
 
@@ -57,7 +66,7 @@
             body: {
               mappings: {
                 dynamic: false,
-                ...mappings[index],
+                ...elasticsearchMappings[index],
               },
               settings: esSettings,
             },
