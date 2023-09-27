@@ -30,7 +30,7 @@ export class TestCaseEntity extends JoiValidationEntity {
       )
         .required()
         .messages({
-          'any.only': 'invalid contact type',
+          'any.only': 'NEW_CUSTOM: invalid contact type',
         }),
       unhelpfulErrorMessage: JoiValidationConstants.STRING.valid(
         'VALID_1',
@@ -40,15 +40,15 @@ export class TestCaseEntity extends JoiValidationEntity {
         .optional()
         .messages({
           'any.only':
-            'unhelpfulErrorMessage: does not match any of the allowed types',
+            'NEW_CUSTOM: unhelpfulErrorMessage: does not match any of the allowed types',
         }),
     };
   }
   getErrorToMessageMap() {
     return {
-      contactType: 'invalid contact type',
+      contactType: 'LEGACY_CUSTOM: invalid contact type',
       unhelpfulErrorMessage:
-        'unhelpfulErrorMessage: does not match any of the allowed types',
+        'LEGACY_CUSTOM: unhelpfulErrorMessage: does not match any of the allowed types',
     };
   }
 

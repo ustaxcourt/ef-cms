@@ -124,7 +124,7 @@ describe('Joi Entity', () => {
           expect(errors).toEqual({
             caseList: [
               {
-                contactType: 'invalid contact type',
+                contactType: 'LEGACY_CUSTOM: invalid contact type',
                 index: 1,
               },
             ],
@@ -140,7 +140,7 @@ describe('Joi Entity', () => {
 
           expect(errors).toEqual({
             nestedCase: {
-              contactType: 'invalid contact type',
+              contactType: 'LEGACY_CUSTOM: invalid contact type',
             },
           });
         });
@@ -261,7 +261,7 @@ describe('Joi Entity', () => {
           expect(errors).toEqual({
             caseList: [
               {
-                contactType: 'invalid contact type',
+                contactType: 'NEW_CUSTOM: invalid contact type',
                 index: 1,
               },
             ],
@@ -277,7 +277,7 @@ describe('Joi Entity', () => {
 
           expect(errors).toEqual({
             nestedCase: {
-              contactType: 'invalid contact type',
+              contactType: 'NEW_CUSTOM: invalid contact type',
             },
           });
         });
