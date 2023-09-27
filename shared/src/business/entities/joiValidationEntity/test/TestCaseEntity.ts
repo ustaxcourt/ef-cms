@@ -21,6 +21,9 @@ export class TestCaseEntity extends JoiValidationEntity {
     // }),
 
     return {
+      caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
+        'any.only': 'invalid contact type',
+      }),
       contactType: JoiValidationConstants.STRING.valid(
         'VALID_1',
         'VALID_2',
