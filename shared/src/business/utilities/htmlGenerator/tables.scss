@@ -23,3 +23,9 @@ th {
   font-weight: 600;
   white-space: nowrap;
 }
+
+.border-bottom-0 {
+  td {
+    border-bottom: none;
+  }
+}
