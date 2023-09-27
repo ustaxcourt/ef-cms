@@ -48,23 +48,27 @@ function appendNestedEntitiesErrors(
   errors: { [key: string]: string } | null,
 ): TempTyping | null {
   const entityProperties = Object.keys(entity);
-  const updatedErrors: TempTyping | null = {};
+  const errorsWithNestedErrorsAppended: TempTyping | null = {};
 
   for (let entityProperty of entityProperties) {
-    const value = entity[entityProperty];
+    const entityPropertyValue = entity[entityProperty];
 
     if (errors && errors[entityProperty]) {
-      updatedErrors[entityProperty] = errors[entityProperty];
+      errorsWithNestedErrorsAppended[entityProperty] = errors[entityProperty];
       continue;
-    } else if (Array.isArray(value)) {
-      const arrayValidation = value
-        .map((v, index) => {
-          const e = getFormattedValidationErrors_NEW(v);
-          return e ? { ...e, index } : null;
+    } else if (Array.isArray(entityPropertyValue)) {
+      const errorsForNestedEntitiesInArray = entityPropertyValue
+        .map((item, index) => {
+          const itemErrors = getFormattedValidationErrors_NEW(item);
+          return itemErrors ? { ...itemErrors, index } : null;
         })
-        .filter(v => !!v) as (TempTyping & { index: number })[];
-      if (arrayValidation.length)
-        updatedErrors[entityProperty] = arrayValidation;
+        .filter(itemErrors => !!itemErrors) as (TempTyping & {
+        index: number;
+      })[];
+
+      if (errorsForNestedEntitiesInArray.length)
+        errorsWithNestedErrorsAppended[entityProperty] =
+          errorsForNestedEntitiesInArray;
       continue;
     }
 
@@ -81,7 +85,9 @@ function appendNestedEntitiesErrors(
     // }
   }
 
-  return Object.keys(updatedErrors).length ? updatedErrors : null;
+  return Object.keys(errorsWithNestedErrorsAppended).length
+    ? errorsWithNestedErrorsAppended
+    : null;
 }
 
 function removeUnhelpfulErrorMessagesFromContactValidations(
