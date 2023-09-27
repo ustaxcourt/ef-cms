@@ -102,7 +102,12 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
             return (
               <React.Fragment key={caseDetail.docketNumber}>
                 <tr className="padding-bottom-2 border-bottom-0">
-                  <td className="docket-number-with-icon">
+                  <td
+                    className={classNames(
+                      memberCase ? 'margin-left-2' : '',
+                      'docket-number-with-icon',
+                    )}
+                  >
                     <div
                       className={classNames(
                         `${caseDetail.isLeadCase && 'lead-consolidated-icon'} ${
