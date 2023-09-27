@@ -224,7 +224,6 @@ export abstract class JoiValidationEntity {
     });
 
     if (error) {
-      console.log('Error, entity is invalid: ', this);
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(

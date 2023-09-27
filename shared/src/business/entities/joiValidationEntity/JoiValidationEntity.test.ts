@@ -110,19 +110,22 @@ describe('Joi Entity', () => {
       describe('nested entities', () => {
         it('should return an array of errors when there is an error in a nested entity list', () => {
           const testCaseEntity = new TestCaseEntity({
-            caseList: [{}, { contactType: 'INVALID' }, {}],
+            caseList: [
+              { contactType: 'VALID_1' },
+              { contactType: 'INVALID' },
+              { contactType: 'VALID_1' },
+            ],
+            contactType: 'VALID_1',
           });
 
           const errors = testCaseEntity.getFormattedValidationErrors()!;
-          expect(errors).toEqual({
-            caseList: [
-              {
-                contactType:
-                  'contantType does not match any of the allowed types',
-                index: 1,
-              },
-            ],
-          });
+
+          expect(errors.caseList).toEqual([
+            {
+              contactType: 'invalid contact type',
+              index: 1,
+            },
+          ]);
         });
       });
     });
