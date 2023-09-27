@@ -116,6 +116,8 @@ describe('trialCalendar', () => {
               respondentCounsel: ['Joy Falotico'],
             },
             {
+              calendarNotes:
+                'When you`re down and troubled, And you need a helping hand, And nothing, oh, nothing is going right, Close your eyes and think of me, And soon I will be there, To brighten up even your darkest nights',
               caseTitle: 'Lyle Lovett',
               docketNumber: '235-56',
               docketNumberWithSuffix: '235-56',
@@ -136,6 +138,8 @@ describe('trialCalendar', () => {
               respondentCounsel: ['Billy Joel'],
             },
             {
+              calendarNotes:
+                'Tumble out of bed and I stumble to the kitchen, Pour myself a cup of ambition, And yawn and stretch and try to come to life',
               caseTitle: 'Carlos Santana',
               docketNumber: '103-22',
               docketNumberWithSuffix: '103-22L',
