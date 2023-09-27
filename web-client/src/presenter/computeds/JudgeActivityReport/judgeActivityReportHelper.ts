@@ -103,8 +103,8 @@ export const judgeActivityReportHelper = (
         : b[sortField] - a[sortField];
     } else if (sortField === 'associatedJudge') {
       return sortOrder === ASCENDING
-        ? a[sortField].localeComapare(b[sortField])
-        : b[sortField].localeComapare(a[sortField]);
+        ? a[sortField].localeCompare(b[sortField])
+        : b[sortField].localeCompare(a[sortField]);
     }
   });
 
