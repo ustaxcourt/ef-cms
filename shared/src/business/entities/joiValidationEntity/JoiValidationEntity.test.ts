@@ -118,14 +118,16 @@ describe('Joi Entity', () => {
             contactType: 'VALID_1',
           });
 
-          const errors = testCaseEntity.getFormattedValidationErrors()!;
+          const errors = testCaseEntity.getFormattedValidationErrors();
 
-          expect(errors.caseList).toEqual([
-            {
-              contactType: 'invalid contact type',
-              index: 1,
-            },
-          ]);
+          expect(errors).toEqual({
+            caseList: [
+              {
+                contactType: 'invalid contact type',
+                index: 1,
+              },
+            ],
+          });
         });
       });
     });
@@ -138,7 +140,7 @@ describe('Joi Entity', () => {
           singleErrorMessage: 'APPROVED',
         });
 
-        const errors = testEntity.getFormattedValidationErrors_NEW()!;
+        const errors = testEntity.getFormattedValidationErrors_NEW();
 
         expect(errors).toEqual(null);
       });

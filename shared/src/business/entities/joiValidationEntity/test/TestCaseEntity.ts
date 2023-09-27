@@ -14,10 +14,13 @@ export class TestCaseEntity extends JoiValidationEntity {
   public caseList: TestCaseEntity[];
 
   getValidationRules() {
+    // TODO: make sure new function supports bubbling eerrors up to parent when
+    // defining joi validation using the item() method
+    // caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
+    //   'any.only': 'invalid contact type',
+    // }),
+
     return {
-      caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
-        'any.only': 'invalid contact type',
-      }),
       contactType: JoiValidationConstants.STRING.valid(
         'VALID_1',
         'VALID_2',
