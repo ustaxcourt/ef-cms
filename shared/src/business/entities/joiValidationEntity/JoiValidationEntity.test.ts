@@ -117,7 +117,6 @@ describe('Joi Entity', () => {
               { contactType: 'INVALID' },
               { contactType: 'VALID_1' },
             ],
-            contactType: 'VALID_1',
           });
 
           const errors = testCaseEntity.getFormattedValidationErrors();
@@ -230,6 +229,29 @@ describe('Joi Entity', () => {
 
           const errors = testCaseEntity.getFormattedValidationErrors_NEW()!;
           expect(errors).toEqual(null);
+        });
+      });
+
+      describe('nested entities', () => {
+        it('should return an array of errors when there is an error in a nested entity list', () => {
+          const testCaseEntity = new TestCaseEntity({
+            caseList: [
+              { contactType: 'VALID_1' },
+              { contactType: 'INVALID' },
+              { contactType: 'VALID_1' },
+            ],
+          });
+
+          const errors = testCaseEntity.getFormattedValidationErrors_NEW();
+
+          expect(errors).toEqual({
+            caseList: [
+              {
+                contactType: 'invalid contact type',
+                index: 1,
+              },
+            ],
+          });
         });
       });
     });

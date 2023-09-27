@@ -51,27 +51,22 @@ function appendNestedEntitiesErrors(
   const updatedErrors: TempTyping | null = {};
 
   for (let entityProperty of entityProperties) {
-    // const value = entity[entityProperty];
+    const value = entity[entityProperty];
 
     if (errors && errors[entityProperty]) {
       updatedErrors[entityProperty] = errors[entityProperty];
       continue;
+    } else if (Array.isArray(value)) {
+      const arrayValidation = value
+        .map((v, index) => {
+          const e = getFormattedValidationErrors_NEW(v);
+          return e ? { ...e, index } : null;
+        })
+        .filter(v => !!v) as (TempTyping & { index: number })[];
+      if (arrayValidation.length)
+        updatedErrors[entityProperty] = arrayValidation;
+      continue;
     }
-
-    // THIS LOGIC RECURSIVELY LOOPS THROUGH ARRAYS AND CHECKS THE ITEMS ARE ENTITIES AND VALIDATES THEM
-    // LEAVE THIS COMMENTED UNTIL WE HAVE TESTS VERIFYING EXPECTED RESULTS
-
-    // else if (Array.isArray(value)) {
-    //   const arrayValidation = value
-    //     .map((v, index) => {
-    //       const e = getFormattedValidationErrors_NEW(v);
-    //       return e ? { ...e, index } : null;
-    //     })
-    //     .filter(v => !!v) as (TempTyping & { index: number })[];
-    //   if (arrayValidation.length)
-    //     updatedErrors[entityProperty] = arrayValidation;
-    //   continue;
-    // }
 
     // THIS LOGIC WILL RUN ON PROPERTIES THAT ARE OBJECT, IT WILL CHECK IF ITS AN ENTITY AND VALIDATE IT
     // LEAVE THIS COMMENTED UNTIL WE HAVE TESTS VERIFYING EXPECTED RESULTS
