@@ -13,6 +13,7 @@ export class TestCaseEntity extends JoiValidationEntity {
   public contactType: string;
   public caseList: TestCaseEntity[];
   public unhelpfulErrorMessage: string;
+  public nestedCase: TestCaseEntity | undefined;
 
   getValidationRules() {
     // TODO: make sure new function supports bubbling eerrors up to parent when
@@ -58,5 +59,8 @@ export class TestCaseEntity extends JoiValidationEntity {
       d => new TestCaseEntity(d),
     );
     this.unhelpfulErrorMessage = rawTestCase.unhelpfulErrorMessage;
+    this.nestedCase = rawTestCase.nestedCase
+      ? new TestCaseEntity(rawTestCase.nestedCase)
+      : undefined;
   }
 }

@@ -70,19 +70,16 @@ function appendNestedEntitiesErrors(
         errorsWithNestedErrorsAppended[entityProperty] =
           errorsForNestedEntitiesInArray;
       continue;
+    } else if (
+      typeof entityPropertyValue === 'object' &&
+      entityPropertyValue &&
+      entityPropertyValue.getFormattedValidationErrors
+    ) {
+      const objectErrors =
+        getFormattedValidationErrors_NEW(entityPropertyValue);
+      if (objectErrors)
+        errorsWithNestedErrorsAppended[entityProperty] = objectErrors;
     }
-
-    // THIS LOGIC WILL RUN ON PROPERTIES THAT ARE OBJECT, IT WILL CHECK IF ITS AN ENTITY AND VALIDATE IT
-    // LEAVE THIS COMMENTED UNTIL WE HAVE TESTS VERIFYING EXPECTED RESULTS
-
-    // else if (
-    //   typeof value === 'object' &&
-    //   value &&
-    //   value.getFormattedValidationErrors
-    // ) {
-    //   const objectErrors = getFormattedValidationErrors_NEW(value);
-    //   if (objectErrors) updatedErrors[entityProperty] = objectErrors;
-    // }
   }
 
   return Object.keys(errorsWithNestedErrorsAppended).length
