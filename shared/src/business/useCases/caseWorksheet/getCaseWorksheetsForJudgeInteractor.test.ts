@@ -10,6 +10,12 @@ import {
 import { getCaseWorksheetsForJudgeInteractor } from './getCaseWorksheetsForJudgeInteractor';
 
 describe('getCaseWorksheetsForJudgeInteractor', () => {
+  beforeAll(() => {
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeForUserHelper.mockResolvedValue(judgeColvin);
+  });
+
   it('should throw an error when the user does not have permission to the case worksheet feature', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
@@ -35,12 +41,6 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockResolvedValue(colvinsChambersUser);
-    applicationContext
-      .getUseCaseHelpers()
-      .getJudgeInSectionHelper.mockResolvedValue(judgeColvin);
-    applicationContext
-      .getPersistenceGateway()
       .getCaseWorksheets.mockReturnValue(TEST_RAW_WORKSHEETS);
 
     const result =
@@ -58,16 +58,10 @@ describe('getCaseWorksheetsForJudgeInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(judgeColvin);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockResolvedValue(judgeColvin);
-    applicationContext
-      .getPersistenceGateway()
       .getCaseWorksheets.mockReturnValue([]);
 
     await getCaseWorksheetsForJudgeInteractor(applicationContext);
 
-    expect(
-      applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
-    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getCaseWorksheets.mock
         .calls[0][1],
