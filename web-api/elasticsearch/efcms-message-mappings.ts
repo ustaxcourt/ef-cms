@@ -1,4 +1,6 @@
-module.exports = {
+import { createHash } from 'crypto';
+
+export const efcmsMessageMappings = {
   properties: {
     case_relations: {
       relations: {
@@ -74,3 +76,9 @@ module.exports = {
     },
   },
 };
+
+export const efcmsMessageMappingsHash: string = createHash('md5')
+  .update(JSON.stringify(efcmsMessageMappings), 'utf8')
+  .digest('hex');
+
+export const efcmsMessageIndex: string = `efcms-message-${efcmsMessageMappingsHash}`;

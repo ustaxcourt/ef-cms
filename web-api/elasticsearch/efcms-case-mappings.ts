@@ -1,4 +1,6 @@
-module.exports = {
+import { createHash } from 'crypto';
+
+export const efcmsCaseMappings = {
   properties: {
     'associatedJudge.S': {
       type: 'text',
@@ -125,3 +127,9 @@ module.exports = {
     },
   },
 };
+
+export const efcmsCaseMappingsHash: string = createHash('md5')
+  .update(JSON.stringify(efcmsCaseMappings), 'utf-8')
+  .digest('hex');
+
+export const efcmsCaseIndex: string = `efcms-case-${efcmsCaseMappingsHash}`;

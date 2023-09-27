@@ -1,8 +1,5 @@
-exports.elasticsearchIndexes = [
-  'efcms-case',
-  'efcms-case-deadline',
-  'efcms-docket-entry',
-  'efcms-user',
-  'efcms-message',
-  'efcms-work-item',
-];
+import { elasticsearchMappings } from './elasticsearch-mappings';
+
+export const elasticsearchIndexes: string[] = Object.keys(
+  elasticsearchMappings,
+);
