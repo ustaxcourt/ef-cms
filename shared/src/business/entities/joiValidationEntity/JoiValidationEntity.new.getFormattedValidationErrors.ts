@@ -42,7 +42,6 @@ export type TempTyping = {
   [key: string]: string | TempTyping | TempTyping[];
 };
 
-// TODO: RECURSIVE LOGIC
 function appendNestedEntitiesErrors(
   entity: any,
   errors: { [key: string]: string } | null,
