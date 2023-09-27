@@ -1,4 +1,8 @@
-export const focusPaginatorTop = (ref: React.MutableRefObject<null>) => {
+export const focusPaginatorTop = (ref: React.RefObject<HTMLDivElement>) => {
+  if (!ref.current) {
+    return;
+  }
+
   window.scrollTo({
     behavior: 'smooth',
     left: 0,
