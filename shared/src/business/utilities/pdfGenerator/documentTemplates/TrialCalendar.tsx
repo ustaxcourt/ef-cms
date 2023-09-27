@@ -4,7 +4,38 @@ import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterL
 import React from 'react';
 import classNames from 'classnames';
 
-export const TrialCalendar = ({ cases = [], sessionDetail }) => {
+type TrialCalendarType = {
+  cases: {
+    docketNumber: string;
+    docketNumberWithSuffix: string;
+    caseTitle: string;
+    petitionerCounsel: string;
+    respondentCounsel: string[];
+    calendarNotes: string;
+    isLeadCase: boolean;
+  }[];
+  sessionDetail: {
+    startTime: string;
+    startDate: string;
+    sessionType: string;
+    courthouseName: string;
+    address1: string;
+    address2: string;
+    formattedCityStateZip: string;
+    judge: string;
+    trialClerk: string;
+    courtReporter: string;
+    notes: string;
+    irsCalendarAdministrator: string;
+    noLocationEntered: boolean;
+    trialLocation: string;
+  };
+};
+
+export const TrialCalendar = ({
+  cases = [],
+  sessionDetail,
+}: TrialCalendarType) => {
   return (
     <div id="trial-calendar">
       <PrimaryHeader />

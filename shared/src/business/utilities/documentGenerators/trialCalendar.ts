@@ -1,7 +1,10 @@
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-export const trialCalendar = async ({ applicationContext, data }) => {
+export const trialCalendar = async ({
+  applicationContext,
+  data,
+}): Promise<Buffer> => {
   const { cases, sessionDetail } = data;
 
   const trialCalendarTemplate = reactTemplateGenerator({
