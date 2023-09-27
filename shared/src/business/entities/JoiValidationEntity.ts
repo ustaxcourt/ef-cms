@@ -117,7 +117,14 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
       if (!obj[key]) delete obj[key];
     }
   }
-  return Object.keys(obj).length === 0 ? null : obj;
+  const results = Object.keys(obj).length === 0 ? null : obj;
+  // TODO:
+  // const newResults = getFormattedValidationErrors_NEW(entity);
+
+  // if(results !== newResults) {
+  //   log here
+  // }
+  return results;
 }
 
 export abstract class JoiValidationEntity {
