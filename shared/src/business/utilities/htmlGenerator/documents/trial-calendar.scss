@@ -19,16 +19,6 @@
     }
   }
 
-  .margin-left-2 {
-    margin-left: 1rem;
-  }
-
-  .border-bottom-0 {
-    td {
-      border-bottom: none;
-    }
-  }
-
   .card {
     border: 1px solid #ccc;
     margin: 12px 0 12px 0;
@@ -47,23 +37,5 @@
     display: flex;
     align-items: flex-start;
     padding: 10px;
-  }
-  
-  .wrap-text-content {
-    word-break: break-word;
-  }
-
-  .lead-consolidated-icon,
-  .consolidated-icon {
-    margin-right: 5px;
-  }
-
-  .docket-number-header {
-    min-width: 100px;
-  }
-
-  .docket-number-with-icon {
-    display: flex;
-    flex-direction: row;
   }
 }
