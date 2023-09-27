@@ -89,7 +89,7 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
       <table>
         <thead>
           <tr>
-            <th className="docket-number-header no-wrap">Docket No.</th>
+            <th className="no-wrap">Docket No.</th>
             <th>Case Title</th>
             <th>Petitioner Counsel</th>
             <th>Respondent Counsel</th>
@@ -101,18 +101,18 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
 
             return (
               <React.Fragment key={caseDetail.docketNumber}>
-                <tr className="padding-bottom-2 border-bottom-0">
+                <tr className="border-bottom-0">
                   <td
                     className={classNames(
                       memberCase ? 'margin-left-2' : '',
                       'docket-number-with-icon',
+                      'no-wrap',
                     )}
                   >
                     <div
                       className={classNames(
-                        `${caseDetail.isLeadCase && 'lead-consolidated-icon'} ${
-                          memberCase && 'consolidated-icon'
-                        }`,
+                        caseDetail.isLeadCase ? 'lead-consolidated-icon' : '',
+                        memberCase ? 'consolidated-icon' : '',
                       )}
                     ></div>
                     <div> {caseDetail.docketNumberWithSuffix}</div>

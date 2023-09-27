@@ -22,3 +22,16 @@ body {
   margin: 0;
   margin-bottom: 2.5cm;
 }
+
+.margin-left-2 {
+  margin-left: 1rem;
+}
+
+.docket-number-with-icon {
+  display: flex;
+  flex-direction: row;
+}
+
+.wrap-text-content {
+  word-break: break-word;
+}
