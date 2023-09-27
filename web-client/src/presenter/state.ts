@@ -366,6 +366,7 @@ export const baseState = {
     qcSectionInProgressCount: number;
     qcIndividualInboxCount: number;
     qcIndividualInProgressCount: number;
+    unreadMessageCount?: number;
   },
   openCases: [],
   paperServiceStatusState: {
