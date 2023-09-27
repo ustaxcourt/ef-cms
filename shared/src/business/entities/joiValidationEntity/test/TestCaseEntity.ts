@@ -1,12 +1,23 @@
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import joi from 'joi';
 
+export const TEST_VALIDATION_RULES = joi.object().keys({
+  contactType: JoiValidationConstants.STRING.valid(
+    'VALID_1',
+    'VALID_2',
+    'VALID_3',
+  ),
+});
 export class TestCaseEntity extends JoiValidationEntity {
   public contactType: string;
   public caseList: TestCaseEntity[];
 
   getValidationRules() {
     return {
+      caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
+        'any.only': 'invalid contact type',
+      }),
       contactType: JoiValidationConstants.STRING.valid(
         'VALID_1',
         'VALID_2',
@@ -14,13 +25,13 @@ export class TestCaseEntity extends JoiValidationEntity {
       )
         .required()
         .messages({
-          'any.only': 'contantType does not match any of the allowed types',
+          'any.only': 'invalid contact type',
         }),
     };
   }
   getErrorToMessageMap() {
     return {
-      contactType: 'contantType does not match any of the allowed types',
+      contactType: 'invalid contact type',
     };
   }
 
