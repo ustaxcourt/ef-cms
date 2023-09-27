@@ -12,6 +12,7 @@ export const TEST_VALIDATION_RULES = joi.object().keys({
 export class TestCaseEntity extends JoiValidationEntity {
   public contactType: string;
   public caseList: TestCaseEntity[];
+  public unhelpfulErrorMessage: string;
 
   getValidationRules() {
     // TODO: make sure new function supports bubbling eerrors up to parent when
@@ -21,9 +22,6 @@ export class TestCaseEntity extends JoiValidationEntity {
     // }),
 
     return {
-      caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
-        'any.only': 'invalid contact type',
-      }),
       contactType: JoiValidationConstants.STRING.valid(
         'VALID_1',
         'VALID_2',
@@ -33,11 +31,23 @@ export class TestCaseEntity extends JoiValidationEntity {
         .messages({
           'any.only': 'invalid contact type',
         }),
+      unhelpfulErrorMessage: JoiValidationConstants.STRING.valid(
+        'VALID_1',
+        'VALID_2',
+        'VALID_3',
+      )
+        .optional()
+        .messages({
+          'any.only':
+            'unhelpfulErrorMessage: does not match any of the allowed types',
+        }),
     };
   }
   getErrorToMessageMap() {
     return {
       contactType: 'invalid contact type',
+      unhelpfulErrorMessage:
+        'unhelpfulErrorMessage: does not match any of the allowed types',
     };
   }
 
@@ -47,5 +57,6 @@ export class TestCaseEntity extends JoiValidationEntity {
     this.caseList = (rawTestCase.caseList || []).map(
       d => new TestCaseEntity(d),
     );
+    this.unhelpfulErrorMessage = rawTestCase.unhelpfulErrorMessage;
   }
 }
