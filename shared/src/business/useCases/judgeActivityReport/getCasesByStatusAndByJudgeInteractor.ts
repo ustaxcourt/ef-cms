@@ -10,17 +10,12 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
+import { faker } from '@faker-js/faker';
 import { isEmpty } from 'lodash';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
   statuses: string[];
   judges: string[];
-  pageNumber?: number;
-  pageSize?: number;
-  sortBy?: {
-    key: string;
-    direction: 'ASC' | 'DESC';
-  };
 };
 
 export type CavAndSubmittedFilteredCasesType = SubmittedCAVTableFields & {
@@ -62,7 +57,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
-  const allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+  let allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
     (caseRecord, i) => ({
       ...caseRecord,
       daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
@@ -70,24 +65,30 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
+  allCaseResults = [
+    ...allCaseResults,
+    // ...allCaseResults,
+    // ...allCaseResults,
+    // ...allCaseResults,
+    // ...allCaseResults,
+  ];
+
   allCaseResults.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
   });
 
-  let paginatedCaseResults;
-  if (searchEntity.pageSize && searchEntity.pageNumber !== undefined) {
-    const itemOffset =
-      (searchEntity.pageNumber * searchEntity.pageSize) % allCaseResults.length;
-
-    const endOffset = itemOffset + searchEntity.pageSize;
-
-    paginatedCaseResults = allCaseResults.slice(itemOffset, endOffset);
-  }
+  allCaseResults.forEach(c => {
+    c.associatedJudge = faker.person.lastName();
+    c.daysElapsedSinceLastStatusChange = faker.number.int({
+      max: 5000,
+      min: 0,
+    });
+  });
 
   return {
-    cases: paginatedCaseResults || allCaseResults,
+    cases: allCaseResults,
     totalCount: allCaseResults.length,
   };
 };
@@ -139,7 +140,6 @@ const getCases = async (
       params: {
         excludeMemberCases: true,
         judges: searchEntity.judges,
-        sortBy: searchEntity.sortBy,
         statuses: searchEntity.statuses,
       },
     });
