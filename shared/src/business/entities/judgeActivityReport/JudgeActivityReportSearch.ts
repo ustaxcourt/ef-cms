@@ -24,13 +24,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public judgeId: string;
   public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
   public judges: string[];
-  public pageSize: number;
   public searchAfter: number;
-  public pageNumber: number;
-  public sortBy?: {
-    key: string;
-    direction: 'asc' | 'desc';
-  };
 
   protected tomorrow: string;
 
@@ -41,13 +35,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.judgeName = rawProps.judgeName;
     this.statuses = rawProps.statuses;
     this.judges = rawProps.judges;
-    this.pageSize = rawProps.pageSize;
     this.searchAfter = rawProps.searchAfter;
-    this.pageNumber = rawProps.pageNumber;
-    this.sortBy = rawProps.sortBy ?? {
-      direction: 'asc',
-      key: 'docetNumber',
-    };
 
     this.tomorrow = calculateISODate({
       howMuch: +1,
@@ -93,30 +81,11 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .array()
       .items(joi.string())
       .description('The last names of judges to generate report for'),
-    pageNumber: joi
-      .number()
-      .optional()
-      .description(
-        'The page of the selected subset of CAV and Submitted cases for display',
-      ),
-    pageSize: joi
-      .number()
-      .optional()
-      .description(
-        'The page size for calculating the number of CAV and Submitted cases to display.',
-      ),
     searchAfter: joi
       .number()
       .description(
         'The last docket number to be used to make the next set of calls per page number',
       ),
-    sortBy: joi
-      .object()
-      .keys({
-        direction: joi.string().required(),
-        key: joi.string().required(),
-      })
-      .optional(),
     startDate: JoiValidationConstants.ISO_DATE.max('now').description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
     ),

@@ -5,6 +5,7 @@ import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
+import { SortableColumnHeaderButton } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
@@ -12,6 +13,7 @@ import React, { useState } from 'react';
 
 export const JudgeActivityReport = connect(
   {
+    constants: state.constants,
     getCavAndSubmittedCasesForJudgesSequence:
       sequences.getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReport: state.judgeActivityReport,
@@ -21,11 +23,13 @@ export const JudgeActivityReport = connect(
     judgeActivityReportJudges: state.judges,
     setJudgeActivityReportFiltersSequence:
       sequences.setJudgeActivityReportFiltersSequence,
+    sortTableSequence: sequences.sortTableSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
+    constants,
     getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReport,
     judgeActivityReportData,
@@ -33,6 +37,7 @@ export const JudgeActivityReport = connect(
     judgeActivityReportHelper,
     judgeActivityReportJudges,
     setJudgeActivityReportFiltersSequence,
+    sortTableSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
@@ -244,10 +249,36 @@ export const JudgeActivityReport = connect(
                 </th>
                 <th aria-label="docket number">Docket No.</th>
                 <th aria-label="number of cases">No. of Cases</th>
-                <th aria-label="judge">Judge</th>
+                <th aria-label="judge">
+                  <SortableColumnHeaderButton
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={
+                      judgeActivityReportHelper.submittedAndCavCasesByJudge
+                        .length > 0
+                    }
+                    sortField="associatedJudge"
+                    title="Judge"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
                 <th aria-label="petitioners">Petitioner(s)</th>
                 <th aria-label="case status">Case Status</th>
-                <th aria-label="days in status">Days in Status</th>
+                <th aria-label="days in status">
+                  <SortableColumnHeaderButton
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={
+                      judgeActivityReportHelper.submittedAndCavCasesByJudge
+                        .length > 0
+                    }
+                    sortField="daysElapsedSinceLastStatusChange"
+                    title="Days in Status"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
                 <th aria-label="status date">Status Date</th>
                 <th aria-label="final brief due date">Final Brief Due Date</th>
                 <th aria-label="status of matter">Status of Matter</th>
@@ -401,13 +432,16 @@ export const JudgeActivityReport = connect(
                   <option key="all" value="All Judges">
                     All Judges
                   </option>
-                  <option key="spec" value="All Regular Judges">
+                  <option key="All Regular Judges" value="All Regular Judges">
                     All Regular Judges
                   </option>
-                  <option key="spec" value="All Senior Judges">
+                  <option key="All Senior Judges" value="All Senior Judges">
                     All Senior Judges
                   </option>
-                  <option key="spec" value="All Special Trial Judges">
+                  <option
+                    key="All Special Trial Judges"
+                    value="All Special Trial Judges"
+                  >
                     All Special Trial Judges
                   </option>
                   {(judgeActivityReportJudges || []).map(judge => (

@@ -8,6 +8,7 @@ import { parallel } from 'cerebral';
 import { resetJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/resetJudgeActivityReportDataAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
+import { setDefaultSubmittedAndCavSortOrderAction } from '@web-client/presenter/actions/JudgeActivityReport/setDefaultSubmittedAndCavSortOrderAction';
 import { setJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeActivityReportDataAction';
 import { setJudgeLastNamesAction } from '@web-client/presenter/actions/JudgeActivityReport/setJudgeLastNamesAction';
 import { setValidationAlertErrorsAction } from '../../actions/setValidationAlertErrorsAction';
@@ -30,6 +31,7 @@ export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
     success: [
       stopShowValidationAction,
       clearErrorAlertsAction,
+      setDefaultSubmittedAndCavSortOrderAction,
       clearAlertsAction,
       setJudgeLastNamesAction,
       parallel([
