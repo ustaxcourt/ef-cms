@@ -77,7 +77,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   });
 
   let paginatedCaseResults;
-  if (searchEntity.pageSize && searchEntity.pageNumber) {
+  if (searchEntity.pageSize && searchEntity.pageNumber !== undefined) {
     const itemOffset =
       (searchEntity.pageNumber * searchEntity.pageSize) % allCaseResults.length;
 
