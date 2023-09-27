@@ -1,30 +1,15 @@
 import { compareCasesByDocketNumber } from '../../utilities/getFormattedTrialSessionDetails';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
-/**
- * generateTrialCalendarPdfInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id for the trial session
- * @returns {string} trial session calendar pdf url
- */
 export const generateTrialCalendarPdfInteractor = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
-) => {
+): Promise<{ fileId: string; url: string }> => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
     .getTrialSessionById({
       applicationContext,
       trialSessionId,
-    });
-
-  const formattedTrialSession = applicationContext
-    .getUtilities()
-    .getFormattedTrialSessionDetails({
-      applicationContext,
-      trialSession,
     });
 
   const calendaredCases = await applicationContext
@@ -34,10 +19,17 @@ export const generateTrialCalendarPdfInteractor = async (
       trialSessionId,
     });
 
-  const formattedOpenCases = formatCases({
-    applicationContext,
-    calendaredCases,
-  });
+  const formattedTrialSession = applicationContext
+    .getUtilities()
+    .getFormattedTrialSessionDetails({
+      applicationContext,
+      trialSession: {
+        ...trialSession,
+        calendaredCases,
+      },
+    });
+
+  const formattedOpenCases = formattedTrialSession.openCases;
 
   formattedTrialSession.caseOrder.forEach(aCase => {
     if (aCase.calendarNotes) {

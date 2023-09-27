@@ -1,6 +1,8 @@
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
-import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader';
+import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterList';
 import React from 'react';
+import classNames from 'classnames';
 
 export const TrialCalendar = ({ cases = [], sessionDetail }) => {
   return (
@@ -46,7 +48,7 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
           </div>
         </div>
 
-        <div className="card width-half" id="assignments">
+        <div className="card width-half">
           <div className="card-header">Assignments</div>
           <div className="card-content">
             <div className="width-half">
@@ -72,11 +74,12 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
           </div>
         </div>
       </div>
+
       <div className="clear"></div>
 
       <div className="card margin-top-0" id="notes">
         <div className="card-header">Session Notes</div>
-        <div className="card-content">{sessionDetail.notes}</div>
+        <div className="card-content">{sessionDetail.notes || 'n/a'} </div>
       </div>
 
       <h4 className="text-center" id="cases-count">
@@ -86,41 +89,73 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
       <table>
         <thead>
           <tr>
-            <th>Docket No.</th>
+            <th className="no-wrap">Docket No.</th>
             <th>Case Title</th>
             <th>Petitioner Counsel</th>
             <th>Respondent Counsel</th>
-            <th>Calendar Notes</th>
           </tr>
         </thead>
         <tbody>
-          {cases.map(caseDetail => (
-            <tr key={caseDetail.docketNumberWithSuffix}>
-              <td>{caseDetail.docketNumberWithSuffix}</td>
-              <td>{caseDetail.caseTitle}</td>
-              <td>
-                {caseDetail.petitionerCounsel &&
-                  caseDetail.petitionerCounsel.map(counsel => (
+          {cases.map(caseDetail => {
+            const memberCase = isMemberCase(caseDetail);
+
+            return (
+              <React.Fragment key={caseDetail.docketNumber}>
+                <tr className="border-bottom-0">
+                  <td
+                    className={classNames(
+                      memberCase ? 'margin-left-2' : '',
+                      'docket-number-with-icon',
+                      'no-wrap',
+                    )}
+                  >
                     <div
-                      key={`counsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
-                    >
-                      {counsel}
-                    </div>
-                  ))}
-              </td>
-              <td>
-                {caseDetail.respondentCounsel &&
-                  caseDetail.respondentCounsel.map(counsel => (
-                    <div
-                      key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
-                    >
-                      {counsel}
-                    </div>
-                  ))}
-              </td>
-              <td>{caseDetail.calendarNotes}</td>
-            </tr>
-          ))}
+                      className={classNames(
+                        caseDetail.isLeadCase ? 'lead-consolidated-icon' : '',
+                        memberCase ? 'consolidated-icon' : '',
+                      )}
+                    ></div>
+                    <div> {caseDetail.docketNumberWithSuffix}</div>
+                  </td>
+                  <td>{caseDetail.caseTitle}</td>
+                  <td>
+                    {caseDetail.petitionerCounsel &&
+                      caseDetail.petitionerCounsel.map(counsel => (
+                        <div
+                          key={`counsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
+                        >
+                          {counsel}
+                        </div>
+                      ))}
+                  </td>
+                  <td>
+                    {caseDetail.respondentCounsel &&
+                      caseDetail.respondentCounsel.map(counsel => (
+                        <div
+                          key={`rcounsel-${caseDetail.docketNumberWithSuffix}-${counsel}`}
+                        >
+                          {counsel}
+                        </div>
+                      ))}
+                  </td>
+                </tr>
+
+                <tr>
+                  <td colSpan={1}></td>
+                  <td colSpan={3}>
+                    {caseDetail.calendarNotes && (
+                      <span>
+                        <span className="text-bold margin-right-1">
+                          Calendar Notes:{' '}
+                        </span>
+                        {caseDetail.calendarNotes}
+                      </span>
+                    )}
+                  </td>
+                </tr>
+              </React.Fragment>
+            );
+          })}
         </tbody>
       </table>
     </div>
