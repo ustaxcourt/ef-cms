@@ -4,18 +4,15 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { SortableColumnHeaderButton } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
     constants: state.constants,
-    getCavAndSubmittedCasesForJudgesSequence:
-      sequences.getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReport: state.judgeActivityReport,
     judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
     judgeActivityReportFilters: state.judgeActivityReport.filters,
@@ -30,7 +27,6 @@ export const JudgeActivityReport = connect(
   },
   function JudgeActivityReport({
     constants,
-    getCavAndSubmittedCasesForJudgesSequence,
     judgeActivityReport,
     judgeActivityReportData,
     judgeActivityReportFilters,
@@ -41,7 +37,6 @@ export const JudgeActivityReport = connect(
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
-    const [activePage, setActivePage] = useState(0);
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
@@ -204,25 +199,6 @@ export const JudgeActivityReport = connect(
     const submittedCavCasesTable = () => {
       return (
         <>
-          {judgeActivityReportHelper.showPaginator && (
-            <Paginator
-              breakClassName="hide"
-              forcePage={activePage}
-              id="paginatorTop"
-              marginPagesDisplayed={0}
-              pageCount={judgeActivityReportHelper.pageCount}
-              pageRangeDisplayed={0}
-              onPageChange={async pageChange => {
-                setActivePage(pageChange.selected);
-                await getCavAndSubmittedCasesForJudgesSequence({
-                  selectedPage: pageChange.selected,
-                });
-                window.document
-                  .getElementById('paginatorTop')
-                  ?.scrollIntoView();
-              }}
-            />
-          )}
           <table
             aria-describedby="progressDescription"
             className="usa-table ustc-table"
@@ -286,9 +262,9 @@ export const JudgeActivityReport = connect(
             </thead>
             <tbody>
               {judgeActivityReportHelper.submittedAndCavCasesByJudge.map(
-                formattedCase => {
+                (formattedCase, index) => {
                   return (
-                    <React.Fragment key={formattedCase.docketNumber}>
+                    <React.Fragment key={`case-row-${index}`}>
                       <tr>
                         <td className="consolidated-case-column">
                           <ConsolidatedCaseIcon
@@ -345,25 +321,6 @@ export const JudgeActivityReport = connect(
               )}
             </tbody>
           </table>
-          {judgeActivityReportHelper.showPaginator && (
-            <Paginator
-              breakClassName="hide"
-              forcePage={activePage}
-              id="paginatorBottom"
-              marginPagesDisplayed={0}
-              pageCount={judgeActivityReportHelper.pageCount}
-              pageRangeDisplayed={0}
-              onPageChange={async pageChange => {
-                setActivePage(pageChange.selected);
-                await getCavAndSubmittedCasesForJudgesSequence({
-                  selectedPage: pageChange.selected,
-                });
-                window.document
-                  .getElementById('paginatorTop')
-                  ?.scrollIntoView();
-              }}
-            />
-          )}
           {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
             <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
           )}
