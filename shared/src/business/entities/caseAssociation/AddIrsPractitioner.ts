@@ -49,6 +49,32 @@ export class AddIrsPractitioner extends JoiValidationEntity {
       user: joi.object().required(),
     };
   }
+
+  getValidationRules_NEW() {
+    return {
+      email: JoiValidationConstants.STRING.optional(),
+      serviceIndicator: joi
+        .when('email', {
+          is: joi.exist().not(null),
+          otherwise: JoiValidationConstants.STRING.valid(
+            SERVICE_INDICATOR_TYPES.SI_NONE,
+            SERVICE_INDICATOR_TYPES.SI_PAPER,
+          ),
+          then: JoiValidationConstants.STRING.valid(
+            ...Object.values(SERVICE_INDICATOR_TYPES),
+          ),
+        })
+        .required()
+        .messages({
+          'any.only':
+            'No email found for electronic service. Select a valid service preference.',
+          'any.required': 'Select service type',
+        }),
+      user: joi.object().required().messages({
+        'any.required': 'Select a respondent counsel',
+      }),
+    };
+  }
 }
 
 declare global {
