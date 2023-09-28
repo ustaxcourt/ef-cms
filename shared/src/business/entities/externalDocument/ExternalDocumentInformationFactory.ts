@@ -120,6 +120,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     certificateOfService:
       'Indicate whether you are including a Certificate of Service',
     certificateOfServiceDate: [
+      //1
       {
         contains: 'must be less than or equal to',
         message:
@@ -130,6 +131,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     documentTitle:
       'Document title must be 3000 characters or fewer. Update this document title and try again.',
     documentType: [
+      //1
       {
         contains: 'contains an invalid value',
         message:
@@ -137,7 +139,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       },
       'Select a document type',
     ],
-    filers: 'Select a filing party',
+    filers: 'Select a filing party', //1
     freeText: [
       { contains: 'is required', message: 'Provide an answer' },
       {
@@ -154,8 +156,8 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     ],
     hasSecondarySupportingDocuments:
       'Enter selection for Secondary Supporting Documents.',
-    hasSupportingDocuments: 'Enter selection for Supporting Documents.',
-    objections: 'Enter selection for Objections.',
+    hasSupportingDocuments: 'Enter selection for Supporting Documents.', //1
+    objections: 'Enter selection for Objections.', //1
     ordinalValue: 'Select an iteration',
     otherIteration: [
       {
@@ -164,9 +166,9 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       },
       'Maximum iteration value is 999.',
     ],
-    partyIrsPractitioner: 'Select a filing party',
+    partyIrsPractitioner: 'Select a filing party', //1
     previousDocument: 'Select a document',
-    primaryDocumentFile: 'Upload a document',
+    primaryDocumentFile: 'Upload a document', //1
     primaryDocumentFileSize: [
       {
         contains: 'must be less than or equal to',

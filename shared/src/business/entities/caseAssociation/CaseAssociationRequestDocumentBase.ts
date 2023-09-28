@@ -93,6 +93,8 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
 
   static VALIDATION_ERROR_MESSAGES = {
     ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
+    documentTitle:
+      'Document title must be 500 characters or fewer. Update this document title and try again.',
     documentTitleTemplate: 'Select a document',
     eventCode: 'Select a document',
     filers: 'Select a party',
@@ -105,6 +107,10 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
   };
 
   getValidationRules() {
+    return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
     return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
   }
 
