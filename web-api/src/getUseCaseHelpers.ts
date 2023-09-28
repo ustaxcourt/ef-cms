@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addExistingUserToCase } from '../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase';
@@ -23,7 +24,6 @@ import { generateChangeOfAddressHelper } from '../../shared/src/business/useCase
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
-import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
@@ -46,6 +46,7 @@ import { updateCaseAutomaticBlock } from '../../shared/src/business/useCaseHelpe
 import { updateInitialFilingDocuments } from '../../shared/src/business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
+  acquireLock,
   addDocketEntryForSystemGeneratedOrder,
   addDraftStampOrderDocketEntryInteractor,
   addExistingUserToCase,
@@ -70,7 +71,6 @@ const useCaseHelpers = {
   generateNoticeOfChangeToInPersonProceeding,
   generatePdfFromHtmlHelper,
   generateStampedCoversheetInteractor,
-  getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,
   getUserIdForNote,
   parseAndScrapePdfContents,
