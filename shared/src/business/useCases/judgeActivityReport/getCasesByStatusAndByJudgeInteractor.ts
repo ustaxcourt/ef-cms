@@ -10,7 +10,6 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
-import { faker } from '@faker-js/faker';
 import { isEmpty } from 'lodash';
 
 export type JudgeActivityReportCavAndSubmittedCasesRequest = {
@@ -57,7 +56,7 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     ),
   );
 
-  let allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+  const allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
     (caseRecord, i) => ({
       ...caseRecord,
       daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
@@ -65,26 +64,10 @@ export const getCasesByStatusAndByJudgeInteractor = async (
     }),
   );
 
-  allCaseResults = [
-    ...allCaseResults,
-    // ...allCaseResults,
-    // ...allCaseResults,
-    // ...allCaseResults,
-    // ...allCaseResults,
-  ];
-
   allCaseResults.sort((a, b) => {
     return (
       b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
     );
-  });
-
-  allCaseResults.forEach(c => {
-    c.associatedJudge = faker.person.lastName();
-    c.daysElapsedSinceLastStatusChange = faker.number.int({
-      max: 5000,
-      min: 0,
-    });
   });
 
   return {
