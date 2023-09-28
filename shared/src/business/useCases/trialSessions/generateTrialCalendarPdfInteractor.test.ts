@@ -34,6 +34,12 @@ describe('generateTrialCalendarPdfInteractor', () => {
       docketNumberWithSuffix: '123-20W',
       removedFromTrial: true,
     },
+    {
+      ...MOCK_CASE,
+      docketNumber: '150-19',
+      docketNumberWithSuffix: '150-19',
+      leadDocketNumber: '150-19',
+    },
   ];
 
   beforeAll(() => {
@@ -110,6 +116,10 @@ describe('generateTrialCalendarPdfInteractor', () => {
               docketNumber: '102-19',
               petitionerCounsel: ['Private Format Me (123)'],
               respondentCounsel: ['IRS Format Me (123)'],
+            }),
+            expect.objectContaining({
+              docketNumber: '150-19',
+              isLeadCase: true,
             }),
             expect.not.objectContaining({
               docketNumber: '123-20',

@@ -31,7 +31,7 @@ export const generateTrialCalendarPdfInteractor = async (
 
   const formattedOpenCases = formatCases({
     applicationContext,
-    calendaredCases,
+    calendaredCases: formattedTrialSession.openCases,
   });
 
   formattedTrialSession.caseOrder.forEach(aCase => {
@@ -94,6 +94,8 @@ export const formatCases = ({ applicationContext, calendaredCases }) => {
         caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
         docketNumber: openCase.docketNumber,
         docketNumberWithSuffix: openCase.docketNumberWithSuffix,
+        inConsolidatedGroup: openCase.inConsolidatedGroup,
+        isLeadCase: openCase.isLeadCase,
         petitionerCounsel: (openCase.privatePractitioners || []).map(
           getPractitionerName,
         ),
