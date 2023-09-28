@@ -115,6 +115,57 @@ describe('CaseAssociationRequestDocumentBase', () => {
           'Document title must be 500 characters or fewer. Update this document title and try again.',
       });
     });
+
+    it('should return default error message when "documentType" is not defined', () => {
+      const entity = new CaseAssociationRequestDocumentBase({
+        ...rawTestData,
+        documentType: undefined,
+      });
+      const errors = entity.getFormattedValidationErrors();
+      expect(errors).toEqual({ documentType: 'Select a document type' });
+    });
+
+    it('should return error message when "documentType" is an invalid value', () => {
+      const entity = new CaseAssociationRequestDocumentBase({
+        ...rawTestData,
+        documentType: 'invalid document type',
+      });
+      const errors = entity.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        documentType: 'Select a document type',
+      });
+    });
+
+    it('should return default error message when "filers" is not an empty array when "partyIrsPractitioner" is true', () => {
+      const entity = new CaseAssociationRequestDocumentBase({
+        ...rawTestData,
+        filers: ['a'],
+      });
+      const errors = entity.getFormattedValidationErrors();
+      expect(errors).toEqual({ filers: 'Select a party' });
+    });
+
+    it('should return default error message when "filers" is an empty array and "partyIrsPractitioner" is false', () => {
+      const entity = new CaseAssociationRequestDocumentBase({
+        ...rawTestData,
+        filers: [],
+        partyIrsPractitioner: false,
+      });
+      const errors = entity.getFormattedValidationErrors();
+      expect(errors).toEqual({ filers: 'Select a party' });
+    });
+
+    it('should return default error message when "filers" contains an item that is not a UUID string and "partyIrsPractitioner" is false', () => {
+      const entity = new CaseAssociationRequestDocumentBase({
+        ...rawTestData,
+        filers: ['not a uuid formatted string'],
+        partyIrsPractitioner: false,
+      });
+      const errors = entity.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        'filers[0]': '"filers[0]" must be a valid GUID',
+      });
+    });
   });
 });
 
