@@ -29,7 +29,10 @@ export const generateTrialCalendarPdfInteractor = async (
       },
     });
 
-  const formattedOpenCases = formattedTrialSession.openCases;
+  const formattedOpenCases = formatCases({
+    applicationContext,
+    calendaredCases,
+  });
 
   formattedTrialSession.caseOrder.forEach(aCase => {
     if (aCase.calendarNotes) {
