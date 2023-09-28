@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class AddIrsPractitioner extends JoiValidationEntity {
@@ -66,13 +67,14 @@ export class AddIrsPractitioner extends JoiValidationEntity {
         })
         .required()
         .messages({
+          ...setDefaultErrorMessages('Select service type'),
           'any.only':
             'No email found for electronic service. Select a valid service preference.',
-          'any.required': 'Select service type',
         }),
-      user: joi.object().required().messages({
-        'any.required': 'Select a respondent counsel',
-      }),
+      user: joi
+        .object()
+        .required()
+        .messages(setDefaultErrorMessages('Select a respondent counsel')),
     };
   }
 }
