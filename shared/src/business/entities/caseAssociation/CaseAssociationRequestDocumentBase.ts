@@ -8,6 +8,7 @@ import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument
 import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { SupportingDocumentInformationFactory } from '@shared/business/entities/externalDocument/SupportingDocumentInformationFactory';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDocument {
@@ -110,8 +111,83 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
   }
 
+  static VALIDATION_RULES_NEW = {
+    attachments: joi
+      .boolean()
+      .optional()
+      .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+    certificateOfService: joi
+      .boolean()
+      .required()
+      .messages(
+        setDefaultErrorMessages(
+          'Indicate whether you are including a Certificate of Service',
+        ),
+      ),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now')
+      .when('certificateOfService', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .messages({
+        ...setDefaultErrorMessages('Enter date of service'),
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+    documentTitle: JoiValidationConstants.STRING.max(500)
+      .optional()
+      .messages(
+        setDefaultErrorMessages(
+          'Document title must be 500 characters or fewer. Update this document title and try again.',
+        ),
+      ),
+    documentTitleTemplate: JoiValidationConstants.STRING.max(500)
+      .required()
+      .messages(setDefaultErrorMessages('Select a document')),
+    documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+      .required()
+      .messages(setDefaultErrorMessages('Select a document type')),
+    eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
+      .required()
+      .messages(setDefaultErrorMessages('Select a document')),
+    filers: joi
+      .when('partyIrsPractitioner', {
+        is: true,
+        otherwise: joi.array().items(JoiValidationConstants.UUID).min(1),
+        then: joi.array().max(0),
+      })
+      .messages(
+        setDefaultErrorMessages('Select a party', {
+          keysToIgnore: ['string.guid'],
+        }),
+      ),
+    hasSupportingDocuments: joi
+      .boolean()
+      .optional()
+      .messages(
+        setDefaultErrorMessages('Enter selection for Supporting Documents.'),
+      ),
+    objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
+      .optional()
+      .messages(setDefaultErrorMessages('Enter selection for Objections.')),
+    partyIrsPractitioner: joi
+      .boolean()
+      .optional()
+      .messages(setDefaultErrorMessages('Select a filing party')),
+    partyPrivatePractitioner: joi.boolean().optional(), //COULD NOT FIND MESSAGE STRING ANYWHERE
+    primaryDocumentFile: joi
+      .object()
+      .required()
+      .messages(setDefaultErrorMessages('Upload a document')),
+    scenario: JoiValidationConstants.STRING.valid(...SCENARIOS)
+      .required()
+      .messages(setDefaultErrorMessages('Select a document')),
+    supportingDocuments: joi.array().optional(), //COULD NOT FIND MESSAGE STRING ANYWHERE
+  };
+
   getValidationRules_NEW() {
-    return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+    return CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
