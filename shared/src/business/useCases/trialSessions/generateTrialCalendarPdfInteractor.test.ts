@@ -73,7 +73,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       });
   });
 
-  it('should find the cases for a trial session successfully', async () => {
+  it('should generate the trial session calendar pdf including open cases', async () => {
     await expect(
       generateTrialCalendarPdfInteractor(applicationContext, {
         trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -106,7 +106,10 @@ describe('generateTrialCalendarPdfInteractor', () => {
               docketNumber: '101-18',
             }),
             expect.objectContaining({
+              caseTitle: 'Test Petitioner',
               docketNumber: '102-19',
+              petitionerCounsel: ['Private Format Me (123)'],
+              respondentCounsel: ['IRS Format Me (123)'],
             }),
             expect.not.objectContaining({
               docketNumber: '123-20',
