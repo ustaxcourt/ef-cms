@@ -1,0 +1,2 @@
+shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory.ts
+documentType: make sure contains an invalid value is used in other entities (not used in shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase.ts)
