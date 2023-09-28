@@ -35,3 +35,10 @@ body {
 .wrap-text-content {
   word-break: break-word;
 }
+
+.blank-note-row {
+  td {
+    height: 0.5rem;
+    border-top: none;
+  }
+}

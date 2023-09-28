@@ -170,8 +170,7 @@ export const TrialCalendar = ({
                       ))}
                   </td>
                 </tr>
-
-                <tr>
+                <tr className="border-bottom-0">
                   <td colSpan={1}></td>
                   <td colSpan={3}>
                     {caseDetail.calendarNotes && (
@@ -183,6 +182,9 @@ export const TrialCalendar = ({
                       </span>
                     )}
                   </td>
+                </tr>
+                <tr className="blank-note-row">
+                  <td colSpan={7}></td>
                 </tr>
               </React.Fragment>
             );
