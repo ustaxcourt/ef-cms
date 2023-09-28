@@ -959,7 +959,6 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
-export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
