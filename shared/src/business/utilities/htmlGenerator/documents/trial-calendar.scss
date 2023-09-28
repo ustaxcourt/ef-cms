@@ -1,7 +1,7 @@
 #trial-calendar {
   margin: 0 -20px;
   page: narrow;
-  
+
   .column {
     display: flex;
     flex: 1;
@@ -18,9 +18,10 @@
       }
     }
   }
-  
+
   .lead-consolidated-icon,
   .consolidated-icon {
+    margin-top: 3px;
     margin-right: 0.3rem;
   }
 }
