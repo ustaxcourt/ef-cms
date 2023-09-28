@@ -1,8 +1,8 @@
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
-  CASE_STATUS_TYPES,
-  CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-  STATUS_OF_MATTER_OPTIONS,
-} from '@shared/business/entities/EntityConstants';
+  JudgeActivityReportCavAndSubmittedCasesRequest,
+  getCasesByStatusAndByJudgeInteractor,
+} from './getCasesByStatusAndByJudgeInteractor';
 import {
   MOCK_CASE,
   MOCK_SUBMITTED_CASE,
@@ -12,9 +12,9 @@ import {
   MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
 } from '@shared/test/mockCase';
+import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { getCasesByStatusAndByJudgeInteractor } from './getCasesByStatusAndByJudgeInteractor';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
@@ -22,10 +22,8 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
 
   let mockGetDocketNumbersWithServedEventCodesResult: string[] = [];
 
-  const mockValidRequest = {
+  const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
     judges: [judgeUser.name],
-    pageNumber: 0,
-    pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
 
@@ -44,18 +42,24 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     petitioners: [],
     status: CASE_STATUS_TYPES.cav,
   };
-  const mockCaseWorksheet = {
-    docketNumber: '101-20',
-    finalBriefDueDate: '01-01-2022',
-    primaryIssue: 'nothing',
-    statusOfMatter: STATUS_OF_MATTER_OPTIONS[1],
-  } as RawCaseWorksheet;
+
+  const mockCaseWorksheet10123: RawCaseWorksheet = {
+    ...MOCK_CASE_WORKSHEET,
+    docketNumber: '101-23',
+  };
+  const mockCaseWorksheet10223: RawCaseWorksheet = {
+    ...MOCK_CASE_WORKSHEET,
+    docketNumber: '102-23',
+  };
 
   beforeAll(() => {
     applicationContext.getSearchClient().count = jest.fn();
     applicationContext
       .getPersistenceGateway()
-      .getCaseWorksheet.mockImplementation(() => mockCaseWorksheet);
+      .getCaseWorksheetsByDocketNumber.mockImplementation(() => [
+        mockCaseWorksheet10123,
+        mockCaseWorksheet10223,
+      ]);
   });
   applicationContext
     .getPersistenceGateway()
@@ -178,7 +182,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   });
 
   it('should paginate the results when page number and page size are provided', async () => {
-    const mockPageSize = 1;
     mockGetDocketNumbersByStatusAndByJudgeResult = [
       { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
       {
@@ -210,8 +213,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       applicationContext,
       {
         judges: [judgeUser.name],
-        pageNumber: 1,
-        pageSize: mockPageSize,
         statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
       },
     );
@@ -253,8 +254,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       applicationContext,
       {
         judges: [judgeUser.name],
-        pageNumber: undefined,
-        pageSize: undefined,
         statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
       },
     );
@@ -292,19 +291,21 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       mockValidRequest,
     );
 
-    expect(result.cases).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          caseWorksheet: mockCaseWorksheet,
-          docketNumber: '101-23',
-        }),
-        expect.objectContaining({
-          caseWorksheet: mockCaseWorksheet,
-          docketNumber: '102-23',
-        }),
-      ]),
-    );
-
+    const actualCases = result.cases.map(aCase => ({
+      caseWorksheet: aCase.caseWorksheet,
+      docketNumber: aCase.docketNumber,
+    }));
+    console.log(actualCases);
+    expect(actualCases).toEqual([
+      {
+        caseWorksheet: mockCaseWorksheet10123,
+        docketNumber: '101-23',
+      },
+      {
+        caseWorksheet: mockCaseWorksheet10223,
+        docketNumber: '102-23',
+      },
+    ]);
     expect(result.totalCount).toEqual(2);
   });
 });
