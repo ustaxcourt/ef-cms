@@ -24,7 +24,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
   public judgeId: string;
   public statuses: CAV_AND_SUBMITTED_CASE_STATUS_TYPES;
   public judges: string[];
-  public searchAfter: number;
 
   protected tomorrow: string;
 
@@ -35,7 +34,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     this.judgeName = rawProps.judgeName;
     this.statuses = rawProps.statuses;
     this.judges = rawProps.judges;
-    this.searchAfter = rawProps.searchAfter;
 
     this.tomorrow = calculateISODate({
       howMuch: +1,
@@ -81,11 +79,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .array()
       .items(joi.string())
       .description('The last names of judges to generate report for'),
-    searchAfter: joi
-      .number()
-      .description(
-        'The last docket number to be used to make the next set of calls per page number',
-      ),
     startDate: JoiValidationConstants.ISO_DATE.max('now').description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
     ),
