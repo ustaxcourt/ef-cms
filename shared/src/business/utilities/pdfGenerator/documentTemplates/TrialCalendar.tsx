@@ -9,10 +9,10 @@ type TrialCalendarType = {
     docketNumber: string;
     docketNumberWithSuffix: string;
     caseTitle: string;
-    petitionerCounsel: string;
     respondentCounsel: string[];
     calendarNotes: string;
     isLeadCase: boolean;
+    petitionerCounsel: string[];
   }[];
   sessionDetail: {
     startTime: string;
