@@ -119,11 +119,17 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   }
   const results = Object.keys(obj).length === 0 ? null : obj;
   // TODO:
-  // const newResults = getFormattedValidationErrors_NEW(entity);
+  const newResults = getFormattedValidationErrors_NEW(entity);
 
-  // if(results !== newResults) {
-  //   log here
-  // }
+  if (JSON.stringify(results) !== JSON.stringify(newResults)) {
+    console.error(
+      'When fetching "Formatted Validation Errors" there was a difference between the legacy implementation and the new implementation results',
+      '\n\nLegacy Results:\n',
+      JSON.stringify(results, null, 2),
+      '\n\nNew Results:\n',
+      JSON.stringify(newResults, null, 2),
+    );
+  }
   return results;
 }
 
@@ -136,6 +142,8 @@ export abstract class JoiValidationEntity {
 
   abstract getValidationRules(): any;
   abstract getErrorToMessageMap(): any;
+
+  abstract getValidationRules_NEW(): any;
 
   getValidationErrors() {
     const rules = this.getValidationRules();
@@ -157,7 +165,7 @@ export abstract class JoiValidationEntity {
   }
 
   getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
-    const rules = this.getValidationRules();
+    const rules = this.getValidationRules_NEW();
     const schema = rules.validate ? rules : joi.object().keys(rules);
     const { error } = schema.validate(this, {
       abortEarly: false,
