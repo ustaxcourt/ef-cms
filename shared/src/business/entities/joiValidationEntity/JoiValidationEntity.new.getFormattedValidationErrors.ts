@@ -2,7 +2,8 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 
 export type JoiErrorDetail = {
   message: string;
-  context: { key: string };
+  type: string;
+  context: { key: string | number; label: string };
 };
 
 function getFormattedValidationErrorsHelper_NEW(entity: JoiValidationEntity): {
@@ -14,7 +15,11 @@ function getFormattedValidationErrorsHelper_NEW(entity: JoiValidationEntity): {
   const { details }: { details: JoiErrorDetail[] } = errors;
   const finalErrorMessages = {};
   details.forEach(d => {
-    finalErrorMessages[d.context.key] = d.message;
+    if (!Number.isInteger(d.context.key)) {
+      finalErrorMessages[d.context.key || d.type] = d.message;
+    } else {
+      finalErrorMessages[d.context.label] = d.message;
+    }
   });
   return finalErrorMessages;
 }
@@ -47,7 +52,7 @@ function appendNestedEntitiesErrors(
   errors: { [key: string]: string } | null,
 ): TempTyping | null {
   const entityProperties = Object.keys(entity);
-  const errorsWithNestedErrorsAppended: TempTyping | null = {};
+  const errorsWithNestedErrorsAppended: TempTyping | null = { ...errors };
 
   for (let entityProperty of entityProperties) {
     const entityPropertyValue = entity[entityProperty];
@@ -90,7 +95,7 @@ function removeUnhelpfulErrorMessagesFromContactValidations(
   errors: { [key: string]: string } | null,
 ): { [key: string]: string } | null {
   if (!errors) return null;
-  const updatedErrors = {};
+  const updatedErrors = { ...errors };
   Object.entries(errors)
     .filter((entry: [string, string]) =>
       isUnhelpfulErrorMessagesFromContactValidations(entry),
