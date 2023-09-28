@@ -10,30 +10,32 @@ export const IdleActivityMonitor = connect(
     broadcastIdleStatusActiveSequence:
       sequences.broadcastIdleStatusActiveSequence,
     constants: state.constants,
-    setIdleStatusActiveSequence: sequences.setIdleStatusActiveSequence,
-    setIdleStatusIdleSequence: sequences.setIdleStatusIdleSequence,
-    setIdleTimerRefSequence: sequences.setIdleTimerRefSequence,
+    handleIdleLogoutSequence: sequences.handleIdleLogoutSequence,
+    lastIdleAction: state.lastIdleAction,
     showAppTimeoutModalHelper: state.showAppTimeoutModalHelper,
+    user: state.user,
   },
   function IdleActivityMonitor({
     broadcastIdleStatusActiveSequence,
     constants,
-    setIdleStatusIdleSequence,
-    setIdleTimerRefSequence,
+    handleIdleLogoutSequence,
+    lastIdleAction,
     showAppTimeoutModalHelper,
   }) {
-    const ref = useIdleTimer({
+    useIdleTimer({
       debounce: constants.SESSION_DEBOUNCE,
       onAction: broadcastIdleStatusActiveSequence,
-      onIdle: setIdleStatusIdleSequence,
-      timeout: constants.SESSION_TIMEOUT,
     });
 
     useEffect(() => {
-      if (showAppTimeoutModalHelper.beginIdleMonitor) {
-        setIdleTimerRefSequence({ ref });
-      }
-    }, [showAppTimeoutModalHelper.beginIdleMonitor]);
+      const interval = setInterval(() => {
+        handleIdleLogoutSequence();
+      }, 1000);
+
+      return () => {
+        clearInterval(interval);
+      };
+    }, [lastIdleAction]);
 
     return <>{showAppTimeoutModalHelper.showModal && <AppTimeoutModal />}</>;
   },
