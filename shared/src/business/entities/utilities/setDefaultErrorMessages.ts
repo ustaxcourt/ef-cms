@@ -249,16 +249,27 @@ const joiErrorKeys = [
   'symbol.map',
 ];
 
+type ErrorMessageOptions = {
+  type?: string;
+  keysToIgnore?: string[];
+};
+
 export function setDefaultErrorMessages(
   message: string,
-  type?: string,
+  options?: ErrorMessageOptions,
 ): {
   [key: string]: string;
 } {
   const defaultErrorMessages = {};
-  const joiKeysToUse = type
-    ? joiErrorKeys.filter(key => key.includes(type))
-    : joiErrorKeys;
+  const joiKeysToUse = joiErrorKeys
+    .filter(key => {
+      if (options?.type) return key.includes(options.type);
+      return true;
+    })
+    .filter(key => {
+      if (options?.keysToIgnore) return !options.keysToIgnore.includes(key);
+      return true;
+    });
 
   joiKeysToUse.forEach(key => {
     defaultErrorMessages[key] = message;
