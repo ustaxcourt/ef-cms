@@ -141,21 +141,15 @@ const getCases = async (
       caseInfo.caseStatusHistory,
   );
 
-  const completeCaseRecords = await Promise.all(
-    filteredCaseRecords.map(async caseRecord => {
-      const caseWorksheet = await applicationContext
-        .getPersistenceGateway()
-        .getCaseWorksheet({
-          applicationContext,
-          docketNumber: caseRecord.docketNumber,
-        });
-
-      return {
-        ...caseRecord,
-        caseWorksheet,
-      } as unknown as SubmittedCAVTableDataWithWorksheet;
-    }),
-  );
+  const caseWorksheets = await applicationContext
+    .getPersistenceGateway()
+    .getCaseWorksheetsByDocketNumber({
+      applicationContext,
+      docketNumbers: filteredCaseRecords.map(c => c.docketNumber),
+    });
+  const completeCaseRecords = filteredCaseRecords.map((aCase, index) => {
+    return { ...aCase, caseWorksheet: caseWorksheets[index] };
+  });
 
   return completeCaseRecords;
 };

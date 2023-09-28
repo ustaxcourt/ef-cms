@@ -335,7 +335,10 @@ export const queryFull = async ({
  * @param {Array} providers.keys the keys to get
  * @returns {Array} the results retrieved
  */
-export const batchGet = async ({ applicationContext, keys }) => {
+export const batchGet = async ({
+  applicationContext,
+  keys,
+}): Promise<TDynamoRecord[]> => {
   if (!keys.length) return [];
   const chunks = chunk(keys, 100);
 
