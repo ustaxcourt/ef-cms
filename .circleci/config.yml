@@ -5,103 +5,20 @@ orbs:
 efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.15
 
 parameters:
-  run_build_and_deploy:
+  run_the_workflow:
     default: true
     type: boolean
 
-  run_build_and_deploy_with_context:
-    default: true
-    type: boolean
-
-  run_glue_to_test:
+  dont_run_the_workflow:
     default: false
     type: boolean
 
-  run_glue_to_lower_env:
-    default: false
-    type: boolean
-
-  lower_env:
-    default: test
+  somevar:
+    default: ""
     type: string
-
-  run_sync_s3_to_lower_env:
-    default: false
-    type: boolean
-
-  referrer:
-    default: ''
-    type: string
-
-  source_bucket:
-    default: ''
-    type: string
-
-  destination_bucket:
-    default: ''
-    type: string
-
-commands:
-  npm-and-cypress-install:
-    steps:
-      - restore_cache:
-          keys:
-            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - restore_cache:
-          keys:
-            - v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - run:
-          name: Install node dependencies
-          command: |
-            if [ ! -d node_modules ]; then
-              npm ci
-            else
-              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
-            fi
-      - run:
-          name: Install Cypress dependency
-          command: |
-            if [ ! -d ~/.cache/Cypress ]; then
-              echo Installing Cypress
-              ./node_modules/.bin/cypress install
-            else
-              echo Found cached Cypress version. Using cached Cypress folder.
-            fi
-      - run:
-          name: Reset package-lock
-          command: 'git checkout -- package-lock.json'
-      - save_cache:
-          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
-      - save_cache:
-          key: v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-          paths:
-            - ~/.cache/Cypress
-
-  npm-install:
-    steps:
-      - restore_cache:
-          keys:
-            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-      - run:
-          name: Install node dependencies
-          command: |
-            if [ ! -d node_modules ]; then
-              npm ci
-            else
-              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
-            fi
-      - run:
-          name: Reset package-lock
-          command: 'git checkout -- package-lock.json'
-      - save_cache:
-          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
-          paths:
-            - node_modules
 
 jobs:
-  deploy:
+  the-jerb:
     docker:
       - image: *efcms-docker-image
         aws_auth:
@@ -109,898 +26,1038 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
     environment:
-      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
+      TRUTHY: << pipeline.parameters.run_the_workflow >>
+      FALSY: << pipeline.parameters.dont_run_the_workflow >>
+      EMPTY: << pipeline.parameters.somevar >>
+      CIRCLE_PROJECT_SLUG: << pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
     steps:
-      - git-shallow-clone/checkout
-      - npm-install
       - run:
-          name: Setup Env
+          name: Test environment variables and pipeline parameters
           command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Build Docker Image
-          command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-      - run:
-          name: Setup Blue Green Migration If Needed
-          command: |
-            ./setup-for-blue-green-migration.sh
-      - run:
-          no_output_timeout: 20m
-          name: 'Deploy - Web API - Terraform'
-          command: |
-            cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
-      - run:
-          no_output_timeout: 20m
-          name: 'Deploy - Web Client - Terraform'
-          command: |
-            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
-      - run:
-          name: Setup Elasticsearch Index Settings
-          command: |
-            ./web-api/setup-elasticsearch-index.sh $ENV
-      - run:
-          name: Admin User Setup
-          command: |
-            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
-              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
+            echo "truthy: ${TRUTHY}"
+            echo "falsy: ${FALSY}"
+            echo "empty: ${EMPTY}"
+            echo "project slug: ${CIRCLE_PROJECT_SLUG}"
+            if [[ -n "$TRUTHY" ]]; then
+              echo "truthy is not empty! yay!"
             else
-              echo "skipping…"
+              echo "truthy is empty tho"
             fi
-      - run:
-          name: Test Users Setup
-          command: |
-            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
-              ./shared/admin-tools/user/setup-test-users.sh $ENV
+            if [[ -z "$FALSY" ]]; then
+              echo "falsy is empty! yay!"
             else
-              echo "skipping…"
+              echo "falsy is not empty tho"
             fi
-      - run:
-          name: Judge Users Setup
-          environment:
-            FILE_NAME: ./scripts/data-import/judge/judge_users.csv
-          command: |
-            if [[ "${CIRCLE_BRANCH}" == "prod" ]] || [[ -n "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
-              echo "skipping…"
-              exit 0
-            fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
-              npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+            if [[ -z "$EMPTY" ]]; then
+              echo "empty is empty! yay!"
             else
-              ./scripts/data-import/judge/bulk-import-judge-users.sh
+              echo "empty is not empty tho"
             fi
-      - run:
-          name: 'Deploy - Web Client - S3'
-          command: |
-            ./web-client/deploy-ui.sh
-      - run:
-          name: 'Deploy - Public Web Client - S3'
-          command: |
-            ./web-client/deploy-public.sh
-      - run:
-          name: 'Deploy - Web API - Cognito Customize'
-          command: |
-            cd web-api && ./setup-cognito-ui.sh $ENV
-      - run:
-          name: 'Deploy - Authorizer Smoke Tests'
-          command: |
-            npm run verify-authorizers -- $ENV
-      - run:
-          name: 'Deploy - Verify Private S3 Buckets'
-          command: |
-            npm run verify-private-s3-buckets -- $ENV
-      - run:
-          name: 'Deploy - Verify Private Elasticsearch'
-          command: |
-            npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Verify Cognito Lambda Triggers'
-          command: |
-            npm run verify-cognito-lambda-triggers -- $ENV
-      - run:
-          name: 'Deploy - Verify USTC Admin User Disabled'
-          command: |
-            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
-              npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
-            else
-              echo "skipping…"
-            fi
-      - store_artifacts:
-          path: /home/app/cypress-smoketests/videos/
-      - run:
-          name: 'Deploy - Pending Color Switch'
-          command: npm run pending-color-switch
-
-  migrate:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Deploy Check Migration Status Cron Lambda
-          command: |
-            npm run deploy:migration-cron -- $ENV
-      - run:
-          name: Setup Migration Infrastructure
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run deploy:migration -- $ENV
-            fi
-      - run:
-          name: Disable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/disable-deploying-dynamo-stream-trigger.sh
-            fi
-      - run:
-          name: Run Migration
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run start:migration -- $ENV
-            fi
-      - run:
-          name: Enable Check Migration Status Cron
-          command: |
-            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
-
-  prepare-for-reindex:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Check Migration Status Cron
-          command: |
-            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
-      - run:
-          name: Deploy Check Reindex Status Cron Lambda
-          command: |
-            npm run deploy:reindex-cron -- $ENV
-      - run:
-          name: Track successful migrations
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              node ./web-api/track-successful-migrations.js
-            fi
-      - run:
-          name: Enable Destination Table Stream
-          command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              ./web-api/enable-deploying-dynamo-stream-trigger.sh
-            fi
-      - run:
-          name: Enable Check Reindex Status Cron
-          command: |
-            ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
-
-  disable-reindex-cron:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Check Reindex Status Cron
-          command: |
-            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
-
-  smoketests:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-and-cypress-install
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Disable Maintenance Mode'
-          command: npm run maintenance:disengage $ENV
-      - run:
-          name: 'Cypress Smoke Tests'
-          command: npm run cypress:smoketests
-      - run:
-          name: 'Pa11y Smoke Tests'
-          command: npm run test:pa11y:smoketests
-      - store_artifacts:
-          path: /root/project/cypress/cypress-smoketests/videos/
-
-  smoketests-readonly:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-and-cypress-install
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Create and Enable Test User
-          command: npx ts-node --transpile-only ./scripts/create-and-enable-smoketest-user.js
-      - run:
-          name: 'Cypress Readonly Smoke Tests'
-          command: |
-            set +e
-            npm run cypress:readonly
-            echo "export READONLY_SMOKETESTS_RESULT=$?" >> $BASH_ENV
-            set -e
-      - run:
-          name: Disable Test User
-          command: npx ts-node --transpile-only ./scripts/disable-smoketest-user.js
-      - run:
-          name: Kill Build if Smoketests Failed
-          command: ./scripts/kill-circle-build.sh
-      - run:
-          name: 'Cypress Public Readonly Smoke Tests'
-          command: npm run cypress:readonly:public
-      - store_artifacts:
-          path: /root/project/cypress-readonly/videos/
-
-  loadtests:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-and-cypress-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Load tests'
-          command: npm run loadtest:pdf-generation
-
-  deploy-switch-colors-cron:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    steps:
-      - git-shallow-clone/checkout
-      - npm-and-cypress-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Deploy Switch Colors Cron
-          command: |
-            npm run deploy:switch-colors-cron -- $ENV
-
-  disable-switch-colors-cron:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    steps:
-      - git-shallow-clone/checkout
-      - npm-and-cypress-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Switch Colors Cron
-          command: |
-            npm run destroy:switch-colors-cron -- $ENV
-
-  switch-colors:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: 'Switch Colors'
-          command: npm run switch-colors
-
-  backup-source-dynamo-table:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Backup Source DynamoDB table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run backup:dynamo-table -- $SOURCE_TABLE
-            fi
-
-  delete-api-mappings:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Delete Source API Gateway Mappings
-          command: |
-            npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
-
-  cleanup:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Destroy Migration Infrastructure
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration -- $ENV
-            fi
-      - run:
-          name: Destroy Check Migration Status Cron Infrastructure
-          command: |
-            npm run destroy:migration-cron -- $ENV
-      - run:
-          name: Destroy Check Reindex Status Cron Infrastructure
-          command: |
-            npm run destroy:reindex-cron -- $ENV
-      - run:
-          name: Delete Source ElasticSearch cluster
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
-            fi
-      - run:
-          name: Delete Source Dynamo table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run delete:dynamo-table -- $SOURCE_TABLE
-            fi
-      - run:
-          name: Cleanup Deploy Table After Migration
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run migration:cleanup -- $ENV
-            fi
-
-  ######################## GLUE JOB: Jobs that run in a lower environment ########################
-
-  delete-existing-data:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Setup the deploy table for a glue job
-          command: |
-            ./scripts/setup-deploy-table-for-glue-job.sh
-      - run:
-          name: Delete all existing dynamodb tables and elasticsearch clusters
-          command: |
-            ./scripts/delete-all-persistence.sh
-
-  redeploy-environment:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            VCS=<< pipeline.project.type >>
-            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-      - run:
-          name: Kick off a deployment
-          command: |
-            CIRCLE_PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
-            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
-      - run:
-          name: Deploy Wait for Workflow Cron Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            npm run deploy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
-
-  initiate-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            source $BASH_ENV
-            VCS=<< pipeline.project.type >>
-            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-            if [[ -z "$PROD_DOCUMENTS_BUCKET_NAME" ]]; then
-              echo "Error: expected PROD_DOCUMENTS_BUCKET_NAME environment variable"
-              exit 1
-            fi
-            echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
-      - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Disable Dynamodb Streams
-          command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
-      - run:
-          name: Kick off the glue-to-lower-env workflow
-          command: |
-            CIRCLE_PIPELINE_ID=$(curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"prod\", \"parameters\":{ \
-                \"run_build_and_deploy_with_context\":false, \
-                \"run_glue_to_lower_env\":true, \
-                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
-            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
-      - run:
-          name: Deploy Wait for Workflow Cron Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-            npm run deploy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
-      - run:
-          name: Kick off the sync-s3-to-lower-env workflow
-          command: |
-            curl --request POST \
-              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
-              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
-              --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
-                \"run_build_and_deploy\":false, \
-                \"run_sync_s3_to_lower_env\":true, \
-                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
-                \"source_bucket\":\"${SOURCE_BUCKET}\", \
-                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
-
-  cleanup-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-glue-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
-          name: Enable Dynamodb Streams
-          command: |
-            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
-
-  sync-s3-buckets-with-timeout:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            VCS=<< pipeline.project.type >>
-            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
-            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-            REFERRER=<< pipeline.parameters.referrer >>
-            if [[ -z "$REFERRER" ]]; then
-              echo "Error: no referrer was provided"
-              exit 1
-            fi
-            SOURCE_BUCKET=<< pipeline.parameters.source_bucket >>
-            if [[ -z "$SOURCE_BUCKET" ]]; then
-              echo "Error: no source bucket was provided"
-              exit 1
-            fi
-            DESTINATION_BUCKET=<< pipeline.parameters.destination_bucket >>
-            if [[ -z "$DESTINATION_BUCKET" ]]; then
-              echo "Error: no destination bucket was provided"
-              exit 1
-            fi
-            echo "export REFERRER=${REFERRER}" >> $BASH_ENV
-            echo "export SOURCE_BUCKET=${SOURCE_BUCKET}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${DESTINATION_BUCKET}" >> $BASH_ENV
-      - run:
-          name: Sync S3 buckets with timeout
-          command: |
-            ./scripts/sync-s3-buckets-with-timeout.sh 175m
-
-  ######################## GLUE JOB: Jobs that run in prod ########################
-
-  start-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-            LOWER_ENV=<< pipeline.parameters.lower_env >>
-            if [[ -z "$LOWER_ENV" ]]; then
-              echo "Error: no lower environment was provided"
-              exit 1
-            fi
-            echo "export LOWER_ENV=${LOWER_ENV}" >> $BASH_ENV
-      - run:
-          name: Deploy Check Glue Job Run State Cron Lambda
-          command: |
-            npm run deploy:glue-cron -- $ENV
-      - run:
-          name: Start Glue Job
-          command: |
-            npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
-      - run:
-          name: Enable Check Glue Job Run State Cron
-          command: |
-            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
-
-  finish-glue-job:
-    docker:
-      - image: *efcms-docker-image
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
-          name: Disable Check Glue Job Run State Cron
-          command: |
-            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
-      - run:
-          name: Destroy Check Glue Job Run State Cron Lambda
-          command: |
-            npm run destroy:glue-cron -- $ENV
-
-only-prod: &only-prod
-  context: efcms-<< pipeline.git.branch >>
-  filters:
-    branches:
-      only:
-        - prod
-
-only-test: &only-test
-  filters:
-    branches:
-      only:
-        - test
-
-only-deployed-lower-environments: &only-deployed-lower-environments
-  filters:
-    branches:
-      only:
-        - develop
-        - experimental1
-        - experimental2
-        - experimental3
-        - experimental4
-        - experimental5
-        - irs
-        - migration
-        - staging
-        - test
 
 workflows:
   version: 2
-
-  build-and-deploy:
-    when: << pipeline.parameters.run_build_and_deploy >>
+  the-workflow:
+    when: << pipeline.parameters.run_the_workflow >>
     jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
-      - migrate:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - wait-for-migration:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
-      - smoketests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - loadtests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - smoketests
-      - smoketests-readonly:
-          <<: *only-deployed-lower-environments
-          requires:
-            - loadtests
-      - switch-colors:
-          <<: *only-deployed-lower-environments
-          requires:
-            - smoketests-readonly
-      - delete-api-mappings:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
-      - cleanup:
-          <<: *only-deployed-lower-environments
-          requires:
-            - switch-colors
+      - the-jerb
 
-  build-and-deploy-with-context:
-    when: << pipeline.parameters.run_build_and_deploy_with_context >>
-    jobs:
-      - deploy:
-          <<: *only-prod
-      - migrate:
-          <<: *only-prod
-          requires:
-            - deploy
-      - wait-for-migration:
-          <<: *only-prod
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-prod
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-prod
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-prod
-          requires:
-            - wait-for-reindex
-      - loadtests:
-          <<: *only-prod
-          requires:
-            - disable-reindex-cron
-      - smoketests-readonly:
-          <<: *only-prod
-          requires:
-            - loadtests
-      - deploy-switch-colors-cron:
-          <<: *only-prod
-          requires:
-            - smoketests-readonly
-      - wait-for-switch:
-          <<: *only-prod
-          type: approval
-          requires:
-            - deploy-switch-colors-cron
-      - disable-switch-colors-cron:
-          <<: *only-prod
-          requires:
-            - wait-for-switch
-      - switch-colors:
-          <<: *only-prod
-          requires:
-            - disable-switch-colors-cron
-      - backup-source-dynamo-table:
-          <<: *only-prod
-          requires:
-            - switch-colors
-      - delete-api-mappings:
-          <<: *only-prod
-          requires:
-            - switch-colors
-      - cleanup:
-          <<: *only-prod
-          requires:
-            - backup-source-dynamo-table
-            - delete-api-mappings
-
-  glue-to-test:
-    when:
-      or:
-        - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
-        - << pipeline.parameters.run_glue_to_test >>
-    jobs:
-      - delete-existing-data:
-          <<: *only-test
-      - redeploy-environment:
-          <<: *only-test
-          requires:
-            - delete-existing-data
-      - wait-for-deployment-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - redeploy-environment
-      - initiate-glue-job:
-          <<: *only-test
-          requires:
-            - wait-for-deployment-workflow
-      - wait-for-glue-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - initiate-glue-job
-      - wait-for-s3-sync-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - initiate-glue-job
-      - cleanup-glue-job:
-          <<: *only-test
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
-
-  glue-to-lower-env:
-    when: << pipeline.parameters.run_glue_to_lower_env >>
-    jobs:
-      - start-glue-job:
-          <<: *only-prod
-      - wait-for-glue-job:
-          <<: *only-prod
-          type: approval
-          requires:
-            - start-glue-job
-      - finish-glue-job:
-          <<: *only-prod
-          requires:
-            - wait-for-glue-job
-
-  sync-s3-to-lower-env:
-    when: << pipeline.parameters.run_sync_s3_to_lower_env >>
-    jobs:
-      - sync-s3-buckets-with-timeout:
-          <<: *only-deployed-lower-environments
+#parameters:
+#  run_build_and_deploy:
+#    default: true
+#    type: boolean
+#
+#  run_build_and_deploy_with_context:
+#    default: true
+#    type: boolean
+#
+#  run_glue_to_test:
+#    default: false
+#    type: boolean
+#
+#  run_glue_to_lower_env:
+#    default: false
+#    type: boolean
+#
+#  lower_env:
+#    default: test
+#    type: string
+#
+#  run_sync_s3_to_lower_env:
+#    default: false
+#    type: boolean
+#
+#  referrer:
+#    default: ''
+#    type: string
+#
+#  source_bucket:
+#    default: ''
+#    type: string
+#
+#  destination_bucket:
+#    default: ''
+#    type: string
+#
+#commands:
+#  npm-and-cypress-install:
+#    steps:
+#      - restore_cache:
+#          keys:
+#            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+#      - restore_cache:
+#          keys:
+#            - v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+#      - run:
+#          name: Install node dependencies
+#          command: |
+#            if [ ! -d node_modules ]; then
+#              npm ci
+#            else
+#              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
+#            fi
+#      - run:
+#          name: Install Cypress dependency
+#          command: |
+#            if [ ! -d ~/.cache/Cypress ]; then
+#              echo Installing Cypress
+#              ./node_modules/.bin/cypress install
+#            else
+#              echo Found cached Cypress version. Using cached Cypress folder.
+#            fi
+#      - run:
+#          name: Reset package-lock
+#          command: 'git checkout -- package-lock.json'
+#      - save_cache:
+#          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+#          paths:
+#            - node_modules
+#      - save_cache:
+#          key: v27-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+#          paths:
+#            - ~/.cache/Cypress
+#
+#  npm-install:
+#    steps:
+#      - restore_cache:
+#          keys:
+#            - v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+#      - run:
+#          name: Install node dependencies
+#          command: |
+#            if [ ! -d node_modules ]; then
+#              npm ci
+#            else
+#              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
+#            fi
+#      - run:
+#          name: Reset package-lock
+#          command: 'git checkout -- package-lock.json'
+#      - save_cache:
+#          key: v27-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+#          paths:
+#            - node_modules
+#
+#jobs:
+#  deploy:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    environment:
+#      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Build Docker Image
+#          command: |
+#            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+#      - run:
+#          name: Setup Blue Green Migration If Needed
+#          command: |
+#            ./setup-for-blue-green-migration.sh
+#      - run:
+#          no_output_timeout: 20m
+#          name: 'Deploy - Web API - Terraform'
+#          command: |
+#            cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
+#      - run:
+#          no_output_timeout: 20m
+#          name: 'Deploy - Web Client - Terraform'
+#          command: |
+#            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
+#      - run:
+#          name: Setup Elasticsearch Index Settings
+#          command: |
+#            ./web-api/setup-elasticsearch-index.sh $ENV
+#      - run:
+#          name: Admin User Setup
+#          command: |
+#            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
+#              npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
+#            else
+#              echo "skipping…"
+#            fi
+#      - run:
+#          name: Test Users Setup
+#          command: |
+#            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
+#              ./shared/admin-tools/user/setup-test-users.sh $ENV
+#            else
+#              echo "skipping…"
+#            fi
+#      - run:
+#          name: Judge Users Setup
+#          environment:
+#            FILE_NAME: ./scripts/data-import/judge/judge_users.csv
+#          command: |
+#            if [[ "${CIRCLE_BRANCH}" == "prod" ]] || [[ -n "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
+#              echo "skipping…"
+#              exit 0
+#            fi
+#            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+#              npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+#            else
+#              ./scripts/data-import/judge/bulk-import-judge-users.sh
+#            fi
+#      - run:
+#          name: 'Deploy - Web Client - S3'
+#          command: |
+#            ./web-client/deploy-ui.sh
+#      - run:
+#          name: 'Deploy - Public Web Client - S3'
+#          command: |
+#            ./web-client/deploy-public.sh
+#      - run:
+#          name: 'Deploy - Web API - Cognito Customize'
+#          command: |
+#            cd web-api && ./setup-cognito-ui.sh $ENV
+#      - run:
+#          name: 'Deploy - Authorizer Smoke Tests'
+#          command: |
+#            npm run verify-authorizers -- $ENV
+#      - run:
+#          name: 'Deploy - Verify Private S3 Buckets'
+#          command: |
+#            npm run verify-private-s3-buckets -- $ENV
+#      - run:
+#          name: 'Deploy - Verify Private Elasticsearch'
+#          command: |
+#            npm run verify-private-elasticsearch -- $ENV
+#      - run:
+#          name: 'Deploy - Verify Cognito Lambda Triggers'
+#          command: |
+#            npm run verify-cognito-lambda-triggers -- $ENV
+#      - run:
+#          name: 'Deploy - Verify USTC Admin User Disabled'
+#          command: |
+#            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
+#              npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
+#            else
+#              echo "skipping…"
+#            fi
+#      - store_artifacts:
+#          path: /home/app/cypress-smoketests/videos/
+#      - run:
+#          name: 'Deploy - Pending Color Switch'
+#          command: npm run pending-color-switch
+#
+#  migrate:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Deploy Check Migration Status Cron Lambda
+#          command: |
+#            npm run deploy:migration-cron -- $ENV
+#      - run:
+#          name: Setup Migration Infrastructure
+#          command: |
+#            if [ "$MIGRATE_FLAG" == "true" ]; then
+#              npm run deploy:migration -- $ENV
+#            fi
+#      - run:
+#          name: Disable Destination Table Stream
+#          command: |
+#            if [ "$MIGRATE_FLAG" == "true" ]; then
+#              ./web-api/disable-deploying-dynamo-stream-trigger.sh
+#            fi
+#      - run:
+#          name: Run Migration
+#          command: |
+#            if [ "$MIGRATE_FLAG" == "true" ]; then
+#              npm run start:migration -- $ENV
+#            fi
+#      - run:
+#          name: Enable Check Migration Status Cron
+#          command: |
+#            ./web-api/workflow-terraform/migration-cron/bin/enable.sh
+#
+#  prepare-for-reindex:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Disable Check Migration Status Cron
+#          command: |
+#            ./web-api/workflow-terraform/migration-cron/bin/disable.sh
+#      - run:
+#          name: Deploy Check Reindex Status Cron Lambda
+#          command: |
+#            npm run deploy:reindex-cron -- $ENV
+#      - run:
+#          name: Track successful migrations
+#          command: |
+#            if [ "$MIGRATE_FLAG" == "true" ]; then
+#              node ./web-api/track-successful-migrations.js
+#            fi
+#      - run:
+#          name: Enable Destination Table Stream
+#          command: |
+#            if [ "$MIGRATE_FLAG" == "true" ]; then
+#              ./web-api/enable-deploying-dynamo-stream-trigger.sh
+#            fi
+#      - run:
+#          name: Enable Check Reindex Status Cron
+#          command: |
+#            ./web-api/workflow-terraform/reindex-cron/bin/enable.sh
+#
+#  disable-reindex-cron:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Disable Check Reindex Status Cron
+#          command: |
+#            ./web-api/workflow-terraform/reindex-cron/bin/disable.sh
+#
+#  smoketests:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-and-cypress-install
+#      - run:
+#          name: Create Cypress Artifacts Directory
+#          command: mkdir /tmp/cypress
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: 'Disable Maintenance Mode'
+#          command: npm run maintenance:disengage $ENV
+#      - run:
+#          name: 'Cypress Smoke Tests'
+#          command: npm run cypress:smoketests
+#      - run:
+#          name: 'Pa11y Smoke Tests'
+#          command: npm run test:pa11y:smoketests
+#      - store_artifacts:
+#          path: /root/project/cypress/cypress-smoketests/videos/
+#
+#  smoketests-readonly:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-and-cypress-install
+#      - run:
+#          name: Create Cypress Artifacts Directory
+#          command: mkdir /tmp/cypress
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Create and Enable Test User
+#          command: npx ts-node --transpile-only ./scripts/create-and-enable-smoketest-user.js
+#      - run:
+#          name: 'Cypress Readonly Smoke Tests'
+#          command: |
+#            set +e
+#            npm run cypress:readonly
+#            echo "export READONLY_SMOKETESTS_RESULT=$?" >> $BASH_ENV
+#            set -e
+#      - run:
+#          name: Disable Test User
+#          command: npx ts-node --transpile-only ./scripts/disable-smoketest-user.js
+#      - run:
+#          name: Kill Build if Smoketests Failed
+#          command: ./scripts/kill-circle-build.sh
+#      - run:
+#          name: 'Cypress Public Readonly Smoke Tests'
+#          command: npm run cypress:readonly:public
+#      - store_artifacts:
+#          path: /root/project/cypress-readonly/videos/
+#
+#  loadtests:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-and-cypress-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: 'Load tests'
+#          command: npm run loadtest:pdf-generation
+#
+#  deploy-switch-colors-cron:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-and-cypress-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Deploy Switch Colors Cron
+#          command: |
+#            npm run deploy:switch-colors-cron -- $ENV
+#
+#  disable-switch-colors-cron:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-and-cypress-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Disable Switch Colors Cron
+#          command: |
+#            npm run destroy:switch-colors-cron -- $ENV
+#
+#  switch-colors:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: 'Switch Colors'
+#          command: npm run switch-colors
+#
+#  backup-source-dynamo-table:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: small
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Backup Source DynamoDB table
+#          command: |
+#            if [ $MIGRATE_FLAG == true ]; then
+#              npm run backup:dynamo-table -- $SOURCE_TABLE
+#            fi
+#
+#  delete-api-mappings:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: small
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Delete Source API Gateway Mappings
+#          command: |
+#            npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
+#
+#  cleanup:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Destroy Migration Infrastructure
+#          command: |
+#            if [ $MIGRATE_FLAG == true ]; then
+#              npm run destroy:migration -- $ENV
+#            fi
+#      - run:
+#          name: Destroy Check Migration Status Cron Infrastructure
+#          command: |
+#            npm run destroy:migration-cron -- $ENV
+#      - run:
+#          name: Destroy Check Reindex Status Cron Infrastructure
+#          command: |
+#            npm run destroy:reindex-cron -- $ENV
+#      - run:
+#          name: Delete Source ElasticSearch cluster
+#          command: |
+#            if [ $MIGRATE_FLAG == true ]; then
+#              npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
+#            fi
+#      - run:
+#          name: Delete Source Dynamo table
+#          command: |
+#            if [ $MIGRATE_FLAG == true ]; then
+#              npm run delete:dynamo-table -- $SOURCE_TABLE
+#            fi
+#      - run:
+#          name: Cleanup Deploy Table After Migration
+#          command: |
+#            if [ $MIGRATE_FLAG == true ]; then
+#              npm run migration:cleanup -- $ENV
+#            fi
+#
+#  ######################## GLUE JOB: Jobs that run in a lower environment ########################
+#
+#  delete-existing-data:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Setup the deploy table for a glue job
+#          command: |
+#            ./scripts/setup-deploy-table-for-glue-job.sh
+#      - run:
+#          name: Delete all existing dynamodb tables and elasticsearch clusters
+#          command: |
+#            ./scripts/delete-all-persistence.sh
+#
+#  redeploy-environment:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#            VCS=<< pipeline.project.type >>
+#            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+#            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+#      - run:
+#          name: Kick off a deployment
+#          command: |
+#            CIRCLE_PIPELINE_ID=$(curl --request POST \
+#              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+#              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+#              --header "content-type: application/json" \
+#              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
+#            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+#      - run:
+#          name: Deploy Wait for Workflow Cron Lambda
+#          command: |
+#            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+#            npm run deploy:wait-for-workflow-cron -- $ENV
+#      - run:
+#          name: Enable Wait for Workflow Cron
+#          command: |
+#            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+#
+#  initiate-glue-job:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#            source $BASH_ENV
+#            VCS=<< pipeline.project.type >>
+#            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+#            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+#            if [[ -z "$PROD_DOCUMENTS_BUCKET_NAME" ]]; then
+#              echo "Error: expected PROD_DOCUMENTS_BUCKET_NAME environment variable"
+#              exit 1
+#            fi
+#            echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
+#            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+#      - run:
+#          name: Disable Wait for Workflow Cron
+#          command: |
+#            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+#      - run:
+#          name: Destroy Wait for Workflow Lambda
+#          command: |
+#            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
+#            export CIRCLE_PIPELINE_ID=noop
+#            npm run destroy:wait-for-workflow-cron -- $ENV
+#      - run:
+#          name: Disable Dynamodb Streams
+#          command: |
+#            ./shared/admin-tools/dynamodb/toggle-streams.sh --off
+#      - run:
+#          name: Kick off the glue-to-lower-env workflow
+#          command: |
+#            CIRCLE_PIPELINE_ID=$(curl --request POST \
+#              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+#              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+#              --header "content-type: application/json" \
+#              --data "{\"branch\":\"prod\", \"parameters\":{ \
+#                \"run_build_and_deploy_with_context\":false, \
+#                \"run_glue_to_lower_env\":true, \
+#                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+#            echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
+#      - run:
+#          name: Deploy Wait for Workflow Cron Lambda
+#          command: |
+#            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+#            npm run deploy:wait-for-workflow-cron -- $ENV
+#      - run:
+#          name: Enable Wait for Workflow Cron
+#          command: |
+#            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/enable.sh
+#      - run:
+#          name: Kick off the sync-s3-to-lower-env workflow
+#          command: |
+#            curl --request POST \
+#              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+#              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+#              --header "content-type: application/json" \
+#              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+#                \"run_build_and_deploy\":false, \
+#                \"run_sync_s3_to_lower_env\":true, \
+#                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+#                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+#                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+#
+#  cleanup-glue-job:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Disable Wait for Workflow Cron
+#          command: |
+#            ./web-api/workflow-terraform/wait-for-workflow-cron/bin/disable.sh
+#      - run:
+#          name: Destroy Wait for Workflow Lambda
+#          command: |
+#            export APPROVAL_JOB_NAME=wait-for-glue-workflow
+#            export CIRCLE_PIPELINE_ID=noop
+#            npm run destroy:wait-for-workflow-cron -- $ENV
+#      - run:
+#          name: Enable Dynamodb Streams
+#          command: |
+#            ./shared/admin-tools/dynamodb/toggle-streams.sh --on
+#
+#  sync-s3-buckets-with-timeout:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#            VCS=<< pipeline.project.type >>
+#            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+#            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+#            REFERRER=<< pipeline.parameters.referrer >>
+#            if [[ -z "$REFERRER" ]]; then
+#              echo "Error: no referrer was provided"
+#              exit 1
+#            fi
+#            SOURCE_BUCKET=<< pipeline.parameters.source_bucket >>
+#            if [[ -z "$SOURCE_BUCKET" ]]; then
+#              echo "Error: no source bucket was provided"
+#              exit 1
+#            fi
+#            DESTINATION_BUCKET=<< pipeline.parameters.destination_bucket >>
+#            if [[ -z "$DESTINATION_BUCKET" ]]; then
+#              echo "Error: no destination bucket was provided"
+#              exit 1
+#            fi
+#            echo "export REFERRER=${REFERRER}" >> $BASH_ENV
+#            echo "export SOURCE_BUCKET=${SOURCE_BUCKET}" >> $BASH_ENV
+#            echo "export DESTINATION_BUCKET=${DESTINATION_BUCKET}" >> $BASH_ENV
+#      - run:
+#          name: Sync S3 buckets with timeout
+#          command: |
+#            ./scripts/sync-s3-buckets-with-timeout.sh 175m
+#
+#  ######################## GLUE JOB: Jobs that run in prod ########################
+#
+#  start-glue-job:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#            LOWER_ENV=<< pipeline.parameters.lower_env >>
+#            if [[ -z "$LOWER_ENV" ]]; then
+#              echo "Error: no lower environment was provided"
+#              exit 1
+#            fi
+#            echo "export LOWER_ENV=${LOWER_ENV}" >> $BASH_ENV
+#      - run:
+#          name: Deploy Check Glue Job Run State Cron Lambda
+#          command: |
+#            npm run deploy:glue-cron -- $ENV
+#      - run:
+#          name: Start Glue Job
+#          command: |
+#            npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+#      - run:
+#          name: Enable Check Glue Job Run State Cron
+#          command: |
+#            ./web-api/workflow-terraform/glue-cron/bin/enable.sh
+#
+#  finish-glue-job:
+#    docker:
+#      - image: *efcms-docker-image
+#        aws_auth:
+#          aws_access_key_id: $AWS_ACCESS_KEY_ID
+#          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+#    resource_class: medium+
+#    steps:
+#      - git-shallow-clone/checkout
+#      - npm-install
+#      - run:
+#          name: Setup Env
+#          command: |
+#            ./scripts/env/env-for-circle.sh
+#      - run:
+#          name: Disable Check Glue Job Run State Cron
+#          command: |
+#            ./web-api/workflow-terraform/glue-cron/bin/disable.sh
+#      - run:
+#          name: Destroy Check Glue Job Run State Cron Lambda
+#          command: |
+#            npm run destroy:glue-cron -- $ENV
+#
+#only-prod: &only-prod
+#  context: efcms-<< pipeline.git.branch >>
+#  filters:
+#    branches:
+#      only:
+#        - prod
+#
+#only-test: &only-test
+#  filters:
+#    branches:
+#      only:
+#        - test
+#
+#only-deployed-lower-environments: &only-deployed-lower-environments
+#  filters:
+#    branches:
+#      only:
+#        - develop
+#        - experimental1
+#        - experimental2
+#        - experimental3
+#        - experimental4
+#        - experimental5
+#        - irs
+#        - migration
+#        - staging
+#        - test
+#
+#workflows:
+#  version: 2
+#
+#  build-and-deploy:
+#    when: << pipeline.parameters.run_build_and_deploy >>
+#    jobs:
+#      - deploy:
+#          <<: *only-deployed-lower-environments
+#      - migrate:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - deploy
+#      - wait-for-migration:
+#          <<: *only-deployed-lower-environments
+#          type: approval
+#          requires:
+#            - migrate
+#      - prepare-for-reindex:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - wait-for-migration
+#      - wait-for-reindex:
+#          <<: *only-deployed-lower-environments
+#          type: approval
+#          requires:
+#            - prepare-for-reindex
+#      - disable-reindex-cron:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - wait-for-reindex
+#      - smoketests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#      - loadtests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - smoketests
+#      - smoketests-readonly:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - loadtests
+#      - switch-colors:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - smoketests-readonly
+#      - delete-api-mappings:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - switch-colors
+#      - cleanup:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - switch-colors
+#
+#  build-and-deploy-with-context:
+#    when: << pipeline.parameters.run_build_and_deploy_with_context >>
+#    jobs:
+#      - deploy:
+#          <<: *only-prod
+#      - migrate:
+#          <<: *only-prod
+#          requires:
+#            - deploy
+#      - wait-for-migration:
+#          <<: *only-prod
+#          type: approval
+#          requires:
+#            - migrate
+#      - prepare-for-reindex:
+#          <<: *only-prod
+#          requires:
+#            - wait-for-migration
+#      - wait-for-reindex:
+#          <<: *only-prod
+#          type: approval
+#          requires:
+#            - prepare-for-reindex
+#      - disable-reindex-cron:
+#          <<: *only-prod
+#          requires:
+#            - wait-for-reindex
+#      - loadtests:
+#          <<: *only-prod
+#          requires:
+#            - disable-reindex-cron
+#      - smoketests-readonly:
+#          <<: *only-prod
+#          requires:
+#            - loadtests
+#      - deploy-switch-colors-cron:
+#          <<: *only-prod
+#          requires:
+#            - smoketests-readonly
+#      - wait-for-switch:
+#          <<: *only-prod
+#          type: approval
+#          requires:
+#            - deploy-switch-colors-cron
+#      - disable-switch-colors-cron:
+#          <<: *only-prod
+#          requires:
+#            - wait-for-switch
+#      - switch-colors:
+#          <<: *only-prod
+#          requires:
+#            - disable-switch-colors-cron
+#      - backup-source-dynamo-table:
+#          <<: *only-prod
+#          requires:
+#            - switch-colors
+#      - delete-api-mappings:
+#          <<: *only-prod
+#          requires:
+#            - switch-colors
+#      - cleanup:
+#          <<: *only-prod
+#          requires:
+#            - backup-source-dynamo-table
+#            - delete-api-mappings
+#
+#  glue-to-test:
+#    when:
+#      or:
+#        - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
+#        - << pipeline.parameters.run_glue_to_test >>
+#    jobs:
+#      - delete-existing-data:
+#          <<: *only-test
+#      - redeploy-environment:
+#          <<: *only-test
+#          requires:
+#            - delete-existing-data
+#      - wait-for-deployment-workflow:
+#          <<: *only-test
+#          type: approval
+#          requires:
+#            - redeploy-environment
+#      - initiate-glue-job:
+#          <<: *only-test
+#          requires:
+#            - wait-for-deployment-workflow
+#      - wait-for-glue-workflow:
+#          <<: *only-test
+#          type: approval
+#          requires:
+#            - initiate-glue-job
+#      - wait-for-s3-sync-workflow:
+#          <<: *only-test
+#          type: approval
+#          requires:
+#            - initiate-glue-job
+#      - cleanup-glue-job:
+#          <<: *only-test
+#          requires:
+#            - wait-for-glue-workflow
+#            - wait-for-s3-sync-workflow
+#
+#  glue-to-lower-env:
+#    when: << pipeline.parameters.run_glue_to_lower_env >>
+#    jobs:
+#      - start-glue-job:
+#          <<: *only-prod
+#      - wait-for-glue-job:
+#          <<: *only-prod
+#          type: approval
+#          requires:
+#            - start-glue-job
+#      - finish-glue-job:
+#          <<: *only-prod
+#          requires:
+#            - wait-for-glue-job
+#
+#  sync-s3-to-lower-env:
+#    when: << pipeline.parameters.run_sync_s3_to_lower_env >>
+#    jobs:
+#      - sync-s3-buckets-with-timeout:
+#          <<: *only-deployed-lower-environments
