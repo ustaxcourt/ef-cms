@@ -1,6 +1,7 @@
 import { requireEnvVars } from '../util';
 requireEnvVars([
   'DEFAULT_ACCOUNT_PASS',
+  'DESTINATION_TABLE',
   'ELASTICSEARCH_ENDPOINT',
   'ENV',
   'REGION',
@@ -9,7 +10,7 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { DynamoDB } from 'aws-sdk';
 import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getUserPoolId, getVersion } from '../util';
+import { getUserPoolId } from '../util';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
@@ -27,7 +28,7 @@ const createOrUpdateCognitoUser = async ({
   role: string;
   userId: string;
   userPoolId: string;
-}) => {
+}): Promise<void> => {
   let userExists = false;
   try {
     await cognito.adminGetUser({
@@ -89,14 +90,12 @@ const deleteDuplicateImportedJudgeUser = async ({
   bulkImportedUserId,
   name,
   section,
-  version,
 }: {
   bulkImportedUserId: string;
   name: string;
   section: string;
-  version: string;
-}) => {
-  const TableName = `efcms-${process.env.ENV}-${version}`;
+}): Promise<void> => {
+  const TableName = process.env.DESTINATION_TABLE!;
 
   const sectionMappingKey = {
     pk: { S: `section|${section}` },
@@ -133,7 +132,17 @@ const deleteDuplicateImportedJudgeUser = async ({
   console.log(`Deleted duplicate ${name}`);
 };
 
-const getJudgeUsersByName = async (applicationContext: IApplicationContext) => {
+const getJudgeUsersByName = async (
+  applicationContext: IApplicationContext,
+): Promise<{
+  [key: string]: {
+    bulkImportedUserId?: string;
+    email: string;
+    gluedUserId?: string;
+    name: string;
+    section: string;
+  };
+}> => {
   const { results } = await search({
     applicationContext,
     searchParameters: {
@@ -193,7 +202,7 @@ const updateCognitoUserId = async ({
   gluedUserId: string;
   name: string;
   userPoolId: string;
-}) => {
+}): Promise<void> => {
   try {
     await cognito.adminUpdateUserAttributes({
       UserAttributes: [
@@ -212,7 +221,6 @@ const updateCognitoUserId = async ({
 };
 
 (async () => {
-  const version = await getVersion();
   const applicationContext = createApplicationContext({});
   const userPoolId = await getUserPoolId();
 
@@ -231,17 +239,18 @@ const updateCognitoUserId = async ({
         bulkImportedUserId,
         name,
         section,
-        version,
       });
     }
 
-    await createOrUpdateCognitoUser({
-      email,
-      name,
-      role: 'judge',
-      userId: gluedUserId,
-      userPoolId: userPoolId!,
-    });
+    if (gluedUserId) {
+      await createOrUpdateCognitoUser({
+        email,
+        name,
+        role: 'judge',
+        userId: gluedUserId,
+        userPoolId: userPoolId!,
+      });
+    }
 
     await cognito.adminSetUserPassword({
       Password: process.env.DEFAULT_ACCOUNT_PASS,
