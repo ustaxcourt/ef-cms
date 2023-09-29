@@ -54,6 +54,7 @@ import { fileExternalDocumentInteractor } from '../../shared/src/business/useCas
 import { forwardMessageInteractor } from '../../shared/src/business/useCases/messages/forwardMessageInteractor';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/business/useCases/generateDocketRecordPdfInteractor';
 import { generateDraftStampOrderInteractor } from '../../shared/src/business/useCases/generateDraftStampOrderInteractor';
+import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
 import { generateNoticeOfChangeOfTrialJudgeInteractor } from '../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from '../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor';
 import { generateNoticeOfTrialIssuedInteractor } from '../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor';
@@ -258,6 +259,7 @@ const useCases = {
   forwardMessageInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
+  generateEntryOfAppearancePdfInteractor,
   generateNoticeOfChangeOfTrialJudgeInteractor,
   generateNoticeOfChangeToRemoteProceedingInteractor,
   generateNoticeOfTrialIssuedInteractor,
