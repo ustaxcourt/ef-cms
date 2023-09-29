@@ -168,6 +168,10 @@ export class WorkItem extends JoiValidationEntity {
     return WORK_ITEM_VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return WORK_ITEM_VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return {};
   }
