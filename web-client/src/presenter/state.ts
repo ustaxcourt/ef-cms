@@ -328,7 +328,6 @@ export const baseState = {
     timeRemaining: Number.POSITIVE_INFINITY,
   },
   form: {} as any,
-
   fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
@@ -338,8 +337,11 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   health: undefined as any,
+  idleLogoutState: {
+    logoutAt: undefined,
+    state: 'INITIAL' as 'INITIAL' | 'MONITORING' | 'COUNTDOWN',
+  },
   idleStatus: IDLE_STATUS.ACTIVE,
-  idleTimerRef: null,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
@@ -349,6 +351,7 @@ export const baseState = {
   ) as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
+  lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
