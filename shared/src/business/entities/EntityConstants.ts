@@ -963,7 +963,6 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
-export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
@@ -1132,7 +1131,7 @@ export const US_STATES_OTHER = {
   FM: 'Federated States of Micronesia',
   GU: 'Guam',
   MH: 'Marshall Islands',
-  MP: 'Norther Mariana Islands',
+  MP: 'Northern Mariana Islands',
   PR: 'Puerto Rico',
   PW: 'Palau',
   VI: 'Virgin Islands',

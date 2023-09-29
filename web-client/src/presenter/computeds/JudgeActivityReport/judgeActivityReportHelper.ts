@@ -1,31 +1,26 @@
-import {
-  ASCENDING,
-  CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-} from '@shared/business/entities/EntityConstants';
-import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
+import { ASCENDING } from '@shared/business/entities/EntityConstants';
+import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { getSubmittedOrCAVDate } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
-  closedCasesTotal: number | undefined;
-  submittedAndCavCasesByJudge: any | undefined;
-  isFormPristine: boolean | undefined;
-  opinionsFiledTotal: number | undefined;
-  ordersFiledTotal: number | undefined;
-  progressDescriptionTableTotal: number | undefined;
-  reportHeader: string | undefined;
-  showResultsTables: boolean | undefined;
-  showSelectDateRangeText: boolean | undefined;
-  trialSessionsHeldTotal: number | undefined;
+  closedCasesTotal: number;
+  isFormPristine: boolean;
+  opinionsFiledTotal: number;
+  orders: CaseDocumentsCountType[];
+  ordersFiledTotal: number;
+  progressDescriptionTableTotal: number;
+  reportHeader: string;
+  showResultsTables: boolean;
+  showSelectDateRangeText: boolean;
+  submittedAndCavCasesByJudge: any;
   today: string;
-  showPaginator: boolean;
-  pageCount: number;
-  orders: AggregatedEventCodesType;
+  trialSessionsHeldTotal: number;
 }
 
 export const judgeActivityReportHelper = (
-  get: any,
+  get: Get,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
   const { endDate, startDate } = get(state.judgeActivityReport.filters);
@@ -35,17 +30,17 @@ export const judgeActivityReportHelper = (
   const {
     casesClosedByJudge,
     opinions,
-    orders = [],
+    orders,
     submittedAndCavCasesByJudge = [],
     totalCountForSubmittedAndCavCases,
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
 
-  let resultsCount: number = 0,
-    showSelectDateRangeText: boolean = false;
+  let resultsCount: number = 0;
+  let showSelectDateRangeText: boolean = false;
 
-  const hasFormBeenSubmitted: boolean =
-    casesClosedByJudge && opinions && orders && trialSessions;
+  const hasFormBeenSubmitted =
+    !!casesClosedByJudge && !!opinions && !!orders && !!trialSessions;
 
   if (hasFormBeenSubmitted) {
     resultsCount =
@@ -66,55 +61,60 @@ export const judgeActivityReportHelper = (
 
   const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
-  submittedAndCavCasesByJudge.forEach(individualCase => {
-    if (individualCase.leadDocketNumber === individualCase.docketNumber) {
-      individualCase.consolidatedIconTooltipText = 'Lead case';
-      individualCase.isLeadCase = true;
-      individualCase.inConsolidatedGroup = true;
-    }
+  const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(
+    individualCase => {
+      let consolidatedIconTooltipText = '';
+      let isLeadCase = false;
+      let inConsolidatedGroup = false;
+      let formattedFinalBriefDueDate = '';
 
-    individualCase.statusDate = individualCase.caseStatusHistory
-      ? getSubmittedOrCAVDate(
-          applicationContext,
-          individualCase.caseStatusHistory,
-        )
-      : '';
+      if (individualCase.leadDocketNumber === individualCase.docketNumber) {
+        consolidatedIconTooltipText = 'Lead case';
+        isLeadCase = true;
+        inConsolidatedGroup = true;
+      }
 
-    if (individualCase.caseWorksheet) {
-      individualCase.caseWorksheet.formattedFinalBriefDueDate = individualCase
-        .caseWorksheet.finalBriefDueDate
-        ? applicationContext
-            .getUtilities()
-            .formatDateString(
-              individualCase.caseWorksheet.finalBriefDueDate,
-              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-            )
-        : '';
-    }
-  });
+      if (individualCase.caseWorksheet) {
+        formattedFinalBriefDueDate = individualCase.caseWorksheet
+          .finalBriefDueDate
+          ? applicationContext
+              .getUtilities()
+              .formatDateString(
+                individualCase.caseWorksheet.finalBriefDueDate,
+                applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+              )
+          : '';
+      }
+
+      return {
+        ...individualCase,
+        caseWorksheet: {
+          ...individualCase.caseWorksheet,
+          formattedFinalBriefDueDate,
+        },
+        consolidatedIconTooltipText,
+        inConsolidatedGroup,
+        isLeadCase,
+      };
+    },
+  );
 
   const { sortField, sortOrder } = get(state.tableSort);
-  console.log(sortField, sortOrder);
 
-  submittedAndCavCasesByJudge.sort((a, b) => {
-    if (sortField === 'daysElapsedSinceLastStatusChange') {
+  submittedAndCavCasesRows.sort((a, b) => {
+    if (typeof a[sortField] === 'number') {
       return sortOrder === ASCENDING
         ? a[sortField] - b[sortField]
         : b[sortField] - a[sortField];
-    } else if (sortField === 'associatedJudge') {
+    } else if (typeof a[sortField] === 'string') {
       return sortOrder === ASCENDING
         ? a[sortField].localeCompare(b[sortField])
         : b[sortField].localeCompare(a[sortField]);
     }
+    return 0;
   });
 
-  console.log(submittedAndCavCasesByJudge[0]);
-
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
-
-  const pageCount = Math.ceil(
-    totalCountForSubmittedAndCavCases / CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-  );
 
   const ordersToDisplay = orders.aggregations?.filter(agg => agg.count);
 
@@ -124,13 +124,11 @@ export const judgeActivityReportHelper = (
     opinionsFiledTotal: opinions?.total || 0,
     orders: ordersToDisplay,
     ordersFiledTotal: orders?.total || 0,
-    pageCount,
     progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
     reportHeader,
-    showPaginator: pageCount > 1,
     showResultsTables: resultsCount > 0,
     showSelectDateRangeText,
-    submittedAndCavCasesByJudge,
+    submittedAndCavCasesByJudge: submittedAndCavCasesRows,
     today,
     trialSessionsHeldTotal: trialSessions?.total || 0,
   };

@@ -1,15 +1,15 @@
+import {
+  CavAndSubmittedFilteredCasesType,
+  JudgeActivityReportCavAndSubmittedCasesRequest,
+} from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { post } from '../requests';
 
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext: ClientApplicationContext,
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
-  cases: (RawCase & {
-    daysElapsedSinceLastStatusChange: number;
-    formattedCaseCount: number;
-  })[];
+  cases: CavAndSubmittedFilteredCasesType[];
   totalCount: number;
 }> => {
   return post({

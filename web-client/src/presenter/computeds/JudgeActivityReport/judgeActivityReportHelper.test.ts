@@ -1,9 +1,12 @@
 import {
+  ASCENDING,
   CASE_STATUS_TYPES,
+  DESCENDING,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_SUBMITTED_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
 import { judgeUser } from '../../../../../shared/src/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -13,7 +16,6 @@ describe('judgeActivityReportHelper', () => {
   let mockJudgeActivityReport;
   let baseState;
 
-  const mockTotalCountForSubmittedAndCavCases = 15;
   let mockSubmittedAndCavCasesByJudge;
 
   const judgeActivityReportHelper = withAppContextDecorator(
@@ -25,7 +27,7 @@ describe('judgeActivityReportHelper', () => {
     mockSubmittedAndCavCasesByJudge = [
       {
         ...MOCK_SUBMITTED_CASE,
-        daysElapsedSinceLastStatusChange: 1,
+        daysElapsedSinceLastStatusChange: 20,
         docketNumber: '101-20',
         formattedCaseCount: 4,
       },
@@ -36,7 +38,7 @@ describe('judgeActivityReportHelper', () => {
       },
       {
         ...MOCK_SUBMITTED_CASE,
-        daysElapsedSinceLastStatusChange: 1,
+        daysElapsedSinceLastStatusChange: 7,
         docketNumber: '102-20',
       },
     ];
@@ -104,6 +106,10 @@ describe('judgeActivityReportHelper', () => {
         filters: {},
         judgeActivityReportData: mockJudgeActivityReport,
         judgeNameToDisplayForHeader: judgeUser.name,
+      },
+      tableSort: {
+        sortField: 'daysElapsedSinceLastStatusChange',
+        sortOrder: ASCENDING,
       },
       validationErrors: {
         endDate: undefined,
@@ -452,57 +458,115 @@ describe('judgeActivityReportHelper', () => {
       ).toBe(1);
     });
 
-    it('should return calculate statusDate using the case caseStatusHistory if available', () => {
-      const expectedStatusDate = applicationContext
-        .getUtilities()
-        .formatDateString(
-          MOCK_SUBMITTED_CASE.caseStatusHistory[0].date,
-          applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-        );
-      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        mockSubmittedAndCavCasesByJudge;
+    it('should sort by daysElapsedSinceLastStatusChange descending', () => {
+      const state = cloneDeep(baseState);
+      state.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            ...MOCK_SUBMITTED_CASE,
+            daysElapsedSinceLastStatusChange: 20,
+            docketNumber: '101-20',
+            formattedCaseCount: 4,
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            daysElapsedSinceLastStatusChange: 1,
+            docketNumber: '103-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            daysElapsedSinceLastStatusChange: 7,
+            docketNumber: '102-20',
+          },
+        ];
+      state.tableSort = {
+        sortField: 'daysElapsedSinceLastStatusChange',
+        sortOrder: DESCENDING,
+      };
+
       const { submittedAndCavCasesByJudge } = runCompute(
         judgeActivityReportHelper,
         {
-          state: baseState,
+          state,
         },
       );
 
-      expect(submittedAndCavCasesByJudge.length).toBe(3);
-      expect(submittedAndCavCasesByJudge[0].statusDate).toBe(
-        expectedStatusDate,
-      );
-      expect(submittedAndCavCasesByJudge[1].statusDate).toBe(
-        expectedStatusDate,
-      );
-      expect(submittedAndCavCasesByJudge[2].statusDate).toBe('');
-    });
-  });
-
-  describe('pageCount and showPaginator', () => {
-    it('should return a pageCount of 1 and showPaginator as false for single page display', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
-        mockTotalCountForSubmittedAndCavCases;
-      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        mockSubmittedAndCavCasesByJudge;
-
-      const result = runCompute(judgeActivityReportHelper, {
-        state: baseState,
-      });
-      expect(result.pageCount).toBe(1);
-      expect(result.showPaginator).toBe(false);
+      const expectedOrder = [
+        {
+          daysElapsedSinceLastStatusChange: 20,
+          docketNumber: '101-20',
+        },
+        {
+          daysElapsedSinceLastStatusChange: 7,
+          docketNumber: '102-20',
+        },
+        {
+          daysElapsedSinceLastStatusChange: 1,
+          docketNumber: '103-20',
+        },
+      ];
+      const actualOrder = submittedAndCavCasesByJudge.map(c => ({
+        daysElapsedSinceLastStatusChange: c.daysElapsedSinceLastStatusChange,
+        docketNumber: c.docketNumber,
+      }));
+      expect(actualOrder).toEqual(expectedOrder);
     });
 
-    it('should return a pageCount of 2 and showPaginator as true for multi-paginated page display', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases = 115;
-      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        mockSubmittedAndCavCasesByJudge;
+    it('should sort by associatedJudge descending', () => {
+      const state = cloneDeep(baseState);
+      state.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            daysElapsedSinceLastStatusChange: 20,
+            docketNumber: '101-20',
+            formattedCaseCount: 4,
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Buch',
+            daysElapsedSinceLastStatusChange: 1,
+            docketNumber: '103-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Sotomayor',
+            daysElapsedSinceLastStatusChange: 7,
+            docketNumber: '102-20',
+          },
+        ];
+      state.tableSort = {
+        sortField: 'associatedJudge',
+        sortOrder: DESCENDING,
+      };
 
-      const result = runCompute(judgeActivityReportHelper, {
-        state: baseState,
-      });
-      expect(result.pageCount).toBe(2);
-      expect(result.showPaginator).toBe(true);
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state,
+        },
+      );
+
+      const expectedOrder = [
+        {
+          associatedJudge: 'Sotomayor',
+          docketNumber: '102-20',
+        },
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '101-20',
+        },
+        {
+          associatedJudge: 'Buch',
+          docketNumber: '103-20',
+        },
+      ];
+      const actualOrder = submittedAndCavCasesByJudge.map(c => ({
+        associatedJudge: c.associatedJudge,
+        docketNumber: c.docketNumber,
+      }));
+      expect(actualOrder).toEqual(expectedOrder);
     });
   });
 });
