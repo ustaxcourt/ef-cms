@@ -1,12 +1,12 @@
-import {
-  CaseDocumentsAggregationReturnType,
-  JudgeActivityReportFilters,
-  getCountOfCaseDocumentsFiledByJudgesInteractor,
-} from './getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import {
   JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } from '../../entities/EntityConstants';
+import {
+  JudgeActivityReportFilters,
+  getCountOfCaseDocumentsFiledByJudgesInteractor,
+} from './getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 import {
@@ -57,7 +57,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   });
 
   it('should make a call to return the case documents filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    const results: CaseDocumentsAggregationReturnType =
+    const results: AggregatedEventCodesType =
       await getCountOfCaseDocumentsFiledByJudgesInteractor(
         applicationContext,
         mockValidRequest,
