@@ -10,14 +10,19 @@ import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventC
 export type JudgeActivityReportFilters = {
   endDate: string;
   startDate: string;
-  documentEventCodes?: string[];
-  judgeId?: string;
   judges: string[];
+};
+
+export type GetCountOfCaseDocumentsFiledByJudgesRequest = {
+  endDate: string;
+  startDate: string;
+  judges: string[];
+  documentEventCodes: string[];
 };
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = async (
   applicationContext: IApplicationContext,
-  params: JudgeActivityReportFilters,
+  params: GetCountOfCaseDocumentsFiledByJudgesRequest,
 ): Promise<AggregatedEventCodesType> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
