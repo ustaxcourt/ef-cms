@@ -707,6 +707,10 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      REFERRER: << pipeline.parameters.referrer >>
+      SOURCE_BUCKET: << pipeline.parameters.source_bucket >>
+      DESTINATION_BUCKET: << pipeline.parameters.destination_bucket >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -717,24 +721,18 @@ jobs:
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-            REFERRER=<< pipeline.parameters.referrer >>
             if [[ -z "$REFERRER" ]]; then
               echo "Error: no referrer was provided"
               exit 1
             fi
-            SOURCE_BUCKET=<< pipeline.parameters.source_bucket >>
             if [[ -z "$SOURCE_BUCKET" ]]; then
               echo "Error: no source bucket was provided"
               exit 1
             fi
-            DESTINATION_BUCKET=<< pipeline.parameters.destination_bucket >>
             if [[ -z "$DESTINATION_BUCKET" ]]; then
               echo "Error: no destination bucket was provided"
               exit 1
             fi
-            echo "export REFERRER=${REFERRER}" >> $BASH_ENV
-            echo "export SOURCE_BUCKET=${SOURCE_BUCKET}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${DESTINATION_BUCKET}" >> $BASH_ENV
       - run:
           name: Sync S3 buckets with timeout
           command: |
@@ -749,6 +747,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      LOWER_ENV: << pipeline.parameters.lower_env >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -756,12 +756,10 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            LOWER_ENV=<< pipeline.parameters.lower_env >>
             if [[ -z "$LOWER_ENV" ]]; then
               echo "Error: no lower environment was provided"
               exit 1
             fi
-            echo "export LOWER_ENV=${LOWER_ENV}" >> $BASH_ENV
       - run:
           name: Deploy Check Glue Job Run State Cron Lambda
           command: |
