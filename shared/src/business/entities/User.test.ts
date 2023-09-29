@@ -284,4 +284,26 @@ describe('User entity', () => {
     });
     expect(user.pendingEmailVerificationToken).toBeDefined();
   });
+
+  describe('validation errors', () => {
+    it('should return error messages related to the "contact" property', () => {
+      const user = new User({
+        contact: {},
+        name: 'Saul Goodman',
+        pendingEmail: 'test@example.com',
+        pendingEmailVerificationToken: null,
+        role: ROLES.irsPractitioner,
+      });
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        address1: 'Enter mailing address',
+        city: 'Enter city',
+        countryType: 'Enter country type',
+        phone: 'Enter phone number',
+        postalCode: 'Enter ZIP code',
+        state: 'Enter state',
+        userId: '"userId" is required',
+      });
+    });
+  });
 });
