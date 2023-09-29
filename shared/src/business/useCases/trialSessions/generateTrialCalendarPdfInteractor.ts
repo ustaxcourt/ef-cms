@@ -32,11 +32,16 @@ export const generateTrialCalendarPdfInteractor = async (
     trialSession.postalCode,
   ]).join(' ');
 
-  let [hour, min]: any = trialSession.startTime.split(':');
-  let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
+  let startTimeFormatted;
+  if (trialSession.startTime) {
+    let [hour, min]: any = trialSession.startTime.split(':');
+    let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
 
-  if (+hour > 12) {
-    hour = +hour - 12;
+    if (+hour > 12) {
+      hour = +hour - 12;
+    }
+
+    startTimeFormatted = `${hour}:${min} ${startTimeExtension}`;
   }
 
   const file = await applicationContext.getDocumentGenerators().trialCalendar({
@@ -60,7 +65,7 @@ export const generateTrialCalendarPdfInteractor = async (
         notes: trialSession.notes,
         sessionType: trialSession.sessionType,
         startDate: formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR'),
-        startTime: `${hour}:${min} ${startTimeExtension}`,
+        startTime: startTimeFormatted,
         trialClerk:
           trialSession.trialClerk?.name ||
           trialSession.alternateTrialClerkName ||
@@ -84,16 +89,21 @@ export const getPractitionerName = practitioner => {
 };
 
 export const formatCases = ({ applicationContext, calendaredCases }) => {
-  const formattedOpenCases = calendaredCases
+  return calendaredCases
     .filter(calendaredCase => !calendaredCase.removedFromTrial)
     .sort(compareCasesByDocketNumber)
     .map(openCase => {
+      const { inConsolidatedGroup, isLeadCase } = applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(openCase, calendaredCases);
+
       return {
+        calendarNotes: openCase.calendarNotes,
         caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
         docketNumber: openCase.docketNumber,
         docketNumberWithSuffix: openCase.docketNumberWithSuffix,
-        inConsolidatedGroup: openCase.inConsolidatedGroup,
-        isLeadCase: openCase.isLeadCase,
+        inConsolidatedGroup,
+        isLeadCase,
         petitionerCounsel: (openCase.privatePractitioners || []).map(
           getPractitionerName,
         ),
@@ -102,5 +112,4 @@ export const formatCases = ({ applicationContext, calendaredCases }) => {
         ),
       };
     });
-  return formattedOpenCases;
 };

@@ -12,6 +12,7 @@ export const trialCalendar = async ({
       docketNumberWithSuffix: string;
       caseTitle: string;
       respondentCounsel: string[];
+      inConsolidatedGroup: boolean;
       calendarNotes: string;
       isLeadCase: boolean;
       petitionerCounsel: string[];
@@ -20,23 +21,22 @@ export const trialCalendar = async ({
       startTime: string;
       startDate: string;
       sessionType: string;
-      courthouseName: string;
-      address1: string;
-      address2: string;
+      courthouseName?: string;
+      address1?: string;
+      address2?: string;
       formattedCityStateZip: string;
       judge: string;
       trialClerk: string;
       courtReporter: string;
-      notes: string;
+      notes?: string;
       irsCalendarAdministrator: string;
       noLocationEntered: boolean;
-      trialLocation: string;
+      trialLocation?: string;
     };
   };
 }): Promise<Buffer> => {
   const { cases, sessionDetail } = data;
 
-  // TODO: Sidequest
   const trialCalendarTemplate = reactTemplateGenerator({
     componentName: 'TrialCalendar',
     data: {
