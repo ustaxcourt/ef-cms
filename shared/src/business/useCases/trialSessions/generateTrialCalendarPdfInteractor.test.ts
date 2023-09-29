@@ -2,11 +2,7 @@ import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import {
-  formatCases,
-  generateTrialCalendarPdfInteractor,
-  getPractitionerName,
-} from './generateTrialCalendarPdfInteractor';
+import { generateTrialCalendarPdfInteractor } from './generateTrialCalendarPdfInteractor';
 import {
   irsPractitionerUser,
   privatePractitionerUser,
@@ -25,6 +21,23 @@ describe('generateTrialCalendarPdfInteractor', () => {
     },
     {
       ...MOCK_CASE,
+      docketNumber: '24529-22',
+      docketNumberWithSuffix: '24529-22',
+      leadDocketNumber: '34189-21',
+    },
+    {
+      ...MOCK_CASE,
+      docketNumber: '8904-22',
+      docketNumberWithSuffix: '8904-22',
+    },
+    {
+      ...MOCK_CASE,
+      docketNumber: '18072-22',
+      docketNumberWithSuffix: '18072-22',
+      leadDocketNumber: '34189-21',
+    },
+    {
+      ...MOCK_CASE,
       docketNumber: '101-18',
       docketNumberWithSuffix: '101-18',
     },
@@ -36,9 +49,9 @@ describe('generateTrialCalendarPdfInteractor', () => {
     },
     {
       ...MOCK_CASE,
-      docketNumber: '150-19',
-      docketNumberWithSuffix: '150-19',
-      leadDocketNumber: '150-19',
+      docketNumber: '34189-21',
+      docketNumberWithSuffix: '34189-21',
+      leadDocketNumber: '34189-21',
     },
   ];
 
@@ -58,10 +71,13 @@ describe('generateTrialCalendarPdfInteractor', () => {
       .getDownloadPolicyUrl.mockReturnValue(mockPdfUrl);
   });
 
-  it('should generate the trial session calendar pdf including open cases', async () => {
-    await generateTrialCalendarPdfInteractor(applicationContext, {
-      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-    });
+  it('should generate the trial session information pdf and return the url to access it', async () => {
+    const result = await generateTrialCalendarPdfInteractor(
+      applicationContext,
+      {
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
+      },
+    );
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
@@ -99,10 +115,40 @@ describe('generateTrialCalendarPdfInteractor', () => {
           {
             calendarNotes: undefined,
             caseTitle: 'Test Petitioner',
-            docketNumber: '150-19',
-            docketNumberWithSuffix: '150-19',
+            docketNumber: '34189-21',
+            docketNumberWithSuffix: '34189-21',
             inConsolidatedGroup: true,
             isLeadCase: true,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '18072-22',
+            docketNumberWithSuffix: '18072-22',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '24529-22',
+            docketNumberWithSuffix: '24529-22',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
+            docketNumber: '8904-22',
+            docketNumberWithSuffix: '8904-22',
+            inConsolidatedGroup: false,
+            isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
           },
@@ -125,92 +171,41 @@ describe('generateTrialCalendarPdfInteractor', () => {
         },
       },
     });
-  });
-
-  it('should return the trial session calendar pdf url', async () => {
-    const result = await generateTrialCalendarPdfInteractor(
-      applicationContext,
-      {
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-      },
-    );
-
     expect(result.url).toBe(mockPdfUrl.url);
   });
 
-  it('should set calendarNotes for each case in trialSession.caseOrder when the case has calendarNotes', async () => {
+  it('should NOT include cases that have been removed from trial on the generated PDF', async () => {
     await generateTrialCalendarPdfInteractor(applicationContext, {
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
     });
 
-    const caseWithCalendarNotes = applicationContext
-      .getDocumentGenerators()
-      .trialCalendar.mock.calls[0][0].data.cases.find(
-        c => c.docketNumber === '102-19',
-      );
-    expect(caseWithCalendarNotes.calendarNotes).toBe('this is a test');
+    const casesOnPDF =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.cases;
+    const mockRemovedFromTrialCase = mockCases.find(m => m.removedFromTrial);
+    expect(mockRemovedFromTrialCase).toBeTruthy(); // there is a case in the mocks which is removed from trial
+    expect(
+      casesOnPDF.find(
+        m => m.docketNumber === mockRemovedFromTrialCase!.docketNumber,
+      ),
+    ).toBeFalsy();
   });
 
-  describe('format cases', () => {
-    it('should filter out cases that have been removed from trial', () => {
-      const result = formatCases({
-        applicationContext,
-        calendaredCases: mockCases,
+  it('should format trial session start time when it has been set', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_INPERSON,
+        startTime: '15:00',
       });
 
-      expect(mockCases.find(m => m.removedFromTrial)).toBeTruthy(); // there is a case in the mocks which is removed from trial
-      expect(result.find(m => m.docketNumber === '123-20')).toBeFalsy();
+    await generateTrialCalendarPdfInteractor(applicationContext, {
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
     });
 
-    it('should sort cases by ascending docket number', () => {
-      const result = formatCases({
-        applicationContext,
-        calendaredCases: mockCases,
-      });
-
-      expect(result[0].docketNumber).toBe('101-18');
-      expect(result[1].docketNumber).toBe('102-19');
-    });
-
-    it('should set casse title to an empty string when caseCaption is undefined', () => {
-      const result = formatCases({
-        applicationContext,
-        calendaredCases: [{ ...mockCases[0], caseCaption: undefined }],
-      });
-
-      expect(result[0].caseTitle).toBe('');
-    });
-
-    it('should format practitioner name + barNumber', () => {
-      const result = formatCases({
-        applicationContext,
-        calendaredCases: mockCases,
-      });
-
-      expect(result[1].petitionerCounsel[0]).toBe(
-        'Private Practitioner (BN1234)',
-      );
-      expect(result[1].respondentCounsel[0]).toBe('IRS Practitioner (BN2345)');
-    });
-  });
-
-  describe('getPractitionerName', () => {
-    it('should return the name and bar number of the practitioner as one string', () => {
-      const result = getPractitionerName({
-        barNumber: '123',
-        name: 'Prac',
-      });
-
-      expect(result).toEqual('Prac (123)');
-    });
-
-    it('should return the name of the practitioner when bar number is undefined', () => {
-      const result = getPractitionerName({
-        barNumber: undefined,
-        name: 'Prac',
-      });
-
-      expect(result).toEqual('Prac');
-    });
+    const formattedTrialSession =
+      applicationContext.getDocumentGenerators().trialCalendar.mock.calls[0][0]
+        .data.sessionDetail;
+    expect(formattedTrialSession.startTime).toBe('3:00 pm');
   });
 });
