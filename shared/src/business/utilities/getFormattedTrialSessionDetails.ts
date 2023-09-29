@@ -1,8 +1,13 @@
-import { PARTIES_CODES } from '../entities/EntityConstants';
+import {
+  DOCKET_NUMBER_SUFFIXES,
+  PARTIES_CODES,
+} from '../entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { compact, partition } from 'lodash';
 
-export const setPretrialMemorandumFiler = ({ caseItem }) => {
-  let filingPartiesCode;
+export const setPretrialMemorandumFiler = ({ caseItem }): string => {
+  let filingPartiesCode: string = '';
   let numberOfPetitionerFilers = 0;
 
   const pretrialMemorandumDocketEntries = caseItem.docketEntries.filter(
@@ -31,38 +36,55 @@ export const setPretrialMemorandumFiler = ({ caseItem }) => {
       filingPartiesCode = PARTIES_CODES.RESPONDENT;
     }
   } else {
-    filingPartiesCode = undefined;
+    filingPartiesCode = '';
   }
 
   return filingPartiesCode;
 };
 
-export const formatCase = ({
+export type FormattedTrialSessionCase = RawCase & {
+  inConsolidatedGroup: boolean;
+  consolidatedIconTooltipText: string;
+  shouldIndent: boolean;
+  isLeadCase: boolean;
+  caseTitle: string;
+  removedFromTrialDateFormatted: string;
+  filingPartiesCode: string;
+  isDocketSuffixHighPriority: boolean;
+};
+
+export const formatCaseForTrialSession = ({
   applicationContext,
   caseItem,
-  eligibleCases,
+  eligibleCases = [],
   setFilingPartiesCode = false,
-}) => {
-  caseItem.caseTitle = applicationContext.getCaseTitle(
-    caseItem.caseCaption || '',
-  );
+}: {
+  applicationContext: IApplicationContext;
+  caseItem: RawCase;
+  eligibleCases?: RawEligibleCase[];
+  setFilingPartiesCode?: boolean;
+}): FormattedTrialSessionCase => {
+  let removedFromTrialDateFormatted = '';
+  let filingPartiesCode = '';
+  const caseTitle = applicationContext.getCaseTitle(caseItem.caseCaption || '');
+
   if (caseItem.removedFromTrialDate) {
-    caseItem.removedFromTrialDateFormatted = applicationContext
+    removedFromTrialDateFormatted = applicationContext
       .getUtilities()
-      .formatDateString(caseItem.removedFromTrialDate, 'MMDDYY');
+      .formatDateString(caseItem.removedFromTrialDate, FORMATS.MMDDYY);
   }
-  const { DOCKET_NUMBER_SUFFIXES } = applicationContext.getConstants();
+
   const highPrioritySuffixes = [
     DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
     DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
     DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
   ];
-  caseItem.isDocketSuffixHighPriority = highPrioritySuffixes.includes(
-    caseItem.docketNumberSuffix,
+  const isDocketSuffixHighPriority = highPrioritySuffixes.includes(
+    caseItem.docketNumberSuffix!,
   );
 
   if (setFilingPartiesCode) {
-    caseItem.filingPartiesCode = setPretrialMemorandumFiler({
+    filingPartiesCode = setPretrialMemorandumFiler({
       caseItem,
     });
   }
@@ -71,7 +93,13 @@ export const formatCase = ({
     .getUtilities()
     .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 
-  return newCaseItem;
+  return {
+    ...newCaseItem,
+    caseTitle,
+    filingPartiesCode,
+    isDocketSuffixHighPriority,
+    removedFromTrialDateFormatted,
+  };
 };
 
 const getDocketNumberSortString = ({ allCases = [], theCase }) => {
@@ -121,13 +149,10 @@ export const getFormattedTrialSessionDetails = ({
 }) => {
   if (!trialSession) return undefined;
 
-  const eligibleCases = trialSession.calendaredCases || [];
-
-  const allCases = eligibleCases.map(caseItem =>
-    formatCase({
+  const allCases = (trialSession.calendaredCases || []).map(caseItem =>
+    formatCaseForTrialSession({
       applicationContext,
       caseItem,
-      eligibleCases,
       setFilingPartiesCode: true,
     }),
   );
