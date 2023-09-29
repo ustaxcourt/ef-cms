@@ -6,7 +6,10 @@ import { requestAccessHelper as requestAccessHelperComputed } from '../../src/pr
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
+export const practitionerRequestsAccessToCaseManual = (
+  cerebralTest,
+  fakeFile,
+) => {
   const caseDetailHeaderHelper = withAppContextDecorator(
     caseDetailHeaderHelperComputed,
   );

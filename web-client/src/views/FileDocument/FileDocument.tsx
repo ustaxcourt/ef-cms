@@ -15,7 +15,7 @@ import React from 'react';
 export const FileDocument = connect(
   {
     allowExternalConsolidatedGroupFiling:
-      state.allowExternalConsolidatedGroupFiling,
+      state.allowExternalConsolidatedGroupFilingHelper,
     fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
