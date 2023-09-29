@@ -29,7 +29,7 @@ jobs:
       TRUTHY: << pipeline.parameters.run_the_workflow >>
       FALSY: << pipeline.parameters.dont_run_the_workflow >>
       EMPTY: << pipeline.parameters.somevar >>
-      CIRCLE_PROJECT_SLUG: << pipeline.project.type >>/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}
+      CIRCLE_PROJECT_SLUG: << pipeline.project.type >>/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME
     steps:
       - run:
           name: Test environment variables and pipeline parameters
@@ -38,15 +38,15 @@ jobs:
             echo "falsy: ${FALSY}"
             echo "empty: ${EMPTY}"
             echo "project slug: ${CIRCLE_PROJECT_SLUG}"
-            if [[ -n "$TRUTHY" ]]; then
-              echo "truthy is not empty! yay!"
+            if [[ "$TRUTHY" == "true" ]]; then
+              echo "truthy is the string true! yay!"
             else
-              echo "truthy is empty tho"
+              echo "truthy is not the string true"
             fi
             if [[ -z "$FALSY" ]]; then
-              echo "falsy is empty! yay!"
+              echo "falsy is the string false! yay!"
             else
-              echo "falsy is not empty tho"
+              echo "falsy is not the string false"
             fi
             if [[ -z "$EMPTY" ]]; then
               echo "empty is empty! yay!"
