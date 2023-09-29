@@ -7,7 +7,8 @@ export const formatDateFromDatePickerAction = ({
   | { key: string; value: string }
   | undefined => {
   if (props.value) {
-    let inputFormat;
+    let inputFormat: TimeFormats;
+
     try {
       inputFormat = applicationContext
         .getUtilities()
