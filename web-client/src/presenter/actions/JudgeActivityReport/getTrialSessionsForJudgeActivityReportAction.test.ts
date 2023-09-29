@@ -17,7 +17,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
 
   const mockStartDate = 'startDate';
   const mockEndDate = 'endDate';
-  const judgeName = judgeUser.name;
+  const judges = ['Buch', 'Colvin'];
   const mockJudges = [
     judgeUser,
     { ...judgeUser, name: 'Buch', userId: 'mockUserId' },
@@ -31,7 +31,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       );
   });
 
-  it('should retrieve trialSessions types based on a selected judges id', async () => {
+  it('should retrieve trialSessions based on a selected judges', async () => {
     const { output } = await runAction(
       getTrialSessionsForJudgeActivityReportAction,
       {
@@ -43,11 +43,10 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
+              judges,
               startDate: mockStartDate,
             },
-            judgeName,
           },
-          judges: mockJudges,
         },
       },
     );
@@ -57,7 +56,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeId: judgeUser.userId,
+      judges,
       startDate: mockStartDate,
     });
 
