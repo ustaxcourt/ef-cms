@@ -7,6 +7,6 @@ export const setDefaultSubmittedAndCavSortOrderAction = ({
   store.set(state.tableSort.sortField, 'daysElapsedSinceLastStatusChange');
   store.set(
     state.tableSort.sortOrder,
-    applicationContext.getConstants().ASCENDING,
+    applicationContext.getConstants().DESCENDING,
   );
 };

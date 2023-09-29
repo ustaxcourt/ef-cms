@@ -3,7 +3,6 @@ import {
   RawCaseWorksheet,
 } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { batchGet } from '../../dynamodbClientService';
-import { uniq } from 'lodash';
 
 export const getCaseWorksheetsByDocketNumber = async ({
   applicationContext,
@@ -14,7 +13,7 @@ export const getCaseWorksheetsByDocketNumber = async ({
 }): Promise<RawCaseWorksheet[]> => {
   const result = await batchGet({
     applicationContext,
-    keys: uniq(docketNumbers).map(docketNumber => ({
+    keys: docketNumbers.map(docketNumber => ({
       pk: `case|${docketNumber}`,
       sk: `case-worksheet|${docketNumber}`,
     })),
