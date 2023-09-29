@@ -150,13 +150,13 @@ const getJudgeUsersByName = async (
         from: 0,
         query: {
           bool: {
-            must: {
-              term: {
-                'role.S': {
-                  value: 'judge',
+            filter: [
+              {
+                term: {
+                  'role.S': 'judge',
                 },
               },
-            },
+            ],
           },
         },
         size: MAX_SEARCH_CLIENT_RESULTS,
