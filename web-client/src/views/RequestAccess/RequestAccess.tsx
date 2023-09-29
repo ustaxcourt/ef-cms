@@ -14,8 +14,9 @@ import classNames from 'classnames';
 
 export const RequestAccess = connect(
   {
+    GENERATION_TYPES: state.constants.GENERATION_TYPES,
     allowExternalConsolidatedGroupFiling:
-      state.allowExternalConsolidatedGroupFiling,
+      state.allowExternalConsolidatedGroupFilingHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     requestAccessHelper: state.requestAccessHelper,
@@ -31,6 +32,7 @@ export const RequestAccess = connect(
     allowExternalConsolidatedGroupFiling,
     form,
     formCancelToggleCancelSequence,
+    GENERATION_TYPES,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -56,7 +58,7 @@ export const RequestAccess = connect(
             Type of Document You’re Filing
           </h2>
         </div>
-        <div className="blue-container">
+        <div>
           <FormGroup errorText={validationErrors.documentType}>
             <label
               className="usa-label"
@@ -105,13 +107,14 @@ export const RequestAccess = connect(
               }}
             />
           </FormGroup>
-          <RequestAccessDocumentForm />
           {requestAccessHelper.showPartiesRepresenting && (
             <PartiesRepresenting />
           )}
-          {allowExternalConsolidatedGroupFiling && (
-            <ExternalConsolidatedCaseGroupFilingCard />
-          )}
+          <RequestAccessDocumentForm />
+          {allowExternalConsolidatedGroupFiling &&
+            form.generationType === GENERATION_TYPES.MANUAL && (
+              <ExternalConsolidatedCaseGroupFilingCard />
+            )}
           <div className="margin-top-5">
             <Button
               id="submit-document"
