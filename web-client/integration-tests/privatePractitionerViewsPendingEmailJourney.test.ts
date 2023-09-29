@@ -8,7 +8,7 @@ import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { partiesInformationHelper as partiesInformationHelperComputed } from '../src/presenter/computeds/partiesInformationHelper';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-import { practitionerRequestsAccessToCase } from './journey/practitionerRequestsAccessToCase';
+import { practitionerRequestsAccessToCaseManual } from './journey/practitionerRequestsAccessToCaseManual';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -69,7 +69,7 @@ describe('private practitioner views pending email journey', () => {
   });
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
-  practitionerRequestsAccessToCase(cerebralTest, fakeFile);
+  practitionerRequestsAccessToCaseManual(cerebralTest, fakeFile);
 
   it('unassociated private practitioner views pending email for counsel on case', () => {
     const partiesInformationHelper = withAppContextDecorator(
