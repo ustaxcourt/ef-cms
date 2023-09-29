@@ -1,5 +1,8 @@
 import { compact } from 'lodash';
-import { compareCasesByDocketNumber } from '../../utilities/getFormattedTrialSessionDetails';
+import {
+  compareCasesByDocketNumber,
+  compareCasesByDocketNumberFactory,
+} from '../../utilities/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
@@ -89,27 +92,32 @@ export const getPractitionerName = practitioner => {
 };
 
 export const formatCases = ({ applicationContext, calendaredCases }) => {
-  return calendaredCases
-    .filter(calendaredCase => !calendaredCase.removedFromTrial)
-    .sort(compareCasesByDocketNumber)
-    .map(openCase => {
-      const { inConsolidatedGroup, isLeadCase } = applicationContext
-        .getUtilities()
-        .setConsolidationFlagsForDisplay(openCase, calendaredCases);
+  return (
+    calendaredCases
+      .filter(calendaredCase => !calendaredCase.removedFromTrial)
+      // .sort(compareCasesByDocketNumber)
+      .sort(compareCasesByDocketNumberFactory({ allCases: calendaredCases }))
+      .map(openCase => {
+        const { inConsolidatedGroup, isLeadCase } = applicationContext
+          .getUtilities()
+          .setConsolidationFlagsForDisplay(openCase, calendaredCases);
 
-      return {
-        calendarNotes: openCase.calendarNotes,
-        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
-        docketNumber: openCase.docketNumber,
-        docketNumberWithSuffix: openCase.docketNumberWithSuffix,
-        inConsolidatedGroup,
-        isLeadCase,
-        petitionerCounsel: (openCase.privatePractitioners || []).map(
-          getPractitionerName,
-        ),
-        respondentCounsel: (openCase.irsPractitioners || []).map(
-          getPractitionerName,
-        ),
-      };
-    });
+        return {
+          calendarNotes: openCase.calendarNotes,
+          caseTitle: applicationContext.getCaseTitle(
+            openCase.caseCaption || '',
+          ),
+          docketNumber: openCase.docketNumber,
+          docketNumberWithSuffix: openCase.docketNumberWithSuffix,
+          inConsolidatedGroup,
+          isLeadCase,
+          petitionerCounsel: (openCase.privatePractitioners || []).map(
+            getPractitionerName,
+          ),
+          respondentCounsel: (openCase.irsPractitioners || []).map(
+            getPractitionerName,
+          ),
+        };
+      })
+  );
 };
