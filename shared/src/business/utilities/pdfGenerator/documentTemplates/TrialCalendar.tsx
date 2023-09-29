@@ -12,6 +12,7 @@ export const TrialCalendar = ({
     docketNumber: string;
     docketNumberWithSuffix: string;
     caseTitle: string;
+    inConsolidatedGroup: boolean;
     respondentCounsel: string[];
     calendarNotes: string;
     isLeadCase: boolean;
@@ -21,17 +22,17 @@ export const TrialCalendar = ({
     startTime: string;
     startDate: string;
     sessionType: string;
-    courthouseName: string;
-    address1: string;
-    address2: string;
+    courthouseName?: string;
+    address1?: string;
+    address2?: string;
     formattedCityStateZip: string;
     judge: string;
     trialClerk: string;
     courtReporter: string;
-    notes: string;
+    notes?: string;
     irsCalendarAdministrator: string;
     noLocationEntered: boolean;
-    trialLocation: string;
+    trialLocation?: string;
   };
 }) => {
   return (
