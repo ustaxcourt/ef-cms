@@ -108,6 +108,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -123,12 +125,6 @@ jobs:
           name: Setup Blue Green Migration If Needed
           command: |
             ./setup-for-blue-green-migration.sh
-      - run:
-          name: Setup Migrate Flag
-          command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Destination Table Var
-          command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
@@ -146,7 +142,7 @@ jobs:
       - run:
           name: Admin User Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
               npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
             else
               echo "skipping…"
@@ -154,26 +150,24 @@ jobs:
       - run:
           name: Test Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
               ./shared/admin-tools/user/setup-test-users.sh $ENV
             else
               echo "skipping…"
             fi
       - run:
-          name: Setup Judge Users File Var
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
-            else
-              echo "skipping…"
-            fi
-      - run:
           name: Judge Users Setup
+          environment:
+            FILE_NAME: ./scripts/data-import/judge/judge_users.csv
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              ./scripts/data-import/judge/bulk-import-judge-users.sh
-            else
+            if [[ "${CIRCLE_BRANCH}" == "prod" ]] || [[ -n "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
               echo "skipping…"
+              exit 0
+            fi
+            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+              npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+            else
+              ./scripts/data-import/judge/bulk-import-judge-users.sh
             fi
       - run:
           name: 'Deploy - Web Client - S3'
@@ -206,10 +200,10 @@ jobs:
       - run:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [[ "${CIRCLE_BRANCH}" != "prod" ]] && [[ -z "$DEPLOY_EMPTY_PERSISTENCE" ]]; then
               npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
             else
-              echo "Skipping verify admin user disabled step on prod"
+              echo "skipping…"
             fi
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
