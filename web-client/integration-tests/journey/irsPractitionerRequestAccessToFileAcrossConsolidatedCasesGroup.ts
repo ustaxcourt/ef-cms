@@ -1,5 +1,6 @@
 import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { externalConsolidatedCaseGroupHelper as externalConsolidatedCaseGroupHelperComputed } from '../../src/presenter/computeds/externalConsolidatedCaseGroupHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -35,9 +36,8 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
       docketNumber,
     });
 
-    const documentToSelect = {
+    const formOptionsToSelect = {
       category: 'Appearance and Representation',
-      certificateOfService: false,
       documentTitle: 'Entry of Appearance',
       documentTitleTemplate: 'Entry of Appearance for [Petitioner Names]',
       documentType: 'Entry of Appearance',
@@ -45,12 +45,22 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
       scenario: 'Standard',
     };
 
-    for (const key of Object.keys(documentToSelect)) {
+    for (const key of Object.keys(formOptionsToSelect)) {
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
         key,
-        value: documentToSelect[key],
+        value: formOptionsToSelect[key],
       });
     }
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'generationType',
+      value: GENERATION_TYPES.MANUAL,
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfService',
+      value: false,
+    });
 
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
@@ -131,6 +141,11 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
     expect(
       externalConsolidatedCasesHelper.consolidatedGroupServiceParties.length,
     ).toEqual(4);
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'redactionAcknowledgement',
+      value: true,
+    });
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
 

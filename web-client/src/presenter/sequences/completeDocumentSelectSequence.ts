@@ -6,7 +6,6 @@ import { navigateToFileADocumentAction } from '../actions/FileDocument/navigateT
 import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/FileDocument/refreshExternalDocumentTitleFromEventCodeAction';
 import { setDefaultFileDocumentFormValuesAction } from '../actions/FileDocument/setDefaultFileDocumentFormValuesAction';
 import { setDocketNumberPropAction } from '../actions/FileDocument/setDocketNumberPropAction';
-import { setIsExternalConsolidatedCaseGroupEnabledValueAction } from '../actions/FileDocument/setIsExternalConsolidatedCaseGroupEnabledValueAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -25,7 +24,6 @@ export const completeDocumentSelectSequence = [
       clearAlertsAction,
       stopShowValidationAction,
       setDocketNumberPropAction,
-      setIsExternalConsolidatedCaseGroupEnabledValueAction,
       setDefaultFileDocumentFormValuesAction,
       clearOtherIterationAction,
       navigateToFileADocumentAction,
