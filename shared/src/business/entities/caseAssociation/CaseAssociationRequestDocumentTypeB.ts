@@ -4,6 +4,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { OBJECTIONS_OPTIONS } from '../EntityConstants';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 
 export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestDocument {
   public attachments?: boolean;
@@ -83,6 +84,17 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
 
   getValidationRules() {
     return CaseAssociationRequestDocumentTypeB.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW,
+    objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
+      .required()
+      .messages(setDefaultErrorMessages('Enter selection for Objections.')),
+  };
+
+  getValidationRules_NEW() {
+    return CaseAssociationRequestDocumentTypeB.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
