@@ -128,6 +128,10 @@ export const InvalidEntityError = class InvalidEntityError extends Error {
    * constructor
    * @param {string} message the error message
    */
+  public details?: {
+    [key: string]: any;
+  };
+
   constructor(
     entityName,
     message = 'entity is invalid or invalid for operation',
