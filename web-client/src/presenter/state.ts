@@ -14,6 +14,7 @@ import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTr
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { allowExternalConsolidatedGroupFilingHelper } from './computeds/allowExternalConsolidatedGroupFilingHelper';
 import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
@@ -148,6 +149,7 @@ export const computeds = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
+  allowExternalConsolidatedGroupFilingHelper,
   appInstanceManagerHelper,
   applyStampFormHelper,
   batchDownloadHelper,
@@ -406,7 +408,7 @@ export const baseState = {
     isScanning: false,
     selectedBatchIndex: 0,
   },
-  screenMetadata: {},
+  screenMetadata: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],

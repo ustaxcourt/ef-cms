@@ -1,25 +1,19 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Sets value for isExternalConsolidatedCaseGroupEnabled
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @param {object} providers.props the cerebral props object
- * @param {object} providers.store the cerebral store object
- */
-export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
-  applicationContext,
-  get,
-  props,
-  store,
-}) => {
+export const allowExternalConsolidatedGroupFilingHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): boolean => {
   const { ALLOWLIST_FEATURE_FLAGS, USER_ROLES } =
     applicationContext.getConstants();
 
   const caseDetail = get(state.caseDetail);
   const { eventCode: documentToFileEventCode } = get(state.form);
-  const { isRequestingAccess } = props;
+  const { isDirectlyAssociated: isRequestingAccess } = get(
+    state.screenMetadata,
+  );
 
   const isConsolidatedGroupAccessEnabled = get(
     state.featureFlags[
@@ -44,8 +38,5 @@ export const setIsExternalConsolidatedCaseGroupEnabledValueAction = ({
     allowExternalConsolidatedGroupFiling = true;
   }
 
-  store.set(
-    state.allowExternalConsolidatedGroupFiling,
-    allowExternalConsolidatedGroupFiling,
-  );
+  return allowExternalConsolidatedGroupFiling;
 };
