@@ -161,9 +161,23 @@ describe('CaseAssociationRequestDocumentBase', () => {
         filers: ['not a uuid formatted string'],
         partyIrsPractitioner: false,
       });
+
       const errors = entity.getFormattedValidationErrors();
       expect(errors).toEqual({
         'filers[0]': '"filers[0]" must be a valid GUID',
+      });
+    });
+
+    it('should return the default JOI error message for "partyPrivatePractitioner" when it is not a boolean', () => {
+      const entity = new CaseAssociationRequestDocumentBase({
+        ...rawTestData,
+        partyPrivatePractitioner: 'NOT A BOOLEAN',
+      });
+
+      const errors = entity.getFormattedValidationErrors();
+      expect(errors).toEqual({
+        partyPrivatePractitioner:
+          '"partyPrivatePractitioner" must be a boolean',
       });
     });
   });
