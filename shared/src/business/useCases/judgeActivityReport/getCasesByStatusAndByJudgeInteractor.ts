@@ -1,4 +1,7 @@
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  FORMATS,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 import {
   InvalidRequest,
   UnauthorizedError,
@@ -21,6 +24,7 @@ export type CavAndSubmittedFilteredCasesType = SubmittedCAVTableFields & {
   daysElapsedSinceLastStatusChange: number;
   formattedCaseCount: number;
   caseWorksheet: RawCaseWorksheet;
+  statusDate: string;
 };
 
 export const getCasesByStatusAndByJudgeInteractor = async (
@@ -43,21 +47,23 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   const caseRecords = await getCases(applicationContext, searchEntity);
 
-  const daysElapsedSinceLastStatusChange: number[] = caseRecords.map(
-    caseRecord => calculateDaysElapsed(applicationContext, caseRecord),
-  );
+  const allCaseResults = await Promise.all(
+    caseRecords.map(async caseRecord => {
+      const numConsolidatedCases = await calculateNumberOfConsolidatedCases(
+        applicationContext,
+        caseRecord,
+      );
+      const { daysElapsedSinceLastStatusChange, statusDate } =
+        calculateDaysElapsed(applicationContext, caseRecord);
 
-  const numConsolidatedCases: number[] = await Promise.all(
-    caseRecords.map(caseRecord =>
-      calculateNumberOfConsolidatedCases(applicationContext, caseRecord),
-    ),
+      return {
+        ...caseRecord,
+        daysElapsedSinceLastStatusChange,
+        formattedCaseCount: numConsolidatedCases,
+        statusDate,
+      };
+    }),
   );
-
-  const allCaseResults = caseRecords.map((caseRecord, i) => ({
-    ...caseRecord,
-    daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
-    formattedCaseCount: numConsolidatedCases[i],
-  }));
 
   allCaseResults.sort((a, b) => {
     return (
@@ -74,9 +80,9 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 const calculateDaysElapsed = (
   applicationContext: IApplicationContext,
   individualCase: SubmittedCAVTableFields,
-): number => {
+): { daysElapsedSinceLastStatusChange: number; statusDate: string } => {
   if (isEmpty(individualCase.caseStatusHistory)) {
-    return 0;
+    return { daysElapsedSinceLastStatusChange: 0, statusDate: '' };
   }
 
   const currentDateInIsoFormat: string = applicationContext
@@ -94,12 +100,15 @@ const calculateDaysElapsed = (
   const dateOfLastCaseStatusChange =
     individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
 
-  return applicationContext
-    .getUtilities()
-    .calculateDifferenceInDays(
-      currentDateInIsoFormat,
-      dateOfLastCaseStatusChange,
-    );
+  return {
+    daysElapsedSinceLastStatusChange: applicationContext
+      .getUtilities()
+      .calculateDifferenceInDays(
+        currentDateInIsoFormat,
+        dateOfLastCaseStatusChange,
+      ),
+    statusDate: formatDateString(dateOfLastCaseStatusChange, FORMATS.MMDDYY),
+  };
 };
 
 const getCases = async (
