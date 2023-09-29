@@ -3,6 +3,7 @@ import { caseInventoryReport } from '../../shared/src/business/utilities/documen
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
+import { entryOfAppearance } from '@shared/business/utilities/documentGenerators/entryOfAppearance';
 import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
 import { noticeOfChangeToInPersonProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding';
 import { noticeOfChangeToRemoteProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding';
@@ -27,6 +28,7 @@ export const getDocumentGenerators = () => ({
   changeOfAddress,
   coverSheet,
   docketRecord,
+  entryOfAppearance,
   noticeOfChangeOfTrialJudge,
   noticeOfChangeToInPersonProceeding,
   noticeOfChangeToRemoteProceeding,
