@@ -50,6 +50,8 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   }
 
   static VALIDATION_RULES = CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+  static VALIDATION_RULES_NEW =
+    CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW;
 
   static VALIDATION_ERROR_MESSAGES =
     CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
@@ -76,6 +78,10 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
 
   getValidationRules() {
     return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
+    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
