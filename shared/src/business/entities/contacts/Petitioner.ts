@@ -1,8 +1,12 @@
 import { CONTACT_TYPES, SERVICE_INDICATOR_TYPES } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { USER_CONTACT_VALIDATION_RULES } from '../User';
+import {
+  USER_CONTACT_VALIDATION_RULES,
+  USER_CONTACT_VALIDATION_RULES_NEW,
+} from '../User';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class Petitioner extends JoiValidationEntity {
@@ -138,6 +142,60 @@ export class Petitioner extends JoiValidationEntity {
 
   getValidationRules() {
     return Petitioner.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...USER_CONTACT_VALIDATION_RULES_NEW,
+    additionalName: JoiValidationConstants.STRING.max(600).optional().messages({
+      'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.', // STRING SAYS 100 BUT JOI IS 600 CHARACTERS
+    }),
+    contactId: JoiValidationConstants.UUID.required().description(
+      'Unique contact ID only used by the system.',
+    ),
+    contactType: JoiValidationConstants.STRING.valid(
+      ...Object.values(CONTACT_TYPES),
+    )
+      .required()
+      .messages(setDefaultErrorMessages('Select a role type')),
+    email: JoiValidationConstants.EMAIL.when('hasEAccess', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
+    hasConsentedToEService: joi
+      .boolean()
+      .optional()
+      .description(
+        'Flag that indicates the petitioner has consented to receive electronic service on a paper petition',
+      ),
+    hasEAccess: joi
+      .boolean()
+      .optional()
+      .description(
+        'Flag that indicates if the petitioner has credentials to both the legacy and new system.',
+      ),
+    inCareOf: JoiValidationConstants.STRING.max(100).optional(),
+    isAddressSealed: joi.boolean().required(),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({
+        ...setDefaultErrorMessages('Enter name'),
+        'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
+      }),
+    paperPetitionEmail: JoiValidationConstants.EMAIL.optional().description(
+      'Email provided by the petitioner on a paper petition',
+    ),
+    sealedAndUnavailable: joi.boolean().optional(),
+    serviceIndicator: JoiValidationConstants.STRING.valid(
+      ...Object.values(SERVICE_INDICATOR_TYPES),
+    )
+      .required()
+      .messages(setDefaultErrorMessages('Select a service indicator')),
+    title: JoiValidationConstants.STRING.max(100).optional(),
+  };
+
+  getValidationRules_NEW() {
+    return Petitioner.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
