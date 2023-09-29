@@ -9,6 +9,7 @@ import { CoverSheet } from '../pdfGenerator/documentTemplates/CoverSheet';
 import { DatePrintedFooter } from '../pdfGenerator/components/DatePrintedFooter';
 import { DateServedFooter } from '../pdfGenerator/components/DateServedFooter';
 import { DocketRecord } from '../pdfGenerator/documentTemplates/DocketRecord';
+import { EntryOfAppearance } from '@shared/business/utilities/pdfGenerator/documentTemplates/EntryOfAppearance';
 import { GettingReadyForTrialChecklist } from '../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist';
 import { NoticeOfChangeOfTrialJudge } from '../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge';
 import { NoticeOfChangeToInPersonProceeding } from '../pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
@@ -54,6 +55,7 @@ const components = {
   DateServedFooter,
   DocketRecord,
   DocumentService,
+  EntryOfAppearance,
   GettingReadyForTrialChecklist,
   NoticeOfChangeOfTrialJudge,
   NoticeOfChangeToInPersonProceeding,
