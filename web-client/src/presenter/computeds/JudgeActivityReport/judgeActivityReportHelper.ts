@@ -1,7 +1,6 @@
 import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { getSubmittedOrCAVDate } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
@@ -68,13 +67,6 @@ export const judgeActivityReportHelper = (
       individualCase.inConsolidatedGroup = true;
     }
 
-    individualCase.statusDate = individualCase.caseStatusHistory
-      ? getSubmittedOrCAVDate(
-          applicationContext,
-          individualCase.caseStatusHistory,
-        )
-      : '';
-
     if (individualCase.caseWorksheet) {
       individualCase.caseWorksheet.formattedFinalBriefDueDate = individualCase
         .caseWorksheet.finalBriefDueDate
@@ -89,7 +81,6 @@ export const judgeActivityReportHelper = (
   });
 
   const { sortField, sortOrder } = get(state.tableSort);
-  console.log(sortField, sortOrder);
 
   submittedAndCavCasesByJudge.sort((a, b) => {
     if (sortField === 'daysElapsedSinceLastStatusChange') {
@@ -102,8 +93,6 @@ export const judgeActivityReportHelper = (
         : b[sortField].localeCompare(a[sortField]);
     }
   });
-
-  console.log(submittedAndCavCasesByJudge[0]);
 
   const today = applicationContext.getUtilities().formatNow(FORMATS.YYYYMMDD);
 

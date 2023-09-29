@@ -1,11 +1,9 @@
-import {
-  ID_FOR_ALL_JUDGES,
-  getTrialSessionsForJudgeActivityReportInteractor,
-} from './getTrialSessionsForJudgeActivityReportInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
+import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
 
 describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   const mockJudges = [
@@ -106,15 +104,15 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
     mockTrialSessionsForAllJudges.push(mockSmallSwingTrialSession);
   });
 
-  const mockValidRequest = {
+  const mockValidRequest: JudgeActivityReportFilters = {
     endDate: '04/01/2020',
-    judgeId: judgeUser.userId,
+    judges: [judgeUser.name],
     startDate: '01/01/2020',
   };
 
   const mockInvalidRequest = {
     endDate: '04/01/5000',
-    judgeId: judgeUser.userId,
+    judges: [judgeUser.name],
     startDate: '01/01/2020',
   };
 
@@ -176,11 +174,10 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   });
 
   it('should return ALL trial session types, the weighted count of sessions held in the date range for all the judges', async () => {
-    mockValidRequest.judgeId = ID_FOR_ALL_JUDGES;
-
+    const request = { ...mockValidRequest, judges: ['Colvin', 'Sotomayor'] };
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
-      mockValidRequest,
+      request,
     );
 
     expect(result).toEqual({

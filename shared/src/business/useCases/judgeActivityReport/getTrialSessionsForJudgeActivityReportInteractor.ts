@@ -11,8 +11,6 @@ import {
 } from '../../entities/EntityConstants';
 import { sum } from 'lodash';
 
-export const ID_FOR_ALL_JUDGES = 'judgeIdToRepresentAllJudgesSelection';
-
 export type TrialSessionTypes = {
   [SESSION_TYPES.regular]: number;
   [SESSION_TYPES.small]: number;
@@ -55,7 +53,6 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     });
 
   const trialSessionsForSelectedJudges = trialSessions.filter(session => {
-    console.log(session.judge);
     if (judges && session.judge) {
       return searchEntity.judges.includes(session.judge.name);
     } else {
