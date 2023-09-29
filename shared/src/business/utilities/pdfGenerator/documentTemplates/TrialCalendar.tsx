@@ -4,7 +4,10 @@ import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterL
 import React from 'react';
 import classNames from 'classnames';
 
-type TrialCalendarType = {
+export const TrialCalendar = ({
+  cases = [],
+  sessionDetail,
+}: {
   cases: {
     docketNumber: string;
     docketNumberWithSuffix: string;
@@ -30,12 +33,7 @@ type TrialCalendarType = {
     noLocationEntered: boolean;
     trialLocation: string;
   };
-};
-
-export const TrialCalendar = ({
-  cases = [],
-  sessionDetail,
-}: TrialCalendarType) => {
+}) => {
   return (
     <div id="trial-calendar">
       <PrimaryHeader />
