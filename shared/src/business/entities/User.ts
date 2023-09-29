@@ -289,6 +289,7 @@ export class User extends JoiValidationEntity {
 
 export const { USER_CONTACT_VALIDATION_RULES, VALIDATION_ERROR_MESSAGES } =
   User;
+export const { USER_CONTACT_VALIDATION_RULES_NEW } = User;
 
 declare global {
   type RawUser = ExcludeMethods<User>;
