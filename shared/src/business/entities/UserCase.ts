@@ -43,15 +43,15 @@ export class UserCase extends JoiValidationEntity {
       caseCaption: Case.VALIDATION_RULES.caseCaption.messages(
         setDefaultErrorMessages('Enter a case caption'),
       ),
-      closedDate: Case.VALIDATION_RULES.closedDate, // NO ERROR MESSAGE FOUND
-      createdAt: Case.VALIDATION_RULES.createdAt, // NO ERROR MESSAGE FOUND
+      closedDate: Case.VALIDATION_RULES.closedDate,
+      createdAt: Case.VALIDATION_RULES.createdAt,
       docketNumber: Case.VALIDATION_RULES.docketNumber.messages(
         setDefaultErrorMessages('Docket number is required'),
       ),
-      docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix, // NO ERROR MESSAGE FOUND
-      entityName: JoiValidationConstants.STRING.valid('UserCase').required(), // NO ERROR MESSAGE FOUND
-      leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber, // NO ERROR MESSAGE FOUND
-      status: Case.VALIDATION_RULES.status, // NO ERROR MESSAGE FOUND
+      docketNumberWithSuffix: Case.VALIDATION_RULES.docketNumberWithSuffix,
+      entityName: JoiValidationConstants.STRING.valid('UserCase').required(),
+      leadDocketNumber: Case.VALIDATION_RULES.leadDocketNumber,
+      status: Case.VALIDATION_RULES.status,
     };
   }
 

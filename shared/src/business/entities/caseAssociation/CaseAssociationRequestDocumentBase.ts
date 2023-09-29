@@ -175,7 +175,7 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
       .boolean()
       .optional()
       .messages(setDefaultErrorMessages('Select a filing party')),
-    partyPrivatePractitioner: joi.boolean().optional(), //COULD NOT FIND MESSAGE STRING ANYWHERE
+    partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi
       .object()
       .required()
@@ -183,7 +183,7 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     scenario: JoiValidationConstants.STRING.valid(...SCENARIOS)
       .required()
       .messages(setDefaultErrorMessages('Select a document')),
-    supportingDocuments: joi.array().optional(), //COULD NOT FIND MESSAGE STRING ANYWHERE
+    supportingDocuments: joi.array().optional(),
   };
 
   getValidationRules_NEW() {
