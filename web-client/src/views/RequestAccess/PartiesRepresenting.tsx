@@ -26,7 +26,7 @@ export const PartiesRepresenting = connect(
         <h2 className="margin-top-4">
           Tell Us About the Parties You’re Representing
         </h2>
-        <div className="blue-container">
+        <div>
           <FormGroup errorText={validationErrors.filers}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
