@@ -1,5 +1,5 @@
 import { compact } from 'lodash';
-import { compareCasesByDocketNumber } from '../../utilities/getFormattedTrialSessionDetails';
+import { compareCasesByDocketNumberFactory } from '../../utilities/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
@@ -82,16 +82,10 @@ export const generateTrialCalendarPdfInteractor = async (
   });
 };
 
-export const getPractitionerName = practitioner => {
-  const { barNumber, name } = practitioner;
-  const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
-  return `${name}${barNumberFormatted}`;
-};
-
-export const formatCases = ({ applicationContext, calendaredCases }) => {
+const formatCases = ({ applicationContext, calendaredCases }) => {
   return calendaredCases
     .filter(calendaredCase => !calendaredCase.removedFromTrial)
-    .sort(compareCasesByDocketNumber)
+    .sort(compareCasesByDocketNumberFactory({ allCases: calendaredCases }))
     .map(openCase => {
       const { inConsolidatedGroup, isLeadCase } = applicationContext
         .getUtilities()
@@ -99,17 +93,20 @@ export const formatCases = ({ applicationContext, calendaredCases }) => {
 
       return {
         calendarNotes: openCase.calendarNotes,
-        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption || ''),
+        caseTitle: applicationContext.getCaseTitle(openCase.caseCaption),
         docketNumber: openCase.docketNumber,
         docketNumberWithSuffix: openCase.docketNumberWithSuffix,
         inConsolidatedGroup,
         isLeadCase,
-        petitionerCounsel: (openCase.privatePractitioners || []).map(
-          getPractitionerName,
-        ),
-        respondentCounsel: (openCase.irsPractitioners || []).map(
-          getPractitionerName,
-        ),
+        petitionerCounsel:
+          openCase.privatePractitioners.map(getPractitionerName),
+        respondentCounsel: openCase.irsPractitioners.map(getPractitionerName),
       };
     });
+};
+
+const getPractitionerName = practitioner => {
+  const { barNumber, name } = practitioner;
+
+  return `${name} (${barNumber})`;
 };
