@@ -7,7 +7,7 @@ export const docketClerkEditsDocketEntryMetaMinuteEntry = cerebralTest => {
     await cerebralTest.runSequence(
       'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateDate',
+        key: 'filingDate',
         toFormat: FORMATS.ISO,
         value: '01/04/2020',
       },
