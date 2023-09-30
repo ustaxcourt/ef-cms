@@ -28,13 +28,19 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
       },
     );
 
-    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
+    await cerebralTest.runSequence(
+      'updateDocketEntryMetaDocumentFormValueSequence',
+      {
+        key: 'date-of-service-date-picker',
+        value: '05/10/2005',
+      },
+    );
 
     expect(
       cerebralTest.getState('screenMetadata.documentTitlePreview'),
     ).toEqual('Certificate of Service of Petition 05-10-2005');
     expect(cerebralTest.getState('form.serviceDate')).toEqual(
-      '2005-05-10T04:00:00.000Z',
+      '2005-05-10T00:00:00.000-04:00',
     );
 
     await cerebralTest.runSequence('submitEditDocketEntryMetaSequence', {

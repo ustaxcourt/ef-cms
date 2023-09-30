@@ -160,6 +160,10 @@ export const NonstandardForm = connect(
                 toFormat: DATE_FORMATS.ISO,
                 value: e.target.value,
               });
+              updateSequence({
+                key: e.target.name,
+                value: e.target.value,
+              });
               validateSequence();
             }}
           />
