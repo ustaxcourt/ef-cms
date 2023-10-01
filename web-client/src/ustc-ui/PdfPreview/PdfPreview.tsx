@@ -6,16 +6,22 @@ import React from 'react';
 
 export const PdfPreview = connect(
   {
+    heightOverride: props.heightOverride,
     noDocumentText: props.noDocumentText,
     pdfPreviewUrl: state.pdfPreviewUrl,
   },
-  function PdfPreview({ noDocumentText, pdfPreviewUrl }) {
+  function PdfPreview({ heightOverride, noDocumentText, pdfPreviewUrl }) {
     // conditional rendering, no life-cycle hooks.
     if (!pdfPreviewUrl || process.env.CI) {
       return noDocumentText || '';
     }
 
-    return <PdfViewer className="pdf-preview-viewer" src={pdfPreviewUrl} />;
+    return (
+      <PdfViewer
+        className={!heightOverride && 'pdf-preview-viewer'}
+        src={pdfPreviewUrl}
+      />
+    );
   },
 );
 
