@@ -1,4 +1,5 @@
 import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -56,6 +57,11 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'scenario',
       value: 'Standard',
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'generationType',
+      value: GENERATION_TYPES.MANUAL,
     });
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
@@ -118,6 +124,11 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
       'Entry of Appearance for Respondent',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'redactionAcknowledgement',
+      value: true,
+    });
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
   });
