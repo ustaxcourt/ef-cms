@@ -12,8 +12,8 @@ npx ts-node --transpile-only scripts/judgeUpdates/update-senior-judges.ts
 // ******************************** INPUTS ******************************
 const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
   {
-    judgeTitle: 'Judge',
-    userId: '68f086bd-9deb-478a-b7f8-e1c09ac8b1ca',
+    judgeTitle: 'EXAMPLE',
+    userId: '111111-11111-1111-111111-111111',
   },
 ];
 // **********************************************************************
