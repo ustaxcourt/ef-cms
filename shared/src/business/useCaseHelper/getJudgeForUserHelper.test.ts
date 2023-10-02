@@ -79,11 +79,10 @@ describe('getJudgeForUserHelper', () => {
         user: chambersUser,
       });
 
-      expect(
-        applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
-      ).toHaveBeenCalledWith(applicationContext, {
-        section: chambersUser.section,
+      const result = await getJudgeForUserHelper(applicationContext, {
+        user: judgeUser,
       });
+      expect(result).toMatchObject(judgeUser);
     });
 
     it('throws an error if it could not find a judge user with getJudgeInSectionHelper', async () => {
