@@ -22,7 +22,7 @@ export class PetitionerDeceasedSpouseContact extends Contact {
 
   getValidationRules_NEW() {
     return {
-      ...super.getValidationRules(),
+      ...super.getValidationRules_NEW(),
       inCareOf: JoiValidationConstants.STRING.max(100)
         .required()
         .messages(setDefaultErrorMessages('Enter name for in care of')),
