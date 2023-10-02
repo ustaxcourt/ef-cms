@@ -318,7 +318,7 @@ export class CaseInternal extends JoiValidationEntity {
         })
         .messages(
           setDefaultErrorMessages(
-            'Upload an Application for Waiver of Filing Fee',
+            'Upload or scan an Application for Waiver of Filing Fee (APW)',
           ),
         ),
       applicationForWaiverOfFilingFeeFileSize:
@@ -420,7 +420,7 @@ export class CaseInternal extends JoiValidationEntity {
       petitionFile: joi
         .object()
         .required()
-        .messages(setDefaultErrorMessages('Upload a Petition')), // object of type File
+        .messages(setDefaultErrorMessages('Upload or scan a Petition')), // object of type File
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
@@ -444,7 +444,10 @@ export class CaseInternal extends JoiValidationEntity {
             'Payment date cannot be in the future. Enter a valid date.',
         }),
       petitionPaymentMethod: Case.VALIDATION_RULES_NEW.petitionPaymentMethod,
-      petitionPaymentStatus: Case.VALIDATION_RULES_NEW.petitionPaymentStatus,
+      petitionPaymentStatus:
+        Case.VALIDATION_RULES_NEW.petitionPaymentStatus.messages(
+          setDefaultErrorMessages('Select a filing fee option'),
+        ),
       petitionPaymentWaivedDate:
         Case.VALIDATION_RULES_NEW.petitionPaymentWaivedDate,
       petitioners: Case.VALIDATION_RULES_NEW.petitioners,
@@ -536,6 +539,23 @@ export class CaseInternal extends JoiValidationEntity {
         validationErrors['object.missing'];
       delete validationErrors['object.missing'];
     }
+
+    return validationErrors;
+  }
+
+  getValidationErrors_NEW() {
+    const validationErrors = super.getValidationErrors_NEW();
+    if (!validationErrors) return validationErrors;
+
+    validationErrors?.details.forEach(d => {
+      if (d.type === 'object.missing') {
+        d.type = 'chooseAtLeastOneValue';
+        d.context.key = 'chooseAtLeastOneValue';
+        d.context.label = 'chooseAtLeastOneValue';
+        d.message =
+          'Select trial location and upload/scan RQT or check Order Designating Place of Trial';
+      }
+    });
 
     return validationErrors;
   }
