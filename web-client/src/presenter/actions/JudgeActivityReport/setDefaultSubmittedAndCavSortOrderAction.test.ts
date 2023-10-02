@@ -1,4 +1,4 @@
-import { ASCENDING } from '@shared/business/entities/EntityConstants';
+import { DESCENDING } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -7,7 +7,7 @@ import { setDefaultSubmittedAndCavSortOrderAction } from '@web-client/presenter/
 describe('setDefaultSubmittedAndCavSortOrderAction', () => {
   presenter.providers.applicationContext = applicationContextForClient;
 
-  it('should set default submitted/CAV sort order on state', async () => {
+  it('should set default submitted/CAV sort order to descending', async () => {
     const result = await runAction(setDefaultSubmittedAndCavSortOrderAction, {
       modules: { presenter },
       state: {},
@@ -15,7 +15,7 @@ describe('setDefaultSubmittedAndCavSortOrderAction', () => {
 
     expect(result.state.tableSort).toEqual({
       sortField: 'daysElapsedSinceLastStatusChange',
-      sortOrder: ASCENDING,
+      sortOrder: DESCENDING,
     });
   });
 });

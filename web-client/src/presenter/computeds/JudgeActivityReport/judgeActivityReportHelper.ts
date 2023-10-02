@@ -36,21 +36,18 @@ export const judgeActivityReportHelper = (
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
 
-  let resultsCount: number = 0;
-  let showSelectDateRangeText: boolean = false;
+  const hasFormBeenSubmitted = get(
+    state.judgeActivityReport.hasUserSubmittedForm,
+  );
 
-  const hasFormBeenSubmitted =
-    !!casesClosedByJudge && !!opinions && !!orders && !!trialSessions;
+  const totalResults =
+    orders.total +
+    opinions.total +
+    trialSessions.total +
+    casesClosedByJudge.total;
+  const showResultsTables = hasFormBeenSubmitted && totalResults > 0;
 
-  if (hasFormBeenSubmitted) {
-    resultsCount =
-      orders.total +
-      opinions.total +
-      trialSessions.total +
-      casesClosedByJudge.total;
-  } else {
-    showSelectDateRangeText = true;
-  }
+  const showSelectDateRangeText = !hasFormBeenSubmitted;
 
   const currentDate: string = applicationContext
     .getUtilities()
@@ -126,7 +123,7 @@ export const judgeActivityReportHelper = (
     ordersFiledTotal: orders?.total || 0,
     progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
     reportHeader,
-    showResultsTables: resultsCount > 0,
+    showResultsTables,
     showSelectDateRangeText,
     submittedAndCavCasesByJudge: submittedAndCavCasesRows,
     today,
