@@ -1,3 +1,4 @@
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -8,9 +9,27 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {Promise} async action
  */
 export const navigateToRequestAccessReviewAction = async ({
+  applicationContext,
   get,
   router,
+  store,
 }: ActionProps) => {
   const docketNumber = get(state.caseDetail.docketNumber);
+
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+
+  const redactionAcknowledgementEnabled = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
+    ],
+  );
+  if (
+    redactionAcknowledgementEnabled &&
+    get(state.form.generationType) === GENERATION_TYPES.MANUAL &&
+    get(state.form.eventCode) === 'EA'
+  ) {
+    store.set(state.form.redactionAcknowledgement, false);
+  }
+
   await router.route(`/case-detail/${docketNumber}/request-access/review`);
 };

@@ -1,7 +1,8 @@
 version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.6.0
-define: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.14
+
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:3.0.15
 
 parameters:
   run_build_and_deploy:
@@ -10,6 +11,10 @@ parameters:
 
   run_build_and_deploy_with_context:
     default: true
+    type: boolean
+
+  run_build_and_deploy_empty:
+    default: false
     type: boolean
 
   run_glue_to_test:
@@ -29,15 +34,15 @@ parameters:
     type: boolean
 
   referrer:
-    default: ""
+    default: ''
     type: string
 
   source_bucket:
-    default: ""
+    default: ''
     type: string
 
   destination_bucket:
-    default: ""
+    default: ''
     type: string
 
 commands:
@@ -107,6 +112,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -122,12 +129,6 @@ jobs:
           name: Setup Blue Green Migration If Needed
           command: |
             ./setup-for-blue-green-migration.sh
-      - run:
-          name: Setup Migrate Flag
-          command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Destination Table Var
-          command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
@@ -145,7 +146,7 @@ jobs:
       - run:
           name: Admin User Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
               npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
             else
               echo "skipping…"
@@ -153,26 +154,24 @@ jobs:
       - run:
           name: Test Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
               ./shared/admin-tools/user/setup-test-users.sh $ENV
             else
               echo "skipping…"
             fi
       - run:
-          name: Setup Judge Users File Var
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
-            else
-              echo "skipping…"
-            fi
-      - run:
           name: Judge Users Setup
+          environment:
+            FILE_NAME: ./scripts/data-import/judge/judge_users.csv
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              ./scripts/data-import/judge/bulk-import-judge-users.sh
-            else
+            if [ "${CIRCLE_BRANCH}" == "prod" ] || [ "$DEPLOY_EMPTY_PERSISTENCE" == "true" ]; then
               echo "skipping…"
+              exit 0
+            fi
+            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+              npx ts-node --transpile-only ./shared/admin-tools/user/setup-glued-judges.ts
+            else
+              ./scripts/data-import/judge/bulk-import-judge-users.sh
             fi
       - run:
           name: 'Deploy - Web Client - S3'
@@ -205,10 +204,10 @@ jobs:
       - run:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
               npx ts-node --transpile-only shared/admin-tools/user/verify-ustc-admin-user-disabled.js
             else
-              echo "Skipping verify admin user disabled step on prod"
+              echo "skipping…"
             fi
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
@@ -591,7 +590,9 @@ jobs:
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}" | jq -r '.id')
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_build_and_deploy_empty\":true}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -712,6 +713,10 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      REFERRER: << pipeline.parameters.referrer >>
+      SOURCE_BUCKET: << pipeline.parameters.source_bucket >>
+      DESTINATION_BUCKET: << pipeline.parameters.destination_bucket >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -722,24 +727,18 @@ jobs:
             VCS=<< pipeline.project.type >>
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
-            REFERRER=<< pipeline.parameters.referrer >>
             if [[ -z "$REFERRER" ]]; then
               echo "Error: no referrer was provided"
               exit 1
             fi
-            SOURCE_BUCKET=<< pipeline.parameters.source_bucket >>
             if [[ -z "$SOURCE_BUCKET" ]]; then
               echo "Error: no source bucket was provided"
               exit 1
             fi
-            DESTINATION_BUCKET=<< pipeline.parameters.destination_bucket >>
             if [[ -z "$DESTINATION_BUCKET" ]]; then
               echo "Error: no destination bucket was provided"
               exit 1
             fi
-            echo "export REFERRER=${REFERRER}" >> $BASH_ENV
-            echo "export SOURCE_BUCKET=${SOURCE_BUCKET}" >> $BASH_ENV
-            echo "export DESTINATION_BUCKET=${DESTINATION_BUCKET}" >> $BASH_ENV
       - run:
           name: Sync S3 buckets with timeout
           command: |
@@ -754,6 +753,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: medium+
+    environment:
+      LOWER_ENV: << pipeline.parameters.lower_env >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -761,12 +762,10 @@ jobs:
           name: Setup Env
           command: |
             ./scripts/env/env-for-circle.sh
-            LOWER_ENV=<< pipeline.parameters.lower_env >>
             if [[ -z "$LOWER_ENV" ]]; then
               echo "Error: no lower environment was provided"
               exit 1
             fi
-            echo "export LOWER_ENV=${LOWER_ENV}" >> $BASH_ENV
       - run:
           name: Deploy Check Glue Job Run State Cron Lambda
           command: |
@@ -952,10 +951,28 @@ workflows:
             - backup-source-dynamo-table
             - delete-api-mappings
 
+  build-and-deploy-empty:
+    when: << pipeline.parameters.run_build_and_deploy_empty >>
+    jobs:
+      - deploy:
+          <<: *only-deployed-lower-environments
+      - switch-colors:
+          <<: *only-deployed-lower-environments
+          requires:
+            - deploy
+      - delete-api-mappings:
+          <<: *only-deployed-lower-environments
+          requires:
+            - switch-colors
+      - cleanup:
+          <<: *only-deployed-lower-environments
+          requires:
+            - switch-colors
+
   glue-to-test:
     when:
       or:
-        - equal: [ glue-to-test-schedule, << pipeline.schedule.name >> ]
+        - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
       - delete-existing-data:
