@@ -1,9 +1,10 @@
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { MAX_FILE_SIZE_BYTES } from '../EntityConstants';
+import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB } from '../EntityConstants';
 import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class SupportingDocumentInformationFactory extends JoiValidationEntity {
@@ -47,6 +48,91 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
         .max(MAX_FILE_SIZE_BYTES)
         .integer(),
       supportingDocumentFreeText: JoiValidationConstants.STRING,
+    };
+
+    const makeRequired = itemName => {
+      makeRequiredHelper({
+        itemName,
+        schema,
+        schemaOptionalItems,
+      });
+    };
+
+    if (this.certificateOfService === true) {
+      makeRequired('certificateOfServiceDate');
+    }
+
+    const supportingDocumentFreeTextCategories = [
+      'Affidavit in Support',
+      'Declaration in Support',
+      'Unsworn Declaration under Penalty of Perjury in Support',
+    ];
+    const supportingDocumentFileCategories = [
+      'Memorandum in Support',
+      'Brief in Support',
+      'Affidavit in Support',
+      'Declaration in Support',
+      'Unsworn Declaration under Penalty of Perjury in Support',
+    ];
+
+    if (
+      includes(supportingDocumentFreeTextCategories, this.supportingDocument)
+    ) {
+      makeRequired('supportingDocumentFreeText');
+    }
+
+    if (includes(supportingDocumentFileCategories, this.supportingDocument)) {
+      makeRequired('supportingDocumentFile');
+    }
+
+    return schema;
+  }
+
+  getValidationRules_NEW() {
+    let schema = {
+      attachments: joi
+        .boolean()
+        .required()
+        .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+      certificateOfService: joi
+        .boolean()
+        .required()
+        .messages(
+          setDefaultErrorMessages(
+            'Indicate whether you are including a Certificate of Service',
+          ),
+        ),
+      supportingDocument: JoiValidationConstants.STRING.required().messages(
+        setDefaultErrorMessages('Select a document type'),
+      ),
+    };
+
+    let schemaOptionalItems = {
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+        'now',
+      ).messages({
+        ...setDefaultErrorMessages('Enter date of service'),
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+      supportingDocumentFile: joi
+        .object()
+        .messages(setDefaultErrorMessages('Upload a document')),
+      supportingDocumentFileSize: joi
+        .number()
+        .optional()
+        .min(1)
+        .max(MAX_FILE_SIZE_BYTES)
+        .integer()
+        .messages({
+          ...setDefaultErrorMessages(
+            'Your Supporting Document file size is empty.',
+          ),
+          'number.max': `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      supportingDocumentFreeText: JoiValidationConstants.STRING.messages(
+        setDefaultErrorMessages('Enter name'),
+      ),
     };
 
     const makeRequired = itemName => {
