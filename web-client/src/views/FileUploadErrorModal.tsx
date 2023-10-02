@@ -6,11 +6,12 @@ import React from 'react';
 export const FileUploadErrorModal = connect(
   {
     MAX_FILE_SIZE_MB: state.constants.MAX_FILE_SIZE_MB,
-    cancelSequence: sequences.cancelFileUploadSequence,
+    cancelSequence: sequences.clearModalSequence,
   },
   function FileUploadErrorModal({ cancelSequence, MAX_FILE_SIZE_MB }) {
     return (
       <ModalDialog
+        cancelSequence={cancelSequence}
         confirmLabel="Close"
         confirmSequence={cancelSequence}
         title={'Your Request Was Not Completed'}
