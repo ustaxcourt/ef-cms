@@ -16,7 +16,7 @@ const config: Config = {
     '!irs-super-user.ts',
     '!jest-scripts.config.ts',
     '!set-maintenance-mode-locally.js',
-    '!judgeUpdates/update-senior-judges.ts',
+    '!judge/update-judge-titles.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
