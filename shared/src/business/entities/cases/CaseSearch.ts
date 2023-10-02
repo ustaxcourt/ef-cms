@@ -1,6 +1,7 @@
 import { COUNTRY_TYPES, US_STATES, US_STATES_OTHER } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -94,6 +95,61 @@ export class CaseSearch extends JoiValidationEntity {
 
   getValidationRules() {
     return CaseSearch.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = joi.object().keys({
+    countryType: JoiValidationConstants.STRING.valid(
+      COUNTRY_TYPES.DOMESTIC,
+      COUNTRY_TYPES.INTERNATIONAL,
+    ).optional(),
+    endDate: joi
+      .date()
+      .iso()
+      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMATS)
+      .max('now')
+      .allow(null)
+      .optional()
+      .when('startDate', {
+        is: joi.exist(),
+        otherwise: joi.date().allow(null),
+        then: joi.date().min(joi.ref('startDate')).optional(),
+      })
+      .description(
+        'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
+      )
+      .messages({
+        ...setDefaultErrorMessages('Enter a valid end date'),
+        'any.ref': 'End date cannot be prior to start date.',
+        'any.required': 'Enter an End date.',
+        'date.max': 'End date cannot be in the future.',
+        'date.min': 'End date cannot be prior to start date.',
+      }),
+    petitionerName: JoiValidationConstants.STRING.max(500)
+      .required()
+      .messages(setDefaultErrorMessages('Enter a name')),
+    petitionerState: JoiValidationConstants.STRING.valid(
+      ...Object.keys(US_STATES),
+      ...Object.keys(US_STATES_OTHER),
+    ).optional(),
+    startDate: joi
+      .date()
+      .iso()
+      .format(CaseSearch.JOI_VALID_DATE_SEARCH_FORMATS)
+      .max('now')
+      .description(
+        'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+      )
+      .allow(null)
+      .optional()
+      .messages({
+        ...setDefaultErrorMessages('Enter a valid start date'),
+        'date.format': 'Format date as MM/DD/YYYY',
+        'date.max': 'Start date cannot be in the future.',
+      }),
+  });
+
+  getValidationRules_NEW() {
+    return CaseSearch.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
