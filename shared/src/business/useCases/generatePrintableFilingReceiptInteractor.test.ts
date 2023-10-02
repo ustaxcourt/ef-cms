@@ -146,6 +146,13 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockResolvedValue(mockConsolidatedCases);
 
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        leadDocketNumber: '101-20',
+      });
+
     await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       documentsFiled: {

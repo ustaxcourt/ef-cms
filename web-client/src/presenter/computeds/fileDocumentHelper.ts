@@ -27,6 +27,8 @@ export const fileDocumentHelper = (
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
+  const pdfPreviewUrl = get(state.pdfPreviewUrl);
+
   const supportingDocumentTypeList =
     getSupportingDocumentTypeList(CATEGORY_MAP);
 
@@ -79,7 +81,13 @@ export const fileDocumentHelper = (
     ],
   );
 
+  const EARedactionAcknowledgement =
+    redactionAcknowledgementEnabled &&
+    !pdfPreviewUrl &&
+    form.eventCode === 'EA';
+
   const exported = {
+    EARedactionAcknowledgement,
     certificateOfServiceDateFormatted,
     formattedFilingParties,
     isSecondaryDocumentUploadOptional:
