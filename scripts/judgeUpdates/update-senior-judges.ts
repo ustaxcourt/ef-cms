@@ -1,73 +1,35 @@
 import { User } from '@shared/business/entities/User';
 import { requireEnvVars } from '../../shared/admin-tools/util';
-requireEnvVars([
-  'DEFAULT_ACCOUNT_PASS',
-  'ELASTICSEARCH_ENDPOINT',
-  'ENV',
-  'REGION',
-]);
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../shared/src/business/entities/EntityConstants';
+requireEnvVars(['ENV', 'REGION', 'DYNAMODB_TABLE_NAME', 'DYNAMODB_ENDPOINT']);
 import { createApplicationContext } from '@web-api/applicationContext';
-import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
-async function searchForAllJudges(applicationContext) {
-  const { results } = await search({
-    applicationContext,
-    searchParameters: {
-      body: {
-        from: 0,
-        query: {
-          bool: {
-            must: {
-              term: {
-                'role.S': {
-                  value: 'judge',
-                },
-              },
-            },
-          },
-        },
-        size: MAX_SEARCH_CLIENT_RESULTS,
-      },
-      index: 'efcms-user',
-    },
-  });
-  return results;
-}
+/**
+How to Run:
+
+npx ts-node --transpile-only scripts/judgeUpdates/update-senior-judges.ts
+*/
+
+// ******************************** INPUTS ******************************
+const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
+  {
+    judgeTitle: 'Judge',
+    userId: '68f086bd-9deb-478a-b7f8-e1c09ac8b1ca',
+  },
+];
+// **********************************************************************
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const judgeUsers = await searchForAllJudges(applicationContext);
 
-  const seniorJudgeNames = [
-    'Cohen',
-    'Colvin',
-    'Gale',
-    'Goeke',
-    'Gustafson',
-    'Halpern',
-    'Holmes',
-    'Lauber',
-    'Marvel',
-    'Morrison',
-    'Paris',
-    'Thornton',
-    'Vasquez',
-  ];
-  const seniorJudges = judgeUsers.filter(judge => {
-    return seniorJudgeNames.includes(judge.name);
-  });
-
-  for (let judge of seniorJudges) {
+  for (let judge of judgesToUpdateIds) {
     const { userId } = judge;
 
     const userToUpdate = await applicationContext
       .getPersistenceGateway()
       .getUserById({ applicationContext, userId });
     const userEntity = new User(userToUpdate);
-    userEntity.judgeTitle = 'Senior Judge';
+    userEntity.judgeTitle = judge.judgeTitle;
 
-    console.log('userToUpdate', userToUpdate);
     await applicationContext.getPersistenceGateway().updateUser({
       applicationContext,
       user: userEntity.validate().toRawObject(),
