@@ -121,16 +121,29 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   // TODO:
   const newResults = getFormattedValidationErrors_NEW(entity);
 
-  if (JSON.stringify(results) !== JSON.stringify(newResults)) {
+  if (customStringify(results) !== customStringify(newResults)) {
     console.error(
       'When fetching "Formatted Validation Errors" there was a difference between the legacy implementation and the new implementation results',
-      '\n\nLegacy Results:\n',
-      JSON.stringify(results, null, 2),
+      `\nEntityName: ${entity.entityName}\n\n`,
+      '\n\nLegacy Results: \n',
+      customStringify(results),
       '\n\nNew Results:\n',
-      JSON.stringify(newResults, null, 2),
+      customStringify(newResults),
     );
   }
   return results;
+}
+
+function customStringify(obj) {
+  if (!obj) return null;
+  const keys = Object.keys(obj).sort();
+  const result: string[] = [];
+
+  for (const key of keys) {
+    const value = obj[key];
+    result.push(`"${key}": ${JSON.stringify(value)}`);
+  }
+  return `{${result.join(', ')}}`;
 }
 
 export abstract class JoiValidationEntity {
@@ -165,14 +178,21 @@ export abstract class JoiValidationEntity {
   }
 
   getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
-    const rules = this.getValidationRules_NEW();
-    const schema = rules.validate ? rules : joi.object().keys(rules);
-    const { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
-    if (!error) return null;
-    return error;
+    try {
+      // DELETE THIS TRY CATCH WHEN CLEANING UP
+      // THIS IS TO HELP US FIGURE OUT WHICH ENTITY IS WRONG
+      const rules = this.getValidationRules_NEW();
+      const schema = rules.validate ? rules : joi.object().keys(rules);
+      const { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
+      if (!error) return null;
+      return error;
+    } catch (e) {
+      console.log('THIS IS THE ENTITY ', this.entityName);
+      return null;
+    }
   }
 
   isValid() {
