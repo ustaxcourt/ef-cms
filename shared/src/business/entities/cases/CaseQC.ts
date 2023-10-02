@@ -1,5 +1,6 @@
 import { Case } from './Case';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class CaseQC extends Case {
@@ -30,6 +31,20 @@ export class CaseQC extends Case {
         .description(
           'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
         ),
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
+      ...super.getValidationRules_NEW(),
+      entityName: JoiValidationConstants.STRING.valid('CaseQC').required(),
+      hasVerifiedIrsNotice: joi
+        .boolean()
+        .required()
+        .description(
+          'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
+        )
+        .messages(setDefaultErrorMessages('Select an option')),
     };
   }
 }
