@@ -68,11 +68,11 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your Petition
+                  Upload your Petition PDF (.pdf)
                 </label>
                 <span className="usa-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
+                  Make sure file is not encrypted or password protected. Max
+                  file size {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <div className="margin-top-0">
                   <Button
@@ -87,7 +87,9 @@ export const StartCaseStep2 = connect(
                   >
                     Download Petition form (T.C. Form 2)
                   </Button>
-                  <p className="margin-top-0">if you haven’t already done so</p>
+                  <p className="margin-top-05 usa-hint display-block">
+                    if you haven’t already done so
+                  </p>
                 </div>
                 <StateDrivenFileInput
                   aria-describedby="petition-file-label"
