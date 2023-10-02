@@ -22,22 +22,26 @@ export const serveCaseToIrs = () => {
   cy.get('.big-blue-header').should('exist');
 };
 
-export const closeScannerSetupDialog = () => {
+export const closeScannerSetupDialogIfExists = () => {
+  // the dynamsoft popup doesn't show immediately after the last script has been downloaded
   cy.on('fail', err => {
+    console.log('encountered an error trying to closeScanner', err);
     if (
-      err.name === 'CypressError' &&
-      err.message.includes('getDynamsoft') &&
-      err.message.includes('Timed out')
+      err.message.includes('Timed out') &&
+      err.message.includes('div.dynamsoft-dialog-close')
     ) {
-      return;
+      console.log('this is the error we were looking for! do not worry');
+      return false;
     }
+    console.log('oh no this is a bad one');
     throw err;
   });
 
-  cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
-  cy.wait('@getDynamsoft');
+  // cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
+  // cy.wait('@getDynamsoft');
 
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
+
   cy.get('div.dynamsoft-dialog-close', { timeout: 10000 }).should('be.visible');
 
   cy.get('body').then(body => {

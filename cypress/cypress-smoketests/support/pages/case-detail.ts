@@ -122,13 +122,14 @@ export const uploadCourtIssuedDocPdf = () => {
 export const reviewAndServePetition = () => {
   cy.get('#tab-document-view').click();
   cy.get('a:contains("Review and Serve Petition")').click();
-  closeScannerSetupDialog();
+
   cy.get('button#tab-irs-notice').click();
   cy.get('label#has-irs-verified-notice-no').click();
   cy.get('button#submit-case').click();
   cy.get('button:contains("Serve to IRS")').click();
   cy.get('button#confirm:contains("Yes, Serve")').click();
   cy.get('.usa-alert:contains("Petition served")').should('exist');
+  closeScannerSetupDialog();
 };
 
 export const clickSaveUploadedPdfButton = () => {
