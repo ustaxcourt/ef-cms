@@ -6,14 +6,14 @@ faker.seed(faker.number.int());
 const EFCMS_DOMAIN = Cypress.env('EFCMS_DOMAIN');
 const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
-export const goToCaseDetail = docketNumber => {
+export const goToCaseDetail = (docketNumber: string) => {
   cy.get('#search-field').clear();
   cy.get('#search-field').type(docketNumber);
   cy.get('.ustc-search-button').click();
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
 };
 
-export const goToCaseOverview = docketNumber => {
+export const goToCaseOverview = (docketNumber: string) => {
   // first visit / because if this step fails and has to be rerun, cerebral will
   // not see it as a new page visit when routing to the same route again and the page
   // will not reload
@@ -28,7 +28,7 @@ export const goToCaseOverview = docketNumber => {
   cy.get('.internal-information').should('exist');
 };
 
-export const createOrder = docketNumber => {
+export const createOrder = (docketNumber: string) => {
   cy.goToRoute(
     `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,
   );
@@ -51,10 +51,11 @@ export const editAndSignOrder = () => {
   cy.url().should('not.contain', '/sign');
 };
 
-export const addDocketEntryForOrderAndSaveForLater = attempt => {
+export const addDocketEntryForOrderAndSaveForLater = (attempt: string) => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
-  cy.get('#free-text').clear().type(` ${attempt}`);
+  cy.get('#free-text').clear();
+  cy.get('#free-text').type(` ${attempt}`);
   cy.get('#save-entry-button').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
   cy.get('button').contains(`Order to Show Cause ${attempt}`).click();
@@ -134,23 +135,23 @@ export const clickSaveUploadedPdfButton = () => {
   cy.get('h3:contains("An Uploaded PDF")').should('exist');
 };
 
-export const manuallyAddCaseToNewTrialSession = trialSessionId => {
+export const manuallyAddCaseToNewTrialSession = (trialSessionId: string) => {
   cy.get('#add-to-trial-session-btn').should('exist').click();
   cy.get('label[for="show-all-locations-true"]').click();
-  cy.get('select#trial-session')
-    .select(trialSessionId)
-    .should('have.value', trialSessionId);
+  cy.get('select#trial-session').select(trialSessionId);
+  cy.get('select#trial-session').should('have.value', trialSessionId);
   cy.get('#modal-root .modal-button-confirm').click();
   cy.get('.usa-alert--success').should('contain', 'Case scheduled for trial.');
   cy.get('h3:contains("Trial - Scheduled")').should('exist');
 };
 
-export const manuallyAddCaseToCalendaredTrialSession = trialSessionId => {
+export const manuallyAddCaseToCalendaredTrialSession = (
+  trialSessionId: string,
+) => {
   cy.get('#add-to-trial-session-btn').should('exist').click();
   cy.get('label[for="show-all-locations-true"]').click();
-  cy.get('select#trial-session')
-    .select(trialSessionId)
-    .should('have.value', trialSessionId);
+  cy.get('select#trial-session').select(trialSessionId);
+  cy.get('select#trial-session').should('have.value', trialSessionId);
   cy.get('#modal-root .modal-button-confirm').click();
   cy.get('.usa-alert--success').should('contain', 'Case set for trial.');
 };
@@ -210,7 +211,7 @@ export const viewPrintableDocketRecord = () => {
     });
 };
 
-export const editPetitionerEmail = emailAddress => {
+export const editPetitionerEmail = (emailAddress: string) => {
   cy.get('#tab-case-information').click();
   cy.get('#tab-parties').click();
   cy.get('.edit-petitioner-button').click();
