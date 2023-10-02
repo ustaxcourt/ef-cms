@@ -42,7 +42,10 @@ describe('Bench opinion advanced search journey', () => {
     loginAs(cerebralTest, 'buchschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);
-    chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'Ronald L. Buch');
+    chambersUserAppliesSignatureToDraftDocument(cerebralTest, {
+      judgeName: 'Ronald L. Buch',
+      judgeTitle: 'Judge',
+    });
     chambersUserSavesSignatureForDraftDocument(cerebralTest);
 
     loginAs(cerebralTest, 'docketclerk1@example.com');
@@ -54,10 +57,10 @@ describe('Bench opinion advanced search journey', () => {
     loginAs(cerebralTest, 'ashfordschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);
-    chambersUserAppliesSignatureToDraftDocument(
-      cerebralTest,
-      'Tamara W. Ashford',
-    );
+    chambersUserAppliesSignatureToDraftDocument(cerebralTest, {
+      judgeName: 'Tamara W. Ashford',
+      judgeTitle: 'Judge',
+    });
     chambersUserSavesSignatureForDraftDocument(cerebralTest);
 
     loginAs(cerebralTest, 'docketclerk1@example.com');
@@ -106,10 +109,10 @@ describe('Bench opinion advanced search journey', () => {
     loginAs(cerebralTest, 'ashfordschambers@example.com');
     chambersUserAddsOrderToCase(cerebralTest);
     chambersUserViewsSignDraftDocument(cerebralTest);
-    chambersUserAppliesSignatureToDraftDocument(
-      cerebralTest,
-      'Tamara W. Ashford',
-    );
+    chambersUserAppliesSignatureToDraftDocument(cerebralTest, {
+      judgeName: 'Tamara W. Ashford',
+      judgeTitle: 'Judge',
+    });
     chambersUserSavesSignatureForDraftDocument(cerebralTest);
 
     loginAs(cerebralTest, 'docketclerk1@example.com');
