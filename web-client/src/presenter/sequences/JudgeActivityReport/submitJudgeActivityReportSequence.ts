@@ -5,7 +5,6 @@ import { getJudgeActivityReportCountsAction } from '../../actions/JudgeActivityR
 import { getSubmittedAndCavCasesByJudgeAction } from '@web-client/presenter/actions/JudgeActivityReport/getSubmittedAndCavCasesByJudgeAction';
 import { getTrialSessionsForJudgeActivityReportAction } from '../../actions/JudgeActivityReport/getTrialSessionsForJudgeActivityReportAction';
 import { parallel } from 'cerebral';
-import { resetJudgeActivityReportDataAction } from '@web-client/presenter/actions/JudgeActivityReport/resetJudgeActivityReportDataAction';
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setCavAndSubmittedCasesAction } from '@web-client/presenter/actions/JudgeActivityReport/setCavAndSubmittedCasesAction';
 import { setDefaultSubmittedAndCavSortOrderAction } from '@web-client/presenter/actions/JudgeActivityReport/setDefaultSubmittedAndCavSortOrderAction';
@@ -21,7 +20,6 @@ import { validateJudgeActivityReportSearchAction } from '../../actions/JudgeActi
 
 export const submitJudgeActivityReportSequence = showProgressSequenceDecorator([
   setHasUserSubmittedFormAction,
-  resetJudgeActivityReportDataAction,
   startShowValidationAction,
   validateJudgeActivityReportSearchAction,
   {
