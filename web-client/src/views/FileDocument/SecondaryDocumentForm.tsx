@@ -34,7 +34,7 @@ export const SecondaryDocumentForm = connect(
               htmlFor="secondary-document"
               id="secondary-document-label"
             >
-              Upload supporting PDF document (.pdf){' '}
+              Upload supporting document PDF (.pdf){' '}
               <span className="success-message padding-left-1">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>{' '}
