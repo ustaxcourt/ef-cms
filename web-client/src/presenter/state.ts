@@ -378,6 +378,7 @@ export const baseState = {
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
+    nameForSigningLine2: '',
     pageNumber: 1,
     pdfjsObj: null,
     signatureApplied: false,

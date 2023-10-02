@@ -1,6 +1,6 @@
 export const chambersUserAppliesSignatureToDraftDocument = (
-  cerebralTest,
-  { judgeName, judgeTitle },
+  cerebralTest: any,
+  { judgeName, judgeTitle }: { judgeName: string; judgeTitle: string },
 ) => {
   return it('Chambers user applies signature to a draft document', async () => {
     expect(cerebralTest.getState('pdfForSigning.nameForSigning')).toEqual(

@@ -1,4 +1,6 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { cloneDeep } from 'lodash';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setSignatureNameForPdfSigningAction } from './setSignatureNameForPdfSigningAction';
@@ -11,11 +13,10 @@ describe('setSignatureNameForPdfSigningAction', () => {
     section: 'colvinChambers',
   };
 
-  let judgeUser = {
-    name: 'Judge Colvin',
-  };
+  let judgeUser: RawUser;
 
   beforeAll(() => {
+    judgeUser = cloneDeep(judgeColvin);
     applicationContext
       .getUseCases()
       .getJudgeInSectionInteractor.mockReturnValue(judgeUser);
@@ -71,5 +72,17 @@ describe('setSignatureNameForPdfSigningAction', () => {
     expect(result.state.pdfForSigning.nameForSigningLine2).toEqual(
       'Special Trial Judge',
     );
+  });
+
+  it('removes the "Senior" designation from the judge title when signing, because "Senior" has a negative connotation associated with it.', async () => {
+    judgeUser.judgeTitle = 'Senior Judge';
+
+    const result = await runAction(setSignatureNameForPdfSigningAction, {
+      modules: {
+        presenter,
+      },
+    });
+    expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
+    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual('Judge');
   });
 });
