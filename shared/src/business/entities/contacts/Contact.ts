@@ -10,6 +10,7 @@ import {
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class Contact extends JoiValidationEntity {
@@ -168,6 +169,102 @@ export class Contact extends JoiValidationEntity {
     return this.countryType === COUNTRY_TYPES.INTERNATIONAL
       ? Contact.INTERNATIONAL_VALIDATION_RULES
       : Contact.DOMESTIC_VALIDATION_RULES;
+  }
+
+  static SHARED_VALIDATION_RULES_NEW = {
+    address1: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessages('Enter mailing address')),
+    address2: JoiValidationConstants.STRING.max(100).optional(),
+    address3: JoiValidationConstants.STRING.max(100).optional(),
+    city: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessages('Enter city')),
+    contactId: JoiValidationConstants.UUID.required().description(
+      'Unique contact ID only used by the system.',
+    ),
+    contactType: JoiValidationConstants.STRING.valid(
+      ...Object.values(CONTACT_TYPES),
+    )
+      .required()
+      .messages(setDefaultErrorMessages('Enter country type')),
+    email: JoiValidationConstants.EMAIL.when('hasEAccess', {
+      is: true,
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
+    hasConsentedToEService: joi
+      .boolean()
+      .optional()
+      .description(
+        'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
+      ),
+    hasEAccess: joi
+      .boolean()
+      .optional()
+      .description(
+        'Flag that indicates if the contact has credentials to both the legacy and new system.',
+      ),
+    inCareOf: JoiValidationConstants.STRING.max(100).optional(),
+    isAddressSealed: joi.boolean().required(),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessages('Enter name')),
+    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
+      .allow(null)
+      .description('Email provided by the petitioner on their petition form')
+      .messages(
+        setDefaultErrorMessages(
+          'Enter email address in format: yourname@example.com',
+        ),
+      ),
+    phone: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessages('Enter phone number')),
+    sealedAndUnavailable: joi.boolean().optional(),
+    secondaryName: JoiValidationConstants.STRING.max(100).optional(),
+    serviceIndicator: JoiValidationConstants.STRING.valid(
+      ...Object.values(SERVICE_INDICATOR_TYPES),
+    ).optional(),
+    title: JoiValidationConstants.STRING.max(100).optional(),
+  } as const;
+
+  static DOMESTIC_VALIDATION_RULES_NEW = {
+    countryType: JoiValidationConstants.STRING.valid(COUNTRY_TYPES.DOMESTIC)
+      .required()
+      .messages(setDefaultErrorMessages('Enter country type')),
+    ...Contact.SHARED_VALIDATION_RULES_NEW,
+    postalCode: JoiValidationConstants.US_POSTAL_CODE.required().messages(
+      setDefaultErrorMessages('Enter ZIP code'),
+    ),
+    state: JoiValidationConstants.STRING.valid(
+      ...Object.keys(US_STATES),
+      ...Object.keys(US_STATES_OTHER),
+      STATE_NOT_AVAILABLE,
+    )
+      .required()
+      .messages(setDefaultErrorMessages('Enter state')),
+  } as const;
+
+  static INTERNATIONAL_VALIDATION_RULES_NEW = {
+    country: JoiValidationConstants.STRING.max(500)
+      .required()
+      .messages(setDefaultErrorMessages('Enter a country')),
+    countryType: JoiValidationConstants.STRING.valid(
+      COUNTRY_TYPES.INTERNATIONAL,
+    )
+      .required()
+      .messages(setDefaultErrorMessages('Enter country type')),
+    ...Contact.SHARED_VALIDATION_RULES_NEW,
+    postalCode: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessages('Enter ZIP code')),
+  } as const;
+
+  getValidationRules_NEW() {
+    return this.countryType === COUNTRY_TYPES.INTERNATIONAL
+      ? Contact.INTERNATIONAL_VALIDATION_RULES_NEW
+      : Contact.DOMESTIC_VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
