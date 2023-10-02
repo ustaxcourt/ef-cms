@@ -143,7 +143,7 @@ function customStringify(obj) {
     const value = obj[key];
     result.push(`"${key}": ${JSON.stringify(value)}`);
   }
-  return `{${result.join(', ')}}`;
+  return `{\n\t${result.join(',\n\t')}\n}`;
 }
 
 export abstract class JoiValidationEntity {
