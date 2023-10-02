@@ -1,6 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 
 export class ExternalDocumentNonStandardE extends ExternalDocumentBase {
   public trialLocation: string;
@@ -18,6 +19,17 @@ export class ExternalDocumentNonStandardE extends ExternalDocumentBase {
 
   getValidationRules() {
     return ExternalDocumentNonStandardE.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
+    trialLocation: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessages('Select a preferred trial location.'),
+    ),
+  };
+
+  getValidationRules_NEW() {
+    return ExternalDocumentNonStandardE.VALIDATION_RULES_NEW;
   }
 
   getDocumentTitle(): string {

@@ -1,6 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import { transformFormValueToTitleCaseOrdinal } from '../../utilities/transformFormValueToTitleCaseOrdinal';
 import joi from 'joi';
 
@@ -27,6 +28,27 @@ export class ExternalDocumentNonStandardG extends ExternalDocumentBase {
 
   getValidationRules() {
     return ExternalDocumentNonStandardG.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
+    ordinalValue: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessages('Select an iteration'),
+    ),
+    otherIteration: joi
+      .when('ordinalValue', {
+        is: 'Other',
+        otherwise: joi.optional().allow(null),
+        then: joi.number().max(999).required(),
+      })
+      .messages({
+        ...setDefaultErrorMessages('Maximum iteration value is 999.'),
+        'any.required': 'Enter an iteration number.',
+      }),
+  };
+
+  getValidationRules_NEW() {
+    return ExternalDocumentNonStandardG.VALIDATION_RULES_NEW;
   }
 
   getDocumentTitle(): string {

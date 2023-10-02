@@ -1,6 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import { transformFormValueToTitleCaseOrdinal } from '../../utilities/transformFormValueToTitleCaseOrdinal';
 import joi from 'joi';
 
@@ -36,6 +37,30 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
 
   getValidationRules() {
     return ExternalDocumentNonStandardF.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
+    ordinalValue: JoiValidationConstants.STRING.required(),
+    otherIteration: joi
+      .when('ordinalValue', {
+        is: 'Other',
+        otherwise: joi.optional().allow(null),
+        then: joi.number().max(999).required(),
+      })
+      .messages(setDefaultErrorMessages('Select an iteration')),
+    previousDocument: joi
+      .object()
+      .keys({
+        documentTitle: JoiValidationConstants.STRING.optional(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .required()
+      .messages(setDefaultErrorMessages('Select a document')),
+  };
+
+  getValidationRules_NEW() {
+    return ExternalDocumentNonStandardF.VALIDATION_RULES_NEW;
   }
 
   getDocumentTitle(): string {

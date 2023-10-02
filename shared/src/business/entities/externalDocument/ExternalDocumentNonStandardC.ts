@@ -1,6 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
@@ -28,6 +29,26 @@ export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
 
   getValidationRules() {
     return ExternalDocumentNonStandardC.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
+    freeText: JoiValidationConstants.STRING.max(1000).required().messages({
+      'any.required': 'Provide an answer',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+    previousDocument: joi
+      .object()
+      .keys({
+        documentTitle: JoiValidationConstants.STRING.optional(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .required()
+      .messages(setDefaultErrorMessages('Select a document')),
+  };
+
+  getValidationRules_NEW() {
+    return ExternalDocumentNonStandardC.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
