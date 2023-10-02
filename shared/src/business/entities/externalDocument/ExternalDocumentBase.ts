@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { MAX_FILE_SIZE_MB } from '../EntityConstants';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 
 export class ExternalDocumentBase extends JoiValidationEntity {
   public category: string;
@@ -124,6 +125,26 @@ export class ExternalDocumentBase extends JoiValidationEntity {
 
   getValidationRules() {
     return ExternalDocumentBase.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    category: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessages('Select a Category.'),
+    ),
+    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().messages(
+      setDefaultErrorMessages(
+        'Document title must be 3000 characters or fewer. Update this document title and try again.',
+      ),
+    ),
+    documentType: JoiValidationConstants.STRING.required().messages({
+      ...setDefaultErrorMessages('Select a document type'),
+      'string.invalid':
+        'Proposed Stipulated Decision must be filed separately in each case',
+    }),
+  };
+
+  getValidationRules_NEW() {
+    return ExternalDocumentBase.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap(): any {
