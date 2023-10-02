@@ -68,7 +68,7 @@ export const StartCaseStep2 = connect(
                   htmlFor="petition-file"
                   id="petition-file-label"
                 >
-                  Upload your Petition PDF (.pdf)
+                  Upload Petition PDF (.pdf)
                 </label>
                 <span className="usa-hint">
                   Make sure file is not encrypted or password protected. Max
