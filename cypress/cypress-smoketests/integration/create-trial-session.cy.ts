@@ -1,10 +1,12 @@
 import { AuthenticationResult } from '../../support/login-types';
 import {
   blockCaseFromTrial,
+  goToCaseDetail,
   goToCaseOverview,
   manuallyAddCaseToCalendaredTrialSession,
   manuallyAddCaseToNewTrialSession,
   removeCaseFromTrialSession,
+  reviewAndServePetition,
   setCaseAsHighPriority,
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
@@ -40,7 +42,6 @@ import {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } from '../support/pages/reports';
-import { serveCaseToIrs } from '../support/pages/create-paper-case';
 import { waitForElasticsearch } from '../support/helpers';
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
@@ -191,27 +192,29 @@ describe('Petitions Clerk', () => {
     // these are separated into their own steps so if they fail
     // they can be rerun without affecting other steps in the test
     it('view case detail for first case', () => {
-      goToCaseOverview(firstDocketNumber);
+      goToCaseDetail(firstDocketNumber);
     });
 
     it('serve first case to irs', () => {
-      serveCaseToIrs();
+      reviewAndServePetition();
     });
 
     it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
+      goToCaseOverview(firstDocketNumber);
       manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
     });
 
     it('view case detail for second case', () => {
-      goToCaseOverview(secondDocketNumber);
+      goToCaseDetail(secondDocketNumber);
     });
 
     it('serve second case to irs', () => {
-      serveCaseToIrs();
+      reviewAndServePetition();
     });
 
     it('manually block second case', () => {
+      goToCaseOverview(secondDocketNumber);
       // block it
       blockCaseFromTrial();
       // do this well before we look for it on blocked cases report...

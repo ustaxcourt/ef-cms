@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import { closeScannerSetupDialog } from './create-paper-case';
 import { faker } from '@faker-js/faker';
 
 faker.seed(faker.number.int());
@@ -121,6 +122,7 @@ export const uploadCourtIssuedDocPdf = () => {
 export const reviewAndServePetition = () => {
   cy.get('#tab-document-view').click();
   cy.get('a:contains("Review and Serve Petition")').click();
+  closeScannerSetupDialog();
   cy.get('button#tab-irs-notice').click();
   cy.get('label#has-irs-verified-notice-no').click();
   cy.get('button#submit-case').click();
