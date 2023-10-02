@@ -1169,7 +1169,7 @@ export class Case extends JoiValidationEntity {
   };
 
   getValidationRules_NEW() {
-    return Case.VALIDATION_RULES;
+    return Case.VALIDATION_RULES_NEW;
   }
 
   assignFieldsForAllUsers({ rawCase }) {
