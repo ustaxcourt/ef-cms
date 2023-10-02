@@ -13,6 +13,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
+import { DOCKET_ENTRY_VALIDATION_RULES_NEW } from '@shared/business/entities/EntityValidationConstants.NEW';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
@@ -531,6 +532,10 @@ export class DocketEntry extends JoiValidationEntity {
     return DOCKET_ENTRY_VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return DOCKET_ENTRY_VALIDATION_RULES_NEW;
+  }
+
   getErrorToMessageMap() {
     return {
       filedBy: [
@@ -540,6 +545,7 @@ export class DocketEntry extends JoiValidationEntity {
         },
         'Enter a filed by',
       ],
+      otherFilingParty: 'Enter other filing party name.',
     };
   }
 
