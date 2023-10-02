@@ -62,6 +62,25 @@ export class CaseExternalIncomplete extends JoiValidationEntity {
     return CaseExternalIncomplete.VALIDATION_RULES;
   }
 
+  static VALIDATION_RULES_NEW = {
+    businessType: CaseExternal.VALIDATION_RULES_NEW.businessType,
+    caseType: CaseExternal.VALIDATION_RULES_NEW.caseType,
+    countryType: CaseExternal.VALIDATION_RULES_NEW.countryType,
+    filingType: CaseExternal.VALIDATION_RULES_NEW.filingType,
+    hasIrsNotice: CaseExternal.VALIDATION_RULES_NEW.hasIrsNotice,
+    partyType: CaseExternal.VALIDATION_RULES_NEW.partyType,
+    petitioners: joi
+      .array()
+      .description('List of Contact Entities for the case.')
+      .optional(),
+    preferredTrialCity: CaseExternal.VALIDATION_RULES_NEW.preferredTrialCity,
+    procedureType: CaseExternal.VALIDATION_RULES_NEW.procedureType,
+  } as const;
+
+  getValidationRules_NEW() {
+    return CaseExternalIncomplete.VALIDATION_RULES_NEW;
+  }
+
   getErrorToMessageMap() {
     return CaseExternalIncomplete.VALIDATION_ERROR_MESSAGES;
   }
