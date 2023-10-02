@@ -61,11 +61,11 @@ export const StartCaseStep1 = connect(
               htmlFor="stin-file"
               id="stin-file-label"
             >
-              Upload your Statement of Taxpayer Identification Number
+              Upload your Statement of Taxpayer Identification Number PDF (.pdf)
             </label>
             <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <div className="margin-top-0">
               <Button
@@ -81,7 +81,9 @@ export const StartCaseStep1 = connect(
                 Download Statement of Taxpayer Identification Number (T.C. Form
                 4)
               </Button>
-              <p className="margin-top-0">if you haven’t already done so</p>
+              <p className="margin-top-05 usa-hint">
+                if you haven’t already done so
+              </p>
             </div>
             <StateDrivenFileInput
               aria-describedby="stin-file-label"
