@@ -1,5 +1,6 @@
 import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 
 export class PetitionerDeceasedSpouseContact extends Contact {
   constructor(
@@ -15,6 +16,16 @@ export class PetitionerDeceasedSpouseContact extends Contact {
     return {
       ...super.getValidationRules(),
       inCareOf: JoiValidationConstants.STRING.max(100).required(),
+      phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
+      ...super.getValidationRules(),
+      inCareOf: JoiValidationConstants.STRING.max(100)
+        .required()
+        .messages(setDefaultErrorMessages('Enter name for in care of')),
       phone: JoiValidationConstants.STRING.max(100).optional().allow(null),
     };
   }
