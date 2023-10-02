@@ -7,7 +7,7 @@ export const chambersUserAppliesSignatureToDraftDocument = (
       expectedSignedJudgeName,
     );
     expect(cerebralTest.getState('pdfForSigning.nameForSigningLine2')).toEqual(
-      'Judge',
+      'Senior Judge',
     );
 
     await cerebralTest.runSequence('setPDFSignatureDataSequence', {
