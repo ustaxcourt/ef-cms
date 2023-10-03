@@ -159,6 +159,15 @@ describe('trialCalendar', () => {
               petitionerCounsel: undefined,
               respondentCounsel: undefined,
             },
+            {
+              caseTitle: 'Ziggy Marley',
+              docketNumber: '110-23',
+              docketNumberWithSuffix: '110-23',
+              inConsolidatedGroup: true,
+              isLeadCase: false,
+              petitionerCounsel: undefined,
+              respondentCounsel: undefined,
+            },
           ],
           sessionDetail: {
             address1: '123 Some Street',
