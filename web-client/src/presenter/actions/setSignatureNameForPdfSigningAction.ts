@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { trimSeniorPrefix } from '@web-client/presenter/actions/computeJudgeNameWithTitleAction';
 
 /**
  * sets the name to be used for signing a pdf
@@ -24,7 +25,7 @@ export const setSignatureNameForPdfSigningAction = async ({
         section: user.section,
       });
     nameForPdfSigning = judgeUser.judgeFullName!;
-    nameForSigningLine2 = judgeUser.judgeTitle!.replace('Senior ', '');
+    nameForSigningLine2 = trimSeniorPrefix(judgeUser.judgeTitle!);
   } else {
     const featureFlags = await applicationContext
       .getUseCases()
