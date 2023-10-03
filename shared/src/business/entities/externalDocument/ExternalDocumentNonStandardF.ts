@@ -41,14 +41,19 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
 
   static VALIDATION_RULES_NEW = {
     ...ExternalDocumentBase.VALIDATION_RULES_NEW,
-    ordinalValue: JoiValidationConstants.STRING.required(),
+    ordinalValue: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessages('Select an iteration'),
+    ),
     otherIteration: joi
       .when('ordinalValue', {
         is: 'Other',
         otherwise: joi.optional().allow(null),
         then: joi.number().max(999).required(),
       })
-      .messages(setDefaultErrorMessages('Select an iteration')),
+      .messages({
+        ...setDefaultErrorMessages('Maximum iteration value is 999.'),
+        'any.required': 'Enter an iteration number.',
+      }),
     previousDocument: joi
       .object()
       .keys({
