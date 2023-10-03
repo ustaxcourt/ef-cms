@@ -25,20 +25,24 @@ export const serveCaseToIrs = () => {
 export const closeScannerSetupDialogIfExists = () => {
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
   cy.on('fail', err => {
-    console.log('encountered an error trying to closeScanner', err);
+    console.log(
+      'encountered an error trying to close scanner setup dialog',
+      err,
+    );
     if (
-      err.message.includes('Timed out') &&
-      err.message.includes('div.dynamsoft-dialog-close')
+      (err.message.includes('Timed out') &&
+        err.message.includes('div.dynamsoft-dialog-close')) ||
+      err.message.includes('getDynamsoft')
     ) {
       console.log('this is the error we were looking for! do not worry');
       return false;
     }
-    console.log('oh no this is a bad one');
+    console.log('oh no this is a bad error, we should re throw it');
     throw err;
   });
 
-  // cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
-  // cy.wait('@getDynamsoft');
+  cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
+  cy.wait('@getDynamsoft');
 
   // the dynamsoft popup doesn't show immediately after the last script has been downloaded
 
