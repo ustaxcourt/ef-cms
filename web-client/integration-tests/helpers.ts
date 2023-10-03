@@ -836,13 +836,6 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     },
   );
 
-  presenter.state = mapValues(presenter.state, value => {
-    if (isFunction(value)) {
-      return withAppContextDecorator(value, applicationContext);
-    }
-    return value;
-  });
-
   presenter.providers.applicationContext = applicationContext;
 
   const {
@@ -897,11 +890,6 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       getData: () => Promise.resolve(getFakeFile(true)),
     },
   });
-
-  cerebralTest = CerebralTest(presenter);
-  cerebralTest.getSequence = seqName => obj =>
-    cerebralTest.runSequence(seqName, obj);
-  cerebralTest.closeSocket = stopSocket;
 
   const originalUseCases = applicationContext.getUseCases();
   const allUseCases = {
