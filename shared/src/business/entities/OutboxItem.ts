@@ -67,6 +67,10 @@ export class OutboxItem extends JoiValidationEntity {
     return OUTBOX_ITEM_VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return OUTBOX_ITEM_VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return {};
   }
