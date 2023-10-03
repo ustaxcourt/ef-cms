@@ -1,5 +1,9 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
+export function trimSeniorPrefix(judgeTitle: string) {
+  return judgeTitle.replace('Senior ', '');
+}
+
 /**
  * computes a judges name with their title
  * @param {object} providers the providers object
@@ -19,7 +23,9 @@ export const computeJudgeNameWithTitleAction = ({
   const foundJudge = judges.find(_judge => _judge.name === judge);
 
   if (foundJudge) {
-    judgeWithTitle = `${foundJudge.judgeTitle} ${foundJudge.name}`;
+    judgeWithTitle = `${trimSeniorPrefix(foundJudge.judgeTitle!)} ${
+      foundJudge.name
+    }`;
   }
 
   return {
