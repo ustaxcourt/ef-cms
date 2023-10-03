@@ -17,6 +17,7 @@ const config: Config = {
     '!jest-scripts.config.ts',
     '!set-maintenance-mode-locally.js',
     '!judge/update-judge-titles.ts',
+    '!judge/update-judge-isSeniorJudge.ts',
     '!run-once-scripts/**',
   ],
   coverageDirectory: './coverage',
