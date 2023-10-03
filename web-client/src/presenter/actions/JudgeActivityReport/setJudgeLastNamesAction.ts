@@ -10,7 +10,7 @@ export const setJudgeLastNamesAction = ({ get, store }: ActionProps) => {
     judgesToQueryFor = judges.map(judge => judge.name);
   } else if (judgeName === 'All Senior Judges') {
     judgesToQueryFor = judges
-      .filter(judge => judge.judgeTitle?.includes('Senior Judge'))
+      .filter(judge => judge.isSeniorJudge === true)
       .map(judge => judge.name);
   } else if (judgeName === 'All Special Trial Judges') {
     judgesToQueryFor = judges
@@ -18,6 +18,7 @@ export const setJudgeLastNamesAction = ({ get, store }: ActionProps) => {
       .map(judge => judge.name);
   } else if (judgeName === 'All Regular Judges') {
     judgesToQueryFor = judges
+      .filter(judge => judge.isSeniorJudge === false)
       .filter(
         judge =>
           judge.judgeTitle === 'Judge' || judge.judgeTitle === 'Chief Judge',

@@ -1608,3 +1608,11 @@ export const isDocumentBriefType = (documentType: string) => {
   return !!documents.find(document => document.documentType === documentType)
     ?.eventCode;
 };
+
+export const JUDGE_TITLES = [
+  'Judge',
+  'Special Trial Judge',
+  'Chief Special Trial Judge',
+  'Chief Judge',
+] as const;
+export type JudgeTitle = (typeof JUDGE_TITLES)[number];

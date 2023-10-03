@@ -9,7 +9,6 @@ export const getJudgeActivityReportCountsAction = async ({
   get,
 }: ActionProps) => {
   const { endDate, judges, startDate } = get(state.judgeActivityReport.filters);
-
   const eventCodes = [
     JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
     OPINION_EVENT_CODES_WITH_BENCH_OPINION,

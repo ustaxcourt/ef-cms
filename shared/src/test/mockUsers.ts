@@ -68,6 +68,7 @@ export const irsSuperuserUser = {
 export const judgeUser: RawUser = {
   email: 'judgeSotomayor@example.com',
   entityName: 'User',
+  isSeniorJudge: false,
   judgeFullName: 'Sonia Sotomayor',
   judgeTitle: 'Judge',
   name: 'Sotomayor',
@@ -78,8 +79,8 @@ export const judgeUser: RawUser = {
 export const judgeColvin: RawUser = {
   email: 'judgeColvin@example.com',
   entityName: 'User',
+  isSeniorJudge: true,
   judgeFullName: 'John O. Colvin',
-  judgeTitle: 'Senior Judge',
   name: 'Colvin',
   role: ROLES.judge,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
