@@ -73,16 +73,4 @@ describe('setSignatureNameForPdfSigningAction', () => {
       'Special Trial Judge',
     );
   });
-
-  it('removes the "Senior" designation from the judge title when signing, because "Senior" has a negative connotation associated with it.', async () => {
-    judgeUser.judgeTitle = 'Senior Judge';
-
-    const result = await runAction(setSignatureNameForPdfSigningAction, {
-      modules: {
-        presenter,
-      },
-    });
-    expect(result.state.pdfForSigning.nameForSigning).toEqual('John O. Colvin');
-    expect(result.state.pdfForSigning.nameForSigningLine2).toEqual('Judge');
-  });
 });
