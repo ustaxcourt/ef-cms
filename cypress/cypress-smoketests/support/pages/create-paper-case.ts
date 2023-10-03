@@ -29,15 +29,19 @@ export const closeScannerSetupDialogIfExists = () => {
       'encountered an error trying to close scanner setup dialog',
       err,
     );
+    cy.log('error encountered in close scanner setup dialog');
+    cy.log(err.message);
     if (
       (err.message.includes('Timed out') &&
         err.message.includes('div.dynamsoft-dialog-close')) ||
       err.message.includes('getDynamsoft')
     ) {
       console.log('this is the error we were looking for! do not worry');
+      cy.log('this is an err we do not worry about');
       return false;
     }
     console.log('oh no this is a bad error, we should re throw it');
+    cy.log('ERROR');
     throw err;
   });
 
