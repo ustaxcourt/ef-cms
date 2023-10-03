@@ -7,7 +7,7 @@ import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { Hint } from '../../ustc-ui/Hint/Hint';
 import { PDFPreviewButton } from '../PDFPreviewButton';
-import { WarningNotificationComponent } from '../WarningNotification';
+import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -208,14 +208,7 @@ export const FileDocumentReview = connect(
           information appears the way you want it to.
         </p>
         {fileDocumentHelper.redactionAcknowledgementEnabled ? (
-          <WarningNotificationComponent
-            alertWarning={{
-              message:
-                'Don’t forget to check your PDF(s) to ensure all personal information has been removed or redacted.',
-            }}
-            dismissable={false}
-            scrollToTop={false}
-          />
+          <PIIRedactedWarning />
         ) : (
           <Hint>
             Don’t forget to check your PDF(s) to ensure all personal information

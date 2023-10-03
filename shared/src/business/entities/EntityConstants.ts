@@ -1131,7 +1131,7 @@ export const US_STATES_OTHER = {
   FM: 'Federated States of Micronesia',
   GU: 'Guam',
   MH: 'Marshall Islands',
-  MP: 'Norther Mariana Islands',
+  MP: 'Northern Mariana Islands',
   PR: 'Puerto Rico',
   PW: 'Palau',
   VI: 'Virgin Islands',

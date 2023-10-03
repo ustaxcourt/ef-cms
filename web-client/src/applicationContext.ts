@@ -133,6 +133,7 @@ import { generateCaseAssociationDocumentTitleInteractor } from '../../shared/src
 import { generateCourtIssuedDocumentTitle } from '../../shared/src/business/useCases/courtIssuedDocument/generateCourtIssuedDocumentTitle';
 import { generateDocketRecordPdfInteractor } from '../../shared/src/proxies/generateDocketRecordPdfProxy';
 import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/documents/generateDraftStampOrderProxy';
+import { generateEntryOfAppearancePdfInteractor } from '../../shared/src/proxies/caseAssociation/generateEntryOfAppearancePdfProxy';
 import { generateExternalDocumentTitle } from '../../shared/src/business/useCases/externalDocument/generateExternalDocumentTitle';
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
@@ -428,6 +429,7 @@ const allUseCases = {
   generateCaseAssociationDocumentTitleInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
+  generateEntryOfAppearancePdfInteractor,
   generatePDFFromJPGDataInteractor,
   generatePractitionerCaseListPdfInteractor,
   generatePrintableCaseInventoryReportInteractor,
@@ -610,7 +612,7 @@ tryCatchDecorator(allUseCases);
 const appConstants = deepFreeze({
   ...getConstants(),
   ERROR_MAP_429,
-});
+}) as ReturnType<typeof getConstants>;
 
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {
