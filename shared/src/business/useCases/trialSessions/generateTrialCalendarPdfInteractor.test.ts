@@ -53,6 +53,12 @@ describe('generateTrialCalendarPdfInteractor', () => {
       docketNumberWithSuffix: '34189-21',
       leadDocketNumber: '34189-21',
     },
+    {
+      ...MOCK_CASE,
+      docketNumber: '555-13',
+      docketNumberWithSuffix: '555-13',
+      leadDocketNumber: '234-12',
+    },
   ];
 
   const mockPdfUrl = { url: 'www.example.com' };
@@ -95,12 +101,24 @@ describe('generateTrialCalendarPdfInteractor', () => {
           {
             calendarNotes: undefined,
             caseTitle: 'Test Petitioner',
+            docketNumber: '555-13',
+            docketNumberWithSuffix: '555-13',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: false,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
             docketNumber: '101-18',
             docketNumberWithSuffix: '101-18',
             inConsolidatedGroup: false,
             isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: false,
           },
           {
             calendarNotes: 'this is a test',
@@ -111,6 +129,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: false,
             petitionerCounsel: ['Private Practitioner (BN1234)'],
             respondentCounsel: ['IRS Practitioner (BN2345)'],
+            shouldIndent: false,
           },
           {
             calendarNotes: undefined,
@@ -121,6 +140,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: true,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: false,
           },
           {
             calendarNotes: undefined,
@@ -131,6 +151,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: true,
           },
           {
             calendarNotes: undefined,
@@ -141,6 +162,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: true,
           },
           {
             calendarNotes: undefined,
@@ -151,6 +173,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: false,
           },
         ],
         sessionDetail: {
