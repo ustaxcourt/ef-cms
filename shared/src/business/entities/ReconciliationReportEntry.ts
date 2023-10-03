@@ -47,6 +47,26 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
     ]);
   }
 
+  getValidationRules_NEW() {
+    // TODO: THERE IS A DOCKET_ENTRY_VALIDATION_RULES_NEW
+    // WE CANNOT USE THAT RIGHT NOW SINVE THE _NEW
+    // VERSION INCLUDES CUSTOM MESSAGES BUT THIS ENTITY
+    // HAS NO CUSTOM ERROR MESSAGES
+    return pick(DOCKET_ENTRY_VALIDATION_RULES, [
+      'caseCaption',
+      'docketEntryId',
+      'docketNumber',
+      'documentTitle',
+      'eventCode',
+      'isFileAttached',
+      'filedBy',
+      'filingDate',
+      'index',
+      'servedAt',
+      'servedPartiesCode',
+    ]);
+  }
+
   getErrorToMessageMap() {
     return {};
   }
