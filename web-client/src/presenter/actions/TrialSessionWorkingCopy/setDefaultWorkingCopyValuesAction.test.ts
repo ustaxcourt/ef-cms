@@ -10,7 +10,11 @@ describe('setDefaultWorkingCopyValuesAction', () => {
       modules: {
         presenter,
       },
-      state: {},
+      state: {
+        trialSessionWorkingCopy: {
+          caseMetadata: {},
+        },
+      },
     });
     expect(result.state.trialSessionWorkingCopy.sort).toEqual('docket');
     expect(result.state.trialSessionWorkingCopy.sortOrder).toEqual('asc');
@@ -39,6 +43,7 @@ describe('setDefaultWorkingCopyValuesAction', () => {
       },
       state: {
         trialSessionWorkingCopy: {
+          caseMetadata: {},
           filters: {
             basisReached: false,
             continued: false,
@@ -57,44 +62,6 @@ describe('setDefaultWorkingCopyValuesAction', () => {
       continued: false,
       dismissed: false,
       recall: false,
-    });
-  });
-
-  it('should not touch trial statuses when UPDATED_TRIAL_STATUS_TYPES flag is false', async () => {
-    const result = await runAction(setDefaultWorkingCopyValuesAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        featureFlags: {
-          'updated-trial-status-types': false,
-        },
-        trialSessionWorkingCopy: {
-          caseMetadata: {
-            '101-20': {
-              trialStatus: 'settled',
-            },
-            '102-20': {
-              trialStatus: 'settled',
-            },
-            '103-20': {
-              trialStatus: 'rule122',
-            },
-          },
-        },
-      },
-    });
-
-    expect(result.state.trialSessionWorkingCopy.caseMetadata).toEqual({
-      '101-20': {
-        trialStatus: 'settled',
-      },
-      '102-20': {
-        trialStatus: 'settled',
-      },
-      '103-20': {
-        trialStatus: 'rule122',
-      },
     });
   });
 
