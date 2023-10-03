@@ -36,6 +36,7 @@ export class User extends JoiValidationEntity {
   public judgeFullName?: string;
   public judgeTitle?: JudgeTitle;
   public section?: string;
+  public isSeniorJudge?: boolean;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
