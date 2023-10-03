@@ -69,6 +69,7 @@ export class User extends JoiValidationEntity {
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
       this.judgeFullName = rawUser.judgeFullName;
       this.judgeTitle = rawUser.judgeTitle;
+      this.isSeniorJudge = rawUser.isSeniorJudge;
     }
 
     this.section = rawUser.section;
@@ -108,6 +109,11 @@ export class User extends JoiValidationEntity {
   };
 
   static BASE_USER_VALIDATION = {
+    isSeniorJudge: joi.when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.boolean().required(),
+    }),
     judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),

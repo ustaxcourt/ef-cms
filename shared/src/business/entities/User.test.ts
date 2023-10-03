@@ -158,6 +158,7 @@ describe('User entity', () => {
 
     it('Creates a valid active judge user', () => {
       const user = new User({
+        isSeniorJudge: false,
         judgeFullName: 'Saul Perfectly Goodman',
         judgeTitle: 'Chief Judge',
         name: 'Saul Goodman',
@@ -171,6 +172,7 @@ describe('User entity', () => {
     JUDGE_TITLES.forEach(judgeTitle => {
       it(`should create a valid judge whose title is ${judgeTitle}`, () => {
         const user = new User({
+          isSeniorJudge: false,
           judgeFullName: 'Saul Perfectly Goodman',
           judgeTitle,
           name: 'Saul Goodman',
@@ -182,8 +184,22 @@ describe('User entity', () => {
       });
     });
 
+    it('is invalid when a judge does not have an isSeniorJudge designator', () => {
+      const user = new User({
+        isSeniorJudge: undefined,
+        judgeFullName: 'Saul Perfectly Goodman',
+        judgeTitle: 'Chief Judge',
+        name: 'Saul Goodman',
+        role: ROLES.judge,
+        userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+      });
+
+      expect(user.isValid()).toBeFalsy();
+    });
+
     it('is invalid when a judge does not have a judge title', () => {
       const user = new User({
+        isSeniorJudge: false,
         judgeFullName: 'Saul Perfectly Goodman',
         name: 'Saul Goodman',
         role: ROLES.judge,
@@ -195,6 +211,7 @@ describe('User entity', () => {
 
     it('is invalid when a judge does not have a judgeFullName', () => {
       const user = new User({
+        isSeniorJudge: false,
         judgeTitle: 'Judge',
         name: 'Saul Goodman',
         role: ROLES.judge,
@@ -206,6 +223,7 @@ describe('User entity', () => {
 
     it('Creates a valid legacy judge user', () => {
       const user = new User({
+        isSeniorJudge: false,
         judgeTitle: 'Legacy Chief Judge',
         name: 'Saul Goodman',
         role: ROLES.legacyJudge,
