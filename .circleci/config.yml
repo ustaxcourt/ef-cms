@@ -836,34 +836,8 @@ workflows:
   build-and-deploy:
     when: << pipeline.parameters.run_build_and_deploy >>
     jobs:
-      - deploy:
-          <<: *only-deployed-lower-environments
-      - migrate:
-          <<: *only-deployed-lower-environments
-          requires:
-            - deploy
-      - wait-for-migration:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - migrate
-      - prepare-for-reindex:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-migration
-      - wait-for-reindex:
-          <<: *only-deployed-lower-environments
-          type: approval
-          requires:
-            - prepare-for-reindex
-      - disable-reindex-cron:
-          <<: *only-deployed-lower-environments
-          requires:
-            - wait-for-reindex
       - smoketests:
           <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
