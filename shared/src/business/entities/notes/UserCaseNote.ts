@@ -1,5 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 
 export class UserCaseNote extends JoiValidationEntity {
   public docketNumber: string;
@@ -26,6 +27,18 @@ export class UserCaseNote extends JoiValidationEntity {
 
   getValidationRules() {
     return UserCaseNote.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
+    notes: JoiValidationConstants.STRING.required().messages(
+      setDefaultErrorMessages('Add note'),
+    ),
+    userId: JoiValidationConstants.UUID.required(),
+  };
+
+  getValidationRules_NEW() {
+    return UserCaseNote.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
