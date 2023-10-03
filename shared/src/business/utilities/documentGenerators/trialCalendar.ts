@@ -11,12 +11,13 @@ export const trialCalendar = async ({
       docketNumber: string;
       docketNumberWithSuffix: string;
       caseTitle: string;
-      respondentCounsel: string[];
+      respondentCounsel?: string[];
       inConsolidatedGroup: boolean;
-      calendarNotes: string;
+      calendarNotes?: string;
       isLeadCase: boolean;
-      petitionerCounsel: string[];
+      petitionerCounsel?: string[];
       shouldIndent?: boolean;
+      leadDocketNumber?: string;
     }[];
     sessionDetail: {
       startTime: string;
@@ -31,7 +32,7 @@ export const trialCalendar = async ({
       courtReporter: string;
       notes?: string;
       irsCalendarAdministrator: string;
-      noLocationEntered: boolean;
+      noLocationEntered?: boolean;
       trialLocation?: string;
     };
   };
