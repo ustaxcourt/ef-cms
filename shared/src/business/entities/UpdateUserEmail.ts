@@ -1,5 +1,6 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 /**
@@ -38,6 +39,21 @@ export class UpdateUserEmail extends JoiValidationEntity {
         joi.ref('email'),
       ).required(),
       email: JoiValidationConstants.EMAIL.required(),
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
+      confirmEmail: JoiValidationConstants.EMAIL.valid(joi.ref('email'))
+        .required()
+        .messages({
+          'any.only': 'Email addresses do not match',
+          'any.required': 'Enter a valid email address',
+          'string.email': 'Enter a valid email address',
+        }),
+      email: JoiValidationConstants.EMAIL.required().messages(
+        setDefaultErrorMessages('Enter a valid email address'),
+      ),
     };
   }
 
