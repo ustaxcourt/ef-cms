@@ -6,6 +6,7 @@ import {
   User,
   VALIDATION_ERROR_MESSAGES,
 } from './User';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export const entityName = 'IrsPractitioner';
@@ -45,6 +46,31 @@ export class IrsPractitioner extends User {
 
   getValidationRules() {
     return IrsPractitioner.VALIDATION_RULES as any;
+  }
+
+  static VALIDATION_RULES_NEW = joi.object().keys({
+    barNumber: JoiValidationConstants.STRING.max(100)
+      .required()
+      .description(
+        'A unique identifier comprising of the practitioner initials, date, and series number.',
+      ),
+    contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
+    email: JoiValidationConstants.EMAIL.optional(),
+    entityName:
+      JoiValidationConstants.STRING.valid('IrsPractitioner').required(),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessages('Enter name')),
+    role: JoiValidationConstants.STRING.valid(ROLES.irsPractitioner).required(),
+    serviceIndicator: JoiValidationConstants.STRING.valid(
+      ...Object.values(SERVICE_INDICATOR_TYPES),
+    ).required(),
+    token: JoiValidationConstants.STRING.optional(),
+    userId: JoiValidationConstants.UUID.required(),
+  });
+
+  getValidationRules_NEW() {
+    return IrsPractitioner.VALIDATION_RULES_NEW as any;
   }
 
   getErrorToMessageMap() {
