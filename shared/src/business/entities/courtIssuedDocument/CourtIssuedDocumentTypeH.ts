@@ -6,6 +6,7 @@ import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 
 export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
   public attachments: boolean;
@@ -46,6 +47,25 @@ export class CourtIssuedDocumentTypeH extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeH.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+    date: JoiValidationConstants.ISO_DATE.max('now')
+      .required()
+      .messages({
+        ...setDefaultErrorMessages('Enter a date'),
+        'date.max': 'Enter a valid date',
+        'date.min': 'Enter a valid date',
+      }),
+    freeText: JoiValidationConstants.STRING.max(1000).required().messages({
+      'any.required': 'Enter a description',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
+  };
+
+  getValidationRules_NEW() {
+    return CourtIssuedDocumentTypeH.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
