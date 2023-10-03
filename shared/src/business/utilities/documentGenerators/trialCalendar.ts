@@ -16,6 +16,7 @@ export const trialCalendar = async ({
       calendarNotes: string;
       isLeadCase: boolean;
       petitionerCounsel: string[];
+      shouldIndent?: boolean;
     }[];
     sessionDetail: {
       startTime: string;

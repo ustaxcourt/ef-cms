@@ -53,6 +53,12 @@ describe('generateTrialCalendarPdfInteractor', () => {
       docketNumberWithSuffix: '34189-21',
       leadDocketNumber: '34189-21',
     },
+    {
+      ...MOCK_CASE,
+      docketNumber: '555-13',
+      docketNumberWithSuffix: '555-13',
+      leadDocketNumber: '234-12',
+    },
   ];
 
   const mockPdfUrl = { url: 'www.example.com' };
@@ -95,6 +101,17 @@ describe('generateTrialCalendarPdfInteractor', () => {
           {
             calendarNotes: undefined,
             caseTitle: 'Test Petitioner',
+            docketNumber: '555-13',
+            docketNumberWithSuffix: '555-13',
+            inConsolidatedGroup: true,
+            isLeadCase: false,
+            petitionerCounsel: [],
+            respondentCounsel: [],
+            shouldIndent: undefined,
+          },
+          {
+            calendarNotes: undefined,
+            caseTitle: 'Test Petitioner',
             docketNumber: '101-18',
             docketNumberWithSuffix: '101-18',
             inConsolidatedGroup: false,
@@ -131,6 +148,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: true,
           },
           {
             calendarNotes: undefined,
@@ -141,6 +159,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
             isLeadCase: false,
             petitionerCounsel: [],
             respondentCounsel: [],
+            shouldIndent: true,
           },
           {
             calendarNotes: undefined,

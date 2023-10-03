@@ -17,6 +17,7 @@ export const TrialCalendar = ({
     calendarNotes: string;
     isLeadCase: boolean;
     petitionerCounsel: string[];
+    shouldIndent?: boolean;
   }[];
   sessionDetail: {
     startTime: string;
@@ -134,7 +135,9 @@ export const TrialCalendar = ({
                 <tr className="border-bottom-0">
                   <td
                     className={classNames(
-                      memberCase ? 'margin-left-2' : '',
+                      {
+                        'margin-left-2': caseDetail.shouldIndent,
+                      },
                       'docket-number-with-icon',
                       'no-wrap',
                     )}

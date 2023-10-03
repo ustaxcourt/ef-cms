@@ -83,13 +83,16 @@ export const generateTrialCalendarPdfInteractor = async (
 };
 
 const formatCases = ({ applicationContext, calendaredCases }) => {
-  return calendaredCases
-    .filter(calendaredCase => !calendaredCase.removedFromTrial)
-    .sort(compareCasesByDocketNumberFactory({ allCases: calendaredCases }))
+  const openCases = calendaredCases.filter(
+    calendaredCase => !calendaredCase.removedFromTrial,
+  );
+  return openCases
+    .sort(compareCasesByDocketNumberFactory({ allCases: openCases }))
     .map(openCase => {
-      const { inConsolidatedGroup, isLeadCase } = applicationContext
-        .getUtilities()
-        .setConsolidationFlagsForDisplay(openCase, calendaredCases);
+      const { inConsolidatedGroup, isLeadCase, shouldIndent } =
+        applicationContext
+          .getUtilities()
+          .setConsolidationFlagsForDisplay(openCase, openCases);
 
       return {
         calendarNotes: openCase.calendarNotes,
@@ -101,6 +104,7 @@ const formatCases = ({ applicationContext, calendaredCases }) => {
         petitionerCounsel:
           openCase.privatePractitioners.map(getPractitionerName),
         respondentCounsel: openCase.irsPractitioners.map(getPractitionerName),
+        shouldIndent,
       };
     });
 };
