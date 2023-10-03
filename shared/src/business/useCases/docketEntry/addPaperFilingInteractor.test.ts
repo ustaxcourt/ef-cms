@@ -1,5 +1,4 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
@@ -41,12 +40,6 @@ describe('addPaperFilingInteractor', () => {
       .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
-      .getUseCases()
-      .getAllFeatureFlagsInteractor.mockReturnValue({
-        [ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key]: true,
-      });
-
-    applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
   });
@@ -83,7 +76,6 @@ describe('addPaperFilingInteractor', () => {
       consolidatedGroupDocketNumbers: [],
       docketEntryId: mockdocketEntryId,
       documentMetadata: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: mockCase.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -127,7 +119,6 @@ describe('addPaperFilingInteractor', () => {
       consolidatedGroupDocketNumbers: [],
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: mockCase.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -168,7 +159,6 @@ describe('addPaperFilingInteractor', () => {
       ],
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         docketNumber: mockCase.docketNumber,
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
@@ -363,7 +353,6 @@ describe('addPaperFilingInteractor', () => {
         consolidatedGroupDocketNumbers: [],
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
           docketNumber: mockCase.docketNumber,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
