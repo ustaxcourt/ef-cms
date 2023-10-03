@@ -23,44 +23,12 @@ export const serveCaseToIrs = () => {
 };
 
 export const closeScannerSetupDialogIfExists = () => {
-  // the dynamsoft popup doesn't show immediately after the last script has been downloaded
-  cy.on('fail', err => {
-    console.log(
-      'encountered an error trying to close scanner setup dialog',
-      err,
-    );
-    if (
-      (err.name == 'CypressError' &&
-        err.message.includes('Timed out') &&
-        err.message.includes('getDynamsoft')) ||
-      (err.name == 'Assertion Error' &&
-        err.message.includes('Timed out') &&
-        err.message.includes('div.dynamsoft-dialog-close'))
-    ) {
-      console.log('this is the error we were looking for! do not worry');
-      console.log(err);
-      cy.log('this is an err we do not worry about');
-      closeDialogIfExists();
-      return false;
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(10000);
+
+  cy.get('body').then(body => {
+    if (body.find('div.dynamsoft-dialog-close').length > 0) {
+      cy.get('div.dynamsoft-dialog-close').click();
     }
-    console.log('oh no this is a bad error, we should re throw it');
-    cy.log('ERROR');
-    throw err;
   });
-
-  cy.intercept('dynamsoft.webtwain.install.js?t=*').as('getDynamsoft');
-  cy.wait('@getDynamsoft');
-
-  // the dynamsoft popup doesn't show immediately after the last script has been downloaded
-  cy.get('div.dynamsoft-dialog-close', { timeout: 10000 });
-
-  const closeDialogIfExists = () => {
-    cy.get('body').then(body => {
-      if (body.find('div.dynamsoft-dialog-close').length > 0) {
-        cy.get('div.dynamsoft-dialog-close').click();
-      }
-    });
-  };
-
-  closeDialogIfExists();
 };
