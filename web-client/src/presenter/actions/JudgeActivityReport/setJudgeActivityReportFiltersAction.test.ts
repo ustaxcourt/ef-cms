@@ -7,14 +7,11 @@ import { setJudgeActivityReportFiltersAction } from './setJudgeActivityReportFil
 presenter.providers.applicationContext = applicationContextForClient;
 
 describe('setJudgeActivityReportFiltersAction', () => {
-  let filters;
-  beforeEach(() => {
-    filters = {
-      endDate: '',
-      judgeName: '',
-      startDate: '',
-    };
-  });
+  const filters = {
+    endDate: '',
+    startDate: '',
+  };
+
   const testEndDate = '2019-05-17';
   const testStartDate = '2019-05-14';
 
@@ -56,7 +53,7 @@ describe('setJudgeActivityReportFiltersAction', () => {
     expect(result.state.judgeActivityReport.filters.endDate).toEqual('');
   });
 
-  it('sets state.judgeActivityReport.filters.startDate to the formatted props.startDate', async () => {
+  it('sets state.judgeActivityReport.filters.startDate to props.startDate', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
@@ -73,7 +70,8 @@ describe('setJudgeActivityReportFiltersAction', () => {
       testStartDate,
     );
   });
-  it('sets state.judgeActivityReport.filters.endDate to the formatted props.endDate', async () => {
+
+  it('sets state.judgeActivityReport.filters.endDate to props.endDate', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
@@ -91,7 +89,7 @@ describe('setJudgeActivityReportFiltersAction', () => {
     );
   });
 
-  it('should set state.judgeActivityReport.filters.judgeName to props.judgeName', async () => {
+  it('should set state.judgeActivityReport.judgeName to props.judgeName', async () => {
     const result = await runAction(setJudgeActivityReportFiltersAction, {
       modules: { presenter },
       props: {
@@ -104,8 +102,6 @@ describe('setJudgeActivityReportFiltersAction', () => {
       },
     });
 
-    expect(result.state.judgeActivityReport.filters.judgeName).toEqual(
-      judgeUser.name,
-    );
+    expect(result.state.judgeActivityReport.judgeName).toEqual(judgeUser.name);
   });
 });
