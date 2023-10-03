@@ -18,6 +18,7 @@ describe('trialCalendar', () => {
               inConsolidatedGroup: false,
               petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
               respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
+              shouldIndent: undefined,
             },
             {
               caseTitle: 'Art Garfunkel',
@@ -28,6 +29,7 @@ describe('trialCalendar', () => {
               leadDocketNumber: '234-56',
               petitionerCounsel: ['Mick Haller'],
               respondentCounsel: ['Joy Falotico'],
+              shouldIndent: undefined,
             },
             {
               calendarNotes:
@@ -40,6 +42,7 @@ describe('trialCalendar', () => {
               leadDocketNumber: '234-56',
               petitionerCounsel: ['Alicia Keys', 'James Taylor'],
               respondentCounsel: ['Stevie Nicks'],
+              shouldIndent: true,
             },
             {
               caseTitle: 'Bob Marley',
@@ -50,6 +53,7 @@ describe('trialCalendar', () => {
               leadDocketNumber: '234-56',
               petitionerCounsel: undefined,
               respondentCounsel: ['Billy Joel'],
+              shouldIndent: true,
             },
             {
               calendarNotes:
@@ -60,6 +64,7 @@ describe('trialCalendar', () => {
               inConsolidatedGroup: false,
               petitionerCounsel: ['Bruce Springsteen', 'Dolly Parton'],
               respondentCounsel: undefined,
+              shouldIndent: undefined,
             },
             {
               caseTitle: 'Aretha Franklin',
@@ -68,6 +73,7 @@ describe('trialCalendar', () => {
               inConsolidatedGroup: false,
               petitionerCounsel: undefined,
               respondentCounsel: undefined,
+              shouldIndent: undefined,
             },
           ],
           sessionDetail: {
@@ -108,6 +114,7 @@ describe('trialCalendar', () => {
               inConsolidatedGroup: false,
               petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
               respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
+              shouldIndent: undefined,
             },
             {
               caseTitle: 'Art Garfunkel',
@@ -118,6 +125,7 @@ describe('trialCalendar', () => {
               leadDocketNumber: '234-56',
               petitionerCounsel: ['Mick Haller'],
               respondentCounsel: ['Joy Falotico'],
+              shouldIndent: undefined,
             },
             {
               calendarNotes:
@@ -130,6 +138,7 @@ describe('trialCalendar', () => {
               leadDocketNumber: '234-56',
               petitionerCounsel: ['Alicia Keys', 'James Taylor'],
               respondentCounsel: ['Stevie Nicks'],
+              shouldIndent: true,
             },
             {
               caseTitle: 'Bob Marley',
@@ -140,6 +149,7 @@ describe('trialCalendar', () => {
               leadDocketNumber: '234-56',
               petitionerCounsel: undefined,
               respondentCounsel: ['Billy Joel'],
+              shouldIndent: true,
             },
             {
               calendarNotes:
@@ -150,6 +160,7 @@ describe('trialCalendar', () => {
               inConsolidatedGroup: false,
               petitionerCounsel: ['Bruce Springsteen', 'Dolly Parton'],
               respondentCounsel: undefined,
+              shouldIndent: undefined,
             },
             {
               caseTitle: 'Aretha Franklin',
@@ -158,15 +169,17 @@ describe('trialCalendar', () => {
               inConsolidatedGroup: false,
               petitionerCounsel: undefined,
               respondentCounsel: undefined,
+              shouldIndent: undefined,
             },
             {
               caseTitle: 'Ziggy Marley',
-              docketNumber: '110-23',
-              docketNumberWithSuffix: '110-23',
+              docketNumber: '111-23',
+              docketNumberWithSuffix: '111-23',
               inConsolidatedGroup: true,
               isLeadCase: false,
               petitionerCounsel: undefined,
               respondentCounsel: undefined,
+              shouldIndent: undefined,
             },
           ],
           sessionDetail: {
