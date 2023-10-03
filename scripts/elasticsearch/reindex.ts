@@ -10,10 +10,8 @@ import { requireEnvVars } from '../../shared/admin-tools/util';
 requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
 
 (async () => {
-  const {
-    ELASTICSEARCH_ENDPOINT: elasticsearchEndpoint,
-    ENV: environmentName,
-  } = process.env;
+  const elasticsearchEndpoint = process.env.ELASTICSEARCH_ENDPOINT!;
+  const environmentName = process.env.ENV!;
   const client: Client = await getClient({
     elasticsearchEndpoint,
     environmentName,
@@ -30,14 +28,15 @@ requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
     elasticsearchIndexes.map((index: string) => {
       const baseAlias = getBaseAliasFromIndexName(index);
       if (!(index in aliasedIndexes)) {
-        const existingAlias = aliases.find(a => a.alias === baseAlias);
+        const currentIndex =
+          aliases.find(a => a.alias === baseAlias)?.index || baseAlias;
         return client.reindex({
           body: {
             destination: {
               index,
             },
             source: {
-              index: existingAlias.index,
+              index: currentIndex,
             },
           },
           wait_for_completion: false,
