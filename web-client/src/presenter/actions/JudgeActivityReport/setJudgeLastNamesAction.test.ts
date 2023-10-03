@@ -30,7 +30,7 @@ describe('setJudgeLastNamesAction', () => {
     },
     {
       ...judgeUser,
-      judgeTitle: 'Senior Judge',
+      isSeniorJudge: true,
       name: 'Some Senior Judge',
     },
   ];

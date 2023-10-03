@@ -18,6 +18,7 @@ export const setJudgeLastNamesAction = ({ get, store }: ActionProps) => {
       .map(judge => judge.name);
   } else if (judgeName === 'All Regular Judges') {
     judgesToQueryFor = judges
+      .filter(judge => judge.isSeniorJudge === false)
       .filter(
         judge =>
           judge.judgeTitle === 'Judge' || judge.judgeTitle === 'Chief Judge',
