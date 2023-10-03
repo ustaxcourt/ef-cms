@@ -97,6 +97,47 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
       userId: JoiValidationConstants.UUID.required(),
     };
   }
+
+  getValidationRules_NEW() {
+    return {
+      caseMetadata: joi
+        .object()
+        .pattern(
+          DOCKET_NUMBER_MATCHER, // keys are docket numbers
+          joi.object().keys({
+            trialStatus: joi.string().allow(''),
+          }),
+        )
+        .optional(),
+      entityName: JoiValidationConstants.STRING.valid(
+        'TrialSessionWorkingCopy',
+      ).required(),
+      filters: joi
+        .object()
+        .keys({
+          basisReached: joi.boolean().required(),
+          continued: joi.boolean().required(),
+          definiteTrial: joi.boolean().required(),
+          dismissed: joi.boolean().required(),
+          motionToDismiss: joi.boolean().required(),
+          probableSettlement: joi.boolean().required(),
+          probableTrial: joi.boolean().required(),
+          recall: joi.boolean().required(),
+          rule122: joi.boolean().required(),
+          setForTrial: joi.boolean().required(),
+          settled: joi.boolean().required(),
+          showAll: joi.boolean().required(),
+          statusUnassigned: joi.boolean().required(),
+          submittedCAV: joi.boolean().required(),
+        })
+        .required(),
+      sessionNotes: JoiValidationConstants.STRING.optional(),
+      sort: JoiValidationConstants.STRING.optional(),
+      sortOrder: JoiValidationConstants.STRING.optional(),
+      trialSessionId: JoiValidationConstants.UUID.required(),
+      userId: JoiValidationConstants.UUID.required(),
+    };
+  }
 }
 
 declare global {
