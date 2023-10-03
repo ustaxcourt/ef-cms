@@ -7,6 +7,7 @@ import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
 import joi from 'joi';
 
 export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
@@ -51,6 +52,26 @@ export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
 
   getValidationRules() {
     return CourtIssuedDocumentTypeE.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+    date: joi
+      .when('createdAt', {
+        is: joi.exist().not(null),
+        otherwise:
+          JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
+        then: JoiValidationConstants.ISO_DATE.required(),
+      })
+      .messages({
+        ...setDefaultErrorMessages('Enter a date'),
+        'date.max': 'Enter a valid date',
+        'date.min': 'Enter a valid date',
+      }),
+  };
+
+  getValidationRules_NEW() {
+    return CourtIssuedDocumentTypeE.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {
