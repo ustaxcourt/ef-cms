@@ -69,6 +69,7 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
       })
       .messages({
         ...setDefaultErrorMessages('Enter a date'),
+        'date.max': 'Enter a valid date',
         'date.min': 'Enter a valid date',
       }),
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
