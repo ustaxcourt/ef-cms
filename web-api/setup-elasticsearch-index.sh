@@ -24,7 +24,7 @@ MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
 pushd ./web-api/terraform/main
-../bin/deploy-init.sh "${1}"
+../bin/deploy-init.sh "${ENV}"
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
@@ -52,9 +52,9 @@ fi
 popd
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}" ]]; then
-  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
+  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_ALPHA}"
 fi
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}" ]]; then
-  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"
+  npx ts-node --transpile-only ./web-api/elasticsearch/elasticsearch-index-settings.ts "${ELASTICSEARCH_ENDPOINT_BETA}"
 fi
