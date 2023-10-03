@@ -128,6 +128,7 @@ const joiErrorKeys = [
   'string.min',
   'string.normalize',
   'string.pattern',
+  'string.pattern.base',
   'string.replace',
   'string.token',
   'string.trim',
