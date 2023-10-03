@@ -55,14 +55,19 @@ export const getClient = async ({
   });
 };
 
-export const listDomains = async (): Promise<string[] | undefined> => {
+export const listDomains = async (): Promise<string[]> => {
   const openSearchClient = new OpenSearchClient({ region: 'us-east-1' });
   const listDomainsCommand: ListDomainNamesCommand = new ListDomainNamesCommand(
     { EngineType: 'OpenSearch' || 'Elasticsearch' },
   );
   const listDomainsResponse = await openSearchClient.send(listDomainsCommand);
-  return (
-    listDomainsResponse.DomainNames?.map(domain => domain.DomainName) ||
-    undefined
-  );
+  const domainNames: string[] = [];
+  if (listDomainsResponse.DomainNames) {
+    for (const domainInfo of listDomainsResponse.DomainNames) {
+      if (domainInfo.DomainName) {
+        domainNames.push(domainInfo.DomainName);
+      }
+    }
+  }
+  return domainNames;
 };
