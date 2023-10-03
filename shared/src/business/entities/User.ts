@@ -1,6 +1,8 @@
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
+  JUDGE_TITLES,
+  JudgeTitle,
   ROLES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -32,7 +34,7 @@ export class User extends JoiValidationEntity {
     state: string;
   };
   public judgeFullName?: string;
-  public judgeTitle?: string;
+  public judgeTitle?: JudgeTitle;
   public section?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
@@ -110,10 +112,10 @@ export class User extends JoiValidationEntity {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
-    judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
+    judgeTitle: joi.when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
-      then: joi.required(),
+      then: JoiValidationConstants.STRING.valid(...JUDGE_TITLES).required(),
     }),
     name: JoiValidationConstants.STRING.max(100).required(),
     role: JoiValidationConstants.STRING.valid(

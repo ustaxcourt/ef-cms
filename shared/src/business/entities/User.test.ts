@@ -2,6 +2,7 @@ import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
   DOCKET_SECTION,
+  JUDGE_TITLES,
   ROLES,
 } from './EntityConstants';
 import { User } from './User';
@@ -165,6 +166,20 @@ describe('User entity', () => {
       });
 
       expect(user.isValid()).toBeTruthy();
+    });
+
+    JUDGE_TITLES.forEach(judgeTitle => {
+      it(`should create a valid judge whose title is ${judgeTitle}`, () => {
+        const user = new User({
+          judgeFullName: 'Saul Perfectly Goodman',
+          judgeTitle,
+          name: 'Saul Goodman',
+          role: ROLES.judge,
+          userId: '5488fed1-1129-4ca0-be7a-3ea3998be953',
+        });
+
+        expect(user.isValid()).toBeTruthy();
+      });
     });
 
     it('is invalid when a judge does not have a judge title', () => {
