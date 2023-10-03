@@ -2,8 +2,6 @@ import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityC
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 
-const { VALIDATION_ERROR_MESSAGES } = Case;
-
 export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
   return it('Petitions clerk submits case to IRS', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -29,8 +27,9 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
     );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
+      irsNoticeDate: Case.VALIDATION_ERROR_MESSAGES.irsNoticeDate[0].message,
     });
 
     await cerebralTest.runSequence(

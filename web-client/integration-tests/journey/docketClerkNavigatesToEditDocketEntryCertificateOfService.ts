@@ -62,7 +62,7 @@ export const docketClerkNavigatesToEditDocketEntryCertificateOfService = (
     await cerebralTest.runSequence(
       'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateDate',
+        key: 'filingDate',
         toFormat: FORMATS.ISO,
         value: '07/13/2002',
       },
