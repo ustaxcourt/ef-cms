@@ -1,5 +1,3 @@
-import { trimSeniorPrefix } from '@web-client/presenter/actions/computeJudgeNameWithTitleAction';
-
 export const getJudgeWithTitle = async ({
   applicationContext,
   judgeUserName,
@@ -20,5 +18,5 @@ export const getJudgeWithTitle = async ({
 
   const judgeName = useFullName ? foundJudge.judgeFullName : foundJudge.name;
 
-  return `${trimSeniorPrefix(foundJudge.judgeTitle)} ${judgeName}`;
+  return `${foundJudge.judgeTitle} ${judgeName}`;
 };

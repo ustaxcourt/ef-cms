@@ -1600,7 +1600,6 @@ export const JUDGE_TITLES = [
   'Judge',
   'Special Trial Judge',
   'Chief Special Trial Judge',
-  'Senior Judge',
   'Chief Judge',
 ] as const;
 export type JudgeTitle = (typeof JUDGE_TITLES)[number];
