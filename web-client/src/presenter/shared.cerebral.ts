@@ -3,9 +3,9 @@ import type { ClientApplicationContext } from '@web-client/applicationContext';
 import type { FunctionComponent } from 'react';
 import type { Get } from 'cerebral';
 
-type FakeConnectType = <PassedProps = {}>(
-  depsMap: any,
-  component: FunctionComponent<any>,
+type FakeConnectType = <PassedProps, Deps>(
+  depsMap: Deps,
+  component: FunctionComponent<Deps & PassedProps>,
 ) => FunctionComponent<PassedProps>;
 export const connect = cerebralConnect as unknown as FakeConnectType;
 
