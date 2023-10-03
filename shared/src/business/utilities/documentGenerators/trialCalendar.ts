@@ -4,6 +4,36 @@ import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTempl
 export const trialCalendar = async ({
   applicationContext,
   data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    cases: {
+      docketNumber: string;
+      docketNumberWithSuffix: string;
+      caseTitle: string;
+      respondentCounsel: string[];
+      inConsolidatedGroup: boolean;
+      calendarNotes: string;
+      isLeadCase: boolean;
+      petitionerCounsel: string[];
+    }[];
+    sessionDetail: {
+      startTime: string;
+      startDate: string;
+      sessionType: string;
+      courthouseName?: string;
+      address1?: string;
+      address2?: string;
+      formattedCityStateZip: string;
+      judge: string;
+      trialClerk: string;
+      courtReporter: string;
+      notes?: string;
+      irsCalendarAdministrator: string;
+      noLocationEntered: boolean;
+      trialLocation?: string;
+    };
+  };
 }): Promise<Buffer> => {
   const { cases, sessionDetail } = data;
 

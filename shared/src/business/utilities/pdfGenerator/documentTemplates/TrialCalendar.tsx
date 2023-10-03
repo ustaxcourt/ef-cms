@@ -4,38 +4,37 @@ import { isMemberCase } from '@shared/business/utilities/generateSelectedFilterL
 import React from 'react';
 import classNames from 'classnames';
 
-type TrialCalendarType = {
+export const TrialCalendar = ({
+  cases = [],
+  sessionDetail,
+}: {
   cases: {
     docketNumber: string;
     docketNumberWithSuffix: string;
     caseTitle: string;
-    petitionerCounsel: string;
+    inConsolidatedGroup: boolean;
     respondentCounsel: string[];
     calendarNotes: string;
     isLeadCase: boolean;
+    petitionerCounsel: string[];
   }[];
   sessionDetail: {
     startTime: string;
     startDate: string;
     sessionType: string;
-    courthouseName: string;
-    address1: string;
-    address2: string;
+    courthouseName?: string;
+    address1?: string;
+    address2?: string;
     formattedCityStateZip: string;
     judge: string;
     trialClerk: string;
     courtReporter: string;
-    notes: string;
+    notes?: string;
     irsCalendarAdministrator: string;
     noLocationEntered: boolean;
-    trialLocation: string;
+    trialLocation?: string;
   };
-};
-
-export const TrialCalendar = ({
-  cases = [],
-  sessionDetail,
-}: TrialCalendarType) => {
+}) => {
   return (
     <div id="trial-calendar">
       <PrimaryHeader />
@@ -170,8 +169,7 @@ export const TrialCalendar = ({
                       ))}
                   </td>
                 </tr>
-
-                <tr>
+                <tr className="border-bottom-0">
                   <td colSpan={1}></td>
                   <td colSpan={3}>
                     {caseDetail.calendarNotes && (
@@ -183,6 +181,9 @@ export const TrialCalendar = ({
                       </span>
                     )}
                   </td>
+                </tr>
+                <tr className="blank-note-row">
+                  <td colSpan={7}></td>
                 </tr>
               </React.Fragment>
             );
