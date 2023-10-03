@@ -96,22 +96,18 @@ function removeUnhelpfulErrorMessagesFromContactValidations(
 ): { [key: string]: string } | null {
   if (!errors) return null;
   const updatedErrors = { ...errors };
-  Object.entries(errors)
-    .filter((entry: [string, string]) =>
-      isUnhelpfulErrorMessagesFromContactValidations(entry),
-    )
-    .forEach(([key, message]: [string, string]) => {
-      updatedErrors[key] = message;
-    });
+  Object.entries(errors).forEach((entry: [string, string]) => {
+    if (deleteUnhelpfulMessages(entry)) {
+      delete updatedErrors[entry[0]];
+    }
+  });
 
   return Object.keys(updatedErrors).length ? updatedErrors : null;
 }
 
-function isUnhelpfulErrorMessagesFromContactValidations(
-  entry: [string, string],
-) {
+function deleteUnhelpfulMessages(entry: [string, string]) {
   const message = entry[1];
-  if (typeof message !== 'string') return true;
-  if (!message.endsWith('does not match any of the allowed types')) return true;
+  if (typeof message !== 'string') return false;
+  if (message.endsWith('does not match any of the allowed types')) return true;
   return false;
 }
