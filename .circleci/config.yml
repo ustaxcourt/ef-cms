@@ -275,10 +275,6 @@ jobs:
           command: |
             ./web-api/workflow-terraform/migration-cron/bin/disable.sh
       - run:
-          name: Deploy Check Reindex Status Cron Lambda
-          command: |
-            npm run deploy:reindex-cron -- $ENV
-      - run:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
@@ -290,6 +286,16 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
+      - run:
+          name: Begin Reindexing
+          command: |
+            if [ "$MIGRATE_FLAG" != "true" ]; then
+              npx ts-node --transpile-only ./scripts/elasticsearch/reindex.ts
+            fi
+      - run:
+          name: Deploy Check Reindex Status Cron Lambda
+          command: |
+            npm run deploy:reindex-cron -- $ENV
       - run:
           name: Enable Check Reindex Status Cron
           command: |
