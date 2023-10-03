@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
-import { closeScannerSetupDialog } from './create-paper-case';
+import { closeScannerSetupDialogIfExists } from './create-paper-case';
 import { faker } from '@faker-js/faker';
 
 faker.seed(faker.number.int());
@@ -129,7 +129,7 @@ export const reviewAndServePetition = () => {
   cy.get('button:contains("Serve to IRS")').click();
   cy.get('button#confirm:contains("Yes, Serve")').click();
   cy.get('.usa-alert:contains("Petition served")').should('exist');
-  closeScannerSetupDialog();
+  closeScannerSetupDialogIfExists();
 };
 
 export const clickSaveUploadedPdfButton = () => {
