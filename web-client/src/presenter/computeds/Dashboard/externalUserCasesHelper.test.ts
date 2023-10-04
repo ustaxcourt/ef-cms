@@ -65,18 +65,37 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it('sets the total count of both open and closed cases', () => {
+  it('sets the total count of both open and closed cases based on when the user is directly associated with the case', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
         closedCases: [{ docketNumber: '101-20' }],
-        openCases: [{ docketNumber: '102-20' }, { docketNumber: '103-20' }],
+        openCases: [
+          {
+            conslidatedCases: [
+              {
+                docketNumber: '108-20',
+                isRequestingUserAssociated: true,
+                leadDocketNumber: '102-20',
+              },
+              {
+                docketNumber: '109-20',
+                isRequestingUserAssociated: true,
+                leadDocketNumber: '102-20',
+              },
+            ],
+            docketNumber: '102-20',
+            isRequestingUserAssociated: false,
+            leadDocketNumber: '102-20',
+          },
+          { docketNumber: '103-20', isRequestingUserAssociated: true },
+        ],
       },
     });
 
     expect(result).toMatchObject({
       closedCasesCount: 1,
-      openCasesCount: 2,
+      openCasesCount: 3,
     });
   });
 

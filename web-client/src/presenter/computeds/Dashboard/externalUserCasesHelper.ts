@@ -1,7 +1,7 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
+
 export const externalUserCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -21,6 +21,20 @@ export const externalUserCasesHelper = (
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
   const pageSize = get(state.constants.CASE_LIST_PAGE_SIZE);
+  // console.log({ formattedOpenCases });
+  let openCasesCount = 0;
+  // formattedOpenCases.forEach(aCase => {
+  //   if (aCase.consolidatedCases) {
+  //     aCase.conslidatedCases.forEach(consolidatedCase => {
+  //       if (consolidatedCase.isRequestingUserAssociated) {
+  //         openCasesCount = openCasesCount + 1;
+  //       }
+  //     });
+  //   }
+  //   if (aCase.isRequestingUserAssociated) {
+  //     openCasesCount = openCasesCount + 1;
+  //   }
+  // });
 
   return {
     closedCaseResults: formattedClosedCases.slice(
@@ -29,7 +43,7 @@ export const externalUserCasesHelper = (
     ),
     closedCasesCount: formattedClosedCases.length,
     openCaseResults: formattedOpenCases.slice(0, openCurrentPage * pageSize),
-    openCasesCount: formattedOpenCases.length,
+    openCasesCount,
     showLoadMoreClosedCases:
       formattedClosedCases.length > closedCurrentPage * pageSize,
     showLoadMoreOpenCases:
