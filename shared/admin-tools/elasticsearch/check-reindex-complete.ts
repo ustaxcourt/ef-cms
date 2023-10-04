@@ -1,27 +1,49 @@
-const { getClient } = require('../../../web-api/elasticsearch/client');
+import {
+  baseAliases,
+  getBaseAliasFromIndexName,
+} from '../../../web-api/elasticsearch/elasticsearch-aliases';
+import { getClient } from '../../../web-api/elasticsearch/client';
 
-const getClusterStats = async ({ environmentName, version }) => {
+export const getClusterStats = async ({
+  environmentName,
+  version,
+}: {
+  environmentName: string;
+  version: string;
+}): Promise<{
+  counts: { [key: string]: number };
+  info: { [key: string]: any };
+}> => {
   const esClient = await getClient({ environmentName, version });
   const apiResponse = await esClient.indices.stats({
     index: '_all',
     level: 'indices',
   });
 
-  const info = apiResponse.body.indices;
-
   const counts = {};
-  for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
+  const info = {};
+  for (const indexName in apiResponse.body?.indices) {
+    const baseAlias =
+      baseAliases.map(a => a.alias).includes(indexName) ||
+      !indexName.includes('-')
+        ? indexName
+        : getBaseAliasFromIndexName(indexName);
+
+    info[baseAlias] = apiResponse.body.indices[indexName];
+
     const res = await esClient.count({
       index: indexName,
     });
-    counts[indexName] = res.body.count;
+    counts[baseAlias] = Number(res.body?.count || 0);
   }
 
   return { counts, info };
 };
 
-exports.isReindexComplete = async environmentName => {
-  const destinationVersion = process.env.DESTINATION_TABLE.split('-').pop();
+export const isMigratedClusterFinishedIndexing = async (
+  environmentName: string,
+): Promise<boolean> => {
+  const destinationVersion = process.env.DESTINATION_TABLE!.split('-').pop();
   const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
   let diffTotal = 0;
@@ -32,7 +54,7 @@ exports.isReindexComplete = async environmentName => {
   let { counts: destinationCounts, info: destinationInfo } =
     await getClusterStats({
       environmentName,
-      version: destinationVersion,
+      version: destinationVersion!,
     });
 
   for (const indexName of ['efcms-case', 'efcms-docket-entry', 'efcms-user']) {
@@ -54,11 +76,12 @@ exports.isReindexComplete = async environmentName => {
     'efcms-message',
     'efcms-work-item',
   ]) {
-    const operationsDestination =
-      destinationInfo[indexName].total.translog.operations;
+    const operationsDestination = Number(
+      destinationInfo[indexName].total?.translog?.operations || 0,
+    );
     if (operationsDestination > 0) {
       console.log(
-        `${operationsDestination} operations on ${indexName} still processing, waiting 60 seconds to check operations again.`,
+        `${operationsDestination} operations on ${indexName} still processing.`,
       );
       return false;
     }

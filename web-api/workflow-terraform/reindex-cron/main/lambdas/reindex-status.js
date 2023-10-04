@@ -2,7 +2,7 @@ const {
   approvePendingJob,
 } = require('../../../../../shared/admin-tools/circleci/circleci-helper');
 const {
-  isReindexComplete,
+  isMigratedClusterFinishedIndexing,
 } = require('../../../../../shared/admin-tools/elasticsearch/check-reindex-complete');
 
 exports.handler = async () => {
@@ -11,7 +11,8 @@ exports.handler = async () => {
   if (migrateFlag === 'true') {
     console.log(`Migrate flag is ${migrateFlag}`);
     const environmentName = process.env.STAGE;
-    const isReindexFinished = await isReindexComplete(environmentName);
+    const isReindexFinished =
+      await isMigratedClusterFinishedIndexing(environmentName);
 
     if (!isReindexFinished) {
       console.log('Reindex is not complete');
