@@ -216,7 +216,7 @@
     "test:client:unit": "jest --config web-client/jest-unit.config.ts",
     "test:client:unit:ci": "jest --config web-client/jest-unit.config.ts --coverageDirectory=./coverage/${NODE_INDEX} ${TESTFILES}",
     "test:scripts": "jest --config scripts/jest-scripts.config.ts",
-    "test:file": "IS_LOCAL=true CI=false NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --config web-client/jest-integration.config.ts -- ",
+    "test:file": "IS_LOCAL=true CI=false NO_SCANNER=true SKIP_VIRUS_SCAN=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --detectOpenHandles --config web-client/jest-integration.config.ts -- ",
     "test:performance": "MULTICORE=1 ARTILLERY_WORKERS=4 artillery run -o ./artillery/private-app-report.json ./artillery/private-app.yml",
     "test:performance:messages": "MULTICORE=1 ARTILLERY_WORKERS=4 artillery run -o ./artillery/read-messages-report.json ./artillery/read-messages.yml && artillery report ./artillery/read-messages-report.json",
     "test:performance:document-qc": "MULTICORE=1 ARTILLERY_WORKERS=4 artillery run -o ./artillery/read-qc-section-messages.json ./artillery/read-qc-section-messages.yml && artillery report ./artillery/read-qc-section-messages.json",
