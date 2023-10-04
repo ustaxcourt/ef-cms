@@ -17,7 +17,7 @@ export const updateCase = async ({
   caseToUpdate: RawCase;
 }) => {
   const setLeadCase = caseToUpdate.leadDocketNumber
-    ? { gsi1pk: `case|${caseToUpdate.leadDocketNumber}` }
+    ? { gsi1pk: `leadCase|${caseToUpdate.leadDocketNumber}` }
     : {};
 
   await put({
