@@ -147,6 +147,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
     )
     .messages({
       ...setDefaultErrorMessages('Enter a filed by'),
+      'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
     }),
   filedByRole: joi
     .when('isDraft', {
