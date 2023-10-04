@@ -21,20 +21,20 @@ export const externalUserCasesHelper = (
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
   const pageSize = get(state.constants.CASE_LIST_PAGE_SIZE);
-  // console.log({ formattedOpenCases });
   let openCasesCount = 0;
-  // formattedOpenCases.forEach(aCase => {
-  //   if (aCase.consolidatedCases) {
-  //     aCase.conslidatedCases.forEach(consolidatedCase => {
-  //       if (consolidatedCase.isRequestingUserAssociated) {
-  //         openCasesCount = openCasesCount + 1;
-  //       }
-  //     });
-  //   }
-  //   if (aCase.isRequestingUserAssociated) {
-  //     openCasesCount = openCasesCount + 1;
-  //   }
-  // });
+
+  formattedOpenCases.forEach(aCase => {
+    if (aCase.consolidatedCases) {
+      aCase.consolidatedCases.forEach(consolidatedCase => {
+        if (consolidatedCase.isRequestingUserAssociated) {
+          openCasesCount = openCasesCount + 1;
+        }
+      });
+    }
+    if (aCase.isRequestingUserAssociated) {
+      openCasesCount = openCasesCount + 1;
+    }
+  });
 
   return {
     closedCaseResults: formattedClosedCases.slice(

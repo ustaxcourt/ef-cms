@@ -1,18 +1,9 @@
-import { applicationContext } from '../../../applicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 const externalUserCasesHelper = withAppContextDecorator(
   externalUserCasesHelperComputed,
-  {
-    ...applicationContext,
-    getUtilities: () => ({
-      formatCase: () => ({
-        docketNumber: '123-20',
-      }),
-    }),
-  },
 );
 
 const baseState = {
@@ -24,7 +15,7 @@ const baseState = {
 };
 
 describe('externalUserCasesHelper', () => {
-  it('returns more than 10 open and closed cases, shows load more button for both', () => {
+  it('should display the load more button for both open and closed cases if there are more than 10 cases for each', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
@@ -37,7 +28,7 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it("doesn't show load more button for closed cases", () => {
+  it("should not show 'Load More' button for closed cases", () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
@@ -51,7 +42,7 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it("doesn't show load more button for open cases", () => {
+  it("should not show 'Load More' button for open cases", () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
@@ -72,7 +63,7 @@ describe('externalUserCasesHelper', () => {
         closedCases: [{ docketNumber: '101-20' }],
         openCases: [
           {
-            conslidatedCases: [
+            consolidatedCases: [
               {
                 docketNumber: '108-20',
                 isRequestingUserAssociated: true,
