@@ -9,7 +9,8 @@ import { externalUserCasesHelper } from '@web-client/presenter/computeds/Dashboa
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
-describe('Skittles', () => {
+// TODO: Decide if this integration test is necessary
+describe('Practitioner Dashboard', () => {
   const cerebralTest = setupTest();
   const externalUserCasesComputed = withAppContextDecorator(
     externalUserCasesHelper,
@@ -30,12 +31,9 @@ describe('Skittles', () => {
     }).openCasesCount;
   });
 
-  // Create a consolidated group (3 cases)
   createConsolidatedGroup(cerebralTest, {}, 2);
 
-  // associate private_practitioner_1 with 1 case in the group
   loginAs(cerebralTest, 'privatepractitioner1@example.com');
-  // practitionerRequestsAccessToCaseManual(cerebralTest, fakeFile);
   it('Practitioner requests access to 2 cases', async () => {
     for (let i = 0; i < 2; i++) {
       const docketNumberToAssociateWith =

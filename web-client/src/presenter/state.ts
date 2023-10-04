@@ -287,6 +287,7 @@ export const baseState = {
   },
   caseDetail: {} as RawCase,
   closedCases: [],
+  closedCasesCurrentPage: 1,
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -371,6 +372,7 @@ export const baseState = {
     unreadMessageCount?: number;
   },
   openCases: [],
+  openCasesCurrentPage: 1,
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
