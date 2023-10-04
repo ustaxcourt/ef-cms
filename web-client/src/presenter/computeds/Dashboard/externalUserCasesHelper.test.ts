@@ -6,20 +6,46 @@ const externalUserCasesHelper = withAppContextDecorator(
   externalUserCasesHelperComputed,
 );
 
-const baseState = {
-  closedCases: [...Array(10).keys()],
-  constants: {
-    CASE_LIST_PAGE_SIZE: 5,
-  },
-  openCases: [...Array(10).keys()],
-};
-
 describe('externalUserCasesHelper', () => {
-  it('should display the load more button for both open and closed cases if there are more than 10 cases for each', () => {
-    const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
+  let baseState;
+  beforeEach(() => {
+    baseState = {
+      closedCases: [
+        { docketNumber: '101-20' },
+        { docketNumber: '102-20' },
+        { docketNumber: '103-20' },
+        { docketNumber: '104-20' },
+      ],
+      constants: {
+        CASE_LIST_PAGE_SIZE: 2,
       },
+      openCases: [
+        {
+          consolidatedCases: [
+            {
+              docketNumber: '108-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '102-20',
+            },
+            {
+              docketNumber: '109-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '102-20',
+            },
+          ],
+          docketNumber: '102-20',
+          isRequestingUserAssociated: false,
+          leadDocketNumber: '102-20',
+        },
+        { docketNumber: '103-21', isRequestingUserAssociated: true },
+        { docketNumber: '103-22' },
+        { docketNumber: '103-23' },
+      ],
+    };
+  });
+  it('should display the load more button for both open and closed cases if there are more cases than page size', () => {
+    const result = runCompute(externalUserCasesHelper, {
+      state: baseState,
     });
 
     expect(result).toMatchObject({
@@ -32,7 +58,7 @@ describe('externalUserCasesHelper', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        closedCases: [0],
+        closedCases: [{ docketNumber: '104-20' }],
       },
     });
 
@@ -46,7 +72,7 @@ describe('externalUserCasesHelper', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        openCases: [0],
+        openCases: [{ docketNumber: '103-23' }],
       },
     });
 
@@ -58,34 +84,11 @@ describe('externalUserCasesHelper', () => {
 
   it('sets the total count of both open and closed cases based on when the user is directly associated with the case', () => {
     const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
-        closedCases: [{ docketNumber: '101-20' }],
-        openCases: [
-          {
-            consolidatedCases: [
-              {
-                docketNumber: '108-20',
-                isRequestingUserAssociated: true,
-                leadDocketNumber: '102-20',
-              },
-              {
-                docketNumber: '109-20',
-                isRequestingUserAssociated: true,
-                leadDocketNumber: '102-20',
-              },
-            ],
-            docketNumber: '102-20',
-            isRequestingUserAssociated: false,
-            leadDocketNumber: '102-20',
-          },
-          { docketNumber: '103-20', isRequestingUserAssociated: true },
-        ],
-      },
+      state: baseState,
     });
 
     expect(result).toMatchObject({
-      closedCasesCount: 1,
+      closedCasesCount: 4,
       openCasesCount: 3,
     });
   });
