@@ -1,13 +1,11 @@
+import { CavAndSubmittedFilteredCasesType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const getSubmittedAndCavCasesForJudgeAction = async ({
+export const getSubmittedAndCavCasesForCurrentJudgeAction = async ({
   applicationContext,
   get,
 }: ActionProps): Promise<{
-  cases: (RawCase & {
-    daysElapsedSinceLastStatusChange: number;
-    formattedCaseCount: number;
-  })[];
+  cases: CavAndSubmittedFilteredCasesType[];
 }> => {
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 

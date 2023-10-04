@@ -65,14 +65,21 @@ export const irsSuperuserUser = {
   userId: '2eee98ac-613f-46bc-afd5-2574d1b15664',
 };
 
-export const judgeUser = {
+export const judgeUser: RawUser = {
+  email: 'judgeSotomayor@example.com',
+  entityName: 'User',
+  isSeniorJudge: false,
   judgeFullName: 'Sonia Sotomayor',
+  judgeTitle: 'Judge',
   name: 'Sotomayor',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
 };
 
-export const judgeColvin = {
+export const judgeColvin: RawUser = {
+  email: 'judgeColvin@example.com',
+  entityName: 'User',
+  isSeniorJudge: true,
   judgeFullName: 'John O. Colvin',
   name: 'Colvin',
   role: ROLES.judge,

@@ -13,6 +13,8 @@ export type TDynamoRecord<T = Record<string, any>> = {
   ttl?: number;
 } & T;
 
+export type UserRecord = TDynamoRecord & RawUser;
+
 export type DocketEntryDynamoRecord = TDynamoRecord<RawDocketEntry>;
 
 export type OutboxDynamoRecord = TDynamoRecord<RawOutboxItem>;
