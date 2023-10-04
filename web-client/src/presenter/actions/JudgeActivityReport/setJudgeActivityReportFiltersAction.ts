@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const setJudgeActivityReportFiltersAction = ({
   props,
@@ -9,7 +9,7 @@ export const setJudgeActivityReportFiltersAction = ({
   const selectedJudge: string = props.judgeName;
 
   if (selectedJudge) {
-    store.set(state.judgeActivityReport.filters.judgeName, selectedJudge);
+    store.set(state.judgeActivityReport.judgeName, selectedJudge);
   }
   if (filterStartDate || filterStartDate === '') {
     store.set(state.judgeActivityReport.filters.startDate, filterStartDate);

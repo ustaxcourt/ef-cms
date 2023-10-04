@@ -1,7 +1,9 @@
 import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
 import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import joi from 'joi';
 
 export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestDocument {
   public attachments?: boolean;
@@ -19,6 +21,7 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   public primaryDocumentFile: any;
   public scenario: string;
   public supportingDocuments?: any[];
+  public generationType: string;
 
   constructor(rawProps) {
     super('CaseAssociationRequestDocumentTypeD');
@@ -38,6 +41,7 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
     this.filers = rawProps.filers || [];
     this.scenario = rawProps.scenario;
     this.supportingDocuments = rawProps.supportingDocuments;
+    this.generationType = rawProps.generationType;
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
@@ -77,7 +81,11 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   };
 
   getValidationRules() {
-    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES;
+    const rules = { ...CaseAssociationRequestDocumentTypeD.VALIDATION_RULES };
+    if (this.generationType === GENERATION_TYPES.AUTO) {
+      rules.primaryDocumentFile = joi.object().optional();
+    }
+    return rules;
   }
 
   getValidationRules_NEW() {

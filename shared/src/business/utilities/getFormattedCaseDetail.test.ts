@@ -414,13 +414,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toHaveProperty('consolidatedCases');
       expect(result.consolidatedCases).toMatchObject([MOCK_CASE]);
     });
-
-    it('should not set consolidated cases if none are passed', () => {
-      const result = formatCase(applicationContext, MOCK_CASE);
-
-      expect(result).toMatchObject(MOCK_CASE);
-      expect(result).not.toHaveProperty('consolidatedCases');
-    });
   });
 
   describe('getFormattedCaseDetail', () => {
@@ -472,17 +465,17 @@ describe('getFormattedCaseDetail', () => {
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-1-2-3`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-1-2-3/sign`,
-          signedAtFormatted: undefined,
+          signedAtFormatted: '',
         },
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-2-3-4`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-2-3-4/sign`,
-          signedAtFormatted: undefined,
+          signedAtFormatted: '',
         },
         {
           editUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-upload-court-issued/d-3-4-5`,
           signUrl: `/case-detail/${MOCK_CASE.docketNumber}/edit-order/d-3-4-5/sign`,
-          signedAtFormatted: undefined,
+          signedAtFormatted: '',
         },
       ]);
     });
@@ -491,6 +484,7 @@ describe('getFormattedCaseDetail', () => {
       const result = getFormattedCaseDetail({
         applicationContext,
         caseDetail: {
+          ...MOCK_CASE,
           docketEntries: [
             {
               docketEntryId: 'd-1-2-3',
@@ -526,6 +520,7 @@ describe('getFormattedCaseDetail', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
       caseDetail: {
+        ...MOCK_CASE,
         petitionPaymentDate: '2019-03-01T21:40:46.415Z',
         petitionPaymentMethod: 'check',
         petitionPaymentStatus: PAYMENT_STATUS.PAID,
@@ -539,6 +534,7 @@ describe('getFormattedCaseDetail', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
       caseDetail: {
+        ...MOCK_CASE,
         petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
         petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
       },
@@ -550,7 +546,10 @@ describe('getFormattedCaseDetail', () => {
   it('should format filing fee string for an unpaid petition fee', () => {
     const result = getFormattedCaseDetail({
       applicationContext,
-      caseDetail: { petitionPaymentStatus: PAYMENT_STATUS.UNPAID },
+      caseDetail: {
+        ...MOCK_CASE,
+        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+      },
     });
 
     expect(result.filingFee).toEqual(`${PAYMENT_STATUS.UNPAID}  `);

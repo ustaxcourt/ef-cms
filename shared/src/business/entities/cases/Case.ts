@@ -11,6 +11,7 @@ import {
   CLOSED_CASE_STATUSES,
   CONTACT_TYPES,
   CaseStatus,
+  CaseType,
   DOCKET_NUMBER_SUFFIXES,
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -26,9 +27,24 @@ import {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
+import {
+  CASE_CAPTION_RULE,
+  CASE_DOCKET_NUMBER_RULE,
+  CASE_IRS_PRACTITIONERS_RULE,
+  CASE_IS_SEALED_RULE,
+  CASE_LEAD_DOCKET_NUMBER_RULE,
+  CASE_PETITIONERS_RULE,
+  CASE_PRIVATE_PRACTITIONERS_RULE,
+  CASE_SORTABLE_DOCKET_NUMBER_RULE,
+  CASE_STATUS_RULE,
+  DOCKET_ENTRY_VALIDATION_RULES,
+} from '../EntityValidationConstants';
+import {
+  ConsolidatedCaseSummary,
+  RawConsolidatedCaseSummary,
+} from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
-import { DOCKET_ENTRY_VALIDATION_RULES } from '../EntityValidationConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES_NEW } from '@shared/business/entities/EntityValidationConstants.NEW';
 import { DocketEntry } from '../DocketEntry';
 import {
@@ -72,60 +88,61 @@ export class Case extends JoiValidationEntity {
   public highPriorityReason?: string;
   public judgeUserId?: string;
   public litigationCosts?: number;
-  public qcCompleteForTrial: boolean;
-  public noticeOfAttachments: boolean;
-  public orderDesignatingPlaceOfTrial: boolean;
-  public orderForAmendedPetition: boolean;
-  public orderForAmendedPetitionAndFilingFee: boolean;
-  public orderForFilingFee: boolean;
-  public orderForCds: boolean;
-  public orderForRatification: boolean;
-  public orderToShowCause: boolean;
+  public qcCompleteForTrial?: Record<string, any>;
+  public noticeOfAttachments?: boolean;
+  public orderDesignatingPlaceOfTrial?: boolean;
+  public orderForAmendedPetition?: boolean;
+  public orderForAmendedPetitionAndFilingFee?: boolean;
+  public orderForFilingFee?: boolean;
+  public orderForCds?: boolean;
+  public orderForRatification?: boolean;
+  public orderToShowCause?: boolean;
   public petitioners: TPetitioner[];
   public caseCaption: string;
-  public caseType: string;
+  public caseType: CaseType;
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
-  public filingType: string;
-  public hasVerifiedIrsNotice: boolean;
-  public irsNoticeDate: string;
-  public isPaper: boolean;
+  public docketNumberSuffix?: string | null;
+  public filingType?: string;
+  public hasVerifiedIrsNotice?: boolean;
+  public irsNoticeDate?: string;
+  public isPaper?: boolean;
   public leadDocketNumber?: string;
-  public mailingDate: string;
+  public mailingDate?: string;
   public partyType: string;
   public petitionPaymentDate?: string;
-  public petitionPaymentMethod: string;
+  public petitionPaymentMethod?: string;
   public petitionPaymentStatus: string;
   public petitionPaymentWaivedDate?: string;
-  public preferredTrialCity: string;
+  public preferredTrialCity?: string;
   public procedureType: string;
   public receivedAt: string;
   public sealedDate?: string;
-  public status: string;
+  public status: CaseStatus;
   public sortableDocketNumber: number;
   public trialDate?: string;
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
-  public useSameAsPrimary: string;
-  public initialDocketNumberSuffix: string;
-  public noticeOfTrialDate: string;
-  public docketNumberWithSuffix: string;
-  public canAllowDocumentService: string;
+  public useSameAsPrimary?: string;
+  public initialDocketNumberSuffix?: string;
+  public noticeOfTrialDate?: string;
+  public docketNumberWithSuffix?: string;
+  public canAllowDocumentService?: boolean;
   public canAllowPrintableDocketRecord!: boolean;
-  public archivedDocketEntries: RawDocketEntry[];
+  public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
-  public isSealed: boolean;
+  public isSealed?: boolean;
   public hearings: any[];
-  public privatePractitioners: any[];
-  public initialCaption: string;
-  public irsPractitioners: any[];
-  public statistics: any[];
-  public correspondence: any[];
-  public archivedCorrespondences: any[];
-  public hasPendingItems: boolean;
+  public privatePractitioners?: any[];
+  public initialCaption?: string;
+  public irsPractitioners?: any[];
+  public statistics?: any[];
+  public correspondence?: any[];
+  public archivedCorrespondences?: any[];
+  public hasPendingItems?: boolean;
+  public consolidatedCases: RawConsolidatedCaseSummary[] = [];
 
   constructor(
     rawCase: any,
@@ -146,7 +163,6 @@ export class Case extends JoiValidationEntity {
     }
 
     this.petitioners = [];
-
     const currentUser = applicationContext.getCurrentUser();
 
     if (!filtered || User.isInternalUser(currentUser.role)) {
@@ -159,6 +175,7 @@ export class Case extends JoiValidationEntity {
     const params = { applicationContext, filtered, rawCase };
 
     // assignContacts needs to come first before assignDocketEntries
+    this.assignConsolidatedCases({ rawCase });
     this.assignContacts(params);
     this.assignDocketEntries(params);
     this.assignHearings(params);
@@ -368,7 +385,6 @@ export class Case extends JoiValidationEntity {
     this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
-
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
     this.orderDesignatingPlaceOfTrial =
       rawCase.orderDesignatingPlaceOfTrial || false;
@@ -452,9 +468,7 @@ export class Case extends JoiValidationEntity {
       .meta({ tags: ['Restricted'] }),
     canAllowDocumentService: joi.boolean().optional(),
     canAllowPrintableDocketRecord: joi.boolean().optional(),
-    caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
-      'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
-    ),
+    caseCaption: CASE_CAPTION_RULE,
     caseNote: JoiValidationConstants.STRING.max(9000)
       .optional()
       .meta({
@@ -470,6 +484,11 @@ export class Case extends JoiValidationEntity {
       otherwise: joi.optional(),
       then: joi.required(),
     }),
+    consolidatedCases: joi
+      .array()
+      .items(ConsolidatedCaseSummary.VALIDATION_RULES)
+      .required()
+      .description('List of consolidated cases for the case.'),
     correspondence: joi
       .array()
       .items(Correspondence.VALIDATION_RULES)
@@ -488,9 +507,7 @@ export class Case extends JoiValidationEntity {
       .items(DOCKET_ENTRY_VALIDATION_RULES)
       .required()
       .description('List of DocketEntry Entities for the case.'),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-      'Unique case identifier in XXXXX-YY format.',
-    ),
+    docketNumber: CASE_DOCKET_NUMBER_RULE,
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
@@ -536,22 +553,13 @@ export class Case extends JoiValidationEntity {
       .optional()
       .allow(null)
       .description('Last date that the petitioner is allowed to file before.'),
-    irsPractitioners: joi
-      .array()
-      .items(IrsPractitioner.VALIDATION_RULES)
-      .optional()
-      .description(
-        'List of IRS practitioners (also known as respondents) associated with the case.',
-      ),
+    irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
-    isSealed: joi.boolean().optional(),
+    isSealed: CASE_IS_SEALED_RULE,
     judgeUserId: JoiValidationConstants.UUID.optional().description(
       'Unique ID for the associated judge.',
     ),
-    leadDocketNumber:
-      JoiValidationConstants.DOCKET_NUMBER.optional().description(
-        'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
-      ),
+    leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     litigationCosts: joi
       .number()
       .optional()
@@ -638,14 +646,7 @@ export class Case extends JoiValidationEntity {
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       },
     ).description('When the case fee was waived.'),
-    petitioners: joi
-      .array()
-      .unique(
-        (a, b) =>
-          a.contactType === CONTACT_TYPES.intervenor &&
-          b.contactType === CONTACT_TYPES.intervenor,
-      )
-      .required(),
+    petitioners: CASE_PETITIONERS_RULE,
     preferredTrialCity: joi
       .alternatives()
       .try(
@@ -658,11 +659,7 @@ export class Case extends JoiValidationEntity {
       )
       .optional()
       .description('Where the petitioner would prefer to hold the case trial.'),
-    privatePractitioners: joi
-      .array()
-      .items(PrivatePractitioner.VALIDATION_RULES)
-      .optional()
-      .description('List of private practitioners associated with the case.'),
+    privatePractitioners: CASE_PRIVATE_PRACTITIONERS_RULE,
     procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
       .required()
       .description('Procedure type of the case.'),
@@ -679,13 +676,7 @@ export class Case extends JoiValidationEntity {
     sealedDate: JoiValidationConstants.ISO_DATE.optional()
       .allow(null)
       .description('When the case was sealed from the public.'),
-
-    sortableDocketNumber: joi
-      .number()
-      .required()
-      .description(
-        'A sortable representation of the docket number (auto-generated by constructor).',
-      ),
+    sortableDocketNumber: CASE_SORTABLE_DOCKET_NUMBER_RULE,
     statistics: joi
       .array()
       .items(Statistic.VALIDATION_RULES)
@@ -699,19 +690,7 @@ export class Case extends JoiValidationEntity {
         }),
       })
       .description('List of Statistic Entities for the case.'),
-    status: joi
-      .alternatives()
-      .conditional('closedDate', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.STRING.valid(
-          ...Object.values(CASE_STATUS_TYPES),
-        ).optional(),
-        then: JoiValidationConstants.STRING.required().valid(
-          ...CLOSED_CASE_STATUSES,
-        ),
-      })
-      .meta({ tags: ['Restricted'] })
-      .description('Status of the case.'),
+    status: CASE_STATUS_RULE,
     trialDate: joi
       .alternatives()
       .conditional('trialSessionId', {
@@ -1337,6 +1316,13 @@ export class Case extends JoiValidationEntity {
     }
   }
 
+  private assignConsolidatedCases({ rawCase }): void {
+    const consolidatedCases = rawCase.consolidatedCases || [];
+    this.consolidatedCases = consolidatedCases.map(
+      consolidatedCase => new ConsolidatedCaseSummary(consolidatedCase),
+    );
+  }
+
   assignCorrespondences({ rawCase }) {
     if (Array.isArray(rawCase.correspondence)) {
       this.correspondence = rawCase.correspondence
@@ -1405,7 +1391,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} caseCaption the original case caption
    * @returns {string} caseTitle the case caption with the postfix removed
    */
-  static getCaseTitle(caseCaption) {
+  static getCaseTitle(caseCaption): string {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
   }
 
@@ -2119,7 +2105,7 @@ export class Case extends JoiValidationEntity {
    * @returns {Case} the updated case entity
    */
   checkForReadyForTrial() {
-    const currentDate = prepareDateFromString().toISOString();
+    const currentDate = prepareDateFromString().toISO();
 
     const isCaseGeneralDocketNotAtIssue =
       this.status === CASE_STATUS_TYPES.generalDocket;
@@ -2132,7 +2118,7 @@ export class Case extends JoiValidationEntity {
         );
 
         const daysElapsedSinceDocumentWasFiled = calculateDifferenceInDays(
-          currentDate,
+          currentDate!,
           docketEntry.createdAt,
         );
 
@@ -2479,8 +2465,10 @@ export const hasPartyWithServiceType = function (rawCase, serviceType) {
 
 export const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
-export const isLeadCase = rawCase =>
-  rawCase.docketNumber === rawCase.leadDocketNumber;
+export const isLeadCase = (rawCase: {
+  docketNumber: string;
+  leadDocketNumber?: string;
+}): boolean => rawCase.docketNumber === rawCase.leadDocketNumber;
 
 export const caseHasServedDocketEntries = rawCase => {
   return rawCase.docketEntries.some(docketEntry =>
