@@ -1,10 +1,6 @@
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { CasesClosedType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { ConsolidatedCasesGroupCountMapResponseType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
-import {
-  JudgeActivityReportFilters,
-  OrdersReturnType,
-} from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
-import { OpinionsReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { TrialSessionReturnType } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 
 export type JudgeActivityReportState = {
@@ -12,20 +8,22 @@ export type JudgeActivityReportState = {
   judgeActivityReportData: {
     trialSessions?: TrialSessionReturnType;
     casesClosedByJudge?: CasesClosedType;
-    consolidatedCasesGroupCountMap?: ConsolidatedCasesGroupCountMapResponseType;
-    opinions?: OpinionsReturnType;
-    orders?: OrdersReturnType;
+    opinions?: AggregatedEventCodesType;
+    orders?: AggregatedEventCodesType;
     submittedAndCavCasesByJudge?: RawCase[];
     totalCountForSubmittedAndCavCases?: number;
   };
+  judgeNameToDisplayForHeader: string;
+  judgeName: string;
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
-    judgeName: '',
     judges: [],
     startDate: '',
   },
   judgeActivityReportData: {},
+  judgeName: '',
+  judgeNameToDisplayForHeader: '',
 };

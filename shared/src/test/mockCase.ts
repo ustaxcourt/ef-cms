@@ -649,8 +649,6 @@ export const MOCK_SUBMITTED_CASE: RawCase = {
       updatedCaseStatus: CASE_STATUS_TYPES.submitted,
     },
   ],
-  pk: `case|${MOCK_CASE.docketNumber}`,
-  sk: `case|${MOCK_CASE.docketNumber}`,
 };
 
 export const MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY = {

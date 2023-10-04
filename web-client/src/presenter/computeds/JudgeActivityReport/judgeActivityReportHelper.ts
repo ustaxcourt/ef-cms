@@ -1,6 +1,7 @@
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { OrdersReturnType } from '../../../../../shared/src/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
+import { getSubmittedOrCAVDate } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
 interface IJudgeActivityReportHelper {
@@ -17,20 +18,19 @@ interface IJudgeActivityReportHelper {
   today: string;
   showPaginator: boolean;
   pageCount: number;
-  orders: OrdersReturnType;
+  orders: AggregatedEventCodesType;
 }
 
 export const judgeActivityReportHelper = (
   get: any,
   applicationContext: IApplicationContext,
 ): IJudgeActivityReportHelper => {
-  const { endDate, judgeNameToDisplayForHeader, startDate } = get(
-    state.judgeActivityReport.filters,
-  );
+  const { endDate, startDate } = get(state.judgeActivityReport.filters);
+
+  const { judgeNameToDisplayForHeader } = get(state.judgeActivityReport);
 
   const {
     casesClosedByJudge,
-    consolidatedCasesGroupCountMap,
     opinions,
     orders = [],
     submittedAndCavCasesByJudge = [],
@@ -64,12 +64,29 @@ export const judgeActivityReportHelper = (
   const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
   submittedAndCavCasesByJudge.forEach(individualCase => {
-    individualCase.formattedCaseCount =
-      consolidatedCasesGroupCountMap[individualCase.docketNumber] || 1;
     if (individualCase.leadDocketNumber === individualCase.docketNumber) {
       individualCase.consolidatedIconTooltipText = 'Lead case';
       individualCase.isLeadCase = true;
       individualCase.inConsolidatedGroup = true;
+    }
+
+    individualCase.statusDate = individualCase.caseStatusHistory
+      ? getSubmittedOrCAVDate(
+          applicationContext,
+          individualCase.caseStatusHistory,
+        )
+      : '';
+
+    if (individualCase.caseWorksheet) {
+      individualCase.caseWorksheet.formattedFinalBriefDueDate = individualCase
+        .caseWorksheet.finalBriefDueDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(
+              individualCase.caseWorksheet.finalBriefDueDate,
+              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+            )
+        : '';
     }
   });
 

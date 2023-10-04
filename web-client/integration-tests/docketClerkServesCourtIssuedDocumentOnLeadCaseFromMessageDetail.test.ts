@@ -149,6 +149,7 @@ describe('Docket Clerk Serves Paper Filed Document On Lead Case From Message Det
     );
 
     await cerebralTest.runSequence('updateMessageModalAttachmentsSequence', {
+      action: 'add',
       documentId: cerebralTest.draftDocument.docketEntryId,
     });
 

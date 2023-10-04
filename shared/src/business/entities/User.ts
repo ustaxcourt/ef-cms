@@ -139,8 +139,12 @@ export class User extends JoiValidationEntity {
     state: 'Enter state',
   };
 
-  isChambersUser() {
-    return this.section.includes('Chambers');
+  isChambersUser(): boolean {
+    return !!this.section?.includes('Chambers');
+  }
+
+  isJudgeUser(): boolean {
+    return this.role === ROLES.judge;
   }
 
   static isExternalUser(role) {
