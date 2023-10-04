@@ -17,8 +17,24 @@ export class TestCaseEntity extends JoiValidationEntity {
 
   getValidationRules() {
     return {
+      caseList: joi.array().items(TEST_VALIDATION_RULES).optional(),
+      contactType: JoiValidationConstants.STRING.valid(
+        'VALID_1',
+        'VALID_2',
+        'VALID_3',
+      ).required(),
+      unhelpfulErrorMessage: JoiValidationConstants.STRING.valid(
+        'VALID_1',
+        'VALID_2',
+        'VALID_3',
+      ).optional(),
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
       caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
-        'any.only': 'NEW_CUSTOM: invalid contact type',
+        'any.only': 'invalid contact type',
       }),
       contactType: JoiValidationConstants.STRING.valid(
         'VALID_1',
@@ -27,7 +43,7 @@ export class TestCaseEntity extends JoiValidationEntity {
       )
         .required()
         .messages({
-          'any.only': 'NEW_CUSTOM: invalid contact type',
+          'any.only': 'invalid contact type',
         }),
       unhelpfulErrorMessage: JoiValidationConstants.STRING.valid(
         'VALID_1',
@@ -37,15 +53,16 @@ export class TestCaseEntity extends JoiValidationEntity {
         .optional()
         .messages({
           'any.only':
-            'NEW_CUSTOM: unhelpfulErrorMessage: does not match any of the allowed types',
+            'unhelpfulErrorMessage: does not match any of the allowed types',
         }),
     };
   }
+
   getErrorToMessageMap() {
     return {
-      contactType: 'LEGACY_CUSTOM: invalid contact type',
+      contactType: 'invalid contact type',
       unhelpfulErrorMessage:
-        'LEGACY_CUSTOM: unhelpfulErrorMessage: does not match any of the allowed types',
+        'unhelpfulErrorMessage: does not match any of the allowed types',
     };
   }
 

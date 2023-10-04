@@ -32,22 +32,42 @@ export class TestEntity extends JoiValidationEntity {
       arrayErrorMessage: [
         {
           contains: 'is required',
-          message: 'LEGACY_CUSTOM arrayErrorMessage is required.',
+          message: 'arrayErrorMessage is required.',
         },
         {
           contains: 'length must be at least',
-          message:
-            'LEGACY_CUSTOM arrayErrorMessage must be at least 2 characters long.',
+          message: 'arrayErrorMessage must be at least 2 characters long.',
         },
       ],
       propUsingReference: [
         {
           contains: 'ref:referencedProp',
-          message:
-            'LEGACY_CUSTOM propUsingReference must be grater than referencedProp.',
+          message: 'propUsingReference must be grater than referencedProp.',
         },
       ],
-      singleErrorMessage: 'LEGACY_CUSTOM singleErrorMessage default message.',
+      singleErrorMessage: 'singleErrorMessage default message.',
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
+      arrayErrorMessage: joi.string().min(2).required().messages({
+        'any.required': 'arrayErrorMessage is required.',
+        'string.min': 'arrayErrorMessage must be at least 2 characters long.',
+      }),
+      propUsingReference: joi
+        .number()
+        .min(joi.ref('referencedProp'))
+        .required()
+        .messages({
+          'number.min':
+            'propUsingReference must be grater than referencedProp.',
+        }),
+      referencedProp: joi.number().required(),
+      singleErrorMessage: joi.string().min(2).required().messages({
+        'any.required': 'singleErrorMessage default message.',
+        'string.min': 'singleErrorMessage default message.',
+      }),
     };
   }
 }
