@@ -1,5 +1,3 @@
-import joi from 'joi';
-
 import {
   ALL_DOCUMENT_TYPES,
   ALL_EVENT_CODES,
@@ -24,6 +22,7 @@ import {
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { createEndOfDayISO } from '../utilities/DateHandler';
 import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:
