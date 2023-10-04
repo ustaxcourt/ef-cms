@@ -122,15 +122,26 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   const newResults = getFormattedValidationErrors_NEW(entity);
 
   if (customStringify(results) !== customStringify(newResults)) {
-    console.error(
-      'When fetching "Formatted Validation Errors" there was a difference between the legacy implementation and the new implementation results',
-      `\nEntityName: ${entity.entityName}\n\n`,
-      '\n\nLegacy Results: \n',
-      customStringify(results),
-      '\n\nNew Results:\n',
-      customStringify(newResults),
-    );
+    /* eslint-disable no-restricted-globals */
+    const inFrontEnd = typeof document !== 'undefined';
+    const kibanaKey = 'JoiValidation error differences';
+    const kibanaContext = {
+      entity,
+      entityName: entity.entityName,
+      legacyResults: results,
+      newResults,
+    };
+
+    if (inFrontEnd) {
+      import('../../../../web-client/src/applicationContext')
+        .then(({ applicationContext }) => {
+          const logger = applicationContext.getLogger();
+          logger.warn(applicationContext, kibanaKey, kibanaContext);
+        })
+        .catch(console.error);
+    }
   }
+
   return results;
 }
 
