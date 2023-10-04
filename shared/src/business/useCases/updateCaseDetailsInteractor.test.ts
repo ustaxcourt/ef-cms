@@ -50,7 +50,21 @@ describe('updateCaseDetailsInteractor', () => {
     ).rejects.toThrow('The Case entity was invalid');
   });
 
-  it('should set irsNoticeDate to undefined when hasVerifiedNotice is not true', async () => {
+  it('should set irsNoticeDate when the updated case has a verified IRS notice', async () => {
+    const result = await updateCaseDetailsInteractor(applicationContext, {
+      caseDetails: {
+        ...mockCase,
+        hasVerifiedIrsNotice: true,
+        irsNoticeDate: '2020-08-28T01:49:58.117Z',
+      },
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(result.hasVerifiedIrsNotice).toBe(true);
+    expect(result.irsNoticeDate).toBe('2020-08-28T01:49:58.117Z');
+  });
+
+  it('should set irsNoticeDate to undefined when the updated case does not have a verified IRS notice', async () => {
     const result = await updateCaseDetailsInteractor(applicationContext, {
       caseDetails: {
         ...mockCase,
