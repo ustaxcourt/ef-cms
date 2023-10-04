@@ -16,6 +16,7 @@ describe('externalUserCasesHelper', () => {
         { docketNumber: '103-20' },
         { docketNumber: '104-20' },
       ],
+      closedCasesCurrentPage: 1,
       constants: {
         CASE_LIST_PAGE_SIZE: 2,
       },
@@ -41,6 +42,7 @@ describe('externalUserCasesHelper', () => {
         { docketNumber: '103-22' },
         { docketNumber: '103-23' },
       ],
+      openCasesCurrentPage: 1,
     };
   });
   it('should display the load more button for both open and closed cases if there are more cases than page size', () => {
