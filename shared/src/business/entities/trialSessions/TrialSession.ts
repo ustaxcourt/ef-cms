@@ -176,9 +176,6 @@ export class TrialSession extends JoiValidationEntity {
       dismissedAlertForNOTT: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
-      // estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
-      //   .min(joi.ref('startDate'))
-      //   .allow(null),
       estimatedEndDate: joi.when('startDate', {
         is: JoiValidationConstants.ISO_DATE.required(),
         otherwise: joi.optional(),
