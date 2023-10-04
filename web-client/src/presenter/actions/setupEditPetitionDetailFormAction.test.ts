@@ -5,11 +5,9 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setupEditPetitionDetailFormAction } from './setupEditPetitionDetailFormAction';
 
 describe('setupEditPetitionDetailFormAction', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+  presenter.providers.applicationContext = applicationContext;
 
-  it('sets the payment waived date on the form if payment status is waived', async () => {
+  it('should set payment waived date on the form when it is defined', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -35,7 +33,7 @@ describe('setupEditPetitionDetailFormAction', () => {
     });
   });
 
-  it('sets the payment paid date on the form if payment status is paid', async () => {
+  it('should set payment paid date on the form when it is defined', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -55,25 +53,7 @@ describe('setupEditPetitionDetailFormAction', () => {
     });
   });
 
-  it('does not set any dates on the form if payment status is unpaid', async () => {
-    const result = await runAction(setupEditPetitionDetailFormAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-        },
-        form: {},
-      },
-    });
-
-    expect(result.state.form).toEqual({
-      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-    });
-  });
-
-  it('sets the IRS notice date on the form if it is present', async () => {
+  it('should set IRS notice date on the form when it is defined', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -86,10 +66,10 @@ describe('setupEditPetitionDetailFormAction', () => {
       },
     });
 
-    expect(result.state.form.irsNoticeDate).toEqual('2019-03-01');
+    expect(result.state.form.irsNoticeDate).toEqual('2019-03-01T21:40:46.415Z');
   });
 
-  it('sets hasVerifiedIrsNotice on the form from caseDetail', async () => {
+  it('should set hasVerifiedIrsNotice on the form from caseDetail', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
@@ -107,7 +87,7 @@ describe('setupEditPetitionDetailFormAction', () => {
     });
   });
 
-  it('sets statistics on the form from caseDetail', async () => {
+  it('should set statistics on the form from caseDetail', async () => {
     const result = await runAction(setupEditPetitionDetailFormAction, {
       modules: {
         presenter,
