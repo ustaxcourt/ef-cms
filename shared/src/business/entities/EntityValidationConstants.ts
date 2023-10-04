@@ -25,8 +25,8 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { createEndOfDayISO } from '../utilities/DateHandler';
-import joi from 'joi';
 import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
   serviceIndicator:

@@ -3,7 +3,7 @@ import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
 import {
   JoiErrorDetail,
   getFormattedValidationErrors_NEW,
-} from '@shared/business/entities/joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
+} from './joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
