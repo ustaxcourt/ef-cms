@@ -27,7 +27,8 @@ let testData = {};
 let token: string;
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 let createdPaperDocketNumber: string;
-const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialogIfExists, login } =
+  getEnvironmentSpecificFunctions();
 describe('Create and serve a case to search for', () => {
   before(() => {
     cy.task<AuthenticationResult>('getUserToken', {
@@ -45,7 +46,7 @@ describe('Create and serve a case to search for', () => {
   it('should be able to create a case and serve to IRS', () => {
     goToMyDocumentQC();
     goToCreateCase();
-    closeScannerSetupDialog();
+    closeScannerSetupDialogIfExists();
     fillInCreateCaseFromPaperForm(testData);
     goToReviewCase().then(
       docketNumber => (createdPaperDocketNumber = docketNumber),
