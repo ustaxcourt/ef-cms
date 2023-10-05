@@ -345,9 +345,6 @@ export const ApplyStamp = connect(
                         stipulated decision by:
                       </label>
                     </div>
-                    {/*
-                      // disabled={!form.dueDateMessage}
-                     */}
 
                     <DateSelector
                       defaultValue={form.date}
