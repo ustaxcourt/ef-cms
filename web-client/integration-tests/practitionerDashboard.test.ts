@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -82,25 +83,14 @@ describe('Practitioner Dashboard', () => {
 
       await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'certificateOfServiceMonth',
-        value: '12',
-      });
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'certificateOfServiceDay',
-        value: '12',
-      });
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'certificateOfServiceYear',
-        value: '5000',
-      });
-
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
-
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'certificateOfServiceYear',
-        value: '2000',
-      });
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'certificateOfServiceDate',
+          toFormat: FORMATS.ISO,
+          value: '12/12/2000',
+        },
+      );
 
       await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
