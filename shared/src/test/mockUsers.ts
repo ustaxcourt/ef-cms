@@ -166,7 +166,7 @@ export const MOCK_PRACTITIONER = {
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
 };
 
-export const validUser = {
+export const validUser: RawUser = {
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
@@ -178,6 +178,8 @@ export const validUser = {
     postalCode: '61234',
     state: 'IL',
   },
+  email: 'user@example.com',
+  entityName: 'User',
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
