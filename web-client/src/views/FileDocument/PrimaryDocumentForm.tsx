@@ -38,14 +38,14 @@ export const PrimaryDocumentForm = connect(
               htmlFor="primary-document"
               id="primary-document-label"
             >
-              Upload your document{' '}
+              Upload document PDF (.pdf){' '}
               <span className="success-message padding-left-1">
                 <FontAwesomeIcon icon="check-circle" size="sm" />
               </span>
             </label>
             <span className="usa-hint">
-              File must be in PDF format (.pdf). Max file size{' '}
-              {constants.MAX_FILE_SIZE_MB}MB.
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
             </span>
             <StateDrivenFileInput
               aria-describedby="primary-document-label"
