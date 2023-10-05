@@ -1,9 +1,16 @@
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
 const externalUserCasesHelper = withAppContextDecorator(
   externalUserCasesHelperComputed,
+  {
+    ...applicationContext,
+    getConstants: () => ({
+      CASE_LIST_PAGE_SIZE: 3,
+    }),
+  },
 );
 
 describe('externalUserCasesHelper', () => {
@@ -13,13 +20,29 @@ describe('externalUserCasesHelper', () => {
       closedCases: [
         { docketNumber: '101-20' },
         { docketNumber: '102-20' },
-        { docketNumber: '103-20' },
-        { docketNumber: '104-20' },
+        {
+          consolidatedCases: [
+            {
+              docketNumber: '158-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '103-20',
+            },
+            {
+              docketNumber: '169-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '103-20',
+            },
+            {
+              docketNumber: '189-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '103-20',
+            },
+          ],
+          docketNumber: '103-20',
+        },
+        { docketNumber: '104-20', isRequestingUserAssociated: true },
       ],
       closedCasesCurrentPage: 1,
-      constants: {
-        CASE_LIST_PAGE_SIZE: 2,
-      },
       openCases: [
         {
           consolidatedCases: [
