@@ -16,7 +16,7 @@ export const getCaseMetadataWithCounsel = async ({
 }: {
   applicationContext: IApplicationContext;
   docketNumber: string;
-}) => {
+}): Promise<RawCase> => {
   const caseItems = [
     await get({
       Key: {

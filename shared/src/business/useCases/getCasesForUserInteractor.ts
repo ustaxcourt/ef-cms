@@ -4,34 +4,37 @@ import {
   isLeadCase,
   userIsDirectlyAssociated,
 } from '../entities/cases/Case';
-import { UserCase } from '../entities/UserCase';
+import { RawUserCase, UserCase } from '../entities/UserCase';
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { uniqBy } from 'lodash';
 
-type TAssociatedCase = {
+export type TAssociatedCase = {
   isRequestingUserAssociated: boolean;
-  consolidatedCases?: Case[];
-} & Case;
+  consolidatedCases?: TAssociatedCase[];
+} & RawUserCase;
 
 export const getCasesForUserInteractor = async (
   applicationContext: IApplicationContext,
-) => {
+): Promise<{
+  openCaseList: TAssociatedCase[];
+  closedCaseList: TAssociatedCase[];
+}> => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  let allUserCases = await applicationContext
+  const allUserCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,
       userId,
     });
 
-  allUserCases = allUserCases.map(aCase => {
-    return { ...aCase, isRequestingUserAssociated: true } as TAssociatedCase;
+  const associatedUserCases = allUserCases.map(aCase => {
+    return { ...aCase, isRequestingUserAssociated: true };
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
     applicationContext,
-    cases: allUserCases,
+    cases: associatedUserCases,
     userId,
   });
 
@@ -70,7 +73,7 @@ async function fetchConsolidatedGroupsAndNest({
   applicationContext: IApplicationContext;
   cases: TAssociatedCase[];
   userId: string;
-}) {
+}): Promise<TAssociatedCase[]> {
   // Get all cases with a lead docket number and add "isRequestingUserAssociated" property
   const consolidatedGroups = (
     await Promise.all(
@@ -96,7 +99,7 @@ async function fetchConsolidatedGroupsAndNest({
     });
 
   // Combine open cases and consolidated cases and remove duplicates
-  const associatedAndUnassociatedCases = uniqBy(
+  const associatedAndUnassociatedCases: TAssociatedCase[] = uniqBy(
     [...cases, ...consolidatedGroups],
     aCase => aCase.docketNumber,
   );
@@ -120,7 +123,7 @@ async function fetchConsolidatedGroupsAndNest({
   associatedAndUnassociatedCases
     .filter(aCase => !isLeadCase(aCase) && aCase.leadDocketNumber)
     .forEach(aCase => {
-      const leadCase = caseMap[aCase.leadDocketNumber];
+      const leadCase = caseMap[aCase.leadDocketNumber!];
       leadCase.consolidatedCases = leadCase.consolidatedCases ?? [];
       leadCase.consolidatedCases.push(aCase);
     });
@@ -138,7 +141,10 @@ async function fetchConsolidatedGroupsAndNest({
   return allCases;
 }
 
-const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
+const sortAndFilterCases = (
+  nestedCases: TAssociatedCase[],
+  caseType: 'open' | 'closed',
+): TAssociatedCase[] => {
   return nestedCases
     .map((c: any) => {
       // explicitly unset the entityName because this is returning a composite entity and if an entityName
