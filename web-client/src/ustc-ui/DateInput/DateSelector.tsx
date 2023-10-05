@@ -17,13 +17,13 @@ export const DateSelector = ({
 }: {
   defaultValue: string | undefined;
   displayOptionalHintText?: boolean;
-  errorText: string;
+  errorText?: string;
   disabled?: boolean;
   formGroupClassNames?: string;
   minDate?: string;
   hintText?: string;
   id: string;
-  label: string;
+  label?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
 }) => {
