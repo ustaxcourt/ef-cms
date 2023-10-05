@@ -7,7 +7,6 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { User } from '@shared/business/entities/User';
 
 export const getCaseWorksheetsForJudgeInteractor = async (
   applicationContext: IApplicationContext,
@@ -18,26 +17,14 @@ export const getCaseWorksheetsForJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: user.userId,
-  });
-
-  const userEntity = new User(rawUser);
-
-  let judgeUser;
-  if (userEntity.isChambersUser() && !userEntity.isJudgeUser()) {
-    judgeUser = await applicationContext
-      .getUseCaseHelpers()
-      .getJudgeInSectionHelper(applicationContext, {
-        section: userEntity.section,
-      });
-  }
+  const judgeUser = await applicationContext
+    .getUseCaseHelpers()
+    .getJudgeForUserHelper(applicationContext, { user });
 
   const rawWorksheets = await applicationContext
     .getPersistenceGateway()
     .getCaseWorksheets(applicationContext, {
-      judgeId: judgeUser ? judgeUser.userId : userEntity.userId,
+      judgeId: judgeUser.userId,
     });
 
   return CaseWorksheet.validateRawCollection(rawWorksheets, {
