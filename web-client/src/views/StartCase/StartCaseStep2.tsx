@@ -51,54 +51,51 @@ export const StartCaseStep2 = connect(
         <p className="margin-bottom-3 margin-top-0 required-statement">
           *All fields required unless otherwise noted
         </p>
-        <div className="blue-container grid-container padding-x-0">
-          <div className="grid-row grid-gap">
-            <div className="mobile-lg:grid-col-6">
-              <FormGroup
-                errorText={
-                  validationErrors.petitionFile ||
-                  validationErrors.petitionFileSize
-                }
+        <div className="blue-container padding-x-0">
+          <FormGroup
+            errorText={
+              validationErrors.petitionFile || validationErrors.petitionFileSize
+            }
+          >
+            <label
+              className={classNames(
+                'usa-label ustc-upload-petition with-hint',
+                startCaseHelper.showPetitionFileValid && 'validated',
+              )}
+              htmlFor="petition-file"
+              id="petition-file-label"
+            >
+              Upload Petition PDF (.pdf)
+            </label>
+            <span className="usa-hint">
+              Make sure file is not encrypted or password protected. Max file
+              size {constants.MAX_FILE_SIZE_MB}MB.
+            </span>
+            <div className="margin-top-0">
+              <Button
+                link
+                className="usa-link--external text-left mobile-text-wrap"
+                href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
+                icon="file-pdf"
+                iconColor="blue"
+                overrideMargin="margin-right-1"
+                rel="noopener noreferrer"
+                target="_blank"
               >
-                <label
-                  className={classNames(
-                    'usa-label ustc-upload-petition with-hint',
-                    startCaseHelper.showPetitionFileValid && 'validated',
-                  )}
-                  htmlFor="petition-file"
-                  id="petition-file-label"
-                >
-                  Upload your Petition
-                </label>
-                <span className="usa-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
-                </span>
-                <div className="margin-top-0">
-                  <Button
-                    link
-                    className="usa-link--external text-left mobile-text-wrap"
-                    href="https://www.ustaxcourt.gov/resources/forms/Petition_Simplified_Form_2.pdf"
-                    icon="file-pdf"
-                    iconColor="blue"
-                    overrideMargin="margin-right-1"
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    Download Petition form (T.C. Form 2)
-                  </Button>
-                  <p className="margin-top-0">if you haven’t already done so</p>
-                </div>
-                <StateDrivenFileInput
-                  aria-describedby="petition-file-label"
-                  id="petition-file"
-                  name="petitionFile"
-                  updateFormValueSequence="updateStartCaseFormValueSequence"
-                  validationSequence="validateStartCaseWizardSequence"
-                />
-              </FormGroup>
+                Download Petition form (T.C. Form 2)
+              </Button>
+              <p className="margin-top-05 usa-hint display-block">
+                if you haven’t already done so
+              </p>
             </div>
-          </div>
+            <StateDrivenFileInput
+              aria-describedby="petition-file-label"
+              id="petition-file"
+              name="petitionFile"
+              updateFormValueSequence="updateStartCaseFormValueSequence"
+              validationSequence="validateStartCaseWizardSequence"
+            />
+          </FormGroup>
         </div>
 
         <h3 className="margin-top-4">Why Are You Filing This Petition?</h3>

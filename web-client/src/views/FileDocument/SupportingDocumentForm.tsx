@@ -34,6 +34,11 @@ export const SupportingDocumentForm = connect(
     validateExternalDocumentInformationSequence,
     validationErrors,
   }) {
+    const fileValidationErrors =
+      validationErrors &&
+      validationErrors.supportingDocuments &&
+      validationErrors.supportingDocuments.find(item => item.index === index);
+
     return (
       <>
         <h2 className="margin-top-4">
@@ -57,11 +62,7 @@ export const SupportingDocumentForm = connect(
               !form.supportingDocuments[index].supportingDocument &&
               'margin-bottom-0'
             }
-            errorText={
-              validationErrors.supportingDocuments &&
-              validationErrors.supportingDocuments[index] &&
-              validationErrors.supportingDocuments[index].supportingDocument
-            }
+            errorText={fileValidationErrors?.supportingDocument}
           >
             <label
               className="usa-label"
@@ -74,11 +75,7 @@ export const SupportingDocumentForm = connect(
               aria-describedby={`supporting-document-${index}-label`}
               className={classNames(
                 'usa-select',
-                validationErrors.supportingDocuments &&
-                  validationErrors.supportingDocuments[index] &&
-                  validationErrors.supportingDocuments[index]
-                    .supportingDocument &&
-                  'usa-select--error',
+                fileValidationErrors?.supportingDocument && 'usa-select--error',
               )}
               id={`supporting-document-${index}`}
               name={`supportingDocuments.${index}.supportingDocument`}
@@ -120,12 +117,7 @@ export const SupportingDocumentForm = connect(
           {fileDocumentHelper.supportingDocuments[index]
             .showSupportingDocumentFreeText && (
             <FormGroup
-              errorText={
-                validationErrors.supportingDocuments &&
-                validationErrors.supportingDocuments[index] &&
-                validationErrors.supportingDocuments[index]
-                  .supportingDocumentFreeText
-              }
+              errorText={fileValidationErrors?.supportingDocumentFreeText}
             >
               <label
                 className="usa-label"
@@ -166,12 +158,7 @@ export const SupportingDocumentForm = connect(
             .showSupportingDocumentUpload && (
             <>
               <FormGroup
-                errorText={
-                  validationErrors.supportingDocuments &&
-                  validationErrors.supportingDocuments[index] &&
-                  validationErrors.supportingDocuments[index]
-                    .supportingDocumentFile
-                }
+                errorText={fileValidationErrors?.supportingDocumentFile}
               >
                 <label
                   className={classNames(
@@ -182,14 +169,14 @@ export const SupportingDocumentForm = connect(
                   htmlFor={`supporting-document-file-${index}`}
                   id={`supporting-document-file-${index}-label`}
                 >
-                  Upload your supporting document{' '}
+                  Upload supporting document PDF (.pdf){' '}
                   <span className="success-message">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
                 <span className="usa-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
+                  Make sure file is not encrypted or password protected. Max
+                  file size {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <StateDrivenFileInput
                   aria-describedby={`supporting-document-file-${index}-label`}
