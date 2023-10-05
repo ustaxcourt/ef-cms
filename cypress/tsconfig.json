@@ -7,7 +7,7 @@
     "target": "es5",
     "lib": ["es5", "dom"],
     "types": ["cypress", "node"],
-    "baseUrl": "./",
+    "baseUrl": "../",
 		"paths": {
       "@web-client/*": ["web-client/src/*"],
       "@web-api/*": ["web-api/src/*"],
