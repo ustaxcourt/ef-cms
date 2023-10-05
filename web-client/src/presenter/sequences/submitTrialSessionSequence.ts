@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
 import { navigateToTrialSessionsAction } from '../actions/TrialSession/navigateToTrialSessionsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -17,12 +16,6 @@ import { validateTrialSessionAction } from '../actions/TrialSession/validateTria
 export const submitTrialSessionSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction('startDate', null, 'computedStartDate'),
-  getComputedFormDateFactoryAction(
-    'estimatedEndDate',
-    null,
-    'computedEstimatedEndDate',
-  ),
   computeSubmitTrialSessionDataAction,
   validateTrialSessionAction,
   {

@@ -3,6 +3,7 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   assignWorkItems,
   contactPrimaryFromState,
@@ -17,12 +18,13 @@ import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDo
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 
-const docketSectionMessage = 'To CSS under Docket Section';
-const petitionsSectionMessage = 'To CSS under Petitions Section';
-const seedCaseServicesSupervisorUserid = '35959d1a-0981-40b2-a93d-f65c7977db52';
-const seededDocketNumber = '105-20';
-
 describe('Case Services Supervisor Messages Journey', () => {
+  const docketSectionMessage = 'To CSS under Docket Section';
+  const petitionsSectionMessage = 'To CSS under Petitions Section';
+  const seedCaseServicesSupervisorUserid =
+    '35959d1a-0981-40b2-a93d-f65c7977db52';
+  const seededDocketNumber = '105-20';
+
   const cerebralTest = setupTest();
 
   afterAll(() => {
@@ -253,18 +255,14 @@ describe('Case Services Supervisor Messages Journey', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'documentType',
