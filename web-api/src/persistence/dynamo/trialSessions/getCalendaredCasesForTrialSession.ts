@@ -9,7 +9,7 @@ export const getCalendaredCasesForTrialSession = async ({
 }: {
   applicationContext: IApplicationContext;
   trialSessionId: string;
-}): Promise<Array<RawCase & TCaseOrder>> => {
+}): Promise<(RawCase & TCaseOrder)[]> => {
   const trialSession = await get({
     Key: {
       pk: `trial-session|${trialSessionId}`,
