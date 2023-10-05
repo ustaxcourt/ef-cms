@@ -24,7 +24,7 @@ export const reindexIfNecessary = async ({
         aliases.find(a => a.alias === baseAlias)?.index || baseAlias;
       return client.reindex({
         body: {
-          destination: {
+          dest: {
             index,
           },
           source: {

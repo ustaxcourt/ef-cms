@@ -89,3 +89,22 @@ export const isMigratedClusterFinishedIndexing = async (
 
   return true;
 };
+
+export const areAllReindexTasksFinished = async ({
+  environmentName,
+}: {
+  environmentName: string;
+}): Promise<boolean> => {
+  const version = process.env.SOURCE_TABLE!.split('-').pop();
+  const esClient = await getClient({ environmentName, version });
+  const tasks = await esClient.cat.tasks({ format: 'json' });
+  if (tasks && tasks.body && tasks.body.length) {
+    const reindexTasks = tasks.body.find(
+      (task: { action: string }) =>
+        task.action === 'indices:data/write/reindex',
+    );
+    console.log(`found ${reindexTasks.length} reindex tasks running`);
+    return reindexTasks.length === 0;
+  }
+  return true;
+};
