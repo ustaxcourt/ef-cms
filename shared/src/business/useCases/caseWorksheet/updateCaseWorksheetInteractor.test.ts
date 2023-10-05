@@ -15,6 +15,12 @@ describe('updateCaseWorksheetInteractor', () => {
     primaryIssue: 'Don`t go chasin waterfalls',
   };
 
+  beforeAll(() => {
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeForUserHelper.mockReturnValue(judgeColvin);
+  });
+
   it('should throw an error when the user does not have access to the case worksheet feature', async () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser); // Only judges and judges chambers have access to case worksheets
 
@@ -80,12 +86,6 @@ describe('updateCaseWorksheetInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(colvinsChambersUser);
     applicationContext
       .getPersistenceGateway()
-      .getUserById.mockReturnValue(colvinsChambersUser);
-    await applicationContext
-      .getUseCaseHelpers()
-      .getJudgeInSectionHelper.mockResolvedValue(judgeColvin);
-    applicationContext
-      .getPersistenceGateway()
       .getCaseWorksheet.mockResolvedValue(mockCaseWorksheet);
 
     const result = await updateCaseWorksheetInteractor(applicationContext, {
@@ -100,10 +100,10 @@ describe('updateCaseWorksheetInteractor', () => {
       finalBriefDueDate: mockFinalBriefDueDate,
     };
     expect(
-      applicationContext.getUseCaseHelpers().getJudgeInSectionHelper.mock
+      applicationContext.getUseCaseHelpers().getJudgeForUserHelper.mock
         .calls[0][1],
     ).toEqual({
-      section: colvinsChambersUser.section,
+      user: colvinsChambersUser,
     });
     expect(
       applicationContext.getPersistenceGateway().updateCaseWorksheet,
