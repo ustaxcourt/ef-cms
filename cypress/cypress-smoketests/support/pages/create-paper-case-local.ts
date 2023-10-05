@@ -1,1 +1,1 @@
-export const closeScannerSetupDialog = () => {};
+export const closeScannerSetupDialogIfExists = () => {};
