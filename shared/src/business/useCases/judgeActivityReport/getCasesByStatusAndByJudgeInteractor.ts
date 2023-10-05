@@ -154,7 +154,7 @@ const calculateNumberOfConsolidatedCases = async (
   caseInfo: { leadDocketNumber?: string },
 ) => {
   if (!caseInfo.leadDocketNumber) {
-    return 0;
+    return 1;
   }
 
   return await applicationContext

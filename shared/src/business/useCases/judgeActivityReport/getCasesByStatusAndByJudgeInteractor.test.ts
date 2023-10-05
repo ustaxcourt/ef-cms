@@ -116,9 +116,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     });
   });
 
-  it('should return an array of cases with statusDate and daysElapsedSinceLastStatusChange (stripping out the cases with served ODD, DEC, SDEC, OAD docket entries and no consolidated cases)', async () => {
+  it('should return an array of cases with statusDate, formattedCaseCount, and daysElapsedSinceLastStatusChange (stripping out the cases with served ODD, DEC, SDEC, OAD docket entries and no consolidated cases)', async () => {
     mockGetDocketNumbersByStatusAndByJudgeResult = [
-      { ...mockCaseInfo, docketNumber: MOCK_SUBMITTED_CASE.docketNumber },
+      {
+        ...mockCaseInfo,
+        docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
+        leadDocketNumber: MOCK_SUBMITTED_CASE.docketNumber,
+      },
       {
         ...mockCaseInfo,
         docketNumber:
@@ -163,6 +167,9 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     applicationContext
       .getUtilities()
       .prepareDateFromString.mockReturnValue('2019-07-25T00:00:00.000-04:00');
+    applicationContext
+      .getPersistenceGateway()
+      .getCountOfConsolidatedCases.mockReturnValueOnce(3);
 
     const result = await getCasesByStatusAndByJudgeInteractor(
       applicationContext,
@@ -174,11 +181,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         expect.objectContaining({
           daysElapsedSinceLastStatusChange: 365,
           docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
+          formattedCaseCount: 3,
           statusDate: '07/25/18',
         }),
         expect.objectContaining({
           daysElapsedSinceLastStatusChange: 0,
           docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
+          formattedCaseCount: 1,
           statusDate: '',
         }),
       ]),
