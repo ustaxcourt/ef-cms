@@ -154,34 +154,7 @@
 }
 
 .file-upload-error {
-  > .modal-header {
-    display: none;
-  }
-
-  .uh-oh {
-    color: color($theme-color-base-darkest);
-    font-size: 48px;
-    font-weight: $font-semibold;
-  }
-
-  .message {
-    width: 80%;
-    margin: auto;
-    color: color($theme-color-base-darkest);
-    font-size: 30px;
-    font-weight: $font-semibold;
-  }
-
-  button.usa-button--outline {
-    background-color: color($theme-color-primary);
-    color: $color-white;
-  }
-
-  padding: 60px 0;
-  background-color: color($theme-color-warning);
-  color: color($theme-color-base-darkest);
-  font-size: 30px;
-  text-align: center;
+  line-height: line-height('body', 5);
 }
 
 .mobile-document-details-overlay {
@@ -367,3 +340,4 @@ button {
     margin-right: 5px;
   }
 }
+
