@@ -43,7 +43,8 @@ const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialogIfExists, login } =
+  getEnvironmentSpecificFunctions();
 let createdPaperDocketNumber: string;
 
 describe('Petitioner', () => {
@@ -105,7 +106,7 @@ describe('Petitions clerk', () => {
   it('should be able to create a case with paper service', () => {
     goToMyDocumentQC();
     goToCreateCase();
-    closeScannerSetupDialog();
+    closeScannerSetupDialogIfExists();
     fillInCreateCaseFromPaperForm();
     goToReviewCase().then(
       docketNumber => (createdPaperDocketNumber = docketNumber),
