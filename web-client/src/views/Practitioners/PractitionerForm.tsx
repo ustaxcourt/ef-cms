@@ -393,7 +393,7 @@ export const PractitionerForm = connect(
 
         <div className="grid-row margin-bottom-4">
           <div className="grid-col-12">
-            <h2>Practitioner Notesss</h2>
+            <h2>Practitioner Notes</h2>
             <div className="blue-container">
               <div className="grid-row grid-gap-3">
                 <div className="grid-col-12">

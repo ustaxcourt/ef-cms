@@ -96,12 +96,6 @@ export const DeficiencyStatisticsForm = connect(
                 </FormGroup>
               )}
 
-              {/*
-                                day: 'lastDateOfPeriodDay',
-                      month: 'lastDateOfPeriodMonth',
-                      year: 'lastDateOfPeriodYear',
-                       */}
-
               {form.yearOrPeriod === 'Period' && (
                 <DateSelector
                   defaultValue={form.lastDateOfPeriod}
