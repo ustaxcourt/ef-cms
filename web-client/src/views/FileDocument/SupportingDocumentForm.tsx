@@ -190,7 +190,8 @@ export const SupportingDocumentForm = connect(
 
               <SupportingDocumentInclusionsForm
                 bind={`form.supportingDocuments.${index}`}
-                type={`supportingDocuments.${index}`}
+                index={index}
+                type={'supportingDocuments'}
                 validationBind={`validationErrors.supportingDocuments.${index}`}
               />
             </>

@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateCaseAssociationTitleAction } from '../actions/CaseAssociationRequest/generateCaseAssociationTitleAction';
 import { generateEntryOfAppearancePdfAction } from '@web-client/presenter/actions/CaseAssociationRequest/generateEntryOfAppearancePdfAction';
 import { generateTitleForSupportingDocumentsAction } from '../actions/FileDocument/generateTitleForSupportingDocumentsAction';
@@ -19,7 +18,6 @@ export const reviewRequestAccessInformationSequence =
   showProgressSequenceDecorator([
     clearAlertsAction,
     startShowValidationAction,
-    computeCertificateOfServiceFormDateAction,
     setSupportingDocumentScenarioAction,
     setFilersFromFilersMapAction,
     validateCaseAssociationRequestAction,
