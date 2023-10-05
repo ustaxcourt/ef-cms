@@ -132,7 +132,8 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
       newResults,
     };
 
-    if (inFrontEnd) {
+    const inTestEnv = document?.URL.includes('test');
+    if (inFrontEnd && inTestEnv) {
       import('../../../../web-client/src/applicationContext')
         .then(({ applicationContext }) => {
           const logger = applicationContext.getLogger();
