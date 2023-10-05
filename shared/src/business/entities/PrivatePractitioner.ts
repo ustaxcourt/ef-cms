@@ -102,6 +102,4 @@ export class PrivatePractitioner extends User {
   }
 }
 
-declare global {
-  type RawPrivatePractitioner = ExcludeMethods<PrivatePractitioner>;
-}
+export type RawPrivatePractitioner = ExcludeMethods<PrivatePractitioner>;
