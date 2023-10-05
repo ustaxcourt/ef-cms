@@ -12,7 +12,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   );
   cy.get('input[name="contactPrimary.city"]').type(faker.location.city());
   cy.get('select[name="contactPrimary.state"]').select(
-    faker.location.stateAbbr(),
+    faker.location.state({ abbreviated: true }),
   );
   cy.get('input[name="contactPrimary.postalCode"]').type(
     faker.location.zipCode(),
@@ -21,21 +21,23 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
 
   cy.get('#tab-case-info').click();
 
-  cy.get('#date-received-date').type('01/01/2020');
+  cy.get('input#date-received-picker').type('01/01/2020');
   cy.get('#mailing-date').type('01/01/2020');
   cy.get('#procedure-type-0').click();
-  cy.get('#preferred-trial-city')
-    .scrollIntoView()
-    .select('Birmingham, Alabama');
+  cy.get('#preferred-trial-city').scrollIntoView();
+  cy.get('#preferred-trial-city').select('Birmingham, Alabama');
   cy.get('label[for="payment-status-paid"]').click();
-  cy.get('#payment-date-date').type('01/01/2020');
+  cy.get('#payment-date-picker').type('01/01/2020');
   cy.get('#petition-payment-method').type('Tears of my enemies');
 
-  cy.get('label[for="notice-of-attachments"]').scrollIntoView().click();
-  cy.get('label[for="order-for-ratification"]').scrollIntoView().click();
+  cy.get('label[for="notice-of-attachments"]').scrollIntoView();
+  cy.get('label[for="notice-of-attachments"]').click();
+  cy.get('label[for="order-for-ratification"]').scrollIntoView();
+  cy.get('label[for="order-for-ratification"]').click();
 
   cy.get('#tab-irs-notice').click();
-  cy.get('#case-type').scrollIntoView().select('Deficiency');
+  cy.get('#case-type').scrollIntoView();
+  cy.get('#case-type').select('Deficiency');
   cy.get('#has-irs-verified-notice-yes').click();
   cy.get('#year-0').type('1995');
 
@@ -48,7 +50,7 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
   );
 
   cy.get('button.calculate-penalties').click();
-  cy.get('#penalty_0').type(0);
+  cy.get('#penalty_0').type('0');
   cy.get('button#modal-button-confirm').click();
 
   cy.get('#upload-mode-upload').click();

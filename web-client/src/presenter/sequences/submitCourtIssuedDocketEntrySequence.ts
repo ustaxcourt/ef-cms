@@ -1,9 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { generateCoversheetAction } from '../actions/DocketEntry/generateCoversheetAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
@@ -27,8 +25,6 @@ import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDock
 export const submitCourtIssuedDocketEntrySequence = [
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction(null),
-  computeFilingFormDateAction,
   validateCourtIssuedDocketEntryAction,
   {
     error: [
