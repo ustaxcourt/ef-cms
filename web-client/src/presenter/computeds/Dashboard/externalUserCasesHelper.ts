@@ -6,9 +6,6 @@ export const externalUserCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  let openCasesCount = 0;
-  let closedCasesCount = 0;
-
   const { formatCase } = applicationContext.getUtilities();
   const pageSize = applicationContext.getConstants().CASE_LIST_PAGE_SIZE;
 
@@ -24,43 +21,35 @@ export const externalUserCasesHelper = (
     formatCase(applicationContext, closedCase),
   );
 
-  formattedOpenCases.forEach(aCase => {
-    if (aCase.consolidatedCases) {
-      aCase.consolidatedCases.forEach(consolidatedCase => {
-        if (consolidatedCase.isRequestingUserAssociated) {
-          openCasesCount = openCasesCount + 1;
-        }
-      });
-    }
-    if (aCase.isRequestingUserAssociated) {
-      openCasesCount = openCasesCount + 1;
-    }
-  });
-
-  formattedClosedCases.forEach(aCase => {
-    if (aCase.consolidatedCases) {
-      aCase.consolidatedCases.forEach(consolidatedCase => {
-        if (consolidatedCase.isRequestingUserAssociated) {
-          closedCasesCount = closedCasesCount + 1;
-        }
-      });
-    }
-    if (aCase.isRequestingUserAssociated) {
-      closedCasesCount = closedCasesCount + 1;
-    }
-  });
-
   return {
     closedCaseResults: formattedClosedCases.slice(
       0,
       closedCurrentPage * pageSize,
     ),
-    closedCasesCount,
+    closedCasesCount: getCountOfCases(formattedClosedCases),
     openCaseResults: formattedOpenCases.slice(0, openCurrentPage * pageSize),
-    openCasesCount,
+    openCasesCount: getCountOfCases(formattedOpenCases),
     showLoadMoreClosedCases:
       formattedClosedCases.length > closedCurrentPage * pageSize,
     showLoadMoreOpenCases:
       formattedOpenCases.length > openCurrentPage * pageSize,
   };
+};
+
+const getCountOfCases = cases => {
+  let count = 0;
+  cases.forEach(aCase => {
+    if (aCase.consolidatedCases) {
+      aCase.consolidatedCases.forEach(consolidatedCase => {
+        if (consolidatedCase.isRequestingUserAssociated) {
+          count = count + 1;
+        }
+      });
+    }
+    if (aCase.isRequestingUserAssociated) {
+      count = count + 1;
+    }
+  });
+
+  return count;
 };
