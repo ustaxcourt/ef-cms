@@ -6,13 +6,16 @@ export const externalUserCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
+  let openCasesCount = 0;
+  let closedCasesCount = 0;
+
   const { formatCase } = applicationContext.getUtilities();
+  const pageSize = applicationContext.getConstants().CASE_LIST_PAGE_SIZE;
 
   const openCases = get(state.openCases);
   const closedCases = get(state.closedCases);
   const openCurrentPage = get(state.openCasesCurrentPage) || 1;
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
-  const pageSize = get(state.constants.CASE_LIST_PAGE_SIZE); // TODO: confirm retrieval of constants
 
   const formattedOpenCases = openCases.map(openCase =>
     formatCase(applicationContext, openCase),
@@ -20,8 +23,6 @@ export const externalUserCasesHelper = (
   const formattedClosedCases = closedCases.map(closedCase =>
     formatCase(applicationContext, closedCase),
   );
-
-  let openCasesCount = 0;
 
   formattedOpenCases.forEach(aCase => {
     if (aCase.consolidatedCases) {
@@ -36,12 +37,25 @@ export const externalUserCasesHelper = (
     }
   });
 
+  formattedClosedCases.forEach(aCase => {
+    if (aCase.consolidatedCases) {
+      aCase.consolidatedCases.forEach(consolidatedCase => {
+        if (consolidatedCase.isRequestingUserAssociated) {
+          closedCasesCount = closedCasesCount + 1;
+        }
+      });
+    }
+    if (aCase.isRequestingUserAssociated) {
+      closedCasesCount = closedCasesCount + 1;
+    }
+  });
+
   return {
     closedCaseResults: formattedClosedCases.slice(
       0,
       closedCurrentPage * pageSize,
     ),
-    closedCasesCount: formattedClosedCases.length,
+    closedCasesCount,
     openCaseResults: formattedOpenCases.slice(0, openCurrentPage * pageSize),
     openCasesCount,
     showLoadMoreClosedCases:
