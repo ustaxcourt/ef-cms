@@ -13,6 +13,35 @@ type TAssociatedCase = {
   consolidatedCases?: Case[];
 } & Case;
 
+export const getCasesForUserInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
+  const { userId } = await applicationContext.getCurrentUser();
+
+  let allUserCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
+      applicationContext,
+      userId,
+    });
+
+  allUserCases = allUserCases.map(aCase => {
+    return { ...aCase, isRequestingUserAssociated: true } as TAssociatedCase;
+  });
+
+  const nestedCases = await fetchConsolidatedGroupsAndNest({
+    applicationContext,
+    cases: allUserCases,
+    userId,
+  });
+
+  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
+
+  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
+
+  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
+};
+
 /**
  * This function will take in an array of cases, fetch all cases part of a consolidated group,
  * and restructure the object so that the lead cases are at the top level and all cases of that group will be nested inside a
@@ -108,40 +137,6 @@ async function fetchConsolidatedGroupsAndNest({
 
   return allCases;
 }
-
-/**
- * getCasesForUserInteractor
- * @param {object} applicationContext the application context
- * @returns {object} A list of the open cases and a list of the closed cases for the user
- */
-export const getCasesForUserInteractor = async (
-  applicationContext: IApplicationContext,
-) => {
-  const { userId } = await applicationContext.getCurrentUser();
-
-  let allUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId,
-    });
-
-  allUserCases = allUserCases.map(aCase => {
-    return { ...aCase, isRequestingUserAssociated: true } as TAssociatedCase;
-  });
-
-  const nestedCases = await fetchConsolidatedGroupsAndNest({
-    applicationContext,
-    cases: allUserCases,
-    userId,
-  });
-
-  const sortedOpenCases = sortAndFilterCases(nestedCases, 'open');
-
-  const sortedClosedCases = sortAndFilterCases(nestedCases, 'closed');
-
-  return { closedCaseList: sortedClosedCases, openCaseList: sortedOpenCases };
-};
 
 const sortAndFilterCases = (nestedCases, caseType: 'open' | 'closed') => {
   return nestedCases

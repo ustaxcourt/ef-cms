@@ -1,5 +1,5 @@
-import * as client from '../../dynamodbClientService';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { queryFull } from '../../dynamodbClientService';
 
 /**
  * getCasesForUser
@@ -15,7 +15,7 @@ export const getCasesForUser = ({
   applicationContext: IApplicationContext;
   userId: string;
 }) =>
-  client.queryFull({
+  queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
