@@ -10,8 +10,8 @@ export const externalUserCasesHelper = (
 
   const openCases = get(state.openCases);
   const closedCases = get(state.closedCases);
-  const openCurrentPage = get(state.openCasesCurrentPage);
-  const closedCurrentPage = get(state.closedCasesCurrentPage);
+  const openCurrentPage = get(state.openCasesCurrentPage) || 1;
+  const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
   const pageSize = get(state.constants.CASE_LIST_PAGE_SIZE); // TODO: confirm retrieval of constants
 
   const formattedOpenCases = openCases.map(openCase =>
