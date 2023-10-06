@@ -28,25 +28,13 @@ pushd ./web-api/terraform/main
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
-    ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output elasticsearch_endpoint_alpha)"
-
-    ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA%\"}"
-    ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
+    ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output -raw elasticsearch_endpoint_alpha)"
   else
-    ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
-
-    ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
-    ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA#\"}"
+    ELASTICSEARCH_ENDPOINT_BETA="$(terraform output -raw elasticsearch_endpoint_beta)"
   fi
 else
-  ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output elasticsearch_endpoint_alpha)"
-  ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
-
-  ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA%\"}"
-  ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
-
-  ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
-  ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA#\"}"
+  ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output -raw elasticsearch_endpoint_alpha)"
+  ELASTICSEARCH_ENDPOINT_BETA="$(terraform output -raw elasticsearch_endpoint_beta)"
 fi
 
 popd

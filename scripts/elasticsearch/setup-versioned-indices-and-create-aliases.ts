@@ -32,8 +32,7 @@ requireEnvVars(['ENV', 'ELASTICSEARCH_ENDPOINT']);
   } while (!reindexFinished);
 
   // delete the old indices
-  const baseAliasNames = baseAliases.map(a => a.alias);
-  await client.indices.delete({ index: baseAliasNames });
+  await client.indices.delete({ index: baseAliases.map(a => a.alias) });
 
   // create new aliases
   await setupAliases({ client });

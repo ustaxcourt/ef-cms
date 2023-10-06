@@ -40,9 +40,11 @@ export const getClusterStats = async ({
   return { counts, info };
 };
 
-export const isMigratedClusterFinishedIndexing = async (
-  environmentName: string,
-): Promise<boolean> => {
+export const isMigratedClusterFinishedIndexing = async ({
+  environmentName,
+}: {
+  environmentName: string;
+}): Promise<boolean> => {
   const destinationVersion = process.env.DESTINATION_TABLE!.split('-').pop();
   const currentVersion = destinationVersion === 'alpha' ? 'beta' : 'alpha';
 
