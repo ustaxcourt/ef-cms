@@ -3,6 +3,7 @@ import {
   initialJudgeActivityReportState,
 } from './judgeActivityReportState';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -285,7 +286,7 @@ export const baseState = {
     page: number;
   },
   caseDetail: {} as RawCase,
-  closedCases: [],
+  closedCases: [] as TAssociatedCase[],
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -372,7 +373,7 @@ export const baseState = {
     qcIndividualInProgressCount: number;
     unreadMessageCount?: number;
   },
-  openCases: [],
+  openCases: [] as TAssociatedCase[],
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
