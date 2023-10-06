@@ -10,7 +10,7 @@ export const SortableColumnHeaderButton = ({
   ascText = 'in ascending order',
   currentlySortedField,
   currentlySortedOrder,
-  defaultSortOrder,
+  defaultSortOrder = 'desc',
   descText = 'in descending order',
   hasRows,
   onClickSequence,
@@ -18,17 +18,27 @@ export const SortableColumnHeaderButton = ({
   title,
 }: {
   ascText: string;
-  defaultSortOrder: 'asc' | 'desc';
+  defaultSortOrder?: 'asc' | 'desc';
   currentlySortedField: string;
   descText: string;
   hasRows: boolean;
-  onClickSequence: (sort: { sortField: string }) => void;
+  onClickSequence: (sort: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  }) => void;
   sortField: string;
   title: string;
   currentlySortedOrder: 'asc' | 'desc';
 }) => {
   const [isLoading, setIsLoading] = React.useState(false);
   const isActive = currentlySortedField === sortField;
+
+  let sortOrder: 'asc' | 'desc';
+  if (isActive) {
+    sortOrder = currentlySortedOrder === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortOrder = defaultSortOrder;
+  }
 
   return (
     <Button
@@ -43,6 +53,7 @@ export const SortableColumnHeaderButton = ({
           requestAnimationFrame(() => {
             onClickSequence({
               sortField,
+              sortOrder,
             }).then(() => setIsLoading(false));
           });
         }
