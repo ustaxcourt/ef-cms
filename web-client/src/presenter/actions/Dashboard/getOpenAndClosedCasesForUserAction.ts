@@ -1,13 +1,11 @@
-/**
- * Fetches the cases (including consolidated) associated with the currently
- * authenticated user.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
- * @returns {object} open and closed case lists for the current user
- */
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+
 export const getOpenAndClosedCasesForUserAction = async ({
   applicationContext,
-}: ActionProps) => {
+}: ActionProps): Promise<{
+  openCaseList: TAssociatedCase[];
+  closedCaseList: TAssociatedCase[];
+}> => {
   const { closedCaseList, openCaseList } = await applicationContext
     .getUseCases()
     .getCasesForUserInteractor(applicationContext);
