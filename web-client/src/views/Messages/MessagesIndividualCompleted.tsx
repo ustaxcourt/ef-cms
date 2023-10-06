@@ -12,12 +12,14 @@ export const MessagesIndividualCompleted = connect(
     formattedMessages: state.formattedMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
   },
   function MessagesIndividualCompleted({
     constants,
     formattedMessages,
     showSortableHeaders,
     sortTableSequence,
+    tableSort,
   }) {
     return (
       <>
@@ -29,7 +31,8 @@ export const MessagesIndividualCompleted = connect(
                 <th aria-label="Docket Number" className="small" colSpan={2}>
                   <SortableColumnHeaderButton
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.DESCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
