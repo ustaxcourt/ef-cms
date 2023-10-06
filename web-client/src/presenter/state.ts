@@ -3,7 +3,6 @@ import {
   initialJudgeActivityReportState,
 } from './judgeActivityReportState';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -55,7 +54,6 @@ import { editPetitionerInformationHelper } from './computeds/editPetitionerInfor
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -81,6 +79,8 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
+import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -188,7 +188,6 @@ export const computeds = {
   editStatisticFormHelper,
   externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
-  featureFlagHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,
@@ -328,7 +327,6 @@ export const baseState = {
     timeRemaining: Number.POSITIVE_INFINITY,
   },
   form: {} as any,
-
   fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
@@ -338,8 +336,11 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   health: undefined as any,
+  idleLogoutState: {
+    logoutAt: undefined,
+    state: 'INITIAL' as 'INITIAL' | 'MONITORING' | 'COUNTDOWN',
+  },
   idleStatus: IDLE_STATUS.ACTIVE,
-  idleTimerRef: null,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
@@ -349,6 +350,7 @@ export const baseState = {
   ) as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
+  lastIdleAction: undefined,
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
@@ -377,6 +379,7 @@ export const baseState = {
   pdfForSigning: {
     docketEntryId: null,
     nameForSigning: '',
+    nameForSigningLine2: '',
     pageNumber: 1,
     pdfjsObj: null,
     signatureApplied: false,
@@ -416,7 +419,6 @@ export const baseState = {
   },
   showValidation: false,
   submittedAndCavCases: {
-    consolidatedCasesGroupCountMap: {} as any,
     submittedAndCavCasesByJudge: [] as any,
     // TODO: this should get moved to currentViewMetadata
     worksheets: [] as RawCaseWorksheet[],
@@ -426,11 +428,11 @@ export const baseState = {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
-  trialSession: {} as RawTrialSession,
-
+  trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
     name: '',
   },
+  trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   user: null,
   userContactEditProgress: {},
   users: [],

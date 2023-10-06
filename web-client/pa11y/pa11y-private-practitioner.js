@@ -17,7 +17,7 @@ module.exports = [
       'check field #supporting-document-0',
       'wait for element .supporting-document-certificate-of-service to be visible',
       'click .supporting-document-certificate-of-service',
-      'wait for element .supporting-document-certificate-of-service-date to be visible',
+      'wait for element #supportingDocuments-0-service-date-picker to be visible',
     ],
     notes: ['request access with supporting document'],
     url: 'http://localhost:1234/log-in?code=privatepractitioner@example.com&path=/case-detail/102-19/request-access&info=supporting-document',

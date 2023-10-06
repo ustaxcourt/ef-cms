@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   getFormattedDocketEntriesForTest,
   getPetitionDocumentForCase,
@@ -77,18 +78,16 @@ export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
       key: 'certificateOfService',
       value: true,
     });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfServiceDay',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfServiceMonth',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'certificateOfServiceYear',
-      value: '2011',
-    });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2011',
+      },
+    );
+
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'pending',
       value: true,
@@ -127,7 +126,7 @@ export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
       additionalInfo2: 'some additional info pt 2',
       attachments: true,
       certificateOfService: true,
-      certificateOfServiceDate: '2011-01-01T05:00:00.000Z',
+      certificateOfServiceDate: '2011-01-01T00:00:00.000-05:00',
       documentTitle: 'Declaration of Bob Barker in Support of Petition',
       documentType: 'Declaration in Support',
       eventCode: 'MISCL',
