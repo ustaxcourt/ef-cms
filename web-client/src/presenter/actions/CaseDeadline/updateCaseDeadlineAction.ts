@@ -1,4 +1,4 @@
-import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * resets the state.form which is used throughout the app for storing html form values
@@ -14,13 +14,17 @@ export const updateCaseDeadlineAction = async ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const caseDeadline = getCaseDeadlineFromFormAction({
-    applicationContext,
-    get,
-    props,
-  });
+  const { associatedJudge, docketNumber, leadDocketNumber } = get(
+    state.caseDetail,
+  );
+
+  const caseDeadline = {
+    ...get(state.form),
+    associatedJudge,
+    docketNumber,
+    leadDocketNumber,
+  };
 
   let updateCaseDeadlineResult = await applicationContext
     .getUseCases()

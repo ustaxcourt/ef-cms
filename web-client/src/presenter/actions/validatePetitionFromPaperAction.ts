@@ -68,21 +68,13 @@ export const validatePetitionFromPaperAction = ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const { petitionPaymentDate, petitionPaymentWaivedDate, receivedAt } = props;
-
   const form = get(state.form);
 
   let errors = applicationContext
     .getUseCases()
     .validatePetitionFromPaperInteractor(applicationContext, {
-      petition: {
-        ...form,
-        petitionPaymentDate,
-        petitionPaymentWaivedDate,
-        receivedAt,
-      },
+      petition: form,
     });
 
   if (!errors) {

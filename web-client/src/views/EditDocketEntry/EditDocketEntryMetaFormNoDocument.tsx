@@ -1,4 +1,4 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -7,35 +7,37 @@ import React from 'react';
 
 export const EditDocketEntryMetaFormNoDocument = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateDocumentSequence: sequences.validateDocumentSequence,
     validationErrors: state.validationErrors,
   },
   function EditDocketEntryMetaFormNoDocument({
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence,
     validateDocumentSequence,
     validationErrors,
   }) {
     return (
       <div className="blue-container">
-        <DateInput
+        <DateSelector
+          defaultValue={form.filingDate}
           errorText={validationErrors.filingDate}
           id="filing-date"
           label="Filed date"
-          names={{
-            day: 'filingDateDay',
-            month: 'filingDateMonth',
-            year: 'filingDateYear',
+          onChange={e => {
+            formatAndUpdateDateFromDatePickerSequence({
+              key: 'filingDate',
+              toFormat: DATE_FORMATS.ISO,
+              value: e.target.value,
+            });
+            validateDocumentSequence();
           }}
-          values={{
-            day: form.filingDateDay,
-            month: form.filingDateMonth,
-            year: form.filingDateYear,
-          }}
-          onBlur={validateDocumentSequence}
-          onChange={updateFormValueSequence}
         />
 
         <FormGroup errorText={validationErrors.documentTitle}>

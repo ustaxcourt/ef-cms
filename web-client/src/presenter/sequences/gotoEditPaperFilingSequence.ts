@@ -1,7 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
-import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -27,7 +26,6 @@ export const gotoEditPaperFiling = [
   setCaseAction,
   setDocketEntryIdAction,
   setDocketEntryFormForDocketEditAction,
-  deconstructDatesToFormAction,
   updateDocketEntryWizardDataAction,
   setupEditPaperFilingAction,
   setPdfPreviewUrlForEditPaperFilingAction,
