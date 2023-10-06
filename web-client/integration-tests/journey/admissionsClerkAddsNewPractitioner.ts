@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { faker } from '@faker-js/faker';
 
 export const admissionsClerkAddsNewPractitioner = cerebralTest => {
@@ -29,18 +30,16 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
       key: 'email',
       value: 'caroleBaskinH8r@example.com',
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: '2010',
-    });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'admissionsDate',
+        toFormat: FORMATS.YYYYMMDD,
+        value: '1/1/2010',
+      },
+    );
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'birthYear',
       value: '1922',

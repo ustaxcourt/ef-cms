@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getFormattedDocketEntriesForTest } from '../helpers';
@@ -33,27 +34,16 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
         value: TRANSCRIPT_EVENT_CODE,
       },
     );
+
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: '1',
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2021',
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2021',
-      },
-    );
+
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -86,26 +76,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '1',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2050',
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
-      },
-    );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
@@ -122,12 +101,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'year',
-        value: '2018',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
       },
     );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
@@ -141,7 +123,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2018-01-01T05:00:00.000Z',
+      date: '2018-01-01T00:00:00.000-05:00',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
       documentType: 'Transcript',
       eventCode: TRANSCRIPT_EVENT_CODE,
@@ -154,15 +136,12 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2018-01-01T05:00:00.000Z',
-      day: '1',
+      date: '2018-01-01T00:00:00.000-05:00',
       documentTitle: 'Transcript of this is free text on 01-01-2018',
       documentType: 'Transcript',
       eventCode: TRANSCRIPT_EVENT_CODE,
       freeText: 'this is free text',
       generatedDocumentTitle: 'Transcript of this is free text on 01-01-2018',
-      month: '1',
-      year: '2018',
     });
   });
 };

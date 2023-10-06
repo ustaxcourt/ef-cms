@@ -545,6 +545,13 @@ export class DocketEntry extends JoiValidationEntity {
         },
         'Enter a filed by',
       ],
+      filingDate: [
+        {
+          contains: 'must be less than or equal to',
+          message: 'Filing date cannot be in the future. Enter a valid date.',
+        },
+        'Enter a valid filing date',
+      ],
       otherFilingParty: 'Enter other filing party name.',
     };
   }

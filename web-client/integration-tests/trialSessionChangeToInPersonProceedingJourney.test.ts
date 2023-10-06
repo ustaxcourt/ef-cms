@@ -3,6 +3,7 @@ import {
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import {
@@ -51,25 +52,14 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       value: overrides.sessionType || 'Hybrid',
     });
 
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateMonth',
-      value: '8',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateDay',
-      value: '12',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateYear',
-      value: '2025',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateMonth',
-      value: '12',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'startDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2025',
+      },
+    );
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',

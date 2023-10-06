@@ -14,7 +14,8 @@ import {
   serveCaseToIrs,
 } from '../support/pages/create-paper-case';
 import { goToMyDocumentQC } from '../support/pages/document-qc';
-const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialogIfExists, login } =
+  getEnvironmentSpecificFunctions();
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 const randomizedEmail = `${faker.string.uuid()}@example.com`;
@@ -30,7 +31,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL') && !Cypress.env('MIGRATE')) {
       });
       goToMyDocumentQC();
       goToCreateCase();
-      closeScannerSetupDialog();
+      closeScannerSetupDialogIfExists();
       fillInCreateCaseFromPaperForm();
       goToReviewCase().then(docketNumber => {
         serveCaseToIrs();

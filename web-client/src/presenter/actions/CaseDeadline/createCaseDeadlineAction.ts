@@ -1,4 +1,4 @@
-import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * creates a case deadline
@@ -13,13 +13,17 @@ export const createCaseDeadlineAction = async ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const caseDeadline = getCaseDeadlineFromFormAction({
-    applicationContext,
-    get,
-    props,
-  });
+  const { associatedJudge, docketNumber, leadDocketNumber } = get(
+    state.caseDetail,
+  );
+
+  const caseDeadline = {
+    ...get(state.form),
+    associatedJudge,
+    docketNumber,
+    leadDocketNumber,
+  };
 
   let createCaseDeadlineResult = await applicationContext
     .getUseCases()

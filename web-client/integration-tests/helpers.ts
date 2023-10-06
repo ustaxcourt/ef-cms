@@ -4,6 +4,15 @@ import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
+import {
+  FORMATS,
+  calculateDifferenceInDays,
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
 import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { applicationContext } from '../src/applicationContext';
@@ -14,14 +23,6 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-import {
-  calculateDifferenceInDays,
-  calculateISODate,
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
@@ -561,24 +562,11 @@ export const createCourtIssuedDocketEntry = async ({
 
   if (filingDate) {
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: filingDate.month,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: filingDate.day,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: filingDate.year,
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: `${filingDate.month}/${filingDate.day}/${filingDate.year}`,
       },
     );
   }
@@ -698,7 +686,7 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
 
 export const uploadProposedStipulatedDecision = async (
   cerebralTest,
-  configObject,
+  configObject?,
 ) => {
   const defaultForm = {
     attachments: false,

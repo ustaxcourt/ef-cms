@@ -1,4 +1,5 @@
 import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
@@ -288,30 +289,18 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     });
 
     await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'certificateOfServiceMonth',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceDay',
-        value: '12',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'certificateOfServiceYear',
-        value: '5000',
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/5000',
       },
     );
 
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       certificateOfServiceDate:
         ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
@@ -333,10 +322,11 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     });
 
     await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'certificateOfServiceYear',
-        value: '2000',
+        key: 'certificateOfServiceDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2000',
       },
     );
 
@@ -396,6 +386,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       primaryDocumentFile:
         ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
@@ -469,6 +460,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await cerebralTest.runSequence('addSupportingDocumentToFormSequence', {
@@ -478,6 +470,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondarySupportingDocuments: [
         {
@@ -528,6 +521,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence(
       'validateExternalDocumentInformationSequence',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondarySupportingDocuments: [
         {

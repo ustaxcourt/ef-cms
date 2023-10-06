@@ -1,4 +1,4 @@
-import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
@@ -131,18 +131,14 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
@@ -214,18 +210,15 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       key: 'petitionPaymentMethod',
       value: 'check',
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateYear',
-      value: '2018',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateDay',
-      value: '24',
-    });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentDate',
+        toFormat: FORMATS.ISO,
+        value: '12/24/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateCaseDetailsSequence');
 
@@ -340,18 +333,14 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 2,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/2/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',
