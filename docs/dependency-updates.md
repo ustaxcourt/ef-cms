@@ -41,10 +41,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 	- ./shared/admin-tools/glue/glue_migrations/main.tf
 	- ./shared/admin-tools/glue/remote_role/main.tf
 	- ./web-api/terraform/main/main.tf
+	- ./web-api/workflow-terraform/glue-cron/main/main.tf
 	- ./web-api/workflow-terraform/migration/main/main.tf
 	- ./web-api/workflow-terraform/migration-cron/main/main.tf
 	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
 	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
+	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
 	- ./web-client/terraform/main/main.tf
 
 	> aws = "latest version"
