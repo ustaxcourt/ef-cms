@@ -33,6 +33,7 @@ export const MessagesIndividualCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
@@ -50,7 +51,9 @@ export const MessagesIndividualCompleted = connect(
                 <th className="medium">
                   <SortableColumnHeaderButton
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
@@ -64,7 +67,9 @@ export const MessagesIndividualCompleted = connect(
                 <th>
                   <SortableColumnHeaderButton
                     ascText={constants.ALPHABETICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"
