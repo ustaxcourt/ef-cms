@@ -85,7 +85,7 @@ export const SortableColumn = ({
   );
 };
 
-SortableColumn.displayName = 'SortableColumnHeaderButton';
+SortableColumn.displayName = 'SortableColumn';
 
 const getFontAwesomeIcon = ({
   ascText,
