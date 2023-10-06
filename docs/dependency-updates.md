@@ -77,6 +77,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 
+### postcss
+
+- (10/6/2023) A security vulnerability exists in postcss that just came out in the end of September. Because postcss is such a used package I imagine this vulnerability will be patched soon. Waiting this week to see if this will be patched in a new version of postcss. 
+
 ### Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
