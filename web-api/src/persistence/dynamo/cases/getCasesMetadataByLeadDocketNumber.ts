@@ -6,7 +6,7 @@ export const getCasesMetadataByLeadDocketNumber = async ({
 }: {
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
-}) => {
+}): Promise<RawCase[]> => {
   const consolidatedGroup = await query({
     ExpressionAttributeNames: {
       '#gsi1pk': 'gsi1pk',
