@@ -1,5 +1,5 @@
 import { CaseListRowTrialSession } from './CaseListRowTrialSession';
-import { SortableColumn } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
