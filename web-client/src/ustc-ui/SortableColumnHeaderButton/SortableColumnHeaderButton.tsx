@@ -1,93 +1,97 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { connect } from '@cerebral/react';
 import { getConstants } from '../../getConstants';
-import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const { DESCENDING } = getConstants();
+const { ASCENDING, DESCENDING } = getConstants();
 
-export const SortableColumnHeaderButton = connect(
-  {
-    getSortIndicatorConfiguration:
-      state.sortableColumnHelper.getSortIndicatorConfiguration,
-    isActive: state.sortableColumnHelper.isActive,
-    tableSort: state.tableSort,
-  },
-  ({
-    ascText = 'in ascending order',
-    defaultSort,
-    descText = 'in descending order',
-    getSortIndicatorConfiguration,
-    hasRows,
-    isActive,
-    onClickSequence,
-    sortField,
-    tableSort,
-    title,
-  }) => {
-    const [isLoading, setIsLoading] = React.useState(false);
+export const SortableColumnHeaderButton = ({
+  ascText = 'in ascending order',
+  currentlySortedField,
+  currentlySortedOrder,
+  descText = 'in descending order',
+  hasRows,
+  onClickSequence,
+  sortField,
+  title,
+}: {
+  ascText: string;
+  currentlySortedField: string;
+  descText: string;
+  hasRows: boolean;
+  onClickSequence: (sort: { sortField: string }) => void;
+  sortField: string;
+  title: string;
+  currentlySortedOrder: 'asc' | 'desc';
+}) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const isActive = currentlySortedField === sortField;
 
-    return (
-      <Button
-        link
-        className={'sortable-header-button margin-right-0'}
-        onClick={() => {
-          if (hasRows) {
-            setIsLoading(true);
-            // we invoke the click sequence AFTER the next animation frame to give
-            // the browser time to display the spinner in the header before it tries to fetch
-            // and re-render the 3000 messages in the message table.
-            requestAnimationFrame(() => {
-              onClickSequence({
-                defaultSort,
-                sortField,
-              }).then(() => setIsLoading(false));
-            });
-          }
-        }}
-      >
-        <span
-          className={classNames('margin-right-105', {
-            sortActive: isActive({ hasRows, sortField, tableSort }),
-          })}
-        >
-          {title}
-        </span>
-        {isLoading && (
-          <FontAwesomeIcon
-            className="fa-spin spinner"
-            icon="sync"
-            size="sm"
-            title="sorting results"
-          />
-        )}
-        {!isLoading &&
-          getFontAwesomeIcon(
-            getSortIndicatorConfiguration({
-              ascText,
-              defaultSort,
-              descText,
+  return (
+    <Button
+      link
+      className={'sortable-header-button margin-right-0'}
+      onClick={() => {
+        if (hasRows) {
+          setIsLoading(true);
+          // we invoke the click sequence AFTER the next animation frame to give
+          // the browser time to display the spinner in the header before it tries to fetch
+          // and re-render the 3000 messages in the message table.
+          requestAnimationFrame(() => {
+            onClickSequence({
               sortField,
-              tableSort,
-            }),
-            isActive({ hasRows, sortField, tableSort }),
-          )}
-      </Button>
-    );
-  },
-);
+            }).then(() => setIsLoading(false));
+          });
+        }
+      }}
+    >
+      <span
+        className={classNames('margin-right-105', {
+          sortActive: isActive,
+        })}
+      >
+        {title}
+      </span>
+      {isLoading && (
+        <FontAwesomeIcon
+          className="fa-spin spinner"
+          icon="sync"
+          size="sm"
+          title="sorting results"
+        />
+      )}
+      {!isLoading &&
+        getFontAwesomeIcon({
+          ascText,
+          descText,
+          direction: currentlySortedOrder,
+          isActiveColumn: isActive,
+        })}
+    </Button>
+  );
+};
 
 SortableColumnHeaderButton.displayName = 'SortableColumnHeaderButton';
 
-const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
+const getFontAwesomeIcon = ({
+  ascText,
+  descText,
+  direction,
+  isActiveColumn,
+}: {
+  direction: string;
+  ascText: string;
+  descText: string;
+  isActiveColumn: boolean;
+}) => {
   let fontAwesomeIcon =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
+  let tooltipText = direction === ASCENDING ? ascText : descText;
 
   if (!isActiveColumn) {
     fontAwesomeIcon = 'exchange-alt';
-    title = '';
+    tooltipText = '';
   }
 
   return (
@@ -96,7 +100,7 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
         isActiveColumn ? 'icon-sortable-header-active' : 'icon-sortable-header'
       }
       icon={fontAwesomeIcon}
-      title={title}
+      title={tooltipText}
     />
   );
 };
