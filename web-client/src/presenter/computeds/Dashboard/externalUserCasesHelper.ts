@@ -5,7 +5,14 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const externalUserCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): {
+  closedCaseResults: any;
+  openCaseResults: any;
+  showLoadMoreClosedCases: boolean;
+  showLoadMoreOpenCases: boolean;
+  closedCasesCount: number;
+  openCasesCount: number;
+} => {
   const { formatCase } = applicationContext.getUtilities();
   const pageSize = applicationContext.getConstants().CASE_LIST_PAGE_SIZE;
 
