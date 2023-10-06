@@ -10,6 +10,7 @@ export const SortableColumnHeaderButton = ({
   ascText = 'in ascending order',
   currentlySortedField,
   currentlySortedOrder,
+  defaultSortOrder,
   descText = 'in descending order',
   hasRows,
   onClickSequence,
@@ -17,6 +18,7 @@ export const SortableColumnHeaderButton = ({
   title,
 }: {
   ascText: string;
+  defaultSortOrder: 'asc' | 'desc';
   currentlySortedField: string;
   descText: string;
   hasRows: boolean;
