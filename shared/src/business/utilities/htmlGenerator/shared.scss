@@ -1,10 +1,6 @@
 body {
   margin: 35px 50px;
   font-family: 'nimbus_roman', sans-serif;
-
-  .printable-working-copy-list {
-    margin: 0 -20px;
-  }
 }
 
 @page {
@@ -25,4 +21,24 @@ body {
 @page narrow:first {
   margin: 0;
   margin-bottom: 2.5cm;
+}
+
+.margin-left-2 {
+  margin-left: 1rem;
+}
+
+.docket-number-with-icon {
+  display: flex;
+  flex-direction: row;
+}
+
+.wrap-text-content {
+  word-break: break-word;
+}
+
+.blank-note-row {
+  td {
+    height: 0.5rem;
+    border-top: none;
+  }
 }
