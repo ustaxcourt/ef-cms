@@ -1,4 +1,5 @@
 import { Client } from '@opensearch-project/opensearch';
+import { baseAliases } from './elasticsearch-aliases';
 import { elasticsearchIndexes } from './elasticsearch-indexes';
 import { elasticsearchMappings } from './elasticsearch-mappings';
 import { esSettingsType } from './elasticsearch-settings';
@@ -56,4 +57,31 @@ export const setupIndexes = async ({
       }
     }),
   );
+};
+
+export const deleteUnaliasedIndices = async ({
+  client,
+}: {
+  client: Client;
+}): Promise<void> => {
+  const indices: string[] =
+    (await client.cat.indices({ format: 'json' })).body
+      ?.filter((i: { index: string }) => {
+        return i.index.includes('efcms');
+      })
+      .map((i: { index: string }) => i.index) || [];
+  const aliasedIndices: string[] =
+    (await client.cat.aliases({ format: 'json' })).body
+      ?.filter((a: { alias: string; index: string }) => {
+        return baseAliases
+          .map((ba: { alias: string; index: string }) => ba.alias)
+          .includes(a.alias);
+      })
+      .map((a: { alias: string; index: string }) => a.index) || [];
+  const unaliasedIndices = indices.filter(index => {
+    return !aliasedIndices.includes(index);
+  });
+  if (unaliasedIndices.length) {
+    client.indices.delete({ index: unaliasedIndices });
+  }
 };

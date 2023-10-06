@@ -289,7 +289,7 @@ jobs:
       - run:
           name: Begin Reindexing
           command: |
-            if [ "$MIGRATE_FLAG" != "true" ]; then
+            if [ "$MIGRATE_FLAG" == "false" ]; then
               npx ts-node --transpile-only ./scripts/elasticsearch/reindex.ts
             fi
       - run:
@@ -528,6 +528,14 @@ jobs:
           name: Destroy Check Reindex Status Cron Infrastructure
           command: |
             npm run destroy:reindex-cron -- $ENV
+      - run:
+          name: Setup Elasticsearch Aliases
+          command: |
+            ./web-api/setup-elasticsearch-aliases.sh $ENV
+      - run:
+          name: Delete Source Elasticsearch Indices After Reindex
+          command: |
+            ./web-api/delete-unaliased-elasticsearch-indices.sh $ENV
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
