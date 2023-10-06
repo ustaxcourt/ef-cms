@@ -9,7 +9,6 @@ import { externalUserCasesHelper } from '@web-client/presenter/computeds/Dashboa
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '@web-client/withAppContext';
 
-// TODO: Decide if this integration test is necessary
 describe('Practitioner Dashboard', () => {
   const cerebralTest = setupTest();
   const externalUserCasesComputed = withAppContextDecorator(
@@ -34,6 +33,7 @@ describe('Practitioner Dashboard', () => {
   createConsolidatedGroup(cerebralTest, {}, 2);
 
   loginAs(cerebralTest, 'privatepractitioner1@example.com');
+
   it('Practitioner requests access to 2 cases', async () => {
     for (let i = 0; i < 2; i++) {
       const docketNumberToAssociateWith =
@@ -66,21 +66,15 @@ describe('Practitioner Dashboard', () => {
         value: 'Standard',
       });
 
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence'); // may not need it
-
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
         key: 'primaryDocumentFile',
         value: fakeFile,
       });
 
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
-
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
         key: 'certificateOfService',
         value: true,
       });
-
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
         key: 'certificateOfServiceMonth',
@@ -90,19 +84,11 @@ describe('Practitioner Dashboard', () => {
         key: 'certificateOfServiceDay',
         value: '12',
       });
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'certificateOfServiceYear',
-        value: '5000',
-      });
-
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
         key: 'certificateOfServiceYear',
         value: '2000',
       });
-
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
 
       const contactPrimary = contactPrimaryFromState(cerebralTest);
       await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -110,13 +96,11 @@ describe('Practitioner Dashboard', () => {
         value: true,
       });
 
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
       await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
       await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
     }
   });
 
-  // login as a private practitioner and expect open cases to be 2
   it('Private practitioner gets a count of cases that they are directly associated with', async () => {
     await cerebralTest.runSequence('gotoDashboardSequence');
 
