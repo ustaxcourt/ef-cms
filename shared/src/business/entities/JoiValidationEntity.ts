@@ -121,9 +121,9 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   // TODO:
   const newResults = getFormattedValidationErrors_NEW(entity);
 
-  if (customStringify(results) !== customStringify(newResults)) {
-    /* eslint-disable no-restricted-globals */
-    const inFrontEnd = typeof document !== 'undefined';
+  /* eslint-disable no-restricted-globals */
+  const inFrontEnd = typeof document !== 'undefined';
+  if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
     const kibanaKey = 'JoiValidation error differences';
     const kibanaContext = {
       entity,
@@ -132,14 +132,14 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
       newResults,
     };
 
-    const inTestEnv = document?.URL.includes('test');
-    if (inFrontEnd && inTestEnv) {
-      import('../../../../web-client/src/applicationContext')
-        .then(({ applicationContext }) => {
-          const logger = applicationContext.getLogger();
-          logger.warn(applicationContext, kibanaKey, kibanaContext);
-        })
-        .catch(console.error);
+    const inTestEnv = document!.URL.includes('test');
+    if (inTestEnv) {
+      // import('../../../../web-client/src/applicationContext')
+      //   .then(({ applicationContext }) => {
+      //     const logger = applicationContext.getLogger();
+      //     logger.warn(applicationContext, kibanaKey, kibanaContext);
+      //   })
+      //   .catch(console.error);
     }
   }
 
