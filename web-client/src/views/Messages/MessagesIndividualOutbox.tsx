@@ -14,6 +14,7 @@ export const MessagesIndividualOutbox = connect(
     screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
     sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualOutbox({
@@ -22,6 +23,7 @@ export const MessagesIndividualOutbox = connect(
     screenMetadata,
     showSortableHeaders,
     sortTableSequence,
+    tableSort,
     updateScreenMetadataSequence,
   }) {
     return (
@@ -59,7 +61,9 @@ export const MessagesIndividualOutbox = connect(
                 <th aria-label="Docket Number" className="small" colSpan={2}>
                   <SortableColumnHeaderButton
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.DESCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
@@ -77,7 +81,9 @@ export const MessagesIndividualOutbox = connect(
                 <th className="small">
                   <SortableColumnHeaderButton
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.DESCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
@@ -91,7 +97,9 @@ export const MessagesIndividualOutbox = connect(
                 <th>
                   <SortableColumnHeaderButton
                     ascText={constants.ALPHABETICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={formattedMessages.hasMessages}
                     sortField="subject"
