@@ -1,4 +1,5 @@
 .printable-working-copy-list {
+  margin: 0 -20px;
   font-family: 'Century Schoolbook Std', serif;
   page: narrow;
 
@@ -8,10 +9,6 @@
 
   .align-right {
     text-align: right;
-  }
-
-  .margin-left-2 {
-    margin-left: 1rem;
   }
 
   .margin-right-1 {
@@ -28,43 +25,10 @@
     }
   }
 
-  .blank-note-row {
-    td {
-      height: 0.5rem;
-      border-top: none;
-    }
-  }
-
-  .border-bottom-0 {
-    td {
-      border-bottom: none;
-    }
-  }
-
   .border-top-0 {
     td {
       border-top: none;
     }
-  }
-
-  .card {
-    border: 1px solid #ccc;
-    margin: 12px 0 12px 0;
-    font-size: 13px;
-  }
-
-  .card-header {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    background: #f0f0f0;
-    font-size: 13px;
-    font-weight: bold;
-  }
-
-  .card-content {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px;
   }
 
   .filters-row {
@@ -105,11 +69,6 @@
     }
   }
 
-  .docket-number-with-icon {
-    display: flex;
-    flex-direction: row;
-  }
-
   .underlined {
     border-bottom: 1px solid;
   }
@@ -135,9 +94,5 @@
         width: 3.5in;
       }
     }
-  }
-
-  .wrap-text-content {
-    word-break: break-word;
   }
 }
