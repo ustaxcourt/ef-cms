@@ -29,6 +29,10 @@ const createOrUpdateCognitoUser = async ({
   userId: string;
   userPoolId: string;
 }): Promise<void> => {
+  if (role === 'legacyJudge') {
+    return;
+  }
+
   let userExists = false;
   try {
     await cognito.adminGetUser({
@@ -44,6 +48,7 @@ const createOrUpdateCognitoUser = async ({
       return;
     }
   }
+
   if (!userExists) {
     try {
       await cognito.adminCreateUser({
@@ -140,6 +145,7 @@ const getJudgeUsersByName = async (
     email: string;
     gluedUserId?: string;
     name: string;
+    role: string;
     section: string;
   };
 }> => {
@@ -152,8 +158,8 @@ const getJudgeUsersByName = async (
           bool: {
             filter: [
               {
-                term: {
-                  'role.S': 'judge',
+                terms: {
+                  'role.S': ['judge', 'legacyJudge'],
                 },
               },
             ],
@@ -174,6 +180,7 @@ const getJudgeUsersByName = async (
           judge.judgeTitle.indexOf('Special Trial') !== -1 ? 'st' : ''
         }judge.${judge.name.toLowerCase()}@example.com`,
         name: `${judge.judgeTitle} ${judge.name}`,
+        role: judge.role,
         section: judge.section,
       };
     }
@@ -231,7 +238,7 @@ const updateCognitoUserId = async ({
       continue;
     }
 
-    const { bulkImportedUserId, email, gluedUserId, name, section } =
+    const { bulkImportedUserId, email, gluedUserId, name, role, section } =
       judgeUsers[judge];
 
     if (bulkImportedUserId) {
@@ -242,11 +249,13 @@ const updateCognitoUserId = async ({
       });
     }
 
+    if (role === 'legacyJudge') continue;
+
     if (gluedUserId) {
       await createOrUpdateCognitoUser({
         email,
         name,
-        role: 'judge',
+        role,
         userId: gluedUserId,
         userPoolId: userPoolId!,
       });
