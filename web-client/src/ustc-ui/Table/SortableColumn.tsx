@@ -1,4 +1,4 @@
-import { Button } from '../../ustc-ui/Button/Button';
+import { Button } from '../Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { getConstants } from '../../getConstants';
 import React from 'react';

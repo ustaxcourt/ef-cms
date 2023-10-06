@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { DeletePractitionerDocumentConfirmModal } from './DeletePractitionerDocumentConfirmModal';
-import { SortableColumn } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';

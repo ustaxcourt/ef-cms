@@ -1,8 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-import { SortableColumn } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
+import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { TableFilters } from '../../ustc-ui/Table/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
