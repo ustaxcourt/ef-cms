@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { SortableColumn } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -29,7 +29,7 @@ export const MessagesIndividualCompleted = connect(
               <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}
@@ -49,7 +49,7 @@ export const MessagesIndividualCompleted = connect(
               )}
               {showSortableHeaders && (
                 <th className="medium">
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}
@@ -65,7 +65,7 @@ export const MessagesIndividualCompleted = connect(
               {!showSortableHeaders && <th className="medium">Completed</th>}
               {showSortableHeaders && (
                 <th>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}

@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 const { ASCENDING, DESCENDING } = getConstants();
 
-export const SortableColumnHeaderButton = ({
+export const SortableColumn = ({
   ascText = 'in ascending order',
   currentlySortedField,
   currentlySortedOrder,
@@ -85,7 +85,7 @@ export const SortableColumnHeaderButton = ({
   );
 };
 
-SortableColumnHeaderButton.displayName = 'SortableColumnHeaderButton';
+SortableColumn.displayName = 'SortableColumnHeaderButton';
 
 const getFontAwesomeIcon = ({
   ascText,
