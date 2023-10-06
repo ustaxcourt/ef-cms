@@ -1,6 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
-import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { SortableColumn } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -59,7 +59,7 @@ export const MessagesIndividualOutbox = connect(
               <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan={2}>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}
@@ -79,7 +79,7 @@ export const MessagesIndividualOutbox = connect(
               )}
               {showSortableHeaders && (
                 <th className="small">
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}
@@ -95,7 +95,7 @@ export const MessagesIndividualOutbox = connect(
               {!showSortableHeaders && <th className="small">Sent</th>}
               {showSortableHeaders && (
                 <th>
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     currentlySortedField={tableSort.sortField}
                     currentlySortedOrder={tableSort.sortOrder}

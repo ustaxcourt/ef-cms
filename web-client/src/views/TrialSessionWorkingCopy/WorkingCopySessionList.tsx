@@ -1,5 +1,5 @@
 import { CaseListRowTrialSession } from './CaseListRowTrialSession';
-import { SortableColumnHeaderButton } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { SortableColumn } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -36,7 +36,7 @@ export const WorkingCopySessionList = connect(
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
               >
-                <SortableColumnHeaderButton
+                <SortableColumn
                   ascText={constants.CHRONOLOGICALLY_ASCENDING}
                   currentlySortedField={trialSessionWorkingCopy.sort}
                   currentlySortedOrder={trialSessionWorkingCopy.sortOrder}
@@ -52,7 +52,7 @@ export const WorkingCopySessionList = connect(
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>
               <th>
-                <SortableColumnHeaderButton
+                <SortableColumn
                   ascText={constants.ALPHABETICALLY_ASCENDING}
                   currentlySortedField={trialSessionWorkingCopy.sort}
                   currentlySortedOrder={trialSessionWorkingCopy.sortOrder}

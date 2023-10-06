@@ -117,7 +117,6 @@ import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
-import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
@@ -247,7 +246,6 @@ export const computeds = {
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
-  sortableColumnHelper,
   startCaseHelper,
   startCaseInternalHelper,
   statisticsFormHelper,
