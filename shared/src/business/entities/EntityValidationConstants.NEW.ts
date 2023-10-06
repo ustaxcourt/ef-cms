@@ -165,7 +165,11 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
   }),
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
-    .description('Date that this Document was filed.'),
+    .description('Date that this Document was filed.')
+    .messages({
+      ...setDefaultErrorMessages('Enter a valid filing date'),
+      'date.max': 'Filing date cannot be in the future. Enter a valid date',
+    }),
   freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
     'any.required': 'Provide an answer',
     'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
