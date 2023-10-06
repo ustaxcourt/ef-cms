@@ -134,12 +134,12 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
     const inTestEnv = document?.URL.includes('test');
     if (inFrontEnd && inTestEnv) {
-      import('../../../../web-client/src/applicationContext')
-        .then(({ applicationContext }) => {
-          const logger = applicationContext.getLogger();
-          logger.warn(applicationContext, kibanaKey, kibanaContext);
-        })
-        .catch(console.error);
+      // import('../../../../web-client/src/applicationContext')
+      //   .then(({ applicationContext }) => {
+      //     const logger = applicationContext.getLogger();
+      //     logger.warn(applicationContext, kibanaKey, kibanaContext);
+      //   })
+      //   .catch(console.error);
     }
   }
 
