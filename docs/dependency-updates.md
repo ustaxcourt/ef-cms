@@ -83,6 +83,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - (10/6/2023) A security vulnerability exists in postcss that just came out in the end of September. Because postcss is such a used package I imagine this vulnerability will be patched soon. Waiting this week to see if this will be patched in a new version of postcss. 
 
+### s3-files (3.0.1)
+- (10/6/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
+
 ### Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
