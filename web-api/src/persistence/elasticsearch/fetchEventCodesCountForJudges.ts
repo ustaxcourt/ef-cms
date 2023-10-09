@@ -12,7 +12,7 @@ export type CaseDocumentsCountType = {
 
 export type AggregatedEventCodesType = {
   aggregations: CaseDocumentsCountType[];
-  total: number | undefined;
+  total: number;
 };
 
 export type FetchEventCodesParamsType = {
