@@ -132,14 +132,14 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
       newResults,
     };
 
-    const inTestEnv = document!.URL.includes('test');
+    const inTestEnv = document!.URL.includes('app.test.ef-cms.ustaxcourt.gov');
     if (inTestEnv) {
-      // import('../../../../web-client/src/applicationContext')
-      //   .then(({ applicationContext }) => {
-      //     const logger = applicationContext.getLogger();
-      //     logger.warn(applicationContext, kibanaKey, kibanaContext);
-      //   })
-      //   .catch(console.error);
+      import('../../../../web-client/src/applicationContext')
+        .then(({ applicationContext }) => {
+          const logger = applicationContext.getLogger();
+          logger.warn(applicationContext, kibanaKey, kibanaContext);
+        })
+        .catch(console.error);
     }
   }
 
