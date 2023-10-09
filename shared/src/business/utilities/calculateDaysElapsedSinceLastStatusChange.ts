@@ -1,13 +1,15 @@
+import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 import { isEmpty } from 'lodash';
 
 export const calculateDaysElapsedSinceLastStatusChange = (
   applicationContext: IApplicationContext,
-  individualCase: SubmittedCAVTableFields,
+  individualCase: {
+    caseStatusHistory: CaseStatusChange[];
+  },
 ): { daysElapsedSinceLastStatusChange: number; statusDate: string } => {
   if (isEmpty(individualCase.caseStatusHistory)) {
     return { daysElapsedSinceLastStatusChange: 0, statusDate: '' };

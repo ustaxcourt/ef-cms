@@ -104,7 +104,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     });
   });
 
-  it('should return an array of cases with statusDate, formattedCaseCount, and daysElapsedSinceLastStatusChange', async () => {
+  it('should return an array of cases with formattedCaseCount', async () => {
     mockGetDocketNumbersByStatusAndByJudgeResult = [
       {
         ...mockCaseInfo,
@@ -113,7 +113,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
       {
         ...mockCaseInfo,
-        caseStatusHistory: [],
         docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
       },
     ];
@@ -123,9 +122,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
         mockGetDocketNumbersByStatusAndByJudgeResult,
       );
-    applicationContext
-      .getUtilities()
-      .prepareDateFromString.mockReturnValue('2019-07-25T00:00:00.000-04:00');
     applicationContext
       .getPersistenceGateway()
       .getCountOfConsolidatedCases.mockReturnValueOnce(3);
@@ -138,16 +134,12 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          daysElapsedSinceLastStatusChange: 365,
           docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
           formattedCaseCount: 3,
-          statusDate: '07/25/18',
         }),
         expect.objectContaining({
-          daysElapsedSinceLastStatusChange: 0,
           docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
           formattedCaseCount: 1,
-          statusDate: '',
         }),
       ]),
     );
