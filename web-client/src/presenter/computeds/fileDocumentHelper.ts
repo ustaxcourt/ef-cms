@@ -52,6 +52,19 @@ export const fileDocumentHelper = (
       .formatDateString(secondaryDocumentCertificateOfServiceDate, 'MMDDYY');
   }
 
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(form.eventCode);
+  console.log('isMultiDocketableEventCode', isMultiDocketableEventCode);
+
+  let allowExternalConsolidatedGroupFiling = false;
+  if (isMultiDocketableEventCode && isInConsolidatedGroup) {
+    allowExternalConsolidatedGroupFiling = true;
+  } else {
+    allowExternalConsolidatedGroupFiling = false;
+  }
+
   const showFilingIncludes = form.certificateOfService || form.attachments;
 
   const supportingDocumentFlags = getSupportingDocumentFlags(form);
@@ -88,6 +101,7 @@ export const fileDocumentHelper = (
 
   const exported = {
     EARedactionAcknowledgement,
+    allowExternalConsolidatedGroupFiling,
     certificateOfServiceDateFormatted,
     formattedFilingParties,
     isSecondaryDocumentUploadOptional:

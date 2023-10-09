@@ -15,8 +15,6 @@ import classNames from 'classnames';
 export const RequestAccess = connect(
   {
     GENERATION_TYPES: state.constants.GENERATION_TYPES,
-    allowExternalConsolidatedGroupFiling:
-      state.allowExternalConsolidatedGroupFilingHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     requestAccessHelper: state.requestAccessHelper,
@@ -29,7 +27,6 @@ export const RequestAccess = connect(
     validationErrors: state.validationErrors,
   },
   function RequestAccess({
-    allowExternalConsolidatedGroupFiling,
     form,
     formCancelToggleCancelSequence,
     GENERATION_TYPES,
@@ -111,7 +108,7 @@ export const RequestAccess = connect(
             <PartiesRepresenting />
           )}
           <RequestAccessDocumentForm />
-          {allowExternalConsolidatedGroupFiling &&
+          {requestAccessHelper.allowExternalConsolidatedGroupFiling &&
             form.generationType === GENERATION_TYPES.MANUAL && (
               <ExternalConsolidatedCaseGroupFilingCard />
             )}
