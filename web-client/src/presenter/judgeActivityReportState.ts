@@ -10,7 +10,6 @@ type JudgeActivityReportData = {
   opinions: AggregatedEventCodesType;
   orders: AggregatedEventCodesType;
   submittedAndCavCasesByJudge: CavAndSubmittedFilteredCasesType[];
-  totalCountForSubmittedAndCavCases: number;
 };
 
 export type JudgeActivityReportState = {
@@ -35,7 +34,6 @@ const initialJudgeActivityReportData: JudgeActivityReportData = {
     total: 0,
   },
   submittedAndCavCasesByJudge: [],
-  totalCountForSubmittedAndCavCases: 0,
   trialSessions: {
     aggregations: {
       Hybrid: 0,

@@ -32,7 +32,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
-  totalCount: number;
 }> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -73,7 +72,6 @@ export const getCasesByStatusAndByJudgeInteractor = async (
 
   return {
     cases: allCaseResults,
-    totalCount: allCaseResults.length,
   };
 };
 

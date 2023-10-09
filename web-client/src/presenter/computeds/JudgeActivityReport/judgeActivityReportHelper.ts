@@ -4,7 +4,10 @@ import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-interface IJudgeActivityReportHelper {
+export const judgeActivityReportHelper = (
+  get: Get,
+  applicationContext: IApplicationContext,
+): {
   closedCasesTotal: number;
   isFormPristine: boolean;
   opinionsFiledTotal: number;
@@ -17,12 +20,7 @@ interface IJudgeActivityReportHelper {
   submittedAndCavCasesByJudge: any;
   today: string;
   trialSessionsHeldTotal: number;
-}
-
-export const judgeActivityReportHelper = (
-  get: Get,
-  applicationContext: IApplicationContext,
-): IJudgeActivityReportHelper => {
+} => {
   const { endDate, startDate } = get(state.judgeActivityReport.filters);
 
   const { judgeNameToDisplayForHeader } = get(state.judgeActivityReport);
@@ -32,7 +30,6 @@ export const judgeActivityReportHelper = (
     opinions,
     orders,
     submittedAndCavCasesByJudge = [],
-    totalCountForSubmittedAndCavCases,
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
 
@@ -121,7 +118,7 @@ export const judgeActivityReportHelper = (
     opinionsFiledTotal: opinions?.total || 0,
     orders: ordersToDisplay,
     ordersFiledTotal: orders?.total || 0,
-    progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
+    progressDescriptionTableTotal: submittedAndCavCasesRows.length,
     reportHeader,
     showResultsTables,
     showSelectDateRangeText,

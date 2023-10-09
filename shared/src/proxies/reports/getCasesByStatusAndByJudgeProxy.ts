@@ -10,11 +10,10 @@ export const getCasesByStatusAndByJudgeInteractor = (
   params: JudgeActivityReportCavAndSubmittedCasesRequest,
 ): Promise<{
   cases: CavAndSubmittedFilteredCasesType[];
-  totalCount: number;
 }> => {
   return post({
     applicationContext,
     body: params,
-    endpoint: '/judge-activity-report/open-cases',
+    endpoint: '/judge-activity-report/open-cases', // todo
   });
 };
