@@ -1,12 +1,13 @@
 import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const judgeActivityReportHelper = (
   get: Get,
-  applicationContext: IApplicationContext,
+  applicationContext: ClientApplicationContext,
 ): {
   closedCasesTotal: number;
   isFormPristine: boolean;
@@ -55,43 +56,46 @@ export const judgeActivityReportHelper = (
 
   const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
-  const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(
-    individualCase => {
-      let consolidatedIconTooltipText = '';
-      let isLeadCase = false;
-      let inConsolidatedGroup = false;
-      let formattedFinalBriefDueDate = '';
+  const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(aCase => {
+    let consolidatedIconTooltipText = '';
+    let isLeadCase = false;
+    let inConsolidatedGroup = false;
+    let formattedFinalBriefDueDate = '';
 
-      if (individualCase.leadDocketNumber === individualCase.docketNumber) {
-        consolidatedIconTooltipText = 'Lead case';
-        isLeadCase = true;
-        inConsolidatedGroup = true;
-      }
+    if (aCase.leadDocketNumber === aCase.docketNumber) {
+      consolidatedIconTooltipText = 'Lead case';
+      isLeadCase = true;
+      inConsolidatedGroup = true;
+    }
 
-      if (individualCase.caseWorksheet) {
-        formattedFinalBriefDueDate = individualCase.caseWorksheet
-          .finalBriefDueDate
-          ? applicationContext
-              .getUtilities()
-              .formatDateString(
-                individualCase.caseWorksheet.finalBriefDueDate,
-                applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-              )
-          : '';
-      }
+    if (aCase.caseWorksheet) {
+      formattedFinalBriefDueDate = aCase.caseWorksheet.finalBriefDueDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(
+              aCase.caseWorksheet.finalBriefDueDate,
+              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+            )
+        : '';
+    }
 
-      return {
-        ...individualCase,
-        caseWorksheet: {
-          ...individualCase.caseWorksheet,
-          formattedFinalBriefDueDate,
-        },
-        consolidatedIconTooltipText,
-        inConsolidatedGroup,
-        isLeadCase,
-      };
-    },
-  );
+    const { daysElapsedSinceLastStatusChange, statusDate } = applicationContext
+      .getUtilities()
+      .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+
+    return {
+      ...aCase,
+      caseWorksheet: {
+        ...aCase.caseWorksheet,
+        formattedFinalBriefDueDate,
+      },
+      consolidatedIconTooltipText,
+      daysElapsedSinceLastStatusChange,
+      inConsolidatedGroup,
+      isLeadCase,
+      statusDate,
+    };
+  });
 
   const { sortField, sortOrder } = get(state.tableSort);
 

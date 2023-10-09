@@ -50,6 +50,7 @@ import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src
 import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authenticateUserProxy';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
+import { calculateDaysElapsedSinceLastStatusChange } from '../../shared/src/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
   calculateISODate,
@@ -723,6 +724,7 @@ const applicationContext = {
     return {
       abbreviateState,
       aggregatePartiesForService,
+      calculateDaysElapsedSinceLastStatusChange,
       calculateDifferenceInDays,
       calculateISODate,
       canAllowDocumentServiceForCase,
