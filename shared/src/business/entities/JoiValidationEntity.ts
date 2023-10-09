@@ -4,6 +4,7 @@ import {
   JoiErrorDetail,
   getFormattedValidationErrors_NEW,
 } from './joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
+import { applicationContext as clientAppContext } from '@web-client/applicationContext';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -123,6 +124,7 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
   /* eslint-disable no-restricted-globals */
   const inFrontEnd = typeof document !== 'undefined';
+
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
     const kibanaKey = 'JoiValidation error differences';
     const kibanaContext = {
@@ -134,12 +136,8 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
     const inTestEnv = document!.URL.includes('app.test.ef-cms.ustaxcourt.gov');
     if (inTestEnv) {
-      // import('../../../../web-client/src/applicationContext')
-      //   .then(({ applicationContext }) => {
-      //     const logger = applicationContext.getLogger();
-      //     logger.warn(applicationContext, kibanaKey, kibanaContext);
-      //   })
-      //   .catch(console.error);
+      const logger = clientAppContext.getLogger();
+      logger.warn(clientAppContext, kibanaKey, kibanaContext);
     }
   }
 
