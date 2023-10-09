@@ -6,11 +6,7 @@ import {
 import {
   MOCK_CASE,
   MOCK_SUBMITTED_CASE,
-  MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY,
-  MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD,
-  MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD,
-  MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
 } from '@shared/test/mockCase';
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
@@ -19,8 +15,6 @@ import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
 describe('getCasesByStatusAndByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
-
-  let mockGetDocketNumbersWithServedEventCodesResult: string[] = [];
 
   const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
     judges: [judgeUser.name],
@@ -67,12 +61,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       () => mockGetDocketNumbersByStatusAndByJudgeResult,
     );
 
-  applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersWithServedEventCodes.mockImplementation(
-      () => mockGetDocketNumbersWithServedEventCodesResult,
-    );
-
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(judgeUser);
   });
@@ -116,7 +104,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     });
   });
 
-  it('should return an array of cases with statusDate, formattedCaseCount, and daysElapsedSinceLastStatusChange (stripping out the cases with served ODD, DEC, SDEC, OAD docket entries and no consolidated cases)', async () => {
+  it('should return an array of cases with statusDate, formattedCaseCount, and daysElapsedSinceLastStatusChange', async () => {
     mockGetDocketNumbersByStatusAndByJudgeResult = [
       {
         ...mockCaseInfo,
@@ -125,44 +113,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
       {
         ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
         caseStatusHistory: [],
         docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
       },
     ];
-    mockGetDocketNumbersWithServedEventCodesResult = [
-      MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-    ];
+
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
         mockGetDocketNumbersByStatusAndByJudgeResult,
-      );
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
-        mockGetDocketNumbersWithServedEventCodesResult,
       );
     applicationContext
       .getUtilities()
@@ -204,18 +163,10 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     ];
 
-    mockGetDocketNumbersWithServedEventCodesResult = [];
-
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
         mockGetDocketNumbersByStatusAndByJudgeResult,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
-        mockGetDocketNumbersWithServedEventCodesResult,
       );
 
     const result = await getCasesByStatusAndByJudgeInteractor(

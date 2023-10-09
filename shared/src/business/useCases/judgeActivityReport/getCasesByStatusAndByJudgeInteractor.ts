@@ -115,7 +115,6 @@ const getCases = async (
   applicationContext: IApplicationContext,
   searchEntity: JudgeActivityReportSearch,
 ) => {
-  // first get all cases for the specified judges and statuses
   const allCaseRecords = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
@@ -127,23 +126,9 @@ const getCases = async (
       },
     });
 
-  // filter out cases with decision documents
-  const docketNumbersFilterOut = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersWithServedEventCodes(applicationContext, {
-      cases: allCaseRecords,
-      eventCodes: ['ODD', 'DEC', 'OAD', 'SDEC'],
-    });
-
-  const filteredCaseRecords = allCaseRecords.filter(
-    caseInfo =>
-      !docketNumbersFilterOut.includes(caseInfo.docketNumber) &&
-      caseInfo.caseStatusHistory,
-  );
-
   const completeCaseRecords = await attachCaseWorkSheets(
     applicationContext,
-    filteredCaseRecords,
+    allCaseRecords,
   );
 
   return completeCaseRecords;
