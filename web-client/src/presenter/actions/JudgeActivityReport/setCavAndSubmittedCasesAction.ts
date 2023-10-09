@@ -5,23 +5,13 @@ export const setCavAndSubmittedCasesAction = ({
   props,
   store,
 }: ActionProps<{
-  totalCountForSubmittedAndCavCases: number;
   cases: CavAndSubmittedFilteredCasesType[];
 }>) => {
-  const {
-    cases: submittedAndCavCasesByJudge,
-    totalCountForSubmittedAndCavCases,
-  } = props;
+  const { cases: submittedAndCavCasesByJudge } = props;
 
   store.set(
     state.judgeActivityReport.judgeActivityReportData
       .submittedAndCavCasesByJudge,
     submittedAndCavCasesByJudge,
-  );
-
-  store.set(
-    state.judgeActivityReport.judgeActivityReportData
-      .totalCountForSubmittedAndCavCases,
-    totalCountForSubmittedAndCavCases,
   );
 };

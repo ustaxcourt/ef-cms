@@ -74,8 +74,5 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       ).mock.calls[0][1],
     ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);
-    expect(result.output.totalCountForSubmittedAndCavCases).toEqual(
-      mockTotalCountOfSubmittedAndCavCases,
-    );
   });
 });

@@ -8,7 +8,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 
   const { CASE_STATUS_TYPES } = applicationContext.getConstants();
 
-  const { cases, totalCount } = await applicationContext
+  const { cases } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judges,
@@ -17,6 +17,5 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 
   return {
     cases,
-    totalCountForSubmittedAndCavCases: totalCount,
   };
 };

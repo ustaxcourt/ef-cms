@@ -372,9 +372,6 @@ describe('judgeActivityReportHelper', () => {
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
-      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
-        mockSubmittedAndCavCasesByJudge.length;
-
       const { progressDescriptionTableTotal } = runCompute(
         judgeActivityReportHelper,
         {

@@ -151,7 +151,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         }),
       ]),
     );
-    expect(result.totalCount).toEqual(2);
+    expect(result.cases.length).toEqual(2);
   });
 
   it('should add a caseWorksheet field to cases returned', async () => {
@@ -188,6 +188,5 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         docketNumber: '102-23',
       },
     ]);
-    expect(result.totalCount).toEqual(2);
   });
 });
