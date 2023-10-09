@@ -4,7 +4,6 @@ import {
   JoiErrorDetail,
   getFormattedValidationErrors_NEW,
 } from './joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
-import { applicationContext as clientAppContext } from '@web-client/applicationContext';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -136,8 +135,12 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
     const inTestEnv = document!.URL.includes('app.test.ef-cms.ustaxcourt.gov');
     if (inTestEnv) {
-      const logger = clientAppContext.getLogger();
-      logger.warn(clientAppContext, kibanaKey, kibanaContext);
+      // import('../../../../web-client/src/applicationContext')
+      //   .then(({ applicationContext }) => {
+      //     const logger = applicationContext.getLogger();
+      //     logger.warn(applicationContext, kibanaKey, kibanaContext);
+      //   })
+      //   .catch(console.error);
     }
   }
 
