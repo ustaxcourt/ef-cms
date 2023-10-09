@@ -1,7 +1,42 @@
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import { reactTemplateGenerator } from '../generateHTMLTemplateForPDF/reactTemplateGenerator';
 
-export const trialCalendar = async ({ applicationContext, data }) => {
+export const trialCalendar = async ({
+  applicationContext,
+  data,
+}: {
+  applicationContext: IApplicationContext;
+  data: {
+    cases: {
+      docketNumber: string;
+      docketNumberWithSuffix: string;
+      caseTitle: string;
+      respondentCounsel?: string[];
+      inConsolidatedGroup: boolean;
+      calendarNotes?: string;
+      isLeadCase: boolean;
+      petitionerCounsel?: string[];
+      shouldIndent?: boolean;
+      leadDocketNumber?: string;
+    }[];
+    sessionDetail: {
+      startTime: string;
+      startDate: string;
+      sessionType: string;
+      courthouseName?: string;
+      address1?: string;
+      address2?: string;
+      formattedCityStateZip: string;
+      judge: string;
+      trialClerk: string;
+      courtReporter: string;
+      notes?: string;
+      irsCalendarAdministrator: string;
+      noLocationEntered?: boolean;
+      trialLocation?: string;
+    };
+  };
+}): Promise<Buffer> => {
   const { cases, sessionDetail } = data;
 
   const trialCalendarTemplate = reactTemplateGenerator({

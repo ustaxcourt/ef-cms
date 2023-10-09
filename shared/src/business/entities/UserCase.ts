@@ -9,9 +9,9 @@ export class UserCase extends JoiValidationEntity {
   public createdAt: string;
   public docketNumber: string;
   public docketNumberWithSuffix: string;
-  public leadDocketNumber: string;
+  public leadDocketNumber?: string;
   public status: string;
-  public closedDate: string;
+  public closedDate?: string;
 
   constructor(rawUserCase) {
     super('UserCase');
