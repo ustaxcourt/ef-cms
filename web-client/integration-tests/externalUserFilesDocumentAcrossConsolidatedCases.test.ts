@@ -1,3 +1,4 @@
+import { allowExternalConsolidatedGroupFilingHelper as allowExternalConsolidatedGroupFilingHelperComputed } from '../src/presenter/computeds/allowExternalConsolidatedGroupFilingHelper';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import {
   contactPrimaryFromState,
@@ -115,7 +116,6 @@ describe('External User files a document across a consolidated case group', () =
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
-    loginAs(cerebralTest, 'irspractitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber2);
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber2,
@@ -153,17 +153,19 @@ describe('External User files a document across a consolidated case group', () =
   describe('privatePractitioner', () => {
     loginAs(cerebralTest, 'privatepractitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, leadCaseDocketNumber);
+
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: leadCaseDocketNumber,
       shouldShowFileDocumentButton: true,
     });
+
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
+
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
 
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber3);
 
     loginAs(cerebralTest, 'privatepractitioner2@example.com');
-
     verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
       expectedAssociation: false,
       practitionerRole: 'privatePractitioner',
@@ -174,7 +176,7 @@ describe('External User files a document across a consolidated case group', () =
       shouldShowRequestAccessToCaseButton: true,
     });
 
-    it('Practitioner requests access to case', async () => {
+    it('practitioner requests access to case', async () => {
       await cerebralTest.runSequence('gotoRequestAccessSequence', {
         docketNumber: consolidatedCaseDocketNumber3,
       });
@@ -223,7 +225,7 @@ describe('External User files a document across a consolidated case group', () =
       expect(createdDocketEntry.filedBy).toEqual('Lilah Gilbert');
     });
 
-    it('Practitioner verifies association only with one case in the consolidated group', () => {
+    it('practitioner verifies association only with one case in the consolidated group', () => {
       const userId: string = cerebralTest.getState('user.userId');
       const consolidatedCases = cerebralTest.getState(
         'caseDetail.consolidatedCases',
@@ -243,12 +245,47 @@ describe('External User files a document across a consolidated case group', () =
         expect(isAssociated).toBe(expectedAssociation);
       });
     });
+
+    it('practitioner requests access to a second case in the consolidated group', async () => {
+      await cerebralTest.runSequence('gotoRequestAccessSequence', {
+        docketNumber: consolidatedCaseDocketNumber1,
+      });
+
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'documentType',
+        value: 'Limited Entry of Appearance',
+      });
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'documentTitleTemplate',
+        value: 'Limited Entry of Appearance for [Petitioner Names]',
+      });
+      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+        key: 'eventCode',
+        value: 'LEA',
+      });
+
+      const allowExternalConsolidatedGroupFilingHelper =
+        withAppContextDecorator(
+          allowExternalConsolidatedGroupFilingHelperComputed,
+        );
+
+      const allowExternalConsolidatedGroupFiling = runCompute(
+        allowExternalConsolidatedGroupFilingHelper,
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      expect(allowExternalConsolidatedGroupFiling).toBe(false);
+    });
   });
 
   describe('petitioner', () => {
     loginAs(cerebralTest, 'petitioner@example.com');
     getConsolidatedCasesDetails(cerebralTest, consolidatedCaseDocketNumber1);
+
     externalUserFilesDocumentForOwnedCase(cerebralTest, fakeFile, true);
+
     verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
   });
 });

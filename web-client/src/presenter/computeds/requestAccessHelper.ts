@@ -1,13 +1,14 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { getFilerParties } from './getFilerParties';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const requestAccessHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
+  allowExternalConsolidatedGroupFiling: boolean;
   certificateOfServiceDateFormatted: string;
   documentWithAttachments: boolean;
   documentWithObjections: boolean;
@@ -50,6 +51,14 @@ export const requestAccessHelper = (
     certificateOfServiceDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
+  }
+  let allowExternalConsolidatedGroupFiling = false;
+  const isIrsPractitioner =
+    applicationContext.getCurrentUser().role === USER_ROLES.irsPractitioner;
+  if (isIrsPractitioner) {
+    allowExternalConsolidatedGroupFiling = true;
+  } else {
+    allowExternalConsolidatedGroupFiling = false;
   }
 
   const documents: {
@@ -146,6 +155,7 @@ export const requestAccessHelper = (
     form.eventCode === 'EA' && form.generationType === GENERATION_TYPES.AUTO;
 
   return {
+    allowExternalConsolidatedGroupFiling,
     certificateOfServiceDateFormatted,
     documentWithAttachments,
     documentWithObjections,
