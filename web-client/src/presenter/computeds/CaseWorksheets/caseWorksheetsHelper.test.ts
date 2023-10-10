@@ -28,6 +28,7 @@ describe('caseWorksheetsHelper', () => {
         docketNumber: '101-20',
         formattedCaseCount: 2,
         leadDocketNumber: '101-20',
+        status: CASE_STATUS_TYPES.submitted,
       },
       {
         caseCaption: 'Velma Jinkies, Petitioner',
@@ -43,6 +44,7 @@ describe('caseWorksheetsHelper', () => {
         ],
         docketNumber: '110-15',
         formattedCaseCount: 1,
+        status: CASE_STATUS_TYPES.submitted,
       },
       {
         caseCaption: 'Fred Dude, Petitioner',
@@ -58,6 +60,23 @@ describe('caseWorksheetsHelper', () => {
         ],
         docketNumber: '202-11',
         formattedCaseCount: 1,
+        status: CASE_STATUS_TYPES.cav,
+      },
+      {
+        caseCaption: 'Shaggy Guy, Petitioner',
+        caseStatusHistory: [
+          {
+            date: '2022-02-15T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+          },
+          {
+            date: '2022-02-06T05:00:00.000Z',
+            updatedCaseStatus: CASE_STATUS_TYPES.submittedRule122,
+          },
+        ],
+        docketNumber: '303-11',
+        formattedCaseCount: 1,
+        status: CASE_STATUS_TYPES.submittedRule122,
       },
     ];
 
@@ -85,7 +104,7 @@ describe('caseWorksheetsHelper', () => {
         formattedSubmittedCavStatusDate: '02/16/02',
         inConsolidatedGroup: true,
         isLeadCase: true,
-        status: undefined,
+        status: CASE_STATUS_TYPES.submitted,
         worksheet: {},
       },
       {
@@ -98,7 +117,20 @@ describe('caseWorksheetsHelper', () => {
         formattedSubmittedCavStatusDate: '02/06/22',
         inConsolidatedGroup: false,
         isLeadCase: false,
-        status: undefined,
+        status: CASE_STATUS_TYPES.cav,
+        worksheet: {},
+      },
+      {
+        caseCaption: 'Shaggy Guy, Petitioner',
+        consolidatedIconTooltipText: '',
+        daysSinceLastStatusChange: expect.anything(),
+        docketNumber: '303-11',
+        docketNumberWithSuffix: undefined,
+        formattedCaseCount: 1,
+        formattedSubmittedCavStatusDate: '02/06/22',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        status: CASE_STATUS_TYPES.submittedRule122,
         worksheet: {},
       },
       {
@@ -111,7 +143,7 @@ describe('caseWorksheetsHelper', () => {
         formattedSubmittedCavStatusDate: '02/26/22',
         inConsolidatedGroup: false,
         isLeadCase: false,
-        status: undefined,
+        status: CASE_STATUS_TYPES.submitted,
         worksheet: {
           docketNumber: '110-15',
           finalBriefDueDateFormatted: '',
