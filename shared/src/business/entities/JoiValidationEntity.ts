@@ -125,6 +125,8 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   const inFrontEnd = typeof document !== 'undefined';
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
+    console.log('customStringify(results)', customStringify(results));
+    console.log('customStringify(newResults)', customStringify(newResults));
     const kibanaKey = 'JoiValidation error differences';
     const kibanaContext = {
       entity,
@@ -134,14 +136,15 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
     };
 
     const inTestEnv = document!.URL.includes('app.test.ef-cms.ustaxcourt.gov');
-    if (inTestEnv) {
-      import('../../../../web-client/src/applicationContext')
-        .then(({ applicationContext }) => {
-          //     const logger = applicationContext.getLogger();
-          //     logger.warn(applicationContext, kibanaKey, kibanaContext);
-        })
-        .catch(console.error);
-    }
+    console.log('inTestEnv: ', inTestEnv);
+    // if (inTestEnv) {
+    //   import('../../../../web-client/src/applicationContext')
+    //     .then(({ applicationContext }) => {
+    //       const logger = applicationContext.getLogger();
+    //       logger.warn(applicationContext, kibanaKey, kibanaContext);
+    //     })
+    //     .catch(console.error);
+    // }
   }
 
   return results;
