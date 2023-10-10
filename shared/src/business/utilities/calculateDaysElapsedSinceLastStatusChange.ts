@@ -1,8 +1,5 @@
 import { CaseStatusChange } from '@shared/business/entities/cases/Case';
-import {
-  FORMATS,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { isEmpty } from 'lodash';
 
 export const calculateDaysElapsedSinceLastStatusChange = (
@@ -22,7 +19,9 @@ export const calculateDaysElapsedSinceLastStatusChange = (
       FORMATS.ISO,
     );
 
-  individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+  individualCase.caseStatusHistory.sort((a, b) =>
+    applicationContext.getUtilities().compareISODateStrings(a.date, b.date),
+  );
 
   const newestCaseStatusChangeIndex =
     individualCase.caseStatusHistory.length - 1;
@@ -37,6 +36,8 @@ export const calculateDaysElapsedSinceLastStatusChange = (
         currentDateInIsoFormat,
         dateOfLastCaseStatusChange,
       ),
-    statusDate: formatDateString(dateOfLastCaseStatusChange, FORMATS.MMDDYY),
+    statusDate: applicationContext
+      .getUtilities()
+      .formatDateString(dateOfLastCaseStatusChange, FORMATS.MMDDYY),
   };
 };
