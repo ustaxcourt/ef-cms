@@ -123,31 +123,19 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
   /* eslint-disable no-restricted-globals */
   const inFrontEnd = typeof document !== 'undefined';
-  console.log('inFrontEnd', inFrontEnd);
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
-    console.log('validation mismatch');
-    console.log('customStringify(results)', customStringify(results));
-    console.log('customStringify(newResults)', customStringify(newResults));
+    const errorMessage = `Validation message mismatch! Please take a screenshot of this alert and add to Devex Card 1187.
+    Entity Name: ${entity.entityName}
+    
+    Old results: ${JSON.stringify(results, null, 2)}
+    
+    New Results: ${JSON.stringify(newResults, null, 2)}`;
 
-    const kibanaKey = 'JoiValidation error differences';
-    const kibanaContext = {
-      entity,
-      entityName: entity.entityName,
-      legacyResults: results,
-      newResults,
+    return {
+      ...results,
+      mismatchMessage: errorMessage,
     };
-
-    const inTestEnv = document!.URL.includes('app.test.ef-cms.ustaxcourt.gov');
-    console.log('inTestEnv');
-    if (inTestEnv) {
-      import('../../../../web-client/src/applicationContext')
-        .then(({ applicationContext }) => {
-          const logger = applicationContext.getLogger();
-          logger.warn(applicationContext, kibanaKey, kibanaContext);
-        })
-        .catch(error => console.error('error importing', error));
-    }
   }
 
   return results;

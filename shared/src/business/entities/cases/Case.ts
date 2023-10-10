@@ -321,7 +321,7 @@ export class Case extends JoiValidationEntity {
     petitionPaymentMethod: 'Enter payment method',
     petitionPaymentStatus: 'Enter payment status',
     petitionPaymentWaivedDate: 'Enter a valid date waived',
-    preferredTrialCity: 'Select a trial location',
+    preferredTrialCity: 'Select a trial location - x',
     procedureType: 'Select a case procedure',
     receivedAt: [
       {

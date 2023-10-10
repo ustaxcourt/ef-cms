@@ -109,5 +109,5 @@ export const completeWizardStep3 = (filingType, petitionerName) => {
 
 export const completeWizardStep4 = () => {
   cy.get('label#procedure-type-0').scrollIntoView().click();
-  cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
+  // cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
 };
