@@ -590,6 +590,10 @@ app.use(logger());
 {
   app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
+  app.get(
+    '/cases/status-and-judge',
+    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
+  );
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
@@ -776,10 +780,6 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
-  );
-  app.post(
-    '/judge-activity-report/open-cases',
-    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
   );
 }
 
