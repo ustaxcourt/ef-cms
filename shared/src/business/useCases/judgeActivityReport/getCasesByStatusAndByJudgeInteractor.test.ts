@@ -1,6 +1,6 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
-  JudgeActivityReportCavAndSubmittedCasesRequest,
+  GetCasesByStatusAndByJudgeRequest,
   getCasesByStatusAndByJudgeInteractor,
 } from './getCasesByStatusAndByJudgeInteractor';
 import {
@@ -16,7 +16,7 @@ import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 describe('getCasesByStatusAndByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
 
-  const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
+  const mockValidRequest: GetCasesByStatusAndByJudgeRequest = {
     judges: [judgeUser.name],
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };

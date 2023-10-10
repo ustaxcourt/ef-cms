@@ -1,13 +1,13 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
+  GetCasesByStatusAndByJudgeRequest,
   GetCasesByStatusAndByJudgeResponse,
-  JudgeActivityReportCavAndSubmittedCasesRequest,
 } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { get } from '../requests';
 
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext: ClientApplicationContext,
-  params: JudgeActivityReportCavAndSubmittedCasesRequest,
+  params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
 }> => {

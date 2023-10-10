@@ -6,9 +6,15 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store used for setting state.judgeUser
  * @param {object} providers.props the cerebral props object used for getting the props.judgeUser
  */
-export const setJudgeUserAction = ({ props, store }: ActionProps) => {
-  if (props.judgeUser) {
-    store.set(state.judgeUser, props.judgeUser);
+export const setJudgeUserAction = ({
+  applicationContext,
+  props,
+  store,
+}: ActionProps) => {
+  const user = applicationContext.getCurrentUser();
+  const judgeUser = props.judgeUser || user;
+  if (judgeUser) {
+    store.set(state.judgeUser, judgeUser);
   } else {
     store.unset(state.judgeUser);
   }

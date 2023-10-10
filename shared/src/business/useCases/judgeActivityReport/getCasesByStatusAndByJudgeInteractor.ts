@@ -10,7 +10,7 @@ import {
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
 
-export type JudgeActivityReportCavAndSubmittedCasesRequest = {
+export type GetCasesByStatusAndByJudgeRequest = {
   statuses: string[];
   judges: string[];
 };
@@ -22,7 +22,7 @@ export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
 
 export const getCasesByStatusAndByJudgeInteractor = async (
   applicationContext: IApplicationContext,
-  params: JudgeActivityReportCavAndSubmittedCasesRequest,
+  params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
 }> => {
