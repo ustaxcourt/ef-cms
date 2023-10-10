@@ -1,4 +1,7 @@
-import { CAV_AND_SUBMITTED_CASES_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
+  CAV_AND_SUBMITTED_CASE_STATUS,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getSubmittedAndCavCasesByJudgeAction = async ({
@@ -11,15 +14,13 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
   const { judges } = get(state.judgeActivityReport.filters);
   const pageNumber = props.selectedPage;
 
-  const { CASE_STATUS_TYPES } = applicationContext.getConstants();
-
   const { cases, totalCount } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judges,
       pageNumber,
       pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
 
   return {

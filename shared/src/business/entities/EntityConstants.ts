@@ -199,6 +199,7 @@ export const CASE_STATUS_TYPES = {
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
+  submittedRule122: 'Submitted - Rule 122', // Case submitted for decision without requiring a trial
 } as const;
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
@@ -206,6 +207,7 @@ export type CaseStatus = (typeof CASE_STATUSES)[number];
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.cav,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
@@ -933,6 +935,7 @@ export const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.onAppeal,
   CASE_STATUS_TYPES.rule155,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export const ANSWER_DOCUMENT_CODES = [
