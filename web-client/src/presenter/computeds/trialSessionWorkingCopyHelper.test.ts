@@ -259,7 +259,7 @@ describe('trial session working copy computed', () => {
         { docketNumber: '101-18' },
         { docketNumber: '115-20' },
       ]);
-      expect(formattedCases[0].consolidatedCases).toMatchObject([
+      expect(formattedCases[0].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '5000-17' },
         { docketNumber: '90-18' },
         { docketNumber: '102-19' },
@@ -352,7 +352,7 @@ describe('trial session working copy computed', () => {
         { docketNumber: '115-20' },
       ]);
 
-      expect(formattedCases[0].consolidatedCases).toMatchObject([
+      expect(formattedCases[0].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '122-17' },
       ]);
     });
@@ -425,13 +425,13 @@ describe('trial session working copy computed', () => {
         { docketNumber: '90-18' },
         { docketNumber: '500-17' },
       ]);
-      expect(formattedCases[0].consolidatedCases).toMatchObject([
+      expect(formattedCases[0].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '101-21' },
       ]);
-      expect(formattedCases[1].consolidatedCases).toMatchObject([
+      expect(formattedCases[1].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '102-19' },
       ]);
-      expect(formattedCases[2].consolidatedCases).toMatchObject([
+      expect(formattedCases[2].nestedConsolidatedCases).toMatchObject([
         { docketNumber: '5000-17' },
         { docketNumber: '111-22' },
       ]);

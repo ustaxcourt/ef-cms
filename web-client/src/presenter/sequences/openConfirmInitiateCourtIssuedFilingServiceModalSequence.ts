@@ -1,8 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -21,11 +19,7 @@ export const openConfirmInitiateCourtIssuedFilingServiceModalSequence = [
       isDocketEntryMultiDocketableAction,
       {
         no: [],
-        yes: [
-          getConsolidatedCasesByCaseAction,
-          setConsolidatedCasesForCaseAction,
-          setMultiDocketingCheckboxesAction,
-        ],
+        yes: [setMultiDocketingCheckboxesAction],
       },
       setShowModalFactoryAction('ConfirmInitiateCourtIssuedFilingServiceModal'),
     ],
