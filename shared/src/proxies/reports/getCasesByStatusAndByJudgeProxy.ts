@@ -3,7 +3,7 @@ import {
   GetCasesByStatusAndByJudgeResponse,
   JudgeActivityReportCavAndSubmittedCasesRequest,
 } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
-import { post } from '../requests';
+import { get } from '../requests';
 
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext: ClientApplicationContext,
@@ -11,9 +11,9 @@ export const getCasesByStatusAndByJudgeInteractor = (
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
 }> => {
-  return post({
+  return get({
     applicationContext,
-    body: params,
-    endpoint: '/judge-activity-report/open-cases', // todo
+    endpoint: '/cases/status-and-judge',
+    params,
   });
 };
