@@ -18,12 +18,12 @@ describe('calculateDaysElapsedSinceLastStatusChange', () => {
         },
         {
           changedBy: 'Private Practitioner',
-          date: '2018-07-25T00:00:00.000-04:00',
+          date: '2018-07-07T00:00:00.000-04:00',
           updatedCaseStatus: CASE_STATUS_TYPES.new,
         },
         {
           changedBy: 'Private Practitioner',
-          date: '2018-07-26T00:00:00.000-04:00',
+          date: '2018-07-03T00:00:00.000-04:00',
           updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
         },
       ],
@@ -33,8 +33,6 @@ describe('calculateDaysElapsedSinceLastStatusChange', () => {
       status: CASE_STATUS_TYPES.cav,
     };
   });
-
-  // TODO: add test for sorting by newest
 
   it('should return the number of days since the case status last changed and the day on which it was changed', () => {
     const mockToday = '2019-07-27T00:00:00.000-04:00';
