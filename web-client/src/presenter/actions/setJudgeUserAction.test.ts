@@ -1,30 +1,34 @@
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeUser } from '@shared/test/mockUsers';
+import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setJudgeUserAction } from './setJudgeUserAction';
 
-const mockUser = {
-  userId: '123',
-};
-
 describe('setJudgeUserAction', () => {
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+  });
   it('sets state.judgeUser to the passed in props.judgeUser', async () => {
     const { state } = await runAction(setJudgeUserAction, {
+      modules: { presenter },
       props: {
-        judgeUser: mockUser,
+        judgeUser,
       },
     });
-    expect(state.judgeUser).toMatchObject(mockUser);
+    expect(state.judgeUser).toMatchObject(judgeUser);
   });
 
-  it('unsets state.judgeUser when props.judgeUser is not provided', async () => {
-    const params = {
+  it('sets judge user on state using the currently logged in user when props.judgeUser is not provided', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
+
+    const result = await runAction(setJudgeUserAction, {
+      modules: { presenter },
       props: {},
       state: {
-        judgeUser: mockUser,
+        judgeUser: undefined,
       },
-    };
+    });
 
-    const result = await runAction(setJudgeUserAction, params);
-
-    expect(result.state.judgeUser).toBeUndefined();
+    expect(result.state.judgeUser).toEqual(judgeUser);
   });
 });
