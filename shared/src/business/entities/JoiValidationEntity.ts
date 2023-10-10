@@ -127,6 +127,9 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
     console.log('validation mismatch');
+    console.log('customStringify(results)', customStringify(results));
+    console.log('customStringify(newResults)', customStringify(newResults));
+
     const kibanaKey = 'JoiValidation error differences';
     const kibanaContext = {
       entity,
