@@ -123,8 +123,10 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
 
   /* eslint-disable no-restricted-globals */
   const inFrontEnd = typeof document !== 'undefined';
+  console.log('inFrontEnd', inFrontEnd);
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
+    console.log('validation mismatch');
     const kibanaKey = 'JoiValidation error differences';
     const kibanaContext = {
       entity,
@@ -134,13 +136,14 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
     };
 
     const inTestEnv = document!.URL.includes('app.test.ef-cms.ustaxcourt.gov');
+    console.log('inTestEnv');
     if (inTestEnv) {
       import('../../../../web-client/src/applicationContext')
         .then(({ applicationContext }) => {
-          //     const logger = applicationContext.getLogger();
-          //     logger.warn(applicationContext, kibanaKey, kibanaContext);
+          const logger = applicationContext.getLogger();
+          logger.warn(applicationContext, kibanaKey, kibanaContext);
         })
-        .catch(console.error);
+        .catch(error => console.error('error importing', error));
     }
   }
 
