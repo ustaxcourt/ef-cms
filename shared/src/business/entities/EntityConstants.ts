@@ -921,6 +921,7 @@ export const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.jurisdictionRetained,
   CASE_STATUS_TYPES.rule155,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export const STATUS_TYPES_MANUAL_UPDATE = [
