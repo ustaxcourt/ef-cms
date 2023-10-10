@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
@@ -32,7 +32,7 @@ describe('getSubmittedAndCavCasesForJudgeAction', () => {
         .calls[0][1],
     ).toEqual({
       judges: [judgeUser.name],
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
     expect(cases).toEqual(TEST_CASES);
   });
