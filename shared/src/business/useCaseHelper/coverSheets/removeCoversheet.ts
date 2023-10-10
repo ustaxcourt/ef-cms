@@ -20,9 +20,10 @@ export const removeCoversheet = async (
       })
       .promise());
   } catch (err) {
-    const error = err as Error;
-    error.message = `${error.message} docket entry id is ${docketEntryId}`;
-    throw error;
+    applicationContext.logger.error(`docket entry id is ${docketEntryId}`, {
+      err,
+    });
+    throw err;
   }
 
   const { PDFDocument } = await applicationContext.getPdfLib();

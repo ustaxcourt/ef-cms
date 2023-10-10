@@ -16,7 +16,7 @@ import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 export const getJudgeInSectionInteractor = async (
   applicationContext: IApplicationContext,
   { section }: { section: string },
-) => {
+): Promise<RawUser> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.GET_USERS_IN_SECTION)) {

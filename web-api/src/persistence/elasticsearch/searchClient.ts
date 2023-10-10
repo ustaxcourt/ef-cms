@@ -6,19 +6,23 @@ import { get } from 'lodash';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
-export type SearchClientResultsType = {
-  aggregations?: {
-    [x: string]: {
-      buckets: {
-        doc_count: number;
-        key: string;
-      }[];
-    };
+
+type AggregationsType = {
+  [x: string]: {
+    buckets: {
+      doc_count: number;
+      key: string;
+    }[];
   };
+};
+
+export type SearchClientResultsType = {
+  aggregations?: AggregationsType;
   expected?: number;
-  total?: number;
+  total: number;
   results: any;
 };
+
 export type SearchAllParametersType = {
   index?: string;
   body?: {
@@ -33,7 +37,7 @@ export type SearchClientCountResultsType = number;
 
 export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
-  const aggregations = get(body, 'aggregations');
+  const aggregations: AggregationsType = get(body, 'aggregations');
 
   let caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
@@ -138,7 +142,7 @@ export const searchAll = async ({
   let search_after = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries
 
-  const expected = get(countQ, 'body.count', 0);
+  const expected: number = get(countQ, 'body.count', 0);
 
   let i = 0;
   let results = [];

@@ -7,12 +7,8 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getSubmittedAndCavCasesByJudgeAction = async ({
   applicationContext,
   get,
-  props,
-}: ActionProps<{
-  selectedPage: number;
-}>) => {
+}: ActionProps) => {
   const { judges } = get(state.judgeActivityReport.filters);
-  const pageNumber = props.selectedPage;
 
   const { cases, totalCount } = await applicationContext
     .getUseCases()

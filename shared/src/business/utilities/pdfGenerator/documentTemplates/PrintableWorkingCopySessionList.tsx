@@ -11,7 +11,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const PrintableWorkingCopySessionList = ({
-  areUpdatedTrialSessionTypesEnabled,
   filters,
   formattedCases,
   formattedTrialSession,
@@ -79,7 +78,7 @@ export const PrintableWorkingCopySessionList = ({
               const memberCase = isMemberCase(formattedCase);
               return (
                 <React.Fragment key={formattedCase.docketNumber}>
-                  <tr className="vertical-align-middle-row padding-bottom-2 content-row">
+                  <tr className="padding-bottom-2 content-row">
                     <td
                       className={`${
                         memberCase ? 'margin-left-2' : ''
@@ -109,12 +108,7 @@ export const PrintableWorkingCopySessionList = ({
                       ))}
                     </td>
                     <td>{formattedCase.filingPartiesCode}</td>
-                    <td>
-                      {generateCaseStatus(
-                        formattedCase.trialStatus,
-                        areUpdatedTrialSessionTypesEnabled,
-                      )}
-                    </td>
+                    <td>{generateCaseStatus(formattedCase.trialStatus)}</td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan={1}></td>

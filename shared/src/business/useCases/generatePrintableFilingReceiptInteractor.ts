@@ -69,16 +69,16 @@ export const generatePrintableFilingReceiptInteractor = async (
   let consolidatedCasesDocketNumbers: string[] = [];
 
   if (fileAcrossConsolidatedGroup) {
-    const consolidatedCases = await applicationContext
+    const leadCase = await applicationContext
       .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
+      .getCaseByDocketNumber({
         applicationContext,
-        leadDocketNumber: caseEntity.leadDocketNumber!,
+        docketNumber: caseEntity.leadDocketNumber!,
       });
-    consolidatedCasesDocketNumbers = consolidatedCases
+    consolidatedCasesDocketNumbers = leadCase.consolidatedCases
       .sort((a, b) => a.sortableDocketNumber - b.sortableDocketNumber)
       .map(consolidatedCaseRecord => consolidatedCaseRecord.docketNumber);
-    caseEntity = new Case(consolidatedCases[0], {
+    caseEntity = new Case(leadCase, {
       applicationContext,
     }).validate();
   }

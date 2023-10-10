@@ -10,7 +10,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {void} sets state for docket entry edit
  */
 export const setDocketEntryFormForDocketEditAction = ({
-  applicationContext,
   get,
   props,
   store,
@@ -32,16 +31,6 @@ export const setDocketEntryFormForDocketEditAction = ({
     if (parsedJson.docketNumber) {
       docketEntryFormData = JSON.parse(docketEntry.editState);
     }
-  }
-
-  if (docketEntryFormData.date) {
-    const deconstructedDate = applicationContext
-      .getUtilities()
-      .deconstructDate(docketEntryFormData.date);
-    docketEntryFormData = {
-      ...docketEntryFormData,
-      ...deconstructedDate,
-    };
   }
 
   docketEntryFormData.filersMap = {};
