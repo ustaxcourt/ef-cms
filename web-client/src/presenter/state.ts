@@ -3,6 +3,7 @@ import {
   initialJudgeActivityReportState,
 } from './judgeActivityReportState';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
@@ -117,7 +118,6 @@ import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
-import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
@@ -246,7 +246,6 @@ export const computeds = {
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
-  sortableColumnHelper,
   startCaseHelper,
   startCaseInternalHelper,
   statisticsFormHelper,
@@ -285,7 +284,7 @@ export const baseState = {
     page: number;
   },
   caseDetail: {} as RawCase,
-  closedCases: [],
+  closedCases: [] as TAssociatedCase[],
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -372,7 +371,7 @@ export const baseState = {
     qcIndividualInProgressCount: number;
     unreadMessageCount?: number;
   },
-  openCases: [],
+  openCases: [] as TAssociatedCase[],
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,

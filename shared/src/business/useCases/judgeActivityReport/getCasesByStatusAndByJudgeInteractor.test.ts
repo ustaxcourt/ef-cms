@@ -1,16 +1,12 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
-  JudgeActivityReportCavAndSubmittedCasesRequest,
+  GetCasesByStatusAndByJudgeRequest,
   getCasesByStatusAndByJudgeInteractor,
 } from './getCasesByStatusAndByJudgeInteractor';
 import {
   MOCK_CASE,
   MOCK_SUBMITTED_CASE,
-  MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD,
   MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY,
-  MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD,
-  MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD,
-  MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD,
 } from '@shared/test/mockCase';
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
@@ -20,9 +16,7 @@ import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 describe('getCasesByStatusAndByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
 
-  let mockGetDocketNumbersWithServedEventCodesResult: string[] = [];
-
-  const mockValidRequest: JudgeActivityReportCavAndSubmittedCasesRequest = {
+  const mockValidRequest: GetCasesByStatusAndByJudgeRequest = {
     judges: [judgeUser.name],
     statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
   };
@@ -65,12 +59,6 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge.mockImplementation(
       () => mockGetDocketNumbersByStatusAndByJudgeResult,
-    );
-
-  applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersWithServedEventCodes.mockImplementation(
-      () => mockGetDocketNumbersWithServedEventCodesResult,
     );
 
   beforeEach(() => {
@@ -116,7 +104,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     });
   });
 
-  it('should return an array of cases with statusDate, formattedCaseCount, and daysElapsedSinceLastStatusChange (stripping out the cases with served ODD, DEC, SDEC, OAD docket entries and no consolidated cases)', async () => {
+  it('should return an array of cases with formattedCaseCount', async () => {
     mockGetDocketNumbersByStatusAndByJudgeResult = [
       {
         ...mockCaseInfo,
@@ -125,48 +113,15 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
       {
         ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber:
-          MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        docketNumber: MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      },
-      {
-        ...mockCaseInfo,
-        caseStatusHistory: [],
         docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
       },
     ];
-    mockGetDocketNumbersWithServedEventCodesResult = [
-      MOCK_SUBMITTED_CASE_OAD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_DEC_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_ODD_ON_DOCKET_RECORD.docketNumber,
-      MOCK_SUBMITTED_CASE_WITH_SDEC_ON_DOCKET_RECORD.docketNumber,
-    ];
+
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
         mockGetDocketNumbersByStatusAndByJudgeResult,
       );
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
-        mockGetDocketNumbersWithServedEventCodesResult,
-      );
-    applicationContext
-      .getUtilities()
-      .prepareDateFromString.mockReturnValue('2019-07-25T00:00:00.000-04:00');
     applicationContext
       .getPersistenceGateway()
       .getCountOfConsolidatedCases.mockReturnValueOnce(3);
@@ -179,20 +134,16 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     expect(result.cases).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          daysElapsedSinceLastStatusChange: 365,
           docketNumber: MOCK_SUBMITTED_CASE.docketNumber,
           formattedCaseCount: 3,
-          statusDate: '07/25/18',
         }),
         expect.objectContaining({
-          daysElapsedSinceLastStatusChange: 0,
           docketNumber: MOCK_SUBMITTED_CASE_WITHOUT_CASE_HISTORY.docketNumber,
           formattedCaseCount: 1,
-          statusDate: '',
         }),
       ]),
     );
-    expect(result.totalCount).toEqual(2);
+    expect(result.cases.length).toEqual(2);
   });
 
   it('should add a caseWorksheet field to cases returned', async () => {
@@ -204,18 +155,10 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       },
     ];
 
-    mockGetDocketNumbersWithServedEventCodesResult = [];
-
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
         mockGetDocketNumbersByStatusAndByJudgeResult,
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersWithServedEventCodes.mockReturnValueOnce(
-        mockGetDocketNumbersWithServedEventCodesResult,
       );
 
     const result = await getCasesByStatusAndByJudgeInteractor(
@@ -237,6 +180,5 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         docketNumber: '102-23',
       },
     ]);
-    expect(result.totalCount).toEqual(2);
   });
 });

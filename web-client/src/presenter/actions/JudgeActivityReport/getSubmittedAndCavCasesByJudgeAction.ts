@@ -7,16 +7,14 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 }: ActionProps) => {
   const { judges } = get(state.judgeActivityReport.filters);
 
-  const { cases, totalCount } = await applicationContext
+  const { cases } = await applicationContext
     .getUseCases()
     .getCasesByStatusAndByJudgeInteractor(applicationContext, {
       judges,
-
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
 
   return {
     cases,
-    totalCountForSubmittedAndCavCases: totalCount,
   };
 };
