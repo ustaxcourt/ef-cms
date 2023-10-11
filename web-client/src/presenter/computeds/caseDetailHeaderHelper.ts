@@ -52,11 +52,7 @@ export const caseDetailHeaderHelper = (
 
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.irsPractitioner) {
-      // can remove  !!caseDetail.hasIrsPractitioner once CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER / consolidated-cases-group-access-petitioner has been removed
-
-      const caseHasRespondent = !!(
-        !!caseDetail.hasIrsPractitioner || caseDetail.irsPractitioners?.length
-      );
+      const caseHasRespondent = !!caseDetail.irsPractitioners?.length;
 
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
 
