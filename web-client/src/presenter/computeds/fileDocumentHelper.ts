@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -8,10 +10,8 @@ export const supportingDocumentFreeTextTypes = [
   'Unsworn Declaration under Penalty of Perjury in Support',
 ];
 
-export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
+const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -22,11 +22,10 @@ export const fileDocumentHelper = (
     CATEGORY_MAP,
     PARTY_TYPES,
   } = applicationContext.getConstants();
-  const caseDetail = get(state.caseDetail);
 
+  const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
-
   const pdfPreviewUrl = get(state.pdfPreviewUrl);
 
   const supportingDocumentTypeList =
