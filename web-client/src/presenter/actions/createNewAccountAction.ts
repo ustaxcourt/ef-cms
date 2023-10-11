@@ -12,7 +12,7 @@ export const createNewAccountAction = async ({
   applicationContext,
   get,
   path,
-}) => {
+}: ActionProps) => {
   const { email, name, password } = get(state.form);
   const user = { email, name, password };
 

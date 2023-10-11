@@ -77,7 +77,7 @@ describe('createOrUpdatePractitionerUser', () => {
     applicationContext.getCognito().adminCreateUser.mockReturnValue({
       promise: () =>
         Promise.resolve({
-          User: { Username: '123' },
+          User: { Username: userId },
         }),
     });
 
@@ -356,13 +356,12 @@ describe('createOrUpdatePractitionerUser', () => {
   });
 
   it('should get userId of newly created user from passed-in user object instead of cognito', async () => {
-    const mockUserId = 'abcd1234';
     process.env.USE_COGNITO_LOCAL = 'true';
     process.env.USER_POOL_ID = 'localUserPoolId';
 
     await createOrUpdatePractitionerUser({
       applicationContext,
-      user: { ...privatePractitionerUser, userId: mockUserId } as any,
+      user: { ...privatePractitionerUser } as any,
     });
 
     expect(
@@ -370,9 +369,9 @@ describe('createOrUpdatePractitionerUser', () => {
     ).toMatchObject({
       Item: {
         ...privatePractitionerUser,
-        pk: `user|${mockUserId}`,
-        sk: `user|${mockUserId}`,
-        userId: mockUserId,
+        pk: `user|${userId}`,
+        sk: `user|${userId}`,
+        userId,
       },
     });
   });

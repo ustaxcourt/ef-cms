@@ -37,10 +37,6 @@ describe('createUserInteractorLocal', () => {
           Name: 'name',
           Value: name,
         },
-        {
-          Name: 'custom:userId',
-          Value: userId,
-        },
       ],
       Username: email,
     };
