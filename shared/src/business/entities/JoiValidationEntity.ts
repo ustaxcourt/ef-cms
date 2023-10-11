@@ -125,16 +125,16 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   const inFrontEnd = typeof document !== 'undefined';
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
-    const errorMessage = `Validation message mismatch! Please take a screenshot of this alert and add to Devex Card 1187.
-    Entity Name: ${entity.entityName}
-    
-    Old results: ${JSON.stringify(results, null, 2)}
-    
-    New Results: ${JSON.stringify(newResults, null, 2)}`;
+    const errorMessage = {
+      entityName: entity.entityName,
+      newResults,
+      oldResults: results,
+      title: 'validation error mismatch',
+    };
 
     return {
       ...results,
-      mismatchMessage: errorMessage,
+      mismatchMessage: JSON.stringify(errorMessage),
     };
   }
 

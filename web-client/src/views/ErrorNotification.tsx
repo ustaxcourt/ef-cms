@@ -36,9 +36,34 @@ export const ErrorNotification = connect(
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
-                  {alertHelper.messagesDeduped.map(message => (
-                    <li key={message}>{message}</li>
-                  ))}
+                  {alertHelper.messagesDeduped.map(message => {
+                    if (message.includes('validation error mismatch')) {
+                      const errorObject = JSON.parse(message);
+                      return (
+                        <div key={errorObject.entityName}>
+                          <br />
+                          <b>Validation message mismatch</b>
+                          <p>
+                            Please take a screenshot of this page and add to
+                            Devex Card{' '}
+                            <a href="https://trello.com/c/J4S7ZhKx/1187-convert-validation-messages-for-entities-to-using-joi-syntax">
+                              1187
+                            </a>
+                          </p>
+                          <p>Entity Name: {errorObject.entityName}</p>
+                          <p>
+                            Old Results:{' '}
+                            {JSON.stringify(errorObject.oldResults, null, 2)}
+                          </p>
+                          <p>
+                            New Results:{' '}
+                            {JSON.stringify(errorObject.newResults, null, 2)}
+                          </p>
+                        </div>
+                      );
+                    }
+                    return <li key={message}>{message}</li>;
+                  })}
                 </ul>
               )}
               {alertHelper.showTitleOnly && (
