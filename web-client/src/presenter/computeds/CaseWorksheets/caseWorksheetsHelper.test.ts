@@ -34,11 +34,11 @@ describe('caseWorksheetsHelper', () => {
         caseCaption: 'Velma Jinkies, Petitioner',
         caseStatusHistory: [
           {
-            date: '2022-02-15T05:00:00.000Z',
+            date: '2022-02-26T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
           },
           {
-            date: '2022-02-26T05:00:00.000Z',
+            date: '2022-02-15T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.submitted,
           },
         ],
@@ -66,11 +66,11 @@ describe('caseWorksheetsHelper', () => {
         caseCaption: 'Shaggy Guy, Petitioner',
         caseStatusHistory: [
           {
-            date: '2022-02-15T05:00:00.000Z',
+            date: '2022-02-06T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
           },
           {
-            date: '2022-02-06T05:00:00.000Z',
+            date: '2022-02-15T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.submittedRule122,
           },
         ],
@@ -127,7 +127,7 @@ describe('caseWorksheetsHelper', () => {
         docketNumber: '303-11',
         docketNumberWithSuffix: undefined,
         formattedCaseCount: 1,
-        formattedSubmittedCavStatusDate: '02/06/22',
+        formattedSubmittedCavStatusDate: '02/15/22',
         inConsolidatedGroup: false,
         isLeadCase: false,
         status: CASE_STATUS_TYPES.submittedRule122,
