@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -17,8 +19,8 @@ interface ICaseWorksheetsHelper {
 }
 
 export const caseWorksheetsHelper = (
-  get: any,
-  applicationContext: IApplicationContext,
+  get: Get,
+  applicationContext: ClientApplicationContext,
 ): ICaseWorksheetsHelper => {
   const { isLeadCase } = applicationContext.getUtilities();
 
@@ -39,34 +41,21 @@ export const caseWorksheetsHelper = (
     };
   });
 
-  const today = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      applicationContext.getConstants().DATE_FORMATS.ISO,
-    );
-
   const caseWorksheetsFormatted = submittedAndCavCasesByJudge.map(aCase => {
-    const formattedSubmittedCavStatusDate = getSubmittedOrCAVDate(
-      applicationContext,
-      aCase.caseStatusHistory,
-    );
-
-    const lastStatusChange = aCase.caseStatusHistory.slice(-1)[0].date;
-    const daysSinceLastStatusChange = applicationContext
+    const { daysElapsedSinceLastStatusChange, statusDate } = applicationContext
       .getUtilities()
-      .calculateDifferenceInDays(today, lastStatusChange);
+      .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
 
     return {
       caseCaption: aCase.caseCaption,
       consolidatedIconTooltipText: isLeadCase(aCase) ? 'Lead case' : '',
       daysSinceLastStatusChange: formatPositiveNumber(
-        daysSinceLastStatusChange,
+        daysElapsedSinceLastStatusChange,
       ),
       docketNumber: aCase.docketNumber,
       docketNumberWithSuffix: aCase.docketNumberWithSuffix,
-      formattedCaseCount: aCase.formattedCaseCount || 1,
-      formattedSubmittedCavStatusDate,
+      formattedCaseCount: aCase.formattedCaseCount,
+      formattedSubmittedCavStatusDate: statusDate,
       inConsolidatedGroup: !!isLeadCase(aCase),
       isLeadCase: isLeadCase(aCase),
       status: aCase.status,
@@ -81,22 +70,4 @@ export const caseWorksheetsHelper = (
   return {
     caseWorksheetsFormatted,
   };
-};
-
-export const getSubmittedOrCAVDate = (
-  applicationContext: IApplicationContext,
-  caseStatusHistory: { updatedCaseStatus: string; date: string }[],
-): string => {
-  const foundDate = caseStatusHistory.find(statusHistory =>
-    ['Submitted', 'CAV'].includes(statusHistory.updatedCaseStatus),
-  )?.date;
-
-  if (!foundDate) return '';
-
-  return applicationContext
-    .getUtilities()
-    .formatDateString(
-      foundDate,
-      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-    );
 };

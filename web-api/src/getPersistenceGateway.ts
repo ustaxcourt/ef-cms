@@ -1,9 +1,5 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-lines */
-import {
-  acquireLock,
-  deleteLock,
-} from './persistence/dynamo/locks/acquireLock';
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
@@ -20,6 +16,11 @@ import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCas
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
+import {
+  createLock,
+  getLock,
+  removeLock,
+} from './persistence/dynamo/locks/acquireLock';
 import { createMessage } from './persistence/dynamo/messages/createMessage';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
@@ -61,6 +62,7 @@ import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInven
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
 import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
 import { getCaseWorksheets } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheets';
+import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
@@ -82,7 +84,6 @@ import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus'
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
-import { getDocketNumbersWithServedEventCodes } from './persistence/elasticsearch/getDocketNumbersWithServedEventCodes';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -239,16 +240,6 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
-    getCaseWorksheet,
-    getCaseWorksheets,
-    getConfigurationItemValue,
-    getFeatureFlagValue,
-    getMaintenanceMode,
-    getPractitionerDocumentByFileId,
-    getPractitionerDocuments,
-    getSesStatus,
-    getTrialSessionJobStatusForCase,
-    getTrialSessionProcessingStatus,
     incrementCounter,
     incrementKeyCount,
     markMessageThreadRepliedTo,
@@ -287,7 +278,6 @@ const gatewayMethods = {
     updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
-  acquireLock,
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
@@ -297,12 +287,12 @@ const gatewayMethods = {
       : confirmAuthCodeLocal
     : confirmAuthCode,
   createChangeOfAddressJob,
+  createLock,
   decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocumentFile,
-  deleteLock,
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
@@ -321,6 +311,9 @@ const gatewayMethods = {
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCaseMetadataWithCounsel,
+  getCaseWorksheet,
+  getCaseWorksheets,
+  getCaseWorksheetsByDocketNumber,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByFilters,
@@ -333,13 +326,13 @@ const gatewayMethods = {
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getConfigurationItemValue,
   getCountOfConsolidatedCases,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
-  getDocketNumbersWithServedEventCodes,
   getDocument,
   getDocumentIdFromSQSMessage,
   getDocumentQCInboxForSection,
@@ -349,23 +342,31 @@ const gatewayMethods = {
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
+  getFeatureFlagValue,
   getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
+  getLock,
+  getMaintenanceMode,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocumentByFileId,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
+  getSesStatus,
   getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,
+  getTrialSessionJobStatusForCase,
+  getTrialSessionProcessingStatus,
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
@@ -391,6 +392,7 @@ const gatewayMethods = {
       })
     : refreshToken,
   removeIrsPractitionerOnCase,
+  removeLock,
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,

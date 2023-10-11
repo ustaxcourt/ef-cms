@@ -6,8 +6,8 @@ export const deleteCognitoPool = async ({ environment }) => {
   });
   const { UserPools } = await cognito.listUserPools({ MaxResults: 60 });
   if (!UserPools) return;
-  const poolIdsToDelete = UserPools.filter(pool =>
-    pool.Name?.includes(environment.name),
+  const poolIdsToDelete = UserPools.filter(
+    pool => pool.Name?.includes(environment.name),
   ).map(pool => pool.Id);
   for (let poolId of poolIdsToDelete) {
     const { UserPool } = await cognito.describeUserPool({ UserPoolId: poolId });

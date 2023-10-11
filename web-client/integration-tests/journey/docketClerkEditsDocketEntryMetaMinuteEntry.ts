@@ -1,36 +1,15 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+
 export const docketClerkEditsDocketEntryMetaMinuteEntry = cerebralTest => {
   return it('docket clerk edits docket entry meta for a minute entry', async () => {
     expect(cerebralTest.getState('currentPage')).toEqual('EditDocketEntryMeta');
 
     await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'filingDate',
-        value: '2020-01-01T05:00:00.000Z',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '04',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateMonth',
-        value: '01',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2020',
+        toFormat: FORMATS.ISO,
+        value: '01/04/2020',
       },
     );
 

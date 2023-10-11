@@ -1,30 +1,21 @@
-import { applicationContext } from '../../applicationContext';
 import { runCompute } from '@web-client/presenter/test.cerebral';
-import { showAppTimeoutModalHelper as showAppTimeoutModalHelperComputed } from './showAppTimeoutModalHelper';
-import { withAppContextDecorator } from '../../withAppContext';
-
-const showAppTimeoutModalHelper = withAppContextDecorator(
-  showAppTimeoutModalHelperComputed,
-  applicationContext,
-);
+import { showAppTimeoutModalHelper } from './showAppTimeoutModalHelper';
 
 describe('showAppTimeoutModalHelper', () => {
   it('shows the modal', () => {
-    applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
-        modal: {
-          showModal: 'AppTimeoutModal',
+        idleLogoutState: {
+          state: 'COUNTDOWN',
         },
         user: {},
       },
     });
 
-    expect(result).toMatchObject({ beginIdleMonitor: true, showModal: true });
+    expect(result).toMatchObject({ showModal: true });
   });
 
   it('does not show the modal due to no user', () => {
-    applicationContext.getCurrentUser = () => {};
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         modal: {
@@ -34,11 +25,10 @@ describe('showAppTimeoutModalHelper', () => {
       },
     });
 
-    expect(result).toMatchObject({ beginIdleMonitor: false, showModal: false });
+    expect(result).toMatchObject({ showModal: false });
   });
 
   it('does not show the modal due to different modal state component', () => {
-    applicationContext.getCurrentUser = () => ({});
     const result = runCompute(showAppTimeoutModalHelper, {
       state: {
         modal: {
@@ -48,6 +38,6 @@ describe('showAppTimeoutModalHelper', () => {
       },
     });
 
-    expect(result).toMatchObject({ beginIdleMonitor: true, showModal: false });
+    expect(result).toMatchObject({ showModal: false });
   });
 });
