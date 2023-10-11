@@ -16,7 +16,6 @@ import {
   isSealedCase,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { ClientApplicationContext } from '../../../../web-client/src/applicationContext';
 import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
@@ -66,6 +65,7 @@ import {
 } from '../../../src/business/utilities/getFormattedJudgeName';
 import { formatPhoneNumber } from '../../../src/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '../useCaseHelper/service/createChangeItems';
+import { generateChangeOfAddressHelper } from '@shared/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
@@ -187,6 +187,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
+    calculateDifferenceInDays: jest
+      .fn()
+      .mockImplementation(DateHandler.calculateDifferenceInDays),
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
@@ -376,6 +379,10 @@ export const createTestApplicationContext = ({ user } = {}) => {
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
+    generateChangeOfAddressHelper: jest
+      .fn()
+      .mockImplementation(generateChangeOfAddressHelper),
+    getJudgeForUserHelper: jest.fn(),
     getJudgeInSectionHelper: jest.fn(),
     getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     removeCounselFromRemovedPetitioner: jest
@@ -398,6 +405,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    entryOfAppearance: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
@@ -468,6 +476,7 @@ export const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getChambersSectionsLabels),
     getDispatchNotification: jest.fn(),
+    getDocketNumbersByStatusAndByJudge: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest.fn(),
     getDocumentQCInboxForUser: jest.fn(),
@@ -670,25 +679,3 @@ export const createTestApplicationContext = ({ user } = {}) => {
 };
 
 export const applicationContext = createTestApplicationContext();
-
-/*
-  If you receive an error when testing cerebral that says:
-  `The property someProperty passed to Provider is not a method`
-  it is because the cerebral testing framework expects all objects on the
-  applicationContext to be functions.  The code below walks the original
-  applicationContext and adds ONLY the functions to the
-  applicationContextForClient.
-*/
-const intermediary = {};
-Object.entries(applicationContext).forEach(([key, value]) => {
-  if (typeof value === 'function') {
-    intermediary[key] = value;
-  }
-});
-interface TestClientApplicationContext extends ClientApplicationContext {
-  getUseCases: typeof applicationContext.getUseCases;
-  getPersistenceGateway: typeof applicationContext.getPersistenceGateway;
-}
-
-export const applicationContextForClient =
-  intermediary as TestClientApplicationContext;

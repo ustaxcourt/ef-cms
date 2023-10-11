@@ -309,6 +309,10 @@ option:first-child {
   margin-right: 50px;
 }
 
+.margin-top-2pt4rem {
+  margin-top: 2.4rem;
+}
+
 p {
   max-width: 700px;
   line-height: 24px;
@@ -390,4 +394,8 @@ td.message-select-control {
   .usa-checkbox {
     padding-bottom: 5px;
   }
+}
+
+.display-block {
+  display: block;
 }

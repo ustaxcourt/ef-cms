@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';

@@ -43,7 +43,8 @@ const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
-const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialogIfExists, login } =
+  getEnvironmentSpecificFunctions();
 let createdPaperDocketNumber: string;
 
 describe('Petitioner', () => {
@@ -105,7 +106,7 @@ describe('Petitions clerk', () => {
   it('should be able to create a case with paper service', () => {
     goToMyDocumentQC();
     goToCreateCase();
-    closeScannerSetupDialog();
+    closeScannerSetupDialogIfExists();
     fillInCreateCaseFromPaperForm();
     goToReviewCase().then(
       docketNumber => (createdPaperDocketNumber = docketNumber),
@@ -155,6 +156,10 @@ describe('Docket Clerk', () => {
 
   // in its own step for retry purposes - sometimes the click fails
   it('should click the save uploaded PDF button', () => {
+    // Fix flaky test
+    // https://github.com/flexion/ef-cms/issues/10144
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(0);
     clickSaveUploadedPdfButton();
   });
 

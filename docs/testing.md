@@ -170,7 +170,7 @@ The scripts containing the word `readonly` run special smoketests that rely on e
 
 #### Open
 
-The Cypress CLI runner also provides a useful `open` command which will load a browser instance locally which developers can use to watch the tests click through the UI and rewind history.
+The Cypress CLI runner also provides a useful `open` command which will load a browser instance locally, which developers can use to watch the tests click through the UI and rewind history.
 
 #### Public
 

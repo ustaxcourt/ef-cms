@@ -17,25 +17,6 @@ resource "aws_iam_policy" "circle_ci_policy" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Sid": "Route53",
-      "Effect": "Allow",
-      "Action": [
-        "route53:GetChange",
-        "route53:GetHostedZone",
-        "route53:ListResourceRecordSets",
-        "route53:ListHostedZones",
-        "route53:ChangeResourceRecordSets",
-        "route53:ListTagsForResource",
-        "route53:ListHostedZonesByName",
-        "route53:CreateHealthCheck",
-        "route53:DeleteHealthCheck",
-        "route53:GetHealthCheck",
-        "route53:ListHealthChecks",
-        "route53:UpdateHealthCheck"
-      ],
-      "Resource": "*"
-    },
-    {
       "Sid": "DynamoDb",
       "Effect": "Allow",
       "Action": [
@@ -111,6 +92,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
       "Sid": "Acm",
       "Effect": "Allow",
       "Action": [
+        "acm:GetCertificate",
         "acm:RequestCertificate",
         "acm:ListCertificates",
         "acm:AddTagsToCertificate",
@@ -294,6 +276,24 @@ resource "aws_iam_policy" "circle_ci_policy" {
     },
     {
       "Action": [
+        "ssm:PutParameter",
+        "ssm:LabelParameterVersion",
+        "ssm:DeleteParameter",
+        "ssm:DeleteParameters",
+        "ssm:UnlabelParameterVersion",
+        "ssm:ListTagsForResource",
+        "ssm:DescribeParameters",
+        "ssm:DescribeDocumentParameters",
+        "ssm:GetParameterHistory",
+        "ssm:GetParametersByPath",
+        "ssm:GetParameters",
+        "ssm:GetParameter"
+      ],
+      "Resource": "*",
+      "Effect": "Allow"
+    },
+    {
+      "Action": [
         "ecs:DescribeServices",
         "ecs:UpdateService",
         "ecs:DeleteService"
@@ -302,6 +302,53 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "arn:aws:ecs:us-east-1:${data.aws_caller_identity.current.account_id}:service/clamav_fargate_cluster_*/clamav_service_*"
       ],
       "Effect": "Allow"
+    },
+    {
+      "Action": [
+        "glue:GetJobRuns",
+        "glue:StartJobRun"
+      ],
+      "Resource": [
+        "arn:aws:glue:us-east-1:${data.aws_caller_identity.current.account_id}:job/*"
+      ],
+      "Effect": "Allow"
+    }
+  ]
+}
+
+EOF
+}
+
+resource "aws_iam_user_policy_attachment" "circle_ci_route53_policy_attachment" {
+  user       = aws_iam_user.circle_ci.name
+  policy_arn = aws_iam_policy.circle_ci_route53_policy.arn
+}
+
+resource "aws_iam_policy" "circle_ci_route53_policy" {
+  name = "circle_ci_route53_policy"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Route53",
+      "Effect": "Allow",
+      "Action": [
+        "route53:GetChange",
+        "route53:GetHostedZone",
+        "route53:ListResourceRecordSets",
+        "route53:ListHostedZones",
+        "route53:ChangeResourceRecordSets",
+        "route53:ListTagsForResource",
+        "route53:ListHostedZonesByName",
+        "route53:CreateHealthCheck",
+        "route53:DeleteHealthCheck",
+        "route53:GetHealthCheck",
+        "route53:ListHealthChecks",
+        "route53:UpdateHealthCheck"
+      ],
+      "Resource": "*"
     }
   ]
 }

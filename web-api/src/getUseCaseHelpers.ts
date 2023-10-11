@@ -19,10 +19,12 @@ import { fileAndServeDocumentOnOneCase } from '../../shared/src/business/useCase
 import { formatConsolidatedCaseCoversheetData } from '../../shared/src/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from '../../shared/src/business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
+import { generateChangeOfAddressHelper } from '../../shared/src/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticeOfChangeToInPersonProceeding } from '../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
 import { generatePdfFromHtmlHelper } from '../../shared/src/business/useCaseHelper/generatePdfFromHtmlHelper';
 import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor';
 import { getConsolidatedCasesForLeadCase } from '../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase';
+import { getJudgeForUserHelper } from '@shared/business/useCaseHelper/getJudgeForUserHelper';
 import { getJudgeInSectionHelper } from '../../shared/src/business/useCaseHelper/getJudgeInSectionHelper';
 import { getUserIdForNote } from '../../shared/src/business/useCaseHelper/getUserIdForNote';
 import { parseAndScrapePdfContents } from '../../shared/src/business/useCaseHelper/pdf/parseAndScrapePdfContents';
@@ -65,10 +67,12 @@ const useCaseHelpers = {
   formatConsolidatedCaseCoversheetData,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
+  generateChangeOfAddressHelper,
   generateNoticeOfChangeToInPersonProceeding,
   generatePdfFromHtmlHelper,
   generateStampedCoversheetInteractor,
   getConsolidatedCasesForLeadCase,
+  getJudgeForUserHelper,
   getJudgeInSectionHelper,
   getUserIdForNote,
   parseAndScrapePdfContents,
