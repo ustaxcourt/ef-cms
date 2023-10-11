@@ -1,138 +1,192 @@
-import { Case } from '../../entities/cases/Case';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  InvalidRequest,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import { JudgeActivityReportSearch } from '../../entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { isEmpty } from 'lodash';
 
-const getConsolidatedCaseGroupCountMap = (
-  filteredCaseRecords,
-  consolidatedCasesGroupCountMap,
-) => {
-  filteredCaseRecords.forEach(caseRecord => {
-    if (caseRecord.leadDocketNumber) {
-      consolidatedCasesGroupCountMap.set(
-        caseRecord.leadDocketNumber,
-        caseRecord.consolidatedCases.length,
-      );
-    }
-  });
+export type JudgeActivityReportCavAndSubmittedCasesRequest = {
+  statuses: string[];
+  judges: string[];
+  pageNumber?: number;
+  pageSize?: number;
 };
 
-const hasUnwantedDocketEntryEventCode = docketEntries => {
-  const prohibitedDocketEntryEventCodes: string[] = [
-    'ODD',
-    'DEC',
-    'OAD',
-    'SDEC',
-  ];
-
-  return docketEntries.some(docketEntry => {
-    if (docketEntry.servedAt && !docketEntry.isStricken) {
-      return prohibitedDocketEntryEventCodes.includes(docketEntry.eventCode);
-    }
-
-    return false;
-  });
+export type CavAndSubmittedCaseResponseType = {
+  foundCases: { docketNumber: string }[];
 };
 
-const filterCasesWithUnwantedDocketEntryEventCodes = caseRecords => {
-  const caseRecordsToReturn: Array<any> = [];
-
-  caseRecords.forEach(individualCaseRecord => {
-    if (!hasUnwantedDocketEntryEventCode(individualCaseRecord.docketEntries)) {
-      caseRecordsToReturn.push(individualCaseRecord);
-    }
-  });
-
-  return caseRecordsToReturn;
+export type CavAndSubmittedFilteredCasesType = RawCase & {
+  daysElapsedSinceLastStatusChange: number;
+  formattedCaseCount: number;
 };
 
-/**
- * getCasesByStatusAndByJudgeInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.judgeName the name of the judge
- * @param {array} providers.statuses statuses of cases for judge activity
- * @returns {object} errors (null if no errors)
- */
 export const getCasesByStatusAndByJudgeInteractor = async (
-  applicationContext,
-  {
-    judgeName,
-    statuses,
-  }: {
-    judgeName: string;
-    statuses: string[];
-  },
-) => {
+  applicationContext: IApplicationContext,
+  params: JudgeActivityReportCavAndSubmittedCasesRequest,
+): Promise<{
+  cases: CavAndSubmittedFilteredCasesType[];
+  totalCount: number;
+}> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.JUDGE_ACTIVITY_REPORT)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const submittedAndCavCasesResults = await applicationContext
+  const searchEntity = new JudgeActivityReportSearch(params);
+  if (!searchEntity.isValid()) {
+    throw new InvalidRequest('Invalid search terms');
+  }
+
+  // get all of the cases
+  const caseRecords: RawCaseWithWorksheet[] = await getCases(
+    applicationContext,
+    searchEntity,
+  );
+
+  const daysElapsedSinceLastStatusChange: number[] = caseRecords.map(
+    caseRecord => calculateDaysElapsed(applicationContext, caseRecord),
+  );
+
+  const numConsolidatedCases: number[] = await Promise.all(
+    caseRecords.map(caseRecord =>
+      calculateNumberOfConsolidatedCases(applicationContext, caseRecord),
+    ),
+  );
+
+  const allCaseResults: CavAndSubmittedFilteredCasesType[] = caseRecords.map(
+    (caseRecord, i) => ({
+      ...caseRecord,
+      daysElapsedSinceLastStatusChange: daysElapsedSinceLastStatusChange[i],
+      formattedCaseCount: numConsolidatedCases[i],
+    }),
+  );
+
+  allCaseResults.sort((a, b) => {
+    return (
+      b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
+    );
+  });
+
+  let paginatedCaseResults;
+  if (searchEntity.pageSize && searchEntity.pageNumber) {
+    const itemOffset =
+      (searchEntity.pageNumber * searchEntity.pageSize) % allCaseResults.length;
+
+    const endOffset = itemOffset + searchEntity.pageSize;
+
+    paginatedCaseResults = allCaseResults.slice(itemOffset, endOffset);
+  }
+
+  return {
+    cases: paginatedCaseResults || allCaseResults,
+    totalCount: allCaseResults.length,
+  };
+};
+
+const calculateDaysElapsed = (
+  applicationContext: IApplicationContext,
+  individualCase: RawCase,
+) => {
+  if (isEmpty(individualCase.caseStatusHistory)) {
+    return 0;
+  }
+
+  const currentDateInIsoFormat: string = applicationContext
+    .getUtilities()
+    .formatDateString(
+      applicationContext.getUtilities().prepareDateFromString(),
+      FORMATS.ISO,
+    );
+
+  individualCase.caseStatusHistory.sort((a, b) => a.date - b.date);
+
+  const newestCaseStatusChangeIndex =
+    individualCase.caseStatusHistory.length - 1;
+
+  const dateOfLastCaseStatusChange =
+    individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+
+  return applicationContext
+    .getUtilities()
+    .calculateDifferenceInDays(
+      currentDateInIsoFormat,
+      dateOfLastCaseStatusChange,
+    );
+};
+
+type RawCaseWithWorksheet = RawCase & {
+  caseWorksheet: RawCaseWorksheet;
+};
+
+const getCases = async (
+  applicationContext: IApplicationContext,
+  searchEntity: JudgeActivityReportSearch,
+): Promise<RawCaseWithWorksheet[]> => {
+  // first get all cases for the specified judges and statuses
+  const allCaseRecords = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByStatusAndByJudge({
       applicationContext,
-      judgeName,
-      statuses,
+      params: {
+        excludeMemberCases: true,
+        judges: searchEntity.judges,
+        statuses: searchEntity.statuses,
+      },
     });
 
-  const rawCaseRecords: RawCase[] = await Promise.all(
-    submittedAndCavCasesResults.map(async result => {
-      return await applicationContext
+  // filter out cases with decision documents
+  const docketNumbersFilterOut = await applicationContext
+    .getPersistenceGateway()
+    .getDocketNumbersWithServedEventCodes(applicationContext, {
+      cases: allCaseRecords,
+      eventCodes: ['ODD', 'DEC', 'OAD', 'SDEC'],
+    });
+
+  const filteredCaseRecords = allCaseRecords.filter(
+    caseInfo =>
+      !docketNumbersFilterOut.includes(caseInfo.docketNumber) &&
+      caseInfo.caseStatusHistory,
+  );
+
+  const completeCaseRecords = await Promise.all(
+    filteredCaseRecords.map(async caseRecord => {
+      const caseWorksheet = await applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber({
+        .getCaseWorksheet({
           applicationContext,
-          docketNumber: result.docketNumber,
+          docketNumber: caseRecord.docketNumber,
         });
+
+      return {
+        ...caseRecord,
+        caseWorksheet,
+      } as unknown as RawCaseWithWorksheet;
     }),
   );
 
-  // We need to filter out member cases returned from elasticsearch so we can get an accurate
-  // consolidated cases group count even when the case status of a member case does not match
-  // the lead case status.
-  const rawCaseRecordsWithWithoutMemberCases: any = await Promise.all(
-    rawCaseRecords
-      .filter(
-        rawCaseRecord =>
-          !rawCaseRecord.leadDocketNumber ||
-          rawCaseRecord.docketNumber === rawCaseRecord.leadDocketNumber,
-      )
-      .map(async rawCaseRecord => {
-        if (rawCaseRecord.leadDocketNumber) {
-          rawCaseRecord.consolidatedCases = await applicationContext
-            .getPersistenceGateway()
-            .getCasesByLeadDocketNumber({
-              applicationContext,
-              leadDocketNumber: rawCaseRecord.docketNumber,
-            });
-          return rawCaseRecord;
-        } else {
-          return rawCaseRecord;
-        }
-      }),
-  );
+  return completeCaseRecords;
+};
 
-  const filteredCaseRecords = filterCasesWithUnwantedDocketEntryEventCodes(
-    rawCaseRecordsWithWithoutMemberCases,
-  );
+const calculateNumberOfConsolidatedCases = async (
+  applicationContext: IApplicationContext,
+  caseInfo: RawCase,
+): Promise<number> => {
+  if (!caseInfo.leadDocketNumber) {
+    return 0;
+  }
 
-  const consolidatedCasesGroupCountMap = new Map();
-
-  getConsolidatedCaseGroupCountMap(
-    filteredCaseRecords,
-    consolidatedCasesGroupCountMap,
-  );
-
-  return {
-    cases: Case.validateRawCollection(filteredCaseRecords, {
+  return await applicationContext
+    .getPersistenceGateway()
+    .getCountOfConsolidatedCases({
       applicationContext,
-    }),
-    consolidatedCasesGroupCountMap: Object.fromEntries(
-      consolidatedCasesGroupCountMap,
-    ),
-  };
+      leadDocketNumber: caseInfo.leadDocketNumber,
+    });
 };

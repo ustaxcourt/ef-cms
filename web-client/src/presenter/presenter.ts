@@ -102,6 +102,7 @@ import { deleteUploadedPdfSequence } from './sequences/deleteUploadedPdfSequence
 import { deleteUserCaseNoteFromWorkingCopySequence } from './sequences/deleteUserCaseNoteFromWorkingCopySequence';
 import { deleteWorkingCopySessionNoteSequence } from './sequences/deleteWorkingCopySessionNoteSequence';
 import { disengageAppMaintenanceSequence } from './sequences/disengageAppMaintenanceSequence';
+import { dismissAddEditCaseWorksheetModalSequence } from '@web-client/presenter/sequences/dismissAddEditCaseWorksheetModalSequence';
 import { dismissAlertSequence } from './sequences/dismissAlertSequence';
 import { dismissCreateMessageModalSequence } from './sequences/dismissCreateMessageModalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
@@ -112,12 +113,14 @@ import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificatio
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
+import { formatAndUpdateDateFromDatePickerSequence } from './sequences/formatAndUpdateDateFromDatePickerSequence';
 import { forwardMessageSequence } from './sequences/forwardMessageSequence';
 import { gatewayTimeoutErrorSequence } from './sequences/gatewayTimeoutErrorSequence';
 import { generateCaseCaptionSequence } from './sequences/generateCaseCaptionSequence';
 import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromScanSessionSequence';
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
+import { getCavAndSubmittedCasesForJudgesSequence } from './sequences/JudgeActivityReport/getCavAndSubmittedCasesForJudgesSequence';
 import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
@@ -227,6 +230,7 @@ import { onPractitionerInformationTabSelectSequence } from './sequences/onPracti
 import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumbersModalSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
+import { openAddEditCaseWorksheetModalSequence } from './sequences/openAddEditCaseWorksheetModalSequence';
 import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
 import { openAddEditSessionNoteModalSequence } from './sequences/openAddEditSessionNoteModalSequence';
 import { openAddEditUserCaseNoteModalFromDetailSequence } from './sequences/openAddEditUserCaseNoteModalFromDetailSequence';
@@ -331,7 +335,6 @@ import { sealCaseSequence } from './sequences/sealCaseSequence';
 import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
-import { selectDateRangeFromJudgeActivityReportSequence } from './sequences/selectDateRangeFromJudgeActivityReportSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
 import { selectDocumentForScanSequence } from './sequences/selectDocumentForScanSequence';
 import { selectScannerSequence } from './sequences/selectScannerSequence';
@@ -356,6 +359,7 @@ import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequ
 import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
 import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
+import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
@@ -457,6 +461,7 @@ import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequen
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
+import { updateCaseWorksheetSequence } from './sequences/updateCaseWorksheetSequence';
 import { updateChambersInCreateMessageModalSequence } from './sequences/updateChambersInCreateMessageModalSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
@@ -512,6 +517,7 @@ import { validateCaseDetailSequence } from './sequences/validateCaseDetailSequen
 import { validateCaseDetailsSequence } from './sequences/validateCaseDetailsSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
 import { validateCaseInventoryReportModalSequence } from './sequences/validateCaseInventoryReportModalSequence';
+import { validateCaseWorksheetSequence } from '@web-client/presenter/sequences/validateCaseWorksheetSequence';
 import { validateChangeLoginAndServiceEmailSequence } from './sequences/validateChangeLoginAndServiceEmailSequence';
 import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCourtIssuedDocketEntrySequence';
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
@@ -640,6 +646,7 @@ export const presenterSequences = {
   deleteUserCaseNoteFromWorkingCopySequence,
   deleteWorkingCopySessionNoteSequence,
   disengageAppMaintenanceSequence,
+  dismissAddEditCaseWorksheetModalSequence,
   dismissAlertSequence,
   dismissCreateMessageModalSequence,
   dismissModalSequence,
@@ -650,11 +657,13 @@ export const presenterSequences = {
   fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
   filterCaseDeadlinesByJudgeSequence,
   formCancelToggleCancelSequence,
+  formatAndUpdateDateFromDatePickerSequence,
   forwardMessageSequence,
   generateCaseCaptionSequence,
   generatePdfFromScanSessionSequence,
   getBlockedCasesByTrialLocationSequence,
   getCaseInventoryReportSequence,
+  getCavAndSubmittedCasesForJudgesSequence,
   getCustomCaseInventoryReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,
@@ -763,6 +772,7 @@ export const presenterSequences = {
   openAddDocketNumbersModalSequence,
   openAddEditCalendarNoteModalSequence,
   openAddEditCaseNoteModalSequence,
+  openAddEditCaseWorksheetModalSequence,
   openAddEditHearingNoteModalSequence,
   openAddEditSessionNoteModalSequence,
   openAddEditUserCaseNoteModalFromDetailSequence,
@@ -867,7 +877,6 @@ export const presenterSequences = {
   sealDocketEntrySequence,
   selectAssigneeSequence,
   selectDateRangeFromCalendarSequence,
-  selectDateRangeFromJudgeActivityReportSequence,
   selectDocumentForPreviewSequence,
   selectDocumentForScanSequence,
   selectScannerSequence,
@@ -891,6 +900,7 @@ export const presenterSequences = {
   setIdleStatusIdleSequence,
   setIdleTimerRefSequence,
   setIrsNoticeFalseSequence,
+  setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence,
   setPDFPageForSigningSequence,
   setPDFSignatureDataSequence,
@@ -992,6 +1002,7 @@ export const presenterSequences = {
   updateCaseDetailsSequence,
   updateCaseNoteSequence,
   updateCasePartyTypeSequence,
+  updateCaseWorksheetSequence,
   updateChambersInCreateMessageModalSequence,
   updateCourtIssuedDocketEntryFormValueSequence,
   updateCreateOrderModalFormValueSequence,
@@ -1047,6 +1058,7 @@ export const presenterSequences = {
   validateCaseDetailsSequence,
   validateCaseDocketNumberSearchFormSequence,
   validateCaseInventoryReportModalSequence,
+  validateCaseWorksheetSequence,
   validateChangeLoginAndServiceEmailSequence,
   validateCourtIssuedDocketEntrySequence,
   validateCreateMessageInModalSequence,

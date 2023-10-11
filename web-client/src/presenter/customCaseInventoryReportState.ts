@@ -1,7 +1,7 @@
 import {
   CaseInventory,
   CustomCaseInventoryReportFilters,
-} from '../../../shared/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
+} from '../../../web-api/src/business/useCases/caseInventoryReport/getCustomCaseInventoryReportInteractor';
 
 export type CustomCaseInventoryReportState = {
   totalCases: number;

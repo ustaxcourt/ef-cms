@@ -10,6 +10,7 @@ import {
   getFromDeployTable,
   getTableName,
   put,
+  putInDeployTable,
   query,
   queryFull,
   scan,
@@ -22,6 +23,7 @@ describe('dynamodbClientService', function () {
   const MOCK_ITEM = {
     docketNumber: '123-20',
   };
+  const dynamoDbTableName = 'efcms-local';
 
   const mockDynamoClient = {
     describeTable: jest.fn().mockImplementation(() => {
@@ -258,7 +260,7 @@ describe('dynamodbClientService', function () {
 
     it('should return the regular dynamo table name when the environment is local', async () => {
       applicationContext.environment = {
-        dynamoDbTableName: 'efcms-local',
+        dynamoDbTableName,
         stage: 'local',
       };
 
@@ -266,7 +268,7 @@ describe('dynamodbClientService', function () {
         applicationContext,
       });
 
-      expect(result).toEqual('efcms-local');
+      expect(result).toEqual(dynamoDbTableName);
     });
   });
 
@@ -535,7 +537,7 @@ describe('dynamodbClientService', function () {
         applicationContext.getDocumentClient().delete.mock.calls[0][0],
       ).toEqual({
         Key: { pk: MOCK_ITEM.docketNumber },
-        TableName: 'efcms-local',
+        TableName: dynamoDbTableName,
       });
     });
   });
@@ -549,7 +551,7 @@ describe('dynamodbClientService', function () {
       expect(
         applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
       ).toEqual({
-        TableName: 'efcms-local',
+        TableName: dynamoDbTableName,
       });
     });
   });
@@ -557,7 +559,7 @@ describe('dynamodbClientService', function () {
   describe('describeDeployTable', () => {
     it("should return information on the environment's table", async () => {
       applicationContext.environment = {
-        dynamoDbTableName: 'efcms-local',
+        dynamoDbTableName,
         stage: 'local',
       };
 
@@ -568,7 +570,31 @@ describe('dynamodbClientService', function () {
       expect(
         applicationContext.getDynamoClient().describeTable.mock.calls[0][0],
       ).toEqual({
-        TableName: 'efcms-local',
+        TableName: dynamoDbTableName,
+      });
+    });
+  });
+
+  describe('putInDeployTable', () => {
+    it('should write an item to the deploy table', async () => {
+      applicationContext.environment = {
+        dynamoDbTableName,
+        stage: 'local',
+      };
+      const dynamoRecord = {
+        data: {
+          allChecksHealthy: false,
+          timeStamp: 20384938202,
+        },
+        pk: 'healthCheckValue',
+        sk: 'healthCheckValue|us-west-1',
+      };
+
+      await putInDeployTable(applicationContext, dynamoRecord);
+
+      expect(applicationContext.getDocumentClient().put).toHaveBeenCalledWith({
+        Item: dynamoRecord,
+        TableName: dynamoDbTableName,
       });
     });
   });

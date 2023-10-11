@@ -28,7 +28,7 @@ export class DocketEntry extends JoiValidationEntity {
   public addToCoversheet?: boolean;
   public archived?: boolean;
   public attachments?: string;
-  public certificateOfService?: string;
+  public certificateOfService?: boolean;
   public certificateOfServiceDate?: string;
   public createdAt: string;
   public date?: string;
@@ -69,7 +69,7 @@ export class DocketEntry extends JoiValidationEntity {
   public ordinalValue?: string;
   public otherIteration?: string;
   public otherFilingParty?: string;
-  public partyIrsPractitioner?: string;
+  public partyIrsPractitioner?: boolean;
   public processingStatus: string;
   public receivedAt: string;
   public relationship?: string;
@@ -335,7 +335,7 @@ export class DocketEntry extends JoiValidationEntity {
       !DocketEntry.isServed(this);
 
     if (shouldGenerateFiledBy) {
-      let partiesArray = [];
+      let partiesArray: string[] = [];
       const privatePractitionerIsFiling = this.privatePractitioners?.some(
         practitioner => practitioner.partyPrivatePractitioner,
       );
@@ -349,7 +349,7 @@ export class DocketEntry extends JoiValidationEntity {
       } else {
         this.partyIrsPractitioner && partiesArray.push('Resp.');
 
-        const petitionersArray = [];
+        const petitionersArray: string[] = [];
         this.filers.forEach(contactId =>
           petitioners.forEach(p => {
             if (p.contactId === contactId) {
@@ -365,7 +365,7 @@ export class DocketEntry extends JoiValidationEntity {
         }
       }
 
-      const filedByArray = [];
+      const filedByArray: string[] = [];
       if (partiesArray.length) {
         filedByArray.push(partiesArray.join(' & '));
       }

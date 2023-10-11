@@ -1,5 +1,5 @@
 import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getScannerInterface } from './getScannerInterface';
 
 describe('getScannerInterface', () => {

@@ -2,6 +2,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { faker } from '@faker-js/faker';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -13,7 +14,6 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAndChecksVerifiedEmailAddress';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
-const { faker } = require('@faker-js/faker');
 
 describe('admissions clerk practitioner journey', () => {
   const cerebralTest = setupTest();

@@ -1,9 +1,9 @@
-@use "../uswds" as *;
+@use '../uswds' as *;
 @use '../variables' as *;
 
 .usa-form-group,
 .usa-fieldset {
-  max-width: 30rem;
+  max-width: 40rem;
   margin-top: 0;
   margin-bottom: 35px;
 }
@@ -624,4 +624,8 @@ label.ustc-upload {
   margin-top: 0;
   margin-bottom: 35px;
   margin-left: -1.25rem;
+}
+
+.ustc-message-modal-text-area {
+  resize: vertical;
 }

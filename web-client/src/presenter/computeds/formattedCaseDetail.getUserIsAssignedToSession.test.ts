@@ -1,6 +1,6 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
-  chambersUser,
+  colvinsChambersUser,
   judgeUser,
   petitionsClerkUser,
   trialClerkUser,
@@ -69,14 +69,14 @@ describe('formattedCaseDetail getUserIsAssignedToSession', () => {
     const result = runCompute(
       get =>
         getUserIsAssignedToSession({
-          currentUser: chambersUser,
+          currentUser: colvinsChambersUser,
           get,
           trialSessionId: mockTrialSessionId,
         }),
       {
         state: {
           judgeUser: {
-            section: chambersUser.section,
+            section: colvinsChambersUser.section,
             userId: judgeUser.userId,
           },
           trialSessions: [
@@ -98,7 +98,7 @@ describe('formattedCaseDetail getUserIsAssignedToSession', () => {
     const result = runCompute(
       get =>
         getUserIsAssignedToSession({
-          currentUser: chambersUser,
+          currentUser: colvinsChambersUser,
           get,
           trialSessionId: mockTrialSessionId,
         }),

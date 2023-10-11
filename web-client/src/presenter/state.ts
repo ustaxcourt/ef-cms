@@ -1,13 +1,21 @@
+import {
+  JudgeActivityReportState,
+  initialJudgeActivityReportState,
+} from './judgeActivityReportState';
+import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
 import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
+import { addEditCaseWorksheetModalHelper } from '@web-client/presenter/computeds/CaseWorksheets/addEditCaseWorksheetModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
+import { allowExternalConsolidatedGroupFilingHelper } from './computeds/allowExternalConsolidatedGroupFilingHelper';
 import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
@@ -25,6 +33,7 @@ import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByN
 import { caseSearchNoMatchesHelper } from './computeds/caseSearchNoMatchesHelper';
 import { caseStatusHistoryHelper } from './computeds/caseStatusHistoryHelper';
 import { caseTypeDescriptionHelper } from './computeds/caseTypeDescriptionHelper';
+import { caseWorksheetsHelper } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { cloneDeep } from 'lodash';
 import { completeDocumentTypeSectionHelper } from './computeds/completeDocumentTypeSectionHelper';
 import { confirmInitiateServiceModalHelper } from './computeds/confirmInitiateServiceModalHelper';
@@ -135,11 +144,13 @@ export const computeds = {
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
   addDocketNumbersModalHelper,
+  addEditCaseWorksheetModalHelper,
   addToTrialSessionModalHelper,
   addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
+  allowExternalConsolidatedGroupFilingHelper,
   appInstanceManagerHelper,
   applyStampFormHelper,
   batchDownloadHelper,
@@ -157,6 +168,7 @@ export const computeds = {
   caseSearchNoMatchesHelper,
   caseStatusHistoryHelper,
   caseTypeDescriptionHelper,
+  caseWorksheetsHelper,
   completeDocumentTypeSectionHelper,
   confirmInitiateServiceModalHelper,
   contactsHelper,
@@ -275,7 +287,7 @@ export const baseState = {
     page: number;
   },
   caseDetail: {} as RawCase,
-  closedCases: [],
+  closedCases: [] as TAssociatedCase[],
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
@@ -307,9 +319,7 @@ export const baseState = {
       tab: null,
     },
   },
-
   customCaseInventory: cloneDeep(initialCustomCaseInventoryReportState),
-  // needs its own object because it's present when other forms are on screen
   docketEntryId: null,
   docketRecordIndex: 0,
   draftDocumentViewerDocketEntryId: null,
@@ -319,8 +329,9 @@ export const baseState = {
     percentComplete: 0,
     timeRemaining: Number.POSITIVE_INFINITY,
   },
-
   form: {} as any,
+
+  fromPage: '',
   // shared object for creating new entities, clear before using
   header: {
     searchTerm: '',
@@ -328,29 +339,39 @@ export const baseState = {
     showMobileMenu: false,
     showUsaBannerDetails: false,
   },
+  health: undefined as any,
   idleStatus: IDLE_STATUS.ACTIVE,
   idleTimerRef: null,
   iframeSrc: '',
   individualInProgressCount: 0,
   individualInboxCount: 0,
   isTerminalUser: false,
-  judgeActivityReportData: {},
+  judgeActivityReport: cloneDeep(
+    initialJudgeActivityReportState,
+  ) as JudgeActivityReportState,
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
+    docketEntry: undefined,
     pdfPreviewModal: undefined,
     showModal: undefined, // the name of the modal to display
-  },
+  } as Record<string, string | undefined>,
   navigation: {},
   noticeStatusState: {
     casesProcessed: 0,
     totalCases: 0,
   },
-  notifications: {},
-  openCases: [],
+  notifications: {} as {
+    qcSectionInboxCount: number;
+    qcSectionInProgressCount: number;
+    qcIndividualInboxCount: number;
+    qcIndividualInProgressCount: number;
+    unreadMessageCount?: number;
+  },
+  openCases: [] as TAssociatedCase[],
   paperServiceStatusState: {
     pdfsAppended: 0,
     totalPdfs: 0,
@@ -385,7 +406,7 @@ export const baseState = {
     isScanning: false,
     selectedBatchIndex: 0,
   },
-  screenMetadata: {},
+  screenMetadata: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
@@ -396,20 +417,26 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  submittedAndCavCases: {
+    consolidatedCasesGroupCountMap: {} as any,
+    submittedAndCavCasesByJudge: [] as any,
+    // TODO: this should get moved to currentViewMetadata
+    worksheets: [] as RawCaseWorksheet[],
+  },
+  submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
   trialSession: {} as RawTrialSession,
+
   trialSessionJudge: {
     name: '',
   },
-
   user: null,
-  // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},
   users: [],
-  validationErrors: {},
+  validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
   workItem: {},
   workItemActions: {},

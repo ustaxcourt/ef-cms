@@ -1,4 +1,7 @@
 #trial-calendar {
+  margin: 0 -20px;
+  page: narrow;
+
   .column {
     display: flex;
     flex: 1;
@@ -16,23 +19,9 @@
     }
   }
 
-  .card {
-    border: 1px solid #ccc;
-    margin: 12px 0 12px 0;
-    font-size: 14px;
-  }
-
-  .card-header {
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    background: #f0f0f0;
-    font-size: 14px;
-    font-weight: bold;
-  }
-
-  .card-content {
-    display: flex;
-    align-items: flex-start;
-    padding: 10px;
+  .lead-consolidated-icon,
+  .consolidated-icon {
+    margin-top: 3px;
+    margin-right: 0.3rem;
   }
 }

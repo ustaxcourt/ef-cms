@@ -3,7 +3,7 @@ import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   SECTIONS,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from './messageModalHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -22,7 +22,7 @@ describe('messageModalHelper', () => {
 
   const mockDocketEntryWithFileAttachedOnDocketRecord = {
     descriptionDisplay: 'Hello with additional info',
-    documentId: mockDocketEntryIdOnDocketRecord,
+    docketEntryId: mockDocketEntryIdOnDocketRecord,
     documentType: 'Petition',
     index: 1,
     isFileAttached: true,
@@ -30,7 +30,7 @@ describe('messageModalHelper', () => {
   };
 
   const mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription = {
-    documentId: mockDocketEntryIdAlsoOnDocketRecord,
+    docketEntryId: mockDocketEntryIdAlsoOnDocketRecord,
     documentTitle: 'Some Document',
     index: 2,
     isFileAttached: true,
@@ -44,7 +44,7 @@ describe('messageModalHelper', () => {
   ];
 
   const mockDraftDocketEntry = {
-    documentId: '345',
+    docketEntryId: '345',
     documentTitle: 'Order to do something',
     documentType: 'Order',
     isDraft: true,
@@ -67,15 +67,20 @@ describe('messageModalHelper', () => {
     },
   ];
 
-  const baseState = {
-    caseDetail: {},
-    modal: {
-      form: {
-        attachments: [],
+  let baseState;
+
+  beforeEach(() => {
+    baseState = {
+      caseDetail: {},
+      modal: {
+        form: {
+          attachments: [],
+          draftAttachments: [],
+        },
       },
-    },
-    screenMetadata: {},
-  };
+      screenMetadata: {},
+    };
+  });
 
   const messageModalHelper = withAppContextDecorator(
     messageModalHelperComputed,
@@ -99,6 +104,7 @@ describe('messageModalHelper', () => {
 
     it('should set a title on each entry from the documentTitle or documentType', () => {
       applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [{}],
         draftDocuments: mockDraftDocuments,
         formattedDocketEntries: [],
       });
@@ -119,30 +125,27 @@ describe('messageModalHelper', () => {
   });
 
   describe('documents', () => {
-    it('should include only documents that are on the docket record', () => {
+    beforeAll(() => {
       applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
         correspondence: [],
         draftDocuments: [],
         formattedDocketEntries: mockDocketEntries,
       });
+    });
 
+    it('should include only documents that are on the docket record', () => {
       const { documents } = runCompute(messageModalHelper, {
         state: baseState,
       });
 
       expect(documents).toMatchObject([
-        { documentId: mockDocketEntryIdOnDocketRecord },
-        { documentId: mockDocketEntryIdAlsoOnDocketRecord },
+        { docketEntryId: mockDocketEntryIdOnDocketRecord },
+        { docketEntryId: mockDocketEntryIdAlsoOnDocketRecord },
       ]);
       expect(documents.length).toEqual(2);
     });
 
     it('should set a title on each entry from either the descriptionDisplay or documentType', () => {
-      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
-        draftDocuments: [],
-        formattedDocketEntries: mockDocketEntries,
-      });
-
       const { documents } = runCompute(messageModalHelper, {
         state: baseState,
       });
@@ -153,6 +156,47 @@ describe('messageModalHelper', () => {
       expect(documents[1].title).toEqual(
         mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription.documentType,
       );
+    });
+
+    it('should should set isAlreadyAttached to true if the document has already been selected', () => {
+      baseState.modal.form.attachments = [
+        {
+          documentId:
+            mockDocketEntryWithFileAttachedOnDocketRecord.docketEntryId,
+        },
+      ];
+      baseState.modal.form.draftAttachments = [];
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+      expect(documents[0].isAlreadyAttached).toEqual(true);
+    });
+
+    it('should should set isAlreadyAttached to false if the document has not been selected', () => {
+      baseState.modal.form.attachments = [];
+      baseState.modal.form.draftAttachments = [];
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+      expect(documents[0].isAlreadyAttached).toEqual(false);
+    });
+
+    it('should should set isAlreadyAttached to true if the draft attachment has already been selected', () => {
+      baseState.modal.form.draftAttachments = [
+        {
+          documentId:
+            mockDocketEntryWithFileAttachedOnDocketRecord.docketEntryId,
+        },
+      ];
+
+      baseState.modal.form.attachments = [];
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+      expect(documents[0].isAlreadyAttached).toEqual(true);
     });
   });
 
@@ -283,6 +327,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}], // 1/2 documents attached
+              draftAttachments: [],
             },
           },
           screenMetadata: {
@@ -306,6 +351,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}], // 1/2 documents attached
+              draftAttachments: [],
             },
           },
           screenMetadata: {
@@ -328,7 +374,8 @@ describe('messageModalHelper', () => {
           caseDetail: {},
           modal: {
             form: {
-              attachments: [{}, {}], // 2/2 documents attached
+              attachments: [{}],
+              draftAttachments: [{}], // 2/2 documents attached
             },
           },
           screenMetadata: {
@@ -354,6 +401,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}], // 1/2 documents attached
+              draftAttachments: [],
             },
           },
           screenMetadata: {},
@@ -374,7 +422,8 @@ describe('messageModalHelper', () => {
           caseDetail: {},
           modal: {
             form: {
-              attachments: [{}, {}], // 2/2 documents attached
+              attachments: [{}],
+              draftAttachments: [{}], // 2/2 documents attached
             },
           },
           screenMetadata: {},
@@ -401,6 +450,7 @@ describe('messageModalHelper', () => {
           modal: {
             form: {
               attachments: [{}],
+              draftAttachments: [],
             },
           },
           screenMetadata: {},
@@ -437,6 +487,7 @@ describe('messageModalHelper', () => {
             modal: {
               form: {
                 attachments: [{}, {}], // 2/2 documents attached
+                draftAttachments: [],
               },
             },
             screenMetadata: {},
@@ -461,6 +512,7 @@ describe('messageModalHelper', () => {
             modal: {
               form: {
                 attachments: [{}],
+                draftAttachments: [],
               },
             },
             screenMetadata: {},

@@ -3,7 +3,7 @@ import {
   CONTACT_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { caseInformationHelper as caseInformationHelperComputed } from './caseInformationHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
