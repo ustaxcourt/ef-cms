@@ -118,7 +118,7 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
     }
   }
   const results = Object.keys(obj).length === 0 ? null : obj;
-  // TODO:
+  // TODO: revert these after manual testing in test is complete
   const newResults = getFormattedValidationErrors_NEW(entity);
 
   /* eslint-disable no-restricted-globals */
@@ -189,7 +189,7 @@ export abstract class JoiValidationEntity {
 
   getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
     try {
-      // DELETE THIS TRY CATCH WHEN CLEANING UP
+      // TODO: DELETE THIS TRY CATCH WHEN CLEANING UP
       // THIS IS TO HELP US FIGURE OUT WHICH ENTITY IS WRONG
       const rules = this.getValidationRules_NEW();
       const schema = rules.validate ? rules : joi.object().keys(rules);
