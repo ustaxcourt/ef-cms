@@ -1,5 +1,5 @@
-import * as client from '../../dynamodbClientService';
-import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { get } from '../../dynamodbClientService';
 
 export const getUserById = ({
   applicationContext,
@@ -7,8 +7,8 @@ export const getUserById = ({
 }: {
   applicationContext: IApplicationContext;
   userId: string;
-}): Promise<TDynamoRecord> =>
-  client.get({
+}): Promise<UserRecord> =>
+  get({
     Key: {
       pk: `user|${userId}`,
       sk: `user|${userId}`,
