@@ -1,14 +1,17 @@
 import { Client } from '@opensearch-project/opensearch';
+import {
+  areAllReindexTasksFinished,
+  isMigratedClusterFinishedIndexing,
+} from './check-reindex-complete';
 import { getClient } from '../../../web-api/elasticsearch/client';
-import { isMigratedClusterFinishedIndexing } from './check-reindex-complete';
 
 jest.mock('../../../web-api/elasticsearch/client', () => ({
   getClient: jest.fn(),
 }));
 const mockedClient = jest.mocked(getClient);
+const mockEnvName = 'experimental100';
 
 describe('isMigratedClusterFinishedIndexing', () => {
-  const mockEnvName = 'experimental100';
   const count = jest.fn();
   const stats = jest.fn();
   const mockIndices = { count, indices: { stats } } as unknown as Client;
@@ -54,7 +57,7 @@ describe('isMigratedClusterFinishedIndexing', () => {
     });
   });
 
-  it('should call getClient with the correct environment and table versions when destination table is alpha', async () => {
+  it('calls getClient with the correct environment and table versions when destination table is alpha', async () => {
     count
       .mockReturnValueOnce({ body: { count: 9 } })
       .mockReturnValueOnce({ body: { count: 8 } })
@@ -70,13 +73,13 @@ describe('isMigratedClusterFinishedIndexing', () => {
       .mockReturnValueOnce({ body: { count: 3 } });
 
     process.env.DESTINATION_TABLE = 'efcms-exp100-alpha';
-    await isMigratedClusterFinishedIndexing(mockEnvName);
+    await isMigratedClusterFinishedIndexing({ environmentName: mockEnvName });
 
     expect(mockedClient.mock.calls[0][0]).toMatchObject({ version: 'beta' });
     expect(mockedClient.mock.calls[1][0]).toMatchObject({ version: 'alpha' });
   });
 
-  it('should call getClient with the correct environment and table versions when destination table is beta', async () => {
+  it('calls getClient with the correct environment and table versions when destination table is beta', async () => {
     count
       .mockReturnValueOnce({ body: { count: 9 } })
       .mockReturnValueOnce({ body: { count: 8 } })
@@ -92,13 +95,13 @@ describe('isMigratedClusterFinishedIndexing', () => {
       .mockReturnValueOnce({ body: { count: 3 } });
 
     process.env.DESTINATION_TABLE = 'efcms-exp100-beta';
-    await isMigratedClusterFinishedIndexing(mockEnvName);
+    await isMigratedClusterFinishedIndexing({ environmentName: mockEnvName });
 
     expect(mockedClient.mock.calls[0][0]).toMatchObject({ version: 'alpha' });
     expect(mockedClient.mock.calls[1][0]).toMatchObject({ version: 'beta' });
   });
 
-  it('should return false when there is a difference in the current and destination index count', async () => {
+  it('returns false when there is a difference in the current and destination index count', async () => {
     count
       .mockReturnValueOnce({ body: { count: 9 } })
       .mockReturnValueOnce({ body: { count: 8 } })
@@ -113,11 +116,13 @@ describe('isMigratedClusterFinishedIndexing', () => {
       .mockReturnValueOnce({ body: { count: 3 } })
       .mockReturnValueOnce({ body: { count: 3 } });
 
-    const result = await isMigratedClusterFinishedIndexing(mockEnvName);
+    const result = await isMigratedClusterFinishedIndexing({
+      environmentName: mockEnvName,
+    });
     expect(result).toBe(false);
   });
 
-  it('should return false when there is no difference in the current and destination index count and elasticsearch is still reindexing', async () => {
+  it('returns false when there is no difference in the current and destination index count and elasticsearch is still reindexing', async () => {
     count
       .mockReturnValueOnce({ body: { count: 9 } })
       .mockReturnValueOnce({ body: { count: 8 } })
@@ -230,11 +235,13 @@ describe('isMigratedClusterFinishedIndexing', () => {
         },
       });
 
-    const result = await isMigratedClusterFinishedIndexing(mockEnvName);
+    const result = await isMigratedClusterFinishedIndexing({
+      environmentName: mockEnvName,
+    });
     expect(result).toBe(false);
   });
 
-  it('should return true when there is no difference in the current and destination index count and elasticsearch is finished reindexing', async () => {
+  it('returns true when there is no difference in the current and destination index count and elasticsearch is finished reindexing', async () => {
     count
       .mockReturnValueOnce({ body: { count: 9 } })
       .mockReturnValueOnce({ body: { count: 8 } })
@@ -347,7 +354,9 @@ describe('isMigratedClusterFinishedIndexing', () => {
         },
       });
 
-    const result = await isMigratedClusterFinishedIndexing(mockEnvName);
+    const result = await isMigratedClusterFinishedIndexing({
+      environmentName: mockEnvName,
+    });
     expect(result).toBe(true);
   });
 
@@ -464,7 +473,9 @@ describe('isMigratedClusterFinishedIndexing', () => {
         },
       });
 
-    const result = await isMigratedClusterFinishedIndexing(mockEnvName);
+    const result = await isMigratedClusterFinishedIndexing({
+      environmentName: mockEnvName,
+    });
     expect(result).toBe(false);
   });
 
@@ -581,7 +592,77 @@ describe('isMigratedClusterFinishedIndexing', () => {
         },
       });
 
-    const result = await isMigratedClusterFinishedIndexing(mockEnvName);
+    const result = await isMigratedClusterFinishedIndexing({
+      environmentName: mockEnvName,
+    });
     expect(result).toBe(true);
+  });
+});
+
+describe('areAllReindexTasksFinished', () => {
+  process.env.SOURCE_TABLE = 'efcms-experimental100-alpha';
+  const tasks = jest.fn();
+  const mockTasks = { cat: { tasks } } as unknown as Client;
+  console.log = () => null;
+
+  beforeEach(() => {
+    mockedClient.mockReturnValue(Promise.resolve(mockTasks));
+  });
+
+  it('returns true when no tasks are ongoing', async () => {
+    tasks.mockReturnValue({ body: [] });
+    const result = await areAllReindexTasksFinished({
+      environmentName: mockEnvName,
+    });
+    expect(result).toBe(true);
+  });
+
+  it('returns true when no reindex tasks are ongoing', async () => {
+    tasks.mockReturnValue({
+      body: [
+        {
+          action: 'cluster:monitor/tasks/lists',
+          task_id: 'AbC-deFGhIjklMnOPqR:4000209',
+        },
+        {
+          action: 'cluster:monitor/tasks/lists[n]',
+          parent_task_id: 'AbC-deFGhIjklMnOPqR:4000209',
+          task_id: 'AbC-deFGhIjklMnOPqR:4000210',
+        },
+      ],
+    });
+    const result = await areAllReindexTasksFinished({
+      environmentName: mockEnvName,
+    });
+    expect(result).toBe(true);
+  });
+
+  it('returns false when a reindex task is ongoing', async () => {
+    tasks.mockReturnValue({
+      body: [
+        {
+          action: 'indices:data/write/reindex',
+          task_id: 'AbC-deFGhIjklMnOPqR:4000211',
+        },
+        {
+          action: 'indices:data/write/bulk',
+          parent_task_id: 'AbC-deFGhIjklMnOPqR:4000211',
+          task_id: 'AbC-deFGhIjklMnOPqR:4000212',
+        },
+        {
+          action: 'cluster:monitor/tasks/lists',
+          task_id: 'AbC-deFGhIjklMnOPqR:4000213',
+        },
+        {
+          action: 'cluster:monitor/tasks/lists[n]',
+          parent_task_id: 'AbC-deFGhIjklMnOPqR:4000213',
+          task_id: 'AbC-deFGhIjklMnOPqR:4000214',
+        },
+      ],
+    });
+    const result = await areAllReindexTasksFinished({
+      environmentName: mockEnvName,
+    });
+    expect(result).toBe(false);
   });
 });
