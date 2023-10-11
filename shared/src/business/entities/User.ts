@@ -1,6 +1,8 @@
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
+  JUDGE_TITLES,
+  JudgeTitle,
   ROLES,
   STATE_NOT_AVAILABLE,
   US_STATES,
@@ -33,8 +35,9 @@ export class User extends JoiValidationEntity {
     state: string;
   };
   public judgeFullName?: string;
-  public judgeTitle?: string;
+  public judgeTitle?: JudgeTitle;
   public section?: string;
+  public isSeniorJudge?: boolean;
 
   constructor(rawUser, { filtered = false } = {}) {
     super('User');
@@ -67,6 +70,7 @@ export class User extends JoiValidationEntity {
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
       this.judgeFullName = rawUser.judgeFullName;
       this.judgeTitle = rawUser.judgeTitle;
+      this.isSeniorJudge = rawUser.isSeniorJudge;
     }
 
     this.section = rawUser.section;
@@ -111,10 +115,10 @@ export class User extends JoiValidationEntity {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
-    judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
+    judgeTitle: joi.when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
-      then: joi.required(),
+      then: JoiValidationConstants.STRING.valid(...JUDGE_TITLES).required(),
     }),
     name: JoiValidationConstants.STRING.max(100).required(),
     role: JoiValidationConstants.STRING.valid(
@@ -185,6 +189,11 @@ export class User extends JoiValidationEntity {
       contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
       email: JoiValidationConstants.EMAIL.optional(),
       entityName: JoiValidationConstants.STRING.valid('User').required(),
+      isSeniorJudge: joi.when('role', {
+        is: ROLES.judge,
+        otherwise: joi.optional().allow(null),
+        then: joi.boolean().required(),
+      }),
       isUpdatingInformation: joi
         .boolean()
         .optional()

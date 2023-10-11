@@ -15,7 +15,7 @@ DEPLOYING_COLOR=$(aws dynamodb get-item \
  --region us-east-1 \
  --table-name "efcms-deploy-${ENV}" \
  --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
-export FILE_NAME=./scripts/data-import/judge/judge_users.csv
+export FILE_NAME=./scripts/circleci/judge/judge_users.csv
 export DESTINATION_TABLE
 export DEPLOYING_COLOR
 
@@ -46,7 +46,7 @@ npx ts-node --transpile-only shared/admin-tools/user/setup-admin.ts
 . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
 
 # Setting up Judge users
-./scripts/data-import/judge/bulk-import-judge-users.sh
+./scripts/circleci/judge/bulk-import-judge-users.sh
 
 unset CI
 unset SECRETS_LOADED
