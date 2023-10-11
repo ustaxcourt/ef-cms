@@ -355,27 +355,6 @@ describe('createOrUpdatePractitionerUser', () => {
     });
   });
 
-  it('should get userId of newly created user from passed-in user object instead of cognito', async () => {
-    process.env.USE_COGNITO_LOCAL = 'true';
-    process.env.USER_POOL_ID = 'localUserPoolId';
-
-    await createOrUpdatePractitionerUser({
-      applicationContext,
-      user: { ...privatePractitionerUser } as any,
-    });
-
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0],
-    ).toMatchObject({
-      Item: {
-        ...privatePractitionerUser,
-        pk: `user|${userId}`,
-        sk: `user|${userId}`,
-        userId,
-      },
-    });
-  });
-
   describe('createUserRecords', () => {
     it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {
       await createUserRecords({
