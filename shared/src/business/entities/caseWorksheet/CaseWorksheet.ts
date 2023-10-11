@@ -36,6 +36,10 @@ export class CaseWorksheet extends JoiValidationEntity {
     return CaseWorksheet.VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return CaseWorksheet.VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return CaseWorksheet.VALIDATION_ERROR_MESSAGES;
   }

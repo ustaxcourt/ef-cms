@@ -18,7 +18,6 @@ describe('validateStartCaseWizardInteractor', () => {
       'partyType',
       'preferredTrialCity',
       'procedureType',
-      'mismatchMessage',
     ]);
   });
 

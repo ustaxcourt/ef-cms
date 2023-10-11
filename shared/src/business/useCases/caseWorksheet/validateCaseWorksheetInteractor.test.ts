@@ -12,7 +12,7 @@ describe('validateCaseWorksheetInteractor', () => {
       caseWorksheet: mockInvalidCaseWorksheet,
     });
 
-    expect(Object.keys(errors!)).toEqual(['docketNumber', 'mismatchMessage']);
+    expect(Object.keys(errors!)).toEqual(['docketNumber']);
   });
 
   it('should return null when the case worksheet is valid', () => {
