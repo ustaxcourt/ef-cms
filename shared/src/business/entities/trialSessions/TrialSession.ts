@@ -551,7 +551,7 @@ export class TrialSession extends JoiValidationEntity {
 
     this.isStartDateWithinNOTTReminderRange = isTodayWithinGivenInterval({
       intervalEndDate: trialStartDateString.minus({
-        ['days']: 28, // luxon's interval end date is not inclusive
+        ['days']: 24, // luxon's interval end date is not inclusive
       }),
       intervalStartDate: trialStartDateString.minus({
         ['days']: 34,
