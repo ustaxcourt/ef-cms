@@ -6,9 +6,13 @@ import { prepareDateFromString } from '../../utilities/DateHandler';
 describe('TrialSession entity', () => {
   describe('Notice of trial reminder', () => {
     const today = prepareDateFromString();
-    // 5 day buffer to display the reminder PLUS 1 more day (the 30th day [inclusive] from the trial)
+    // 9 day buffer to display the reminder PLUS 1 more day (the 25th day [inclusive] from the trial)
     const tests = [
-      { daysFromToday: 28, expectedOutput: false },
+      { daysFromToday: 24, expectedOutput: false },
+      { daysFromToday: 25, expectedOutput: true },
+      { daysFromToday: 26, expectedOutput: true },
+      { daysFromToday: 27, expectedOutput: true },
+      { daysFromToday: 28, expectedOutput: true },
       { daysFromToday: 29, expectedOutput: true },
       { daysFromToday: 30, expectedOutput: true },
       { daysFromToday: 31, expectedOutput: true },
