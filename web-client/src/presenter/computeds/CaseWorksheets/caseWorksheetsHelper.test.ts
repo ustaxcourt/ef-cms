@@ -48,15 +48,15 @@ describe('caseWorksheetsHelper', () => {
         caseCaption: 'Fred Dude, Petitioner',
         caseStatusHistory: [
           {
-            date: '2022-02-06T05:00:00.000Z',
+            date: '1987-02-06T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
           },
           {
-            date: '2022-02-15T05:00:00.000Z',
+            date: '1987-02-15T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.cav,
           },
         ],
-        docketNumber: '202-11',
+        docketNumber: '202-87',
         formattedCaseCount: 0,
       },
     ];
@@ -76,6 +76,19 @@ describe('caseWorksheetsHelper', () => {
 
     const EXPECTED_FORMATTED_CASE_WORKSHEETS = [
       {
+        caseCaption: 'Fred Dude, Petitioner',
+        consolidatedIconTooltipText: '',
+        daysSinceLastStatusChange: expect.anything(),
+        docketNumber: '202-87',
+        docketNumberWithSuffix: undefined,
+        formattedCaseCount: 1,
+        formattedSubmittedCavStatusDate: '02/15/87',
+        inConsolidatedGroup: false,
+        isLeadCase: false,
+        status: undefined,
+        worksheet: {},
+      },
+      {
         caseCaption: 'Scooby Doo, Petitioner',
         consolidatedIconTooltipText: 'Lead case',
         daysSinceLastStatusChange: expect.anything(),
@@ -85,19 +98,6 @@ describe('caseWorksheetsHelper', () => {
         formattedSubmittedCavStatusDate: '02/16/02',
         inConsolidatedGroup: true,
         isLeadCase: true,
-        status: undefined,
-        worksheet: {},
-      },
-      {
-        caseCaption: 'Fred Dude, Petitioner',
-        consolidatedIconTooltipText: '',
-        daysSinceLastStatusChange: expect.anything(),
-        docketNumber: '202-11',
-        docketNumberWithSuffix: undefined,
-        formattedCaseCount: 1,
-        formattedSubmittedCavStatusDate: '02/15/22',
-        inConsolidatedGroup: false,
-        isLeadCase: false,
         status: undefined,
         worksheet: {},
       },
@@ -114,6 +114,7 @@ describe('caseWorksheetsHelper', () => {
         status: undefined,
         worksheet: {
           docketNumber: '110-15',
+          finalBriefDueDateFormatted: undefined,
           primaryIssue: 'ZOINKS!',
         },
       },
@@ -122,7 +123,6 @@ describe('caseWorksheetsHelper', () => {
       aCase => aCase.docketNumber === '101-20',
     );
     expect(caseWorksheetsFormatted).toEqual(EXPECTED_FORMATTED_CASE_WORKSHEETS);
-
     expect(
       `${caseWithOlderStatusChange!.daysSinceLastStatusChange}`.includes(','),
     ).toBeTruthy();

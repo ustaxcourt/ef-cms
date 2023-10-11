@@ -8,20 +8,15 @@ export const setCaseWorksheetAction = ({
 }: ActionProps<{ updatedWorksheet: RawCaseWorksheet }>) => {
   const { updatedWorksheet } = props;
 
-  const worksheets = get(state.submittedAndCavCases.worksheets);
+  const { submittedAndCavCasesByJudge } = get(state.submittedAndCavCases);
 
-  const worksheetAlreadyExists = worksheets.findIndex(
+  const caseIndex = submittedAndCavCasesByJudge.findIndex(
     ws => ws.docketNumber === updatedWorksheet.docketNumber,
   );
-  if (worksheetAlreadyExists !== -1) {
-    store.set(
-      state.submittedAndCavCases.worksheets[worksheetAlreadyExists],
-      updatedWorksheet,
-    );
-  } else {
-    store.set(state.submittedAndCavCases.worksheets, [
-      ...worksheets,
-      updatedWorksheet,
-    ]);
-  }
+
+  store.set(
+    state.submittedAndCavCases.submittedAndCavCasesByJudge[caseIndex]
+      .caseWorksheet,
+    updatedWorksheet,
+  );
 };
