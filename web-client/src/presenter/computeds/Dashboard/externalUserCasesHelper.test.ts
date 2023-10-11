@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../applicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { externalUserCasesHelper as externalUserCasesHelperComputed } from './externalUserCasesHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
@@ -7,28 +7,70 @@ const externalUserCasesHelper = withAppContextDecorator(
   externalUserCasesHelperComputed,
   {
     ...applicationContext,
-    getUtilities: () => ({
-      formatCase: () => ({
-        docketNumber: '123-20',
-      }),
+    getConstants: () => ({
+      CASE_LIST_PAGE_SIZE: 3,
     }),
   },
 );
 
-const baseState = {
-  closedCases: [...Array(10).keys()],
-  constants: {
-    CASE_LIST_PAGE_SIZE: 5,
-  },
-  openCases: [...Array(10).keys()],
-};
-
 describe('externalUserCasesHelper', () => {
-  it('returns more than 10 open and closed cases, shows load more button for both', () => {
+  let baseState;
+  beforeEach(() => {
+    baseState = {
+      closedCases: [
+        { docketNumber: '101-20' },
+        { docketNumber: '102-20' },
+        {
+          consolidatedCases: [
+            {
+              docketNumber: '158-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '103-20',
+            },
+            {
+              docketNumber: '169-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '103-20',
+            },
+            {
+              docketNumber: '189-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '103-20',
+            },
+          ],
+          docketNumber: '103-20',
+        },
+        { docketNumber: '104-20', isRequestingUserAssociated: true },
+      ],
+      closedCasesCurrentPage: 1,
+      openCases: [
+        {
+          consolidatedCases: [
+            {
+              docketNumber: '108-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '102-20',
+            },
+            {
+              docketNumber: '109-20',
+              isRequestingUserAssociated: true,
+              leadDocketNumber: '102-20',
+            },
+          ],
+          docketNumber: '102-20',
+          isRequestingUserAssociated: false,
+          leadDocketNumber: '102-20',
+        },
+        { docketNumber: '103-21', isRequestingUserAssociated: true },
+        { docketNumber: '103-22' },
+        { docketNumber: '103-23' },
+      ],
+      openCasesCurrentPage: 1,
+    };
+  });
+  it('should display the load more button for both open and closed cases if there are more cases than page size', () => {
     const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
-      },
+      state: baseState,
     });
 
     expect(result).toMatchObject({
@@ -37,11 +79,11 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it("doesn't show load more button for closed cases", () => {
+  it("should not show 'Load More' button for closed cases", () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        closedCases: [0],
+        closedCases: [{ docketNumber: '104-20' }],
       },
     });
 
@@ -51,11 +93,11 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it("doesn't show load more button for open cases", () => {
+  it("should not show 'Load More' button for open cases", () => {
     const result = runCompute(externalUserCasesHelper, {
       state: {
         ...baseState,
-        openCases: [0],
+        openCases: [{ docketNumber: '103-23' }],
       },
     });
 
@@ -65,18 +107,14 @@ describe('externalUserCasesHelper', () => {
     });
   });
 
-  it('sets the total count of both open and closed cases', () => {
+  it('sets the total count of both open and closed cases based on when the user is directly associated with the case', () => {
     const result = runCompute(externalUserCasesHelper, {
-      state: {
-        ...baseState,
-        closedCases: [{ docketNumber: '101-20' }],
-        openCases: [{ docketNumber: '102-20' }, { docketNumber: '103-20' }],
-      },
+      state: baseState,
     });
 
     expect(result).toMatchObject({
-      closedCasesCount: 1,
-      openCasesCount: 2,
+      closedCasesCount: 4,
+      openCasesCount: 3,
     });
   });
 
