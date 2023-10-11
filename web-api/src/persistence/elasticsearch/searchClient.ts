@@ -16,7 +16,7 @@ export type SearchClientResultsType = {
     };
   };
   expected?: number;
-  total?: number;
+  total: number;
   results: any;
 };
 export type SearchAllParametersType = {
