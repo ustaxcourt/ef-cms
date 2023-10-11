@@ -183,21 +183,12 @@ export const createOrUpdateUser = async ({
       Username: user.email,
     };
 
-    if (process.env.USE_COGNITO_LOCAL) {
-      params.additionalParams = {
-        Name: 'custom:userId',
-        Value: user.userId,
-      };
-    }
-
     const response = await applicationContext
       .getCognito()
       .adminCreateUser(params)
       .promise();
 
-    userId = process.env.USE_COGNITO_LOCAL
-      ? user.userId
-      : response.User.Username;
+    userId = response.User.Username;
   } else {
     const response = await applicationContext
       .getCognito()
@@ -225,12 +216,11 @@ export const createOrUpdateUser = async ({
   }
 
   if (disableCognitoUser) {
-    const username = process.env.USE_COGNITO_LOCAL ? user.email : userId;
     await applicationContext
       .getCognito()
       .adminDisableUser({
         UserPoolId: userPoolId,
-        Username: username,
+        Username: userId,
       })
       .promise();
   }

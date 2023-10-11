@@ -112,21 +112,12 @@ export const createOrUpdatePractitionerUser = async ({
       Username: userEmail,
     };
 
-    if (process.env.USE_COGNITO_LOCAL) {
-      params.additionalAttributes = {
-        Name: 'custom:userId',
-        Value: user.userId,
-      };
-    }
-
     const response = await applicationContext
       .getCognito()
       .adminCreateUser(params)
       .promise();
 
-    if (process.env.USE_COGNITO_LOCAL) {
-      ({ userId } = user);
-    } else if (response && response.User && response.User.Username) {
+    if (response && response.User && response.User.Username) {
       userId = response.User.Username;
     }
   } else {

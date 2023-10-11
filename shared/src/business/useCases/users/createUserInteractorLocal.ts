@@ -11,8 +11,6 @@ export const createUserInteractorLocal = async (
   applicationContext: IApplicationContext,
   { user }: { user: { password: string; name: string; email: string } },
 ) => {
-  const userId = applicationContext.getUniqueId();
-
   const params = {
     ClientId: process.env.COGNITO_CLIENT_ID,
     Password: user.password,
@@ -32,10 +30,6 @@ export const createUserInteractorLocal = async (
       {
         Name: 'name',
         Value: user.name,
-      },
-      {
-        Name: 'custom:userId',
-        Value: userId,
       },
     ],
     Username: user.email,

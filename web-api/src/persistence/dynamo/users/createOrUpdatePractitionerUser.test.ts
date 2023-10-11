@@ -352,10 +352,6 @@ describe('createOrUpdatePractitionerUser', () => {
       ],
       UserPoolId: 'localUserPoolId',
       Username: 'test@example.com',
-      additionalAttributes: {
-        Name: 'custom:userId',
-        Value: '9b52c605-edba-41d7-b045-d5f992a499d3',
-      },
     });
   });
 
