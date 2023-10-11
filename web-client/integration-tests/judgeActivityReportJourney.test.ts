@@ -91,14 +91,24 @@ describe('Judge activity report journey', () => {
       'Colvin',
     );
 
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkCreatesNewCase(cerebralTest);
+
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkUpdatesCaseStatusTo(
+      cerebralTest,
+      CASE_STATUS_TYPES.submittedRule122,
+      'Colvin',
+    );
+
     loginAs(cerebralTest, 'judgecolvin@example.com');
     viewJudgeActivityReportResults(cerebralTest, {});
-    it('should increase progressDescriptionTableTotal by 2 when there is one "CAV" case and one "Submitted" case added', () => {
+    it('should increase progressDescriptionTableTotal by 3 when there is each of "CAV", "Submitted" and "Submitted - Rule 122" cases added', () => {
       const progressDescriptionTableTotalAfter =
         cerebralTest.progressDescriptionTableTotal;
 
       expect(progressDescriptionTableTotalAfter).toEqual(
-        progressDescriptionTableTotalBefore + 2,
+        progressDescriptionTableTotalBefore + 3,
       );
     });
 
