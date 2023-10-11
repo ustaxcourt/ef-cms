@@ -23,7 +23,6 @@ export const authenticateUserAction = async ({
     });
 
   if (response.alertError) {
-    console.log('response', response);
     if (response.alertError.message === 'NEW_PASSWORD_REQUIRED') {
       store.set(state.cognitoLocal.userEmail, code);
       store.set(state.cognitoLocal.sessionId, response.alertError.sessionId);

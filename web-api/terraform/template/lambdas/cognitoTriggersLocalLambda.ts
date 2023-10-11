@@ -8,8 +8,5 @@ import { handler } from './cognito-triggers';
 export const cognitoTriggersLocalLambda = async event => {
   const cognitoEvent = JSON.parse(event.body);
 
-  cognitoEvent.request.userAttributes.sub =
-    cognitoEvent.request.userAttributes['custom:userId'];
-
   return await handler(cognitoEvent);
 };
