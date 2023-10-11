@@ -923,17 +923,17 @@
         }
       }
     },
-    "/cases/status-and-judge": {
+    "/case-worksheets": {
       "get": {
         "tags": ["cases"],
-        "summary": "search for cases by status and judge",
-        "description": "Search for cases by status and judge.\n",
+        "summary": "search for case worksheets by judge",
+        "description": "Search for case worksheets by judge.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
             "schema": {
-              "$ref": "#/definitions/case"
+              "$ref": "#/definitions/case-worksheet"
             }
           }
         },
@@ -7543,49 +7543,6 @@
             "description": "the newly created access token",
             "schema": {
               "$ref": "#/definitions/authorization"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/case-worksheet": {
-      "get": {
-        "summary": "get all case worksheets for the specified judge",
-        "description": "Get all case worksheets for the specified judge.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case-worksheet"
             }
           }
         },

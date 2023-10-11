@@ -1,8 +1,8 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
   GetCasesByStatusAndByJudgeRequest,
-  getCasesByStatusAndByJudgeInteractor,
-} from './getCasesByStatusAndByJudgeInteractor';
+  getCaseWorksheetsByJudgeInteractor,
+} from './getCaseWorksheetsByJudgeInteractor';
 import {
   MOCK_CASE,
   MOCK_SUBMITTED_CASE,
@@ -13,7 +13,7 @@ import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWo
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 
-describe('getCasesByStatusAndByJudgeInteractor', () => {
+describe('getCaseWorksheetsByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
 
   const mockValidRequest: GetCasesByStatusAndByJudgeRequest = {
@@ -69,16 +69,13 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
     await expect(
-      getCasesByStatusAndByJudgeInteractor(
-        applicationContext,
-        mockValidRequest,
-      ),
+      getCaseWorksheetsByJudgeInteractor(applicationContext, mockValidRequest),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
-      getCasesByStatusAndByJudgeInteractor(applicationContext, {
+      getCaseWorksheetsByJudgeInteractor(applicationContext, {
         judges: [judgeUser.name],
         statuses: [undefined as any],
       }),
@@ -86,7 +83,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
   });
 
   it('calls getDocketNumbersByStatusAndByJudge with excludeMemberCases flag = true (stripping out the consolidated member case)', async () => {
-    await getCasesByStatusAndByJudgeInteractor(
+    await getCaseWorksheetsByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -126,7 +123,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
       .getPersistenceGateway()
       .getCountOfConsolidatedCases.mockReturnValueOnce(3);
 
-    const result = await getCasesByStatusAndByJudgeInteractor(
+    const result = await getCaseWorksheetsByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );
@@ -161,7 +158,7 @@ describe('getCasesByStatusAndByJudgeInteractor', () => {
         mockGetDocketNumbersByStatusAndByJudgeResult,
       );
 
-    const result = await getCasesByStatusAndByJudgeInteractor(
+    const result = await getCaseWorksheetsByJudgeInteractor(
       applicationContext,
       mockValidRequest,
     );

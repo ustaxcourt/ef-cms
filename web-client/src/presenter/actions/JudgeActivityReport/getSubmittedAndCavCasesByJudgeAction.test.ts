@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { GetCasesByStatusAndByJudgeRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { GetCasesByStatusAndByJudgeRequest } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
@@ -47,7 +47,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
 
     applicationContext
       .getUseCases()
-      .getCasesByStatusAndByJudgeInteractor.mockReturnValueOnce(
+      .getCaseWorksheetsByJudgeInteractor.mockReturnValueOnce(
         mockCustomCaseReportResponse,
       );
   });
@@ -70,7 +70,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     expect(
       (
         applicationContext.getUseCases()
-          .getCasesByStatusAndByJudgeInteractor as jest.Mock
+          .getCaseWorksheetsByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);

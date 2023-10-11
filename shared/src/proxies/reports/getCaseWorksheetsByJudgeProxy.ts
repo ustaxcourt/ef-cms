@@ -2,10 +2,10 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
   GetCasesByStatusAndByJudgeRequest,
   GetCasesByStatusAndByJudgeResponse,
-} from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+} from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { get } from '../requests';
 
-export const getCasesByStatusAndByJudgeInteractor = (
+export const getCaseWorksheetsByJudgeInteractor = (
   applicationContext: ClientApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
@@ -13,7 +13,7 @@ export const getCasesByStatusAndByJudgeInteractor = (
 }> => {
   return get({
     applicationContext,
-    endpoint: '/cases/status-and-judge',
+    endpoint: '/case-worksheets',
     params,
   });
 };

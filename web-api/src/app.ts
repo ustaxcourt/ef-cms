@@ -68,7 +68,7 @@ import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesL
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
-import { getCasesByStatusAndByJudgeLambda } from './lambdas/reports/getCasesByStatusAndByJudgeLambda';
+import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
@@ -589,10 +589,6 @@ app.use(logger());
 {
   app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
-  app.get(
-    '/cases/status-and-judge',
-    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
-  );
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
@@ -621,6 +617,13 @@ app.use(logger());
     '/cases/:docketNumber/case-worksheet',
     lambdaWrapper(updateCaseWorksheetLambda),
   );
+}
+
+/**
+ * case-worksheets
+ */
+{
+  app.get('/case-worksheets', lambdaWrapper(getCaseWorksheetsByJudgeLambda));
 }
 
 /**

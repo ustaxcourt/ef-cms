@@ -1,4 +1,4 @@
-import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
   JudgeActivityReportState,
   initialJudgeActivityReportState,
