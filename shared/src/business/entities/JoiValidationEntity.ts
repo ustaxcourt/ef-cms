@@ -132,6 +132,9 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
       title: 'validation error mismatch',
     };
 
+    if (JSON.stringify(results).includes('mismatchMessage')) {
+      return results;
+    }
     return {
       ...results,
       mismatchMessage: JSON.stringify(errorMessage),
