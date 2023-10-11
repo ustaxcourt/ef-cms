@@ -121,7 +121,6 @@ import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmail
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
-import { logWarningLambda } from './lambdas/log/logWarningLambda';
 import { logger } from './logger';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
@@ -1027,8 +1026,3 @@ if (process.env.IS_LOCAL) {
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
 }
-
-/**
- * TEMP Logger
- */
-app.post('/log/warning', lambdaWrapper(logWarningLambda));

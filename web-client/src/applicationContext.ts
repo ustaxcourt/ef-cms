@@ -232,7 +232,6 @@ import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/g
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
-import { logWarningInteractor } from '../../shared/src/proxies/logWarningProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
 import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
@@ -676,12 +675,6 @@ const applicationContext = {
     timeEnd: key => {
       // eslint-disable-next-line no-console
       console.timeEnd(key);
-    },
-    warn: (appContext, key, value) => {
-      logWarningInteractor(appContext, {
-        context: value,
-        key,
-      });
     },
   }),
   getPdfJs: async () => {
