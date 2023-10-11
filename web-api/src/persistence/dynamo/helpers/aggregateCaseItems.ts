@@ -35,7 +35,7 @@ export const isIrsPractitionerItem = item =>
 export const isPrivatePractitionerItem = item =>
   item.sk.startsWith('privatePractitioner|');
 
-export const aggregateCaseItems = caseAndCaseItems => {
+export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
   let archivedCorrespondences = [];
   let archivedDocketEntries = [];
   let caseRecords = [];
