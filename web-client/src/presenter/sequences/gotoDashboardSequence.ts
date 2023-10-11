@@ -14,6 +14,7 @@ import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
+import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseWorksheetsForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsForJudgeAction';
@@ -93,6 +94,7 @@ const goToDashboard = [
                 ],
                 irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
                 judge: [
+                  passAlongJudgeUserAction,
                   setJudgeUserAction,
                   parallel([
                     getMessages,
