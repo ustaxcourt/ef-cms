@@ -105,8 +105,9 @@ export const areAllReindexTasksFinished = async ({
       (task: { action: string }) =>
         task.action === 'indices:data/write/reindex',
     );
-    console.log(`found ${reindexTasks.length} reindex tasks running`);
-    return reindexTasks.length === 0;
+    const numReindexTasks = reindexTasks ? reindexTasks.length : 0;
+    console.log(`found ${numReindexTasks} reindex tasks running`);
+    return numReindexTasks === 0;
   }
   return true;
 };
