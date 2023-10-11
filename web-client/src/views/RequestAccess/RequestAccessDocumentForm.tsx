@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PIIRedactedWarning } from '@web-client/views/RequestAccess/PIIRedactedWarning';
@@ -17,6 +17,8 @@ export const RequestAccessDocumentForm = connect(
   {
     constants: state.constants,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
     requestAccessHelper: state.requestAccessHelper,
     showModal: state.modal.showModal,
@@ -29,6 +31,7 @@ export const RequestAccessDocumentForm = connect(
   function RequestAccessDocumentForm({
     constants,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     openCleanModalSequence,
     requestAccessHelper,
     showModal,
@@ -185,23 +188,19 @@ export const RequestAccessDocumentForm = connect(
                 </fieldset>
 
                 {form.certificateOfService && (
-                  <DateInput
-                    className="margin-top-2"
+                  <DateSelector
+                    defaultValue={form.certificateOfServiceDate}
                     errorText={validationErrors?.certificateOfServiceDate}
                     id="service-date"
                     label="Service date"
-                    names={{
-                      day: 'certificateOfServiceDay',
-                      month: 'certificateOfServiceMonth',
-                      year: 'certificateOfServiceYear',
+                    onChange={e => {
+                      formatAndUpdateDateFromDatePickerSequence({
+                        key: 'certificateOfServiceDate',
+                        toFormat: constants.DATE_FORMATS.ISO,
+                        value: e.target.value,
+                      });
+                      validateCaseAssociationRequestSequence();
                     }}
-                    values={{
-                      day: form.certificateOfServiceDay,
-                      month: form.certificateOfServiceMonth,
-                      year: form.certificateOfServiceYear,
-                    }}
-                    onBlur={validateCaseAssociationRequestSequence}
-                    onChange={updateCaseAssociationFormValueSequence}
                   />
                 )}
               </div>

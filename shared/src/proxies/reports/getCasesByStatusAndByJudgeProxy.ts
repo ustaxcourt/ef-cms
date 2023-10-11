@@ -1,20 +1,19 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
-import { post } from '../requests';
+import {
+  GetCasesByStatusAndByJudgeRequest,
+  GetCasesByStatusAndByJudgeResponse,
+} from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { get } from '../requests';
 
 export const getCasesByStatusAndByJudgeInteractor = (
   applicationContext: ClientApplicationContext,
-  params: JudgeActivityReportCavAndSubmittedCasesRequest,
+  params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
-  cases: (RawCase & {
-    daysElapsedSinceLastStatusChange: number;
-    formattedCaseCount: number;
-  })[];
-  totalCount: number;
+  cases: GetCasesByStatusAndByJudgeResponse[];
 }> => {
-  return post({
+  return get({
     applicationContext,
-    body: params,
-    endpoint: '/judge-activity-report/open-cases',
+    endpoint: '/cases/status-and-judge',
+    params,
   });
 };
