@@ -1,8 +1,8 @@
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import {
   JudgeActivityReportState,
   initialJudgeActivityReportState,
 } from './judgeActivityReportState';
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
@@ -419,18 +419,13 @@ export const baseState = {
   },
   showValidation: false,
   submittedAndCavCases: {
-    consolidatedCasesGroupCountMap: {} as any,
-    submittedAndCavCasesByJudge: [] as any,
-    // TODO: this should get moved to currentViewMetadata
-    worksheets: [] as RawCaseWorksheet[],
+    submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
   },
-  submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
   trialSession: {} as RawTrialSession,
-
   trialSessionJudge: {
     name: '',
   },
