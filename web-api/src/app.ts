@@ -68,7 +68,6 @@ import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesL
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
-import { getCaseWorksheetsForJudgeLambda } from '@web-api/lambdas/caseWorksheet/getCaseWorksheetsForJudgeLambda';
 import { getCasesByStatusAndByJudgeLambda } from './lambdas/reports/getCasesByStatusAndByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
@@ -622,13 +621,6 @@ app.use(logger());
     '/cases/:docketNumber/case-worksheet',
     lambdaWrapper(updateCaseWorksheetLambda),
   );
-}
-
-/**
- * Case Worksheet
- */
-{
-  app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
 }
 
 /**
