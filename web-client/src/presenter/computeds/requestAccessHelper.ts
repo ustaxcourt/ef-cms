@@ -8,7 +8,6 @@ export const requestAccessHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  allowExternalConsolidatedGroupFiling: boolean;
   certificateOfServiceDateFormatted: string;
   documentWithAttachments: boolean;
   documentWithObjections: boolean;
@@ -37,10 +36,13 @@ export const requestAccessHelper = (
 } => {
   const { GENERATION_TYPES, PARTY_TYPES, USER_ROLES } =
     applicationContext.getConstants();
+
   const user = applicationContext.getCurrentUser();
+
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const documentType = get(state.form.documentType);
+
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
@@ -51,14 +53,6 @@ export const requestAccessHelper = (
     certificateOfServiceDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(certificateOfServiceDate, 'MMDDYY');
-  }
-  let allowExternalConsolidatedGroupFiling = false;
-  const isIrsPractitioner =
-    applicationContext.getCurrentUser().role === USER_ROLES.irsPractitioner;
-  if (isIrsPractitioner) {
-    allowExternalConsolidatedGroupFiling = true;
-  } else {
-    allowExternalConsolidatedGroupFiling = false;
   }
 
   const documents: {
@@ -155,7 +149,6 @@ export const requestAccessHelper = (
     form.eventCode === 'EA' && form.generationType === GENERATION_TYPES.AUTO;
 
   return {
-    allowExternalConsolidatedGroupFiling,
     certificateOfServiceDateFormatted,
     documentWithAttachments,
     documentWithObjections,

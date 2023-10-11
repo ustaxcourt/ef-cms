@@ -1,21 +1,22 @@
 import { GENERATION_TYPES } from '@web-client/getConstants';
-import { allowExternalConsolidatedGroupFilingHelper } from '@web-client/presenter/computeds/allowExternalConsolidatedGroupFilingHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * Set default values on file document form
- * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store object
- */
 export const setDefaultFileDocumentFormValuesAction = ({
   applicationContext,
   get,
   store,
 }: ActionProps) => {
+  const caseDetail = get(state.caseDetail);
+  const { eventCode: documentToFileEventCode } = get(state.form);
+
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(documentToFileEventCode);
+
   store.set(
     state.form.fileAcrossConsolidatedGroup,
-    allowExternalConsolidatedGroupFilingHelper(get, applicationContext),
+    isInConsolidatedGroup && isMultiDocketableEventCode,
   );
   store.set(state.form.attachments, false);
   store.set(state.form.certificateOfService, false);
