@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { GetCasesByStatusAndByJudgeRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
@@ -20,7 +20,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     startDate: mockStartDate,
   };
 
-  const getCasesByStatusAndByJudgeRequestParams: JudgeActivityReportCavAndSubmittedCasesRequest =
+  const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
     {
       judges: [judgeUser.name],
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
@@ -74,8 +74,5 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
       ).mock.calls[0][1],
     ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);
-    expect(result.output.totalCountForSubmittedAndCavCases).toEqual(
-      mockTotalCountOfSubmittedAndCavCases,
-    );
   });
 });

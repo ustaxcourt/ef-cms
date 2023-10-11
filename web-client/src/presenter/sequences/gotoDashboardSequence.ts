@@ -9,24 +9,22 @@ import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
-import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToMessagesAction } from '../actions/navigateToMessagesAction';
 import { navigateToSectionDocumentQCAction } from '../actions/navigateToSectionDocumentQCAction';
 import { parallel } from 'cerebral';
+import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
 import { setCaseWorksheetsForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsForJudgeAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
-import { setMessageInboxPropsAction } from '../actions/setMessageInboxPropsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setSubmittedAndCavCasesForJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
-import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
@@ -43,8 +41,8 @@ const goToDashboard = [
   closeMobileMenuAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
+  setUserPermissionsAction,
   parallel([
-    [getUserAction, setUserAction, setUserPermissionsAction],
     [
       getMaintenanceModeAction,
       {
@@ -71,16 +69,17 @@ const goToDashboard = [
                   proceedToMessages,
                 ),
                 chambers: [
-                  setMessageInboxPropsAction,
-                  getMessages,
                   getJudgeForCurrentUserAction,
                   setJudgeUserAction,
-                  getTrialSessionsForJudgeAction,
-                  setTrialSessionsAction,
-                  getSubmittedAndCavCasesForCurrentJudgeAction,
-                  setSubmittedAndCavCasesForJudgeAction,
-                  getCaseWorksheetsAction,
-                  setCaseWorksheetsForJudgeAction,
+                  parallel([
+                    getMessages,
+                    [getTrialSessionsForJudgeAction, setTrialSessionsAction],
+                    [
+                      getSubmittedAndCavCasesForCurrentJudgeAction,
+                      setSubmittedAndCavCasesForJudgeAction,
+                    ],
+                    [getCaseWorksheetsAction, setCaseWorksheetsForJudgeAction],
+                  ]),
                   setupCurrentPageAction('DashboardChambers'),
                 ],
                 general: [navigateToSectionDocumentQCAction],
@@ -95,16 +94,17 @@ const goToDashboard = [
                 ],
                 irsSuperuser: [setupCurrentPageAction('DashboardIrsSuperuser')],
                 judge: [
-                  setMessageInboxPropsAction,
-                  getMessages,
-                  getJudgeForCurrentUserAction,
+                  passAlongJudgeUserAction,
                   setJudgeUserAction,
-                  getTrialSessionsForJudgeAction,
-                  setTrialSessionsAction,
-                  getSubmittedAndCavCasesForCurrentJudgeAction,
-                  setSubmittedAndCavCasesForJudgeAction,
-                  getCaseWorksheetsAction,
-                  setCaseWorksheetsForJudgeAction,
+                  parallel([
+                    getMessages,
+                    [getTrialSessionsForJudgeAction, setTrialSessionsAction],
+                    [
+                      getSubmittedAndCavCasesForCurrentJudgeAction,
+                      setSubmittedAndCavCasesForJudgeAction,
+                    ],
+                    [getCaseWorksheetsAction, setCaseWorksheetsForJudgeAction],
+                  ]),
                   setupCurrentPageAction('DashboardJudge'),
                 ],
                 petitioner: [

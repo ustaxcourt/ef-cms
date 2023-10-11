@@ -1,19 +1,16 @@
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { genericHandler } from '../../genericHandler';
 
-/**
- * retrieves cases with specified status(es) associated with the specified judge
- * @param {object} event the AWS event object
- * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
- */
-export const getCasesByStatusAndByJudgeLambda = event =>
+export const getCasesByStatusAndByJudgeLambda = (event: APIGatewayProxyEvent) =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getCasesByStatusAndByJudgeInteractor(applicationContext, {
-          ...JSON.parse(event.body),
-        });
+        .getCasesByStatusAndByJudgeInteractor(
+          applicationContext,
+          event.queryStringParameters,
+        );
     },
     { logResults: false },
   );
