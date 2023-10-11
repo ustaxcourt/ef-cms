@@ -31,7 +31,7 @@ describe('bulkImportJudgeUsers helpers', () => {
     mockLegacyJudge = {
       email: 'judgefieri@example.com',
       judgeFullName: 'Fieri',
-      judgeTitle: 'Legacy Judge',
+      judgeTitle: 'Judge',
       name: 'Fieri',
       role: 'legacyJudge',
       section: 'legacyJudgesChambers',
