@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { confirmSignUpLocalAction } from './confirmSignUpLocalAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';

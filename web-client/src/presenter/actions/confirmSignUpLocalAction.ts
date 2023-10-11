@@ -10,7 +10,7 @@ export const confirmSignUpLocalAction = async ({
   applicationContext,
   path,
   props,
-}) => {
+}: ActionProps) => {
   const { confirmationCode, userEmail } = props;
 
   try {
