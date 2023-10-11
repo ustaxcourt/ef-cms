@@ -1,5 +1,5 @@
-import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../entities/EntityConstants';
 import { Case, isUserPartOfGroup } from '../entities/cases/Case';
+import { ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { formatPublicCase } from '../useCaseHelper/consolidatedCases/formatPublicCase';
 
@@ -15,15 +15,6 @@ export const getConsolidatedCasesByCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const isConsolidatedGroupAccessEnabled =
-    featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
-    ];
-
   const user = applicationContext.getCurrentUser();
 
   const consolidatedCases = await applicationContext
@@ -54,10 +45,7 @@ export const getConsolidatedCasesByCaseInteractor = async (
         userId: user.userId,
       });
 
-    if (
-      isAssociated ||
-      (isConsolidatedGroupAccessEnabled && isAssociatedWithGroup)
-    ) {
+    if (isAssociated || isAssociatedWithGroup) {
       validatedConsolidatedCases.push(
         new Case(consolidatedCase, { applicationContext })
           .validate()

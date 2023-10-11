@@ -1,4 +1,3 @@
-import { allowExternalConsolidatedGroupFilingHelper as allowExternalConsolidatedGroupFilingHelperComputed } from '../src/presenter/computeds/allowExternalConsolidatedGroupFilingHelper';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import {
   contactPrimaryFromState,
@@ -244,39 +243,6 @@ describe('External User files a document across a consolidated case group', () =
 
         expect(isAssociated).toBe(expectedAssociation);
       });
-    });
-
-    it('practitioner requests access to a second case in the consolidated group', async () => {
-      await cerebralTest.runSequence('gotoRequestAccessSequence', {
-        docketNumber: consolidatedCaseDocketNumber1,
-      });
-
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'documentType',
-        value: 'Limited Entry of Appearance',
-      });
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'documentTitleTemplate',
-        value: 'Limited Entry of Appearance for [Petitioner Names]',
-      });
-      await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
-        key: 'eventCode',
-        value: 'LEA',
-      });
-
-      const allowExternalConsolidatedGroupFilingHelper =
-        withAppContextDecorator(
-          allowExternalConsolidatedGroupFilingHelperComputed,
-        );
-
-      const allowExternalConsolidatedGroupFiling = runCompute(
-        allowExternalConsolidatedGroupFilingHelper,
-        {
-          state: cerebralTest.getState(),
-        },
-      );
-
-      expect(allowExternalConsolidatedGroupFiling).toBe(false);
     });
   });
 
