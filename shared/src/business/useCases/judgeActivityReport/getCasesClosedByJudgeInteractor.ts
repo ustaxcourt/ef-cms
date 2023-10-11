@@ -7,14 +7,12 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 
-export type CasesClosedType = {
-  [CASE_STATUS_TYPES.closed]: number;
-  [CASE_STATUS_TYPES.closedDismissed]: number;
-};
-
 export type CasesClosedReturnType = {
-  aggregations: CasesClosedType | {};
-  total: number | undefined;
+  aggregations: {
+    [CASE_STATUS_TYPES.closed]: number;
+    [CASE_STATUS_TYPES.closedDismissed]: number;
+  };
+  total: number;
 };
 
 export const getCasesClosedByJudgeInteractor = async (

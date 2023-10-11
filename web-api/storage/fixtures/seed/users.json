@@ -38,7 +38,8 @@
     "userId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "email": "judgefieri@example.com",
     "judgeFullName": "Guy S. B. Fieri",
-    "judgeTitle": "Legacy Judge",
+    "judgeTitle": "Judge",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
@@ -49,6 +50,7 @@
     "email": "judgecolvin@example.com",
     "judgeFullName": "John O. Colvin",
     "judgeTitle": "Judge",
+    "isSeniorJudge": true,
     "entityName": "User"
   },
   {
@@ -59,6 +61,7 @@
     "section": "mowryChambers",
     "userId": "09b7c6c9-2d9e-43a5-83a4-096ae5362725",
     "email": "judgemowry@example.com",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
@@ -69,6 +72,7 @@
     "email": "judgeashford@example.com",
     "judgeFullName": "Tamara W. Ashford",
     "judgeTitle": "Judge",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
@@ -78,7 +82,8 @@
     "userId": "659789b4-acc5-40b7-9318-3354e7eb8604",
     "email": "judgefoley@example.com",
     "judgeFullName": "Maurice B. Foley",
-    "judgeTitle": "Chief Judge"
+    "judgeTitle": "Chief Judge",
+    "isSeniorJudge": false
   },
   {
     "role": "judge",
@@ -88,6 +93,7 @@
     "email": "judgebuch@example.com",
     "judgeFullName": "Ronald L. Buch",
     "judgeTitle": "Judge",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
@@ -98,6 +104,7 @@
     "email": "judgecarluzzo@example.com",
     "judgeFullName": "Lewis R. Carluzzo",
     "judgeTitle": "Chief Special Trial Judge",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
@@ -108,6 +115,7 @@
     "email": "judgecohen@example.com",
     "judgeFullName": "Mary Ann Cohen",
     "judgeTitle": "Judge",
+    "isSeniorJudge": true,
     "entityName": "User"
   },
   {
@@ -118,6 +126,7 @@
     "email": "judgegustafson@example.com",
     "judgeFullName": "David Gustafson",
     "judgeTitle": "Judge",
+    "isSeniorJudge": true,
     "entityName": "User"
   },
   {
@@ -128,6 +137,7 @@
     "email": "judgepugh@example.com",
     "judgeFullName": "Cary Douglas Pugh",
     "judgeTitle": "Judge",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
@@ -138,6 +148,7 @@
     "email": "judgeurda@example.com",
     "judgeFullName": "Patrick J. Urda",
     "judgeTitle": "Judge",
+    "isSeniorJudge": false,
     "entityName": "User"
   },
   {
