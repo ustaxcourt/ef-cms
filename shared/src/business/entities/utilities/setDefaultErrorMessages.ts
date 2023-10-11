@@ -184,6 +184,9 @@ export function setDefaultErrorMessages(
 ): {
   [key: string]: string;
 } {
+  if (!options) {
+    return { ['*']: message };
+  }
   const defaultErrorMessages = {};
   const joiKeysToUse = joiErrorKeys
     .filter(key => {
