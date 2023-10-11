@@ -1,5 +1,5 @@
 import { TDynamoRecord } from './dynamo/dynamoTypes';
-import { chunk, isEmpty } from 'lodash';
+import { chunk, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
 /**
@@ -335,9 +335,18 @@ export const queryFull = async ({
  * @param {Array} providers.keys the keys to get
  * @returns {Array} the results retrieved
  */
-export const batchGet = async ({ applicationContext, keys }) => {
+export const batchGet = async ({
+  applicationContext,
+  keys,
+}: {
+  applicationContext: IApplicationContext;
+  keys: Pick<TDynamoRecord, 'pk' | 'sk'>[];
+}): Promise<TDynamoRecord[]> => {
   if (!keys.length) return [];
-  const chunks = chunk(keys, 100);
+  const uniqueKeys = uniqBy(keys, key => {
+    return key.pk + key.sk;
+  });
+  const chunks = chunk(uniqueKeys, 100);
 
   let results = [];
   for (let chunkOfKeys of chunks) {
