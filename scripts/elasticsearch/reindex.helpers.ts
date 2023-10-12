@@ -17,22 +17,24 @@ export const reindexIfNecessary = async ({
   const indexesWithoutAliases = elasticsearchIndexes.filter(
     index => !aliases.map(alias => alias.index).includes(index),
   );
-  await Promise.all(
-    indexesWithoutAliases.map(index => {
-      const baseAlias = getBaseAliasFromIndexName(index);
-      const currentIndex =
-        aliases.find(a => a.alias === baseAlias)?.index || baseAlias;
-      return client.reindex({
-        body: {
-          dest: {
-            index,
+  if (indexesWithoutAliases) {
+    await Promise.all(
+      indexesWithoutAliases.map(index => {
+        const baseAlias = getBaseAliasFromIndexName(index);
+        const currentIndex =
+          aliases.find(a => a.alias === baseAlias)?.index || baseAlias;
+        return client.reindex({
+          body: {
+            dest: {
+              index,
+            },
+            source: {
+              index: currentIndex,
+            },
           },
-          source: {
-            index: currentIndex,
-          },
-        },
-        wait_for_completion: false,
-      });
-    }),
-  );
+          wait_for_completion: false,
+        });
+      }),
+    );
+  }
 };
