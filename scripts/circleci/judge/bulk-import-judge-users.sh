@@ -3,7 +3,7 @@
 # This script is used for importing a list of judge users from a provided .csv file
 #
 # usage: 
-#   FILE_NAME=./web-api/judge_users.csv ./scripts/bulk-import-judge-users.sh
+#   FILE_NAME=./scripts/circleci/judge/judge_users.csv ./scripts/circleci/judge/bulk-import-judge-users.sh
 #
 
 # Getting the account-wide deployment settings and injecting them into the shell environment
@@ -37,4 +37,4 @@ STAGE=${ENV} \
   DYNAMODB_ENDPOINT="dynamodb.${REGION}.amazonaws.com" \
   S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
   DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
-  npx ts-node --transpile-only ./scripts/data-import/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
+  npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
