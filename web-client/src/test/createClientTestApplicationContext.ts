@@ -16,7 +16,6 @@ import {
   isSealedCase,
   isUserPartOfGroup,
 } from '@shared/business/entities/cases/Case';
-import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import {
   DocketEntry,
   getServedPartiesCode,
@@ -39,7 +38,7 @@ import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandle
 import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -181,10 +180,6 @@ const createTestApplicationContext = () => {
     toBlob: jest.fn(),
   };
 
-  const mockGetDTOs = {
-    ConsolidatedCaseDTO,
-  };
-
   const mockGetUtilities = appContextProxy({
     abbreviateState: jest.fn().mockImplementation(abbreviateState),
     aggregatePartiesForService: jest
@@ -258,6 +253,7 @@ const createTestApplicationContext = () => {
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
+    getDateFormat: jest.fn().mockImplementation(DateHandler.getDateFormat),
     getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
     getDocQcSectionForUser: jest
       .fn()
@@ -343,10 +339,12 @@ const createTestApplicationContext = () => {
   });
 
   const mockGetHttpClientReturnValue = {
+    delete: jest.fn(),
     get: () => ({
       data: 'url',
     }),
     post: jest.fn(),
+    put: jest.fn(),
   };
 
   const mockGetUseCases = appContextProxy({
@@ -593,7 +591,6 @@ const createTestApplicationContext = () => {
     getCurrentUserToken: () => {
       return '';
     },
-    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),

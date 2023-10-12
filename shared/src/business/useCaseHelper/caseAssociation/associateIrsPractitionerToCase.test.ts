@@ -7,12 +7,11 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
-  ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-
-import { MOCK_CASE } from '../../../test/mockCase.ts';
-import { MOCK_USERS } from '../../../test/mockUsers';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_USERS, irsPractitionerUser } from '../../../test/mockUsers';
+import { cloneDeep } from 'lodash';
 
 describe('associateIrsPractitionerToCase', () => {
   let caseRecord1 = {
@@ -37,7 +36,7 @@ describe('associateIrsPractitionerToCase', () => {
     ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    status: CASE_STATUS_TYPES.NEW,
+    status: CASE_STATUS_TYPES.new,
     userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
   let caseRecord2 = {
@@ -62,9 +61,12 @@ describe('associateIrsPractitionerToCase', () => {
     ],
     preferredTrialCity: 'Fresno, California',
     procedureType: 'Regular',
-    status: CASE_STATUS_TYPES.NEW,
+    status: CASE_STATUS_TYPES.new,
     userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
+
+  const mockIrsPractitioner: RawIrsPractitioner =
+    cloneDeep(irsPractitionerUser);
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(
@@ -77,12 +79,6 @@ describe('associateIrsPractitionerToCase', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    const user = {
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.irsPractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(true);
@@ -91,7 +87,7 @@ describe('associateIrsPractitionerToCase', () => {
       applicationContext,
       docketNumber: caseRecord1.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      user,
+      user: mockIrsPractitioner,
     });
 
     expect(
@@ -107,18 +103,11 @@ describe('associateIrsPractitionerToCase', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    const user = {
-      barNumber: 'BN1234',
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.irsPractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     await associateIrsPractitionerToCase({
       applicationContext,
       docketNumber: caseRecord1.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      user,
+      user: mockIrsPractitioner,
     });
 
     expect(
@@ -134,7 +123,7 @@ describe('associateIrsPractitionerToCase', () => {
       irsPractitioners: [
         {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          userId: mockIrsPractitioner.userId,
         },
       ],
     });
@@ -150,13 +139,6 @@ describe('associateIrsPractitionerToCase', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
 
-    const user = {
-      barNumber: 'BN1234',
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.irsPractitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-
     await associateIrsPractitionerToCase({
       applicationContext,
       consolidatedCasesDocketNumbers: [
@@ -165,7 +147,7 @@ describe('associateIrsPractitionerToCase', () => {
       ],
       docketNumber: caseRecord1.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-      user,
+      user: mockIrsPractitioner,
     });
 
     expect(
@@ -181,7 +163,7 @@ describe('associateIrsPractitionerToCase', () => {
       irsPractitioners: [
         {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          userId: mockIrsPractitioner.userId,
         },
       ],
     });
@@ -192,7 +174,7 @@ describe('associateIrsPractitionerToCase', () => {
       irsPractitioners: [
         {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          userId: mockIrsPractitioner.userId,
         },
       ],
     });

@@ -69,23 +69,23 @@ describe('DocketEntryFactory', () => {
   it('should require received date be entered', () => {
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .dateReceived,
-    ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.dateReceived[1]);
-    rawEntity.dateReceived = createISODateString();
+        .receivedAt,
+    ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.receivedAt[1]);
+    rawEntity.receivedAt = createISODateString();
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .dateReceived,
+        .receivedAt,
     ).toEqual(undefined);
   });
 
   it('should not allow received date be in the future', () => {
-    rawEntity.dateReceived = calculateISODate({ howMuch: 1, units: 'days' });
+    rawEntity.receivedAt = calculateISODate({ howMuch: 1, units: 'days' });
 
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .dateReceived,
+        .receivedAt,
     ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
+      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.receivedAt[0].message,
     );
   });
 
@@ -336,7 +336,7 @@ describe('DocketEntryFactory', () => {
 
   describe('otherFilingParty', () => {
     beforeEach(() => {
-      rawEntity.dateReceived = createISODateString();
+      rawEntity.receivedAt = createISODateString();
       rawEntity.documentTitle = 'Order to do something';
       rawEntity.documentType = 'Order';
       rawEntity.eventCode = 'O';
@@ -396,7 +396,7 @@ describe('DocketEntryFactory', () => {
 
   describe('filers', () => {
     beforeEach(() => {
-      rawEntity.dateReceived = createISODateString();
+      rawEntity.receivedAt = createISODateString();
       rawEntity.documentTitle = 'Notice of Change of Address';
       rawEntity.documentType = 'Notice of Change of Address';
       rawEntity.eventCode = 'NCA';
