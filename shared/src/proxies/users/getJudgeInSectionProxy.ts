@@ -11,7 +11,7 @@ import { get } from '../requests';
 export const getJudgeInSectionInteractor = (
   applicationContext,
   { section },
-) => {
+): Promise<RawUser> => {
   return get({
     applicationContext,
     endpoint: `/sections/${section}/judge`,
