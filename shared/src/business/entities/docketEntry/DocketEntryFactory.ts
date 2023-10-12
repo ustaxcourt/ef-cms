@@ -257,13 +257,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
         DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.certificateOfService,
       certificateOfServiceDate:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.certificateOfServiceDate,
-      dateReceived: JoiValidationConstants.ISO_DATE.max('now')
-        .required()
-        .messages({
-          ...setDefaultErrorMessages('Enter a valid date received'),
-          'date.max':
-            'Received date cannot be in the future. Enter a valid date.',
-        }),
       documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.documentTitle,
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
@@ -319,6 +312,13 @@ export class DocketEntryFactory extends JoiValidationEntity {
         ...setDefaultErrorMessages('Your document file size is empty.'),
         'number.max': `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now')
+        .required()
+        .messages({
+          ...setDefaultErrorMessages('Enter a valid date received'),
+          'date.max':
+            'Received date cannot be in the future. Enter a valid date.',
+        }),
       serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.serviceDate,
       trialLocation: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.trialLocation,
     });
