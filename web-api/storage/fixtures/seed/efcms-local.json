@@ -70889,12 +70889,12 @@
     "sk": "case|400-22",
     "sortableDocketNumber": 2022000100,
     "statistics": [],
-    "status": "Submitted",
+    "status": "Submitted - Rule 122",
     "caseStatusHistory": [
       {
         "changedBy": "Docketclerk",
         "date": "2022-12-21T19:03:01.908Z",
-        "updatedCaseStatus": "Submitted"
+        "updatedCaseStatus": "Submitted - Rule 122"
       }
     ]
   },
