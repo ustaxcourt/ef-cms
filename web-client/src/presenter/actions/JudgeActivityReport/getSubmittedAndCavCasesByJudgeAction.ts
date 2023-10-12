@@ -9,7 +9,7 @@ export const getSubmittedAndCavCasesByJudgeAction = async ({
 
   const { cases } = await applicationContext
     .getUseCases()
-    .getCasesByStatusAndByJudgeInteractor(applicationContext, {
+    .getCaseWorksheetsByJudgeInteractor(applicationContext, {
       judges,
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });

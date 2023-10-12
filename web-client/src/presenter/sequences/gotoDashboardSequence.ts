@@ -1,7 +1,6 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { clearSelectedWorkItemsAction } from '../actions/clearSelectedWorkItemsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { getCaseWorksheetsAction } from '@web-client/presenter/actions/CaseWorksheet/getCaseWorksheetsAction';
 import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
@@ -17,7 +16,6 @@ import { parallel } from 'cerebral';
 import { passAlongJudgeUserAction } from '@web-client/presenter/actions/passAlongJudgeUserAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
-import { setCaseWorksheetsForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/setCaseWorksheetsForJudgeAction';
 import { setCasesAction } from '../actions/setCasesAction';
 import { setDefaultCaseTypeToDisplayAction } from '../actions/setDefaultCaseTypeToDisplayAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
@@ -78,7 +76,6 @@ const goToDashboard = [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
                     ],
-                    [getCaseWorksheetsAction, setCaseWorksheetsForJudgeAction],
                   ]),
                   setupCurrentPageAction('DashboardChambers'),
                 ],
@@ -103,7 +100,6 @@ const goToDashboard = [
                       getSubmittedAndCavCasesForCurrentJudgeAction,
                       setSubmittedAndCavCasesForJudgeAction,
                     ],
-                    [getCaseWorksheetsAction, setCaseWorksheetsForJudgeAction],
                   ]),
                   setupCurrentPageAction('DashboardJudge'),
                 ],

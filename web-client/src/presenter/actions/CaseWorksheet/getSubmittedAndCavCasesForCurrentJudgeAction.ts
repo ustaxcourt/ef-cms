@@ -1,5 +1,5 @@
 import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
-import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getSubmittedAndCavCasesForCurrentJudgeAction = async ({
@@ -12,7 +12,7 @@ export const getSubmittedAndCavCasesForCurrentJudgeAction = async ({
 
   const { cases } = await applicationContext
     .getUseCases()
-    .getCasesByStatusAndByJudgeInteractor(applicationContext, {
+    .getCaseWorksheetsByJudgeInteractor(applicationContext, {
       judges: [name],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });

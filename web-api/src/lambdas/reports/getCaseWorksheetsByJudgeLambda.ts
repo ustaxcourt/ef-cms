@@ -1,13 +1,13 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
 import { genericHandler } from '../../genericHandler';
 
-export const getCasesByStatusAndByJudgeLambda = (event: APIGatewayProxyEvent) =>
+export const getCaseWorksheetsByJudgeLambda = (event: APIGatewayProxyEvent) =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .getCasesByStatusAndByJudgeInteractor(
+        .getCaseWorksheetsByJudgeInteractor(
           applicationContext,
           event.queryStringParameters,
         );

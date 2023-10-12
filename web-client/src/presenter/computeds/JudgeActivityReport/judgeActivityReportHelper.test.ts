@@ -557,5 +557,91 @@ describe('judgeActivityReportHelper', () => {
       }));
       expect(actualOrder).toEqual(expectedOrder);
     });
+
+    it('should always secondarily sort by days elapsed since last status change descending', () => {
+      const state = cloneDeep(baseState);
+      state.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2015-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '101-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Ashford',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '103-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '102-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2017-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '104-20',
+          },
+        ];
+      state.tableSort = {
+        sortField: 'associatedJudge',
+        sortOrder: DESCENDING,
+      };
+
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state,
+        },
+      );
+
+      const expectedOrder = [
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '101-20',
+        },
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '104-20',
+        },
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '102-20',
+        },
+        {
+          associatedJudge: 'Ashford',
+          docketNumber: '103-20',
+        },
+      ];
+      const actualOrder = submittedAndCavCasesByJudge.map(c => ({
+        associatedJudge: c.associatedJudge,
+        docketNumber: c.docketNumber,
+      }));
+      expect(actualOrder).toEqual(expectedOrder);
+    });
   });
 });

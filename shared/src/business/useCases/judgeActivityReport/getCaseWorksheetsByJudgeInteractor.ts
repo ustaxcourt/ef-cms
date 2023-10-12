@@ -17,10 +17,10 @@ export type GetCasesByStatusAndByJudgeRequest = {
 
 export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
   formattedCaseCount: number;
-  caseWorksheet: RawCaseWorksheet;
+  caseWorksheet?: RawCaseWorksheet;
 };
 
-export const getCasesByStatusAndByJudgeInteractor = async (
+export const getCaseWorksheetsByJudgeInteractor = async (
   applicationContext: IApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{

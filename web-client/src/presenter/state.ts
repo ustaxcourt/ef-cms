@@ -1,8 +1,8 @@
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
   JudgeActivityReportState,
   initialJudgeActivityReportState,
 } from './judgeActivityReportState';
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -419,11 +419,8 @@ export const baseState = {
   },
   showValidation: false,
   submittedAndCavCases: {
-    submittedAndCavCasesByJudge: [] as any,
-    // TODO: this should get moved to currentViewMetadata
-    worksheets: [] as RawCaseWorksheet[],
+    submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
   },
-  submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
