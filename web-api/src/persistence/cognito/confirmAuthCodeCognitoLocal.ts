@@ -5,6 +5,10 @@ export const confirmAuthCodeCognitoLocal = async ({
   applicationContext,
   code,
   password,
+}: {
+  applicationContext: IApplicationContext;
+  code: string;
+  password?: string;
 }) => {
   // fallback to allow current local user to be assumed
   if (userMap[code.toLowerCase()]) {
@@ -60,11 +64,4 @@ export const confirmAuthCodeCognitoLocal = async ({
       token: result.AuthenticationResult.IdToken,
     };
   }
-
-  return {
-    alertError: {
-      message: 'Login credentials not found.',
-      title: 'Login error!',
-    },
-  };
 };
