@@ -78,10 +78,14 @@ export const deleteUnaliasedIndices = async ({
           .includes(a.alias);
       })
       .map((a: { alias: string; index: string }) => a.index) || [];
-  const unaliasedIndices = indices.filter(index => {
-    return !aliasedIndices.includes(index);
-  });
+  const unaliasedIndices =
+    indices.filter(index => {
+      return !aliasedIndices.includes(index);
+    }) || [];
   if (unaliasedIndices.length) {
-    client.indices.delete({ index: unaliasedIndices });
+    client.indices.delete({
+      index:
+        unaliasedIndices.length === 1 ? unaliasedIndices[0] : unaliasedIndices,
+    });
   }
 };

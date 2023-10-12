@@ -13,7 +13,7 @@ export const setupAliases = async ({
         return a.alias !== '.kibana';
       },
     ) || [];
-  const aliasedIndexes: string[] = existingAliases.map(a => a.index);
+  const aliasedIndexes: string[] = existingAliases.map(a => a.index) || [];
   for (const oldAlias of existingAliases) {
     if (!elasticsearchIndexes.includes(oldAlias.index)) {
       await client.indices.deleteAlias({
