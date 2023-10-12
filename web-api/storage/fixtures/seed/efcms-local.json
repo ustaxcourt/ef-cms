@@ -31869,7 +31869,7 @@
     "docketNumber": "409-23"
   },
   {
-    "associatedJudge": "Colvin",
+    "associatedJudge": "Ashford",
     "isSealed": false,
     "procedureType": "Regular",
     "isPaper": true,
@@ -84519,7 +84519,7 @@
     "caseStatusHistory": [
       {
         "changedBy": "Docketclerk",
-        "date": "2022-12-21T19:03:01.908Z",
+        "date": "2020-12-21T19:03:01.908Z",
         "updatedCaseStatus": "Submitted"
       }
     ]
@@ -84562,7 +84562,7 @@
     "caseStatusHistory": [
       {
         "changedBy": "Docketclerk",
-        "date": "2022-12-21T19:03:01.908Z",
+        "date": "1999-12-21T19:03:01.908Z",
         "updatedCaseStatus": "Submitted"
       }
     ]
@@ -84605,7 +84605,7 @@
     "caseStatusHistory": [
       {
         "changedBy": "Docketclerk",
-        "date": "2022-12-21T19:03:01.908Z",
+        "date": "1998-12-21T19:03:01.908Z",
         "updatedCaseStatus": "Submitted"
       }
     ]
@@ -84648,7 +84648,7 @@
     "caseStatusHistory": [
       {
         "changedBy": "Docketclerk",
-        "date": "2022-12-21T19:03:01.908Z",
+        "date": "1985-12-21T19:03:01.908Z",
         "updatedCaseStatus": "Submitted"
       }
     ]
@@ -84691,7 +84691,7 @@
     "caseStatusHistory": [
       {
         "changedBy": "Docketclerk",
-        "date": "2022-12-21T19:03:01.908Z",
+        "date": "1986-12-21T19:03:01.908Z",
         "updatedCaseStatus": "Submitted"
       }
     ]

@@ -98,9 +98,12 @@ export const judgeActivityReportHelper = (
   });
 
   const { sortField, sortOrder } = get(state.tableSort);
-
   submittedAndCavCasesRows.sort((a, b) => {
-    if (typeof a[sortField] === 'number') {
+    if (a[sortField] === b[sortField]) {
+      return (
+        b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
+      );
+    } else if (typeof a[sortField] === 'number') {
       return sortOrder === ASCENDING
         ? a[sortField] - b[sortField]
         : b[sortField] - a[sortField];
