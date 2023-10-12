@@ -5,6 +5,7 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
 import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
@@ -33,12 +34,14 @@ export const generalUser = {
   userId: '2806fccc-1432-4fcc-8a8d-5943edf07284',
 };
 
-export const irsPractitionerUser = {
+export const irsPractitionerUser: RawIrsPractitioner = {
   barNumber: 'BN2345',
-  contact: {},
+  email: 'irspractitioner@example.com',
+  entityName: 'IRSPractitioner',
   name: 'IRS Practitioner',
   role: ROLES.irsPractitioner,
   section: 'irsPractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
