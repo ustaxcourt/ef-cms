@@ -2,17 +2,7 @@ import {
   DescribeDomainCommand,
   OpenSearchClient,
 } from '@aws-sdk/client-opensearch';
-import { elasticsearchIndexes } from '../../web-api/elasticsearch/elasticsearch-indexes';
 import { getClient } from '../../web-api/elasticsearch/client';
-
-export const deleteIfExists = async ({ client, index }) => {
-  const indexExists = await client.indices.exists({ body: {}, index });
-  if (indexExists.statusCode === 404) {
-    return;
-  }
-
-  await client.indices.delete({ body: {}, index });
-};
 
 export const checkIfExists = async (DomainName: string): Promise<boolean> => {
   const client = new OpenSearchClient({ region: 'us-east-1' });
@@ -62,8 +52,7 @@ export const getClientForDomainName = async (DomainName: string) => {
     console.error('Invalid Domain Name specified');
     return;
   }
-  const client = await getClient({ environmentName: ENV, version: VERSION });
-  return client;
+  return await getClient({ environmentName: ENV, version: VERSION });
 };
 
 export const readyClusterForMigration = async (DomainName?: string) => {
@@ -89,11 +78,23 @@ export const readyClusterForMigration = async (DomainName?: string) => {
     process.exit(1);
   }
 
-  // TODO: query cluster for list of indices
+  // if the cluster is empty, just delete the indices and aliases
+  // as they will be recreated soon with latest and greatest mappings
 
-  // if the cluster is empty, just delete the indices as they will be recreated soon
-  // with latest and greatest mappings
+  const aliases = await client.cat.aliases({ format: 'json' });
   await Promise.all(
-    elasticsearchIndexes.map(index => deleteIfExists({ client, index })),
+    aliases.body?.map((alias: { alias: string; index: string }) =>
+      client.indices.deleteAlias({
+        index: alias.index,
+        name: alias.alias,
+      }),
+    ),
+  );
+
+  const indices = await client.cat.indices({ format: 'json' });
+  await Promise.all(
+    indices.body?.map((index: { index: string }) =>
+      client.indices.delete({ index: index.index }),
+    ),
   );
 };
