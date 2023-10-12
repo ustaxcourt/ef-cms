@@ -78,7 +78,7 @@ export const PrintableWorkingCopySessionList = ({
               const memberCase = isMemberCase(formattedCase);
               return (
                 <React.Fragment key={formattedCase.docketNumber}>
-                  <tr className="vertical-align-middle-row padding-bottom-2 content-row">
+                  <tr className="padding-bottom-2 content-row">
                     <td
                       className={`${
                         memberCase ? 'margin-left-2' : ''

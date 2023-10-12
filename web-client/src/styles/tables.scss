@@ -42,6 +42,12 @@ table,
   }
 }
 
+.usa-table.ustc-table table {
+  td {
+    padding: 0;
+  }
+}
+
 .batches-table-wrapper {
   height: 160px;
   overflow-y: auto;

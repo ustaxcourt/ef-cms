@@ -18,7 +18,7 @@ export const adcUser = {
   userId: 'g7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
-export const chambersUser = {
+export const colvinsChambersUser = {
   name: 'Chandler Chambers',
   role: ROLES.chambers,
   section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
@@ -51,11 +51,26 @@ export const irsSuperuserUser = {
   userId: '2eee98ac-613f-46bc-afd5-2574d1b15664',
 };
 
-export const judgeUser = {
+export const judgeUser: RawUser = {
+  email: 'judgeSotomayor@example.com',
+  entityName: 'User',
+  isSeniorJudge: false,
   judgeFullName: 'Sonia Sotomayor',
+  judgeTitle: 'Judge',
   name: 'Sotomayor',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
+};
+
+export const judgeColvin: RawUser = {
+  email: 'judgeColvin@example.com',
+  entityName: 'User',
+  isSeniorJudge: true,
+  judgeFullName: 'John O. Colvin',
+  name: 'Colvin',
+  role: ROLES.judge,
+  section: getJudgesChambers().COLVINS_CHAMBERS_SECTION.section,
+  userId: 'd17b07dc-6455-447e-bea3-f91d12ac5a6a',
 };
 
 export const petitionerUser = {
@@ -160,7 +175,7 @@ export const MOCK_PRACTITIONER = {
   userId: 'df56e4f8-b302-46ec-b9b3-a6a5e2142092',
 };
 
-export const validUser = {
+export const validUser: RawUser = {
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
@@ -172,6 +187,8 @@ export const validUser = {
     postalCode: '61234',
     state: 'IL',
   },
+  email: 'user@example.com',
+  entityName: 'User',
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',

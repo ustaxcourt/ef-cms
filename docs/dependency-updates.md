@@ -41,10 +41,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 	- ./shared/admin-tools/glue/glue_migrations/main.tf
 	- ./shared/admin-tools/glue/remote_role/main.tf
 	- ./web-api/terraform/main/main.tf
+	- ./web-api/workflow-terraform/glue-cron/main/main.tf
 	- ./web-api/workflow-terraform/migration/main/main.tf
 	- ./web-api/workflow-terraform/migration-cron/main/main.tf
 	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
 	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
+	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
 	- ./web-client/terraform/main/main.tf
 
 	> aws = "latest version"
@@ -67,7 +69,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - Keep `@sparticuz/chromium` locked to 112.0.2 and `puppeteer` locked to 19.8.5 as 114+ and 20+ were causing pdf generation timeout bugs. (https://app.zenhub.com/workspaces/flexionef-cms-5bbe4bed4b5806bc2bec65d3/issues/gh/flexion/ef-cms/10087).
 
-- When updating puppeteer or puppeteer core in the project make sure to also match versions in web-api/runtimes/puppeteer/package.json as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
+- When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
 
 #### s3rver
 - As of 7/26/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813).
@@ -75,8 +77,16 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 ### pdfjs-dist
 
-- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+
+### postcss
+
+- (10/6/2023) A security vulnerability exists in postcss that just came out in the end of September. Because postcss is such a used package I imagine this vulnerability will be patched soon. Waiting this week to see if this will be patched in a new version of postcss. 
+
+### s3-files (3.0.1)
+- (10/6/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
 
 ### Incrementing the Node Cache Key Version
 
-It's rare to need to increment or change the cache key. One reason you may want to do so is if something happens while storing the cache which corrupts it. For example, a few months ago a package failed to install while the cache was being stored. CircleCI had no idea that the installation didn't go according to plan and saved the corrupted cache. In this case, we incremented the cache key version so that CircleCI was forced to reinstall the node dependencies and save them under the new key. The cache key can be updated by searching within config.yml for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
+It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
+

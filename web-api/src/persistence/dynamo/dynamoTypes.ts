@@ -14,6 +14,7 @@ export type TDynamoRecord<T = Record<string, any>> = {
 } & T;
 
 export type DocketEntryDynamoRecord = TDynamoRecord<RawDocketEntry>;
+export type UserRecord = TDynamoRecord & RawUser;
 
 export type OutboxDynamoRecord = TDynamoRecord<RawOutboxItem>;
 

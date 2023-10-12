@@ -1,8 +1,6 @@
-import { ID_FOR_ALL_JUDGES } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getTrialSessionsForJudgeActivityReportAction } from './getTrialSessionsForJudgeActivityReportAction';
-import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -17,11 +15,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
 
   const mockStartDate = 'startDate';
   const mockEndDate = 'endDate';
-  const judgeName = judgeUser.name;
-  const mockJudges = [
-    judgeUser,
-    { ...judgeUser, name: 'Buch', userId: 'mockUserId' },
-  ];
+  const judges = ['Buch', 'Colvin'];
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
@@ -31,7 +25,7 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
       );
   });
 
-  it('should call the interactor to set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types based on the selected judge id', async () => {
+  it('should retrieve trialSessions based on a selected judges', async () => {
     const { output } = await runAction(
       getTrialSessionsForJudgeActivityReportAction,
       {
@@ -43,11 +37,10 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
           judgeActivityReport: {
             filters: {
               endDate: mockEndDate,
-              judgeName,
+              judges,
               startDate: mockStartDate,
             },
           },
-          judges: mockJudges,
         },
       },
     );
@@ -57,42 +50,10 @@ describe('getTrialSessionsForJudgeActivityReportAction', () => {
         .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
     ).toMatchObject({
       endDate: mockEndDate,
-      judgeId: judgeUser.userId,
+      judges,
       startDate: mockStartDate,
     });
 
     expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
-  });
-
-  it('should set state.judgeActivityReport.judgeActivityReportData.trialSessions with the trialSessions types for all judges if no selected judge id is prescribed', async () => {
-    const { output } = await runAction(
-      getTrialSessionsForJudgeActivityReportAction,
-      {
-        modules: {
-          presenter,
-        },
-        props: {},
-        state: {
-          judgeActivityReport: {
-            filters: {
-              endDate: mockEndDate,
-              judgeName: 'All Judges',
-              startDate: mockStartDate,
-            },
-          },
-          judges: mockJudges,
-        },
-      },
-    );
-
-    expect(output.trialSessions).toMatchObject(trialSessionTypesResult);
-    expect(
-      applicationContext.getUseCases()
-        .getTrialSessionsForJudgeActivityReportInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      endDate: mockEndDate,
-      judgeId: ID_FOR_ALL_JUDGES,
-      startDate: mockStartDate,
-    });
   });
 });
