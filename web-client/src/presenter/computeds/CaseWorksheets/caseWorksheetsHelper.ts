@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
@@ -70,4 +71,22 @@ export const caseWorksheetsHelper = (
   return {
     caseWorksheetsFormatted,
   };
+};
+
+export const getSubmittedOrCAVDate = (
+  applicationContext: IApplicationContext,
+  caseStatusHistory: { updatedCaseStatus: string; date: string }[],
+): string => {
+  const foundDate = caseStatusHistory.find(statusHistory =>
+    CAV_AND_SUBMITTED_CASE_STATUS.includes(statusHistory.updatedCaseStatus),
+  )?.date;
+
+  if (!foundDate) return '';
+
+  return applicationContext
+    .getUtilities()
+    .formatDateString(
+      foundDate,
+      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+    );
 };
