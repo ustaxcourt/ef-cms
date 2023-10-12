@@ -55,7 +55,6 @@ export const fileDocumentHelper = (
   const isMultiDocketableEventCode = !!applicationContext
     .getConstants()
     .MULTI_DOCKET_FILING_EVENT_CODES.includes(form.eventCode);
-  console.log('isMultiDocketableEventCode', isMultiDocketableEventCode);
 
   let allowExternalConsolidatedGroupFiling = false;
   if (isMultiDocketableEventCode && isInConsolidatedGroup) {
