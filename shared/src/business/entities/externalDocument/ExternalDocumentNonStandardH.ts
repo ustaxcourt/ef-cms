@@ -41,11 +41,6 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
     return ExternalDocumentNonStandardH.VALIDATION_RULES_NEW;
   }
 
-  john() {
-    console.log('NEW getValidationRules_NEW H TYPE');
-    return ExternalDocumentNonStandardH.VALIDATION_RULES_NEW;
-  }
-
   getDocumentTitle(): string {
     return replaceBracketed(
       this.documentTitle,
