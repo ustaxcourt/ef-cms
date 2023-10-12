@@ -62,7 +62,7 @@ Peterson,Special Trial Judge,Peterson,legacy.judge.peterson@example.com,legacyJu
 Powell,Special Trial Judge,Powell,legacy.judge.powell@example.com,legacyJudge,legacyJudgesChambers,false
 Pugh,Judge,Cary Douglas Pugh,judge.pugh@example.com,judge,pughsChambers,false
 Raum,Judge,Raum,legacy.judge.raum@example.com,legacyJudge,legacyJudgesChambers,false
-Ruwe,Judge,Robert P. Ruwe,judge.ruwe@example.com,judge,ruwesChambers,false
+Ruwe,Judge,Robert P. Ruwe,legacy.judge.ruwe@example.com,legacyJudge,legacyJudgesChambers,false
 Scott,Judge,Scott,legacy.judge.scott@example.com,legacyJudge,legacyJudgesChambers,false
 Shields,Judge,Shields,legacy.judge.shields@example.com,legacyJudge,legacyJudgesChambers,false
 Siegel,Special Trial Judge,Jennifer E. Siegel,stjudge.siegel@example.com,judge,siegelsChambers,false
