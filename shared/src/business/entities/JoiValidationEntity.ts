@@ -189,14 +189,19 @@ export abstract class JoiValidationEntity {
   }
 
   getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
-    const rules = this.getValidationRules_NEW();
-    const schema = rules.validate ? rules : joi.object().keys(rules);
-    const { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
-    if (!error) return null;
-    return error;
+    try {
+      const rules = this.getValidationRules_NEW();
+      const schema = rules.validate ? rules : joi.object().keys(rules);
+      const { error } = schema.validate(this, {
+        abortEarly: false,
+        allowUnknown: true,
+      });
+      if (!error) return null;
+      return error;
+    } catch (e) {
+      console.log('THIS IS THE ENTITY ', this.entityName);
+      return null;
+    }
   }
 
   isValid() {
