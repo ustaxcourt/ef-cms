@@ -20,7 +20,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     judges: [judgeUser.name],
     startDate: mockStartDate,
   };
-  d;
+
   const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
     {
       judges: [judgeUser.name],
