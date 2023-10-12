@@ -21,8 +21,7 @@ export const reindexIfNecessary = async ({
     await Promise.all(
       indexesWithoutAliases.map(index => {
         const baseAlias = getBaseAliasFromIndexName(index);
-        const currentIndex =
-          aliases.find(a => a.alias === baseAlias)?.index || baseAlias;
+        const currentIndex = aliases.find(a => a.alias === baseAlias)?.index;
         return client.reindex({
           body: {
             dest: {

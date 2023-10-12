@@ -51,16 +51,9 @@ export const getElasticsearchAliases = async ({
       return { alias, index: alias };
     });
   } else {
-    aliases = existingAliases.map(
-      (a: {
-        alias: string;
-        index: string;
-        filter?: string;
-        is_write_index?: string;
-      }) => {
-        return { alias: a.alias, index: a.index };
-      },
-    );
+    aliases = existingAliases.map((a: { alias: string; index: string }) => {
+      return { alias: a.alias, index: a.index };
+    });
   }
   return aliases;
 };
