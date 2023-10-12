@@ -146,4 +146,55 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   trialClerkAddsNotesFromWorkingCopyCaseList(cerebralTest);
   trialClerkViewsNotesFromCaseDetail(cerebralTest);
   trialClerkViewsTrialSessionWorkingCopyWithNotes(cerebralTest);
+
+  it('navigate to printable working copy', async () => {
+    jest.spyOn(
+      cerebralTest.applicationContext.getUseCases(),
+      'generatePrintableTrialSessionCopyReportInteractor',
+    );
+
+    runCompute(trialSessionWorkingCopyHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    await cerebralTest.runSequence(
+      'openPrintableTrialSessionWorkingCopyModalSequence',
+    );
+    await cerebralTest.runSequence(
+      'gotoPrintableTrialSessionWorkingCopySequence',
+    );
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'PrintableTrialSessionWorkingCopyPreviewPage',
+    );
+
+    const methodParams =
+      cerebralTest.applicationContext.getUseCases()
+        .generatePrintableTrialSessionCopyReportInteractor.mock.calls[0][1];
+
+    expect(
+      cerebralTest.applicationContext.getUseCases()
+        .generatePrintableTrialSessionCopyReportInteractor.mock.calls.length,
+    ).toEqual(1);
+
+    expect(methodParams.formattedCases.length).toEqual(4);
+    const [soloCase, leadCase, groupedCase, groupedCaseWithNoLead] =
+      methodParams.formattedCases;
+
+    expect(soloCase.isLeadCase).toEqual(false);
+    expect(soloCase.inConsolidatedGroup).toEqual(false);
+    expect(soloCase.docketNumber).toEqual(createdDocketNumbers[0]);
+
+    expect(leadCase.isLeadCase).toEqual(true);
+    expect(leadCase.inConsolidatedGroup).toEqual(true);
+    expect(leadCase.docketNumber).toEqual(createdDocketNumbers[1]);
+
+    expect(groupedCase.isLeadCase).toEqual(false);
+    expect(groupedCase.inConsolidatedGroup).toEqual(true);
+    expect(groupedCase.docketNumber).toEqual(createdDocketNumbers[2]);
+
+    expect(groupedCaseWithNoLead.isLeadCase).toEqual(false);
+    expect(groupedCaseWithNoLead.inConsolidatedGroup).toEqual(true);
+    expect(groupedCaseWithNoLead.docketNumber).toEqual(createdDocketNumbers[3]);
+  });
 });
