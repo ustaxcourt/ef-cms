@@ -27,20 +27,14 @@ describe('submitCaseAssociationRequestAction', () => {
         caseDetail: {},
         form: {
           eventCode: eventCodeAllowingImmediateAssociation,
-          fileAcrossConsolidatedGroup: undefined,
           primaryDocumentFile: {},
         },
       },
     });
 
     expect(
-      applicationContext.getUseCases().submitCaseAssociationRequestInteractor
-        .mock.calls.length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().submitCaseAssociationRequestInteractor
-        .mock.calls[0][1],
-    ).toEqual(expect.objectContaining({ consolidatedCasesDocketNumbers: [] }));
+      applicationContext.getUseCases().submitCaseAssociationRequestInteractor,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it("should call submitPendingCaseAssociationRequest when the document's event code does not allow for the user to be immediately associated with the case", async () => {
