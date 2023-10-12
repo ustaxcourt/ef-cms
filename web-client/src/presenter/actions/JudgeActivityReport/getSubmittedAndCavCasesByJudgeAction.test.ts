@@ -1,7 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
-} from '@shared/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
@@ -26,8 +23,6 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   const getCasesByStatusAndByJudgeRequestParams: JudgeActivityReportCavAndSubmittedCasesRequest =
     {
       judges: [judgeUser.name],
-      pageNumber,
-      pageSize: CAV_AND_SUBMITTED_CASES_PAGE_SIZE,
       statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
     };
 

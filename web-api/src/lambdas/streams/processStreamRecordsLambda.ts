@@ -3,7 +3,6 @@ import {
   getTableName,
 } from '../../persistence/dynamodbClientService';
 import { createApplicationContext } from '../../applicationContext';
-import { uniq } from 'lodash';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
 /**
@@ -41,10 +40,12 @@ async function getEventHistories(
 ) {
   return (await batchGet({
     applicationContext,
-    keys: uniq(records.map(record => record.eventID)).map(eventID => ({
-      pk: `stream-event-id|${eventID}`,
-      sk: `stream-event-id|${eventID}`,
-    })),
+    keys: records
+      .map(record => record.eventID)
+      .map(eventID => ({
+        pk: `stream-event-id|${eventID}`,
+        sk: `stream-event-id|${eventID}`,
+      })),
   })) as { pk: string; sk: string }[];
 }
 
