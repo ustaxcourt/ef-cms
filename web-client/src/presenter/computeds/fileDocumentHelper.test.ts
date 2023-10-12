@@ -493,4 +493,66 @@ describe('fileDocumentHelper', () => {
       ]);
     });
   });
+
+  describe('EARedactionAcknowledgement', () => {
+    it('should set redactionAcknowledgementEnabled to true when document type is EA and no preview url is set and the feature flag is enabled', () => {
+      state.featureFlags = {
+        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
+      };
+      state.form = {
+        eventCode: 'EA',
+      };
+      state.pdfPreviewUrl = false;
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(true);
+    });
+
+    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
+      state.featureFlags = {
+        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
+      };
+      state.form = {
+        eventCode: 'EA',
+      };
+      state.pdfPreviewUrl = true;
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(false);
+    });
+
+    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
+      state.featureFlags = {
+        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
+      };
+      state.form = {
+        eventCode: 'A',
+      };
+      state.pdfPreviewUrl = false;
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(false);
+    });
+
+    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
+      state.featureFlags = {
+        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: false,
+      };
+      state.form = {
+        eventCode: 'EA',
+      };
+      state.pdfPreviewUrl = true;
+      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
+        state,
+      });
+
+      expect(EARedactionAcknowledgement).toEqual(false);
+    });
+  });
 });

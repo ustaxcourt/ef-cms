@@ -35,7 +35,11 @@ describe('generatePrintableFilingReceiptInteractor', () => {
       sortableDocketNumber: 2023000104,
     },
   ];
-  const mockCase = { ...MOCK_CASE, consolidatedCases: mockConsolidatedCases };
+  const mockCase: RawCase = {
+    ...MOCK_CASE,
+    consolidatedCases: mockConsolidatedCases,
+    leadDocketNumber: MOCK_CASE.docketNumber,
+  };
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue(

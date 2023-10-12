@@ -50,7 +50,7 @@ export const isPrivatePractitionerItem = (
 ): item is PrivatePractitionerOnCaseRecord =>
   item.pk?.startsWith('case|') && item.sk.startsWith('privatePractitioner|');
 
-export const aggregateCaseItems = caseAndCaseItems => {
+export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
   let archivedCorrespondences = [];
   let archivedDocketEntries = [];
   let caseRecords = [];

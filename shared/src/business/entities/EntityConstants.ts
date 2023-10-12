@@ -121,6 +121,17 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_PAPER: 'Paper',
 };
 
+export const STATUS_OF_MATTER_OPTIONS = [
+  'Awaiting Consideration',
+  'Awaiting Briefs',
+  'Drafting',
+  'Reviewing Draft',
+  'Submitted to Chief Judge',
+  'Revising Draft',
+  'Submitted to Reporter',
+  'Stayed',
+];
+
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
   PENDING: 'pending',
@@ -393,6 +404,13 @@ export const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
   'NTD',
   'NOT',
+);
+
+export const JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES = ORDER_EVENT_CODES.filter(
+  eventCode => {
+    const excludedOrderEventCodes = ['OAJ', 'SPOS', 'SPTO', 'OST'];
+    return !excludedOrderEventCodes.includes(eventCode);
+  },
 );
 
 export const EXTERNAL_DOCUMENT_TYPES = flatten(
@@ -933,7 +951,6 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
-export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
@@ -1102,7 +1119,7 @@ export const US_STATES_OTHER = {
   FM: 'Federated States of Micronesia',
   GU: 'Guam',
   MH: 'Marshall Islands',
-  MP: 'Norther Mariana Islands',
+  MP: 'Northern Mariana Islands',
   PR: 'Puerto Rico',
   PW: 'Palau',
   VI: 'Virgin Islands',
@@ -1577,3 +1594,11 @@ export const isDocumentBriefType = (documentType: string) => {
   return !!documents.find(document => document.documentType === documentType)
     ?.eventCode;
 };
+
+export const JUDGE_TITLES = [
+  'Judge',
+  'Special Trial Judge',
+  'Chief Special Trial Judge',
+  'Chief Judge',
+] as const;
+export type JudgeTitle = (typeof JUDGE_TITLES)[number];

@@ -4,9 +4,15 @@ import {
 } from './helpers/searchQueryForAggregation';
 import { search } from './searchClient';
 
-export type ComputedAggs = {
-  aggregations: { count: number; documentType: string; eventCode: string }[];
-  total: number | undefined;
+export type CaseDocumentsCountType = {
+  count: number;
+  documentType: string | undefined;
+  eventCode: string;
+};
+
+export type AggregatedEventCodesType = {
+  aggregations: CaseDocumentsCountType[];
+  total: number;
 };
 
 export type FetchEventCodesParamsType = {
@@ -22,7 +28,7 @@ export const fetchEventCodesCountForJudges = async ({
 }: {
   applicationContext: IApplicationContext;
   params: FetchEventCodesParamsType;
-}): Promise<ComputedAggs> => {
+}): Promise<AggregatedEventCodesType> => {
   const documentFilters = computeDocumentFilters({ params });
   const shouldFilters = computeShouldFilters({ params });
 

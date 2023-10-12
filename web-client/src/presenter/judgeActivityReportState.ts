@@ -1,29 +1,61 @@
-import { CasesClosedType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import {
-  JudgeActivityReportFilters,
-  OrdersReturnType,
-} from '@shared/business/useCases/judgeActivityReport/getCountOfOrdersFiledByJudgesInteractor';
-import { OpinionsReturnType } from '@shared/business/useCases/judgeActivityReport/getCountOfOpinionsFiledByJudgesInteractor';
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
+import { CasesClosedReturnType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
+import { CavAndSubmittedFilteredCasesType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { TrialSessionReturnType } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
+
+type JudgeActivityReportData = {
+  trialSessions: TrialSessionReturnType;
+  casesClosedByJudge: CasesClosedReturnType;
+  opinions: AggregatedEventCodesType;
+  orders: AggregatedEventCodesType;
+  submittedAndCavCasesByJudge: CavAndSubmittedFilteredCasesType[];
+  totalCountForSubmittedAndCavCases: number;
+};
 
 export type JudgeActivityReportState = {
   filters: JudgeActivityReportFilters;
-  judgeActivityReportData: {
-    trialSessions?: TrialSessionReturnType;
-    casesClosedByJudge?: CasesClosedType;
-    opinions?: OpinionsReturnType;
-    orders?: OrdersReturnType;
-    submittedAndCavCasesByJudge?: RawCase[];
-    totalCountForSubmittedAndCavCases?: number;
-  };
+  judgeActivityReportData: JudgeActivityReportData;
+  judgeNameToDisplayForHeader: string;
+  judgeName: string;
+  hasUserSubmittedForm: boolean;
+};
+
+const initialJudgeActivityReportData: JudgeActivityReportData = {
+  casesClosedByJudge: {
+    aggregations: { Closed: 0, 'Closed - Dismissed': 0 },
+    total: 0,
+  },
+  opinions: {
+    aggregations: [],
+    total: 0,
+  },
+  orders: {
+    aggregations: [],
+    total: 0,
+  },
+  submittedAndCavCasesByJudge: [],
+  totalCountForSubmittedAndCavCases: 0,
+  trialSessions: {
+    aggregations: {
+      Hybrid: 0,
+      'Motion/Hearing': 0,
+      Regular: 0,
+      Small: 0,
+      Special: 0,
+    },
+    total: 0,
+  },
 };
 
 export const initialJudgeActivityReportState: JudgeActivityReportState = {
   filters: {
     endDate: '',
-    judgeName: '',
     judges: [],
     startDate: '',
   },
-  judgeActivityReportData: {},
+  hasUserSubmittedForm: false,
+  judgeActivityReportData: initialJudgeActivityReportData,
+  judgeName: '',
+  judgeNameToDisplayForHeader: '',
 };

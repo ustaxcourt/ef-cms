@@ -57,7 +57,14 @@ export const generatePrintableFilingReceiptInteractor = async (
       applicationContext,
       docketNumber,
     });
+
   let caseEntity = new Case(caseRecord, { applicationContext }).validate();
+
+  if (fileAcrossConsolidatedGroup && !caseRecord.leadDocketNumber) {
+    throw new Error(
+      'you can not file across a consolidated group because this case is not part of one',
+    );
+  }
 
   let consolidatedCasesDocketNumbers: string[] = [];
 

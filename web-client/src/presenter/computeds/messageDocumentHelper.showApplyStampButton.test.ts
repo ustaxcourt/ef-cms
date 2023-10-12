@@ -1,8 +1,8 @@
 import { STAMPED_DOCUMENTS_ALLOWLIST } from '../../../../shared/src/business/entities/EntityConstants';
 import {
   adcUser,
-  chambersUser,
   clerkOfCourtUser,
+  colvinsChambersUser,
   docketClerkUser,
   judgeUser,
 } from '../../../../shared/src/test/mockUsers';
@@ -120,7 +120,7 @@ describe('messageDocumentHelper.showApplyStampButton', () => {
   it('should be true when the selected message document is not a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
-        ...getBaseState(chambersUser),
+        ...getBaseState(colvinsChambersUser),
         caseDetail: {
           docketEntries: [],
         },
