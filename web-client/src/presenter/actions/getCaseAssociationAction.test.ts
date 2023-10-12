@@ -64,7 +64,7 @@ describe('getCaseAssociation', () => {
 
       expect(results.output).toEqual({
         isAssociated: true,
-        isDirectlyAssociated: true,
+        isDirectlyAssociated: false,
         pendingAssociation: false,
       });
     });
@@ -91,7 +91,7 @@ describe('getCaseAssociation', () => {
 
       expect(results.output).toEqual({
         isAssociated: true,
-        isDirectlyAssociated: true,
+        isDirectlyAssociated: false,
         pendingAssociation: false,
       });
     });
