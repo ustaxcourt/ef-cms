@@ -42,6 +42,7 @@ describe('caseWorksheetsHelper', () => {
             updatedCaseStatus: CASE_STATUS_TYPES.submitted,
           },
         ],
+        caseWorksheet: { docketNumber: '110-15', primaryIssue: 'ZOINKS!' },
         docketNumber: '110-15',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.submitted,
@@ -50,7 +51,7 @@ describe('caseWorksheetsHelper', () => {
         caseCaption: 'Fred Dude, Petitioner',
         caseStatusHistory: [
           {
-            date: '1987-02-06T05:00:00.000Z',
+            date: '1987-02-04T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
           },
           {
@@ -58,7 +59,7 @@ describe('caseWorksheetsHelper', () => {
             updatedCaseStatus: CASE_STATUS_TYPES.cav,
           },
         ],
-        docketNumber: '202-11',
+        docketNumber: '202-87',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.cav,
       },
@@ -70,7 +71,7 @@ describe('caseWorksheetsHelper', () => {
             updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
           },
           {
-            date: '2022-02-06T05:00:00.000Z',
+            date: '2022-02-16T05:00:00.000Z',
             updatedCaseStatus: CASE_STATUS_TYPES.submittedRule122,
           },
         ],
@@ -83,7 +84,6 @@ describe('caseWorksheetsHelper', () => {
     baseState = {
       submittedAndCavCases: {
         submittedAndCavCasesByJudge,
-        worksheets: [{ docketNumber: '110-15', primaryIssue: 'ZOINKS!' }],
       },
     };
   });
@@ -100,12 +100,13 @@ describe('caseWorksheetsHelper', () => {
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '202-87',
         docketNumberWithSuffix: undefined,
+        finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/15/87',
         inConsolidatedGroup: false,
         isLeadCase: false,
-        status: undefined,
-        worksheet: {},
+        status: CASE_STATUS_TYPES.cav,
+        worksheet: undefined,
       },
       {
         caseCaption: 'Scooby Doo, Petitioner',
@@ -113,25 +114,13 @@ describe('caseWorksheetsHelper', () => {
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '101-20',
         docketNumberWithSuffix: undefined,
+        finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/16/02',
         inConsolidatedGroup: true,
         isLeadCase: true,
         status: CASE_STATUS_TYPES.submitted,
-        worksheet: {},
-      },
-      {
-        caseCaption: 'Fred Dude, Petitioner',
-        consolidatedIconTooltipText: '',
-        daysSinceLastStatusChange: expect.anything(),
-        docketNumber: '202-11',
-        docketNumberWithSuffix: undefined,
-        formattedCaseCount: 1,
-        formattedSubmittedCavStatusDate: '02/06/22',
-        inConsolidatedGroup: false,
-        isLeadCase: false,
-        status: CASE_STATUS_TYPES.cav,
-        worksheet: {},
+        worksheet: undefined,
       },
       {
         caseCaption: 'Shaggy Guy, Petitioner',
@@ -139,12 +128,13 @@ describe('caseWorksheetsHelper', () => {
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '303-11',
         docketNumberWithSuffix: undefined,
+        finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
-        formattedSubmittedCavStatusDate: '02/06/22',
+        formattedSubmittedCavStatusDate: '02/16/22',
         inConsolidatedGroup: false,
         isLeadCase: false,
         status: CASE_STATUS_TYPES.submittedRule122,
-        worksheet: {},
+        worksheet: undefined,
       },
       {
         caseCaption: 'Velma Jinkies, Petitioner',
@@ -152,6 +142,7 @@ describe('caseWorksheetsHelper', () => {
         daysSinceLastStatusChange: expect.anything(),
         docketNumber: '110-15',
         docketNumberWithSuffix: undefined,
+        finalBriefDueDateFormatted: '',
         formattedCaseCount: 1,
         formattedSubmittedCavStatusDate: '02/26/22',
         inConsolidatedGroup: false,
@@ -159,7 +150,6 @@ describe('caseWorksheetsHelper', () => {
         status: CASE_STATUS_TYPES.submitted,
         worksheet: {
           docketNumber: '110-15',
-          finalBriefDueDateFormatted: undefined,
           primaryIssue: 'ZOINKS!',
         },
       },
