@@ -20,10 +20,8 @@ const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
   setDefaultFilersMapAction,
   getCaseAction,
   setCaseAction,
-  {
-    no: [],
-    yes: [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
-  },
+  getConsolidatedCasesByCaseAction,
+  setConsolidatedCasesForCaseAction,
   setWizardStepAction('SelectDocumentType'),
   setupCurrentPageAction('FileDocumentWizard'),
 ]);
