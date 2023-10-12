@@ -124,6 +124,7 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   /* eslint-disable no-restricted-globals */
   const inFrontEnd = typeof document !== 'undefined';
 
+  // TODO: revert these after manual testing in test is complete for devex-1187
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
     const errorMessage = {
       entityName: entity.entityName,
@@ -188,21 +189,14 @@ export abstract class JoiValidationEntity {
   }
 
   getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
-    try {
-      // TODO: DELETE THIS TRY CATCH WHEN CLEANING UP
-      // THIS IS TO HELP US FIGURE OUT WHICH ENTITY IS WRONG
-      const rules = this.getValidationRules_NEW();
-      const schema = rules.validate ? rules : joi.object().keys(rules);
-      const { error } = schema.validate(this, {
-        abortEarly: false,
-        allowUnknown: true,
-      });
-      if (!error) return null;
-      return error;
-    } catch (e) {
-      console.log('THIS IS THE ENTITY ', this.entityName);
-      return null;
-    }
+    const rules = this.getValidationRules_NEW();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    const { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+    if (!error) return null;
+    return error;
   }
 
   isValid() {

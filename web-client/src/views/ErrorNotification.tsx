@@ -37,6 +37,7 @@ export const ErrorNotification = connect(
               {alertHelper.showMultipleMessages && (
                 <ul>
                   {alertHelper.messagesDeduped.map(message => {
+                    // TODO: remove once testing is complete for devex-1187
                     if (message.includes('validation error mismatch')) {
                       const errorObject = JSON.parse(message);
                       return (
