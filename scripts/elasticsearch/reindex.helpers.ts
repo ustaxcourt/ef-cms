@@ -17,7 +17,7 @@ export const reindexIfNecessary = async ({
   const indexesWithoutAliases = elasticsearchIndexes.filter(
     index => !aliases.map(alias => alias.index).includes(index),
   );
-  if (indexesWithoutAliases) {
+  if (indexesWithoutAliases.length) {
     await Promise.all(
       indexesWithoutAliases.map(index => {
         const baseAlias = getBaseAliasFromIndexName(index);
