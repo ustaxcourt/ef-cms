@@ -5,7 +5,7 @@ import {
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
   public attachments: boolean;
@@ -55,7 +55,7 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
     judge: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select a judge'),
+      setDefaultErrorMessage('Select a judge'),
     ),
     judgeWithTitle: JoiValidationConstants.STRING.optional(),
   };

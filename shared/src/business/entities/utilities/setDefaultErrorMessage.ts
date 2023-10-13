@@ -178,7 +178,7 @@ type ErrorMessageOptions = {
   keysToIgnore?: string[];
 };
 
-export function setDefaultErrorMessages(
+export function setDefaultErrorMessage(
   message: string,
   options?: ErrorMessageOptions,
 ): {
@@ -187,7 +187,7 @@ export function setDefaultErrorMessages(
   if (!options) {
     return { ['*']: message };
   }
-  const defaultErrorMessages = {};
+  const defaultErrorMessage = {};
   const joiKeysToUse = joiErrorKeys
     .filter(key => {
       if (options?.type) return key.includes(options.type);
@@ -199,7 +199,7 @@ export function setDefaultErrorMessages(
     });
 
   joiKeysToUse.forEach(key => {
-    defaultErrorMessages[key] = message;
+    defaultErrorMessage[key] = message;
   });
-  return defaultErrorMessages;
+  return defaultErrorMessage;
 }

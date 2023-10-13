@@ -10,7 +10,7 @@ import {
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 const todayFormatted = formatDateString(
@@ -101,7 +101,7 @@ export class Stamp extends JoiValidationEntity {
             ),
         })
         .messages({
-          ...setDefaultErrorMessages('Enter a valid date'),
+          ...setDefaultErrorMessage('Enter a valid date'),
           'date.min': 'Due date cannot be prior to today. Enter a valid date.',
         }),
       deniedAsMoot: joi.boolean().optional().allow(null),
@@ -110,7 +110,7 @@ export class Stamp extends JoiValidationEntity {
         ...Object.values(MOTION_DISPOSITIONS),
       )
         .required()
-        .messages(setDefaultErrorMessages('Enter a disposition')),
+        .messages(setDefaultErrorMessage('Enter a disposition')),
       dueDateMessage: joi.optional().allow(null),
       jurisdictionalOption: JoiValidationConstants.STRING.valid(
         ...Object.values(JURISDICTIONAL_OPTIONS),

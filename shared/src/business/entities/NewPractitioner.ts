@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class NewPractitioner extends Practitioner {
@@ -46,7 +46,7 @@ export class NewPractitioner extends Practitioner {
       ...superSchema,
       barNumber: JoiValidationConstants.STRING.optional()
         .allow(null)
-        .messages(setDefaultErrorMessages('Bar number is required')),
+        .messages(setDefaultErrorMessage('Bar number is required')),
       confirmEmail: JoiValidationConstants.EMAIL.when('email', {
         is: joi.exist().not(null),
         otherwise: joi.optional().allow(null),
@@ -57,18 +57,18 @@ export class NewPractitioner extends Practitioner {
         'string.email': 'Enter a valid email address',
       }),
       email: JoiValidationConstants.EMAIL.required().messages(
-        setDefaultErrorMessages('Enter email address'),
+        setDefaultErrorMessage('Enter email address'),
       ),
       firstName: superSchema.firstName.messages(
-        setDefaultErrorMessages('Enter first name'),
+        setDefaultErrorMessage('Enter first name'),
       ),
       lastName: superSchema.lastName.messages(
-        setDefaultErrorMessages('Enter last name'),
+        setDefaultErrorMessage('Enter last name'),
       ),
       role: JoiValidationConstants.STRING.optional().allow(null),
       updatedEmail: JoiValidationConstants.STRING.optional()
         .allow(null)
-        .messages(setDefaultErrorMessages('Enter a valid email address')),
+        .messages(setDefaultErrorMessage('Enter a valid email address')),
       userId: JoiValidationConstants.STRING.optional().allow(null),
     };
   }

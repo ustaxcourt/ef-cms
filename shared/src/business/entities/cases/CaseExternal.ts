@@ -14,7 +14,7 @@ import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 /**
@@ -164,7 +164,7 @@ export class CaseExternal extends JoiValidationEntity {
       is: joi.exist(),
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }).messages(setDefaultErrorMessages('Select a case type')),
+    }).messages(setDefaultErrorMessage('Select a case type')),
     corporateDisclosureFile: joi
       .object()
       .when('filingType', {
@@ -173,7 +173,7 @@ export class CaseExternal extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages(
-        setDefaultErrorMessages('Upload a Corporate Disclosure Statement'),
+        setDefaultErrorMessage('Upload a Corporate Disclosure Statement'),
       ),
     corporateDisclosureFileSize: joi
       .number()
@@ -186,7 +186,7 @@ export class CaseExternal extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({
-        ...setDefaultErrorMessages(
+        ...setDefaultErrorMessage(
           'Your Corporate Disclosure Statement file size is empty',
         ),
         'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
@@ -198,23 +198,23 @@ export class CaseExternal extends JoiValidationEntity {
     )
       .required()
       .messages(
-        setDefaultErrorMessages('Select on whose behalf you are filing'),
+        setDefaultErrorMessage('Select on whose behalf you are filing'),
       ),
     hasIrsNotice: joi
       .boolean()
       .required()
       .messages(
-        setDefaultErrorMessages('Indicate whether you received an IRS notice'),
+        setDefaultErrorMessage('Indicate whether you received an IRS notice'),
       ),
     partyType: JoiValidationConstants.STRING.valid(
       ...Object.values(PARTY_TYPES),
     )
       .required()
-      .messages(setDefaultErrorMessages('Select a party type')),
+      .messages(setDefaultErrorMessage('Select a party type')),
     petitionFile: joi
       .object()
       .required()
-      .messages(setDefaultErrorMessages('Upload a Petition')),
+      .messages(setDefaultErrorMessage('Upload a Petition')),
     petitionFileSize: joi
       .number()
       .integer()
@@ -226,7 +226,7 @@ export class CaseExternal extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({
-        ...setDefaultErrorMessages('Your Petition file size is empty'),
+        ...setDefaultErrorMessage('Your Petition file size is empty'),
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
     preferredTrialCity: joi
@@ -240,15 +240,15 @@ export class CaseExternal extends JoiValidationEntity {
         JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
       )
       .required()
-      .messages(setDefaultErrorMessages('Select a trial location')),
+      .messages(setDefaultErrorMessage('Select a trial location')),
     procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
       .required()
-      .messages(setDefaultErrorMessages('Select a case procedure')),
+      .messages(setDefaultErrorMessage('Select a case procedure')),
     stinFile: joi
       .object()
       .required()
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Upload a Statement of Taxpayer Identification Number (STIN)',
         ),
       ), // object of type File
@@ -263,7 +263,7 @@ export class CaseExternal extends JoiValidationEntity {
         then: joi.required(),
       })
       .messages({
-        ...setDefaultErrorMessages('Your STIN file size is empty'),
+        ...setDefaultErrorMessage('Your STIN file size is empty'),
         'number.max': `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
   };

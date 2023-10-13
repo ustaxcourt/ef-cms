@@ -14,7 +14,7 @@ import {
 } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class JudgeActivityReportSearch extends JoiValidationEntity {
   private VALID_DATE_FORMAT: string = FORMATS.MMDDYYYY;
@@ -132,7 +132,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       )
       .messages({
-        ...setDefaultErrorMessages('Enter a valid end date.'),
+        ...setDefaultErrorMessage('Enter a valid end date.'),
         'any.required': 'Enter an end date',
         'date.less': 'End date cannot be in the future. Enter a valid date.',
         'date.min':
@@ -170,7 +170,7 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       )
       .messages({
-        ...setDefaultErrorMessages('Enter a valid start date.'),
+        ...setDefaultErrorMessage('Enter a valid start date.'),
         'any.required': 'Enter a start date.',
         'date.max': 'Start date cannot be in the future. Enter a valid date.',
       }),

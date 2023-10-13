@@ -6,7 +6,7 @@ import {
   User,
   VALIDATION_ERROR_MESSAGES,
 } from './User';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export const entityName = 'IrsPractitioner';
@@ -60,7 +60,7 @@ export class IrsPractitioner extends User {
       JoiValidationConstants.STRING.valid('IrsPractitioner').required(),
     name: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter name')),
+      .messages(setDefaultErrorMessage('Enter name')),
     role: JoiValidationConstants.STRING.valid(ROLES.irsPractitioner).required(),
     serviceIndicator: JoiValidationConstants.STRING.valid(
       ...Object.values(SERVICE_INDICATOR_TYPES),

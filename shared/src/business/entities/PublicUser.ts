@@ -2,7 +2,7 @@ import { JoiValidationConstants } from '@shared/business/entities/JoiValidationC
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { ROLES } from './EntityConstants';
 import { User } from './User';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 /**
  * constructor
@@ -41,7 +41,7 @@ export class PublicUser extends JoiValidationEntity {
       ...User.BASE_USER_VALIDATION_NEW,
       name: JoiValidationConstants.STRING.max(100).required(),
       role: User.BASE_USER_VALIDATION_NEW.role.messages(
-        setDefaultErrorMessages('Role is required'),
+        setDefaultErrorMessage('Role is required'),
       ),
     } as any;
   }

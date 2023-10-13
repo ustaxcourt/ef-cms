@@ -2,7 +2,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import { remove } from 'lodash';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 /**
@@ -95,7 +95,7 @@ export class Scan extends JoiValidationEntity {
         .array()
         .min(1)
         .required()
-        .messages(setDefaultErrorMessages('#At least one batch is required')),
+        .messages(setDefaultErrorMessage('#At least one batch is required')),
       createdAt: JoiValidationConstants.ISO_DATE.required(),
       scanId: JoiValidationConstants.UUID.required(),
     };

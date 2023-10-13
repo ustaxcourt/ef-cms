@@ -8,7 +8,7 @@ import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument
 import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { SupportingDocumentInformationFactory } from '@shared/business/entities/externalDocument/SupportingDocumentInformationFactory';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDocument {
@@ -115,12 +115,12 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     attachments: joi
       .boolean()
       .optional()
-      .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+      .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
     certificateOfService: joi
       .boolean()
       .required()
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Indicate whether you are including a Certificate of Service',
         ),
       ),
@@ -131,26 +131,26 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
         then: joi.required(),
       })
       .messages({
-        ...setDefaultErrorMessages('Enter date of service'),
+        ...setDefaultErrorMessage('Enter date of service'),
         'date.max':
           'Certificate of Service date cannot be in the future. Enter a valid date.',
       }),
     documentTitle: JoiValidationConstants.STRING.max(500)
       .optional()
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Document title must be 500 characters or fewer. Update this document title and try again.',
         ),
       ),
     documentTitleTemplate: JoiValidationConstants.STRING.max(500)
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
     documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
       .required()
-      .messages(setDefaultErrorMessages('Select a document type')),
+      .messages(setDefaultErrorMessage('Select a document type')),
     eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
     filers: joi
       .when('partyIrsPractitioner', {
         is: true,
@@ -158,7 +158,7 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
         then: joi.array().max(0),
       })
       .messages(
-        setDefaultErrorMessages('Select a party', {
+        setDefaultErrorMessage('Select a party', {
           keysToIgnore: ['string.guid'],
         }),
       ),
@@ -166,23 +166,23 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
       .boolean()
       .optional()
       .messages(
-        setDefaultErrorMessages('Enter selection for Supporting Documents.'),
+        setDefaultErrorMessage('Enter selection for Supporting Documents.'),
       ),
     objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
       .optional()
-      .messages(setDefaultErrorMessages('Enter selection for Objections.')),
+      .messages(setDefaultErrorMessage('Enter selection for Objections.')),
     partyIrsPractitioner: joi
       .boolean()
       .optional()
-      .messages(setDefaultErrorMessages('Select a filing party')),
+      .messages(setDefaultErrorMessage('Select a filing party')),
     partyPrivatePractitioner: joi.boolean().optional(),
     primaryDocumentFile: joi
       .object()
       .required()
-      .messages(setDefaultErrorMessages('Upload a document')),
+      .messages(setDefaultErrorMessage('Upload a document')),
     scenario: JoiValidationConstants.STRING.valid(...SCENARIOS)
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
     supportingDocuments: joi.array().optional(),
   };
 

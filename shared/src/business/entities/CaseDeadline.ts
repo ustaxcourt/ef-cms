@@ -2,7 +2,7 @@ import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CaseDeadline extends JoiValidationEntity {
@@ -97,7 +97,7 @@ export class CaseDeadline extends JoiValidationEntity {
         .description(
           'Judge assigned to the case containing this Case Deadline.',
         )
-        .messages(setDefaultErrorMessages('Associated judge is required')),
+        .messages(setDefaultErrorMessage('Associated judge is required')),
       caseDeadlineId: JoiValidationConstants.UUID.required().description(
         'Unique Case Deadline ID only used by the system.',
       ),
@@ -106,19 +106,19 @@ export class CaseDeadline extends JoiValidationEntity {
       ),
       deadlineDate: JoiValidationConstants.ISO_DATE.required()
         .description('When the Case Deadline expires.')
-        .messages(setDefaultErrorMessages('Enter a valid deadline date')),
+        .messages(setDefaultErrorMessage('Enter a valid deadline date')),
       description: JoiValidationConstants.STRING.max(120)
         .min(1)
         .required()
         .description('User provided description of the Case Deadline.')
         .messages({
-          ...setDefaultErrorMessages('Enter a description of this deadline'),
+          ...setDefaultErrorMessage('Enter a description of this deadline'),
           'string.max':
             'The description is too long. Please enter a valid description.',
         }),
       docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()
         .description('Docket number of the case containing the Case Deadline.')
-        .messages(setDefaultErrorMessages('You must have a docket number.')),
+        .messages(setDefaultErrorMessage('You must have a docket number.')),
       entityName:
         JoiValidationConstants.STRING.valid('CaseDeadline').required(),
       leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
@@ -128,9 +128,7 @@ export class CaseDeadline extends JoiValidationEntity {
         .description(
           'A sortable representation of the docket number of the case containing the Case Deadline.',
         )
-        .messages(
-          setDefaultErrorMessages('Sortable docket number is required'),
-        ),
+        .messages(setDefaultErrorMessage('Sortable docket number is required')),
     };
   }
 }

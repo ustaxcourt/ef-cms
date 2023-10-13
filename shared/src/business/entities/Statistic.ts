@@ -2,7 +2,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
 import { Penalty } from './Penalty';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 /**
@@ -176,7 +176,7 @@ export class Statistic extends JoiValidationEntity {
       })
       .description('The amount of the deficiency determined by the Court.')
       .messages(
-        setDefaultErrorMessages('Enter deficiency as determined by Court.'),
+        setDefaultErrorMessage('Enter deficiency as determined by Court.'),
       ),
     determinationTotalPenalties: joi
       .alternatives()
@@ -189,25 +189,21 @@ export class Statistic extends JoiValidationEntity {
         'The total amount of penalties for the period or year determined by the Court.',
       )
       .messages(
-        setDefaultErrorMessages(
-          'Enter total penalties as determined by Court.',
-        ),
+        setDefaultErrorMessage('Enter total penalties as determined by Court.'),
       ),
     entityName: JoiValidationConstants.STRING.valid('Statistic').required(),
     irsDeficiencyAmount: joi
       .number()
       .required()
       .description('The amount of the deficiency on the IRS notice.')
-      .messages(setDefaultErrorMessages('Enter deficiency on IRS Notice.')),
+      .messages(setDefaultErrorMessage('Enter deficiency on IRS Notice.')),
     irsTotalPenalties: joi
       .number()
       .required()
       .description(
         'The total amount of penalties for the period or year on the IRS notice.',
       )
-      .messages(
-        setDefaultErrorMessages('Enter total penalties on IRS Notice.'),
-      ),
+      .messages(setDefaultErrorMessage('Enter total penalties on IRS Notice.')),
     lastDateOfPeriod: JoiValidationConstants.ISO_DATE.max('now')
       .when('yearOrPeriod', {
         is: 'Period',
@@ -216,7 +212,7 @@ export class Statistic extends JoiValidationEntity {
       })
       .description('Last date of the statistics period.')
       .messages({
-        ...setDefaultErrorMessages('Enter last date of period'),
+        ...setDefaultErrorMessage('Enter last date of period'),
         'date.max': 'Enter valid last date of period',
       }),
     penalties: joi
@@ -228,7 +224,7 @@ export class Statistic extends JoiValidationEntity {
       )
       .required()
       .description('List of Penalty Entities for the statistic.')
-      .messages(setDefaultErrorMessages('Enter at least one IRS penalty.')),
+      .messages(setDefaultErrorMessage('Enter at least one IRS penalty.')),
     statisticId: JoiValidationConstants.UUID.required().description(
       'Unique statistic ID only used by the system.',
     ),
@@ -238,7 +234,7 @@ export class Statistic extends JoiValidationEntity {
       then: joi.required(),
     })
       .description('The year of the statistics period.')
-      .messages(setDefaultErrorMessages('Enter a valid year.')),
+      .messages(setDefaultErrorMessage('Enter a valid year.')),
     yearOrPeriod: JoiValidationConstants.STRING.required()
       .valid('Year', 'Period')
       .description('Whether the statistics are for a year or period.'),

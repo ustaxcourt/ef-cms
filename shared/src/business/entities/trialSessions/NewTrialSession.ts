@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TrialSession } from './TrialSession';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class NewTrialSession extends TrialSession {
@@ -42,13 +42,13 @@ export class NewTrialSession extends TrialSession {
           then: JoiValidationConstants.STRING.max(100).required(),
         })
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'A valid alternate trial clerk name must be provided if "Other" is selected',
           ),
         ),
       startDate: JoiValidationConstants.ISO_DATE.min('now')
         .required()
-        .messages(setDefaultErrorMessages('Enter a valid start date')),
+        .messages(setDefaultErrorMessage('Enter a valid start date')),
     };
   }
 }

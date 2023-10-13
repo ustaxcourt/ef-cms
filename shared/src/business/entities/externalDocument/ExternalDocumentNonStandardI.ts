@@ -1,7 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import { transformFormValueToTitleCaseOrdinal } from '../../utilities/transformFormValueToTitleCaseOrdinal';
 import joi from 'joi';
 
@@ -40,7 +40,7 @@ export class ExternalDocumentNonStandardI extends ExternalDocumentBase {
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
     ordinalValue: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select an iteration'),
+      setDefaultErrorMessage('Select an iteration'),
     ),
     otherIteration: joi
       .when('ordinalValue', {
@@ -49,7 +49,7 @@ export class ExternalDocumentNonStandardI extends ExternalDocumentBase {
         then: joi.number().max(999).required(),
       })
       .messages({
-        ...setDefaultErrorMessages('Maximum iteration value is 999.'),
+        ...setDefaultErrorMessage('Maximum iteration value is 999.'),
         'any.required': 'Enter an iteration number.',
       }),
   };

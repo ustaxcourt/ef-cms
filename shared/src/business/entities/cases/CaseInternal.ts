@@ -14,7 +14,7 @@ import { DocketEntry } from '../DocketEntry';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Statistic } from '../Statistic';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 /**
@@ -317,7 +317,7 @@ export class CaseInternal extends JoiValidationEntity {
           then: joi.required(),
         })
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Upload or scan an Application for Waiver of Filing Fee (APW)',
           ),
         ),
@@ -330,7 +330,7 @@ export class CaseInternal extends JoiValidationEntity {
             then: joi.required(),
           },
         ).messages({
-          ...setDefaultErrorMessages(
+          ...setDefaultErrorMessage(
             'Your Filing Fee Waiver file size is empty',
           ),
           'number.max': `Your Filing Fee Waiver file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
@@ -339,11 +339,11 @@ export class CaseInternal extends JoiValidationEntity {
         Case.VALIDATION_RULES_NEW.archivedCorrespondences,
       archivedDocketEntries: Case.VALIDATION_RULES_NEW.archivedDocketEntries,
       caseCaption: JoiValidationConstants.CASE_CAPTION.required().messages(
-        setDefaultErrorMessages('Enter a case caption'),
+        setDefaultErrorMessage('Enter a case caption'),
       ),
       caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
         .required()
-        .messages(setDefaultErrorMessages('Select a case type')),
+        .messages(setDefaultErrorMessage('Select a case type')),
       corporateDisclosureFile: joi
         .object()
         .when('partyType', {
@@ -363,7 +363,7 @@ export class CaseInternal extends JoiValidationEntity {
           }),
         })
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Upload or scan Corporate Disclosure Statement(CDS)',
           ),
         ),
@@ -376,7 +376,7 @@ export class CaseInternal extends JoiValidationEntity {
             then: joi.required(),
           },
         ).messages({
-          ...setDefaultErrorMessages(
+          ...setDefaultErrorMessage(
             'Your Corporate Disclosure Statement file size is empty',
           ),
           'number.max': `Your Corporate Disclosure Statement file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
@@ -387,20 +387,18 @@ export class CaseInternal extends JoiValidationEntity {
       )
         .optional()
         .messages(
-          setDefaultErrorMessages('Select on whose behalf you are filing'),
+          setDefaultErrorMessage('Select on whose behalf you are filing'),
         ),
       hasVerifiedIrsNotice: joi
         .boolean()
         .required()
         .messages(
-          setDefaultErrorMessages(
-            'Indicate whether you received an IRS notice',
-          ),
+          setDefaultErrorMessage('Indicate whether you received an IRS notice'),
         ),
       irsNoticeDate: Case.VALIDATION_RULES_NEW.irsNoticeDate,
       mailingDate: JoiValidationConstants.STRING.max(25)
         .required()
-        .messages(setDefaultErrorMessages('Enter a mailing date')),
+        .messages(setDefaultErrorMessage('Enter a mailing date')),
       noticeOfAttachments: Case.VALIDATION_RULES_NEW.noticeOfAttachments,
       orderDesignatingPlaceOfTrial:
         Case.VALIDATION_RULES_NEW.orderDesignatingPlaceOfTrial,
@@ -416,11 +414,11 @@ export class CaseInternal extends JoiValidationEntity {
         ...Object.values(PARTY_TYPES),
       )
         .required()
-        .messages(setDefaultErrorMessages('Select a party type')),
+        .messages(setDefaultErrorMessage('Select a party type')),
       petitionFile: joi
         .object()
         .required()
-        .messages(setDefaultErrorMessages('Upload or scan a Petition')), // object of type File
+        .messages(setDefaultErrorMessage('Upload or scan a Petition')), // object of type File
       petitionFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'petitionFile',
         {
@@ -429,7 +427,7 @@ export class CaseInternal extends JoiValidationEntity {
           then: joi.required(),
         },
       ).messages({
-        ...setDefaultErrorMessages('Your Petition file size is empty'),
+        ...setDefaultErrorMessage('Your Petition file size is empty'),
         'number.max': `Your Petition file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
       petitionPaymentDate: JoiValidationConstants.ISO_DATE.max('now')
@@ -439,14 +437,14 @@ export class CaseInternal extends JoiValidationEntity {
           then: joi.required(),
         })
         .messages({
-          ...setDefaultErrorMessages('Enter a valid payment date'),
+          ...setDefaultErrorMessage('Enter a valid payment date'),
           'date.max':
             'Payment date cannot be in the future. Enter a valid date.',
         }),
       petitionPaymentMethod: Case.VALIDATION_RULES_NEW.petitionPaymentMethod,
       petitionPaymentStatus:
         Case.VALIDATION_RULES_NEW.petitionPaymentStatus.messages(
-          setDefaultErrorMessages('Select a filing fee option'),
+          setDefaultErrorMessage('Select a filing fee option'),
         ),
       petitionPaymentWaivedDate:
         Case.VALIDATION_RULES_NEW.petitionPaymentWaivedDate,
@@ -458,14 +456,14 @@ export class CaseInternal extends JoiValidationEntity {
           otherwise: joi.optional().allow(null),
           then: JoiValidationConstants.STRING.required(),
         })
-        .messages(setDefaultErrorMessages('Select a preferred trial location')),
+        .messages(setDefaultErrorMessage('Select a preferred trial location')),
       procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
         .required()
-        .messages(setDefaultErrorMessages('Select a case procedure')),
+        .messages(setDefaultErrorMessage('Select a case procedure')),
       receivedAt: JoiValidationConstants.ISO_DATE.max('now')
         .required()
         .messages({
-          ...setDefaultErrorMessages('Enter a valid date received'),
+          ...setDefaultErrorMessage('Enter a valid date received'),
           'date.max':
             'Date received cannot be in the future. Enter a valid date.',
         }),
@@ -477,7 +475,7 @@ export class CaseInternal extends JoiValidationEntity {
           then: joi.object().required(), // object of type File
         })
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Upload or scan a Request for Place of Trial (RQT)',
           ),
         ),
@@ -490,7 +488,7 @@ export class CaseInternal extends JoiValidationEntity {
             then: joi.required(),
           },
         ).messages({
-          ...setDefaultErrorMessages(
+          ...setDefaultErrorMessage(
             'Your Request for Place of Trial file size is empty',
           ),
           'number.max': `Your Request for Place of Trial file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
@@ -500,7 +498,7 @@ export class CaseInternal extends JoiValidationEntity {
         .object()
         .optional()
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Upload a Statement of Taxpayer Identification Number (STIN)',
           ),
         ), // object of type File
@@ -512,7 +510,7 @@ export class CaseInternal extends JoiValidationEntity {
           then: joi.required(),
         },
       ).messages({
-        ...setDefaultErrorMessages('Your STIN file size is empty'),
+        ...setDefaultErrorMessage('Your STIN file size is empty'),
         'number.max': `Your STIN file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
       useSameAsPrimary: Case.VALIDATION_RULES_NEW.useSameAsPrimary,

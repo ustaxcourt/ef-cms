@@ -4,7 +4,7 @@ import {
 } from './CourtIssuedDocumentConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CourtIssuedDocumentBase extends CourtIssuedDocument {
@@ -53,10 +53,10 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
     attachments: joi
       .boolean()
       .required()
-      .messages(setDefaultErrorMessages('Enter selection for Attachments')),
+      .messages(setDefaultErrorMessage('Enter selection for Attachments')),
     documentTitle: JoiValidationConstants.STRING.optional(),
     documentType: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select a document type'),
+      setDefaultErrorMessage('Select a document type'),
     ),
     eventCode: JoiValidationConstants.STRING.optional(),
     filingDate: joi
@@ -68,7 +68,7 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
         otherwise: joi.optional().allow(null),
         then: JoiValidationConstants.ISO_DATE.max('now').required(),
       })
-      .messages(setDefaultErrorMessages('Enter a filing date')),
+      .messages(setDefaultErrorMessage('Enter a filing date')),
   };
 
   getValidationRules_NEW() {

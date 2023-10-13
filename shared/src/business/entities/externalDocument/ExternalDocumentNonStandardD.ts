@@ -2,7 +2,7 @@ import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
@@ -41,11 +41,11 @@ export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
         documentType: JoiValidationConstants.STRING.required(),
       })
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
     serviceDate: JoiValidationConstants.ISO_DATE.max('now')
       .required()
       .messages({
-        ...setDefaultErrorMessages('Provide a service date'),
+        ...setDefaultErrorMessage('Provide a service date'),
         'date.max': 'Service date cannot be in the future. Enter a valid date.',
       }),
   };

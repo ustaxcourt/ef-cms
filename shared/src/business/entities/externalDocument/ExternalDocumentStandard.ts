@@ -1,6 +1,6 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentStandard extends ExternalDocumentBase {
@@ -40,7 +40,7 @@ export class ExternalDocumentStandard extends ExternalDocumentBase {
         ),
       })
       .messages({
-        ...setDefaultErrorMessages('Select a document type'),
+        ...setDefaultErrorMessage('Select a document type'),
         'any.invalid':
           'Proposed Stipulated Decision must be filed separately in each case',
       }),

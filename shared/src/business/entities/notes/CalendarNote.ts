@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CalendarNote extends JoiValidationEntity {
   public note?: string;
@@ -28,7 +28,7 @@ export class CalendarNote extends JoiValidationEntity {
       .allow('', null)
       .optional()
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Limit is 200 characters. Enter 200 or fewer characters.',
         ),
       ),

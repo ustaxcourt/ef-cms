@@ -1,7 +1,7 @@
 import { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class Order extends JoiValidationEntity {
   public documentTitle: string;
@@ -46,13 +46,13 @@ export class Order extends JoiValidationEntity {
     }),
     documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
       .required()
-      .messages(setDefaultErrorMessages('Select an order type')),
+      .messages(setDefaultErrorMessage('Select an order type')),
     eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
       .optional()
-      .messages(setDefaultErrorMessages('Select an order type')),
+      .messages(setDefaultErrorMessage('Select an order type')),
     orderBody: JoiValidationConstants.STRING.max(500)
       .required()
-      .messages(setDefaultErrorMessages('Order body is required.')),
+      .messages(setDefaultErrorMessage('Order body is required.')),
   };
 
   getValidationRules() {

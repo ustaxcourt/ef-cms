@@ -7,7 +7,7 @@ import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
@@ -64,7 +64,7 @@ export class CourtIssuedDocumentTypeE extends CourtIssuedDocument {
         then: JoiValidationConstants.ISO_DATE.required(),
       })
       .messages({
-        ...setDefaultErrorMessages('Enter a date'),
+        ...setDefaultErrorMessage('Enter a date'),
         'date.max': 'Enter a valid date',
         'date.min': 'Enter a valid date',
       }),

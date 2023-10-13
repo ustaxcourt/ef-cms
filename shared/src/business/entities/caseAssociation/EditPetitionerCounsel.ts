@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class EditPetitionerCounsel extends JoiValidationEntity {
@@ -31,7 +31,7 @@ export class EditPetitionerCounsel extends JoiValidationEntity {
       .array()
       .items(JoiValidationConstants.UUID.required())
       .required()
-      .messages(setDefaultErrorMessages('Select a representing party')),
+      .messages(setDefaultErrorMessage('Select a representing party')),
   } as const;
 
   getValidationRules_NEW() {

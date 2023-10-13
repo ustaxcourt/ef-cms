@@ -2,7 +2,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { Practitioner } from './Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from './EntityConstants';
 import { USER_CONTACT_VALIDATION_RULES, User } from './User';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export const entityName = 'PrivatePractitioner';
@@ -81,7 +81,7 @@ export class PrivatePractitioner extends User {
       .description('The firm name for the practitioner.'),
     name: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter name')),
+      .messages(setDefaultErrorMessage('Enter name')),
     representing: joi
       .array()
       .items(JoiValidationConstants.UUID)

@@ -10,7 +10,7 @@ import {
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { User } from './User';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class Practitioner extends User {
@@ -216,7 +216,7 @@ export class Practitioner extends User {
           'The date the practitioner was admitted to the Tax Court bar.',
         )
         .messages({
-          ...setDefaultErrorMessages('Enter an admission date'),
+          ...setDefaultErrorMessage('Enter an admission date'),
           'date.max':
             'Admission date cannot be in the future. Enter a valid date.',
         }),
@@ -225,17 +225,17 @@ export class Practitioner extends User {
       )
         .required()
         .description('The Tax Court bar admission status for the practitioner.')
-        .messages(setDefaultErrorMessages('Select an admission status')),
+        .messages(setDefaultErrorMessage('Select an admission status')),
       barNumber: JoiValidationConstants.STRING.max(100)
         .required()
         .description(
           'A unique identifier comprising of the practitioner initials, date, and series number.',
         )
-        .messages(setDefaultErrorMessages('Bar number is required')),
+        .messages(setDefaultErrorMessage('Bar number is required')),
       birthYear: JoiValidationConstants.YEAR_MAX_CURRENT.required()
         .description('The year the practitioner was born.')
         .messages({
-          ...setDefaultErrorMessages('Enter a valid birth year'),
+          ...setDefaultErrorMessage('Enter a valid birth year'),
           'date.max': 'Birth year cannot be in the future. Enter a valid year.',
         }),
       confirmEmail: JoiValidationConstants.EMAIL.when('updatedEmail', {
@@ -250,7 +250,7 @@ export class Practitioner extends User {
       employer: JoiValidationConstants.STRING.valid(...EMPLOYER_OPTIONS)
         .required()
         .description('The employer designation for the practitioner.')
-        .messages(setDefaultErrorMessages('Select an employer')),
+        .messages(setDefaultErrorMessage('Select an employer')),
       entityName:
         JoiValidationConstants.STRING.valid('Practitioner').required(),
       firmName: JoiValidationConstants.STRING.max(100)
@@ -276,13 +276,13 @@ export class Practitioner extends User {
         .description(
           'The state in which the practitioner passed their bar examination.',
         )
-        .messages(setDefaultErrorMessages('Select an original bar state')),
+        .messages(setDefaultErrorMessage('Select an original bar state')),
       practitionerNotes: JoiValidationConstants.STRING.max(500)
         .optional()
         .allow(null, '')
         .description('The optional notes of the practitioner.')
         .messages({
-          ...setDefaultErrorMessages('Enter valid notes'),
+          ...setDefaultErrorMessage('Enter valid notes'),
           'string.max':
             'Limit is 500 characters. Enter 500 or fewer characters',
         }),
@@ -293,7 +293,7 @@ export class Practitioner extends User {
         .description(
           'The type of practitioner - either Attorney or Non-Attorney.',
         )
-        .messages(setDefaultErrorMessages('Select a practitioner type')),
+        .messages(setDefaultErrorMessage('Select a practitioner type')),
       role: joi.alternatives().conditional('admissionsStatus', {
         is: joi.valid('Active'),
         otherwise: JoiValidationConstants.STRING.valid(
@@ -317,7 +317,7 @@ export class Practitioner extends User {
           otherwise: JoiValidationConstants.EMAIL.optional().allow(null),
           then: JoiValidationConstants.EMAIL.required(),
         })
-        .messages(setDefaultErrorMessages('Enter a valid email address')),
+        .messages(setDefaultErrorMessage('Enter a valid email address')),
     };
   }
 
