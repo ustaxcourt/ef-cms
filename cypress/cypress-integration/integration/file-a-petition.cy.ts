@@ -180,9 +180,8 @@ describe('creation form', () => {
   });
 
   it('submits forms and redirects to the file petition success page', () => {
-    cy.get('button#submit-case').scrollIntoView().click();
-
     cy.intercept('POST', '**/cases').as('postCase');
+    cy.get('button#submit-case').scrollIntoView().click();
     cy.wait('@postCase').then(({ response }) => {
       expect(response.body).to.have.property('docketNumber');
       createdDocketNumber = response.body.docketNumber;
