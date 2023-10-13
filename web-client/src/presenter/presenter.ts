@@ -39,6 +39,7 @@ import { cancelRemovePetitionerSequence } from './sequences/cancelRemovePetition
 import { caseDetailPrimaryTabChangeSequence } from './sequences/caseDetailPrimaryTabChangeSequence';
 import { caseInventoryReportLoadMoreSequence } from './sequences/caseInventoryReportLoadMoreSequence';
 import { cerebralBindSimpleSetStateSequence } from './sequences/cerebralBindSimpleSetStateSequence';
+import { changePasswordLocalSequence } from './sequences/changePasswordLocalSequence';
 import { changeTabAndSetViewerDocumentToDisplaySequence } from './sequences/changeTabAndSetViewerDocumentToDisplaySequence';
 import { checkForNegativeValueSequence } from './sequences/checkForNegativeValueSequence';
 import { chooseModalWizardStepSequence } from './sequences/chooseModalWizardStepSequence';
@@ -77,6 +78,7 @@ import { completeDocumentSelectSequence } from './sequences/completeDocumentSele
 import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
+import { confirmSignUpLocalSequence } from './sequences/confirmSignUpLocalSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
 import { confirmWorkItemAlreadyCompleteSequence } from './sequences/confirmWorkItemAlreadyCompleteSequence';
 import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
@@ -86,6 +88,7 @@ import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequen
 import { countryTypeUserContactChangeSequence } from './sequences/countryTypeUserContactChangeSequence';
 import { createCaseDeadlineSequence } from './sequences/createCaseDeadlineSequence';
 import { createMessageSequence } from './sequences/createMessageSequence';
+import { createNewAccountLocalSequence } from './sequences/createNewAccountLocalSequence';
 import { deleteCalendarNoteSequence } from './sequences/deleteCalendarNoteSequence';
 import { deleteCaseDeadlineSequence } from './sequences/deleteCaseDeadlineSequence';
 import { deleteCaseNoteSequence } from './sequences/deleteCaseNoteSequence';
@@ -120,6 +123,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToCreateAccountLocalSequence } from './sequences/goToCreateAccountLocalSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
@@ -136,6 +140,7 @@ import { gotoCaseDetailSequence } from './sequences/gotoCaseDetailSequence';
 import { gotoCaseInventoryReportSequence } from './sequences/gotoCaseInventoryReportSequence';
 import { gotoCaseSearchNoMatchesSequence } from './sequences/gotoCaseSearchNoMatchesSequence';
 import { gotoChangeLoginAndServiceEmailSequence } from './sequences/gotoChangeLoginAndServiceEmailSequence';
+import { gotoChangePasswordLocalSequence } from './sequences/gotoChangePasswordLocalSequence';
 import { gotoCompleteDocketEntryQCSequence } from './sequences/gotoCompleteDocketEntryQCSequence';
 import { gotoContactEditSequence } from './sequences/gotoContactEditSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
@@ -208,6 +213,7 @@ import { loadMoreCaseDeadlinesSequence } from './sequences/loadMoreCaseDeadlines
 import { loadMorePendingItemsSequence } from './sequences/loadMorePendingItemsSequence';
 import { loadPdfSequence } from './sequences/PDFPreviewModal/loadPdfSequence';
 import { loginWithCodeSequence } from './sequences/loginWithCodeSequence';
+import { loginWithCognitoLocalSequence } from './sequences/loginWithCognitoLocalSequence';
 import { loginWithTokenSequence } from './sequences/loginWithTokenSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
@@ -577,6 +583,7 @@ export const presenterSequences = {
   caseDetailPrimaryTabChangeSequence,
   caseInventoryReportLoadMoreSequence,
   cerebralBindSimpleSetStateSequence,
+  changePasswordLocalSequence,
   changeTabAndSetViewerDocumentToDisplaySequence,
   checkForNegativeValueSequence,
   chooseModalWizardStepSequence,
@@ -615,6 +622,7 @@ export const presenterSequences = {
   completeMessageSequence,
   completePrintPaperPetitionReceiptSequence,
   completeStartCaseWizardStepSequence,
+  confirmSignUpLocalSequence,
   confirmStayLoggedInSequence,
   confirmWorkItemAlreadyCompleteSequence,
   consolidatedCaseCheckboxAllChangeSequence,
@@ -624,6 +632,7 @@ export const presenterSequences = {
   countryTypeUserContactChangeSequence,
   createCaseDeadlineSequence,
   createMessageSequence,
+  createNewAccountLocalSequence,
   deleteCalendarNoteSequence,
   deleteCaseDeadlineSequence,
   deleteCaseNoteSequence,
@@ -657,6 +666,7 @@ export const presenterSequences = {
   getCustomCaseInventoryReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,
+  goToCreateAccountLocalSequence,
   gotoAccessibilityStatementSequence,
   gotoAddCourtIssuedDocketEntrySequence,
   gotoAddDeficiencyStatisticsSequence,
@@ -673,6 +683,7 @@ export const presenterSequences = {
   gotoCaseInventoryReportSequence,
   gotoCaseSearchNoMatchesSequence,
   gotoChangeLoginAndServiceEmailSequence,
+  gotoChangePasswordLocalSequence,
   gotoCompleteDocketEntryQCSequence,
   gotoContactEditSequence,
   gotoContactSequence,
@@ -744,6 +755,7 @@ export const presenterSequences = {
   loadMorePendingItemsSequence,
   loadPdfSequence,
   loginWithCodeSequence,
+  loginWithCognitoLocalSequence,
   loginWithTokenSequence,
   navigateBackSequence,
   navigateToCaseDetailFromPaperServiceSequence,

@@ -598,6 +598,9 @@ export const createTestApplicationContext = ({
       adminUpdateUserAttributes: jest.fn().mockReturnValue({
         promise: jest.fn(),
       }),
+      initiateAuth: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
     }),
     getCognitoClientId: jest.fn(),
     getCognitoLoginUrl,
