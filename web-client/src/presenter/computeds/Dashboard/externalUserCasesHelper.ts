@@ -1,19 +1,28 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
+import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+
+type TAssociatedCaseFormatted = TAssociatedCase & {
+  caseTitle: string;
+  consolidatedIconTooltipText: string;
+  createdAtFormatted: string;
+  inConsolidatedGroup: boolean;
+  isLeadCase: boolean;
+};
 
 export const externalUserCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): {
-  closedCaseResults: any;
-  openCaseResults: any;
+  closedCaseResults: TAssociatedCaseFormatted[];
+  openCaseResults: TAssociatedCaseFormatted[];
   showLoadMoreClosedCases: boolean;
   showLoadMoreOpenCases: boolean;
   closedCasesCount: number;
   openCasesCount: number;
 } => {
-  const { formatCase } = applicationContext.getUtilities();
   const pageSize = applicationContext.getConstants().CASE_LIST_PAGE_SIZE;
 
   const openCases = get(state.openCases);
@@ -22,10 +31,10 @@ export const externalUserCasesHelper = (
   const closedCurrentPage = get(state.closedCasesCurrentPage) || 1;
 
   const formattedOpenCases = openCases.map(openCase =>
-    formatCase(applicationContext, openCase),
+    formatAssociatedCase(applicationContext, openCase),
   );
   const formattedClosedCases = closedCases.map(closedCase =>
-    formatCase(applicationContext, closedCase),
+    formatAssociatedCase(applicationContext, closedCase),
   );
 
   return {
@@ -43,7 +52,33 @@ export const externalUserCasesHelper = (
   };
 };
 
-const getCountOfCases = cases => {
+const formatAssociatedCase = (
+  applicationContext: ClientApplicationContext,
+  caseA: TAssociatedCase,
+): TAssociatedCaseFormatted => {
+  const caseInQuestion = cloneDeep(caseA);
+
+  const { consolidatedIconTooltipText, inConsolidatedGroup, isLeadCase } =
+    applicationContext.getUtilities().setConsolidationFlagsForDisplay(caseA);
+
+  return {
+    ...caseInQuestion,
+    caseTitle: applicationContext.getCaseTitle(
+      caseInQuestion.caseCaption || '',
+    ),
+    consolidatedCases: caseInQuestion.consolidatedCases?.map(c => {
+      return formatAssociatedCase(applicationContext, c);
+    }),
+    consolidatedIconTooltipText,
+    createdAtFormatted: applicationContext
+      .getUtilities()
+      .formatDateString(caseInQuestion.createdAt, 'MMDDYY'),
+    inConsolidatedGroup,
+    isLeadCase,
+  };
+};
+
+const getCountOfCases = (cases: TAssociatedCaseFormatted[]): number => {
   let count = 0;
   cases.forEach(aCase => {
     if (aCase.consolidatedCases) {

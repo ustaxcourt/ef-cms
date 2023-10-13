@@ -9,7 +9,7 @@ Follow these steps to perform a glue job manually.
 1. With local environment variables pointed to the target lower environment, edit values in the `deploy` table to configure the `alpha` table as both the current and destination table and set `migration` to `false`:
    ```zsh
    . scripts/env/set-env.zsh ustc-test
-   ./scripts/setup-deploy-table-for-glue-job.sh
+   ./scripts/circleci/setup-deploy-table-for-glue-job.sh
    ```
 1. Refresh your local environment variables with the new values you just wrote to the `deploy` table:
    ```zsh
