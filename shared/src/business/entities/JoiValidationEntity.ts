@@ -124,22 +124,15 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   /* eslint-disable no-restricted-globals */
   const inFrontEnd = typeof document !== 'undefined';
 
-  // TODO: revert these after manual testing in test is complete for devex-1187
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
-    const errorMessage = {
-      entityName: entity.entityName,
-      newResults,
-      oldResults: results,
-      title: 'validation error mismatch',
-    };
+    const thisURL = new URL(document.URL);
+    const errorMessage = `Validation message mismatch. Please take a screenshot of this message and add to Devex Card 1187. 
+    Page: ${thisURL.pathname}
+    Entity Name: ${entity.entityName}
+    Old Results: ${JSON.stringify(results)}
+    New Results: ${JSON.stringify(newResults)}`;
 
-    if (JSON.stringify(results).includes('mismatchMessage')) {
-      return results;
-    }
-    return {
-      ...results,
-      mismatchMessage: JSON.stringify(errorMessage),
-    };
+    alert(errorMessage);
   }
 
   return results;
