@@ -46,21 +46,16 @@ const verifyCorrectFileDocumentButton = (
 
 const verifyDocumentWasFiledAcrossConsolidatedCaseGroup = cerebralTest => {
   return it('should verify docket entry was filed across the entire consolidated case group', async () => {
-    await Promise.all(
-      cerebralTest.consolidatedCaseDetailGroup.map(
-        async consolidatedCaseBefore => {
-          await cerebralTest.runSequence('gotoCaseDetailSequence', {
-            docketNumber: consolidatedCaseBefore.docketNumber,
-          });
+    for (let consolidatedCase of cerebralTest.consolidatedCaseDetailGroup) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
 
-          const consolidatedCaseAfter = cerebralTest.getState('caseDetail');
-
-          expect(consolidatedCaseAfter.docketEntries.length).toEqual(
-            consolidatedCaseBefore.docketEntries.length + 1,
-          );
-        },
-      ),
-    );
+      const consolidatedCaseAfter = cerebralTest.getState('caseDetail');
+      expect(consolidatedCaseAfter.docketEntries.length).toEqual(
+        consolidatedCase.docketEntries.length + 1,
+      );
+    }
   });
 };
 

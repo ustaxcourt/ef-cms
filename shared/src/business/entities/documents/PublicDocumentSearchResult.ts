@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class PublicDocumentSearchResult extends JoiValidationEntity {
@@ -74,6 +75,48 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
 
   getValidationRules() {
     return PublicDocumentSearchResult.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    caseCaption:
+      JoiValidationConstants.STRING.description('The case caption').required(),
+    docketEntryId: JoiValidationConstants.UUID.description(
+      'The UUID of the corresponding document in S3',
+    ).required(),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
+    docketNumberWithSuffix: JoiValidationConstants.STRING,
+    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
+    documentType: JoiValidationConstants.STRING,
+    eventCode: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.STRING,
+        then: JoiValidationConstants.STRING.valid(
+          ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+        ),
+      })
+      .messages(
+        setDefaultErrorMessage(
+          'Sealed documents cannot be returned in public searches unless they are of type opinion',
+        ),
+      ),
+    isSealed: joi.boolean(),
+    isStricken: joi
+      .boolean()
+      .invalid(true)
+      .messages(
+        setDefaultErrorMessage(
+          'Stricken documents cannot be returned in public searches.',
+        ),
+      ),
+    judge: JoiValidationConstants.STRING.optional(),
+    numberOfPages: joi.number().integer().optional().allow(null),
+    sealedDate: JoiValidationConstants.ISO_DATE,
+    signedJudgeName: JoiValidationConstants.STRING.optional(),
+  };
+
+  getValidationRules_NEW() {
+    return PublicDocumentSearchResult.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {

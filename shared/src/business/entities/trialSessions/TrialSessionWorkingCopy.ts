@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 export class TrialSessionWorkingCopy extends JoiValidationEntity {
-  public caseMetadata: object;
+  public caseMetadata: { [docketNumber: string]: { trialStatus: string } };
   public filters: {
     basisReached: boolean;
     continued: boolean;
@@ -23,7 +23,7 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   };
   public sessionNotes: string;
   public sort: string;
-  public sortOrder: string;
+  public sortOrder: 'asc' | 'desc';
   public trialSessionId: string;
   public userId: string;
 
@@ -97,8 +97,48 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
       userId: JoiValidationConstants.UUID.required(),
     };
   }
+
+  getValidationRules_NEW() {
+    return {
+      caseMetadata: joi
+        .object()
+        .pattern(
+          DOCKET_NUMBER_MATCHER, // keys are docket numbers
+          joi.object().keys({
+            trialStatus: joi.string().allow(''),
+          }),
+        )
+        .optional(),
+      entityName: JoiValidationConstants.STRING.valid(
+        'TrialSessionWorkingCopy',
+      ).required(),
+      filters: joi
+        .object()
+        .keys({
+          basisReached: joi.boolean().required(),
+          continued: joi.boolean().required(),
+          definiteTrial: joi.boolean().required(),
+          dismissed: joi.boolean().required(),
+          motionToDismiss: joi.boolean().required(),
+          probableSettlement: joi.boolean().required(),
+          probableTrial: joi.boolean().required(),
+          recall: joi.boolean().required(),
+          rule122: joi.boolean().required(),
+          setForTrial: joi.boolean().required(),
+          settled: joi.boolean().required(),
+          showAll: joi.boolean().required(),
+          statusUnassigned: joi.boolean().required(),
+          submittedCAV: joi.boolean().required(),
+        })
+        .required(),
+      sessionNotes: JoiValidationConstants.STRING.optional(),
+      sort: JoiValidationConstants.STRING.optional(),
+      sortOrder: JoiValidationConstants.STRING.optional(),
+      trialSessionId: JoiValidationConstants.UUID.required(),
+      userId: JoiValidationConstants.UUID.required(),
+    };
+  }
 }
 
-declare global {
-  type RawTrialSessionWorkingCopy = ExcludeMethods<TrialSessionWorkingCopy>;
-}
+export type RawTrialSessionWorkingCopy =
+  ExcludeMethods<TrialSessionWorkingCopy>;

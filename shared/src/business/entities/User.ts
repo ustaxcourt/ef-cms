@@ -11,11 +11,12 @@ import {
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class User extends JoiValidationEntity {
   public pendingEmailVerificationToken?: string;
-  public email: string;
+  public email?: string;
   public name: string;
   public pendingEmail?: string;
   public role: string;
@@ -24,8 +25,8 @@ export class User extends JoiValidationEntity {
   public isUpdatingInformation?: boolean;
   public contact?: {
     address1: string;
-    address2: string;
-    address3: string;
+    address2?: string;
+    address3?: string;
     city: string;
     country: string;
     countryType: string;
@@ -208,6 +209,92 @@ export class User extends JoiValidationEntity {
     };
   }
 
+  static USER_CONTACT_VALIDATION_RULES_NEW = {
+    address1: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessage('Enter mailing address')),
+    address2: JoiValidationConstants.STRING.max(100).optional().allow(null),
+    address3: JoiValidationConstants.STRING.max(100).optional().allow(null),
+    city: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessage('Enter city')),
+    country: JoiValidationConstants.STRING.when('countryType', {
+      is: COUNTRY_TYPES.INTERNATIONAL,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }).messages(setDefaultErrorMessage('Enter a country')),
+    countryType: JoiValidationConstants.STRING.valid(
+      COUNTRY_TYPES.DOMESTIC,
+      COUNTRY_TYPES.INTERNATIONAL,
+    )
+      .required()
+      .messages(setDefaultErrorMessage('Enter country type')),
+    phone: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessage('Enter phone number')),
+    postalCode: joi
+      .when('countryType', {
+        is: COUNTRY_TYPES.INTERNATIONAL,
+        otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
+        then: JoiValidationConstants.STRING.max(100).required(),
+      })
+      .messages(setDefaultErrorMessage('Enter ZIP code')),
+    state: JoiValidationConstants.STRING.when('countryType', {
+      is: COUNTRY_TYPES.INTERNATIONAL,
+      otherwise: joi
+        .valid(
+          ...Object.keys(US_STATES),
+          ...Object.keys(US_STATES_OTHER),
+          STATE_NOT_AVAILABLE,
+        )
+        .required(),
+      then: joi.optional().allow(null),
+    }).messages(setDefaultErrorMessage('Enter state')),
+  };
+
+  static BASE_USER_VALIDATION_NEW = {
+    judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
+    judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
+      is: ROLES.judge,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages(setDefaultErrorMessage('Enter name')),
+    role: JoiValidationConstants.STRING.valid(
+      ...Object.values(ROLES),
+    ).required(),
+  };
+
+  getValidationRules_NEW() {
+    return {
+      ...User.BASE_USER_VALIDATION_NEW,
+      contact: joi
+        .object()
+        .keys(User.USER_CONTACT_VALIDATION_RULES_NEW)
+        .optional(),
+      email: JoiValidationConstants.EMAIL.optional(),
+      entityName: JoiValidationConstants.STRING.valid('User').required(),
+      isUpdatingInformation: joi
+        .boolean()
+        .optional()
+        .description(
+          'Whether the contact information for the user is being updated.',
+        ),
+      pendingEmail: JoiValidationConstants.EMAIL.allow(null).optional(),
+      pendingEmailVerificationToken:
+        JoiValidationConstants.UUID.allow(null).optional(),
+      section: JoiValidationConstants.STRING.optional(),
+      token: JoiValidationConstants.STRING.optional(),
+      userId: JoiValidationConstants.UUID.required(),
+    };
+  }
+
   getErrorToMessageMap() {
     return User.VALIDATION_ERROR_MESSAGES;
   }
@@ -215,6 +302,7 @@ export class User extends JoiValidationEntity {
 
 export const { USER_CONTACT_VALIDATION_RULES, VALIDATION_ERROR_MESSAGES } =
   User;
+export const { USER_CONTACT_VALIDATION_RULES_NEW } = User;
 
 declare global {
   type RawUser = ExcludeMethods<User>;

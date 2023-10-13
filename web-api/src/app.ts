@@ -68,13 +68,11 @@ import { getCaseDeadlinesLambda } from './lambdas/caseDeadline/getCaseDeadlinesL
 import { getCaseExistsLambda } from './lambdas/cases/getCaseExistsLambda';
 import { getCaseInventoryReportLambda } from './lambdas/reports/getCaseInventoryReportLambda';
 import { getCaseLambda } from './lambdas/cases/getCaseLambda';
-import { getCaseWorksheetsForJudgeLambda } from '@web-api/lambdas/caseWorksheet/getCaseWorksheetsForJudgeLambda';
-import { getCasesByStatusAndByJudgeLambda } from './lambdas/reports/getCasesByStatusAndByJudgeLambda';
+import { getCaseWorksheetsByJudgeLambda } from './lambdas/reports/getCaseWorksheetsByJudgeLambda';
 import { getCasesClosedByJudgeLambda } from './lambdas/reports/getCasesClosedByJudgeLambda';
 import { getCasesForUserLambda } from './lambdas/cases/getCasesForUserLambda';
 import { getCompletedMessagesForSectionLambda } from './lambdas/messages/getCompletedMessagesForSectionLambda';
 import { getCompletedMessagesForUserLambda } from './lambdas/messages/getCompletedMessagesForUserLambda';
-import { getConsolidatedCasesByCaseLambda } from './lambdas/cases/getConsolidatedCasesByCaseLambda';
 import { getCountOfCaseDocumentsFiledByJudgesLambda } from '@web-api/lambdas/reports/getCountOfCaseDocumentsFiledByJudgesLambda';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getCustomCaseInventoryReportLambda } from './lambdas/reports/getCustomCaseInventoryReportLambda';
@@ -595,10 +593,6 @@ app.use(logger());
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
   );
-  app.get(
-    '/cases/:docketNumber/consolidated-cases',
-    lambdaWrapper(getConsolidatedCasesByCaseLambda),
-  );
   app.post(
     '/cases/:docketNumber/serve-to-irs',
     lambdaWrapper(serveCaseToIrsLambda),
@@ -621,10 +615,10 @@ app.use(logger());
 }
 
 /**
- * Case Worksheet
+ * case-worksheets
  */
 {
-  app.get('/case-worksheet', lambdaWrapper(getCaseWorksheetsForJudgeLambda));
+  app.get('/case-worksheets', lambdaWrapper(getCaseWorksheetsByJudgeLambda));
 }
 
 /**
@@ -776,10 +770,6 @@ app.get(
   app.post(
     '/judge-activity-report/closed-cases',
     lambdaWrapper(getCasesClosedByJudgeLambda),
-  );
-  app.post(
-    '/judge-activity-report/open-cases',
-    lambdaWrapper(getCasesByStatusAndByJudgeLambda),
   );
 }
 

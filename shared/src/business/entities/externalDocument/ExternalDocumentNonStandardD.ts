@@ -2,6 +2,7 @@ import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
@@ -29,6 +30,28 @@ export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
 
   getValidationRules() {
     return ExternalDocumentNonStandardD.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
+    previousDocument: joi
+      .object()
+      .keys({
+        documentTitle: JoiValidationConstants.STRING.optional(),
+        documentType: JoiValidationConstants.STRING.required(),
+      })
+      .required()
+      .messages(setDefaultErrorMessage('Select a document')),
+    serviceDate: JoiValidationConstants.ISO_DATE.max('now')
+      .required()
+      .messages({
+        ...setDefaultErrorMessage('Provide a service date'),
+        'date.max': 'Service date cannot be in the future. Enter a valid date.',
+      }),
+  };
+
+  getValidationRules_NEW() {
+    return ExternalDocumentNonStandardD.VALIDATION_RULES_NEW;
   }
 
   getDocumentTitle(): string {

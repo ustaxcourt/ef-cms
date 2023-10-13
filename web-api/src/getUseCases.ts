@@ -80,13 +80,11 @@ import { getCaseExistsInteractor } from '../../shared/src/business/useCases/getC
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/business/useCases/public/getCaseForPublicDocketSearchInteractor';
 import { getCaseInteractor } from '../../shared/src/business/useCases/getCaseInteractor';
 import { getCaseInventoryReportInteractor } from './business/useCases/caseInventoryReport/getCaseInventoryReportInteractor';
-import { getCaseWorksheetsForJudgeInteractor } from '@shared/business/useCases/caseWorksheet/getCaseWorksheetsForJudgeInteractor';
-import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { getCaseWorksheetsByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
 import { getCasesForUserInteractor } from '../../shared/src/business/useCases/getCasesForUserInteractor';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForSectionInteractor';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/business/useCases/messages/getCompletedMessagesForUserInteractor';
-import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/business/useCases/workitems/getDocumentQCInboxForSectionInteractor';
@@ -285,13 +283,11 @@ const useCases = {
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCaseWorksheetsForJudgeInteractor,
-  getCasesByStatusAndByJudgeInteractor,
+  getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
-  getConsolidatedCasesByCaseInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
