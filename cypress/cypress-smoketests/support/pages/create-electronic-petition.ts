@@ -42,10 +42,8 @@ export const goToWizardStep5 = () => {
 };
 
 export const submitPetition = testData => {
-  cy.get('button#submit-case').scrollIntoView();
-  cy.get('button#submit-case').click();
-
   cy.intercept('POST', '**/cases').as('postCase');
+  cy.get('button#submit-case').scrollIntoView().click();
   cy.wait('@postCase').then(({ response }) => {
     expect(response.body).to.have.property('docketNumber');
     const { docketNumber } = response.body;
