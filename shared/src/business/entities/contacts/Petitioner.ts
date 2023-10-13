@@ -70,7 +70,7 @@ export class Petitioner extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     ...USER_CONTACT_VALIDATION_RULES,
-    additionalName: JoiValidationConstants.STRING.max(600).optional(),
+    additionalName: JoiValidationConstants.STRING.max(100).optional(),
     contactId: JoiValidationConstants.UUID.required().description(
       'Unique contact ID only used by the system.',
     ),
@@ -146,8 +146,8 @@ export class Petitioner extends JoiValidationEntity {
 
   static VALIDATION_RULES_NEW = {
     ...USER_CONTACT_VALIDATION_RULES_NEW,
-    additionalName: JoiValidationConstants.STRING.max(600).optional().messages({
-      'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.', // STRING SAYS 100 BUT JOI IS 600 CHARACTERS
+    additionalName: JoiValidationConstants.STRING.max(100).optional().messages({
+      'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
     }),
     contactId: JoiValidationConstants.UUID.required().description(
       'Unique contact ID only used by the system.',
