@@ -68,6 +68,7 @@ describe('externalUserCasesHelper', () => {
       openCasesCurrentPage: 1,
     };
   });
+
   it('should display the load more button for both open and closed cases if there are more cases than page size', () => {
     const result = runCompute(externalUserCasesHelper, {
       state: baseState,
@@ -131,5 +132,15 @@ describe('externalUserCasesHelper', () => {
       showLoadMoreClosedCases: false,
       showLoadMoreOpenCases: false,
     });
+  });
+
+  it('should format consolidated member cases', () => {
+    runCompute(externalUserCasesHelper, {
+      state: baseState,
+    });
+
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(13);
   });
 });
