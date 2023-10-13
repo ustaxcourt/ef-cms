@@ -10,7 +10,7 @@ import {
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class Contact extends JoiValidationEntity {
@@ -174,12 +174,12 @@ export class Contact extends JoiValidationEntity {
   static SHARED_VALIDATION_RULES_NEW = {
     address1: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter mailing address')),
+      .messages(setDefaultErrorMessage('Enter mailing address')),
     address2: JoiValidationConstants.STRING.max(100).optional(),
     address3: JoiValidationConstants.STRING.max(100).optional(),
     city: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter city')),
+      .messages(setDefaultErrorMessage('Enter city')),
     contactId: JoiValidationConstants.UUID.required().description(
       'Unique contact ID only used by the system.',
     ),
@@ -187,7 +187,7 @@ export class Contact extends JoiValidationEntity {
       ...Object.values(CONTACT_TYPES),
     )
       .required()
-      .messages(setDefaultErrorMessages('Enter country type')),
+      .messages(setDefaultErrorMessage('Enter country type')),
     email: JoiValidationConstants.EMAIL.when('hasEAccess', {
       is: true,
       otherwise: joi.optional(),
@@ -209,18 +209,18 @@ export class Contact extends JoiValidationEntity {
     isAddressSealed: joi.boolean().required(),
     name: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter name')),
+      .messages(setDefaultErrorMessage('Enter name')),
     paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
       .allow(null)
       .description('Email provided by the petitioner on their petition form')
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Enter email address in format: yourname@example.com',
         ),
       ),
     phone: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter phone number')),
+      .messages(setDefaultErrorMessage('Enter phone number')),
     sealedAndUnavailable: joi.boolean().optional(),
     secondaryName: JoiValidationConstants.STRING.max(100).optional(),
     serviceIndicator: JoiValidationConstants.STRING.valid(
@@ -232,10 +232,10 @@ export class Contact extends JoiValidationEntity {
   static DOMESTIC_VALIDATION_RULES_NEW = {
     countryType: JoiValidationConstants.STRING.valid(COUNTRY_TYPES.DOMESTIC)
       .required()
-      .messages(setDefaultErrorMessages('Enter country type')),
+      .messages(setDefaultErrorMessage('Enter country type')),
     ...Contact.SHARED_VALIDATION_RULES_NEW,
     postalCode: JoiValidationConstants.US_POSTAL_CODE.required().messages(
-      setDefaultErrorMessages('Enter ZIP code'),
+      setDefaultErrorMessage('Enter ZIP code'),
     ),
     state: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),
@@ -243,22 +243,22 @@ export class Contact extends JoiValidationEntity {
       STATE_NOT_AVAILABLE,
     )
       .required()
-      .messages(setDefaultErrorMessages('Enter state')),
+      .messages(setDefaultErrorMessage('Enter state')),
   } as const;
 
   static INTERNATIONAL_VALIDATION_RULES_NEW = {
     country: JoiValidationConstants.STRING.max(500)
       .required()
-      .messages(setDefaultErrorMessages('Enter a country')),
+      .messages(setDefaultErrorMessage('Enter a country')),
     countryType: JoiValidationConstants.STRING.valid(
       COUNTRY_TYPES.INTERNATIONAL,
     )
       .required()
-      .messages(setDefaultErrorMessages('Enter country type')),
+      .messages(setDefaultErrorMessage('Enter country type')),
     ...Contact.SHARED_VALIDATION_RULES_NEW,
     postalCode: JoiValidationConstants.STRING.max(100)
       .required()
-      .messages(setDefaultErrorMessages('Enter ZIP code')),
+      .messages(setDefaultErrorMessage('Enter ZIP code')),
   } as const;
 
   getValidationRules_NEW() {

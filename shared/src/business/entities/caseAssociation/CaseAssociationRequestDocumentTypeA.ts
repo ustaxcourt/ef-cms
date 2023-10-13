@@ -1,7 +1,7 @@
 import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
 import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CaseAssociationRequestDocumentTypeA extends CaseAssociationRequestDocument {
@@ -71,7 +71,7 @@ export class CaseAssociationRequestDocumentTypeA extends CaseAssociationRequestD
     attachments: joi
       .boolean()
       .required()
-      .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+      .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
   };
 
   getValidationRules_NEW() {

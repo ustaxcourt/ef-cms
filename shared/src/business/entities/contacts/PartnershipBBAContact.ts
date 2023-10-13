@@ -1,6 +1,6 @@
 import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class PartnershipBBAPrimaryContact extends Contact {
   constructor(
@@ -25,7 +25,7 @@ export class PartnershipBBAPrimaryContact extends Contact {
       secondaryName: JoiValidationConstants.STRING.max(500)
         .required()
         .messages(
-          setDefaultErrorMessages('Enter partnership representative name'),
+          setDefaultErrorMessage('Enter partnership representative name'),
         ),
     };
   }

@@ -1,6 +1,6 @@
 import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class PetitionerIntermediaryContact extends Contact {
   constructor(
@@ -24,7 +24,7 @@ export class PetitionerIntermediaryContact extends Contact {
       ...super.getValidationRules_NEW(),
       inCareOf: JoiValidationConstants.STRING.max(100)
         .optional()
-        .messages(setDefaultErrorMessages('In care of has errors.')),
+        .messages(setDefaultErrorMessage('In care of has errors.')),
     };
   }
 

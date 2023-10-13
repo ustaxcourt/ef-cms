@@ -6,7 +6,7 @@ import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '../../utilities/DateHandler';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class DocumentSearch extends JoiValidationEntity {
@@ -198,7 +198,7 @@ export class DocumentSearch extends JoiValidationEntity {
             ),
         })
         .messages({
-          ...setDefaultErrorMessages('Enter a valid end date'),
+          ...setDefaultErrorMessage('Enter a valid end date'),
           'date.less':
             'End date cannot be in the future. Enter valid end date.',
         }),
@@ -231,7 +231,7 @@ export class DocumentSearch extends JoiValidationEntity {
             ),
         })
         .messages({
-          ...setDefaultErrorMessages('Enter a valid start date'),
+          ...setDefaultErrorMessage('Enter a valid start date'),
           'date.max':
             'Start date cannot be in the future. Enter valid start date.',
         }),

@@ -1,6 +1,6 @@
 import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class PetitionerCustodianContact extends Contact {
   constructor(
@@ -24,7 +24,7 @@ export class PetitionerCustodianContact extends Contact {
       ...super.getValidationRules_NEW(),
       secondaryName: JoiValidationConstants.STRING.max(500)
         .required()
-        .messages(setDefaultErrorMessages('Enter name of custodian')),
+        .messages(setDefaultErrorMessage('Enter name of custodian')),
     };
   }
 

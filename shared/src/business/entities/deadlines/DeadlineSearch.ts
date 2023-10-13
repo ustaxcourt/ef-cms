@@ -1,5 +1,5 @@
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -49,7 +49,7 @@ export class DeadlineSearch extends JoiValidationEntity {
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       )
       .messages({
-        ...setDefaultErrorMessages('Enter a valid end date'),
+        ...setDefaultErrorMessage('Enter a valid end date'),
         'any.ref':
           'End date cannot be prior to Start Date. Enter a valid End date.',
         'any.required': 'Enter an End date.',
@@ -65,7 +65,7 @@ export class DeadlineSearch extends JoiValidationEntity {
         'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
       )
       .messages({
-        ...setDefaultErrorMessages('Enter a valid start date'),
+        ...setDefaultErrorMessage('Enter a valid start date'),
         'any.required': 'Enter a Start date.',
       }),
   };

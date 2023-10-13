@@ -1,7 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
@@ -44,7 +44,7 @@ export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
         documentType: JoiValidationConstants.STRING.required(),
       })
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
   };
 
   getValidationRules_NEW() {

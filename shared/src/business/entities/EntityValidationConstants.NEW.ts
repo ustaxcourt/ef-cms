@@ -21,7 +21,7 @@ import {
   SYSTEM_ROLE,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
   action: JoiValidationConstants.STRING.max(100)
@@ -44,12 +44,12 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
   attachments: joi
     .boolean()
     .optional()
-    .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+    .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
   certificateOfService: joi
     .boolean()
     .optional()
     .messages(
-      setDefaultErrorMessages(
+      setDefaultErrorMessage(
         'Indicate whether you are including a Certificate of Service',
       ),
     ),
@@ -60,7 +60,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
       then: joi.required(),
     })
     .messages({
-      ...setDefaultErrorMessages('Enter date of service'),
+      ...setDefaultErrorMessage('Enter date of service'),
       'date.max':
         'Certificate of Service date cannot be in the future. Enter a valid date.',
     }),
@@ -92,7 +92,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
   documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional()
     .description('The title of this document.')
     .messages(
-      setDefaultErrorMessages(
+      setDefaultErrorMessage(
         'Document title must be 3000 characters or fewer. Update this document title and try again.',
       ),
     ),
@@ -146,7 +146,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
       'The party who filed the document, either the petitioner or respondent on the case.',
     )
     .messages({
-      ...setDefaultErrorMessages('Enter a filed by'),
+      ...setDefaultErrorMessage('Enter a filed by'),
       'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
     }),
   filedByRole: joi
@@ -179,7 +179,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
     .boolean()
     .optional()
     .messages(
-      setDefaultErrorMessages('Enter selection for Supporting Documents.'),
+      setDefaultErrorMessage('Enter selection for Supporting Documents.'),
     ),
   index: joi
     .number()
@@ -260,14 +260,14 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
     .description(
       'A lodged document is awaiting action by the judge to enact or refuse.',
     )
-    .messages(setDefaultErrorMessages('Enter selection for filing status.')),
+    .messages(setDefaultErrorMessage('Enter selection for filing status.')),
   mailingDate: JoiValidationConstants.STRING.max(100).optional(),
   numberOfPages: joi.number().integer().optional().allow(null),
   objections: JoiValidationConstants.STRING.valid(
     ...OBJECTIONS_OPTIONS,
   ).optional(),
   ordinalValue: JoiValidationConstants.STRING.optional().messages(
-    setDefaultErrorMessages('Select an iteration'),
+    setDefaultErrorMessage('Select an iteration'),
   ),
   otherFilingParty: JoiValidationConstants.STRING.max(100)
     .when('hasOtherFilingParty', {
@@ -282,9 +282,9 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
     .description(
       'When someone other than the petitioner or respondent files a document, this is the name of the person who filed that document',
     )
-    .messages(setDefaultErrorMessages('Enter other filing party name.')),
+    .messages(setDefaultErrorMessage('Enter other filing party name.')),
   otherIteration: joi.optional().messages({
-    ...setDefaultErrorMessages('Maximum iteration value is 999.'),
+    ...setDefaultErrorMessage('Maximum iteration value is 999.'),
     'any.required': 'Enter an iteration number.',
   }),
   partyIrsPractitioner: joi.boolean().optional(),
@@ -436,7 +436,7 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
     .description(
       'An optional trial location used when generating a fully concatenated document title.',
     )
-    .messages(setDefaultErrorMessages('Select a preferred trial location.')),
+    .messages(setDefaultErrorMessage('Select a preferred trial location.')),
   userId: JoiValidationConstants.UUID.when('isDraft', {
     is: undefined,
     otherwise: joi.optional(),

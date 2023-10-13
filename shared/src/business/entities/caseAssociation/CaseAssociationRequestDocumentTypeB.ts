@@ -4,7 +4,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { OBJECTIONS_OPTIONS } from '../EntityConstants';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestDocument {
   public attachments?: boolean;
@@ -90,7 +90,7 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
     ...CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW,
     objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
       .required()
-      .messages(setDefaultErrorMessages('Enter selection for Objections.')),
+      .messages(setDefaultErrorMessage('Enter selection for Objections.')),
   };
 
   getValidationRules_NEW() {

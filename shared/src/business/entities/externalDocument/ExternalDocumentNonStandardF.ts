@@ -1,7 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import { transformFormValueToTitleCaseOrdinal } from '../../utilities/transformFormValueToTitleCaseOrdinal';
 import joi from 'joi';
 
@@ -42,7 +42,7 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
   static VALIDATION_RULES_NEW = {
     ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     ordinalValue: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select an iteration'),
+      setDefaultErrorMessage('Select an iteration'),
     ),
     otherIteration: joi
       .when('ordinalValue', {
@@ -51,7 +51,7 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
         then: joi.number().max(999).required(),
       })
       .messages({
-        ...setDefaultErrorMessages('Maximum iteration value is 999.'),
+        ...setDefaultErrorMessage('Maximum iteration value is 999.'),
         'any.required': 'Enter an iteration number.',
       }),
     previousDocument: joi
@@ -61,7 +61,7 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
         documentType: JoiValidationConstants.STRING.required(),
       })
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
   };
 
   getValidationRules_NEW() {

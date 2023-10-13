@@ -1,7 +1,7 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { PENALTY_TYPES } from './EntityConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class Penalty extends JoiValidationEntity {
@@ -60,22 +60,22 @@ export class Penalty extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(50)
       .required()
       .description('Penalty name.')
-      .messages(setDefaultErrorMessages('Penalty name is required.')),
+      .messages(setDefaultErrorMessage('Penalty name is required.')),
     penaltyAmount: joi
       .number()
       .required()
       .description('The dollar amount of the penalty.')
-      .messages(setDefaultErrorMessages('Enter penalty amount.')),
+      .messages(setDefaultErrorMessage('Enter penalty amount.')),
     penaltyId: JoiValidationConstants.UUID.required().description(
       'Unique Penalty ID only used by the system.',
     ),
     penaltyType: JoiValidationConstants.STRING.required()
       .valid(...Object.values(PENALTY_TYPES))
       .description('The type of penalty (IRS or Court Determination).')
-      .messages(setDefaultErrorMessages('Penalty type is required.')),
+      .messages(setDefaultErrorMessage('Penalty type is required.')),
     statisticId: JoiValidationConstants.UUID.required()
       .description('Unique statistic ID only used by the system.')
-      .messages(setDefaultErrorMessages('Statistic ID is required.')),
+      .messages(setDefaultErrorMessage('Statistic ID is required.')),
   });
 
   getValidationRules_NEW() {

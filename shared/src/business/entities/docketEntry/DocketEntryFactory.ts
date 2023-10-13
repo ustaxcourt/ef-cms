@@ -12,7 +12,7 @@ import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFac
 import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class DocketEntryFactory extends JoiValidationEntity {
@@ -260,17 +260,17 @@ export class DocketEntryFactory extends JoiValidationEntity {
       dateReceived: JoiValidationConstants.ISO_DATE.max('now')
         .required()
         .messages({
-          ...setDefaultErrorMessages('Enter a valid date received'),
+          ...setDefaultErrorMessage('Enter a valid date received'),
           'date.max':
             'Received date cannot be in the future. Enter a valid date.',
         }),
       documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.documentTitle,
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
-        .messages(setDefaultErrorMessages('Select a document type')),
+        .messages(setDefaultErrorMessage('Select a document type')),
       eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
         .required()
-        .messages(setDefaultErrorMessages('Select a document type')),
+        .messages(setDefaultErrorMessage('Select a document type')),
       freeText: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.freeText,
       hasOtherFilingParty:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.hasOtherFilingParty,
@@ -295,7 +295,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
           then: joi.required(),
         }),
         then: joi.optional(),
-      }).messages(setDefaultErrorMessages('Enter selection for Objections.')),
+      }).messages(setDefaultErrorMessage('Enter selection for Objections.')),
       ordinalValue: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.ordinalValue,
       otherFilingParty: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.otherFilingParty,
       otherIteration: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.otherIteration,
@@ -307,7 +307,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
           otherwise: joi.optional(),
           then: joi.required(),
         })
-        .messages(setDefaultErrorMessages('Upload a document')),
+        .messages(setDefaultErrorMessage('Upload a document')),
       primaryDocumentFileSize: JoiValidationConstants.MAX_FILE_SIZE_BYTES.when(
         'primaryDocumentFile',
         {
@@ -316,7 +316,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
           then: joi.required(),
         },
       ).messages({
-        ...setDefaultErrorMessages('Your document file size is empty.'),
+        ...setDefaultErrorMessage('Your document file size is empty.'),
         'number.max': `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
       serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.serviceDate,
@@ -333,7 +333,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
             .required(),
           then: joi.optional(),
         })
-        .messages(setDefaultErrorMessages('Select a filing party')),
+        .messages(setDefaultErrorMessage('Select a filing party')),
     };
 
     const addToSchema = itemName => {
@@ -351,7 +351,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
     schema = schema.concat(docketEntryExternalDocumentSchema).concat(
       joi.object({
         category: JoiValidationConstants.STRING.optional().messages(
-          setDefaultErrorMessages('Select a Category.'),
+          setDefaultErrorMessage('Select a Category.'),
         ), // omitting category
       }),
     );

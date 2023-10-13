@@ -1,7 +1,7 @@
 import { ExternalDocumentBase } from './ExternalDocumentBase';
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
@@ -30,11 +30,11 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
     secondaryDocument: joi
       .object()
       .required()
-      .messages(setDefaultErrorMessages('Select a document')),
+      .messages(setDefaultErrorMessage('Select a document')),
     secondaryDocumentFile: joi
       .object()
       .optional()
-      .messages(setDefaultErrorMessages('Upload a document')),
+      .messages(setDefaultErrorMessage('Upload a document')),
   };
 
   getValidationRules_NEW() {

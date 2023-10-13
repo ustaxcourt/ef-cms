@@ -8,7 +8,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
 import { getStandaloneRemoteDocumentTitle } from '../../utilities/getStandaloneRemoteDocumentTitle';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
   public attachments: boolean;
@@ -65,12 +65,12 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
   static VALIDATION_RULES_NEW = {
     ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
     date: JoiValidationConstants.ISO_DATE.required().messages({
-      ...setDefaultErrorMessages('Enter a date'),
+      ...setDefaultErrorMessage('Enter a date'),
       'date.max': 'Enter a valid date',
       'date.min': 'Enter a valid date',
     }),
     trialLocation: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select a trial location'),
+      setDefaultErrorMessage('Select a trial location'),
     ),
   };
 

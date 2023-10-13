@@ -21,7 +21,7 @@ import {
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { createEndOfDayISO } from '../utilities/DateHandler';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
@@ -508,7 +508,7 @@ export const DATE_RANGE_VALIDATION_RULE_KEYS_NEW = {
         ),
     })
     .messages({
-      ...setDefaultErrorMessages('Enter a valid end date.'),
+      ...setDefaultErrorMessage('Enter a valid end date.'),
       'any.required': 'Enter an end date.',
       'date.max': 'End date cannot be in the future. Enter a valid date.',
       'date.min':
@@ -520,7 +520,7 @@ export const DATE_RANGE_VALIDATION_RULE_KEYS_NEW = {
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
     )
     .messages({
-      ...setDefaultErrorMessages('Enter a valid start date.'),
+      ...setDefaultErrorMessage('Enter a valid start date.'),
       'any.required': 'Enter a start date.',
       'date.max': 'Start date cannot be in the future. Enter a valid date.',
     }),

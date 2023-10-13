@@ -2,7 +2,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
@@ -78,23 +78,23 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
     let schemaOptionalItems = {
       attachments: joi
         .boolean()
-        .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+        .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
       certificateOfService: joi
         .boolean()
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Indicate whether you are including a Certificate of Service',
           ),
         ),
       certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
         'now',
       ).messages({
-        ...setDefaultErrorMessages('Enter date of service'),
+        ...setDefaultErrorMessage('Enter date of service'),
         'date.max':
           'Certificate of Service date cannot be in the future. Enter a valid date.',
       }),
       objections: JoiValidationConstants.STRING.messages(
-        setDefaultErrorMessages('Enter selection for Objections.'),
+        setDefaultErrorMessage('Enter selection for Objections.'),
       ),
     };
 

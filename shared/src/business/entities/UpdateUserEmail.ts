@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 /**
@@ -52,7 +52,7 @@ export class UpdateUserEmail extends JoiValidationEntity {
           'string.email': 'Enter a valid email address',
         }),
       email: JoiValidationConstants.EMAIL.required().messages(
-        setDefaultErrorMessages('Enter a valid email address'),
+        setDefaultErrorMessage('Enter a valid email address'),
       ),
     };
   }

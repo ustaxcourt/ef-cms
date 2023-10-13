@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class HearingNote extends JoiValidationEntity {
   public note: string;
@@ -33,7 +33,7 @@ export class HearingNote extends JoiValidationEntity {
     note: JoiValidationConstants.STRING.max(200)
       .required()
       .messages({
-        ...setDefaultErrorMessages('Add a note'),
+        ...setDefaultErrorMessage('Add a note'),
         'string.max': 'Limit is 200 characters. Enter 200 or fewer characters.',
       }),
   } as const;

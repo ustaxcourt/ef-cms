@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 /**
@@ -344,11 +344,11 @@ export class Message extends JoiValidationEntity {
       .description(
         'The section of the user who is the recipient of the message.',
       )
-      .messages(setDefaultErrorMessages('Select a section')),
+      .messages(setDefaultErrorMessage('Select a section')),
     toUserId: JoiValidationConstants.UUID.required()
       .allow(null)
       .description('The ID of the user who is the recipient of the message.')
-      .messages(setDefaultErrorMessages('Select a recipient')),
+      .messages(setDefaultErrorMessage('Select a recipient')),
   };
 
   getValidationRules_NEW() {

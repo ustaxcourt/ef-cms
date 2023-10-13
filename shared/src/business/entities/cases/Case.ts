@@ -53,7 +53,7 @@ import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
 
@@ -828,7 +828,7 @@ export class Case extends JoiValidationEntity {
       .description(
         'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
       )
-      .messages(setDefaultErrorMessages('Enter a case caption')),
+      .messages(setDefaultErrorMessage('Enter a case caption')),
     caseNote: JoiValidationConstants.STRING.max(9000)
       .optional()
       .meta({
@@ -844,7 +844,7 @@ export class Case extends JoiValidationEntity {
       .description('The history of status changes on the case'),
     caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
       .required()
-      .messages(setDefaultErrorMessages('Select a case type')),
+      .messages(setDefaultErrorMessage('Select a case type')),
     closedDate: JoiValidationConstants.ISO_DATE.when('status', {
       is: joi.exist().valid(...CLOSED_CASE_STATUSES),
       otherwise: joi.optional(),
@@ -870,7 +870,7 @@ export class Case extends JoiValidationEntity {
       .description('List of DocketEntry Entities for the case.'),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()
       .description('Unique case identifier in XXXXX-YY format.')
-      .messages(setDefaultErrorMessages('Docket number is required')),
+      .messages(setDefaultErrorMessage('Docket number is required')),
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
@@ -885,7 +885,7 @@ export class Case extends JoiValidationEntity {
     )
       .optional()
       .messages(
-        setDefaultErrorMessages('Select on whose behalf you are filing'),
+        setDefaultErrorMessage('Select on whose behalf you are filing'),
       ),
     hasPendingItems: joi.boolean().optional(),
     hasVerifiedIrsNotice: joi
@@ -896,7 +896,7 @@ export class Case extends JoiValidationEntity {
         'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
       )
       .messages(
-        setDefaultErrorMessages('Indicate whether you received an IRS notice'),
+        setDefaultErrorMessage('Indicate whether you received an IRS notice'),
       ),
     highPriority: joi
       .boolean()
@@ -924,7 +924,7 @@ export class Case extends JoiValidationEntity {
       .allow(null)
       .description('Last date that the petitioner is allowed to file before.')
       .messages({
-        ...setDefaultErrorMessages('Please enter a valid IRS notice date'),
+        ...setDefaultErrorMessage('Please enter a valid IRS notice date'),
         'date.max':
           'The IRS notice date cannot be in the future. Enter a valid date.',
       }),
@@ -956,7 +956,7 @@ export class Case extends JoiValidationEntity {
         then: joi.required(),
       })
       .description('Date that petition was mailed to the court.')
-      .messages(setDefaultErrorMessages('Enter a mailing date')),
+      .messages(setDefaultErrorMessage('Enter a mailing date')),
     noticeOfAttachments: joi
       .boolean()
       .optional()
@@ -1003,7 +1003,7 @@ export class Case extends JoiValidationEntity {
     )
       .required()
       .description('Party type of the case petitioner.')
-      .messages(setDefaultErrorMessages('Select a party type')),
+      .messages(setDefaultErrorMessage('Select a party type')),
     petitionPaymentDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
@@ -1013,7 +1013,7 @@ export class Case extends JoiValidationEntity {
       },
     )
       .description('When the petitioner paid the case fee.')
-      .messages(setDefaultErrorMessages('Enter a valid payment date')),
+      .messages(setDefaultErrorMessage('Enter a valid payment date')),
     petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
       .when('petitionPaymentStatus', {
         is: PAYMENT_STATUS.PAID,
@@ -1021,13 +1021,13 @@ export class Case extends JoiValidationEntity {
         then: joi.required(),
       })
       .description('How the petitioner paid the case fee.')
-      .messages(setDefaultErrorMessages('Enter payment method')),
+      .messages(setDefaultErrorMessage('Enter payment method')),
     petitionPaymentStatus: JoiValidationConstants.STRING.valid(
       ...Object.values(PAYMENT_STATUS),
     )
       .required()
       .description('Status of the case fee payment.')
-      .messages(setDefaultErrorMessages('Enter payment status')),
+      .messages(setDefaultErrorMessage('Enter payment status')),
     petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
       'petitionPaymentStatus',
       {
@@ -1037,7 +1037,7 @@ export class Case extends JoiValidationEntity {
       },
     )
       .description('When the case fee was waived.')
-      .messages(setDefaultErrorMessages('Enter a valid date waived')),
+      .messages(setDefaultErrorMessage('Enter a valid date waived')),
     petitioners: joi
       .array()
       .unique(
@@ -1058,7 +1058,7 @@ export class Case extends JoiValidationEntity {
       )
       .optional()
       .description('Where the petitioner would prefer to hold the case trial.')
-      .messages(setDefaultErrorMessages('Select a trial location')),
+      .messages(setDefaultErrorMessage('Select a trial location')),
     privatePractitioners: joi
       .array()
       .items(PrivatePractitioner.VALIDATION_RULES)
@@ -1067,7 +1067,7 @@ export class Case extends JoiValidationEntity {
     procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
       .required()
       .description('Procedure type of the case.')
-      .messages(setDefaultErrorMessages('Select a case procedure')),
+      .messages(setDefaultErrorMessage('Select a case procedure')),
     qcCompleteForTrial: joi
       .object()
       .optional()
@@ -1080,7 +1080,7 @@ export class Case extends JoiValidationEntity {
         'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
       )
       .messages({
-        ...setDefaultErrorMessages('Enter a valid date received'),
+        ...setDefaultErrorMessage('Enter a valid date received'),
         'date.max':
           'Date received cannot be in the future. Enter a valid date.',
       }),
@@ -1094,7 +1094,7 @@ export class Case extends JoiValidationEntity {
       .description(
         'A sortable representation of the docket number (auto-generated by constructor).',
       )
-      .messages(setDefaultErrorMessages('Sortable docket number is required')),
+      .messages(setDefaultErrorMessage('Sortable docket number is required')),
     statistics: joi
       .array()
       .items(Statistic.VALIDATION_RULES)

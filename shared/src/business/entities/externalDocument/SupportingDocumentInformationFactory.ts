@@ -4,7 +4,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB } from '../EntityConstants';
 import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class SupportingDocumentInformationFactory extends JoiValidationEntity {
@@ -93,17 +93,17 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
       attachments: joi
         .boolean()
         .required()
-        .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+        .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
       certificateOfService: joi
         .boolean()
         .required()
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Indicate whether you are including a Certificate of Service',
           ),
         ),
       supportingDocument: JoiValidationConstants.STRING.required().messages(
-        setDefaultErrorMessages('Select a document type'),
+        setDefaultErrorMessage('Select a document type'),
       ),
     };
 
@@ -111,13 +111,13 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
       certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
         'now',
       ).messages({
-        ...setDefaultErrorMessages('Enter date of service'),
+        ...setDefaultErrorMessage('Enter date of service'),
         'date.max':
           'Certificate of Service date cannot be in the future. Enter a valid date.',
       }),
       supportingDocumentFile: joi
         .object()
-        .messages(setDefaultErrorMessages('Upload a document')),
+        .messages(setDefaultErrorMessage('Upload a document')),
       supportingDocumentFileSize: joi
         .number()
         .optional()
@@ -125,13 +125,13 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
         .max(MAX_FILE_SIZE_BYTES)
         .integer()
         .messages({
-          ...setDefaultErrorMessages(
+          ...setDefaultErrorMessage(
             'Your Supporting Document file size is empty.',
           ),
           'number.max': `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
         }),
       supportingDocumentFreeText: JoiValidationConstants.STRING.messages(
-        setDefaultErrorMessages('Enter name'),
+        setDefaultErrorMessage('Enter name'),
       ),
     };
 

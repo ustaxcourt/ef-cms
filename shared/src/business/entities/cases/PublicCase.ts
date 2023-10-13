@@ -17,7 +17,7 @@ import { PublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { map } from 'lodash';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class PublicCase extends JoiValidationEntity {
@@ -214,7 +214,7 @@ export class PublicCase extends JoiValidationEntity {
         otherwise: JoiValidationConstants.CASE_CAPTION.optional(),
         then: joi.any().forbidden(),
       })
-      .messages(setDefaultErrorMessages('Enter a case caption')),
+      .messages(setDefaultErrorMessage('Enter a case caption')),
     createdAt: joi.when('isSealed', {
       is: true,
       otherwise: JoiValidationConstants.ISO_DATE.optional(),
@@ -231,11 +231,11 @@ export class PublicCase extends JoiValidationEntity {
         then: joi.array().max(0),
       })
       .messages(
-        setDefaultErrorMessages('At least one valid docket entry is required'),
+        setDefaultErrorMessage('At least one valid docket entry is required'),
       ),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()
       .description('Unique case identifier in XXXXX-YY format.')
-      .messages(setDefaultErrorMessages('Docket number is required')),
+      .messages(setDefaultErrorMessage('Docket number is required')),
     docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
       .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
       .optional(),
@@ -256,7 +256,7 @@ export class PublicCase extends JoiValidationEntity {
           .description('Party type of the case petitioner.'),
         then: joi.any().forbidden(),
       })
-      .messages(setDefaultErrorMessages('Select a party type')),
+      .messages(setDefaultErrorMessage('Select a party type')),
     petitioners: joi.when('isSealed', {
       is: true,
       otherwise: joi.array().items(PublicContact.VALIDATION_RULES).required(),
@@ -269,7 +269,7 @@ export class PublicCase extends JoiValidationEntity {
         then: joi.any().forbidden(),
       })
       .messages({
-        ...setDefaultErrorMessages('Enter a valid date received'),
+        ...setDefaultErrorMessage('Enter a valid date received'),
         'date.max':
           'Date received cannot be in the future. Enter a valid date.',
       }),

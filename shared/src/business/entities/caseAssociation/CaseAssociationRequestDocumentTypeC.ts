@@ -3,7 +3,7 @@ import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocu
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { OBJECTIONS_OPTIONS } from '../EntityConstants';
 import { SupportingDocumentInformationFactory } from '../externalDocument/SupportingDocumentInformationFactory';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestDocument {
@@ -77,16 +77,16 @@ export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestD
     attachments: joi
       .boolean()
       .required()
-      .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+      .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
     hasSupportingDocuments: joi
       .boolean()
       .required()
       .messages(
-        setDefaultErrorMessages('Enter selection for Supporting Documents.'),
+        setDefaultErrorMessage('Enter selection for Supporting Documents.'),
       ),
     objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
       .required()
-      .messages(setDefaultErrorMessages('Enter selection for Objections.')),
+      .messages(setDefaultErrorMessage('Enter selection for Objections.')),
   };
 
   getValidationRules_NEW() {

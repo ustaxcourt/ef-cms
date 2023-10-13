@@ -1,6 +1,6 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class Note extends JoiValidationEntity {
   public notes: string;
@@ -24,7 +24,7 @@ export class Note extends JoiValidationEntity {
 
   static VALIDATION_RULES_NEW = {
     notes: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Add note'),
+      setDefaultErrorMessage('Add note'),
     ),
   };
 

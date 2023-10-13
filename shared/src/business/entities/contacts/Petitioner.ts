@@ -6,7 +6,7 @@ import {
   USER_CONTACT_VALIDATION_RULES_NEW,
 } from '../User';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class Petitioner extends JoiValidationEntity {
@@ -156,7 +156,7 @@ export class Petitioner extends JoiValidationEntity {
       ...Object.values(CONTACT_TYPES),
     )
       .required()
-      .messages(setDefaultErrorMessages('Select a role type')),
+      .messages(setDefaultErrorMessage('Select a role type')),
     email: JoiValidationConstants.EMAIL.when('hasEAccess', {
       is: true,
       otherwise: joi.optional(),
@@ -179,7 +179,7 @@ export class Petitioner extends JoiValidationEntity {
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .messages({
-        ...setDefaultErrorMessages('Enter name'),
+        ...setDefaultErrorMessage('Enter name'),
         'string.max': 'Limit is 100 characters. Enter 100 or fewer characters.',
       }),
     paperPetitionEmail: JoiValidationConstants.EMAIL.optional().description(
@@ -190,7 +190,7 @@ export class Petitioner extends JoiValidationEntity {
       ...Object.values(SERVICE_INDICATOR_TYPES),
     )
       .required()
-      .messages(setDefaultErrorMessages('Select a service indicator')),
+      .messages(setDefaultErrorMessage('Select a service indicator')),
     title: JoiValidationConstants.STRING.max(100).optional(),
   };
 

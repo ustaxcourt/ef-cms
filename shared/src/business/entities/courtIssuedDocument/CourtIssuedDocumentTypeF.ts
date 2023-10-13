@@ -7,7 +7,7 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
 import { getStandaloneRemoteDocumentTitle } from '../../utilities/getStandaloneRemoteDocumentTitle';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
   public attachments: boolean;
@@ -74,11 +74,11 @@ export class CourtIssuedDocumentTypeF extends CourtIssuedDocument {
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
     judge: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select a judge'),
+      setDefaultErrorMessage('Select a judge'),
     ),
     judgeWithtitle: JoiValidationConstants.STRING.optional(),
     trialLocation: JoiValidationConstants.STRING.required().messages(
-      setDefaultErrorMessages('Select a trial location'),
+      setDefaultErrorMessage('Select a trial location'),
     ),
   };
 

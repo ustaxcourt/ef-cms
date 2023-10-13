@@ -1,6 +1,6 @@
 import { Contact } from './Contact';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class NextFriendForIncompetentPersonContact extends Contact {
   constructor(
@@ -24,7 +24,7 @@ export class NextFriendForIncompetentPersonContact extends Contact {
       ...super.getValidationRules_NEW(),
       secondaryName: JoiValidationConstants.STRING.max(500)
         .required()
-        .messages(setDefaultErrorMessages('Enter name of next friend')),
+        .messages(setDefaultErrorMessage('Enter name of next friend')),
     };
   }
 

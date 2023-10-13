@@ -1,7 +1,7 @@
 import { COUNTRY_TYPES, US_STATES, US_STATES_OTHER } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -118,7 +118,7 @@ export class CaseSearch extends JoiValidationEntity {
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       )
       .messages({
-        ...setDefaultErrorMessages('Enter a valid end date'),
+        ...setDefaultErrorMessage('Enter a valid end date'),
         'any.ref': 'End date cannot be prior to start date.',
         'any.required': 'Enter an End date.',
         'date.max': 'End date cannot be in the future.',
@@ -126,7 +126,7 @@ export class CaseSearch extends JoiValidationEntity {
       }),
     petitionerName: JoiValidationConstants.STRING.max(500)
       .required()
-      .messages(setDefaultErrorMessages('Enter a name')),
+      .messages(setDefaultErrorMessage('Enter a name')),
     petitionerState: JoiValidationConstants.STRING.valid(
       ...Object.keys(US_STATES),
       ...Object.keys(US_STATES_OTHER),
@@ -142,7 +142,7 @@ export class CaseSearch extends JoiValidationEntity {
       .allow(null)
       .optional()
       .messages({
-        ...setDefaultErrorMessages('Enter a valid start date'),
+        ...setDefaultErrorMessage('Enter a valid start date'),
         'date.format': 'Format date as MM/DD/YYYY',
         'date.max': 'Start date cannot be in the future.',
       }),

@@ -8,7 +8,7 @@ import {
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
@@ -86,7 +86,7 @@ export class CourtIssuedDocumentTypeA extends CourtIssuedDocument {
           then: joi.optional().allow(null),
         }),
       })
-      .messages(setDefaultErrorMessages('Select a service stamp')),
+      .messages(setDefaultErrorMessage('Select a service stamp')),
   };
 
   getValidationRules_NEW() {

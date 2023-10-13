@@ -15,7 +15,7 @@ import {
   makeRequiredHelper,
 } from './externalDocumentHelpers';
 import { isEqual, reduce, some, sortBy, values } from 'lodash';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentInformationFactory extends JoiValidationEntity {
@@ -332,20 +332,20 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       attachments: joi
         .boolean()
         .required()
-        .messages(setDefaultErrorMessages('Enter selection for Attachments.')),
+        .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
       casesParties: joi.object().optional(),
       certificateOfService: joi
         .boolean()
         .required()
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Indicate whether you are including a Certificate of Service',
           ),
         ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
         .messages({
-          ...setDefaultErrorMessages('Select a document type'),
+          ...setDefaultErrorMessage('Select a document type'),
         }),
       eventCode: JoiValidationConstants.STRING.valid(
         ...ALL_EVENT_CODES,
@@ -359,27 +359,27 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         .boolean()
         .required()
         .messages(
-          setDefaultErrorMessages('Enter selection for Supporting Documents.'),
+          setDefaultErrorMessage('Enter selection for Supporting Documents.'),
         ),
       lodged: joi.boolean().optional(),
       ordinalValue: JoiValidationConstants.STRING.optional().messages(
-        setDefaultErrorMessages('Select an iteration'),
+        setDefaultErrorMessage('Select an iteration'),
       ),
       previousDocument: joi
         .object()
         .optional()
-        .messages(setDefaultErrorMessages('Select a document')),
+        .messages(setDefaultErrorMessage('Select a document')),
       primaryDocumentFile: joi
         .object()
         .required()
-        .messages(setDefaultErrorMessages('Upload a document')),
+        .messages(setDefaultErrorMessage('Upload a document')),
     };
 
     let schemaOptionalItems = {
       certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
         'now',
       ).messages({
-        ...setDefaultErrorMessages('Enter date of service'),
+        ...setDefaultErrorMessage('Enter date of service'),
         'date.max':
           'Certificate of Service date cannot be in the future. Enter a valid date.',
       }),
@@ -387,23 +387,23 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         .array()
         .items(JoiValidationConstants.UUID.required())
         .required()
-        .messages(setDefaultErrorMessages('Select a filing party')),
+        .messages(setDefaultErrorMessage('Select a filing party')),
       hasSecondarySupportingDocuments: joi
         .boolean()
         .messages(
-          setDefaultErrorMessages(
+          setDefaultErrorMessage(
             'Enter selection for Secondary Supporting Documents.',
           ),
         ),
       objections: JoiValidationConstants.STRING.messages(
-        setDefaultErrorMessages('Enter selection for Objections.'),
+        setDefaultErrorMessage('Enter selection for Objections.'),
       ),
       partyIrsPractitioner: joi
         .boolean()
-        .messages(setDefaultErrorMessages('Select a filing party')),
+        .messages(setDefaultErrorMessage('Select a filing party')),
       secondaryDocumentFile: joi
         .object()
-        .messages(setDefaultErrorMessages('Upload a document')),
+        .messages(setDefaultErrorMessage('Upload a document')),
       secondarySupportingDocuments: joi.array().optional(),
       selectedCases: joi
         .array()
@@ -485,7 +485,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
             joi
               .array()
               .items(joi.string().required())
-              .messages(setDefaultErrorMessages('Select a filing party')),
+              .messages(setDefaultErrorMessage('Select a filing party')),
           );
         }
       }
@@ -496,7 +496,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
           joi
             .array()
             .items(joi.string().required())
-            .messages(setDefaultErrorMessages('Select a filing party')),
+            .messages(setDefaultErrorMessage('Select a filing party')),
         );
       }
     }

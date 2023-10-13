@@ -1,7 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class PublicDocumentSearchResult extends JoiValidationEntity {
@@ -96,7 +96,7 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
         ),
       })
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Sealed documents cannot be returned in public searches unless they are of type opinion',
         ),
       ),
@@ -105,7 +105,7 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
       .boolean()
       .invalid(true)
       .messages(
-        setDefaultErrorMessages(
+        setDefaultErrorMessage(
           'Stricken documents cannot be returned in public searches.',
         ),
       ),

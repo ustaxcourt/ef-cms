@@ -23,7 +23,7 @@ import {
   US_STATES_OTHER,
 } from '../EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
-import { setDefaultErrorMessages } from '@shared/business/entities/utilities/setDefaultErrorMessages';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 // TODO 9970: Can we reduce some complexity here? CalendaredTrialSession..?
@@ -393,7 +393,7 @@ export class TrialSession extends JoiValidationEntity {
       estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
         .min(joi.ref('startDate'))
         .allow(null)
-        .messages(setDefaultErrorMessages('Enter a valid estimated end date')),
+        .messages(setDefaultErrorMessage('Enter a valid estimated end date')),
       hasNOTTBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),
@@ -412,7 +412,7 @@ export class TrialSession extends JoiValidationEntity {
           then: joi.optional(),
         })
         .messages(
-          setDefaultErrorMessages('Enter a valid number of maximum cases'),
+          setDefaultErrorMessage('Enter a valid number of maximum cases'),
         ),
       meetingId: stringRequiredForRemoteProceedings,
       notes: JoiValidationConstants.STRING.max(400).optional(),
@@ -427,7 +427,7 @@ export class TrialSession extends JoiValidationEntity {
         ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
       )
         .required()
-        .messages(setDefaultErrorMessages('Enter a valid proceeding type')),
+        .messages(setDefaultErrorMessage('Enter a valid proceeding type')),
       sessionScope: JoiValidationConstants.STRING.valid(
         ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
       ).required(),
@@ -438,12 +438,12 @@ export class TrialSession extends JoiValidationEntity {
         ...Object.values(SESSION_TYPES),
       )
         .required()
-        .messages(setDefaultErrorMessages('Select a session type')),
+        .messages(setDefaultErrorMessage('Select a session type')),
       startDate: JoiValidationConstants.ISO_DATE.required().messages(
-        setDefaultErrorMessages('Enter a valid start date'),
+        setDefaultErrorMessage('Enter a valid start date'),
       ),
       startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES.messages(
-        setDefaultErrorMessages('Enter a valid start time'),
+        setDefaultErrorMessage('Enter a valid start time'),
       ),
       state: JoiValidationConstants.STRING.valid(
         ...Object.keys(US_STATES),
@@ -456,13 +456,13 @@ export class TrialSession extends JoiValidationEntity {
         is: true,
         otherwise: JoiValidationConstants.STRING.optional(),
         then: joi.required(),
-      }).messages(setDefaultErrorMessages('You must select a swing session')),
+      }).messages(setDefaultErrorMessage('You must select a swing session')),
       term: JoiValidationConstants.STRING.valid(...SESSION_TERMS)
         .required()
-        .messages(setDefaultErrorMessages('Term session is not valid')),
+        .messages(setDefaultErrorMessage('Term session is not valid')),
       termYear: JoiValidationConstants.STRING.max(4)
         .required()
-        .messages(setDefaultErrorMessages('Term year is required')),
+        .messages(setDefaultErrorMessage('Term year is required')),
       trialClerk: joi
         .object({
           name: JoiValidationConstants.STRING.max(100).required(),
@@ -481,7 +481,7 @@ export class TrialSession extends JoiValidationEntity {
             .required(),
           then: joi.optional(),
         })
-        .messages(setDefaultErrorMessages('Select a trial session location')),
+        .messages(setDefaultErrorMessage('Select a trial session location')),
       trialSessionId: JoiValidationConstants.UUID.optional(),
     },
   };
