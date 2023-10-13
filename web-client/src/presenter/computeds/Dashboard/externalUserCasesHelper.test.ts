@@ -19,12 +19,17 @@ describe('externalUserCasesHelper', () => {
     baseState = {
       closedCases: [
         {
-          caseCaption: 'Case Title for 108-20',
+          caseCaption: 'Case Title for 101-20',
           createdAt: '2019-12-22T12:49:10.949Z',
           docketNumber: '101-20',
         },
-        { createdAt: '2019-12-22T12:49:10.949Z', docketNumber: '102-20' },
         {
+          caseCaption: 'Case Title for 200-20',
+          createdAt: '2019-12-22T12:49:10.949Z',
+          docketNumber: '200-20',
+        },
+        {
+          caseCaption: 'Case Title for 103-20',
           consolidatedCases: [
             {
               caseCaption: 'Case Title for 158-20',
@@ -34,12 +39,14 @@ describe('externalUserCasesHelper', () => {
               leadDocketNumber: '103-20',
             },
             {
+              caseCaption: 'Case Title for 169-20',
               createdAt: '2014-12-22T12:49:10.949Z',
               docketNumber: '169-20',
               isRequestingUserAssociated: true,
               leadDocketNumber: '103-20',
             },
             {
+              caseCaption: 'Case Title for 189-20',
               createdAt: '2012-12-22T12:49:10.949Z',
               docketNumber: '189-20',
               isRequestingUserAssociated: true,
@@ -49,6 +56,7 @@ describe('externalUserCasesHelper', () => {
           docketNumber: '103-20',
         },
         {
+          caseCaption: 'Case Title for 104-20',
           createdAt: '2019-12-22T12:49:10.949Z',
           docketNumber: '104-20',
           isRequestingUserAssociated: true,
@@ -67,6 +75,7 @@ describe('externalUserCasesHelper', () => {
               leadDocketNumber: '102-20',
             },
             {
+              caseCaption: 'Case Title for 109-20',
               createdAt: '2017-01-22T12:49:10.949Z',
               docketNumber: '109-20',
               isRequestingUserAssociated: true,
@@ -84,7 +93,11 @@ describe('externalUserCasesHelper', () => {
           docketNumber: '103-21',
           isRequestingUserAssociated: true,
         },
-        { createdAt: '2021-08-22T12:49:10.949Z', docketNumber: '103-22' },
+        {
+          caseCaption: 'Case Title for 103-22',
+          createdAt: '2021-08-22T12:49:10.949Z',
+          docketNumber: '103-22',
+        },
         { createdAt: '2022-08-22T12:49:10.949Z', docketNumber: '103-23' },
       ],
       openCasesCurrentPage: 1,
@@ -169,7 +182,7 @@ describe('externalUserCasesHelper', () => {
             docketNumber: '108-20',
           },
           {
-            caseTitle: '',
+            caseTitle: 'Case Title for 109-20',
             createdAtFormatted: '01/22/17',
             docketNumber: '109-20',
           },
@@ -185,7 +198,7 @@ describe('externalUserCasesHelper', () => {
         docketNumber: '103-21',
       },
       {
-        caseTitle: '',
+        caseTitle: 'Case Title for 103-22',
         consolidatedCases: undefined,
         createdAtFormatted: '08/22/21',
         docketNumber: '103-22',
@@ -194,17 +207,17 @@ describe('externalUserCasesHelper', () => {
 
     const expectedClosedCasesResult = [
       {
-        caseTitle: 'Case Title for 108-20',
+        caseTitle: 'Case Title for 101-20',
         createdAtFormatted: '12/22/19',
         docketNumber: '101-20',
       },
       {
-        caseTitle: '',
+        caseTitle: 'Case Title for 200-20',
         createdAtFormatted: '12/22/19',
-        docketNumber: '102-20',
+        docketNumber: '200-20',
       },
       {
-        caseTitle: '',
+        caseTitle: 'Case Title for 103-20',
         consolidatedCases: [
           {
             caseTitle: 'Case Title for 158-20',
@@ -212,12 +225,12 @@ describe('externalUserCasesHelper', () => {
             docketNumber: '158-20',
           },
           {
-            caseTitle: '',
+            caseTitle: 'Case Title for 169-20',
             createdAtFormatted: '12/22/14',
             docketNumber: '169-20',
           },
           {
-            caseTitle: '',
+            caseTitle: 'Case Title for 189-20',
             createdAtFormatted: '12/22/12',
             docketNumber: '189-20',
           },
