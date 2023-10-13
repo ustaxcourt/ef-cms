@@ -43,7 +43,8 @@ export const goToWizardStep5 = () => {
 
 export const submitPetition = testData => {
   cy.intercept('POST', '**/cases').as('postCase');
-  cy.get('button#submit-case').scrollIntoView().click();
+  cy.get('button#submit-case').scrollIntoView();
+  cy.get('button#submit-case').click();
   cy.wait('@postCase').then(({ response }) => {
     expect(response.body).to.have.property('docketNumber');
     const { docketNumber } = response.body;
@@ -70,17 +71,18 @@ export const completeWizardStep2 = (hasIrsNoticeInput, caseType) => {
   cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNoticeInput}`).click();
-  cy.get('#case-type').scrollIntoView().select(caseType);
+  cy.get('#case-type').scrollIntoView();
+  cy.get('#case-type').select(caseType);
 };
 
 export const completeWizardStep3 = (filingType, petitionerName) => {
-  cy.get(`label#filing-type-${filingType}`).scrollIntoView().click();
+  cy.get(`label#filing-type-${filingType}`).scrollIntoView();
+  cy.get(`label#filing-type-${filingType}`).click();
 
   if (filingType === exports.filingTypes.PETITIONER_AND_SPOUSE) {
     cy.get('label#is-spouse-deceased-0').click();
-    cy.get('input#use-same-address-above')
-      .scrollIntoView()
-      .check({ force: true });
+    cy.get('input#use-same-address-above').scrollIntoView();
+    cy.get('input#use-same-address-above').check({ force: true });
 
     cy.get('input#secondaryName').type(
       `${faker.person.firstName()} ${faker.person.lastName()}`,
@@ -90,23 +92,29 @@ export const completeWizardStep3 = (filingType, petitionerName) => {
     );
   }
 
-  cy.get('input#name').scrollIntoView().type(petitionerName);
-  cy.get('input[name="contactPrimary.address1"]')
-    .scrollIntoView()
-    .type(faker.location.streetAddress());
-  cy.get('input[name="contactPrimary.city"]')
-    .scrollIntoView()
-    .type(faker.location.city());
-  cy.get('select[name="contactPrimary.state"]')
-    .scrollIntoView()
-    .select(faker.location.stateAbbr());
-  cy.get('input[name="contactPrimary.postalCode"]')
-    .scrollIntoView()
-    .type(faker.location.zipCode());
-  cy.get('input#phone').scrollIntoView().type(faker.phone.number());
+  cy.get('input#name').scrollIntoView();
+  cy.get('input#name').type(petitionerName);
+  cy.get('input[name="contactPrimary.address1"]').scrollIntoView();
+  cy.get('input[name="contactPrimary.address1"]').type(
+    faker.location.streetAddress(),
+  );
+  cy.get('input[name="contactPrimary.city"]').scrollIntoView();
+  cy.get('input[name="contactPrimary.city"]').type(faker.location.city());
+  cy.get('select[name="contactPrimary.state"]').scrollIntoView();
+  cy.get('select[name="contactPrimary.state"]').select(
+    faker.location.stateAbbr(),
+  );
+  cy.get('input[name="contactPrimary.postalCode"]').scrollIntoView();
+  cy.get('input[name="contactPrimary.postalCode"]').type(
+    faker.location.zipCode(),
+  );
+  cy.get('input#phone').scrollIntoView();
+  cy.get('input#phone').type(faker.phone.number());
 };
 
 export const completeWizardStep4 = () => {
-  cy.get('label#procedure-type-0').scrollIntoView().click();
-  cy.get('#preferred-trial-city').scrollIntoView().select('Mobile, Alabama');
+  cy.get('label#procedure-type-0').scrollIntoView();
+  cy.get('label#procedure-type-0').click();
+  cy.get('#preferred-trial-city').scrollIntoView();
+  cy.get('#preferred-trial-city').select('Mobile, Alabama');
 };
