@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
@@ -23,7 +23,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
   const getCasesByStatusAndByJudgeRequestParams: JudgeActivityReportCavAndSubmittedCasesRequest =
     {
       judges: [judgeUser.name],
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     };
 
   let mockReturnedCases;
