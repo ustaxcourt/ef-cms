@@ -4,16 +4,15 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { Paginator } from '../../ustc-ui/Pagination/Paginator';
+import { SortableColumnHeaderButton } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
-import React, { useState } from 'react';
+import React from 'react';
 
 export const JudgeActivityReport = connect(
   {
-    getCavAndSubmittedCasesForJudgesSequence:
-      sequences.getCavAndSubmittedCasesForJudgesSequence,
+    constants: state.constants,
     judgeActivityReport: state.judgeActivityReport,
     judgeActivityReportData: state.judgeActivityReport.judgeActivityReportData,
     judgeActivityReportFilters: state.judgeActivityReport.filters,
@@ -21,22 +20,23 @@ export const JudgeActivityReport = connect(
     judgeActivityReportJudges: state.judges,
     setJudgeActivityReportFiltersSequence:
       sequences.setJudgeActivityReportFiltersSequence,
+    sortTableSequence: sequences.sortTableSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
-    getCavAndSubmittedCasesForJudgesSequence,
+    constants,
     judgeActivityReport,
     judgeActivityReportData,
     judgeActivityReportFilters,
     judgeActivityReportHelper,
     judgeActivityReportJudges,
     setJudgeActivityReportFiltersSequence,
+    sortTableSequence,
     submitJudgeActivityReportSequence,
     validationErrors,
   }) {
-    const [activePage, setActivePage] = useState(0);
     const closedCases: () => JSX.Element = () => (
       <>
         <table aria-describedby="casesClosed" className="usa-table ustc-table">
@@ -199,25 +199,6 @@ export const JudgeActivityReport = connect(
     const submittedCavCasesTable = () => {
       return (
         <>
-          {judgeActivityReportHelper.showPaginator && (
-            <Paginator
-              breakClassName="hide"
-              forcePage={activePage}
-              id="paginatorTop"
-              marginPagesDisplayed={0}
-              pageCount={judgeActivityReportHelper.pageCount}
-              pageRangeDisplayed={0}
-              onPageChange={async pageChange => {
-                setActivePage(pageChange.selected);
-                await getCavAndSubmittedCasesForJudgesSequence({
-                  selectedPage: pageChange.selected,
-                });
-                window.document
-                  .getElementById('paginatorTop')
-                  ?.scrollIntoView();
-              }}
-            />
-          )}
           <table
             aria-describedby="progressDescription"
             className="usa-table ustc-table"
@@ -243,20 +224,47 @@ export const JudgeActivityReport = connect(
                   </span>
                 </th>
                 <th aria-label="docket number">Docket No.</th>
-                <th aria-label="opinion type">No. of Cases</th>
-                <th aria-label="event total">Petitioner(s)</th>
-                <th aria-label="event total">Case Status</th>
-                <th aria-label="event total">Days in Status</th>
-                <th aria-label="event total">Status Date</th>
-                <th aria-label="event total">Final Brief Due Date</th>
-                <th aria-label="event total">Status of Matter</th>
+                <th aria-label="number of cases">No. of Cases</th>
+                <th aria-label="judge">
+                  <SortableColumnHeaderButton
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={
+                      judgeActivityReportHelper.submittedAndCavCasesByJudge
+                        .length > 0
+                    }
+                    sortField="associatedJudge"
+                    title="Judge"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th aria-label="petitioners">Petitioner(s)</th>
+                <th aria-label="case status">Case Status</th>
+                <th aria-label="days in status">
+                  <SortableColumnHeaderButton
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={
+                      judgeActivityReportHelper.submittedAndCavCasesByJudge
+                        .length > 0
+                    }
+                    sortField="daysElapsedSinceLastStatusChange"
+                    title="Days in Status"
+                    onClickSequence={sortTableSequence}
+                  />
+                </th>
+                <th aria-label="status date">Status Date</th>
+                <th aria-label="final brief due date">Final Brief Due Date</th>
+                <th aria-label="status of matter">Status of Matter</th>
               </tr>
             </thead>
             <tbody>
               {judgeActivityReportHelper.submittedAndCavCasesByJudge.map(
-                formattedCase => {
+                (formattedCase, index) => {
                   return (
-                    <React.Fragment key={formattedCase.docketNumber}>
+                    <React.Fragment key={`case-row-${index}`}>
                       <tr>
                         <td className="consolidated-case-column">
                           <ConsolidatedCaseIcon
@@ -281,6 +289,7 @@ export const JudgeActivityReport = connect(
                             formattedCase?.formattedCaseCount,
                           )}
                         </td>
+                        <td>{formattedCase.associatedJudge}</td>
                         <td>{formattedCase.caseCaption}</td>
                         <td>{formattedCase.status}</td>
                         <td>
@@ -312,25 +321,6 @@ export const JudgeActivityReport = connect(
               )}
             </tbody>
           </table>
-          {judgeActivityReportHelper.showPaginator && (
-            <Paginator
-              breakClassName="hide"
-              forcePage={activePage}
-              id="paginatorBottom"
-              marginPagesDisplayed={0}
-              pageCount={judgeActivityReportHelper.pageCount}
-              pageRangeDisplayed={0}
-              onPageChange={async pageChange => {
-                setActivePage(pageChange.selected);
-                await getCavAndSubmittedCasesForJudgesSequence({
-                  selectedPage: pageChange.selected,
-                });
-                window.document
-                  .getElementById('paginatorTop')
-                  ?.scrollIntoView();
-              }}
-            />
-          )}
           {judgeActivityReportHelper.progressDescriptionTableTotal === 0 && (
             <p>{'There are no cases with a status of "Submitted" or "CAV".'}</p>
           )}
@@ -399,6 +389,18 @@ export const JudgeActivityReport = connect(
                   <option key="all" value="All Judges">
                     All Judges
                   </option>
+                  <option key="All Regular Judges" value="All Regular Judges">
+                    All Regular Judges
+                  </option>
+                  <option key="All Senior Judges" value="All Senior Judges">
+                    All Senior Judges
+                  </option>
+                  <option
+                    key="All Special Trial Judges"
+                    value="All Special Trial Judges"
+                  >
+                    All Special Trial Judges
+                  </option>
                   {(judgeActivityReportJudges || []).map(judge => (
                     <option key={judge.name} value={judge.name}>
                       {judge.name}
@@ -412,10 +414,7 @@ export const JudgeActivityReport = connect(
                   className="position-relative margin-bottom-35"
                   disabled={judgeActivityReportHelper.isFormPristine}
                   onClick={() => {
-                    submitJudgeActivityReportSequence({
-                      selectedPage: 0,
-                    });
-                    setActivePage(0);
+                    submitJudgeActivityReportSequence();
                   }}
                 >
                   Run Report
