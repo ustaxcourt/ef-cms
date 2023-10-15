@@ -29,6 +29,9 @@ describe('Chambers dashboard', () => {
   chambersUserViewsCaseDetailAfterAddingOrder(cerebralTest, 3);
   chambersUserViewsDraftDocuments(cerebralTest, 1);
   chambersUserViewsSignDraftDocument(cerebralTest);
-  chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'John O. Colvin');
+  chambersUserAppliesSignatureToDraftDocument(cerebralTest, {
+    judgeName: 'John O. Colvin',
+    judgeTitle: 'Judge',
+  });
   chambersUserSavesSignatureForDraftDocument(cerebralTest);
 });
