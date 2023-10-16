@@ -58,10 +58,8 @@ export const confirmAuthCodeCognitoLocal = async ({
     };
   }
 
-  if (result.AuthenticationResult.IdToken) {
-    return {
-      refreshToken: result.AuthenticationResult.IdToken,
-      token: result.AuthenticationResult.IdToken,
-    };
-  }
+  return {
+    refreshToken: result.AuthenticationResult.IdToken,
+    token: result.AuthenticationResult.IdToken,
+  };
 };
