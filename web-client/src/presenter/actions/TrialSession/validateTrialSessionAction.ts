@@ -63,7 +63,7 @@ export const validateTrialSessionAction = ({
   ) {
     errors = {
       ...(errors || {}),
-      estimatedEndDate: 'Please enter a valid estimated end date.',
+      estimatedEndDate: 'Please enter a valid estimated end date.', //TODO: Devex-1187: do we need this?
     };
   }
 
