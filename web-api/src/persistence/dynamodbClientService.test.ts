@@ -366,15 +366,36 @@ describe('dynamodbClientService', function () {
   });
 
   describe('batchGet', () => {
+    it('should remove remove duplicates from keys array', async () => {
+      const result = await batchGet({
+        applicationContext,
+        keys: [
+          {
+            pk: MOCK_ITEM.docketNumber,
+            sk: `caseWorksheet|${MOCK_ITEM.docketNumber}`,
+          },
+          {
+            pk: MOCK_ITEM.docketNumber,
+            sk: `caseWorksheet|${MOCK_ITEM.docketNumber}`,
+          },
+        ],
+      });
+      expect(
+        applicationContext.getDocumentClient().batchGet.mock.calls[0][0]
+          .RequestItems['efcms-local'].Keys.length,
+      ).toEqual(1);
+      expect(result).toEqual([MOCK_ITEM]);
+    });
+
     it('should remove the global aws fields on the object returned', async () => {
       const result = await batchGet({
         applicationContext,
         keys: [
           {
             pk: MOCK_ITEM.docketNumber,
+            sk: `caseWorksheet|${MOCK_ITEM.docketNumber}`,
           },
         ],
-        tableName: 'a',
       });
       expect(result).toEqual([MOCK_ITEM]);
     });
@@ -382,7 +403,6 @@ describe('dynamodbClientService', function () {
       const result = await batchGet({
         applicationContext,
         keys: [],
-        tableName: 'a',
       });
       expect(result).toEqual([]);
     });

@@ -80,7 +80,7 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
 export SOURCE_TABLE_VERSION
 export ELASTICSEARCH_ENDPOINT
 export DEPLOYING_COLOR
-export FILE_NAME=./scripts/data-import/judge/judge_users.csv
+export FILE_NAME=./scripts/circleci/judge/judge_users.csv
 
 echo "clearing elasticsearch"
 ./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
@@ -93,4 +93,4 @@ echo "setting up test users"
 # shellcheck disable=SC1091
 . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
 echo "importing judge users"
-./scripts/data-import/judge/bulk-import-judge-users.sh
+./scripts/circleci/judge/bulk-import-judge-users.sh

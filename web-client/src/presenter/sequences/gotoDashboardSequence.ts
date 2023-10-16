@@ -7,7 +7,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
-import { getSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
+import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { getTrialSessionsForJudgeAction } from '../actions/TrialSession/getTrialSessionsForJudgeAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -77,7 +77,7 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  getSubmittedAndCavCasesForJudgeAction,
+                  getSubmittedAndCavCasesForCurrentJudgeAction,
                   setSubmittedAndCavCasesForJudgeAction,
                   getCaseWorksheetsAction,
                   setCaseWorksheetsForJudgeAction,
@@ -101,7 +101,7 @@ const goToDashboard = [
                   setJudgeUserAction,
                   getTrialSessionsForJudgeAction,
                   setTrialSessionsAction,
-                  getSubmittedAndCavCasesForJudgeAction,
+                  getSubmittedAndCavCasesForCurrentJudgeAction,
                   setSubmittedAndCavCasesForJudgeAction,
                   getCaseWorksheetsAction,
                   setCaseWorksheetsForJudgeAction,

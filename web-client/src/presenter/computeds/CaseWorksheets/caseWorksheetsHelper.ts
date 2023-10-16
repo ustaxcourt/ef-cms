@@ -1,3 +1,4 @@
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -88,7 +89,7 @@ export const getSubmittedOrCAVDate = (
   caseStatusHistory: { updatedCaseStatus: string; date: string }[],
 ): string => {
   const foundDate = caseStatusHistory.find(statusHistory =>
-    ['Submitted', 'CAV'].includes(statusHistory.updatedCaseStatus),
+    CAV_AND_SUBMITTED_CASE_STATUS.includes(statusHistory.updatedCaseStatus),
   )?.date;
 
   if (!foundDate) return '';
