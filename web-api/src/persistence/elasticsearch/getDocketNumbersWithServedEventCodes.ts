@@ -5,7 +5,10 @@ import { search } from './searchClient';
 
 export const getDocketNumbersWithServedEventCodes = async (
   applicationContext: IApplicationContext,
-  { cases, eventCodes }: { cases?: RawCase[]; eventCodes: string[] },
+  {
+    cases,
+    eventCodes,
+  }: { cases?: { docketNumber: string }[]; eventCodes: string[] },
 ): Promise<string[]> => {
   const docketNumbers = cases
     ? cases.map(caseInfo => caseInfo.docketNumber)

@@ -1,5 +1,4 @@
 import { batchGet } from '../../dynamodbClientService';
-import { uniq } from 'lodash';
 
 /**
  * getUsersById
@@ -16,7 +15,7 @@ export const getUsersById = async ({
 }) => {
   return await batchGet({
     applicationContext,
-    keys: uniq(userIds).map(userId => ({
+    keys: userIds.map(userId => ({
       pk: `user|${userId}`,
       sk: `user|${userId}`,
     })),

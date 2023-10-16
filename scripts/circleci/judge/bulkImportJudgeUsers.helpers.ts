@@ -17,6 +17,7 @@ export const CSV_HEADERS = [
   'email',
   'role',
   'section',
+  'isSeniorJudge',
 ];
 
 export const init = async (csvFile, outputMap) => {

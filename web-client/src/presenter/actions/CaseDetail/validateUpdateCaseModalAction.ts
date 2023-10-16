@@ -18,7 +18,12 @@ export const validateUpdateCaseModalAction = ({
   const { STATUS_TYPES_WITH_ASSOCIATED_JUDGE } =
     applicationContext.getConstants();
 
-  let errors = {};
+  const errors: {
+    associatedJudge?: string;
+    caseCaption?: string;
+    caseStatus?: string;
+  } = {};
+
   if (
     STATUS_TYPES_WITH_ASSOCIATED_JUDGE.includes(caseStatus) &&
     !associatedJudge

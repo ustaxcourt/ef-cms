@@ -3,7 +3,7 @@
 # Deletes the pdfjs-express-viewer-enabled flag
 
 # Usage
-#   ENV=dev ./scripts/dynamo/delete-pdfjs-express-viewer-flag.sh
+#   ENV=dev ./scripts/run-once-scripts/delete-pdfjs-express-viewer-flag.sh
 
 ./check-env-variables.sh \
   "ENV" \
