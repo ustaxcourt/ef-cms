@@ -73,105 +73,7 @@ export class Contact extends JoiValidationEntity {
     this.hasEAccess = rawContact.hasEAccess || undefined;
   }
 
-  static SHARED_VALIDATION_MESSAGES = {
-    address1: 'Enter mailing address',
-    city: 'Enter city',
-    countryType: 'Enter country type',
-    name: 'Enter name',
-    paperPetitionEmail: 'Enter email address in format: yourname@example.com',
-    phone: 'Enter phone number',
-  } as const;
-
-  static DOMESTIC_VALIDATION_MESSAGES = {
-    ...Contact.SHARED_VALIDATION_MESSAGES,
-    postalCode: [
-      {
-        contains: 'match',
-        message: 'Enter ZIP code',
-      },
-      'Enter ZIP code',
-    ],
-    state: 'Enter state',
-  } as const;
-
-  static INTERNATIONAL_VALIDATION_MESSAGES = {
-    ...Contact.SHARED_VALIDATION_MESSAGES,
-    country: 'Enter a country',
-    postalCode: 'Enter ZIP code',
-  } as const;
-
   static SHARED_VALIDATION_RULES = {
-    address1: JoiValidationConstants.STRING.max(100).required(),
-    address2: JoiValidationConstants.STRING.max(100).optional(),
-    address3: JoiValidationConstants.STRING.max(100).optional(),
-    city: JoiValidationConstants.STRING.max(100).required(),
-    contactId: JoiValidationConstants.UUID.required().description(
-      'Unique contact ID only used by the system.',
-    ),
-    contactType: JoiValidationConstants.STRING.valid(
-      ...Object.values(CONTACT_TYPES),
-    ).required(),
-    email: JoiValidationConstants.EMAIL.when('hasEAccess', {
-      is: true,
-      otherwise: joi.optional(),
-      then: joi.required(),
-    }),
-    hasConsentedToEService: joi
-      .boolean()
-      .optional()
-      .description(
-        'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
-      ),
-    hasEAccess: joi
-      .boolean()
-      .optional()
-      .description(
-        'Flag that indicates if the contact has credentials to both the legacy and new system.',
-      ),
-    inCareOf: JoiValidationConstants.STRING.max(100).optional(),
-    isAddressSealed: joi.boolean().required(),
-    name: JoiValidationConstants.STRING.max(100).required(),
-    paperPetitionEmail: JoiValidationConstants.EMAIL.optional()
-      .allow(null)
-      .description('Email provided by the petitioner on their petition form'),
-    phone: JoiValidationConstants.STRING.max(100).required(),
-    sealedAndUnavailable: joi.boolean().optional(),
-    secondaryName: JoiValidationConstants.STRING.max(100).optional(),
-    serviceIndicator: JoiValidationConstants.STRING.valid(
-      ...Object.values(SERVICE_INDICATOR_TYPES),
-    ).optional(),
-    title: JoiValidationConstants.STRING.max(100).optional(),
-  } as const;
-
-  static DOMESTIC_VALIDATION_RULES = {
-    countryType: JoiValidationConstants.STRING.valid(
-      COUNTRY_TYPES.DOMESTIC,
-    ).required(),
-    ...Contact.SHARED_VALIDATION_RULES,
-    postalCode: JoiValidationConstants.US_POSTAL_CODE.required(),
-    state: JoiValidationConstants.STRING.valid(
-      ...Object.keys(US_STATES),
-      ...Object.keys(US_STATES_OTHER),
-      STATE_NOT_AVAILABLE,
-    ).required(),
-  } as const;
-
-  static INTERNATIONAL_VALIDATION_RULES = {
-    country: JoiValidationConstants.STRING.max(500).required(),
-    countryType: JoiValidationConstants.STRING.valid(
-      COUNTRY_TYPES.INTERNATIONAL,
-    ).required(),
-    ...Contact.SHARED_VALIDATION_RULES,
-    postalCode: JoiValidationConstants.STRING.max(100).required(),
-  } as const;
-
-  getValidationRules() {
-    return this.countryType === COUNTRY_TYPES.INTERNATIONAL
-      ? Contact.INTERNATIONAL_VALIDATION_RULES
-      : Contact.DOMESTIC_VALIDATION_RULES;
-  }
-
-  static SHARED_VALIDATION_RULES_NEW = {
     address1: JoiValidationConstants.STRING.max(100)
       .required()
       .messages(setDefaultErrorMessage('Enter mailing address')),
@@ -229,11 +131,11 @@ export class Contact extends JoiValidationEntity {
     title: JoiValidationConstants.STRING.max(100).optional(),
   } as const;
 
-  static DOMESTIC_VALIDATION_RULES_NEW = {
+  static DOMESTIC_VALIDATION_RULES = {
     countryType: JoiValidationConstants.STRING.valid(COUNTRY_TYPES.DOMESTIC)
       .required()
       .messages(setDefaultErrorMessage('Enter country type')),
-    ...Contact.SHARED_VALIDATION_RULES_NEW,
+    ...Contact.SHARED_VALIDATION_RULES,
     postalCode: JoiValidationConstants.US_POSTAL_CODE.required().messages(
       setDefaultErrorMessage('Enter ZIP code'),
     ),
@@ -246,7 +148,7 @@ export class Contact extends JoiValidationEntity {
       .messages(setDefaultErrorMessage('Enter state')),
   } as const;
 
-  static INTERNATIONAL_VALIDATION_RULES_NEW = {
+  static INTERNATIONAL_VALIDATION_RULES = {
     country: JoiValidationConstants.STRING.max(500)
       .required()
       .messages(setDefaultErrorMessage('Enter a country')),
@@ -255,22 +157,16 @@ export class Contact extends JoiValidationEntity {
     )
       .required()
       .messages(setDefaultErrorMessage('Enter country type')),
-    ...Contact.SHARED_VALIDATION_RULES_NEW,
+    ...Contact.SHARED_VALIDATION_RULES,
     postalCode: JoiValidationConstants.STRING.max(100)
       .required()
       .messages(setDefaultErrorMessage('Enter ZIP code')),
   } as const;
 
-  getValidationRules_NEW() {
+  getValidationRules() {
     return this.countryType === COUNTRY_TYPES.INTERNATIONAL
-      ? Contact.INTERNATIONAL_VALIDATION_RULES_NEW
-      : Contact.DOMESTIC_VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return this.countryType === COUNTRY_TYPES.INTERNATIONAL
-      ? Contact.INTERNATIONAL_VALIDATION_MESSAGES
-      : Contact.DOMESTIC_VALIDATION_MESSAGES;
+      ? Contact.INTERNATIONAL_VALIDATION_RULES
+      : Contact.DOMESTIC_VALIDATION_RULES;
   }
 }
 

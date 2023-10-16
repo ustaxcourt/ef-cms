@@ -1,8 +1,8 @@
-import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { CaseExternal } from './CaseExternal';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { getContactPrimary, getContactSecondary } from './Case';
 import joi from 'joi';
 
 /**
@@ -78,31 +78,8 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     ...CaseExternalInformationFactory.wizardStep4(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
-
   getValidationRules() {
     return CaseExternalInformationFactory.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    wizardStep: JoiValidationConstants.STRING.valid(
-      '1',
-      '2',
-      '3',
-      '4',
-    ).required(),
-    ...CaseExternalInformationFactory.wizardStep1_NEW(),
-    ...CaseExternalInformationFactory.wizardStep2_NEW(),
-    ...CaseExternalInformationFactory.wizardStep3_NEW(),
-    ...CaseExternalInformationFactory.wizardStep4_NEW(),
-  };
-
-  getValidationRules_NEW() {
-    return CaseExternalInformationFactory.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CaseExternalInformationFactory.VALIDATION_ERROR_MESSAGES;
   }
 
   static atWizardStep(stepNum, schemaObj) {
@@ -155,42 +132,6 @@ export class CaseExternalInformationFactory extends JoiValidationEntity {
     return CaseExternalInformationFactory.atWizardStep(4, {
       preferredTrialCity: CaseExternal.VALIDATION_RULES.preferredTrialCity,
       procedureType: CaseExternal.VALIDATION_RULES.procedureType,
-    });
-  }
-
-  static wizardStep1_NEW() {
-    return CaseExternalInformationFactory.atWizardStep(1, {
-      stinFile: CaseExternal.VALIDATION_RULES_NEW.stinFile,
-      stinFileSize: CaseExternal.VALIDATION_RULES_NEW.stinFileSize,
-    });
-  }
-
-  static wizardStep2_NEW() {
-    return CaseExternalInformationFactory.atWizardStep(2, {
-      caseType: CaseExternal.VALIDATION_RULES_NEW.caseType,
-      hasIrsNotice: CaseExternal.VALIDATION_RULES_NEW.hasIrsNotice,
-      petitionFile: CaseExternal.VALIDATION_RULES_NEW.petitionFile,
-      petitionFileSize: CaseExternal.VALIDATION_RULES_NEW.petitionFileSize,
-    });
-  }
-
-  static wizardStep3_NEW() {
-    return CaseExternalInformationFactory.atWizardStep(3, {
-      businessType: CaseExternal.VALIDATION_RULES_NEW.businessType,
-      corporateDisclosureFile:
-        CaseExternal.VALIDATION_RULES_NEW.corporateDisclosureFile,
-      corporateDisclosureFileSize:
-        CaseExternal.VALIDATION_RULES_NEW.corporateDisclosureFileSize,
-      countryType: CaseExternal.VALIDATION_RULES_NEW.countryType,
-      filingType: CaseExternal.VALIDATION_RULES_NEW.filingType,
-      partyType: CaseExternal.VALIDATION_RULES_NEW.partyType,
-    });
-  }
-
-  static wizardStep4_NEW() {
-    return CaseExternalInformationFactory.atWizardStep(4, {
-      preferredTrialCity: CaseExternal.VALIDATION_RULES_NEW.preferredTrialCity,
-      procedureType: CaseExternal.VALIDATION_RULES_NEW.procedureType,
     });
   }
 }

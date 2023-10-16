@@ -10,10 +10,10 @@ import {
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
 } from '../EntityConstants';
-import { Case, getContactPrimary, getContactSecondary } from './Case';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
+import { getContactPrimary, getContactSecondary } from './Case';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
@@ -76,85 +76,6 @@ export class CaseExternal extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    businessType: JoiValidationConstants.STRING.valid(
-      ...Object.values(BUSINESS_TYPES),
-    )
-      .optional()
-      .allow(null),
-    caseType: JoiValidationConstants.STRING.when('hasIrsNotice', {
-      is: joi.exist(),
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
-    corporateDisclosureFile: joi.object().when('filingType', {
-      is: 'A business',
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }),
-    corporateDisclosureFileSize: joi
-      .number()
-      .integer()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .when('corporateDisclosureFile', {
-        is: joi.exist(),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
-    countryType: JoiValidationConstants.STRING.optional(),
-    filingType: JoiValidationConstants.STRING.valid(
-      ...FILING_TYPES[ROLES.petitioner],
-      ...FILING_TYPES[ROLES.privatePractitioner],
-    ).required(),
-    hasIrsNotice: joi.boolean().required(),
-    partyType: JoiValidationConstants.STRING.valid(
-      ...Object.values(PARTY_TYPES),
-    ).required(),
-    petitionFile: joi.object().required(),
-    petitionFileSize: joi
-      .number()
-      .integer()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .when('petitionFile', {
-        is: joi.exist(),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
-    preferredTrialCity: joi
-      .alternatives()
-      .try(
-        JoiValidationConstants.STRING.valid(
-          ...TRIAL_CITY_STRINGS,
-          ...LEGACY_TRIAL_CITY_STRINGS,
-          null,
-        ),
-        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
-      )
-      .required(),
-    procedureType: JoiValidationConstants.STRING.valid(
-      ...PROCEDURE_TYPES,
-    ).required(),
-    stinFile: joi.object().required(), // object of type File
-    stinFileSize: joi
-      .number()
-      .integer()
-      .min(1)
-      .max(MAX_FILE_SIZE_BYTES)
-      .when('stinFile', {
-        is: joi.exist(),
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      }),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = Case.VALIDATION_ERROR_MESSAGES;
-
-  getValidationRules() {
-    return CaseExternal.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
     businessType: JoiValidationConstants.STRING.valid(
       ...Object.values(BUSINESS_TYPES),
     )
@@ -268,12 +189,8 @@ export class CaseExternal extends JoiValidationEntity {
       }),
   };
 
-  getValidationRules_NEW() {
-    return CaseExternal.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CaseExternal.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CaseExternal.VALIDATION_RULES;
   }
 
   getContactPrimary() {

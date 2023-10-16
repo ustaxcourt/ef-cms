@@ -138,17 +138,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
   } as const;
 
-  static VALIDATION_ERROR_MESSAGES = {} as const;
-
   getValidationRules() {
     return PublicDocketEntry.VALIDATION_RULES;
-  }
-
-  getValidationRules_NEW() {
-    return PublicDocketEntry.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return PublicDocketEntry.VALIDATION_ERROR_MESSAGES;
   }
 }
