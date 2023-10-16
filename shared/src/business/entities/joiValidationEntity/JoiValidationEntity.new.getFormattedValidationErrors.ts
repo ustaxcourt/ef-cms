@@ -6,10 +6,10 @@ export type JoiErrorDetail = {
   context: { key: string | number; label: string };
 };
 
-function getFormattedValidationErrorsHelper_NEW(entity: JoiValidationEntity): {
+function getFormattedValidationErrorsHelper(entity: JoiValidationEntity): {
   [key: string]: string;
 } | null {
-  const errors = entity.getValidationErrors_NEW();
+  const errors = entity.getValidationErrors();
   if (!errors) return null;
 
   const { details }: { details: JoiErrorDetail[] } = errors;
@@ -28,11 +28,11 @@ function isJoiValidationEntity(entity): boolean {
   return !!entity.getFormattedValidationErrors;
 }
 
-export function getFormattedValidationErrors_NEW(entity): TempTyping | null {
+export function getFormattedValidationErrors(entity): TempTyping | null {
   let errors: {} | null = null;
 
   if (isJoiValidationEntity(entity)) {
-    errors = getFormattedValidationErrorsHelper_NEW(entity);
+    errors = getFormattedValidationErrorsHelper(entity);
   }
 
   const updatedErrors =
@@ -43,6 +43,7 @@ export function getFormattedValidationErrors_NEW(entity): TempTyping | null {
   return nestedErrors;
 }
 
+// TODO: update name
 export type TempTyping = {
   [key: string]: string | TempTyping | TempTyping[];
 };
@@ -63,7 +64,7 @@ function appendNestedEntitiesErrors(
     } else if (Array.isArray(entityPropertyValue)) {
       const errorsForNestedEntitiesInArray = entityPropertyValue
         .map((item, index) => {
-          const itemErrors = getFormattedValidationErrors_NEW(item);
+          const itemErrors = getFormattedValidationErrors(item);
           return itemErrors ? { ...itemErrors, index } : null;
         })
         .filter(itemErrors => !!itemErrors) as (TempTyping & {
@@ -79,8 +80,7 @@ function appendNestedEntitiesErrors(
       entityPropertyValue &&
       entityPropertyValue.getFormattedValidationErrors
     ) {
-      const objectErrors =
-        getFormattedValidationErrors_NEW(entityPropertyValue);
+      const objectErrors = getFormattedValidationErrors(entityPropertyValue);
       if (objectErrors)
         errorsWithNestedErrorsAppended[entityProperty] = objectErrors;
     }

@@ -2,7 +2,7 @@
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
 import {
   JoiErrorDetail,
-  getFormattedValidationErrors_NEW,
+  getFormattedValidationErrors,
 } from './joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
 import { differenceWith, fromPairs, isEmpty, isEqual, toPairs } from 'lodash';
 import joi from 'joi';
@@ -44,124 +44,6 @@ function toRawObject(entity) {
   }
   return obj;
 }
-
-/**
- * returns all of the validation errors after being converted to their formatted output
- *
- * @returns {object} the formatted errors
- */
-function getFormattedValidationErrorsHelper(entity: JoiValidationEntity) {
-  const errors = entity.getValidationErrors();
-  if (!errors) return null;
-  for (let key of Object.keys(errors)) {
-    const errorMap = entity.getErrorToMessageMap()[key];
-    if (Array.isArray(errorMap)) {
-      for (let errorObject of errorMap) {
-        if (
-          typeof errorObject === 'object' &&
-          errors[key].includes(errorObject.contains)
-        ) {
-          errors[key] = errorObject.message;
-          break;
-        } else if (typeof errorObject !== 'object') {
-          errors[key] = errorObject;
-          break;
-        }
-      }
-    } else if (errorMap) {
-      errors[key] = errorMap;
-    }
-  }
-  return errors;
-}
-
-function getFormattedValidationErrors(entity): Record<string, string> | null {
-  const keys = Object.keys(entity);
-  const obj = {};
-  let errors: {} | null = null;
-  if (entity.getFormattedValidationErrors) {
-    errors = getFormattedValidationErrorsHelper(entity);
-  }
-  if (errors) {
-    for (const key of Object.keys(errors)) {
-      if (
-        // remove unhelpful error messages from contact validations
-        typeof errors[key] == 'string' &&
-        errors[key].endsWith('does not match any of the allowed types')
-      ) {
-        delete errors[key];
-      }
-    }
-    Object.assign(obj, errors);
-  }
-  for (let key of keys) {
-    const value = entity[key];
-    if (errors && errors[key]) {
-      continue;
-    } else if (Array.isArray(value)) {
-      obj[key] = value
-        .map((v, index) => {
-          const e = getFormattedValidationErrors(v);
-          return e ? { ...e, index } : null;
-        })
-        .filter(v => v);
-      if (obj[key].length === 0) {
-        delete obj[key];
-      }
-    } else if (
-      typeof value === 'object' &&
-      value &&
-      value.getFormattedValidationErrors
-    ) {
-      obj[key] = getFormattedValidationErrors(value);
-      if (!obj[key]) delete obj[key];
-    }
-  }
-  const results = Object.keys(obj).length === 0 ? null : obj;
-  // TODO: revert these after manual testing in test is complete
-  const newResults = getFormattedValidationErrors_NEW(entity);
-
-  /* eslint-disable no-restricted-globals */
-  const inFrontEnd = typeof document !== 'undefined';
-
-  if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
-    const resultsDiff = differenceWith(
-      toPairs(newResults!),
-      toPairs(results!),
-      isEqual,
-    );
-
-    const newResultsDiff = differenceWith(
-      toPairs(results!),
-      toPairs(newResults!),
-      isEqual,
-    );
-
-    const thisURL = new URL(document.URL);
-    const errorMessage = `Validation message mismatch. Please take a screenshot of this message and add to Devex Card 1187. 
-    Page: ${thisURL.pathname}
-    Entity Name: ${entity.entityName}
-    Old Results: ${JSON.stringify(fromPairs(resultsDiff))}
-    New Results: ${JSON.stringify(fromPairs(newResultsDiff))}`;
-
-    alert(errorMessage);
-  }
-
-  return results;
-}
-
-function customStringify(obj) {
-  if (!obj) return null;
-  const keys = Object.keys(obj).sort();
-  const result: string[] = [];
-
-  for (const key of keys) {
-    const value = obj[key];
-    result.push(`"${key}": ${JSON.stringify(value)}`);
-  }
-  return `{\n\t${result.join(',\n\t')}\n}`;
-}
-
 export abstract class JoiValidationEntity {
   public entityName: string;
 
@@ -170,11 +52,8 @@ export abstract class JoiValidationEntity {
   }
 
   abstract getValidationRules(): any;
-  abstract getErrorToMessageMap(): any;
 
-  abstract getValidationRules_NEW(): any;
-
-  getValidationErrors() {
+  getValidationErrors(): { details: JoiErrorDetail[] } | null {
     const rules = this.getValidationRules();
     const schema = rules.validate ? rules : joi.object().keys(rules);
     const { error } = schema.validate(this, {
@@ -182,31 +61,7 @@ export abstract class JoiValidationEntity {
       allowUnknown: true,
     });
     if (!error) return null;
-    const errors = {};
-    error.details.forEach(detail => {
-      if (!Number.isInteger(detail.context.key)) {
-        errors[detail.context.key || detail.type] = detail.message;
-      } else {
-        errors[detail.context.label] = detail.message;
-      }
-    });
-    return errors;
-  }
-
-  getValidationErrors_NEW(): { details: JoiErrorDetail[] } | null {
-    try {
-      const rules = this.getValidationRules_NEW();
-      const schema = rules.validate ? rules : joi.object().keys(rules);
-      const { error } = schema.validate(this, {
-        abortEarly: false,
-        allowUnknown: true,
-      });
-      if (!error) return null;
-      return error;
-    } catch (e) {
-      console.log('THIS IS THE ENTITY ', this.entityName);
-      return null;
-    }
+    return error;
   }
 
   isValid() {
@@ -250,10 +105,6 @@ export abstract class JoiValidationEntity {
 
   getFormattedValidationErrors() {
     return getFormattedValidationErrors(this);
-  }
-
-  getFormattedValidationErrors_NEW() {
-    return getFormattedValidationErrors_NEW(this);
   }
 
   toRawObject() {
