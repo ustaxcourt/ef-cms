@@ -4,7 +4,10 @@ export const setDefaultGenerationTypeAction = ({
   applicationContext,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  key: string;
+  value: string;
+}>) => {
   const { GENERATION_TYPES } = applicationContext.getConstants();
 
   if (props.key === 'eventCode') {

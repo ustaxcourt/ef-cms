@@ -565,7 +565,7 @@ export const NON_MULTI_DOCKETABLE_EVENT_CODES = [
 ];
 
 export const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP), // todo: EA should not be multi-docketable for e=filings
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ])
   .filter((internalEvent: Record<string, any>) => !internalEvent.caseDecision)
   .map(x => x.eventCode);
