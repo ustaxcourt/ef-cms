@@ -40,6 +40,18 @@ export class CourtIssuedDocumentTypeC extends CourtIssuedDocument {
     return CourtIssuedDocumentTypeC.VALIDATION_RULES;
   }
 
+  static VALIDATION_RULES_NEW = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+    docketNumbers: JoiValidationConstants.STRING.max(500).required().messages({
+      'any.required': 'Enter docket number(s)',
+      'string.max': 'Limit is 500 characters. Enter 500 or fewer characters.',
+    }),
+  };
+
+  getValidationRules_NEW() {
+    return CourtIssuedDocumentTypeC.VALIDATION_RULES_NEW;
+  }
+
   getErrorToMessageMap() {
     return CourtIssuedDocumentTypeC.VALIDATION_ERROR_MESSAGES;
   }

@@ -14,9 +14,7 @@ describe('clearStatisticsFormValuesAction', () => {
             {
               irsDeficiencyAmount: '123',
               irsTotalPenalties: '123',
-              lastDateOfPeriodDay: '1',
-              lastDateOfPeriodMonth: '1',
-              lastDateOfPeriodYear: '2010',
+              lastDateOfPeriod: '2010-01-01',
               year: '2012',
               yearOrPeriod: 'Year',
             },
@@ -38,11 +36,10 @@ describe('clearStatisticsFormValuesAction', () => {
     const statisticsForm = {
       irsDeficiencyAmount: '123',
       irsTotalPenalties: '123',
-      lastDateOfPeriodDay: '1',
-      lastDateOfPeriodMonth: '1',
-      lastDateOfPeriodYear: '2010',
+      lastDateOfPeriod: '2010-01-01',
       year: '2012',
     };
+
     const result = await runAction(clearStatisticsFormValuesAction, {
       props: {
         key: 'statistics.0.year',

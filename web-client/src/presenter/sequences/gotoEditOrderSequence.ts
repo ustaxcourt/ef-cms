@@ -2,14 +2,11 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getDocumentContentsAction } from '../actions/getDocumentContentsAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
-import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setAddedDocketNumbersAction } from '../actions/setAddedDocketNumbersAction';
 import { setCaseAction } from '../actions/setCaseAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
@@ -36,9 +33,6 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setParentMessageIdAction,
   convertHtml2PdfSequence,
   setAddedDocketNumbersAction,
-  parallel([
-    [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
-  ]),
   setupCurrentPageAction('CreateOrder'),
 ]);
 

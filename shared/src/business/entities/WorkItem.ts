@@ -1,4 +1,5 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
@@ -22,7 +23,7 @@ export class WorkItem extends JoiValidationEntity {
   public docketNumberWithSuffix: string;
   public hideFromPendingMessages?: boolean;
   public highPriority: boolean;
-  public inProgress: boolean;
+  public inProgress?: boolean;
   public isInitializeCase: boolean;
   public isRead?: boolean;
   public section: string;
@@ -165,6 +166,10 @@ export class WorkItem extends JoiValidationEntity {
   }
 
   getValidationRules() {
+    return WORK_ITEM_VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
     return WORK_ITEM_VALIDATION_RULES;
   }
 

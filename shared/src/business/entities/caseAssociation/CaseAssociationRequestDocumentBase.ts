@@ -8,6 +8,7 @@ import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument
 import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { SupportingDocumentInformationFactory } from '@shared/business/entities/externalDocument/SupportingDocumentInformationFactory';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDocument {
@@ -93,6 +94,8 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
 
   static VALIDATION_ERROR_MESSAGES = {
     ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
+    documentTitle:
+      'Document title must be 500 characters or fewer. Update this document title and try again.',
     documentTitleTemplate: 'Select a document',
     eventCode: 'Select a document',
     filers: 'Select a party',
@@ -106,6 +109,85 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
 
   getValidationRules() {
     return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    attachments: joi
+      .boolean()
+      .optional()
+      .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
+    certificateOfService: joi
+      .boolean()
+      .required()
+      .messages(
+        setDefaultErrorMessage(
+          'Indicate whether you are including a Certificate of Service',
+        ),
+      ),
+    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now')
+      .when('certificateOfService', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .messages({
+        ...setDefaultErrorMessage('Enter date of service'),
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+    documentTitle: JoiValidationConstants.STRING.max(500)
+      .optional()
+      .messages(
+        setDefaultErrorMessage(
+          'Document title must be 500 characters or fewer. Update this document title and try again.',
+        ),
+      ),
+    documentTitleTemplate: JoiValidationConstants.STRING.max(500)
+      .required()
+      .messages(setDefaultErrorMessage('Select a document')),
+    documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+      .required()
+      .messages(setDefaultErrorMessage('Select a document type')),
+    eventCode: JoiValidationConstants.STRING.valid(...ALL_EVENT_CODES)
+      .required()
+      .messages(setDefaultErrorMessage('Select a document')),
+    filers: joi
+      .when('partyIrsPractitioner', {
+        is: true,
+        otherwise: joi.array().items(JoiValidationConstants.UUID).min(1),
+        then: joi.array().max(0),
+      })
+      .messages(
+        setDefaultErrorMessage('Select a party', {
+          keysToIgnore: ['string.guid'],
+        }),
+      ),
+    hasSupportingDocuments: joi
+      .boolean()
+      .optional()
+      .messages(
+        setDefaultErrorMessage('Enter selection for Supporting Documents.'),
+      ),
+    objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
+      .optional()
+      .messages(setDefaultErrorMessage('Enter selection for Objections.')),
+    partyIrsPractitioner: joi
+      .boolean()
+      .optional()
+      .messages(setDefaultErrorMessage('Select a filing party')),
+    partyPrivatePractitioner: joi.boolean().optional(),
+    primaryDocumentFile: joi
+      .object()
+      .required()
+      .messages(setDefaultErrorMessage('Upload a document')),
+    scenario: JoiValidationConstants.STRING.valid(...SCENARIOS)
+      .required()
+      .messages(setDefaultErrorMessage('Select a document')),
+    supportingDocuments: joi.array().optional(),
+  };
+
+  getValidationRules_NEW() {
+    return CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {

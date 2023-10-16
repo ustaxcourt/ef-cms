@@ -4,6 +4,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { faker } from '@faker-js/faker';
@@ -60,18 +61,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     };
 
     let formValues = [
-      {
-        key: 'receivedAtMonth',
-        value: faker.number.int({ max: 11, min: 1 }),
-      },
-      {
-        key: 'receivedAtDay',
-        value: faker.number.int({ max: 28, min: 1 }),
-      },
-      {
-        key: 'receivedAtYear',
-        value: faker.number.int({ max: 2021, min: 2001 }),
-      },
       {
         key: 'mailingDate',
         value: faker.date.recent().toDateString(),
@@ -178,6 +167,18 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         await cerebralTest.runSequence('updateFormValueSequence', item);
       }
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: `${faker.number.int({ max: 11, min: 1 })}/${faker.number.int({
+          max: 28,
+          min: 1,
+        })}/${faker.number.int({ max: 2021, min: 2001 })}`,
+      },
+    );
 
     for (const item of Object.values(ordersAndNoticesToGenerate)) {
       await cerebralTest.runSequence('updateFormValueSequence', {

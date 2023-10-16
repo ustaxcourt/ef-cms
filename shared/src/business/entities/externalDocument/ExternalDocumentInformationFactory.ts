@@ -15,6 +15,7 @@ import {
   makeRequiredHelper,
 } from './externalDocumentHelpers';
 import { isEqual, reduce, some, sortBy, values } from 'lodash';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class ExternalDocumentInformationFactory extends JoiValidationEntity {
@@ -242,7 +243,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
 
     const addProperty = (itemName, itemSchema, itemErrorMessage?) => {
       addPropertyHelper({
-        VALIDATION_ERROR_MESSAGES:
+        errorToMessageMap:
           ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
         itemErrorMessage,
         itemName,
@@ -319,6 +320,183 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
         addProperty(
           'filers',
           joi.array().items(joi.string().required()).required(),
+        );
+      }
+    }
+
+    return schema;
+  }
+
+  getValidationRules_NEW() {
+    let schema = {
+      attachments: joi
+        .boolean()
+        .required()
+        .messages(setDefaultErrorMessage('Enter selection for Attachments.')),
+      casesParties: joi.object().optional(),
+      certificateOfService: joi
+        .boolean()
+        .required()
+        .messages(
+          setDefaultErrorMessage(
+            'Indicate whether you are including a Certificate of Service',
+          ),
+        ),
+      documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
+        .optional()
+        .messages({
+          ...setDefaultErrorMessage('Select a document type'),
+        }),
+      eventCode: JoiValidationConstants.STRING.valid(
+        ...ALL_EVENT_CODES,
+      ).optional(),
+      freeText: JoiValidationConstants.STRING.optional().messages({
+        'any.required': 'Provide an answer',
+        'sring.max':
+          'Limit is 1000 characters. Enter 1000 or fewer characters.',
+      }),
+      hasSupportingDocuments: joi
+        .boolean()
+        .required()
+        .messages(
+          setDefaultErrorMessage('Enter selection for Supporting Documents.'),
+        ),
+      lodged: joi.boolean().optional(),
+      ordinalValue: JoiValidationConstants.STRING.optional().messages(
+        setDefaultErrorMessage('Select an iteration'),
+      ),
+      previousDocument: joi
+        .object()
+        .optional()
+        .messages(setDefaultErrorMessage('Select a document')),
+      primaryDocumentFile: joi
+        .object()
+        .required()
+        .messages(setDefaultErrorMessage('Upload a document')),
+    };
+
+    let schemaOptionalItems = {
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+        'now',
+      ).messages({
+        ...setDefaultErrorMessage('Enter date of service'),
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+      filers: joi
+        .array()
+        .items(JoiValidationConstants.UUID.required())
+        .required()
+        .messages(setDefaultErrorMessage('Select a filing party')),
+      hasSecondarySupportingDocuments: joi
+        .boolean()
+        .messages(
+          setDefaultErrorMessage(
+            'Enter selection for Secondary Supporting Documents.',
+          ),
+        ),
+      objections: JoiValidationConstants.STRING.messages(
+        setDefaultErrorMessage('Enter selection for Objections.'),
+      ),
+      partyIrsPractitioner: joi
+        .boolean()
+        .messages(setDefaultErrorMessage('Select a filing party')),
+      secondaryDocumentFile: joi
+        .object()
+        .messages(setDefaultErrorMessage('Upload a document')),
+      secondarySupportingDocuments: joi.array().optional(),
+      selectedCases: joi
+        .array()
+        .items(JoiValidationConstants.STRING)
+        .optional(),
+      supportingDocuments: joi.array().optional(),
+    };
+
+    const addProperty = (itemName, itemSchema, itemErrorMessage?) => {
+      const options = {
+        errorToMessageMap: {},
+        itemErrorMessage,
+        itemName,
+        itemSchema,
+        schema,
+      };
+      addPropertyHelper(options);
+    };
+
+    const makeRequired = itemName => {
+      makeRequiredHelper({
+        itemName,
+        schema,
+        schemaOptionalItems,
+      });
+    };
+
+    if (this.certificateOfService === true) {
+      makeRequired('certificateOfServiceDate');
+    }
+
+    const objectionDocumentTypes = [
+      ...DOCUMENT_EXTERNAL_CATEGORIES_MAP['Motion'].map(entry => {
+        return entry.documentType;
+      }),
+      'Motion to Withdraw Counsel (filed by petitioner)',
+      'Motion to Withdraw as Counsel',
+      'Application to Take Deposition',
+    ];
+
+    if (
+      objectionDocumentTypes.includes(this.documentType) ||
+      (AMENDMENT_EVENT_CODES.includes(this.eventCode!) &&
+        objectionDocumentTypes.includes(this.previousDocument?.documentType!))
+    ) {
+      makeRequired('objections');
+    }
+
+    if (
+      this.scenario &&
+      this.scenario.toLowerCase().trim() === 'nonstandard h'
+    ) {
+      if (this.documentType === 'Motion for Leave to File Out of Time') {
+        makeRequired('secondaryDocumentFile');
+      }
+
+      if (this.secondaryDocumentFile) {
+        makeRequired('hasSecondarySupportingDocuments');
+      }
+    }
+
+    if (this.selectedCases && this.selectedCases.length > 1) {
+      if (this.partyIrsPractitioner !== true) {
+        const casesWithAPartySelected = reduce(
+          this.casesParties,
+          (accArray: string[], parties: object, docketNumber: string) => {
+            if (some(values(parties))) {
+              accArray.push(docketNumber);
+            }
+            return accArray;
+          },
+          [],
+        );
+        if (
+          !isEqual(sortBy(this.selectedCases), sortBy(casesWithAPartySelected))
+        ) {
+          addProperty(
+            'filers',
+            joi
+              .array()
+              .items(joi.string().required())
+              .messages(setDefaultErrorMessage('Select a filing party')),
+          );
+        }
+      }
+    } else {
+      if (this.filers.length === 0 && this.partyIrsPractitioner !== true) {
+        addProperty(
+          'filers',
+          joi
+            .array()
+            .items(joi.string().required())
+            .messages(setDefaultErrorMessage('Select a filing party')),
         );
       }
     }
