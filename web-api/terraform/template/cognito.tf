@@ -255,7 +255,7 @@ resource "aws_cognito_user_pool_client" "irs_client" {
     id_token      = "hours"
     refresh_token = "days"
   }
-  refresh_token_validity = 1
+  refresh_token_validity = 30 # irs app expects 30 days
   access_token_validity  = 1
   id_token_validity      = 1
 
