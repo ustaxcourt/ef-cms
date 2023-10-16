@@ -1,7 +1,6 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { refreshElasticsearchIndex } from '../helpers';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
 export const petitionsClerkCreatesACaseDeadline = (
   cerebralTest,
@@ -20,8 +19,8 @@ export const petitionsClerkCreatesACaseDeadline = (
     await cerebralTest.runSequence('createCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
-      description: VALIDATION_ERROR_MESSAGES.description[1],
+      deadlineDate: CaseDeadline.VALIDATION_ERROR_MESSAGES.deadlineDate,
+      description: CaseDeadline.VALIDATION_ERROR_MESSAGES.description[1],
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -39,25 +38,24 @@ I'll be gone
 In a day or two`,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: overrides.month || '8',
-    });
+    const deadlineMonth = overrides.month || '08';
+    const deadlineDay = overrides.day || '12';
+    const deadlineYear = overrides.year || '2025';
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: overrides.day || '12',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: overrides.year || '2025',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'deadlineDate',
+        toFormat: FORMATS.ISO,
+        value: `${deadlineMonth}/${deadlineDay}/${deadlineYear}`,
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: VALIDATION_ERROR_MESSAGES.description[0].message,
+      description:
+        CaseDeadline.VALIDATION_ERROR_MESSAGES.description[0].message,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

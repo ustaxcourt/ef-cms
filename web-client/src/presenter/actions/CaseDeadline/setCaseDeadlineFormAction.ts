@@ -1,5 +1,5 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { find } from 'lodash';
-import { parseDateToMonthDayYear } from './parseDateToMonthDayYear';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -17,6 +17,7 @@ export const setCaseDeadlineFormAction = ({
   store,
 }: ActionProps) => {
   const caseDeadlines = get(state.caseDeadlines);
+
   const caseDeadline = find(caseDeadlines, {
     caseDeadlineId: props.caseDeadlineId,
   });
@@ -25,11 +26,10 @@ export const setCaseDeadlineFormAction = ({
 
   if (caseDeadline) {
     form = {
-      ...parseDateToMonthDayYear({
-        applicationContext,
-        dateString: caseDeadline.deadlineDate,
-      }),
       caseDeadlineId: caseDeadline.caseDeadlineId,
+      deadlineDate: applicationContext
+        .getUtilities()
+        .formatDateString(caseDeadline.deadlineDate, FORMATS.YYYYMMDD),
       description: caseDeadline.description,
     };
 

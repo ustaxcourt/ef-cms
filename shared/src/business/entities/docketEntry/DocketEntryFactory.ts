@@ -16,7 +16,7 @@ import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setD
 import joi from 'joi';
 
 export class DocketEntryFactory extends JoiValidationEntity {
-  public dateReceived: string;
+  public receivedAt: string;
   public isDocumentRequired: boolean;
   public partyPrivatePractitioner: boolean;
   public primaryDocumentFile: object;
@@ -64,7 +64,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
-    this.dateReceived = rawPropsParam.dateReceived;
+    this.receivedAt = rawPropsParam.receivedAt;
     this.documentTitle = rawPropsParam.documentTitle;
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
@@ -101,13 +101,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
 
   static VALIDATION_ERROR_MESSAGES = {
     ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-    dateReceived: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Received date cannot be in the future. Enter a valid date.',
-      },
-      'Enter a valid date received',
-    ],
     documentTitle:
       'Document title must be 3000 characters or fewer. Update this document title and try again.',
     eventCode: 'Select a document type',
@@ -120,6 +113,13 @@ export class DocketEntryFactory extends JoiValidationEntity {
         message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       },
       'Your document file size is empty.',
+    ],
+    receivedAt: [
+      {
+        contains: 'must be less than or equal to',
+        message: 'Received date cannot be in the future. Enter a valid date.',
+      },
+      'Enter a valid date received',
     ],
     secondaryDocumentFile: 'A file was not selected.',
   } as const;
@@ -143,7 +143,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
         DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
       certificateOfServiceDate:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
-      dateReceived: JoiValidationConstants.ISO_DATE.max('now').required(),
       documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
       documentType: JoiValidationConstants.STRING.valid(
         ...ALL_DOCUMENT_TYPES,
@@ -193,6 +192,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
           then: joi.required(),
         },
       ),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
       serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS.serviceDate,
       trialLocation: DOCKET_ENTRY_VALIDATION_RULE_KEYS.trialLocation,
     });
@@ -257,13 +257,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
         DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.certificateOfService,
       certificateOfServiceDate:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.certificateOfServiceDate,
-      dateReceived: JoiValidationConstants.ISO_DATE.max('now')
-        .required()
-        .messages({
-          ...setDefaultErrorMessage('Enter a valid date received'),
-          'date.max':
-            'Received date cannot be in the future. Enter a valid date.',
-        }),
       documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.documentTitle,
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
@@ -319,6 +312,13 @@ export class DocketEntryFactory extends JoiValidationEntity {
         ...setDefaultErrorMessage('Your document file size is empty.'),
         'number.max': `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now')
+        .required()
+        .messages({
+          ...setDefaultErrorMessage('Enter a valid date received'),
+          'date.max':
+            'Received date cannot be in the future. Enter a valid date.',
+        }),
       serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.serviceDate,
       trialLocation: DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW.trialLocation,
     });
