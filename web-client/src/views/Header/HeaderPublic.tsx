@@ -34,12 +34,15 @@ export const HeaderPublic = connect(
   {
     isTerminalUser: state.isTerminalUser,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
+    navigateToCreatePetitionerAccountSequence:
+      sequences.navigateToCreatePetitionerAccountSequence,
     showBetaBar: state.templateHelper.showBetaBar,
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
     isTerminalUser,
     navigateToCognitoSequence,
+    navigateToCreatePetitionerAccountSequence,
     showBetaBar,
     toggleBetaBarSequence,
   }) {
@@ -78,6 +81,15 @@ export const HeaderPublic = connect(
                   >
                     Log In
                   </button>
+                </div>
+
+                <div className="create-container">
+                  <Button
+                    className="usa-button--unstyled"
+                    onClick={() => navigateToCreatePetitionerAccountSequence()}
+                  >
+                    Create Account
+                  </Button>
                 </div>
               </div>
             </div>

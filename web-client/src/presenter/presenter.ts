@@ -121,6 +121,7 @@ import { getCavAndSubmittedCasesForJudgesSequence } from './sequences/JudgeActiv
 import { getCustomCaseInventoryReportSequence } from './sequences/getCustomCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
@@ -658,6 +659,7 @@ export const presenterSequences = {
   getCustomCaseInventoryReportSequence,
   getUsersInSectionSequence,
   goToApplyStampSequence,
+  goToCreatePetitionerAccountSequence,
   gotoAccessibilityStatementSequence,
   gotoAddCourtIssuedDocketEntrySequence,
   gotoAddDeficiencyStatisticsSequence,

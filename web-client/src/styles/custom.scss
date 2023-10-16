@@ -988,6 +988,16 @@ header.usa-header {
   color: white;
 }
 
+.petitioner-account-creation-form {
+  background-color: color($theme-color-primary-darker);
+
+	.usa-label {
+		margin-top: 15px;
+		margin-bottom: 10px;
+		font-weight: normal;
+	}
+}
+
 .big-blue-header {
   padding: 20px 0;
   margin-bottom: 20px;

@@ -31,6 +31,11 @@ const router = {
       app.getSequence('gotoPublicCaseDetailSequence')({ docketNumber });
     });
 
+    route('/create-account/petitioner', () => {
+      setPageTitle('Account Registration');
+      app.getSequence('goToCreatePetitionerAccountSequence')();
+    });
+
     route('/case-detail/*/printable-docket-record', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicPrintableDocketRecordSequence')({
