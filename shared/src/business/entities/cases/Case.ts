@@ -930,7 +930,7 @@ export class Case extends JoiValidationEntity {
       }),
     irsPractitioners: joi
       .array()
-      .items(IrsPractitioner.VALIDATION_RULES)
+      .items(IrsPractitioner.VALIDATION_RULES_NEW)
       .optional()
       .description(
         'List of IRS practitioners (also known as respondents) associated with the case.',
@@ -1061,7 +1061,7 @@ export class Case extends JoiValidationEntity {
       .messages(setDefaultErrorMessage('Select a trial location')),
     privatePractitioners: joi
       .array()
-      .items(PrivatePractitioner.VALIDATION_RULES)
+      .items(PrivatePractitioner.VALIDATION_RULES_NEW)
       .optional()
       .description('List of private practitioners associated with the case.'),
     procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
@@ -1097,7 +1097,7 @@ export class Case extends JoiValidationEntity {
       .messages(setDefaultErrorMessage('Sortable docket number is required')),
     statistics: joi
       .array()
-      .items(Statistic.VALIDATION_RULES)
+      .items(Statistic.VALIDATION_RULES_NEW)
       .when('hasVerifiedIrsNotice', {
         is: true,
         otherwise: joi.optional(),
