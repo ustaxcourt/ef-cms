@@ -1,5 +1,5 @@
 export const navigateToCreatePetitionerAccountAction = async ({
   router,
 }: ActionProps): Promise<void> => {
-  await router.route('/account-registration');
+  await router.route('/create-account/petitioner');
 };

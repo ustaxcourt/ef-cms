@@ -59,7 +59,7 @@ export const presenterSequences = {
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
   dismissModalSequence,
-  goToAccountRegistrationSequence: goToCreatePetitionerAccountSequence,
+  goToCreatePetitionerAccountSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
