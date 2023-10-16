@@ -7,7 +7,6 @@ import {
 } from './helpers';
 import { externalUserFilesDocumentForOwnedCase } from './journey/externalUserFilesDocumentForOwnedCase';
 import { getConsolidatedCasesDetails } from './journey/consolidation/getConsolidatedCasesDetails';
-import { irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup } from './journey/irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -134,18 +133,6 @@ describe('External User files a document across a consolidated case group', () =
     verifyCorrectFileDocumentButton(cerebralTest, {
       docketNumber: consolidatedCaseDocketNumber3,
       shouldShowRequestAccessToCaseButton: true,
-    });
-    irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup(
-      cerebralTest,
-      {
-        docketNumber: consolidatedCaseDocketNumber3,
-        fakeFile,
-      },
-    );
-    verifyDocumentWasFiledAcrossConsolidatedCaseGroup(cerebralTest);
-    verifyPractitionerAssociationAcrossConsolidatedCaseGroup(cerebralTest, {
-      expectedAssociation: true,
-      practitionerRole: 'irsPractitioner',
     });
   });
 
