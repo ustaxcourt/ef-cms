@@ -40,21 +40,7 @@ export class Batch extends JoiValidationEntity {
     return this;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    batchIndex: 'Invalid batch index',
-    pages: 'At least one page is required',
-  };
-
   getValidationRules() {
-    return joi.object().keys({
-      batchId: JoiValidationConstants.UUID.required(),
-      batchIndex: joi.number().integer().min(0).required(),
-      createdAt: JoiValidationConstants.ISO_DATE.required(),
-      pages: joi.array().min(1).required(),
-    });
-  }
-
-  getValidationRules_NEW() {
     return joi.object().keys({
       batchId: JoiValidationConstants.UUID.required(),
       batchIndex: joi
@@ -70,9 +56,5 @@ export class Batch extends JoiValidationEntity {
         .required()
         .messages(setDefaultErrorMessage('At least one page is required')),
     });
-  }
-
-  getErrorToMessageMap() {
-    return Batch.VALIDATION_ERROR_MESSAGES;
   }
 }
