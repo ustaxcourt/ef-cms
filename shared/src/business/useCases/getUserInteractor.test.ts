@@ -53,6 +53,7 @@ describe('getUserInteractor', () => {
 
   it('should call the persistence method to get the user when the user is a judge', async () => {
     const mockJudge = {
+      isSeniorJudge: false,
       judgeFullName: 'Test Judge',
       judgeTitle: 'Judge',
       name: 'Test Judge',

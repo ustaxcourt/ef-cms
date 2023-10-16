@@ -6,7 +6,7 @@ export const getCountOfConsolidatedCases = async ({
 }: {
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
-}) => {
+}): Promise<number> => {
   const results = await count({
     applicationContext,
     searchParameters: {
