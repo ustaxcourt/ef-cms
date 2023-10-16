@@ -1,11 +1,11 @@
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { getSubmittedAndCavCasesForJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForJudgeAction';
+import { getSubmittedAndCavCasesForCurrentJudgeAction } from '@web-client/presenter/actions/CaseWorksheet/getSubmittedAndCavCasesForCurrentJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('getSubmittedAndCavCasesForJudgeAction', () => {
+describe('getSubmittedAndCavCasesForCurrentJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should retrieve cases with a status of submitted and cav for the provided judge from persistence and return items as props', async () => {
@@ -18,7 +18,7 @@ describe('getSubmittedAndCavCasesForJudgeAction', () => {
 
     const {
       output: { cases },
-    } = await runAction(getSubmittedAndCavCasesForJudgeAction, {
+    } = await runAction(getSubmittedAndCavCasesForCurrentJudgeAction, {
       modules: {
         presenter,
       },
@@ -32,7 +32,7 @@ describe('getSubmittedAndCavCasesForJudgeAction', () => {
         .calls[0][1],
     ).toEqual({
       judges: [judgeUser.name],
-      statuses: [CASE_STATUS_TYPES.submitted, CASE_STATUS_TYPES.cav],
+      statuses: CAV_AND_SUBMITTED_CASE_STATUS,
     });
     expect(cases).toEqual(TEST_CASES);
   });

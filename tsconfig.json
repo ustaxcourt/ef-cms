@@ -34,7 +34,8 @@
     "./web-client/integration-tests/**/*",
     "./web-client/integration-tests/fixtures/consolidated-cases.ts",
     "./web-client/integration-tests-public/**/*",
-    "./web-client/src/**/*"
+    "./web-client/src/**/*",
+    "./scripts/**/*"
   ],
-  "exclude": ["node_modules", "./cognito-triggers-sls/node_modules/**/*"]
+  "exclude": ["node_modules", "./scripts/run-once-scripts/**/*", "./cognito-triggers-sls/node_modules/**/*"]
 }

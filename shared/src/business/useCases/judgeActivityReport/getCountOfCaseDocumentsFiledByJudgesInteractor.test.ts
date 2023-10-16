@@ -1,12 +1,10 @@
+import { AggregatedEventCodesType } from '../../../../../web-api/src/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import {
-  CaseDocumentsAggregationReturnType,
   JudgeActivityReportFilters,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
 } from './getCountOfCaseDocumentsFiledByJudgesInteractor';
-import {
-  JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} from '../../entities/EntityConstants';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import { addDocumentTypeToEventCodeAggregation } from './addDocumentTypeToEventCodeAggregation';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { judgeUser, petitionsClerkUser } from '@shared/test/mockUsers';
 import {
@@ -14,11 +12,14 @@ import {
   mockCountOfOrdersIssuedByJudge,
 } from '@shared/test/mockSearchResults';
 
+jest.mock('./addDocumentTypeToEventCodeAggregation');
+
 describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   const mockStartDate = '02/12/2020';
   const mockEndDate = '03/21/2020';
   const mockJudges = [judgeUser.name];
   const mockValidRequest: JudgeActivityReportFilters = {
+    documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
     endDate: mockEndDate,
     judges: mockJudges,
     startDate: mockStartDate,
@@ -57,7 +58,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
   });
 
   it('should make a call to return the case documents filed by the judge provided in the date range provided, sorted by eventCode (ascending)', async () => {
-    const results: CaseDocumentsAggregationReturnType =
+    const results: AggregatedEventCodesType =
       await getCountOfCaseDocumentsFiledByJudgesInteractor(
         applicationContext,
         mockValidRequest,
@@ -75,45 +76,7 @@ describe('getCountOfCaseDocumentsFiledByJudgesInteractor', () => {
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
-        .mock.calls[1][0],
-    ).toMatchObject({
-      params: {
-        documentEventCodes: JUDGE_ACTIVITY_REPORT_ORDER_EVENT_CODES,
-        endDate: '2020-03-22T03:59:59.999Z',
-        judges: mockJudges,
-        startDate: '2020-02-12T05:00:00.000Z',
-      },
-    });
-
-    expect(results).toEqual({
-      opinions: mockCountOfOpinionsIssuedByJudge,
-      orders: mockCountOfOrdersIssuedByJudge,
-    });
-  });
-
-  it('should exclude certain order event codes when calling fetchEventCodesCountForJudges', async () => {
-    await getCountOfCaseDocumentsFiledByJudgesInteractor(
-      applicationContext,
-      mockValidRequest,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
-        .mock.calls[1][0].params.documentEventCodes,
-    ).not.toContain('OAJ');
-    expect(
-      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
-        .mock.calls[1][0].params.documentEventCodes,
-    ).not.toContain('SPOS');
-    expect(
-      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
-        .mock.calls[1][0].params.documentEventCodes,
-    ).not.toContain('SPTO');
-    expect(
-      applicationContext.getPersistenceGateway().fetchEventCodesCountForJudges
-        .mock.calls[1][0].params.documentEventCodes,
-    ).not.toContain('OST');
+    expect(addDocumentTypeToEventCodeAggregation).toHaveBeenCalled();
+    expect(results).toEqual(mockCountOfOpinionsIssuedByJudge);
   });
 });

@@ -1,13 +1,11 @@
-import {
-  CaseDocumentsAggregationReturnType,
-  JudgeActivityReportFilters,
-} from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
+import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
+import { GetCountOfCaseDocumentsFiledByJudgesRequest } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { get } from '../requests';
 
 export const getCountOfCaseDocumentsFiledByJudgesInteractor = (
   applicationContext,
-  params: JudgeActivityReportFilters,
-): Promise<CaseDocumentsAggregationReturnType> => {
+  params: GetCountOfCaseDocumentsFiledByJudgesRequest,
+): Promise<AggregatedEventCodesType> => {
   return get({
     applicationContext,
     endpoint: '/case-documents/count',
