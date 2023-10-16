@@ -9,6 +9,7 @@ import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
 import { confirmAuthCode } from './persistence/cognito/confirmAuthCode';
+import { confirmAuthCodeCognitoLocal } from '@web-api/persistence/cognito/confirmAuthCodeCognitoLocal';
 import { confirmAuthCodeLocal } from './persistence/cognito/confirmAuthCodeLocal';
 import { createCase } from './persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
@@ -279,7 +280,9 @@ const gatewayMethods = {
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
-    ? confirmAuthCodeLocal
+    ? process.env.USE_COGNITO_LOCAL
+      ? confirmAuthCodeCognitoLocal
+      : confirmAuthCodeLocal
     : confirmAuthCode,
   createChangeOfAddressJob,
   createLock,
