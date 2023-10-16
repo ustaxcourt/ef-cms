@@ -1,8 +1,8 @@
-import { navigateToAccountRegistrationAction } from '@web-client/presenter/actions/navigateToAccountRegistrationAction';
+import { navigateToCreatePetitionerAccountAction } from '@web-client/presenter/actions/navigateToCreatePetitionerAccountAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('navigateToAccountRegistrationAction', () => {
+describe('navigateToCreatePetitionerAccountAction', () => {
   let routeStub;
 
   beforeAll(() => {
@@ -14,7 +14,7 @@ describe('navigateToAccountRegistrationAction', () => {
   });
 
   it('should call route with the correct url for create petitioner', async () => {
-    await runAction(navigateToAccountRegistrationAction, {
+    await runAction(navigateToCreatePetitionerAccountAction, {
       modules: {
         presenter,
       },
