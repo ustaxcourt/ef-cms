@@ -12,12 +12,10 @@ export class CalendarNote extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    note: JoiValidationConstants.STRING.max(200).allow('', null).optional(),
+    note: JoiValidationConstants.STRING.allow('', null).optional(),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {
-    note: 'Limit is 200 characters. Enter 200 or fewer characters.',
-  };
+  static VALIDATION_ERROR_MESSAGES = {};
 
   getValidationRules() {
     return CalendarNote.VALIDATION_RULES;
