@@ -113,4 +113,4 @@ export const CreatePetitionerAccountForm = connect({}, () => {
   );
 });
 
-CreatePetitionerAccountForm.displayName = 'CreatePetitioneAccountForm';
+CreatePetitionerAccountForm.displayName = 'CreatePetitionerAccountForm';
