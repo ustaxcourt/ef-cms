@@ -22,8 +22,8 @@ import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSeq
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
+import { navigateToAccountRegistrationSequence } from '@web-client/presenter/sequences/navigateToAccountRegistrationSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
-import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
@@ -85,8 +85,8 @@ export const presenterSequences = {
   ),
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
+  navigateToAccountRegistrationSequence,
   navigateToCognitoSequence,
-  navigateToCreatePetitionerAccountSequence,
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,
