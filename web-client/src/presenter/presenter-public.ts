@@ -8,6 +8,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
+import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
@@ -22,8 +23,8 @@ import { gotoTodaysOrdersSequence } from './sequences/Public/gotoTodaysOrdersSeq
 import { initialPublicState } from './state-public';
 import { loadMoreTodaysOrdersSequence } from './sequences/loadMoreTodaysOrdersSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
-import { navigateToAccountRegistrationSequence } from '@web-client/presenter/sequences/navigateToAccountRegistrationSequence';
 import { navigateToCognitoSequence } from './sequences/navigateToCognitoSequence';
+import { navigateToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/navigateToCreatePetitionerAccountSequence';
 import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPublicSiteSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
@@ -58,6 +59,7 @@ export const presenterSequences = {
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
   dismissModalSequence,
+  goToAccountRegistrationSequence: goToCreatePetitionerAccountSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
@@ -85,8 +87,8 @@ export const presenterSequences = {
   ),
   loadMoreTodaysOrdersSequence,
   navigateBackSequence,
-  navigateToAccountRegistrationSequence,
   navigateToCognitoSequence,
+  navigateToCreatePetitionerAccountSequence,
   navigateToPublicSiteSequence,
   notFoundErrorSequence,
   openAppMaintenanceModalSequence,
