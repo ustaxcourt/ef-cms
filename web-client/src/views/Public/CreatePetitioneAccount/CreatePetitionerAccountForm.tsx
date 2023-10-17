@@ -26,7 +26,6 @@ export const CreatePetitionerAccountForm = connect(
               <label className="usa-label" htmlFor="email">
                 Email address
               </label>
-
               <input
                 required
                 autoCapitalize="off"
@@ -37,40 +36,38 @@ export const CreatePetitionerAccountForm = connect(
                 type="text"
               />
 
-              <label className="usa-label" htmlFor="password-create-account">
+              <label className="usa-label" htmlFor="name">
                 Name
               </label>
-
               <input
                 required
                 autoCapitalize="off"
                 autoCorrect="off"
                 className="usa-input"
-                id="email"
-                name="email"
-                type="email"
+                id="name"
+                name="name"
+                type="text"
               />
 
-              <label className="usa-label" htmlFor="password-create-account">
+              <label className="usa-label" htmlFor="password">
                 Password
               </label>
-
               <input
                 required
                 className="usa-input"
-                id="password-create-account"
+                id="password"
                 name="password"
                 type="password"
                 onChange={e => {
+                  console.log('e.target.value', e.target.value);
                   updateFormValueSequence({
                     key: 'password',
                     value: e.target.value,
                   });
                 }}
               />
-
               <button
-                aria-controls="password-create-account password-create-account-confirm"
+                aria-controls="password password-create-account-confirm"
                 className="usa-show-password"
                 data-hide-text="Hide password"
                 data-show-text="Show password"
@@ -79,6 +76,8 @@ export const CreatePetitionerAccountForm = connect(
               >
                 Show password
               </button>
+							<Require
+
               <label
                 className="usa-label"
                 htmlFor="password-create-account-confirm"
