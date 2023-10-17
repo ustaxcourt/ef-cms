@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { changePasswordLocalAction } from './changePasswordLocalAction';
 import { presenter } from '../presenter-mock';
-import { runAction } from 'cerebral/test';
+import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('changePasswordLocalAction', () => {
   const userEmail = 'someone@example.com';
@@ -30,8 +30,8 @@ describe('changePasswordLocalAction', () => {
         presenter,
       },
       state: {
-        cognitoLocal: { sessionId, userEmail },
         form: { newPassword },
+        login: { sessionId, userEmail },
       },
     });
 
@@ -53,8 +53,8 @@ describe('changePasswordLocalAction', () => {
         presenter,
       },
       state: {
-        cognitoLocal: { sessionId, userEmail },
         form: { newPassword },
+        login: { sessionId, userEmail },
       },
     });
 
@@ -72,8 +72,8 @@ describe('changePasswordLocalAction', () => {
         presenter,
       },
       state: {
-        cognitoLocal: { sessionId, userEmail },
         form: { newPassword },
+        login: { sessionId, userEmail },
       },
     });
 
