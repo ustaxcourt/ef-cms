@@ -134,7 +134,7 @@ export const CreatePetitionerAccountForm = connect(
                 Show password
               </button>
               <RequirementsText
-                label="Must not contain leading or trailing space"
+                label="Passowrd must match"
                 valid={true} // TODO : SAVE IN COMPUTED AND WIRE CORRECTLY HERE
               ></RequirementsText>
 
