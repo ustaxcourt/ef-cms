@@ -14,6 +14,18 @@ describe('ExternalDocumentInformationFactory', () => {
     ).getFormattedValidationErrors();
 
   describe('Standard Document', () => {
+    const VALID_DOC = {
+      category: 'Application',
+      certificateOfService: true,
+      certificateOfServiceDate: '1993-09-10T01:49:58.119Z',
+      documentTitle: 'Application for Waiver of Filing Fee',
+      documentType: 'Application for Waiver of Filing Fee',
+      filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
+      hasSupportingDocuments: true,
+      primaryDocumentFile: {},
+      scenario: 'Standard',
+    };
+
     beforeEach(() => {
       baseDoc = {
         category: 'Application',
@@ -22,6 +34,14 @@ describe('ExternalDocumentInformationFactory', () => {
         filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
         scenario: 'Standard',
       };
+    });
+
+    describe('Validation Errors', () => {
+      it('should return null if there are no validation error', () => {
+        const entity = new ExternalDocumentInformationFactory(VALID_DOC);
+        const formattedValidationErrors = entity.getFormattedValidationErrors();
+        expect(formattedValidationErrors).toEqual(null);
+      });
     });
 
     it('should require primary document file', () => {

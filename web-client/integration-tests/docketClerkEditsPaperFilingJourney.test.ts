@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -39,8 +40,8 @@ describe('Docket Clerk edits a paper filing journey', () => {
     });
 
     const paperFilingValidationErrors = [
-      'dateReceived',
       'eventCode',
+      'receivedAt',
       'documentType',
       'filers',
     ];
@@ -59,18 +60,10 @@ describe('Docket Clerk edits a paper filing journey', () => {
       paperFilingValidationErrors,
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      { key: 'receivedAt', toFormat: FORMATS.ISO, value: '01/01/2018' },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',

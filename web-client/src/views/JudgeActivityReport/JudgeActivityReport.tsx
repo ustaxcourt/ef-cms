@@ -4,12 +4,11 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { SortableColumnHeaderButton } from '@web-client/ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
 export const JudgeActivityReport = connect(
   {
     constants: state.constants,
@@ -23,6 +22,7 @@ export const JudgeActivityReport = connect(
     sortTableSequence: sequences.sortTableSequence,
     submitJudgeActivityReportSequence:
       sequences.submitJudgeActivityReportSequence,
+    tableSort: state.tableSort,
     validationErrors: state.validationErrors,
   },
   function JudgeActivityReport({
@@ -35,6 +35,7 @@ export const JudgeActivityReport = connect(
     setJudgeActivityReportFiltersSequence,
     sortTableSequence,
     submitJudgeActivityReportSequence,
+    tableSort,
     validationErrors,
   }) {
     const closedCases: () => JSX.Element = () => (
@@ -226,9 +227,11 @@ export const JudgeActivityReport = connect(
                 <th aria-label="docket number">Docket No.</th>
                 <th aria-label="number of cases">No. of Cases</th>
                 <th aria-label="judge">
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.ALPHABETICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={
                       judgeActivityReportHelper.submittedAndCavCasesByJudge
@@ -242,9 +245,11 @@ export const JudgeActivityReport = connect(
                 <th aria-label="petitioners">Petitioner(s)</th>
                 <th aria-label="case status">Case Status</th>
                 <th aria-label="days in status">
-                  <SortableColumnHeaderButton
+                  <SortableColumn
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={constants.ASCENDING}
+                    currentlySortedField={tableSort.sortField}
+                    currentlySortedOrder={tableSort.sortOrder}
+                    defaultSortOrder={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={
                       judgeActivityReportHelper.submittedAndCavCasesByJudge

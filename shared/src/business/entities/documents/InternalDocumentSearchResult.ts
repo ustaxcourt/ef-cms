@@ -69,6 +69,10 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
     return InternalDocumentSearchResult.VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return InternalDocumentSearchResult.VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return InternalDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
   }

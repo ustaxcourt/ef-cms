@@ -144,6 +144,10 @@ export class PublicDocketEntry extends JoiValidationEntity {
     return PublicDocketEntry.VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return PublicDocketEntry.VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return PublicDocketEntry.VALIDATION_ERROR_MESSAGES;
   }

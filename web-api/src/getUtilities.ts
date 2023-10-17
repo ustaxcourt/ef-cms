@@ -1,4 +1,5 @@
 import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
+import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
   calculateISODate,
@@ -12,7 +13,6 @@ import {
 import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -43,9 +43,11 @@ import { serveCaseDocument } from '../../shared/src/business/utilities/serveCase
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { uploadToS3 } from '../../shared/src/business/utilities/uploadToS3';
 
 const utilities = {
+  calculateDaysElapsedSinceLastStatusChange,
   calculateDifferenceInDays,
   calculateISODate,
   combineTwoPdfs,
@@ -56,7 +58,6 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
-  formatCaseForTrialSession,
   formatDateString,
   formatJudgeName,
   formatNow,
@@ -79,6 +80,7 @@ const utilities = {
   setConsolidationFlagsForDisplay,
   setServiceIndicatorsForCase,
   setupPdfDocument,
+  sleep,
   uploadToS3,
 };
 
