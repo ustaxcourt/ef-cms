@@ -2,18 +2,21 @@ import { RequirementsText } from '@web-client/views/Public/CreatePetitioneAccoun
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 
+import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 
 export const CreatePetitionerAccountForm = connect(
   {
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
+    navigateToCognitoSequence: sequences.navigateToCognitoSequence,
     password: state.form.password,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   ({
     confirmPassword,
     createAccountHelper,
+    navigateToCognitoSequence,
     password,
     updateFormValueSequence,
   }) => {
@@ -160,11 +163,12 @@ export const CreatePetitionerAccountForm = connect(
             </form>
             <p>
               Already have an account?{' '}
-              {/* TODO: FILL IN HREF WITH CORRECT LINK LATER ! */}
-              <a className="usa-link" href="/">
+              <Button
+                className="usa-button--unstyled"
+                onClick={() => navigateToCognitoSequence()}
+              >
                 Sign in
-              </a>
-              .
+              </Button>
             </p>
           </div>
         </div>
