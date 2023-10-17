@@ -24,7 +24,6 @@ import React, { useEffect } from 'react';
 const pages = {
   AppMaintenance,
   Contact,
-  CreatePetitionerAccount,
   EmailVerificationInstructions,
   EmailVerificationSuccess,
   ErrorView,
@@ -36,6 +35,10 @@ const pages = {
   PublicSearch,
   TodaysOpinions,
   TodaysOrders,
+};
+
+const floatingCards = {
+  CreatePetitionerAccount,
 };
 
 let initialPageLoaded = false;
@@ -68,6 +71,7 @@ export const AppComponentPublic = connect(
     }
 
     const CurrentPage = pages[currentPage];
+    const CurrentCardPage = floatingCards[currentPage];
 
     return (
       <React.Fragment>
@@ -85,9 +89,22 @@ export const AppComponentPublic = connect(
             <HeaderPublic />
           </>
         )}
-        <main id="main-content" role="main">
-          <CurrentPage />
-        </main>
+        {CurrentPage && (
+          <>
+            <main id="main-content" role="main">
+              <CurrentPage />
+            </main>
+          </>
+        )}
+        {CurrentCardPage && (
+          <>
+            <div className="floating-card-pages">
+              <div className="padding-top-5 padding-bottom-5 display-flex flex-justify-center">
+                <CurrentCardPage />
+              </div>
+            </div>
+          </>
+        )}
         <Loading />
 
         {showHeaderAndFooter && <Footer />}

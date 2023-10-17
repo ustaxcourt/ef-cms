@@ -7,13 +7,9 @@ import React from 'react';
 export const CreatePetitionerAccount = connect({}, () => {
   return (
     <>
-      <div className="petitioner-account-creation-form">
-        <div className="grid-container padding-top-5 padding-bottom-5">
-          <div className="grid-row flex-justify-center bg-white border border-base-lighter">
-            <CreatePetitionerAccountForm></CreatePetitionerAccountForm>
-            <CreatePetitionerAccountInfo></CreatePetitionerAccountInfo>
-          </div>
-        </div>
+      <div className="bg-white padding-y-3 padding-x-5 display-flex grid-gap-lg">
+        <CreatePetitionerAccountForm></CreatePetitionerAccountForm>
+        <CreatePetitionerAccountInfo></CreatePetitionerAccountInfo>
       </div>
     </>
   );

@@ -988,13 +988,25 @@ header.usa-header {
   color: white;
 }
 
-.petitioner-account-creation-form {
+.floating-card-pages {
   background-color: color($theme-color-primary-darker);
 
 	.usa-label {
 		margin-top: 15px;
 		margin-bottom: 10px;
 		font-weight: normal;
+	}
+
+	.grid-container{
+		width: unset;
+		max-width: unset;
+	}
+}
+
+.create-petitioner-form{
+	input.usa-input {
+		width: 100%;
+		max-width: unset;
 	}
 }
 
