@@ -998,6 +998,14 @@ header.usa-header {
   }
 }
 
+.valid-requirement{
+	color: $color-green
+}
+
+.invalid-requirement{
+	color: color($theme-color-secondary-vivid)
+}
+
 .create-petitioner-form {
   input.usa-input {
     width: 100%;
