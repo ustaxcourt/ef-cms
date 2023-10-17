@@ -4,7 +4,7 @@ import {
   CaseStatus,
   CaseType,
 } from '../EntityConstants';
-import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants.NEW';
+import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 

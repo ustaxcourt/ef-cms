@@ -27,7 +27,7 @@ import {
 } from '../EntityConstants';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
-import { DOCKET_ENTRY_VALIDATION_RULES } from '@shared/business/entities/EntityValidationConstants.NEW';
+import { DOCKET_ENTRY_VALIDATION_RULES } from '@shared/business/entities/EntityValidationConstants';
 import { DocketEntry } from '../DocketEntry';
 import {
   FORMATS,

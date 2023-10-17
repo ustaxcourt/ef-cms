@@ -12,7 +12,7 @@ import {
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
-import { DOCKET_ENTRY_VALIDATION_RULES } from '@shared/business/entities/EntityValidationConstants.NEW';
+import { DOCKET_ENTRY_VALIDATION_RULES } from '@shared/business/entities/EntityValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { User } from './User';
 import { WorkItem } from './WorkItem';

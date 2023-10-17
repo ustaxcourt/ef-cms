@@ -6,7 +6,7 @@ import {
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_MB,
 } from '../EntityConstants';
-import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants.NEW';
+import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
