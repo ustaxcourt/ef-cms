@@ -1,3 +1,4 @@
+import { RequirementsText } from '@web-client/views/Public/CreatePetitioneAccount/RequirementsText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 
@@ -6,9 +7,10 @@ import React from 'react';
 export const CreatePetitionerAccountForm = connect(
   {
     createAccountHelper: state.createAccountHelper,
+    password: state.form.password,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ updateFormValueSequence }) => {
+  ({ createAccountHelper, password, updateFormValueSequence }) => {
     return (
       <>
         <div
@@ -59,7 +61,6 @@ export const CreatePetitionerAccountForm = connect(
                 name="password"
                 type="password"
                 onChange={e => {
-                  console.log('e.target.value', e.target.value);
                   updateFormValueSequence({
                     key: 'password',
                     value: e.target.value,
@@ -76,7 +77,38 @@ export const CreatePetitionerAccountForm = connect(
               >
                 Show password
               </button>
-							<Require
+              <div hidden={!password}>
+                <RequirementsText
+                  label="Must contain lower case letter"
+                  valid={createAccountHelper.passwordErrors?.hasOneLowercase}
+                ></RequirementsText>
+                <RequirementsText
+                  label="Must contain upper case letter"
+                  valid={createAccountHelper.passwordErrors?.hasOneUppercase}
+                ></RequirementsText>
+                <RequirementsText
+                  label="Must contain number"
+                  valid={createAccountHelper.passwordErrors?.hasOneNumber}
+                ></RequirementsText>
+                <RequirementsText
+                  label="Must be between 8-99 characters long"
+                  valid={createAccountHelper.passwordErrors?.isProperLength}
+                ></RequirementsText>
+                <RequirementsText
+                  label="Must contain special character or space"
+                  valid={
+                    createAccountHelper.passwordErrors
+                      ?.hasSpecialCharacterOrSpace
+                  }
+                ></RequirementsText>
+                <RequirementsText
+                  label="Must not contain leading or trailing space"
+                  valid={
+                    createAccountHelper.passwordErrors
+                      ?.hasNoLeadingOrTrailingSpace
+                  }
+                ></RequirementsText>
+              </div>
 
               <label
                 className="usa-label"
@@ -101,6 +133,10 @@ export const CreatePetitionerAccountForm = connect(
               >
                 Show password
               </button>
+              <RequirementsText
+                label="Must not contain leading or trailing space"
+                valid={true} // TODO : SAVE IN COMPUTED AND WIRE CORRECTLY HERE
+              ></RequirementsText>
 
               <input
                 className="usa-button margin-top-4"

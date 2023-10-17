@@ -93,6 +93,8 @@ export class CreateAccountForm extends JoiValidationEntity {
         errorsToReturn[error] = false;
       }
       results.password = errorsToReturn;
+    } else {
+      results.password = getDefaultErrors();
     }
 
     return results;
