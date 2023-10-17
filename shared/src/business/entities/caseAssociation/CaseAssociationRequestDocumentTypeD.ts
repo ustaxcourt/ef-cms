@@ -45,20 +45,12 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeD.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
 
   static VALIDATION_RULES = CaseAssociationRequestDocumentBase.VALIDATION_RULES;
-  static VALIDATION_RULES_NEW =
-    CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW;
-
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
 
   getDocumentTitle = petitioners => {
     let petitionerNames;
@@ -81,19 +73,13 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   };
 
   getValidationRules() {
-    const rules = { ...CaseAssociationRequestDocumentTypeD.VALIDATION_RULES };
     if (this.generationType === GENERATION_TYPES.AUTO) {
-      rules.primaryDocumentFile = joi.object().optional();
+      return {
+        ...CaseAssociationRequestDocumentTypeD.VALIDATION_RULES,
+        primaryDocumentFile: joi.object().optional(),
+      };
     }
-    return rules;
-  }
-
-  getValidationRules_NEW() {
-    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeD.VALIDATION_ERROR_MESSAGES;
+    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES;
   }
 }
 

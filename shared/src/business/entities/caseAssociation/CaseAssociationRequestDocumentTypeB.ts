@@ -44,23 +44,10 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeB.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
-
-  static VALIDATION_RULES = {
-    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
-    objections: JoiValidationConstants.STRING.valid(
-      ...OBJECTIONS_OPTIONS,
-    ).required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
 
   getDocumentTitle = petitioners => {
     let petitionerNames;
@@ -82,23 +69,15 @@ export class CaseAssociationRequestDocumentTypeB extends CaseAssociationRequestD
     return replaceBracketed(this.documentTitleTemplate, petitionerNames);
   };
 
-  getValidationRules() {
-    return CaseAssociationRequestDocumentTypeB.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW,
+  static VALIDATION_RULES = {
+    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
     objections: JoiValidationConstants.STRING.valid(...OBJECTIONS_OPTIONS)
       .required()
       .messages(setDefaultErrorMessage('Enter selection for Objections.')),
   };
 
-  getValidationRules_NEW() {
-    return CaseAssociationRequestDocumentTypeB.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeB.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CaseAssociationRequestDocumentTypeB.VALIDATION_RULES;
   }
 }
 

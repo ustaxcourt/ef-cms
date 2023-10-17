@@ -5,7 +5,6 @@ import {
   SCENARIOS,
 } from '../EntityConstants';
 import { CaseAssociationRequestDocument } from './CaseAssociationRequestDocument';
-import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { SupportingDocumentInformationFactory } from '@shared/business/entities/externalDocument/SupportingDocumentInformationFactory';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
@@ -49,69 +48,17 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
-
-  static VALIDATION_RULES = {
-    attachments: joi.boolean().optional(),
-    certificateOfService: joi.boolean().required(),
-    certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now').when(
-      'certificateOfService',
-      {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      },
-    ),
-    documentTitle: JoiValidationConstants.STRING.max(500).optional(),
-    documentTitleTemplate: JoiValidationConstants.STRING.max(500).required(),
-    documentType: JoiValidationConstants.STRING.valid(
-      ...ALL_DOCUMENT_TYPES,
-    ).required(),
-    eventCode: JoiValidationConstants.STRING.valid(
-      ...ALL_EVENT_CODES,
-    ).required(),
-    filers: joi.when('partyIrsPractitioner', {
-      is: true,
-      otherwise: joi.array().items(JoiValidationConstants.UUID).min(1),
-      then: joi.array().max(0),
-    }),
-    hasSupportingDocuments: joi.boolean().optional(),
-    objections: JoiValidationConstants.STRING.valid(
-      ...OBJECTIONS_OPTIONS,
-    ).optional(),
-    partyIrsPractitioner: joi.boolean().optional(),
-    partyPrivatePractitioner: joi.boolean().optional(),
-    primaryDocumentFile: joi.object().required(),
-    scenario: JoiValidationConstants.STRING.valid(...SCENARIOS).required(),
-    supportingDocuments: joi.array().optional(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = {
-    ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-    documentTitle:
-      'Document title must be 500 characters or fewer. Update this document title and try again.',
-    documentTitleTemplate: 'Select a document',
-    eventCode: 'Select a document',
-    filers: 'Select a party',
-    scenario: 'Select a document',
-  };
 
   // TODO
   getDocumentTitle = () => {
     return this.documentTitleTemplate;
   };
 
-  getValidationRules() {
-    return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
+  static VALIDATION_RULES = {
     attachments: joi
       .boolean()
       .optional()
@@ -186,12 +133,8 @@ export class CaseAssociationRequestDocumentBase extends CaseAssociationRequestDo
     supportingDocuments: joi.array().optional(),
   };
 
-  getValidationRules_NEW() {
-    return CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CaseAssociationRequestDocumentBase.VALIDATION_RULES;
   }
 }
 

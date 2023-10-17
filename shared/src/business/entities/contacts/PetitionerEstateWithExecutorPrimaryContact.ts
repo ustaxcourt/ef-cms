@@ -15,14 +15,6 @@ export class PetitionerEstateWithExecutorPrimaryContact extends Contact {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      secondaryName: JoiValidationConstants.STRING.max(500).required(),
-      title: JoiValidationConstants.STRING.max(100).optional(),
-    };
-  }
-
-  getValidationRules_NEW() {
-    return {
-      ...super.getValidationRules_NEW(),
       secondaryName: JoiValidationConstants.STRING.max(500)
         .required()
         .messages(
@@ -33,14 +25,6 @@ export class PetitionerEstateWithExecutorPrimaryContact extends Contact {
       title: JoiValidationConstants.STRING.max(100)
         .optional()
         .messages(setDefaultErrorMessage('Enter title')),
-    };
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      secondaryName: 'Enter name of executor/personal representative',
-      title: 'Enter title',
     };
   }
 }

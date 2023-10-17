@@ -44,36 +44,17 @@ export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestD
 
     if (this.supportingDocuments) {
       this.supportingDocuments = this.supportingDocuments.map(item => {
-        return new SupportingDocumentInformationFactory(
-          item,
-          CaseAssociationRequestDocumentTypeC.VALIDATION_ERROR_MESSAGES,
-        );
+        return new SupportingDocumentInformationFactory(item);
       });
     }
   }
-
-  static VALIDATION_RULES = {
-    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
-    attachments: joi.boolean().required(),
-    hasSupportingDocuments: joi.boolean().required(),
-    objections: JoiValidationConstants.STRING.valid(
-      ...OBJECTIONS_OPTIONS,
-    ).required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES =
-    CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
 
   getDocumentTitle = () => {
     return this.documentTitleTemplate;
   };
 
-  getValidationRules() {
-    return CaseAssociationRequestDocumentTypeC.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW,
+  static VALIDATION_RULES = {
+    ...CaseAssociationRequestDocumentBase.VALIDATION_RULES,
     attachments: joi
       .boolean()
       .required()
@@ -89,12 +70,8 @@ export class CaseAssociationRequestDocumentTypeC extends CaseAssociationRequestD
       .messages(setDefaultErrorMessage('Enter selection for Objections.')),
   };
 
-  getValidationRules_NEW() {
-    return CaseAssociationRequestDocumentTypeC.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CaseAssociationRequestDocumentTypeC.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CaseAssociationRequestDocumentTypeC.VALIDATION_RULES;
   }
 }
 

@@ -16,9 +16,7 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
   public supportingDocumentFileSize?: number;
   public supportingDocumentFreeText: string;
 
-  private supportingDocumentValidationRules: object;
-
-  constructor(rawProps, validationRules) {
+  constructor(rawProps) {
     super('SupportingDocumentInformationFactory');
     this.attachments = rawProps.attachments || false;
     this.certificateOfService = rawProps.certificateOfService;
@@ -27,8 +25,6 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     this.supportingDocumentFile = rawProps.supportingDocumentFile;
     this.supportingDocumentFileSize = rawProps.supportingDocumentFileSize;
     this.supportingDocumentFreeText = rawProps.supportingDocumentFreeText;
-
-    this.supportingDocumentValidationRules = validationRules;
   }
 
   getValidationRules() {
