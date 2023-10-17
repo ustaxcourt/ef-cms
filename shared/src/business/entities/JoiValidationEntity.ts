@@ -125,13 +125,13 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   const inFrontEnd = typeof document !== 'undefined';
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
-    const resultsDiff = differenceWith(
+    const newResultsDiff = differenceWith(
       toPairs(newResults!),
       toPairs(results!),
       isEqual,
     );
 
-    const newResultsDiff = differenceWith(
+    const resultsDiff = differenceWith(
       toPairs(results!),
       toPairs(newResults!),
       isEqual,
@@ -143,7 +143,6 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
     Entity Name: ${entity.entityName}
     Old Results: ${JSON.stringify(fromPairs(resultsDiff))}
     New Results: ${JSON.stringify(fromPairs(newResultsDiff))}`;
-
     alert(errorMessage);
   }
 

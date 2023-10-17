@@ -1,4 +1,4 @@
-import { CaseAssociationRequestDocumentTypeC } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentTypeC';
+import { CaseAssociationRequestDocumentTypeD } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentTypeD';
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import {
   INITIAL_DOCUMENT_TYPES,
@@ -26,7 +26,7 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
     };
 
     it('should return null when there are no validation errors', () => {
-      const entity = new CaseAssociationRequestDocumentTypeC(
+      const entity = new CaseAssociationRequestDocumentTypeD(
         VALID_REQUEST_DOC_D,
       );
 
@@ -35,7 +35,7 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
     });
 
     it('should require primary document file type when generation type is manual', () => {
-      const entity = new CaseAssociationRequestDocumentTypeC({
+      const entity = new CaseAssociationRequestDocumentTypeD({
         ...VALID_REQUEST_DOC_D,
         generationType: GENERATION_TYPES.MANUAL,
         primaryDocumentFile: undefined,
@@ -48,9 +48,9 @@ describe('CaseAssociationRequestDocumentTypeD', () => {
     });
 
     it('should not require primary document file type when generation type is auto', () => {
-      const entity = new CaseAssociationRequestDocumentTypeC({
+      const entity = new CaseAssociationRequestDocumentTypeD({
         ...VALID_REQUEST_DOC_D,
-        generationType: GENERATION_TYPES.MANUAL,
+        generationType: GENERATION_TYPES.AUTO,
         primaryDocumentFile: undefined,
       });
 
