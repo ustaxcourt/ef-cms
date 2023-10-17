@@ -13,23 +13,14 @@ export class ExternalDocumentNonStandardB extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).required(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardB.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     freeText: JoiValidationConstants.STRING.max(1000).required().messages({
       'any.required': 'Provide an answer',
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
     }),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardB.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentNonStandardB.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {

@@ -17,22 +17,6 @@ export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).required(),
-    previousDocument: joi
-      .object()
-      .keys({
-        documentTitle: JoiValidationConstants.STRING.optional(),
-        documentType: JoiValidationConstants.STRING.required(),
-      })
-      .required(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardC.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     freeText: JoiValidationConstants.STRING.max(1000).required().messages({
       'any.required': 'Enter name',
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
@@ -47,21 +31,8 @@ export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
       .messages(setDefaultErrorMessage('Select a document')),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardC.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...ExternalDocumentBase.VALIDATION_ERROR_MESSAGES,
-      freeText: [
-        { contains: 'is required', message: 'Enter name' },
-        {
-          contains: 'must be less than or equal to',
-          message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-        },
-      ],
-    };
+  getValidationRules() {
+    return ExternalDocumentNonStandardC.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {

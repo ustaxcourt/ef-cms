@@ -21,27 +21,12 @@ export class ExternalDocumentNonStandardA extends ExternalDocumentBase {
         documentTitle: JoiValidationConstants.STRING.optional(),
         documentType: JoiValidationConstants.STRING.required(),
       })
-      .required(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardA.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
-    previousDocument: joi
-      .object()
-      .keys({
-        documentTitle: JoiValidationConstants.STRING.optional(),
-        documentType: JoiValidationConstants.STRING.required(),
-      })
       .required()
       .messages(setDefaultErrorMessage('Select a document')),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardA.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentNonStandardA.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {

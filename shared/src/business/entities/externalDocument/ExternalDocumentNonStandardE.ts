@@ -14,22 +14,13 @@ export class ExternalDocumentNonStandardE extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    trialLocation: JoiValidationConstants.STRING.required(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardE.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     trialLocation: JoiValidationConstants.STRING.required().messages(
       setDefaultErrorMessage('Select a preferred trial location.'),
     ),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardE.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentNonStandardE.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {

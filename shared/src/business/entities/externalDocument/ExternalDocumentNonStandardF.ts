@@ -20,27 +20,6 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    ordinalValue: JoiValidationConstants.STRING.required(),
-    otherIteration: joi.when('ordinalValue', {
-      is: 'Other',
-      otherwise: joi.optional().allow(null),
-      then: joi.number().max(999).required(),
-    }),
-    previousDocument: joi
-      .object()
-      .keys({
-        documentTitle: JoiValidationConstants.STRING.optional(),
-        documentType: JoiValidationConstants.STRING.required(),
-      })
-      .required(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardF.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     ordinalValue: JoiValidationConstants.STRING.required().messages(
       setDefaultErrorMessage('Select an iteration'),
     ),
@@ -64,8 +43,8 @@ export class ExternalDocumentNonStandardF extends ExternalDocumentBase {
       .messages(setDefaultErrorMessage('Select a document')),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardF.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentNonStandardF.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {

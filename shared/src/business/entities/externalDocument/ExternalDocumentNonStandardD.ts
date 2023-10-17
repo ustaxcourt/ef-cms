@@ -24,22 +24,6 @@ export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
         documentTitle: JoiValidationConstants.STRING.optional(),
         documentType: JoiValidationConstants.STRING.required(),
       })
-      .required(),
-    serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardD.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
-    previousDocument: joi
-      .object()
-      .keys({
-        documentTitle: JoiValidationConstants.STRING.optional(),
-        documentType: JoiValidationConstants.STRING.required(),
-      })
       .required()
       .messages(setDefaultErrorMessage('Select a document')),
     serviceDate: JoiValidationConstants.ISO_DATE.max('now')
@@ -50,8 +34,8 @@ export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
       }),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardD.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentNonStandardD.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {

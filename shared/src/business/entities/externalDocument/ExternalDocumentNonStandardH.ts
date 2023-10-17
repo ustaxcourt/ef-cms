@@ -17,16 +17,6 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    secondaryDocument: joi.object().required(),
-    secondaryDocumentFile: joi.object().optional(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentNonStandardH.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     secondaryDocument: joi
       .object()
       .required()
@@ -37,8 +27,8 @@ export class ExternalDocumentNonStandardH extends ExternalDocumentBase {
       .messages(setDefaultErrorMessage('Upload a document')),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentNonStandardH.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentNonStandardH.VALIDATION_RULES;
   }
 
   getDocumentTitle(): string {
