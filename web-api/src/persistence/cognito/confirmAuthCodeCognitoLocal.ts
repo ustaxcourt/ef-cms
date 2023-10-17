@@ -41,7 +41,10 @@ export const confirmAuthCodeCognitoLocal = async ({
       .promise();
   } catch (e) {
     return {
-      alertError: { message: e.message, title: e.message },
+      alertError: {
+        message: (e as Error).message,
+        title: (e as Error).message,
+      },
     };
   }
 
