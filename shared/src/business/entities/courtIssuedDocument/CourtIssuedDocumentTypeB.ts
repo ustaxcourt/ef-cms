@@ -1,7 +1,4 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
@@ -30,26 +27,13 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
     this.judgeWithTitle = rawProps.judgeWithTitle;
   }
 
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).optional(),
-    judge: JoiValidationConstants.STRING.required(),
-    judgeWithTitle: JoiValidationConstants.STRING.optional(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     const judge = this.judgeWithTitle || this.judge;
     return replaceBracketed(this.documentTitle, judge, this.freeText);
   }
 
-  getValidationRules() {
-    return CourtIssuedDocumentTypeB.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
     freeText: JoiValidationConstants.STRING.max(1000).optional().messages({
       'any.required': 'Enter a description',
       'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
@@ -60,12 +44,8 @@ export class CourtIssuedDocumentTypeB extends CourtIssuedDocument {
     judgeWithTitle: JoiValidationConstants.STRING.optional(),
   };
 
-  getValidationRules_NEW() {
-    return CourtIssuedDocumentTypeB.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeB.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentTypeB.VALIDATION_RULES;
   }
 }
 

@@ -1,7 +1,4 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
@@ -24,32 +21,11 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
     this.filingDate = rawProps.filingDate;
   }
 
-  static VALIDATION_RULES = {
-    attachments: joi.boolean().required(),
-    documentTitle: JoiValidationConstants.STRING.optional(),
-    documentType: JoiValidationConstants.STRING.required(),
-    eventCode: JoiValidationConstants.STRING.optional(),
-    filingDate: joi.when('eventCode', {
-      is: joi
-        .exist()
-        .not(null)
-        .valid(...UNSERVABLE_EVENT_CODES),
-      otherwise: joi.optional().allow(null),
-      then: JoiValidationConstants.ISO_DATE.max('now').required(),
-    }),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     return this.documentTitle!;
   }
 
-  getValidationRules() {
-    return CourtIssuedDocumentBase.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
+  static VALIDATION_RULES = {
     attachments: joi
       .boolean()
       .required()
@@ -71,12 +47,8 @@ export class CourtIssuedDocumentBase extends CourtIssuedDocument {
       .messages(setDefaultErrorMessage('Enter a filing date')),
   };
 
-  getValidationRules_NEW() {
-    return CourtIssuedDocumentBase.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentBase.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentBase.VALIDATION_RULES;
   }
 }
 
