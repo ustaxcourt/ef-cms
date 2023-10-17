@@ -6,12 +6,12 @@ import React from 'react';
 
 export const CreatePetitionerAccount = connect({}, () => {
   return (
-    <>
-      <div className="bg-white padding-y-3 padding-x-5 display-flex grid-gap-lg">
+    <div className="bg-white padding-y-4 grid-container grid-gap-lg padding-x-4">
+      <div className="grid-row">
         <CreatePetitionerAccountForm></CreatePetitionerAccountForm>
         <CreatePetitionerAccountInfo></CreatePetitionerAccountInfo>
       </div>
-    </>
+    </div>
   );
 });
 
