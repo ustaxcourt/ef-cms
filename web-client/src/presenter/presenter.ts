@@ -276,6 +276,7 @@ import { openGainElectronicAccessToCaseModalSequence } from './sequences/openGai
 import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPenaltiesModalSequence';
 import { openPdfPreviewModalSequence } from './sequences/openPdfPreviewModalSequence';
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
+import { openPrintGeneratedPaperServiceSequence } from '@web-client/presenter/sequences/openPrintGeneratedPaperServiceSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
 import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
@@ -812,6 +813,7 @@ export const presenterSequences = {
   openItemizedPenaltiesModalSequence,
   openPdfPreviewModalSequence,
   openPractitionerDocumentDownloadUrlSequence,
+  openPrintGeneratedPaperServiceSequence,
   openPrintableTrialSessionWorkingCopyModalSequence,
   openPrioritizeCaseModalSequence,
   openRemoveFromTrialSessionModalSequence,

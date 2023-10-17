@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DeleteTrialSessionModal } from './DeleteTrialSessionModal';
 import { SessionAssignments } from '../TrialSessionWorkingCopy/SessionAssignments';
 import { connect } from '@cerebral/react';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -74,15 +73,16 @@ export const TrialSessionInformation = connect(
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence:
       sequences.openConfirmDeleteTrialSessionModalSequence,
+    openPrintGeneratedPaperServiceSequence:
+      sequences.openPrintGeneratedPaperServiceSequence,
     printTrialCalendarSequence: sequences.printTrialCalendarSequence,
-    showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   function TrialSessionInformation({
     formattedTrialSessionDetails,
     openConfirmDeleteTrialSessionModalSequence,
+    openPrintGeneratedPaperServiceSequence,
     printTrialCalendarSequence,
-    showModal,
     TRIAL_SESSION_PROCEEDING_TYPES,
     trialSessionHeaderHelper,
   }) {
@@ -90,7 +90,7 @@ export const TrialSessionInformation = connect(
       <>
         <div className="grid-container padding-x-0">
           <div className="grid-row">
-            <div className="grid-col-9">
+            <div className="grid-col-auto">
               <h1>
                 Session Information
                 {trialSessionHeaderHelper.showSwitchToWorkingCopy && (
@@ -113,8 +113,7 @@ export const TrialSessionInformation = connect(
                 )}
               </h1>
             </div>
-            <div className="grid-col-3 display-flex">
-              <span className="flex-push-right width-0 margin-left-auto" />
+            <div className="grid-col-fill display-flex flex-justify-end">
               {formattedTrialSessionDetails.canDelete && (
                 <Button
                   link
@@ -127,20 +126,25 @@ export const TrialSessionInformation = connect(
                   Delete Session
                 </Button>
               )}
-              {showModal === 'DeleteTrialSessionModal' && (
-                <DeleteTrialSessionModal />
-              )}
               {formattedTrialSessionDetails.isCalendared && (
-                <Button
-                  link
-                  className="margin-top-2 margin-left-4"
-                  icon="print"
-                  onClick={() => {
-                    printTrialCalendarSequence();
-                  }}
-                >
-                  Print
-                </Button>
+                <>
+                  <Button
+                    link
+                    className="margin-top-2 margin-left-4"
+                    icon="print"
+                    onClick={() => openPrintGeneratedPaperServiceSequence()}
+                  >
+                    Print Paper Service PDF
+                  </Button>
+                  <Button
+                    link
+                    className="margin-top-2 margin-left-4"
+                    icon="print"
+                    onClick={() => printTrialCalendarSequence()}
+                  >
+                    Print Session Information
+                  </Button>
+                </>
               )}
             </div>
           </div>

@@ -2,6 +2,7 @@ import { AllCases } from './AllCases';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
+import { DeleteTrialSessionModal } from '@web-client/views/TrialSessionDetail/DeleteTrialSessionModal';
 import { DismissThirtyDayNoticeModal } from './DismissThirtyDayNoticeModal';
 import { EligibleCases } from './EligibleCases';
 import { ErrorNotification } from '../ErrorNotification';
@@ -9,6 +10,7 @@ import { InactiveCases } from './InactiveCases';
 import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
 import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
+import { PrintPreviouslyGeneratedPaperServiceModal } from '@web-client/views/TrialSessions/PrintPreviouslyGeneratedPaperServiceModal';
 import { ServeThirtyDayNoticeModal } from './ServeThirtyDayNoticeModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
@@ -50,6 +52,7 @@ export const TrialSessionDetail = connect(
           <SuccessNotification />
           <ErrorNotification />
           <WarningNotification />
+
           {formattedTrialSessionDetails.showAlertForNOTTReminder && (
             <WarningNotificationComponent
               alertWarning={{
@@ -217,6 +220,10 @@ export const TrialSessionDetail = connect(
         )}
         {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
         {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
+        {showModal === 'PrintPreviouslyGeneratedPaperServiceModal' && (
+          <PrintPreviouslyGeneratedPaperServiceModal />
+        )}
+        {showModal === 'DeleteTrialSessionModal' && <DeleteTrialSessionModal />}
       </>
     );
   },
