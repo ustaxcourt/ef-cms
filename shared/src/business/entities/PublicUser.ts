@@ -26,21 +26,11 @@ export class PublicUser extends JoiValidationEntity {
     }
   }
 
-  getErrorToMessageMap() {
-    return {
-      role: 'Role is required',
-    } as any;
-  }
-
   getValidationRules() {
-    return User.BASE_USER_VALIDATION as any;
-  }
-
-  getValidationRules_NEW() {
     return {
-      ...User.BASE_USER_VALIDATION_NEW,
+      ...User.BASE_USER_VALIDATION,
       name: JoiValidationConstants.STRING.max(100).required(),
-      role: User.BASE_USER_VALIDATION_NEW.role.messages(
+      role: User.BASE_USER_VALIDATION.role.messages(
         setDefaultErrorMessage('Role is required'),
       ),
     } as any;

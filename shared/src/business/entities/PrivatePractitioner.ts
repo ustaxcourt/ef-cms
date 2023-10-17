@@ -25,46 +25,11 @@ export class PrivatePractitioner extends User {
       Practitioner.getDefaultServiceIndicator(rawUser);
   }
 
-  static VALIDATION_RULES = joi.object().keys({
-    barNumber: JoiValidationConstants.STRING.max(100)
-      .required()
-      .description(
-        'A unique identifier comprising of the practitioner initials, date, and series number.',
-      ),
-    contact: joi.object().keys(USER_CONTACT_VALIDATION_RULES).optional(),
-    email: JoiValidationConstants.EMAIL.optional(),
-    entityName: JoiValidationConstants.STRING.valid(
-      'PrivatePractitioner',
-    ).required(),
-    firmName: JoiValidationConstants.STRING.max(100)
-      .optional()
-      .allow(null)
-      .description('The firm name for the practitioner.'),
-    name: JoiValidationConstants.STRING.max(100).required(),
-    representing: joi
-      .array()
-      .items(JoiValidationConstants.UUID)
-      .optional()
-      .description('List of contact IDs of contacts'),
-    role: JoiValidationConstants.STRING.required().valid(
-      ROLES.privatePractitioner,
-    ),
-    serviceIndicator: JoiValidationConstants.STRING.valid(
-      ...Object.values(SERVICE_INDICATOR_TYPES),
-    ).required(),
-    token: JoiValidationConstants.STRING.optional(),
-    userId: JoiValidationConstants.UUID.required(),
-  });
-
   isRepresenting(petitionerContactId) {
     return this.representing.includes(petitionerContactId);
   }
 
-  getValidationRules() {
-    return PrivatePractitioner.VALIDATION_RULES as any;
-  }
-
-  static VALIDATION_RULES_NEW = joi.object().keys({
+  static VALIDATION_RULES = joi.object().keys({
     barNumber: JoiValidationConstants.STRING.max(100)
       .required()
       .description(
@@ -97,8 +62,8 @@ export class PrivatePractitioner extends User {
     userId: JoiValidationConstants.UUID.required(),
   });
 
-  getValidationRules_NEW() {
-    return PrivatePractitioner.VALIDATION_RULES_NEW as any;
+  getValidationRules() {
+    return PrivatePractitioner.VALIDATION_RULES as any;
   }
 }
 
