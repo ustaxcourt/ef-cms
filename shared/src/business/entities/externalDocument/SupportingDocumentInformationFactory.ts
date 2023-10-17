@@ -33,63 +33,6 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
 
   getValidationRules() {
     let schema = {
-      attachments: joi.boolean().required(),
-      certificateOfService: joi.boolean().required(),
-      supportingDocument: JoiValidationConstants.STRING.required(),
-    };
-
-    let schemaOptionalItems = {
-      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-      supportingDocumentFile: joi.object(),
-      supportingDocumentFileSize: joi
-        .number()
-        .optional()
-        .min(1)
-        .max(MAX_FILE_SIZE_BYTES)
-        .integer(),
-      supportingDocumentFreeText: JoiValidationConstants.STRING,
-    };
-
-    const makeRequired = itemName => {
-      makeRequiredHelper({
-        itemName,
-        schema,
-        schemaOptionalItems,
-      });
-    };
-
-    if (this.certificateOfService === true) {
-      makeRequired('certificateOfServiceDate');
-    }
-
-    const supportingDocumentFreeTextCategories = [
-      'Affidavit in Support',
-      'Declaration in Support',
-      'Unsworn Declaration under Penalty of Perjury in Support',
-    ];
-    const supportingDocumentFileCategories = [
-      'Memorandum in Support',
-      'Brief in Support',
-      'Affidavit in Support',
-      'Declaration in Support',
-      'Unsworn Declaration under Penalty of Perjury in Support',
-    ];
-
-    if (
-      includes(supportingDocumentFreeTextCategories, this.supportingDocument)
-    ) {
-      makeRequired('supportingDocumentFreeText');
-    }
-
-    if (includes(supportingDocumentFileCategories, this.supportingDocument)) {
-      makeRequired('supportingDocumentFile');
-    }
-
-    return schema;
-  }
-
-  getValidationRules_NEW() {
-    let schema = {
       attachments: joi
         .boolean()
         .required()
@@ -171,9 +114,5 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     }
 
     return schema;
-  }
-
-  getErrorToMessageMap() {
-    return this.supportingDocumentValidationRules;
   }
 }

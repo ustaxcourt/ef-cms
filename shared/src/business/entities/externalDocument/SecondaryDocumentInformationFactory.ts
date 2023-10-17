@@ -14,6 +14,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
   public objections: string;
   public secondaryDocumentFile?: object;
 
+  // TODO: investigate whether this is necessary
   private secondaryDocumentErrorMessages: object;
 
   constructor(rawProps, errorMessages) {
@@ -30,49 +31,6 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    let schema = {};
-
-    let schemaOptionalItems = {
-      attachments: joi.boolean(),
-      certificateOfService: joi.boolean(),
-      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-      objections: JoiValidationConstants.STRING,
-    };
-
-    const makeRequired = itemName => {
-      makeRequiredHelper({
-        itemName,
-        schema,
-        schemaOptionalItems,
-      });
-    };
-
-    if (this.secondaryDocumentFile) {
-      makeRequired('attachments');
-      makeRequired('certificateOfService');
-
-      if (this.certificateOfService === true) {
-        makeRequired('certificateOfServiceDate');
-      }
-
-      if (
-        this.category === 'Motion' ||
-        includes(
-          [
-            'Motion to Withdraw Counsel',
-            'Motion to Withdraw As Counsel',
-            'Application to Take Deposition',
-          ],
-          this.documentType,
-        )
-      ) {
-        makeRequired('objections');
-      }
-    }
-    return schema;
-  }
-
-  getValidationRules_NEW() {
     let schema = {};
 
     let schemaOptionalItems = {
@@ -129,9 +87,5 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
       }
     }
     return schema;
-  }
-
-  getErrorToMessageMap() {
-    return this.secondaryDocumentErrorMessages;
   }
 }

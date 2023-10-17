@@ -14,24 +14,6 @@ export class ExternalDocumentStandard extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    documentType: JoiValidationConstants.STRING.required().when(
-      'selectedCases',
-      {
-        is: joi.array().min(1).required(),
-        then: JoiValidationConstants.STRING.invalid(
-          'Proposed Stipulated Decision',
-        ),
-      },
-    ),
-    selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
-  };
-
-  getValidationRules() {
-    return ExternalDocumentStandard.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...ExternalDocumentBase.VALIDATION_RULES_NEW,
     documentType: JoiValidationConstants.STRING.required()
       .when('selectedCases', {
         is: joi.array().min(1).required(),
@@ -47,8 +29,8 @@ export class ExternalDocumentStandard extends ExternalDocumentBase {
     selectedCases: joi.array().items(JoiValidationConstants.STRING).optional(),
   };
 
-  getValidationRules_NEW() {
-    return ExternalDocumentStandard.VALIDATION_RULES_NEW;
+  getValidationRules() {
+    return ExternalDocumentStandard.VALIDATION_RULES;
   }
 }
 
