@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Gets the JWT token and refresh token using the cognito authorization code.
@@ -24,8 +24,8 @@ export const authenticateUserAction = async ({
 
   if (response.alertError) {
     if (response.alertError.message === 'NEW_PASSWORD_REQUIRED') {
-      store.set(state.cognitoLocal.userEmail, code);
-      store.set(state.cognitoLocal.sessionId, response.alertError.sessionId);
+      store.set(state.login.userEmail, code);
+      store.set(state.login.sessionId, response.alertError.sessionId);
 
       return path.newPasswordRequired({
         path: '/change-password-local',
