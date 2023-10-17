@@ -202,6 +202,7 @@ export const CASE_STATUS_TYPES = {
   onAppeal: 'On Appeal', // After the trial, the case has gone to the appeals court
   rule155: 'Rule 155', // Where the Court has filed or stated its opinion or issued a dispositive order determining the issues in a case, it may withhold entry of its decision for the purpose of permitting the parties to submit computations pursuant to the Court’s determination of the issues, showing the correct amount to be included in the decision.
   submitted: 'Submitted', // Submitted to the judge for decision
+  submittedRule122: 'Submitted - Rule 122', // Case submitted for decision without requiring a trial
 } as const;
 export const CASE_STATUSES = Object.values(CASE_STATUS_TYPES);
 export type CaseStatus = (typeof CASE_STATUSES)[number];
@@ -209,6 +210,7 @@ export type CaseStatus = (typeof CASE_STATUSES)[number];
 export const CAV_AND_SUBMITTED_CASE_STATUS = [
   CASE_STATUS_TYPES.cav,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export type CAV_AND_SUBMITTED_CASE_STATUS_TYPES =
@@ -922,6 +924,7 @@ export const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.jurisdictionRetained,
   CASE_STATUS_TYPES.rule155,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export const STATUS_TYPES_MANUAL_UPDATE = [
@@ -936,6 +939,7 @@ export const STATUS_TYPES_MANUAL_UPDATE = [
   CASE_STATUS_TYPES.onAppeal,
   CASE_STATUS_TYPES.rule155,
   CASE_STATUS_TYPES.submitted,
+  CASE_STATUS_TYPES.submittedRule122,
 ];
 
 export const ANSWER_DOCUMENT_CODES = [
@@ -962,7 +966,6 @@ export const AUTOMATIC_BLOCKED_REASONS = {
 };
 
 export const CUSTOM_CASE_INVENTORY_PAGE_SIZE = 100;
-export const CAV_AND_SUBMITTED_CASES_PAGE_SIZE = 100;
 
 export const CASE_TYPES_MAP = {
   cdp: 'CDP (Lien/Levy)',
@@ -1599,3 +1602,11 @@ export const isDocumentBriefType = (documentType: string) => {
   return !!documents.find(document => document.documentType === documentType)
     ?.eventCode;
 };
+
+export const JUDGE_TITLES = [
+  'Judge',
+  'Special Trial Judge',
+  'Chief Special Trial Judge',
+  'Chief Judge',
+] as const;
+export type JudgeTitle = (typeof JUDGE_TITLES)[number];

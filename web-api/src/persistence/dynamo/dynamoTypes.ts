@@ -7,6 +7,8 @@ export type TDynamoRecord = {
   [key: string]: any;
 };
 
+export type UserRecord = TDynamoRecord & RawUser;
+
 export type DocketEntryDynamoRecord = RawDocketEntry & TDynamoRecord;
 
 export type OutboxDynamoRecord = RawOutboxItem & TDynamoRecord;

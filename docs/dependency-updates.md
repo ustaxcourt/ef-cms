@@ -41,10 +41,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 	- ./shared/admin-tools/glue/glue_migrations/main.tf
 	- ./shared/admin-tools/glue/remote_role/main.tf
 	- ./web-api/terraform/main/main.tf
+	- ./web-api/workflow-terraform/glue-cron/main/main.tf
 	- ./web-api/workflow-terraform/migration/main/main.tf
 	- ./web-api/workflow-terraform/migration-cron/main/main.tf
 	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
 	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
+	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
 	- ./web-client/terraform/main/main.tf
 
 	> aws = "latest version"
@@ -76,6 +78,13 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### pdfjs-dist
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
+
+### postcss
+
+- (10/6/2023) A security vulnerability exists in postcss that just came out in the end of September. Because postcss is such a used package I imagine this vulnerability will be patched soon. Waiting this week to see if this will be patched in a new version of postcss. 
+
+### s3-files (3.0.1)
+- (10/6/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
 
 ### Incrementing the Node Cache Key Version
 

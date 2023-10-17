@@ -22,6 +22,7 @@ describe('Get users in section', () => {
 
   const MOCK_JUDGE_SECTION = [
     {
+      isSeniorJudge: false,
       judgeFullName: 'Test Judge 1',
       judgeTitle: 'Judge',
       name: 'Test Judge 1',
@@ -29,6 +30,7 @@ describe('Get users in section', () => {
       userId: 'ce5add74-1559-448d-a67d-c887c8351b2e',
     },
     {
+      isSeniorJudge: false,
       judgeFullName: 'Test Judge 1',
       judgeTitle: 'Judge',
       name: 'Test Judge 2',
