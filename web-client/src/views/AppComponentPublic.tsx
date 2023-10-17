@@ -1,6 +1,6 @@
 import { AppMaintenance } from './AppMaintenance';
 import { Contact } from './Contact';
-import { CreatePetitionerAccount } from './Public/CreatePetitioneAccount/CreatePetitionerAccount';
+import { CreatePetitionerAccount } from './Public/CreatePetitionerAccount/CreatePetitionerAccount';
 import { EmailVerificationInstructions } from './Public/EmailVerificationInstructions';
 import { EmailVerificationSuccess } from './Public/EmailVerificationSuccess';
 import { ErrorView } from './Error';

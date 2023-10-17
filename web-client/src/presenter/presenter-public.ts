@@ -40,6 +40,7 @@ import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/su
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/Public/submitPublicOrderAdvancedSearchSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
 import { toggleMobileDocketSortSequence } from './sequences/toggleMobileDocketSortSequence';
+import { toggleShowPasswordSequence } from '@web-client/presenter/sequences/toggleShowPasswordSequence';
 import { toggleUsaBannerDetailsSequence } from './sequences/toggleUsaBannerDetailsSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
@@ -103,6 +104,7 @@ export const presenterSequences = {
   submitPublicOrderAdvancedSearchSequence,
   toggleBetaBarSequence,
   toggleMobileDocketSortSequence,
+  toggleShowPasswordSequence,
   toggleUsaBannerDetailsSequence,
   updateAdvancedOpinionSearchFormValueSequence,
   updateAdvancedOrderSearchFormValueSequence,

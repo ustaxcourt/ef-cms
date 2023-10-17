@@ -1,7 +1,7 @@
-import { CreatePetitionerAccountForm } from '@web-client/views/Public/CreatePetitioneAccount/CreatePetitionerAccountForm';
+import { CreatePetitionerAccountForm } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountForm';
 import { connect } from '@cerebral/react';
 
-import { CreatePetitionerAccountInfo } from '@web-client/views/Public/CreatePetitioneAccount/CreatePetitionerAccountInfo';
+import { CreatePetitionerAccountInfo } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountInfo';
 import React from 'react';
 
 export const CreatePetitionerAccount = connect({}, () => {
