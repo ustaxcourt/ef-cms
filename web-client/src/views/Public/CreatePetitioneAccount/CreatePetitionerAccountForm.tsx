@@ -6,11 +6,17 @@ import React from 'react';
 
 export const CreatePetitionerAccountForm = connect(
   {
+    confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
     password: state.form.password,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  ({ createAccountHelper, password, updateFormValueSequence }) => {
+  ({
+    confirmPassword,
+    createAccountHelper,
+    password,
+    updateFormValueSequence,
+  }) => {
     return (
       <>
         <div
@@ -122,6 +128,12 @@ export const CreatePetitionerAccountForm = connect(
                 id="password-create-account-confirm"
                 name="password-confirm"
                 type="password"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: 'confirmPassword',
+                    value: e.target.value,
+                  });
+                }}
               />
               <button
                 aria-controls="password-create-account password-create-account-confirm"
@@ -133,10 +145,12 @@ export const CreatePetitionerAccountForm = connect(
               >
                 Show password
               </button>
-              <RequirementsText
-                label="Password must match"
-                valid={true} // TODO : SAVE IN COMPUTED AND WIRE CORRECTLY HERE
-              ></RequirementsText>
+              <div hidden={!confirmPassword}>
+                <RequirementsText
+                  label="Password must match"
+                  valid={createAccountHelper.confirmPassword}
+                ></RequirementsText>
+              </div>
 
               <input
                 className="usa-button margin-top-4"
