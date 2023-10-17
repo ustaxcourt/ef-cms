@@ -1,4 +1,4 @@
-const { disableUser } = require('../shared/admin-tools/user/admin');
+const { disableUser } = require('../../shared/admin-tools/user/admin');
 
 const disableSmoketestUser = async () => {
   try {
