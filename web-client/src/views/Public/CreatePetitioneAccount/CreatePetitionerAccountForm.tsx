@@ -134,7 +134,7 @@ export const CreatePetitionerAccountForm = connect(
                 Show password
               </button>
               <RequirementsText
-                label="Passowrd must match"
+                label="Password must match"
                 valid={true} // TODO : SAVE IN COMPUTED AND WIRE CORRECTLY HERE
               ></RequirementsText>
 
