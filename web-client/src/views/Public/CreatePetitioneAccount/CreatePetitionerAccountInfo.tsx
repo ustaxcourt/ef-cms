@@ -13,10 +13,13 @@ export const CreatePetitionerAccountInfo = connect({}, () => {
           <h2>Are you filing a petition on behalf of someone else?</h2>
           <p>
             To file a case on behalf of another taxpayer, you must be authorized
-            in this Court as provided by the Tax Court Rules of Practice and
-            Procedure. Enrolled agents, certified public accountants, and powers
-            of attorney who are not admitted to practice before the Court may
-            not file a petition on someone else&apos;s behalf or represent a
+            in this Court as provided by the{' '}
+            <a className="usa-link" href="/">
+              Tax Court Rules of Practice and Procedure
+            </a>
+            . Enrolled agents, certified public accountants, and powers of
+            attorney who are not admitted to practice before the Court may not
+            file a petition on someone else&apos;s behalf or represent a
             taxpayer in a case.
           </p>
           <p>
@@ -25,7 +28,7 @@ export const CreatePetitionerAccountInfo = connect({}, () => {
               dawson.support@ustaxcourt.gov
             </a>
           </p>
-          <br></br>
+          <hr />
           <h2>Are you a practitioner?</h2>
           <p>
             Practitioners need to contact Admissions to have their account
@@ -38,7 +41,7 @@ export const CreatePetitionerAccountInfo = connect({}, () => {
             </a>{' '}
             with your name and your USTC Bar number (if you have one).
           </p>
-          <br></br>
+          <hr />
           <h2>Need help?</h2>
           <p>
             Contact DAWSON support:{' '}

@@ -46,6 +46,7 @@ import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAd
 import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvancedSearchFormValueSequence';
 import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/updateCaseAdvancedSearchByNameFormValueSequence';
 import { updateDocketNumberSearchFormSequence } from './sequences/updateDocketNumberSearchFormSequence';
+import { updateFormValueSequence } from './sequences/updateFormValueSequence';
 import { updateSessionMetadataSequence } from './sequences/updateSessionMetadataSequence';
 import { validateCaseAdvancedSearchFormSequence } from './sequences/validateCaseAdvancedSearchFormSequence';
 import { validateCaseDocketNumberSearchFormSequence } from './sequences/validateCaseDocketNumberSearchFormSequence';
@@ -108,6 +109,7 @@ export const presenterSequences = {
   updateAdvancedSearchFormValueSequence,
   updateCaseAdvancedSearchByNameFormValueSequence,
   updateDocketNumberSearchFormSequence,
+  updateFormValueSequence,
   updateSessionMetadataSequence,
   validateCaseAdvancedSearchFormSequence,
   validateCaseDocketNumberSearchFormSequence,
