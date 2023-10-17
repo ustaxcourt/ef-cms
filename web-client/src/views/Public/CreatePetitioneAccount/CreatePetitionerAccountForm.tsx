@@ -7,22 +7,16 @@ export const CreatePetitionerAccountForm = connect({}, () => {
     <>
       <div
         className="
-              grid-col-auto
-              mobile-lg:grid-col-10
-              tablet:grid-col-8
-              desktop:grid-col-6
+							create-petitioner-form
               padding-x-205
               margin-bottom-4
+							flex-1
             "
+        style={{ width: 'fit-content' }}
       >
-        <div
-          className="
-                bg-white
-                padding-y-3 padding-x-5
-              "
-        >
+        <div>
           <h1 className="margin-bottom-1">Create Petitioner Account</h1>
-          <form className="usa-form">
+          <form style={{ width: '90%' }}>
             <label className="usa-label" htmlFor="email">
               Email address
             </label>

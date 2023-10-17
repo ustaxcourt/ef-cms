@@ -5,13 +5,11 @@ import React from 'react';
 export const CreatePetitionerAccountInfo = connect({}, () => {
   return (
     <>
-      <div className="grid-col-auto mobile-lg:grid-col-10 tablet:grid-col-8 desktop:grid-col-6 padding-x-205">
-        <div
-          className="
-                bg-white
-                padding-y-3 padding-x-5
-              "
-        >
+      <div
+        className="padding-x-205 margin-top-1 flex-1"
+        style={{ width: 'fit-content' }}
+      >
+        <div>
           <h2>Are you filing a petition on behalf of someone else?</h2>
           <p>
             To file a case on behalf of another taxpayer, you must be authorized
