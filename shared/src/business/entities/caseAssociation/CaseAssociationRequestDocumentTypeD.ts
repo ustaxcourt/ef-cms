@@ -89,6 +89,12 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   }
 
   getValidationRules_NEW() {
+    if (this.generationType === GENERATION_TYPES.AUTO) {
+      return {
+        ...CaseAssociationRequestDocumentTypeD.VALIDATION_RULES_NEW,
+        primaryDocumentFile: joi.object().optional(),
+      };
+    }
     return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES_NEW;
   }
 

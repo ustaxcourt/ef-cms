@@ -4,7 +4,7 @@ import {
   JoiErrorDetail,
   getFormattedValidationErrors_NEW,
 } from './joiValidationEntity/JoiValidationEntity.new.getFormattedValidationErrors';
-import { isEmpty } from 'lodash';
+import { differenceWith, fromPairs, isEmpty, isEqual, toPairs } from 'lodash';
 import joi from 'joi';
 
 const setIsValidated = obj => {
@@ -125,13 +125,24 @@ function getFormattedValidationErrors(entity): Record<string, string> | null {
   const inFrontEnd = typeof document !== 'undefined';
 
   if (inFrontEnd && customStringify(results) !== customStringify(newResults)) {
+    const newResultsDiff = differenceWith(
+      toPairs(newResults!),
+      toPairs(results!),
+      isEqual,
+    );
+
+    const resultsDiff = differenceWith(
+      toPairs(results!),
+      toPairs(newResults!),
+      isEqual,
+    );
+
     const thisURL = new URL(document.URL);
     const errorMessage = `Validation message mismatch. Please take a screenshot of this message and add to Devex Card 1187. 
     Page: ${thisURL.pathname}
     Entity Name: ${entity.entityName}
-    Old Results: ${JSON.stringify(results)}
-    New Results: ${JSON.stringify(newResults)}`;
-
+    Old Results: ${JSON.stringify(fromPairs(resultsDiff))}
+    New Results: ${JSON.stringify(fromPairs(newResultsDiff))}`;
     alert(errorMessage);
   }
 
