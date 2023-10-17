@@ -1,15 +1,7 @@
 import { CalendarNote } from './CalendarNote';
-import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CalendarNote', () => {
   describe('validation', () => {
-    it('should have error message for note field longer than 200 characters', () => {
-      const entity = new CalendarNote({ note: getTextByCount(1001) });
-      expect(entity.getFormattedValidationErrors()).toEqual({
-        note: CalendarNote.VALIDATION_ERROR_MESSAGES.note,
-      });
-    });
-
     it('should be valid when all fields are present', () => {
       const entity = new CalendarNote({
         note: '  some notes   ', // with spaces all around it

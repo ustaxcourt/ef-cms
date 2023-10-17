@@ -44,12 +44,10 @@ describe('Practitioner requests access to case', () => {
     cerebralTest.closeSocket();
   });
 
-  //tests for practitioner starting a new case
   loginAs(cerebralTest, 'privatepractitioner@example.com');
   practitionerCreatesNewCase(cerebralTest, fakeFile);
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
 
-  // verify petition filed by private practitioner can be found in petitions Section Document QC
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('Petitions clerk views Section Document QC', async () => {
     await cerebralTest.runSequence('navigateToPathSequence', {
@@ -222,7 +220,7 @@ describe('Practitioner requests access to case', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
   loginAs(cerebralTest, 'irspractitioner@example.com');
-  irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true); // passing flag for isSealed
+  irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true);
 
   loginAs(cerebralTest, 'petitioner1@example.com');
   petitionerSearchesForUnassociatedSealedCase(cerebralTest);

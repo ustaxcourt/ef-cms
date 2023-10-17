@@ -99,7 +99,6 @@ describe('admissions clerk practitioner journey', () => {
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   admissionsClerkAddsPractitionerEmail(cerebralTest);
 
-  // show Practitioners only, and not case-users (bug ref: #8081)
   it('searches for indexed Practitioners only and not CaseUser records', async () => {
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'practitionerSearchByName',
