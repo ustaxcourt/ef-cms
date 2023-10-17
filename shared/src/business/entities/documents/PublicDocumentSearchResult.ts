@@ -52,41 +52,6 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
     docketNumberWithSuffix: JoiValidationConstants.STRING,
     documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
     documentType: JoiValidationConstants.STRING,
-    eventCode: joi.when('isSealed', {
-      is: true,
-      otherwise: JoiValidationConstants.STRING,
-      then: JoiValidationConstants.STRING.valid(
-        ...OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-      ),
-    }),
-    isSealed: joi.boolean(),
-    isStricken: joi.boolean().invalid(true),
-    judge: JoiValidationConstants.STRING.optional(),
-    numberOfPages: joi.number().integer().optional().allow(null),
-    sealedDate: JoiValidationConstants.ISO_DATE,
-    signedJudgeName: JoiValidationConstants.STRING.optional(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = {
-    eventCode:
-      'Sealed documents cannot be returned in public searches unless they are of type opinion',
-    isStricken: 'Stricken documents cannot be returned in public searches.',
-  };
-
-  getValidationRules() {
-    return PublicDocumentSearchResult.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    caseCaption:
-      JoiValidationConstants.STRING.description('The case caption').required(),
-    docketEntryId: JoiValidationConstants.UUID.description(
-      'The UUID of the corresponding document in S3',
-    ).required(),
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-    docketNumberWithSuffix: JoiValidationConstants.STRING,
-    documentTitle: JoiValidationConstants.DOCUMENT_TITLE.required(),
-    documentType: JoiValidationConstants.STRING,
     eventCode: joi
       .when('isSealed', {
         is: true,
@@ -115,12 +80,8 @@ export class PublicDocumentSearchResult extends JoiValidationEntity {
     signedJudgeName: JoiValidationConstants.STRING.optional(),
   };
 
-  getValidationRules_NEW() {
-    return PublicDocumentSearchResult.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return PublicDocumentSearchResult.VALIDATION_RULES;
   }
 }
 

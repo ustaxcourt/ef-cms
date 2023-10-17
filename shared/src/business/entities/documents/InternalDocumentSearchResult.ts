@@ -61,20 +61,10 @@ export class InternalDocumentSearchResult extends JoiValidationEntity {
     signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
   };
 
-  static VALIDATION_ERROR_MESSAGES = {};
-
   static DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
   getValidationRules() {
     return InternalDocumentSearchResult.VALIDATION_RULES;
-  }
-
-  getValidationRules_NEW() {
-    return InternalDocumentSearchResult.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return InternalDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
   }
 }
 

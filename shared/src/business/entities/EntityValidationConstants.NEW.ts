@@ -23,7 +23,7 @@ import {
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
-export const DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW = {
+export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   action: JoiValidationConstants.STRING.max(100)
     .optional()
     .allow(null)
