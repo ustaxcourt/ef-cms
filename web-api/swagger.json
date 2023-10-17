@@ -3999,6 +3999,38 @@
         }
       }
     },
+    "/users/{userId}/case/{docketNumber}": {
+      "parameters": [
+        {
+          "name": "userId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["cases"],
+        "summary": "submit a case association request for a private or IRS practitioner",
+        "description": "Submit a case association request for a private or IRS practitioner..\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      }
+    },
     "/users/{userId}/case/{docketNumber}/pending": {
       "parameters": [
         {

@@ -10,7 +10,8 @@ export const supportingDocumentFreeTextTypes = [
   'Declaration in Support',
   'Unsworn Declaration under Penalty of Perjury in Support',
 ];
-export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
+
+const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
 export const fileDocumentHelper = (
   get: Get,
@@ -22,8 +23,8 @@ export const fileDocumentHelper = (
     CATEGORY_MAP,
     PARTY_TYPES,
   } = applicationContext.getConstants();
-  const caseDetail = get(state.caseDetail);
 
+  const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
 
@@ -48,6 +49,18 @@ export const fileDocumentHelper = (
     secondaryDocumentCertificateOfServiceDateFormatted = applicationContext
       .getUtilities()
       .formatDateString(secondaryDocumentCertificateOfServiceDate, 'MMDDYY');
+  }
+
+  const isInConsolidatedGroup = !!caseDetail.leadDocketNumber;
+  const isMultiDocketableEventCode = !!applicationContext
+    .getConstants()
+    .MULTI_DOCKET_FILING_EVENT_CODES.includes(form.eventCode);
+
+  let allowExternalConsolidatedGroupFiling = false;
+  if (isMultiDocketableEventCode && isInConsolidatedGroup) {
+    allowExternalConsolidatedGroupFiling = true;
+  } else {
+    allowExternalConsolidatedGroupFiling = false;
   }
 
   const showFilingIncludes = form.certificateOfService || form.attachments;
@@ -86,6 +99,7 @@ export const fileDocumentHelper = (
 
   const exported = {
     EARedactionAcknowledgement,
+    allowExternalConsolidatedGroupFiling,
     certificateOfServiceDateFormatted,
     formattedFilingParties,
     isSecondaryDocumentUploadOptional:

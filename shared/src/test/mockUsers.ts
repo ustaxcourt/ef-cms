@@ -10,6 +10,7 @@ import {
   SERVICE_INDICATOR_TYPES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adcUser = {
@@ -49,7 +50,7 @@ export const irsPractitionerUser: RawIrsPractitioner = {
     postalCode: '61234',
     state: 'IL',
   },
-  email: 'irs.person@example.com',
+  email: 'irsPractitioner@example.com',
   entityName: 'IrsPractitioner',
   name: 'IRS Practitioner',
   role: ROLES.irsPractitioner,

@@ -1,6 +1,6 @@
 /* eslint-disable max-lines */
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
@@ -8,7 +8,6 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_CASE } from '../../test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -741,7 +740,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
+  describe('when the document belongs to a case in a consolidated group and the user is associated with the consolidated group', () => {
     const leadMockCase: RawCase = {
       ...MOCK_CASE,
       leadDocketNumber: MOCK_CASE.docketNumber,
@@ -757,12 +756,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(leadMockCase);
-      applicationContext
-        .getUseCases()
-        .getAllFeatureFlagsInteractor.mockReturnValue({
-          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
-            .key]: true,
-        });
     });
 
     it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
