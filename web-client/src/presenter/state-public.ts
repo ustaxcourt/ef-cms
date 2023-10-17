@@ -2,6 +2,7 @@ import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/busines
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
+import { createAccountHelper } from './computeds/Public/createAccountHelper';
 import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
@@ -17,6 +18,7 @@ const computeds = {
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
+  createAccountHelper,
   featureFlagHelper,
   loadingHelper,
   menuHelper,
@@ -37,6 +39,7 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
+  form: {} as Record<string, any>, // TODO: make specific form
   header: {
     searchTerm: '',
     showBetaBar: true, // default state
