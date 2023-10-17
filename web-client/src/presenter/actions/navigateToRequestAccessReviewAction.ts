@@ -23,12 +23,15 @@ export const navigateToRequestAccessReviewAction = async ({
       ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
     ],
   );
+
   if (
     redactionAcknowledgementEnabled &&
     get(state.form.generationType) === GENERATION_TYPES.MANUAL &&
     get(state.form.eventCode) === 'EA'
   ) {
     store.set(state.form.redactionAcknowledgement, false);
+  } else {
+    store.unset(state.form.redactionAcknowledgement);
   }
 
   await router.route(`/case-detail/${docketNumber}/request-access/review`);

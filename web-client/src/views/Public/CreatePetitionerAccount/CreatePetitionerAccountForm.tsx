@@ -1,8 +1,7 @@
-import { RequirementsText } from '@web-client/views/Public/CreatePetitioneAccount/RequirementsText';
+import { Button } from '@web-client/ustc-ui/Button/Button';
+import { RequirementsText } from '@web-client/views/Public/CreatePetitionerAccount/RequirementsText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
-
-import { Button } from '@web-client/ustc-ui/Button/Button';
 import React from 'react';
 
 export const CreatePetitionerAccountForm = connect(
@@ -11,14 +10,22 @@ export const CreatePetitionerAccountForm = connect(
     createAccountHelper: state.createAccountHelper,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
     password: state.form.password,
+    showConfirmPassword: state.showConfirmPassword,
+    showPassword: state.showPassword,
+    toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validationErrors: state.validationErrors,
   },
   ({
     confirmPassword,
     createAccountHelper,
     navigateToCognitoSequence,
     password,
+    showConfirmPassword,
+    showPassword,
+    toggleShowPasswordSequence,
     updateFormValueSequence,
+    validationErrors,
   }) => {
     return (
       <>
@@ -46,6 +53,12 @@ export const CreatePetitionerAccountForm = connect(
                 name="name"
                 type="text"
               />
+              <div hidden={validationErrors.email}>
+                <RequirementsText
+                  label={validationErrors.email}
+                  valid={false}
+                ></RequirementsText>
+              </div>
 
               <label className="usa-label" htmlFor="name">
                 Name
@@ -59,7 +72,12 @@ export const CreatePetitionerAccountForm = connect(
                 name="name"
                 type="text"
               />
-
+              <div hidden={validationErrors.name}>
+                <RequirementsText
+                  label={validationErrors.name}
+                  valid={false}
+                ></RequirementsText>
+              </div>
               <label className="usa-label" htmlFor="password">
                 Password
               </label>
@@ -68,7 +86,7 @@ export const CreatePetitionerAccountForm = connect(
                 className="usa-input"
                 id="password"
                 name="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 onChange={e => {
                   updateFormValueSequence({
                     key: 'password',
@@ -83,8 +101,11 @@ export const CreatePetitionerAccountForm = connect(
                 data-show-text="Show password"
                 title=""
                 type="button"
+                onClick={() =>
+                  toggleShowPasswordSequence({ passwordType: 'showPassword' })
+                }
               >
-                Show password
+                {showPassword ? 'Hide Password' : 'Show password'}
               </button>
               <div hidden={!password}>
                 <RequirementsText
@@ -129,8 +150,8 @@ export const CreatePetitionerAccountForm = connect(
                 required
                 className="usa-input"
                 id="password-create-account-confirm"
-                name="password-confirm"
-                type="password"
+                name="confirmPassword"
+                type={showConfirmPassword ? 'text' : 'password'}
                 onChange={e => {
                   updateFormValueSequence({
                     key: 'confirmPassword',
@@ -139,14 +160,19 @@ export const CreatePetitionerAccountForm = connect(
                 }}
               />
               <button
-                aria-controls="password-create-account password-create-account-confirm"
+                aria-controls="password password-create-account-confirm"
                 className="usa-show-password"
                 data-hide-text="Hide password"
                 data-show-text="Show password"
                 title=""
                 type="button"
+                onClick={() =>
+                  toggleShowPasswordSequence({
+                    passwordType: 'showConfirmPassword',
+                  })
+                }
               >
-                Show password
+                {showConfirmPassword ? 'Hide Password' : 'Show password'}
               </button>
               <div hidden={!confirmPassword}>
                 <RequirementsText
