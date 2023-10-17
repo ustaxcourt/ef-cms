@@ -90,20 +90,16 @@ export const AppComponentPublic = connect(
           </>
         )}
         {CurrentPage && (
-          <>
-            <main id="main-content" role="main">
-              <CurrentPage />
-            </main>
-          </>
+          <main id="main-content" role="main">
+            <CurrentPage />
+          </main>
         )}
         {CurrentCardPage && (
-          <>
-            <div className="floating-card-pages">
-              <div className="padding-top-5 padding-bottom-5 display-flex flex-justify-center">
-                <CurrentCardPage />
-              </div>
+          <div className="floating-card-pages">
+            <div className="padding-y-5 padding-x-5 display-flex flex-justify-center">
+              <CurrentCardPage />
             </div>
-          </>
+          </div>
         )}
         <Loading />
 
