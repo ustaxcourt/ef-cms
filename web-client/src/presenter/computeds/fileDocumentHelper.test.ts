@@ -3,6 +3,7 @@ import {
   CONTACT_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../test/createClientTestApplicationContext';
 import { capitalize } from 'lodash';
@@ -494,14 +495,15 @@ describe('fileDocumentHelper', () => {
   });
 
   describe('EARedactionAcknowledgement', () => {
-    it('should set redactionAcknowledgementEnabled to true when document type is EA and no preview url is set and the feature flag is enabled', () => {
+    it('should set EARedactionAcknowledgement to true when document type is EA, generation type is manual, and the feature flag is enabled', () => {
       state.featureFlags = {
         [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
       };
       state.form = {
         eventCode: 'EA',
+        generationType: GENERATION_TYPES.MANUAL,
       };
-      state.pdfPreviewUrl = false;
+
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });
@@ -509,14 +511,15 @@ describe('fileDocumentHelper', () => {
       expect(EARedactionAcknowledgement).toEqual(true);
     });
 
-    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
+    it('should set EARedactionAcknowledgement to false when document type is EA, generation type is auto, and the feature flag is enabled', () => {
       state.featureFlags = {
         [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
       };
       state.form = {
         eventCode: 'EA',
+        generationType: GENERATION_TYPES.AUTO,
       };
-      state.pdfPreviewUrl = true;
+
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });
@@ -524,14 +527,15 @@ describe('fileDocumentHelper', () => {
       expect(EARedactionAcknowledgement).toEqual(false);
     });
 
-    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
+    it('should set EARedactionAcknowledgement to false when document type is not EA, generation type is manual, and the feature flag is enabled', () => {
       state.featureFlags = {
         [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
       };
       state.form = {
         eventCode: 'A',
+        generationType: GENERATION_TYPES.MANUAL,
       };
-      state.pdfPreviewUrl = false;
+
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });
@@ -539,14 +543,15 @@ describe('fileDocumentHelper', () => {
       expect(EARedactionAcknowledgement).toEqual(false);
     });
 
-    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
+    it('should set EARedactionAcknowledgement to false when document type is EA, generation type is auto, but the feature flag is disabled', () => {
       state.featureFlags = {
         [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: false,
       };
       state.form = {
         eventCode: 'EA',
+        generationType: GENERATION_TYPES.AUTO,
       };
-      state.pdfPreviewUrl = true;
+
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });

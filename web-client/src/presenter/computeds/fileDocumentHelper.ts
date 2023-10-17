@@ -1,4 +1,5 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { Get } from 'cerebral';
 import { getFilerParties } from './getFilerParties';
 import { getSupportingDocumentTypeList } from './addDocketEntryHelper';
@@ -26,7 +27,6 @@ export const fileDocumentHelper = (
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const validationErrors = get(state.validationErrors);
-  const pdfPreviewUrl = get(state.pdfPreviewUrl);
 
   const supportingDocumentTypeList =
     getSupportingDocumentTypeList(CATEGORY_MAP);
@@ -94,7 +94,7 @@ export const fileDocumentHelper = (
 
   const EARedactionAcknowledgement =
     redactionAcknowledgementEnabled &&
-    !pdfPreviewUrl &&
+    form.generationType === GENERATION_TYPES.MANUAL &&
     form.eventCode === 'EA';
 
   const exported = {
