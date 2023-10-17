@@ -10,6 +10,7 @@ export const createAccountHelper = (get: Get) => {
   const errors = formEntity.getFormattedValidationErrors();
 
   return {
+    confirmPassword: !errors?.confirmPassword,
     passwordErrors: errors?.password,
   };
 };
