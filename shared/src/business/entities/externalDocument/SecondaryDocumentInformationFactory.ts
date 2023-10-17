@@ -14,10 +14,7 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
   public objections: string;
   public secondaryDocumentFile?: object;
 
-  // TODO: investigate whether this is necessary
-  private secondaryDocumentErrorMessages: object;
-
-  constructor(rawProps, errorMessages) {
+  constructor(rawProps) {
     super('SecondaryDocumentInformationFactory');
     this.attachments = rawProps.attachments || false;
     this.category = rawProps.category;
@@ -26,8 +23,6 @@ export class SecondaryDocumentInformationFactory extends JoiValidationEntity {
     this.documentType = rawProps.documentType;
     this.objections = rawProps.objections;
     this.secondaryDocumentFile = rawProps.secondaryDocumentFile;
-
-    this.secondaryDocumentErrorMessages = errorMessages;
   }
 
   getValidationRules() {

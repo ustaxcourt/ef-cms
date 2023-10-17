@@ -42,6 +42,17 @@ describe('ExternalDocumentInformationFactory', () => {
         const formattedValidationErrors = entity.getFormattedValidationErrors();
         expect(formattedValidationErrors).toEqual(null);
       });
+
+      it('should return an error when an invalid document type is set', () => {
+        const entity = new ExternalDocumentInformationFactory({
+          ...VALID_DOC,
+          documentType: 1,
+        });
+        const formattedValidationErrors = entity.getFormattedValidationErrors();
+        expect(formattedValidationErrors?.documentType).toEqual(
+          'Proposed Stipulated Decision must be filed separately in each case',
+        );
+      });
     });
 
     it('should require primary document file', () => {
