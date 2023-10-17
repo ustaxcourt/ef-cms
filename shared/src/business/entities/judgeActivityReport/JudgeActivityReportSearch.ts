@@ -1,10 +1,7 @@
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
-import {
-  CAV_AND_SUBMITTED_CASE_STATUS_TYPES,
-  VALIDATION_ERROR_MESSAGES,
-} from '../EntityConstants';
+import { CAV_AND_SUBMITTED_CASE_STATUS_TYPES } from '../EntityConstants';
 import {
   FORMATS,
   calculateISODate,
@@ -69,67 +66,6 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
       .min(joi.ref('startDate'))
       .description(
         'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
-      ),
-    judgeId: joi
-      .optional()
-      .description('The userId of the judge to generate the report for'),
-    judgeName: joi
-      .optional()
-      .description('The last name of the judge to generate the report for'),
-    judges: joi
-      .array()
-      .items(joi.string())
-      .description('The last names of judges to generate report for'),
-    startDate: JoiValidationConstants.ISO_DATE.max('now').description(
-      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
-    ),
-    statuses: JoiValidationConstants.JUDGES_STATUSES.optional().description(
-      'The CAV and Submitted case statuses associated with judges',
-    ),
-    tomorrow: JoiValidationConstants.STRING.optional().description(
-      'The computed value to validate the endDate against, in order to verify that the endDate is less than or equal to the current date',
-    ),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = {
-    endDate: [
-      {
-        contains: 'ref:startDate',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR,
-      },
-      {
-        contains: 'ref:tomorrow',
-        message: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR,
-      },
-      {
-        contains: 'is required',
-        message: 'Enter an end date.',
-      },
-      'Enter a valid end date.',
-    ],
-    startDate: [
-      {
-        contains: 'is required',
-        message: 'Enter a start date.',
-      },
-      {
-        contains: 'must be less than or equal to',
-        message:
-          VALIDATION_ERROR_MESSAGES.START_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
-      },
-      'Enter a valid start date.',
-    ],
-  };
-
-  getValidationRules() {
-    return JudgeActivityReportSearch.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    endDate: JoiValidationConstants.ISO_DATE.less(joi.ref('tomorrow'))
-      .min(joi.ref('startDate'))
-      .description(
-        'The end date search filter must be greater than or equal to the start date, and less than or equal to the current date',
       )
       .messages({
         ...setDefaultErrorMessage('Enter a valid end date.'),
@@ -182,12 +118,8 @@ export class JudgeActivityReportSearch extends JoiValidationEntity {
     ),
   };
 
-  getValidationRules_NEW() {
-    return JudgeActivityReportSearch.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return JudgeActivityReportSearch.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return JudgeActivityReportSearch.VALIDATION_RULES;
   }
 }
 

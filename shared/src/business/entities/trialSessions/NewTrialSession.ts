@@ -12,29 +12,9 @@ export class NewTrialSession extends TrialSession {
     this.trialClerkId = rawSession.trialClerkId;
   }
 
-  getErrorToMessageMap() {
-    return {
-      ...super.getErrorToMessageMap(),
-      alternateTrialClerkName:
-        'A valid alternate trial clerk name must be provided if "Other" is selected',
-    };
-  }
-
   getValidationRules() {
     return {
       ...TrialSession.validationRules.COMMON,
-      alternateTrialClerkName: joi.when('trialClerkId', {
-        is: 'Other',
-        otherwise: joi.optional(),
-        then: JoiValidationConstants.STRING.max(100).required(),
-      }),
-      startDate: JoiValidationConstants.ISO_DATE.min('now').required(),
-    };
-  }
-
-  getValidationRules_NEW() {
-    return {
-      ...TrialSession.validationRules_NEW.COMMON,
       alternateTrialClerkName: joi
         .when('trialClerkId', {
           is: 'Other',

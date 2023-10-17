@@ -17,32 +17,14 @@ export class UserCaseNote extends JoiValidationEntity {
 
   static VALIDATION_RULES = {
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
-    notes: JoiValidationConstants.STRING.required(),
-    userId: JoiValidationConstants.UUID.required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = {
-    notes: 'Add note',
-  };
-
-  getValidationRules() {
-    return UserCaseNote.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required(),
     notes: JoiValidationConstants.STRING.required().messages(
       setDefaultErrorMessage('Add note'),
     ),
     userId: JoiValidationConstants.UUID.required(),
   };
 
-  getValidationRules_NEW() {
-    return UserCaseNote.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return UserCaseNote.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return UserCaseNote.VALIDATION_RULES;
   }
 }
 

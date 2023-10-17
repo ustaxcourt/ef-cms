@@ -10,30 +10,14 @@ export class Note extends JoiValidationEntity {
     this.notes = rawNote.notes?.trim();
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    notes: 'Add note',
-  };
-
   static VALIDATION_RULES = {
-    notes: JoiValidationConstants.STRING.required(),
-  };
-
-  getValidationRules() {
-    return Note.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
     notes: JoiValidationConstants.STRING.required().messages(
       setDefaultErrorMessage('Add note'),
     ),
   };
 
-  getValidationRules_NEW() {
-    return Note.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return Note.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return Note.VALIDATION_RULES;
   }
 }
 

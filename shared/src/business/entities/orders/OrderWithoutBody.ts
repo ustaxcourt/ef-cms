@@ -1,7 +1,6 @@
 import { ALL_DOCUMENT_TYPES, ALL_EVENT_CODES } from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { Order } from './Order';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
 export class OrderWithoutBody extends JoiValidationEntity {
@@ -16,23 +15,7 @@ export class OrderWithoutBody extends JoiValidationEntity {
     this.eventCode = rawOrder.eventCode;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    ...Order.VALIDATION_ERROR_MESSAGES,
-  };
-
   getValidationRules() {
-    return {
-      documentTitle: JoiValidationConstants.STRING.max(100).required(),
-      documentType: JoiValidationConstants.STRING.valid(
-        ...ALL_DOCUMENT_TYPES,
-      ).required(),
-      eventCode: JoiValidationConstants.STRING.valid(
-        ...ALL_EVENT_CODES,
-      ).required(),
-    };
-  }
-
-  getValidationRules_NEW() {
     return {
       documentTitle: JoiValidationConstants.STRING.max(100)
         .required()
@@ -48,10 +31,6 @@ export class OrderWithoutBody extends JoiValidationEntity {
         .required()
         .messages(setDefaultErrorMessage('Select an order type')),
     };
-  }
-
-  getErrorToMessageMap() {
-    return OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
   }
 }
 
