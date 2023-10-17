@@ -85,5 +85,115 @@ describe('CreateAccountForm', () => {
         },
       });
     });
+
+    it('should set hasOneLowercase to false when provided a password does not contain a lower case character', () => {
+      const PASSWORD = '1AWD%$DNAWK';
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        password: {
+          hasNoLeadingOrTrailingSpace: true,
+          hasOneLowercase: false,
+          hasOneNumber: true,
+          hasOneUppercase: true,
+          hasSpecialCharacterOrSpace: true,
+          isProperLength: true,
+        },
+      });
+    });
+
+    it('should set hasOneNumber to false when provided a password does not contain a number', () => {
+      const PASSWORD = 'aAWD%$DNAWK';
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        password: {
+          hasNoLeadingOrTrailingSpace: true,
+          hasOneLowercase: true,
+          hasOneNumber: false,
+          hasOneUppercase: true,
+          hasSpecialCharacterOrSpace: true,
+          isProperLength: true,
+        },
+      });
+    });
+
+    it('should set hasOneUppercase to false when provided a password does not contain an upper case character', () => {
+      const PASSWORD = 'aaws%$dn1awk';
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        password: {
+          hasNoLeadingOrTrailingSpace: true,
+          hasOneLowercase: true,
+          hasOneNumber: true,
+          hasOneUppercase: false,
+          hasSpecialCharacterOrSpace: true,
+          isProperLength: true,
+        },
+      });
+    });
+
+    it('should set hasSpecialCharacterOrSpace to false when provided a password does not contain a special character', () => {
+      const PASSWORD = 'aaWsdn1awk';
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        password: {
+          hasNoLeadingOrTrailingSpace: true,
+          hasOneLowercase: true,
+          hasOneNumber: true,
+          hasOneUppercase: true,
+          hasSpecialCharacterOrSpace: false,
+          isProperLength: true,
+        },
+      });
+    });
+
+    it('should set isProperLength to false when provided a password is less than 8 characters long', () => {
+      const PASSWORD = '1';
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toMatchObject({
+        password: {
+          isProperLength: false,
+        },
+      });
+    });
+
+    it('should set isProperLength to false when provided a password is greater than 99 characters long', () => {
+      const PASSWORD = '#'.repeat(101);
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        confirmPassword: PASSWORD,
+        password: PASSWORD,
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toMatchObject({
+        password: {
+          isProperLength: false,
+        },
+      });
+    });
   });
 });
