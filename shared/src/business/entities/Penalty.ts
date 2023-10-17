@@ -24,38 +24,7 @@ export class Penalty extends JoiValidationEntity {
     this.statisticId = rawProps.statisticId;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    name: 'Penalty name is required.',
-    penaltyAmount: 'Enter penalty amount.',
-    penaltyType: 'Penalty type is required.',
-    statisticId: 'Statistic ID is required.',
-  };
-
   static VALIDATION_RULES = joi.object().keys({
-    entityName: JoiValidationConstants.STRING.valid('Penalty').required(),
-    name: JoiValidationConstants.STRING.max(50)
-      .required()
-      .description('Penalty name.'),
-    penaltyAmount: joi
-      .number()
-      .required()
-      .description('The dollar amount of the penalty.'),
-    penaltyId: JoiValidationConstants.UUID.required().description(
-      'Unique Penalty ID only used by the system.',
-    ),
-    penaltyType: JoiValidationConstants.STRING.required()
-      .valid(...Object.values(PENALTY_TYPES))
-      .description('The type of penalty (IRS or Court Determination).'),
-    statisticId: JoiValidationConstants.UUID.required().description(
-      'Unique statistic ID only used by the system.',
-    ),
-  });
-
-  getValidationRules() {
-    return Penalty.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = joi.object().keys({
     entityName: JoiValidationConstants.STRING.valid('Penalty').required(),
     name: JoiValidationConstants.STRING.max(50)
       .required()
@@ -78,12 +47,8 @@ export class Penalty extends JoiValidationEntity {
       .messages(setDefaultErrorMessage('Statistic ID is required.')),
   });
 
-  getValidationRules_NEW() {
-    return Penalty.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return Penalty.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return Penalty.VALIDATION_RULES;
   }
 }
 

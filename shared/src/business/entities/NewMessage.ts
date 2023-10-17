@@ -20,19 +20,6 @@ export class NewMessage extends JoiValidationEntity {
     };
   }
 
-  getValidationRules_NEW() {
-    return {
-      entityName: JoiValidationConstants.STRING.valid('NewMessage').required(),
-      message: Message.VALIDATION_RULES_NEW.message,
-      subject: Message.VALIDATION_RULES_NEW.subject,
-      toSection: Message.VALIDATION_RULES_NEW.toSection,
-      toUserId: Message.VALIDATION_RULES_NEW.toUserId,
-    };
-  }
-
-  getErrorToMessageMap() {
-    return Message.VALIDATION_ERROR_MESSAGES;
-  }
   public message: string;
   public subject: string;
   public toSection: string;
@@ -49,6 +36,4 @@ export class NewMessage extends JoiValidationEntity {
     this.toSection = rawMessage.toSection;
     this.toUserId = rawMessage.toUserId;
   }
-
-  static VALIDATION_ERROR_MESSAGES = Message.VALIDATION_ERROR_MESSAGES;
 }
