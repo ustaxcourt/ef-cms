@@ -2,7 +2,7 @@ import * as client from '../../dynamodbClientService';
 import { type AdminCreateUserRequest } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 
-const createUserRecords = async ({
+export const createUserRecords = async ({
   applicationContext,
   newUser,
   userId,

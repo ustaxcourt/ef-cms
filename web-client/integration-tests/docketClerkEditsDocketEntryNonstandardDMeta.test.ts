@@ -9,6 +9,7 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   const cerebralTest = setupTest();
 
   cerebralTest.draftOrders = [];
+
   afterAll(() => {
     cerebralTest.closeSocket();
   });

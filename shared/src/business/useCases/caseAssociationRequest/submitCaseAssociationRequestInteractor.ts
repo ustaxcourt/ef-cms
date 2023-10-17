@@ -4,6 +4,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -14,14 +15,12 @@ import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
  * @param {string} providers.filers the parties represented by the practitioner
  * @returns {Promise<*>} the promise of the case association request
  */
-export const submitCaseAssociationRequestInteractor = async (
+export const submitCaseAssociationRequest = async (
   applicationContext: IApplicationContext,
   {
-    consolidatedCasesDocketNumbers,
     docketNumber,
     filers = [],
   }: {
-    consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
     filers: string[];
   },
@@ -42,7 +41,7 @@ export const submitCaseAssociationRequestInteractor = async (
     authorizedUser.role === ROLES.privatePractitioner;
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
 
-  if (isPrivatePractitioner) {
+  if (isPrivatePractitioner && filers) {
     return await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
@@ -56,9 +55,15 @@ export const submitCaseAssociationRequestInteractor = async (
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
         applicationContext,
-        consolidatedCasesDocketNumbers,
         docketNumber,
         user,
       });
   }
 };
+
+export const submitCaseAssociationRequestInteractor = withLocking(
+  submitCaseAssociationRequest,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

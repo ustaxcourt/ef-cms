@@ -4,7 +4,17 @@ import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
+import {
+  FORMATS,
+  calculateDifferenceInDays,
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
+import { acquireLock } from '../../shared/src/business/useCaseHelper/acquireLock';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -13,22 +23,18 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-import {
-  calculateDifferenceInDays,
-  calculateISODate,
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import {
+  createLock,
+  getLock,
+  removeLock,
+} from '../../web-api/src/persistence/dynamo/locks/acquireLock';
+import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
-import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -57,6 +63,7 @@ import { sendBulkTemplatedEmail } from '../../web-api/src/dispatchers/ses/sendBu
 import { sendEmailEventToQueue } from '../../web-api/src/persistence/messages/sendEmailEventToQueue';
 import { sendServedPartiesEmails } from '../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails';
 import { setUserEmailFromPendingEmailInteractor } from '../../shared/src/business/useCases/users/setUserEmailFromPendingEmailInteractor';
+import { sleep } from '../../shared/src/business/utilities/sleep';
 import { socketProvider } from '../src/providers/socket';
 import { socketRouter } from '../src/providers/socketRouter';
 import { updateCase } from '../../web-api/src/persistence/dynamo/cases/updateCase';
@@ -208,6 +215,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       return pdfLib;
     },
     getPersistenceGateway: () => ({
+      createLock,
       getCaseByDocketNumber,
       getCasesForUser,
       getDocketNumbersByUser,
@@ -216,7 +224,9 @@ export const callCognitoTriggerForPendingEmail = async userId => {
           url: 'http://example.com',
         };
       },
+      getLock,
       getUserById,
+      removeLock,
       saveDocumentFromLambda,
       saveWorkItem,
       updateCase,
@@ -241,6 +251,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     },
     getUniqueId,
     getUseCaseHelpers: () => ({
+      acquireLock,
       countPagesInDocument,
       generateAndServeDocketEntry,
       generatePdfFromHtmlHelper,
@@ -259,7 +270,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
         'external-order-search-enabled': true,
         'internal-opinion-search-enabled': true,
         'internal-order-search-enabled': true,
-        'multi-docketable-paper-filings': true,
         'redaction-acknowledgement-enabled': true,
         'updated-trial-status-types': true,
         'use-external-pdf-generation': false,
@@ -273,11 +283,13 @@ export const callCognitoTriggerForPendingEmail = async userId => {
       formatNow,
       getDocumentTypeForAddressChange,
       prepareDateFromString,
+      sleep,
     }),
     logger: {
       debug: () => {},
       error: () => {},
       info: () => {},
+      warn: () => {},
     },
   };
 
@@ -293,14 +305,6 @@ export const getFormattedDocumentQCMyInbox = async cerebralTest => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: cerebralTest.getState(),
-  });
-};
-
-const featureFlagHelperComputed = withAppContextDecorator(featureFlagHelper);
-
-export const getFeatureFlagHelper = cerebralTest => {
-  return runCompute(featureFlagHelperComputed, {
     state: cerebralTest.getState(),
   });
 };
@@ -432,7 +436,7 @@ export const setFeatureFlag = async (isEnabled, key) => {
 
 export const getFormattedDocumentQCSectionInbox = async (
   cerebralTest,
-  selectedSection = null,
+  selectedSection: string | null = null,
 ) => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
@@ -558,24 +562,11 @@ export const createCourtIssuedDocketEntry = async ({
 
   if (filingDate) {
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: filingDate.month,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: filingDate.day,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: filingDate.year,
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: `${filingDate.month}/${filingDate.day}/${filingDate.year}`,
       },
     );
   }
@@ -695,7 +686,7 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
 
 export const uploadProposedStipulatedDecision = async (
   cerebralTest,
-  configObject,
+  configObject?,
 ) => {
   const defaultForm = {
     attachments: false,

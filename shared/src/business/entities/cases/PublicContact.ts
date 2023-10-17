@@ -32,6 +32,10 @@ export class PublicContact extends JoiValidationEntity {
     return PublicContact.VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return PublicContact.VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return PublicContact.VALIDATION_ERROR_MESSAGES;
   }

@@ -23,6 +23,7 @@ import {
   US_STATES_OTHER,
 } from '../EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 // TODO 9970: Can we reduce some complexity here? CalendaredTrialSession..?
@@ -176,9 +177,13 @@ export class TrialSession extends JoiValidationEntity {
       dismissedAlertForNOTT: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
-      estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
-        .min(joi.ref('startDate'))
-        .allow(null),
+      estimatedEndDate: joi.when('startDate', {
+        is: JoiValidationConstants.ISO_DATE.required(),
+        otherwise: joi.optional(),
+        then: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
+          .optional()
+          .allow(null),
+      }),
       hasNOTTBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),
@@ -338,6 +343,162 @@ export class TrialSession extends JoiValidationEntity {
   getValidationRules() {
     return {
       ...TrialSession.validationRules.COMMON,
+      caseOrder: joi.array().items(
+        joi.object().keys({
+          calendarNotes: JoiValidationConstants.STRING.optional().allow(
+            '',
+            null,
+          ),
+          disposition: JoiValidationConstants.STRING.max(100).when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+          docketNumber:
+            JoiValidationConstants.DOCKET_NUMBER.required().description(
+              'Docket number of the case.',
+            ),
+          isManuallyAdded: joi.boolean().optional(),
+          removedFromTrial: joi.boolean().optional(),
+          removedFromTrialDate: JoiValidationConstants.ISO_DATE.when(
+            'removedFromTrial',
+            {
+              is: true,
+              otherwise: joi.optional().allow(null),
+              then: joi.required(),
+            },
+          ),
+        }),
+      ),
+    } as object;
+  }
+
+  static validationRules_NEW = {
+    COMMON: {
+      address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
+      address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
+      alternateTrialClerkName: joi.when('trialClerk', {
+        is: joi.exist(),
+        otherwise: JoiValidationConstants.STRING.max(100).allow('').optional(),
+        then: joi.any().forbidden(),
+      }),
+      chambersPhoneNumber: stringRequiredForRemoteProceedings,
+      city: JoiValidationConstants.STRING.max(100).allow('').optional(),
+      courtReporter: JoiValidationConstants.STRING.max(100).optional(),
+      courthouseName: JoiValidationConstants.STRING.max(100)
+        .allow('')
+        .optional(),
+      createdAt: JoiValidationConstants.ISO_DATE.optional(),
+      dismissedAlertForNOTT: joi.boolean().optional(),
+      entityName:
+        JoiValidationConstants.STRING.valid('TrialSession').required(),
+      estimatedEndDate: joi
+        .when('startDate', {
+          is: JoiValidationConstants.ISO_DATE.required(),
+          otherwise: joi.optional(),
+          then: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
+            .optional()
+            .allow(null),
+        })
+        .messages(setDefaultErrorMessage('Enter a valid estimated end date')),
+      hasNOTTBeenServed: joi.boolean().required(),
+      irsCalendarAdministrator:
+        JoiValidationConstants.STRING.max(100).optional(),
+      isCalendared: joi.boolean().required(),
+      joinPhoneNumber: stringRequiredForRemoteProceedings,
+      judge: joi
+        .object({
+          name: JoiValidationConstants.STRING.max(100).required(),
+          userId: JoiValidationConstants.UUID.required(),
+        })
+        .optional(),
+      maxCases: joi
+        .when('sessionScope', {
+          is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          otherwise: joi.number().greater(0).integer().required(),
+          then: joi.optional(),
+        })
+        .messages(
+          setDefaultErrorMessage('Enter a valid number of maximum cases'),
+        ),
+      meetingId: stringRequiredForRemoteProceedings,
+      notes: JoiValidationConstants.STRING.max(400).optional(),
+      noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
+      password: stringRequiredForRemoteProceedings,
+      postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('')
+        .optional()
+        .messages({
+          'string.pattern.base': 'Enter ZIP code',
+        }),
+      proceedingType: JoiValidationConstants.STRING.valid(
+        ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),
+      )
+        .required()
+        .messages(setDefaultErrorMessage('Enter a valid proceeding type')),
+      sessionScope: JoiValidationConstants.STRING.valid(
+        ...Object.values(TRIAL_SESSION_SCOPE_TYPES),
+      ).required(),
+      sessionStatus: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_STATUS_TYPES),
+      ).required(),
+      sessionType: JoiValidationConstants.STRING.valid(
+        ...Object.values(SESSION_TYPES),
+      )
+        .required()
+        .messages(setDefaultErrorMessage('Select a session type')),
+      startDate: JoiValidationConstants.ISO_DATE.required().messages(
+        setDefaultErrorMessage('Enter a valid start date'),
+      ),
+      startTime: JoiValidationConstants.TWENTYFOUR_HOUR_MINUTES.messages(
+        setDefaultErrorMessage('Enter a valid start time'),
+      ),
+      state: JoiValidationConstants.STRING.valid(
+        ...Object.keys(US_STATES),
+        ...Object.keys(US_STATES_OTHER),
+      )
+        .allow('')
+        .optional(),
+      swingSession: joi.boolean().optional(),
+      swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
+        is: true,
+        otherwise: JoiValidationConstants.STRING.optional(),
+        then: joi.required(),
+      }).messages(setDefaultErrorMessage('You must select a swing session')),
+      term: JoiValidationConstants.STRING.valid(...SESSION_TERMS)
+        .required()
+        .messages(setDefaultErrorMessage('Term session is not valid')),
+      termYear: JoiValidationConstants.STRING.max(4)
+        .required()
+        .messages(setDefaultErrorMessage('Term year is required')),
+      trialClerk: joi
+        .object({
+          name: JoiValidationConstants.STRING.max(100).required(),
+          userId: JoiValidationConstants.UUID.required(),
+        })
+        .optional(),
+      trialLocation: joi
+        .when('sessionScope', {
+          is: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+          otherwise: joi
+            .alternatives()
+            .try(
+              JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+              JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+            )
+            .required(),
+          then: joi.optional(),
+        })
+        .messages(setDefaultErrorMessage('Select a trial session location')),
+      trialSessionId: JoiValidationConstants.UUID.optional(),
+    },
+  };
+
+  getValidationRules_NEW() {
+    return {
+      ...TrialSession.validationRules_NEW.COMMON,
       caseOrder: joi.array().items(
         joi.object().keys({
           calendarNotes: JoiValidationConstants.STRING.max(200)

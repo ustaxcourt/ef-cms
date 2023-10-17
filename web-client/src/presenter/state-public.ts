@@ -2,7 +2,6 @@ import { PUBLIC_DOCKET_RECORD_FILTER_OPTIONS } from '../../../shared/src/busines
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
@@ -17,7 +16,6 @@ const computeds = {
   advancedSearchHelper,
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
-  featureFlagHelper,
   loadingHelper,
   menuHelper,
   publicCaseDetailHeaderHelper,

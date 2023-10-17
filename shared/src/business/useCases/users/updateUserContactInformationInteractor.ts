@@ -11,10 +11,10 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';
 import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
+import { withLocking } from '../../useCaseHelper/acquireLock';
 
 /**
  * updateUserContactInformationHelper
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
@@ -30,7 +30,7 @@ const updateUserContactInformationHelper = async (
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
 ) => {
-  const user: any = await applicationContext
+  const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
@@ -109,13 +109,12 @@ const updateUserContactInformationHelper = async (
 
 /**
  * updateUserContactInformationInteractor
- *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  */
-export const updateUserContactInformationInteractor = async (
+export const updateUserContactInformation = async (
   applicationContext: IApplicationContext,
   {
     contactInfo,
@@ -151,3 +150,43 @@ export const updateUserContactInformationInteractor = async (
     throw error;
   }
 };
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_user_contact_information',
+    },
+    userId: user.userId,
+  });
+};
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+) => {
+  const cases: RawCase[] = await applicationContext
+    .getPersistenceGateway()
+    .getCasesForUser({
+      applicationContext,
+      userId,
+    });
+
+  return {
+    identifiers: cases?.map(item => `case|${item.docketNumber}`),
+    ttl: 900,
+  };
+};
+
+export const updateUserContactInformationInteractor = withLocking(
+  updateUserContactInformation,
+  determineEntitiesToLock,
+  handleLockError,
+);
