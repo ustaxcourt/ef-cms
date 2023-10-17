@@ -445,6 +445,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   workItem: joi.object().optional(),
 };
 
-export const DOCKET_ENTRY_VALIDATION_RULES_NEW = joi
+export const DOCKET_ENTRY_VALIDATION_RULES = joi
   .object()
-  .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS_NEW);
+  .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS);

@@ -27,7 +27,7 @@ import {
 } from '../EntityConstants';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
-import { DOCKET_ENTRY_VALIDATION_RULES_NEW } from '@shared/business/entities/EntityValidationConstants.NEW';
+import { DOCKET_ENTRY_VALIDATION_RULES } from '@shared/business/entities/EntityValidationConstants.NEW';
 import { DocketEntry } from '../DocketEntry';
 import {
   FORMATS,
@@ -306,7 +306,7 @@ export class Case extends JoiValidationEntity {
       .description('List of Correspondence Entities that were archived.'),
     archivedDocketEntries: joi
       .array()
-      .items(DOCKET_ENTRY_VALIDATION_RULES_NEW)
+      .items(DOCKET_ENTRY_VALIDATION_RULES)
       .optional()
       .description(
         'List of DocketEntry Entities that were archived instead of added to the docket record.',
@@ -406,7 +406,7 @@ export class Case extends JoiValidationEntity {
       .description('Damages for the case.'),
     docketEntries: joi
       .array()
-      .items(DOCKET_ENTRY_VALIDATION_RULES_NEW)
+      .items(DOCKET_ENTRY_VALIDATION_RULES)
       .required()
       .description('List of DocketEntry Entities for the case.'),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()

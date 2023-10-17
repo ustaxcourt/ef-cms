@@ -21,28 +21,7 @@ export class UpdateUserEmail extends JoiValidationEntity {
     this.confirmEmail = rawUpdateUserEmail.confirmEmail;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    confirmEmail: [
-      {
-        contains: 'must be [ref:email]',
-        message: 'Email addresses do not match',
-      },
-      { contains: 'is required', message: 'Enter a valid email address' },
-      { contains: 'must be a valid', message: 'Enter a valid email address' },
-    ],
-    email: 'Enter a valid email address',
-  };
-
   getValidationRules() {
-    return {
-      confirmEmail: JoiValidationConstants.EMAIL.valid(
-        joi.ref('email'),
-      ).required(),
-      email: JoiValidationConstants.EMAIL.required(),
-    };
-  }
-
-  getValidationRules_NEW() {
     return {
       confirmEmail: JoiValidationConstants.EMAIL.valid(joi.ref('email'))
         .required()
@@ -55,9 +34,5 @@ export class UpdateUserEmail extends JoiValidationEntity {
         setDefaultErrorMessage('Enter a valid email address'),
       ),
     };
-  }
-
-  getErrorToMessageMap() {
-    return UpdateUserEmail.VALIDATION_ERROR_MESSAGES;
   }
 }
