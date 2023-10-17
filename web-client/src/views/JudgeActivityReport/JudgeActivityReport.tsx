@@ -9,7 +9,6 @@ import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-
 export const JudgeActivityReport = connect(
   {
     constants: state.constants,
