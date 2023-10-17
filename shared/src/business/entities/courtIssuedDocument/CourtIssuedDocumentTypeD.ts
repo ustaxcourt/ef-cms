@@ -1,6 +1,5 @@
 import {
   CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
   yesterdayFormatted,
 } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
@@ -33,19 +32,6 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     this.freeText = rawProps.freeText;
   }
 
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    date: joi.when('createdAt', {
-      is: joi.exist().not(null),
-      otherwise:
-        JoiValidationConstants.ISO_DATE.min(yesterdayFormatted).required(),
-      then: JoiValidationConstants.ISO_DATE.required(),
-    }),
-    freeText: JoiValidationConstants.STRING.max(1000).optional(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     return replaceBracketed(
       this.documentTitle,
@@ -54,12 +40,8 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     );
   }
 
-  getValidationRules() {
-    return CourtIssuedDocumentTypeD.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: joi
       .when('createdAt', {
         is: joi.exist().not(null),
@@ -78,12 +60,8 @@ export class CourtIssuedDocumentTypeD extends CourtIssuedDocument {
     }),
   };
 
-  getValidationRules_NEW() {
-    return CourtIssuedDocumentTypeD.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeD.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentTypeD.VALIDATION_RULES;
   }
 }
 

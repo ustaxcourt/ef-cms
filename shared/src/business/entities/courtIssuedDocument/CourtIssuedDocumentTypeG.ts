@@ -1,7 +1,4 @@
-import {
-  CourtIssuedDocument,
-  VALIDATION_ERROR_MESSAGES,
-} from './CourtIssuedDocumentConstants';
+import { CourtIssuedDocument } from './CourtIssuedDocumentConstants';
 import { CourtIssuedDocumentBase } from './CourtIssuedDocumentBase';
 import { FORMATS, formatDateString } from '../../utilities/DateHandler';
 import { JoiValidationConstants } from '../JoiValidationConstants';
@@ -31,14 +28,6 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
     this.trialLocation = rawProps.trialLocation;
   }
 
-  static VALIDATION_RULES = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES,
-    date: JoiValidationConstants.ISO_DATE.required(),
-    trialLocation: JoiValidationConstants.STRING.required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = VALIDATION_ERROR_MESSAGES;
-
   getDocumentTitle() {
     if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
       this.documentTitle = getStandaloneRemoteDocumentTitle({
@@ -58,12 +47,8 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
     );
   }
 
-  getValidationRules() {
-    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = {
-    ...CourtIssuedDocumentBase.VALIDATION_RULES_NEW,
+  static VALIDATION_RULES = {
+    ...CourtIssuedDocumentBase.VALIDATION_RULES,
     date: JoiValidationConstants.ISO_DATE.required().messages({
       ...setDefaultErrorMessage('Enter a date'),
       'date.max': 'Enter a valid date',
@@ -74,12 +59,8 @@ export class CourtIssuedDocumentTypeG extends CourtIssuedDocument {
     ),
   };
 
-  getValidationRules_NEW() {
-    return CourtIssuedDocumentTypeG.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return CourtIssuedDocumentTypeG.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return CourtIssuedDocumentTypeG.VALIDATION_RULES;
   }
 }
 
