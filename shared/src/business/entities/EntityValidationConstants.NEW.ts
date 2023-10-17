@@ -509,7 +509,7 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
 
-const DATE_RANGE_VALIDATION_RULE_KEYS = {
+export const DATE_RANGE_VALIDATION_RULE_KEYS = {
   endDate: joi
     .alternatives()
     .conditional('startDate', {

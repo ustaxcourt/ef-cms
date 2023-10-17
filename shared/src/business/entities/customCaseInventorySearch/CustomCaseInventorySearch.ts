@@ -4,7 +4,7 @@ import {
   CaseStatus,
   CaseType,
 } from '../EntityConstants';
-import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
+import { DATE_RANGE_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants.NEW';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
@@ -64,7 +64,7 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
     return {
       caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
       caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
-      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate,
+      endDate: DATE_RANGE_VALIDATION_RULE_KEYS.endDate, //TODO: dx1187-fix this
       filingMethod: joi
         .string()
         .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
