@@ -271,6 +271,8 @@ export const computeds = {
 export const baseState = {
   advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
+  alertError: undefined,
+  alertSuccess: undefined,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
@@ -352,6 +354,7 @@ export const baseState = {
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
+  login: {} as any,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
