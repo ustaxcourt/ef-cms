@@ -6,10 +6,8 @@ import {
   INTERNAL_DOCUMENT_TYPES,
   PARTIES_CODES,
 } from '@shared/business/entities/EntityConstants';
-import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { pick } from 'lodash';
 import joi from 'joi';
 
 export class ReconciliationReportEntry extends JoiValidationEntity {
@@ -42,22 +40,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    return pick(DOCKET_ENTRY_VALIDATION_RULES, [
-      'caseCaption',
-      'docketEntryId',
-      'docketNumber',
-      'documentTitle',
-      'eventCode',
-      'isFileAttached',
-      'filedBy',
-      'filingDate',
-      'index',
-      'servedAt',
-      'servedPartiesCode',
-    ]);
-  }
-
-  getValidationRules_NEW() {
     return {
       caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
       docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
@@ -131,10 +113,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
         .optional()
         .description('Served parties code to override system-computed code.'),
     };
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 }
 

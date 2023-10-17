@@ -73,23 +73,7 @@ export class Scan extends JoiValidationEntity {
     return aggregatedPngs;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    batches: '#At least one batch is required',
-  };
-
-  getErrorToMessageMap() {
-    return Scan.VALIDATION_ERROR_MESSAGES;
-  }
-
   getValidationRules() {
-    return {
-      batches: joi.array().min(1).required(),
-      createdAt: JoiValidationConstants.ISO_DATE.required(),
-      scanId: JoiValidationConstants.UUID.required(),
-    };
-  }
-
-  getValidationRules_NEW() {
     return {
       batches: joi
         .array()

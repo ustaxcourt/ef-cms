@@ -58,81 +58,6 @@ export class Statistic extends JoiValidationEntity {
     }
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    determinationDeficiencyAmount: 'Enter deficiency as determined by Court.',
-    determinationTotalPenalties:
-      'Enter total penalties as determined by Court.',
-    irsDeficiencyAmount: 'Enter deficiency on IRS Notice.',
-    irsTotalPenalties: 'Enter total penalties on IRS Notice.',
-    lastDateOfPeriod: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Enter valid last date of period',
-      },
-      'Enter last date of period',
-    ],
-    penalties: 'Enter at least one IRS penalty.',
-    year: 'Enter a valid year.',
-  };
-  static VALIDATION_RULES = joi.object().keys({
-    determinationDeficiencyAmount: joi
-      .alternatives()
-      .conditional('determinationTotalPenalties', {
-        is: joi.exist().not(null),
-        otherwise: joi.number().optional().allow(null),
-        then: joi.number().required(),
-      })
-      .description('The amount of the deficiency determined by the Court.'),
-    determinationTotalPenalties: joi
-      .alternatives()
-      .conditional('determinationDeficiencyAmount', {
-        is: joi.exist().not(null),
-        otherwise: joi.number().optional().allow(null),
-        then: joi.number().required(),
-      })
-      .description(
-        'The total amount of penalties for the period or year determined by the Court.',
-      ),
-    entityName: JoiValidationConstants.STRING.valid('Statistic').required(),
-    irsDeficiencyAmount: joi
-      .number()
-      .required()
-      .description('The amount of the deficiency on the IRS notice.'),
-    irsTotalPenalties: joi
-      .number()
-      .required()
-      .description(
-        'The total amount of penalties for the period or year on the IRS notice.',
-      ),
-    lastDateOfPeriod: JoiValidationConstants.ISO_DATE.max('now')
-      .when('yearOrPeriod', {
-        is: 'Period',
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      })
-      .description('Last date of the statistics period.'),
-    penalties: joi
-      .array()
-      .has(
-        joi.object().keys({
-          penaltyType: joi.string().valid(PENALTY_TYPES.IRS_PENALTY_AMOUNT),
-        }),
-      )
-      .required()
-      .description('List of Penalty Entities for the statistic.'),
-    statisticId: JoiValidationConstants.UUID.required().description(
-      'Unique statistic ID only used by the system.',
-    ),
-    year: JoiValidationConstants.YEAR_MAX_CURRENT.when('yearOrPeriod', {
-      is: 'Year',
-      otherwise: joi.optional().allow(null),
-      then: joi.required(),
-    }).description('The year of the statistics period.'),
-    yearOrPeriod: JoiValidationConstants.STRING.required()
-      .valid('Year', 'Period')
-      .description('Whether the statistics are for a year or period.'),
-  });
-
   /**
    *  adds a Penalty object to the Statistic's penalties array
    *
@@ -162,11 +87,7 @@ export class Statistic extends JoiValidationEntity {
     Object.assign(foundPenalty, updatedPenalty);
   }
 
-  getValidationRules() {
-    return Statistic.VALIDATION_RULES;
-  }
-
-  static VALIDATION_RULES_NEW = joi.object().keys({
+  static VALIDATION_RULES = joi.object().keys({
     determinationDeficiencyAmount: joi
       .alternatives()
       .conditional('determinationTotalPenalties', {
@@ -240,12 +161,8 @@ export class Statistic extends JoiValidationEntity {
       .description('Whether the statistics are for a year or period.'),
   });
 
-  getValidationRules_NEW() {
-    return Statistic.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return Statistic.VALIDATION_ERROR_MESSAGES;
+  getValidationRules() {
+    return Statistic.VALIDATION_RULES;
   }
 }
 
