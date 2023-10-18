@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   NotFoundError,
   ServiceUnavailableError,
