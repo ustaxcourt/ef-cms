@@ -1,7 +1,7 @@
 export const retryAsyncRequestAction = async ({
   applicationContext,
   props,
-}) => {
+}: ActionProps) => {
   let func;
   switch (props.requestToRetry) {
     case 'add_paper_filing':
