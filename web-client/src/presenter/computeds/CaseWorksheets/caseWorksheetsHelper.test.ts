@@ -146,6 +146,7 @@ describe('caseWorksheetsHelper', () => {
         status: CASE_STATUS_TYPES.submitted,
         worksheet: {
           docketNumber: '110-15',
+          finalBriefDueDateFormatted: '',
           primaryIssue: 'ZOINKS!',
         },
       },
