@@ -99,7 +99,7 @@ export class CreateAccountForm extends JoiValidationEntity {
 
     if (!results) return results;
 
-    if (results.password && results.password instanceof String) {
+    if (results.password && typeof results.password === 'string') {
       const errors = results.password.split('|');
       const errorsToReturn = getDefaultErrors();
 
