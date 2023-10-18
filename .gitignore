@@ -1,6 +1,5 @@
 
 .cache/
-.cognito/db/
 .DS_Store
 .dynamodb/
 .elasticsearch/
