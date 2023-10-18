@@ -2,8 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
-import { getConstants } from '../../getConstants';
-import { isFeatureFlagEnabledFactoryAction } from '../actions/isFeatureFlagEnabledFactoryAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -22,14 +20,8 @@ const gotoFileDocument = startWebSocketConnectionSequenceDecorator([
   setDefaultFilersMapAction,
   getCaseAction,
   setCaseAction,
-  isFeatureFlagEnabledFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS
-      .CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER,
-  ),
-  {
-    no: [],
-    yes: [getConsolidatedCasesByCaseAction, setConsolidatedCasesForCaseAction],
-  },
+  getConsolidatedCasesByCaseAction,
+  setConsolidatedCasesForCaseAction,
   setWizardStepAction('SelectDocumentType'),
   setupCurrentPageAction('FileDocumentWizard'),
 ]);
