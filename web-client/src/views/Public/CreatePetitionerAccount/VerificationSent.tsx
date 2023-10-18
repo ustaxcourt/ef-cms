@@ -6,7 +6,7 @@ export const VerificationSent = connect(
   {
     email: state.cognito.email,
   },
-  ({ email }) => {
+  ({ email = '"EMAIL NOT PROVIDED"' }) => {
     function maskEmail(rawEmail: string) {
       const parts = rawEmail.split('@');
       if (parts.length !== 2) return rawEmail;
