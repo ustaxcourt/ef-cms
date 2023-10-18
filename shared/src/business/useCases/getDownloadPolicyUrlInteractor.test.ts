@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
@@ -738,7 +737,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
+  describe('when the document belongs to a case in a consolidated group and the user is associated with the consolidated group', () => {
     const leadMockCase = {
       ...MOCK_CASE,
       leadDocketNumber: MOCK_CASE.docketNumber,
@@ -753,14 +752,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .getConsolidatedCasesByCaseInteractor.mockReturnValue([leadMockCase]);
     });
 
-    it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
-      applicationContext
-        .getUseCases()
-        .getAllFeatureFlagsInteractor.mockReturnValue({
-          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
-            .key]: true,
-        });
-
+    it('should return the policy url when the document requested is an available document', async () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValueOnce(leadMockCase);
