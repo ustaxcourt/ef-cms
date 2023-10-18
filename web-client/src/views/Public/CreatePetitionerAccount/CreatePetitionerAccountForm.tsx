@@ -12,6 +12,8 @@ export const CreatePetitionerAccountForm = connect(
     password: state.form.password,
     showConfirmPassword: state.showConfirmPassword,
     showPassword: state.showPassword,
+    submitCreatePetitionerAccountFormSequence:
+      sequences.submitCreatePetitionerAccountFormSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
@@ -23,10 +25,12 @@ export const CreatePetitionerAccountForm = connect(
     password,
     showConfirmPassword,
     showPassword,
+    submitCreatePetitionerAccountFormSequence,
     toggleShowPasswordSequence,
     updateFormValueSequence,
     validationErrors,
   }) => {
+    console.log('validationErrors', validationErrors);
     return (
       <>
         <div
@@ -49,14 +53,20 @@ export const CreatePetitionerAccountForm = connect(
                 autoCapitalize="off"
                 autoCorrect="off"
                 className="usa-input"
-                id="name"
-                name="name"
+                id="email"
+                name="email"
                 type="text"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: 'email',
+                    value: e.target.value,
+                  });
+                }}
               />
               {validationErrors.email && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={validationErrors.email}
+                    label={validationErrors.email[0]}
                     valid={false}
                   ></RequirementsText>
                 </div>
@@ -73,11 +83,17 @@ export const CreatePetitionerAccountForm = connect(
                 id="name"
                 name="name"
                 type="text"
+                onChange={e => {
+                  updateFormValueSequence({
+                    key: 'name',
+                    value: e.target.value,
+                  });
+                }}
               />
               {validationErrors.name && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={validationErrors.name}
+                    label={validationErrors.name[0]}
                     valid={false}
                   ></RequirementsText>
                 </div>
@@ -187,11 +203,12 @@ export const CreatePetitionerAccountForm = connect(
                 </div>
               )}
 
-              <input
-                className="usa-button margin-top-4"
-                type="submit"
-                value="Continue"
-              />
+              <Button
+                className="usa-button"
+                onClick={() => submitCreatePetitionerAccountFormSequence()}
+              >
+                Continue
+              </Button>
             </form>
             <p>
               Already have an account?{' '}

@@ -34,6 +34,7 @@ import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequ
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
+import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
 import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
@@ -98,6 +99,7 @@ export const presenterSequences = {
   persistFormsOnReloadSequence,
   showMoreResultsSequence,
   sortTodaysOrdersSequence,
+  submitCreatePetitionerAccountFormSequence,
   submitPublicCaseAdvancedSearchSequence,
   submitPublicCaseDocketNumberSearchSequence,
   submitPublicOpinionAdvancedSearchSequence,
