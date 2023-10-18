@@ -39,6 +39,10 @@ export class Correspondence extends JoiValidationEntity {
     return Correspondence.VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return Correspondence.VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return {};
   }

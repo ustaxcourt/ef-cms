@@ -4,7 +4,10 @@ import {
   CaseStatus,
   CaseType,
 } from '../EntityConstants';
-import { DATE_RANGE_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
+import {
+  DATE_RANGE_VALIDATION_RULE_KEYS,
+  DATE_RANGE_VALIDATION_RULE_KEYS_NEW,
+} from '../EntityValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
@@ -115,6 +118,34 @@ export class CustomCaseInventorySearch extends JoiValidationEntity {
         })
         .required(),
       startDate: DATE_RANGE_VALIDATION_RULE_KEYS.startDate,
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
+      caseStatuses: joi.array().items(joi.string().valid(...CASE_STATUSES)),
+      caseTypes: joi.array().items(joi.string().valid(...CASE_TYPES)),
+      endDate: DATE_RANGE_VALIDATION_RULE_KEYS_NEW.endDate,
+      filingMethod: joi
+        .string()
+        .valid(...CUSTOM_CASE_REPORT_FILING_METHODS)
+        .required(),
+      highPriority: joi.boolean(),
+      judges: joi.array().items(joi.string()),
+      pageSize: joi.number().required(),
+      preferredTrialCities: joi.array().items(joi.string()),
+      procedureType: joi
+        .string()
+        .valid(...CUSTOM_CASE_REPORT_PROCEDURE_TYPES)
+        .required(),
+      searchAfter: joi
+        .object()
+        .keys({
+          pk: joi.string().allow('').required(),
+          receivedAt: joi.number().required(),
+        })
+        .required(),
+      startDate: DATE_RANGE_VALIDATION_RULE_KEYS_NEW.startDate,
     };
   }
 

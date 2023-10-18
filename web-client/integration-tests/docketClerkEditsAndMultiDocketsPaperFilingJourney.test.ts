@@ -2,6 +2,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
   SERVICE_INDICATOR_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { confirmInitiateServiceModalHelper } from '../src/presenter/computeds/confirmInitiateServiceModalHelper';
 import {
   contactPrimaryFromState,
@@ -45,9 +46,6 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
 
       const formValues = {
         additionalInfo: 'Marvelous multidocket memo',
-        dateReceivedDay: 1,
-        dateReceivedMonth: 1,
-        dateReceivedYear: 2018,
         eventCode: 'A',
         trialLocation: 'Little Rock, AR',
       };
@@ -58,6 +56,15 @@ describe('Docket Clerk edits and multi-dockets a paper filing journey', () => {
           value,
         });
       }
+
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'receivedAt',
+          toFormat: FORMATS.ISO,
+          value: '1/1/2018',
+        },
+      );
 
       const { contactId } = contactPrimaryFromState(cerebralTest);
       await cerebralTest.runSequence(

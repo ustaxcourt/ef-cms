@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
@@ -37,27 +38,16 @@ export const docketClerkEditsDocketEntryFromOrderTypeF = (
         value: 'some freeText',
       },
     );
+
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: '1',
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2021',
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2021',
-      },
-    );
+
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
