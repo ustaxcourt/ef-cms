@@ -2,12 +2,14 @@ import { Button } from '@web-client/ustc-ui/Button/Button';
 import { RequirementsText } from '@web-client/views/Public/CreatePetitionerAccount/RequirementsText';
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
-import React from 'react';
+import React, { useState } from 'react';
 
 export const CreatePetitionerAccountForm = connect(
   {
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
+    email: state.form.email,
+    name: state.form.name,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
     password: state.form.password,
     showConfirmPassword: state.showConfirmPassword,
@@ -16,11 +18,12 @@ export const CreatePetitionerAccountForm = connect(
       sequences.submitCreatePetitionerAccountFormSequence,
     toggleShowPasswordSequence: sequences.toggleShowPasswordSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validationErrors: state.validationErrors,
   },
   ({
     confirmPassword,
     createAccountHelper,
+    email,
+    name,
     navigateToCognitoSequence,
     password,
     showConfirmPassword,
@@ -28,8 +31,10 @@ export const CreatePetitionerAccountForm = connect(
     submitCreatePetitionerAccountFormSequence,
     toggleShowPasswordSequence,
     updateFormValueSequence,
-    validationErrors,
   }) => {
+    const [inFocusEmail, setInFocusEmail] = useState(false);
+    const [inFocusName, setInFocusName] = useState(false);
+
     return (
       <>
         <div
@@ -55,17 +60,20 @@ export const CreatePetitionerAccountForm = connect(
                 id="email"
                 name="email"
                 type="text"
-                onChange={e => {
+                onBlur={e => {
+                  setInFocusEmail(false);
+
                   updateFormValueSequence({
                     key: 'email',
                     value: e.target.value,
                   });
                 }}
+                onFocus={() => setInFocusEmail(true)}
               />
-              {validationErrors.email && (
+              {!inFocusEmail && email && createAccountHelper.email && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={validationErrors.email}
+                    label={createAccountHelper.email}
                     valid={false}
                   ></RequirementsText>
                 </div>
@@ -82,17 +90,19 @@ export const CreatePetitionerAccountForm = connect(
                 id="name"
                 name="name"
                 type="text"
-                onChange={e => {
+                onBlur={e => {
+                  setInFocusName(false);
                   updateFormValueSequence({
                     key: 'name',
                     value: e.target.value,
                   });
                 }}
+                onFocus={() => setInFocusName(true)}
               />
-              {validationErrors.name && (
+              {!inFocusName && name && createAccountHelper.name && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={validationErrors.name}
+                    label={createAccountHelper.name}
                     valid={false}
                   ></RequirementsText>
                 </div>

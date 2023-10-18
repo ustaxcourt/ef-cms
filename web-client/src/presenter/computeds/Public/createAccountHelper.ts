@@ -7,8 +7,10 @@ import { state } from '@web-client/presenter/app-public.cerebral';
 
 export type CreateAccuntHelperResults = {
   confirmPassword: boolean;
+  email?: string;
   enableContinueButton: boolean;
-  passwordErrors: CreateAccountFormPasswordValidations | undefined;
+  name?: string;
+  passwordErrors?: CreateAccountFormPasswordValidations;
 };
 
 export const createAccountHelper = (get: Get): CreateAccuntHelperResults => {
@@ -16,8 +18,8 @@ export const createAccountHelper = (get: Get): CreateAccuntHelperResults => {
   const formEntity = new CreateAccountForm(form);
   const errors = formEntity.getFormattedValidationErrors();
 
-  const passwordErrors: CreateAccountFormPasswordValidations | undefined =
-    errors?.password as CreateAccountFormPasswordValidations | undefined;
+  const passwordErrors: CreateAccountFormPasswordValidations =
+    errors?.password as CreateAccountFormPasswordValidations;
 
   const enableContinueButton =
     !errors?.confirmPassword &&
@@ -25,7 +27,9 @@ export const createAccountHelper = (get: Get): CreateAccuntHelperResults => {
 
   return {
     confirmPassword: !errors?.confirmPassword,
+    email: errors?.email as string,
     enableContinueButton,
+    name: errors?.name as string,
     passwordErrors,
   };
 };
