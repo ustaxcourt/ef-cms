@@ -10,4 +10,4 @@
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"redaction-acknowledgement-enabled"},"sk":{"S":"redaction-acknowledgement-enabled"}}'
+aws dynamodb delete-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"redaction-acknowledgement-enabled"},"sk":{"S":"redaction-acknowledgement-enabled"}}'
