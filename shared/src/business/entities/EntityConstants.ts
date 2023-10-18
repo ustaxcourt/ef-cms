@@ -81,11 +81,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
       'The ability to add multiple docket entries to an order is disabled.',
     key: 'consolidated-cases-add-docket-numbers',
   },
-  CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER: {
-    disabledMessage:
-      'The ability to view a case that you are not directly associated with in a consolidated group is disabled.',
-    key: 'consolidated-cases-group-access-petitioner',
-  },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
   },
