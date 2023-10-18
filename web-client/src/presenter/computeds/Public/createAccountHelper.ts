@@ -15,12 +15,17 @@ export const createAccountHelper = (get: Get): CreateAccuntHelperResults => {
   const form = get(state.form);
   const formEntity = new CreateAccountForm(form);
   const errors = formEntity.getFormattedValidationErrors();
+
   const passwordErrors: CreateAccountFormPasswordValidations | undefined =
     errors?.password as CreateAccountFormPasswordValidations | undefined;
 
+  const enableContinueButton =
+    !errors?.confirmPassword &&
+    (!passwordErrors || Object.values(passwordErrors).every(Boolean));
+
   return {
     confirmPassword: !errors?.confirmPassword,
-    enableContinueButton: true,
+    enableContinueButton,
     passwordErrors,
   };
 };

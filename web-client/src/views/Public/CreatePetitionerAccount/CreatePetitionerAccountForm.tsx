@@ -30,7 +30,6 @@ export const CreatePetitionerAccountForm = connect(
     updateFormValueSequence,
     validationErrors,
   }) => {
-    console.log('validationErrors', validationErrors);
     return (
       <>
         <div
@@ -205,6 +204,11 @@ export const CreatePetitionerAccountForm = connect(
 
               <Button
                 className="usa-button"
+                disabled={
+                  !password ||
+                  !confirmPassword ||
+                  !createAccountHelper.enableContinueButton
+                }
                 onClick={() => submitCreatePetitionerAccountFormSequence()}
               >
                 Continue
