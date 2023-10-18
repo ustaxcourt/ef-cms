@@ -439,8 +439,8 @@ describe('formattedDocketEntries', () => {
           isPetition: false,
           isStatusServed: false,
           showDocumentViewerLink: true,
-          signedAtFormatted: '',
-          signedAtFormattedTZ: '',
+          signedAtFormatted: undefined,
+          signedAtFormattedTZ: undefined,
         },
       ]);
     });
