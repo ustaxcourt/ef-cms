@@ -66,7 +66,7 @@ export const CreatePetitionerAccountForm = connect(
               {validationErrors.email && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={validationErrors.email[0]}
+                    label={validationErrors.email}
                     valid={false}
                   ></RequirementsText>
                 </div>
@@ -93,7 +93,7 @@ export const CreatePetitionerAccountForm = connect(
               {validationErrors.name && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={validationErrors.name[0]}
+                    label={validationErrors.name}
                     valid={false}
                   ></RequirementsText>
                 </div>
