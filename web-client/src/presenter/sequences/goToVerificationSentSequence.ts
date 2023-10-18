@@ -1,3 +1,5 @@
-import { navigateToVerificationSentAction } from '@web-client/presenter/actions/navigateToVerificationSentAction';
+import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurrentPageAction';
 
-export const goToVerificationSentSequence = [navigateToVerificationSentAction];
+export const goToVerificationSentSequence = [
+  setupCurrentPageAction('VerificationSent'),
+];
