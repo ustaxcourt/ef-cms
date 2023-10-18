@@ -76,6 +76,13 @@ export const put = ({
       }),
     })
     .promise()
+    .catch(e => {
+      if (e.message.includes('The conditional request failed')) {
+        return;
+      } else {
+        throw e;
+      }
+    })
     .then(() => Item);
 };
 

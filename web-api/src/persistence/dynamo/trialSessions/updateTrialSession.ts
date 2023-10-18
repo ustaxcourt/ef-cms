@@ -12,13 +12,16 @@ export const updateTrialSession = async ({
   trialSessionToUpdate: RawTrialSession;
 }) => {
   for (const item of trialSessionToUpdate.paperServicePdfs) {
+    const pk = `trial-session|${trialSessionToUpdate.trialSessionId}`;
+    const sk = `paper-service-pdf|${item.documentId}`;
+
     await put({
       ConditionExpression:
-        'attribute_not_exists(pk) and attribute_not_exists(sk)',
+        'attribute_not_exists(pk) AND attribute_not_exists(sk)',
       Item: {
         ...item,
-        pk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
-        sk: `paper-service-pdf|${item.documentId}`,
+        pk,
+        sk,
         ttl: 60 * 60 * 72,
       },
       applicationContext,
