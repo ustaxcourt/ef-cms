@@ -216,9 +216,8 @@ export const CreatePetitionerAccountForm = connect(
               </div>
 
               <Button
-                className="usa-button"
+                className="usa-button margin-top-2"
                 disabled={!createAccountHelper.formIsValid}
-                style={{ 'margin-top': '2rem' }}
                 onClick={() => submitCreatePetitionerAccountFormSequence()}
               >
                 Continue
