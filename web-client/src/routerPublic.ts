@@ -36,6 +36,11 @@ const router = {
       app.getSequence('goToCreatePetitionerAccountSequence')();
     });
 
+    route('/create-account/verification-sent', () => {
+      setPageTitle('Verification Sent');
+      app.getSequence('goToVerificationSentSequence')();
+    });
+
     route('/case-detail/*/printable-docket-record', docketNumber => {
       setPageTitle(`Docket ${docketNumber}`);
       app.getSequence('gotoPublicPrintableDocketRecordSequence')({

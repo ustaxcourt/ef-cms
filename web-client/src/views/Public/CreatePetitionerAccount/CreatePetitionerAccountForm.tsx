@@ -1,5 +1,6 @@
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { RequirementsText } from '@web-client/views/Public/CreatePetitionerAccount/RequirementsText';
+import { VerificationSent } from '@web-client/views/Public/CreatePetitionerAccount/VerificationSent';
 import { connect } from '@cerebral/react';
 import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React, { useState } from 'react';
@@ -37,6 +38,7 @@ export const CreatePetitionerAccountForm = connect(
 
     return (
       <>
+        <VerificationSent></VerificationSent>
         <div
           className="
 							create-petitioner-form

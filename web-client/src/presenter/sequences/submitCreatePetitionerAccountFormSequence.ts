@@ -1,11 +1,15 @@
-import { setValidationErrorsAction } from '@web-client/presenter/actions/setValidationErrorsAction';
+import { createPetitionerAccountFormAction } from '@web-client/presenter/actions/createPetitionerAccountFormAction';
+import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
+import { setNewAccountEmailInStateAction } from '@web-client/presenter/actions/setNewAccountEmailInStateAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
-import { validateCreatePetitionerAccountFormAction } from '@web-client/presenter/actions/validateCreatePetitionerAccountFormAction';
 
 export const submitCreatePetitionerAccountFormSequence = [
-  validateCreatePetitionerAccountFormAction,
+  createPetitionerAccountFormAction,
   {
-    error: [setValidationErrorsAction],
-    success: showProgressSequenceDecorator([]),
+    error: [setAlertErrorAction],
+    success: showProgressSequenceDecorator([
+      setNewAccountEmailInStateAction,
+      navigateToCheckYourEmailPageAction,
+    ]),
   },
 ];

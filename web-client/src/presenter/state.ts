@@ -288,6 +288,7 @@ export const baseState = {
   },
   caseDetail: {} as RawCase,
   closedCases: [] as TAssociatedCase[],
+  cognito: { email: '' },
   cognitoLoginUrl: null,
   completeForm: {},
   constants: {} as ReturnType<typeof getConstants>,
