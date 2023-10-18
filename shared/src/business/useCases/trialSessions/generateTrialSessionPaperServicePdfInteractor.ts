@@ -85,7 +85,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       applicationContext,
     });
 
-    trialSessionEntity.addPaperServicePdf(docketEntryId, 'Intial Calendaring');
+    trialSessionEntity.addPaperServicePdf(docketEntryId, 'Initial Calendaring');
 
     await applicationContext.getPersistenceGateway().updateTrialSession({
       applicationContext,

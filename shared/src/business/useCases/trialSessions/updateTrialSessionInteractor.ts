@@ -3,11 +3,171 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { get } from 'lodash';
+
+export const updateTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: RawTrialSession },
+): Promise<void> => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const currentTrialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId: trialSession.trialSessionId!,
+    });
+
+  if (
+    currentTrialSession.startDate <
+    applicationContext.getUtilities().createISODateString()
+  ) {
+    throw new Error('Trial session cannot be updated after its start date');
+  }
+
+  const editableFields = {
+    address1: trialSession.address1,
+    address2: trialSession.address2,
+    alternateTrialClerkName: trialSession.alternateTrialClerkName,
+    chambersPhoneNumber: trialSession.chambersPhoneNumber,
+    city: trialSession.city,
+    courtReporter: trialSession.courtReporter,
+    courthouseName: trialSession.courthouseName,
+    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
+    estimatedEndDate: trialSession.estimatedEndDate,
+    irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
+    joinPhoneNumber: trialSession.joinPhoneNumber,
+    judge: trialSession.judge,
+    maxCases: trialSession.maxCases,
+    meetingId: trialSession.meetingId,
+    notes: trialSession.notes,
+    password: trialSession.password,
+    postalCode: trialSession.postalCode,
+    proceedingType: trialSession.proceedingType,
+    sessionType: trialSession.sessionType,
+    startDate: trialSession.startDate,
+    startTime: trialSession.startTime,
+    state: trialSession.state,
+    swingSession: trialSession.swingSession,
+    swingSessionId: trialSession.swingSessionId,
+    term: trialSession.term,
+    termYear: trialSession.termYear,
+    trialClerk: trialSession.trialClerk,
+    trialLocation: trialSession.trialLocation,
+  };
+
+  const updatedTrialSessionEntity = new TrialSession(
+    { ...currentTrialSession, ...editableFields },
+    {
+      applicationContext,
+    },
+  );
+
+  const shouldCreateWorkingCopyForNewJudge =
+    (!get(currentTrialSession, 'judge.userId') &&
+      get(updatedTrialSessionEntity, 'judge.userId')) ||
+    (currentTrialSession.judge &&
+      updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId);
+
+  if (shouldCreateWorkingCopyForNewJudge) {
+    await createWorkingCopyForNewUserOnSession({
+      applicationContext,
+      trialSessionId: updatedTrialSessionEntity.trialSessionId,
+      userId: updatedTrialSessionEntity.judge?.userId,
+    });
+  }
+
+  const shouldCreateWorkingCopyForNewTrialClerk =
+    (!get(currentTrialSession, 'trialClerk.userId') &&
+      get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
+    (currentTrialSession.trialClerk &&
+      updatedTrialSessionEntity.trialClerk &&
+      currentTrialSession.trialClerk.userId !==
+        updatedTrialSessionEntity.trialClerk.userId);
+
+  if (shouldCreateWorkingCopyForNewTrialClerk) {
+    await createWorkingCopyForNewUserOnSession({
+      applicationContext,
+      trialSessionId: updatedTrialSessionEntity.trialSessionId,
+      userId: updatedTrialSessionEntity.trialClerk?.userId,
+    });
+  }
+
+  let hasPaper, pdfUrl;
+  if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
+    const calendaredCases = currentTrialSession.caseOrder.filter(
+      c => !c.removedFromTrial,
+    );
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const paperServicePdfsCombined = await PDFDocument.create();
+
+    for (let calendaredCase of calendaredCases) {
+      await updateAssociatedCaseAndSetNoticeOfChange({
+        applicationContext,
+        currentTrialSession,
+        docketNumber: calendaredCase.docketNumber,
+        paperServicePdfsCombined,
+        updatedTrialSessionEntity,
+        user,
+      });
+    }
+
+    hasPaper = !!paperServicePdfsCombined.getPageCount();
+    const paperServicePdfData = await paperServicePdfsCombined.save();
+
+    if (hasPaper) {
+      let fileId;
+
+      ({ fileId, url: pdfUrl } = await applicationContext
+        .getUseCaseHelpers()
+        .saveFileAndGenerateUrl({
+          applicationContext,
+          file: paperServicePdfData,
+          useTempBucket: true,
+        }));
+
+      updatedTrialSessionEntity.addPaperServicePdf(fileId, 'Notice of Change');
+    }
+  }
+
+  if (trialSession.swingSession && trialSession.swingSessionId) {
+    applicationContext
+      .getUseCaseHelpers()
+      .associateSwingTrialSessions(applicationContext, {
+        swingSessionId: trialSession.swingSessionId,
+        trialSessionEntity: updatedTrialSessionEntity,
+      });
+  }
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
+  });
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'update_trial_session_complete',
+      hasPaper,
+      pdfUrl,
+      trialSessionId: trialSession.trialSessionId,
+    },
+    userId: user.userId,
+  });
+};
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,
@@ -128,163 +288,4 @@ const createWorkingCopyForNewUserOnSession = async ({
         .validate()
         .toRawObject(),
     });
-};
-
-/**
- * updateTrialSessionInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSession the trial session data
- */
-export const updateTrialSessionInteractor = async (
-  applicationContext: IApplicationContext,
-  { trialSession },
-) => {
-  const user = applicationContext.getCurrentUser();
-
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const currentTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId: trialSession.trialSessionId,
-    });
-
-  if (
-    currentTrialSession.startDate <
-    applicationContext.getUtilities().createISODateString()
-  ) {
-    throw new Error('Trial session cannot be updated after its start date');
-  }
-
-  const editableFields = {
-    address1: trialSession.address1,
-    address2: trialSession.address2,
-    alternateTrialClerkName: trialSession.alternateTrialClerkName,
-    chambersPhoneNumber: trialSession.chambersPhoneNumber,
-    city: trialSession.city,
-    courtReporter: trialSession.courtReporter,
-    courthouseName: trialSession.courthouseName,
-    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
-    estimatedEndDate: trialSession.estimatedEndDate,
-    irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
-    joinPhoneNumber: trialSession.joinPhoneNumber,
-    judge: trialSession.judge,
-    maxCases: trialSession.maxCases,
-    meetingId: trialSession.meetingId,
-    notes: trialSession.notes,
-    password: trialSession.password,
-    postalCode: trialSession.postalCode,
-    proceedingType: trialSession.proceedingType,
-    sessionType: trialSession.sessionType,
-    startDate: trialSession.startDate,
-    startTime: trialSession.startTime,
-    state: trialSession.state,
-    swingSession: trialSession.swingSession,
-    swingSessionId: trialSession.swingSessionId,
-    term: trialSession.term,
-    termYear: trialSession.termYear,
-    trialClerk: trialSession.trialClerk,
-    trialLocation: trialSession.trialLocation,
-  };
-
-  const updatedTrialSessionEntity = new TrialSession(
-    { ...currentTrialSession, ...editableFields },
-    {
-      applicationContext,
-    },
-  );
-
-  const shouldCreateWorkingCopyForNewJudge =
-    (!get(currentTrialSession, 'judge.userId') &&
-      get(updatedTrialSessionEntity, 'judge.userId')) ||
-    (currentTrialSession.judge &&
-      updatedTrialSessionEntity.judge &&
-      currentTrialSession.judge.userId !==
-        updatedTrialSessionEntity.judge.userId);
-
-  if (shouldCreateWorkingCopyForNewJudge) {
-    await createWorkingCopyForNewUserOnSession({
-      applicationContext,
-      trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.judge?.userId,
-    });
-  }
-
-  const shouldCreateWorkingCopyForNewTrialClerk =
-    (!get(currentTrialSession, 'trialClerk.userId') &&
-      get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
-    (currentTrialSession.trialClerk &&
-      updatedTrialSessionEntity.trialClerk &&
-      currentTrialSession.trialClerk.userId !==
-        updatedTrialSessionEntity.trialClerk.userId);
-
-  if (shouldCreateWorkingCopyForNewTrialClerk) {
-    await createWorkingCopyForNewUserOnSession({
-      applicationContext,
-      trialSessionId: updatedTrialSessionEntity.trialSessionId,
-      userId: updatedTrialSessionEntity.trialClerk?.userId,
-    });
-  }
-
-  let hasPaper, pdfUrl;
-  if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
-    const calendaredCases = currentTrialSession.caseOrder.filter(
-      c => !c.removedFromTrial,
-    );
-    const { PDFDocument } = await applicationContext.getPdfLib();
-    const paperServicePdfsCombined = await PDFDocument.create();
-
-    for (let calendaredCase of calendaredCases) {
-      await updateAssociatedCaseAndSetNoticeOfChange({
-        applicationContext,
-        currentTrialSession,
-        docketNumber: calendaredCase.docketNumber,
-        paperServicePdfsCombined,
-        updatedTrialSessionEntity,
-        user,
-      });
-    }
-
-    hasPaper = !!paperServicePdfsCombined.getPageCount();
-    const paperServicePdfData = await paperServicePdfsCombined.save();
-
-    if (hasPaper) {
-      ({ url: pdfUrl } = await applicationContext
-        .getUseCaseHelpers()
-        .saveFileAndGenerateUrl({
-          applicationContext,
-          file: paperServicePdfData,
-          useTempBucket: true,
-        }));
-    }
-  }
-
-  if (trialSession.swingSession && trialSession.swingSessionId) {
-    applicationContext
-      .getUseCaseHelpers()
-      .associateSwingTrialSessions(applicationContext, {
-        swingSessionId: trialSession.swingSessionId,
-        trialSessionEntity: updatedTrialSessionEntity,
-      });
-  }
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-  });
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'update_trial_session_complete',
-      hasPaper,
-      pdfUrl,
-      trialSessionId: trialSession.trialSessionId,
-    },
-    userId: user.userId,
-  });
 };
