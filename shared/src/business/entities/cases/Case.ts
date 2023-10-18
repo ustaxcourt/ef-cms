@@ -2439,7 +2439,7 @@ const generateCaptionFromContacts = ({
       caseCaption = `${primaryContact.name}, Transferee, Petitioner`;
       break;
     case PARTY_TYPES.survivingSpouse:
-      caseCaption = `${primaryContact.name}, Deceased, Petitioner`;
+      caseCaption = `${primaryContact.name}, Deceased, ${primaryContact.secondaryName}, Surviving Spouse, Petitioner`;
       break;
   }
   return caseCaption;
