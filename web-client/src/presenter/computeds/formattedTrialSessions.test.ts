@@ -296,7 +296,7 @@ describe('formattedTrialSessions', () => {
     expect(result.sessionsByTerm).toEqual([
       {
         caseOrder: [],
-        formattedEstimatedEndDate: '',
+        formattedEstimatedEndDate: undefined,
         formattedNoticeIssuedDate: '07/25/2019',
         formattedStartDate: '11/27/19',
         isCalendared: false,
@@ -316,15 +316,14 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
-        formattedEstimatedEndDate: '',
-        formattedNoticeIssuedDate: '',
+        formattedEstimatedEndDate: undefined,
+        formattedNoticeIssuedDate: undefined,
         formattedStartDate: '11/25/19',
         isCalendared: false,
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',
         sessionStatus: 'New',
         sessionType: SESSION_TYPES.small,
-        showAlertForNOTTReminder: undefined,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
