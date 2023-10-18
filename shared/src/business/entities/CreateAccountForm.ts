@@ -98,18 +98,19 @@ export class CreateAccountForm extends JoiValidationEntity {
     } | null = super.getFormattedValidationErrors();
 
     if (!results) return results;
+    if (!results.password || typeof results.password !== 'string')
+      return {
+        ...results,
+        password: getDefaultErrors(),
+      };
 
-    if (results.password && typeof results.password === 'string') {
-      const errors = results.password.split('|');
-      const errorsToReturn = getDefaultErrors();
+    const errors = results.password.split('|');
+    const errorsToReturn = getDefaultErrors();
 
-      for (let error of errors) {
-        errorsToReturn[error] = false;
-      }
-      results.password = errorsToReturn;
-    } else {
-      results.password = getDefaultErrors();
+    for (let error of errors) {
+      errorsToReturn[error] = false;
     }
+    results.password = errorsToReturn;
 
     return results;
   }
