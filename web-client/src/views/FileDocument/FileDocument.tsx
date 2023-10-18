@@ -14,8 +14,6 @@ import React from 'react';
 
 export const FileDocument = connect(
   {
-    allowExternalConsolidatedGroupFiling:
-      state.allowExternalConsolidatedGroupFilingHelper,
     fileDocumentHelper: state.fileDocumentHelper,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
@@ -24,7 +22,6 @@ export const FileDocument = connect(
     showModal: state.modal.showModal,
   },
   function FileDocument({
-    allowExternalConsolidatedGroupFiling,
     fileDocumentHelper,
     formCancelToggleCancelSequence,
     navigateBackSequence,
@@ -60,7 +57,7 @@ export const FileDocument = connect(
 
         <PartiesFiling />
 
-        {allowExternalConsolidatedGroupFiling && (
+        {fileDocumentHelper.allowExternalConsolidatedGroupFiling && (
           <ExternalConsolidatedCaseGroupFilingCard />
         )}
 

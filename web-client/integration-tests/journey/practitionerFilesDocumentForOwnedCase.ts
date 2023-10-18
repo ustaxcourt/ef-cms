@@ -4,7 +4,7 @@ import { contactPrimaryFromState } from '../helpers';
 export const practitionerFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
