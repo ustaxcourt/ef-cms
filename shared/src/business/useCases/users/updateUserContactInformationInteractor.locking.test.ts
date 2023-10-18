@@ -112,6 +112,14 @@ describe('updateUserContactInformationInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByUserId.mockReturnValue([MOCK_CASE.docketNumber]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesForUser.mockReturnValue([MOCK_CASE.docketNumber]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
   });
 
   describe('locked', () => {
