@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Removes the redaction acknowledgement enabled feature flag to "false" in the dynamo deploy table
+# Removes the redaction acknowledgement enabled feature flag in the dynamo deploy table
 
 # Usage
 #   ENV=dev ./remove-redaction-acknowledgement-enabled-flag.sh
