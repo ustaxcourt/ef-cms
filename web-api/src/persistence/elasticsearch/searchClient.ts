@@ -3,6 +3,7 @@ import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
+import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
 import AWS from 'aws-sdk';
 
 const CHUNK_SIZE = 10000;
@@ -80,6 +81,7 @@ export const count = async ({
   applicationContext: IApplicationContext;
   searchParameters: Search;
 }): Promise<SearchClientCountResultsType> => {
+  updateIndex({ searchParameters });
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -98,6 +100,7 @@ export const search = async <T>({
   applicationContext: IApplicationContext;
   searchParameters: Search;
 }): Promise<SearchClientResultsType> => {
+  updateIndex({ searchParameters });
   try {
     const response = await applicationContext
       .getSearchClient()
@@ -116,6 +119,7 @@ export const searchAll = async ({
   applicationContext: IApplicationContext;
   searchParameters: SearchAllParametersType;
 }): Promise<SearchClientResultsType> => {
+  updateIndex({ searchParameters });
   const index = searchParameters.index || '';
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;
