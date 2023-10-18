@@ -203,18 +203,22 @@ export const CreatePetitionerAccountForm = connect(
               >
                 {showConfirmPassword ? 'Hide Password' : 'Show password'}
               </button>
-              {confirmPassword && (
-                <div className="margin-top-1">
-                  <RequirementsText
-                    label="Password must match"
-                    valid={createAccountHelper.confirmPassword}
-                  ></RequirementsText>
-                </div>
-              )}
+              <div
+                className="margin-top-1"
+                style={{
+                  visibility: confirmPassword ? 'visible' : 'hidden',
+                }}
+              >
+                <RequirementsText
+                  label="Password must match"
+                  valid={createAccountHelper.confirmPassword}
+                ></RequirementsText>
+              </div>
 
               <Button
                 className="usa-button"
                 disabled={!createAccountHelper.formIsValid}
+                style={{ 'margin-top': '2rem' }}
                 onClick={() => submitCreatePetitionerAccountFormSequence()}
               >
                 Continue
