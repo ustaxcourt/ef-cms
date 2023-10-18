@@ -89,12 +89,17 @@ export class CreateAccountForm extends JoiValidationEntity {
     return CreateAccountForm.VALIDATION_RULES;
   }
 
-  getFormattedValidationErrors() {
-    const results = super.getFormattedValidationErrors();
+  // @ts-ignore
+  getFormattedValidationErrors(): {
+    [key: string]: string | CreateAccountFormPasswordValidations;
+  } | null {
+    const results: {
+      [key: string]: string | CreateAccountFormPasswordValidations;
+    } | null = super.getFormattedValidationErrors();
 
     if (!results) return results;
 
-    if (results.password) {
+    if (results.password && results.password instanceof String) {
       const errors = results.password.split('|');
       const errorsToReturn = getDefaultErrors();
 
