@@ -90,9 +90,6 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
-  REDACTION_ACKNOWLEDGEMENT_ENABLED: {
-    key: 'redaction-acknowledgement-enabled',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',

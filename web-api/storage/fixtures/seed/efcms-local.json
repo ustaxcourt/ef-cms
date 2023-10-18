@@ -39532,11 +39532,6 @@
     "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
   },
   {
-    "sk": "redaction-acknowledgement-enabled",
-    "current": true,
-    "pk": "redaction-acknowledgement-enabled"
-  },
-  {
     "sk": "section-outbox-number-of-days",
     "current": 7,
     "pk": "section-outbox-number-of-days"
