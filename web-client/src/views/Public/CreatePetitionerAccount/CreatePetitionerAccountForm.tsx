@@ -20,7 +20,6 @@ export const CreatePetitionerAccountForm = connect(
     confirmPassword,
     createAccountHelper,
     navigateToCognitoSequence,
-    password,
     showConfirmPassword,
     showPassword,
     toggleShowPasswordSequence,
@@ -53,12 +52,14 @@ export const CreatePetitionerAccountForm = connect(
                 name="name"
                 type="text"
               />
-              <div hidden={validationErrors.email}>
-                <RequirementsText
-                  label={validationErrors.email}
-                  valid={false}
-                ></RequirementsText>
-              </div>
+              {validationErrors.email && (
+                <div className="margin-top-1">
+                  <RequirementsText
+                    label={validationErrors.email}
+                    valid={false}
+                  ></RequirementsText>
+                </div>
+              )}
 
               <label className="usa-label" htmlFor="name">
                 Name
@@ -72,12 +73,14 @@ export const CreatePetitionerAccountForm = connect(
                 name="name"
                 type="text"
               />
-              <div hidden={validationErrors.name}>
-                <RequirementsText
-                  label={validationErrors.name}
-                  valid={false}
-                ></RequirementsText>
-              </div>
+              {validationErrors.name && (
+                <div className="margin-top-1">
+                  <RequirementsText
+                    label={validationErrors.name}
+                    valid={false}
+                  ></RequirementsText>
+                </div>
+              )}
               <label className="usa-label" htmlFor="password">
                 Password
               </label>
@@ -107,7 +110,7 @@ export const CreatePetitionerAccountForm = connect(
               >
                 {showPassword ? 'Hide Password' : 'Show password'}
               </button>
-              <div hidden={!password}>
+              <div className="margin-top-1">
                 <RequirementsText
                   label="Must contain lower case letter"
                   valid={createAccountHelper.passwordErrors?.hasOneLowercase}
@@ -174,12 +177,14 @@ export const CreatePetitionerAccountForm = connect(
               >
                 {showConfirmPassword ? 'Hide Password' : 'Show password'}
               </button>
-              <div hidden={!confirmPassword}>
-                <RequirementsText
-                  label="Password must match"
-                  valid={createAccountHelper.confirmPassword}
-                ></RequirementsText>
-              </div>
+              {confirmPassword && (
+                <div className="margin-top-1">
+                  <RequirementsText
+                    label="Password must match"
+                    valid={createAccountHelper.confirmPassword}
+                  ></RequirementsText>
+                </div>
+              )}
 
               <input
                 className="usa-button margin-top-4"
