@@ -2,7 +2,16 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import joi from 'joi';
 
-function getDefaultErrors() {
+export type CreateAccountFormPasswordValidations = {
+  hasNoLeadingOrTrailingSpace: boolean;
+  hasOneLowercase: boolean;
+  hasOneNumber: boolean;
+  hasOneUppercase: boolean;
+  hasSpecialCharacterOrSpace: boolean;
+  isProperLength: boolean;
+};
+
+function getDefaultErrors(): CreateAccountFormPasswordValidations {
   return {
     hasNoLeadingOrTrailingSpace: true,
     hasOneLowercase: true,
