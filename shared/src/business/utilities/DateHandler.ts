@@ -237,7 +237,7 @@ export const formatDateString = (
   dateString: string,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
 ): string | void => {
-  if (!dateString) return;
+  if (!dateString) return '';
   let formatString = FORMATS[formatArg] || formatArg;
 
   if (!Object.values(FORMATS).includes(formatString)) {
