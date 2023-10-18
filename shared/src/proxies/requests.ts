@@ -1,5 +1,6 @@
-const maxRetries = 10;
 import moize from 'moize';
+
+const MAX_RETRIES = 10;
 
 /**
  *
@@ -106,10 +107,10 @@ export const post = async ({
       })
       .then(response => response.data);
   } catch (err) {
-    if (err.response.status === 503 && retry < maxRetries) {
+    if (isRetryableError({ err, retry })) {
       await applicationContext
         .getUtilities()
-        .sleep(err.response.headers['Retry-After'] || 5000);
+        .sleep(err.response?.headers['Retry-After'] || 5000);
       return exports.post({
         applicationContext,
         body,
@@ -148,10 +149,10 @@ export const put = async ({
 
     return res;
   } catch (err) {
-    if (err.response.status === 503 && retry < maxRetries) {
+    if (isRetryableError({ err, retry })) {
       await applicationContext
         .getUtilities()
-        .sleep(err.response.headers['Retry-After'] || 5000);
+        .sleep(err.response?.headers['Retry-After'] || 5000);
       return exports.put({
         applicationContext,
         body,
@@ -196,10 +197,10 @@ export const remove = async ({
       })
       .then(response => response.data);
   } catch (err) {
-    if (err.response.status === 503 && retry < maxRetries) {
+    if (isRetryableError({ err, retry })) {
       await applicationContext
         .getUtilities()
-        .sleep(err.response.headers['Retry-After'] || 5000);
+        .sleep(err.response?.headers['Retry-After'] || 5000);
       return exports.remove({
         applicationContext,
         endpoint,
@@ -221,4 +222,8 @@ const getDefaultHeaders = userToken => {
   }
 
   return authorizationHeaderObject;
+};
+
+const isRetryableError = ({ err, retry }) => {
+  return err.response && err.response.status === 503 && retry < MAX_RETRIES;
 };
