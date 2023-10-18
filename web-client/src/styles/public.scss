@@ -70,6 +70,10 @@
 
 		.create-container {
 			margin-left: unset;
+
+			&.mobile {
+				padding-left: 2px;
+			}
 		}
   }
 }
