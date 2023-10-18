@@ -91,6 +91,15 @@ export const HeaderPublic = connect(
                     Create Account
                   </Button>
                 </div>
+
+                <div className="create-container mobile">
+                  <button
+                    className="usa-menu-btn"
+                    onClick={() => navigateToCreatePetitionerAccountSequence()}
+                  >
+                    Create Account
+                  </button>
+                </div>
               </div>
             </div>
           </header>
