@@ -16,12 +16,8 @@ export const fileDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ) => {
-  const {
-    ALLOWLIST_FEATURE_FLAGS,
-    AMENDMENT_EVENT_CODES,
-    CATEGORY_MAP,
-    PARTY_TYPES,
-  } = applicationContext.getConstants();
+  const { AMENDMENT_EVENT_CODES, CATEGORY_MAP, PARTY_TYPES } =
+    applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
 
   const form = get(state.form);
@@ -73,16 +69,8 @@ export const fileDocumentHelper = (
     filersMap: form.filersMap,
   });
 
-  const redactionAcknowledgementEnabled = get(
-    state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key
-    ],
-  );
-
   const EARedactionAcknowledgement =
-    redactionAcknowledgementEnabled &&
-    form.generationType === GENERATION_TYPES.MANUAL &&
-    form.eventCode === 'EA';
+    form.generationType === GENERATION_TYPES.MANUAL && form.eventCode === 'EA';
 
   const exported = {
     EARedactionAcknowledgement,
@@ -92,7 +80,6 @@ export const fileDocumentHelper = (
       form.documentType === 'Motion for Leave to File',
     partyValidationError,
     primaryDocument,
-    redactionAcknowledgementEnabled,
     secondaryDocument,
     showFilingIncludes,
     showPrimaryDocumentValid: !!form.primaryDocumentFile,
