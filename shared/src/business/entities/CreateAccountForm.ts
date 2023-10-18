@@ -42,7 +42,7 @@ export class CreateAccountForm extends JoiValidationEntity {
     email: JoiValidationConstants.EMAIL.required().description('Email of user'),
     entityName:
       JoiValidationConstants.STRING.valid('CreateAccountForm').required(),
-    name: JoiValidationConstants.STRING.max(250)
+    name: JoiValidationConstants.STRING.max(100)
       .required()
       .description('Name of the user.'),
     password: JoiValidationConstants.STRING.custom((value, helper) => {
@@ -82,7 +82,9 @@ export class CreateAccountForm extends JoiValidationEntity {
             .join('|') as any,
         );
       }
-    }).description('Password for the account.'),
+    }).description(
+      'Password for the account. Contains a custom validation because we want to construct a string with all the keys that failed which later we parse out to an object',
+    ),
   });
 
   getValidationRules() {
@@ -116,7 +118,16 @@ export class CreateAccountForm extends JoiValidationEntity {
   }
 
   getErrorToMessageMap() {
-    return {};
+    return {
+      email: 'Enter a valid email address',
+      name: [
+        {
+          contains: 'must be less than or equal to',
+          message: 'Enter a name with less than 100 characters',
+        },
+        'Enter a name',
+      ],
+    };
   }
 }
 
