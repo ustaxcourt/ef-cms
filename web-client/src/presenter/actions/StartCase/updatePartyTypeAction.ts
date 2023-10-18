@@ -1,24 +1,15 @@
 import { showContactsHelper } from '../../computeds/showContactsHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * updates the partyType, filingType, otherType, businessType,
- * contactPrimary, and/or contactSecondary depending on the
- * key/value pair passed in via props
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function used
- * for getting state.form.filingType
- * @param {object} providers.props the cerebral store used for
- * getting props.key and props.value
- * @param {object} providers.store the cerebral store
- */
 export const updatePartyTypeAction = ({
   applicationContext,
   get,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{
+  key: string;
+  value: string;
+}>) => {
   let partyType = '';
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
@@ -26,6 +17,11 @@ export const updatePartyTypeAction = ({
     if (props.value === 'Myself' || props.value === 'Individual petitioner') {
       partyType = PARTY_TYPES.petitioner;
     }
+    store.unset(state.form.otherType);
+    store.unset(state.form.isSpouseDeceased);
+    store.unset(state.form.businessType);
+    store.unset(state.form.estateType);
+    store.unset(state.form.minorIncompetentType);
   } else if (props.key === 'isSpouseDeceased') {
     switch (props.value) {
       case 'Yes':
