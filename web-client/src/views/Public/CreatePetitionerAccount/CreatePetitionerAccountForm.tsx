@@ -20,6 +20,7 @@ export const CreatePetitionerAccountForm = connect(
     confirmPassword,
     createAccountHelper,
     navigateToCognitoSequence,
+    password,
     showConfirmPassword,
     showPassword,
     toggleShowPasswordSequence,
@@ -110,7 +111,7 @@ export const CreatePetitionerAccountForm = connect(
               >
                 {showPassword ? 'Hide Password' : 'Show password'}
               </button>
-              <div className="margin-top-1">
+              <div className="margin-top-1" hidden={!password}>
                 <RequirementsText
                   label="Must contain lower case letter"
                   valid={createAccountHelper.passwordErrors?.hasOneLowercase}
