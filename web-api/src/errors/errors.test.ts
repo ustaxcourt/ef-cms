@@ -117,8 +117,8 @@ describe('ServiceUnavailableError', () => {
     error = new ServiceUnavailableError();
   });
 
-  it('should set a status code of 504', () => {
-    expect(error.statusCode).toEqual(504);
+  it('should set a status code of 503', () => {
+    expect(error.statusCode).toEqual(503);
   });
 
   it('should set the message', () => {
