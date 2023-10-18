@@ -44,6 +44,9 @@ export const trialSessionHeaderHelper = (
       ? currentUser.name
       : formattedTrialSession.formattedJudge,
     showBatchDownloadButton: !isEmpty(formattedTrialSession.allCases),
+    showPrintCalendarButton: formattedTrialSession.isCalendared,
+    showPrintPaperServicePDFsButton:
+      formattedTrialSession.paperServicePdfs.length > 0,
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
     title: 'Session Working Copy',

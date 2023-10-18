@@ -1,11 +1,9 @@
-import { generateTrialCalendarPdfUrlAction } from '../actions/TrialSession/generateTrialCalendarPdfUrlAction';
-import { gotoPrintTrialCalendarPreviewAction } from '../actions/gotoPrintTrialCalendarPreviewAction';
-import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setShowModalFactoryAction } from '@web-client/presenter/actions/setShowModalFactoryAction';
+import { state } from '@web-client/presenter/app.cerebral';
 
-export const openPrintGeneratedPaperServiceSequence =
-  showProgressSequenceDecorator([
-    generateTrialCalendarPdfUrlAction,
-    setPdfPreviewUrlSequence,
-    gotoPrintTrialCalendarPreviewAction,
-  ]);
+export const openPrintGeneratedPaperServiceSequence = [
+  ({ store }) => {
+    store.set(state.form, { selectedPdfs: [] });
+  },
+  setShowModalFactoryAction('PrintPreviouslyGeneratedPaperServiceModal'),
+];

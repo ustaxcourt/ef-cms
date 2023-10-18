@@ -1,19 +1,34 @@
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { omit } from 'lodash';
 import { put } from '../../dynamodbClientService';
 
-export const updateTrialSession = ({
+const fieldsToOmitBeforePersisting = ['paperServicePdfs'];
+
+export const updateTrialSession = async ({
   applicationContext,
   trialSessionToUpdate,
 }: {
   applicationContext: IApplicationContext;
   trialSessionToUpdate: RawTrialSession;
-}) =>
-  put({
+}) => {
+  for (const item of trialSessionToUpdate.paperServicePdfs) {
+    await put({
+      Item: {
+        ...item,
+        pk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
+        sk: `paper-service-pdf|${item.documentId}`,
+      },
+      applicationContext,
+    });
+  }
+
+  await put({
     Item: {
-      ...trialSessionToUpdate,
+      ...omit(trialSessionToUpdate, fieldsToOmitBeforePersisting),
       gsi1pk: 'trial-session-catalog',
       pk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
       sk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
     },
     applicationContext,
   });
+};

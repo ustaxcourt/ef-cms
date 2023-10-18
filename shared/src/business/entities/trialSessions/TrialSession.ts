@@ -25,8 +25,6 @@ import {
 import { isEmpty, isEqual } from 'lodash';
 import joi from 'joi';
 
-// TODO 9970: Can we reduce some complexity here? CalendaredTrialSession..?
-
 const stringRequiredForRemoteProceedings = JoiValidationConstants.STRING.max(
   100,
 ).when('isCalendared', {
@@ -107,6 +105,7 @@ export class TrialSession extends JoiValidationEntity {
   public trialClerk?: TTrialClerk;
   public trialLocation?: string;
   public trialSessionId?: string;
+  public paperServicePdfs: { documentId: string; title: string }[];
 
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
@@ -198,6 +197,12 @@ export class TrialSession extends JoiValidationEntity {
       meetingId: stringRequiredForRemoteProceedings,
       notes: JoiValidationConstants.STRING.max(400).optional(),
       noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
+      paperServicePdfs: joi.array().items(
+        joi.object().keys({
+          documentId: JoiValidationConstants.UUID.required(),
+          title: JoiValidationConstants.STRING.required(),
+        }),
+      ),
       password: stringRequiredForRemoteProceedings,
       postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
       proceedingType: JoiValidationConstants.STRING.valid(
@@ -309,6 +314,7 @@ export class TrialSession extends JoiValidationEntity {
       : rawSession.proceedingType;
     this.trialSessionId =
       rawSession.trialSessionId || applicationContext.getUniqueId();
+    this.paperServicePdfs = rawSession.paperServicePdfs || [];
 
     if (rawSession.judge?.name) {
       this.judge = {
@@ -329,6 +335,10 @@ export class TrialSession extends JoiValidationEntity {
         userId: rawSession.trialClerk.userId,
       };
     }
+  }
+
+  static isStandaloneRemote(sessionScope) {
+    return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
   }
 
   getErrorToMessageMap() {
@@ -511,10 +521,6 @@ export class TrialSession extends JoiValidationEntity {
     return TrialSession.isStandaloneRemote(this.sessionScope);
   }
 
-  static isStandaloneRemote(sessionScope) {
-    return sessionScope === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
-  }
-
   getEmptyFields() {
     const missingProperties = TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING[
       this.proceedingType
@@ -531,6 +537,10 @@ export class TrialSession extends JoiValidationEntity {
   setAsClosed() {
     this.sessionStatus = SESSION_STATUS_TYPES.closed;
     return this;
+  }
+
+  addPaperServicePdf(documentId: string, title: string): void {
+    this.paperServicePdfs.push({ documentId, title });
   }
 }
 

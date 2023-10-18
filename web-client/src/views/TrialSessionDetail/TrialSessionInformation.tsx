@@ -126,25 +126,25 @@ export const TrialSessionInformation = connect(
                   Delete Session
                 </Button>
               )}
-              {formattedTrialSessionDetails.isCalendared && (
-                <>
-                  <Button
-                    link
-                    className="margin-top-2 margin-left-4"
-                    icon="print"
-                    onClick={() => openPrintGeneratedPaperServiceSequence()}
-                  >
-                    Print Paper Service PDF
-                  </Button>
-                  <Button
-                    link
-                    className="margin-top-2 margin-left-4"
-                    icon="print"
-                    onClick={() => printTrialCalendarSequence()}
-                  >
-                    Print Session Information
-                  </Button>
-                </>
+              {trialSessionHeaderHelper.showPrintPaperServicePDFsButton && (
+                <Button
+                  link
+                  className="margin-top-2 margin-left-4"
+                  icon="print"
+                  onClick={() => openPrintGeneratedPaperServiceSequence()}
+                >
+                  Print Paper Service PDF
+                </Button>
+              )}
+              {trialSessionHeaderHelper.showPrintCalendarButton && (
+                <Button
+                  link
+                  className="margin-top-2 margin-left-4"
+                  icon="print"
+                  onClick={() => printTrialCalendarSequence()}
+                >
+                  Print Session Information
+                </Button>
               )}
             </div>
           </div>
