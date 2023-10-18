@@ -2,20 +2,16 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
-// eslint-disable-next-line spellcheck/spell-checker
-/**
- * generateTrialSessionPaperServicePdfInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialNoticePdfsKeys the trialNoticePdfsKeys
- * @returns {object} docketEntryId, hasPaper, pdfUrl
- */
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
-  { trialNoticePdfsKeys }: { trialNoticePdfsKeys: string[] },
-) => {
+  {
+    trialNoticePdfsKeys,
+    trialSessionId,
+  }: { trialNoticePdfsKeys: string[]; trialSessionId: string },
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -77,6 +73,24 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
         file: paperServicePdfData,
         useTempBucket: true,
       }));
+
+    const trialSession = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId,
+      });
+
+    const trialSessionEntity = new TrialSession(trialSession, {
+      applicationContext,
+    });
+
+    trialSessionEntity.addPaperServicePdf(docketEntryId, 'Intial Calendaring');
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
 
     applicationContext.logger.info(
       `generated the printable paper service pdf at ${pdfUrl}`,

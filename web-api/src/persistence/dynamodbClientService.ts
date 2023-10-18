@@ -59,14 +59,17 @@ export const describeDeployTable = async ({ applicationContext }) => {
 
 export const put = ({
   applicationContext,
+  ConditionExpression,
   Item,
 }: {
+  ConditionExpression?: string;
   Item: TDynamoRecord;
   applicationContext: IApplicationContext;
 }): Promise<TDynamoRecord> => {
   return applicationContext
     .getDocumentClient()
     .put({
+      ConditionExpression,
       Item: filterEmptyStrings(Item),
       TableName: getTableName({
         applicationContext,

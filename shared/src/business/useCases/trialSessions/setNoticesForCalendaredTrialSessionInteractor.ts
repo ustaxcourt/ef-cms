@@ -5,33 +5,10 @@ import {
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
-const waitForJobToFinish = ({ applicationContext, jobId }) => {
-  return new Promise(resolve => {
-    const interval = setInterval(async () => {
-      const jobStatus = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionJobStatusForCase({
-          applicationContext,
-          jobId,
-        });
-      if (jobStatus && jobStatus.unfinishedCases === 0) {
-        clearInterval(interval);
-        resolve(undefined);
-      }
-    }, 5000);
-  });
-};
-
-/**
- * Generates notices for all calendared cases for the given trialSessionId
- * @param {object} applicationContext the applicationContext
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the trial session id
- */
 export const setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
-) => {
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -54,6 +31,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
         action: 'notice_generation_complete',
         hasPaper: false,
         trialNoticePdfsKeys,
+        trialSessionId,
       },
       userId: user.userId,
     });
@@ -169,7 +147,25 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
     message: {
       action: 'notice_generation_complete',
       trialNoticePdfsKeys,
+      trialSessionId: trialSessionEntity.trialSessionId,
     },
     userId: user.userId,
+  });
+};
+
+const waitForJobToFinish = ({ applicationContext, jobId }) => {
+  return new Promise(resolve => {
+    const interval = setInterval(async () => {
+      const jobStatus = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionJobStatusForCase({
+          applicationContext,
+          jobId,
+        });
+      if (jobStatus && jobStatus.unfinishedCases === 0) {
+        clearInterval(interval);
+        resolve(undefined);
+      }
+    }, 5000);
   });
 };

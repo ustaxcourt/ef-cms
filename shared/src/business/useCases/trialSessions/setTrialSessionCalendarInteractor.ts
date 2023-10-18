@@ -3,48 +3,18 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
-import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { partition } from 'lodash';
 
-/**
- * Removes a manually added case from the trial session
- * @param {object} applicationContext the application context
- * @param {object} caseRecord the case to remove from the trial session
- * @param {object} trialSessionEntity the trial session to remove the case from
- * @returns {Promise} the promise of the updateCase call
- */
-const removeManuallyAddedCaseFromTrialSession = ({
-  applicationContext,
-  caseRecord,
-  trialSessionEntity,
-}) => {
-  trialSessionEntity.deleteCaseFromCalendar({
-    docketNumber: caseRecord.docketNumber,
-  });
-
-  const caseEntity = new Case(caseRecord, { applicationContext });
-
-  caseEntity.removeFromTrialWithAssociatedJudge();
-
-  return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
-};
-
-/**
- * set trial session calendar
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the id of the trial session to set the calendar
- * @returns {Promise} the promise of the updateTrialSession call
- */
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: IApplicationContext,
   { trialSessionId }: { trialSessionId: string },
-) => {
+): Promise<RawTrialSession> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)) {
@@ -184,4 +154,30 @@ export const setTrialSessionCalendarInteractor = async (
   return new TrialSession(updatedTrialSession, { applicationContext })
     .validate()
     .toRawObject();
+};
+
+/**
+ * Removes a manually added case from the trial session
+ * @param {object} applicationContext the application context
+ * @param {object} caseRecord the case to remove from the trial session
+ * @param {object} trialSessionEntity the trial session to remove the case from
+ * @returns {Promise} the promise of the updateCase call
+ */
+const removeManuallyAddedCaseFromTrialSession = ({
+  applicationContext,
+  caseRecord,
+  trialSessionEntity,
+}) => {
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseRecord.docketNumber,
+  });
+
+  const caseEntity = new Case(caseRecord, { applicationContext });
+
+  caseEntity.removeFromTrialWithAssociatedJudge();
+
+  return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
 };
