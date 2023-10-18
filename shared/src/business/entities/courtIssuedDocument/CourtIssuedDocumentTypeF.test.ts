@@ -1,6 +1,6 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('CourtIssuedDocumentTypeF', () => {
   describe('constructor', () => {
@@ -21,10 +21,13 @@ describe('CourtIssuedDocumentTypeF', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type F',
       });
+      const validationRules = documentInstance.getValidationRules();
+      const customMessages = extractCustomMessages(validationRules);
+
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        judge: VALIDATION_ERROR_MESSAGES.judge,
-        trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+        documentType: customMessages.documentType[0],
+        judge: customMessages.judge[0],
+        trialLocation: customMessages.trialLocation[0],
       });
     });
 
@@ -38,8 +41,11 @@ describe('CourtIssuedDocumentTypeF', () => {
         scenario: 'Type F',
       });
 
+      const validationRules = documentInstance.getValidationRules();
+      const customMessages = extractCustomMessages(validationRules);
+
       expect(documentInstance.getFormattedValidationErrors()!.freeText).toEqual(
-        VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        customMessages.freeText[1],
       );
     });
 

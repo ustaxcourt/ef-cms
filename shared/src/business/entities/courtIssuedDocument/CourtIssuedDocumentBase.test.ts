@@ -1,6 +1,6 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { UNSERVABLE_EVENT_CODES } from '../EntityConstants';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('CourtIssuedDocumentBase', () => {
   describe('validation', () => {
@@ -8,8 +8,11 @@ describe('CourtIssuedDocumentBase', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: null,
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: customMessages.documentType[0],
       });
     });
 
@@ -18,9 +21,12 @@ describe('CourtIssuedDocumentBase', () => {
         eventCode: UNSERVABLE_EVENT_CODES[0],
         scenario: null,
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
+        documentType: customMessages.documentType[0],
+        filingDate: customMessages.filingDate[0],
       });
     });
 
@@ -48,8 +54,11 @@ describe('CourtIssuedDocumentBase', () => {
         documentType: 'Corrected Transcript',
         eventCode: UNSERVABLE_EVENT_CODES[1],
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        filingDate: VALIDATION_ERROR_MESSAGES.filingDate,
+        filingDate: customMessages.filingDate[0],
       });
     });
   });

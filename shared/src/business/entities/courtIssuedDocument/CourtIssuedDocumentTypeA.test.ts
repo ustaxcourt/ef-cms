@@ -1,10 +1,10 @@
 import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   REPORT_PAMPHLET_DOCUMENT_TYPE,
-  VALIDATION_ERROR_MESSAGES,
 } from './CourtIssuedDocumentConstants';
 
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeA', () => {
@@ -26,8 +26,11 @@ describe('CourtIssuedDocumentTypeA', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type A',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        documentType: customMessages.documentType[0],
       });
     });
 
@@ -67,9 +70,11 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: undefined,
       });
-
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+        serviceStamp: customMessages.serviceStamp[0],
       });
     });
 
@@ -107,9 +112,12 @@ describe('CourtIssuedDocumentTypeA', () => {
         documentType: 'Order',
         scenario: 'Type A',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
-        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+        freeText: customMessages.freeText[0],
+        serviceStamp: customMessages.serviceStamp[0],
       });
     });
 
@@ -119,8 +127,11 @@ describe('CourtIssuedDocumentTypeA', () => {
         documentType: REPORT_PAMPHLET_DOCUMENT_TYPE,
         scenario: 'Type A',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+        freeText: customMessages.freeText[0],
       });
     });
 
@@ -133,8 +144,11 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: 'Served',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText: customMessages.freeText[1],
       });
     });
 
@@ -147,8 +161,11 @@ describe('CourtIssuedDocumentTypeA', () => {
         scenario: 'Type A',
         serviceStamp: 'Something invalid',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        serviceStamp: VALIDATION_ERROR_MESSAGES.serviceStamp,
+        serviceStamp: customMessages.serviceStamp[0],
       });
     });
 
