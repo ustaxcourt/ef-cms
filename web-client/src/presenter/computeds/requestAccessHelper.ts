@@ -1,9 +1,9 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { getDocumentTypesForSelect } from './internalTypesHelper';
 import { getFilerParties } from './getFilerParties';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const requestAccessHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -36,10 +36,13 @@ export const requestAccessHelper = (
 } => {
   const { GENERATION_TYPES, PARTY_TYPES, USER_ROLES } =
     applicationContext.getConstants();
+
   const user = applicationContext.getCurrentUser();
+
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const documentType = get(state.form.documentType);
+
   const showSecondaryParty =
     caseDetail.partyType === PARTY_TYPES.petitionerSpouse ||
     caseDetail.partyType === PARTY_TYPES.petitionerDeceasedSpouse;
