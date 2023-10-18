@@ -13,16 +13,19 @@ export const updateTrialSession = async ({
 }) => {
   for (const item of trialSessionToUpdate.paperServicePdfs) {
     await put({
+      ConditionExpression:
+        'attribute_not_exists(pk) and attribute_not_exists(sk)',
       Item: {
         ...item,
         pk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
         sk: `paper-service-pdf|${item.documentId}`,
+        ttl: 60 * 60 * 72,
       },
       applicationContext,
     });
   }
 
-  await put({
+  return put({
     Item: {
       ...omit(trialSessionToUpdate, fieldsToOmitBeforePersisting),
       gsi1pk: 'trial-session-catalog',
