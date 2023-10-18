@@ -176,8 +176,14 @@ export const remove = async ({
   applicationContext,
   endpoint,
   options = {},
-  params,
+  params = {},
   retry = 0,
+}: {
+  applicationContext: any;
+  endpoint: string;
+  options?: any;
+  params?: any;
+  retry?: number;
 }) => {
   getMemoized.clear();
   try {

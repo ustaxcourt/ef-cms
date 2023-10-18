@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../business/test/createTestApplicationContext.ts';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { post, put, remove } from './requests';
 
 const mockFail503 = Promise.reject({
