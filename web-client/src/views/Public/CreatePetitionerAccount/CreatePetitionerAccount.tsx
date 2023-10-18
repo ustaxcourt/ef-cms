@@ -1,4 +1,4 @@
-import { CreatePetitionerAccountForm } from '@web-client/views/Public/CreatePetitionerrAccount/CreatePetitionerAccountForm';
+import { CreatePetitionerAccountForm } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountForm';
 import { CreatePetitionerAccountInfo } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountInfo';
 import { connect } from '@cerebral/react';
 
