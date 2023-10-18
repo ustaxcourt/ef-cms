@@ -38,7 +38,7 @@ export class CreateAccountForm extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = joi.object().keys({
-    confirmPassword: joi.valid(joi.ref('password')),
+    confirmPassword: joi.valid(joi.ref('password')).required(),
     email: JoiValidationConstants.EMAIL.required().description('Email of user'),
     entityName:
       JoiValidationConstants.STRING.valid('CreateAccountForm').required(),
@@ -94,12 +94,12 @@ export class CreateAccountForm extends JoiValidationEntity {
   // @ts-ignore
   getFormattedValidationErrors(): {
     [key: string]: string | CreateAccountFormPasswordValidations;
-  } | null {
+  } {
     const results: {
       [key: string]: string | CreateAccountFormPasswordValidations;
     } | null = super.getFormattedValidationErrors();
 
-    if (!results) return results;
+    if (!results) return { password: getDefaultErrors() };
     if (!results.password || typeof results.password !== 'string')
       return {
         ...results,
@@ -128,6 +128,16 @@ export class CreateAccountForm extends JoiValidationEntity {
         'Enter a name',
       ],
     };
+  }
+
+  isFormValid(errors: {
+    [key: string]: string | CreateAccountFormPasswordValidations;
+  }): boolean {
+    const keys = Object.keys(errors);
+    if (keys.length > 1) return false;
+    if (keys[0] !== 'password') return false;
+
+    return Object.values(errors.password).every(Boolean);
   }
 }
 

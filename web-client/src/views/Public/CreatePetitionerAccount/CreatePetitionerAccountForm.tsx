@@ -214,11 +214,7 @@ export const CreatePetitionerAccountForm = connect(
 
               <Button
                 className="usa-button"
-                disabled={
-                  !password ||
-                  !confirmPassword ||
-                  !createAccountHelper.enableContinueButton
-                }
+                disabled={!createAccountHelper.formIsValid}
                 onClick={() => submitCreatePetitionerAccountFormSequence()}
               >
                 Continue
