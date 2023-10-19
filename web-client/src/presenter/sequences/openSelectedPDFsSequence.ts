@@ -6,11 +6,11 @@ export const openSelectedPDFsSequence = [
     console.log(selectedPdfs);
 
     let allUrls: string[] = [];
-    for (const [key, value] of Object.entries(selectedPdfs)) {
+    for (const documentId of selectedPdfs) {
       const { url } = await applicationContext
         .getUseCases()
         .getPaperServicePdfUrlInteractor(applicationContext, {
-          key,
+          key: documentId,
         });
 
       allUrls.push(url);
