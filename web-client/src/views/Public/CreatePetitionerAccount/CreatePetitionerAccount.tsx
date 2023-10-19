@@ -1,18 +1,38 @@
 import { CreatePetitionerAccountForm } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountForm';
 import { CreatePetitionerAccountInfo } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountInfo';
+import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
 import { connect } from '@cerebral/react';
-
+import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const CreatePetitionerAccount = connect({}, () => {
-  return (
-    <div className="bg-white padding-y-4 grid-container grid-gap-lg padding-x-4">
-      <div className="grid-row">
-        <CreatePetitionerAccountForm></CreatePetitionerAccountForm>
-        <CreatePetitionerAccountInfo></CreatePetitionerAccountInfo>
-      </div>
-    </div>
-  );
-});
+export const CreatePetitionerAccount = connect(
+  {
+    alertError: state.alertError,
+  },
+  ({ alertError }) => {
+    return (
+      <>
+        <div className="grid-container grid-gap-lg padding-x-4">
+          {alertError && (
+            <div
+              className="grid-row margin-bottom-2 margin-x-auto"
+              style={{ width: 'fit-content' }}
+            >
+              <MessageAlert
+                alertType={alertError.alertType}
+                message={alertError.message}
+                title={alertError.title}
+              ></MessageAlert>
+            </div>
+          )}
+          <div className="grid-row bg-white padding-y-4">
+            <CreatePetitionerAccountForm></CreatePetitionerAccountForm>
+            <CreatePetitionerAccountInfo></CreatePetitionerAccountInfo>
+          </div>
+        </div>
+      </>
+    );
+  },
+);
 
 CreatePetitionerAccount.displayName = 'CreatePetitionerAccount';
