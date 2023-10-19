@@ -16,12 +16,15 @@ import { authenticateUserLambda } from './lambdas/auth/authenticateUserLambda';
 import { batchDownloadTrialSessionLambda } from './lambdas/trialSessions/batchDownloadTrialSessionLambda';
 import { blockCaseFromTrialLambda } from './lambdas/cases/blockCaseFromTrialLambda';
 import { caseAdvancedSearchLambda } from './lambdas/cases/caseAdvancedSearchLambda';
+import { changePasswordLocalLambda } from './auth/changePasswordLocalLambda';
 import { checkEmailAvailabilityLambda } from './lambdas/users/checkEmailAvailabilityLambda';
 import { checkForReadyForTrialCasesLambda } from './lambdas/cases/checkForReadyForTrialCasesLambda';
 import { closeTrialSessionLambda } from './lambdas/trialSessions/closeTrialSessionLambda';
+import { cognitoTriggersLocalLambda } from '../terraform/template/lambdas/cognitoTriggersLocalLambda';
 import { completeDocketEntryQCLambda } from './lambdas/documents/completeDocketEntryQCLambda';
 import { completeMessageLambda } from './lambdas/messages/completeMessageLambda';
 import { completeWorkItemLambda } from './lambdas/workitems/completeWorkItemLambda';
+import { confirmSignUpLocalLambda } from './auth/confirmSignUpLocalLambda';
 import { createApplicationContext } from './applicationContext';
 import { createCaseDeadlineLambda } from './lambdas/caseDeadline/createCaseDeadlineLambda';
 import { createCaseFromPaperLambda } from './lambdas/cases/createCaseFromPaperLambda';
@@ -32,6 +35,7 @@ import { createPractitionerDocumentLambda } from './lambdas/practitioners/create
 import { createPractitionerUserLambda } from './lambdas/practitioners/createPractitionerUserLambda';
 import { createTrialSessionLambda } from './lambdas/trialSessions/createTrialSessionLambda';
 import { createUserLambda } from './lambdas/users/createUserLambda';
+import { createUserLocalLambda } from './users/createUserLocalLambda';
 import { deleteAuthCookieLambda } from './lambdas/auth/deleteAuthCookieLambda';
 import { deleteCaseDeadlineLambda } from './lambdas/caseDeadline/deleteCaseDeadlineLambda';
 import { deleteCaseNoteLambda } from './lambdas/caseNote/deleteCaseNoteLambda';
@@ -1025,4 +1029,17 @@ if (process.env.IS_LOCAL) {
     '/run-check-ready-for-trial',
     lambdaWrapper(checkForReadyForTrialCasesLambda),
   );
+  // This following endpoints are used by cognito-local
+  app.post(
+    '/cognito-triggers-local',
+    lambdaWrapper(cognitoTriggersLocalLambda, {
+      isAsync: true,
+    }),
+  );
+
+  app.post('/users/local', lambdaWrapper(createUserLocalLambda));
+
+  app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
+
+  app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 }
