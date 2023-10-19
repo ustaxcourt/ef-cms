@@ -97,6 +97,7 @@ import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseL
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
+import { getPaperServicePdfUrlLambda } from '@web-api/lambdas/trialSessions/getPaperServicePdfUrlLambda';
 import { getPractitionerByBarNumberLambda } from './lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionerDocumentDownloadUrlLambda } from './lambdas/practitioners/getPractitionerDocumentDownloadUrlLambda';
 import { getPractitionerDocumentLambda } from './lambdas/practitioners/getPractitionerDocumentLambda';
@@ -806,6 +807,10 @@ app.get(
   app.post(
     '/async/trial-sessions/paper-service-pdf',
     lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
+  );
+  app.get(
+    '/trial-sessions/paper-service-pdf/:key',
+    lambdaWrapper(getPaperServicePdfUrlLambda),
   );
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
