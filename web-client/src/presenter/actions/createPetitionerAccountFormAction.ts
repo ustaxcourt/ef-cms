@@ -31,7 +31,7 @@ export const createPetitionerAccountFormAction = ({
   } else {
     return path.error({
       alertError: {
-        message: authenticationResults.errorMessage,
+        message: getErrorMessageFromResults(authenticationResults),
         title: 'Error creating account',
       },
     });
@@ -39,6 +39,13 @@ export const createPetitionerAccountFormAction = ({
 };
 
 function userExists(authenticationResults: AdminCreateUserResponse) {
-  authenticationResults.true = true;
-  return authenticationResults.true;
+  console.log('Determine if user exists', authenticationResults);
+  return true;
+}
+
+function getErrorMessageFromResults(
+  authenticationResults: AdminCreateUserResponse,
+): string {
+  console.log('Determine if user exists', authenticationResults);
+  return 'Error message from AWS cognito';
 }
