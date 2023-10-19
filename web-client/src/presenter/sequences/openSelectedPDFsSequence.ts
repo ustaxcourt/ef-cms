@@ -4,14 +4,20 @@ export const openSelectedPDFsSequence = [
   async ({ applicationContext, get }) => {
     const { selectedPdfs } = get(state.form);
 
-    for (const documentId of selectedPdfs) {
-      const { url } = await applicationContext
-        .getUseCases()
-        .getPaperServicePdfUrlInteractor(applicationContext, {
-          key: documentId,
-        });
-
-      await applicationContext.getUtilities().openUrlInNewTab({ url });
-    }
+    await Promise.all(
+      selectedPdfs.map(documentId =>
+        getUrlAndOpenInNewTab(applicationContext, documentId),
+      ),
+    );
   },
 ];
+
+const getUrlAndOpenInNewTab = async (applicationContext, documentId) => {
+  const { url } = await applicationContext
+    .getUseCases()
+    .getPaperServicePdfUrlInteractor(applicationContext, {
+      key: documentId,
+    });
+
+  await applicationContext.getUtilities().openUrlInNewTab({ url });
+};
