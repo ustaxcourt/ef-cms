@@ -4,29 +4,28 @@ import {
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_USERS } from '../../../../shared/src/test/mockUsers';
-import { applicationContext } from '../../applicationContext';
+import { applicationContextForClient as applicationContext } from '../../test/createClientTestApplicationContext';
 import { capitalize } from 'lodash';
+import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { fileDocumentHelper as fileDocumentHelperComputed } from './fileDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const state = {
-  caseDetail: MOCK_CASE,
-  featureFlags: {},
-  form: {},
-  validationErrors: {},
-};
-
-applicationContext.getCurrentUser = () =>
-  MOCK_USERS['a7d90c05-f6cd-442c-a168-202db587f16f'];
-
-const fileDocumentHelper = withAppContextDecorator(
-  fileDocumentHelperComputed,
-  applicationContext,
-);
-
 describe('fileDocumentHelper', () => {
+  const state = {
+    caseDetail: MOCK_CASE,
+    featureFlags: {},
+    form: {},
+    validationErrors: {},
+  };
+
+  applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+  const fileDocumentHelper = withAppContextDecorator(
+    fileDocumentHelperComputed,
+    applicationContext,
+  );
+
   beforeEach(() => {
     state.form = {};
   });
