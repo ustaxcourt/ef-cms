@@ -214,15 +214,14 @@ export const CreatePetitionerAccountForm = connect(
                   valid={createAccountHelper.confirmPassword}
                 ></RequirementsText>
               </div>
-
-              <Button
-                className="usa-button margin-top-2"
-                disabled={!createAccountHelper.formIsValid}
-                onClick={() => submitCreatePetitionerAccountFormSequence()}
-              >
-                Continue
-              </Button>
             </form>
+            <Button
+              className="usa-button margin-top-2"
+              disabled={!createAccountHelper.formIsValid}
+              onClick={() => submitCreatePetitionerAccountFormSequence()}
+            >
+              Continue
+            </Button>
             <p>
               Already have an account?{' '}
               <Button

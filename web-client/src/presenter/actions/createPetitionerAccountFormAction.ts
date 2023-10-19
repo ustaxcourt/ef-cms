@@ -21,7 +21,8 @@ export const createPetitionerAccountFormAction = ({
   }
   if (userExists(authenticationResults)) {
     return path.error({
-      alertWarning: {
+      alertError: {
+        alertType: 'error',
         message:
           'That email address is already associated with and account. If you forgot your password, you can request a password reset',
         title: 'Email address already has an account',
