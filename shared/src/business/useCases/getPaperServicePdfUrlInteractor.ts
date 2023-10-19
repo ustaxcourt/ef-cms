@@ -14,7 +14,7 @@ export const getPaperServicePdfUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+  return applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
     key,
     useTempBucket: true,
