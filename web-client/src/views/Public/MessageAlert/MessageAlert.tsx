@@ -1,5 +1,5 @@
 import { Icon } from '@web-client/ustc-ui/Icon/Icon';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const MessageAlert = ({ alertType = 'error', message, title }) => {
   const alertTypeClassName = {
@@ -14,8 +14,16 @@ export const MessageAlert = ({ alertType = 'error', message, title }) => {
   const className = alertTypeClassName[alertType] || alertTypeClassName.error;
   const icon = iconDictionary[alertType] || iconDictionary.error;
 
+  const notificationRef = useRef(null);
+  useEffect(() => {
+    const notification = notificationRef.current;
+    if (notification) {
+      window.scrollTo(0, 0);
+    }
+  });
+
   return (
-    <div className={`padding-3 ${className}`}>
+    <div className={`padding-3 ${className}`} ref={notificationRef}>
       <div className="grid-row">
         <div className="grid-col-1">
           <Icon aria-label="warning icon" className="" icon={icon} size="2x" />
