@@ -12,6 +12,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { decorateForCaseStatus, getCaseInteractor } from './getCaseInteractor';
 import { getOtherFilers } from '../entities/cases/Case';
+import { petitionerUser } from '@shared/test/mockUsers';
 
 describe('getCaseInteractor', () => {
   const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
@@ -19,7 +20,6 @@ describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
-  const petitionerId = '42624376-4228-49aa-a4c3-597dae1c7220';
   const irsSuperuserId = '5a5c771d-ab63-4d78-a298-1de657dde621';
 
   let testCase;
@@ -229,36 +229,31 @@ describe('getCaseInteractor', () => {
   });
 
   it('should return the full case (non public) when the user is part of the consolidated group', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      name: 'Tasha Yar',
-      role: ROLES.petitioner,
-      userId: petitionerId,
-    });
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...testCase,
+        consolidatedCases: [
+          { ...testCase, petitioners: [] },
+          {
+            ...testCase,
+            petitioners: [
+              {
+                ...testCase.petitioners[0],
+                contactId: petitionerUser.userId,
+              },
+            ],
+          },
+          { ...testCase, petitioners: [] },
+        ],
         leadDocketNumber: '101-20',
       });
-    applicationContext
-      .getUseCases()
-      .getConsolidatedCasesByCaseInteractor.mockResolvedValue([
-        { ...testCase, petitioners: [] },
-        {
-          ...testCase,
-          petitioners: [
-            {
-              ...testCase.petitioners[0],
-              contactId: petitionerId,
-            },
-          ],
-        },
-        { ...testCase, petitioners: [] },
-      ]);
 
     const result = await getCaseInteractor(applicationContext, {
       docketNumber: '101-18',
     });
+
     expect(result.entityName).toEqual('Case');
   });
 

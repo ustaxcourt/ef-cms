@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
@@ -8,13 +9,14 @@ import {
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   calculateISODate,
   createISODateString,
 } from '../utilities/DateHandler';
-import { cloneDeep } from 'lodash';
 import {
+  casePetitioner,
   docketClerkUser,
   irsPractitionerUser,
   irsSuperuserUser,
@@ -22,6 +24,7 @@ import {
   petitionsClerkUser,
   privatePractitionerUser,
 } from '../../test/mockUsers';
+import { cloneDeep } from 'lodash';
 import { getDownloadPolicyUrlInteractor } from './getDownloadPolicyUrlInteractor';
 
 describe('getDownloadPolicyUrlInteractor', () => {
@@ -738,30 +741,43 @@ describe('getDownloadPolicyUrlInteractor', () => {
   });
 
   describe('when the document belongs to a case in a consolidated group and the user is associated with the consolidated group', () => {
-    const leadMockCase = {
+    const leadMockCase: RawCase = {
       ...MOCK_CASE,
       leadDocketNumber: MOCK_CASE.docketNumber,
-      petitioners: [{ ...petitionerUser, contactId: petitionerUser.userId }],
+      petitioners: [casePetitioner],
     };
+    leadMockCase.consolidatedCases = [
+      new ConsolidatedCaseSummary(leadMockCase),
+    ];
 
     beforeEach(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
       applicationContext
-        .getUseCases()
-        .getConsolidatedCasesByCaseInteractor.mockReturnValue([leadMockCase]);
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(leadMockCase);
     });
 
-    it('should return the policy url when the document requested is an available document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValueOnce(leadMockCase);
-
+    it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: baseDocketEntry.docketEntryId,
       });
       expect(url).toEqual('localhost');
+    });
+
+    it('should throw an error when the document requested is an available document and the user is not associated with the consolidated group', async () => {
+      applicationContext.getCurrentUser.mockReturnValueOnce({
+        ...petitionerUser,
+        userId: 'someone-else',
+      });
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: `case-${MOCK_CASE.docketNumber}-confirmation.pdf`,
+        }),
+      ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
     });
   });
 });

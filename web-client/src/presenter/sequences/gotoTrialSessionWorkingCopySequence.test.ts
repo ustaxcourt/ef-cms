@@ -25,6 +25,7 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
   };
 
   const mockWorkingCopy = {
+    caseMetadata: {},
     trialSessionId: mockTrialSessionId,
     userId: mockJudgeUserId,
   };
