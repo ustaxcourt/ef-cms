@@ -24,7 +24,7 @@ export const createPetitionerAccountFormAction = ({
       alertError: {
         alertType: 'warning',
         message:
-          'That email address is already associated with and account. You can log in here. If you forgot your password, you can request a password reset',
+          'This email address is already associated with and account. You can log in here. If you forgot your password, you can request a password reset',
         title: 'Email address already has an account',
       },
     });
