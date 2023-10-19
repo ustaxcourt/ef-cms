@@ -30,7 +30,7 @@ export const MessageAlert = ({ alertType = 'error', message, title }) => {
         </div>
         <div className="grid-col-11">
           <h2>{title}</h2>
-          <p>{message}</p>
+          <p dangerouslySetInnerHTML={{ __html: message }}></p>
         </div>
       </div>
     </div>

@@ -10,7 +10,12 @@ export const createPetitionerAccountFormAction = ({
     success: { User: {} },
   };
 
-  const authenticationResults: AdminCreateUserResponse = resultsDict.success;
+  const cognitoLoginUrl = get(state.cognitoLoginUrl);
+  const cognitoRequestPasswordResetUrl = get(
+    state.cognitoRequestPasswordResetUrl,
+  );
+  const authenticationResults: AdminCreateUserResponse =
+    resultsDict.emailAlreadyExist;
 
   if (authenticationResults.User) {
     return path.success({
@@ -23,8 +28,7 @@ export const createPetitionerAccountFormAction = ({
     return path.error({
       alertError: {
         alertType: 'warning',
-        message:
-          'This email address is already associated with and account. You can log in here. If you forgot your password, you can request a password reset',
+        message: `This email address is already associated with and account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>`,
         title: 'Email address already has an account',
       },
     });

@@ -144,8 +144,9 @@ const app = {
       }
       return value;
     });
-
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+    presenter.state.cognitoRequestPasswordResetUrl =
+      applicationContext.getCognitoRequestPasswordResetUrl();
     presenter.state.constants = applicationContext.getConstants();
 
     const shouldRefreshToken =
