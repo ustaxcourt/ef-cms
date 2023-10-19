@@ -20,7 +20,12 @@ describe('setAddEditCaseWorksheetModalStateAction', () => {
       },
       state: {
         submittedAndCavCases: {
-          worksheets: [mockWorksheet],
+          submittedAndCavCasesByJudge: [
+            {
+              caseWorksheet: mockWorksheet,
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
         },
       },
     });
@@ -35,7 +40,9 @@ describe('setAddEditCaseWorksheetModalStateAction', () => {
       },
       state: {
         submittedAndCavCases: {
-          worksheets: [],
+          submittedAndCavCasesByJudge: [
+            { caseWorksheet: undefined, docketNumber: MOCK_CASE.docketNumber },
+          ],
         },
       },
     });
