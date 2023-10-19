@@ -14,8 +14,7 @@ export const createPetitionerAccountFormAction = ({
   const cognitoRequestPasswordResetUrl = get(
     state.cognitoRequestPasswordResetUrl,
   );
-  const authenticationResults: AdminCreateUserResponse =
-    resultsDict.emailAlreadyExist;
+  const authenticationResults: AdminCreateUserResponse = resultsDict.success;
 
   if (authenticationResults.User) {
     return path.success({

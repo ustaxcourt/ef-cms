@@ -40,6 +40,7 @@ import {
   ERROR_MAP_429,
   getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
+  getCognitoResendVerificationLinkUrl,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
@@ -161,6 +162,7 @@ const applicationContextPublic = {
   getCaseTitle: Case.getCaseTitle,
   getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
+  getCognitoResendVerificationLinkUrl,
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,

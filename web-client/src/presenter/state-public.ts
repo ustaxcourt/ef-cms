@@ -33,8 +33,10 @@ export const baseState = {
   advancedSearchForm: {},
   advancedSearchTab: 'case',
   caseDetail: {} as RawPublicCase,
+  cognito: { email: '' },
   cognitoLoginUrl: '',
   cognitoRequestPasswordResetUrl: '',
+  cognitoResendVerificationLinkUrl: '',
   commonUI: {
     showBetaBar: true,
     showMobileMenu: false,

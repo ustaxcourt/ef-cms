@@ -15,6 +15,10 @@ export const getCognitoRequestPasswordResetUrl = () => {
   return process.env.COGNITO_PASSWORD_RESET_REQUEST_URL || '/';
 };
 
+export const getCognitoResendVerificationLinkUrl = () => {
+  return process.env.COGNITO_RESEND_VERIFICATION_LINK_URL || '/';
+};
+
 export const getEnvironment = () => ({
   dynamoDbTableName: process.env.DYNAMODB_TABLE_NAME,
   stage: process.env.STAGE || 'local',

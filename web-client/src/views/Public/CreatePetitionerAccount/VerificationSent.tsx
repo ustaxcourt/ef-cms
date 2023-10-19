@@ -1,12 +1,13 @@
 import { connect } from '@cerebral/react';
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 export const VerificationSent = connect(
   {
     email: state.cognito.email,
+    resendVerificationLink: state.cognitoResendVerificationLinkUrl,
   },
-  ({ email = '"EMAIL NOT PROVIDED"' }) => {
+  ({ email = '"EMAIL NOT PROVIDED"', resendVerificationLink }) => {
     function maskEmail(rawEmail: string) {
       const parts = rawEmail.split('@');
       if (parts.length !== 2) return rawEmail;
@@ -28,7 +29,9 @@ export const VerificationSent = connect(
         <p>
           An email to verify your email address was sent to {maskEmail(email)} .
           If you didn&apos;t receive a verification email, check your spam
-          folder or you can <a href="/">send the verification email again</a>.
+          folder or you can{' '}
+          <a href={resendVerificationLink}>send the verification email again</a>
+          .
         </p>
       </div>
     );
