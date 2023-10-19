@@ -22,7 +22,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       trialSessionId,
     });
 
-  let trialNoticePdfsKeys = [];
+  let trialNoticePdfsKeys: string[] = [];
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
