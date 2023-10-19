@@ -9,12 +9,14 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
     clearModalSequence: sequences.clearModalSequence,
     form: state.form,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    openSelectedPDFsSequence: sequences.openSelectedPDFsSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
   function PrintPreviouslyGeneratedPaperServiceModal({
     clearModalSequence,
     form,
     formattedTrialSessionDetails,
+    openSelectedPDFsSequence,
     updateFormValueSequence,
   }) {
     return (
@@ -22,7 +24,7 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
         cancelLabel="Cancel"
         cancelSequence={clearModalSequence}
         confirmLabel="Open PDF"
-        confirmSequence={() => {}}
+        confirmSequence={openSelectedPDFsSequence}
         message="Select the PDF(s) that you would like to print. They will open in seperate tabs and be available for three days after the PDF was originally generated."
         title="Print Paper Service PDF"
       >
@@ -36,6 +38,7 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
                 name={`selectedPdfs.${pdfInfo.documentId}`}
                 type="checkbox"
                 onChange={e => {
+                  console.log(e.target.name);
                   updateFormValueSequence({
                     key: e.target.name,
                     value: e.target.checked,
