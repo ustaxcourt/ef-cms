@@ -48,7 +48,7 @@ export const SuccessNotification = connect(
                         className="padding-0 margin-top-2 ustc-button--mobile-inline"
                         href={alertSuccess.linkUrl}
                         rel="noopener noreferrer"
-                        target="_blank"
+                        target={alertSuccess.newTab ? '_blank' : '_self'}
                       >
                         {alertSuccess.linkText || alertSuccess.linkUrl}
                       </Button>

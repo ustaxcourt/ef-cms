@@ -154,8 +154,8 @@ describe('Case Worksheets Journey', () => {
     });
     let cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
-    );
-    expect(cavCase?.worksheet.primaryIssue).toBeDefined();
+    )!;
+    expect(cavCase.worksheet!.primaryIssue).toBeDefined();
 
     await cerebralTest.runSequence('openAddEditCaseWorksheetModalSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -173,8 +173,8 @@ describe('Case Worksheets Journey', () => {
     }));
     cavCase = caseWorksheetsFormatted.find(
       theCase => theCase.docketNumber === cerebralTest.docketNumber,
-    );
-    expect(cavCase?.worksheet.primaryIssue).toBe('');
+    )!;
+    expect(cavCase.worksheet!.primaryIssue).toBe('');
   });
 
   it('should persist and display a final brief due date set by user', async () => {
@@ -212,7 +212,7 @@ describe('Case Worksheets Journey', () => {
       theCase =>
         theCase.docketNumber === cerebralTest.submittedCaseDocketNumber,
     )!;
-    expect(otherCavCaseInTable.worksheet.finalBriefDueDate).toBeUndefined();
+    expect(otherCavCaseInTable.finalBriefDueDateFormatted).toEqual('');
   });
 
   it('should display an error message when the user enters an invalid final brief due date', async () => {
