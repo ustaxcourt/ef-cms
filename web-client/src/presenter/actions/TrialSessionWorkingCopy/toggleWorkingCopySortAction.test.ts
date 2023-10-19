@@ -3,41 +3,23 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { toggleWorkingCopySortAction } from './toggleWorkingCopySortAction';
 
 describe('toggleWorkingCopySortAction', () => {
-  it('should set the sort and default the sort order to asc when selecting a different sort', async () => {
+  it('should set the sort field and sort order', async () => {
     const result = await runAction(toggleWorkingCopySortAction, {
       modules: {
         presenter,
       },
       props: {
-        sort: 'docket',
+        sortField: 'docket',
+        sortOrder: 'asc',
       },
       state: {
         trialSessionWorkingCopy: {
-          sort: 'practitioner',
-          sortOrder: 'desc',
+          sort: undefined,
+          sortOrder: undefined,
         },
       },
     });
     expect(result.state.trialSessionWorkingCopy.sort).toEqual('docket');
     expect(result.state.trialSessionWorkingCopy.sortOrder).toEqual('asc');
-  });
-
-  it('should toggle the sort order when the sort is already set', async () => {
-    const result = await runAction(toggleWorkingCopySortAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        sort: 'docket',
-      },
-      state: {
-        trialSessionWorkingCopy: {
-          sort: 'docket',
-          sortOrder: 'asc',
-        },
-      },
-    });
-    expect(result.state.trialSessionWorkingCopy.sort).toEqual('docket');
-    expect(result.state.trialSessionWorkingCopy.sortOrder).toEqual('desc');
   });
 });
