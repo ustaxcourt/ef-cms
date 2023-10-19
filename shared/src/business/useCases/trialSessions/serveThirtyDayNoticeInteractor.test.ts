@@ -52,6 +52,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   describe('Happy Path', () => {
     const mockPdfUrl = 'www.blahdeebloop.com';
+    const mockDocumentId = '66bac560-1b85-4e64-9316-3f4d2b17f7bc';
 
     let mockCase: RawCase;
 
@@ -69,7 +70,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       applicationContext
         .getUseCaseHelpers()
         .saveFileAndGenerateUrl.mockResolvedValue({
-          fileId: '',
+          fileId: mockDocumentId,
           url: mockPdfUrl,
         });
     });
@@ -188,6 +189,19 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext: expect.anything(),
         file: expect.anything(),
         useTempBucket: true,
+      });
+      expect(
+        applicationContext.getPersistenceGateway().updateTrialSession,
+      ).toHaveBeenCalledWith({
+        applicationContext: expect.anything(),
+        trialSessionToUpdate: expect.objectContaining({
+          paperServicePdfs: [
+            {
+              documentId: mockDocumentId,
+              title: expect.stringContaining('30 Day Notice of Trial on'),
+            },
+          ],
+        }),
       });
       expect(
         applicationContext.getNotificationGateway().sendNotificationToUser,
