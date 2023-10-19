@@ -27,7 +27,7 @@ describe('contactsHelper', () => {
       });
     });
 
-    it('should return a empty object if party type if undefined', () => {
+    it('should return an empty object if party type is undefined', () => {
       const result = runCompute(contactsHelper, {
         state: {
           form: {
@@ -140,7 +140,7 @@ describe('contactsHelper', () => {
       });
     });
 
-    it('should return a empty object if party type if undefined', () => {
+    it('should return an empty object if party type is undefined', () => {
       const result = runCompute(contactsHelper, {
         state: {
           form: {
