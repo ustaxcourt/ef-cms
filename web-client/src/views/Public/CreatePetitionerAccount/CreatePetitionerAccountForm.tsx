@@ -62,7 +62,6 @@ export const CreatePetitionerAccountForm = connect(
                 type="text"
                 onBlur={e => {
                   setInFocusEmail(false);
-
                   updateFormValueSequence({
                     key: 'email',
                     value: e.target.value,
