@@ -103,8 +103,8 @@ describe('authenticateUserAction', () => {
         state: {},
       });
 
-      expect(state.cognitoLocal.userEmail).toEqual(code);
-      expect(state.cognitoLocal.sessionId).toEqual(sessionId);
+      expect(state.login.userEmail).toEqual(code);
+      expect(state.login.sessionId).toEqual(sessionId);
 
       expect(mockNewPasswordRequired.mock.calls[0][0]).toMatchObject({
         path: '/change-password-local',

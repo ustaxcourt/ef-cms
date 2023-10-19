@@ -10,7 +10,8 @@ export const supportingDocumentFreeTextTypes = [
   'Declaration in Support',
   'Unsworn Declaration under Penalty of Perjury in Support',
 ];
-export const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
+
+const SUPPORTING_DOCUMENTS_MAX_COUNT = 5;
 
 export const fileDocumentHelper = (
   get: Get,

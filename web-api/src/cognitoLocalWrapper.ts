@@ -1,25 +1,42 @@
+const cognitoFunctions = [
+  'adminCreateUser',
+  'adminDisableUser',
+  'adminGetUser',
+  'adminUpdateUserAttributes',
+  'confirmSignUp',
+  'initiateAuth',
+  'respondToAuthChallenge',
+  'signUp',
+];
+
 export const cognitoLocalWrapper = cognito => {
-  const originalAdminCreateUser = cognito.adminCreateUser;
+  for (const methodName in cognito) {
+    if (
+      typeof cognito[methodName] === 'function' &&
+      cognitoFunctions.includes(methodName)
+    ) {
+      const originalMethod = cognito[methodName];
 
-  cognito.adminCreateUser = function (params) {
-    return {
-      promise: async () => {
-        const convertedParams = {
-          ...params,
-          DesiredDeliveryMediums: ['EMAIL'],
+      cognito[methodName] = function (params) {
+        return {
+          promise: async () => {
+            if (methodName === 'adminCreateUser') {
+              params.DesiredDeliveryMediums = ['EMAIL'];
+            }
+            const response = await originalMethod.call(this, params).promise();
+
+            return new Promise(resolve => {
+              if (response.User) {
+                // returning 'sub' attribute as username
+                response.User.Username = response.User.Attributes[0].Value;
+              }
+              resolve(response);
+            });
+          },
         };
-
-        const response = await originalAdminCreateUser
-          .call(this, convertedParams)
-          .promise();
-
-        return new Promise(resolve => {
-          response.User.Username = response.User.Attributes[0].Value;
-          resolve(response);
-        });
-      },
-    };
-  };
+      };
+    }
+  }
 
   return cognito;
 };

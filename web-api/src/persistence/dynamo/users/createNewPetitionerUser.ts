@@ -59,8 +59,8 @@ export const createNewPetitionerUser = async ({
         Value: user.userId,
       },
     ],
-    UserPoolId: process.env.USER_POOL_ID,
-    Username: user.pendingEmail,
+    UserPoolId: process.env.USER_POOL_ID!,
+    Username: user.pendingEmail!,
   };
 
   if (process.env.STAGE !== 'prod') {

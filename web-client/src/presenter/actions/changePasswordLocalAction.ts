@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * Updates the user's password in cognito, locally
@@ -14,7 +14,7 @@ export const changePasswordLocalAction = async ({
   get,
   path,
 }) => {
-  const { sessionId, userEmail } = get(state.cognitoLocal);
+  const { sessionId, userEmail } = get(state.login);
   const newPassword = get(state.form.newPassword);
 
   const response = await applicationContext
