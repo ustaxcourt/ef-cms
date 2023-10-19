@@ -169,13 +169,13 @@ describe('updatePartyTypeAction', () => {
     );
   });
 
-  it('resets the state.form.corporateDisclosureFile and state.form.businessTyp when form.filingType is anything other than "A business"', async () => {
+  it('resets the state.form.corporateDisclosureFile and state.form.businessType when form.filingType is anything other than "A business"', async () => {
     const { state } = await runAction(
       updatePartyTypeAction,
       getFixtures(
         {
-          key: 'anything',
-          value: 'Any Value',
+          key: 'filingType',
+          value: 'Myself',
         },
         {
           constants: {
