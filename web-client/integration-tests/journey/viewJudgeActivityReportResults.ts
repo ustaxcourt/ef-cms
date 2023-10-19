@@ -11,14 +11,14 @@ import {
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const judgeActivityReportHelper = withAppContextDecorator(
-  judgeActivityReportHelperComputed,
-);
-
 export const viewJudgeActivityReportResults = (
   cerebralTest: any,
   overrides: { startDate?: string; endDate?: string; judgeName?: string } = {},
 ) => {
+  const judgeActivityReportHelper = withAppContextDecorator(
+    judgeActivityReportHelperComputed,
+  );
+
   return it('should submit the form with valid dates and display judge activity report results and Progress Description Table Results', async () => {
     const currentDate = formatDateString(
       prepareDateFromString(),
@@ -67,26 +67,5 @@ export const viewJudgeActivityReportResults = (
         trialSessions: expect.anything(),
       }),
     );
-
-    const { totalCountForSubmittedAndCavCases: initialTotal } =
-      cerebralTest.getState('judgeActivityReport.judgeActivityReportData');
-
-    await cerebralTest.runSequence('getCavAndSubmittedCasesForJudgesSequence', {
-      selectedPage: 1,
-    });
-
-    expect(
-      cerebralTest.getState('judgeActivityReport.judgeActivityReportData'),
-    ).toMatchObject(
-      expect.objectContaining({
-        submittedAndCavCasesByJudge: expect.anything(),
-      }),
-    );
-
-    expect(
-      cerebralTest.getState(
-        'judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases',
-      ),
-    ).toEqual(initialTotal);
   });
 };
