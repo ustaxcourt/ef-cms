@@ -9,11 +9,11 @@ export const setAddEditCaseWorksheetModalStateAction = ({
 }>) => {
   const { docketNumber } = props;
 
-  const { worksheets = [] } = get(state.submittedAndCavCases);
+  const { submittedAndCavCasesByJudge } = get(state.submittedAndCavCases);
 
-  const caseWorksheet = worksheets.find(
+  const caseWorksheet = submittedAndCavCasesByJudge.find(
     ws => ws.docketNumber === docketNumber,
-  ) || { docketNumber };
+  )?.caseWorksheet || { docketNumber };
 
   store.set(state.form, { ...caseWorksheet });
 };
