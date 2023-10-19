@@ -433,7 +433,7 @@ export const baseState = {
   trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   user: null,
   userContactEditProgress: {},
-  users: [],
+  users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
   workItem: {},

@@ -1,4 +1,3 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
 import {
   GetCasesByStatusAndByJudgeRequest,
   GetCasesByStatusAndByJudgeResponse,
@@ -6,7 +5,7 @@ import {
 import { get } from '../requests';
 
 export const getCaseWorksheetsByJudgeInteractor = (
-  applicationContext: ClientApplicationContext,
+  applicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
 ): Promise<{
   cases: GetCasesByStatusAndByJudgeResponse[];
