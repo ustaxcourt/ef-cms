@@ -475,7 +475,7 @@ export const updateCaseAndAssociations = async ({
 }: {
   applicationContext: IApplicationContext;
   caseToUpdate: any;
-}) => {
+}): Promise<RawCase> => {
   const caseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, { applicationContext });
