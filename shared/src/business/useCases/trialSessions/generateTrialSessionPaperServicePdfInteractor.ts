@@ -60,50 +60,47 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     });
   }
 
-  const hasPaper = !!paperServiceDocumentsPdf.getPageCount();
   const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
   let docketEntryId, pdfUrl;
 
-  if (hasPaper) {
-    ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
-      .getUseCaseHelpers()
-      .saveFileAndGenerateUrl({
-        applicationContext,
-        file: paperServicePdfData,
-        useTempBucket: true,
-      }));
-
-    const trialSession = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
-        trialSessionId,
-      });
-
-    const trialSessionEntity = new TrialSession(trialSession, {
+  ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl({
       applicationContext,
+      file: paperServicePdfData,
+      useTempBucket: true,
+    }));
+
+  const trialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId,
     });
 
-    trialSessionEntity.addPaperServicePdf(docketEntryId, 'Initial Calendaring');
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
+  trialSessionEntity.addPaperServicePdf(docketEntryId, 'Initial Calendaring');
 
-    applicationContext.logger.info(
-      `generated the printable paper service pdf at ${pdfUrl}`,
-      { pdfUrl },
-    );
-  }
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
+
+  applicationContext.logger.info(
+    `generated the printable paper service pdf at ${pdfUrl}`,
+    { pdfUrl },
+  );
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'paper_service_complete',
       docketEntryId,
-      hasPaper,
+      hasPaper: true,
       pdfUrl,
     },
     userId: user.userId,
