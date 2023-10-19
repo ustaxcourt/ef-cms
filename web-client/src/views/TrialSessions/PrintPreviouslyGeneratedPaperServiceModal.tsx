@@ -10,14 +10,15 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
     form: state.form,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSelectedPDFsSequence: sequences.openSelectedPDFsSequence,
-    updateFormValueSequence: sequences.updateFormValueSequence,
+    updatePDFsSelectedForPrintSequence:
+      sequences.updatePDFsSelectedForPrintSequence,
   },
   function PrintPreviouslyGeneratedPaperServiceModal({
     clearModalSequence,
     form,
     formattedTrialSessionDetails,
     openSelectedPDFsSequence,
-    updateFormValueSequence,
+    updatePDFsSelectedForPrintSequence,
   }) {
     return (
       <ModalDialog
@@ -32,22 +33,22 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
           return (
             <div className="usa-checkbox" key={pdfInfo.documentId}>
               <input
-                checked={form.selectedPdfs[pdfInfo.documentId] || false}
+                checked={
+                  form.selectedPdfs.includes(pdfInfo.documentId) || false
+                }
                 className="usa-checkbox__input"
-                id={`selectedPdfs-${pdfInfo.documentId}`}
-                name={`selectedPdfs.${pdfInfo.documentId}`}
+                id={`${pdfInfo.documentId}`}
+                name={`${pdfInfo.documentId}`}
                 type="checkbox"
                 onChange={e => {
-                  console.log(e.target.name);
-                  updateFormValueSequence({
+                  updatePDFsSelectedForPrintSequence({
                     key: e.target.name,
-                    value: e.target.checked,
                   });
                 }}
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor={`selectedPdfs-${pdfInfo.documentId}`}
+                htmlFor={`${pdfInfo.documentId}`}
               >
                 {pdfInfo.title}
               </label>

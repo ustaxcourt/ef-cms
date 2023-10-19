@@ -482,6 +482,7 @@ import { updateMessageModalAttachmentsSequence } from './sequences/updateMessage
 import { updateModalFormValueSequence } from './sequences/updateModalFormValueSequence';
 import { updateModalValueSequence } from './sequences/updateModalValueSequence';
 import { updateOrderForDesignatingPlaceOfTrialSequence } from './sequences/updateOrderForDesignatingPlaceOfTrialSequence';
+import { updatePDFsSelectedForPrintSequence } from '@web-client/presenter/sequences/updatePDFsSelectedForPrintSequence';
 import { updatePaperServiceProgressSequence } from './sequences/updatePaperServiceProgressSequence';
 import { updatePartyViewTabSequence } from './sequences/updatePartyViewTabSequence';
 import { updatePetitionPaymentFormValueSequence } from './sequences/updatePetitionPaymentFormValueSequence';
@@ -1025,6 +1026,7 @@ export const presenterSequences = {
   updateModalFormValueSequence,
   updateModalValueSequence,
   updateOrderForDesignatingPlaceOfTrialSequence,
+  updatePDFsSelectedForPrintSequence,
   updatePaperServiceProgressSequence,
   updatePartyViewTabSequence,
   updatePetitionPaymentFormValueSequence,
