@@ -59,8 +59,6 @@ import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDea
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
-import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
-import { getCaseWorksheets } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheets';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import {
   getCasesAssociatedWithUser,
@@ -83,7 +81,6 @@ import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus'
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
-import { getDocketNumbersWithServedEventCodes } from './persistence/elasticsearch/getDocketNumbersWithServedEventCodes';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -312,8 +309,6 @@ const gatewayMethods = {
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCaseMetadataWithCounsel,
-  getCaseWorksheet,
-  getCaseWorksheets,
   getCaseWorksheetsByDocketNumber,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
@@ -334,7 +329,6 @@ const gatewayMethods = {
   getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
-  getDocketNumbersWithServedEventCodes,
   getDocument,
   getDocumentIdFromSQSMessage,
   getDocumentQCInboxForSection,
