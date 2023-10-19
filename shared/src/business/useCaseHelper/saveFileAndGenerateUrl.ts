@@ -5,8 +5,8 @@ export const saveFileAndGenerateUrl = async ({
   useTempBucket = false,
 }: {
   applicationContext: IApplicationContext;
-  file: Buffer;
-  useTempBucket: boolean;
+  file: Blob;
+  useTempBucket?: boolean;
   // time to live of link in seconds
   URLTTL?: number;
 }): Promise<{

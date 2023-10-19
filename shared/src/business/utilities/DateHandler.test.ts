@@ -7,21 +7,19 @@ import {
   castToISO,
   checkDate,
   combineISOandEasternTime,
-  computeDate,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
-  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
+  getDateFormat,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isTodayWithinGivenInterval,
   isValidDateString,
-  prepareDateFromEST,
   prepareDateFromString,
   subtractISODates,
   validateDateAndCreateISO,
@@ -90,13 +88,6 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('prepareDateFromEST', () => {
-    it('converts calendar date to ISO', () => {
-      const result = prepareDateFromEST('11/11/11', FORMATS.MMDDYY);
-      expect(result).toBe('2011-11-11T05:00:00.000Z');
-    });
-  });
-
   describe('prepareDateFromString', () => {
     it("Creates a new datetime object for 'now' when given no inputs", () => {
       const myDatetime = prepareDateFromString();
@@ -112,28 +103,8 @@ describe('DateHandler', () => {
     it('Creates a new datetime object for a given strict ISO timestamp with unchanged timezone', () => {
       const strictIsoStamp = '2021-03-21T01:00:00.000Z';
       const myDatetime = prepareDateFromString(strictIsoStamp);
-      const isoString = myDatetime.toISOString();
+      const isoString = myDatetime.toISO();
       expect(isoString).toEqual(strictIsoStamp);
-    });
-  });
-
-  describe('createISODateStringFromObject', () => {
-    it('should return expected date when using single digit month and day', () => {
-      const myDate = createISODateStringFromObject({
-        day: '1',
-        month: '1',
-        year: '1990',
-      });
-      expect(myDate).toEqual('1990-01-01T05:00:00.000Z');
-    });
-
-    it('should return expected date when using double digit month and day', () => {
-      const myDate = createISODateStringFromObject({
-        day: '01',
-        month: '01',
-        year: '1990',
-      });
-      expect(myDate).toEqual('1990-01-01T05:00:00.000Z');
     });
   });
 
@@ -312,7 +283,7 @@ describe('DateHandler', () => {
       it('gets an ISO Date String representing today at Midnight when given no arguments', () => {
         const sameDay = '2022-07-16';
         mockTimeFunc.setDateMockValue(`${sameDay}T18:54:00.000Z`);
-        const result = createISODateAtStartOfDayEST(null);
+        const result = createISODateAtStartOfDayEST();
         expect(result).toBe(`${sameDay}T04:00:00.000Z`);
       });
     });
@@ -323,7 +294,7 @@ describe('DateHandler', () => {
     });
 
     it('creates a timestamp at start of day EST when given no arguments', () => {
-      const myDate = createISODateAtStartOfDayEST(null);
+      const myDate = createISODateAtStartOfDayEST();
       expect(isStringISOFormatted(myDate)).toBeTruthy();
     });
 
@@ -485,7 +456,25 @@ describe('DateHandler', () => {
     });
 
     it('should return false when undefined is provided as the date value', () => {
-      expect(isValidDateString(undefined)).toBeFalsy();
+      expect(isValidDateString(undefined as any)).toBeFalsy();
+    });
+  });
+
+  describe('getDateFormat', () => {
+    it('should throw an error when the date provided is NOT in any of the provided acceptable formats', () => {
+      expect(() => getDateFormat('01-01-01', [])).toThrow(
+        'Invalid date string',
+      );
+    });
+
+    it('should return the format when the date provided is formatted as one of the provided acceptable formats', () => {
+      const result = getDateFormat('01/01/01', [
+        FORMATS.ISO,
+        FORMATS.MMDDYY, // MM/dd/yy
+        FORMATS.YEAR, // yyyy
+      ]);
+
+      expect(result).toBe(FORMATS.MMDDYY);
     });
   });
 
@@ -528,38 +517,6 @@ describe('DateHandler', () => {
 
     it('should return the expected date in ISO format', () => {
       expect(checkDate('2009-09-03')).toEqual('2009-09-03T04:00:00.000Z');
-    });
-  });
-
-  describe('computeDate', () => {
-    it('should return a zero-padded date formatted like YYYY-MM-DDTHH:mm:ss.SSSZ when provided day, month, and year', () => {
-      const result = computeDate({
-        day: '9',
-        month: '3',
-        year: '1993',
-      });
-
-      expect(result).toBe('1993-03-09T05:00:00.000Z');
-    });
-
-    it('should return undefined when year, month, or day is not provided', () => {
-      const result = computeDate({
-        day: '5',
-        month: '11',
-        year: null,
-      });
-
-      expect(result).toBe(undefined);
-    });
-
-    it('should return null if not provided values for all of day, month, and year', () => {
-      const result = computeDate({
-        day: null,
-        month: null,
-        year: null,
-      });
-
-      expect(result).toBe(null);
     });
   });
 
@@ -615,18 +572,38 @@ describe('DateHandler', () => {
       const result = validateDateAndCreateISO({
         day: '4',
         month: '10',
-      });
+      } as any);
 
       expect(result).toBe(undefined);
     });
 
-    it('should return expected ISO date when date object is valid', () => {
-      const validDate = createISODateStringFromObject({
-        day: '1',
-        month: '1',
-        year: '2001',
+    it('should return a zero-padded date formatted like YYYY-MM-DDTHH:mm:ss.SSSZ when provided day, month, and year', () => {
+      const result = validateDateAndCreateISO({
+        day: '9',
+        month: '3',
+        year: '1993',
       });
-      expect(validDate).toEqual('2001-01-01T05:00:00.000Z');
+
+      expect(result).toBe('1993-03-09T05:00:00.000Z');
+    });
+
+    it('should return undefined when year, month, or day is not provided', () => {
+      const result = validateDateAndCreateISO({
+        day: '5',
+        month: '11',
+      } as any);
+
+      expect(result).toBe(undefined);
+    });
+
+    it('should return undefined if not provided values for all of day, month, and year', () => {
+      const result = validateDateAndCreateISO({
+        daynotprovided: true,
+        not: 'date info',
+        some: 'other thing',
+      } as any);
+
+      expect(result).toBe(undefined);
     });
   });
 

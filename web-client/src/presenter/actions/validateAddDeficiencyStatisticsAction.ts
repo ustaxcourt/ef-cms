@@ -1,4 +1,3 @@
-import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -16,17 +15,10 @@ export const validateAddDeficiencyStatisticsAction = ({
 }: ActionProps) => {
   const form = get(state.form);
 
-  const combinedForm = combineLastDateOfPeriodFields({
-    applicationContext,
-    form,
-  });
-
   let errors = applicationContext
     .getUseCases()
     .validateAddDeficiencyStatisticsInteractor(applicationContext, {
-      statistic: {
-        ...combinedForm,
-      },
+      statistic: form,
     });
 
   // we show this error when the calculate modal is not used to generate irsTotalPenalties

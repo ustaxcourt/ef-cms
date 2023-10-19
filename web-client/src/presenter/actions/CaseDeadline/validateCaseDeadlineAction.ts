@@ -1,4 +1,4 @@
-import { getCaseDeadlineFromFormAction } from './getCaseDeadlineFromFormAction';
+import { state } from '@web-client/presenter/app.cerebral';
 
 /**
  * validates the petition.
@@ -13,13 +13,17 @@ export const validateCaseDeadlineAction = ({
   applicationContext,
   get,
   path,
-  props,
 }: ActionProps) => {
-  const caseDeadline = getCaseDeadlineFromFormAction({
-    applicationContext,
-    get,
-    props,
-  });
+  const { associatedJudge, docketNumber, leadDocketNumber } = get(
+    state.caseDetail,
+  );
+
+  const caseDeadline = {
+    ...get(state.form),
+    associatedJudge,
+    docketNumber,
+    leadDocketNumber,
+  };
 
   const errors = applicationContext
     .getUseCases()
