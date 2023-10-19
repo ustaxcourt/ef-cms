@@ -15,7 +15,7 @@ export const CreatePetitionerAccount = connect(
         <div className="grid-container grid-gap-lg padding-x-4">
           {alertError && (
             <div
-              className="grid-row margin-bottom-2 margin-x-auto"
+              className="grid-row margin-bottom-2"
               style={{ width: 'fit-content' }}
             >
               <MessageAlert

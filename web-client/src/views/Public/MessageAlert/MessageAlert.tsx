@@ -3,6 +3,7 @@ import React from 'react';
 export const MessageAlert = ({ alertType = 'error', message, title }) => {
   const alertTypeClassName = {
     error: 'error-message-alert',
+    warning: 'warning-message-alert',
   };
   const className = alertTypeClassName[alertType] || alertTypeClassName.error;
 
