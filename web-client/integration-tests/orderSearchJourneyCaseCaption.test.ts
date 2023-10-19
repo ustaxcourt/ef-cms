@@ -22,22 +22,11 @@ describe('order search journey for case caption', () => {
   cerebralTest.draftOrders = [];
   cerebralTest.createdCases = [];
 
-  beforeEach(() => {
-    global.window ??= Object.create({
-      ...global.window,
-      localStorage: {
-        removeItem: () => null,
-        setItem: () => null,
-      },
-    });
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-
   it('Creates the first case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
       contactPrimary: {
