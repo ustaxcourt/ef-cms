@@ -156,18 +156,15 @@ export const setTrialSessionCalendarInteractor = async (
     .toRawObject();
 };
 
-/**
- * Removes a manually added case from the trial session
- * @param {object} applicationContext the application context
- * @param {object} caseRecord the case to remove from the trial session
- * @param {object} trialSessionEntity the trial session to remove the case from
- * @returns {Promise} the promise of the updateCase call
- */
 const removeManuallyAddedCaseFromTrialSession = ({
   applicationContext,
   caseRecord,
   trialSessionEntity,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  caseRecord: RawCase;
+  trialSessionEntity: TrialSession;
+}): Promise<RawCase> => {
   trialSessionEntity.deleteCaseFromCalendar({
     docketNumber: caseRecord.docketNumber,
   });
