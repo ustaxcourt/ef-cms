@@ -1,5 +1,5 @@
 import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
-import { JudgeActivityReportCavAndSubmittedCasesRequest } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { GetCasesByStatusAndByJudgeRequest } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getSubmittedAndCavCasesByJudgeAction } from './getSubmittedAndCavCasesByJudgeAction';
 import { judgeUser } from '@shared/test/mockUsers';
@@ -8,6 +8,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('getSubmittedAndCavCasesByJudgeAction', () => {
   presenter.providers.applicationContext = applicationContext;
+
   const mockEndDate = '2022-04-13';
   const mockStartDate = '12/12/1923';
   const mockTotalCountOfSubmittedAndCavCases = 15;
@@ -20,7 +21,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     startDate: mockStartDate,
   };
 
-  const getCasesByStatusAndByJudgeRequestParams: JudgeActivityReportCavAndSubmittedCasesRequest =
+  const getCasesByStatusAndByJudgeRequestParams: GetCasesByStatusAndByJudgeRequest =
     {
       judges: [judgeUser.name],
       statuses: CAV_AND_SUBMITTED_CASE_STATUS,
@@ -47,7 +48,7 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
 
     applicationContext
       .getUseCases()
-      .getCasesByStatusAndByJudgeInteractor.mockReturnValueOnce(
+      .getCaseWorksheetsByJudgeInteractor.mockReturnValueOnce(
         mockCustomCaseReportResponse,
       );
   });
@@ -70,12 +71,9 @@ describe('getSubmittedAndCavCasesByJudgeAction', () => {
     expect(
       (
         applicationContext.getUseCases()
-          .getCasesByStatusAndByJudgeInteractor as jest.Mock
+          .getCaseWorksheetsByJudgeInteractor as jest.Mock
       ).mock.calls[0][1],
     ).toMatchObject(getCasesByStatusAndByJudgeRequestParams);
     expect(result.output.cases).toBe(mockReturnedCases);
-    expect(result.output.totalCountForSubmittedAndCavCases).toEqual(
-      mockTotalCountOfSubmittedAndCavCases,
-    );
   });
 });
