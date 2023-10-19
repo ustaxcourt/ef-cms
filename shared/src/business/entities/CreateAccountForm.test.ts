@@ -10,8 +10,8 @@ describe('CreateAccountForm', () => {
 
   it('should return a valid CreateAccountForm entity', () => {
     const formEntity = new CreateAccountForm(validEntity);
-    expect(formEntity.getValidationErrors()).toBeNull();
     expect(formEntity.isValid()).toBeTruthy();
+    expect(formEntity.getValidationErrors()).toBeNull();
   });
 
   it('should return error message for email', () => {
@@ -21,22 +21,59 @@ describe('CreateAccountForm', () => {
     });
     expect(formEntity.isValid()).toBeFalsy();
     expect(formEntity.getFormattedValidationErrors()).toEqual({
-      email: '"email" must be a valid email',
+      email: 'Enter a valid email address',
+      password: {
+        hasNoLeadingOrTrailingSpace: true,
+        hasOneLowercase: true,
+        hasOneNumber: true,
+        hasOneUppercase: true,
+        hasSpecialCharacterOrSpace: true,
+        isProperLength: true,
+      },
     });
   });
 
-  it('should return error message for name', () => {
-    const formEntity = new CreateAccountForm({
-      ...validEntity,
-      name: '',
+  describe('Name', () => {
+    it('should return error message for name when not provided', () => {
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        name: '',
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        name: 'Enter a name',
+        password: {
+          hasNoLeadingOrTrailingSpace: true,
+          hasOneLowercase: true,
+          hasOneNumber: true,
+          hasOneUppercase: true,
+          hasSpecialCharacterOrSpace: true,
+          isProperLength: true,
+        },
+      });
     });
-    expect(formEntity.isValid()).toBeFalsy();
-    expect(formEntity.getFormattedValidationErrors()).toEqual({
-      name: '"name" is not allowed to be empty',
+
+    it('should return error message for name when exceeds length', () => {
+      const formEntity = new CreateAccountForm({
+        ...validEntity,
+        name: '#'.repeat(101),
+      });
+      expect(formEntity.isValid()).toBeFalsy();
+      expect(formEntity.getFormattedValidationErrors()).toEqual({
+        name: 'Enter a name with less than 100 characters',
+        password: {
+          hasNoLeadingOrTrailingSpace: true,
+          hasOneLowercase: true,
+          hasOneNumber: true,
+          hasOneUppercase: true,
+          hasSpecialCharacterOrSpace: true,
+          isProperLength: true,
+        },
+      });
     });
   });
 
-  it('should return error message for password', () => {
+  it('should return error message for confirmPassword', () => {
     const formEntity = new CreateAccountForm({
       ...validEntity,
       confirmPassword: 'not matching',
@@ -44,6 +81,14 @@ describe('CreateAccountForm', () => {
     expect(formEntity.isValid()).toBeFalsy();
     expect(formEntity.getFormattedValidationErrors()).toEqual({
       confirmPassword: '"confirmPassword" must be [ref:password]',
+      password: {
+        hasNoLeadingOrTrailingSpace: true,
+        hasOneLowercase: true,
+        hasOneNumber: true,
+        hasOneUppercase: true,
+        hasSpecialCharacterOrSpace: true,
+        isProperLength: true,
+      },
     });
   });
 
