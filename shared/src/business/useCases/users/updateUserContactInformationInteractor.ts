@@ -30,7 +30,7 @@ const updateUserContactInformationHelper = async (
     userId,
   }: { contactInfo: any; firmName: string; userId: string },
 ) => {
-  const user: any = await applicationContext
+  const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 

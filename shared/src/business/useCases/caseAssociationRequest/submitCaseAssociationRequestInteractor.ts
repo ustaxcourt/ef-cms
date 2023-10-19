@@ -18,11 +18,9 @@ import { withLocking } from '../../useCaseHelper/acquireLock';
 export const submitCaseAssociationRequest = async (
   applicationContext: IApplicationContext,
   {
-    consolidatedCasesDocketNumbers,
     docketNumber,
     filers = [],
   }: {
-    consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
     filers: string[];
   },
@@ -57,7 +55,6 @@ export const submitCaseAssociationRequest = async (
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
         applicationContext,
-        consolidatedCasesDocketNumbers,
         docketNumber,
         user,
       });
