@@ -28,7 +28,7 @@ export const createPetitionerAccountFormAction = ({
     return path.error({
       alertError: {
         alertType: 'warning',
-        message: `This email address is already associated with and account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>`,
+        message: `This email address is already associated with an account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset.</a>`,
         title: 'Email address already has an account',
       },
     });
