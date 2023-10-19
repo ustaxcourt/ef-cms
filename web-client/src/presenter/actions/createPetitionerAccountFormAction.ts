@@ -46,6 +46,6 @@ function userExists(authenticationResults: AdminCreateUserResponse) {
 function getErrorMessageFromResults(
   authenticationResults: AdminCreateUserResponse,
 ): string {
-  console.log('Determine if user exists', authenticationResults);
+  console.log('Extract errpr message from results', authenticationResults);
   return 'Error message from AWS cognito';
 }
