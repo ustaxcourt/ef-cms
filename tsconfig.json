@@ -37,5 +37,9 @@
     "./web-client/src/**/*",
     "./scripts/**/*"
   ],
-  "exclude": ["node_modules", "./cognito-triggers-sls/node_modules/**/*", "./scripts/run-once-scripts/**/*"]
+  "exclude": [
+    "node_modules",
+    "./cognito-triggers-sls/node_modules/**/*",
+    "./scripts/run-once-scripts/**/*"
+  ]
 }

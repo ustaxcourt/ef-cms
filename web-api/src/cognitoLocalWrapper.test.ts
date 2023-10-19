@@ -1,7 +1,9 @@
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 const originalAdminCreateUser = jest.fn();
+const originalAdminGetUser = jest.fn();
 const cognitoMock = {
   adminCreateUser: originalAdminCreateUser,
+  adminGetUser: originalAdminGetUser,
 };
 
 cognitoLocalWrapper(cognitoMock);
@@ -27,15 +29,26 @@ describe('cognitoLocalWrapper', () => {
     originalAdminCreateUser.mockReturnValue({
       promise: jest.fn().mockResolvedValue(mockResponse),
     });
+    originalAdminGetUser.mockReturnValue({
+      promise: jest.fn().mockResolvedValue({}),
+    });
   });
 
-  it('should modify the response object correctly', async () => {
+  it('should modify the params and response object correctly when calling adminCreateUser', async () => {
     const response = await cognitoMock.adminCreateUser({}).promise();
 
     expect(response.User.Username).toBe(mockSub);
     expect(response.User.Attributes[0].Value).toBe(mockSub);
 
     expect(originalAdminCreateUser).toHaveBeenCalledWith(
+      expect.objectContaining({ DesiredDeliveryMediums: ['EMAIL'] }),
+    );
+  });
+
+  it('should not modify params when not calling adminCreateUser', async () => {
+    await cognitoMock.adminGetUser({}).promise();
+
+    expect(originalAdminGetUser).not.toHaveBeenCalledWith(
       expect.objectContaining({ DesiredDeliveryMediums: ['EMAIL'] }),
     );
   });

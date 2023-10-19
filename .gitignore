@@ -21,7 +21,6 @@ artillery/private-advanced-order.json
 aws.json
 aws/lambdas/*.zip
 aws/lambdas/RotateInfoIndices/dist
-.cognito/db
 coverage/
 cypress/downloads
 cypress/**/screenshots
