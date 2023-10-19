@@ -34,6 +34,8 @@ import { addDocketEntryForSystemGeneratedOrder } from '@shared/business/useCaseH
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
+import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
+import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
 import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
@@ -188,6 +190,12 @@ const createTestApplicationContext = () => {
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
+    calculateDaysElapsedSinceLastStatusChange: jest
+      .fn()
+      .mockImplementation(calculateDaysElapsedSinceLastStatusChange),
+    calculateDifferenceInDays: jest
+      .fn()
+      .mockImplementation(calculateDifferenceInDays),
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
