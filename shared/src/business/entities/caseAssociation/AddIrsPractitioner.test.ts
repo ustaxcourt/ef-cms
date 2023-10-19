@@ -1,15 +1,15 @@
 import { AddIrsPractitioner } from './AddIrsPractitioner';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('AddIrsPractitioner', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = new AddIrsPractitioner({});
-
+      const customMessages = extractCustomMessages(entity.getValidationRules());
       expect(entity.getFormattedValidationErrors()).toEqual({
-        serviceIndicator:
-          AddIrsPractitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator[1],
-        user: AddIrsPractitioner.VALIDATION_ERROR_MESSAGES.user,
+        serviceIndicator: customMessages.serviceIndicator[0],
+        user: customMessages.user[0],
       });
     });
 
@@ -28,11 +28,9 @@ describe('AddIrsPractitioner', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
     });
-
+    const customMessages = extractCustomMessages(entity.getValidationRules());
     expect(entity.getFormattedValidationErrors()).toEqual({
-      serviceIndicator:
-        AddIrsPractitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator[0]
-          .message,
+      serviceIndicator: customMessages.serviceIndicator[1],
     });
   });
 });

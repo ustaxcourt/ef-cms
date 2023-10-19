@@ -1,8 +1,7 @@
 import { Batch } from './Batch';
 import { Scan } from './Scan';
 import { applicationContext } from '../test/createTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = Scan;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('Scan entity', () => {
   it('adds a Batch entity to the Scan entity', () => {
@@ -87,8 +86,10 @@ describe('Scan entity', () => {
         rawScan: {},
       });
 
+      const customMessages = extractCustomMessages(scan.getValidationRules());
+
       expect(scan.getFormattedValidationErrors()).toMatchObject({
-        batches: VALIDATION_ERROR_MESSAGES.batches,
+        batches: customMessages.batches[0],
       });
     });
   });

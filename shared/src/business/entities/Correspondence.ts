@@ -21,20 +21,22 @@ export class Correspondence extends JoiValidationEntity {
     this.filingDate = rawProps.filingDate || createISODateString();
   }
 
+  static VALIDATION_RULES = {
+    archived: joi
+      .boolean()
+      .optional()
+      .description('A correspondence document that was archived.'),
+    correspondenceId: JoiValidationConstants.UUID.required(),
+    documentTitle: JoiValidationConstants.STRING.max(500).required(),
+    filedBy: JoiValidationConstants.STRING.max(500).allow('').optional(),
+    filingDate: JoiValidationConstants.ISO_DATE.max('now')
+      .required()
+      .description('Date that this Document was filed.'),
+    userId: JoiValidationConstants.UUID.required(),
+  };
+
   getValidationRules() {
-    return {
-      archived: joi
-        .boolean()
-        .optional()
-        .description('A correspondence document that was archived.'),
-      correspondenceId: JoiValidationConstants.UUID.required(),
-      documentTitle: JoiValidationConstants.STRING.max(500).required(),
-      filedBy: JoiValidationConstants.STRING.max(500).allow('').optional(),
-      filingDate: JoiValidationConstants.ISO_DATE.max('now')
-        .required()
-        .description('Date that this Document was filed.'),
-      userId: JoiValidationConstants.UUID.required(),
-    };
+    return Correspondence.VALIDATION_RULES;
   }
 }
 

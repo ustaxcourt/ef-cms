@@ -1,7 +1,6 @@
 import { Batch } from './Batch';
 import { applicationContext } from '../test/createTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = Batch;
+import { extractCustomMessages } from './utilities/extractCustomMessages';
 
 describe('Batch entity', () => {
   it('adds a page', () => {
@@ -27,8 +26,10 @@ describe('Batch entity', () => {
     it('validates minimum number of pages', () => {
       const batch = new Batch({ applicationContext, rawBatch: {} });
 
+      const customMessages = extractCustomMessages(batch.getValidationRules());
+
       expect(batch.getFormattedValidationErrors()).toMatchObject({
-        pages: VALIDATION_ERROR_MESSAGES.pages,
+        pages: customMessages.pages[0],
       });
     });
 
@@ -40,9 +41,9 @@ describe('Batch entity', () => {
           pages: ['page 1'],
         },
       });
-
+      const customMessages = extractCustomMessages(batch.getValidationRules());
       expect(batch.getFormattedValidationErrors()).toMatchObject({
-        batchIndex: VALIDATION_ERROR_MESSAGES.batchIndex,
+        batchIndex: customMessages.batchIndex[0],
       });
     });
   });

@@ -1,19 +1,21 @@
 import { CaseDeadline } from './CaseDeadline';
 import { applicationContext } from '../test/createTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 const DOCKET_NUMBER = '123-19';
 describe('CaseDeadline', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const caseDeadline = new CaseDeadline({}, { applicationContext });
+      const customMessages = extractCustomMessages(
+        caseDeadline.getValidationRules(),
+      );
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        associatedJudge: VALIDATION_ERROR_MESSAGES.associatedJudge,
-        deadlineDate: VALIDATION_ERROR_MESSAGES.deadlineDate,
-        description: VALIDATION_ERROR_MESSAGES.description[1],
-        docketNumber: VALIDATION_ERROR_MESSAGES.docketNumber,
-        sortableDocketNumber: VALIDATION_ERROR_MESSAGES.sortableDocketNumber,
+        associatedJudge: customMessages.associatedJudge[0],
+        deadlineDate: customMessages.deadlineDate[0],
+        description: customMessages.description[0],
+        docketNumber: customMessages.docketNumber[0],
+        sortableDocketNumber: customMessages.sortableDocketNumber[0],
       });
     });
 
@@ -74,8 +76,12 @@ You ain't been up off that porch, now`,
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        caseDeadline.getValidationRules(),
+      );
+
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
-        description: (VALIDATION_ERROR_MESSAGES.description[0] as any).message,
+        description: customMessages.description[1],
       });
     });
   });

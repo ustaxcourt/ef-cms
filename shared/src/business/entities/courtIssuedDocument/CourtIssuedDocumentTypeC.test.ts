@@ -1,5 +1,5 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeC', () => {
@@ -21,9 +21,12 @@ describe('CourtIssuedDocumentTypeC', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type C',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[0].message,
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        docketNumbers: customMessages.docketNumbers[0],
+        documentType: customMessages.documentType[0],
       });
     });
 
@@ -48,8 +51,11 @@ describe('CourtIssuedDocumentTypeC', () => {
         documentType: 'Order that the letter "L" is added to Docket Number',
         scenario: 'Type C',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        docketNumbers: VALIDATION_ERROR_MESSAGES.docketNumbers[1].message,
+        docketNumbers: customMessages.docketNumbers[1],
       });
     });
 

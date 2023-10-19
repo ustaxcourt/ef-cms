@@ -8,16 +8,15 @@ import {
 } from '../utilities/DateHandler';
 import { MOTION_DISPOSITIONS } from './EntityConstants';
 import { Stamp } from './Stamp';
-
-const { VALIDATION_ERROR_MESSAGES } = Stamp;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('Stamp entity', () => {
   describe('Validation', () => {
     it('should be invalid when disposition is undefined', () => {
       const stamp = new Stamp({});
-
+      const customMessages = extractCustomMessages(stamp.getValidationRules());
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
-        disposition: VALIDATION_ERROR_MESSAGES.disposition,
+        disposition: customMessages.disposition[0],
       });
     });
 

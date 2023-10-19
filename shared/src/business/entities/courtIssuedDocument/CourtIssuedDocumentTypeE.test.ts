@@ -1,9 +1,9 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 import {
   calculateISODate,
   createISODateString,
 } from '../../utilities/DateHandler';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('CourtIssuedDocumentTypeE', () => {
   describe('constructor', () => {
@@ -24,9 +24,12 @@ describe('CourtIssuedDocumentTypeE', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type E',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        date: customMessages.date[0],
+        documentType: customMessages.documentType[0],
       });
     });
 
@@ -45,8 +48,9 @@ describe('CourtIssuedDocumentTypeE', () => {
           'Order time is extended for petr(s) to pay the filing fee',
         scenario: 'Type E',
       });
+      const customMessages = extractCustomMessages(extDoc.getValidationRules());
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[0].message,
+        date: customMessages.date[1],
       });
     });
 

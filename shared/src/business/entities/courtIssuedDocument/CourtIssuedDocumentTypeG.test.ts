@@ -1,6 +1,6 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import { TRIAL_SESSION_SCOPE_TYPES } from '../EntityConstants';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('CourtIssuedDocumentTypeG', () => {
   describe('constructor', () => {
@@ -20,10 +20,13 @@ describe('CourtIssuedDocumentTypeG', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type G',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+        date: customMessages.date[0],
+        documentType: customMessages.documentType[0],
+        trialLocation: customMessages.trialLocation[0],
       });
     });
 
@@ -36,8 +39,9 @@ describe('CourtIssuedDocumentTypeG', () => {
         scenario: 'Type G',
         trialLocation: 'Seattle, Washington',
       });
+      const customMessages = extractCustomMessages(extDoc.getValidationRules());
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
+        date: customMessages.date[0],
       });
     });
 

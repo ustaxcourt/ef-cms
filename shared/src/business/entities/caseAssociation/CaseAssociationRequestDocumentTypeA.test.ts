@@ -1,5 +1,5 @@
-import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestDocumentTypeA } from './CaseAssociationRequestDocumentTypeA';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('CaseAssociationRequestFactory', () => {
   it('should, in addition to the base document requirements, require attachments', () => {
@@ -7,9 +7,10 @@ describe('CaseAssociationRequestFactory', () => {
       attachments: undefined,
       documentType: 'Notice of Intervention',
     });
+    const customMessages = extractCustomMessages(entity.getValidationRules());
 
     expect(entity.getFormattedValidationErrors()!.attachments).toEqual(
-      CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.attachments,
+      customMessages.attachments[0],
     );
   });
 

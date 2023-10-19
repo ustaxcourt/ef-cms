@@ -5,8 +5,7 @@ import {
 } from '../EntityConstants';
 import { CaseExternal } from './CaseExternal';
 import { applicationContext } from '../../test/createTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = CaseExternal;
+import { extractCustomMessages } from '../utilities/extractCustomMessages';
 
 describe('CaseExternal entity', () => {
   describe('isValid', () => {
@@ -22,9 +21,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!.corporateDisclosureFile,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+      ).toEqual(customMessages.corporateDisclosureFile[0]);
     });
     it('does not require corporate disclosure if filing type not set', () => {
       const petition = new CaseExternal(
@@ -67,8 +69,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(caseExternal.getFormattedValidationErrors()!.stinFile).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFile,
+        customMessages.stinFile[0],
       );
     });
   });
@@ -88,9 +93,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[0].message);
+      ).toEqual(customMessages.petitionFileSize[0]);
     });
 
     it('should inform you if petition file size is zero', () => {
@@ -107,9 +115,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+      ).toEqual(customMessages.petitionFileSize[1]);
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -142,9 +153,12 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.petitionFileSize[1]);
+      ).toEqual(customMessages.petitionFileSize[1]);
     });
   });
 
@@ -163,8 +177,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[0].message,
+        customMessages.stinFileSize[0],
       );
     });
 
@@ -182,8 +199,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        customMessages.stinFileSize[1],
       );
     });
 
@@ -217,8 +237,11 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        VALIDATION_ERROR_MESSAGES.stinFileSize[1],
+        customMessages.stinFileSize[1],
       );
     });
   });
@@ -238,12 +261,13 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(
-        VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[0].message,
-      );
+      ).toEqual(customMessages.corporateDisclosureFileSize[0].message);
     });
 
     it('should inform you if corporate disclosure file size is zero', () => {
@@ -260,10 +284,13 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+      ).toEqual(customMessages.corporateDisclosureFileSize[1]);
     });
 
     it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
@@ -297,10 +324,13 @@ describe('CaseExternal entity', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        CaseExternal.VALIDATION_RULES,
+      );
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(VALIDATION_ERROR_MESSAGES.corporateDisclosureFileSize[1]);
+      ).toEqual(customMessages.corporateDisclosureFileSize[1]);
     });
   });
 });

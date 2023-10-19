@@ -1,9 +1,9 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
 import {
   calculateISODate,
   createISODateString,
 } from '../../utilities/DateHandler';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeD', () => {
@@ -27,10 +27,12 @@ describe('CourtIssuedDocumentTypeD', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type D',
       });
-
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[2],
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
+        date: customMessages.date[0],
+        documentType: customMessages.documentType[0],
       });
     });
 
@@ -49,9 +51,10 @@ describe('CourtIssuedDocumentTypeD', () => {
         freeText: 'Some free text',
         scenario: 'Type D',
       });
+      const customMessages = extractCustomMessages(extDoc.getValidationRules());
 
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        date: VALIDATION_ERROR_MESSAGES.date[0].message,
+        date: customMessages.date[1],
       });
     });
 
@@ -98,9 +101,10 @@ describe('CourtIssuedDocumentTypeD', () => {
         freeText: getTextByCount(1001),
         scenario: 'Type D',
       });
+      const customMessages = extractCustomMessages(extDoc.getValidationRules());
 
       expect(extDoc.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText: customMessages.freeText[1],
       });
     });
 

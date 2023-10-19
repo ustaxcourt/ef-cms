@@ -1,5 +1,6 @@
 import { AddPrivatePractitioner } from './AddPrivatePractitioner';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('AddPrivatePractitioner', () => {
   describe('validation', () => {
@@ -7,12 +8,11 @@ describe('AddPrivatePractitioner', () => {
 
     it('should have error messages for missing fields', () => {
       const entity = new AddPrivatePractitioner({});
+      const customMessages = extractCustomMessages(entity.getValidationRules());
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representing:
-          AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.representing,
-        serviceIndicator:
-          AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator[1],
-        user: AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.user,
+        representing: customMessages.representing[0],
+        serviceIndicator: customMessages.serviceIndicator[0],
+        user: customMessages.user[0],
       });
     });
 
@@ -32,10 +32,10 @@ describe('AddPrivatePractitioner', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
+      const customMessages = extractCustomMessages(entity.getValidationRules());
 
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representing:
-          AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.representing,
+        representing: customMessages.representing[0],
       });
     });
 
@@ -45,11 +45,10 @@ describe('AddPrivatePractitioner', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
         user: { userId: '02323349-87fe-4d29-91fe-8dd6916d2fda' },
       });
+      const customMessages = extractCustomMessages(entity.getValidationRules());
 
       expect(entity.getFormattedValidationErrors()).toEqual({
-        serviceIndicator:
-          AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator[0]
-            .message,
+        serviceIndicator: customMessages.serviceIndicator[1],
       });
     });
   });
