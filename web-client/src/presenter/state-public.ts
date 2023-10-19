@@ -57,6 +57,8 @@ export const baseState = {
     docketRecordFilter: PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: {},
   },
+  showConfirmPassword: false,
+  showPassword: false,
   todaysOpinions: [],
   todaysOrders: {
     results: [],
