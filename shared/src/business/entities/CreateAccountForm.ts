@@ -130,6 +130,10 @@ export class CreateAccountForm extends JoiValidationEntity {
     };
   }
 
+  isValid(): boolean {
+    const errors = this.getFormattedValidationErrors();
+    return this.isFormValid(errors);
+  }
   isFormValid(errors: {
     [key: string]: string | CreateAccountFormPasswordValidations;
   }): boolean {
