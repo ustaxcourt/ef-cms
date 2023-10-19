@@ -11,7 +11,7 @@ export const updatePartyTypeAction = ({
 }>) => {
   const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-  function updatePartyType(newPartyType: string) {
+  const updatePartyType = (newPartyType: string) => {
     store.set(state.form.partyType, newPartyType);
 
     const showContacts = showContactsHelper(newPartyType, PARTY_TYPES);
@@ -26,7 +26,7 @@ export const updatePartyTypeAction = ({
           : {},
       );
     });
-  }
+  };
 
   if (props.key === 'filingType') {
     if (props.value === 'Myself' || props.value === 'Individual petitioner') {
