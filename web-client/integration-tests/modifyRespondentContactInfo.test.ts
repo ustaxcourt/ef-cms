@@ -13,10 +13,6 @@ import { respondentViewsCaseDetailNoticeOfChangeOfAddress } from './journey/resp
 describe('Modify Respondent Contact Information', () => {
   const cerebralTest = setupTest();
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
