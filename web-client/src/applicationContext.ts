@@ -27,6 +27,7 @@ import {
   ERROR_MAP_429,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
+  getCognitoRequestPasswordResetUrl,
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
@@ -637,6 +638,7 @@ const applicationContext = {
   getCognitoRedirectUrl: () => {
     return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
   },
+  getCognitoRequestPasswordResetUrl,
   getCognitoTokenUrl: () => {
     return (
       process.env.COGNITO_TOKEN_URL ||
