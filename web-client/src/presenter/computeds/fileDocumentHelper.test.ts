@@ -1,8 +1,8 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   CONTACT_TYPES,
   PARTY_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { GENERATION_TYPES } from '@web-client/getConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../test/createClientTestApplicationContext';
 import { capitalize } from 'lodash';
@@ -201,20 +201,6 @@ describe('fileDocumentHelper', () => {
     state.validationErrors = { filers: 'You did something bad.' };
     const result: any = runCompute(fileDocumentHelper, { state });
     expect(result.partyValidationError).toEqual('You did something bad.');
-  });
-
-  it('passes the value of the REDACTION_ACKNOWLEDGEMENT_ENABLED flag', () => {
-    state.featureFlags = {
-      [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
-    };
-    let result: any = runCompute(fileDocumentHelper, { state });
-    expect(result.redactionAcknowledgementEnabled).toEqual(true);
-
-    state.featureFlags = {
-      [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: false,
-    };
-    result = runCompute(fileDocumentHelper, { state });
-    expect(result.redactionAcknowledgementEnabled).toEqual(false);
   });
 
   describe('supporting documents', () => {
@@ -494,14 +480,12 @@ describe('fileDocumentHelper', () => {
   });
 
   describe('EARedactionAcknowledgement', () => {
-    it('should set redactionAcknowledgementEnabled to true when document type is EA and no preview url is set and the feature flag is enabled', () => {
-      state.featureFlags = {
-        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
-      };
+    it('should set EARedactionAcknowledgement to true when document type is EA and the generation type is manual', () => {
       state.form = {
         eventCode: 'EA',
+        generationType: GENERATION_TYPES.MANUAL,
       };
-      state.pdfPreviewUrl = false;
+
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });
@@ -509,14 +493,12 @@ describe('fileDocumentHelper', () => {
       expect(EARedactionAcknowledgement).toEqual(true);
     });
 
-    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
-      state.featureFlags = {
-        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
-      };
+    it('should set EARedactionAcknowledgement to false when document type is EA and generation type is auto', () => {
       state.form = {
         eventCode: 'EA',
+        generationType: GENERATION_TYPES.AUTO,
       };
-      state.pdfPreviewUrl = true;
+
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });
@@ -524,29 +506,12 @@ describe('fileDocumentHelper', () => {
       expect(EARedactionAcknowledgement).toEqual(false);
     });
 
-    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
-      state.featureFlags = {
-        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: true,
-      };
+    it('should set EARedactionAcknowledgement to false when document type is not EA and generation type is manual', () => {
       state.form = {
         eventCode: 'A',
+        generationType: GENERATION_TYPES.MANUAL,
       };
-      state.pdfPreviewUrl = false;
-      const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
-        state,
-      });
 
-      expect(EARedactionAcknowledgement).toEqual(false);
-    });
-
-    it('should set redactionAcknowledgementEnabled to false when document type is EA and a preview url is set and the feature flag is enabled', () => {
-      state.featureFlags = {
-        [ALLOWLIST_FEATURE_FLAGS.REDACTION_ACKNOWLEDGEMENT_ENABLED.key]: false,
-      };
-      state.form = {
-        eventCode: 'EA',
-      };
-      state.pdfPreviewUrl = true;
       const { EARedactionAcknowledgement } = runCompute(fileDocumentHelper, {
         state,
       });
