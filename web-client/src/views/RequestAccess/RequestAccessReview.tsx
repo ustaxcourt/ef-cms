@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ExternalConsolidatedGroupCards } from '../FileDocument/ExternalConsolidatedGroupCards';
 import { FileUploadErrorModal } from '../FileUploadErrorModal';
 import { FileUploadStatusModal } from '../FileUploadStatusModal';
 import { Focus } from '../../ustc-ui/Focus/Focus';
@@ -255,10 +254,6 @@ export const RequestAccessReview = connect(
                 )}
               </div>
             </div>
-
-            {form.fileAcrossConsolidatedGroup && (
-              <ExternalConsolidatedGroupCards />
-            )}
 
             <div className="grid-row grid-gap margin-bottom-5">
               <div className="tablet:grid-col-12 bg-white submit-reminders">
