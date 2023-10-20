@@ -7,11 +7,13 @@ describe('setReprintPaperServicePdfsModalFormAction', () => {
       setReprintPaperServicePdfsModalFormAction,
       {
         state: {
-          form: {},
+          modal: {
+            form: {},
+          },
         },
       },
     );
 
-    expect(state.form.selectedPdfs).toEqual([]);
+    expect(state.modal!.form!.selectedPdfs).toEqual([]);
   });
 });

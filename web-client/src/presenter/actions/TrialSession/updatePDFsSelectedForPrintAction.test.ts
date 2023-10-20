@@ -10,13 +10,15 @@ describe('updatePDFsSelectedForPrintAction', () => {
         key: mockFileId,
       },
       state: {
-        form: {
-          selectedPdfs: [],
+        modal: {
+          form: {
+            selectedPdfs: [],
+          },
         },
       },
     });
 
-    expect(state.form.selectedPdfs).toEqual([mockFileId]);
+    expect(state.modal!.form!.selectedPdfs).toEqual([mockFileId]);
   });
 
   it('should remove the provided key from the list of selected pdfs when it is already in the list', async () => {
@@ -25,12 +27,14 @@ describe('updatePDFsSelectedForPrintAction', () => {
         key: mockFileId,
       },
       state: {
-        form: {
-          selectedPdfs: [mockFileId],
+        modal: {
+          form: {
+            selectedPdfs: [mockFileId],
+          },
         },
       },
     });
 
-    expect(state.form.selectedPdfs).toEqual([]);
+    expect(state.modal!.form!.selectedPdfs).toEqual([]);
   });
 });

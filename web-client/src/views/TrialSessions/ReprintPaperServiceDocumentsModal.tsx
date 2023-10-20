@@ -7,7 +7,7 @@ import React from 'react';
 export const ReprintPaperServiceDocumentsModal = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
-    form: state.form,
+    form: state.modal.form,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     openSelectedPDFsSequence: sequences.openSelectedPDFsSequence,
     updatePDFsSelectedForPrintSequence:
@@ -31,14 +31,13 @@ export const ReprintPaperServiceDocumentsModal = connect(
       >
         {formattedTrialSessionDetails.paperServicePdfs.map(pdfInfo => {
           return (
-            <div className="usa-checkbox" key={pdfInfo.documentId}>
+            <div className="usa-checkbox" key={pdfInfo.fileId}>
+              {console.log(form.selectedPdfs)}
               <input
-                checked={
-                  form.selectedPdfs.includes(pdfInfo.documentId) || false
-                }
+                checked={form.selectedPdfs.includes(pdfInfo.fileId) || false}
                 className="usa-checkbox__input"
-                id={`${pdfInfo.documentId}`}
-                name={`${pdfInfo.documentId}`}
+                id={`${pdfInfo.fileId}`}
+                name={`${pdfInfo.fileId}`}
                 type="checkbox"
                 onChange={e => {
                   updatePDFsSelectedForPrintSequence({
@@ -48,7 +47,7 @@ export const ReprintPaperServiceDocumentsModal = connect(
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor={`${pdfInfo.documentId}`}
+                htmlFor={`${pdfInfo.fileId}`}
               >
                 {pdfInfo.title}
               </label>

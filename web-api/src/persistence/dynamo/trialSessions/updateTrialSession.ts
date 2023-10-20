@@ -16,7 +16,7 @@ export const updateTrialSession = async ({
 }) => {
   for (const item of trialSessionToUpdate.paperServicePdfs) {
     const pk = `trial-session|${trialSessionToUpdate.trialSessionId}`;
-    const sk = `paper-service-pdf|${item.documentId}`;
+    const sk = `paper-service-pdf|${item.fileId}`;
 
     await conditionalPut({
       ConditionExpression:

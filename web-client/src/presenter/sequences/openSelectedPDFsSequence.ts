@@ -2,21 +2,21 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 export const openSelectedPDFsSequence = [
   async ({ applicationContext, get }) => {
-    const { selectedPdfs } = get(state.form);
+    const { selectedPdfs } = get(state.modal.form);
 
     await Promise.all(
-      selectedPdfs.map(documentId =>
-        getUrlAndOpenInNewTab(applicationContext, documentId),
+      selectedPdfs.map(fileId =>
+        getUrlAndOpenInNewTab(applicationContext, fileId),
       ),
     );
   },
 ];
 
-const getUrlAndOpenInNewTab = async (applicationContext, documentId) => {
+const getUrlAndOpenInNewTab = async (applicationContext, fileId) => {
   const { url } = await applicationContext
     .getUseCases()
     .getPaperServicePdfUrlInteractor(applicationContext, {
-      key: documentId,
+      key: fileId,
     });
 
   await applicationContext.getUtilities().openUrlInNewTab({ url });
