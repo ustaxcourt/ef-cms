@@ -1,11 +1,8 @@
-export const isPaperServicePdfItem = item =>
-  item.sk.startsWith('paper-service-pdf|');
-
-const isTrialSessionItem = item => item.sk.startsWith('trial-session|');
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 export const aggregateTrialSessionItems = (items): RawTrialSession => {
-  let paperServicePdfs = [];
-  let trialSessionRecords = [];
+  let paperServicePdfs: { title: string; fileId: string }[] = [];
+  let trialSessionRecords: Omit<RawTrialSession, 'paperServicePdfs'>[] = [];
 
   items.forEach(item => {
     if (isTrialSessionItem(item)) {
@@ -23,3 +20,7 @@ export const aggregateTrialSessionItems = (items): RawTrialSession => {
     paperServicePdfs,
   };
 };
+
+const isTrialSessionItem = item => item.sk.startsWith('trial-session|');
+
+const isPaperServicePdfItem = item => item.sk.startsWith('paper-service-pdf|');
