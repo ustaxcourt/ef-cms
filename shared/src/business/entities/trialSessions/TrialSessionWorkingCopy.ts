@@ -4,7 +4,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
 export class TrialSessionWorkingCopy extends JoiValidationEntity {
-  public caseMetadata: object;
+  public caseMetadata: { [docketNumber: string]: { trialStatus: string } };
   public filters: {
     basisReached: boolean;
     continued: boolean;
@@ -100,6 +100,5 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   }
 }
 
-declare global {
-  type RawTrialSessionWorkingCopy = ExcludeMethods<TrialSessionWorkingCopy>;
-}
+export type RawTrialSessionWorkingCopy =
+  ExcludeMethods<TrialSessionWorkingCopy>;

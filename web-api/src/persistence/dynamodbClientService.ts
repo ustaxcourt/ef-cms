@@ -309,7 +309,7 @@ export const scan = async params => {
   return allItems;
 };
 
-export const queryFull = async ({
+export const queryFull = async <T>({
   applicationContext,
   ExpressionAttributeNames,
   ExpressionAttributeValues,
@@ -323,7 +323,7 @@ export const queryFull = async ({
   ExpressionAttributeNames: Record<string, string>;
   ExpressionAttributeValues: Record<string, string>;
   KeyConditionExpression: string;
-}): Promise<TDynamoRecord[]> => {
+}): Promise<TDynamoRecord<T>[]> => {
   let hasMoreResults = true;
   let lastKey = null;
   let allResults = [];

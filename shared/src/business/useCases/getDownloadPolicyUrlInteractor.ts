@@ -59,11 +59,7 @@ export const getDownloadPolicyUrlInteractor = async (
   } else {
     let userAssociatedWithCase;
     if (caseEntity.leadDocketNumber) {
-      const consolidatedCases = await applicationContext
-        .getUseCases()
-        .getConsolidatedCasesByCaseInteractor(applicationContext, {
-          docketNumber: caseEntity.leadDocketNumber,
-        });
+      const { consolidatedCases } = caseData;
 
       userAssociatedWithCase = isUserPartOfGroup({
         consolidatedCases,
