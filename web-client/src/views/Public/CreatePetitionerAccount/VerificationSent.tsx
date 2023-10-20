@@ -1,15 +1,16 @@
 import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
 import { connect } from '@cerebral/react';
-import { state } from '@web-client/presenter/app-public.cerebral';
+import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 export const VerificationSent = connect(
   {
     alertSuccess: state.alertSuccess,
+    cognitoResendVerificationLinkSequence:
+      sequences.cognitoResendVerificationLinkSequence,
     email: state.cognito.email,
-    resendVerificationLink: state.cognitoResendVerificationLinkUrl,
   },
-  ({ alertSuccess, email, resendVerificationLink }) => {
+  ({ alertSuccess, cognitoResendVerificationLinkSequence, email }) => {
     function maskEmail(rawEmail: string) {
       const parts = rawEmail.split('@');
       if (parts.length !== 2) return rawEmail;
@@ -46,9 +47,12 @@ export const VerificationSent = connect(
               <>
                 to {maskEmail(email)} . If you didn&apos;t receive a
                 verification email, check your spam folder or you can{' '}
-                <a href={resendVerificationLink}>
+                <button
+                  className="usa-button--unstyled"
+                  onClick={() => cognitoResendVerificationLinkSequence()}
+                >
                   send the verification email again
-                </a>
+                </button>
                 .
               </>
             )}

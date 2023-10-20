@@ -52,6 +52,7 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
+import { cognitoResendVerificationLinkLambda } from '@web-api/lambdas/public-api/cognitoResendVerificationLinkLambda';
 import { createUserCognitoLambda } from '@web-api/users/createUserCognitoLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
@@ -136,3 +137,8 @@ app.get(
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 
 app.post('/account/create', lambdaWrapper(createUserCognitoLambda));
+
+app.post(
+  '/account/resend-verification',
+  lambdaWrapper(cognitoResendVerificationLinkLambda),
+);
