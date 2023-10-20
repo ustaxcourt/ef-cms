@@ -36,8 +36,8 @@ import { createPetitionerAccountInteractor } from '../../shared/src/business/use
 import { createPractitionerDocumentInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerDocumentInteractor';
 import { createPractitionerUserInteractor } from '../../shared/src/business/useCases/practitioners/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/createTrialSessionInteractor';
+import { createUserCognitoInteractor } from '../../shared/src/business/useCases/users/createUserCognitoInteractor';
 import { createUserInteractor } from '../../shared/src/business/useCases/users/createUserInteractor';
-import { createUserInteractorLocal } from '../../shared/src/business/useCases/users/createUserInteractorLocal';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from '../../shared/src/business/useCases/caseNote/deleteCaseNoteInteractor';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/business/useCases/caseAssociation/deleteCounselFromCaseInteractor';
@@ -243,8 +243,8 @@ const useCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
+  createUserCognitoInteractor,
   createUserInteractor,
-  createUserInteractorLocal,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,

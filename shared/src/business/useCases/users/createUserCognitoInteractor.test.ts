@@ -1,7 +1,7 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { createUserInteractorLocal } from './createUserInteractorLocal';
+import { createUserCognitoInteractor } from './createUserCognitoInteractor';
 
-describe('createUserInteractorLocal', () => {
+describe('createUserCognitoInteractor', () => {
   const email = 'example@example.com';
   const name = 'Antoninus Sara';
   const userId = 'abc123';
@@ -41,7 +41,7 @@ describe('createUserInteractorLocal', () => {
       Username: email,
     };
 
-    const result = await createUserInteractorLocal(applicationContext, {
+    const result = await createUserCognitoInteractor(applicationContext, {
       user,
     });
 
@@ -60,7 +60,7 @@ describe('createUserInteractorLocal', () => {
     });
 
     await expect(
-      createUserInteractorLocal(applicationContext, {
+      createUserCognitoInteractor(applicationContext, {
         user,
       }),
     ).rejects.toThrow();
