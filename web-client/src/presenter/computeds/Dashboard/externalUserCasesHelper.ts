@@ -66,6 +66,9 @@ const formatAssociatedCase = (
     caseTitle: applicationContext.getCaseTitle(
       caseInQuestion.caseCaption || '',
     ),
+    consolidatedCases: caseInQuestion.consolidatedCases?.map(c => {
+      return formatAssociatedCase(applicationContext, c);
+    }),
     consolidatedIconTooltipText,
     createdAtFormatted: applicationContext
       .getUtilities()

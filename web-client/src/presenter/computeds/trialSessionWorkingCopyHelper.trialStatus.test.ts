@@ -25,7 +25,7 @@ describe('trial session working copy computed', () => {
     trialLocation: 'Houston, Texas',
   };
 
-  it('should omit deprecated trial status types and sort trialStatusFilters by displayOrder when UPDATED_TRIAL_STATUS_TYPES feature flag is active', () => {
+  it('should omit deprecated trial status types and sort trialStatusFilters by displayOrder', () => {
     const { trialStatusFilters } = runCompute(trialSessionWorkingCopyHelper, {
       state: {
         featureFlags: {

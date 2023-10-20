@@ -17,11 +17,9 @@ import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 export const submitCaseAssociationRequestInteractor = async (
   applicationContext: IApplicationContext,
   {
-    consolidatedCasesDocketNumbers,
     docketNumber,
     filers = [],
   }: {
-    consolidatedCasesDocketNumbers?: string[];
     docketNumber: string;
     filers: string[];
   },
@@ -56,7 +54,6 @@ export const submitCaseAssociationRequestInteractor = async (
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
         applicationContext,
-        consolidatedCasesDocketNumbers,
         docketNumber,
         user,
       });
