@@ -22,7 +22,6 @@ export const VerificationSent = connect(
       return `${maskedUsername}@${maskedDomain}`;
     }
 
-    //TODO: create a sequence to resend verification email to user and attach to the anchor element in markup
     return (
       <div className={'bg-white padding-4'}>
         <h2>Email address verification sent</h2>
