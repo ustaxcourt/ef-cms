@@ -58,6 +58,7 @@ describe('getFileExternalDocumentAlertSuccessAction', () => {
         linkText: 'Print receipt.',
         linkUrl: 'http://example.com',
         message: DOCUMENT_SERVED_MESSAGES.EXTERNAL_ENTRY_ADDED,
+        newTab: true,
       },
     });
   });

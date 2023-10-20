@@ -18,12 +18,13 @@ type TPetitioner = {
   entityName: string;
   isAddressSealed: boolean;
   name: string;
+  paperPetitionEmail?: string;
   phone: string;
   postalCode: string;
   sealedAndUnavailable: boolean;
   serviceIndicator?: string;
   state: string;
-  title: string;
+  title?: string;
 };
 
 type TCaseNote = {
