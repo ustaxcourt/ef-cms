@@ -1,6 +1,5 @@
 import { MOCK_CASE } from '../../../../../../shared/src/test/mockCase';
 import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../../shared/src/business/entities/EntityConstants';
-
 import { migrateItems } from './0012-remove-signed-judge-on-spos-spto';
 
 describe('migrateItems', () => {

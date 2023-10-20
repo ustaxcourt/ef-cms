@@ -1,6 +1,6 @@
 import { AggregatedEventCodesType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { CasesClosedReturnType } from '@shared/business/useCases/judgeActivityReport/getCasesClosedByJudgeInteractor';
-import { CavAndSubmittedFilteredCasesType } from '@shared/business/useCases/judgeActivityReport/getCasesByStatusAndByJudgeInteractor';
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import { JudgeActivityReportFilters } from '@shared/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { TrialSessionReturnType } from '@shared/business/useCases/judgeActivityReport/getTrialSessionsForJudgeActivityReportInteractor';
 
@@ -9,8 +9,7 @@ type JudgeActivityReportData = {
   casesClosedByJudge: CasesClosedReturnType;
   opinions: AggregatedEventCodesType;
   orders: AggregatedEventCodesType;
-  submittedAndCavCasesByJudge: CavAndSubmittedFilteredCasesType[];
-  totalCountForSubmittedAndCavCases: number;
+  submittedAndCavCasesByJudge: GetCasesByStatusAndByJudgeResponse[];
 };
 
 export type JudgeActivityReportState = {
@@ -35,7 +34,6 @@ const initialJudgeActivityReportData: JudgeActivityReportData = {
     total: 0,
   },
   submittedAndCavCasesByJudge: [],
-  totalCountForSubmittedAndCavCases: 0,
   trialSessions: {
     aggregations: {
       Hybrid: 0,

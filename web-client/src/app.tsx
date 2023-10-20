@@ -148,6 +148,8 @@ const app = {
     presenter.state.cognitoRequestPasswordResetUrl =
       applicationContext.getCognitoRequestPasswordResetUrl();
     presenter.state.constants = applicationContext.getConstants();
+    presenter.state.cognitoLocalEnabled =
+      applicationContext.getCognitoLocalEnabled();
 
     const shouldRefreshToken =
       !wasAppLoadedFromACognitoLogin(window.location.href) &&
