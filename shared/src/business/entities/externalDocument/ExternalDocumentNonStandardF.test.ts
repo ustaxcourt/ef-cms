@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardF } from './ExternalDocumentNonStandardF';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardF', () => {
@@ -8,18 +8,14 @@ describe('ExternalDocumentNonStandardF', () => {
       const externalDocumentF = ExternalDocumentFactory({
         scenario: 'Nonstandard F',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentF.getValidationRules(),
+      );
       expect(externalDocumentF.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        ordinalValue:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.ordinalValue,
-        previousDocument:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES
-            .previousDocument,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        ordinalValue: customMessages.ordinalValue[0],
+        previousDocument: customMessages.previousDocument[0],
       });
     });
 
@@ -45,10 +41,11 @@ describe('ExternalDocumentNonStandardF', () => {
         previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard F',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentF.getValidationRules(),
+      );
       expect(externalDocumentF.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

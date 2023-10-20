@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardG } from './ExternalDocumentNonStandardG';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardG', () => {
@@ -8,15 +8,13 @@ describe('ExternalDocumentNonStandardG', () => {
       const externalDocumentG = ExternalDocumentFactory({
         scenario: 'Nonstandard G',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentG.getValidationRules(),
+      );
       expect(externalDocumentG.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        ordinalValue:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES.ordinalValue,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        ordinalValue: customMessages.ordinalValue[0],
       });
     });
 
@@ -40,10 +38,11 @@ describe('ExternalDocumentNonStandardG', () => {
         ordinalValue: 'First',
         scenario: 'Nonstandard G',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentG.getValidationRules(),
+      );
       expect(externalDocumentG.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

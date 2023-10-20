@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardJ } from './ExternalDocumentNonStandardJ';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardJ', () => {
@@ -8,19 +8,14 @@ describe('ExternalDocumentNonStandardJ', () => {
       const exexternalDocumentJDoc = ExternalDocumentFactory({
         scenario: 'Nonstandard J',
       });
-
+      const customMessages = extractCustomMessages(
+        exexternalDocumentJDoc.getValidationRules(),
+      );
       expect(exexternalDocumentJDoc.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        freeText:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText[0]
-            .message,
-        freeText2:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText2[0]
-            .message,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        freeText: customMessages.freeText[0],
+        freeText2: customMessages.freeText2[0],
       });
     });
 
@@ -46,14 +41,12 @@ describe('ExternalDocumentNonStandardJ', () => {
         freeText2: getTextByCount(1001),
         scenario: 'Nonstandard J',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentJ.getValidationRules(),
+      );
       expect(externalDocumentJ.getFormattedValidationErrors()).toEqual({
-        freeText:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText[1]
-            .message,
-        freeText2:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.freeText2[1]
-            .message,
+        freeText: customMessages.freeText[1],
+        freeText2: customMessages.freeText2[1],
       });
     });
 
@@ -66,10 +59,11 @@ describe('ExternalDocumentNonStandardJ', () => {
         freeText2: 'Test2',
         scenario: 'Nonstandard J',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentJ.getValidationRules(),
+      );
       expect(externalDocumentJ.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardJ.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

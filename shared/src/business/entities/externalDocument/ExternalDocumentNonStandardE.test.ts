@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardE } from './ExternalDocumentNonStandardE';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardE', () => {
@@ -8,15 +8,13 @@ describe('ExternalDocumentNonStandardE', () => {
       const externalDocumentD = ExternalDocumentFactory({
         scenario: 'Nonstandard E',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentD.getValidationRules(),
+      );
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardE.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardE.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        trialLocation:
-          ExternalDocumentNonStandardE.VALIDATION_ERROR_MESSAGES.trialLocation,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        trialLocation: customMessages.trialLocation[0],
       });
     });
 
@@ -43,10 +41,11 @@ describe('ExternalDocumentNonStandardE', () => {
         scenario: 'Nonstandard E',
         trialLocation: 'Little Rock, AR',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentD.getValidationRules(),
+      );
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardE.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardB } from './ExternalDocumentNonStandardB';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardB', () => {
@@ -8,16 +8,13 @@ describe('ExternalDocumentNonStandardB', () => {
       const externalDocumentB = ExternalDocumentFactory({
         scenario: 'Nonstandard B',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentB.getValidationRules(),
+      );
       expect(externalDocumentB.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        freeText:
-          ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES.freeText[0]
-            .message,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        freeText: customMessages.freeText[0],
       });
     });
 
@@ -41,10 +38,11 @@ describe('ExternalDocumentNonStandardB', () => {
         freeText: 'Petition',
         scenario: 'Nonstandard B',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentB.getValidationRules(),
+      );
       expect(externalDocumentB.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });
@@ -57,11 +55,11 @@ describe('ExternalDocumentNonStandardB', () => {
       freeText: getTextByCount(1001),
       scenario: 'Nonstandard B',
     });
-
+    const customMessages = extractCustomMessages(
+      externalDocumentB.getValidationRules(),
+    );
     expect(externalDocumentB.getFormattedValidationErrors()).toEqual({
-      freeText:
-        ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES.freeText[1]
-          .message,
+      freeText: customMessages.freeText[1],
     });
   });
 

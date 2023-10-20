@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentStandard } from './ExternalDocumentStandard';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentStandard', () => {
@@ -8,11 +8,13 @@ describe('ExternalDocumentStandard', () => {
       const externalDocumentStandard = ExternalDocumentFactory({
         scenario: 'Standard',
       });
+      const customMessages = extractCustomMessages(
+        externalDocumentStandard.getValidationRules(),
+      );
 
       expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
-        category: ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES.documentType[1],
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
       });
     });
 
@@ -36,10 +38,11 @@ describe('ExternalDocumentStandard', () => {
         documentType: 'Application for Waiver of Filing Fee',
         scenario: 'Standard',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentStandard.getValidationRules(),
+      );
       expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentStandard.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
 

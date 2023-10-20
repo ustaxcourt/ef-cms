@@ -1,9 +1,9 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardD } from './ExternalDocumentNonStandardD';
 import {
   calculateISODate,
   createISODateString,
 } from '../../utilities/DateHandler';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardD', () => {
@@ -12,18 +12,15 @@ describe('ExternalDocumentNonStandardD', () => {
       const externalDocumentD = ExternalDocumentFactory({
         scenario: 'Nonstandard D',
       });
+      const customMessages = extractCustomMessages(
+        externalDocumentD.getValidationRules(),
+      );
 
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        previousDocument:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES
-            .previousDocument,
-        serviceDate:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.serviceDate[1],
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        previousDocument: customMessages.previousDocument[0],
+        serviceDate: customMessages.serviceDate[0],
       });
     });
 
@@ -38,11 +35,11 @@ describe('ExternalDocumentNonStandardD', () => {
         scenario: 'Nonstandard D',
         serviceDate,
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentD.getValidationRules(),
+      );
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        serviceDate:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.serviceDate[0]
-            .message,
+        serviceDate: customMessages.serviceDate[1],
       });
     });
 
@@ -72,10 +69,11 @@ describe('ExternalDocumentNonStandardD', () => {
         scenario: 'Nonstandard D',
         serviceDate,
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentD.getValidationRules(),
+      );
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        serviceDate:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.serviceDate[1],
+        serviceDate: customMessages.serviceDate[0],
       });
     });
 
@@ -90,10 +88,11 @@ describe('ExternalDocumentNonStandardD', () => {
         scenario: 'Nonstandard D',
         serviceDate,
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentD.getValidationRules(),
+      );
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardD.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

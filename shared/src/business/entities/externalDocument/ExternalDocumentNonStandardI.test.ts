@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardI } from './ExternalDocumentNonStandardI';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardI', () => {
@@ -8,18 +8,14 @@ describe('ExternalDocumentNonStandardI', () => {
       const externalDocumentI = ExternalDocumentFactory({
         scenario: 'Nonstandard I',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentI.getValidationRules(),
+      );
       expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        freeText:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.freeText[0]
-            .message,
-        ordinalValue:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.ordinalValue,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        freeText: customMessages.freeText[0],
+        ordinalValue: customMessages.ordinalValue[0],
       });
     });
 
@@ -45,11 +41,11 @@ describe('ExternalDocumentNonStandardI', () => {
         ordinalValue: 'First',
         scenario: 'Nonstandard I',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentI.getValidationRules(),
+      );
       expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
-        freeText:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.freeText[1]
-            .message,
+        freeText: customMessages.freeText[1],
       });
     });
 
@@ -62,10 +58,11 @@ describe('ExternalDocumentNonStandardI', () => {
         ordinalValue: 'First',
         scenario: 'Nonstandard I',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentI.getValidationRules(),
+      );
       expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });
