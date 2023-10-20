@@ -1,26 +1,25 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const createConfirmLinkLocal = async ({ get, path }: ActionProps) => {
-  if (process.env.STAGE === 'local') {
-    const { email } = get(state.form);
+export const createConfirmLinkLocal = ({ get }: ActionProps) => {
+  if (process.env.STAGE !== 'local') return;
+  const { email } = get(state.form);
 
-    // confirmation code is currently intentionally hard-coded in cognitoLocal
-    const confirmationCode = '123456';
-    const queryString = qs.stringify(
-      { confirmationCode, email },
-      { encode: false },
-    );
+  // confirmation code is currently intentionally hard-coded in cognitoLocal
+  const confirmationCode = '123456';
+  const queryString = qs.stringify(
+    { confirmationCode, email },
+    { encode: false },
+  );
 
-    const confirmationLink = `/confirm-signup-local?${queryString}`;
+  const confirmationLink = `/confirm-signup-local?${queryString}`;
 
-    return path.yes({
-      alertSuccess: {
-        alertType: 'success',
-        message: `New user account created successfully for ${email}! Please click the link below to verify your email address. /n 
+  return {
+    alertSuccess: {
+      alertType: 'success',
+      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. /n 
         <a href="${confirmationLink}">log in here</a>.`,
-        title: 'Account Created Locally',
-      },
-    });
-  }
+      title: 'Account Created Locally',
+    },
+  };
 };
