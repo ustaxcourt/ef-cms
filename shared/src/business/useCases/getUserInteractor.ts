@@ -1,5 +1,6 @@
 import {
   IrsPractitioner,
+  RawIrsPractitioner,
   entityName as irsPractitionerEntityName,
 } from '../entities/IrsPractitioner';
 import { NotFoundError } from '../../../../web-api/src/errors/errors';
