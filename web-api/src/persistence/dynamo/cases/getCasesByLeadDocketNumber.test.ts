@@ -9,7 +9,9 @@ describe('getCasesByLeadDocketNumber', () => {
         Promise.resolve({
           Items: [
             {
-              docketNumber: '101-20',
+              docketNumber: '123-20',
+              pk: 'case|123-20',
+              sk: 'case|123-20',
             },
           ],
         }),

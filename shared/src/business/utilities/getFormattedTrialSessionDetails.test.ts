@@ -2,7 +2,7 @@ import { DOCKET_NUMBER_SUFFIXES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
-  formatCase,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
@@ -224,11 +224,13 @@ describe('formattedTrialSessionDetails', () => {
 
   it('formatCase identifies Small Lien/Levy, Lien/Levy, and Passport as high priority', () => {
     expect(
-      formatCase({ applicationContext, caseItem: { docketNumberSuffix: 'W' } })
-        .isDocketSuffixHighPriority,
+      formatCaseForTrialSession({
+        applicationContext,
+        caseItem: { docketNumberSuffix: 'W' },
+      }).isDocketSuffixHighPriority,
     ).toBe(false);
     expect(
-      formatCase({
+      formatCaseForTrialSession({
         applicationContext,
         caseItem: {
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY,
@@ -236,13 +238,13 @@ describe('formattedTrialSessionDetails', () => {
       }).isDocketSuffixHighPriority,
     ).toBe(true);
     expect(
-      formatCase({
+      formatCaseForTrialSession({
         applicationContext,
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY },
       }).isDocketSuffixHighPriority,
     ).toBe(true);
     expect(
-      formatCase({
+      formatCaseForTrialSession({
         applicationContext,
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
       }).isDocketSuffixHighPriority,
