@@ -1,13 +1,15 @@
 import { UserCaseNote } from './UserCaseNote';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('UserCaseNote', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = new UserCaseNote({});
+      const customMessages = extractCustomMessages(entity.getValidationRules());
 
       expect(entity.getFormattedValidationErrors()).toEqual({
         docketNumber: '"docketNumber" is required',
-        notes: UserCaseNote.VALIDATION_ERROR_MESSAGES.notes,
+        notes: customMessages.notes[0],
         userId: '"userId" is required',
       });
     });

@@ -1,12 +1,15 @@
 import { CalendarNote } from './CalendarNote';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CalendarNote', () => {
   describe('validation', () => {
     it('should have error message for note field longer than 200 characters', () => {
       const entity = new CalendarNote({ note: getTextByCount(1001) });
+      const customMessages = extractCustomMessages(entity.getValidationRules());
+
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: CalendarNote.VALIDATION_ERROR_MESSAGES.note,
+        note: customMessages.note[0],
       });
     });
 

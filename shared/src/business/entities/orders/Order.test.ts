@@ -1,4 +1,5 @@
 import { Order } from './Order';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('Order', () => {
@@ -23,9 +24,10 @@ describe('Order', () => {
         documentType: 'Order',
         orderBody: 'some text',
       });
+      const customMessages = extractCustomMessages(order.getValidationRules());
 
       expect(order.getFormattedValidationErrors()).toEqual({
-        documentTitle: Order.VALIDATION_ERROR_MESSAGES.documentTitle[1].message,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

@@ -8,6 +8,7 @@ import {
 } from '../EntityConstants';
 import { TrialSession } from './TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('TrialSession entity', () => {
   it('should throw an error when applicationContext is not passed in', () => {
@@ -248,10 +249,13 @@ describe('TrialSession entity', () => {
             applicationContext,
           },
         );
+        const customMessages = extractCustomMessages(
+          trialSession.getValidationRules(),
+        );
 
         expect(trialSession.isValid()).toBe(false);
         expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+          proceedingType: customMessages.proceedingType[0],
         });
       });
 
@@ -308,10 +312,13 @@ describe('TrialSession entity', () => {
             applicationContext,
           },
         );
+        const customMessages = extractCustomMessages(
+          trialSession.getValidationRules(),
+        );
 
         expect(trialSession.isValid()).toBe(false);
         expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-          proceedingType: TrialSession.VALIDATION_ERROR_MESSAGES.proceedingType,
+          proceedingType: customMessages.proceedingType[0],
         });
       });
     });
@@ -599,11 +606,13 @@ describe('TrialSession entity', () => {
           applicationContext,
         },
       );
+      const customMessages = extractCustomMessages(
+        trialSession.getValidationRules(),
+      );
 
       expect(() => trialSession.validate()).toThrow();
       expect(trialSession.getFormattedValidationErrors()).toMatchObject({
-        estimatedEndDate:
-          TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[0].message,
+        estimatedEndDate: customMessages.estimatedEndDate[0],
       });
     });
 

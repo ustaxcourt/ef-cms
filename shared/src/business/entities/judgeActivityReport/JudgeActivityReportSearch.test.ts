@@ -4,7 +4,8 @@ import {
   formatDateString,
 } from '../../utilities/DateHandler';
 import { JudgeActivityReportSearch } from './JudgeActivityReportSearch';
-import { VALIDATION_ERROR_MESSAGES } from '../EntityConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+
 describe('JudgeActivityReportSearch', () => {
   describe('constructor', () => {
     it('should convert startDate to an ISO datetime representing the beginning of the day, EDT', () => {
@@ -41,11 +42,14 @@ describe('JudgeActivityReportSearch', () => {
         endDate: '01/01/2021',
         startDate: '02/01/2022',
       });
+      const customMessages = extractCustomMessages(
+        judgeActivityReportSearchEntity.getValidationRules(),
+      );
 
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_PRIOR_TO_START_DATE_ERROR,
+        endDate: customMessages.endDate[3],
       });
     });
 
@@ -54,12 +58,13 @@ describe('JudgeActivityReportSearch', () => {
         endDate: mockFutureDate,
         startDate: mockFutureDate,
       });
-
+      const customMessages = extractCustomMessages(
+        judgeActivityReportSearchEntity.getValidationRules(),
+      );
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        startDate:
-          VALIDATION_ERROR_MESSAGES.START_DATE_IN_THE_FUTURE_ERROR_MESSAGE,
+        startDate: customMessages.startDate[2],
       });
     });
 
@@ -68,11 +73,13 @@ describe('JudgeActivityReportSearch', () => {
         endDate: mockFutureDate,
         startDate: '03/01/2020',
       });
-
+      const customMessages = extractCustomMessages(
+        judgeActivityReportSearchEntity.getValidationRules(),
+      );
       expect(
         judgeActivityReportSearchEntity.getFormattedValidationErrors(),
       ).toMatchObject({
-        endDate: VALIDATION_ERROR_MESSAGES.END_DATE_IN_THE_FUTURE_ERROR,
+        endDate: customMessages.endDate[2],
       });
     });
 

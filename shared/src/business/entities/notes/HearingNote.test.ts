@@ -1,18 +1,23 @@
 import { HearingNote } from './HearingNote';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('HearingNote', () => {
   describe('validation', () => {
     it('should have errors if note is undefined', () => {
       const entity = new HearingNote({});
+      const customMessages = extractCustomMessages(entity.getValidationRules());
+
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: HearingNote.VALIDATION_ERROR_MESSAGES.note[1],
+        note: customMessages.note[0],
       });
     });
 
     it('should have errors if note is an empty string', () => {
       const entity = new HearingNote({ note: '' });
+      const customMessages = extractCustomMessages(entity.getValidationRules());
+
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: HearingNote.VALIDATION_ERROR_MESSAGES.note[1],
+        note: customMessages.note[0],
       });
     });
 
@@ -20,8 +25,10 @@ describe('HearingNote', () => {
       const entity = new HearingNote({
         note: new Array(201).fill('A').join(''),
       });
+      const customMessages = extractCustomMessages(entity.getValidationRules());
+
       expect(entity.getFormattedValidationErrors()).toEqual({
-        note: HearingNote.VALIDATION_ERROR_MESSAGES.note[0].message,
+        note: customMessages.note[1],
       });
     });
 

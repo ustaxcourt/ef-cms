@@ -1,6 +1,5 @@
 import { Note } from './Note';
-
-const { VALIDATION_ERROR_MESSAGES } = Note;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('Note', () => {
   describe('validation', () => {
@@ -8,8 +7,10 @@ describe('Note', () => {
       // typing arguments of Note as any to avoid ts errors
       const notesConfiguration: any = {};
       const entity = new Note(notesConfiguration);
+      const customMessages = extractCustomMessages(entity.getValidationRules());
+
       expect(entity.getFormattedValidationErrors()).toEqual({
-        notes: VALIDATION_ERROR_MESSAGES.notes,
+        notes: customMessages.notes[0],
       });
     });
 
