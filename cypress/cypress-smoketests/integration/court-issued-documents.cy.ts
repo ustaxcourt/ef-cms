@@ -18,7 +18,6 @@ import {
   completeWizardStep3,
   completeWizardStep4,
   filingTypes,
-  goToDashboard,
   goToStartCreatePetition,
   goToWizardStep1,
   goToWizardStep2,
@@ -39,15 +38,46 @@ import {
 import { goToMyDocumentQC } from '../support/pages/document-qc';
 
 let token: string;
-const testData = {};
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 const { closeScannerSetupDialogIfExists, login } =
   getEnvironmentSpecificFunctions();
 
-describe('Files some cases', { scrollBehavior: 'center' }, () => {
-  it('creates a case and does a bunch of stuff', () => {
+describe('Court Issued Documents', { scrollBehavior: 'center' }, () => {
+  it('should create a paper petition, serve the petition, and create an order on the petition', () => {
+    cy.task<AuthenticationResult>('getUserToken', {
+      email: 'petitionsclerk1@example.com',
+      password: DEFAULT_ACCOUNT_PASS,
+    }).then(result => {
+      token = result.AuthenticationResult.IdToken;
+      login(token);
+    });
+    goToMyDocumentQC();
+    goToCreateCase();
+    closeScannerSetupDialogIfExists();
+    fillInCreateCaseFromPaperForm();
+    goToReviewCase().then(createdPaperDocketNumber => {
+      serveCaseToIrs();
+
+      cy.task<AuthenticationResult>('getUserToken', {
+        email: 'docketclerk1@example.com',
+        password: DEFAULT_ACCOUNT_PASS,
+      }).then(result => {
+        token = result.AuthenticationResult.IdToken;
+        login(token);
+      });
+      createOrder(createdPaperDocketNumber);
+      editAndSignOrder();
+      addDocketEntryForOrderAndServePaper();
+      goToCaseDetail(createdPaperDocketNumber);
+      uploadCourtIssuedDocPdf();
+      clickSaveUploadedPdfButton();
+      addDocketEntryForUploadedPdfAndServePaper();
+    });
+  });
+
+  it('should create an e-filed petition, serve the petition, and create an order on the petition', () => {
     cy.task<AuthenticationResult>('getUserToken', {
       email: 'petitioner1@example.com',
       password: Cypress.env('DEFAULT_ACCOUNT_PASS'),
@@ -68,23 +98,15 @@ describe('Files some cases', { scrollBehavior: 'center' }, () => {
     goToWizardStep4();
     completeWizardStep4();
     goToWizardStep5();
-    submitPetition(testData);
-    goToDashboard();
-
-    cy.task<AuthenticationResult>('getUserToken', {
-      email: 'petitionsclerk1@example.com',
-      password: DEFAULT_ACCOUNT_PASS,
-    }).then(result => {
-      token = result.AuthenticationResult.IdToken;
-      login(token);
-    });
-    goToMyDocumentQC();
-    goToCreateCase();
-    closeScannerSetupDialogIfExists();
-    fillInCreateCaseFromPaperForm();
-    goToReviewCase().then(createdPaperDocketNumber => {
-      serveCaseToIrs();
-      goToCaseDetail(testData.createdDocketNumber);
+    submitPetition().then(createdPaperDocketNumber => {
+      cy.task<AuthenticationResult>('getUserToken', {
+        email: 'petitionsclerk1@example.com',
+        password: DEFAULT_ACCOUNT_PASS,
+      }).then(result => {
+        token = result.AuthenticationResult.IdToken;
+        login(token);
+      });
+      goToCaseDetail(createdPaperDocketNumber);
       reviewAndServePetition();
 
       cy.task<AuthenticationResult>('getUserToken', {
@@ -94,23 +116,14 @@ describe('Files some cases', { scrollBehavior: 'center' }, () => {
         token = result.AuthenticationResult.IdToken;
         login(token);
       });
-      // eslint-disable-next-line no-underscore-dangle
-      const attempt = cy.state('runnable')._currentRetry;
-      createOrder(testData.createdDocketNumber);
-      editAndSignOrder();
-      addDocketEntryForOrderAndSaveForLater(attempt);
-      serveCourtIssuedDocketEntry();
       createOrder(createdPaperDocketNumber);
       editAndSignOrder();
-      addDocketEntryForOrderAndServePaper();
-      goToCaseDetail(testData.createdDocketNumber);
-      uploadCourtIssuedDocPdf();
-      clickSaveUploadedPdfButton();
-      addDocketEntryForUploadedPdfAndServe();
+      addDocketEntryForOrderAndSaveForLater('0');
+      serveCourtIssuedDocketEntry();
       goToCaseDetail(createdPaperDocketNumber);
       uploadCourtIssuedDocPdf();
       clickSaveUploadedPdfButton();
-      addDocketEntryForUploadedPdfAndServePaper();
+      addDocketEntryForUploadedPdfAndServe();
     });
   });
 });
