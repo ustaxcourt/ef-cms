@@ -199,12 +199,15 @@ export class TrialSession extends JoiValidationEntity {
       meetingId: stringRequiredForRemoteProceedings,
       notes: JoiValidationConstants.STRING.max(400).optional(),
       noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
-      paperServicePdfs: joi.array().items(
-        joi.object().keys({
-          documentId: JoiValidationConstants.UUID.required(),
-          title: JoiValidationConstants.STRING.required(),
-        }),
-      ),
+      paperServicePdfs: joi
+        .array()
+        .items(
+          joi.object().keys({
+            documentId: JoiValidationConstants.UUID.required(),
+            title: JoiValidationConstants.STRING.required(),
+          }),
+        )
+        .required(),
       password: stringRequiredForRemoteProceedings,
       postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
       proceedingType: JoiValidationConstants.STRING.valid(

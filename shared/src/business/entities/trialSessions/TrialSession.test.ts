@@ -618,4 +618,37 @@ describe('TrialSession entity', () => {
       expect(trialSession.dismissedAlertForNOTT).toBe(false);
     });
   });
+
+  describe('paperServicePdfs', () => {
+    it('should default to an empty array when the trial session does not already have any paper service pdfs', () => {
+      const trialSession = new TrialSession(
+        {
+          ...MOCK_TRIAL_REGULAR,
+          paperServicePdfs: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.paperServicePdfs).toEqual([]);
+    });
+
+    it('should require a fileId and title on each entry to be valid', () => {
+      const trialSession = new TrialSession(
+        {
+          ...MOCK_TRIAL_REGULAR,
+          paperServicePdfs: [{}],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.getFormattedValidationErrors()).toEqual({
+        documentId: '"paperServicePdfs[0].documentId" is required',
+        title: '"paperServicePdfs[0].title" is required',
+      });
+    });
+  });
 });
