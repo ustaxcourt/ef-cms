@@ -4,35 +4,28 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('createPaperServicePdfForCasesAction', () => {
-  beforeAll(() => {
-    presenter.providers.applicationContext = applicationContext;
-  });
+  presenter.providers.applicationContext = applicationContext;
 
-  it('should return appropriate paper service information', async () => {
-    const paperServiceInfo = {
-      docketEntryId: '2c4998ed-d86b-4030-9ec3-5952199b6bee',
-      hasPaper: true,
-      pdfUrl: 'www.example.com',
-    };
-    applicationContext
-      .getUseCases()
-      .generateTrialSessionPaperServicePdfInteractor.mockResolvedValue(
-        paperServiceInfo,
-      );
-    const trialNoticePdfsKeys = ['382-830-29'];
+  it('should make a call to combine the paper service documents for the cases on the trial session that have requested paper service', async () => {
+    const mockTrialNoticePdfsKeys = ['382-23', '983-23'];
+    const mockTrialSessionId = '23c5cf9b-d60a-4ddc-b173-62ffbfc3bbfc';
 
     await runAction(createPaperServicePdfForCasesAction, {
       modules: {
         presenter,
       },
       props: {
-        trialNoticePdfsKeys,
+        trialNoticePdfsKeys: mockTrialNoticePdfsKeys,
+        trialSessionId: mockTrialSessionId,
       },
     });
 
     expect(
       applicationContext.getUseCases()
         .generateTrialSessionPaperServicePdfInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), { trialNoticePdfsKeys });
+    ).toHaveBeenCalledWith(expect.anything(), {
+      trialNoticePdfsKeys: mockTrialNoticePdfsKeys,
+      trialSessionId: mockTrialSessionId,
+    });
   });
 });
