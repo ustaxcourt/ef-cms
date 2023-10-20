@@ -1,3 +1,4 @@
+import { APIGatewayProxyEvent } from 'aws-lambda';
 import { genericHandler } from '../../genericHandler';
 
 /**
@@ -5,7 +6,9 @@ import { genericHandler } from '../../genericHandler';
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-export const getCountOfCaseDocumentsFiledByJudgesLambda = event =>
+export const getCountOfCaseDocumentsFiledByJudgesLambda = (
+  event: APIGatewayProxyEvent,
+) =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
