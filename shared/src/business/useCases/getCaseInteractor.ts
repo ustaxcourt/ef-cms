@@ -1,4 +1,3 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -108,15 +107,6 @@ export const getCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
 ) => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const isConsolidatedGroupAccessEnabled =
-    featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
-    ];
-
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
@@ -146,10 +136,7 @@ export const getCaseInteractor = async (
         ROLE_PERMISSIONS.GET_CASE,
         getPetitionerById(caseRecord, currentUser.userId).contactId,
       );
-    } else if (
-      isConsolidatedGroupAccessEnabled &&
-      caseRecord.leadDocketNumber
-    ) {
+    } else if (caseRecord.leadDocketNumber) {
       isAuthorizedToGetCase = isUserPartOfGroup({
         consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
@@ -162,7 +149,7 @@ export const getCaseInteractor = async (
     user: currentUser,
   });
 
-  if (isConsolidatedGroupAccessEnabled && caseRecord.leadDocketNumber) {
+  if (caseRecord.leadDocketNumber) {
     isAssociatedWithCase =
       isAssociatedWithCase ||
       isUserPartOfGroup({

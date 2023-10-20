@@ -21,7 +21,7 @@ describe('generateCaseStatus', () => {
 
   for (let index = 0; index < statusLabelsPostUPDATE.length; index++) {
     const caseFilter = statusLabelsPostUPDATE[index];
-    it(`should return the correct status label for filter code: ${caseFilter.key} after the UPDATED_TRIAL_STATUS_TYPES is turned on`, () => {
+    it(`should return the correct status label for filter code: ${caseFilter.key}`, () => {
       const result = generateCaseStatus(caseFilter.key);
       expect(result).toEqual(caseFilter.label);
     });

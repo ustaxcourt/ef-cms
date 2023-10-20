@@ -125,11 +125,18 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await cerebralTest.runSequence('openPdfPreviewModalSequence', {
+      file: fakeFile,
+      modalId: 'PDFPreviewModal-Entry of Appearance for Respondent',
+    });
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'redactionAcknowledgement',
       value: true,
     });
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 };
