@@ -28,18 +28,15 @@ describe('judgeActivityReportHelper', () => {
     mockSubmittedAndCavCasesByJudge = [
       {
         ...MOCK_SUBMITTED_CASE,
-        daysElapsedSinceLastStatusChange: 20,
         docketNumber: '101-20',
         formattedCaseCount: 4,
       },
       {
         ...MOCK_SUBMITTED_CASE,
-        daysElapsedSinceLastStatusChange: 1,
         docketNumber: '103-20',
       },
       {
         ...MOCK_SUBMITTED_CASE,
-        daysElapsedSinceLastStatusChange: 7,
         docketNumber: '102-20',
       },
     ];
@@ -372,9 +369,6 @@ describe('judgeActivityReportHelper', () => {
       baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
         mockSubmittedAndCavCasesByJudge;
 
-      baseState.judgeActivityReport.judgeActivityReportData.totalCountForSubmittedAndCavCases =
-        mockSubmittedAndCavCasesByJudge.length;
-
       const { progressDescriptionTableTotal } = runCompute(
         judgeActivityReportHelper,
         {
@@ -393,19 +387,16 @@ describe('judgeActivityReportHelper', () => {
       mockSubmittedAndCavCasesByJudge = [
         {
           ...MOCK_SUBMITTED_CASE,
-          daysElapsedSinceLastStatusChange: 1,
           docketNumber: '101-20',
           formattedCaseCount: 4,
           leadDocketNumber: '101-20',
         },
         {
           ...MOCK_SUBMITTED_CASE,
-          daysElapsedSinceLastStatusChange: 1,
           docketNumber: '110-15',
           formattedCaseCount: 1,
         },
         {
-          daysElapsedSinceLastStatusChange: 1,
           docketNumber: '202-11',
           formattedCaseCount: 1,
         },
@@ -438,35 +429,10 @@ describe('judgeActivityReportHelper', () => {
       expect(leadCase.isLeadCase).toBe(true);
       expect(leadCase.inConsolidatedGroup).toBe(true);
       expect(leadCase.formattedCaseCount).toBe(4);
-      expect(leadCase.daysElapsedSinceLastStatusChange).toBe(1);
-
       expect(unconsolidatedCases.length).toBe(2);
       unconsolidatedCases.forEach(unconsolidatedCase => {
         expect(unconsolidatedCase.formattedCaseCount).toBe(1);
-        expect(unconsolidatedCase.daysElapsedSinceLastStatusChange).toBe(1);
       });
-    });
-
-    it('should return submittedAndCavCasesByJudge off of state.submittedAndCavCasesByJudge sorted by daysElapsedSinceLastStatusChange in descending order', () => {
-      baseState.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
-        mockSubmittedAndCavCasesByJudge;
-      const { submittedAndCavCasesByJudge } = runCompute(
-        judgeActivityReportHelper,
-        {
-          state: baseState,
-        },
-      );
-
-      expect(submittedAndCavCasesByJudge.length).toBe(3);
-      expect(
-        submittedAndCavCasesByJudge[0].daysElapsedSinceLastStatusChange,
-      ).toBe(1);
-      expect(
-        submittedAndCavCasesByJudge[1].daysElapsedSinceLastStatusChange,
-      ).toBe(1);
-      expect(
-        submittedAndCavCasesByJudge[2].daysElapsedSinceLastStatusChange,
-      ).toBe(1);
     });
 
     it('should sort by daysElapsedSinceLastStatusChange descending', () => {
@@ -475,18 +441,33 @@ describe('judgeActivityReportHelper', () => {
         [
           {
             ...MOCK_SUBMITTED_CASE,
-            daysElapsedSinceLastStatusChange: 20,
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-11T14:19:28.717Z',
+              },
+            ],
             docketNumber: '101-20',
             formattedCaseCount: 4,
           },
           {
             ...MOCK_SUBMITTED_CASE,
-            daysElapsedSinceLastStatusChange: 1,
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-29T14:19:28.717Z',
+              },
+            ],
             docketNumber: '103-20',
           },
           {
             ...MOCK_SUBMITTED_CASE,
-            daysElapsedSinceLastStatusChange: 7,
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-15T14:19:28.717Z',
+              },
+            ],
             docketNumber: '102-20',
           },
         ];
@@ -504,21 +485,21 @@ describe('judgeActivityReportHelper', () => {
 
       const expectedOrder = [
         {
-          daysElapsedSinceLastStatusChange: 20,
           docketNumber: '101-20',
+          statusDate: '05/11/23',
         },
         {
-          daysElapsedSinceLastStatusChange: 7,
           docketNumber: '102-20',
+          statusDate: '05/15/23',
         },
         {
-          daysElapsedSinceLastStatusChange: 1,
           docketNumber: '103-20',
+          statusDate: '05/29/23',
         },
       ];
       const actualOrder = submittedAndCavCasesByJudge.map(c => ({
-        daysElapsedSinceLastStatusChange: c.daysElapsedSinceLastStatusChange,
         docketNumber: c.docketNumber,
+        statusDate: c.statusDate,
       }));
       expect(actualOrder).toEqual(expectedOrder);
     });
@@ -530,20 +511,17 @@ describe('judgeActivityReportHelper', () => {
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Colvin',
-            daysElapsedSinceLastStatusChange: 20,
             docketNumber: '101-20',
             formattedCaseCount: 4,
           },
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Buch',
-            daysElapsedSinceLastStatusChange: 1,
             docketNumber: '103-20',
           },
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Sotomayor',
-            daysElapsedSinceLastStatusChange: 7,
             docketNumber: '102-20',
           },
         ];
@@ -570,6 +548,92 @@ describe('judgeActivityReportHelper', () => {
         },
         {
           associatedJudge: 'Buch',
+          docketNumber: '103-20',
+        },
+      ];
+      const actualOrder = submittedAndCavCasesByJudge.map(c => ({
+        associatedJudge: c.associatedJudge,
+        docketNumber: c.docketNumber,
+      }));
+      expect(actualOrder).toEqual(expectedOrder);
+    });
+
+    it('should always secondarily sort by days elapsed since last status change descending', () => {
+      const state = cloneDeep(baseState);
+      state.judgeActivityReport.judgeActivityReportData.submittedAndCavCasesByJudge =
+        [
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2015-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '101-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Ashford',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '103-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2023-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '102-20',
+          },
+          {
+            ...MOCK_SUBMITTED_CASE,
+            associatedJudge: 'Colvin',
+            caseStatusHistory: [
+              {
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                date: '2017-05-11T14:19:28.717Z',
+              },
+            ],
+            docketNumber: '104-20',
+          },
+        ];
+      state.tableSort = {
+        sortField: 'associatedJudge',
+        sortOrder: DESCENDING,
+      };
+
+      const { submittedAndCavCasesByJudge } = runCompute(
+        judgeActivityReportHelper,
+        {
+          state,
+        },
+      );
+
+      const expectedOrder = [
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '101-20',
+        },
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '104-20',
+        },
+        {
+          associatedJudge: 'Colvin',
+          docketNumber: '102-20',
+        },
+        {
+          associatedJudge: 'Ashford',
           docketNumber: '103-20',
         },
       ];

@@ -1,10 +1,9 @@
+import { Case } from '../../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '../../entities/EntityConstants';
-import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   NotFoundError,
@@ -109,22 +108,12 @@ export const serveExternallyFiledDocument = async (
   let caseEntities: Case[] = [];
   const coversheetLength = 1;
 
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const consolidateCaseDuplicateDocketEntries =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key];
-
   const subjectCaseIsSimultaneousDocType =
     SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
       originalSubjectDocketEntry.eventCode,
     ) || originalSubjectDocketEntry.documentTitle?.includes('Simultaneous');
 
-  if (
-    !consolidateCaseDuplicateDocketEntries ||
-    subjectCaseIsSimultaneousDocType
-  ) {
+  if (subjectCaseIsSimultaneousDocType) {
     docketNumbers = [subjectCaseDocketNumber];
   } else {
     docketNumbers = [subjectCaseDocketNumber, ...docketNumbers];

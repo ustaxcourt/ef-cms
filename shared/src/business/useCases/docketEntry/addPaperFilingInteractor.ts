@@ -1,10 +1,9 @@
+import { Case, isLeadCase } from '../../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
   ROLES,
 } from '../../entities/EntityConstants';
-import { Case, isLeadCase } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
@@ -59,14 +58,7 @@ export const addPaperFiling = async (
   const { docketNumber: subjectCaseDocketNumber, isFileAttached } =
     documentMetadata;
 
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const isCaseConsolidationFeatureOn =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.MULTI_DOCKETABLE_PAPER_FILINGS.key];
-
-  if (!isCaseConsolidationFeatureOn || isSavingForLater) {
+  if (isSavingForLater) {
     consolidatedGroupDocketNumbers = [subjectCaseDocketNumber];
   } else {
     consolidatedGroupDocketNumbers = [

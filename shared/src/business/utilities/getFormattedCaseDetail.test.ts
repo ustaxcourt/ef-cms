@@ -414,13 +414,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result).toHaveProperty('consolidatedCases');
       expect(result.consolidatedCases).toMatchObject([MOCK_CASE]);
     });
-
-    it('should not set consolidated cases if none are passed', () => {
-      const result = formatCase(applicationContext, MOCK_CASE);
-
-      expect(result).toMatchObject(MOCK_CASE);
-      expect(result).not.toHaveProperty('consolidatedCases');
-    });
   });
 
   describe('getFormattedCaseDetail', () => {
