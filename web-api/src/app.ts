@@ -1032,7 +1032,7 @@ if (process.env.IS_LOCAL) {
     }),
   );
 
-  app.post('/users/local', lambdaWrapper(createUserCognitoLambda));
+  app.post('/account/create', lambdaWrapper(createUserCognitoLambda));
 
   app.post('/change-password-local', lambdaWrapper(changePasswordLocalLambda));
 

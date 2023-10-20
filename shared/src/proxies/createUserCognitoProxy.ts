@@ -11,6 +11,6 @@ export const createUserCognitoInteractor = (applicationContext, { user }) => {
   return post({
     applicationContext,
     body: user,
-    endpoint: '/users/local',
+    endpoint: '/account/create',
   });
 };

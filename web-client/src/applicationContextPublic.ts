@@ -54,6 +54,7 @@ import {
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
+import { createUserCognitoInteractor } from '../../shared/src/proxies/createUserCognitoProxy';
 import {
   formatDocketEntry,
   sortDocketEntries,
@@ -97,6 +98,7 @@ const ADVANCED_SEARCH_TABS = {
 
 const allUseCases = {
   casePublicSearchInteractor,
+  createUserCognitoInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,

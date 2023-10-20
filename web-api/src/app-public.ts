@@ -52,6 +52,7 @@ app.use(logger());
 
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
+import { createUserCognitoLambda } from '@web-api/users/createUserCognitoLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
@@ -133,3 +134,5 @@ app.get(
 );
 
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
+
+app.post('/account/create', lambdaWrapper(createUserCognitoLambda));
