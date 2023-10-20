@@ -114,7 +114,7 @@ export const updateTrialSessionInteractor = async (
     const { PDFDocument } = await applicationContext.getPdfLib();
     const paperServicePdfsCombined = await PDFDocument.create();
 
-    for (let calendaredCase of calendaredCases) {
+    for (const calendaredCase of calendaredCases) {
       await updateAssociatedCaseAndSetNoticeOfChange({
         applicationContext,
         currentTrialSession,
@@ -228,7 +228,6 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
         });
     }
 
-    // should issue notice of change of trial judge only when changing from one judge to another
     const shouldIssueNoticeOfChangeOfTrialJudge =
       currentTrialSession.isCalendared &&
       currentTrialSession.judge &&
