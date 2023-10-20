@@ -63,7 +63,7 @@ export class Case extends JoiValidationEntity {
   public blocked?: boolean;
   public blockedDate?: string;
   public blockedReason?: string;
-  public caseStatusHistory: any[];
+  public caseStatusHistory: CaseStatusChange[];
   public caseNote?: string;
   public damages?: number;
   public highPriority?: boolean;
@@ -2443,4 +2443,10 @@ const generateCaptionFromContacts = ({
       break;
   }
   return caseCaption;
+};
+
+export type CaseStatusChange = {
+  changedBy: string;
+  date: string;
+  updatedCaseStatus: string;
 };

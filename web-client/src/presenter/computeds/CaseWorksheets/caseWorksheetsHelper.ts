@@ -1,103 +1,80 @@
-import { CAV_AND_SUBMITTED_CASE_STATUS } from '@shared/business/entities/EntityConstants';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
 import { formatPositiveNumber } from '@shared/business/utilities/formatPositiveNumber';
 import { state } from '@web-client/presenter/app.cerebral';
 
-type CaseWorksheetTableRow = RawCase & {
-  worksheet: RawCaseWorksheet;
+type CaseWorksheetTableRow = {
+  worksheet?: RawCaseWorksheet;
   consolidatedIconTooltipText: string;
   isLeadCase: boolean;
   inConsolidatedGroup: boolean;
   formattedCaseCount: number;
-  daysSinceLastStatusChange: number;
-  formattedSubmittedCavStatusChangedDate: string;
+  daysSinceLastStatusChange: string;
+  caseCaption: string;
+  docketNumber: string;
+  docketNumberWithSuffix: string;
+  formattedSubmittedCavStatusDate: string;
+  finalBriefDueDateFormatted: string;
+  status: string;
 };
 
-interface ICaseWorksheetsHelper {
+type CaseWorksheetsHelper = {
   caseWorksheetsFormatted: CaseWorksheetTableRow[];
-}
+};
 
 export const caseWorksheetsHelper = (
-  get: any,
-  applicationContext: IApplicationContext,
-): ICaseWorksheetsHelper => {
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): CaseWorksheetsHelper => {
   const { isLeadCase } = applicationContext.getUtilities();
 
-  const { submittedAndCavCasesByJudge = [], worksheets = [] } = get(
-    state.submittedAndCavCases,
-  );
+  const { submittedAndCavCasesByJudge = [] } = get(state.submittedAndCavCases);
 
-  const worksheetsObj: { [docketNumber: string]: RawCaseWorksheet } = {};
-  worksheets.forEach(ws => {
-    worksheetsObj[ws.docketNumber] = {
-      ...ws,
-      finalBriefDueDateFormatted: applicationContext
-        .getUtilities()
-        .formatDateString(
-          ws.finalBriefDueDate,
-          applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+  const caseWorksheetsFormatted = submittedAndCavCasesByJudge
+    .map(aCase => {
+      const { daysElapsedSinceLastStatusChange, statusDate } =
+        applicationContext
+          .getUtilities()
+          .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+
+      const finalBriefDueDateFormatted = aCase.caseWorksheet?.finalBriefDueDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(
+              aCase.caseWorksheet.finalBriefDueDate,
+              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+            )
+        : '';
+
+      return {
+        caseCaption: aCase.caseCaption,
+        consolidatedIconTooltipText: isLeadCase(aCase) ? 'Lead case' : '',
+        daysSinceLastStatusChange: daysElapsedSinceLastStatusChange,
+        docketNumber: aCase.docketNumber,
+        docketNumberWithSuffix: aCase.docketNumberWithSuffix,
+        finalBriefDueDateFormatted,
+        formattedCaseCount: aCase.formattedCaseCount || 1,
+        formattedSubmittedCavStatusDate: statusDate,
+        inConsolidatedGroup: !!isLeadCase(aCase),
+        isLeadCase: isLeadCase(aCase),
+        status: aCase.status,
+        worksheet: aCase.caseWorksheet,
+      };
+    })
+    .sort((a, b) => {
+      return b.daysSinceLastStatusChange - a.daysSinceLastStatusChange;
+    })
+    .map(ws => {
+      return {
+        ...ws,
+        daysSinceLastStatusChange: formatPositiveNumber(
+          ws.daysSinceLastStatusChange,
         ),
-    };
-  });
-
-  const today = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      applicationContext.getConstants().DATE_FORMATS.ISO,
-    );
-
-  const caseWorksheetsFormatted = submittedAndCavCasesByJudge.map(aCase => {
-    const formattedSubmittedCavStatusDate = getSubmittedOrCAVDate(
-      applicationContext,
-      aCase.caseStatusHistory,
-    );
-
-    const lastStatusChange = aCase.caseStatusHistory.slice(-1)[0].date;
-    const daysSinceLastStatusChange = applicationContext
-      .getUtilities()
-      .calculateDifferenceInDays(today, lastStatusChange);
-
-    return {
-      caseCaption: aCase.caseCaption,
-      consolidatedIconTooltipText: isLeadCase(aCase) ? 'Lead case' : '',
-      daysSinceLastStatusChange: formatPositiveNumber(
-        daysSinceLastStatusChange,
-      ),
-      docketNumber: aCase.docketNumber,
-      docketNumberWithSuffix: aCase.docketNumberWithSuffix,
-      formattedCaseCount: aCase.formattedCaseCount || 1,
-      formattedSubmittedCavStatusDate,
-      inConsolidatedGroup: !!isLeadCase(aCase),
-      isLeadCase: isLeadCase(aCase),
-      status: aCase.status,
-      worksheet: worksheetsObj[aCase.docketNumber] || {},
-    };
-  });
-
-  caseWorksheetsFormatted.sort((a, b) => {
-    return b.daysSinceLastStatusChange - a.daysSinceLastStatusChange;
-  });
+      };
+    });
 
   return {
     caseWorksheetsFormatted,
   };
-};
-
-export const getSubmittedOrCAVDate = (
-  applicationContext: IApplicationContext,
-  caseStatusHistory: { updatedCaseStatus: string; date: string }[],
-): string => {
-  const foundDate = caseStatusHistory.find(statusHistory =>
-    CAV_AND_SUBMITTED_CASE_STATUS.includes(statusHistory.updatedCaseStatus),
-  )?.date;
-
-  if (!foundDate) return '';
-
-  return applicationContext
-    .getUtilities()
-    .formatDateString(
-      foundDate,
-      applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-    );
 };
