@@ -210,6 +210,7 @@
     "start:migration": "node ./web-api/send-migration-segment-messages.js",
     "start:public:ci": "npm run clean:public && CI=true npm run start:public",
     "start:public-host": "servor dist-public index.html 5678 &",
+    "start:public:cognito-local": "USE_COGNITO_LOCAL=true npm run start:public",
     "start:public": "npm run start:public-host && CHECK_DEPLOY_DATE_INTERVAL=5000 WATCH=true USTC_ENV=dev IS_LOCAL=true PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn node esbuild.public.config.mjs",
     "start:s3rver": "s3rver -d web-api/storage/s3 -a 0.0.0.0 -p 9000 --configure-bucket $DOCUMENTS_BUCKET_NAME web-api/cors-policy.xml --configure-bucket $TEMP_DOCUMENTS_BUCKET_NAME web-api/cors-policy.xml",
     "switch-colors": "./web-client/switch-colors.sh",

@@ -1,13 +1,13 @@
 import { ROLES } from '../../entities/EntityConstants';
 
 /**
- * createUserInteractorLocal
+ * createUserCognitoInteractor
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-export const createUserInteractorLocal = async (
+export const createUserCognitoInteractor = async (
   applicationContext: IApplicationContext,
   { user }: { user: { password: string; name: string; email: string } },
 ) => {

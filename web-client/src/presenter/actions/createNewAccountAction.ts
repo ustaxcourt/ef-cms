@@ -26,7 +26,7 @@ export const createNewAccountAction = async ({
   try {
     await applicationContext
       .getUseCases()
-      .createUserInteractorLocal(applicationContext, {
+      .createUserCognitoInteractor(applicationContext, {
         user,
       });
     return path.yes({

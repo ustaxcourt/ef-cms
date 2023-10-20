@@ -38,6 +38,7 @@ import {
 } from '../../shared/src/business/entities/cases/Case';
 import {
   ERROR_MAP_429,
+  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
   getCognitoResendVerificationLinkUrl,
@@ -160,6 +161,7 @@ const applicationContextPublic = {
     return process.env.API_URL || 'http://localhost:5000';
   },
   getCaseTitle: Case.getCaseTitle,
+  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
   getCognitoResendVerificationLinkUrl,

@@ -92,6 +92,9 @@ const appPublic = {
     presenter.state.cognitoResendVerificationLinkUrl =
       applicationContext.getCognitoResendVerificationLinkUrl();
 
+    presenter.state.cognitoLocalEnabled =
+      applicationContext.getCognitoLocalEnabled();
+
     presenter.state.constants = applicationContext.getConstants();
 
     const advancedSearchTab = applicationContext

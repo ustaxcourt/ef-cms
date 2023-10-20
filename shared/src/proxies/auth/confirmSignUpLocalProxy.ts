@@ -8,7 +8,7 @@ import { post } from '../requests';
  * @param {string} auth.userEmail the email of the user confirming their account
  * @returns {Promise<*>} the promise of the api call
  */
-exports.confirmSignUpLocalInteractor = (
+export const confirmSignUpLocalInteractor = (
   applicationContext,
   { confirmationCode, userEmail },
 ) => {
