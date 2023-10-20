@@ -242,6 +242,7 @@ const updateIrsPractitioners = ({
           .updateIrsPractitionerOnCase({
             applicationContext,
             docketNumber: caseToUpdate.docketNumber,
+            leadDocketNumber: caseToUpdate.leadDocketNumber,
             practitioner,
             userId: practitioner.userId,
           });
@@ -301,6 +302,7 @@ const updatePrivatePractitioners = ({
           .updatePrivatePractitionerOnCase({
             applicationContext,
             docketNumber: caseToUpdate.docketNumber,
+            leadDocketNumber: caseToUpdate.leadDocketNumber,
             practitioner,
             userId: practitioner.userId,
           });
