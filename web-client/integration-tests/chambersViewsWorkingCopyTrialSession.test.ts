@@ -94,6 +94,6 @@ describe('Chambers dashboard', () => {
     const caseWithoutPtm = trialSessionFormatted.allCases.find(
       c => c.docketNumber === cerebralTest.docketNumber4,
     );
-    expect(caseWithoutPtm.filingPartiesCode).toBeUndefined();
+    expect(caseWithoutPtm.filingPartiesCode).toEqual('');
   });
 });

@@ -43,7 +43,6 @@ export const docketClerkCreatesAnOrder = (cerebralTest, data) => {
       'consolidated-cases-add-docket-numbers': expect.anything(),
       'document-visibility-policy-change-date': expect.anything(),
       'e-consent-fields-enabled-feature-flag': expect.anything(),
-      'multi-docketable-paper-filings': expect.anything(),
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
