@@ -8,7 +8,7 @@ import { User } from '../../entities/User';
 export const getUsersInSectionInteractor = async (
   applicationContext: IApplicationContext,
   { section }: { section: string },
-) => {
+): Promise<RawUser[]> => {
   const user = applicationContext.getCurrentUser();
   let rolePermission;
 
