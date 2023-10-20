@@ -1,14 +1,11 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
-import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
-import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
-import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -39,12 +36,6 @@ export const gotoCreateOrderSequence = [
           setCreateOrderModalDataOnFormAction,
           setIsCreatingOrderAction,
           convertHtml2PdfSequence,
-          parallel([
-            [
-              getConsolidatedCasesByCaseAction,
-              setConsolidatedCasesForCaseAction,
-            ],
-          ]),
           setupCurrentPageAction('CreateOrder'),
         ],
       },
