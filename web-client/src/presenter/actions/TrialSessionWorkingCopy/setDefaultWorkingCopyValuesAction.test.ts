@@ -65,7 +65,7 @@ describe('setDefaultWorkingCopyValuesAction', () => {
     });
   });
 
-  it('should convert all `settled` trial status types to `basisReached` when UPDATED_TRIAL_STATUS_TYPES flag is true', async () => {
+  it('should convert all `settled` trial status types to `basisReached`', async () => {
     const result = await runAction(setDefaultWorkingCopyValuesAction, {
       modules: {
         presenter,
