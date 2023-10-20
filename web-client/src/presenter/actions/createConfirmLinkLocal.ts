@@ -1,8 +1,12 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const createConfirmLinkLocal = ({ get }: ActionProps) => {
-  if (process.env.STAGE !== 'local') return;
+export const createConfirmLinkLocal = ({
+  applicationContext,
+  get,
+}: ActionProps) => {
+  if (applicationContext.getEnvironment().stage !== 'local') return;
+
   const { email } = get(state.form);
 
   // confirmation code is currently intentionally hard-coded in cognitoLocal
@@ -17,7 +21,7 @@ export const createConfirmLinkLocal = ({ get }: ActionProps) => {
   return {
     alertSuccess: {
       alertType: 'success',
-      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. /n 
+      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. \n 
         <a href="${confirmationLink}">log in here</a>.`,
       title: 'Account Created Locally',
     },
