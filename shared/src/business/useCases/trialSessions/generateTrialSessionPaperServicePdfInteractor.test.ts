@@ -6,7 +6,7 @@ import { testPdfDoc } from '../../test/getFakeFile';
 
 describe('generateTrialSessionPaperServicePdfInteractor', () => {
   const mockPdfUrl = 'www.example.com';
-  const mockDocumentId = '46f3244d-aaca-48c8-a7c1-de561d000c90';
+  const mockFileId = '46f3244d-aaca-48c8-a7c1-de561d000c90';
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
@@ -18,7 +18,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .saveFileAndGenerateUrl.mockResolvedValue({
-        fileId: mockDocumentId,
+        fileId: mockFileId,
         url: mockPdfUrl,
       });
   });
@@ -63,7 +63,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
       applicationContext: expect.anything(),
       trialSessionToUpdate: expect.objectContaining({
         paperServicePdfs: [
-          { documentId: mockDocumentId, title: 'Initial Calendaring' },
+          { fileId: mockFileId, title: 'Initial Calendaring' },
         ],
       }),
     });
@@ -80,7 +80,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     ).toMatchObject({
       message: {
         action: 'paper_service_complete',
-        docketEntryId: mockDocumentId,
+        docketEntryId: mockFileId,
         hasPaper: true,
         pdfUrl: expect.anything(),
       },

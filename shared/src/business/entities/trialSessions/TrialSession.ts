@@ -105,7 +105,7 @@ export class TrialSession extends JoiValidationEntity {
   public trialClerk?: TTrialClerk;
   public trialLocation?: string;
   public trialSessionId?: string;
-  public paperServicePdfs: { documentId: string; title: string }[];
+  public paperServicePdfs: { fileId: string; title: string }[];
 
   public static PAPER_SERVICE_PDF_TTL = 60 * 60 * 72;
 
@@ -203,7 +203,7 @@ export class TrialSession extends JoiValidationEntity {
         .array()
         .items(
           joi.object().keys({
-            documentId: JoiValidationConstants.UUID.required(),
+            fileId: JoiValidationConstants.UUID.required(),
             title: JoiValidationConstants.STRING.required(),
           }),
         )
@@ -545,8 +545,8 @@ export class TrialSession extends JoiValidationEntity {
     return this;
   }
 
-  addPaperServicePdf(documentId: string, title: string): void {
-    this.paperServicePdfs.push({ documentId, title });
+  addPaperServicePdf(fileId: string, title: string): void {
+    this.paperServicePdfs.push({ fileId, title });
   }
 }
 

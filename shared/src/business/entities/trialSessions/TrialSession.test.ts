@@ -646,7 +646,7 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.getFormattedValidationErrors()).toEqual({
-        documentId: '"paperServicePdfs[0].documentId" is required',
+        fileId: '"paperServicePdfs[0].fileId" is required',
         title: '"paperServicePdfs[0].title" is required',
       });
     });
