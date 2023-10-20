@@ -1,6 +1,6 @@
-import { ALLOWLIST_FEATURE_FLAGS, ROLES } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generatePrintableTrialSessionCopyReportInteractor } from './generatePrintableTrialSessionCopyReportInteractor';
 
@@ -9,7 +9,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockTrialSession;
 
   const interactorProps = {
-    areUpdatedTrialSessionTypesEnabled: false,
     filters: {
       aBasisReached: true,
       continued: true,
@@ -38,12 +37,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'https://example.com' });
-
-    applicationContext
-      .getUseCases()
-      .getAllFeatureFlagsInteractor.mockReturnValue({
-        [ALLOWLIST_FEATURE_FLAGS.UPDATED_TRIAL_STATUS_TYPES.key]: false,
-      });
   });
 
   beforeEach(() => {
