@@ -41,13 +41,17 @@ export const VerificationSent = connect(
         <div className={'bg-white padding-4'}>
           <h2>Email address verification sent</h2>
           <p>
-            An email to verify your email address was sent to {maskEmail(email)}{' '}
-            . If you didn&apos;t receive a verification email, check your spam
-            folder or you can{' '}
-            <a href={resendVerificationLink}>
-              send the verification email again
-            </a>
-            .
+            An email to verify your email address was sent
+            {email && (
+              <>
+                to {maskEmail(email)} . If you didn&apos;t receive a
+                verification email, check your spam folder or you can{' '}
+                <a href={resendVerificationLink}>
+                  send the verification email again
+                </a>
+                .
+              </>
+            )}
           </p>
         </div>
       </div>
