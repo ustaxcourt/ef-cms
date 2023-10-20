@@ -81,8 +81,8 @@ export const conditionalPut = ({
   ConditionExpression,
   Item,
 }: {
-  ConditionExpression?: string;
-  Item: TDynamoRecord;
+  ConditionExpression: string;
+  Item: Record<string, any>;
   applicationContext: IApplicationContext;
 }): Promise<TDynamoRecord> => {
   return applicationContext
