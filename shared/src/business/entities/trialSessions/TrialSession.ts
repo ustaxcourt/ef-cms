@@ -107,6 +107,8 @@ export class TrialSession extends JoiValidationEntity {
   public trialSessionId?: string;
   public paperServicePdfs: { documentId: string; title: string }[];
 
+  public static PAPER_SERVICE_PDF_TTL = 60 * 60 * 72;
+
   static PROPERTIES_REQUIRED_FOR_CALENDARING = {
     [TRIAL_SESSION_PROCEEDING_TYPES.inPerson]: [
       'address1',
