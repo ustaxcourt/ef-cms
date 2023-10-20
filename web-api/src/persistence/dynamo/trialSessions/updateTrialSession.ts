@@ -1,6 +1,9 @@
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { conditionalPut, put } from '../../dynamodbClientService';
 import { omit } from 'lodash';
-import { put } from '../../dynamodbClientService';
 
 const fieldsToOmitBeforePersisting = ['paperServicePdfs'];
 
@@ -15,14 +18,14 @@ export const updateTrialSession = async ({
     const pk = `trial-session|${trialSessionToUpdate.trialSessionId}`;
     const sk = `paper-service-pdf|${item.documentId}`;
 
-    await put({
+    await conditionalPut({
       ConditionExpression:
         'attribute_not_exists(pk) AND attribute_not_exists(sk)',
       Item: {
         ...item,
         pk,
         sk,
-        ttl: 60 * 60 * 72,
+        ttl: TrialSession.PAPER_SERVICE_PDF_TTL,
       },
       applicationContext,
     });
