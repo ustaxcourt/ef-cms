@@ -3,5 +3,5 @@ import { setShowModalFactoryAction } from '@web-client/presenter/actions/setShow
 
 export const openPrintGeneratedPaperServiceSequence = [
   setReprintPaperServicePdfsModalFormAction,
-  setShowModalFactoryAction('PrintPreviouslyGeneratedPaperServiceModal'),
+  setShowModalFactoryAction('ReprintPaperServiceDocumentsModal'),
 ];

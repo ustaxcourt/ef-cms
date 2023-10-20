@@ -10,7 +10,7 @@ import { InactiveCases } from './InactiveCases';
 import { NoticeStatusModal } from '../NoticeStatusModal';
 import { OpenCases } from './OpenCases';
 import { PaperServiceStatusModal } from '../PaperServiceStatusModal';
-import { PrintPreviouslyGeneratedPaperServiceModal } from '@web-client/views/TrialSessions/PrintPreviouslyGeneratedPaperServiceModal';
+import { ReprintPaperServiceDocumentsModal } from '@web-client/views/TrialSessions/ReprintPaperServiceDocumentsModal';
 import { ServeThirtyDayNoticeModal } from './ServeThirtyDayNoticeModal';
 import { SetCalendarModalDialog } from './SetCalendarModalDialog';
 import { SuccessNotification } from '../SuccessNotification';
@@ -220,8 +220,8 @@ export const TrialSessionDetail = connect(
         )}
         {showModal === 'NoticeStatusModal' && <NoticeStatusModal />}
         {showModal === 'PaperServiceStatusModal' && <PaperServiceStatusModal />}
-        {showModal === 'PrintPreviouslyGeneratedPaperServiceModal' && (
-          <PrintPreviouslyGeneratedPaperServiceModal />
+        {showModal === 'ReprintPaperServiceDocumentsModal' && (
+          <ReprintPaperServiceDocumentsModal />
         )}
         {showModal === 'DeleteTrialSessionModal' && <DeleteTrialSessionModal />}
       </>
