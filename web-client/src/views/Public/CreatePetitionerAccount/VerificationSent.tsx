@@ -5,11 +5,11 @@ import React from 'react';
 
 export const VerificationSent = connect(
   {
-    alertError: state.alertError,
+    alertSuccess: state.alertSuccess,
     email: state.cognito.email,
     resendVerificationLink: state.cognitoResendVerificationLinkUrl,
   },
-  ({ alertError, email, resendVerificationLink }) => {
+  ({ alertSuccess, email, resendVerificationLink }) => {
     function maskEmail(rawEmail: string) {
       const parts = rawEmail.split('@');
       if (parts.length !== 2) return rawEmail;
@@ -26,22 +26,22 @@ export const VerificationSent = connect(
 
     return (
       <div className="grid-container grid-gap-lg padding-x-4">
-        {alertError && (
+        {alertSuccess && (
           <div
             className="grid-row margin-bottom-2"
             style={{ width: 'fit-content' }}
           >
             <MessageAlert
-              alertType={alertError.alertType}
-              message={alertError.message}
-              title={alertError.title}
+              alertType={alertSuccess.alertType}
+              message={alertSuccess.message}
+              title={alertSuccess.title}
             ></MessageAlert>
           </div>
         )}
         <div className={'bg-white padding-4'}>
           <h2>Email address verification sent</h2>
           <p>
-            An email to verify your email address was sent
+            An email to verify your email address was sent{' '}
             {email && (
               <>
                 to {maskEmail(email)} . If you didn&apos;t receive a

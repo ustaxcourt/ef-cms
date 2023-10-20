@@ -32,6 +32,7 @@ const computeds = {
 export const baseState = {
   advancedSearchForm: {},
   advancedSearchTab: 'case',
+  alertSuccess: null,
   caseDetail: {} as RawPublicCase,
   cognito: { email: '' },
   cognitoLoginUrl: '',
