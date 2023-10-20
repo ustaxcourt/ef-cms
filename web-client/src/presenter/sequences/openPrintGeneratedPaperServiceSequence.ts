@@ -1,9 +1,7 @@
+import { setReprintPaperServicePdfsModalFormAction } from '@web-client/presenter/actions/TrialSession/setReprintPaperServicePdfsModalFormAction';
 import { setShowModalFactoryAction } from '@web-client/presenter/actions/setShowModalFactoryAction';
-import { state } from '@web-client/presenter/app.cerebral';
 
 export const openPrintGeneratedPaperServiceSequence = [
-  ({ store }) => {
-    store.set(state.form, { selectedPdfs: [] });
-  },
+  setReprintPaperServicePdfsModalFormAction,
   setShowModalFactoryAction('PrintPreviouslyGeneratedPaperServiceModal'),
 ];
