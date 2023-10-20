@@ -344,9 +344,10 @@ export class TrialSession extends JoiValidationEntity {
       ...TrialSession.validationRules.COMMON,
       caseOrder: joi.array().items(
         joi.object().keys({
-          calendarNotes: JoiValidationConstants.STRING.max(200)
-            .optional()
-            .allow('', null),
+          calendarNotes: JoiValidationConstants.STRING.optional().allow(
+            '',
+            null,
+          ),
           disposition: JoiValidationConstants.STRING.max(100).when(
             'removedFromTrial',
             {
