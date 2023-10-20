@@ -15,7 +15,7 @@ import { privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully } from 
 import { privatePractitionerSeesStrickenDocketEntry } from './journey/privatePractitionerSeesStrickenDocketEntry';
 import { userSearchesForStrickenDocument } from './journey/userSearchesForStrickenDocument';
 
-describe("Docket Clerk Edits a Docket Entry's Meta", () => {
+describe('Docket Clerk Strikes a Docket Entry', () => {
   const cerebralTest = setupTest();
 
   console.error = () => null;

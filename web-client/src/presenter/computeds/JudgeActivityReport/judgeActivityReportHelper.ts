@@ -1,10 +1,14 @@
 import { ASCENDING } from '@shared/business/entities/EntityConstants';
 import { CaseDocumentsCountType } from '@web-api/persistence/elasticsearch/fetchEventCodesCountForJudges';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { Get } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-interface IJudgeActivityReportHelper {
+export const judgeActivityReportHelper = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): {
   closedCasesTotal: number;
   isFormPristine: boolean;
   opinionsFiledTotal: number;
@@ -17,12 +21,7 @@ interface IJudgeActivityReportHelper {
   submittedAndCavCasesByJudge: any;
   today: string;
   trialSessionsHeldTotal: number;
-}
-
-export const judgeActivityReportHelper = (
-  get: Get,
-  applicationContext: IApplicationContext,
-): IJudgeActivityReportHelper => {
+} => {
   const { endDate, startDate } = get(state.judgeActivityReport.filters);
 
   const { judgeNameToDisplayForHeader } = get(state.judgeActivityReport);
@@ -32,7 +31,6 @@ export const judgeActivityReportHelper = (
     opinions,
     orders,
     submittedAndCavCasesByJudge = [],
-    totalCountForSubmittedAndCavCases,
     trialSessions,
   } = get(state.judgeActivityReport.judgeActivityReportData);
 
@@ -58,48 +56,54 @@ export const judgeActivityReportHelper = (
 
   const reportHeader: string = `${judgeNameToDisplayForHeader} ${currentDate}`;
 
-  const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(
-    individualCase => {
-      let consolidatedIconTooltipText = '';
-      let isLeadCase = false;
-      let inConsolidatedGroup = false;
-      let formattedFinalBriefDueDate = '';
+  const submittedAndCavCasesRows = submittedAndCavCasesByJudge.map(aCase => {
+    let consolidatedIconTooltipText = '';
+    let isLeadCase = false;
+    let inConsolidatedGroup = false;
+    let formattedFinalBriefDueDate = '';
 
-      if (individualCase.leadDocketNumber === individualCase.docketNumber) {
-        consolidatedIconTooltipText = 'Lead case';
-        isLeadCase = true;
-        inConsolidatedGroup = true;
-      }
+    if (aCase.leadDocketNumber === aCase.docketNumber) {
+      consolidatedIconTooltipText = 'Lead case';
+      isLeadCase = true;
+      inConsolidatedGroup = true;
+    }
 
-      if (individualCase.caseWorksheet) {
-        formattedFinalBriefDueDate = individualCase.caseWorksheet
-          .finalBriefDueDate
-          ? applicationContext
-              .getUtilities()
-              .formatDateString(
-                individualCase.caseWorksheet.finalBriefDueDate,
-                applicationContext.getConstants().DATE_FORMATS.MMDDYY,
-              )
-          : '';
-      }
+    if (aCase.caseWorksheet) {
+      formattedFinalBriefDueDate = aCase.caseWorksheet.finalBriefDueDate
+        ? applicationContext
+            .getUtilities()
+            .formatDateString(
+              aCase.caseWorksheet.finalBriefDueDate,
+              applicationContext.getConstants().DATE_FORMATS.MMDDYY,
+            )
+        : '';
+    }
 
-      return {
-        ...individualCase,
-        caseWorksheet: {
-          ...individualCase.caseWorksheet,
-          formattedFinalBriefDueDate,
-        },
-        consolidatedIconTooltipText,
-        inConsolidatedGroup,
-        isLeadCase,
-      };
-    },
-  );
+    const { daysElapsedSinceLastStatusChange, statusDate } = applicationContext
+      .getUtilities()
+      .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+
+    return {
+      ...aCase,
+      caseWorksheet: {
+        ...aCase.caseWorksheet,
+        formattedFinalBriefDueDate,
+      },
+      consolidatedIconTooltipText,
+      daysElapsedSinceLastStatusChange,
+      inConsolidatedGroup,
+      isLeadCase,
+      statusDate,
+    };
+  });
 
   const { sortField, sortOrder } = get(state.tableSort);
-
   submittedAndCavCasesRows.sort((a, b) => {
-    if (typeof a[sortField] === 'number') {
+    if (a[sortField] === b[sortField]) {
+      return (
+        b.daysElapsedSinceLastStatusChange - a.daysElapsedSinceLastStatusChange
+      );
+    } else if (typeof a[sortField] === 'number') {
       return sortOrder === ASCENDING
         ? a[sortField] - b[sortField]
         : b[sortField] - a[sortField];
@@ -121,7 +125,7 @@ export const judgeActivityReportHelper = (
     opinionsFiledTotal: opinions?.total || 0,
     orders: ordersToDisplay,
     ordersFiledTotal: orders?.total || 0,
-    progressDescriptionTableTotal: totalCountForSubmittedAndCavCases || 0,
+    progressDescriptionTableTotal: submittedAndCavCasesRows.length,
     reportHeader,
     showResultsTables,
     showSelectDateRangeText,

@@ -25,9 +25,7 @@ export const PrimaryDocumentForm = connect(
     return (
       <React.Fragment>
         <h2 className="margin-top-4">{form.documentTitle}</h2>
-        {fileDocumentHelper.redactionAcknowledgementEnabled && (
-          <PIIRedactedWarning />
-        )}
+        <PIIRedactedWarning />
         <div className="blue-container">
           <FormGroup errorText={validationErrors.primaryDocumentFile}>
             <label
