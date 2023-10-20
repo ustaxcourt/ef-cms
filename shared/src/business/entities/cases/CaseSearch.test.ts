@@ -1,4 +1,5 @@
 import { CaseSearch } from './CaseSearch';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('Case Search entity', () => {
   it('needs only a petitioner name to be valid', () => {
@@ -20,9 +21,12 @@ describe('Case Search entity', () => {
     const caseSearch = new CaseSearch({});
 
     const validationErrors = caseSearch.getFormattedValidationErrors();
+    const customMessages = extractCustomMessages(
+      caseSearch.getValidationRules(),
+    );
 
     expect(validationErrors!.petitionerName).toEqual(
-      CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
+      customMessages.petitionerName[0],
     );
   });
 

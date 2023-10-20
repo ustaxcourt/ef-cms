@@ -1,13 +1,13 @@
 import { EditPetitionerCounsel } from './EditPetitionerCounsel';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('EditPetitionerCounsel', () => {
   describe('validation', () => {
     it('should have error messages for missing fields', () => {
       const entity = new EditPetitionerCounsel({});
-
+      const customMessages = extractCustomMessages(entity.getValidationRules());
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representing:
-          EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
+        representing: customMessages.representing[0],
       });
     });
 
@@ -23,10 +23,9 @@ describe('EditPetitionerCounsel', () => {
       const entity = new EditPetitionerCounsel({
         representing: [],
       });
-
+      const customMessages = extractCustomMessages(entity.getValidationRules());
       expect(entity.getFormattedValidationErrors()).toEqual({
-        representing:
-          EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
+        representing: customMessages.representing[0],
       });
     });
   });

@@ -1,7 +1,13 @@
 import { PublicDocumentSearchResult } from './PublicDocumentSearchResult';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('Public Document Search Result entity', () => {
-  const errorMessages = PublicDocumentSearchResult.VALIDATION_ERROR_MESSAGES;
+  const customMessages = extractCustomMessages(
+    PublicDocumentSearchResult.VALIDATION_RULES,
+  );
+
+  const errorMessages = customMessages;
+
   it('returns validation errors for required fields when no data is passed in', () => {
     const searchResult = new PublicDocumentSearchResult(undefined as any);
     const validationErrors = searchResult.getFormattedValidationErrors();
@@ -35,7 +41,7 @@ describe('Public Document Search Result entity', () => {
     const searchResult = new PublicDocumentSearchResult({ isStricken: true });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
-    expect(validationErrors!.isStricken).toEqual(errorMessages.isStricken);
+    expect(validationErrors!.isStricken).toEqual(errorMessages.isStricken[0]);
   });
 
   it('fails validation if the search result is sealed but is not of type opinion', () => {
@@ -50,7 +56,7 @@ describe('Public Document Search Result entity', () => {
     });
     const validationErrors = searchResult.getFormattedValidationErrors();
 
-    expect(validationErrors!.eventCode).toEqual(errorMessages.eventCode);
+    expect(validationErrors!.eventCode).toEqual(errorMessages.eventCode[0]);
   });
 
   it('passes validation if the search result is for a sealed opinion', () => {

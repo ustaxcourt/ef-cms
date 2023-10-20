@@ -4,6 +4,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from './EntityConstants';
 import { Practitioner } from './Practitioner';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../utilities/getTextByCount';
 
 describe('Practitioner', () => {
@@ -168,12 +169,10 @@ describe('Practitioner', () => {
       ...mockPractitioner,
       practitionerNotes: getTextByCount(1001),
     });
-
+    const customMessages = extractCustomMessages(user.getValidationRules());
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toEqual({
-      practitionerNotes: (
-        Practitioner.VALIDATION_ERROR_MESSAGES.practitionerNotes[0] as any
-      ).message,
+      practitionerNotes: customMessages.practitionerNotes[1],
     });
   });
 
@@ -220,84 +219,81 @@ describe('Practitioner', () => {
   });
 
   describe('updatedEmail/confirmEmail', () => {
-    it('passes validation when updatedEmail and confirmEmail are undefined', () => {
-      validPractitioner.updatedEmail = undefined;
-      validPractitioner.confirmEmail = undefined;
+    const user = new Practitioner(mockPractitioner);
+    const customMessages = extractCustomMessages(user.getValidationRules());
 
-      expect(validPractitioner.isValid()).toBeTruthy();
+    it('passes validation when updatedEmail and confirmEmail are undefined', () => {
+      user.updatedEmail = undefined;
+      user.confirmEmail = undefined;
+
+      expect(user.isValid()).toBeTruthy();
     });
 
     it('passes validation when updatedEmail and confirmEmail match and are valid email addresses', () => {
-      validPractitioner.confirmEmail = mockUpdatedEmail;
-      validPractitioner.updatedEmail = mockUpdatedEmail;
+      user.confirmEmail = mockUpdatedEmail;
+      user.updatedEmail = mockUpdatedEmail;
 
-      expect(validPractitioner.isValid()).toBeTruthy();
+      expect(user.isValid()).toBeTruthy();
     });
 
     it('fails validation when updatedEmail is not a valid email address and confirmEmail is a valid email address', () => {
-      validPractitioner.confirmEmail = mockUpdatedEmail;
-      validPractitioner.updatedEmail = invalidEmail;
-
-      expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      user.confirmEmail = mockUpdatedEmail;
+      user.updatedEmail = invalidEmail;
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        confirmEmail: customMessages.confirmEmail[0],
+        updatedEmail: customMessages.updatedEmail[0],
       });
     });
 
     it('fails validation when updatedEmail is defined and valid and confirmEmail is undefined', () => {
-      validPractitioner.confirmEmail = undefined;
-      validPractitioner.updatedEmail = mockUpdatedEmail;
+      user.confirmEmail = undefined;
+      user.updatedEmail = mockUpdatedEmail;
 
-      expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        confirmEmail: customMessages.confirmEmail[1],
       });
     });
 
     it('fails validation when updatedEmail is defined and valid and confirmEmail is not a valid email address', () => {
-      validPractitioner.confirmEmail = invalidEmail;
-      validPractitioner.updatedEmail = mockUpdatedEmail;
+      user.confirmEmail = invalidEmail;
+      user.updatedEmail = mockUpdatedEmail;
 
-      expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        confirmEmail: customMessages.confirmEmail[1],
       });
     });
 
     it('fails validation when updatedEmail and confirmEmail do not match and both are valid', () => {
-      validPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
-      validPractitioner.updatedEmail = mockUpdatedEmail;
+      user.confirmEmail = 'abc' + mockUpdatedEmail;
+      user.updatedEmail = mockUpdatedEmail;
 
-      expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        confirmEmail: customMessages.confirmEmail[0],
       });
     });
 
     it('should fail validation when updatedEmail is undefined and confirmEmail is a valid email address', () => {
-      validPractitioner.confirmEmail = mockUpdatedEmail;
-      validPractitioner.updatedEmail = undefined;
+      user.confirmEmail = mockUpdatedEmail;
+      user.updatedEmail = undefined;
 
-      expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        updatedEmail: customMessages.updatedEmail[0],
       });
     });
 
     it('should fail validation when updatedEmail is invalid and confirmEmail is undefined', () => {
-      validPractitioner.confirmEmail = undefined;
-      validPractitioner.updatedEmail = invalidEmail;
+      user.confirmEmail = undefined;
+      user.updatedEmail = invalidEmail;
 
-      expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      expect(user.isValid()).toBeFalsy();
+      expect(user.getFormattedValidationErrors()).toEqual({
+        confirmEmail: customMessages.confirmEmail[1],
+        updatedEmail: customMessages.updatedEmail[0],
       });
     });
   });

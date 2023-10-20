@@ -1,7 +1,7 @@
-import { Message } from './Message';
 import { NewMessage } from './NewMessage';
 import { PETITIONS_SECTION } from './EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../utilities/getTextByCount';
 
 describe('NewMessage', () => {
@@ -46,8 +46,12 @@ describe('NewMessage', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(
+        message.getValidationRules(),
+      );
+
       expect(message.getFormattedValidationErrors()).toEqual({
-        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
+        message: customMessages[1],
       });
     });
   });

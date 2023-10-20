@@ -1,5 +1,5 @@
 import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
-import { VALIDATION_ERROR_MESSAGES } from './CourtIssuedDocumentConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CourtIssuedDocumentTypeB', () => {
@@ -21,9 +21,13 @@ describe('CourtIssuedDocumentTypeB', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         scenario: 'Type B',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
+
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        documentType: VALIDATION_ERROR_MESSAGES.documentType,
-        judge: VALIDATION_ERROR_MESSAGES.judge,
+        documentType: customMessages.documentType[0],
+        judge: customMessages.judge[0],
       });
     });
 
@@ -48,8 +52,12 @@ describe('CourtIssuedDocumentTypeB', () => {
         judge: 'Judge Colvin',
         scenario: 'Type B',
       });
+      const customMessages = extractCustomMessages(
+        documentInstance.getValidationRules(),
+      );
+
       expect(documentInstance.getFormattedValidationErrors()).toEqual({
-        freeText: VALIDATION_ERROR_MESSAGES.freeText[1].message,
+        freeText: customMessages.freeText[1],
       });
     });
 

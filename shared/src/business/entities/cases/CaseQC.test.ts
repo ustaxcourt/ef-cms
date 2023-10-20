@@ -1,6 +1,7 @@
 import { CaseQC } from './CaseQC';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('CaseQC entity', () => {
   describe('validation', () => {
@@ -10,17 +11,18 @@ describe('CaseQC entity', () => {
 
     it('returns the expected set of errors for an empty object', () => {
       const caseQcEntity = new CaseQC({}, { applicationContext });
+      const customMessages = extractCustomMessages(
+        caseQcEntity.getValidationRules(),
+      );
 
       expect(caseQcEntity.getFormattedValidationErrors()).toEqual({
-        caseCaption: CaseQC.VALIDATION_ERROR_MESSAGES.caseCaption,
-        caseType: CaseQC.VALIDATION_ERROR_MESSAGES.caseType,
-        docketNumber: CaseQC.VALIDATION_ERROR_MESSAGES.docketNumber,
-        hasVerifiedIrsNotice:
-          CaseQC.VALIDATION_ERROR_MESSAGES.hasVerifiedIrsNotice,
-        partyType: CaseQC.VALIDATION_ERROR_MESSAGES.partyType,
-        procedureType: CaseQC.VALIDATION_ERROR_MESSAGES.procedureType,
-        sortableDocketNumber:
-          CaseQC.VALIDATION_ERROR_MESSAGES.sortableDocketNumber,
+        caseCaption: customMessages.caseCaption[0],
+        caseType: customMessages.caseType[0],
+        docketNumber: customMessages.docketNumber[0],
+        hasVerifiedIrsNotice: customMessages.hasVerifiedIrsNotice[0],
+        partyType: customMessages.partyType[0],
+        procedureType: customMessages.procedureType[0],
+        sortableDocketNumber: customMessages.sortableDocketNumber[0],
       });
     });
 

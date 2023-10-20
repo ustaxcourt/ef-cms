@@ -1,4 +1,5 @@
 import { UpdateUserEmail } from './UpdateUserEmail';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('UpdateUserEmail', () => {
   describe('validation', () => {
@@ -7,12 +8,14 @@ describe('UpdateUserEmail', () => {
         confirmEmail: 'test@example.com',
         email: undefined,
       });
+      const customMessages = extractCustomMessages(
+        updateUserEmailEntity.getValidationRules(),
+      );
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
+        confirmEmail: customMessages.confirmEmail[0],
+        email: customMessages.email[0],
       });
     });
 
@@ -21,11 +24,12 @@ describe('UpdateUserEmail', () => {
         confirmEmail: undefined,
         email: 'test@example.com',
       });
-
+      const customMessages = extractCustomMessages(
+        updateUserEmailEntity.getValidationRules(),
+      );
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        confirmEmail: customMessages.confirmEmail[1],
       });
     });
 
@@ -34,11 +38,12 @@ describe('UpdateUserEmail', () => {
         confirmEmail: 'test2@example.com',
         email: 'test@example.com',
       });
-
+      const customMessages = extractCustomMessages(
+        updateUserEmailEntity.getValidationRules(),
+      );
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+        confirmEmail: customMessages.confirmEmail[0],
       });
     });
 
@@ -47,12 +52,13 @@ describe('UpdateUserEmail', () => {
         confirmEmail: undefined,
         email: undefined,
       });
-
+      const customMessages = extractCustomMessages(
+        updateUserEmailEntity.getValidationRules(),
+      );
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
+        confirmEmail: customMessages.confirmEmail[1],
+        email: customMessages.email[0],
       });
     });
 
@@ -61,12 +67,13 @@ describe('UpdateUserEmail', () => {
         confirmEmail: 'test@example.com',
         email: 'testexample.com',
       });
-
+      const customMessages = extractCustomMessages(
+        updateUserEmailEntity.getValidationRules(),
+      );
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
+        confirmEmail: customMessages.confirmEmail[0],
+        email: customMessages.email[0],
       });
     });
 
@@ -75,11 +82,12 @@ describe('UpdateUserEmail', () => {
         confirmEmail: 'testexample.com',
         email: 'test@example.com',
       });
-
+      const customMessages = extractCustomMessages(
+        updateUserEmailEntity.getValidationRules(),
+      );
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
       expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[2].message,
+        confirmEmail: customMessages.confirmEmail[2],
       });
     });
 

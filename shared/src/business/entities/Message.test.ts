@@ -2,6 +2,7 @@ import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
 import { Message } from './Message';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createISODateString } from '../utilities/DateHandler';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../utilities/getTextByCount';
 
 jest.mock('../utilities/DateHandler', () => {
@@ -314,9 +315,11 @@ describe('Message', () => {
         },
         { applicationContext },
       );
-
+      const customMessages = extractCustomMessages(
+        message.getValidationRules(),
+      );
       expect(message.getFormattedValidationErrors()).toEqual({
-        message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
+        message: customMessages.message[1],
       });
     });
   });

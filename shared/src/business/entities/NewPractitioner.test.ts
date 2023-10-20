@@ -1,5 +1,6 @@
 import { COUNTRY_TYPES, ROLES } from './EntityConstants';
 import { NewPractitioner } from './NewPractitioner';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('NewPractitioner', () => {
   const mockPractitioner = {
@@ -37,9 +38,11 @@ describe('NewPractitioner', () => {
     const user = new NewPractitioner({
       role: ROLES.privatePractitioner,
     });
+    const customMessages = extractCustomMessages(user.getValidationRules());
+
     expect(user.isValid()).toBeFalsy();
     expect(user.getFormattedValidationErrors()).toMatchObject({
-      email: NewPractitioner.VALIDATION_ERROR_MESSAGES.email,
+      email: customMessages.email[0],
     });
   });
 
@@ -74,45 +77,50 @@ describe('NewPractitioner', () => {
     it('fails validation when email is not a valid email address', () => {
       validNewPractitioner.email = invalidEmail;
       validNewPractitioner.confirmEmail = undefined;
+      const customMessages = extractCustomMessages(
+        validNewPractitioner.getValidationRules(),
+      );
 
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        email: NewPractitioner.VALIDATION_ERROR_MESSAGES.email,
+        confirmEmail: customMessages.confirmEmail[1],
+        email: customMessages.email[0],
       });
     });
 
     it('fails validation when email is defined and confirmEmail is undefined', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = undefined;
-
+      const customMessages = extractCustomMessages(
+        validNewPractitioner.getValidationRules(),
+      );
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        confirmEmail: customMessages.confirmEmail[1],
       });
     });
 
     it('fails validation when email is defined and confirmEmail is not a valid email address', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = invalidEmail;
-
+      const customMessages = extractCustomMessages(
+        validNewPractitioner.getValidationRules(),
+      );
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+        confirmEmail: customMessages.confirmEmail[1],
       });
     });
 
     it('fails validation when email and confirmEmail do not match', () => {
       validNewPractitioner.email = mockUpdatedEmail;
       validNewPractitioner.confirmEmail = 'abc' + mockUpdatedEmail;
-
+      const customMessages = extractCustomMessages(
+        validNewPractitioner.getValidationRules(),
+      );
       expect(validNewPractitioner.isValid()).toBeFalsy();
       expect(validNewPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          NewPractitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+        confirmEmail: customMessages.confirmEmail[0],
       });
     });
   });

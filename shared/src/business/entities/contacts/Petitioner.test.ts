@@ -5,6 +5,7 @@ import {
 } from '../EntityConstants';
 import { Petitioner } from './Petitioner';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('Petitioner', () => {
@@ -35,10 +36,11 @@ describe('Petitioner', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(entity.getValidationRules());
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
+        serviceIndicator: customMessages.serviceIndicator[0],
       });
     });
 
@@ -50,10 +52,11 @@ describe('Petitioner', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(entity.getValidationRules());
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        name: Petitioner.VALIDATION_ERROR_MESSAGES.name[0].message,
+        name: customMessages.name[1],
       });
     });
 
@@ -65,11 +68,11 @@ describe('Petitioner', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(entity.getValidationRules());
 
       expect(entity.isValid()).toBe(false);
       expect(entity.getFormattedValidationErrors()).toEqual({
-        additionalName:
-          Petitioner.VALIDATION_ERROR_MESSAGES.additionalName[0].message,
+        additionalName: customMessages.additionalName[0],
       });
     });
 

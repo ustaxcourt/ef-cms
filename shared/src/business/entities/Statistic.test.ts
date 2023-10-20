@@ -1,5 +1,6 @@
 import { Statistic } from './Statistic';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 
 describe('Statistic', () => {
   it('throws an error if applicationContext is not provided on construction', () => {
@@ -82,12 +83,11 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
+      const customMessages = extractCustomMessages(statistic.VALIDATION_RULES);
 
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod: (
-          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0] as any
-        ).message,
+        lastDateOfPeriod: customMessages.lastDateOfPeriod[0],
       });
     });
 
