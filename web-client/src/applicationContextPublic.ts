@@ -47,6 +47,7 @@ import {
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
+import { cognitoResendVerificationLinkInteractor } from '@shared/proxies/public/cognitoResendVerificationLinkProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
   createISODateString,
@@ -98,6 +99,7 @@ const ADVANCED_SEARCH_TABS = {
 
 const allUseCases = {
   casePublicSearchInteractor,
+  cognitoResendVerificationLinkInteractor,
   createUserCognitoInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,

@@ -20,12 +20,9 @@ COGNITO_LOGIN_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazonco
 
 COGNITO_PASSWORD_RESET_REQUEST_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/forgotPassword?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
 
-COGNITO_RESEND_VERIFICATION_LINK_URL="https://auth-${ENV}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/resendcode?response_type=code&client_id=${CLIENT_ID}&redirect_uri=${COGNITO_REDIRECT_URL}"
-
 STAGE="${CLIENT_STAGE}" \
   COGNITO_LOGIN_URL="${COGNITO_LOGIN_URL}" \
   COGNITO_PASSWORD_RESET_REQUEST_URL="${COGNITO_PASSWORD_RESET_REQUEST_URL}" \
-  COGNITO_RESEND_VERIFICATION_LINK_URL="${COGNITO_RESEND_VERIFICATION_LINK_URL}" \
   CIRCLE_SHA1="${CIRCLE_SHA1}" \
   SESSION_TIMEOUT=3300000 \
   API_URL="${API_URL}" \
