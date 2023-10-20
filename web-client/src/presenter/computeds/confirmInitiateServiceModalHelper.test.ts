@@ -376,9 +376,6 @@ describe('confirmInitiateServiceModalHelper', () => {
 
     beforeEach(() => {
       baseState = cloneDeep({
-        featureFlagHelper: {
-          areMultiDocketablePaperFilingsEnabled: true,
-        },
         form: {
           documentTitle: 'Answer',
           eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
@@ -434,25 +431,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           state: {
             ...baseState,
             currentPage: 'MessageDetail',
-            formattedCaseDetail: {
-              isLeadCase: true,
-            },
-          },
-        },
-      );
-
-      expect(showConsolidatedCasesForService).toEqual(false);
-    });
-
-    it('should be false when the docket entry is a paper filing and the feature flag is off', () => {
-      const { showConsolidatedCasesForService } = runCompute(
-        confirmInitiateServiceModalHelper,
-        {
-          state: {
-            ...baseState,
-            featureFlagHelper: {
-              areMultiDocketablePaperFilingsEnabled: false,
-            },
             formattedCaseDetail: {
               isLeadCase: true,
             },

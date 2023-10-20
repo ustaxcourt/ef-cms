@@ -110,7 +110,7 @@ export const formattedEligibleCasesHelper = (
         caseItem[groupKeySymbol],
       );
     })
-    .sort(compareTrialSessionEligibleCases(eligibleCases))
+    .sort(compareTrialSessionEligibleCases(formattedCases))
     .filter(eligibleCase => {
       if (filter === 'Small') {
         return (
