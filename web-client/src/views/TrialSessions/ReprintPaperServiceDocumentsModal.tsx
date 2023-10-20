@@ -4,7 +4,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 
-export const PrintPreviouslyGeneratedPaperServiceModal = connect(
+export const ReprintPaperServiceDocumentsModal = connect(
   {
     clearModalSequence: sequences.clearModalSequence,
     form: state.form,
@@ -13,7 +13,7 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
     updatePDFsSelectedForPrintSequence:
       sequences.updatePDFsSelectedForPrintSequence,
   },
-  function PrintPreviouslyGeneratedPaperServiceModal({
+  function ReprintPaperServiceDocumentsModal({
     clearModalSequence,
     form,
     formattedTrialSessionDetails,
@@ -60,5 +60,5 @@ export const PrintPreviouslyGeneratedPaperServiceModal = connect(
   },
 );
 
-PrintPreviouslyGeneratedPaperServiceModal.displayName =
-  'PrintPreviouslyGeneratedPaperServiceModal';
+ReprintPaperServiceDocumentsModal.displayName =
+  'ReprintPaperServiceDocumentsModal';
