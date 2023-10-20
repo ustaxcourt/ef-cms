@@ -16,7 +16,6 @@ import {
   isSealedCase,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
@@ -35,7 +34,7 @@ import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/util
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../utilities/getFormattedTrialSessionDetails';
 import {
@@ -177,10 +176,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetReduceImageBlobValue = {
     toBlob: jest.fn(),
-  };
-
-  const mockGetDTOs = {
-    ConsolidatedCaseDTO,
   };
 
   const mockGetUtilities = appContextProxy({
@@ -616,7 +611,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
-    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),

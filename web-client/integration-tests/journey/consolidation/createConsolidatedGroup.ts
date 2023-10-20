@@ -21,9 +21,8 @@ export const createConsolidatedGroup = (
   numberOfMemberCases: number = 1,
 ) => {
   return describe('Create a consolidated group of cases', () => {
-    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
     it('login as a petitioner and create the lead case', async () => {
+      cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
       const { docketNumber } = await uploadPetition(
         cerebralTest,
         caseOverrides,

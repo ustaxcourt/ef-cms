@@ -1,6 +1,7 @@
 import {
   ADC_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -205,4 +206,22 @@ export const validUser: RawUser = {
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+};
+
+export const casePetitioner: TPetitioner = {
+  address1: '234 Main St',
+  address2: 'Apartment 4',
+  address3: 'Under the stairs',
+  city: 'Chicago',
+  contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  contactType: CONTACT_TYPES.primary,
+  countryType: COUNTRY_TYPES.DOMESTIC,
+  entityName: 'Petitioner',
+  isAddressSealed: false,
+  name: 'Jingo Bjango',
+  phone: '+1 (555) 555-5555',
+  postalCode: '61234',
+  sealedAndUnavailable: false,
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  state: 'IL',
 };

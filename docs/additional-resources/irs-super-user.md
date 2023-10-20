@@ -79,13 +79,6 @@ GET https://api.myenv/v2/cases/DOCKET_NUMBER
 Authorization: Bearer ID_TOKEN
 ```
 
-### Consolidated Case Detail
-Replace `DOCKET_NUMBER` with the desired docket number.
-```http request
-GET https://api.myenv/v2/cases/DOCKET_NUMBER/consolidated-cases
-Authorization: Bearer ID_TOKEN
-```
-
 ### Docket Entry Download
 Replace `DOCKET_NUMBER` with the desired docket number, and replace `DOCKET_ENTRY_ID` with a valid docket entry id belonging to the desired case.
 ```http request
