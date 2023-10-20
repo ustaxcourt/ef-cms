@@ -148,7 +148,16 @@ resource "aws_s3_bucket" "temp_documents_us_east_1" {
     }
   }
 
-    server_side_encryption_configuration {
+  lifecycle_rule {
+    prefix = "paper-service-pdf|"
+    enabled = true
+
+    expiration {
+      days = 3
+    }
+  }
+
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
@@ -195,7 +204,16 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
     }
   }
 
-    server_side_encryption_configuration {
+  lifecycle_rule {
+    prefix = "paper-service-pdf|"
+    enabled = true
+
+    expiration {
+      days = 3
+    }
+  }
+
+  server_side_encryption_configuration {
     rule {
       bucket_key_enabled = false
       apply_server_side_encryption_by_default {
