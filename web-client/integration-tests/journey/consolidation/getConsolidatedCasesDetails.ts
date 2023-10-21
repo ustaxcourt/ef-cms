@@ -8,14 +8,13 @@ export const getConsolidatedCasesDetails = (cerebralTest, docketNumber) => {
       'caseDetail.consolidatedCases',
     );
 
-    const consolidatedCaseDetailGroup = await Promise.all(
-      consolidatedCases.map(async consolidatedCase => {
-        await cerebralTest.runSequence('gotoCaseDetailSequence', {
-          docketNumber: consolidatedCase.docketNumber,
-        });
-        return cerebralTest.getState('caseDetail');
-      }),
-    );
+    const consolidatedCaseDetailGroup: RawCase[] = [];
+    for (let consolidatedCase of consolidatedCases) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
+      consolidatedCaseDetailGroup.push(cerebralTest.getState('caseDetail'));
+    }
 
     cerebralTest.consolidatedCaseDetailGroup = consolidatedCaseDetailGroup;
   });

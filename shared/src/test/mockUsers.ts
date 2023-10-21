@@ -1,12 +1,15 @@
 import {
   ADC_SECTION,
   CASE_SERVICES_SUPERVISOR_SECTION,
+  CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
+  SERVICE_INDICATOR_TYPES,
   TRIAL_CLERKS_SECTION,
 } from '../business/entities/EntityConstants';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { getJudgesChambers } from '../../../web-client/src/business/chambers/getJudgesChambers';
 
 export const adcUser = {
@@ -33,12 +36,25 @@ export const generalUser = {
   userId: '2806fccc-1432-4fcc-8a8d-5943edf07284',
 };
 
-export const irsPractitionerUser = {
+export const irsPractitionerUser: RawIrsPractitioner = {
   barNumber: 'BN2345',
-  contact: {},
+  contact: {
+    address1: '234 Main St',
+    address2: 'Apartment 4',
+    address3: 'Under the stairs',
+    city: 'Chicago',
+    country: COUNTRY_TYPES.DOMESTIC,
+    countryType: COUNTRY_TYPES.DOMESTIC,
+    phone: '+1 (555) 555-5555',
+    postalCode: '61234',
+    state: 'IL',
+  },
+  email: 'irsPractitioner@example.com',
+  entityName: 'IrsPractitioner',
   name: 'IRS Practitioner',
   role: ROLES.irsPractitioner,
   section: 'irsPractitioner',
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
 };
 
@@ -190,4 +206,22 @@ export const validUser: RawUser = {
   name: 'Saul Goodman',
   role: ROLES.petitioner,
   userId: '3ab77c88-1dd0-4adb-a03c-c466ad72d417',
+};
+
+export const casePetitioner: TPetitioner = {
+  address1: '234 Main St',
+  address2: 'Apartment 4',
+  address3: 'Under the stairs',
+  city: 'Chicago',
+  contactId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  contactType: CONTACT_TYPES.primary,
+  countryType: COUNTRY_TYPES.DOMESTIC,
+  entityName: 'Petitioner',
+  isAddressSealed: false,
+  name: 'Jingo Bjango',
+  phone: '+1 (555) 555-5555',
+  postalCode: '61234',
+  sealedAndUnavailable: false,
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  state: 'IL',
 };

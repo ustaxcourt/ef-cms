@@ -1,9 +1,8 @@
+import { GetCasesByStatusAndByJudgeResponse } from '@shared/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 import {
   JudgeActivityReportState,
   initialJudgeActivityReportState,
 } from './judgeActivityReportState';
-import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { RawTrialSession } from 'shared/src/business/entities/trialSessions/TrialSession';
 import { TAssociatedCase } from '@shared/business/useCases/getCasesForUserInteractor';
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
@@ -15,7 +14,6 @@ import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTr
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
-import { allowExternalConsolidatedGroupFilingHelper } from './computeds/allowExternalConsolidatedGroupFilingHelper';
 import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
 import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
@@ -55,7 +53,6 @@ import { editPetitionerInformationHelper } from './computeds/editPetitionerInfor
 import { editStatisticFormHelper } from './computeds/editStatisticFormHelper';
 import { externalConsolidatedCaseGroupHelper } from './computeds/externalConsolidatedCaseGroupHelper';
 import { externalUserCasesHelper } from './computeds/Dashboard/externalUserCasesHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { fileDocumentHelper } from './computeds/fileDocumentHelper';
 import { fileUploadStatusHelper } from './computeds/fileUploadStatusHelper';
 import { filingPartiesFormHelper } from './computeds/filingPartiesFormHelper';
@@ -81,6 +78,8 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { getTrialCityName } from './computeds/formattedTrialCity';
 import { headerHelper } from './computeds/headerHelper';
 import { initialCustomCaseInventoryReportState } from './customCaseInventoryReportState';
+import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
+import { initialTrialSessionWorkingCopyState } from '@web-client/presenter/state/trialSessionWorkingCopyState';
 import { internalPetitionPartiesHelper } from './computeds/internalPetitionPartiesHelper';
 import { internalTypesHelper } from './computeds/internalTypesHelper';
 import { judgeActivityReportHelper } from './computeds/JudgeActivityReport/judgeActivityReportHelper';
@@ -118,7 +117,6 @@ import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
-import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
 import { statisticsFormHelper } from './computeds/statisticsFormHelper';
@@ -150,7 +148,6 @@ export const computeds = {
   advancedDocumentSearchHelper,
   advancedSearchHelper,
   alertHelper,
-  allowExternalConsolidatedGroupFilingHelper,
   appInstanceManagerHelper,
   applyStampFormHelper,
   batchDownloadHelper,
@@ -189,7 +186,6 @@ export const computeds = {
   editStatisticFormHelper,
   externalConsolidatedCaseGroupHelper,
   externalUserCasesHelper,
-  featureFlagHelper,
   fileDocumentHelper,
   fileUploadStatusHelper,
   filingPartiesFormHelper,
@@ -248,7 +244,6 @@ export const computeds = {
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
-  sortableColumnHelper,
   startCaseHelper,
   startCaseInternalHelper,
   statisticsFormHelper,
@@ -271,6 +266,8 @@ export const computeds = {
 export const baseState = {
   advancedSearchForm: {} as any, // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
+  alertError: undefined,
+  alertSuccess: undefined,
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
@@ -352,6 +349,7 @@ export const baseState = {
   judgeUser: {} as any,
   judges: [] as RawUser[],
   legacyAndCurrentJudges: [],
+  login: {} as any,
   messagesInboxCount: 0,
   messagesSectionCount: 0,
   modal: {
@@ -419,24 +417,20 @@ export const baseState = {
   },
   showValidation: false,
   submittedAndCavCases: {
-    consolidatedCasesGroupCountMap: {} as any,
-    submittedAndCavCasesByJudge: [] as any,
-    // TODO: this should get moved to currentViewMetadata
-    worksheets: [] as RawCaseWorksheet[],
+    submittedAndCavCasesByJudge: [] as GetCasesByStatusAndByJudgeResponse[],
   },
-  submittedAndCavCasesForJudge: [],
   tableSort: {
     sortField: 'createdAt',
     sortOrder: ASCENDING,
   },
-  trialSession: {} as RawTrialSession,
-
+  trialSession: cloneDeep(initialTrialSessionState),
   trialSessionJudge: {
     name: '',
   },
+  trialSessionWorkingCopy: cloneDeep(initialTrialSessionWorkingCopyState),
   user: null,
   userContactEditProgress: {},
-  users: [],
+  users: [] as RawUser[],
   validationErrors: {} as Record<string, string>,
   viewerDocumentToDisplay: undefined,
   workItem: {},
