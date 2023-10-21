@@ -10,49 +10,25 @@ describe('setUpdatedCaseInStateAction', () => {
     primaryIssue: 'Superstition ain`t the way',
   };
 
-  it('should add the updated worksheet to the list of worksheets in state when it does not already exist in the list', async () => {
+  it('should add the updated worksheet to the case in state', async () => {
     const { state } = await runAction(setCaseWorksheetAction, {
       props: {
         updatedWorksheet: mockCaseWorksheet,
       },
       state: {
         submittedAndCavCases: {
-          worksheets: [],
-        },
-      },
-    });
-
-    expect(state.submittedAndCavCases.worksheets).toEqual([mockCaseWorksheet]);
-  });
-
-  it('should update the existing in state when it already exists in the list', async () => {
-    const mockCaseWorksheet2: RawCaseWorksheet = {
-      docketNumber: '102-18',
-      entityName: 'CaseWorksheet',
-      finalBriefDueDate: '2023-08-29',
-    };
-
-    const { state } = await runAction(setCaseWorksheetAction, {
-      props: {
-        updatedWorksheet: mockCaseWorksheet,
-      },
-      state: {
-        submittedAndCavCases: {
-          worksheets: [
-            mockCaseWorksheet2,
-            {
-              ...mockCaseWorksheet,
-              primaryIssue:
-                'When you believe in things that you don`t understand',
-            },
+          submittedAndCavCasesByJudge: [
+            { docketNumber: MOCK_CASE.docketNumber },
           ],
         },
       },
     });
 
-    expect(state.submittedAndCavCases.worksheets).toEqual([
-      mockCaseWorksheet2,
-      mockCaseWorksheet,
+    expect(state.submittedAndCavCases.submittedAndCavCasesByJudge).toEqual([
+      {
+        caseWorksheet: mockCaseWorksheet,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
     ]);
   });
 });

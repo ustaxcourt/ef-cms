@@ -77,10 +77,8 @@ export const CaseWorksheets = connect(
                     <td>{formattedCase.status}</td>
                     <td>{formattedCase.daysSinceLastStatusChange}</td>
                     <td>{formattedCase.formattedSubmittedCavStatusDate}</td>
-                    <td>
-                      {formattedCase.worksheet.finalBriefDueDateFormatted}
-                    </td>
-                    <td>{formattedCase.worksheet.statusOfMatter}</td>
+                    <td>{formattedCase.finalBriefDueDateFormatted}</td>
+                    <td>{formattedCase.worksheet?.statusOfMatter}</td>
                     <td>
                       <Button
                         link
@@ -102,7 +100,7 @@ export const CaseWorksheets = connect(
                       <span className="text-semibold margin-right-1">
                         Primary Issue:
                       </span>
-                      {formattedCase.worksheet.primaryIssue}
+                      {formattedCase.worksheet?.primaryIssue}
                     </td>
                   </tr>
                 </React.Fragment>
