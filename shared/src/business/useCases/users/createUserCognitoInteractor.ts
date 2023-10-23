@@ -11,10 +11,6 @@ export const createUserCognitoInteractor = async (
         Value: user.email,
       },
       {
-        Name: 'email_verified',
-        Value: 'True',
-      },
-      {
         Name: 'name',
         Value: user.name,
       },
