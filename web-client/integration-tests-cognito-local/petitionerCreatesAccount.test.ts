@@ -52,9 +52,12 @@ describe('Petitioner creates new account', () => {
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: expectedVerificationLink,
     });
-    expect(cerebralTest.getState('alertSuccess')).toEqual({
-      message: 'Your registration has been confirmed!',
-    });
+    expect(cerebralTest.getState('alertSuccess')).toEqual(
+      expect.objectContaining({
+        message:
+          'Your registration has been confirmed! You will be redirected shortly!',
+      }),
+    );
   });
 
   it('petitioner logs in successfully', async () => {

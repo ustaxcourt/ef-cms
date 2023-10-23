@@ -26,14 +26,6 @@ describe('createUserCognitoInteractor', () => {
           Value: email,
         },
         {
-          Name: 'email_verified',
-          Value: 'True',
-        },
-        {
-          Name: 'custom:role',
-          Value: 'petitioner',
-        },
-        {
           Name: 'name',
           Value: name,
         },
