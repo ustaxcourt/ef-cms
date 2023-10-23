@@ -33,6 +33,7 @@ const config: Config = {
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/../',
   }),
+  setupFiles: ['core-js'],
   testEnvironment: 'jsdom',
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
