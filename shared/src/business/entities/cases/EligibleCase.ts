@@ -91,6 +91,10 @@ export class EligibleCase extends JoiValidationEntity {
     return EligibleCase.VALIDATION_RULES;
   }
 
+  getValidationRules_NEW() {
+    return EligibleCase.VALIDATION_RULES;
+  }
+
   getErrorToMessageMap() {
     return EligibleCase.VALIDATION_ERROR_MESSAGES;
   }

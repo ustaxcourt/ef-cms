@@ -253,6 +253,7 @@ const createTestApplicationContext = () => {
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
+    getDateFormat: jest.fn().mockImplementation(DateHandler.getDateFormat),
     getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
     getDocQcSectionForUser: jest
       .fn()
@@ -338,10 +339,12 @@ const createTestApplicationContext = () => {
   });
 
   const mockGetHttpClientReturnValue = {
+    delete: jest.fn(),
     get: () => ({
       data: 'url',
     }),
     post: jest.fn(),
+    put: jest.fn(),
   };
 
   const mockGetUseCases = appContextProxy({

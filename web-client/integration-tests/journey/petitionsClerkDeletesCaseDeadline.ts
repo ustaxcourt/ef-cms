@@ -2,11 +2,12 @@ import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presente
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
-
 export const petitionsClerkDeletesCaseDeadline = cerebralTest => {
+  const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
   return it('Petitions clerk deletes a case deadline', async () => {
     cerebralTest.setState('caseDetail', {});
+
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -20,9 +21,7 @@ export const petitionsClerkDeletesCaseDeadline = cerebralTest => {
     });
 
     expect(cerebralTest.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(cerebralTest.getState('form.month')).toBeTruthy();
-    expect(cerebralTest.getState('form.day')).toBeTruthy();
-    expect(cerebralTest.getState('form.year')).toBeTruthy();
+    expect(cerebralTest.getState('form.deadlineDate')).toBeTruthy();
     expect(cerebralTest.getState('form.description')).toBeTruthy();
 
     await cerebralTest.runSequence('deleteCaseDeadlineSequence');

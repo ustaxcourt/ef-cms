@@ -13,6 +13,11 @@ export class PetitionerPrimaryContact extends Contact {
   getValidationRules() {
     return super.getValidationRules();
   }
+
+  getValidationRules_NEW() {
+    return super.getValidationRules_NEW();
+  }
+
   getErrorToMessageMap() {
     return super.getErrorToMessageMap();
   }

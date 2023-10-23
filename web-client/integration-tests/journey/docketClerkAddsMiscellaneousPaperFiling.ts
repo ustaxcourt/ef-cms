@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -23,9 +24,6 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
     });
 
     const docketEntryFormValues = {
-      dateReceivedDay: 30,
-      dateReceivedMonth: 4,
-      dateReceivedYear: 2001,
       eventCode: 'MISC',
       freeText: 'A title',
       primaryDocumentFile: fakeFile,
@@ -38,6 +36,11 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
         value,
       });
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      { key: 'receivedAt', toFormat: FORMATS.ISO, value: '04/30/2001' },
+    );
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

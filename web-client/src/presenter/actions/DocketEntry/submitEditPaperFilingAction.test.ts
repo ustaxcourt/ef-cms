@@ -35,8 +35,8 @@ describe('submitEditPaperFilingAction', () => {
         caseDetail: mockCaseDetail,
         docketEntryId: mockDocketEntryId,
         form: {
-          dateReceived: mockDateRecieved,
           primaryDocumentFile: {},
+          receivedAt: mockDateRecieved,
         },
       },
     });
@@ -49,7 +49,6 @@ describe('submitEditPaperFilingAction', () => {
       docketEntryId: mockDocketEntryId,
       documentMetadata: {
         createdAt: mockDateRecieved,
-        dateReceived: mockDateRecieved,
         docketNumber: mockCaseDetail.docketNumber,
         isFileAttached: true,
         isPaper: true,

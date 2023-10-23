@@ -203,6 +203,7 @@ import { gotoUserContactEditSequence } from './sequences/gotoUserContactEditSequ
 import { gotoVerifyEmailSequence } from './sequences/gotoVerifyEmailSequence';
 import { gotoViewAllDocumentsSequence } from './sequences/gotoViewAllDocumentsSequence';
 import { gotoWorkQueueSequence } from './sequences/gotoWorkQueueSequence';
+import { handleIdleLogoutSequence } from './sequences/handleIdleLogoutSequence';
 import { initialState } from '@web-client/presenter/state';
 import { leaveCaseForLaterServiceSequence } from './sequences/leaveCaseForLaterServiceSequence';
 import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDocketViewerDocumentToDisplaySequence';
@@ -321,6 +322,7 @@ import { rescanBatchSequence } from './sequences/rescanBatchSequence';
 import { resetCaseMenuSequence } from './sequences/resetCaseMenuSequence';
 import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordionsSequence';
 import { resetIdleTimerSequence } from './sequences/resetIdleTimerSequence';
+import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
@@ -355,8 +357,6 @@ import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSe
 import { setDocumentUploadModeSequence } from './sequences/setDocumentUploadModeSequence';
 import { setForHearingSequence } from './sequences/setForHearingSequence';
 import { setIdleStatusActiveSequence } from './sequences/setIdleStatusActiveSequence';
-import { setIdleStatusIdleSequence } from './sequences/setIdleStatusIdleSequence';
-import { setIdleTimerRefSequence } from './sequences/setIdleTimerRefSequence';
 import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence';
 import { setJudgeActivityReportFiltersSequence } from './sequences/setJudgeActivityReportFiltersSequence';
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
@@ -463,6 +463,7 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateCaseWorksheetSequence } from './sequences/updateCaseWorksheetSequence';
 import { updateChambersInCreateMessageModalSequence } from './sequences/updateChambersInCreateMessageModalSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
+import { updateCourtIssuedDocketEntryTitleSequence } from '@web-client/presenter/sequences/updateCourtIssuedDocketEntryTitleSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
@@ -745,6 +746,7 @@ export const presenterSequences = {
   gotoVerifyEmailSequence,
   gotoViewAllDocumentsSequence,
   gotoWorkQueueSequence,
+  handleIdleLogoutSequence,
   leaveCaseForLaterServiceSequence,
   loadDefaultDocketViewerDocumentToDisplaySequence,
   loadDefaultDraftViewerDocumentToDisplaySequence,
@@ -862,6 +864,7 @@ export const presenterSequences = {
   resetCaseMenuSequence,
   resetHeaderAccordionsSequence,
   resetIdleTimerSequence,
+  retryAsyncRequestSequence,
   reviewExternalDocumentInformationSequence,
   reviewRequestAccessInformationSequence,
   runTrialSessionPlanningReportSequence,
@@ -895,8 +898,6 @@ export const presenterSequences = {
   setDocumentUploadModeSequence,
   setForHearingSequence,
   setIdleStatusActiveSequence,
-  setIdleStatusIdleSequence,
-  setIdleTimerRefSequence,
   setIrsNoticeFalseSequence,
   setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence,
@@ -1003,6 +1004,7 @@ export const presenterSequences = {
   updateCaseWorksheetSequence,
   updateChambersInCreateMessageModalSequence,
   updateCourtIssuedDocketEntryFormValueSequence,
+  updateCourtIssuedDocketEntryTitleSequence,
   updateCreateOrderModalFormValueSequence,
   updateDateRangeForDeadlinesSequence,
   updateDocketEntryFormValueSequence,

@@ -1,3 +1,3 @@
-import { resetIdleTimerAction } from '../actions/resetIdleTimerAction';
+import { handlePeerResetIdleTimerAction } from '@web-client/presenter/actions/handlePeerResetIdleTimerAction';
 
-export const resetIdleTimerSequence = [resetIdleTimerAction];
+export const resetIdleTimerSequence = [handlePeerResetIdleTimerAction];
