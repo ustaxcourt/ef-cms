@@ -65,7 +65,9 @@ describe.skip('Petitioner', () => {
       goToWizardStep4();
       completeWizardStep4();
       goToWizardStep5();
-      submitPetition(testData);
+      submitPetition().then(createdPaperDocketNumber => {
+        testData.docketNumbers.push(createdPaperDocketNumber);
+      });
       goToDashboard();
     });
   });
@@ -92,7 +94,9 @@ describe.skip('Petitioner', () => {
       goToWizardStep4();
       completeWizardStep4();
       goToWizardStep5();
-      submitPetition(testData);
+      submitPetition().then(createdPaperDocketNumber => {
+        testData.docketNumbers.push(createdPaperDocketNumber);
+      });
       goToDashboard();
     });
   });
