@@ -1,13 +1,13 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkAddsTrackedDocketEntry = (
   cerebralTest,
   fakeFile,
   paperServiceRequested = false,
 ) => {
-  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-
   return it('Docketclerk adds tracked paper filing', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -20,10 +20,10 @@ export const docketClerkAddsTrackedDocketEntry = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
+      dateReceived: customMessages.dateReceived[0],
+      documentType: customMessages.documentType[0],
+      eventCode: customMessages.eventCode[0],
+      filers: customMessages.filers[0],
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
@@ -72,7 +72,7 @@ export const docketClerkAddsTrackedDocketEntry = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+      freeText: customMessages.freeText[1],
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

@@ -5,7 +5,9 @@ import {
   PAYMENT_STATUS,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { fakeFile } from '../helpers';
+const customMessages = extractCustomMessages(CaseInternal);
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,
@@ -27,7 +29,6 @@ export const petitionsClerkCreatesNewCase = (
     trialLocation: 'Birmingham, Alabama',
   };
   overrides = Object.assign(defaults, overrides || {});
-  const { VALIDATION_ERROR_MESSAGES } = CaseInternal;
 
   return it('Petitions clerk creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -40,15 +41,15 @@ export const petitionsClerkCreatesNewCase = (
     );
 
     expect(cerebralTest.getState('validationErrors.caseCaption')).toEqual(
-      VALIDATION_ERROR_MESSAGES.caseCaption,
+      customMessages.caseCaption[0],
     );
 
     expect(cerebralTest.getState('validationErrors.receivedAt')).toEqual(
-      VALIDATION_ERROR_MESSAGES.receivedAt[1],
+      customMessages.receivedAt[0],
     );
 
     expect(cerebralTest.getState('validationErrors.petitionFile')).toEqual(
-      VALIDATION_ERROR_MESSAGES.petitionFile,
+      customMessages.petitionFile[0],
     );
 
     expect(
@@ -89,7 +90,7 @@ export const petitionsClerkCreatesNewCase = (
 
     expect(
       cerebralTest.getState('validationErrors.requestForPlaceOfTrialFile'),
-    ).toEqual(VALIDATION_ERROR_MESSAGES.requestForPlaceOfTrialFile);
+    ).toEqual(customMessages.requestForPlaceOfTrialFile[0]);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionFile',

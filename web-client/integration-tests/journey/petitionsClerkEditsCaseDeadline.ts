@@ -1,11 +1,11 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
+const customMessages = extractCustomMessages(CaseDeadline);
 
 const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
-
-const { VALIDATION_ERROR_MESSAGES } = CaseDeadline;
 
 export const petitionsClerkEditsCaseDeadline = (
   cerebralTest,
@@ -66,7 +66,7 @@ In a day or two`,
     await cerebralTest.runSequence('updateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: VALIDATION_ERROR_MESSAGES.description[0].message,
+      description: customMessages[0],
     });
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');

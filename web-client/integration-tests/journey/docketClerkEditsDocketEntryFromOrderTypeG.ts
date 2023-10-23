@@ -1,4 +1,3 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeG = (
@@ -57,8 +56,8 @@ export const docketClerkEditsDocketEntryFromOrderTypeG = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
-      trialLocation: VALIDATION_ERROR_MESSAGES.trialLocation,
+      date: 'Enter a date',
+      trialLocation: 'Select a trial location',
     });
 
     await cerebralTest.runSequence(

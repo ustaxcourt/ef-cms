@@ -3,7 +3,9 @@ import {
   COUNTRY_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { refreshElasticsearchIndex } from '../helpers';
+const customMessages = extractCustomMessages(CaseSearch);
 
 export const irsSuperuserAdvancedSearchForCase = cerebralTest => {
   return it('irsSuperuser performs an advanced search for a case', async () => {
@@ -14,7 +16,7 @@ export const irsSuperuserAdvancedSearchForCase = cerebralTest => {
     await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      petitionerName: CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
+      petitionerName: customMessages.petitionerName[0],
     });
 
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {

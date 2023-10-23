@@ -1,4 +1,3 @@
-import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
@@ -81,8 +80,8 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[2],
-      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
+      date: 'Enter a date',
+      freeText: 'Enter a description',
     });
 
     await cerebralTest.runSequence(
@@ -118,7 +117,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeH = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      date: VALIDATION_ERROR_MESSAGES.date[1].message,
+      date: 'Enter a valid date',
     });
 
     await cerebralTest.runSequence(

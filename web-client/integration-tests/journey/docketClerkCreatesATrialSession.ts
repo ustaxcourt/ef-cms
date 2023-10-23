@@ -4,6 +4,8 @@ import {
   TrialSessionTypes,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(TrialSession);
 
 type CreateTrialSessionOverrides = {
   maxCases?: number;
@@ -41,12 +43,12 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      maxCases: TrialSession.VALIDATION_ERROR_MESSAGES.maxCases,
-      sessionType: TrialSession.VALIDATION_ERROR_MESSAGES.sessionType,
-      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
-      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
-      termYear: TrialSession.VALIDATION_ERROR_MESSAGES.termYear,
-      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
+      maxCases: customMessages.maxCases[0],
+      sessionType: customMessages.sessionType[0],
+      startDate: customMessages.startDate[0],
+      term: customMessages.term[0],
+      termYear: customMessages.termYear[0],
+      trialLocation: customMessages.trialLocation[0],
     });
 
     /* eslint-disable sort-keys-fix/sort-keys-fix */
@@ -82,9 +84,9 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      startDate: TrialSession.VALIDATION_ERROR_MESSAGES.startDate[1],
-      term: TrialSession.VALIDATION_ERROR_MESSAGES.term,
-      trialLocation: TrialSession.VALIDATION_ERROR_MESSAGES.trialLocation,
+      startDate: customMessages.startDate[0],
+      term: customMessages.term[0],
+      trialLocation: customMessages.trialLocation[0],
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -106,8 +108,7 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      estimatedEndDate:
-        TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[1],
+      estimatedEndDate: customMessages.estimatedEndDate[0],
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {

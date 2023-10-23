@@ -1,12 +1,13 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
+const customMessages = extractCustomMessages(Case);
 
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 
-const { VALIDATION_ERROR_MESSAGES } = Case;
 const { CASE_TYPES_MAP, COUNTRY_TYPES, PARTY_TYPES } =
   applicationContext.getConstants();
 
@@ -249,7 +250,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
     await cerebralTest.runSequence('submitFilePetitionSequence');
 
     expect(cerebralTest.getState('alertError').messages).toContain(
-      VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+      customMessages.corporateDisclosureFile[0],
     );
 
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
@@ -259,7 +260,7 @@ export const petitionerCreatesNewCaseTestAllOptions = (
 
     await cerebralTest.runSequence('submitFilePetitionSequence');
     expect(cerebralTest.getState('alertError').messages[0]).not.toContain(
-      VALIDATION_ERROR_MESSAGES.corporateDisclosureFile,
+      customMessages.corporateDisclosureFile[0],
     );
 
     // Partnership other than tax matters party type primary contact

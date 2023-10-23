@@ -1,8 +1,10 @@
 import Joi from 'joi';
 
-export function extractCustomMessages(schema): { [key: string]: string[] } {
-  const joiSchema = Joi.object(schema);
-
+export function extractCustomMessages(
+  schema,
+  isJoiObject = false,
+): { [key: string]: string[] } {
+  const joiSchema = isJoiObject ? schema : Joi.object(schema);
   const customMessages = {};
   const keys = Object.keys(joiSchema.describe().keys);
   keys.forEach(key => {

@@ -7,6 +7,7 @@ import {
   calculateISODate,
   createISODateString,
 } from '../../utilities/DateHandler';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('DocketEntryFactory', () => {
@@ -41,6 +42,10 @@ describe('DocketEntryFactory', () => {
     rawEntity.primaryDocumentFile = {};
     rawEntity.primaryDocumentFileSize = 0;
 
+    const customMessages = extractCustomMessages(
+      new DocketEntryFactory(rawEntity).getValidationRules(),
+      true,
+    );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
         .primaryDocumentFile,
@@ -48,9 +53,7 @@ describe('DocketEntryFactory', () => {
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
         .primaryDocumentFileSize,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.primaryDocumentFileSize[1],
-    );
+    ).toEqual(customMessages.primaryDocumentFileSize[0]);
   });
 
   it('should not require a filing status selection', () => {
@@ -67,10 +70,14 @@ describe('DocketEntryFactory', () => {
   });
 
   it('should require received date be entered', () => {
+    const customMessages = extractCustomMessages(
+      new DocketEntryFactory(rawEntity).getValidationRules(),
+      true,
+    );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
         .dateReceived,
-    ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.dateReceived[1]);
+    ).toEqual(customMessages.dateReceived[0]);
     rawEntity.dateReceived = createISODateString();
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
@@ -80,35 +87,38 @@ describe('DocketEntryFactory', () => {
 
   it('should not allow received date be in the future', () => {
     rawEntity.dateReceived = calculateISODate({ howMuch: 1, units: 'days' });
-
+    const customMessages = extractCustomMessages(
+      new DocketEntryFactory(rawEntity).getValidationRules(),
+      true,
+    );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
         .dateReceived,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
-    );
+    ).toEqual(customMessages.dateReceived[1]);
   });
 
   it('should be invalid when additionalInfo is over 500 characters long', () => {
     rawEntity.additionalInfo = getTextByCount(1001);
-
+    const customMessages = extractCustomMessages(
+      new DocketEntryFactory(rawEntity).getValidationRules(),
+      true,
+    );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
         .additionalInfo,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.additionalInfo[0].message,
-    );
+    ).toEqual(customMessages.additionalInfo[0]);
   });
 
   it('should be invalid when additionalInfo2 is over 500 characters long', () => {
     rawEntity.additionalInfo2 = getTextByCount(1001);
-
+    const customMessages = extractCustomMessages(
+      new DocketEntryFactory(rawEntity).getValidationRules(),
+      true,
+    );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
         .additionalInfo2,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.additionalInfo2[0].message,
-    );
+    ).toEqual(customMessages.additionalInfo2[0]);
   });
 
   it('should require event code', () => {
@@ -196,10 +206,14 @@ describe('DocketEntryFactory', () => {
     });
 
     it('should require non standard fields', () => {
+      const customMessages = extractCustomMessages(
+        new DocketEntryFactory(rawEntity).getValidationRules(),
+        true,
+      );
       expect(
         new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
           .ordinalValue,
-      ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.ordinalValue);
+      ).toEqual(customMessages.ordinalValue[0]);
       rawEntity.ordinalValue = 'First';
       expect(
         new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
@@ -222,13 +236,14 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require certificate of service date be entered', () => {
+        const customMessages = extractCustomMessages(
+          new DocketEntryFactory(rawEntity).getValidationRules(),
+          true,
+        );
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
             .certificateOfServiceDate,
-        ).toEqual(
-          DocketEntryFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[1],
-        );
+        ).toEqual(customMessages.certificateOfServiceDate[0]);
         rawEntity.certificateOfServiceDate = createISODateString();
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
@@ -241,14 +256,14 @@ describe('DocketEntryFactory', () => {
           howMuch: 1,
           units: 'days',
         });
-
+        const customMessages = extractCustomMessages(
+          new DocketEntryFactory(rawEntity).getValidationRules(),
+          true,
+        );
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
             .certificateOfServiceDate,
-        ).toEqual(
-          DocketEntryFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[0].message,
-        );
+        ).toEqual(customMessages.certificateOfServiceDate[1]);
       });
     });
 
@@ -273,10 +288,14 @@ describe('DocketEntryFactory', () => {
       });
 
       it('should require Objections', () => {
+        const customMessages = extractCustomMessages(
+          new DocketEntryFactory(rawEntity).getValidationRules(),
+          true,
+        );
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
             .objections,
-        ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.objections);
+        ).toEqual(customMessages.objections[0]);
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
@@ -290,11 +309,14 @@ describe('DocketEntryFactory', () => {
         rawEntity.previousDocument = {
           eventCode: 'M006',
         };
-
+        const customMessages = extractCustomMessages(
+          new DocketEntryFactory(rawEntity).getValidationRules(),
+          true,
+        );
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
             .objections,
-        ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.objections);
+        ).toEqual(customMessages.objections[0]);
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(
           new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
@@ -321,13 +343,16 @@ describe('DocketEntryFactory', () => {
         });
 
         it('should validate secondary document', () => {
+          const customMessages = extractCustomMessages(
+            new DocketEntryFactory(rawEntity).getValidationRules(),
+            true,
+          );
           expect(
             new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
               .secondaryDocument,
           ).toEqual({
-            category: DocketEntryFactory.VALIDATION_ERROR_MESSAGES.category,
-            documentType:
-              DocketEntryFactory.VALIDATION_ERROR_MESSAGES.documentType[1],
+            category: customMessages.category[0],
+            documentType: customMessages.documentType[0],
           });
         });
       });

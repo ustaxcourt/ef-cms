@@ -1,5 +1,7 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(CaseInternal.VALIDATION_RULES);
 
 export const petitionsClerkVerifiesOrderForDiscCheckbox = (
   cerebralTest,
@@ -39,7 +41,7 @@ export const petitionsClerkVerifiesOrderForDiscCheckbox = (
 
     expect(
       cerebralTest.getState('validationErrors.corporateDisclosureFile'),
-    ).toEqual(CaseInternal.VALIDATION_ERROR_MESSAGES.corporateDisclosureFile);
+    ).toEqual(customMessages.corporateDisclosureFile);
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForDisc',

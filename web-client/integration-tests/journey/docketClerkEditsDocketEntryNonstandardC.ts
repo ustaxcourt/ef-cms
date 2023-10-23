@@ -5,7 +5,8 @@ import {
   waitForCondition,
 } from '../helpers';
 
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard C scenario', async () => {
@@ -39,8 +40,8 @@ export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      freeText: VALIDATION_ERROR_MESSAGES.freeText[0].message,
-      previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
+      freeText: customMessages.freeText[1],
+      previousDocument: customMessages.previousDocument[0],
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

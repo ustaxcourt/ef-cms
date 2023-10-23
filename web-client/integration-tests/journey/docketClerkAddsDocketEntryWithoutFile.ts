@@ -5,13 +5,13 @@ import {
   getFormattedDocketEntriesForTest,
   waitForCondition,
 } from '../helpers';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkAddsDocketEntryWithoutFile = (
   cerebralTest,
   overrides = {},
 ) => {
-  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-
   return it('Docketclerk adds docket entry data without a file', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -26,10 +26,10 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
+      dateReceived: customMessages.dateReceived[0],
+      documentType: customMessages.documentType[0],
+      eventCode: customMessages.eventCode[0],
+      filers: customMessages.filers[0],
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
@@ -84,7 +84,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      otherFilingParty: VALIDATION_ERROR_MESSAGES.otherFilingParty,
+      otherFilingParty: customMessages.otherFilingParty[0],
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

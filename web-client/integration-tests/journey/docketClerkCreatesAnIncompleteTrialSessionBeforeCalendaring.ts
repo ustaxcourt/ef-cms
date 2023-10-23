@@ -1,7 +1,7 @@
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
-
-const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(TrialSession);
 
 export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
   cerebralTest,
@@ -15,12 +15,12 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      maxCases: errorMessages.maxCases,
-      sessionType: errorMessages.sessionType,
-      startDate: errorMessages.startDate[1],
-      term: errorMessages.term,
-      termYear: errorMessages.termYear,
-      trialLocation: errorMessages.trialLocation,
+      maxCases: customMessages.maxCases[0],
+      sessionType: customMessages.sessionType[0],
+      startDate: customMessages.startDate[0],
+      term: customMessages.term[0],
+      termYear: customMessages.termYear[0],
+      trialLocation: customMessages.trialLocation[0],
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {

@@ -1,5 +1,7 @@
 import { EditPetitionerCounsel } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounsel';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(EditPetitionerCounsel);
 
 export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
   return it('Petitions clerk edits a practitioner on a case', async () => {
@@ -40,8 +42,7 @@ export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
     await cerebralTest.runSequence('submitEditPetitionerCounselSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      representing:
-        EditPetitionerCounsel.VALIDATION_ERROR_MESSAGES.representing,
+      representing: customMessages.representing[0],
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

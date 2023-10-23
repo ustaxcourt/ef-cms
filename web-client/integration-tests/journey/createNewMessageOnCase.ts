@@ -1,5 +1,6 @@
-import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
+import { Message } from '../../../shared/src/business/entities/Message';
 import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -74,9 +75,10 @@ export const createNewMessageOnCase = (
     });
 
     await cerebralTest.runSequence('createMessageSequence');
+    const customMessages = extractCustomMessages(Message.VALIDATION_RULES);
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
+      message: customMessages.message[0],
     });
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {

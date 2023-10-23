@@ -1,5 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardH } from './ExternalDocumentNonStandardH';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardH', () => {
@@ -8,19 +8,15 @@ describe('ExternalDocumentNonStandardH', () => {
       const externalDocumentH = ExternalDocumentFactory({
         scenario: 'Nonstandard H',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentH.getValidationRules(),
+      );
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
         secondaryDocument: {
-          category:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
-          documentType:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-              .documentType[1],
+          category: customMessages.category[0],
+          documentType: customMessages.documentType[0],
         },
       });
     });
@@ -52,17 +48,15 @@ describe('ExternalDocumentNonStandardH', () => {
         },
       });
 
+      const customMessages = extractCustomMessages(
+        externalDocumentH.getValidationRules(),
+      );
       expect(() => externalDocumentH.validate()).toThrow();
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
-          category:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.category,
-          documentType:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-              .documentType[1],
-          previousDocument:
-            ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES
-              .previousDocument,
+          category: customMessages.category[0],
+          documentType: customMessages.documentType[0],
+          previousDocument: 'Select a document',
         },
       });
     });
@@ -79,10 +73,11 @@ describe('ExternalDocumentNonStandardH', () => {
           documentType: 'Application for Waiver of Filing Fee',
         },
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentH.getValidationRules(),
+      );
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
-        documentTitle:
-          ExternalDocumentNonStandardH.VALIDATION_ERROR_MESSAGES.documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });

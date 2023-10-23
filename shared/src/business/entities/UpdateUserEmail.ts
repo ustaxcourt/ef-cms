@@ -21,18 +21,20 @@ export class UpdateUserEmail extends JoiValidationEntity {
     this.confirmEmail = rawUpdateUserEmail.confirmEmail;
   }
 
+  static VALIDATION_RULES = {
+    confirmEmail: JoiValidationConstants.EMAIL.valid(joi.ref('email'))
+      .required()
+      .messages({
+        'any.only': 'Email addresses do not match',
+        'any.required': 'Enter a valid email address',
+        'string.email': 'Enter a valid email address',
+      }),
+    email: JoiValidationConstants.EMAIL.required().messages(
+      setDefaultErrorMessage('Enter a valid email address'),
+    ),
+  };
+
   getValidationRules() {
-    return {
-      confirmEmail: JoiValidationConstants.EMAIL.valid(joi.ref('email'))
-        .required()
-        .messages({
-          'any.only': 'Email addresses do not match',
-          'any.required': 'Enter a valid email address',
-          'string.email': 'Enter a valid email address',
-        }),
-      email: JoiValidationConstants.EMAIL.required().messages(
-        setDefaultErrorMessage('Enter a valid email address'),
-      ),
-    };
+    return UpdateUserEmail.VALIDATION_RULES;
   }
 }

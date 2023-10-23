@@ -1,7 +1,7 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-
-const { VALIDATION_ERROR_MESSAGES } = Case;
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(Case);
 
 const { CASE_TYPES_MAP, PAYMENT_STATUS } = applicationContext.getConstants();
 
@@ -33,7 +33,7 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: VALIDATION_ERROR_MESSAGES.irsNoticeDate[1],
+      irsNoticeDate: customMessages[0],
     });
 
     // irsNoticeDate - valid
@@ -119,8 +119,8 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      petitionPaymentDate: VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
-      petitionPaymentMethod: VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+      petitionPaymentDate: customMessages.petitionPaymentDate[0],
+      petitionPaymentMethod: customMessages.petitionPaymentMethod[0],
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -155,14 +155,11 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      caseType: VALIDATION_ERROR_MESSAGES.caseType,
-      procedureType: VALIDATION_ERROR_MESSAGES.procedureType,
+      caseType: customMessages.caseType[0],
+      procedureType: customMessages.procedureType[0],
     });
     expect(cerebralTest.getState('alertError')).toEqual({
-      messages: [
-        VALIDATION_ERROR_MESSAGES.caseType,
-        VALIDATION_ERROR_MESSAGES.procedureType,
-      ],
+      messages: [customMessages.caseType[0], customMessages.procedureType[0]],
       title: 'Please correct the following errors on the page:',
     });
 

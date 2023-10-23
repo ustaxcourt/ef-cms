@@ -7,10 +7,20 @@ import { Contact } from '../entities/contacts/Contact';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { validatePetitionerInteractor } from './validatePetitionerInteractor';
 
 describe('validatePetitionerInteractor', () => {
   let mockContact;
+  const updateUserEmailCustomMessages = extractCustomMessages(
+    UpdateUserEmail.VALIDATION_RULES,
+  );
+  const petitionerCustomMessages = extractCustomMessages(
+    Petitioner.VALIDATION_RULES,
+  );
+  const contactCustomMessages = extractCustomMessages(
+    Contact.DOMESTIC_VALIDATION_RULES,
+  );
 
   beforeEach(() => {
     mockContact = {
@@ -64,12 +74,10 @@ describe('validatePetitionerInteractor', () => {
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
     } as any);
-
     expect(errors).toEqual({
-      confirmEmail:
-        UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
-      serviceIndicator: Petitioner.VALIDATION_ERROR_MESSAGES.serviceIndicator,
+      confirmEmail: updateUserEmailCustomMessages.confirmEmail[1],
+      postalCode: contactCustomMessages.postalCode[0],
+      serviceIndicator: petitionerCustomMessages.serviceIndicator[0],
     });
   });
 
@@ -85,9 +93,8 @@ describe('validatePetitionerInteractor', () => {
     } as any);
 
     expect(errors).toEqual({
-      confirmEmail:
-        UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      confirmEmail: updateUserEmailCustomMessages.confirmEmail[1],
+      postalCode: contactCustomMessages.postalCode[0],
     });
   });
 
@@ -104,10 +111,9 @@ describe('validatePetitionerInteractor', () => {
     } as any);
 
     expect(errors).toEqual({
-      confirmEmail:
-        UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-      email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
-      postalCode: Contact.DOMESTIC_VALIDATION_MESSAGES.postalCode[0].message,
+      confirmEmail: updateUserEmailCustomMessages.confirmEmail[0],
+      email: updateUserEmailCustomMessages.email[0],
+      postalCode: contactCustomMessages.postalCode[0],
     });
   });
 
@@ -129,8 +135,7 @@ describe('validatePetitionerInteractor', () => {
     } as any);
 
     expect(errors).toEqual({
-      contactType:
-        Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor,
+      contactType: petitionerCustomMessages.contactTypeSecondIntervenor[0],
     });
   });
 

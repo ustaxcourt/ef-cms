@@ -2,8 +2,12 @@ import { CaseAssociationRequestDocumentBase } from '../../../shared/src/business
 import { GENERATION_TYPES } from '@web-client/getConstants';
 import { caseDetailHeaderHelper as caseDetailHeaderComputed } from '../../src/presenter/computeds/caseDetailHeaderHelper';
 import { externalConsolidatedCaseGroupHelper as externalConsolidatedCaseGroupHelperComputed } from '../../src/presenter/computeds/externalConsolidatedCaseGroupHelper';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
+const customMessages = extractCustomMessages(
+  CaseAssociationRequestDocumentBase,
+);
 
 export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
   cerebralTest,
@@ -64,9 +68,7 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      primaryDocumentFile:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
+      primaryDocumentFile: customMessages.primaryDocumentFile[0],
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -81,9 +83,7 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[1],
+      certificateOfServiceDate: customMessages.certificateOfServiceDate[0],
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -101,9 +101,7 @@ export const irsPractitionerRequestAccessToFileAcrossConsolidatedCasesGroup = (
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate:
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfServiceDate[0].message,
+      certificateOfServiceDate: customMessages.certificateOfServiceDate[1],
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {

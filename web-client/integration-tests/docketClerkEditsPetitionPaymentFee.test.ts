@@ -3,6 +3,7 @@ import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('docket clerk edits a petition payment fee', () => {
@@ -49,13 +50,12 @@ describe('docket clerk edits a petition payment fee', () => {
     });
 
     await cerebralTest.runSequence('updateCaseDetailsSequence');
+    const customMessages = extractCustomMessages(CaseQC.VALIDATION_RULES);
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      hasVerifiedIrsNotice:
-        CaseQC.VALIDATION_ERROR_MESSAGES.hasVerifiedIrsNotice,
-      petitionPaymentDate: CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentDate,
-      petitionPaymentMethod:
-        CaseQC.VALIDATION_ERROR_MESSAGES.petitionPaymentMethod,
+      hasVerifiedIrsNotice: 'Select an option',
+      petitionPaymentDate: customMessages.petitionPaymentDate[0],
+      petitionPaymentMethod: customMessages.petitionPaymentMethod[0],
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

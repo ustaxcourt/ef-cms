@@ -1,4 +1,6 @@
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(CaseInternal.VALIDATION_RULES);
 
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   cerebralTest,
@@ -24,8 +26,7 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      chooseAtLeastOneValue:
-        CaseInternal.VALIDATION_ERROR_MESSAGES.chooseAtLeastOneValue,
+      chooseAtLeastOneValue: customMessages.chooseAtLeastOneValue[0],
     });
 
     await cerebralTest.runSequence(

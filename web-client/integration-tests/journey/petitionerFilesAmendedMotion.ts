@@ -1,9 +1,13 @@
 import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
+const customMessages = extractCustomMessages(
+  ExternalDocumentInformationFactory,
+);
 
 export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -102,8 +106,7 @@ export const petitionerFilesAmendedMotion = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('reviewExternalDocumentInformationSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.objections,
+      objections: customMessages.objections[0],
     });
 
     const helper = runCompute(withAppContextDecorator(fileDocumentHelper), {

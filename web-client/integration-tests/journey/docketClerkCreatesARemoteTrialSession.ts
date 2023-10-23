@@ -3,14 +3,14 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
+const customMessages = extractCustomMessages(TrialSession);
 
 export const docketClerkCreatesARemoteTrialSession = (
   cerebralTest,
   overrides = {},
 ) => {
   return it('Docket clerk starts a remote trial session', async () => {
-    const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
-
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -18,12 +18,12 @@ export const docketClerkCreatesARemoteTrialSession = (
     await cerebralTest.runSequence('submitTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      maxCases: errorMessages.maxCases,
-      sessionType: errorMessages.sessionType,
-      startDate: errorMessages.startDate[1],
-      term: errorMessages.term,
-      termYear: errorMessages.termYear,
-      trialLocation: errorMessages.trialLocation,
+      maxCases: customMessages.maxCases[0],
+      sessionType: customMessages.sessionType[0],
+      startDate: customMessages.startDate[0],
+      term: customMessages.term[0],
+      termYear: customMessages.termYear[0],
+      trialLocation: customMessages.trialLocation[0],
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {

@@ -1,4 +1,3 @@
-import { AddIrsPractitioner } from '../../entities/caseAssociation/AddIrsPractitioner';
 import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateAddIrsPractitionerInteractor } from './validateAddIrsPractitionerInteractor';
@@ -9,9 +8,10 @@ describe('validateAddIrsPractitionerInteractor', () => {
       counsel: {},
     });
 
-    expect(Object.keys(errors)).toEqual(
-      Object.keys(AddIrsPractitioner.VALIDATION_ERROR_MESSAGES),
-    );
+    expect(errors).toEqual({
+      serviceIndicator: 'Select service type',
+      user: 'Select a respondent counsel',
+    });
   });
 
   it('returns null when no errors occur', () => {

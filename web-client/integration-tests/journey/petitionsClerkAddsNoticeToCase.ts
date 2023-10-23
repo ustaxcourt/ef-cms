@@ -1,8 +1,8 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { first } from 'lodash';
-
-const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
+const customMessages = extractCustomMessages(OrderWithoutBody);
 
 export const petitionsClerkAddsNoticeToCase = cerebralTest => {
   return it('Petitions clerk adds Notice to case', async () => {
@@ -11,9 +11,9 @@ export const petitionsClerkAddsNoticeToCase = cerebralTest => {
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitle: errorMessages.documentTitle[0].message,
-      documentType: errorMessages.documentType,
-      eventCode: errorMessages.eventCode,
+      documentTitle: customMessages.documentTitle[1],
+      documentType: customMessages.documentType[0],
+      eventCode: customMessages.eventCode[0],
     });
 
     await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {

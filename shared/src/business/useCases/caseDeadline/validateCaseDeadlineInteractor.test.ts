@@ -1,4 +1,3 @@
-import { CaseDeadline } from '../../entities/CaseDeadline';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateCaseDeadlineInteractor } from './validateCaseDeadlineInteractor';
 
@@ -7,10 +6,13 @@ describe('validateCaseDeadlineInteractor', () => {
     const errors = validateCaseDeadlineInteractor(applicationContext, {
       caseDeadline: {} as any,
     });
-
-    expect(Object.keys(errors)).toEqual(
-      Object.keys(CaseDeadline.VALIDATION_ERROR_MESSAGES),
-    );
+    expect(errors).toEqual({
+      associatedJudge: 'Associated judge is required',
+      deadlineDate: 'Enter a valid deadline date',
+      description: 'Enter a description of this deadline',
+      docketNumber: 'You must have a docket number.',
+      sortableDocketNumber: 'Sortable docket number is required',
+    });
   });
 
   it('returns null when there are no errors', () => {
