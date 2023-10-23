@@ -45,6 +45,8 @@ import {
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
+import { DOCKET_ENTRY_VALIDATION_RULES_NEW } from '@shared/business/entities/EntityValidationConstants.NEW';
+
 import { DocketEntry } from '../DocketEntry';
 import {
   FORMATS,
@@ -68,6 +70,7 @@ import { User } from '../User';
 import { clone, compact, includes, isEmpty, startCase } from 'lodash';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
 
@@ -101,7 +104,7 @@ export class Case extends JoiValidationEntity {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
   public irsNoticeDate?: string;
@@ -734,6 +737,417 @@ export class Case extends JoiValidationEntity {
 
   getValidationRules() {
     return Case.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    archivedCorrespondences: joi
+      .array()
+      .items(Correspondence.VALIDATION_RULES)
+      .optional()
+      .description('List of Correspondence Entities that were archived.'),
+    archivedDocketEntries: joi
+      .array()
+      .items(DOCKET_ENTRY_VALIDATION_RULES_NEW)
+      .optional()
+      .description(
+        'List of DocketEntry Entities that were archived instead of added to the docket record.',
+      ),
+    associatedJudge: JoiValidationConstants.STRING.max(50)
+      .optional()
+      .meta({ tags: ['Restricted'] })
+      .description('Judge assigned to this case. Defaults to Chief Judge.'),
+    automaticBlocked: joi
+      .boolean()
+      .optional()
+      .description(
+        'Temporarily blocked from trial due to a pending item or due date.',
+      ),
+    automaticBlockedDate: JoiValidationConstants.ISO_DATE.when(
+      'automaticBlocked',
+      {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      },
+    ),
+    automaticBlockedReason: JoiValidationConstants.STRING.valid(
+      ...Object.values(AUTOMATIC_BLOCKED_REASONS),
+    )
+      .description('The reason the case was automatically blocked from trial.')
+      .when('automaticBlocked', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }),
+    blocked: joi
+      .boolean()
+      .optional()
+      .meta({ tags: ['Restricted'] })
+      .when('status', {
+        is: CASE_STATUS_TYPES.calendared,
+        otherwise: joi.optional(),
+        then: joi.invalid(true),
+      })
+      .description('Temporarily blocked from trial.'),
+    blockedDate: JoiValidationConstants.ISO_DATE.when('blocked', {
+      is: true,
+      otherwise: joi.optional().allow(null),
+      then: joi.required(),
+    }).meta({ tags: ['Restricted'] }),
+    blockedReason: JoiValidationConstants.STRING.max(250)
+      .description(
+        'Open text field for describing reason for blocking this case from trial.',
+      )
+      .when('blocked', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .meta({ tags: ['Restricted'] }),
+    canAllowDocumentService: joi.boolean().optional(),
+    canAllowPrintableDocketRecord: joi.boolean().optional(),
+    caseCaption: JoiValidationConstants.CASE_CAPTION.required()
+      .description(
+        'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
+      )
+      .messages(setDefaultErrorMessage('Enter a case caption')),
+    caseNote: JoiValidationConstants.STRING.max(9000)
+      .optional()
+      .meta({
+        tags: ['Restricted'],
+      })
+      .messages({
+        'string.max':
+          'Limit is 9000 characters. Enter 9000 or fewer characters.',
+      }),
+    caseStatusHistory: joi
+      .array()
+      .required()
+      .description('The history of status changes on the case'),
+    caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES)
+      .required()
+      .messages(setDefaultErrorMessage('Select a case type')),
+    closedDate: JoiValidationConstants.ISO_DATE.when('status', {
+      is: joi.exist().valid(...CLOSED_CASE_STATUSES),
+      otherwise: joi.optional(),
+      then: joi.required(),
+    }),
+    correspondence: joi
+      .array()
+      .items(Correspondence.VALIDATION_RULES)
+      .optional()
+      .description('List of Correspondence documents for the case.'),
+    createdAt: JoiValidationConstants.ISO_DATE.required().description(
+      'When the paper or electronic case was added to the system. This value cannot be edited.',
+    ),
+    damages: joi
+      .number()
+      .optional()
+      .allow(null)
+      .description('Damages for the case.'),
+    docketEntries: joi
+      .array()
+      .items(DOCKET_ENTRY_VALIDATION_RULES_NEW)
+      .required()
+      .description('List of DocketEntry Entities for the case.'),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()
+      .description('Unique case identifier in XXXXX-YY format.')
+      .messages(setDefaultErrorMessage('Docket number is required')),
+    docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
+      .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+      .optional(),
+    docketNumberWithSuffix:
+      JoiValidationConstants.STRING.optional().description(
+        'Auto-generated from docket number and the suffix.',
+      ),
+    entityName: JoiValidationConstants.STRING.valid('Case').required(),
+    filingType: JoiValidationConstants.STRING.valid(
+      ...FILING_TYPES[ROLES.petitioner],
+      ...FILING_TYPES[ROLES.privatePractitioner],
+    )
+      .optional()
+      .messages(
+        setDefaultErrorMessage('Select on whose behalf you are filing'),
+      ),
+    hasPendingItems: joi.boolean().optional(),
+    hasVerifiedIrsNotice: joi
+      .boolean()
+      .optional()
+      .allow(null)
+      .description(
+        'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
+      )
+      .messages(
+        setDefaultErrorMessage('Indicate whether you received an IRS notice'),
+      ),
+    highPriority: joi
+      .boolean()
+      .optional()
+      .meta({ tags: ['Restricted'] }),
+    highPriorityReason: JoiValidationConstants.STRING.max(250)
+      .when('highPriority', {
+        is: true,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .meta({ tags: ['Restricted'] }),
+    initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
+      .optional()
+      .description('Case caption before modification.'),
+    initialDocketNumberSuffix: JoiValidationConstants.STRING.valid(
+      ...Object.values(DOCKET_NUMBER_SUFFIXES),
+      '_',
+    )
+      .allow(null)
+      .optional()
+      .description('Case docket number suffix before modification.'),
+    irsNoticeDate: JoiValidationConstants.ISO_DATE.max('now')
+      .optional()
+      .allow(null)
+      .description('Last date that the petitioner is allowed to file before.')
+      .messages({
+        ...setDefaultErrorMessage('Please enter a valid IRS notice date'),
+        'date.max':
+          'The IRS notice date cannot be in the future. Enter a valid date.',
+      }),
+    irsPractitioners: joi
+      .array()
+      .items(IrsPractitioner.VALIDATION_RULES_NEW)
+      .optional()
+      .description(
+        'List of IRS practitioners (also known as respondents) associated with the case.',
+      ),
+    isPaper: joi.boolean().optional(),
+    isSealed: joi.boolean().optional(),
+    judgeUserId: JoiValidationConstants.UUID.optional().description(
+      'Unique ID for the associated judge.',
+    ),
+    leadDocketNumber:
+      JoiValidationConstants.DOCKET_NUMBER.optional().description(
+        'If this case is consolidated, this is the docket number of the lead case. It is the lowest docket number in the consolidated group.',
+      ),
+    litigationCosts: joi
+      .number()
+      .optional()
+      .allow(null)
+      .description('Litigation costs for the case.'),
+    mailingDate: JoiValidationConstants.STRING.max(25)
+      .when('isPaper', {
+        is: true,
+        otherwise: joi.allow(null).optional(),
+        then: joi.required(),
+      })
+      .description('Date that petition was mailed to the court.')
+      .messages(setDefaultErrorMessage('Enter a mailing date')),
+    noticeOfAttachments: joi
+      .boolean()
+      .optional()
+      .description('Reminder for clerks to review the notice of attachments.'),
+    noticeOfTrialDate: JoiValidationConstants.ISO_DATE.optional().description(
+      'Reminder for clerks to review the notice of trial date.',
+    ),
+    orderDesignatingPlaceOfTrial: joi
+      .boolean()
+      .optional()
+      .description(
+        'Reminder for clerks to review the Order Designating Place of Trial.',
+      ),
+    orderForAmendedPetition: joi
+      .boolean()
+      .optional()
+      .description(
+        'Reminder for clerks to review the order for amended Petition.',
+      ),
+    orderForAmendedPetitionAndFilingFee: joi
+      .boolean()
+      .optional()
+      .description(
+        'Reminder for clerks to review the order for amended Petition And filing fee.',
+      ),
+    orderForCds: joi
+      .boolean()
+      .optional()
+      .description('Reminder for clerks to review the order for CDS.'),
+    orderForFilingFee: joi
+      .boolean()
+      .optional()
+      .description('Reminder for clerks to review the order for filing fee.'),
+    orderForRatification: joi
+      .boolean()
+      .optional()
+      .description('Reminder for clerks to review the Order for Ratification.'),
+    orderToShowCause: joi
+      .boolean()
+      .optional()
+      .description('Reminder for clerks to review the Order to Show Cause.'),
+    partyType: JoiValidationConstants.STRING.valid(
+      ...Object.values(PARTY_TYPES),
+    )
+      .required()
+      .description('Party type of the case petitioner.')
+      .messages(setDefaultErrorMessage('Select a party type')),
+    petitionPaymentDate: JoiValidationConstants.ISO_DATE.when(
+      'petitionPaymentStatus',
+      {
+        is: PAYMENT_STATUS.PAID,
+        otherwise: joi.optional().allow(null),
+        then: JoiValidationConstants.ISO_DATE.max('now').required(),
+      },
+    )
+      .description('When the petitioner paid the case fee.')
+      .messages(setDefaultErrorMessage('Enter a valid payment date')),
+    petitionPaymentMethod: JoiValidationConstants.STRING.max(50)
+      .when('petitionPaymentStatus', {
+        is: PAYMENT_STATUS.PAID,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      })
+      .description('How the petitioner paid the case fee.')
+      .messages(setDefaultErrorMessage('Enter payment method')),
+    petitionPaymentStatus: JoiValidationConstants.STRING.valid(
+      ...Object.values(PAYMENT_STATUS),
+    )
+      .required()
+      .description('Status of the case fee payment.')
+      .messages(setDefaultErrorMessage('Enter payment status')),
+    petitionPaymentWaivedDate: JoiValidationConstants.ISO_DATE.when(
+      'petitionPaymentStatus',
+      {
+        is: PAYMENT_STATUS.WAIVED,
+        otherwise: joi.allow(null).optional(),
+        then: JoiValidationConstants.ISO_DATE.max('now').required(),
+      },
+    )
+      .description('When the case fee was waived.')
+      .messages(setDefaultErrorMessage('Enter a valid date waived')),
+    petitioners: joi
+      .array()
+      .unique(
+        (a, b) =>
+          a.contactType === CONTACT_TYPES.intervenor &&
+          b.contactType === CONTACT_TYPES.intervenor,
+      )
+      .required(),
+    preferredTrialCity: joi
+      .alternatives()
+      .try(
+        JoiValidationConstants.STRING.valid(
+          ...TRIAL_CITY_STRINGS,
+          ...LEGACY_TRIAL_CITY_STRINGS,
+          null,
+        ),
+        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+      )
+      .optional()
+      .description('Where the petitioner would prefer to hold the case trial.')
+      .messages(setDefaultErrorMessage('Select a trial location')),
+    privatePractitioners: joi
+      .array()
+      .items(PrivatePractitioner.VALIDATION_RULES_NEW)
+      .optional()
+      .description('List of private practitioners associated with the case.'),
+    procedureType: JoiValidationConstants.STRING.valid(...PROCEDURE_TYPES)
+      .required()
+      .description('Procedure type of the case.')
+      .messages(setDefaultErrorMessage('Select a case procedure')),
+    qcCompleteForTrial: joi
+      .object()
+      .optional()
+      .meta({ tags: ['Restricted'] })
+      .description(
+        'QC Checklist object that must be completed before the case can go to trial.',
+      ),
+    receivedAt: JoiValidationConstants.ISO_DATE.required()
+      .description(
+        'When the case was received by the court. If electronic, this value will be the same as createdAt. If paper, this value can be edited.',
+      )
+      .messages({
+        ...setDefaultErrorMessage('Enter a valid date received'),
+        'date.max':
+          'Date received cannot be in the future. Enter a valid date.',
+      }),
+    sealedDate: JoiValidationConstants.ISO_DATE.optional()
+      .allow(null)
+      .description('When the case was sealed from the public.'),
+
+    sortableDocketNumber: joi
+      .number()
+      .required()
+      .description(
+        'A sortable representation of the docket number (auto-generated by constructor).',
+      )
+      .messages(setDefaultErrorMessage('Sortable docket number is required')),
+    statistics: joi
+      .array()
+      .items(Statistic.VALIDATION_RULES_NEW)
+      .when('hasVerifiedIrsNotice', {
+        is: true,
+        otherwise: joi.optional(),
+        then: joi.when('caseType', {
+          is: CASE_TYPES_MAP.deficiency,
+          otherwise: joi.optional(),
+          then: joi.array().min(1).required(),
+        }),
+      })
+      .description('List of Statistic Entities for the case.'),
+    status: joi
+      .alternatives()
+      .conditional('closedDate', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.STRING.valid(
+          ...Object.values(CASE_STATUS_TYPES),
+        ).optional(),
+        then: JoiValidationConstants.STRING.required().valid(
+          ...CLOSED_CASE_STATUSES,
+        ),
+      })
+      .meta({ tags: ['Restricted'] })
+      .description('Status of the case.'),
+    trialDate: joi
+      .alternatives()
+      .conditional('trialSessionId', {
+        is: joi.exist().not(null),
+        otherwise: JoiValidationConstants.ISO_DATE.optional().allow(null),
+        then: JoiValidationConstants.ISO_DATE.required(),
+      })
+      .description('When this case goes to trial.'),
+    trialLocation: joi
+      .alternatives()
+      .try(
+        JoiValidationConstants.STRING.valid(...TRIAL_CITY_STRINGS, null),
+        JoiValidationConstants.STRING.pattern(TRIAL_LOCATION_MATCHER), // Allow unique values for testing
+        JoiValidationConstants.STRING.valid('Standalone Remote'),
+      )
+      .optional()
+      .description(
+        'Where this case goes to trial. This may be different that the preferred trial location.',
+      ),
+    trialSessionId: joi
+      .when('status', {
+        is: CASE_STATUS_TYPES.calendared,
+        otherwise: joi.when('trialDate', {
+          is: joi.exist().not(null),
+          otherwise: JoiValidationConstants.UUID.optional(),
+          then: JoiValidationConstants.UUID.required(),
+        }),
+        then: JoiValidationConstants.UUID.required(),
+      })
+      .description(
+        'The unique ID of the trial session associated with this case.',
+      ),
+    trialTime: JoiValidationConstants.STRING.pattern(PATTERNS['H:MM'])
+      .optional()
+      .description('Time of day when this case goes to trial.'),
+    useSameAsPrimary: joi
+      .boolean()
+      .optional()
+      .description(
+        'Whether to use the same address for the primary and secondary petitioner contact information (used only in data entry and QC process).',
+      ),
+  };
+
+  getValidationRules_NEW() {
+    return Case.VALIDATION_RULES_NEW;
   }
 
   assignFieldsForAllUsers({ rawCase }) {
@@ -2387,7 +2801,7 @@ const generateCaptionFromContacts = ({
       caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Petitioners`;
       break;
     case PARTY_TYPES.petitionerDeceasedSpouse:
-      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Deceased, ${primaryContact.name}, Surviving Spouse, Petitioners`;
+      caseCaption = `${primaryContact.name} & ${secondaryContact.name}, Deceased, Petitioners`;
       break;
     case PARTY_TYPES.estate:
       caseCaption = `Estate of ${primaryContact.name}, Deceased, ${primaryContact.secondaryName}, ${primaryContact.title}, Petitioner(s)`;

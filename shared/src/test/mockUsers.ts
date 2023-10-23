@@ -43,7 +43,7 @@ export const irsPractitionerUser: RawIrsPractitioner = {
     address2: 'Apartment 4',
     address3: 'Under the stairs',
     city: 'Chicago',
-    country: COUNTRY_TYPES.DOMESTIC,
+    country: 'USA',
     countryType: COUNTRY_TYPES.DOMESTIC,
     phone: '+1 (555) 555-5555',
     postalCode: '61234',
@@ -54,7 +54,7 @@ export const irsPractitionerUser: RawIrsPractitioner = {
   name: 'IRS Practitioner',
   role: ROLES.irsPractitioner,
   section: 'irsPractitioner',
-  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
   userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
 };
 

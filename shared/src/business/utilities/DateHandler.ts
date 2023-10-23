@@ -236,7 +236,7 @@ export const createISODateStringFromObject = options => {
 export const formatDateString = (
   dateString: string,
   formatArg: TimeFormatNames | TimeFormats = FORMATS.ISO,
-): string | void => {
+): string => {
   if (!dateString) return '';
   let formatString = FORMATS[formatArg] || formatArg;
 
@@ -371,6 +371,19 @@ export const isValidDateString = (
   }
 
   return DateTime.fromFormat(dateString, formats).isValid;
+};
+
+export const getDateFormat = (
+  dateString: string,
+  acceptableFormats: TimeFormats[],
+): TimeFormats => {
+  for (const possibleTimeFormat of acceptableFormats) {
+    if (DateTime.fromFormat(dateString, possibleTimeFormat).isValid) {
+      return possibleTimeFormat;
+    }
+  }
+
+  throw new Error('Invalid date string');
 };
 
 /**

@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class Batch extends JoiValidationEntity {
@@ -50,6 +51,24 @@ export class Batch extends JoiValidationEntity {
       batchIndex: joi.number().integer().min(0).required(),
       createdAt: JoiValidationConstants.ISO_DATE.required(),
       pages: joi.array().min(1).required(),
+    });
+  }
+
+  getValidationRules_NEW() {
+    return joi.object().keys({
+      batchId: JoiValidationConstants.UUID.required(),
+      batchIndex: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages(setDefaultErrorMessage('Invalid batch index')),
+      createdAt: JoiValidationConstants.ISO_DATE.required(),
+      pages: joi
+        .array()
+        .min(1)
+        .required()
+        .messages(setDefaultErrorMessage('At least one page is required')),
     });
   }
 

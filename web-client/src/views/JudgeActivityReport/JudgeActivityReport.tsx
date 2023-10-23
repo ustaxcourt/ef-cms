@@ -4,7 +4,7 @@ import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
 import { connect } from '@cerebral/react';
 import { formatPositiveNumber } from '../../../../shared/src/business/utilities/formatPositiveNumber';
 import { sequences, state } from '@web-client/presenter/app.cerebral';

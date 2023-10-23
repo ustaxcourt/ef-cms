@@ -10,7 +10,7 @@ import {
   FORMATS,
   dateStringsCompared,
   formatDateString,
-} from '../../utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import {
   InvalidRequest,
   UnauthorizedError,

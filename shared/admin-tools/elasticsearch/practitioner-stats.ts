@@ -4,9 +4,9 @@ import { requireEnvVars } from '../util';
 requireEnvVars(['ENV', 'REGION']);
 
 import { DateTime } from 'luxon';
-import { createApplicationContext } from '../../../web-api/src/applicationContext';
-import { searchAll } from '../../../web-api/src/persistence/elasticsearch/searchClient';
-import { validateDateAndCreateISO } from '../../src/business/utilities/DateHandler';
+import { createApplicationContext } from '@web-api/applicationContext';
+import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { validateDateAndCreateISO } from '@shared/business/utilities/DateHandler';
 
 const year = Number(process.argv[2]) || Number(DateTime.now().toObject().year);
 
