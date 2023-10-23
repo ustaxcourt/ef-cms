@@ -87,34 +87,3 @@ This runs only the specified Cypress Integration test in isolation. Simply creat
 Troubleshotoing flaky Unit tests or Cerebral integration tests could also employ a similar strategy.
 
 ## Workarounds and Solutions
-
-### Using cy.wait(0) 
-
-In order to solve #[3866](https://github.com/ustaxcourt/ef-cms/issues/3866), we employed a `cy.wait(0);` command to fix a flaky cypress integration test. 
-
-For whatever reason a `cy.get('#selector').click();` was not firing, and the subsequent expectation afterwards was failing. Simply adding a `cy.wait(...)` before the click enabled the test run to reliably trigger the click event, and the test proceeded successfully. 
-
-We initially started with an arbitrary number greater than 0 (500ms at first). Then we burned the number down to 0 as the tests continued to pass. We want as low a number so as to minimize how much we slow down our test suites.
-
-And in order to pass linting, we needed to add a lint rule exception.
-
-Before:
-
-```
-// do some things
-cy.get('#selector').click();
-cy.get('#another-selector').attachFile('../fixtures/some-file.pdf');
-```
-
-After:
-```
-// do some things
-// eslint-disable-next-line cypress/no-unnecessary-waiting
-cy.wait(0);
-cy.get('#selector').click();
-cy.get('#another-selector').attachFile('../fixtures/some-file.pdf');
-```
-
-Using `cy.wait()` [is an anti-pattern](https://docs.cypress.io/guides/references/best-practices), and so use it only as a last resort.
-
-
