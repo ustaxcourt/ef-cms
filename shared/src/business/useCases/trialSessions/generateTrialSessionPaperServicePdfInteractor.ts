@@ -62,13 +62,14 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
 
   const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
-  let docketEntryId, pdfUrl;
+  let fileId, pdfUrl;
 
-  ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
+  ({ fileId, url: pdfUrl } = await applicationContext
     .getUseCaseHelpers()
     .saveFileAndGenerateUrl({
       applicationContext,
       file: paperServicePdfData,
+      fileNamePrefix: 'paper-service-pdf',
       useTempBucket: true,
     }));
 
@@ -83,7 +84,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     applicationContext,
   });
 
-  trialSessionEntity.addPaperServicePdf(docketEntryId, 'Initial Calendaring');
+  trialSessionEntity.addPaperServicePdf(fileId, 'Initial Calendaring');
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

@@ -136,6 +136,7 @@ export const updateTrialSessionInteractor = async (
         .saveFileAndGenerateUrl({
           applicationContext,
           file: paperServicePdfData,
+          fileNamePrefix: 'paper-service-pdf',
           useTempBucket: true,
         }));
 

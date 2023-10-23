@@ -188,6 +188,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
         file: expect.anything(),
+        fileNamePrefix: 'paper-service-pdf',
         useTempBucket: true,
       });
       expect(
