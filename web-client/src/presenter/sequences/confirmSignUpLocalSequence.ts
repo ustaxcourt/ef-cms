@@ -1,5 +1,5 @@
 import { confirmSignUpLocalAction } from '../actions/confirmSignUpLocalAction';
-import { gotoLoginSequence } from './gotoLoginSequence';
+import { navigateToCognitoAction } from '@web-client/presenter/actions/navigateToCognitoAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
@@ -11,12 +11,12 @@ export const confirmSignUpLocalSequence = showProgressSequenceDecorator([
     no: [
       setAlertErrorAction,
       setSaveAlertsForNavigationAction,
-      gotoLoginSequence,
+      navigateToCognitoAction,
     ],
     yes: [
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
-      gotoLoginSequence,
+      navigateToCognitoAction,
     ],
   },
 ]);
