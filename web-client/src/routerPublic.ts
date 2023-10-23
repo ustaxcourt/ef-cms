@@ -95,6 +95,14 @@ const router = {
       return app.getSequence('gotoMaintenanceSequence')();
     });
 
+    route('/confirm-signup-local?..', () => {
+      const { confirmationCode, email } = route.query();
+      return app.getSequence('confirmSignUpLocalSequence')({
+        confirmationCode,
+        userEmail: email,
+      });
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({

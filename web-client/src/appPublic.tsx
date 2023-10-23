@@ -89,8 +89,6 @@ const appPublic = {
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.cognitoRequestPasswordResetUrl =
       applicationContext.getCognitoRequestPasswordResetUrl();
-    presenter.state.cognitoResendVerificationLinkUrl =
-      applicationContext.getCognitoResendVerificationLinkUrl();
 
     presenter.state.cognitoLocalEnabled =
       applicationContext.getCognitoLocalEnabled();

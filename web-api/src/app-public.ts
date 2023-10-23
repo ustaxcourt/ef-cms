@@ -53,6 +53,7 @@ app.use(logger());
 import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { cognitoResendVerificationLinkLambda } from '@web-api/lambdas/public-api/cognitoResendVerificationLinkLambda';
+import { confirmSignUpLocalLambda } from '@web-api/auth/confirmSignUpLocalLambda';
 import { createUserCognitoLambda } from '@web-api/users/createUserCognitoLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
@@ -136,7 +137,10 @@ app.get(
 
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 
+// TODO: consider prefixing below with /public/
 app.post('/account/create', lambdaWrapper(createUserCognitoLambda));
+
+app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 
 app.post(
   '/account/resend-verification',

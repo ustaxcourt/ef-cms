@@ -11,6 +11,7 @@ export const VerificationSent = connect(
     email: state.cognito.email,
   },
   ({ alertSuccess, cognitoResendVerificationLinkSequence, email }) => {
+    //TODO: move this to `goToVerificationSentSequence, remove actual email from state
     function maskEmail(rawEmail: string) {
       const parts = rawEmail.split('@');
       if (parts.length !== 2) return rawEmail;
@@ -45,15 +46,14 @@ export const VerificationSent = connect(
             An email to verify your email address was sent{' '}
             {email && (
               <>
-                to {maskEmail(email)} . If you didn&apos;t receive a
-                verification email, check your spam folder or you can{' '}
+                to {maskEmail(email)}. If you didn&apos;t receive a verification
+                email, check your spam folder or you can{' '}
                 <button
                   className="usa-button--unstyled"
                   onClick={() => cognitoResendVerificationLinkSequence()}
                 >
-                  send the verification email again
+                  send the verification email again.
                 </button>
-                .
               </>
             )}
           </p>

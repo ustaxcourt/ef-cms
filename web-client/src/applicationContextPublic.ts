@@ -41,14 +41,14 @@ import {
   getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
-  getCognitoResendVerificationLinkUrl,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
 import { User } from '../../shared/src/business/entities/User';
 import { casePublicSearchInteractor } from '../../shared/src/proxies/casePublicSearchProxy';
-import { cognitoResendVerificationLinkInteractor } from '@shared/proxies/public/cognitoResendVerificationLinkProxy';
+import { cognitoResendVerificationLinkInteractor } from '../../shared/src/proxies/public/cognitoResendVerificationLinkProxy';
 import { compareCasesByDocketNumber } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { confirmSignUpLocalInteractor } from '@shared/proxies/auth/confirmSignUpLocalProxy';
 import {
   createISODateString,
   formatDateString,
@@ -100,6 +100,7 @@ const ADVANCED_SEARCH_TABS = {
 const allUseCases = {
   casePublicSearchInteractor,
   cognitoResendVerificationLinkInteractor,
+  confirmSignUpLocalInteractor,
   createUserCognitoInteractor,
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
@@ -168,7 +169,6 @@ const applicationContextPublic = {
   getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getCognitoRequestPasswordResetUrl,
-  getCognitoResendVerificationLinkUrl,
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
