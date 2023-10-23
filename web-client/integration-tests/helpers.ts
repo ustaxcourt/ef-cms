@@ -929,9 +929,50 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  cerebralTest = CerebralTest(presenter);
+  cerebralTest = CerebralTest(presenter, { throwToConsole: true });
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
+  const oldRunTest = cerebralTest.runSequence;
+  cerebralTest.runSequence = async function (...args) {
+    try {
+      return await oldRunTest.call(this, ...args);
+    } catch (err) {
+      // console.log();
+
+      delete err.execution; // This is a problem
+      delete err.functionDetails;
+      delete err.payload;
+      delete err.details;
+      delete err.response;
+      // console.log(Object.getOwnPropertyNames(err));
+      // console.log(Object.keys(err));
+      // console.log(err.toJSON());
+      // const error = new Error(err.message);
+      // error.stack = err.stack;
+      // if (err.originalError) {
+      //   delete err.originalError;
+      console.log(Object.getOwnPropertyNames(err));
+      console.log('STACKKKK: ', err.stack);
+      // console.log(Object.keys(err));
+      // [
+      //   'port',
+      //   'address',
+      //   'syscall',
+      //   'code',
+      //   'errno',
+      //   'message',
+      //   'stack',
+      //   'name',
+      //   'config',
+      //   'request',
+      //   'cause',
+      // ].forEach(prop => console.log(prop, err[prop]));
+      throw 'it is over';
+      // } else {
+      //   throw err;
+      // }
+    }
+  };
   cerebralTest.closeSocket = stopSocket;
   cerebralTest.applicationContext = applicationContext;
 
