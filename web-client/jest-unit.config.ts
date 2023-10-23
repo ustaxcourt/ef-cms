@@ -33,14 +33,12 @@ const config: Config = {
   moduleNameMapper: pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {
     prefix: '<rootDir>/../',
   }),
-  setupFiles: ['core-js'],
-  testEnvironment: 'jsdom',
+  testEnvironment: 'node',
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
 };
 
