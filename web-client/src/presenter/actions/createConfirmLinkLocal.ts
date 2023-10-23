@@ -21,8 +21,8 @@ export const createConfirmLinkLocal = ({
   return {
     alertSuccess: {
       alertType: 'success',
-      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. \n 
-        <a href="${confirmationLink}">log in here</a>.`,
+      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. </br>
+        <a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>.`,
       title: 'Account Created Locally',
     },
   };

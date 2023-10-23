@@ -8,6 +8,7 @@ import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearch
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { closeModalAndNavigateToMaintenanceSequence } from './sequences/closeModalAndNavigateToMaintenanceSequence';
 import { cognitoResendVerificationLinkSequence } from '@web-client/presenter/sequences/Public/cognitoResendVerificationLinkSequence';
+import { confirmSignUpLocalSequence } from '@web-client/presenter/sequences/confirmSignUpLocalSequence';
 import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToVerificationSentSequence } from '@web-client/presenter/sequences/goToVerificationSentSequence';
@@ -64,6 +65,7 @@ export const presenterSequences = {
   clearPdfPreviewUrlSequence,
   closeModalAndNavigateToMaintenanceSequence,
   cognitoResendVerificationLinkSequence,
+  confirmSignUpLocalSequence,
   dismissModalSequence,
   goToCreatePetitionerAccountSequence,
   goToVerificationSentSequence,

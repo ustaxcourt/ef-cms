@@ -13,13 +13,26 @@ export const cognitoResendVerificationLinkAction = async ({
       .cognitoResendVerificationLinkInteractor(applicationContext, {
         email,
       });
-
     if (CodeDeliveryDetails) {
       return path.success();
     } else {
-      return path.error();
+      return path.error({
+        alertError: {
+          alertType: 'error',
+          message: 'Please check your spam folder.',
+          title: 'Unable to resend confirmation link',
+        },
+      });
     }
   } catch (e) {
-    console.log('do a flip!');
+    return path.error({
+      alertError: {
+        //TODO: Ask UX about error message
+        alertType: 'error',
+        message:
+          'Could not resend verification link, please contact DAWSON user support',
+        title: 'Unable to resend confirmation link',
+      },
+    });
   }
 };
