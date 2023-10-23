@@ -14,6 +14,7 @@ describe('getPaperServicePdfUrlInteractor', () => {
   });
 
   it('should return a url to the document specified when the user has permission to re-print trial session paper service documents', async () => {
+    const mockFileId = 'd30ca1a5-6e9c-411d-a292-3e89abf13141';
     const mockDocumentUrl = 'example.com';
     applicationContext.getCurrentUser.mockReturnValueOnce(petitionsClerkUser);
     applicationContext
@@ -21,9 +22,16 @@ describe('getPaperServicePdfUrlInteractor', () => {
       .getDownloadPolicyUrl.mockResolvedValue({ url: mockDocumentUrl });
 
     const { url } = await getPaperServicePdfUrlInteractor(applicationContext, {
-      key: 'd30ca1a5-6e9c-411d-a292-3e89abf13141',
+      key: mockFileId,
     });
 
+    expect(
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
+    ).toHaveBeenCalledWith({
+      applicationContext: expect.anything(),
+      key: `paper-service-pdf|${mockFileId}`,
+      useTempBucket: true,
+    });
     expect(url).toEqual(mockDocumentUrl);
   });
 });
