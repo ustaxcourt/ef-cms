@@ -3,9 +3,9 @@ import { navigateToCognitoAction } from '@web-client/presenter/actions/navigateT
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { sleep } from '@shared/tools/helpers';
 
-export const confirmSignUpLocalSequence = showProgressSequenceDecorator([
+export const confirmSignUpLocalSequence = [
   confirmSignUpLocalAction,
   {
     no: [
@@ -16,7 +16,10 @@ export const confirmSignUpLocalSequence = showProgressSequenceDecorator([
     yes: [
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
+      async () => {
+        await sleep(3000);
+      },
       navigateToCognitoAction,
     ],
   },
-]);
+];
