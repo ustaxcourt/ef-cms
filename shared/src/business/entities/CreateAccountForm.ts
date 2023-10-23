@@ -40,7 +40,9 @@ export class CreateAccountForm extends JoiValidationEntity {
   static VALIDATION_RULES = joi.object().keys({
     confirmPassword: joi.valid(joi.ref('password')).required(),
     //TODO: don't forget to test this
-    email: JoiValidationConstants.EMAIL.required().description('Email of user'),
+    email: JoiValidationConstants.EMAIL.lowercase()
+      .required()
+      .description('Email of user'),
     entityName:
       JoiValidationConstants.STRING.valid('CreateAccountForm').required(),
     name: JoiValidationConstants.STRING.max(100)
