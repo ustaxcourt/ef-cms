@@ -758,7 +758,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .getCaseByDocketNumber.mockReturnValue(leadMockCase);
     });
 
-    it('should return the policy url when the document requested is an available document and user is associated with the consolidated group', async () => {
+    it('should return the policy url when the document requested is an available document', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: baseDocketEntry.docketEntryId,
