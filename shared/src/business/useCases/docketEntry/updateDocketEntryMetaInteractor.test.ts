@@ -4,7 +4,7 @@ import {
   NotFoundError,
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { docketClerkUser } from '../../../test/mockUsers';

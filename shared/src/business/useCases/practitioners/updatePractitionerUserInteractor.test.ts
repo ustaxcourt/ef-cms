@@ -1,8 +1,5 @@
 import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';

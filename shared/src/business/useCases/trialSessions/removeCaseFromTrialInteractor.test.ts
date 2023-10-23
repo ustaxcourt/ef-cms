@@ -6,7 +6,7 @@ import { RawTrialSession } from '../../entities/trialSessions/TrialSession';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { petitionerUser, petitionsClerkUser } from '../../../test/mockUsers';

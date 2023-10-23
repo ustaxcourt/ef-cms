@@ -4,7 +4,7 @@ import { ROLES } from '../../entities/EntityConstants';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import { User } from '../../entities/User';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
