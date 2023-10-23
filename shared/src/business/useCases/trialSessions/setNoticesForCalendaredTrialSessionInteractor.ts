@@ -4,7 +4,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 const waitForJobToFinish = async ({ applicationContext, jobId }) => {
   let unfinishedCases;

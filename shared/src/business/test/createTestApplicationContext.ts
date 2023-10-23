@@ -26,7 +26,7 @@ import {
 } from '../../sharedAppContext';
 import { User } from '../entities/User';
 import { abbreviateState } from '../utilities/abbreviateState';
-import { acquireLock } from '../useCaseHelper/acquireLock';
+import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';

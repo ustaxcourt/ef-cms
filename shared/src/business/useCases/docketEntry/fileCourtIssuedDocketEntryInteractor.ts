@@ -14,7 +14,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
 import { omit } from 'lodash';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *

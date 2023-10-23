@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
-import { withLocking } from '../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 /**
  * used for setting a case as blocked
  * @param {object} applicationContext the application context

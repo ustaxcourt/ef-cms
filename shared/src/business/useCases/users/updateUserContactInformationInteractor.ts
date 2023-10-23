@@ -11,7 +11,7 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';
 import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * updateUserContactInformationHelper

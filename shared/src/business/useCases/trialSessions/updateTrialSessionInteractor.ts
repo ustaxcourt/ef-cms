@@ -8,7 +8,7 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { get } from 'lodash';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,

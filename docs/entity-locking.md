@@ -58,7 +58,7 @@ await applicationContext.getPersistenceGateway().removeLock({
 If you are working within a very large interactor that has many lines, it may be more desirable to wrap it rather than adding even more lines to that function. A `withLocking` wrapper is available for this purpose. Get started by importing it:
 
 ```typescript
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 ```
 
 Then rename your original interactor function; you will reference it later:
@@ -107,7 +107,7 @@ export const updateSomethingInteractor = withLocking(
 Here are all of the lines put together:
 
 ```typescript
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 // the original interactor, renamed
 export const updateSomething = async (applicationContext, { docketNumber }) => {

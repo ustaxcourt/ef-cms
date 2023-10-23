@@ -6,7 +6,7 @@ import {
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 import { createISODateString } from '../../utilities/DateHandler';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * completeWorkItemInteractor
