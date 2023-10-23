@@ -11,7 +11,7 @@ import { MOCK_LOCK } from '../../test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getPetitionerById } from '../entities/cases/Case';
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';

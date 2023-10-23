@@ -7,10 +7,10 @@ import {
 import {
   UnauthorizedError,
   UnprocessableEntityError,
-} from '../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
-import { withLocking } from '../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * saveCaseDetailInternalEdit

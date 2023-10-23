@@ -20,13 +20,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,

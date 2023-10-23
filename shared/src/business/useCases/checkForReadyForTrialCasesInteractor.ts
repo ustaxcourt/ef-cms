@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { acquireLock } from '../useCaseHelper/acquireLock';
+import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
 import { createISODateString } from '../utilities/DateHandler';
 import { uniqBy } from 'lodash';
 

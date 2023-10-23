@@ -8,17 +8,14 @@ import {
   getPetitionerById,
   getPractitionersRepresenting,
 } from '../entities/cases/Case';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
-import { withLocking } from '../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
   oldCase,

@@ -11,10 +11,7 @@ import {
   dateStringsCompared,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import {
-  InvalidRequest,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -26,7 +23,7 @@ import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDoc
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '../../utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 export const needsNewCoversheet = ({
   applicationContext,
