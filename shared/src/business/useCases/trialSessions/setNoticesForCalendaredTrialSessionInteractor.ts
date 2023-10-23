@@ -119,7 +119,7 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
       trialSessionStatus: 'complete',
     });
 
-  await trialSessionEntity.setNoticesIssued();
+  trialSessionEntity.setNoticesIssued();
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
