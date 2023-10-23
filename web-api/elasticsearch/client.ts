@@ -43,16 +43,18 @@ export const getClient = async ({
     }
   }
 
-  return new Client({
-    ...AwsSigv4Signer({
-      getCredentials: () => {
-        const credentialsProvider = defaultProvider();
-        return credentialsProvider();
-      },
-      region: 'us-east-1',
-    }),
-    node: elasticsearchEndpoint,
-  });
+  return environmentName === 'local'
+    ? new Client({ node: elasticsearchEndpoint })
+    : new Client({
+        ...AwsSigv4Signer({
+          getCredentials: () => {
+            const credentialsProvider = defaultProvider();
+            return credentialsProvider();
+          },
+          region: 'us-east-1',
+        }),
+        node: elasticsearchEndpoint,
+      });
 };
 
 export const listDomains = async (): Promise<string[]> => {
