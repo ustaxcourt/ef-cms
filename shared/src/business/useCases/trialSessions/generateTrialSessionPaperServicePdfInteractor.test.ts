@@ -79,7 +79,7 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
         .calls[2][0],
     ).toMatchObject({
       message: {
-        action: 'paper_service_complete',
+        action: 'set_trial_calendar_paper_service_complete',
         docketEntryId: mockFileId,
         hasPaper: true,
         pdfUrl: expect.anything(),

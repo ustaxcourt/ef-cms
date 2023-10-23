@@ -98,8 +98,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: 'paper_service_complete',
-      docketEntryId,
+      action: 'set_trial_calendar_paper_service_complete',
       hasPaper: true,
       pdfUrl,
     },
