@@ -14,7 +14,7 @@ const config: Config = {
     }),
     uuid: require.resolve('uuid'), // https://github.com/microsoft/accessibility-insights-web/pull/5421
   },
-  testEnvironment: 'node',
+  testEnvironment: 'jsdom',
   testSequencer: `${__dirname}/jestSequencer.js`,
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
