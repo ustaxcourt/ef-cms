@@ -1,8 +1,5 @@
 import { Case, isSealedCase } from '../../entities/cases/Case';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { PublicCase } from '../../entities/cases/PublicCase';
 
 /**

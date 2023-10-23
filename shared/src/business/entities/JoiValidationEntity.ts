@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
+import { InvalidEntityError } from '@web-api/errors/errors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 

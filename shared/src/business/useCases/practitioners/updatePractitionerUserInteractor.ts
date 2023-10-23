@@ -1,7 +1,4 @@
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { Practitioner } from '../../entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
