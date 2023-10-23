@@ -1,5 +1,4 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -229,6 +228,38 @@ describe('getCaseInteractor', () => {
     expect(result.entityName).toEqual('Case');
   });
 
+  it('should return the full case (non public) when the user is part of the consolidated group', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'Tasha Yar',
+      role: ROLES.petitioner,
+      userId: petitionerId,
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...testCase,
+        consolidatedCases: [
+          { ...testCase, petitioners: [] },
+          {
+            ...testCase,
+            petitioners: [
+              {
+                ...testCase.petitioners[0],
+                contactId: petitionerId,
+              },
+            ],
+          },
+          { ...testCase, petitioners: [] },
+        ],
+        leadDocketNumber: '101-20',
+      });
+
+    const result = await getCaseInteractor(applicationContext, {
+      docketNumber: '101-18',
+    });
+    expect(result.entityName).toEqual('Case');
+  });
+
   describe('sealed contact information', () => {
     beforeAll(() => {
       const mockCaseWithSealed = cloneDeep(MOCK_CASE_WITH_SECONDARY_OTHERS);
@@ -454,48 +485,6 @@ describe('getCaseInteractor', () => {
       expect(
         decorateForCaseStatus(MOCK_CASE).canAllowDocumentService,
       ).toBeDefined();
-    });
-  });
-
-  describe('with CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER feature flag on', () => {
-    it('should return the full case (non public) when the user is part of the consolidated group', async () => {
-      applicationContext.getCurrentUser.mockReturnValue({
-        name: 'Tasha Yar',
-        role: ROLES.petitioner,
-        userId: petitionerId,
-      });
-      applicationContext
-        .getUseCases()
-        .getAllFeatureFlagsInteractor.mockReturnValue({
-          [ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER
-            .key]: true,
-        });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...testCase,
-          leadDocketNumber: '101-20',
-        });
-      applicationContext
-        .getUseCases()
-        .getConsolidatedCasesByCaseInteractor.mockResolvedValue([
-          { ...testCase, petitioners: [] },
-          {
-            ...testCase,
-            petitioners: [
-              {
-                ...testCase.petitioners[0],
-                contactId: petitionerId,
-              },
-            ],
-          },
-          { ...testCase, petitioners: [] },
-        ]);
-
-      const result = await getCaseInteractor(applicationContext, {
-        docketNumber: '101-18',
-      });
-      expect(result.entityName).toEqual('Case');
     });
   });
 });

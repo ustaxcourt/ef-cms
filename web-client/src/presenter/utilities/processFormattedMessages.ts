@@ -154,11 +154,11 @@ export const applyFiltersToMessages = ({ messages, screenMetadata }) => {
     )
     .filter(message => (toUserFilter ? message.to === toUserFilter : true));
 
-  const caseStatuses = uniq(map(filteredMessages, 'caseStatus'));
-  const toUsers = uniq(map(filteredMessages, 'to'));
-  const fromUsers = uniq(map(filteredMessages, 'from'));
-  const fromSections = uniq(map(filteredMessages, 'fromSection'));
-  const toSections = uniq(map(filteredMessages, 'toSection'));
+  const caseStatuses = uniq(map(filteredMessages, 'caseStatus')).sort();
+  const toUsers = uniq(map(filteredMessages, 'to')).sort();
+  const fromUsers = uniq(map(filteredMessages, 'from')).sort();
+  const fromSections = uniq(map(filteredMessages, 'fromSection')).sort();
+  const toSections = uniq(map(filteredMessages, 'toSection')).sort();
 
   return {
     filterValues: {
@@ -182,7 +182,9 @@ export const applyFiltersToCompletedMessages = ({
     completedByFilter ? message.completedBy === completedByFilter : true,
   );
 
-  const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
+  const completedByUsers = uniq(
+    map(filteredCompletedMessages, 'completedBy'),
+  ).sort();
 
   return {
     filterValues: {

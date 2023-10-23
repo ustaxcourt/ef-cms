@@ -1,6 +1,9 @@
 import { faker } from '@faker-js/faker';
 
-export const admissionsClerkAddsNewPractitioner = cerebralTest => {
+export const admissionsClerkAddsNewPractitioner = (
+  cerebralTest,
+  email = 'caroleBaskinH8r@example.com',
+) => {
   return it('admissions clerk adds a new practitioner', async () => {
     cerebralTest.fakeName = faker.person.fullName();
 
@@ -27,7 +30,7 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'email',
-      value: 'caroleBaskinH8r@example.com',
+      value: email,
     });
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'month',
@@ -90,7 +93,7 @@ export const admissionsClerkAddsNewPractitioner = cerebralTest => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'confirmEmail',
-      value: 'caroleBaskinH8r@example.com',
+      value: email,
     });
 
     await cerebralTest.runSequence('submitAddPractitionerSequence');
