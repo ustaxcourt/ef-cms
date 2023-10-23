@@ -60,8 +60,10 @@ export const CreatePetitionerAccountForm = connect(
                 id="email"
                 name="email"
                 type="text"
-                onBlur={e => {
+                onBlur={() => {
                   setInFocusEmail(false);
+                }}
+                onChange={e => {
                   updateFormValueSequence({
                     key: 'email',
                     value: e.target.value,
@@ -89,8 +91,10 @@ export const CreatePetitionerAccountForm = connect(
                 id="name"
                 name="name"
                 type="text"
-                onBlur={e => {
+                onBlur={() => {
                   setInFocusName(false);
+                }}
+                onChange={e => {
                   updateFormValueSequence({
                     key: 'name',
                     value: e.target.value,
