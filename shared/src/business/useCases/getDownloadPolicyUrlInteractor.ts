@@ -1,12 +1,11 @@
+import { Case, isUserPartOfGroup } from '../entities/cases/Case';
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   POLICY_DATE_IMPACTED_EVENTCODES,
   ROLES,
   UNSERVABLE_EVENT_CODES,
 } from '../entities/EntityConstants';
-import { Case, isUserPartOfGroup } from '../entities/cases/Case';
 import { DocketEntry } from '../entities/DocketEntry';
 import {
   NotFoundError,
@@ -110,15 +109,6 @@ export const getDownloadPolicyUrlInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber, key }: { docketNumber: string; key: string },
 ) => {
-  const featureFlags = await applicationContext
-    .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
-
-  const isConsolidatedGroupAccessEnabled =
-    featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_GROUP_ACCESS_PETITIONER.key
-    ];
-
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_DOCUMENTS)) {
@@ -155,12 +145,8 @@ export const getDownloadPolicyUrlInteractor = async (
     handleIrsSuperUser({ docketEntryEntity, key, petitionDocketEntry });
   } else {
     let userAssociatedWithCase;
-    if (isConsolidatedGroupAccessEnabled && caseEntity.leadDocketNumber) {
-      const consolidatedCases = await applicationContext
-        .getUseCases()
-        .getConsolidatedCasesByCaseInteractor(applicationContext, {
-          docketNumber: caseEntity.leadDocketNumber,
-        });
+    if (caseEntity.leadDocketNumber) {
+      const { consolidatedCases } = caseData;
 
       userAssociatedWithCase = isUserPartOfGroup({
         consolidatedCases,

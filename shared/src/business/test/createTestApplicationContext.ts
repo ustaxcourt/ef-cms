@@ -16,7 +16,6 @@ import {
   isSealedCase,
   isUserPartOfGroup,
 } from '../entities/cases/Case';
-import { ConsolidatedCaseDTO } from '../dto/cases/ConsolidatedCaseDTO';
 import { DocketEntry, getServedPartiesCode } from '../entities/DocketEntry';
 import {
   ERROR_MAP_429,
@@ -31,10 +30,11 @@ import { addDocketEntryForSystemGeneratedOrder } from '../useCaseHelper/addDocke
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '../../../../web-api/src/persistence/elasticsearch/bulkIndexRecords';
+import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import { combineTwoPdfs } from '../utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../utilities/getFormattedTrialSessionDetails';
 import {
@@ -178,15 +178,14 @@ export const createTestApplicationContext = ({ user } = {}) => {
     toBlob: jest.fn(),
   };
 
-  const mockGetDTOs = {
-    ConsolidatedCaseDTO,
-  };
-
   const mockGetUtilities = appContextProxy({
     abbreviateState: jest.fn().mockImplementation(abbreviateState),
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
+    calculateDaysElapsedSinceLastStatusChange: jest
+      .fn()
+      .mockImplementation(calculateDaysElapsedSinceLastStatusChange),
     calculateDifferenceInDays: jest
       .fn()
       .mockImplementation(DateHandler.calculateDifferenceInDays),
@@ -585,6 +584,9 @@ export const createTestApplicationContext = ({ user } = {}) => {
       adminUpdateUserAttributes: jest.fn().mockReturnValue({
         promise: jest.fn(),
       }),
+      initiateAuth: jest.fn().mockReturnValue({
+        promise: jest.fn(),
+      }),
     }),
     getCognitoClientId: jest.fn(),
     getCognitoLoginUrl,
@@ -609,7 +611,6 @@ export const createTestApplicationContext = ({ user } = {}) => {
     getCurrentUserToken: () => {
       return '';
     },
-    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
