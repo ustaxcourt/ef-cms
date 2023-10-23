@@ -31,7 +31,7 @@ export class CreateAccountForm extends JoiValidationEntity {
   constructor(rawProps) {
     super('CreateAccountForm');
 
-    this.email = rawProps.email;
+    this.email = rawProps.email ? rawProps.email?.toLowerCase() : '';
     this.name = rawProps.name;
     this.password = rawProps.password;
     this.confirmPassword = rawProps.confirmPassword;
@@ -39,6 +39,7 @@ export class CreateAccountForm extends JoiValidationEntity {
 
   static VALIDATION_RULES = joi.object().keys({
     confirmPassword: joi.valid(joi.ref('password')).required(),
+    //TODO: don't forget to test this
     email: JoiValidationConstants.EMAIL.required().description('Email of user'),
     entityName:
       JoiValidationConstants.STRING.valid('CreateAccountForm').required(),
@@ -132,6 +133,7 @@ export class CreateAccountForm extends JoiValidationEntity {
 
   isValid(): boolean {
     const errors = this.getFormattedValidationErrors();
+    console.log('validationErrors', errors);
     return this.isFormValid(errors);
   }
   isFormValid(errors: {
