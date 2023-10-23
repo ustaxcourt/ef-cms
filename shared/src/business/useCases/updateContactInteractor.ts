@@ -14,7 +14,7 @@ import { addCoverToPdf } from './addCoverToPdf';
 import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
 import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
-import { withLocking } from '../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * updateContact

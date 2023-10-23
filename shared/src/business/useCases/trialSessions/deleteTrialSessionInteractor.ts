@@ -8,7 +8,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
-import { acquireLock } from '../../useCaseHelper/acquireLock';
+import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * deleteTrialSession

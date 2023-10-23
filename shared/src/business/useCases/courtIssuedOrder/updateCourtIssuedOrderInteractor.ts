@@ -13,7 +13,7 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { get } from 'lodash';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  *

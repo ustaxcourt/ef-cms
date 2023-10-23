@@ -8,7 +8,7 @@ import {
 import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../../entities/User';
 import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,

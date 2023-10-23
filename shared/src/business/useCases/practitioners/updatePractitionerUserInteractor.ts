@@ -9,7 +9,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 import { omit, union } from 'lodash';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
   const isEmailAvailable = await applicationContext
