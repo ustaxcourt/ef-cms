@@ -4,6 +4,9 @@ import { getClient } from './client';
 import { requireEnvVars } from '../../shared/admin-tools/util';
 
 export const getBaseAliasFromIndexName = (indexName: string): string => {
+  if (!indexName.includes('-')) {
+    return indexName;
+  }
   const indexParts = indexName.split('-');
   indexParts.pop(); // remove the md5sum to get the base alias name
   return indexParts.join('-');
