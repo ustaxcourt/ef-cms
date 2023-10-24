@@ -13,4 +13,5 @@ export const setDefaultCaseTypeToDisplayAction = ({
 }: ActionProps) => {
   const { EXTERNAL_USER_DASHBOARD_TABS } = applicationContext.getConstants();
   store.set(state.openClosedCases.caseType, EXTERNAL_USER_DASHBOARD_TABS.OPEN);
+  throw new Error('gg');
 };
