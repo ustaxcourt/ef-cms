@@ -50,6 +50,7 @@ export class CaseSearch extends JoiValidationEntity {
         ...setDefaultErrorMessage('Enter a valid end date'),
         'any.ref': 'End date cannot be prior to start date.',
         'any.required': 'Enter an End date.',
+        'date.format': 'Format date as MM/DD/YYYY',
         'date.max': 'End date cannot be in the future.',
         'date.min': 'End date cannot be prior to start date.',
       }),
