@@ -1,5 +1,6 @@
 import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { CreateAccountForm } from '@shared/business/entities/CreateAccountForm';
+import { CreateUserAlreadyExistsError } from '@shared/business/useCases/users/createUserCognitoInteractor';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const createPetitionerAccountFormAction = async ({
@@ -19,7 +20,9 @@ export const createPetitionerAccountFormAction = async ({
   const cognitoRequestPasswordResetUrl = get(
     state.cognitoRequestPasswordResetUrl,
   );
-  let authenticationResults: AdminCreateUserResponse;
+  let authenticationResults:
+    | AdminCreateUserResponse
+    | CreateUserAlreadyExistsError;
   try {
     authenticationResults = await applicationContext
       .getUseCases()
@@ -48,7 +51,7 @@ export const createPetitionerAccountFormAction = async ({
     return path.error({
       alertError: {
         alertType: 'warning',
-        message: `This email address is already associated with an account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset.</a>`,
+        message: `This email address is already associated with an account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
         title: 'Email address already has an account',
       },
     });
@@ -64,7 +67,11 @@ export const createPetitionerAccountFormAction = async ({
   }
 };
 
-function userExists(authenticationResults: AdminCreateUserResponse) {
-  console.log('Determine if user exists', authenticationResults);
-  return false;
+function userExists(
+  authenticationResults: AdminCreateUserResponse | CreateUserAlreadyExistsError,
+) {
+  return (
+    'userAlreadyExists' in authenticationResults &&
+    authenticationResults.userAlreadyExists
+  );
 }

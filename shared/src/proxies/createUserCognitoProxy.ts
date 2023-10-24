@@ -1,13 +1,11 @@
+import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
+import { CreateUserAlreadyExistsError } from '@shared/business/useCases/users/createUserCognitoInteractor';
 import { post } from './requests';
 
-/**
- * createUserCognitoProxy
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.user the attributes of the user being created
- * @returns {Promise<*>} the promise of the api call
- */
-export const createUserCognitoInteractor = (applicationContext, { user }) => {
+export const createUserCognitoInteractor = (
+  applicationContext,
+  { user },
+): Promise<AdminCreateUserResponse | CreateUserAlreadyExistsError> => {
   return post({
     applicationContext,
     body: user,
