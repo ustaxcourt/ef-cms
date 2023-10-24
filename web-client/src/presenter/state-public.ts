@@ -3,7 +3,6 @@ import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advance
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { caseSearchByNameHelper } from './computeds/AdvancedSearch/CaseSearchByNameHelper';
 import { createAccountHelper } from './computeds/Public/createAccountHelper';
-import { featureFlagHelper } from './computeds/FeatureFlags/featureFlagHelper';
 import { loadingHelper } from './computeds/loadingHelper';
 import { menuHelper } from './computeds/menuHelper';
 import { publicAlertHelper } from './computeds/Public/publicAlertHelper';
@@ -19,7 +18,6 @@ const computeds = {
   alertHelper: publicAlertHelper,
   caseSearchByNameHelper,
   createAccountHelper,
-  featureFlagHelper,
   loadingHelper,
   menuHelper,
   publicCaseDetailHeaderHelper,
