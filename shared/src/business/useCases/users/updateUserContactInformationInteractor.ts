@@ -6,12 +6,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
 import { isEqual } from 'lodash';
 import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * updateUserContactInformationHelper
@@ -172,7 +172,7 @@ export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
 ) => {
-  const cases: RawCase[] = await applicationContext
+  const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,

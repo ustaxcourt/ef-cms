@@ -1,16 +1,13 @@
 import { Case } from '../../entities/cases/Case';
 import { DOCUMENT_SERVED_MESSAGES } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import {
-  NotFoundError,
-  UnauthorizedError,
-} from '../../../../../web-api/src/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { createISODateString } from '../../utilities/DateHandler';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * serveCourtIssuedDocumentInteractor

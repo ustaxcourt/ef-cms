@@ -9,7 +9,7 @@ import { MOCK_LOCK } from '../../test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
-} from '../../../../web-api/src/errors/errors';
+} from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '@shared/test/mockUsers';

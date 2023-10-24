@@ -12,7 +12,7 @@ import {
 import { Stamp } from '../../entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { orderBy } from 'lodash';
-import { withLocking } from '../../useCaseHelper/acquireLock';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
 /**
  * addDraftStampOrderDocketEntryInteractor

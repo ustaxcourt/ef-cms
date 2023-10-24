@@ -1,7 +1,7 @@
 import { Practitioner } from '../../entities/Practitioner';
 import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { User } from '../../entities/User';
-import { acquireLock } from '../../useCaseHelper/acquireLock';
+import { acquireLock } from '@shared/business/useCaseHelper/acquireLock';
 import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
 /**
  * setUserEmailFromPendingEmailInteractor

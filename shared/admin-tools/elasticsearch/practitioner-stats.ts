@@ -21,11 +21,9 @@ const toDate = validateDateAndCreateISO({
   year: `${year + 1}`,
 });
 
-const getAllPractitioners = async ({
-  applicationContext,
-}: {
-  applicationContext: IApplicationContext;
-}): Promise<Array<RawPractitioner>> => {
+const getAllPractitioners = async (
+  applicationContext: IApplicationContext,
+): Promise<Array<RawPractitioner>> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -68,9 +66,8 @@ const getUniqueValues = ({
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  const allPractitioners: RawPractitioner[] = await getAllPractitioners({
-    applicationContext,
-  });
+  const allPractitioners: RawPractitioner[] =
+    await getAllPractitioners(applicationContext);
   const admittedInYear = allPractitioners.filter(p => {
     return p.admissionsDate >= fromDate! && p.admissionsDate < toDate!;
   });
