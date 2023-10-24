@@ -28,7 +28,6 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
-import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -259,7 +258,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
         'external-order-search-enabled': true,
         'internal-opinion-search-enabled': true,
         'internal-order-search-enabled': true,
-        'multi-docketable-paper-filings': true,
         'updated-trial-status-types': true,
         'use-external-pdf-generation': false,
       }),
@@ -292,14 +290,6 @@ export const getFormattedDocumentQCMyInbox = async cerebralTest => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: cerebralTest.getState(),
-  });
-};
-
-const featureFlagHelperComputed = withAppContextDecorator(featureFlagHelper);
-
-export const getFeatureFlagHelper = cerebralTest => {
-  return runCompute(featureFlagHelperComputed, {
     state: cerebralTest.getState(),
   });
 };
