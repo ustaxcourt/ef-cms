@@ -55,14 +55,15 @@ export const fillInCreateCaseFromPaperForm = (testData?: any) => {
 
   cy.get('#upload-mode-upload').click();
   cy.get('input#petitionFile-file').attachFile('../fixtures/w3-dummy.pdf');
-
+  cy.get('[data-cy="remove-pdf"]');
   cy.get('button#tabButton-stinFile').click();
   cy.get('#upload-mode-upload').click();
   cy.get('input#stinFile-file').attachFile('../fixtures/w3-dummy.pdf');
-
+  cy.get('[data-cy="remove-pdf"]');
   cy.get('button#tabButton-requestForPlaceOfTrialFile').click();
   cy.get('#upload-mode-upload').click();
   cy.get('input#requestForPlaceOfTrialFile-file').attachFile(
     '../fixtures/w3-dummy.pdf',
   );
+  cy.get('[data-cy="remove-pdf"]');
 };
