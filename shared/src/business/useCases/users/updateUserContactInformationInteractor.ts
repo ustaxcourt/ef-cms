@@ -172,7 +172,7 @@ export const determineEntitiesToLock = async (
   applicationContext: IApplicationContext,
   { userId }: { userId: string },
 ) => {
-  const cases: RawCase[] = await applicationContext
+  const cases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,

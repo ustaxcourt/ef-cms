@@ -24,6 +24,10 @@ const contactInfo = {
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
+  const mockCases = ['111-20', '222-20', '333-20'].map(docketNumber => ({
+    ...MOCK_CASE,
+    docketNumber,
+  }));
   beforeEach(() => {
     mockParams = {
       contactInfo,
@@ -31,11 +35,7 @@ describe('determineEntitiesToLock', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([
-        { docketNumber: '111-20' },
-        { docketNumber: '222-20' },
-        { docketNumber: '333-20' },
-      ]);
+      .getCasesForUser.mockReturnValue(mockCases);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
@@ -53,9 +53,9 @@ describe('determineEntitiesToLock', () => {
       mockParams,
     );
 
-    expect(identifiers).toContain('case|111-20');
-    expect(identifiers).toContain('case|222-20');
-    expect(identifiers).toContain('case|333-20');
+    mockCases.forEach(mockCase => {
+      expect(identifiers).toContain(`case|${mockCase.docketNumber}`);
+    });
   });
 });
 
@@ -119,11 +119,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue([MOCK_CASE.docketNumber]);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([MOCK_CASE.docketNumber]);
+      .getCasesForUser.mockReturnValue([MOCK_CASE]);
 
     applicationContext
       .getPersistenceGateway()
