@@ -13,10 +13,10 @@ export const signOutSequence = [
   // () => {
   //   throw new Error('signOutSequence error');
   // },
-  async () => {
-    await axios.get('http://localhost:4000/feature-flag/');
-  },
-  // setupCurrentPageAction('Interstitial'),
+  // async () => {
+  //   await axios.get('http://localhost:4000/feature-flag/');
+  // },
+  setupCurrentPageAction('Interstitial'),
   // stopWebSocketConnectionAction,
   // broadcastLogoutAction,
   // deleteAuthCookieAction,

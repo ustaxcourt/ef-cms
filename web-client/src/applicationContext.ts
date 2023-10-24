@@ -660,7 +660,18 @@ const applicationContext = {
     return ErrorFactory.getError(e);
   },
   getFileReaderInstance: () => new FileReader(),
-  getHttpClient: () => axios,
+  getHttpClient: () => {
+    const stackError = new Error();
+
+    const client = axios.create(); // possibly find a place to call once
+
+    client.interceptors.response.use(undefined, error => {
+      error.stack = stackError.stack;
+      throw error;
+    });
+
+    return client;
+  },
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
