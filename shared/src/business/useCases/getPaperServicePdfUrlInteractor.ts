@@ -16,7 +16,6 @@ export const getPaperServicePdfUrlInteractor = async (
 
   return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    key: `paper-service-pdf|${key}`,
-    useTempBucket: true,
+    key: `paper-service-pdf/${key}`,
   });
 };

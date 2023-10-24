@@ -32,7 +32,6 @@ export const ReprintPaperServiceDocumentsModal = connect(
         {formattedTrialSessionDetails.paperServicePdfs.map(pdfInfo => {
           return (
             <div className="usa-checkbox" key={pdfInfo.fileId}>
-              {console.log(form.selectedPdfs)}
               <input
                 checked={form.selectedPdfs.includes(pdfInfo.fileId) || false}
                 className="usa-checkbox__input"

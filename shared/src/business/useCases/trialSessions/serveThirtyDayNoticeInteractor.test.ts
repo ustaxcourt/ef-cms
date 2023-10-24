@@ -189,7 +189,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
         applicationContext: expect.anything(),
         file: expect.anything(),
         fileNamePrefix: 'paper-service-pdf',
-        useTempBucket: true,
       });
       expect(
         applicationContext.getPersistenceGateway().updateTrialSession,

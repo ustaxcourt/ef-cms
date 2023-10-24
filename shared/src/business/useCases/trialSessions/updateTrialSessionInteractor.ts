@@ -137,7 +137,6 @@ export const updateTrialSessionInteractor = async (
           applicationContext,
           file: paperServicePdfData,
           fileNamePrefix: 'paper-service-pdf',
-          useTempBucket: true,
         }));
 
       updatedTrialSessionEntity.addPaperServicePdf(fileId, 'Notice of Change');

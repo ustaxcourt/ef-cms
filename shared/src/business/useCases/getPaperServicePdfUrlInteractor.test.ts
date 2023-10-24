@@ -29,8 +29,7 @@ describe('getPaperServicePdfUrlInteractor', () => {
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
-      key: `paper-service-pdf|${mockFileId}`,
-      useTempBucket: true,
+      key: `paper-service-pdf/${mockFileId}`,
     });
     expect(url).toEqual(mockDocumentUrl);
   });

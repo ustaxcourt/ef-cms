@@ -38,7 +38,6 @@ describe('saveFileAndGenerateUrl', () => {
       applicationContext,
       file: Buffer.from('abc', 'utf-8'),
       fileNamePrefix: 'paper-service-pdf',
-      useTempBucket: true,
     });
 
     expect(
@@ -46,8 +45,7 @@ describe('saveFileAndGenerateUrl', () => {
     ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       document: expect.anything(),
-      key: `paper-service-pdf|${mockUUID}`,
-      useTempBucket: true,
+      key: `paper-service-pdf/${mockUUID}`,
     });
   });
 });
