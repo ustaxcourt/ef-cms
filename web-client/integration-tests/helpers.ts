@@ -929,7 +929,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     route: (routeToGoTo = '/') => gotoRoute(routes, routeToGoTo),
   };
 
-  cerebralTest = CerebralTest(presenter, { throwToConsole: true });
+  cerebralTest = CerebralTest(presenter);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
   const oldRunSequence = cerebralTest.runSequence;
