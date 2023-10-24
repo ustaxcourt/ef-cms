@@ -210,7 +210,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     await cerebralTest.runSequence('validatePetitionFromPaperSequence');
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(
-      'Shawn Johnson & Julius Lenhart, Deceased, Shawn Johnson, Surviving Spouse, Petitioners',
+      'Shawn Johnson & Julius Lenhart, Deceased, Petitioners',
     );
     expect(cerebralTest.getState('form.contactSecondary.address1')).toBe(
       cerebralTest.getState('form.contactPrimary.address1'),
@@ -244,7 +244,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     });
 
     expect(cerebralTest.getState('form.caseCaption')).toBe(
-      'Ada Lovelace & Julius Lenhart, Deceased, Ada Lovelace, Surviving Spouse, Petitioners',
+      'Ada Lovelace & Julius Lenhart, Deceased, Petitioners',
     );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
