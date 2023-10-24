@@ -1096,13 +1096,13 @@ export const presenterSequences = {
 export const presenter = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
-    // [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    // [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    // [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
-    // [NotFoundError, notFoundErrorSequence], //404
-    // [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
-    // [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
-    // [ActionError, setCurrentPageErrorSequence], // generic error handler
+    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
+    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
+    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
+    [NotFoundError, notFoundErrorSequence], //404
+    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
+    [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
+    [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {},
   sequences: presenterSequences,

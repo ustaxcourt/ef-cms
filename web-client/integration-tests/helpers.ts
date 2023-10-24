@@ -937,6 +937,7 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     try {
       return await oldRunTest.call(this, ...args);
     } catch (err) {
+      console.log('DEOCORATED RUN SEQUENCE')
       // console.log();
 
       delete err.execution; // This is a problem
@@ -944,6 +945,10 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       delete err.payload;
       delete err.details;
       delete err.response;
+      const originalError = new Error();
+      originalError.message = err.originalError.message;
+      originalError.response = err.originalError.response;
+      err.originalError = originalError;
       // console.log(Object.getOwnPropertyNames(err));
       // console.log(Object.keys(err));
       // console.log(err.toJSON());
@@ -951,8 +956,8 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       // error.stack = err.stack;
       // if (err.originalError) {
       //   delete err.originalError;
-      console.log(Object.getOwnPropertyNames(err));
-      console.log('STACKKKK: ', err.stack);
+      // console.log(Object.getOwnPropertyNames(err));
+      // console.log('STACKKKK: ', err.stack);
       // console.log(Object.keys(err));
       // [
       //   'port',
@@ -967,10 +972,13 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
       //   'request',
       //   'cause',
       // ].forEach(prop => console.log(prop, err[prop]));
-      throw 'it is over';
+      throw err;
       // } else {
       //   throw err;
       // }
+
+      // Axios error -> error factory -> decorated run sequence -> presenter catch error
+      // Axios error -> error factory -> presenter catch error -> decorated run sequence
     }
   };
   cerebralTest.closeSocket = stopSocket;
