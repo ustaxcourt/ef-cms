@@ -22,10 +22,10 @@ export const goToReviewDocument = exports.goToFileYourDocument;
 
 export const uploadDocumentFile = () => {
   cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('[data-cy="upload-file-success"]');
 };
 
 export const submitDocument = () => {
   cy.get('button#submit-document').click();
-
   cy.get('div.usa-alert--success').should('exist');
 };
