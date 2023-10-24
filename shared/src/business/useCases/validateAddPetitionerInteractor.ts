@@ -17,9 +17,13 @@ export const validateAddPetitionerInteractor = (
   const petitionerErrors = new Petitioner(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
-
+  const caseTest = {
+    ...caseDetail,
+    petitioners: [...caseDetail.petitioners, contact],
+  };
+  console.log('caseTest', caseTest);
   const caseErrors = new Case(
-    { ...caseDetail, caseCaption: contact.caseCaption },
+    { ...caseTest, caseCaption: contact.caseCaption },
     {
       applicationContext,
     },

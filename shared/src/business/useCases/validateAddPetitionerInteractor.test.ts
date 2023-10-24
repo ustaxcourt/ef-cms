@@ -1,8 +1,10 @@
 import {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { validateAddPetitionerInteractor } from './validateAddPetitionerInteractor';
 
@@ -56,19 +58,34 @@ describe('validateAddPetitionerInteractor', () => {
       ...mockContact,
       contactType: CONTACT_TYPES.intervenor,
     };
-    const mockExistingPetitioners = [
-      {
-        contactType: CONTACT_TYPES.intervenor,
-      },
-    ];
 
     const errors = validateAddPetitionerInteractor(applicationContext, {
+      caseDetail: {
+        ...MOCK_CASE,
+        petitioners: [
+          ...MOCK_CASE.petitioners,
+          {
+            address1: '42 Lamb Sauce Blvd',
+            city: 'Nashville',
+            contactType: CONTACT_TYPES.intervenor,
+            country: 'USA',
+            countryType: COUNTRY_TYPES.DOMESTIC,
+            email: 'gordon@example.com',
+            name: 'Gordon Ramsay',
+            phone: '1234567890',
+            postalCode: '05198',
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            state: 'AK',
+            title: 'Intervenor',
+          },
+        ],
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
       contact: mockContact,
-      existingPetitioners: mockExistingPetitioners,
     });
 
     expect(errors).toEqual({
-      contactType:
+      ['petitioners[2]']:
         'Only one (1) Intervenor is allowed per case. Please select a different Role.',
     });
   });
