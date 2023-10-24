@@ -59,11 +59,13 @@ export const goToDashboard = () => {
 
 export const completeWizardStep1 = () => {
   cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('[data-cy="upload-file-success"]');
 };
 
 export const completeWizardStep2 = (hasIrsNoticeInput, caseType) => {
   cy.screenshot();
   cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('[data-cy="upload-file-success"]');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNoticeInput}`).click();
   cy.get('#case-type').scrollIntoView();
