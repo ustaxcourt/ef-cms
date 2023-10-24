@@ -41,13 +41,6 @@ export const confirmInitiateServiceModalHelper = (
     !isOnMessageDetailPage;
 
   if (!isCourtIssued(eventCode)) {
-    const { areMultiDocketablePaperFilingsEnabled } = get(
-      state.featureFlagHelper,
-    );
-
-    showConsolidatedCasesForService =
-      showConsolidatedCasesForService && areMultiDocketablePaperFilingsEnabled;
-
     if (
       SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode) ||
       documentTitle.includes('Simultaneous')
