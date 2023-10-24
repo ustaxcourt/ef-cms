@@ -109,12 +109,8 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
           ),
         ),
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
-        .optional()
-        .messages({
-          ...setDefaultErrorMessage('Select a document type'),
-          'any.invalid':
-            'Proposed Stipulated Decision must be filed separately in each case',
-        }),
+        .messages(setDefaultErrorMessage('Select a document type'))
+        .required(),
       eventCode: JoiValidationConstants.STRING.valid(
         ...ALL_EVENT_CODES,
       ).optional(),

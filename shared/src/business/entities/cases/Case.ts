@@ -586,7 +586,11 @@ export class Case extends JoiValidationEntity {
           a.contactType === CONTACT_TYPES.intervenor &&
           b.contactType === CONTACT_TYPES.intervenor,
       )
-      .required(),
+      .required()
+      .messages({
+        ['array.unique']:
+          'Only one (1) Intervenor is allowed per case. Please select a different Role.',
+      }),
     preferredTrialCity: joi
       .alternatives()
       .try(

@@ -1,7 +1,6 @@
-import { CONTACT_TYPES } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
 import { Petitioner } from '../entities/contacts/Petitioner';
-import { isEmpty, some } from 'lodash';
+import { isEmpty } from 'lodash';
 
 /**
  * validateAddPetitionerInteractor
@@ -13,34 +12,23 @@ import { isEmpty, some } from 'lodash';
  */
 export const validateAddPetitionerInteractor = (
   applicationContext: IApplicationContext,
-  {
-    contact,
-    existingPetitioners,
-  }: { contact: any; existingPetitioners?: any[] },
+  { caseDetail, contact }: { contact: any; caseDetail: RawCase },
 ) => {
   const petitionerErrors = new Petitioner(contact, {
     applicationContext,
   }).getFormattedValidationErrors();
 
-  let caseCaptionError;
-  if (!contact.caseCaption) {
-    caseCaptionError = {
-      caseCaption: Case.VALIDATION_ERROR_MESSAGES.caseCaption,
-    };
-  }
+  const caseErrors = new Case(
+    { ...caseDetail, caseCaption: contact.caseCaption },
+    {
+      applicationContext,
+    },
+  ).getFormattedValidationErrors();
 
   const aggregatedErrors = {
     ...petitionerErrors,
-    ...caseCaptionError,
+    ...caseErrors,
   };
-
-  if (
-    some(existingPetitioners, { contactType: CONTACT_TYPES.intervenor }) &&
-    contact.contactType === CONTACT_TYPES.intervenor
-  ) {
-    aggregatedErrors.contactType =
-      Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
-  }
 
   return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };

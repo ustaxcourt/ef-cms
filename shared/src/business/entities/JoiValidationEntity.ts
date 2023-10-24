@@ -53,6 +53,20 @@ export abstract class JoiValidationEntity {
 
   abstract getValidationRules(): any;
 
+  getValidationMessages(): { [key: string]: string[] } {
+    const rules = this.getValidationRules();
+    const joiSchema = rules.validate ? rules : joi.object().keys(rules);
+    const validationMessages = {};
+    const keys = Object.keys(joiSchema.describe().keys);
+    keys.forEach(key => {
+      const field = joiSchema.describe().keys[key];
+      if (field.preferences?.messages) {
+        validationMessages[key] = Object.values(field.preferences?.messages);
+      }
+    });
+    return validationMessages;
+  }
+
   getValidationErrors(): { details: JoiErrorDetail[] } | null {
     const rules = this.getValidationRules();
     const schema = rules.validate ? rules : joi.object().keys(rules);
