@@ -8,8 +8,7 @@ export const CreatePetitionerAccountForm = connect(
   {
     confirmPassword: state.form.confirmPassword,
     createAccountHelper: state.createAccountHelper,
-    email: state.form.email,
-    name: state.form.name,
+
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
     password: state.form.password,
     showConfirmPassword: state.showConfirmPassword,
@@ -22,8 +21,6 @@ export const CreatePetitionerAccountForm = connect(
   ({
     confirmPassword,
     createAccountHelper,
-    email,
-    name,
     navigateToCognitoSequence,
     password,
     showConfirmPassword,
@@ -32,8 +29,8 @@ export const CreatePetitionerAccountForm = connect(
     toggleShowPasswordSequence,
     updateFormValueSequence,
   }) => {
-    const [inFocusEmail, setInFocusEmail] = useState(false);
-    const [inFocusName, setInFocusName] = useState(false);
+    const [inFocusEmail, setInFocusEmail] = useState(true);
+    const [inFocusName, setInFocusName] = useState(true);
 
     return (
       <>
@@ -71,7 +68,7 @@ export const CreatePetitionerAccountForm = connect(
                 }}
                 onFocus={() => setInFocusEmail(true)}
               />
-              {!inFocusEmail && email && createAccountHelper.email && (
+              {!inFocusEmail && createAccountHelper.email && (
                 <div className="margin-top-1">
                   <RequirementsText
                     label={createAccountHelper.email}
@@ -102,7 +99,7 @@ export const CreatePetitionerAccountForm = connect(
                 }}
                 onFocus={() => setInFocusName(true)}
               />
-              {!inFocusName && name && createAccountHelper.name && (
+              {!inFocusName && createAccountHelper.name && (
                 <div className="margin-top-1">
                   <RequirementsText
                     label={createAccountHelper.name}
