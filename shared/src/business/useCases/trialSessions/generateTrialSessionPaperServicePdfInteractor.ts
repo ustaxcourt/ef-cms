@@ -70,7 +70,6 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       applicationContext,
       file: paperServicePdfData,
       fileNamePrefix: 'paper-service-pdf',
-      useTempBucket: true,
     }));
 
   const trialSession = await applicationContext

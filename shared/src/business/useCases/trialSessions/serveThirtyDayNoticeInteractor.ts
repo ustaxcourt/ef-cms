@@ -213,7 +213,6 @@ export const serveThirtyDayNoticeInteractor = async (
         applicationContext,
         file: paperServicePdfData,
         fileNamePrefix: 'paper-service-pdf',
-        useTempBucket: true,
       });
 
     pdfUrl = url;

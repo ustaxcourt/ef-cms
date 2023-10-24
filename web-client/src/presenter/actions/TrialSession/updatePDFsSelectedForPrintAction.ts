@@ -1,4 +1,3 @@
-import { remove } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const updatePDFsSelectedForPrintAction = ({
@@ -6,10 +5,14 @@ export const updatePDFsSelectedForPrintAction = ({
   props,
   store,
 }: ActionProps<{ key: string }>) => {
-  const { selectedPdfs } = get(state.modal.form);
+  const selectedPdfs: string[] = get(state.modal.form.selectedPdfs);
 
   if (selectedPdfs.includes(props.key)) {
-    store.set(state.modal.form.selectedPdfs, remove(selectedPdfs, props.key));
+    const index = selectedPdfs.findIndex(
+      selectedpdf => selectedpdf === props.key,
+    );
+    selectedPdfs.splice(index, 1);
+    store.set(state.modal.form.selectedPdfs, selectedPdfs);
   } else {
     store.set(state.modal.form.selectedPdfs, [...selectedPdfs, props.key]);
   }
