@@ -7,39 +7,6 @@ import {
 import { createSilentApplicationContext } from '../../../../shared/src/business/test/createSilentApplicationContext';
 import { getCaseLambda } from './getCaseLambda';
 
-const mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
-  entityName: 'Case',
-  pk: 'case|101-18',
-  sk: 'case|23',
-});
-
-const mockIrsPractitionerRecord = Object.assign(
-  {},
-  MOCK_COMPLEX_CASE.irsPractitioners[0],
-  {
-    entityName: 'IrsPractitioner',
-    pk: 'case|101-18',
-    sk: 'irsPractitioner|23',
-  },
-);
-
-const mockPrivatePractitionerRecord = Object.assign({}, MOCK_PRACTITIONER, {
-  entityName: 'PrivatePractitioner',
-  pk: 'case|101-18',
-  serviceIndicator: 'Paper',
-  sk: 'privatePractitioner|23',
-});
-
-const REQUEST_EVENT = {
-  body: {},
-  headers: {},
-  path: '',
-  pathParameters: {
-    docketNumber: '123-30',
-  },
-  queryStringParameters: {},
-};
-
 describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   let CI;
   // disable logging by mimicking CI for this test
@@ -47,8 +14,46 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     ({ CI } = process.env);
     process.env.CI = true;
   });
+  let mockDynamoCaseRecord;
+  let mockIrsPractitionerRecord;
+  let mockPrivatePractitionerRecord;
+  let REQUEST_EVENT;
 
   afterAll(() => (process.env.CI = CI));
+  beforeEach(() => {
+    mockDynamoCaseRecord = Object.assign({}, MOCK_CASE_WITH_TRIAL_SESSION, {
+      entityName: 'Case',
+      pk: 'case|101-18',
+      sk: 'case|23',
+    });
+
+    mockIrsPractitionerRecord = Object.assign(
+      {},
+      MOCK_COMPLEX_CASE.irsPractitioners[0],
+      {
+        entityName: 'IrsPractitioner',
+        pk: 'case|101-18',
+        sk: 'irsPractitioner|23',
+      },
+    );
+
+    mockPrivatePractitionerRecord = Object.assign({}, MOCK_PRACTITIONER, {
+      entityName: 'PrivatePractitioner',
+      pk: 'case|101-18',
+      serviceIndicator: 'Paper',
+      sk: 'privatePractitioner|23',
+    });
+
+    REQUEST_EVENT = {
+      body: {},
+      headers: {},
+      path: '',
+      pathParameters: {
+        docketNumber: '123-30',
+      },
+      queryStringParameters: {},
+    };
+  });
 
   // the 401 case is handled by API Gateway, and as such isn’t tested here.
 

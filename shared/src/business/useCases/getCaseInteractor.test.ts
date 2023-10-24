@@ -238,23 +238,21 @@ describe('getCaseInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...testCase,
+        consolidatedCases: [
+          { ...testCase, petitioners: [] },
+          {
+            ...testCase,
+            petitioners: [
+              {
+                ...testCase.petitioners[0],
+                contactId: petitionerId,
+              },
+            ],
+          },
+          { ...testCase, petitioners: [] },
+        ],
         leadDocketNumber: '101-20',
       });
-    applicationContext
-      .getUseCases()
-      .getConsolidatedCasesByCaseInteractor.mockResolvedValue([
-        { ...testCase, petitioners: [] },
-        {
-          ...testCase,
-          petitioners: [
-            {
-              ...testCase.petitioners[0],
-              contactId: petitionerId,
-            },
-          ],
-        },
-        { ...testCase, petitioners: [] },
-      ]);
 
     const result = await getCaseInteractor(applicationContext, {
       docketNumber: '101-18',

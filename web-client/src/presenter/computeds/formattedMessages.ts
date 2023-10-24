@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import {
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,
@@ -5,8 +7,6 @@ import {
 } from '../utilities/processFormattedMessages';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const formattedMessages = (
   get: Get,
   applicationContext: ClientApplicationContext,
