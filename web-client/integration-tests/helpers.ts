@@ -67,7 +67,7 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import pug from 'pug';
 import qs from 'qs';
@@ -932,53 +932,22 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   cerebralTest = CerebralTest(presenter, { throwToConsole: true });
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
-  const oldRunTest = cerebralTest.runSequence;
+  const oldRunSequence = cerebralTest.runSequence;
   cerebralTest.runSequence = async function (...args) {
     try {
-      return await oldRunTest.call(this, ...args);
-    } catch (err) {
-      console.log('DEOCORATED RUN SEQUENCE')
-      // console.log();
-
-      delete err.execution; // This is a problem
-      delete err.functionDetails;
-      delete err.payload;
-      delete err.details;
-      delete err.response;
-      const originalError = new Error();
-      originalError.message = err.originalError.message;
-      originalError.response = err.originalError.response;
-      err.originalError = originalError;
-      // console.log(Object.getOwnPropertyNames(err));
-      // console.log(Object.keys(err));
-      // console.log(err.toJSON());
-      // const error = new Error(err.message);
-      // error.stack = err.stack;
-      // if (err.originalError) {
-      //   delete err.originalError;
-      // console.log(Object.getOwnPropertyNames(err));
-      // console.log('STACKKKK: ', err.stack);
-      // console.log(Object.keys(err));
-      // [
-      //   'port',
-      //   'address',
-      //   'syscall',
-      //   'code',
-      //   'errno',
-      //   'message',
-      //   'stack',
-      //   'name',
-      //   'config',
-      //   'request',
-      //   'cause',
-      // ].forEach(prop => console.log(prop, err[prop]));
-      throw err;
-      // } else {
-      //   throw err;
-      // }
-
-      // Axios error -> error factory -> decorated run sequence -> presenter catch error
-      // Axios error -> error factory -> presenter catch error -> decorated run sequence
+      return await oldRunSequence.call(this, ...args);
+    } catch (err: any) {
+      const thrownError = new Error();
+      thrownError.stack = err.stack;
+      if (err.originalError instanceof AxiosError) {
+        const errorContext = {
+          method: err.originalError?.config?.method,
+          responseCode: err.originalError?.responseCode,
+          url: err.originalError?.config?.url,
+        };
+        thrownError.stack = JSON.stringify(errorContext) + thrownError.stack;
+      }
+      throw thrownError;
     }
   };
   cerebralTest.closeSocket = stopSocket;
