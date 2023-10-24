@@ -58,7 +58,7 @@ const { login } = getEnvironmentSpecificFunctions();
 
 let firstDocketNumber: string;
 let secondDocketNumber: string;
-const caseTestData = { docketNumbers: [] };
+const caseTestData: { docketNumbers: string[] } = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
   before(() => {
@@ -118,7 +118,9 @@ describe('Petitions Clerk', () => {
           goToWizardStep4();
           completeWizardStep4();
           goToWizardStep5();
-          submitPetition(caseTestData);
+          submitPetition().then(createdPaperDocketNumber => {
+            caseTestData.docketNumbers.push(createdPaperDocketNumber);
+          });
           goToDashboard();
         });
       });
@@ -149,7 +151,9 @@ describe('Petitions Clerk', () => {
           goToWizardStep4();
           completeWizardStep4();
           goToWizardStep5();
-          submitPetition(caseTestData);
+          submitPetition().then(createdPaperDocketNumber => {
+            caseTestData.docketNumbers.push(createdPaperDocketNumber);
+          });
           goToDashboard();
         });
       });
