@@ -124,15 +124,6 @@ export const getCaseInteractor = async (
 
   const currentUser = applicationContext.getCurrentUser();
 
-  let consolidatedCases;
-  if (caseRecord.leadDocketNumber) {
-    consolidatedCases = await applicationContext
-      .getUseCases()
-      .getConsolidatedCasesByCaseInteractor(applicationContext, {
-        docketNumber: caseRecord.leadDocketNumber,
-      });
-  }
-
   let isAuthorizedToGetCase = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.GET_CASE,
@@ -147,7 +138,7 @@ export const getCaseInteractor = async (
       );
     } else if (caseRecord.leadDocketNumber) {
       isAuthorizedToGetCase = isUserPartOfGroup({
-        consolidatedCases,
+        consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
       });
     }
@@ -162,7 +153,7 @@ export const getCaseInteractor = async (
     isAssociatedWithCase =
       isAssociatedWithCase ||
       isUserPartOfGroup({
-        consolidatedCases,
+        consolidatedCases: caseRecord.consolidatedCases,
         userId: currentUser.userId,
       });
   }
@@ -199,6 +190,5 @@ export const getCaseInteractor = async (
   }
 
   caseDetailRaw = caseContactAddressSealedFormatter(caseDetailRaw, currentUser);
-
   return caseDetailRaw;
 };

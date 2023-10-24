@@ -36,6 +36,7 @@ export const MessagesSectionCompleted = connect(
                 key: 'completedBy',
                 label: 'Completed By',
                 options: formattedMessages.completedByUsers,
+                useInlineSelect: false,
               },
             ]}
             onSelect={updateScreenMetadataSequence}
