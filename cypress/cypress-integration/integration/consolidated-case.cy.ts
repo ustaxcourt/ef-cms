@@ -52,6 +52,7 @@ describe('Docket clerk views consolidated case', function () {
       cy.get('input#primaryDocumentFile-file').attachFile(
         '../fixtures/w3-dummy.pdf',
       );
+      cy.get('[data-cy="remove-pdf"]');
       cy.get('button#upload-correspondence').click();
       // delete correspondence
       cy.contains('button', 'Delete').click();
