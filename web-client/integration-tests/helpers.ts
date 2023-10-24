@@ -937,15 +937,23 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
     try {
       return await oldRunSequence.call(this, ...args);
     } catch (err: any) {
-      const thrownError = new Error();
+      const thrownError = new Error(err.message);
       thrownError.stack = err.stack;
       if (err.originalError instanceof AxiosError) {
         const errorContext = {
+          code: err.originalError?.code,
+          message: err.originalError?.message,
           method: err.originalError?.config?.method,
-          responseCode: err.originalError?.responseCode,
+          port: err.originalError?.config?.port,
+          responseCode: err.responseCode,
           url: err.originalError?.config?.url,
         };
-        thrownError.stack = JSON.stringify(errorContext) + thrownError.stack;
+        thrownError.stack =
+          `ERROR: An Axios request failed with the following context: \n\n${JSON.stringify(
+            errorContext,
+            null,
+            2,
+          )}\n\n` + thrownError.stack;
       }
       throw thrownError;
     }
