@@ -41,21 +41,16 @@ export const goToWizardStep5 = () => {
   cy.url().should('contain', '/file-a-petition/step-5');
 };
 
-export const submitPetition = testData => {
+export const submitPetition = (): Cypress.Chainable<string> => {
   cy.intercept('POST', '**/cases').as('postCase');
   cy.get('button#submit-case').scrollIntoView();
   cy.get('button#submit-case').click();
-  cy.wait('@postCase').then(({ response }) => {
+  cy.url().should('include', 'file-a-petition/success');
+  return cy.wait('@postCase').then(({ response }) => {
     expect(response.body).to.have.property('docketNumber');
     const { docketNumber } = response.body;
-    if (testData) {
-      testData.createdDocketNumber = docketNumber;
-      if (testData.docketNumbers) {
-        testData.docketNumbers.push(docketNumber);
-      }
-    }
+    return docketNumber;
   });
-  cy.url().should('include', 'file-a-petition/success');
 };
 
 export const goToDashboard = () => {
@@ -64,11 +59,13 @@ export const goToDashboard = () => {
 
 export const completeWizardStep1 = () => {
   cy.get('input#stin-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('[data-cy="upload-file-success"]');
 };
 
 export const completeWizardStep2 = (hasIrsNoticeInput, caseType) => {
   cy.screenshot();
   cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
+  cy.get('[data-cy="upload-file-success"]');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNoticeInput}`).click();
   cy.get('#case-type').scrollIntoView();
