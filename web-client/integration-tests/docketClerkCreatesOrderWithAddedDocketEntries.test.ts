@@ -13,15 +13,7 @@ describe('Docketclerk creates an order with added docket numbers on the cover sh
     cerebralTest.docketNumber = '111-19';
   });
 
-  // loginAs(cerebralTest, 'docketclerk@example.com');
-
-  it('set the docket number', async () => {
-    await cerebralTest.runSequence('signOutSequence');
-  });
-  // docketClerkCreatesAnOrderWithAddedDocketNumbers(cerebralTest);
-  // docketClerkEditsOrderAndChecksAddedDocketNumbers(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrderWithAddedDocketNumbers(cerebralTest);
+  docketClerkEditsOrderAndChecksAddedDocketNumbers(cerebralTest);
 });
-
-// what are the inner working of --detectOpenHandles
-// Figure out exaclt where the error is been thrown and work backwards.
-//How do we get from the location of that error to the end error thrown by cerebral test
