@@ -120,7 +120,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
       ).optional(),
       freeText: JoiValidationConstants.STRING.optional().messages({
         'any.required': 'Provide an answer',
-        'sring.max':
+        'string.max':
           'Limit is 1000 characters. Enter 1000 or fewer characters.',
       }),
       hasSupportingDocuments: joi
