@@ -1,11 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const createConfirmLinkLocal = ({
-  applicationContext,
-  get,
-}: ActionProps) => {
-  if (applicationContext.getEnvironment().stage !== 'local') return;
+export const createConfirmLinkLocal = ({ get }: ActionProps) => {
+  if (!process.env.IS_LOCAL) return;
 
   const { email } = get(state.form);
 
