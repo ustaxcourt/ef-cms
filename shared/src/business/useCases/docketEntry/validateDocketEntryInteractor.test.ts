@@ -1,7 +1,4 @@
-import { DocketEntryFactory } from '../../entities/docketEntry/DocketEntryFactory';
 import { validateDocketEntryInteractor } from './validateDocketEntryInteractor';
-
-const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 
 describe('validateDocketEntryInteractor', () => {
   it('returns the expected errors object on an empty docket entry', () => {
@@ -10,10 +7,10 @@ describe('validateDocketEntryInteractor', () => {
     });
 
     expect(errors).toEqual({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
+      dateReceived: 'Enter a valid date received',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
     });
   });
 

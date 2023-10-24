@@ -1,4 +1,3 @@
-import { ExternalDocumentInformationFactory } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
 import { validateExternalDocumentInformationInteractor } from './validateExternalDocumentInformationInteractor';
 
 describe('validateExternalDocumentInformationInteractor', () => {
@@ -9,16 +8,10 @@ describe('validateExternalDocumentInformationInteractor', () => {
 
     expect(errors).toEqual({
       certificateOfService:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .certificateOfService,
-      filers:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.filers,
-      hasSupportingDocuments:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .hasSupportingDocuments,
-      primaryDocumentFile:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
+        'Indicate whether you are including a Certificate of Service',
+      filers: 'Select a filing party',
+      hasSupportingDocuments: 'Enter selection for Supporting Documents.',
+      primaryDocumentFile: 'Upload a document',
     });
   });
 

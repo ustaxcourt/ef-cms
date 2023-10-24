@@ -1,9 +1,7 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
 export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
-  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
   const { DOCUMENT_RELATIONSHIPS, OBJECTIONS_OPTIONS_MAP } =
     applicationContext.getConstants();
 
@@ -24,10 +22,10 @@ export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
+      dateReceived: 'Enter a valid date received',
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
     });
@@ -83,8 +81,8 @@ export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      objections: VALIDATION_ERROR_MESSAGES.objections,
-      secondaryDocument: VALIDATION_ERROR_MESSAGES.secondaryDocument,
+      objections: 'Enter selection for Objections.',
+      secondaryDocument: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
