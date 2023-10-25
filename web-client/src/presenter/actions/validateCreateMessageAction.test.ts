@@ -22,32 +22,8 @@ describe('validateCreateMessageAction', () => {
       .validateCreateMessageInteractor.mockReturnValue(null);
   });
 
-  it('should call the success path when no errors are found', async () => {
-    await runAction(validateCreateMessageAction, {
-      modules: {
-        presenter,
-      },
-      props: {},
-      state: {
-        modal: {
-          form: {
-            docketNumber: '123-45',
-            from: 'yup',
-            fromSection: 'yup',
-            fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-            message: 'yup',
-            subject: 'hi',
-            to: 'yup',
-            toSection: 'yup',
-            toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-          },
-        },
-      },
-    });
-    expect(
-      applicationContext.getUseCases().validateCreateMessageInteractor.mock
-        .calls[0][1].message,
-    ).toMatchObject({
+  it('should call the success path when the new message is valid', async () => {
+    const mockNewMessage = {
       docketNumber: '123-45',
       from: 'yup',
       fromSection: 'yup',
@@ -57,11 +33,28 @@ describe('validateCreateMessageAction', () => {
       to: 'yup',
       toSection: 'yup',
       toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
+    };
+
+    await runAction(validateCreateMessageAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        modal: {
+          form: mockNewMessage,
+        },
+      },
     });
+
+    expect(
+      applicationContext.getUseCases().validateCreateMessageInteractor.mock
+        .calls[0][0].message,
+    ).toMatchObject(mockNewMessage);
     expect(successStub.mock.calls.length).toEqual(1);
   });
 
-  it('should call the error path when any errors are found', async () => {
+  it('should call the error path when the new message is NOT valid', async () => {
     applicationContext
       .getUseCases()
       .validateCreateMessageInteractor.mockReturnValue('error');
@@ -72,19 +65,11 @@ describe('validateCreateMessageAction', () => {
       },
       state: {
         modal: {
-          form: {
-            docketNumber: '123-45',
-            from: 'yup',
-            fromSection: 'yup',
-            fromUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-            message: 'yup',
-            to: 'yup',
-            toSection: 'yup',
-            toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-          },
+          form: {},
         },
       },
     });
+
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });
