@@ -59,18 +59,12 @@ describe('updateDocketEntryWizardDataAction', () => {
         },
         state: {
           form: {
-            certificateOfServiceDate: '12-12-1212',
-            certificateOfServiceDay: 12,
-            certificateOfServiceMonth: 12,
-            certificateOfServiceYear: 12,
+            certificateOfServiceDate: '12-12-2012',
           },
         },
       });
 
       expect(result.state.form.certificateOfServiceDate).toEqual(undefined);
-      expect(result.state.form.certificateOfServiceDay).toEqual(undefined);
-      expect(result.state.form.certificateOfServiceMonth).toEqual(undefined);
-      expect(result.state.form.certificateOfServiceYear).toEqual(undefined);
     });
   });
 

@@ -27,16 +27,16 @@ export const createTrialSession = (testData, overrides = {}) => {
   };
 
   // session information
-  cy.get('#start-date-date').type(createFutureDate());
-  cy.get('#start-time-hours')
-    .clear()
-    .type(faker.number.int({ max: 11, min: 6 }));
-  cy.get('#start-time-minutes')
-    .clear()
-    .type(faker.helpers.arrayElement(['00', '15', '30', '45']));
+  cy.get('#start-date-picker').type(createFutureDate());
+  cy.get('#start-time-hours').clear();
+  cy.get('#start-time-hours').type(`${faker.number.int({ max: 11, min: 6 })}`);
+  cy.get('#start-time-minutes').clear();
+  cy.get('#start-time-minutes').type(
+    faker.helpers.arrayElement(['00', '15', '30', '45']),
+  );
   cy.get('label[for="startTimeExtension-pm"]').click();
   cy.get('label[for="session-type-Hybrid"]').click();
-  cy.get('#max-cases').type(faker.number.int({ max: 100, min: 10 }));
+  cy.get('#max-cases').type(`${faker.number.int({ max: 100, min: 10 })}`);
 
   // location information
   cy.get('#inPerson-proceeding-label').click();
@@ -70,12 +70,12 @@ export const createTrialSession = (testData, overrides = {}) => {
   });
 };
 
-export const goToTrialSession = trialSessionId => {
+export const goToTrialSession = (trialSessionId: string) => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
   cy.get('.big-blue-header').should('exist');
 };
 
-export const setTrialSessionAsCalendared = trialSessionId => {
+export const setTrialSessionAsCalendared = (trialSessionId: string) => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
   cy.get('#set-calendar-button').should('exist').click();
   cy.get('#modal-root .modal-button-confirm').click();
@@ -83,11 +83,11 @@ export const setTrialSessionAsCalendared = trialSessionId => {
   cy.get('.progress-indicator').should('not.exist');
 };
 
-export const markCaseAsQcCompleteForTrial = docketNumber => {
+export const markCaseAsQcCompleteForTrial = (docketNumber: string) => {
   cy.get(`#upcoming-sessions label[for="${docketNumber}-complete"]`).click();
 };
 
-export const verifyOpenCaseOnTrialSession = docketNumber => {
+export const verifyOpenCaseOnTrialSession = (docketNumber: string) => {
   cy.get(
     `#open-cases-tab-content a[href="/case-detail/${docketNumber}"]`,
   ).should('exist');

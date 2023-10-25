@@ -1,5 +1,6 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
@@ -28,10 +29,10 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
     });
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       filers: VALIDATION_ERROR_MESSAGES.filers,
+      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
@@ -42,6 +43,15 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
         value,
       });
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: `${documentFormValues.dateReceivedMonth}/${documentFormValues.dateReceivedDay}/${documentFormValues.dateReceivedYear}`,
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: `filersMap.${contactId}`,
