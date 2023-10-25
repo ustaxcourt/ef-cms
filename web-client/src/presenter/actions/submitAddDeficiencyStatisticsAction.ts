@@ -1,4 +1,3 @@
-import { combineLastDateOfPeriodFields } from './StartCaseInternal/computeStatisticDatesAction';
 import { state } from '@web-client/presenter/app.cerebral';
 /**
  * submits the add deficiency statistics form
@@ -22,10 +21,7 @@ export const submitAddDeficiencyStatisticsAction = async ({
     penalties,
     year,
     yearOrPeriod,
-  } = combineLastDateOfPeriodFields({
-    applicationContext,
-    form: get(state.form),
-  });
+  } = get(state.form);
   const docketNumber = get(state.caseDetail.docketNumber);
 
   try {

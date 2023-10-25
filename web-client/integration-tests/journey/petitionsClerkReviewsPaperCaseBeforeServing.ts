@@ -2,14 +2,14 @@ import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const reviewSavedPetitionHelper = withAppContextDecorator(
-  reviewSavedPetitionHelperComputed,
-);
-
 export const petitionsClerkReviewsPaperCaseBeforeServing = (
   cerebralTest,
   expectedObject,
 ) => {
+  const reviewSavedPetitionHelper = withAppContextDecorator(
+    reviewSavedPetitionHelperComputed,
+  );
+
   const updatedCaseCaption = 'Ada Lovelace is awesome';
 
   it('petitions clerk reviews paper case before serving', async () => {
