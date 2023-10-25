@@ -3,6 +3,7 @@ import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
+import { getIndexNameFromAlias } from 'web-api/elasticsearch/elasticsearch-aliases';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
 import AWS from 'aws-sdk';
 
@@ -44,15 +45,15 @@ export const formatResults = <T>(body: Record<string, any>) => {
     sourceUnmarshalled['_score'] = hit['_score'];
 
     const isDocketEntryResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-docket-entry' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-docket-entry') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
     const isMessageResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-message' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-message') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
     const isWorkItemResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-work-item' &&
+      hit['_index'] === getIndexNameFromAlias('efcms-work-item') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
 
