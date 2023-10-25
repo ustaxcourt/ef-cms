@@ -1,7 +1,7 @@
 import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const createConfirmLinkLocal = ({ get }: ActionProps) => {
+export const createConfirmLinkLocalAction = ({ get }: ActionProps) => {
   if (!process.env.IS_LOCAL) return;
 
   const { email } = get(state.form);
@@ -18,8 +18,7 @@ export const createConfirmLinkLocal = ({ get }: ActionProps) => {
   return {
     alertSuccess: {
       alertType: 'success',
-      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. </br>
-        <a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>.`,
+      message: `New user account created successfully for ${email}! Please click the link below to verify your email address. </br><a rel="noopener noreferrer" href="${confirmationLink}">Verify Email Address</a>.`,
       title: 'Account Created Locally',
     },
   };
