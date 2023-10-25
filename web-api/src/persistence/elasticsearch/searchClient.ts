@@ -3,7 +3,7 @@ import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
-import { getIndexNameFromAlias } from 'web-api/elasticsearch/elasticsearch-aliases';
+import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
 import AWS from 'aws-sdk';
 
