@@ -52,7 +52,7 @@ export const DocumentSearchResults = connect(
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th>Date</th>
+                  <th>Filed Date</th>
                   <th aria-hidden="true" className="small-column"></th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Case Title</th>
