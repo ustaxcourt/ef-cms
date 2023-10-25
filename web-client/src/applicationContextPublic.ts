@@ -172,9 +172,7 @@ const applicationContextPublic = {
   getConstants: () => frozenConstants,
   getCurrentUser: () => ({}),
   getCurrentUserToken: () => null,
-  getEnvironment: () => ({
-    stage: process.env.STAGE || 'local',
-  }),
+  getEnvironment,
   getHttpClient: () => axios,
   getLogger: () => ({
     error: () => {
