@@ -180,6 +180,7 @@ import { gotoPractitionerDetailSequence } from './sequences/gotoPractitionerDeta
 import { gotoPractitionerDocumentationSequence } from './sequences/gotoPractitionerDocumentationSequence';
 import { gotoPractitionerEditDocumentSequence } from './sequences/gotoPractitionerEditDocumentSequence';
 import { gotoPrintPaperServiceSequence } from './sequences/gotoPrintPaperServiceSequence';
+import { gotoPrintPaperTrialNoticesSequence } from '@web-client/presenter/sequences/gotoPrintPaperTrialNoticesSequence';
 import { gotoPrintPractitionerCasesSequence } from './sequences/gotoPrintPractitionerCasesSequence';
 import { gotoPrintableCaseConfirmationSequence } from './sequences/gotoPrintableCaseConfirmationSequence';
 import { gotoPrintableCaseInventoryReportSequence } from './sequences/gotoPrintableCaseInventoryReportSequence';
@@ -725,6 +726,7 @@ export const presenterSequences = {
   gotoPractitionerDocumentationSequence,
   gotoPractitionerEditDocumentSequence,
   gotoPrintPaperServiceSequence,
+  gotoPrintPaperTrialNoticesSequence,
   gotoPrintPractitionerCasesSequence,
   gotoPrintableCaseConfirmationSequence,
   gotoPrintableCaseInventoryReportSequence,
