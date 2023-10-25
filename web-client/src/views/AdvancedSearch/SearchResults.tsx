@@ -52,9 +52,9 @@ export const SearchResults = connect(
                   <NonMobile>
                     <th>Petitioner(s)</th>
                   </NonMobile>
-                  <th>Docket Number</th>
+                  <th>Docket No.</th>
                   <NonMobile>
-                    <th>Date Filed</th>
+                    <th>Filed Date</th>
                     <th>Case Title</th>
                     <th>State</th>
                   </NonMobile>

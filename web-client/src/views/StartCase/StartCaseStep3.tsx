@@ -394,7 +394,9 @@ export const StartCaseStep3 = connect(
                   >
                     Download Corporate Disclosure Statement (T.C. Form 6)
                   </Button>
-                  <p className="margin-top-0">if you haven’t already done so</p>
+                  <span className="margin-top-0 display-block">
+                    if you haven’t already done so
+                  </span>
                 </p>
                 <StateDrivenFileInput
                   aria-describedby="corporate-disclosure-file-label"

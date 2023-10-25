@@ -1076,6 +1076,22 @@ describe('Case entity', () => {
         ],
       });
     });
+
+    it('should throw an error on a case that has an invalid consolidated Case', () => {
+      const invalidConsolidatedCase = {};
+      const testCase = new Case(
+        {
+          ...MOCK_CASE,
+          consolidatedCases: [invalidConsolidatedCase],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      const errors: any = testCase.getFormattedValidationErrors();
+      expect(errors.consolidatedCases).toBeDefined();
+    });
   });
 
   describe('trialDate and trialSessionId validation', () => {

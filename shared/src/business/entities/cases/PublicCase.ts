@@ -8,6 +8,7 @@ import {
   TRANSCRIPT_EVENT_CODE,
   isDocumentBriefType,
 } from '../EntityConstants';
+import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -38,7 +39,8 @@ export class PublicCase extends JoiValidationEntity {
   public isSealed: boolean;
   public petitioners: any[] | undefined;
   public irsPractitioners?: any[];
-  public privatePractitioners: any;
+  public privatePractitioners?: any[];
+  public consolidatedCases?: ConsolidatedCaseSummary[];
 
   private _score?: string;
 
@@ -89,6 +91,9 @@ export class PublicCase extends JoiValidationEntity {
       );
 
       this.leadDocketNumber = rawCase.leadDocketNumber;
+      this.consolidatedCases = (rawCase.consolidatedCases || []).map(
+        consolidatedCase => new ConsolidatedCaseSummary(consolidatedCase),
+      );
     } else if (!this.isSealed) {
       this.petitioners = [];
       rawCase.petitioners.map(petitioner => {

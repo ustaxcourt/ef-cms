@@ -1,22 +1,18 @@
 import { CalendarNote } from './CalendarNote';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('CalendarNote', () => {
   describe('validation', () => {
-    it('should have error message for note field longer than 200 characters', () => {
-      const entity = new CalendarNote({ note: getTextByCount(1001) });
-      const customMessages = extractCustomMessages(entity.getValidationRules());
+    it('should have validation rules', () => {
+      const entity = new CalendarNote({ note: '' });
 
-      expect(entity.getFormattedValidationErrors()).toEqual({
-        note: customMessages.note[0],
-      });
+      expect(entity.getValidationRules()).not.toEqual(null);
     });
 
     it('should be valid when all fields are present', () => {
       const entity = new CalendarNote({
         note: '  some notes   ', // with spaces all around it
       });
+
       expect(entity.getFormattedValidationErrors()).toEqual(null);
       expect(entity.note).toEqual('some notes');
     });
@@ -25,6 +21,7 @@ describe('CalendarNote', () => {
       const entity = new CalendarNote({
         note: '',
       });
+
       expect(entity.getFormattedValidationErrors()).toEqual(null);
       expect(entity.note).toEqual('');
     });
