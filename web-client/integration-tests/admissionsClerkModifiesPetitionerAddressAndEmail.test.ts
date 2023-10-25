@@ -35,12 +35,11 @@ describe('Admissions Clerk modified petitioner address and email', () => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
+    const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
-        contactId: contactPrimary.contactId,
+        contactId,
         docketNumber: cerebralTest.docketNumber,
       },
     );
@@ -96,7 +95,6 @@ describe('Admissions Clerk modified petitioner address and email', () => {
     await cerebralTest.runSequence('submitEditPetitionerSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'NoMatchingEmailFoundModal',
     );

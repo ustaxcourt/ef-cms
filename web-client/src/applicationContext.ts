@@ -18,7 +18,6 @@ import {
   isUserPartOfGroup,
   userIsDirectlyAssociated,
 } from '../../shared/src/business/entities/cases/Case';
-import { ConsolidatedCaseDTO } from '../../shared/src/business/dto/cases/ConsolidatedCaseDTO';
 import {
   DocketEntry,
   getServedPartiesCode,
@@ -26,12 +25,14 @@ import {
 import {
   ERROR_MAP_429,
   clerkOfCourtNameForSigning,
+  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext';
 import { ErrorFactory } from './presenter/errors/ErrorFactory';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { User } from '../../shared/src/business/entities/User';
 import { abbreviateState } from '../../shared/src/business/utilities/abbreviateState';
 import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/addCaseToTrialSessionProxy';
@@ -50,6 +51,7 @@ import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src
 import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authenticateUserProxy';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
+import { calculateDaysElapsedSinceLastStatusChange } from '../../shared/src/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import {
   calculateDifferenceInDays,
   calculateISODate,
@@ -63,6 +65,7 @@ import {
   deconstructDate,
   formatDateString,
   formatNow,
+  getDateFormat,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isTodayWithinGivenInterval,
@@ -73,11 +76,12 @@ import {
 import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
+import { changePasswordLocalInteractor } from '../../shared/src/proxies/auth/changePasswordLocalProxy';
 import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users/checkEmailAvailabilityProxy';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -87,6 +91,7 @@ import {
 import { completeDocketEntryQCInteractor } from '../../shared/src/proxies/editDocketEntry/completeDocketEntryQCProxy';
 import { completeMessageInteractor } from '../../shared/src/proxies/messages/completeMessageProxy';
 import { completeWorkItemInteractor } from '../../shared/src/proxies/workitems/completeWorkItemProxy';
+import { confirmSignUpLocalInteractor } from '../../shared/src/proxies/auth/confirmSignUpLocalProxy';
 import { createCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/createCaseDeadlineProxy';
 import { createCaseFromPaperInteractor } from '../../shared/src/proxies/createCaseFromPaperProxy';
 import { createCaseInteractor } from '../../shared/src/proxies/createCaseProxy';
@@ -96,6 +101,7 @@ import { createMessageInteractor } from '../../shared/src/proxies/messages/creat
 import { createPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/createPractitionerDocumentProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
+import { createUserInteractorLocal } from '../../shared/src/proxies/createUserInteractorLocalProxy';
 import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
@@ -154,8 +160,7 @@ import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadlin
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
-import { getCaseWorksheetsForJudgeInteractor } from '@shared/proxies/caseWorksheet/getCaseWorksheetsForJudgeProxy';
-import { getCasesByStatusAndByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesByStatusAndByJudgeProxy';
+import { getCaseWorksheetsByJudgeInteractor } from '@shared/proxies/reports/getCaseWorksheetsByJudgeProxy';
 import { getCasesClosedByJudgeInteractor } from '../../shared/src/proxies/reports/getCasesClosedByJudgeProxy';
 import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import {
@@ -166,7 +171,6 @@ import {
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForSectionProxy';
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
-import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
@@ -187,6 +191,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/ut
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getHttpClient } from '@web-client/providers/httpClient';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -347,7 +352,6 @@ import { validateUserContactInteractor } from '../../shared/src/business/useCase
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
-import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
 const reduce = ImageBlobReduce({
@@ -393,11 +397,13 @@ const allUseCases = {
   canConsolidateInteractor,
   canSetTrialSessionAsCalendaredInteractor,
   caseAdvancedSearchInteractor,
+  changePasswordLocalInteractor,
   checkEmailAvailabilityInteractor,
   closeTrialSessionInteractor,
   completeDocketEntryQCInteractor,
   completeMessageInteractor,
   completeWorkItemInteractor,
+  confirmSignUpLocalInteractor,
   createCaseDeadlineInteractor,
   createCaseFromPaperInteractor,
   createCaseInteractor,
@@ -407,6 +413,7 @@ const allUseCases = {
   createPractitionerDocumentInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
+  createUserInteractorLocal,
   deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
@@ -448,13 +455,11 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
-  getCaseWorksheetsForJudgeInteractor,
-  getCasesByStatusAndByJudgeInteractor,
+  getCaseWorksheetsByJudgeInteractor,
   getCasesClosedByJudgeInteractor,
   getCasesForUserInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
-  getConsolidatedCasesByCaseInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getCustomCaseInventoryReportInteractor,
   getDocumentContentsForDocketEntryInteractor,
@@ -633,6 +638,7 @@ const applicationContext = {
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
   },
+  getCognitoLocalEnabled,
   getCognitoLoginUrl,
   getCognitoRedirectUrl: () => {
     return process.env.COGNITO_REDIRECT_URI || 'http://localhost:1234/log-in';
@@ -650,15 +656,12 @@ const applicationContext = {
     return getUserPermissions(currentUser);
   },
   getCurrentUserToken,
-  getDTOs: () => ({
-    ConsolidatedCaseDTO,
-  }),
   getEnvironment,
   getError: e => {
     return ErrorFactory.getError(e);
   },
   getFileReaderInstance: () => new FileReader(),
-  getHttpClient: () => axios,
+  getHttpClient,
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
@@ -723,6 +726,7 @@ const applicationContext = {
     return {
       abbreviateState,
       aggregatePartiesForService,
+      calculateDaysElapsedSinceLastStatusChange,
       calculateDifferenceInDays,
       calculateISODate,
       canAllowDocumentServiceForCase,
@@ -757,6 +761,7 @@ const applicationContext = {
       getContactPrimary,
       getContactSecondary,
       getCropBox,
+      getDateFormat,
       getDescriptionDisplay,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,

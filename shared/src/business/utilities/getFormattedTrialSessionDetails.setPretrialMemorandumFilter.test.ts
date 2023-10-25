@@ -27,12 +27,6 @@ describe('getFormattedTrialSessionDetails', () => {
 
     let mockCase;
 
-    beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    });
-
     it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
       mockCase = {
         ...MOCK_CASE,
@@ -139,7 +133,7 @@ describe('getFormattedTrialSessionDetails', () => {
       expect(result).toEqual(PARTIES_CODES.RESPONDENT);
     });
 
-    it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
+    it('should set the pretrialMemorandumStatus to an empty string when there is no pretrial memorandum on the case', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -149,10 +143,10 @@ describe('getFormattedTrialSessionDetails', () => {
         caseItem: MOCK_CASE,
       });
 
-      expect(result).toBeUndefined();
+      expect(result).toEqual('');
     });
 
-    it('should set the pretrialMemorandumStatus to undefined when there is a pretrial memorandum on the case but it is stricken', () => {
+    it('should set the pretrialMemorandumStatus to an empty string when there is a pretrial memorandum on the case but it is stricken', () => {
       mockCase = {
         ...MOCK_CASE,
         docketEntries: [
@@ -168,7 +162,7 @@ describe('getFormattedTrialSessionDetails', () => {
         caseItem: MOCK_CASE,
       });
 
-      expect(result).toBeUndefined();
+      expect(result).toEqual('');
     });
   });
 });

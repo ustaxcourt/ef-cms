@@ -176,9 +176,13 @@ export class TrialSession extends JoiValidationEntity {
       dismissedAlertForNOTT: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
-      estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
-        .min(joi.ref('startDate'))
-        .allow(null),
+      estimatedEndDate: joi.when('startDate', {
+        is: JoiValidationConstants.ISO_DATE.required(),
+        otherwise: joi.optional(),
+        then: JoiValidationConstants.ISO_DATE.min(joi.ref('startDate'))
+          .optional()
+          .allow(null),
+      }),
       hasNOTTBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),
@@ -340,9 +344,10 @@ export class TrialSession extends JoiValidationEntity {
       ...TrialSession.validationRules.COMMON,
       caseOrder: joi.array().items(
         joi.object().keys({
-          calendarNotes: JoiValidationConstants.STRING.max(200)
-            .optional()
-            .allow('', null),
+          calendarNotes: JoiValidationConstants.STRING.optional().allow(
+            '',
+            null,
+          ),
           disposition: JoiValidationConstants.STRING.max(100).when(
             'removedFromTrial',
             {

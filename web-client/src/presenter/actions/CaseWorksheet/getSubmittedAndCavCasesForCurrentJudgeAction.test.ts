@@ -12,7 +12,7 @@ describe('getSubmittedAndCavCasesForCurrentJudgeAction', () => {
     const TEST_CASES = [];
     applicationContext
       .getUseCases()
-      .getCasesByStatusAndByJudgeInteractor.mockResolvedValue({
+      .getCaseWorksheetsByJudgeInteractor.mockResolvedValue({
         cases: TEST_CASES,
       });
 
@@ -28,7 +28,7 @@ describe('getSubmittedAndCavCasesForCurrentJudgeAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getCasesByStatusAndByJudgeInteractor.mock
+      applicationContext.getUseCases().getCaseWorksheetsByJudgeInteractor.mock
         .calls[0][1],
     ).toEqual({
       judges: [judgeUser.name],

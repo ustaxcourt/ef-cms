@@ -4,6 +4,15 @@ import * as pdfLib from 'pdf-lib';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest } from 'cerebral/test';
 import { DynamoDB, S3, SQS } from 'aws-sdk';
+import {
+  FORMATS,
+  calculateDifferenceInDays,
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  formatNow,
+  prepareDateFromString,
+} from '../../shared/src/business/utilities/DateHandler';
 import { JSDOM } from 'jsdom';
 import { applicationContext } from '../src/applicationContext';
 import {
@@ -13,14 +22,6 @@ import {
   revokeObjectURL,
   router,
 } from '../src/router';
-import {
-  calculateDifferenceInDays,
-  calculateISODate,
-  createISODateString,
-  formatDateString,
-  formatNow,
-  prepareDateFromString,
-} from '../../shared/src/business/utilities/DateHandler';
 import { changeOfAddress } from '../../shared/src/business/utilities/documentGenerators/changeOfAddress';
 import { countPagesInDocument } from '../../shared/src/business/useCaseHelper/countPagesInDocument';
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
@@ -28,7 +29,6 @@ import {
   fakeData,
   getFakeFile,
 } from '../../shared/src/business/test/getFakeFile';
-import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
@@ -68,7 +68,7 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import pug from 'pug';
 import qs from 'qs';
@@ -259,7 +259,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
         'external-order-search-enabled': true,
         'internal-opinion-search-enabled': true,
         'internal-order-search-enabled': true,
-        'multi-docketable-paper-filings': true,
         'updated-trial-status-types': true,
         'use-external-pdf-generation': false,
       }),
@@ -292,14 +291,6 @@ export const getFormattedDocumentQCMyInbox = async cerebralTest => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
-    state: cerebralTest.getState(),
-  });
-};
-
-const featureFlagHelperComputed = withAppContextDecorator(featureFlagHelper);
-
-export const getFeatureFlagHelper = cerebralTest => {
-  return runCompute(featureFlagHelperComputed, {
     state: cerebralTest.getState(),
   });
 };
@@ -557,24 +548,11 @@ export const createCourtIssuedDocketEntry = async ({
 
   if (filingDate) {
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: filingDate.month,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: filingDate.day,
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: filingDate.year,
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: `${filingDate.month}/${filingDate.day}/${filingDate.year}`,
       },
     );
   }
@@ -694,7 +672,7 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
 
 export const uploadProposedStipulatedDecision = async (
   cerebralTest,
-  configObject,
+  configObject?,
 ) => {
   const defaultForm = {
     attachments: false,
@@ -942,6 +920,32 @@ export const setupTest = ({ constantsOverrides = {}, useCases = {} } = {}) => {
   cerebralTest = CerebralTest(presenter);
   cerebralTest.getSequence = seqName => obj =>
     cerebralTest.runSequence(seqName, obj);
+  const oldRunSequence = cerebralTest.runSequence;
+  cerebralTest.runSequence = async function (...args) {
+    try {
+      return await oldRunSequence.call(this, ...args);
+    } catch (err: any) {
+      const thrownError = new Error(err.message);
+      thrownError.stack = err.stack;
+      if (err.originalError instanceof AxiosError) {
+        const errorContext = {
+          code: err.originalError?.code,
+          message: err.originalError?.message,
+          method: err.originalError?.config?.method,
+          port: err.originalError?.config?.port,
+          responseCode: err.responseCode,
+          url: err.originalError?.config?.url,
+        };
+        thrownError.stack =
+          `ERROR: An Axios request failed with the following context: \n\n${JSON.stringify(
+            errorContext,
+            null,
+            2,
+          )}\n\n` + thrownError.stack;
+      }
+      throw thrownError;
+    }
+  };
   cerebralTest.closeSocket = stopSocket;
   cerebralTest.applicationContext = applicationContext;
 

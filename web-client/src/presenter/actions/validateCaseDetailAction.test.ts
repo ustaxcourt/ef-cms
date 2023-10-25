@@ -31,14 +31,13 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
+      state: {
+        form: {
           docketEntries: [],
           docketNumber: '123-45',
           irsNoticeDate: '2009-10-13',
         },
       },
-      state: {},
     });
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor.mock
@@ -59,19 +58,13 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
-          docketEntries: [],
-        },
-      },
       state: {
         caseDetail: {
           docketNumber: '123-45',
         },
         form: {
-          irsDay: '13',
-          irsMonth: '10',
-          irsYear: '2009',
+          docketEntries: [],
+          irsNoticeDate: '2009-10-13',
         },
       },
     });
@@ -92,13 +85,9 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
-          docketEntries: [],
-        },
-      },
       state: {
         form: {
+          docketEntries: [],
           statistics: [
             { yearOrPeriod: 'Year' },
             { yearOrPeriod: 'Period' },
@@ -126,15 +115,14 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
+      state: {
+        form: {
           docketEntries: [],
           docketNumber: '123-45',
           irsNoticeDate: '2009-10-13',
           isPaper: true,
         },
       },
-      state: {},
     });
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor,
@@ -149,8 +137,8 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
+      state: {
+        form: {
           docketEntries: [
             { documentType: 'Petition' },
             { documentType: 'Statement of Taxpayer Identification' },
@@ -161,7 +149,6 @@ describe('validateCaseDetail', () => {
           isPaper: true,
         },
       },
-      state: {},
     });
     expect(
       applicationContext.getUseCases().validateCaseDetailInteractor,
@@ -191,8 +178,8 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
+      state: {
+        form: {
           docketEntries: [
             { documentType: 'Petition' },
             { documentType: 'Statement of Taxpayer Identification' },
@@ -201,9 +188,6 @@ describe('validateCaseDetail', () => {
           docketNumber: '123-45',
           irsNoticeDate: '2009-10-13',
         },
-      },
-      state: {
-        form: {},
       },
     });
 
@@ -224,8 +208,8 @@ describe('validateCaseDetail', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
+      state: {
+        form: {
           docketEntries: [
             { documentType: 'Petition' },
             { documentType: 'Statement of Taxpayer Identification' },
@@ -234,9 +218,6 @@ describe('validateCaseDetail', () => {
           docketNumber: '123-45',
           irsNoticeDate: '2009-10-13',
         },
-      },
-      state: {
-        form: {},
       },
     });
 
