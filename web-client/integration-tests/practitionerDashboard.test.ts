@@ -77,8 +77,6 @@ describe('Practitioner Dashboard', () => {
         value: true,
       });
 
-      await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
-
       await cerebralTest.runSequence(
         'formatAndUpdateDateFromDatePickerSequence',
         {
