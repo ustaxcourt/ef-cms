@@ -52,10 +52,14 @@ export const cognitoLocalWrapper = cognito => {
           };
         };
       } else {
-        return {
-          promise: () => {
-            return new Promise((resolve, reject) => reject({}));
-          },
+        cognito[methodName] = function (params) {
+          return {
+            promise: () => {
+              return new Promise((resolve, reject) =>
+                reject({ FunctionUnsupported: true, Params: params }),
+              );
+            },
+          };
         };
       }
     }

@@ -1,9 +1,10 @@
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 const originalAdminCreateUser = jest.fn();
 const originalAdminGetUser = jest.fn();
+const original_SOME_NON_EXISTING_METHOD = jest.fn();
 
 const cognitoMock = {
-  SOME_NON_EXISTING_METHOD: jest.fn(),
+  SOME_NON_EXISTING_METHOD: original_SOME_NON_EXISTING_METHOD,
   adminCreateUser: originalAdminCreateUser,
   adminGetUser: originalAdminGetUser,
   resendConfirmationCode: jest.fn(),
@@ -13,24 +14,25 @@ cognitoLocalWrapper(cognitoMock);
 
 describe('cognitoLocalWrapper', () => {
   const mockSub = 'eb1c37a6-2370-4afe-8490-c51a2f2b9073';
-  const mockResponse = {
+  const mockUsername = 'TEST_USERNAME@TEST.COM';
+  const mockUserCreatedResponse = {
     User: {
       Attributes: [
         { Name: 'sub', Value: mockSub },
         { Name: 'email_verified', Value: 'True' },
-        { Name: 'email', Value: 'example@example.com' },
+        { Name: 'email', Value: mockUsername },
         { Name: 'custom:role', Value: 'privatePractitioner' },
         { Name: 'name', Value: 'Joe Gilberto Langworth' },
       ],
       Enabled: true,
       UserStatus: 'FORCE_CHANGE_PASSWORD',
-      Username: 'example@example.com',
+      Username: mockUsername,
     },
   };
 
   beforeAll(() => {
     originalAdminCreateUser.mockReturnValue({
-      promise: jest.fn().mockResolvedValue(mockResponse),
+      promise: jest.fn().mockResolvedValue(mockUserCreatedResponse),
     });
     originalAdminGetUser.mockReturnValue({
       promise: jest.fn().mockResolvedValue({}),
@@ -57,22 +59,29 @@ describe('cognitoLocalWrapper', () => {
   });
 
   it('should return a mocked method for "resendConfirmationCode"', async () => {
-    const TEST_USERNAME = 'TEST_USERNAME@TEST.COM';
-    const options = { Username: TEST_USERNAME };
+    const options = { Username: mockUsername };
     const results = await cognitoMock.resendConfirmationCode(options).promise();
 
     expect(results).toEqual({
       CodeDeliveryDetails: {
         AttributeName: 'Email',
         DeliveryMedium: 'Email',
-        Destination: TEST_USERNAME,
+        Destination: mockUsername,
       },
     });
   });
 
-  // it('should do nothing when method name is not handled', async () => {
-  //   await cognitoMock.SOME_NON_EXISTING_METHOD().promise();
+  it('should reject call with FunctionUnsupported when local cognito is not yet configured', async () => {
+    const mockParams = {
+      ClientId: '480559f0-4d31-4743-9674-4bb8fea06684',
+      Password: 'abc123',
+      Username: mockUsername,
+    };
 
-  //   expect(cognitoMock.SOME_NON_EXISTING_METHOD).not.toHaveBeenCalled();
-  // });
+    await expect(
+      cognitoMock.SOME_NON_EXISTING_METHOD(mockParams).promise(),
+    ).rejects.toEqual({ FunctionUnsupported: true, Params: mockParams });
+
+    expect(original_SOME_NON_EXISTING_METHOD).not.toHaveBeenCalled();
+  });
 });
