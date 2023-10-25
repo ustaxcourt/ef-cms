@@ -17,22 +17,6 @@ export class TestCaseEntity extends JoiValidationEntity {
 
   getValidationRules() {
     return {
-      caseList: joi.array().items(TEST_VALIDATION_RULES).optional(),
-      contactType: JoiValidationConstants.STRING.valid(
-        'VALID_1',
-        'VALID_2',
-        'VALID_3',
-      ).required(),
-      unhelpfulErrorMessage: JoiValidationConstants.STRING.valid(
-        'VALID_1',
-        'VALID_2',
-        'VALID_3',
-      ).optional(),
-    };
-  }
-
-  getValidationRules_NEW() {
-    return {
       caseList: joi.array().items(TEST_VALIDATION_RULES).optional().messages({
         'any.only': 'invalid contact type',
       }),
