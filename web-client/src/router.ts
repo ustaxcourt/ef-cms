@@ -1048,10 +1048,10 @@ const router = {
 
     registerRoute(
       '/trial-session-detail/*/print-paper-trial-notices/*',
-      ifHasAccess({ app }, (trialSessionId, documentId) => {
+      ifHasAccess({ app }, (trialSessionId, fileId) => {
         setPageTitle('Print Paper Trial Notices');
         return app.getSequence('gotoPrintPaperTrialNoticesSequence')({
-          documentId,
+          fileId,
           trialSessionId,
         });
       }),
