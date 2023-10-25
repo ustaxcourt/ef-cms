@@ -27,28 +27,6 @@ export class TestEntity extends JoiValidationEntity {
     };
   }
 
-  getErrorToMessageMap() {
-    return {
-      arrayErrorMessage: [
-        {
-          contains: 'is required',
-          message: 'arrayErrorMessage is required.',
-        },
-        {
-          contains: 'length must be at least',
-          message: 'arrayErrorMessage must be at least 2 characters long.',
-        },
-      ],
-      propUsingReference: [
-        {
-          contains: 'ref:referencedProp',
-          message: 'propUsingReference must be grater than referencedProp.',
-        },
-      ],
-      singleErrorMessage: 'singleErrorMessage default message.',
-    };
-  }
-
   getValidationRules_NEW() {
     return {
       arrayErrorMessage: joi.string().min(2).required().messages({

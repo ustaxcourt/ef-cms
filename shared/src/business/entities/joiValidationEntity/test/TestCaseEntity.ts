@@ -58,14 +58,6 @@ export class TestCaseEntity extends JoiValidationEntity {
     };
   }
 
-  getErrorToMessageMap() {
-    return {
-      contactType: 'invalid contact type',
-      unhelpfulErrorMessage:
-        'unhelpfulErrorMessage: does not match any of the allowed types',
-    };
-  }
-
   constructor(rawTestCase) {
     super('TestCaseEntity');
     this.contactType = rawTestCase.contactType || 'VALID_1';
