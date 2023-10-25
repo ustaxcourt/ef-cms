@@ -1,6 +1,4 @@
-import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
 import { CreateAccountForm } from '@shared/business/entities/CreateAccountForm';
-import { CreateUserAlreadyExistsError } from '@shared/business/useCases/users/createUserCognitoInteractor';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const createPetitionerAccountFormAction = async ({
@@ -20,58 +18,60 @@ export const createPetitionerAccountFormAction = async ({
   const cognitoRequestPasswordResetUrl = get(
     state.cognitoRequestPasswordResetUrl,
   );
-  let authenticationResults:
-    | AdminCreateUserResponse
-    | CreateUserAlreadyExistsError;
-  try {
-    authenticationResults = await applicationContext
-      .getUseCases()
-      .createUserCognitoInteractor(applicationContext, {
-        user: petitionerAccountForm,
-      });
-  } catch (e) {
-    console.log('cognito error', e);
-    return path.error({
-      alertError: {
-        //TODO: Ask UX about error message
-        message:
-          'Could not create user account, please contact DAWSON user support',
-        title: 'Error creating account',
-      },
-    });
-  }
 
-  if (Object.keys(authenticationResults).includes('UserConfirmed')) {
-    return path.success({
-      email: petitionerAccountForm.email,
-    });
-  }
+  const response = await applicationContext
+    .getUseCases()
+    .createUserCognitoInteractor(applicationContext, {
+      user: petitionerAccountForm,
+    })
+    .then(authenticationResults =>
+      responseHandler(authenticationResults, petitionerAccountForm.email),
+    )
+    .catch(e =>
+      errorHandler(e, cognitoLoginUrl, cognitoRequestPasswordResetUrl),
+    );
 
-  if (userExists(authenticationResults)) {
-    return path.error({
+  if (response.alertError) {
+    return path.error(response);
+  }
+  return path.success(response);
+};
+
+const errorHandler = (e, cognitoLoginUrl, cognitoRequestPasswordResetUrl) => {
+  console.log('e!!!!', e);
+  if (e.message === 'User already exists') {
+    return {
       alertError: {
         alertType: 'warning',
         message: `This email address is already associated with an account. You can <a href="${cognitoLoginUrl}">log in here</a>. If you forgot your password, you can <a href="${cognitoRequestPasswordResetUrl}">request a password reset</a>.`,
         title: 'Email address already has an account',
       },
-    });
-  } else {
-    return path.error({
-      alertError: {
-        //TODO: Ask UX about error message
-        message:
-          'Could not create user account, please contact DAWSON user support',
-        title: 'Error creating account',
-      },
-    });
+    };
   }
+  return {
+    alertError: {
+      //TODO: Ask UX about error message, possibly extract error message, possibly write error message creation function
+      message: `Could not create user account: ${e.message}, please contact DAWSON user support`,
+      title: 'Error creating account',
+    },
+  };
 };
 
-function userExists(
-  authenticationResults: AdminCreateUserResponse | CreateUserAlreadyExistsError,
-) {
-  return (
-    'userAlreadyExists' in authenticationResults &&
-    authenticationResults.userAlreadyExists
-  );
-}
+const responseHandler = (
+  authenticationResults,
+  email,
+): { alertError?: object; email?: string } => {
+  if (Object.keys(authenticationResults).includes('UserConfirmed')) {
+    return {
+      email,
+    };
+  }
+  return {
+    alertError: {
+      //TODO: Ask UX about error message
+      message:
+        'Could not create user account, please contact DAWSON user support',
+      title: 'Error creating account',
+    },
+  };
+};
