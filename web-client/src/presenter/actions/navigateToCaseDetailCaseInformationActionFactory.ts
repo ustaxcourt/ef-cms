@@ -10,7 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @returns {Promise} async action
  */
 export const navigateToCaseDetailCaseInformationActionFactory =
-  (caseInformationTab, partiesTab) =>
+  (caseInformationTab?, partiesTab?) =>
   async ({ get, props, router }) => {
     const docketNumber =
       props.docketNumber ||

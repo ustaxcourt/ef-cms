@@ -15,6 +15,7 @@ import {
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
+  getDateFormat,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isTodayWithinGivenInterval,
@@ -456,6 +457,24 @@ describe('DateHandler', () => {
 
     it('should return false when undefined is provided as the date value', () => {
       expect(isValidDateString(undefined as any)).toBeFalsy();
+    });
+  });
+
+  describe('getDateFormat', () => {
+    it('should throw an error when the date provided is NOT in any of the provided acceptable formats', () => {
+      expect(() => getDateFormat('01-01-01', [])).toThrow(
+        'Invalid date string',
+      );
+    });
+
+    it('should return the format when the date provided is formatted as one of the provided acceptable formats', () => {
+      const result = getDateFormat('01/01/01', [
+        FORMATS.ISO,
+        FORMATS.MMDDYY, // MM/dd/yy
+        FORMATS.YEAR, // yyyy
+      ]);
+
+      expect(result).toBe(FORMATS.MMDDYY);
     });
   });
 

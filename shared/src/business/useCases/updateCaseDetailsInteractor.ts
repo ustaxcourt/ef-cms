@@ -55,6 +55,9 @@ export const updateCaseDetails = async (
     {
       ...oldCase,
       ...editableFields,
+      irsNoticeDate: editableFields.hasVerifiedIrsNotice
+        ? editableFields.irsNoticeDate
+        : undefined,
       petitionPaymentDate: isPaid ? editableFields.petitionPaymentDate : null,
       petitionPaymentMethod: isPaid
         ? editableFields.petitionPaymentMethod

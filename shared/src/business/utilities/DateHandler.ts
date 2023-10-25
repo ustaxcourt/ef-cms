@@ -373,6 +373,19 @@ export const isValidDateString = (
   return DateTime.fromFormat(dateString, formats).isValid;
 };
 
+export const getDateFormat = (
+  dateString: string,
+  acceptableFormats: TimeFormats[],
+): TimeFormats => {
+  for (const possibleTimeFormat of acceptableFormats) {
+    if (DateTime.fromFormat(dateString, possibleTimeFormat).isValid) {
+      return possibleTimeFormat;
+    }
+  }
+
+  throw new Error('Invalid date string');
+};
+
 /**
  * Calculates the difference in calendar days between timeStamp1 and timeStamp2
  * When timeStamp1 is greater (more recent) than timeStamp2, the difference
