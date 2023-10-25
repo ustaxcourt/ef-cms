@@ -1,5 +1,7 @@
 import * as computeFile from './computeTrialSessionFormDataAction';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { computeSubmitTrialSessionDataAction } from './computeSubmitTrialSessionDataAction';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeSubmitTrialSessionDataAction', () => {
@@ -16,10 +18,15 @@ describe('computeSubmitTrialSessionDataAction', () => {
       computeFile,
       'computeTermAndUpdateState',
     );
+
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should call computeTermAndUpdateState', () => {
     runAction(computeSubmitTrialSessionDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
 
@@ -29,7 +36,11 @@ describe('computeSubmitTrialSessionDataAction', () => {
 
   it('should clear trialClerkId and trialClerk when alternateTrialClerkName is present', async () => {
     const alternateTrialClerkName = 'Wonder Woman';
+
     const result = await runAction(computeSubmitTrialSessionDataAction, {
+      modules: {
+        presenter,
+      },
       state: {
         form: {
           ...form,
@@ -39,6 +50,7 @@ describe('computeSubmitTrialSessionDataAction', () => {
         },
       },
     });
+
     expect(result.state.form.trialClerkId).toEqual(undefined);
     expect(result.state.form.trialClerk).toEqual(undefined);
     expect(result.state.form.alternateTrialClerkName).toEqual(
@@ -48,6 +60,9 @@ describe('computeSubmitTrialSessionDataAction', () => {
 
   it('should NOT clear trialClerkId and trialClerk when alternateTrialClerkName is not present', async () => {
     const result = await runAction(computeSubmitTrialSessionDataAction, {
+      modules: {
+        presenter,
+      },
       state: {
         form: {
           ...form,
@@ -56,6 +71,7 @@ describe('computeSubmitTrialSessionDataAction', () => {
         },
       },
     });
+
     expect(result.state.form.trialClerkId).toEqual('12');
     expect(result.state.form.trialClerk).toEqual(trialClerk);
   });
