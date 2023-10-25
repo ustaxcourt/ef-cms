@@ -24,11 +24,8 @@ describe('setPractitionerDetailOnFormAction', () => {
     });
     expect(result.state.form).toEqual({
       admissionsDate: '2019-03-01',
-      day: '1',
       firstName: 'Chandler',
       lastName: 'Bing',
-      month: '3',
-      year: '2019',
     });
   });
 

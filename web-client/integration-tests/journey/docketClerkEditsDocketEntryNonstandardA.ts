@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   contactSecondaryFromState,
@@ -31,43 +32,41 @@ export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
     expect(cerebralTest.getState('currentPage')).toEqual('PaperFiling');
     expect(cerebralTest.getState('docketEntryId')).toEqual(docketEntryId);
 
-    expect(cerebralTest.getState('form')).toMatchObject({
-      dateReceivedDay: '1',
-      dateReceivedMonth: '1',
-      dateReceivedYear: '2018',
-    });
+    expect(cerebralTest.getState('form.receivedAt')).toEqual(
+      '2018-01-01T05:00:00.000Z',
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
       value: 'NNOB',
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: '1',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: '2050',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2050',
+      },
+    );
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[0].message,
       previousDocument: VALIDATION_ERROR_MESSAGES.previousDocument,
+      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[0].message,
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: '2012',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2012',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
