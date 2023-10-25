@@ -1,15 +1,9 @@
-import { PublicUser } from '../../entities/PublicUser';
+import { PublicUser, RawPublicUser } from '../../entities/PublicUser';
 import { ROLES } from '../../entities/EntityConstants';
 
-/**
- * getJudgesForPublicSearchInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {object} the list of judges
- */
 export const getJudgesForPublicSearchInteractor = async (
   applicationContext: IApplicationContext,
-) => {
+): Promise<RawPublicUser[]> => {
   const rawJudges = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({

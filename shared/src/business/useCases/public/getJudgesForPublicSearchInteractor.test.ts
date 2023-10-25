@@ -6,7 +6,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
   it('strips out all non public data', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([
+      .getUsersInSection.mockResolvedValue([
         {
           barNumber: 'should be filtered out',
           email: 'should be filtered out',

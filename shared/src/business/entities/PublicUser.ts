@@ -4,20 +4,15 @@ import { ROLES } from './EntityConstants';
 import { User } from './User';
 import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 
-/**
- * constructor
- *
- * @param {object} rawUser the raw user data
- * @constructor
- */
 export class PublicUser extends JoiValidationEntity {
-  public name: string;
-  public role: string;
   public judgeFullName?: string;
   public judgeTitle?: string;
+  public name: string;
+  public role: string;
 
   constructor(rawUser) {
     super('PublicUser');
+
     this.name = rawUser.name;
     this.role = rawUser.role;
     if (this.role === ROLES.judge || this.role === ROLES.legacyJudge) {
@@ -36,3 +31,5 @@ export class PublicUser extends JoiValidationEntity {
     } as any;
   }
 }
+
+export type RawPublicUser = ExcludeMethods<PublicUser>;

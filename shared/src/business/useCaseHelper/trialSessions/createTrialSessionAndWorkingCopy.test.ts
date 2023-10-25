@@ -3,23 +3,24 @@ import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createTrialSessionAndWorkingCopy } from './createTrialSessionAndWorkingCopy';
 
-const DATE = '2018-11-21T20:49:28.192Z';
-
-const trialSessionMetadata = {
-  isCalendared: false,
-  judge: { name: 'Buch', userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0' },
-  maxCases: 100,
-  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-  sessionType: 'Hybrid',
-  startDate: DATE,
-  term: 'Fall',
-  termYear: '2018',
-  trialLocation: 'Chicago, Illinois',
-  trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
-};
-let trialSessionToAdd;
-
 describe('createTrialSessionAndWorkingCopy', () => {
+  const DATE = '2018-11-21T20:49:28.192Z';
+
+  const trialSessionMetadata = {
+    isCalendared: false,
+    judge: { name: 'Buch', userId: 'd90e7b8c-c8a1-4b96-9b30-70bd47b63df0' },
+    maxCases: 100,
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    sessionType: 'Hybrid',
+    startDate: DATE,
+    term: 'Fall',
+    termYear: '2018',
+    trialLocation: 'Chicago, Illinois',
+    trialSessionId: 'a54ba5a9-b37b-479d-9201-067ec6e335cc',
+  };
+
+  let trialSessionToAdd;
+
   beforeEach(() => {
     trialSessionToAdd = new TrialSession(trialSessionMetadata, {
       applicationContext,
