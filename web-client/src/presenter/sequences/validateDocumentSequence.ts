@@ -1,7 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setValidationErrorsByFlagAction } from '../actions/WorkItem/setValidationErrorsByFlagAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
@@ -12,9 +9,6 @@ export const validateDocumentSequence = [
   {
     ignore: [],
     validate: [
-      computeFilingFormDateAction,
-      getComputedFormDateFactoryAction('dateReceived'),
-      setComputeFormDateFactoryAction('dateReceived'),
       setFilersFromFilersMapAction,
       validateDocumentAction,
       {

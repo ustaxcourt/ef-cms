@@ -1,14 +1,17 @@
+import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { computeTrialSessionFormDataAction } from './computeTrialSessionFormDataAction';
+import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('computeTrialSessionFormDataAction', () => {
   let form;
   const TIME_INVALID = '99:99';
 
+  presenter.providers.applicationContext = applicationContextForClient;
+
   beforeEach(() => {
     form = {
-      startDateMonth: '12',
-      startDateYear: '2019',
+      startDate: '2019-12-01',
       startTimeExtension: 'am',
       startTimeHours: '11',
       startTimeMinutes: '00',
@@ -19,6 +22,9 @@ describe('computeTrialSessionFormDataAction', () => {
     let result;
 
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
@@ -27,24 +33,33 @@ describe('computeTrialSessionFormDataAction', () => {
       termYear: '2019',
     });
 
-    form.startDateMonth = '5';
+    form.startDate = '2019-05-01';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
       term: 'Spring',
     });
 
-    form.startDateMonth = '7';
+    form.startDate = '2019-07-01';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
       term: 'Summer',
     });
 
-    form.startDateMonth = '2';
+    form.startDate = '2019-02-01';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
@@ -55,30 +70,27 @@ describe('computeTrialSessionFormDataAction', () => {
   it('should store empty term and termYear if month is invalid or year is empty', async () => {
     let result;
 
-    form.startDateMonth = 'June';
+    form.startDate = '37-37';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form.term).toBeUndefined();
     expect(result.state.form.termYear).toBeUndefined();
 
-    form.startDateMonth = '13';
-    form.startDateYear = '2019';
+    form.startDate = '2019-37-37';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
       termYear: '2019',
     });
     expect(result.state.form.term).toBeUndefined();
-
-    form.startDateMonth = '5';
-    form.startDateYear = '';
-    result = await runAction(computeTrialSessionFormDataAction, {
-      state: { form },
-    });
-    expect(result.state.form.term).toBeUndefined();
-    expect(result.state.form.termYear).toBeUndefined();
   });
 
   it('should store an afternoon (pm) startTime in 24hr format', async () => {
@@ -87,6 +99,9 @@ describe('computeTrialSessionFormDataAction', () => {
     form.startTimeMinutes = '15';
     form.startTimeExtension = 'pm';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
@@ -100,6 +115,9 @@ describe('computeTrialSessionFormDataAction', () => {
     form.startTimeMinutes = '15';
     form.startTimeExtension = 'pm';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
@@ -113,6 +131,9 @@ describe('computeTrialSessionFormDataAction', () => {
     form.startTimeMinutes = '15';
     form.startTimeExtension = 'am';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
@@ -126,6 +147,9 @@ describe('computeTrialSessionFormDataAction', () => {
     form.startTimeMinutes = '00';
     form.startTimeExtension = 'am';
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form },
     });
     expect(result.state.form).toMatchObject({
@@ -136,6 +160,9 @@ describe('computeTrialSessionFormDataAction', () => {
   it('should not store a time if hours and minutes are not set', async () => {
     let result;
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       state: { form: {} },
     });
     expect(result.state.startTime).toBeUndefined();
@@ -147,6 +174,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeHours = '13';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -156,6 +186,9 @@ describe('computeTrialSessionFormDataAction', () => {
       form.startTimeHours = '13';
       form.startTimeExtension = 'pm';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -164,6 +197,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeHours = '0';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -172,6 +208,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeHours = '24';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -180,6 +219,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeHours = undefined;
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -188,6 +230,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeHours = 'abc';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -200,6 +245,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeMinutes = undefined;
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -208,6 +256,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeMinutes = '61';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -216,6 +267,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeMinutes = 'abc';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -228,6 +282,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeExtension = undefined;
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -236,6 +293,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
       form.startTimeExtension = 'abc';
       result = await runAction(computeTrialSessionFormDataAction, {
+        modules: {
+          presenter,
+        },
         state: { form },
       });
       expect(result.state.form).toMatchObject({
@@ -246,6 +306,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
   it('should correctly store the judge on the form', async () => {
     const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       props: { key: 'judgeId', value: { name: 'Test Judge', userId: '123' } },
       state: { form },
     });
@@ -258,6 +321,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
   it('should correctly store the trialClerk on the form', async () => {
     const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       props: {
         key: 'trialClerkId',
         value: { name: 'Test Clerk', userId: '321' },
@@ -274,6 +340,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
   it('should correctly store the trialClerkId to "Other" on the form when "Other" is selected in drop down', async () => {
     const result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       props: {
         key: 'trialClerkId',
         value: { name: 'Other', userId: 'Other' },
@@ -286,6 +355,9 @@ describe('computeTrialSessionFormDataAction', () => {
 
   it('should clear the trial clerk input when "Select" is selected in drop down', async () => {
     let result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       props: {
         key: 'trialClerkId',
         value: undefined,
@@ -301,6 +373,9 @@ describe('computeTrialSessionFormDataAction', () => {
     expect(result.state.form.trialClerkId).toEqual(undefined);
     expect(result.state.form.trialClerk).toEqual(undefined);
     result = await runAction(computeTrialSessionFormDataAction, {
+      modules: {
+        presenter,
+      },
       props: {
         key: 'trialClerkId',
         value: undefined,

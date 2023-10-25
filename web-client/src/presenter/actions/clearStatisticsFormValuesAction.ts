@@ -12,9 +12,7 @@ export const clearStatisticsFormValuesAction = ({
 }: ActionProps) => {
   if (props.key.includes('yearOrPeriod')) {
     const index = props.key.split('.')[1];
-    store.unset(state.form.statistics[index].lastDateOfPeriodDay);
-    store.unset(state.form.statistics[index].lastDateOfPeriodMonth);
-    store.unset(state.form.statistics[index].lastDateOfPeriodYear);
+    store.unset(state.form.statistics[index].lastDateOfPeriod);
     store.unset(state.form.statistics[index].year);
     store.unset(state.form.statistics[index].irsDeficiencyAmount);
     store.unset(state.form.statistics[index].irsTotalPenalties);

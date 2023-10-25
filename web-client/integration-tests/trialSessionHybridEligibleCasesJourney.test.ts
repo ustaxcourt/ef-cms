@@ -47,9 +47,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         ...overrides,
         caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
-        receivedAtDay: '01',
-        receivedAtMonth: '01',
-        receivedAtYear: '2019',
+        receivedAt: '2019-01-01T04:00:00.000Z',
       };
       loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #1', async () => {
@@ -71,9 +69,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         ...overrides,
         caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Regular',
-        receivedAtDay: '02',
-        receivedAtMonth: '01',
-        receivedAtYear: '2019',
+        receivedAt: '2019-01-02T04:00:00.000Z',
       };
       loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #2', async () => {
@@ -95,9 +91,7 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         ...overrides,
         caseType: CASE_TYPES_MAP.deficiency,
         procedureType: 'Small',
-        receivedAtDay: '01',
-        receivedAtMonth: '02',
-        receivedAtYear: '2019',
+        receivedAt: '2019-02-01T04:00:00.000Z',
       };
       loginAs(cerebralTest, 'petitioner@example.com');
       it('Create case #3', async () => {
