@@ -2,14 +2,21 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import { Message } from './Message';
 
-/**
- * NewMessage entity - used for validating
- * the Create Message modal form
- *
- * @param {object} rawMessage the raw message data
- * @constructor
- */
 export class NewMessage extends JoiValidationEntity {
+  public message: string;
+  public subject: string;
+  public toSection: string;
+  public toUserId: string;
+
+  constructor(rawMessage) {
+    super('NewMessage');
+
+    this.message = rawMessage.message;
+    this.subject = rawMessage.subject;
+    this.toSection = rawMessage.toSection;
+    this.toUserId = rawMessage.toUserId;
+  }
+
   getValidationRules() {
     return {
       entityName: JoiValidationConstants.STRING.valid('NewMessage').required(),
@@ -18,22 +25,5 @@ export class NewMessage extends JoiValidationEntity {
       toSection: Message.VALIDATION_RULES.toSection,
       toUserId: Message.VALIDATION_RULES.toUserId,
     };
-  }
-
-  public message: string;
-  public subject: string;
-  public toSection: string;
-  public toUserId: string;
-
-  constructor(rawMessage, { applicationContext }) {
-    super('NewMessage');
-    if (!applicationContext) {
-      throw new TypeError('applicationContext must be defined');
-    }
-
-    this.message = rawMessage.message;
-    this.subject = rawMessage.subject;
-    this.toSection = rawMessage.toSection;
-    this.toUserId = rawMessage.toUserId;
   }
 }

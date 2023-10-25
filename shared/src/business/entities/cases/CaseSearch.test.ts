@@ -23,6 +23,7 @@ describe('Case Search entity', () => {
     const validationErrors = caseSearch.getFormattedValidationErrors();
     const customMessages = extractCustomMessages(
       caseSearch.getValidationRules(),
+      true,
     );
 
     expect(validationErrors!.petitionerName).toEqual(

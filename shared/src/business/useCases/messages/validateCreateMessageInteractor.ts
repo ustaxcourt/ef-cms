@@ -8,11 +8,10 @@ import { NewMessage } from '../../entities/NewMessage';
  * @param {object} providers.message the message data
  * @returns {object} errors (null if no errors)
  */
-export const validateCreateMessageInteractor = (
-  applicationContext: IApplicationContext,
-  { message }: { message: string },
-) => {
-  return new NewMessage(message, {
-    applicationContext,
-  }).getFormattedValidationErrors();
+export const validateCreateMessageInteractor = ({
+  message,
+}: {
+  message: string;
+}) => {
+  return new NewMessage(message).getFormattedValidationErrors();
 };

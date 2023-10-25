@@ -83,11 +83,14 @@ describe('Statistic', () => {
         },
         { applicationContext },
       );
-      const customMessages = extractCustomMessages(statistic.VALIDATION_RULES);
+      const customMessages = extractCustomMessages(
+        Statistic.VALIDATION_RULES,
+        true,
+      );
 
       expect(statistic.isValid()).toBeFalsy();
       expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod: customMessages.lastDateOfPeriod[0],
+        lastDateOfPeriod: customMessages.lastDateOfPeriod[1],
       });
     });
 

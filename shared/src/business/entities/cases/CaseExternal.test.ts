@@ -98,7 +98,7 @@ describe('CaseExternal entity', () => {
       );
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(customMessages.petitionFileSize[0]);
+      ).toEqual(customMessages.petitionFileSize[1]);
     });
 
     it('should inform you if petition file size is zero', () => {
@@ -120,7 +120,7 @@ describe('CaseExternal entity', () => {
       );
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(customMessages.petitionFileSize[1]);
+      ).toEqual(customMessages.petitionFileSize[0]);
     });
 
     it('should not error on petitionFileSize when petitionFile is undefined', () => {
@@ -158,7 +158,7 @@ describe('CaseExternal entity', () => {
       );
       expect(
         caseExternal.getFormattedValidationErrors()!.petitionFileSize,
-      ).toEqual(customMessages.petitionFileSize[1]);
+      ).toEqual(customMessages.petitionFileSize[0]);
     });
   });
 
@@ -181,7 +181,7 @@ describe('CaseExternal entity', () => {
         CaseExternal.VALIDATION_RULES,
       );
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        customMessages.stinFileSize[0],
+        customMessages.stinFileSize[1],
       );
     });
 
@@ -203,7 +203,7 @@ describe('CaseExternal entity', () => {
         CaseExternal.VALIDATION_RULES,
       );
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        customMessages.stinFileSize[1],
+        customMessages.stinFileSize[0],
       );
     });
 
@@ -241,7 +241,7 @@ describe('CaseExternal entity', () => {
         CaseExternal.VALIDATION_RULES,
       );
       expect(caseExternal.getFormattedValidationErrors()!.stinFileSize).toEqual(
-        customMessages.stinFileSize[1],
+        customMessages.stinFileSize[0],
       );
     });
   });
@@ -267,7 +267,7 @@ describe('CaseExternal entity', () => {
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(customMessages.corporateDisclosureFileSize[0].message);
+      ).toEqual(customMessages.corporateDisclosureFileSize[1]);
     });
 
     it('should inform you if corporate disclosure file size is zero', () => {
@@ -290,7 +290,7 @@ describe('CaseExternal entity', () => {
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(customMessages.corporateDisclosureFileSize[1]);
+      ).toEqual(customMessages.corporateDisclosureFileSize[0]);
     });
 
     it('should not error on corporateDisclosureFileSize when corporateDisclosureFile is undefined', () => {
@@ -330,7 +330,7 @@ describe('CaseExternal entity', () => {
       expect(
         caseExternal.getFormattedValidationErrors()!
           .corporateDisclosureFileSize,
-      ).toEqual(customMessages.corporateDisclosureFileSize[1]);
+      ).toEqual(customMessages.corporateDisclosureFileSize[0]);
     });
   });
 });
