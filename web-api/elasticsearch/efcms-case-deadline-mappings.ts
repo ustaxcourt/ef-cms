@@ -31,7 +31,7 @@ export const efcmsCaseDeadlineMappings = {
   },
 };
 
-export const efcmsCaseDeadlineMappingsHash: string = createHash('md5')
+const efcmsCaseDeadlineMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsCaseDeadlineMappings), 'utf8')
   .digest('hex');
 

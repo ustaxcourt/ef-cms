@@ -112,7 +112,7 @@ export const efcmsDocketEntryMappings = {
   },
 };
 
-export const efcmsDocketEntryMappingsHash: string = createHash('md5')
+const efcmsDocketEntryMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsDocketEntryMappings), 'utf8')
   .digest('hex');
 

@@ -128,7 +128,7 @@ export const efcmsCaseMappings = {
   },
 };
 
-export const efcmsCaseMappingsHash: string = createHash('md5')
+const efcmsCaseMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsCaseMappings), 'utf-8')
   .digest('hex');
 

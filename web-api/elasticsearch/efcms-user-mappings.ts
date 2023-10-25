@@ -32,7 +32,7 @@ export const efcmsUserMappings = {
   },
 };
 
-export const efcmsUserMappingsHash: string = createHash('md5')
+const efcmsUserMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsUserMappings), 'utf8')
   .digest('hex');
 

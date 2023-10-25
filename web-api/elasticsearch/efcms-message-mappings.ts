@@ -77,7 +77,7 @@ export const efcmsMessageMappings = {
   },
 };
 
-export const efcmsMessageMappingsHash: string = createHash('md5')
+const efcmsMessageMappingsHash: string = createHash('md5')
   .update(JSON.stringify(efcmsMessageMappings), 'utf8')
   .digest('hex');
 
