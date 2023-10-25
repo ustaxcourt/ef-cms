@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -78,9 +79,6 @@ describe('docket clerk updates docket entries', () => {
     const trialExhibitsFormValues = {
       documentType: 'Trial Exhibits',
       eventCode: 'TE', // Trial Exhibits, a coversheet will be added to the uploaded PDF
-      filingDateDay: '4',
-      filingDateMonth: '4',
-      filingDateYear: '2020',
     };
 
     for (let [key, value] of Object.entries(trialExhibitsFormValues)) {
@@ -89,6 +87,15 @@ describe('docket clerk updates docket entries', () => {
         value,
       });
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: '4/4/2020',
+      },
+    );
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 

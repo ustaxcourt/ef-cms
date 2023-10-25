@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState } from '../helpers';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -59,26 +60,11 @@ export const petitionerFilesANonstardardDDocumentForCase = (
     );
 
     await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'serviceDateMonth',
-        value: '03',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'serviceDateDay',
-        value: '03',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateFileDocumentWizardFormValueSequence',
-      {
-        key: 'serviceDateYear',
-        value: '2003',
+        key: 'serviceDate',
+        toFormat: FORMATS.ISO,
+        value: '03/03/2003',
       },
     );
 

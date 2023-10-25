@@ -10,10 +10,10 @@ describe('validateDocketEntryInteractor', () => {
     });
 
     expect(errors).toEqual({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       filers: VALIDATION_ERROR_MESSAGES.filers,
+      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
     });
   });
 
@@ -21,7 +21,6 @@ describe('validateDocketEntryInteractor', () => {
     const errors = validateDocketEntryInteractor({
       entryMetadata: {
         category: 'Answer',
-        dateReceived: '1987-08-06T07:53:09.001Z',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Answer',
         eventCode: 'A',
@@ -31,6 +30,7 @@ describe('validateDocketEntryInteractor', () => {
         otherIteration: '16',
         primaryDocumentFile: {},
         primaryDocumentFileSize: 1,
+        receivedAt: '1987-08-06T07:53:09.001Z',
         scenario: 'Nonstandard G',
       },
     });
