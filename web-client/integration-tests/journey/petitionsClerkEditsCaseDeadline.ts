@@ -1,16 +1,17 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
 const customMessages = extractCustomMessages(CaseDeadline);
 
-const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
-
 export const petitionsClerkEditsCaseDeadline = (
   cerebralTest,
   overrides = {},
 ) => {
+  const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
   return it('Petitions clerk edits a case deadline', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -26,9 +27,7 @@ export const petitionsClerkEditsCaseDeadline = (
     });
 
     expect(cerebralTest.getState('form.caseDeadlineId')).toBeTruthy();
-    expect(cerebralTest.getState('form.month')).toBeTruthy();
-    expect(cerebralTest.getState('form.day')).toBeTruthy();
-    expect(cerebralTest.getState('form.year')).toBeTruthy();
+    expect(cerebralTest.getState('form.deadlineDate')).toBeTruthy();
     expect(cerebralTest.getState('form.description')).toBeTruthy();
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -46,20 +45,14 @@ I'll be gone
 In a day or two`,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: overrides.month || '4',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: overrides.day || '1',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: overrides.year || '2035',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'deadlineDate',
+        toFormat: FORMATS.ISO,
+        value: '04/01/2035',
+      },
+    );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 

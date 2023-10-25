@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   getFormattedDocketEntriesForTest,
   getPetitionDocumentForCase,
@@ -44,18 +45,14 @@ export const docketClerkEditsDocketEntryNonstandardD = cerebralTest => {
       serviceDate: customMessages.serviceDate[0],
     });
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'serviceDateDay',
-      value: '5',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'serviceDateMonth',
-      value: '5',
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'serviceDateYear',
-      value: '2015',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'serviceDate',
+        toFormat: FORMATS.ISO,
+        value: '5/5/2015',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'previousDocument',
@@ -93,7 +90,7 @@ export const docketClerkEditsDocketEntryNonstandardD = cerebralTest => {
       documentTitle: 'Certificate of Service of Petition 05-05-2015',
       documentType: 'Certificate of Service',
       eventCode: 'MISCL',
-      serviceDate: '2015-05-05T04:00:00.000Z',
+      serviceDate: '2015-05-05T00:00:00.000-04:00',
     });
   });
 };

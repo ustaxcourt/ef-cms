@@ -236,7 +236,10 @@ export class TrialSession extends JoiValidationEntity {
             .optional()
             .allow(null),
         })
-        .messages(setDefaultErrorMessage('Enter a valid estimated end date')),
+        .messages({
+          ...setDefaultErrorMessage('Enter a valid estimated end date'),
+          'date.max': 'Enter a valid estimated end date',
+        }),
       hasNOTTBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),

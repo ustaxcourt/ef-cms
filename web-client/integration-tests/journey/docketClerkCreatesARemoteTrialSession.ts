@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
@@ -46,20 +47,14 @@ export const docketClerkCreatesARemoteTrialSession = (
       value: overrides.sessionType || 'Hybrid',
     });
 
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateMonth',
-      value: '13',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateDay',
-      value: '12',
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateYear',
-      value: '2025',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'startDate',
+        toFormat: FORMATS.ISO,
+        value: '13/12/2025',
+      },
+    );
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'judge',
@@ -78,15 +73,19 @@ export const docketClerkCreatesARemoteTrialSession = (
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      startDate: errorMessages.startDate[1],
-      term: errorMessages.term,
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
+      startDate: customMessages.startDate[0],
+      term: customMessages.term,
     });
 
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'startDateMonth',
-      value: '12',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'startDate',
+        toFormat: FORMATS.ISO,
+        value: '12/12/2025',
+      },
+    );
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 

@@ -76,25 +76,25 @@ describe('DocketEntryFactory', () => {
     );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .dateReceived,
-    ).toEqual(customMessages.dateReceived[0]);
-    rawEntity.dateReceived = createISODateString();
+        .receivedAt,
+    ).toEqual(customMessages.receivedAt[0]);
+    rawEntity.receivedAt = createISODateString();
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .dateReceived,
+        .receivedAt,
     ).toEqual(undefined);
   });
 
   it('should not allow received date be in the future', () => {
-    rawEntity.dateReceived = calculateISODate({ howMuch: 1, units: 'days' });
+    rawEntity.receivedAt = calculateISODate({ howMuch: 1, units: 'days' });
     const customMessages = extractCustomMessages(
       new DocketEntryFactory(rawEntity).getValidationRules(),
       true,
     );
     expect(
       new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .dateReceived,
-    ).toEqual(customMessages.dateReceived[1]);
+        .receivedAt,
+    ).toEqual(customMessages.receivedAt[1]);
   });
 
   it('should be invalid when additionalInfo is over 500 characters long', () => {
@@ -361,7 +361,7 @@ describe('DocketEntryFactory', () => {
 
   describe('otherFilingParty', () => {
     beforeEach(() => {
-      rawEntity.dateReceived = createISODateString();
+      rawEntity.receivedAt = createISODateString();
       rawEntity.documentTitle = 'Order to do something';
       rawEntity.documentType = 'Order';
       rawEntity.eventCode = 'O';
@@ -421,7 +421,7 @@ describe('DocketEntryFactory', () => {
 
   describe('filers', () => {
     beforeEach(() => {
-      rawEntity.dateReceived = createISODateString();
+      rawEntity.receivedAt = createISODateString();
       rawEntity.documentTitle = 'Notice of Change of Address';
       rawEntity.documentType = 'Notice of Change of Address';
       rawEntity.eventCode = 'NCA';

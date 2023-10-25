@@ -7,10 +7,10 @@ describe('validateDocketEntryInteractor', () => {
     });
 
     expect(errors).toEqual({
-      dateReceived: 'Enter a valid date received',
       documentType: 'Select a document type',
       eventCode: 'Select a document type',
       filers: 'Select a filing party',
+      receivedAt: 'Enter a valid date received',
     });
   });
 
@@ -18,7 +18,6 @@ describe('validateDocketEntryInteractor', () => {
     const errors = validateDocketEntryInteractor({
       entryMetadata: {
         category: 'Answer',
-        dateReceived: '1987-08-06T07:53:09.001Z',
         documentTitle: '[First, Second, etc.] Amendment to Answer',
         documentType: 'Answer',
         eventCode: 'A',
@@ -28,6 +27,7 @@ describe('validateDocketEntryInteractor', () => {
         otherIteration: '16',
         primaryDocumentFile: {},
         primaryDocumentFileSize: 1,
+        receivedAt: '1987-08-06T07:53:09.001Z',
         scenario: 'Nonstandard G',
       },
     });

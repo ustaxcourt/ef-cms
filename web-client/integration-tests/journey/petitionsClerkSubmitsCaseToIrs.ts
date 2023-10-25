@@ -1,5 +1,6 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../../shared/src/business/entities/cases/Case';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 const customMessages = extractCustomMessages(Case);
 
@@ -17,28 +18,30 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
       key: 'hasVerifiedIrsNotice',
       value: false,
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsDay',
-      value: '24',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2050',
-    });
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'irsNoticeDate',
+        toFormat: FORMATS.ISO,
+        value: '12/24/2050',
+      },
+    );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
+
     expect(cerebralTest.getState('validationErrors')).toEqual({
       irsNoticeDate: customMessages.irsNoticeDate[1],
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'irsYear',
-      value: '2017',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'irsNoticeDate',
+        toFormat: FORMATS.ISO,
+        value: '12/24/2017',
+      },
+    );
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -49,14 +52,13 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    // check that save occurred
     expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2017-12-24T05:00:00.000Z',
+      '2017-12-24T00:00:00.000-05:00',
     );
     expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,
     );
-    //check that documents were served
+
     const documents = cerebralTest.getState('caseDetail.docketEntries');
     for (const document of documents) {
       if (!document.isMinuteEntry && !document.isDraft) {

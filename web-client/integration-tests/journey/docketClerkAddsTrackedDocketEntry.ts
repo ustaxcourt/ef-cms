@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 const customMessages = extractCustomMessages(DocketEntryFactory);
@@ -20,27 +21,22 @@ export const docketClerkAddsTrackedDocketEntry = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      dateReceived: customMessages.dateReceived[0],
       documentType: customMessages.documentType[0],
       eventCode: customMessages.eventCode[0],
       filers: customMessages.filers[0],
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
+      receivedAt: customMessages.dateReceived[1],
     });
 
-    // primary document
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 1,
-    });
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2018,
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'primaryDocumentFile',

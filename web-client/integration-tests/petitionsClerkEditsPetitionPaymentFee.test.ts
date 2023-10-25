@@ -1,4 +1,5 @@
 import { Case } from '../../shared/src/business/entities/cases/Case';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
@@ -62,18 +63,14 @@ describe('petitions clerk edits a petition payment fee', () => {
       petitionPaymentMethod: customMessages.petitionPaymentMethod[0],
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateDay',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateMonth',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateYear',
-      value: '2001',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2001',
+      },
+    );
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'petitionPaymentMethod',
@@ -88,7 +85,7 @@ describe('petitions clerk edits a petition payment fee', () => {
       PAYMENT_STATUS.PAID,
     );
     expect(cerebralTest.getState('caseDetail.petitionPaymentDate')).toEqual(
-      '2001-01-01T05:00:00.000Z',
+      '2001-01-01T00:00:00.000-05:00',
     );
 
     expect(
@@ -100,7 +97,7 @@ describe('petitions clerk edits a petition payment fee', () => {
     ).toMatchObject({
       documentTitle: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
       eventCode: 'FEE',
-      filingDate: '2001-01-01T05:00:00.000Z',
+      filingDate: '2001-01-01T00:00:00.000-05:00',
       index: 3,
     });
   });

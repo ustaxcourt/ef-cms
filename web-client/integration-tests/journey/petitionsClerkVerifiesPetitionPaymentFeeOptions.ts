@@ -1,5 +1,6 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 const customMessages = extractCustomMessages(Case.VALIDATION_RULES);
@@ -32,18 +33,15 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
       petitionPaymentMethod: customMessages.petitionPaymentMethod[0],
     });
 
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'paymentDateDay',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'paymentDateMonth',
-      value: '01',
-    });
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'paymentDateYear',
-      value: '2001',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentDate',
+        toFormat: FORMATS.ISO,
+        value: '01/01/2001',
+      },
+    );
+
     await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentMethod',
       value: 'check',
@@ -89,18 +87,15 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
       petitionPaymentWaivedDate: customMessages.petitionPaymentWaivedDate[0],
     });
 
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'paymentDateWaivedDay',
-      value: '02',
-    });
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'paymentDateWaivedMonth',
-      value: '02',
-    });
-    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
-      key: 'paymentDateWaivedYear',
-      value: '2002',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'petitionPaymentWaivedDate',
+        toFormat: FORMATS.ISO,
+        value: '02/02/2002',
+      },
+    );
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'applicationForWaiverOfFilingFeeFile',
       value: fakeFile,

@@ -14,7 +14,7 @@ import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setD
 import joi from 'joi';
 
 export class DocketEntryFactory extends JoiValidationEntity {
-  public dateReceived: string;
+  public receivedAt: string;
   public isDocumentRequired: boolean;
   public partyPrivatePractitioner: boolean;
   public primaryDocumentFile: object;
@@ -62,7 +62,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
     this.attachments = rawPropsParam.attachments;
     this.certificateOfService = rawPropsParam.certificateOfService;
     this.certificateOfServiceDate = rawPropsParam.certificateOfServiceDate;
-    this.dateReceived = rawPropsParam.dateReceived;
+    this.receivedAt = rawPropsParam.receivedAt;
     this.documentTitle = rawPropsParam.documentTitle;
     this.documentType = rawPropsParam.documentType;
     this.eventCode = rawPropsParam.eventCode;
@@ -116,13 +116,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
         DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfService,
       certificateOfServiceDate:
         DOCKET_ENTRY_VALIDATION_RULE_KEYS.certificateOfServiceDate,
-      dateReceived: JoiValidationConstants.ISO_DATE.max('now')
-        .required()
-        .messages({
-          ...setDefaultErrorMessage('Enter a valid date received'),
-          'date.max':
-            'Received date cannot be in the future. Enter a valid date.',
-        }),
       documentTitle: DOCKET_ENTRY_VALIDATION_RULE_KEYS.documentTitle,
       documentType: JoiValidationConstants.STRING.valid(...ALL_DOCUMENT_TYPES)
         .optional()
@@ -178,6 +171,13 @@ export class DocketEntryFactory extends JoiValidationEntity {
         ...setDefaultErrorMessage('Your document file size is empty.'),
         'number.max': `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
       }),
+      receivedAt: JoiValidationConstants.ISO_DATE.max('now')
+        .required()
+        .messages({
+          ...setDefaultErrorMessage('Enter a valid date received'),
+          'date.max':
+            'Received date cannot be in the future. Enter a valid date.',
+        }),
       serviceDate: DOCKET_ENTRY_VALIDATION_RULE_KEYS.serviceDate,
       trialLocation: DOCKET_ENTRY_VALIDATION_RULE_KEYS.trialLocation,
     });

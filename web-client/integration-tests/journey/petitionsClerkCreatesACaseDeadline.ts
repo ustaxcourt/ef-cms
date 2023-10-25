@@ -1,4 +1,5 @@
 import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { refreshElasticsearchIndex } from '../helpers';
 const customMessages = extractCustomMessages(CaseDeadline);
@@ -39,20 +40,18 @@ I'll be gone
 In a day or two`,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'month',
-      value: overrides.month || '8',
-    });
+    const deadlineMonth = overrides.month || '08';
+    const deadlineDay = overrides.day || '12';
+    const deadlineYear = overrides.year || '2025';
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'day',
-      value: overrides.day || '12',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'year',
-      value: overrides.year || '2025',
-    });
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'deadlineDate',
+        toFormat: FORMATS.ISO,
+        value: `${deadlineMonth}/${deadlineDay}/${deadlineYear}`,
+      },
+    );
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
