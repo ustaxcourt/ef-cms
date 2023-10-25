@@ -85,7 +85,7 @@ describe('Joi Entity', () => {
 
         expect(Object.keys(errors).length).toEqual(1);
         expect(errors.propUsingReference).toEqual(
-          'propUsingReference must be grater than referencedProp.',
+          'propUsingReference must be greater than referencedProp.',
         );
       });
     });

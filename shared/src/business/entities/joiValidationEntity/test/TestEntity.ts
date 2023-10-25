@@ -39,7 +39,7 @@ export class TestEntity extends JoiValidationEntity {
         .required()
         .messages({
           'number.min':
-            'propUsingReference must be grater than referencedProp.',
+            'propUsingReference must be greater than referencedProp.',
         }),
       referencedProp: joi.number().required(),
       singleErrorMessage: joi.string().min(2).required().messages({
