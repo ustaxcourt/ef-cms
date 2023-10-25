@@ -1,12 +1,9 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   getFormattedDocketEntriesForTest,
   waitForCondition,
 } from '../helpers';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkEditsDocketEntryStandard = cerebralTest => {
   return it('docket clerk edits docket entry with Standard scenario', async () => {
@@ -45,7 +42,7 @@ export const docketClerkEditsDocketEntryStandard = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      receivedAt: customMessages.receivedAt[1],
+      receivedAt: 'Enter a valid date received',
     });
 
     await cerebralTest.runSequence(

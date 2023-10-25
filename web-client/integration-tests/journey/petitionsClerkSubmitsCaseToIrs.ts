@@ -2,7 +2,7 @@ import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityC
 import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(Case);
+const customMessages = extractCustomMessages(Case.VALIDATION_RULES);
 
 export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
   return it('Petitions clerk submits case to IRS', async () => {

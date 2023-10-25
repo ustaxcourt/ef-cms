@@ -1,11 +1,8 @@
-import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
-const customMessages = extractCustomMessages(NewMessage);
 
 const { PETITIONS_SECTION } = applicationContext.getConstants();
 
@@ -79,7 +76,7 @@ export const petitionsClerkCreatesNewMessageOnCaseWithMaxAttachments =
       await cerebralTest.runSequence('createMessageSequence');
 
       expect(cerebralTest.getState('validationErrors')).toEqual({
-        message: customMessages.message[0],
+        message: 'Enter a message',
       });
 
       await cerebralTest.runSequence('updateModalFormValueSequence', {

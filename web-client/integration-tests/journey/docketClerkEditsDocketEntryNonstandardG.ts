@@ -1,7 +1,4 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkEditsDocketEntryNonstandardG = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard G scenario', async () => {
@@ -31,7 +28,7 @@ export const docketClerkEditsDocketEntryNonstandardG = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      ordinalValue: customMessages.ordinalValue[0],
+      ordinalValue: 'Select an iteration',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

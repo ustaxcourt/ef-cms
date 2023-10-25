@@ -2,7 +2,7 @@ import { CASE_TYPES_MAP } from '../../../shared/src/business/entities/EntityCons
 import { Statistic } from '../../../shared/src/business/entities/Statistic';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(Statistic);
+const customMessages = extractCustomMessages(Statistic.VALIDATION_RULES, true);
 
 export const petitionsClerkAddsDeficiencyStatisticToCase = cerebralTest => {
   return it('petitions clerk adds deficiency statistic to case after QCing', async () => {

@@ -8,7 +8,10 @@ import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseIn
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { fakeFile } from '../helpers';
-const customMessages = extractCustomMessages(CaseInternal);
+const customMessages = extractCustomMessages(
+  CaseInternal.VALIDATION_RULES,
+  true,
+);
 
 export const petitionsClerkCreatesNewCase = (
   cerebralTest,

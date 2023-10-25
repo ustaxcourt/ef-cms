@@ -1,8 +1,5 @@
-import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { refreshElasticsearchIndex } from '../helpers';
-const customMessages = extractCustomMessages(CaseDeadline);
 
 export const petitionsClerkCreatesACaseDeadline = (
   cerebralTest,
@@ -21,8 +18,8 @@ export const petitionsClerkCreatesACaseDeadline = (
     await cerebralTest.runSequence('createCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      deadlineDate: customMessages.deadlineDate[0],
-      description: customMessages.description[0],
+      deadlineDate: 'Enter a valid deadline date',
+      description: 'Enter a description of this deadline',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -56,7 +53,7 @@ In a day or two`,
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: customMessages.description[1],
+      description: 'Enter a description of this deadline',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
