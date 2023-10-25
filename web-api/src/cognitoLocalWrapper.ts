@@ -9,8 +9,6 @@ const cognitoFunctions = [
   'signUp',
 ];
 
-const mockedFunctions = ['resendConfirmationCode'];
-
 export const cognitoLocalWrapper = cognito => {
   for (const methodName in cognito) {
     if (typeof cognito[methodName] === 'function') {
@@ -37,7 +35,7 @@ export const cognitoLocalWrapper = cognito => {
             },
           };
         };
-      } else if (mockedFunctions.includes(methodName)) {
+      } else if (methodName === 'resendConfirmationCode') {
         cognito[methodName] = function (params) {
           return {
             promise: async () => {
@@ -52,6 +50,12 @@ export const cognitoLocalWrapper = cognito => {
               });
             },
           };
+        };
+      } else {
+        return {
+          promise: () => {
+            return new Promise((resolve, reject) => reject({}));
+          },
         };
       }
     }

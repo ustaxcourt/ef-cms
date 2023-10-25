@@ -1,9 +1,12 @@
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 const originalAdminCreateUser = jest.fn();
 const originalAdminGetUser = jest.fn();
+
 const cognitoMock = {
+  SOME_NON_EXISTING_METHOD: jest.fn(),
   adminCreateUser: originalAdminCreateUser,
   adminGetUser: originalAdminGetUser,
+  resendConfirmationCode: jest.fn(),
 };
 
 cognitoLocalWrapper(cognitoMock);
@@ -52,4 +55,24 @@ describe('cognitoLocalWrapper', () => {
       expect.objectContaining({ DesiredDeliveryMediums: ['EMAIL'] }),
     );
   });
+
+  it('should return a mocked method for "resendConfirmationCode"', async () => {
+    const TEST_USERNAME = 'TEST_USERNAME@TEST.COM';
+    const options = { Username: TEST_USERNAME };
+    const results = await cognitoMock.resendConfirmationCode(options).promise();
+
+    expect(results).toEqual({
+      CodeDeliveryDetails: {
+        AttributeName: 'Email',
+        DeliveryMedium: 'Email',
+        Destination: TEST_USERNAME,
+      },
+    });
+  });
+
+  // it('should do nothing when method name is not handled', async () => {
+  //   await cognitoMock.SOME_NON_EXISTING_METHOD().promise();
+
+  //   expect(cognitoMock.SOME_NON_EXISTING_METHOD).not.toHaveBeenCalled();
+  // });
 });
