@@ -1,10 +1,7 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { isDocketEntryMultiDocketableAction } from '../actions/CaseConsolidation/isDocketEntryMultiDocketableAction';
-import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setMultiDocketingCheckboxesAction } from '../actions/CaseConsolidation/setMultiDocketingCheckboxesAction';
@@ -19,11 +16,6 @@ export const openConfirmPaperServiceModalSequence = [
   clearAlertsAction,
   clearModalStateAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction('serviceDate'),
-  setComputeFormDateFactoryAction('serviceDate'),
-  computeCertificateOfServiceFormDateAction,
-  getComputedFormDateFactoryAction('dateReceived'),
-  setComputeFormDateFactoryAction('dateReceived'),
   isDocketEntryMultiDocketableAction,
   {
     no: [],
