@@ -1,6 +1,6 @@
 import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 import { clearFormAction } from '@web-client/presenter/actions/clearFormAction';
-import { createConfirmLinkLocal } from '@web-client/presenter/actions/createConfirmLinkLocalAction';
+import { createConfirmLinkLocalAction } from '@web-client/presenter/actions/createConfirmLinkLocalAction';
 import { createPetitionerAccountFormAction } from '@web-client/presenter/actions/createPetitionerAccountFormAction';
 import { navigateToVerificationSentAction } from '@web-client/presenter/actions/navigateToVerificationSentAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
@@ -14,7 +14,7 @@ export const submitCreatePetitionerAccountFormSequence = [
   {
     error: [setAlertErrorAction],
     success: showProgressSequenceDecorator([
-      createConfirmLinkLocal,
+      createConfirmLinkLocalAction,
       setAlertSuccessAction,
       clearFormAction,
       setNewAccountEmailInStateAction,
