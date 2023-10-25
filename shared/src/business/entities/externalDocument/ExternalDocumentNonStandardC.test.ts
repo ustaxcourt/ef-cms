@@ -1,4 +1,5 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
+import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardC', () => {
@@ -8,12 +9,15 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
+      const customMessages = extractCustomMessages(
+        externalDocumentC.getValidationRules(),
+      );
+
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        category: externalDocumentC.getErrorToMessageMap().category,
-        documentType: externalDocumentC.getErrorToMessageMap().documentType[1],
-        freeText: externalDocumentC.getErrorToMessageMap().freeText[0].message,
-        previousDocument:
-          externalDocumentC.getErrorToMessageMap().previousDocument,
+        category: customMessages.category[0],
+        documentType: customMessages.documentType[0],
+        freeText: customMessages.freeText[0],
+        previousDocument: customMessages.previousDocument[0],
       });
     });
 
@@ -39,9 +43,11 @@ describe('ExternalDocumentNonStandardC', () => {
         previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard C',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentC.getValidationRules(),
+      );
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        freeText: externalDocumentC.getErrorToMessageMap().freeText[1].message,
+        freeText: customMessages.freeText[1],
       });
     });
 
@@ -54,9 +60,11 @@ describe('ExternalDocumentNonStandardC', () => {
         previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard C',
       });
-
+      const customMessages = extractCustomMessages(
+        externalDocumentC.getValidationRules(),
+      );
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        documentTitle: externalDocumentC.getErrorToMessageMap().documentTitle,
+        documentTitle: customMessages.documentTitle[0],
       });
     });
   });
