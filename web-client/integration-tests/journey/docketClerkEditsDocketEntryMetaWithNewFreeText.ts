@@ -2,6 +2,7 @@ import {
   AUTOMATIC_BLOCKED_REASONS,
   OBJECTIONS_OPTIONS_MAP,
 } from '../../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
   cerebralTest,
@@ -19,34 +20,11 @@ export const docketClerkEditsDocketEntryMetaWithNewFreeText = (
     );
 
     await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'filingDate',
+        toFormat: FORMATS.ISO,
         value: '2020-01-04T05:00:00.000Z',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '04',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateMonth',
-        value: '01',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateDocketEntryMetaDocumentFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2020',
       },
     );
 

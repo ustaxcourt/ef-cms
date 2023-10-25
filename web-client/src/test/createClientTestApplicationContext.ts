@@ -16,7 +16,6 @@ import {
   isSealedCase,
   isUserPartOfGroup,
 } from '@shared/business/entities/cases/Case';
-import { ConsolidatedCaseDTO } from '@shared/business/dto/cases/ConsolidatedCaseDTO';
 import {
   DocketEntry,
   getServedPartiesCode,
@@ -34,10 +33,12 @@ import { addDocketEntryForSystemGeneratedOrder } from '@shared/business/useCaseH
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
+import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
+import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
 import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
-  formatCase as formatCaseForTrialSession,
+  formatCaseForTrialSession,
   getFormattedTrialSessionDetails,
 } from '@shared/business/utilities/getFormattedTrialSessionDetails';
 import {
@@ -179,15 +180,17 @@ const createTestApplicationContext = () => {
     toBlob: jest.fn(),
   };
 
-  const mockGetDTOs = {
-    ConsolidatedCaseDTO,
-  };
-
   const mockGetUtilities = appContextProxy({
     abbreviateState: jest.fn().mockImplementation(abbreviateState),
     aggregatePartiesForService: jest
       .fn()
       .mockImplementation(aggregatePartiesForService),
+    calculateDaysElapsedSinceLastStatusChange: jest
+      .fn()
+      .mockImplementation(calculateDaysElapsedSinceLastStatusChange),
+    calculateDifferenceInDays: jest
+      .fn()
+      .mockImplementation(calculateDifferenceInDays),
     calculateISODate: jest
       .fn()
       .mockImplementation(DateHandler.calculateISODate),
@@ -250,6 +253,7 @@ const createTestApplicationContext = () => {
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
+    getDateFormat: jest.fn().mockImplementation(DateHandler.getDateFormat),
     getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
     getDocQcSectionForUser: jest
       .fn()
@@ -585,7 +589,6 @@ const createTestApplicationContext = () => {
     getCurrentUserToken: () => {
       return '';
     },
-    getDTOs: jest.fn().mockImplementation(() => mockGetDTOs),
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),

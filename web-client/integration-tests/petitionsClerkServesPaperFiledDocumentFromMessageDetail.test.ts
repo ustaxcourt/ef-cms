@@ -9,6 +9,7 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 
 describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () => {
   const cerebralTest = setupTest();
+
   cerebralTest.draftOrders = [];
 
   beforeAll(() => {
