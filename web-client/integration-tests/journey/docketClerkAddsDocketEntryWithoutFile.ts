@@ -1,4 +1,5 @@
 import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
@@ -26,10 +27,10 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      dateReceived: VALIDATION_ERROR_MESSAGES.dateReceived[1],
       documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
       eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
       filers: VALIDATION_ERROR_MESSAGES.filers,
+      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
@@ -58,18 +59,6 @@ export const docketClerkAddsDocketEntryWithoutFile = (
         key: 'hasOtherFilingParty',
         value: true,
       },
-      {
-        key: 'dateReceivedMonth',
-        value: overrides.dateReceivedMonth || 1,
-      },
-      {
-        key: 'dateReceivedDay',
-        value: overrides.dateReceivedDay || 1,
-      },
-      {
-        key: 'dateReceivedYear',
-        value: overrides.dateReceivedYear || 2018,
-      },
     ];
 
     for (const item of administrativeRecord) {
@@ -78,6 +67,17 @@ export const docketClerkAddsDocketEntryWithoutFile = (
         item,
       );
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: `${overrides.dateReceivedMonth || 1}/${
+          overrides.dateReceivedDay || 1
+        }/${overrides.dateReceivedYear || 2018}`,
+      },
+    );
 
     await cerebralTest.runSequence('submitPaperFilingSequence', {
       isSavingForLater: true,
