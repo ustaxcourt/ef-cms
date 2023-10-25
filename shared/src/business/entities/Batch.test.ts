@@ -1,6 +1,5 @@
 import { Batch } from './Batch';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { extractCustomMessages } from './utilities/extractCustomMessages';
 
 describe('Batch entity', () => {
   it('adds a page', () => {
@@ -26,10 +25,8 @@ describe('Batch entity', () => {
     it('validates minimum number of pages', () => {
       const batch = new Batch({ applicationContext, rawBatch: {} });
 
-      const customMessages = extractCustomMessages(batch.getValidationRules());
-
       expect(batch.getFormattedValidationErrors()).toMatchObject({
-        pages: customMessages.pages[0],
+        pages: 'At least one page is required',
       });
     });
 
@@ -41,9 +38,8 @@ describe('Batch entity', () => {
           pages: ['page 1'],
         },
       });
-      const customMessages = extractCustomMessages(batch.getValidationRules());
       expect(batch.getFormattedValidationErrors()).toMatchObject({
-        batchIndex: customMessages.batchIndex[0],
+        batchIndex: 'Invalid batch index',
       });
     });
   });

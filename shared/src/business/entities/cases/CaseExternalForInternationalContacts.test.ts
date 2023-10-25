@@ -5,7 +5,6 @@ import {
   PARTY_TYPES,
 } from '../EntityConstants';
 import { CaseExternal } from './CaseExternal';
-import { Contact } from '../contacts/Contact';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CaseExternal', () => {
@@ -44,7 +43,7 @@ describe('CaseExternal', () => {
       expect(caseExternal.getFormattedValidationErrors()).toEqual({
         petitioners: [
           {
-            country: Contact.INTERNATIONAL_VALIDATION_MESSAGES.country,
+            country: 'Enter a country',
             index: 0,
           },
         ],

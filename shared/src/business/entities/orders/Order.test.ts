@@ -27,7 +27,7 @@ describe('Order', () => {
       const customMessages = extractCustomMessages(order.getValidationRules());
 
       expect(order.getFormattedValidationErrors()).toEqual({
-        documentTitle: customMessages.documentTitle[0],
+        documentTitle: customMessages.documentTitle[1],
       });
     });
   });
