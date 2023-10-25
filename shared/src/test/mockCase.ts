@@ -216,7 +216,7 @@ export const MOCK_CASE_WITH_SECONDARY_OTHERS = {
   status: CASE_STATUS_TYPES.generalDocket,
 };
 
-export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
+export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE: RawCase = {
   caseCaption: 'Test Petitioner, Test Petitioner 2',
   caseType: CASE_TYPES_MAP.other,
   docketEntries: MOCK_DOCUMENTS,
@@ -234,9 +234,12 @@ export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
       contactType: CONTACT_TYPES.petitioner,
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
+      entityName: 'Petitioner',
+      isAddressSealed: false,
       name: 'Test Petitioner',
       phone: '1234567',
       postalCode: '12345',
+      sealedAndUnavailable: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       state: 'TN',
       title: 'Executor',
@@ -248,10 +251,12 @@ export const MOCK_LEAD_CASE_WITH_PAPER_SERVICE = {
       contactType: CONTACT_TYPES.participant,
       countryType: COUNTRY_TYPES.DOMESTIC,
       email: 'petitioner@example.com',
-      inCareOf: 'Myself',
+      entityName: 'Petitioner',
+      isAddressSealed: false,
       name: 'Test Petitioner3',
       phone: '1234567',
       postalCode: '12345',
+      sealedAndUnavailable: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'TN',
       title: 'Tax Matters Partner',

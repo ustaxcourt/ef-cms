@@ -1,38 +1,43 @@
 import { Case } from '../entities/cases/Case';
-import { Petitioner } from '../entities/contacts/Petitioner';
-import { isEmpty } from 'lodash';
+import { TempTyping } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity.getFormattedValidationErrors';
+import { isEmpty, pick } from 'lodash';
 
-/**
- * validateAddPetitionerInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.contact the contact to validate
- * @returns {object} errors (null if no errors)
- */
 export const validateAddPetitionerInteractor = (
   applicationContext: IApplicationContext,
   { caseDetail, contact }: { contact: any; caseDetail: RawCase },
-) => {
-  const petitionerErrors = new Petitioner(contact, {
-    applicationContext,
-  }).getFormattedValidationErrors();
-  const caseTest = {
-    ...caseDetail,
-    petitioners: [...caseDetail.petitioners, contact],
-  };
-  console.log('caseTest', caseTest);
+): Partial<TempTyping> | undefined => {
+  const newPetitionerIndex = caseDetail.petitioners.length;
+
   const caseErrors = new Case(
-    { ...caseTest, caseCaption: contact.caseCaption },
+    {
+      ...caseDetail,
+      caseCaption: contact.caseCaption,
+      petitioners: [...caseDetail.petitioners, contact],
+    },
     {
       applicationContext,
     },
   ).getFormattedValidationErrors();
 
-  const aggregatedErrors = {
-    ...petitionerErrors,
-    ...caseErrors,
-  };
+  let addPetitionerErrors = pick(caseErrors, [
+    'petitioners',
+    `petitioners[${newPetitionerIndex}]`,
+    'caseCaption',
+  ]);
 
-  return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
+  if (addPetitionerErrors.petitioners) {
+    const petitionerContactErrors = addPetitionerErrors.petitioners.find(
+      item => item.index === newPetitionerIndex,
+    );
+
+    delete addPetitionerErrors.petitioners;
+    delete petitionerContactErrors.index;
+
+    addPetitionerErrors = {
+      ...addPetitionerErrors,
+      ...petitionerContactErrors,
+    };
+  }
+
+  return isEmpty(addPetitionerErrors) ? undefined : addPetitionerErrors;
 };

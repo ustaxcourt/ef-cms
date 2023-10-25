@@ -36,6 +36,7 @@ export class Petitioner extends JoiValidationEntity {
     { applicationContext }: { applicationContext: IApplicationContext },
   ) {
     super('Petitioner');
+
     if (!applicationContext) {
       throw new TypeError('applicationContext must be defined');
     }
