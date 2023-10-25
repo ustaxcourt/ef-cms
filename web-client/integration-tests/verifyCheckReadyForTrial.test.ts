@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -51,31 +52,19 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const answer = [
-        {
-          key: 'dateReceivedMonth',
-          value: 1,
-        },
-        {
-          key: 'dateReceivedDay',
-          value: 1,
-        },
-        {
-          key: 'dateReceivedYear',
-          value: 2018,
-        },
-        {
-          key: 'eventCode',
-          value: document.eventCode,
-        },
-      ];
+      await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+        key: 'eventCode',
+        value: document.eventCode,
+      });
 
-      for (const item of answer) {
-        await cerebralTest.runSequence(
-          'updateDocketEntryFormValueSequence',
-          item,
-        );
-      }
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'receivedAt',
+          toFormat: FORMATS.ISO,
+          value: '1/1/2018',
+        },
+      );
 
       await cerebralTest.runSequence('setDocumentForUploadSequence', {
         documentType: 'primaryDocumentFile',

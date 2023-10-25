@@ -51,9 +51,6 @@ export const updateDocketEntryWizardDataAction = ({
       break;
     case 'certificateOfService':
       store.unset(state.form.certificateOfServiceDate);
-      store.unset(state.form.certificateOfServiceMonth);
-      store.unset(state.form.certificateOfServiceDay);
-      store.unset(state.form.certificateOfServiceYear);
       break;
     case 'eventCode':
       form = setDocumentPropsFromFormAndBaseDocument({
@@ -84,9 +81,6 @@ export const updateDocketEntryWizardDataAction = ({
         }
       }
       store.unset(state.form.serviceDate);
-      store.unset(state.form.serviceDateDay);
-      store.unset(state.form.serviceDateMonth);
-      store.unset(state.form.serviceDateYear);
       store.unset(state.form.trialLocation);
       store.unset(state.form.ordinalValue);
       store.unset(state.form.otherIteration);
@@ -119,9 +113,6 @@ export const updateDocketEntryWizardDataAction = ({
         store.unset(state.form.attachments);
         store.unset(state.form.certificateOfService);
         store.unset(state.form.certificateOfServiceDate);
-        store.unset(state.form.certificateOfServiceMonth);
-        store.unset(state.form.certificateOfServiceDay);
-        store.unset(state.form.certificateOfServiceYear);
 
         //restore previous doc data from screenMetadata onto form
         const caseDetail = get(state.caseDetail);

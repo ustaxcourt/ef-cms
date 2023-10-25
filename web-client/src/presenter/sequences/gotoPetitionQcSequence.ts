@@ -6,7 +6,6 @@ import { setContactsOnFormAction } from '../actions/setContactsOnFormAction';
 import { setDefaultDocumentSelectedForPreviewAction } from '../actions/setDefaultDocumentSelectedForPreviewAction';
 import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
 import { setDocumentForPreviewSequence } from '../sequences/setDocumentForPreviewSequence';
-import { setFormForCaseAction } from '../actions/setFormForCaseAction';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -24,7 +23,6 @@ export const gotoPetitionQcSequence = startWebSocketConnectionSequenceDecorator(
     setCaseAction,
     setCaseOnFormAction,
     setContactsOnFormAction,
-    setFormForCaseAction,
     unsetDocumentSelectedForPreviewAction,
     setDefaultDocumentSelectedForPreviewAction,
     setDocumentForPreviewSequence,

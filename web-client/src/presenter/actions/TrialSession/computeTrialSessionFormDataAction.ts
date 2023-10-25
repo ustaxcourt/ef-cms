@@ -1,11 +1,17 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-export const computeTermAndUpdateState = ({ month, year }, store) => {
-  const selectedMonth = +month;
-  let term, termYear;
+export const computeTermAndUpdateState = (
+  { startDate },
+  store,
+  applicationContext,
+) => {
+  const date = applicationContext.getUtilities().deconstructDate(startDate);
 
-  if (selectedMonth && year) {
-    termYear = year;
+  if (date?.month && date?.year) {
+    let term;
+
+    const monthAsNumber = +date.month;
+
     const termsByMonth = {
       fall: [9, 10, 11, 12],
       spring: [4, 5, 6],
@@ -13,18 +19,19 @@ export const computeTermAndUpdateState = ({ month, year }, store) => {
       winter: [1, 2, 3],
     };
 
-    if (termsByMonth.winter.includes(selectedMonth)) {
+    if (termsByMonth.winter.includes(monthAsNumber)) {
       term = 'Winter';
-    } else if (termsByMonth.spring.includes(selectedMonth)) {
+    } else if (termsByMonth.spring.includes(monthAsNumber)) {
       term = 'Spring';
-    } else if (termsByMonth.summer.includes(selectedMonth)) {
+    } else if (termsByMonth.summer.includes(monthAsNumber)) {
       term = 'Summer';
-    } else if (termsByMonth.fall.includes(selectedMonth)) {
+    } else if (termsByMonth.fall.includes(monthAsNumber)) {
       term = 'Fall';
     }
+
+    store.set(state.form.term, term);
+    store.set(state.form.termYear, date.year);
   }
-  store.set(state.form.term, term);
-  store.set(state.form.termYear, termYear);
 };
 
 export const compute24HrTimeAndUpdateState = (
@@ -68,6 +75,7 @@ export const compute24HrTimeAndUpdateState = (
  * @param {object} providers.store the cerebral store function
  */
 export const computeTrialSessionFormDataAction = ({
+  applicationContext,
   get,
   props,
   store,
@@ -76,10 +84,10 @@ export const computeTrialSessionFormDataAction = ({
 
   computeTermAndUpdateState(
     {
-      month: form.startDateMonth,
-      year: form.startDateYear,
+      startDate: form.startDate,
     },
     store,
+    applicationContext,
   );
 
   compute24HrTimeAndUpdateState(

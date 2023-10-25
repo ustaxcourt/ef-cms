@@ -2,7 +2,6 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -30,7 +29,6 @@ export const gotoEditCourtIssuedDocketEntry =
     getCaseAction,
     setCaseAction,
     setDocketEntryFormForDocketEditAction,
-    getComputedFormDateFactoryAction(null, true),
     generateCourtIssuedDocumentTitleAction,
     setDocketEntryIdAction,
     setIsEditingDocketEntryAction(true),

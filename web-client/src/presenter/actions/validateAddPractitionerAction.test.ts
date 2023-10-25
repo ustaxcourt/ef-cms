@@ -29,11 +29,9 @@ describe('validateAddPractitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
         form: {
+          admissionsDate: '2019-03-01T21:40:46.415Z',
           barNumber: 'BN001',
           contact: {
             address1: '123 Some St.',
@@ -66,11 +64,9 @@ describe('validateAddPractitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
         form: {
+          admissionsDate: '2019-03-01T21:40:46.415Z',
           barNumber: 'BN001',
           contact: {
             address1: '123 Some St.',
@@ -101,11 +97,9 @@ describe('validateAddPractitionerAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        computedDate: '2019-03-01T21:40:46.415Z',
-      },
       state: {
         form: {
+          admissionsDate: '2019-03-01T21:40:46.415Z',
           barNumber: 'BN001',
           contact: {
             address1: '123 Some St.',

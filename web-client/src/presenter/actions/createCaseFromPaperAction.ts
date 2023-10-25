@@ -1,4 +1,3 @@
-import { omit } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const setupPercentDone = (files, store) => {
@@ -60,19 +59,10 @@ export const setupPercentDone = (files, store) => {
   return uploadProgressCallbackMap;
 };
 
-/**
- * invokes the filePetition useCase.
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function used for getting petition
- * @param {object} providers.props the cerebral props object
- * @returns {object} the next path based on if creation was successful or error
- */
 export const createCaseFromPaperAction = async ({
   applicationContext,
   get,
   path,
-  props,
   store,
 }: ActionProps) => {
   const {
@@ -82,24 +72,6 @@ export const createCaseFromPaperAction = async ({
     requestForPlaceOfTrialFile,
     stinFile,
   } = get(state.form);
-
-  const receivedAt = // AAAA-BB-CC
-    (props.receivedAt &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.receivedAt)
-        .toISOString()) ||
-    null;
-
-  const form = omit(
-    {
-      ...get(state.form),
-      petitionPaymentDate: props.petitionPaymentDate,
-      petitionPaymentWaivedDate: props.petitionPaymentWaivedDate,
-      receivedAt,
-    },
-    ['receivedAtYear', 'receivedAtMonth', 'receivedAtDay'],
-  );
 
   const progressFunctions = setupPercentDone(
     {
@@ -124,7 +96,7 @@ export const createCaseFromPaperAction = async ({
         corporateDisclosureFile,
         corporateDisclosureUploadProgress: progressFunctions.corporate,
         petitionFile,
-        petitionMetadata: form,
+        petitionMetadata: get(state.form),
         petitionUploadProgress: progressFunctions.petition,
         requestForPlaceOfTrialFile,
         requestForPlaceOfTrialUploadProgress: progressFunctions.trial,
