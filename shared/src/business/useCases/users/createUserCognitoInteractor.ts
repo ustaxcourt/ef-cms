@@ -1,23 +1,16 @@
 import { type AdminCreateUserResponse } from 'aws-sdk/clients/cognitoidentityserviceprovider';
-// TODO 10011: remove in favor of cognito's type?
-export type CreateUserAlreadyExistsError = {
-  userAlreadyExists: boolean;
-};
 
 export const createUserCognitoInteractor = async (
   applicationContext: IApplicationContext,
   { user }: { user: { password: string; name: string; email: string } },
-): Promise<AdminCreateUserResponse | CreateUserAlreadyExistsError> => {
+): Promise<AdminCreateUserResponse> => {
   const emailExistsInSystem = await checkUserAlreadyExists(
     applicationContext,
     user.email,
   );
 
   if (emailExistsInSystem) {
-    const userExistsError: CreateUserAlreadyExistsError = {
-      userAlreadyExists: true,
-    };
-    return userExistsError;
+    throw new Error('User already exists');
   }
 
   const params = {
