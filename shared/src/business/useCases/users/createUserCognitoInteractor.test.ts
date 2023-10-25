@@ -10,11 +10,16 @@ describe('createUserCognitoInteractor', () => {
 
   // cognito returns an empty 200 on success
   const confirmSignUpResult = {};
-  beforeAll(() => {
+  const listUserResults: { Users: any[] } = { Users: [] };
+  beforeEach(() => {
     applicationContext.getCognito().signUp.mockReturnValue({
       promise: () => confirmSignUpResult,
     });
     applicationContext.getUniqueId.mockReturnValue(userId);
+
+    applicationContext.getCognito().listUsers.mockReturnValue({
+      promise: () => listUserResults,
+    });
   });
 
   it('should call cognito signUp with correctly formatted parameters and return the result', async () => {
@@ -58,5 +63,17 @@ describe('createUserCognitoInteractor', () => {
     ).rejects.toThrow();
 
     expect(applicationContext.getCognito().signUp).toHaveBeenCalled();
+  });
+
+  it('should return an error if email already exists in system', async () => {
+    listUserResults.Users.push({});
+
+    await expect(
+      createUserCognitoInteractor(applicationContext, {
+        user,
+      }),
+    ).rejects.toThrow();
+
+    expect(applicationContext.getCognito().signUp).not.toHaveBeenCalled();
   });
 });
