@@ -1,9 +1,6 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
   cerebralTest,
@@ -29,10 +26,10 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
     });
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      documentType: customMessages.documentType[0],
-      eventCode: customMessages.eventCode[0],
-      filers: customMessages.filers[0],
-      receivedAt: customMessages.receivedAt[0],
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
+      receivedAt: 'Enter a valid date received',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);

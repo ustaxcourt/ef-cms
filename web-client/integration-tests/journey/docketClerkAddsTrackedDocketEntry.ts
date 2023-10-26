@@ -1,8 +1,5 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkAddsTrackedDocketEntry = (
   cerebralTest,
@@ -21,12 +18,12 @@ export const docketClerkAddsTrackedDocketEntry = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      documentType: customMessages.documentType[0],
-      eventCode: customMessages.eventCode[0],
-      filers: customMessages.filers[0],
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
       primaryDocumentFile:
         'Scan or upload a document to serve, or click Save for Later to serve at a later time',
-      receivedAt: customMessages.dateReceived[1],
+      receivedAt: 'Enter a valid date received',
     });
 
     await cerebralTest.runSequence(
@@ -68,7 +65,7 @@ export const docketClerkAddsTrackedDocketEntry = (
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      freeText: customMessages.freeText[1],
+      freeText: 'Provide an answer',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

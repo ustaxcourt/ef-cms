@@ -1,4 +1,3 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import {
@@ -6,8 +5,6 @@ import {
   getFormattedDocketEntriesForTest,
   waitForCondition,
 } from '../helpers';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkAddsDocketEntryWithoutFile = (
   cerebralTest,
@@ -27,10 +24,10 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: customMessages.documentType[0],
-      eventCode: customMessages.eventCode[0],
-      filers: customMessages.filers[0],
-      receivedAt: customMessages.receivedAt[0],
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
+      receivedAt: 'Enter a valid date received',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
@@ -84,7 +81,7 @@ export const docketClerkAddsDocketEntryWithoutFile = (
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      otherFilingParty: customMessages.otherFilingParty[0],
+      otherFilingParty: 'Enter other filing party name.',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

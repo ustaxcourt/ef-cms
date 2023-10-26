@@ -1,12 +1,9 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import {
   getFormattedDocketEntriesForTest,
   getPetitionDocumentForCase,
   waitForCondition,
 } from '../helpers';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
@@ -42,7 +39,7 @@ export const docketClerkEditsDocketEntryNonstandardH = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      secondaryDocument: customMessages.secondaryDocument[0],
+      secondaryDocument: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

@@ -1,4 +1,3 @@
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
@@ -7,9 +6,6 @@ import {
   getPetitionDocumentForCase,
   waitForCondition,
 } from '../helpers';
-
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(DocketEntryFactory);
 
 export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
   return it('docket clerk edits a paper-filed incomplete docket entry with Nonstandard A scenario', async () => {
@@ -56,8 +52,8 @@ export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      previousDocument: customMessages.previousDocument[0],
-      receivedAt: customMessages.receivedAt[1],
+      previousDocument: 'Upload a document',
+      receivedAt: 'Enter a valid date received',
     });
 
     await cerebralTest.runSequence(
