@@ -15,7 +15,7 @@ describe('createConfirmLinkLocalAction', () => {
     process.env = oldEnv;
   });
 
-  it('should return immediately if IS_LOCAL is "false"', async () => {
+  it('should return immediately if IS_LOCAL is not defined', async () => {
     delete process.env.IS_LOCAL;
     const result = await runAction(createConfirmLinkLocalAction, {
       modules: {
