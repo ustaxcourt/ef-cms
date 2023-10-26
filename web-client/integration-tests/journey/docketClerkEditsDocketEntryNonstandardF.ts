@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryNonstandardF = cerebralTest => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       ordinalValue: 'Select an iteration',
-      previousDocument: 'Upload a document',
+      previousDocument: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {

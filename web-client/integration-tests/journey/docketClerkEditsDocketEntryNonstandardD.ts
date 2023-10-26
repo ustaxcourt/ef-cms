@@ -37,7 +37,7 @@ export const docketClerkEditsDocketEntryNonstandardD = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      previousDocument: 'Upload a document',
+      previousDocument: 'Select a document',
       serviceDate: 'Provide a service date',
     });
 

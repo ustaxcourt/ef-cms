@@ -42,7 +42,7 @@ export const docketClerkEditsDocketEntryStandard = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      receivedAt: 'Enter a valid date received',
+      receivedAt: 'Received date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(

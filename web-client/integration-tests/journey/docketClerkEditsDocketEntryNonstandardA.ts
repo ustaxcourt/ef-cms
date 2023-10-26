@@ -52,8 +52,8 @@ export const docketClerkEditsDocketEntryNonstandardA = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      previousDocument: 'Upload a document',
-      receivedAt: 'Enter a valid date received',
+      previousDocument: 'Select a document',
+      receivedAt: 'Received date cannot be in the future. Enter a valid date.',
     });
 
     await cerebralTest.runSequence(

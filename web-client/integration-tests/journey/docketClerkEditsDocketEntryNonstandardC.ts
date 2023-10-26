@@ -36,8 +36,8 @@ export const docketClerkEditsDocketEntryNonstandardC = cerebralTest => {
     });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      freeText: 'Provide an answer',
-      previousDocument: 'Upload a document',
+      freeText: 'Enter name',
+      previousDocument: 'Select a document',
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
