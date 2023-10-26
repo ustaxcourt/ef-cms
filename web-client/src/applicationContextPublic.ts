@@ -226,3 +226,5 @@ const applicationContextPublic = {
 };
 
 export { applicationContextPublic };
+
+export type ClientPublicApplicationContext = typeof applicationContextPublic;

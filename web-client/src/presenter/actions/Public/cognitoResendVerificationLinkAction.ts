@@ -1,10 +1,11 @@
+import { ClientPublicApplicationContext } from '@web-client/applicationContextPublic';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const cognitoResendVerificationLinkAction = async ({
   applicationContext,
   get,
   path,
-}: ActionProps) => {
+}: ActionProps<{}, ClientPublicApplicationContext>) => {
   const email = get(state.cognito.email);
 
   try {
