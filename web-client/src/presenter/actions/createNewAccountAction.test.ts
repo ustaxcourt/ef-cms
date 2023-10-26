@@ -19,12 +19,12 @@ describe('createNewAccountAction', () => {
 
     applicationContext
       .getUseCases()
-      .createUserInteractorLocal.mockReturnValue({});
+      .createUserCognitoInteractor.mockReturnValue({});
 
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('should get email, name, and password from state.form and pass them to createUserInteractorLocal', async () => {
+  it('should get email, name, and password from state.form and pass them to createUserCognitoInteractor', async () => {
     await runAction(createNewAccountAction, {
       modules: {
         presenter,
@@ -39,7 +39,7 @@ describe('createNewAccountAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().createUserInteractorLocal.mock
+      applicationContext.getUseCases().createUserCognitoInteractor.mock
         .calls[0][1],
     ).toMatchObject({
       user: {
@@ -50,7 +50,7 @@ describe('createNewAccountAction', () => {
     });
   });
 
-  it('should return a correctly formatted alertSuccess with a correctly formatted linkUrl when createUserInteractorLocal returns successfully', async () => {
+  it('should return a correctly formatted alertSuccess with a correctly formatted linkUrl when createUserCognitoInteractor returns successfully', async () => {
     const expectedAlertSuccess = {
       linkText: 'Verify Email',
       linkUrl:
@@ -78,10 +78,10 @@ describe('createNewAccountAction', () => {
     });
   });
 
-  it('should return a correctly formatted alertError when createUserInteractorLocal does not return successfully', async () => {
+  it('should return a correctly formatted alertError when createUserCognitoInteractor does not return successfully', async () => {
     applicationContext
       .getUseCases()
-      .createUserInteractorLocal.mockImplementationOnce(() => {
+      .createUserCognitoInteractor.mockImplementationOnce(() => {
         throw new Error();
       });
 
