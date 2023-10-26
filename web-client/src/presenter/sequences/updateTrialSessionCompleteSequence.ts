@@ -6,10 +6,7 @@ import { navigateToPrintPaperTrialNoticesAction } from '@web-client/presenter/ac
 import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { sequence } from 'cerebral';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setAlertWarningAction } from '../actions/setAlertWarningAction';
-import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
 export const updateTrialSessionCompleteSequence = sequence<{
@@ -27,11 +24,6 @@ export const updateTrialSessionCompleteSequence = sequence<{
       setSaveAlertsForNavigationAction,
       navigateToTrialSessionDetailAction,
     ],
-    paper: [
-      setPdfPreviewUrlSequence,
-      setTrialSessionCalendarAlertWarningAction,
-      setAlertWarningAction,
-      navigateToPrintPaperTrialNoticesAction,
-    ],
+    paper: [navigateToPrintPaperTrialNoticesAction],
   },
 ]);

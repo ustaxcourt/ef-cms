@@ -6,7 +6,7 @@ import { UnauthorizedError } from '../../../../web-api/src/errors/errors';
 
 export const getPaperServicePdfUrlInteractor = async (
   applicationContext: IApplicationContext,
-  { key }: { key: string },
+  { fileId }: { fileId: string },
 ): Promise<{ url: string }> => {
   const user = applicationContext.getCurrentUser();
 
@@ -16,6 +16,6 @@ export const getPaperServicePdfUrlInteractor = async (
 
   return await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
     applicationContext,
-    key: `paper-service-pdf/${key}`,
+    key: `paper-service-pdf/${fileId}`,
   });
 };

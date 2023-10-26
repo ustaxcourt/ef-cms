@@ -803,7 +803,7 @@ app.get(
     lambdaWrapper(generateTrialSessionPaperServicePdfLambda, { isAsync: true }),
   );
   app.get(
-    '/trial-sessions/paper-service-pdf/:key',
+    '/trial-sessions/paper-service-pdf/:fileId',
     lambdaWrapper(getPaperServicePdfUrlLambda),
   );
   app.post(
