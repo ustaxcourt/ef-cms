@@ -106,7 +106,9 @@ export const updateTrialSessionInteractor = async (
     });
   }
 
-  let hasPaper, pdfUrl;
+  let hasPaper: boolean | undefined;
+  let pdfUrl: string | undefined;
+  let fileId: string | undefined;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     const calendaredCases = currentTrialSession.caseOrder.filter(
       c => !c.removedFromTrial,
@@ -129,8 +131,6 @@ export const updateTrialSessionInteractor = async (
     const paperServicePdfData = await paperServicePdfsCombined.save();
 
     if (hasPaper) {
-      let fileId;
-
       ({ fileId, url: pdfUrl } = await applicationContext
         .getUseCaseHelpers()
         .saveFileAndGenerateUrl({
@@ -161,6 +161,7 @@ export const updateTrialSessionInteractor = async (
     applicationContext,
     message: {
       action: 'update_trial_session_complete',
+      fileId,
       hasPaper,
       pdfUrl,
       trialSessionId: trialSession.trialSessionId,
