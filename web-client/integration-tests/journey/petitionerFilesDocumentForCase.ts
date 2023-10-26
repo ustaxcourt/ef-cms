@@ -13,8 +13,8 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: 'Select a Category',
-      documentType: 'Select a document',
+      category: 'Select a Category.',
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -27,7 +27,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: 'Select a document',
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -78,7 +78,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: 'Select a document',
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -114,8 +114,8 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        category: 'Select a Category',
-        documentType: 'Select a document',
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
       },
     });
 

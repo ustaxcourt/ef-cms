@@ -16,8 +16,8 @@ export const respondentAddsMotionWithBrief = (
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: 'Select a Category',
-      documentType: 'Select a document',
+      category: 'Select a Category.',
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -30,7 +30,7 @@ export const respondentAddsMotionWithBrief = (
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType: 'Select a document',
+      documentType: 'Select a document type',
     });
 
     const documentToSelect = {
