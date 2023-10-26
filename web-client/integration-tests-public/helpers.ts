@@ -35,6 +35,9 @@ export const setupTest = ({ useCases = {} } = {}) => {
             docketNumber: cerebralTest.docketNumber,
           });
           break;
+        case '/create-account/verification-sent':
+          await cerebralTest.runSequence('goToVerificationSentSequence');
+          break;
         default:
           break;
       }
