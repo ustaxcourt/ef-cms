@@ -5,6 +5,7 @@ const cognitoFunctions = [
   'adminUpdateUserAttributes',
   'confirmSignUp',
   'initiateAuth',
+  'listUsers',
   'respondToAuthChallenge',
   'signUp',
 ];
@@ -48,16 +49,6 @@ export const cognitoLocalWrapper = cognito => {
                   },
                 });
               });
-            },
-          };
-        };
-      } else {
-        cognito[methodName] = function (params) {
-          return {
-            promise: () => {
-              return new Promise((resolve, reject) =>
-                reject({ FunctionUnsupported: true, Params: params }),
-              );
             },
           };
         };
