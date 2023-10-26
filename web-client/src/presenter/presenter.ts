@@ -1116,8 +1116,11 @@ export const presenter = {
 export type Sequences = typeof presenterSequences;
 
 declare global {
-  type ActionProps<Props = any> = {
-    applicationContext: ClientApplicationContext;
+  type ActionProps<
+    Props = any,
+    ApplicationContext = ClientApplicationContext,
+  > = {
+    applicationContext: ApplicationContext;
     get: <T>(slice: T) => T;
     store: {
       set: (key: any, value: any) => void;
