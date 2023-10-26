@@ -1,9 +1,11 @@
 import {
+  CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
 import { Contact } from '../entities/contacts/Contact';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -42,9 +44,15 @@ describe('validatePetitionerInteractor', () => {
   });
 
   it('runs validation on a contact with no invalid properties', () => {
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [mockContact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: mockContact,
-    } as any);
+    });
 
     expect(errors).toBeFalsy();
   });
@@ -56,9 +64,16 @@ describe('validatePetitionerInteractor', () => {
       updatedEmail: undefined,
     };
 
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [mockContact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
+
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: mockContact,
-    } as any);
+    });
 
     expect(errors).toBeFalsy();
   });
@@ -71,9 +86,16 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: undefined, // required
     };
 
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [mockContact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
+
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: mockContact,
-    } as any);
+    });
     expect(errors).toEqual({
       confirmEmail: updateUserEmailCustomMessages.confirmEmail[1],
       postalCode: contactCustomMessages.postalCode[0],
@@ -87,10 +109,16 @@ describe('validatePetitionerInteractor', () => {
       confirmEmail: undefined,
       postalCode: 'what is love',
     };
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [contact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
 
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: contact,
-    } as any);
+    });
 
     expect(errors).toEqual({
       confirmEmail: updateUserEmailCustomMessages.confirmEmail[1],
@@ -105,10 +133,16 @@ describe('validatePetitionerInteractor', () => {
       postalCode: '',
       updatedEmail: undefined,
     };
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [contact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
 
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: contact,
-    } as any);
+    });
 
     expect(errors).toEqual({
       confirmEmail: updateUserEmailCustomMessages.confirmEmail[0],
@@ -117,45 +151,48 @@ describe('validatePetitionerInteractor', () => {
     });
   });
 
-  it('should return an error when second intervenor is added', () => {
+  it('should not return an error when the first intervenor is edited', () => {
     const contact = {
       ...mockContact,
-      contactType: CONTACT_TYPES.intervenor,
+      address1: '200 Main St.',
     };
-    const mockExistingPetitioners = [
-      {
-        contactId: 'bbe5de3e-81b7-4354-bd9b-270717164a5f',
-        contactType: CONTACT_TYPES.intervenor,
-      },
-    ];
-
-    const errors = validatePetitionerInteractor(applicationContext, {
-      contactInfo: contact,
-      existingPetitioners: mockExistingPetitioners,
-    } as any);
-
-    expect(errors).toEqual({
-      contactType: petitionerCustomMessages.contactTypeSecondIntervenor[0],
-    });
-  });
-
-  it('should not return an error when first intervenor is edited', () => {
-    const contact = {
-      ...mockContact,
-      contactType: CONTACT_TYPES.intervenor,
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [contact],
+      status: CASE_STATUS_TYPES.generalDocket,
     };
-    const mockExistingPetitioners = [
-      {
-        ...contact,
-      },
-    ];
-
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: contact,
-      existingPetitioners: mockExistingPetitioners,
     });
 
     expect(errors).toBeFalsy();
+  });
+
+  it('should throw an error when attempting to update an existing petitioner to an intervenor if an intervenor is already associated with the case', () => {
+    const contact = {
+      ...mockContact,
+      contactType: CONTACT_TYPES.intervenor,
+    };
+    const petitioner = {
+      ...mockContact,
+      contactId: '3ec8aa37-67aa-489d-be6d-13121331768b',
+      contactType: CONTACT_TYPES.intervenor,
+    };
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [petitioner, mockContact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
+    const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
+      contactInfo: contact,
+    });
+
+    expect(errors).toEqual({
+      'petitioners[1]':
+        'Only one (1) Intervenor is allowed per case. Please select a different Role.',
+    });
   });
 
   it('should not edit the first intervenor when the contactType is not intervenor', () => {
@@ -163,15 +200,15 @@ describe('validatePetitionerInteractor', () => {
       ...mockContact,
       contactType: CONTACT_TYPES.otherFiler,
     };
-    const mockExistingPetitioners = [
-      {
-        ...contact,
-      },
-    ];
 
+    const caseDetail = {
+      ...MOCK_CASE,
+      petitioners: [contact],
+      status: CASE_STATUS_TYPES.generalDocket,
+    };
     const errors = validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: contact,
-      existingPetitioners: mockExistingPetitioners,
     });
 
     expect(errors).toBeFalsy();

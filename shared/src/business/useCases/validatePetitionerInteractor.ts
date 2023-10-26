@@ -1,8 +1,12 @@
-import { CONTACT_TYPES } from '../entities/EntityConstants';
+import {
+  Case,
+  getPetitionerById,
+  updatePetitioner,
+} from '@shared/business/entities/cases/Case';
 import { Petitioner } from '../entities/contacts/Petitioner';
 import { RawContact } from '../entities/contacts/Contact';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
-import { isEmpty } from 'lodash';
+import { isEmpty, pick } from 'lodash';
 
 /**
  * validatePetitionerInteractor
@@ -15,10 +19,7 @@ import { isEmpty } from 'lodash';
 
 export const validatePetitionerInteractor = (
   applicationContext: IApplicationContext,
-  {
-    contactInfo,
-    existingPetitioners,
-  }: { contactInfo: RawContact; existingPetitioners: TPetitioner[] },
+  { caseDetail, contactInfo }: { contactInfo: RawContact; caseDetail: RawCase },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
@@ -26,32 +27,51 @@ export const validatePetitionerInteractor = (
 
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
-    updateUserEmailErrors = new UpdateUserEmail(
-      { ...contactInfo, email: contactInfo.updatedEmail },
-      { applicationContext },
-    ).getFormattedValidationErrors();
+    updateUserEmailErrors = new UpdateUserEmail({
+      ...contactInfo,
+      email: contactInfo.updatedEmail,
+    }).getFormattedValidationErrors();
+  }
+
+  let caseErrors;
+
+  const petitionerToUpdate = getPetitionerById(
+    caseDetail,
+    contactInfo.contactId,
+  );
+  const updatedPetitioner = { ...petitionerToUpdate, ...contactInfo };
+  updatePetitioner(caseDetail, updatedPetitioner);
+  const petitionerIndex = caseDetail.petitioners.findIndex(
+    p => p.contactId === updatedPetitioner.contactId,
+  );
+  caseErrors = new Case(caseDetail, {
+    applicationContext,
+  }).getFormattedValidationErrors();
+
+  let addPetitionerErrors = pick(caseErrors, [
+    'petitioners',
+    `petitioners[${petitionerIndex}]`,
+  ]);
+
+  if (addPetitionerErrors.petitioners) {
+    const petitionerContactErrors = addPetitionerErrors.petitioners.find(
+      item => item.index === petitionerIndex,
+    );
+
+    delete addPetitionerErrors.petitioners;
+    delete petitionerContactErrors.index;
+
+    addPetitionerErrors = {
+      ...addPetitionerErrors,
+      ...petitionerContactErrors,
+    };
   }
 
   const aggregatedErrors = {
     ...contactErrors,
     ...updateUserEmailErrors,
+    ...addPetitionerErrors,
   };
-
-  let firstIntervenorId;
-  existingPetitioners?.forEach(petitioner => {
-    if (petitioner.contactType === CONTACT_TYPES.intervenor) {
-      firstIntervenorId = petitioner.contactId;
-    }
-  });
-
-  if (
-    firstIntervenorId &&
-    firstIntervenorId !== contactInfo.contactId &&
-    contactInfo.contactType === CONTACT_TYPES.intervenor
-  ) {
-    aggregatedErrors.contactType =
-      Petitioner.VALIDATION_ERROR_MESSAGES.contactTypeSecondIntervenor;
-  }
 
   return !isEmpty(aggregatedErrors) ? aggregatedErrors : undefined;
 };
