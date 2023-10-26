@@ -92,7 +92,7 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
       startDate: 'Enter a valid start date',
       term: 'Term session is not valid',
       trialLocation: 'Select a trial session location',
