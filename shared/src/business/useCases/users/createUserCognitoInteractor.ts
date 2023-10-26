@@ -47,5 +47,5 @@ const checkUserAlreadyExists = async (
     .listUsers(filters)
     .promise();
 
-  return inCognito.Users.length;
+  return inCognito.Users?.length;
 };

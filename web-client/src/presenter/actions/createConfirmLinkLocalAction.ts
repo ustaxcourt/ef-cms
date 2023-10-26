@@ -1,10 +1,9 @@
-import { state } from '@web-client/presenter/app.cerebral';
 import qs from 'qs';
 
-export const createConfirmLinkLocalAction = ({ get }: ActionProps) => {
+export const createConfirmLinkLocalAction = ({ props }: ActionProps) => {
   if (!process.env.IS_LOCAL) return;
 
-  const { email } = get(state.form);
+  const { email } = props;
 
   // confirmation code is currently intentionally hard-coded in cognitoLocal
   const confirmationCode = '123456';
