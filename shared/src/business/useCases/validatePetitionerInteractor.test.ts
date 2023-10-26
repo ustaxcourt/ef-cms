@@ -4,25 +4,13 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { Contact } from '../entities/contacts/Contact';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { Petitioner } from '../entities/contacts/Petitioner';
-import { UpdateUserEmail } from '../entities/UpdateUserEmail';
+import { RawContact } from '@shared/business/entities/contacts/Contact';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { validatePetitionerInteractor } from './validatePetitionerInteractor';
 
 describe('validatePetitionerInteractor', () => {
   let mockContact;
-  const updateUserEmailCustomMessages = extractCustomMessages(
-    UpdateUserEmail.VALIDATION_RULES,
-  );
-  const petitionerCustomMessages = extractCustomMessages(
-    Petitioner.VALIDATION_RULES,
-  );
-  const contactCustomMessages = extractCustomMessages(
-    Contact.DOMESTIC_VALIDATION_RULES,
-  );
 
   beforeEach(() => {
     mockContact = {
@@ -40,30 +28,10 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'MN',
       updatedEmail: 'night@example.com',
-    } as any;
+    } as RawContact & { confirmEmail?: string; updatedEmail?: string };
   });
 
-  it('runs validation on a contact with no invalid properties', () => {
-    const caseDetail = {
-      ...MOCK_CASE,
-      petitioners: [mockContact],
-      status: CASE_STATUS_TYPES.generalDocket,
-    };
-    const errors = validatePetitionerInteractor(applicationContext, {
-      caseDetail,
-      contactInfo: mockContact,
-    });
-
-    expect(errors).toBeFalsy();
-  });
-
-  it('should not return validation errors when contact is valid and updatedEmail and confirmEmail are not present', () => {
-    mockContact = {
-      ...mockContact,
-      confirmEmail: undefined,
-      updatedEmail: undefined,
-    };
-
+  it('should not return validation errors when the updated contact information is valid', () => {
     const caseDetail = {
       ...MOCK_CASE,
       petitioners: [mockContact],
@@ -75,17 +43,10 @@ describe('validatePetitionerInteractor', () => {
       contactInfo: mockContact,
     });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toBeUndefined();
   });
 
-  it('runs validation on a contact with invalid properties', () => {
-    mockContact = {
-      ...mockContact,
-      confirmEmail: undefined, // required when updatedEmail is present
-      postalCode: 'what is love', // invalid postal code
-      serviceIndicator: undefined, // required
-    };
-
+  it('should not return validation errors when the updated contact is valid and updatedEmail and confirmEmail are not present', () => {
     const caseDetail = {
       ...MOCK_CASE,
       petitioners: [mockContact],
@@ -94,123 +55,87 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       caseDetail,
-      contactInfo: mockContact,
+      contactInfo: {
+        ...mockContact,
+        confirmEmail: undefined,
+        updatedEmail: undefined,
+      },
     });
-    expect(errors).toEqual({
-      confirmEmail: updateUserEmailCustomMessages.confirmEmail[1],
-      postalCode: contactCustomMessages.postalCode[0],
-      serviceIndicator: petitionerCustomMessages.serviceIndicator[0],
-    });
+
+    expect(errors).toBeUndefined();
   });
 
-  it('runs validation on a secondary contact with invalid properties', () => {
-    const contact = {
-      ...mockContact,
-      confirmEmail: undefined,
-      postalCode: 'what is love',
-    };
+  it('should return validation errors when the updated contact is NOT valid', () => {
     const caseDetail = {
       ...MOCK_CASE,
-      petitioners: [contact],
+      petitioners: [mockContact],
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
     const errors = validatePetitionerInteractor(applicationContext, {
       caseDetail,
-      contactInfo: contact,
-    });
-
-    expect(errors).toEqual({
-      confirmEmail: updateUserEmailCustomMessages.confirmEmail[1],
-      postalCode: contactCustomMessages.postalCode[0],
-    });
-  });
-
-  it('returns a validation error when confirmEmail is present without updatedEmail', () => {
-    const contact = {
-      ...mockContact,
-      confirmEmail: 'night@example.com',
-      postalCode: '',
-      updatedEmail: undefined,
-    };
-    const caseDetail = {
-      ...MOCK_CASE,
-      petitioners: [contact],
-      status: CASE_STATUS_TYPES.generalDocket,
-    };
-
-    const errors = validatePetitionerInteractor(applicationContext, {
-      caseDetail,
-      contactInfo: contact,
+      contactInfo: {
+        ...mockContact,
+        confirmEmail: undefined, // required when updatedEmail is present
+        postalCode: 'what is love', // invalid postal code
+        serviceIndicator: undefined, // required
+      },
     });
 
     expect(errors).toEqual({
-      confirmEmail: updateUserEmailCustomMessages.confirmEmail[0],
-      email: updateUserEmailCustomMessages.email[0],
-      postalCode: contactCustomMessages.postalCode[0],
+      confirmEmail: 'Enter a valid email address',
+      postalCode: 'Enter ZIP code',
+      serviceIndicator: 'Select a service indicator',
     });
   });
 
-  it('should not return an error when the first intervenor is edited', () => {
-    const contact = {
-      ...mockContact,
-      address1: '200 Main St.',
-    };
+  it('should return validation errors when a confirmation email was provided without an updated email', () => {
     const caseDetail = {
       ...MOCK_CASE,
-      petitioners: [contact],
+      petitioners: [mockContact],
       status: CASE_STATUS_TYPES.generalDocket,
     };
+
     const errors = validatePetitionerInteractor(applicationContext, {
       caseDetail,
-      contactInfo: contact,
+      contactInfo: {
+        ...mockContact,
+        confirmEmail: 'night@example.com',
+        updatedEmail: undefined,
+      },
     });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toEqual({
+      confirmEmail: 'Email addresses do not match',
+      email: 'Enter a valid email address',
+    });
   });
 
-  it('should throw an error when attempting to update an existing petitioner to an intervenor if an intervenor is already associated with the case', () => {
-    const contact = {
-      ...mockContact,
-      contactType: CONTACT_TYPES.intervenor,
-    };
-    const petitioner = {
-      ...mockContact,
-      contactId: '3ec8aa37-67aa-489d-be6d-13121331768b',
-      contactType: CONTACT_TYPES.intervenor,
-    };
+  it('should return validation errors when attempting to update an existing petitioner to an intervenor when an intervenor is already associated with the case', () => {
     const caseDetail = {
       ...MOCK_CASE,
-      petitioners: [petitioner, mockContact],
+      petitioners: [
+        {
+          ...mockContact,
+          contactId: '3ec8aa37-67aa-489d-be6d-13121331768b',
+          contactType: CONTACT_TYPES.intervenor,
+        },
+        mockContact,
+      ],
       status: CASE_STATUS_TYPES.generalDocket,
     };
+
     const errors = validatePetitionerInteractor(applicationContext, {
       caseDetail,
-      contactInfo: contact,
+      contactInfo: {
+        ...mockContact,
+        contactType: CONTACT_TYPES.intervenor,
+      },
     });
 
     expect(errors).toEqual({
       'petitioners[1]':
         'Only one (1) Intervenor is allowed per case. Please select a different Role.',
     });
-  });
-
-  it('should not edit the first intervenor when the contactType is not intervenor', () => {
-    const contact = {
-      ...mockContact,
-      contactType: CONTACT_TYPES.otherFiler,
-    };
-
-    const caseDetail = {
-      ...MOCK_CASE,
-      petitioners: [contact],
-      status: CASE_STATUS_TYPES.generalDocket,
-    };
-    const errors = validatePetitionerInteractor(applicationContext, {
-      caseDetail,
-      contactInfo: contact,
-    });
-
-    expect(errors).toBeFalsy();
   });
 });

@@ -1,10 +1,6 @@
-import {
-  Case,
-  getPetitionerById,
-  updatePetitioner,
-} from '@shared/business/entities/cases/Case';
-import { Petitioner } from '../entities/contacts/Petitioner';
-import { RawContact } from '../entities/contacts/Contact';
+import { Case, updatePetitioner } from '@shared/business/entities/cases/Case';
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { RawPetitioner } from '../entities/contacts/Petitioner';
 import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 import { isEmpty, pick } from 'lodash';
 
@@ -18,13 +14,18 @@ import { isEmpty, pick } from 'lodash';
  */
 
 export const validatePetitionerInteractor = (
-  applicationContext: IApplicationContext,
-  { caseDetail, contactInfo }: { contactInfo: RawContact; caseDetail: RawCase },
+  applicationContext: ClientApplicationContext,
+  {
+    caseDetail,
+    contactInfo,
+  }: {
+    contactInfo: RawPetitioner & {
+      updatedEmail?: string;
+      confirmEmail?: string;
+    };
+    caseDetail: RawCase;
+  },
 ) => {
-  const contactErrors = new Petitioner(contactInfo, {
-    applicationContext,
-  }).getFormattedValidationErrors();
-
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
     updateUserEmailErrors = new UpdateUserEmail({
@@ -33,20 +34,15 @@ export const validatePetitionerInteractor = (
     }).getFormattedValidationErrors();
   }
 
-  let caseErrors;
+  updatePetitioner(caseDetail, contactInfo);
 
-  const petitionerToUpdate = getPetitionerById(
-    caseDetail,
-    contactInfo.contactId,
-  );
-  const updatedPetitioner = { ...petitionerToUpdate, ...contactInfo };
-  updatePetitioner(caseDetail, updatedPetitioner);
-  const petitionerIndex = caseDetail.petitioners.findIndex(
-    p => p.contactId === updatedPetitioner.contactId,
-  );
-  caseErrors = new Case(caseDetail, {
+  const caseErrors = new Case(caseDetail, {
     applicationContext,
   }).getFormattedValidationErrors();
+
+  const petitionerIndex = caseDetail.petitioners.findIndex(
+    p => p.contactId === contactInfo.contactId,
+  );
 
   let addPetitionerErrors = pick(caseErrors, [
     'petitioners',
@@ -68,7 +64,6 @@ export const validatePetitionerInteractor = (
   }
 
   const aggregatedErrors = {
-    ...contactErrors,
     ...updateUserEmailErrors,
     ...addPetitionerErrors,
   };

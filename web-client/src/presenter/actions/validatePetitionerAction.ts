@@ -22,8 +22,8 @@ export const validatePetitionerAction = ({
   const errors = applicationContext
     .getUseCases()
     .validatePetitionerInteractor(applicationContext, {
+      caseDetail,
       contactInfo: contact,
-      existingPetitioners: caseDetail.petitioners,
     });
 
   store.set(state.validationErrors.contact, errors);
