@@ -2,10 +2,10 @@ import { get } from '../requests';
 
 export const getPaperServicePdfUrlInteractor = (
   applicationContext,
-  { key }: { key: string },
+  { fileId }: { fileId: string },
 ): Promise<{ url: string }> => {
   return get({
     applicationContext,
-    endpoint: `/trial-sessions/paper-service-pdf/${key}`,
+    endpoint: `/trial-sessions/paper-service-pdf/${fileId}`,
   });
 };
