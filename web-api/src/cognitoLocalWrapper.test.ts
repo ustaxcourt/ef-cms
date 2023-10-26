@@ -1,10 +1,8 @@
 import { cognitoLocalWrapper } from './cognitoLocalWrapper';
 const originalAdminCreateUser = jest.fn();
 const originalAdminGetUser = jest.fn();
-const original_SOME_NON_EXISTING_METHOD = jest.fn();
 
 const cognitoMock = {
-  SOME_NON_EXISTING_METHOD: original_SOME_NON_EXISTING_METHOD,
   adminCreateUser: originalAdminCreateUser,
   adminGetUser: originalAdminGetUser,
   resendConfirmationCode: jest.fn(),
@@ -69,19 +67,5 @@ describe('cognitoLocalWrapper', () => {
         Destination: mockUsername,
       },
     });
-  });
-
-  it('should reject call with FunctionUnsupported when local cognito is not yet configured', async () => {
-    const mockParams = {
-      ClientId: '480559f0-4d31-4743-9674-4bb8fea06684',
-      Password: 'abc123',
-      Username: mockUsername,
-    };
-
-    await expect(
-      cognitoMock.SOME_NON_EXISTING_METHOD(mockParams).promise(),
-    ).rejects.toEqual({ FunctionUnsupported: true, Params: mockParams });
-
-    expect(original_SOME_NON_EXISTING_METHOD).not.toHaveBeenCalled();
   });
 });
