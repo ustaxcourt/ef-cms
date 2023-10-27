@@ -14,6 +14,6 @@ describe('setReprintPaperServicePdfsModalFormAction', () => {
       },
     );
 
-    expect(state.modal!.form!.selectedPdfs).toEqual([]);
+    expect(state.modal.form.selectedPdf).toEqual('');
   });
 });
