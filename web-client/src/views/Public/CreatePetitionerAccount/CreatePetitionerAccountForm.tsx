@@ -184,16 +184,13 @@ export const CreatePetitionerAccountForm = connect(
                 ></RequirementsText>
               </div>
 
-              <label
-                className="usa-label"
-                htmlFor="password-create-account-confirm"
-              >
+              <label className="usa-label" htmlFor="confirm-password">
                 Re-type Password
               </label>
               <input
                 required
                 className="usa-input"
-                id="password-create-account-confirm"
+                id="confirm-password"
                 name="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
                 onChange={e => {
@@ -233,6 +230,7 @@ export const CreatePetitionerAccountForm = connect(
               <Button
                 className="usa-button margin-top-2"
                 disabled={!createAccountHelper.formIsValid}
+                id="submit-button"
               >
                 Continue
               </Button>

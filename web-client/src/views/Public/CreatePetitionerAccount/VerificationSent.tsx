@@ -12,7 +12,10 @@ export const VerificationSent = connect(
   },
   ({ alertSuccess, cognitoResendVerificationLinkSequence, email }) => {
     return (
-      <div className="grid-container grid-gap-lg padding-x-4">
+      <div
+        className="grid-container grid-gap-lg padding-x-4"
+        id="verification-sent-message"
+      >
         {alertSuccess && (
           <div
             className="grid-row margin-bottom-2"
