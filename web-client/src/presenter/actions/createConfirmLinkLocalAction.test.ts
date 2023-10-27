@@ -21,10 +21,8 @@ describe('createConfirmLinkLocalAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        form: {
-          email,
-        },
+      props: {
+        email,
       },
     });
     expect(result.output).toBeUndefined();
@@ -36,10 +34,8 @@ describe('createConfirmLinkLocalAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        form: {
-          email,
-        },
+      props: {
+        email,
       },
     });
 
