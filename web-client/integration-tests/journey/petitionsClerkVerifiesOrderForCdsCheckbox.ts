@@ -1,7 +1,4 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { PARTY_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(CaseInternal.VALIDATION_RULES);
 
 export const petitionsClerkVerifiesOrderForCdsCheckbox = (
   cerebralTest,
@@ -41,7 +38,7 @@ export const petitionsClerkVerifiesOrderForCdsCheckbox = (
 
     expect(
       cerebralTest.getState('validationErrors.corporateDisclosureFile'),
-    ).toEqual(customMessages.corporateDisclosureFile);
+    ).toEqual('Upload or scan Corporate Disclosure Statement(CDS)');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'orderForCds',

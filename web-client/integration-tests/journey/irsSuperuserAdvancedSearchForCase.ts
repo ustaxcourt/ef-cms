@@ -5,7 +5,7 @@ import {
 import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { refreshElasticsearchIndex } from '../helpers';
-const customMessages = extractCustomMessages(CaseSearch);
+const customMessages = extractCustomMessages(CaseSearch.VALIDATION_RULES, true);
 
 export const irsSuperuserAdvancedSearchForCase = cerebralTest => {
   return it('irsSuperuser performs an advanced search for a case', async () => {

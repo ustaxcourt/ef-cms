@@ -1,7 +1,9 @@
 import { EditPetitionerCounsel } from '../../../shared/src/business/entities/caseAssociation/EditPetitionerCounsel';
 import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(EditPetitionerCounsel);
+const customMessages = extractCustomMessages(
+  EditPetitionerCounsel.VALIDATION_RULES,
+);
 
 export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
   return it('Petitions clerk edits a practitioner on a case', async () => {

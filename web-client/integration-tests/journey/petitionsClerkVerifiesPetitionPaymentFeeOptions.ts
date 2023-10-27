@@ -1,13 +1,5 @@
-import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { PAYMENT_STATUS } from '../../../shared/src/business/entities/EntityConstants';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(Case.VALIDATION_RULES);
-const caseInternalCustomMessages = extractCustomMessages(
-  CaseInternal.VALIDATION_RULES,
-);
-
 export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
   cerebralTest,
   fakeFile,
@@ -29,8 +21,8 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      petitionPaymentDate: customMessages.petitionPaymentDate[0],
-      petitionPaymentMethod: customMessages.petitionPaymentMethod[0],
+      petitionPaymentDate: 'Enter a valid payment date',
+      petitionPaymentMethod: 'Enter payment method',
     });
 
     await cerebralTest.runSequence(
@@ -83,8 +75,8 @@ export const petitionsClerkVerifiesPetitionPaymentFeeOptions = (
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
       applicationForWaiverOfFilingFeeFile:
-        caseInternalCustomMessages.applicationForWaiverOfFilingFeeFile[0],
-      petitionPaymentWaivedDate: customMessages.petitionPaymentWaivedDate[0],
+        'Upload or scan an Application for Waiver of Filing Fee (APW)',
+      petitionPaymentWaivedDate: 'Enter a valid date waived',
     });
 
     await cerebralTest.runSequence(

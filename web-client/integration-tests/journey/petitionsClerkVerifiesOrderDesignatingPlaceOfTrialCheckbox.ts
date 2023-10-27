@@ -1,7 +1,3 @@
-import { CaseInternal } from '../../../shared/src/business/entities/cases/CaseInternal';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(CaseInternal.VALIDATION_RULES);
-
 export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
   cerebralTest,
   fakeFile,
@@ -26,7 +22,8 @@ export const petitionsClerkVerifiesOrderDesignatingPlaceOfTrialCheckbox = (
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      chooseAtLeastOneValue: customMessages.chooseAtLeastOneValue[0],
+      chooseAtLeastOneValue:
+        'Select trial location and upload/scan RQT or check Order Designating Place of Trial',
     });
 
     await cerebralTest.runSequence(
