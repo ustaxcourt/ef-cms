@@ -9,7 +9,8 @@ export const ReprintPaperServiceDocumentsModal = connect(
     clearModalSequence: sequences.clearModalSequence,
     form: state.modal.form,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
-    openSelectedPDFsSequence: sequences.openSelectedPDFsSequence,
+    openSelectedTrialSessionPaperServicePdfSequence:
+      sequences.openSelectedTrialSessionPaperServicePdfSequence,
     updatePDFsSelectedForPrintSequence:
       sequences.updatePDFsSelectedForPrintSequence,
   },
@@ -17,7 +18,7 @@ export const ReprintPaperServiceDocumentsModal = connect(
     clearModalSequence,
     form,
     formattedTrialSessionDetails,
-    openSelectedPDFsSequence,
+    openSelectedTrialSessionPaperServicePdfSequence,
     updatePDFsSelectedForPrintSequence,
   }) {
     return (
@@ -25,29 +26,26 @@ export const ReprintPaperServiceDocumentsModal = connect(
         cancelLabel="Cancel"
         cancelSequence={clearModalSequence}
         confirmLabel="Open PDF"
-        confirmSequence={openSelectedPDFsSequence}
+        confirmSequence={openSelectedTrialSessionPaperServicePdfSequence}
         message="Select the PDF(s) that you would like to print. They will open in seperate tabs and be available for three days after the PDF was originally generated."
         title="Print Paper Service PDF"
       >
         {formattedTrialSessionDetails.paperServicePdfs.map(pdfInfo => {
           return (
-            <div className="usa-checkbox" key={pdfInfo.fileId}>
+            <div className="usa-radio" key={pdfInfo.fileId}>
               <input
-                checked={form.selectedPdfs.includes(pdfInfo.fileId) || false}
-                className="usa-checkbox__input"
+                checked={form.selectedPdf === pdfInfo.fileId}
+                className="usa-radio__input"
                 id={`${pdfInfo.fileId}`}
                 name={`${pdfInfo.fileId}`}
-                type="checkbox"
+                type="radio"
                 onChange={e => {
                   updatePDFsSelectedForPrintSequence({
                     key: e.target.name,
                   });
                 }}
               />
-              <label
-                className="usa-checkbox__label"
-                htmlFor={`${pdfInfo.fileId}`}
-              >
+              <label className="usa-radio__label" htmlFor={`${pdfInfo.fileId}`}>
                 {pdfInfo.title}
               </label>
             </div>
