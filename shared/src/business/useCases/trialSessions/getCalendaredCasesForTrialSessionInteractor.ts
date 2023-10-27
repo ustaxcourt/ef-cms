@@ -1,4 +1,4 @@
-import { Case } from '../../entities/cases/Case';
+import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -31,14 +31,19 @@ export const getCalendaredCasesForTrialSessionInteractor = async (
 
   // instead of sending EVERY docket entry over, the front end only cares about the PMT documents not stricken
   // to figure out the filingPartiesCode
-  const casesWithMinimalRequiredDocketEntries = cases.map(aCase => ({
-    ...aCase,
-    docketEntries: aCase.docketEntries.filter(
-      docketEntry => docketEntry.eventCode === 'PMT' && !docketEntry.isStricken,
-    ),
-  }));
+  const casesWithMinimalRequiredInformation = cases
+    .map(aCase => ({
+      ...aCase,
+      docketEntries: aCase.docketEntries.filter(
+        docketEntry =>
+          docketEntry.eventCode === 'PMT' && !docketEntry.isStricken,
+      ),
+    }))
+    .map(aCase => {
+      return new CalendaredCase(aCase, applicationContext)
+        .validate()
+        .toRawObject();
+    });
 
-  return Case.validateRawCollection(casesWithMinimalRequiredDocketEntries, {
-    applicationContext,
-  });
+  return casesWithMinimalRequiredInformation;
 };
