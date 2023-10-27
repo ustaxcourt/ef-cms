@@ -44,7 +44,7 @@ export abstract class JoiValidationEntity_New {
 
   abstract getValidationRules(): any;
 
-  getValidationErrors() {
+  getValidationErrors(): Record<string, string> | null {
     const rules = this.getValidationRules();
     const schema = rules.validate ? rules : joi.object().keys(rules);
     const { error } = schema.validate(this, {
