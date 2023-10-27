@@ -1,11 +1,11 @@
 import { checkIfCognitoEmailInState } from '@web-client/presenter/actions/checkIfCognitoEmailInState';
-import { gotoPublicSearchSequence } from '@web-client/presenter/sequences/Public/gotoPublicSearchSequence';
+import { navigateToCognitoAction } from '@web-client/presenter/actions/navigateToCognitoAction';
 import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurrentPageAction';
 
 export const goToVerificationSentSequence = [
   checkIfCognitoEmailInState,
   {
-    doesNotExist: [gotoPublicSearchSequence],
+    doesNotExist: [navigateToCognitoAction],
     exists: [setupCurrentPageAction('VerificationSent')],
   },
 ];
