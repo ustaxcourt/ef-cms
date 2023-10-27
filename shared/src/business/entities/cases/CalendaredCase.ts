@@ -90,4 +90,4 @@ export class CalendaredCase extends JoiValidationEntity {
   }
 }
 
-export type RawEligibleCase = ExcludeMethods<CalendaredCase>;
+export type RawCalendaredCase = ExcludeMethods<CalendaredCase>;
