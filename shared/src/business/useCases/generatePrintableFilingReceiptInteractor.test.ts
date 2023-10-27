@@ -151,6 +151,14 @@ describe('generatePrintableFilingReceiptInteractor', () => {
   });
 
   it('should call the Receipt of Filing document generator with consolidatedCases array populated when fileAcrossConsolidatedGroup is true', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        consolidatedCases: mockConsolidatedCases,
+        leadDocketNumber: '101-20',
+      });
+
     await generatePrintableFilingReceiptInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       documentsFiled: {

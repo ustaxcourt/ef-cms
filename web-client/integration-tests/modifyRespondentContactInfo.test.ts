@@ -55,6 +55,8 @@ describe('Modify Respondent Contact Information', () => {
       component: 'userContactEditProgress.inProgress',
       refreshInterval: 1000,
     });
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await refreshElasticsearchIndex(5000);
   });
 
   respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, 0, true);

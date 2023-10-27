@@ -28,6 +28,7 @@ export class OutboxItem extends JoiValidationEntity {
       throw new TypeError('applicationContext must be defined');
     }
 
+    this.entityName = rawOutboxItem.entityName;
     this.caseStatus = rawOutboxItem.caseStatus;
     this.caseTitle = rawOutboxItem.caseTitle;
     this.completedAt = rawOutboxItem.completedAt;
@@ -64,6 +65,10 @@ export class OutboxItem extends JoiValidationEntity {
   }
 
   getValidationRules() {
+    return OUTBOX_ITEM_VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
     return OUTBOX_ITEM_VALIDATION_RULES;
   }
 

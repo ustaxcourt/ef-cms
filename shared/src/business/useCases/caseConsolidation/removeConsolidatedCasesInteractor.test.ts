@@ -1,13 +1,23 @@
 import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_LOCK } from '../../../test/mockLock';
 import { ROLES } from '../../entities/EntityConstants';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
 
 let mockCases;
+let mockLock;
 const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
 
 describe('removeConsolidatedCasesInteractor', () => {
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
     mockCases = {
       '101-19': {
         ...MOCK_CASE,
@@ -242,6 +252,50 @@ describe('removeConsolidatedCasesInteractor', () => {
     ).toMatchObject({
       docketNumber: '104-19',
       leadDocketNumber: undefined,
+    });
+  });
+
+  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    mockLock = MOCK_LOCK;
+
+    await expect(
+      removeConsolidatedCasesInteractor(applicationContext, {
+        docketNumber: '105-19',
+        docketNumbersToRemove: ['104-19'],
+      }),
+    ).rejects.toThrow(ServiceUnavailableError);
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should acquire and remove the lock on the cases', async () => {
+    await removeConsolidatedCasesInteractor(applicationContext, {
+      docketNumber: '105-19',
+      docketNumbersToRemove: ['104-19'],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: ['case|105-19', 'case|104-19'],
+    });
+    ['105-19', '104-19'].forEach(docketNumber => {
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: `case|${docketNumber}`,
+        ttl: 30,
+      });
     });
   });
 });
