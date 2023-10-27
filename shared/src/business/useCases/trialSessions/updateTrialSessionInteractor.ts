@@ -110,22 +110,40 @@ export const updateTrialSessionInteractor = async (
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
-    const calendaredCases = currentTrialSession.caseOrder.filter(
-      c => !c.removedFromTrial,
-    );
     const { PDFDocument } = await applicationContext.getPdfLib();
     const paperServicePdfsCombined = await PDFDocument.create();
 
-    for (const calendaredCase of calendaredCases) {
-      await updateAssociatedCaseAndSetNoticeOfChange({
-        applicationContext,
-        currentTrialSession,
-        docketNumber: calendaredCase.docketNumber,
-        paperServicePdfsCombined,
-        updatedTrialSessionEntity,
-        user,
-      });
-    }
+    const shouldSetNoticeOfChangeToInPersonProceeding =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.isCalendared;
+
+    const shouldIssueNoticeOfChangeOfTrialJudge =
+      currentTrialSession.isCalendared &&
+      !!currentTrialSession.judge &&
+      !!updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId;
+
+    const shouldSetNoticeOfChangeToRemoteProceeding =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.isCalendared;
+
+    await updateCasesAndSetNoticeOfChange({
+      applicationContext,
+      currentTrialSession,
+      paperServicePdfsCombined,
+      shouldIssueNoticeOfChangeOfTrialJudge,
+      shouldSetNoticeOfChangeToInPersonProceeding,
+      shouldSetNoticeOfChangeToRemoteProceeding,
+      updatedTrialSessionEntity,
+      user,
+    });
 
     hasPaper = !!paperServicePdfsCombined.getPageCount();
     const paperServicePdfData = await paperServicePdfsCombined.save();
@@ -138,8 +156,13 @@ export const updateTrialSessionInteractor = async (
           file: paperServicePdfData,
           fileNamePrefix: 'paper-service-pdf',
         }));
+      const paperServicePdfName = getPaperServicePdfName({
+        shouldIssueNoticeOfChangeOfTrialJudge,
+        shouldSetNoticeOfChangeToInPersonProceeding,
+        shouldSetNoticeOfChangeToRemoteProceeding,
+      });
 
-      updatedTrialSessionEntity.addPaperServicePdf(fileId, 'Notice of Change');
+      updatedTrialSessionEntity.addPaperServicePdf(fileId, paperServicePdfName);
     }
   }
 
@@ -170,72 +193,66 @@ export const updateTrialSessionInteractor = async (
   });
 };
 
-const updateAssociatedCaseAndSetNoticeOfChange = async ({
+const updateCasesAndSetNoticeOfChange = async ({
   applicationContext,
   currentTrialSession,
-  docketNumber,
   paperServicePdfsCombined,
+  shouldIssueNoticeOfChangeOfTrialJudge,
+  shouldSetNoticeOfChangeToInPersonProceeding,
+  shouldSetNoticeOfChangeToRemoteProceeding,
   updatedTrialSessionEntity,
   user,
-}) => {
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  const caseEntity = new Case(caseToUpdate, { applicationContext });
-  if (
-    caseToUpdate.trialSessionId === updatedTrialSessionEntity.trialSessionId
-  ) {
-    const shouldSetNoticeOfChangeToRemoteProceeding =
-      currentTrialSession.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-      updatedTrialSessionEntity.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-      updatedTrialSessionEntity.isCalendared &&
-      !caseEntity.isClosed();
-
+}: {
+  applicationContext: IApplicationContext;
+  currentTrialSession: RawTrialSession;
+  paperServicePdfsCombined: any;
+  updatedTrialSessionEntity: TrialSession;
+  user: any;
+  shouldSetNoticeOfChangeToRemoteProceeding: boolean;
+  shouldSetNoticeOfChangeToInPersonProceeding: boolean;
+  shouldIssueNoticeOfChangeOfTrialJudge: boolean;
+}): Promise<void> => {
+  const calendaredCaseEntities = await Promise.all(
+    currentTrialSession
+      .caseOrder!.filter(c => !c.removedFromTrial)
+      .map(async c => {
+        const aCase = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber: c.docketNumber,
+          });
+        return new Case(aCase, { applicationContext });
+      }),
+  );
+  const casesThatShouldReceiveNotices = calendaredCaseEntities
+    .filter(aCase => !aCase.isClosed())
+    .filter(
+      aCase =>
+        aCase.trialSessionId === updatedTrialSessionEntity.trialSessionId,
+    );
+  for (const caseEntity of casesThatShouldReceiveNotices) {
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
       await applicationContext
         .getUseCaseHelpers()
         .setNoticeOfChangeToRemoteProceeding(applicationContext, {
           caseEntity,
-          currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
           user: applicationContext.getCurrentUser(),
         });
     }
-
-    const shouldSetNoticeOfChangeToInPersonProceeding =
-      currentTrialSession.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-      updatedTrialSessionEntity.proceedingType ===
-        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-      updatedTrialSessionEntity.isCalendared &&
-      !caseEntity.isClosed();
 
     if (shouldSetNoticeOfChangeToInPersonProceeding) {
       await applicationContext
         .getUseCaseHelpers()
         .setNoticeOfChangeToInPersonProceeding(applicationContext, {
           caseEntity,
-          currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
           user: applicationContext.getCurrentUser(),
         });
     }
-
-    const shouldIssueNoticeOfChangeOfTrialJudge =
-      currentTrialSession.isCalendared &&
-      currentTrialSession.judge &&
-      updatedTrialSessionEntity.judge &&
-      currentTrialSession.judge.userId !==
-        updatedTrialSessionEntity.judge.userId &&
-      !caseEntity.isClosed();
 
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
       await applicationContext
@@ -257,17 +274,20 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
     });
   }
 
-  const matchingHearing = caseToUpdate.hearings.find(
-    hearing =>
-      hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
-  );
-  if (matchingHearing) {
-    applicationContext.getPersistenceGateway().updateCaseHearing({
-      applicationContext,
-      docketNumber,
-      hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-    });
-  }
+  const updatedHearingPromises = calendaredCaseEntities.map(async aCase => {
+    const matchingHearing = aCase.hearings.find(
+      hearing =>
+        hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
+    );
+    if (matchingHearing) {
+      await applicationContext.getPersistenceGateway().updateCaseHearing({
+        applicationContext,
+        docketNumber: aCase.docketNumber,
+        hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
+      });
+    }
+  });
+  await Promise.all(updatedHearingPromises);
 };
 
 const createWorkingCopyForNewUserOnSession = async ({
@@ -288,4 +308,24 @@ const createWorkingCopyForNewUserOnSession = async ({
         .validate()
         .toRawObject(),
     });
+};
+
+const getPaperServicePdfName = ({
+  shouldIssueNoticeOfChangeOfTrialJudge,
+  shouldSetNoticeOfChangeToInPersonProceeding,
+  shouldSetNoticeOfChangeToRemoteProceeding,
+}: {
+  shouldSetNoticeOfChangeToRemoteProceeding: boolean;
+  shouldSetNoticeOfChangeToInPersonProceeding: boolean;
+  shouldIssueNoticeOfChangeOfTrialJudge: boolean;
+}): string => {
+  if (shouldIssueNoticeOfChangeOfTrialJudge) {
+    return 'Notice of Change of Trial Judge';
+  } else if (shouldSetNoticeOfChangeToInPersonProceeding) {
+    return 'Notice of Change to In Person Proceeding';
+  } else if (shouldSetNoticeOfChangeToRemoteProceeding) {
+    return 'Notice of Change to Remote Proceeding';
+  } else {
+    return 'Notice of Change';
+  }
 };
