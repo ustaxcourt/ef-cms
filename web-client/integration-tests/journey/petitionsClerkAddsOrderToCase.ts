@@ -1,8 +1,5 @@
-import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { first } from 'lodash';
-const customMessages = extractCustomMessages(OrderWithoutBody);
 
 export const petitionsClerkAddsOrderToCase = cerebralTest => {
   return it('Petitions clerk adds Order to case', async () => {
@@ -11,9 +8,9 @@ export const petitionsClerkAddsOrderToCase = cerebralTest => {
     await cerebralTest.runSequence('submitCreateOrderModalSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentTitle: customMessages.documentTitle[1],
-      documentType: customMessages.documentType[0],
-      eventCode: customMessages.eventCode[0],
+      documentTitle: 'Enter the title of this order',
+      documentType: 'Select an order type',
+      eventCode: 'Select an order type',
     });
 
     await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {

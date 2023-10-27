@@ -93,7 +93,7 @@ export const respondentRequestsAccessToCase = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      certificateOfServiceDate: customMessages.certificateOfServiceDate[0],
+      certificateOfServiceDate: customMessages.certificateOfServiceDate[1],
     });
 
     await cerebralTest.runSequence(
