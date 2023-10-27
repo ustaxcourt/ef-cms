@@ -1,3 +1,4 @@
+import { RawMessage } from '@shared/business/entities/Message';
 import { put } from '../../dynamodbClientService';
 
 /**
