@@ -53,7 +53,6 @@ export const PrimaryDocumentForm = connect(
               validationSequence="validateExternalDocumentInformationSequence"
             />
           </FormGroup>
-
           <InclusionsForm
             bind="form"
             type="primaryDocument"

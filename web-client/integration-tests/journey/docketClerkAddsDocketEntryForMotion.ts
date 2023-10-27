@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { fakeFile } from '../../integration-tests-public/helpers';
 import { waitForLoadingComponentToHide } from '../helpers';
 
@@ -8,9 +9,6 @@ export const docketClerkAddsDocketEntryForMotion = cerebralTest => {
     });
 
     const formFields = {
-      dateReceivedDay: 12,
-      dateReceivedMonth: 2,
-      dateReceivedYear: 2002,
       eventCode: 'M000',
       freeText: 'making my way downtown, walking fast, all tests pass',
       hasOtherFilingParty: true,
@@ -23,6 +21,15 @@ export const docketClerkAddsDocketEntryForMotion = cerebralTest => {
         value,
       });
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '12/2/2002',
+      },
+    );
 
     await cerebralTest.runSequence('setDocumentForUploadSequence', {
       documentType: 'primaryDocumentFile',
