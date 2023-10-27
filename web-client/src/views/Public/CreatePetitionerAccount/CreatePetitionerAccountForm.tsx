@@ -45,7 +45,13 @@ export const CreatePetitionerAccountForm = connect(
         >
           <div>
             <h1 className="margin-bottom-1">Create Petitioner Account</h1>
-            <form style={{ width: '90%' }}>
+            <form
+              style={{ width: '90%' }}
+              onSubmit={e => {
+                e.preventDefault();
+                submitCreatePetitionerAccountFormSequence();
+              }}
+            >
               <label className="usa-label" htmlFor="email">
                 Email address
               </label>
@@ -71,7 +77,8 @@ export const CreatePetitionerAccountForm = connect(
               {!inFocusEmail && createAccountHelper.email && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={createAccountHelper.email}
+                    fieldName="email"
+                    text={createAccountHelper.email}
                     valid={false}
                   ></RequirementsText>
                 </div>
@@ -102,7 +109,9 @@ export const CreatePetitionerAccountForm = connect(
               {!inFocusName && createAccountHelper.name && (
                 <div className="margin-top-1">
                   <RequirementsText
-                    label={createAccountHelper.name}
+                    aria-label="name field validation errors"
+                    fieldName="name"
+                    text={createAccountHelper.name}
                     valid={false}
                   ></RequirementsText>
                 </div>
@@ -138,30 +147,36 @@ export const CreatePetitionerAccountForm = connect(
               </button>
               <div className="margin-top-1" hidden={!password}>
                 <RequirementsText
-                  label="Must contain lower case letter"
+                  fieldName="password"
+                  text="Must contain lower case letter"
                   valid={createAccountHelper.passwordErrors?.hasOneLowercase}
                 ></RequirementsText>
                 <RequirementsText
-                  label="Must contain upper case letter"
+                  fieldName="password"
+                  text="Must contain upper case letter"
                   valid={createAccountHelper.passwordErrors?.hasOneUppercase}
                 ></RequirementsText>
                 <RequirementsText
-                  label="Must contain number"
+                  fieldName="password"
+                  text="Must contain number"
                   valid={createAccountHelper.passwordErrors?.hasOneNumber}
                 ></RequirementsText>
                 <RequirementsText
-                  label="Must be between 8-99 characters long"
+                  fieldName="password"
+                  text="Must be between 8-99 characters long"
                   valid={createAccountHelper.passwordErrors?.isProperLength}
                 ></RequirementsText>
                 <RequirementsText
-                  label="Must contain special character or space"
+                  fieldName="password"
+                  text="Must contain special character or space"
                   valid={
                     createAccountHelper.passwordErrors
                       ?.hasSpecialCharacterOrSpace
                   }
                 ></RequirementsText>
                 <RequirementsText
-                  label="Must not contain leading or trailing space"
+                  fieldName="password"
+                  text="Must not contain leading or trailing space"
                   valid={
                     createAccountHelper.passwordErrors
                       ?.hasNoLeadingOrTrailingSpace
@@ -210,18 +225,18 @@ export const CreatePetitionerAccountForm = connect(
                 }}
               >
                 <RequirementsText
-                  label="Password must match"
+                  fieldName="confirm password"
+                  text="Password must match"
                   valid={createAccountHelper.confirmPassword}
                 ></RequirementsText>
               </div>
+              <Button
+                className="usa-button margin-top-2"
+                disabled={!createAccountHelper.formIsValid}
+              >
+                Continue
+              </Button>
             </form>
-            <Button
-              className="usa-button margin-top-2"
-              disabled={!createAccountHelper.formIsValid}
-              onClick={() => submitCreatePetitionerAccountFormSequence()}
-            >
-              Continue
-            </Button>
             <p>
               Already have an account?{' '}
               <Button
