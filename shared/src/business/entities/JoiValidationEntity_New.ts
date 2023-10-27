@@ -52,8 +52,10 @@ export abstract class JoiValidationEntity_New {
       abortEarly: false,
       allowUnknown: true,
     });
+
     if (!error) return null;
-    const errors = {};
+
+    let errors = {};
     error.details.forEach(detail => {
       if (!Number.isInteger(detail.context.key)) {
         errors[detail.context.key || detail.type] = detail.message;
@@ -61,35 +63,83 @@ export abstract class JoiValidationEntity_New {
         errors[detail.context.label] = detail.message;
       }
     });
+
     return errors;
   }
 
-  validate() {
-    const { error } = this.getValidationRules().validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
+  isValid() {
+    const validationErrors = this.getValidationErrors();
+    return isEmpty(validationErrors);
+  }
 
-    if (!error) return null;
+  validate(options?: {
+    applicationContext: IApplicationContext;
+    logErrors: boolean;
+  }) {
+    const applicationContext = options?.applicationContext;
+    const logErrors = options?.logErrors;
 
-    let errors = {};
-    error!.details.forEach(detail => {
-      if (!Number.isInteger(detail.context?.key)) {
-        errors[detail.context?.key || detail.type] = detail.message;
-      } else {
-        errors[detail.context?.label] = detail.message;
+    if (!this.isValid()) {
+      const stringifyTransform = obj => {
+        if (!obj) return obj;
+        const transformed = {};
+        Object.keys(obj).forEach(key => {
+          if (typeof obj[key] === 'string') {
+            transformed[key] = obj[key].replace(/"/g, "'");
+          } else {
+            transformed[key] = obj[key];
+          }
+        });
+        return transformed;
+      };
+      if (logErrors) {
+        applicationContext?.logger.error('*** Entity with error: ***', this);
       }
-    });
+      const validationErrors = this.getValidationErrors()!;
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(stringifyTransform(validationErrors)),
+        validationErrors,
+      );
+    }
 
-    return errors;
-  }
-
-  validateWithLogging(applicationContext) {
-    return this.validate({ applicationContext, logErrors: true });
+    setIsValidated(this);
+    return this;
   }
 
   toRawObject() {
     return toRawObject(this) as ExcludeMethods<this>;
+  }
+
+  toRawObjectFromJoi() {
+    return toRawObject(this) as ExcludeMethods<this>;
+  }
+
+  validateForMigration() {
+    const rules = this.getValidationRules();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    let { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    if (error) {
+      console.log('Error, entity is invalid: ', this);
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(
+          error.details.map(detail => {
+            return detail.message.replace(/"/g, "'");
+          }),
+        ),
+      );
+    }
+    setIsValidated(this);
+    return this;
+  }
+
+  validateWithLogging(applicationContext) {
+    return this.validate({ applicationContext, logErrors: true });
   }
 
   static validateRawCollection<T extends JoiValidationEntity_New>(
