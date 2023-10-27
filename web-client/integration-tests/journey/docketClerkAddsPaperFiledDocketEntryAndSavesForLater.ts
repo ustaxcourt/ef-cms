@@ -46,7 +46,7 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
       {
         key: 'receivedAt',
         toFormat: FORMATS.ISO,
-        value: `${documentFormValues.receivedAtMonth}/${documentFormValues.receivedAtDay}/${documentFormValues.receivedAtYear}`,
+        value: `${documentFormValues.dateReceivedMonth}/${documentFormValues.dateReceivedDay}/${documentFormValues.dateReceivedYear}`,
       },
     );
 
