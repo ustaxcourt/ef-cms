@@ -39,20 +39,12 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   // trial session itself is not considered calendared (see issue #3254).
   let calendaredCases: (RawCase & TCaseOrder)[] = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
-    calendaredCases = (
-      await applicationContext
-        .getPersistenceGateway()
-        .getCalendaredCasesForTrialSession({
-          applicationContext,
-          trialSessionId,
-        })
-    ).map(aCase => ({
-      ...aCase,
-      docketEntries: aCase.docketEntries.filter(
-        docketEntry =>
-          docketEntry.eventCode === 'PMT' && !docketEntry.isStricken,
-      ),
-    }));
+    calendaredCases = await applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession({
+        applicationContext,
+        trialSessionId,
+      });
   }
 
   const trialSessionEntity = new TrialSession(trialSession, {
