@@ -1,4 +1,4 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { TrialCityOptions } from '../TrialCityOptions';
 import { connect } from '@cerebral/react';
@@ -8,38 +8,55 @@ import React from 'react';
 
 const NonstandardDateInput = ({
   addCourtIssuedDocketEntryNonstandardHelper,
+  DATE_FORMATS,
   form,
-  updateCourtIssuedDocketEntryFormValueSequence,
+  formatAndUpdateDateFromDatePickerSequence,
+  updateCourtIssuedDocketEntryTitleSequence,
   validateCourtIssuedDocketEntrySequence,
   validationErrors,
 }) => (
-  <DateInput
+  <DateSelector
+    defaultValue={form.date}
     errorText={validationErrors.date}
     id="date"
     label={addCourtIssuedDocketEntryNonstandardHelper.dateLabel}
-    values={form}
-    onBlur={validateCourtIssuedDocketEntrySequence}
-    onChange={updateCourtIssuedDocketEntryFormValueSequence}
+    onChange={e => {
+      formatAndUpdateDateFromDatePickerSequence({
+        key: 'date',
+        toFormat: DATE_FORMATS.ISO,
+        value: e.target.value,
+      });
+      updateCourtIssuedDocketEntryTitleSequence();
+      validateCourtIssuedDocketEntrySequence();
+    }}
   />
 );
 
 export const CourtIssuedNonstandardForm = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     addCourtIssuedDocketEntryNonstandardHelper:
       state.addCourtIssuedDocketEntryNonstandardHelper,
     form: state.form,
+    formatAndUpdateDateFromDatePickerSequence:
+      sequences.formatAndUpdateDateFromDatePickerSequence,
     judgeUsers: state.judges,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
+    updateCourtIssuedDocketEntryTitleSequence:
+      sequences.updateCourtIssuedDocketEntryTitleSequence,
     validateCourtIssuedDocketEntrySequence:
       sequences.validateCourtIssuedDocketEntrySequence,
     validationErrors: state.validationErrors,
   },
   function CourtIssuedNonstandardForm({
     addCourtIssuedDocketEntryNonstandardHelper,
+    DATE_FORMATS,
     form,
+    formatAndUpdateDateFromDatePickerSequence,
     judgeUsers,
     updateCourtIssuedDocketEntryFormValueSequence,
+    updateCourtIssuedDocketEntryTitleSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
   }) {
@@ -47,12 +64,16 @@ export const CourtIssuedNonstandardForm = connect(
       <>
         {addCourtIssuedDocketEntryNonstandardHelper.showDateFirst && (
           <NonstandardDateInput
+            DATE_FORMATS={DATE_FORMATS}
             addCourtIssuedDocketEntryNonstandardHelper={
               addCourtIssuedDocketEntryNonstandardHelper
             }
             form={form}
-            updateCourtIssuedDocketEntryFormValueSequence={
-              updateCourtIssuedDocketEntryFormValueSequence
+            formatAndUpdateDateFromDatePickerSequence={
+              formatAndUpdateDateFromDatePickerSequence
+            }
+            updateCourtIssuedDocketEntryTitleSequence={
+              updateCourtIssuedDocketEntryTitleSequence
             }
             validateCourtIssuedDocketEntrySequence={
               validateCourtIssuedDocketEntrySequence
@@ -201,12 +222,16 @@ export const CourtIssuedNonstandardForm = connect(
 
         {addCourtIssuedDocketEntryNonstandardHelper.showDateLast && (
           <NonstandardDateInput
+            DATE_FORMATS={DATE_FORMATS}
             addCourtIssuedDocketEntryNonstandardHelper={
               addCourtIssuedDocketEntryNonstandardHelper
             }
             form={form}
-            updateCourtIssuedDocketEntryFormValueSequence={
-              updateCourtIssuedDocketEntryFormValueSequence
+            formatAndUpdateDateFromDatePickerSequence={
+              formatAndUpdateDateFromDatePickerSequence
+            }
+            updateCourtIssuedDocketEntryTitleSequence={
+              updateCourtIssuedDocketEntryTitleSequence
             }
             validateCourtIssuedDocketEntrySequence={
               validateCourtIssuedDocketEntrySequence

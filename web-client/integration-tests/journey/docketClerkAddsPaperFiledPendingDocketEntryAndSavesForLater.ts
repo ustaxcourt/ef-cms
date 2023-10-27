@@ -1,4 +1,5 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -8,7 +9,7 @@ import {
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   cerebralTest,
-  caseDocketNumber,
+  caseDocketNumber?,
 ) => {
   return it('docket clerk adds paper filed docket entry and saves for later', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -25,18 +26,6 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     });
 
     const paperFiledAnswer = [
-      {
-        key: 'dateReceivedMonth',
-        value: 1,
-      },
-      {
-        key: 'dateReceivedDay',
-        value: 1,
-      },
-      {
-        key: 'dateReceivedYear',
-        value: 2018,
-      },
       {
         key: 'primaryDocumentFile',
         value: fakeFile,
@@ -61,6 +50,15 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
         item,
       );
     }
+
+    await cerebralTest.runSequence(
+      'formatAndUpdateDateFromDatePickerSequence',
+      {
+        key: 'receivedAt',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2018',
+      },
+    );
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(

@@ -75,7 +75,10 @@ export const StateDrivenFileInput = connect(
 
         {fileOnForm && (
           <div>
-            <span className="success-message icon-upload margin-right-1">
+            <span
+              className="success-message icon-upload margin-right-1"
+              data-cy="upload-file-success"
+            >
               <FontAwesomeIcon icon="check-circle" size="1x" />
             </span>
             <span className="mr-1">

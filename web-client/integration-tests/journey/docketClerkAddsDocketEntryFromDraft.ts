@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
@@ -63,24 +64,11 @@ export const docketClerkAddsDocketEntryFromDraft = (
     );
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2021',
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2021',
       },
     );
 

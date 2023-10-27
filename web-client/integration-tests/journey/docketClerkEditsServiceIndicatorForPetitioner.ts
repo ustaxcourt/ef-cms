@@ -3,7 +3,7 @@ import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkEditsServiceIndicatorForPetitioner = (
   cerebralTest,
-  expectedServiceIndicator = null,
+  expectedServiceIndicator,
 ) => {
   return it('docket clerk edits service indicator for a petitioner', async () => {
     let contactPrimary = contactPrimaryFromState(cerebralTest);

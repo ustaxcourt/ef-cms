@@ -1,5 +1,5 @@
 import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
-import { createISODateString } from '../../../shared/src/business/utilities/DateHandler';
+import { formatDateString } from '../../../shared/src/business/utilities/DateHandler';
 
 export const checkWorkitemOnCalendaredCase = (
   cerebralTest,
@@ -13,7 +13,7 @@ export const checkWorkitemOnCalendaredCase = (
         workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
     );
 
-    const expectedTrialDate = createISODateString(
+    const expectedTrialDate = formatDateString(
       `${trialDate.year}-${trialDate.month}-${trialDate.day}`,
     );
 

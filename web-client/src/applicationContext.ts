@@ -65,6 +65,7 @@ import {
   deconstructDate,
   formatDateString,
   formatNow,
+  getDateFormat,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isTodayWithinGivenInterval,
@@ -190,6 +191,7 @@ import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/ut
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
+import { getHttpClient } from '@web-client/providers/httpClient';
 import { getInboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForSectionProxy';
 import { getInboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getInboxMessagesForUserProxy';
 import { getInternalUsersInteractor } from '../../shared/src/proxies/users/getInternalUsersProxy';
@@ -351,7 +353,6 @@ import { validateUserContactInteractor } from '../../shared/src/business/useCase
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
-import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
 const reduce = ImageBlobReduce({
@@ -662,7 +663,7 @@ const applicationContext = {
     return ErrorFactory.getError(e);
   },
   getFileReaderInstance: () => new FileReader(),
-  getHttpClient: () => axios,
+  getHttpClient,
   getLogger: () => ({
     error: value => {
       // eslint-disable-next-line no-console
@@ -762,6 +763,7 @@ const applicationContext = {
       getContactPrimary,
       getContactSecondary,
       getCropBox,
+      getDateFormat,
       getDescriptionDisplay,
       getDocQcSectionForUser,
       getDocumentTitleWithAdditionalInfo,

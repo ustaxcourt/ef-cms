@@ -3,6 +3,7 @@ import {
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { docketClerkGetsDocketEntryByEventCode } from './journey/docketClerkGetsDocketEntryByEventCode';
 import { docketClerkServesASavedCourtIssuedDocumentFromDocumentView } from './journey/docketClerkServesASavedCourtIssuedDocumentFromDocumentView';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
@@ -16,10 +17,6 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
   const cerebralTest = setupTest();
 
   cerebralTest.draftOrders = [];
-
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -61,21 +58,14 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const docketEntryFormData = {
-        day: '2',
-        month: '2',
-        year: '2050',
-      };
-
-      for (const [key, value] of Object.entries(docketEntryFormData)) {
-        await cerebralTest.runSequence(
-          'updateCourtIssuedDocketEntryFormValueSequence',
-          {
-            key,
-            value,
-          },
-        );
-      }
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'date',
+          toFormat: FORMATS.ISO,
+          value: '2/2/2050',
+        },
+      );
 
       await cerebralTest.runSequence(
         'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
@@ -136,21 +126,14 @@ describe('Autogenerate Deadline when order for filing fee is served', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const docketEntryFormData = {
-        day: '2',
-        month: '2',
-        year: '2050',
-      };
-
-      for (const [key, value] of Object.entries(docketEntryFormData)) {
-        await cerebralTest.runSequence(
-          'updateCourtIssuedDocketEntryFormValueSequence',
-          {
-            key,
-            value,
-          },
-        );
-      }
+      await cerebralTest.runSequence(
+        'formatAndUpdateDateFromDatePickerSequence',
+        {
+          key: 'date',
+          toFormat: FORMATS.ISO,
+          value: '2/2/2050',
+        },
+      );
 
       await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 

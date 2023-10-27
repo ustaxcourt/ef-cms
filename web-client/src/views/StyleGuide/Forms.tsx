@@ -1,4 +1,4 @@
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { SelectSearch } from '../../ustc-ui/Select/SelectSearch';
 import React from 'react';
 
@@ -322,19 +322,12 @@ export const Forms = () => (
       </div>
 
       <div className="blue-container margin-bottom-4">
-        <DateInput
+        <DateSelector
+          defaultValue={'06/02/3001'}
+          errorText="Please enter a valid date of birth"
           id="date_of_birth"
           label="Date of birth"
-          names={{
-            day: 'date_of_birth_1',
-            month: 'date_of_birth_2',
-            year: 'date_of_birth_3',
-          }}
-          values={{
-            day: 'date_of_birth_1',
-            month: 'date_of_birth_2',
-            year: 'date_of_birth_3',
-          }}
+          onChange={() => {}}
         />
 
         <fieldset className="usa-fieldset margin-bottom-0">

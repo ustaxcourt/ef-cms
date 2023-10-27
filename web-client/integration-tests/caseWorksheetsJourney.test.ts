@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   STATUS_OF_MATTER_OPTIONS,
 } from '../../shared/src/business/entities/EntityConstants';
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from '@web-client/presenter/computeds/CaseWorksheets/caseWorksheetsHelper';
 import { docketClerkUpdatesCaseStatusTo } from './journey/docketClerkUpdatesCaseStatusTo';
 import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
@@ -188,6 +189,7 @@ describe('Case Worksheets Journey', () => {
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'finalBriefDueDate',
+        toFormat: FORMATS.YYYYMMDD,
         value: briefDueDate,
       },
     );
@@ -226,6 +228,7 @@ describe('Case Worksheets Journey', () => {
       'formatAndUpdateDateFromDatePickerSequence',
       {
         key: 'finalBriefDueDate',
+        toFormat: FORMATS.YYYYMMDD,
         value: 'abcdefghi', // not a valid date
       },
     );
