@@ -53,7 +53,8 @@ In a day or two`,
     await cerebralTest.runSequence('validateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: 'Enter a description of this deadline',
+      description:
+        'The description is too long. Please enter a valid description.',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {

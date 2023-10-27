@@ -1,10 +1,7 @@
-import { CaseDeadline } from '../../../shared/src/business/entities/CaseDeadline';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
-import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../src/withAppContext';
-const customMessages = extractCustomMessages(CaseDeadline);
 
 export const petitionsClerkEditsCaseDeadline = (
   cerebralTest,
@@ -59,7 +56,8 @@ In a day or two`,
     await cerebralTest.runSequence('updateCaseDeadlineSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      description: customMessages[0],
+      description:
+        'The description is too long. Please enter a valid description.',
     });
 
     await cerebralTest.runSequence('validateCaseDeadlineSequence');

@@ -41,7 +41,7 @@ describe('Blocking a Case', () => {
   docketClerkViewsTrialSessionList(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  //manual block and unblock - check eligible list
+  // //manual block and unblock - check eligible list
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
   petitionsClerkBlocksCase(cerebralTest, trialLocation, {
     docketNumberSuffix: 'S',
@@ -50,7 +50,7 @@ describe('Blocking a Case', () => {
   petitionsClerkUnblocksCase(cerebralTest, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
-  // automatic block with a due date
+  // // automatic block with a due date
   petitionsClerkCreatesACaseDeadline(cerebralTest);
 
   it('petitions clerk views blocked report with an automatically blocked case for due date', async () => {
