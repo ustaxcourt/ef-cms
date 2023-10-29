@@ -3,12 +3,9 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearOtherIterationAction } from '../actions/clearOtherIterationAction';
-import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getEditDocketEntryMetaAlertSuccessAction } from '../actions/EditDocketRecordEntry/getEditDocketEntryMetaAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { primePropsFromEditDocketEntryMetaModalAction } from '../actions/EditDocketRecordEntry/primePropsFromEditDocketEntryMetaModalAction';
@@ -16,7 +13,6 @@ import { refreshExternalDocumentTitleFromEventCodeAction } from '../actions/File
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
-import { setFormDateAction } from '../actions/setFormDateAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -30,10 +26,6 @@ import { validateDocumentAction } from '../actions/EditDocketRecordEntry/validat
 export const submitEditDocketEntryMetaSequence = [
   startShowValidationAction,
   setFilersFromFilersMapAction,
-  computeFilingFormDateAction,
-  computeCertificateOfServiceFormDateAction,
-  getComputedFormDateFactoryAction(null),
-  setFormDateAction,
   primePropsFromEditDocketEntryMetaModalAction,
   chooseMetaTypePathAction,
   {

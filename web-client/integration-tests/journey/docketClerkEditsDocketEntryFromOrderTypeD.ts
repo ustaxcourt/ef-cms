@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
@@ -59,26 +60,15 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '1',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2002',
       },
     );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2002',
-      },
-    );
+
+    await cerebralTest.runSequence('updateCourtIssuedDocketEntryTitleSequence');
 
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
@@ -92,7 +82,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01T05:00:00.000Z',
+      date: '2002-01-01T00:00:00.000-05:00',
       documentTitle: 'Order for Filing Fee on 01-01-2002',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
@@ -104,14 +94,11 @@ export const docketClerkEditsDocketEntryFromOrderTypeD = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2002-01-01T05:00:00.000Z',
-      day: '1',
+      date: '2002-01-01T00:00:00.000-05:00',
       documentTitle: 'Order for Filing Fee on 01-01-2002',
       documentType: 'Order for Filing Fee',
       eventCode: 'OF',
       generatedDocumentTitle: 'Order for Filing Fee on 01-01-2002',
-      month: '1',
-      year: '2002',
     });
   });
 };

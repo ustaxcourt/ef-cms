@@ -305,7 +305,7 @@ module.exports = [
       'click #submit-document',
       'wait for element #primary-document to be visible',
       'click #primaryDocument-certificateOfService-label',
-      'wait for element .primaryDocument-service-date to be visible',
+      'wait for element #primaryDocument-service-date-picker to be visible',
       'wait for element #secondary-document to be visible',
     ],
     notes: ['File a document, step 2'],

@@ -42,31 +42,6 @@ describe('createPractitionerUserAction', () => {
     });
   });
 
-  it('should set admissions date on the practitioner user from props', async () => {
-    const mockComputedAdmissionsDate = '2019-03-01T21:40:46.415Z';
-
-    await runAction(createPractitionerUserAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        computedDate: mockComputedAdmissionsDate,
-      },
-      state: {
-        form: {
-          user: {},
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().createPractitionerUserInteractor.mock
-        .calls[0][1].user,
-    ).toMatchObject({
-      admissionsDate: mockComputedAdmissionsDate,
-    });
-  });
-
   it('should return path.success with a success message and practitioner information when the practitioner user was successfully created', async () => {
     const mockPractitioner = {
       barNumber: 'AB1234',

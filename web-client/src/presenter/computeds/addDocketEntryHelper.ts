@@ -1,3 +1,5 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
+import { Get } from 'cerebral';
 import { find, orderBy } from 'lodash';
 import { getOptionsForCategory } from './selectDocumentTypeHelper';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -25,8 +27,6 @@ export const getSupportingDocumentTypeList = categoryMap => {
   });
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
 export const addDocketEntryHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,

@@ -463,6 +463,7 @@ import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequ
 import { updateCaseWorksheetSequence } from './sequences/updateCaseWorksheetSequence';
 import { updateChambersInCreateMessageModalSequence } from './sequences/updateChambersInCreateMessageModalSequence';
 import { updateCourtIssuedDocketEntryFormValueSequence } from './sequences/updateCourtIssuedDocketEntryFormValueSequence';
+import { updateCourtIssuedDocketEntryTitleSequence } from '@web-client/presenter/sequences/updateCourtIssuedDocketEntryTitleSequence';
 import { updateCreateOrderModalFormValueSequence } from './sequences/updateCreateOrderModalFormValueSequence';
 import { updateDateRangeForDeadlinesSequence } from './sequences/updateDateRangeForDeadlinesSequence';
 import { updateDocketEntryFormValueSequence } from './sequences/updateDocketEntryFormValueSequence';
@@ -1003,6 +1004,7 @@ export const presenterSequences = {
   updateCaseWorksheetSequence,
   updateChambersInCreateMessageModalSequence,
   updateCourtIssuedDocketEntryFormValueSequence,
+  updateCourtIssuedDocketEntryTitleSequence,
   updateCreateOrderModalFormValueSequence,
   updateDateRangeForDeadlinesSequence,
   updateDocketEntryFormValueSequence,

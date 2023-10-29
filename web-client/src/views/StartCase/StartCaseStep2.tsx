@@ -20,8 +20,7 @@ export const StartCaseStep2 = connect(
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     navigateBackSequence: sequences.navigateBackSequence,
     startCaseHelper: state.startCaseHelper,
-    updateStartCaseFormValueSequence:
-      sequences.updateStartCaseFormValueSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validateStartCaseWizardSequence: sequences.validateStartCaseWizardSequence,
     validationErrors: state.validationErrors,
   },
@@ -33,7 +32,7 @@ export const StartCaseStep2 = connect(
     formCancelToggleCancelSequence,
     navigateBackSequence,
     startCaseHelper,
-    updateStartCaseFormValueSequence,
+    updateFormValueSequence,
     validateStartCaseWizardSequence,
     validationErrors,
   }) {
@@ -118,7 +117,7 @@ export const StartCaseStep2 = connect(
                         type="radio"
                         value={option === 'Yes'}
                         onChange={e => {
-                          updateStartCaseFormValueSequence({
+                          updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value === 'true',
                           });
