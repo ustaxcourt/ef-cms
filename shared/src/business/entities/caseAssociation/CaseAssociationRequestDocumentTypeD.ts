@@ -54,6 +54,8 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
   }
 
   static VALIDATION_RULES = CaseAssociationRequestDocumentBase.VALIDATION_RULES;
+  static VALIDATION_RULES_NEW =
+    CaseAssociationRequestDocumentBase.VALIDATION_RULES_NEW;
 
   static VALIDATION_ERROR_MESSAGES =
     CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES;
@@ -84,6 +86,16 @@ export class CaseAssociationRequestDocumentTypeD extends CaseAssociationRequestD
       rules.primaryDocumentFile = joi.object().optional();
     }
     return rules;
+  }
+
+  getValidationRules_NEW() {
+    if (this.generationType === GENERATION_TYPES.AUTO) {
+      return {
+        ...CaseAssociationRequestDocumentTypeD.VALIDATION_RULES_NEW,
+        primaryDocumentFile: joi.object().optional(),
+      };
+    }
+    return CaseAssociationRequestDocumentTypeD.VALIDATION_RULES_NEW;
   }
 
   getErrorToMessageMap() {

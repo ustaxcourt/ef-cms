@@ -9,10 +9,11 @@ import {
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { get } from 'lodash';
+import { withLocking } from '@shared/business/useCaseHelper/acquireLock';
 
-export const updateTrialSessionInteractor = async (
+export const updateTrialSession = async (
   applicationContext: IApplicationContext,
   { trialSession }: { trialSession: RawTrialSession },
 ): Promise<void> => {
@@ -329,3 +330,49 @@ const getPaperServicePdfName = ({
     return 'Notice of Change';
   }
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: RawTrialSession },
+) => {
+  const { caseOrder } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId: trialSession.trialSessionId!,
+    });
+
+  const entitiesToLock = [`trial-session|${trialSession.trialSessionId}`];
+
+  caseOrder?.forEach(({ docketNumber }) =>
+    entitiesToLock.push(`case|${docketNumber}`),
+  );
+
+  return {
+    identifiers: entitiesToLock,
+    ttl: 900,
+  };
+};
+
+export const handleLockError = async (
+  applicationContext: IApplicationContext,
+  originalRequest: any,
+) => {
+  const user = applicationContext.getCurrentUser();
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'retry_async_request',
+      originalRequest,
+      requestToRetry: 'update_trial_session',
+    },
+    userId: user.userId,
+  });
+};
+
+export const updateTrialSessionInteractor = withLocking(
+  updateTrialSession,
+  determineEntitiesToLock,
+  handleLockError,
+);
