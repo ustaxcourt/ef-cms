@@ -18,7 +18,7 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'set_trial_calendar_paper_service_complete':
-        await app.getSequence('paperServiceCompleteSequence')({
+        await app.getSequence('updateTrialSessionCompleteSequence')({
           ...message,
         });
         break;
