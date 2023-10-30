@@ -37,15 +37,12 @@ describe('saveFileAndGenerateUrl', () => {
     await saveFileAndGenerateUrl({
       applicationContext,
       file: Buffer.from('abc', 'utf-8'),
-      fileNamePrefix: 'paper-service-pdf',
+      fileNamePrefix: 'paper-service-pdf/',
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalledWith({
-      applicationContext: expect.anything(),
-      document: expect.anything(),
-      key: `paper-service-pdf/${mockUUID}`,
-    });
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].key,
+    ).toEqual(`paper-service-pdf/${mockUUID}`);
   });
 });
