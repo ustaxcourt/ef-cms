@@ -1,4 +1,6 @@
+import { InvalidEntityError } from '@web-api/errors/errors';
 import { TestEntity } from './TestEntity';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 
 describe('Joi Entity', () => {
   describe('getValidationErrors', () => {
@@ -87,6 +89,40 @@ describe('Joi Entity', () => {
           'propUsingReference must be greater than referencedProp.',
         );
       });
+    });
+  });
+
+  describe('isValid', () => {
+    it('should true when the entity does NOT have any validation errors', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      const isValid = testEntity.isValid();
+
+      expect(isValid).toEqual(true);
+    });
+  });
+
+  describe('validate', () => {
+    it('should throw an error and log the entity when logErrors is true and the entity is NOT valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: '', // Invalid, must be a string with at least 2 characters
+      });
+
+      try {
+        testEntity.validate({
+          applicationContext,
+          logErrors: true,
+        });
+      } catch (e) {
+        expect(e instanceof InvalidEntityError).toEqual(true);
+        expect(applicationContext?.logger.error).toHaveBeenCalled();
+      }
     });
   });
 });
