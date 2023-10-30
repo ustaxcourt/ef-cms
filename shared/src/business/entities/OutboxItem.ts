@@ -1,10 +1,9 @@
 import { CASE_STATUS_TYPES } from './EntityConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { OUTBOX_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { pick } from 'lodash';
 
-export class OutboxItem extends JoiValidationEntity {
-  public entityName: string;
+export class OutboxItem extends JoiValidationEntity_New {
   public caseStatus: string;
   public caseTitle: string;
   public completedAt: string;
@@ -21,7 +20,6 @@ export class OutboxItem extends JoiValidationEntity {
   public trialLocation?: string;
   public workItemId: string;
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   constructor(rawOutboxItem: RawOutboxItem, { applicationContext }) {
     super('OutboxItem');
     if (!applicationContext) {
@@ -65,10 +63,6 @@ export class OutboxItem extends JoiValidationEntity {
 
   getValidationRules() {
     return OUTBOX_ITEM_VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 }
 
