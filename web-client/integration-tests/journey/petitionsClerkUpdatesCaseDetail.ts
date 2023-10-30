@@ -2,7 +2,7 @@ import { Case } from '../../../shared/src/business/entities/cases/Case';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { extractCustomMessages } from '@shared/business/entities/utilities/extractCustomMessages';
-const customMessages = extractCustomMessages(Case);
+const customMessages = extractCustomMessages(Case.VALIDATION_RULES);
 
 const { CASE_TYPES_MAP, PAYMENT_STATUS } = applicationContext.getConstants();
 
@@ -32,7 +32,7 @@ export const petitionsClerkUpdatesCaseDetail = cerebralTest => {
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      irsNoticeDate: customMessages[0],
+      irsNoticeDate: customMessages.irsNoticeDate[0],
     });
 
     // irsNoticeDate - valid

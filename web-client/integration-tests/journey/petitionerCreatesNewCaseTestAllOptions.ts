@@ -9,7 +9,7 @@ import { extractCustomMessages } from '@shared/business/entities/utilities/extra
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
-const customMessages = extractCustomMessages(Case);
+const customMessages = extractCustomMessages(Case.VALIDATION_RULES);
 
 export const petitionerCreatesNewCaseTestAllOptions = (
   cerebralTest,
