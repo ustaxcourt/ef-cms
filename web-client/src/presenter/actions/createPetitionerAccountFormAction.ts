@@ -51,8 +51,8 @@ const errorHandler = (e, cognitoLoginUrl, cognitoRequestPasswordResetUrl) => {
   }
   return {
     alertError: {
-      //TODO: Ask UX about error message, possibly extract error message, possibly write error message creation function
-      message: `Could not create user account: ${e.message}, please contact DAWSON user support`,
+      message:
+        'Could not create user account, please contact DAWSON user support',
       title: 'Error creating account',
     },
   };
@@ -69,9 +69,8 @@ const responseHandler = (
   }
   return {
     alertError: {
-      //TODO: Ask UX about error message
       message:
-        'Could not create user account, please contact DAWSON user support',
+        'Could not parse authentication results, please contact DAWSON user support',
       title: 'Error creating account',
     },
   };
