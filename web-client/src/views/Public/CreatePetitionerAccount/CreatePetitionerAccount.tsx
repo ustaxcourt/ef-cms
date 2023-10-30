@@ -2,8 +2,7 @@ import { CreatePetitionerAccountForm } from '@web-client/views/Public/CreatePeti
 import { CreatePetitionerAccountInfo } from '@web-client/views/Public/CreatePetitionerAccount/CreatePetitionerAccountInfo';
 import { MessageAlert } from '@web-client/views/Public/MessageAlert/MessageAlert';
 import { connect } from '@cerebral/react';
-//TODO: use `'@web-client/presenter/app-public.cerebral';`
-import { state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 export const CreatePetitionerAccount = connect(
