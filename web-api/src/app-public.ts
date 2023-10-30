@@ -137,8 +137,7 @@ app.get(
 
 app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 
-// TODO: consider prefixing below with /public/
-app.post('/account/create', lambdaWrapper(createUserCognitoLambda));
+app.post('/public-api/account/create', lambdaWrapper(createUserCognitoLambda));
 
 app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
 
