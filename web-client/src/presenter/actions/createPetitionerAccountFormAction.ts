@@ -1,4 +1,4 @@
-import { CreateAccountForm } from '@shared/business/entities/CreateAccountForm';
+import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export const createPetitionerAccountFormAction = async ({
@@ -6,11 +6,11 @@ export const createPetitionerAccountFormAction = async ({
   get,
   path,
 }: ActionProps) => {
-  if (!new CreateAccountForm(get(state.form)).isValid()) {
+  if (!new NewPetitionerUser(get(state.form)).isValid()) {
     throw new Error('Received invalid petitioner information');
   }
 
-  const petitionerAccountForm = new CreateAccountForm(
+  const petitionerAccountForm = new NewPetitionerUser(
     get(state.form),
   ).toRawObject();
 

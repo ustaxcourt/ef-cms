@@ -1,6 +1,6 @@
-import { CreateAccountForm } from '@shared/business/entities/CreateAccountForm';
+import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 
-describe('CreateAccountForm', () => {
+describe('NewPetitionerUser', () => {
   const validEntity = {
     confirmPassword: '12$Azasodfkj3',
     email: 'test@example.com',
@@ -8,14 +8,14 @@ describe('CreateAccountForm', () => {
     password: '12$Azasodfkj3',
   };
 
-  it('should return a valid CreateAccountForm entity', () => {
-    const formEntity = new CreateAccountForm(validEntity);
+  it('should return a valid NewPetitionerUser entity', () => {
+    const formEntity = new NewPetitionerUser(validEntity);
     expect(formEntity.isValid()).toBeTruthy();
     expect(formEntity.getValidationErrors()).toBeNull();
   });
 
   it('should return error message for email', () => {
-    const formEntity = new CreateAccountForm({
+    const formEntity = new NewPetitionerUser({
       ...validEntity,
       email: 'hello',
     });
@@ -35,7 +35,7 @@ describe('CreateAccountForm', () => {
 
   describe('Name', () => {
     it('should return error message for name when not provided', () => {
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         name: '',
       });
@@ -54,7 +54,7 @@ describe('CreateAccountForm', () => {
     });
 
     it('should return error message for name when exceeds length', () => {
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         name: '#'.repeat(101),
       });
@@ -74,7 +74,7 @@ describe('CreateAccountForm', () => {
   });
 
   it('should return error message for confirmPassword', () => {
-    const formEntity = new CreateAccountForm({
+    const formEntity = new NewPetitionerUser({
       ...validEntity,
       confirmPassword: 'not matching',
     });
@@ -94,7 +94,7 @@ describe('CreateAccountForm', () => {
 
   describe('password', () => {
     it('should set hasNoLeadingOrTrailingSpace to false when provided a password with leading space', () => {
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: ' 12$Azasodfkj3',
         password: ' 12$Azasodfkj3',
@@ -113,7 +113,7 @@ describe('CreateAccountForm', () => {
     });
 
     it('should set hasNoLeadingOrTrailingSpace to false when provided a password with trailing space', () => {
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: '12$Azasodfkj3 ',
         password: '12$Azasodfkj3 ',
@@ -133,7 +133,7 @@ describe('CreateAccountForm', () => {
 
     it('should set hasOneLowercase to false when provided a password does not contain a lower case character', () => {
       const PASSWORD = '1AWD%$DNAWK';
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,
@@ -153,7 +153,7 @@ describe('CreateAccountForm', () => {
 
     it('should set hasOneNumber to false when provided a password does not contain a number', () => {
       const PASSWORD = 'aAWD%$DNAWK';
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,
@@ -173,7 +173,7 @@ describe('CreateAccountForm', () => {
 
     it('should set hasOneUppercase to false when provided a password does not contain an upper case character', () => {
       const PASSWORD = 'aaws%$dn1awk';
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,
@@ -193,7 +193,7 @@ describe('CreateAccountForm', () => {
 
     it('should set hasSpecialCharacterOrSpace to false when provided a password does not contain a special character', () => {
       const PASSWORD = 'aaWsdn1awk';
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,
@@ -213,7 +213,7 @@ describe('CreateAccountForm', () => {
 
     it('should set isProperLength to false when provided a password is less than 8 characters long', () => {
       const PASSWORD = '1';
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,
@@ -228,7 +228,7 @@ describe('CreateAccountForm', () => {
 
     it('should set isProperLength to false when provided a password is greater than 99 characters long', () => {
       const PASSWORD = '#'.repeat(101);
-      const formEntity = new CreateAccountForm({
+      const formEntity = new NewPetitionerUser({
         ...validEntity,
         confirmPassword: PASSWORD,
         password: PASSWORD,

@@ -2,7 +2,7 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import joi from 'joi';
 
-export type CreateAccountFormPasswordValidations = {
+export type NewPetitionerUserPasswordValidations = {
   hasNoLeadingOrTrailingSpace: boolean;
   hasOneLowercase: boolean;
   hasOneNumber: boolean;
@@ -11,7 +11,7 @@ export type CreateAccountFormPasswordValidations = {
   isProperLength: boolean;
 };
 
-function getDefaultErrors(): CreateAccountFormPasswordValidations {
+function getDefaultErrors(): NewPetitionerUserPasswordValidations {
   return {
     hasNoLeadingOrTrailingSpace: true,
     hasOneLowercase: true,
@@ -22,14 +22,14 @@ function getDefaultErrors(): CreateAccountFormPasswordValidations {
   };
 }
 
-export class CreateAccountForm extends JoiValidationEntity {
+export class NewPetitionerUser extends JoiValidationEntity {
   public email: string;
   public name: string;
   public password: string;
   public confirmPassword: string;
 
   constructor(rawProps) {
-    super('CreateAccountForm');
+    super('NewPetitionerUser');
 
     this.email = rawProps.email ? rawProps.email?.toLowerCase() : '';
     this.name = rawProps.name;
@@ -43,7 +43,7 @@ export class CreateAccountForm extends JoiValidationEntity {
       .required()
       .description('Email of user'),
     entityName:
-      JoiValidationConstants.STRING.valid('CreateAccountForm').required(),
+      JoiValidationConstants.STRING.valid('NewPetitionerUser').required(),
     name: JoiValidationConstants.STRING.max(100)
       .required()
       .description('Name of the user.'),
@@ -90,15 +90,15 @@ export class CreateAccountForm extends JoiValidationEntity {
   });
 
   getValidationRules() {
-    return CreateAccountForm.VALIDATION_RULES;
+    return NewPetitionerUser.VALIDATION_RULES;
   }
 
   // @ts-ignore
   getFormattedValidationErrors(): {
-    [key: string]: string | CreateAccountFormPasswordValidations;
+    [key: string]: string | NewPetitionerUserPasswordValidations;
   } {
     const results: {
-      [key: string]: string | CreateAccountFormPasswordValidations;
+      [key: string]: string | NewPetitionerUserPasswordValidations;
     } | null = super.getFormattedValidationErrors();
 
     if (!results) return { password: getDefaultErrors() };
@@ -138,7 +138,7 @@ export class CreateAccountForm extends JoiValidationEntity {
   }
 
   isFormValid(errors: {
-    [key: string]: string | CreateAccountFormPasswordValidations;
+    [key: string]: string | NewPetitionerUserPasswordValidations;
   }): boolean {
     const keys = Object.keys(errors);
     if (keys.length > 1) return false;
@@ -148,4 +148,4 @@ export class CreateAccountForm extends JoiValidationEntity {
   }
 }
 
-export type RawCreateAccountForm = ExcludeMethods<CreateAccountForm>;
+export type RawNewPetitionerUser = ExcludeMethods<NewPetitionerUser>;

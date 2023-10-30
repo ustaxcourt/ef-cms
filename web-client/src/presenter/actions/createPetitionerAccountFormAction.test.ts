@@ -53,7 +53,7 @@ describe('createPetitionerAccountFormAction', () => {
     ).toEqual({
       user: {
         ...FORM,
-        entityName: 'CreateAccountForm',
+        entityName: 'NewPetitionerUser',
       },
     });
 
@@ -122,7 +122,7 @@ describe('createPetitionerAccountFormAction', () => {
     ).toEqual({
       user: {
         ...FORM,
-        entityName: 'CreateAccountForm',
+        entityName: 'NewPetitionerUser',
       },
     });
 
@@ -175,7 +175,7 @@ describe('createPetitionerAccountFormAction', () => {
     ).toEqual({
       user: {
         ...FORM,
-        entityName: 'CreateAccountForm',
+        entityName: 'NewPetitionerUser',
       },
     });
 
@@ -223,7 +223,7 @@ describe('createPetitionerAccountFormAction', () => {
     ).toEqual({
       user: {
         ...FORM,
-        entityName: 'CreateAccountForm',
+        entityName: 'NewPetitionerUser',
       },
     });
 
