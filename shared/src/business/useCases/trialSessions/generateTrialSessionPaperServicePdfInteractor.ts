@@ -99,6 +99,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     applicationContext,
     message: {
       action: 'set_trial_calendar_paper_service_complete',
+      fileId,
       hasPaper: true,
       pdfUrl,
     },
