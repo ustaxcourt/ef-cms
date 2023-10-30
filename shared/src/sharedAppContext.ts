@@ -28,10 +28,6 @@ export const getUniqueId = (): string => {
   return uuidv4();
 };
 
-export const getCognitoLocalEnabled = () => {
-  return !!process.env.USE_COGNITO_LOCAL;
-};
-
 export const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
 
 export const ERROR_MAP_429 = {
