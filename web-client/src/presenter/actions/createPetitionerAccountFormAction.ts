@@ -38,7 +38,6 @@ export const createPetitionerAccountFormAction = async ({
 };
 
 const errorHandler = (e, cognitoLoginUrl, cognitoRequestPasswordResetUrl) => {
-  console.log('e!!!!', e);
   const originalErrorMessage = e?.originalError?.response?.data;
   if (originalErrorMessage === 'User already exists') {
     return {
