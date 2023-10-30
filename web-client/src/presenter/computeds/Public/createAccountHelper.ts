@@ -1,25 +1,25 @@
-import {
-  CreateAccountForm,
-  CreateAccountFormPasswordValidations,
-} from '@shared/business/entities/CreateAccountForm';
 import { Get } from 'cerebral';
+import {
+  NewPetitionerUser,
+  NewPetitionerUserPasswordValidations,
+} from '@shared/business/entities/NewPetitionerUser';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
-export type CreateAccuntHelperResults = {
+export type CreateAccountHelperResults = {
   confirmPassword: boolean;
   email?: string;
   formIsValid: boolean;
   name?: string;
-  passwordErrors?: CreateAccountFormPasswordValidations;
+  passwordErrors?: NewPetitionerUserPasswordValidations;
 };
 
-export const createAccountHelper = (get: Get): CreateAccuntHelperResults => {
+export const createAccountHelper = (get: Get): CreateAccountHelperResults => {
   const form = get(state.form);
-  const formEntity = new CreateAccountForm(form);
+  const formEntity = new NewPetitionerUser(form);
   const errors = formEntity.getFormattedValidationErrors();
 
-  const passwordErrors: CreateAccountFormPasswordValidations =
-    errors?.password as CreateAccountFormPasswordValidations;
+  const passwordErrors: NewPetitionerUserPasswordValidations =
+    errors?.password as NewPetitionerUserPasswordValidations;
 
   return {
     confirmPassword: !errors?.confirmPassword,
