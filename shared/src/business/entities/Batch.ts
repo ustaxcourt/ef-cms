@@ -1,9 +1,9 @@
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import joi from 'joi';
 
-export class Batch extends JoiValidationEntity {
+export class Batch extends JoiValidationEntity_New {
   public batchId: string;
   public batchIndex: string;
   public createdAt: string;
@@ -39,21 +39,21 @@ export class Batch extends JoiValidationEntity {
     return this;
   }
 
-  static VALIDATION_ERROR_MESSAGES = {
-    batchIndex: 'Invalid batch index',
-    pages: 'At least one page is required',
-  };
-
   getValidationRules() {
     return joi.object().keys({
       batchId: JoiValidationConstants.UUID.required(),
-      batchIndex: joi.number().integer().min(0).required(),
+      batchIndex: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({ '*': 'Invalid batch index' }),
       createdAt: JoiValidationConstants.ISO_DATE.required(),
-      pages: joi.array().min(1).required(),
+      pages: joi
+        .array()
+        .min(1)
+        .required()
+        .messages({ '*': 'At least one page is required' }),
     });
-  }
-
-  getErrorToMessageMap() {
-    return Batch.VALIDATION_ERROR_MESSAGES;
   }
 }
