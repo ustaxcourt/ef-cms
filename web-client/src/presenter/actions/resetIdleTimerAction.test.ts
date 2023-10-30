@@ -2,27 +2,21 @@ import { resetIdleTimerAction } from './resetIdleTimerAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 describe('resetIdleTimerAction', () => {
   it('resets the idle timer', async () => {
-    const mock = jest.fn();
-    const idleTimerRefMock = new Proxy(
-      { reset: () => null },
-      {
-        get() {
-          return mock;
-        },
-      },
-    );
-    await runAction(resetIdleTimerAction, {
+    const output = await runAction(resetIdleTimerAction, {
       state: {
-        idleTimerRef: idleTimerRefMock,
+        idleLogoutState: {
+          logoutAt: 300,
+          state: 'MONITORING',
+        },
+        lastIdleAction: 23423,
       },
     });
-    expect(mock).toHaveBeenCalled();
-  });
-  it('exits quietly if no idle timer is present', async () => {
-    await expect(
-      runAction(resetIdleTimerAction, {
-        state: {},
-      }),
-    ).resolves.toBeDefined();
+    expect(output.state).toMatchObject({
+      idleLogoutState: {
+        logoutAt: undefined,
+        state: 'INITIAL',
+      },
+      lastIdleAction: expect.any(Number),
+    });
   });
 });
