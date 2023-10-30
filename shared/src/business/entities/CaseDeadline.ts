@@ -1,6 +1,6 @@
 import { Case } from './cases/Case';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/JoiValidationEntity_New';
+import { JoiValidationEntity_New } from './joiValidationEntity/JoiValidationEntity_New';
 import { createISODateString } from '../utilities/DateHandler';
 import joi from 'joi';
 
