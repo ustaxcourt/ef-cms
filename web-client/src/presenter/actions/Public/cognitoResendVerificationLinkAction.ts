@@ -20,7 +20,8 @@ export const cognitoResendVerificationLinkAction = async ({
       return path.error({
         alertError: {
           alertType: 'error',
-          message: 'Please check your spam folder.',
+          message:
+            'Unable parse out the code delivery details, please contact DAWSON user support',
           title: 'Unable to resend confirmation link',
         },
       });
@@ -28,7 +29,6 @@ export const cognitoResendVerificationLinkAction = async ({
   } catch (e) {
     return path.error({
       alertError: {
-        //TODO: Ask UX about error message
         alertType: 'error',
         message:
           'Could not resend verification link, please contact DAWSON user support',

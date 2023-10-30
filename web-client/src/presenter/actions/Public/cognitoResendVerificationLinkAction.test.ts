@@ -63,7 +63,8 @@ describe('cognitoResendVerificationLinkAction', () => {
     expect(pathErrorStub).toHaveBeenCalledWith({
       alertError: {
         alertType: 'error',
-        message: 'Please check your spam folder.',
+        message:
+          'Unable parse out the code delivery details, please contact DAWSON user support',
         title: 'Unable to resend confirmation link',
       },
     });
