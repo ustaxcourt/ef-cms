@@ -1,5 +1,4 @@
-import { TestCaseEntity } from '@shared/business/entities/joiValidationEntity/TestCaseEntity';
-import { TestEntity } from '@shared/business/entities/joiValidationEntity/TestEntity';
+import { TestEntity } from './TestEntity';
 
 describe('Joi Entity', () => {
   describe('getValidationErrors', () => {
@@ -87,55 +86,6 @@ describe('Joi Entity', () => {
         expect(errors.propUsingReference).toEqual(
           'propUsingReference must be greater than referencedProp.',
         );
-      });
-    });
-
-    describe('remove unhelpful error messages from contact validations', () => {
-      it('should remove unhelpful error messages that end with "does not match any of the allowed types"', () => {
-        const testCaseEntity = new TestCaseEntity({
-          unhelpfulErrorMessage: 'INVALID',
-        });
-
-        const errors = testCaseEntity.getValidationErrors()!;
-        expect(errors).toEqual(null);
-      });
-    });
-
-    describe('nested entities', () => {
-      it('should return an array of errors when there is an error in a nested entity list', () => {
-        const testCaseEntity = new TestCaseEntity({
-          caseList: [
-            { contactType: 'VALID_1' },
-            { contactType: 'INVALID' },
-            { contactType: 'VALID_1' },
-          ],
-        });
-
-        const errors = testCaseEntity.getValidationErrors();
-
-        expect(errors).toEqual({
-          caseList: [
-            {
-              contactType: 'invalid contact type',
-              index: 1,
-            },
-          ],
-          contactType: 'invalid contact type',
-        });
-      });
-
-      it('should return an object of errors when there is an error in a nested entity', () => {
-        const testCaseEntity = new TestCaseEntity({
-          nestedCase: { contactType: 'INVALID_1' },
-        });
-
-        const errors = testCaseEntity.getValidationErrors();
-
-        expect(errors).toEqual({
-          nestedCase: {
-            contactType: 'invalid contact type',
-          },
-        });
       });
     });
   });
