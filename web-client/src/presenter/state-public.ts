@@ -42,7 +42,7 @@ export const baseState = {
     showUsaBannerDetails: false,
   },
   currentPage: 'Interstitial',
-  form: {} as Record<string, any>, // TODO: make specific form
+  form: {} as Record<string, any>,
   header: {
     searchTerm: '',
     showBetaBar: true, // default state
