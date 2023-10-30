@@ -1,7 +1,7 @@
 import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 import { state } from '@web-client/presenter/app-public.cerebral';
 
-export const createPetitionerAccountFormAction = async ({
+export const createNewPetitionerUserAction = async ({
   applicationContext,
   get,
   path,

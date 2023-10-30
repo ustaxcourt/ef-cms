@@ -11,7 +11,7 @@ describe('createUserCognitoInteractor', () => {
   // cognito returns an empty 200 on success
   const confirmSignUpResult = {};
   const listUserResults: { Users: any[] } = { Users: [] };
-  beforeEach(() => {
+  beforeAll(() => {
     applicationContext.getCognito().signUp.mockReturnValue({
       promise: () => confirmSignUpResult,
     });
@@ -66,7 +66,22 @@ describe('createUserCognitoInteractor', () => {
   });
 
   it('should return an error if email already exists in system', async () => {
-    listUserResults.Users.push({});
+    applicationContext.getCognito().listUsers.mockReturnValueOnce({
+      promise: () => {
+        {
+          [
+            {
+              Attributes: [],
+              Enabled: true,
+              UserCreateDate: '2023-10-27T15:18:37.000Z',
+              UserLastModifiedDate: '2023-10-27T15:18:37.000Z',
+              Username: email,
+            },
+          ];
+        }
+      },
+    });
+    listUserResults.Users.push({ User: {} });
 
     await expect(
       createUserCognitoInteractor(applicationContext, {
