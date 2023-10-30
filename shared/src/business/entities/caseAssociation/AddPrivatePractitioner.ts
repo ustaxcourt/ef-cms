@@ -1,9 +1,9 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
 import joi from 'joi';
 
-export class AddPrivatePractitioner extends JoiValidationEntity {
+export class AddPrivatePractitioner extends JoiValidationEntity_New {
   public email?: string;
   public representing: string[];
   public serviceIndicator: string;
@@ -22,7 +22,8 @@ export class AddPrivatePractitioner extends JoiValidationEntity {
     representing: joi
       .array()
       .items(JoiValidationConstants.UUID.required())
-      .required(),
+      .required()
+      .messages({ '*': 'Select a represented party' }),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),
@@ -34,29 +35,20 @@ export class AddPrivatePractitioner extends JoiValidationEntity {
           ...Object.values(SERVICE_INDICATOR_TYPES),
         ),
       })
-      .required(),
-    user: joi.object().required(),
-  } as const;
-
-  static VALIDATION_ERROR_MESSAGES = {
-    representing: 'Select a represented party',
-    serviceIndicator: [
-      {
-        contains: 'must be one of',
-        message:
+      .required()
+      .messages({
+        '*': 'Select service type',
+        'any.only':
           'No email found for electronic service. Select a valid service preference.',
-      },
-      'Select service type',
-    ],
-    user: 'Select a petitioner counsel',
+      }),
+    user: joi
+      .object()
+      .required()
+      .messages({ '*': 'Select a petitioner counsel' }),
   } as const;
 
   getValidationRules() {
     return AddPrivatePractitioner.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES;
   }
 }
 
