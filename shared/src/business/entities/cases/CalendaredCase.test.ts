@@ -4,7 +4,7 @@ import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
 import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CalendaredCase', () => {
-  it('white lists the fields set within the entity, removing those not defined', () => {
+  it('allowlists the fields set within the entity, removing those not defined', () => {
     const calendaredCase = new CalendaredCase(
       MOCK_CASE_WITH_SECONDARY_OTHERS,
       applicationContext,
