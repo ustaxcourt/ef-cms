@@ -110,37 +110,6 @@ export abstract class JoiValidationEntity_New {
     return toRawObject(this) as ExcludeMethods<this>;
   }
 
-  toRawObjectFromJoi() {
-    return toRawObject(this) as ExcludeMethods<this>;
-  }
-
-  validateForMigration() {
-    const rules = this.getValidationRules();
-    const schema = rules.validate ? rules : joi.object().keys(rules);
-    let { error } = schema.validate(this, {
-      abortEarly: false,
-      allowUnknown: true,
-    });
-
-    if (error) {
-      console.log('Error, entity is invalid: ', this);
-      throw new InvalidEntityError(
-        this.entityName,
-        JSON.stringify(
-          error.details.map(detail => {
-            return detail.message.replace(/"/g, "'");
-          }),
-        ),
-      );
-    }
-    setIsValidated(this);
-    return this;
-  }
-
-  validateWithLogging(applicationContext) {
-    return this.validate({ applicationContext, logErrors: true });
-  }
-
   static validateRawCollection<T extends JoiValidationEntity_New>(
     this: new (someVar: any, someArgs: any) => T,
     collection: any[] = [],
