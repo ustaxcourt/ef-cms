@@ -1,5 +1,5 @@
-import { JoiValidationConstants } from '@shared/business/entities/joiValidationEntity/JoiValidationConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationConstants } from '../JoiValidationConstants';
+import { JoiValidationEntity_New } from './JoiValidationEntity_New';
 import joi from 'joi';
 
 export const TEST_VALIDATION_RULES = joi.object().keys({

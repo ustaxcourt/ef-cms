@@ -1,7 +1,7 @@
-import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
+import { JoiValidationEntity_New } from './JoiValidationEntity_New';
 import joi from 'joi';
 
-export class TestEntity extends JoiValidationEntity {
+export class TestEntity extends JoiValidationEntity_New {
   public arrayErrorMessage: string;
   public singleErrorMessage: string;
 
