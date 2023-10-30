@@ -131,7 +131,7 @@ describe('createPetitionerAccountFormAction', () => {
     expect(mockErrorPath.mock.calls[0][0]).toEqual({
       alertError: {
         message:
-          'Could not create user account, please contact DAWSON user support',
+          'Could not parse authentication results, please contact DAWSON user support',
         title: 'Error creating account',
       },
     });
@@ -191,11 +191,10 @@ describe('createPetitionerAccountFormAction', () => {
   });
 
   it('should call the error path when the interactor throws an error cognito throws', async () => {
-    const COGNITO_ERROR = 'SOME COGNITO ERROR';
     applicationContext
       .getUseCases()
       .createUserCognitoInteractor.mockRejectedValueOnce({
-        message: COGNITO_ERROR,
+        message: 'SOME COGNITO ERROR',
       });
 
     const FORM = {
@@ -232,7 +231,8 @@ describe('createPetitionerAccountFormAction', () => {
     expect(mockErrorPath.mock.calls.length).toEqual(1);
     expect(mockErrorPath.mock.calls[0][0]).toEqual({
       alertError: {
-        message: `Could not create user account: ${COGNITO_ERROR}, please contact DAWSON user support`,
+        message:
+          'Could not create user account, please contact DAWSON user support',
         title: 'Error creating account',
       },
     });
