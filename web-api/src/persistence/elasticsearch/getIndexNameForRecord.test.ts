@@ -12,11 +12,11 @@ describe('getIndexNameForRecord', () => {
 
     record = undefined;
     result = getIndexNameForRecord(record);
-    expect(result).toEqual(null);
+    expect(result).toEqual('');
 
     record = {};
     result = getIndexNameForRecord(record);
-    expect(result).toEqual(null);
+    expect(result).toEqual('');
   });
 
   it('returns efcms-case for Case records', () => {
