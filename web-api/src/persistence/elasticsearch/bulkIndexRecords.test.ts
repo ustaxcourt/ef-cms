@@ -4,6 +4,9 @@ import {
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { bulkIndexRecords } from './bulkIndexRecords';
+import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
+import { efcmsMessageIndex } from '../../../elasticsearch/efcms-message-mappings';
+import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
 
 describe('bulkIndexRecords', () => {
   const newImageRecord = {
@@ -54,9 +57,9 @@ describe('bulkIndexRecords', () => {
       items: [
         {
           index: {
-            _index: 'efcms-message',
+            _index: efcmsMessageIndex,
             error: {
-              index: 'efcms-message',
+              index: efcmsMessageIndex,
               index_uuid: 'aAsFqTI0Tc2W0LCWgPNrOA',
               reason: 'document missing',
               shard: '0',
@@ -106,7 +109,7 @@ describe('bulkIndexRecords', () => {
         {
           index: {
             _id: 'case|123-45_docket-entry|8675309',
-            _index: 'efcms-docket-entry',
+            _index: efcmsDocketEntryIndex,
             routing: 'case|123-45_case|123-45|mapping',
           },
         },
@@ -155,7 +158,7 @@ describe('bulkIndexRecords', () => {
         {
           index: {
             _id: 'case|123-45_message|8675309',
-            _index: 'efcms-message',
+            _index: efcmsMessageIndex,
             routing: 'case|123-45_case|123-45|mapping',
           },
         },
@@ -204,7 +207,7 @@ describe('bulkIndexRecords', () => {
         {
           index: {
             _id: 'case|123-45_work-item|8675309',
-            _index: 'efcms-work-item',
+            _index: efcmsWorkItemIndex,
             routing: 'case|123-45_case|123-45|mapping',
           },
         },
@@ -253,7 +256,7 @@ describe('bulkIndexRecords', () => {
         {
           index: {
             _id: 'case|123-45_case|123-45|mapping',
-            _index: 'efcms-docket-entry',
+            _index: efcmsDocketEntryIndex,
             routing: null,
           },
         },
@@ -302,7 +305,7 @@ describe('bulkIndexRecords', () => {
         {
           index: {
             _id: 'case|123-45_case|123-45|mapping',
-            _index: 'efcms-message',
+            _index: efcmsMessageIndex,
             routing: null,
           },
         },
@@ -351,7 +354,7 @@ describe('bulkIndexRecords', () => {
         {
           index: {
             _id: 'case|123-45_case|123-45|mapping',
-            _index: 'efcms-work-item',
+            _index: efcmsWorkItemIndex,
             routing: null,
           },
         },
