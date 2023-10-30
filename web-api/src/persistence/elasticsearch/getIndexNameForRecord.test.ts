@@ -100,7 +100,7 @@ describe('getIndexNameForRecord', () => {
 
     const result = getIndexNameForRecord(record);
 
-    expect(result).toEqual(null);
+    expect(result).toEqual('');
   });
 
   it('returns efcms-user for Practitioner records', () => {
