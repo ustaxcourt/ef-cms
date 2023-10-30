@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { createPetitionerAccountFormAction } from '@web-client/presenter/actions/createPetitionerAccountFormAction';
+import { createNewPetitionerUserAction } from '@web-client/presenter/actions/createNewPetitionerUserAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('createPetitionerAccountFormAction', () => {
+describe('createNewPetitionerUserAction', () => {
   const mockSuccessPath = jest.fn();
   const mockErrorPath = jest.fn();
 
@@ -34,7 +34,7 @@ describe('createPetitionerAccountFormAction', () => {
       name: TEST_NAME,
       password: TEST_PASSWORD,
     };
-    await runAction(createPetitionerAccountFormAction, {
+    await runAction(createNewPetitionerUserAction, {
       modules: {
         presenter,
       },
@@ -71,7 +71,7 @@ describe('createPetitionerAccountFormAction', () => {
     };
 
     await expect(
-      runAction(createPetitionerAccountFormAction, {
+      runAction(createNewPetitionerUserAction, {
         modules: {
           presenter,
         },
@@ -103,7 +103,7 @@ describe('createPetitionerAccountFormAction', () => {
       name: TEST_NAME,
       password: TEST_PASSWORD,
     };
-    await runAction(createPetitionerAccountFormAction, {
+    await runAction(createNewPetitionerUserAction, {
       modules: {
         presenter,
       },
@@ -154,7 +154,7 @@ describe('createPetitionerAccountFormAction', () => {
     const cognitoLoginUrl = 'cognitoLoginUrl';
     const cognitoRequestPasswordResetUrl = 'cognitoRequestPasswordResetUrl';
 
-    await runAction(createPetitionerAccountFormAction, {
+    await runAction(createNewPetitionerUserAction, {
       modules: {
         presenter,
       },
@@ -204,7 +204,7 @@ describe('createPetitionerAccountFormAction', () => {
       password: TEST_PASSWORD,
     };
 
-    await runAction(createPetitionerAccountFormAction, {
+    await runAction(createNewPetitionerUserAction, {
       modules: {
         presenter,
       },
