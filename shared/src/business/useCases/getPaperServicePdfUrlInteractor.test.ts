@@ -8,7 +8,7 @@ describe('getPaperServicePdfUrlInteractor', () => {
 
     await expect(
       getPaperServicePdfUrlInteractor(applicationContext, {
-        key: 'd30ca1a5-6e9c-411d-a292-3e89abf13141',
+        fileId: 'd30ca1a5-6e9c-411d-a292-3e89abf13141',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -22,7 +22,7 @@ describe('getPaperServicePdfUrlInteractor', () => {
       .getDownloadPolicyUrl.mockResolvedValue({ url: mockDocumentUrl });
 
     const { url } = await getPaperServicePdfUrlInteractor(applicationContext, {
-      key: mockFileId,
+      fileId: mockFileId,
     });
 
     expect(
