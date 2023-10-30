@@ -90,9 +90,6 @@ const appPublic = {
     presenter.state.cognitoRequestPasswordResetUrl =
       applicationContext.getCognitoRequestPasswordResetUrl();
 
-    presenter.state.cognitoLocalEnabled =
-      applicationContext.getCognitoLocalEnabled();
-
     presenter.state.constants = applicationContext.getConstants();
 
     const advancedSearchTab = applicationContext
