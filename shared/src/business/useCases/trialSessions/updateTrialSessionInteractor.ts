@@ -109,7 +109,7 @@ export const updateTrialSessionInteractor = async (
   let hasPaper: boolean | undefined;
   let pdfUrl: string | undefined;
   let fileId: string | undefined;
-  if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
+  if (currentTrialSession.caseOrder?.length) {
     const { PDFDocument } = await applicationContext.getPdfLib();
     const paperServicePdfsCombined = await PDFDocument.create();
 

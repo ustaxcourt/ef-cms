@@ -3,11 +3,13 @@ import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
 } from '../../../test/mockTrial';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
 import {
   docketClerkUser,
   judgeUser,
@@ -450,5 +452,105 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getUseCaseHelpers().associateSwingTrialSessions.mock
         .calls[0][1].swingSessionId,
     ).toEqual(mockSwingSessionId);
+  });
+
+  describe('Change of Trial Notices', () => {
+    let desiredTrialSession: RawTrialSession;
+    let originalTrialSession: RawTrialSession;
+
+    beforeEach(() => {
+      desiredTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
+      originalTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
+      originalTrialSession.isCalendared = true;
+      applicationContext.getPdfLib = jest.fn().mockResolvedValue({
+        PDFDocument: {
+          create: jest.fn().mockResolvedValue({
+            getPageCount: () => 3,
+            save: () => {},
+          }),
+        },
+      });
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge =
+        jest.fn();
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeToInPersonProceeding =
+        jest.fn();
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
+        jest.fn();
+      applicationContext
+        .getUseCaseHelpers()
+        .saveFileAndGenerateUrl.mockReturnValue({
+          fileId: '55f4fc65-b33e-4c04-8561-3e56d533f386',
+        });
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue({
+          ...MOCK_CASE,
+          trialDate: desiredTrialSession.startDate,
+          trialSessionId: desiredTrialSession.trialSessionId,
+        });
+      applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById.mockReturnValue(originalTrialSession);
+    });
+
+    it('should be generated when the judge has changed', async () => {
+      desiredTrialSession.judge!.userId =
+        '07a2a119-c142-4811-87e0-7d6bc2d06a1b';
+
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: desiredTrialSession,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateTrialSession.mock
+          .calls[0][0].trialSessionToUpdate.paperServicePdfs[0].title,
+      ).toEqual('Notice of Change of Trial Judge');
+    });
+
+    it('should be generated when the proceeding type has changed to remote', async () => {
+      desiredTrialSession.proceedingType =
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
+      originalTrialSession.proceedingType =
+        TRIAL_SESSION_PROCEEDING_TYPES.remote;
+
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: desiredTrialSession,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateTrialSession.mock
+          .calls[0][0].trialSessionToUpdate.paperServicePdfs[0].title,
+      ).toEqual('Notice of Change to In Person Proceeding');
+    });
+
+    it('should be generated when the proceeding type has changed to in person', async () => {
+      desiredTrialSession.proceedingType =
+        TRIAL_SESSION_PROCEEDING_TYPES.remote;
+      desiredTrialSession.joinPhoneNumber = '123455678';
+      desiredTrialSession.meetingId = 'meeting_ID';
+      desiredTrialSession.password = 'password';
+      originalTrialSession.proceedingType =
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
+
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: desiredTrialSession,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateTrialSession.mock
+          .calls[0][0].trialSessionToUpdate.paperServicePdfs[0].title,
+      ).toEqual('Notice of Change to Remote Proceeding');
+    });
   });
 });
