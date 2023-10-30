@@ -69,7 +69,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     .saveFileAndGenerateUrl({
       applicationContext,
       file: paperServicePdfData,
-      fileNamePrefix: 'paper-service-pdf',
+      fileNamePrefix: 'paper-service-pdf/',
     }));
 
   const trialSession = await applicationContext
