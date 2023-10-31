@@ -11,6 +11,7 @@ export class AddPrivatePractitioner extends JoiValidationEntity_New {
 
   constructor(rawProps) {
     super('AddPrivatePractitioner');
+
     this.email = rawProps.user?.email;
     this.representing = rawProps.representing;
     this.serviceIndicator = rawProps.serviceIndicator;
