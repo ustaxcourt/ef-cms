@@ -91,10 +91,13 @@ export abstract class JoiValidationEntity_New {
         });
         return transformed;
       };
+
       if (logErrors) {
         applicationContext?.logger.error('*** Entity with error: ***', this);
       }
+
       const validationErrors = this.getValidationErrors()!;
+
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(stringifyTransform(validationErrors)),
@@ -103,6 +106,33 @@ export abstract class JoiValidationEntity_New {
     }
 
     setIsValidated(this);
+
+    return this;
+  }
+
+  validateForMigration() {
+    const rules = this.getValidationRules();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    let { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    if (error) {
+      console.log('Error, entity is invalid: ', this);
+
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(
+          error.details.map(detail => {
+            return detail.message.replace(/"/g, "'");
+          }),
+        ),
+      );
+    }
+
+    setIsValidated(this);
+
     return this;
   }
 
