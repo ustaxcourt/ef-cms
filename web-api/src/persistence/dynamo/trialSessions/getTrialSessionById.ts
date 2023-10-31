@@ -8,7 +8,7 @@ export const getTrialSessionById = async ({
 }: {
   applicationContext: IApplicationContext;
   trialSessionId: string;
-}): Promise<RawTrialSession> => {
+}): Promise<RawTrialSession | undefined> => {
   const trialSessionItems = await queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -20,5 +20,5 @@ export const getTrialSessionById = async ({
     applicationContext,
   });
 
-  return aggregateTrialSessionItems(trialSessionItems) as RawTrialSession;
+  return aggregateTrialSessionItems(trialSessionItems);
 };
