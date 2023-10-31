@@ -1,7 +1,6 @@
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
-  JUDGE_TITLES,
   JudgeTitle,
   ROLES,
   STATE_NOT_AVAILABLE,
@@ -9,11 +8,11 @@ import {
   US_STATES_OTHER,
 } from './EntityConstants';
 import { JoiValidationConstants } from './JoiValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
 import joi from 'joi';
 
-export class User extends JoiValidationEntity {
+export class User extends JoiValidationEntity_New {
   public pendingEmailVerificationToken?: string;
   public email: string;
   public name: string;
@@ -76,25 +75,35 @@ export class User extends JoiValidationEntity {
   }
 
   static USER_CONTACT_VALIDATION_RULES = {
-    address1: JoiValidationConstants.STRING.max(100).required(),
+    address1: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter mailing address' }),
     address2: JoiValidationConstants.STRING.max(100).optional().allow(null),
     address3: JoiValidationConstants.STRING.max(100).optional().allow(null),
-    city: JoiValidationConstants.STRING.max(100).required(),
+    city: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter city' }),
     country: JoiValidationConstants.STRING.when('countryType', {
       is: COUNTRY_TYPES.INTERNATIONAL,
       otherwise: joi.optional().allow(null),
       then: joi.required(),
-    }),
+    }).messages({ '*': 'Enter a country' }),
     countryType: JoiValidationConstants.STRING.valid(
       COUNTRY_TYPES.DOMESTIC,
       COUNTRY_TYPES.INTERNATIONAL,
-    ).required(),
-    phone: JoiValidationConstants.STRING.max(100).required(),
-    postalCode: joi.when('countryType', {
-      is: COUNTRY_TYPES.INTERNATIONAL,
-      otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
-      then: JoiValidationConstants.STRING.max(100).required(),
-    }),
+    )
+      .required()
+      .messages({ '*': 'Enter country type' }),
+    phone: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter phone number' }),
+    postalCode: joi
+      .when('countryType', {
+        is: COUNTRY_TYPES.INTERNATIONAL,
+        otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
+        then: JoiValidationConstants.STRING.max(100).required(),
+      })
+      .messages({ '*': 'Enter ZIP code' }),
     state: JoiValidationConstants.STRING.when('countryType', {
       is: COUNTRY_TYPES.INTERNATIONAL,
       otherwise: joi
@@ -105,7 +114,7 @@ export class User extends JoiValidationEntity {
         )
         .required(),
       then: joi.optional().allow(null),
-    }),
+    }).messages({ '*': 'Enter state' }),
   };
 
   static BASE_USER_VALIDATION = {
@@ -114,32 +123,17 @@ export class User extends JoiValidationEntity {
       otherwise: joi.optional().allow(null),
       then: joi.required(),
     }),
-    judgeTitle: joi.when('role', {
+    judgeTitle: JoiValidationConstants.STRING.max(100).when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
-      then: JoiValidationConstants.STRING.valid(...JUDGE_TITLES).required(),
+      then: joi.required(),
     }),
-    name: JoiValidationConstants.STRING.max(100).required(),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter name' }),
     role: JoiValidationConstants.STRING.valid(
       ...Object.values(ROLES),
     ).required(),
-  };
-
-  static VALIDATION_ERROR_MESSAGES = {
-    address1: 'Enter mailing address',
-    city: 'Enter city',
-    country: 'Enter a country',
-    countryType: 'Enter country type',
-    name: 'Enter name',
-    phone: 'Enter phone number',
-    postalCode: [
-      {
-        contains: 'match',
-        message: 'Enter ZIP code',
-      },
-      'Enter ZIP code',
-    ],
-    state: 'Enter state',
   };
 
   isChambersUser(): boolean {
@@ -206,10 +200,6 @@ export class User extends JoiValidationEntity {
       token: JoiValidationConstants.STRING.optional(),
       userId: JoiValidationConstants.UUID.required(),
     };
-  }
-
-  getErrorToMessageMap() {
-    return User.VALIDATION_ERROR_MESSAGES;
   }
 }
 
