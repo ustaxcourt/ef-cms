@@ -4,6 +4,7 @@ import {
   DOCKET_SECTION,
 } from '../business/entities/EntityConstants';
 import { MOCK_CASE } from './mockCase';
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 
 export const MOCK_WORK_ITEM: RawWorkItem = Object.freeze({
   assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
