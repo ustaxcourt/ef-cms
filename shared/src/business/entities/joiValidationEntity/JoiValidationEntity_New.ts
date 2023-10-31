@@ -110,6 +110,32 @@ export abstract class JoiValidationEntity_New {
     return this;
   }
 
+  validateForMigration() {
+    const rules = this.getValidationRules();
+    const schema = rules.validate ? rules : joi.object().keys(rules);
+    let { error } = schema.validate(this, {
+      abortEarly: false,
+      allowUnknown: true,
+    });
+
+    if (error) {
+      console.log('Error, entity is invalid: ', this);
+
+      throw new InvalidEntityError(
+        this.entityName,
+        JSON.stringify(
+          error.details.map(detail => {
+            return detail.message.replace(/"/g, "'");
+          }),
+        ),
+      );
+    }
+
+    setIsValidated(this);
+
+    return this;
+  }
+
   toRawObject() {
     return toRawObject(this) as ExcludeMethods<this>;
   }
