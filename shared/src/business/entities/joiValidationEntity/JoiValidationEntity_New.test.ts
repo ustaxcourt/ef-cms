@@ -127,6 +127,37 @@ describe('Joi Entity', () => {
     });
   });
 
+  describe('validateForMigration', () => {
+    it('should log to the console and throw an error when the entity is invalid', () => {
+      jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: '', // Invalid, must be a string with at least 2 characters
+      });
+
+      try {
+        testEntity.validateForMigration();
+      } catch (e) {
+        expect(e instanceof InvalidEntityError).toEqual(true);
+        expect(console.log).toHaveBeenCalled();
+      }
+    });
+
+    it('should mark the entity as having been validated and return the entity when it is valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      const result = testEntity.validateForMigration();
+
+      expect(result).toEqual(testEntity);
+    });
+  });
+
   describe('toRawObject', () => {
     it('should return the entity as a plain JSON object', () => {
       const testEntity = new TestEntity({
