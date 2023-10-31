@@ -13,7 +13,9 @@ import {
 } from '@web-api/persistence/dynamodbClientService';
 import { omit } from 'lodash';
 
-export const trialSessionFieldsToOmitBeforePersisting = ['paperServicePdfs'];
+export const trialSessionFieldsToOmitBeforePersisting = [
+  'paperServicePdfs',
+] as const;
 
 export const updateTrialSession = async ({
   applicationContext,
