@@ -9,10 +9,9 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
+      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+        confirmEmail: 'Email addresses do not match',
+        email: 'Enter a valid email address',
       });
     });
 
@@ -23,9 +22,8 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+        confirmEmail: 'Enter a valid email address',
       });
     });
 
@@ -36,9 +34,8 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+        confirmEmail: 'Email addresses do not match',
       });
     });
 
@@ -49,10 +46,9 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
+      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+        confirmEmail: 'Enter a valid email address',
+        email: 'Enter a valid email address',
       });
     });
 
@@ -63,10 +59,9 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        email: UpdateUserEmail.VALIDATION_ERROR_MESSAGES.email,
+      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+        confirmEmail: 'Email addresses do not match',
+        email: 'Enter a valid email address',
       });
     });
 
@@ -77,9 +72,8 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          UpdateUserEmail.VALIDATION_ERROR_MESSAGES.confirmEmail[2].message,
+      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+        confirmEmail: 'Enter a valid email address',
       });
     });
 
