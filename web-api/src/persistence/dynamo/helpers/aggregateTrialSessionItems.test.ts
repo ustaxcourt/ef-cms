@@ -39,9 +39,9 @@ describe('aggregateTrialSessionItems', () => {
     });
   });
 
-  it('should throw an error if no items have a trial session record', () => {
-    expect(() => aggregateTrialSessionItems([])).toThrow(
-      'No trial session record found. Cannot form trial session from given records.',
-    );
+  it('should return undefined if no items have a trial session record', () => {
+    const retval = aggregateTrialSessionItems([]);
+
+    expect(retval).toEqual(undefined);
   });
 });

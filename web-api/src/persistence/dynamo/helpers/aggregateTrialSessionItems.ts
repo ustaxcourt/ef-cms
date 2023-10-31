@@ -4,7 +4,9 @@ import {
   TrialSessionRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
 
-export const aggregateTrialSessionItems = (items): RawTrialSession => {
+export const aggregateTrialSessionItems = (
+  items,
+): RawTrialSession | undefined => {
   let paperServicePdfs: { title: string; fileId: string }[] = [];
 
   let trialSession: RawTrialSession | undefined;
@@ -17,13 +19,9 @@ export const aggregateTrialSessionItems = (items): RawTrialSession => {
     }
   });
 
-  if (!trialSession) {
-    throw new Error(
-      'No trial session record found. Cannot form trial session from given records.',
-    );
+  if (trialSession) {
+    trialSession.paperServicePdfs = paperServicePdfs;
   }
-
-  trialSession.paperServicePdfs = paperServicePdfs;
 
   return trialSession;
 };
