@@ -159,17 +159,17 @@ const waitForJobToFinish = async ({
 }: {
   applicationContext: IApplicationContext;
   jobId: string;
-}) => {
-  let unfinishedCases;
-  while (unfinishedCases !== 0) {
-    const jobStatus = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase({
-        applicationContext,
-        jobId,
-      });
-    ({ unfinishedCases } = jobStatus);
-
-    await new Promise(resolve => setTimeout(resolve, 3000));
+}): Promise<void> => {
+  const { unfinishedCases } = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionJobStatusForCase({
+      applicationContext,
+      jobId,
+    });
+  if (unfinishedCases === 0) {
+    return;
   }
+
+  await new Promise(resolve => setTimeout(resolve, 3000));
+  await waitForJobToFinish({ applicationContext, jobId });
 };
