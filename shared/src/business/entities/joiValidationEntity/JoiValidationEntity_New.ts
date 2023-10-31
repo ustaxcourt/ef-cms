@@ -91,10 +91,13 @@ export abstract class JoiValidationEntity_New {
         });
         return transformed;
       };
+
       if (logErrors) {
         applicationContext?.logger.error('*** Entity with error: ***', this);
       }
+
       const validationErrors = this.getValidationErrors()!;
+
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(stringifyTransform(validationErrors)),
@@ -103,15 +106,8 @@ export abstract class JoiValidationEntity_New {
     }
 
     setIsValidated(this);
+
     return this;
-  }
-
-  toRawObject() {
-    return toRawObject(this) as ExcludeMethods<this>;
-  }
-
-  toRawObjectFromJoi() {
-    return toRawObject(this) as ExcludeMethods<this>;
   }
 
   validateForMigration() {
@@ -124,6 +120,7 @@ export abstract class JoiValidationEntity_New {
 
     if (error) {
       console.log('Error, entity is invalid: ', this);
+
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(
@@ -133,12 +130,14 @@ export abstract class JoiValidationEntity_New {
         ),
       );
     }
+
     setIsValidated(this);
+
     return this;
   }
 
-  validateWithLogging(applicationContext) {
-    return this.validate({ applicationContext, logErrors: true });
+  toRawObject() {
+    return toRawObject(this) as ExcludeMethods<this>;
   }
 
   static validateRawCollection<T extends JoiValidationEntity_New>(

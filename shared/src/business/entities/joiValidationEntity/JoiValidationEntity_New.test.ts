@@ -1,4 +1,7 @@
+import { InvalidEntityError } from '@web-api/errors/errors';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { TestEntity } from './TestEntity';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 
 describe('Joi Entity', () => {
   describe('getValidationErrors', () => {
@@ -87,6 +90,107 @@ describe('Joi Entity', () => {
           'propUsingReference must be greater than referencedProp.',
         );
       });
+    });
+  });
+
+  describe('isValid', () => {
+    it('should true when the entity does NOT have any validation errors', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      const isValid = testEntity.isValid();
+
+      expect(isValid).toEqual(true);
+    });
+  });
+
+  describe('validate', () => {
+    it('should throw an error and log the entity when logErrors is true and the entity is NOT valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: '', // Invalid, must be a string with at least 2 characters
+      });
+
+      try {
+        testEntity.validate({
+          applicationContext,
+          logErrors: true,
+        });
+      } catch (e) {
+        expect(e instanceof InvalidEntityError).toEqual(true);
+        expect(applicationContext?.logger.error).toHaveBeenCalled();
+      }
+    });
+  });
+
+  describe('validateForMigration', () => {
+    it('should log to the console and throw an error when the entity is invalid', () => {
+      jest.spyOn(console, 'log').mockImplementation(() => {});
+
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: '', // Invalid, must be a string with at least 2 characters
+      });
+
+      try {
+        testEntity.validateForMigration();
+      } catch (e) {
+        expect(e instanceof InvalidEntityError).toEqual(true);
+        expect(console.log).toHaveBeenCalled();
+      }
+    });
+
+    it('should mark the entity as having been validated and return the entity when it is valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      const result = testEntity.validateForMigration();
+
+      expect(result).toEqual(testEntity);
+    });
+  });
+
+  describe('toRawObject', () => {
+    it('should return the entity as a plain JSON object', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      const result = testEntity.toRawObject();
+
+      expect(result).toEqual({
+        arrayErrorMessage: 'APPROVED',
+        entityName: 'TestEntity',
+        propUsingReference: 10,
+        referencedProp: 5,
+        singleErrorMessage: 'APPROVED',
+      });
+      expect(testEntity instanceof JoiValidationEntity_New).toEqual(true);
+      expect(result instanceof JoiValidationEntity_New).toEqual(false);
+    });
+  });
+
+  describe('validateRawCollection', () => {
+    it('should throw an error when an item in the collection is NOT valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      expect(() =>
+        TestEntity.validateRawCollection([testEntity.toRawObject(), {}], {}),
+      ).toThrow();
     });
   });
 });
