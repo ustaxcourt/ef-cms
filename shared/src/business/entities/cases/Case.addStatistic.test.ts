@@ -21,7 +21,7 @@ describe('addStatistic', () => {
 
     caseEntity.addStatistic(statisticToAdd);
 
-    expect(caseEntity.statistics.length).toEqual(1);
+    expect(caseEntity.statistics!.length).toEqual(1);
   });
 
   it('should throw an error if the max number of statistics for a case has already been reached', () => {
@@ -57,6 +57,6 @@ describe('addStatistic', () => {
     expect(error.toString()).toEqual(
       'Error: maximum number of statistics reached',
     );
-    expect(caseEntity.statistics.length).toEqual(12);
+    expect(caseEntity.statistics!.length).toEqual(12);
   });
 });
