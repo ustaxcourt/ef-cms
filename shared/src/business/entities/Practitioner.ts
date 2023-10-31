@@ -21,22 +21,24 @@ export class Practitioner extends User {
   public birthYear: string;
   public confirmEmail?: string;
   public employer: string;
-  public firmName: string;
+  public firmName?: string;
   public firstName: string;
   public lastName: string;
-  public middleName: string;
+  public middleName?: string;
   public name: string;
   public originalBarState: string;
-  public practitionerNotes: string;
+  public practitionerNotes?: string;
   public practitionerType: string;
   public section: string;
-  public suffix: string;
   public serviceIndicator: string;
-  public updatedEmail: string;
+  public suffix?: string;
+  public updatedEmail?: string;
 
   constructor(rawUser, options?) {
     super(rawUser, options);
-    this.entityName = entityName;
+
+    this.entityName = Practitioner.ENTITY_NAME;
+
     this.additionalPhone = rawUser.additionalPhone;
     this.admissionsDate = rawUser.admissionsDate;
     this.admissionsStatus = rawUser.admissionsStatus;
@@ -59,13 +61,19 @@ export class Practitioner extends User {
       Practitioner.getDefaultServiceIndicator(rawUser);
     this.updatedEmail = rawUser.updatedEmail;
     if (this.admissionsStatus === 'Active') {
-      this.role = roleMap[this.employer];
+      this.role = Practitioner.ROLE_MAP[this.employer];
     } else {
       this.role = ROLES.inactivePractitioner;
     }
   }
 
-  static ENTITY_NAME = 'IrsPractitioner';
+  static ENTITY_NAME = 'Practitioner';
+
+  static ROLE_MAP = {
+    DOJ: ROLES.irsPractitioner,
+    IRS: ROLES.irsPractitioner,
+    Private: ROLES.privatePractitioner,
+  };
 
   static VALIDATION_RULES = joi.object().keys({
     additionalPhone: JoiValidationConstants.STRING.max(100)
@@ -194,12 +202,12 @@ export class Practitioner extends User {
     return result;
   }
 
-  /**
-   * returns the full concatenated name for the given practitioner data
-   * @param {object} practitionerData data to pull name parts from
-   * @returns {string} the concatenated firstName, middleName, and lastName with suffix
-   */
-  static getFullName(practitionerData) {
+  static getFullName(practitionerData: {
+    firstName: string;
+    lastName: string;
+    middleName?: string;
+    suffix?: string;
+  }): string {
     const { firstName, lastName } = practitionerData;
     const middleName = practitionerData.middleName
       ? ' ' + practitionerData.middleName
@@ -209,22 +217,13 @@ export class Practitioner extends User {
     return `${firstName}${middleName} ${lastName}${suffix}`;
   }
 
-  /**
-   * returns a default service indicator based on whether the presence of an email address
-   * @param {object} practitionerData data where an email may exist
-   * @returns {string} the service indicator for the given condition
-   */
-  static getDefaultServiceIndicator(practitionerData) {
+  static getDefaultServiceIndicator(practitionerData: {
+    email?: string;
+  }): string {
     return practitionerData.email
       ? SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
       : SERVICE_INDICATOR_TYPES.SI_PAPER;
   }
 }
-
-const roleMap = {
-  DOJ: ROLES.irsPractitioner,
-  IRS: ROLES.irsPractitioner,
-  Private: ROLES.privatePractitioner,
-};
 
 export type RawPractitioner = ExcludeMethods<Practitioner>;

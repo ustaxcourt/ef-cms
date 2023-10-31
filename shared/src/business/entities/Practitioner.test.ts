@@ -3,17 +3,17 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from './EntityConstants';
-import { Practitioner } from './Practitioner';
+import { Practitioner, RawPractitioner } from './Practitioner';
 import { getTextByCount } from '../utilities/getTextByCount';
 
 describe('Practitioner', () => {
   let validPractitioner;
 
-  const mockPractitioner = {
+  const mockPractitioner: RawPractitioner = {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'PT20001',
-    birthYear: 2019,
+    birthYear: '2019',
     contact: {
       address1: '234 Main St',
       address2: 'Apartment 4',
@@ -27,6 +27,7 @@ describe('Practitioner', () => {
     },
     email: 'test.practitioner@example.com',
     employer: 'Private',
+    entityName: 'Practitioner',
     firmName: 'GW Law Offices',
     firstName: 'Test',
     lastName: 'Practitioner',
@@ -35,6 +36,7 @@ describe('Practitioner', () => {
     practitionerNotes: '',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
+    section: ROLES.privatePractitioner,
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     userId: 'ec4fe2e7-52cf-4084-84de-d8e8d151e927',
   };
@@ -43,8 +45,9 @@ describe('Practitioner', () => {
     validPractitioner = new Practitioner(mockPractitioner);
   });
 
-  it('Creates a valid Practitioner with all required fields', () => {
+  it('creates a valid Practitioner with all required fields', () => {
     const user = new Practitioner(mockPractitioner);
+
     expect(user.isValid()).toBeTruthy();
   });
 
@@ -56,37 +59,42 @@ describe('Practitioner', () => {
       },
       { filtered: true },
     );
+
     expect(user.pendingEmailVerificationToken).toBeUndefined();
   });
 
-  it('Creates an invalid Practitioner with missing required fields', () => {
+  it('creates an invalid Practitioner with missing required fields', () => {
     const user = new Practitioner({
       role: ROLES.privatePractitioner,
     });
+
     expect(user.isValid()).toBeFalsy();
   });
 
-  it('Creates an invalid Practitioner with invalid employer option', () => {
+  it('creates an invalid Practitioner with invalid employer option', () => {
     const user = new Practitioner({
       ...mockPractitioner,
       employer: 'Something else',
     });
+
     expect(user.isValid()).toBeFalsy();
   });
 
-  it('Creates an invalid Practitioner with invalid practitionerType option', () => {
+  it('creates an invalid Practitioner with invalid practitionerType option', () => {
     const user = new Practitioner({
       ...mockPractitioner,
       practitionerType: 'Purple',
     });
+
     expect(user.isValid()).toBeFalsy();
   });
 
-  it('Creates an invalid Practitioner with invalid admissionsStatus option', () => {
+  it('creates an invalid Practitioner with invalid admissionsStatus option', () => {
     const user = new Practitioner({
       ...mockPractitioner,
       admissionsStatus: 'Invalid',
     });
+
     expect(user.isValid()).toBeFalsy();
   });
 
@@ -172,10 +180,9 @@ describe('Practitioner', () => {
     });
 
     expect(user.isValid()).toBeFalsy();
-    expect(user.getFormattedValidationErrors()).toEqual({
-      practitionerNotes: (
-        Practitioner.VALIDATION_ERROR_MESSAGES.practitionerNotes[0] as any
-      ).message,
+    expect(user.getValidationErrors()).toEqual({
+      practitionerNotes:
+        'Limit is 500 characters. Enter 500 or fewer characters',
     });
   });
 
@@ -245,10 +252,9 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
-        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      expect(validPractitioner.getValidationErrors()).toEqual({
+        confirmEmail: 'Email addresses do not match',
+        updatedEmail: 'Enter a valid email address',
       });
     });
 
@@ -257,9 +263,8 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      expect(validPractitioner.getValidationErrors()).toEqual({
+        confirmEmail: 'Enter a valid email address',
       });
     });
 
@@ -268,9 +273,8 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
+      expect(validPractitioner.getValidationErrors()).toEqual({
+        confirmEmail: 'Enter a valid email address',
       });
     });
 
@@ -279,9 +283,8 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = mockUpdatedEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[0].message,
+      expect(validPractitioner.getValidationErrors()).toEqual({
+        confirmEmail: 'Email addresses do not match',
       });
     });
 
@@ -290,8 +293,8 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = undefined;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      expect(validPractitioner.getValidationErrors()).toEqual({
+        updatedEmail: 'Enter a valid email address',
       });
     });
 
@@ -300,10 +303,9 @@ describe('Practitioner', () => {
       validPractitioner.updatedEmail = invalidEmail;
 
       expect(validPractitioner.isValid()).toBeFalsy();
-      expect(validPractitioner.getFormattedValidationErrors()).toEqual({
-        confirmEmail:
-          Practitioner.VALIDATION_ERROR_MESSAGES.confirmEmail[1].message,
-        updatedEmail: Practitioner.VALIDATION_ERROR_MESSAGES.updatedEmail,
+      expect(validPractitioner.getValidationErrors()).toEqual({
+        confirmEmail: 'Enter a valid email address',
+        updatedEmail: 'Enter a valid email address',
       });
     });
   });
