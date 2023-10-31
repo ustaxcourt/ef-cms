@@ -1,29 +1,24 @@
-import { CaseDeadline } from '../../entities/CaseDeadline';
+import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateCaseDeadlineInteractor } from './validateCaseDeadlineInteractor';
 
 describe('validateCaseDeadlineInteractor', () => {
-  it('returns the expected errors object on an empty case deadline', () => {
+  it('should return validation error messages when the case deadline is NOT valid', () => {
     const errors = validateCaseDeadlineInteractor(applicationContext, {
-      caseDeadline: {} as any,
+      caseDeadline: {
+        ...MOCK_CASE_DEADLINE,
+        description: undefined as any, // Description is a required string
+      },
     });
 
-    expect(Object.keys(errors)).toEqual(
-      Object.keys(CaseDeadline.VALIDATION_ERROR_MESSAGES),
-    );
+    expect(errors).toEqual({
+      description: 'Enter a description of this deadline',
+    });
   });
 
-  it('returns null when there are no errors', () => {
-    const mockCaseDeadline = {
-      associatedJudge: 'Buch',
-      caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      deadlineDate: '2019-03-01T21:42:29.073Z',
-      description: 'hello world',
-      docketNumber: '123-20',
-    };
-
+  it('should return null when the case deadline is valid', () => {
     const errors = validateCaseDeadlineInteractor(applicationContext, {
-      caseDeadline: mockCaseDeadline as any,
+      caseDeadline: MOCK_CASE_DEADLINE,
     });
 
     expect(errors).toEqual(null);
