@@ -12,6 +12,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
+import { RawUser } from '@shared/business/entities/User';
 import { cloneDeep } from 'lodash';
 
 interface IEditPaperFilingRequest {

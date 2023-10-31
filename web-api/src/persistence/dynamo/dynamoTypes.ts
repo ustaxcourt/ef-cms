@@ -1,5 +1,6 @@
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { fieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/cases/createCase';
 
 type CaseFieldsToOmitBeforePersisting =

@@ -7,6 +7,7 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from './EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { formatPhoneNumber } from '../utilities/formatPhoneNumber';
@@ -117,7 +118,7 @@ export class User extends JoiValidationEntity_New {
     }).messages({ '*': 'Enter state' }),
   };
 
-  static BASE_USER_VALIDATION = {
+  static VALIDATION_RULES = {
     judgeFullName: JoiValidationConstants.STRING.max(100).when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
@@ -144,17 +145,18 @@ export class User extends JoiValidationEntity_New {
     return this.role === ROLES.judge;
   }
 
-  static isExternalUser(role) {
+  static isExternalUser(role: string): boolean {
     const externalRoles = [
       ROLES.petitioner,
       ROLES.privatePractitioner,
       ROLES.irsPractitioner,
       ROLES.irsSuperuser,
     ];
+
     return externalRoles.includes(role);
   }
 
-  static isInternalUser(role) {
+  static isInternalUser(role: string): boolean {
     const internalRoles = [
       ROLES.adc,
       ROLES.admissionsClerk,
@@ -169,16 +171,17 @@ export class User extends JoiValidationEntity_New {
       ROLES.reportersOffice,
       ROLES.trialClerk,
     ];
+
     return internalRoles.includes(role);
   }
 
-  static isCaseServicesUser({ section }) {
+  static isCaseServicesUser({ section }: { section: string }): boolean {
     return section === CASE_SERVICES_SUPERVISOR_SECTION;
   }
 
   getValidationRules() {
     return {
-      ...User.BASE_USER_VALIDATION,
+      ...User.VALIDATION_RULES,
       contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
       email: JoiValidationConstants.EMAIL.optional(),
       entityName: JoiValidationConstants.STRING.valid('User').required(),
@@ -203,9 +206,4 @@ export class User extends JoiValidationEntity_New {
   }
 }
 
-export const { USER_CONTACT_VALIDATION_RULES, VALIDATION_ERROR_MESSAGES } =
-  User;
-
-declare global {
-  type RawUser = ExcludeMethods<User>;
-}
+export type RawUser = ExcludeMethods<User>;
