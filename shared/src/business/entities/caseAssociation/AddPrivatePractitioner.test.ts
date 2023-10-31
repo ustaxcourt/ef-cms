@@ -7,6 +7,7 @@ describe('AddPrivatePractitioner', () => {
 
     it('should have error messages for missing fields', () => {
       const entity = new AddPrivatePractitioner({});
+
       expect(entity.getValidationErrors()).toEqual({
         representing: 'Select a represented party',
         serviceIndicator: 'Select service type',
