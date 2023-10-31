@@ -144,7 +144,22 @@ describe('Joi Entity', () => {
         referencedProp: 5,
         singleErrorMessage: 'APPROVED',
       });
+      expect(testEntity instanceof JoiValidationEntity_New).toEqual(true);
       expect(result instanceof JoiValidationEntity_New).toEqual(false);
+    });
+  });
+
+  describe('validateRawCollection', () => {
+    it('should throw an error when an item in the collection is NOT valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      expect(() =>
+        TestEntity.validateRawCollection([testEntity.toRawObject(), {}], {}),
+      ).toThrow();
     });
   });
 });
