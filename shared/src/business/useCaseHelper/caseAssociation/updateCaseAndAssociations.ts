@@ -213,11 +213,23 @@ const updateIrsPractitioners = ({
   const {
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
+    same: unchangedIrsPractitioners,
     updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
+  const currentIrsPractitioners = [
+    ...addedIrsPractitioners,
+    ...updatedIrsPractitioners,
+  ];
+
+  if (caseToUpdate.leadDocketNumber && unchangedIrsPractitioners.length) {
+    currentIrsPractitioners.push(...unchangedIrsPractitioners);
+  }
+
+  console.log('currentIrsPractitioners%%%%%', currentIrsPractitioners);
+
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
-    [...addedIrsPractitioners, ...updatedIrsPractitioners],
+    currentIrsPractitioners,
     { applicationContext },
   );
 
@@ -269,6 +281,7 @@ const updatePrivatePractitioners = ({
   const {
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
+    same: unchangedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
     oldCase.privatePractitioners,
@@ -276,8 +289,17 @@ const updatePrivatePractitioners = ({
     'userId',
   );
 
+  const currentPrivatePractitioners = [
+    ...addedPrivatePractitioners,
+    ...updatedPrivatePractitioners,
+  ];
+
+  if (caseToUpdate.leadDocketNumber && unchangedPrivatePractitioners.length) {
+    currentPrivatePractitioners.push(...unchangedPrivatePractitioners);
+  }
+
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
-    [...addedPrivatePractitioners, ...updatedPrivatePractitioners],
+    currentPrivatePractitioners,
     { applicationContext },
   );
 
