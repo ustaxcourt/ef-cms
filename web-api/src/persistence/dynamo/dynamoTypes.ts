@@ -40,3 +40,7 @@ type TrialSessionFieldsToOmitBeforePersisting =
 export type TrialSessionRecord = TDynamoRecord<
   Omit<RawTrialSession, TrialSessionFieldsToOmitBeforePersisting>
 >;
+export type TrialSessionPaperPdfRecord = TDynamoRecord<{
+  fileId: string;
+  title: string;
+}>;

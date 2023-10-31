@@ -76,35 +76,6 @@ export const put = ({
     .then(() => Item);
 };
 
-export const conditionalPut = ({
-  applicationContext,
-  ConditionExpression,
-  Item,
-}: {
-  ConditionExpression: string;
-  Item: Record<string, any>;
-  applicationContext: IApplicationContext;
-}): Promise<TDynamoRecord> => {
-  return applicationContext
-    .getDocumentClient()
-    .put({
-      ConditionExpression,
-      Item: filterEmptyStrings(Item),
-      TableName: getTableName({
-        applicationContext,
-      }),
-    })
-    .promise()
-    .catch(e => {
-      if (e.message.includes('The conditional request failed')) {
-        return;
-      } else {
-        throw e;
-      }
-    })
-    .then(() => Item);
-};
-
 export const update = ({
   applicationContext,
   ConditionExpression,

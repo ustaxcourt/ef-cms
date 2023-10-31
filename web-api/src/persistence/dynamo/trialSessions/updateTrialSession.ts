@@ -1,9 +1,16 @@
 import {
   PutRequest,
+  TrialSessionPaperPdfRecord,
   TrialSessionRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { batchWrite } from '../../dynamodbClientService';
+import {
+  RawTrialSession,
+  TrialSession,
+} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import {
+  batchWrite,
+  queryFull,
+} from '@web-api/persistence/dynamodbClientService';
 import { omit } from 'lodash';
 
 export const trialSessionFieldsToOmitBeforePersisting = ['paperServicePdfs'];
@@ -24,32 +31,40 @@ export const updateTrialSession = async ({
   };
   itemsToUpdate.push({ PutRequest: { Item: trialSessionRecord } });
 
-  // for (const item of trialSessionToUpdate.paperServicePdfs) {
-  //   const pk = `trial-session|${trialSessionToUpdate.trialSessionId}`;
-  //   const sk = `paper-service-pdf|${item.fileId}`;
-  //   await conditionalPut({
-  //     ConditionExpression:
-  //       'attribute_not_exists(pk) AND attribute_not_exists(sk)',
-  //     Item: {
-  //       ...item,
-  //       pk,
-  //       sk,
-  //       ttl: TrialSession.PAPER_SERVICE_PDF_TTL,
-  //     },
-  //     applicationContext,
-  //   });
-  // }
-  // return put({
-  //   Item: {
-  //     ...omit(trialSessionToUpdate, fieldsToOmitBeforePersisting),
-  //     gsi1pk: 'trial-session-catalog',
-  //     pk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
-  //     sk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
-  //   },
-  //   applicationContext,
-  // });
+  if (trialSessionToUpdate.paperServicePdfs.length) {
+    const existingPdfIds = await queryFull<TrialSessionPaperPdfRecord>({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+        '#sk': 'sk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `trial-session|${trialSessionToUpdate.trialSessionId}`,
+        ':prefix': 'paper-service-pdf',
+      },
+      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+      applicationContext,
+    }).then(existingPdfs =>
+      existingPdfs.map(existingPdf => existingPdf.fileId),
+    );
+
+    const newPdfs = trialSessionToUpdate.paperServicePdfs.filter(
+      paperPdf => !existingPdfIds.includes(paperPdf.fileId),
+    );
+    newPdfs
+      .map(newPdf => {
+        const expireInThreeDays =
+          Math.floor(Date.now() / 1000) + TrialSession.PAPER_SERVICE_PDF_TTL;
+        const record: TrialSessionPaperPdfRecord = {
+          fileId: newPdf.fileId,
+          pk: `trial-session|${trialSessionToUpdate.trialSessionId}`,
+          sk: `paper-service-pdf|${newPdf.fileId}`,
+          title: newPdf.title,
+          ttl: expireInThreeDays,
+        };
+        return record;
+      })
+      .forEach(record => itemsToUpdate.push({ PutRequest: { Item: record } }));
+  }
+
   await batchWrite(itemsToUpdate, applicationContext);
 };
-
-// Remove conditionalPut in favor of skipping over old pdfs
-// Use batchwrite
