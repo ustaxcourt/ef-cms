@@ -153,7 +153,13 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
   });
 };
 
-const waitForJobToFinish = async ({ applicationContext, jobId }) => {
+const waitForJobToFinish = async ({
+  applicationContext,
+  jobId,
+}: {
+  applicationContext: IApplicationContext;
+  jobId: string;
+}) => {
   let unfinishedCases;
   while (unfinishedCases !== 0) {
     const jobStatus = await applicationContext
@@ -164,6 +170,6 @@ const waitForJobToFinish = async ({ applicationContext, jobId }) => {
       });
     ({ unfinishedCases } = jobStatus);
 
-    await applicationContext.getUtilities().sleep(5000);
+    await new Promise(resolve => setTimeout(resolve, 5000));
   }
 };
