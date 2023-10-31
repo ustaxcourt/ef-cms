@@ -209,7 +209,7 @@ export const serveThirtyDayNoticeInteractor = async (
       .saveFileAndGenerateUrl({
         applicationContext,
         file: paperServicePdfData,
-        fileNamePrefix: 'paper-service-pdf',
+        fileNamePrefix: 'paper-service-pdf/',
       });
 
     pdfUrl = url;

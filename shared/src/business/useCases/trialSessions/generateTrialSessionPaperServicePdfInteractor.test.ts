@@ -80,8 +80,9 @@ describe('generateTrialSessionPaperServicePdfInteractor', () => {
     ).toMatchObject({
       message: {
         action: 'set_trial_calendar_paper_service_complete',
+        fileId: mockFileId,
         hasPaper: true,
-        pdfUrl: expect.anything(),
+        pdfUrl: mockPdfUrl,
       },
     });
   });

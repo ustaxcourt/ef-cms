@@ -1,4 +1,4 @@
-import { TDynamoRecord } from './dynamo/dynamoTypes';
+import { DeleteRequest, PutRequest, TDynamoRecord } from './dynamo/dynamoTypes';
 import { chunk, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
 
@@ -73,35 +73,6 @@ export const put = ({
       }),
     })
     .promise()
-    .then(() => Item);
-};
-
-export const conditionalPut = ({
-  applicationContext,
-  ConditionExpression,
-  Item,
-}: {
-  ConditionExpression: string;
-  Item: Record<string, any>;
-  applicationContext: IApplicationContext;
-}): Promise<TDynamoRecord> => {
-  return applicationContext
-    .getDocumentClient()
-    .put({
-      ConditionExpression,
-      Item: filterEmptyStrings(Item),
-      TableName: getTableName({
-        applicationContext,
-      }),
-    })
-    .promise()
-    .catch(e => {
-      if (e.message.includes('The conditional request failed')) {
-        return;
-      } else {
-        throw e;
-      }
-    })
     .then(() => Item);
 };
 
@@ -451,6 +422,29 @@ export const batchDelete = ({ applicationContext, items }) => {
       );
     }
   }
+};
+
+export const batchWrite = async (
+  commands: (DeleteRequest | PutRequest)[],
+  applicationContext: IApplicationContext,
+): Promise<void> => {
+  commands.forEach(command => filterEmptyStrings(command));
+  const documentClient = applicationContext.getDocumentClient();
+  const chunks = chunk(commands, 25);
+
+  await Promise.all(
+    chunks.map(commandChunk =>
+      documentClient
+        .batchWrite({
+          RequestItems: {
+            [applicationContext.environment.dynamoDbTableName]: commandChunk,
+          },
+        })
+        .promise(),
+    ),
+  );
+
+  return;
 };
 
 export const remove = ({

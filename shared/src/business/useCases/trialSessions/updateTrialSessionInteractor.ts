@@ -155,7 +155,7 @@ export const updateTrialSession = async (
         .saveFileAndGenerateUrl({
           applicationContext,
           file: paperServicePdfData,
-          fileNamePrefix: 'paper-service-pdf',
+          fileNamePrefix: 'paper-service-pdf/',
         }));
       const paperServicePdfName = getPaperServicePdfName({
         shouldIssueNoticeOfChangeOfTrialJudge,

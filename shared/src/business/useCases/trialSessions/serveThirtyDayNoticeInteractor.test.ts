@@ -185,7 +185,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ).toHaveBeenCalledWith({
         applicationContext: expect.anything(),
         file: expect.anything(),
-        fileNamePrefix: 'paper-service-pdf',
+        fileNamePrefix: 'paper-service-pdf/',
       });
       expect(
         applicationContext.getPersistenceGateway().updateTrialSession,

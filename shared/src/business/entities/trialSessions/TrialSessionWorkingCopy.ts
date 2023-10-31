@@ -27,7 +27,7 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
   public trialSessionId: string;
   public userId: string;
 
-  constructor(rawSession: RawTrialSessionWorkingCopy) {
+  constructor(rawSession) {
     super('TrialSessionWorkingCopy');
 
     this.caseMetadata = rawSession.caseMetadata || {};
