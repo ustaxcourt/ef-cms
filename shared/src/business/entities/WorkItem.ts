@@ -1,10 +1,10 @@
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { Case } from '@shared/business/entities/cases/Case';
+import { JoiValidationEntity_New } from './joiValidationEntity/JoiValidationEntity_New';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
 import { pick } from 'lodash';
-
-export class WorkItem extends JoiValidationEntity {
+export class WorkItem extends JoiValidationEntity_New {
   public assigneeId: string;
   public assigneeName: string;
   public associatedJudge: string;
@@ -166,10 +166,6 @@ export class WorkItem extends JoiValidationEntity {
 
   getValidationRules() {
     return WORK_ITEM_VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 }
 
