@@ -91,10 +91,13 @@ export abstract class JoiValidationEntity_New {
         });
         return transformed;
       };
+
       if (logErrors) {
         applicationContext?.logger.error('*** Entity with error: ***', this);
       }
+
       const validationErrors = this.getValidationErrors()!;
+
       throw new InvalidEntityError(
         this.entityName,
         JSON.stringify(stringifyTransform(validationErrors)),
@@ -103,6 +106,7 @@ export abstract class JoiValidationEntity_New {
     }
 
     setIsValidated(this);
+
     return this;
   }
 

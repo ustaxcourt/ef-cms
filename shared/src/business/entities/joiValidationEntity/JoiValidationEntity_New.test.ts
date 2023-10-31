@@ -1,4 +1,5 @@
 import { InvalidEntityError } from '@web-api/errors/errors';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { TestEntity } from './TestEntity';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 
@@ -123,6 +124,42 @@ describe('Joi Entity', () => {
         expect(e instanceof InvalidEntityError).toEqual(true);
         expect(applicationContext?.logger.error).toHaveBeenCalled();
       }
+    });
+  });
+
+  describe('toRawObject', () => {
+    it('should return the entity as a plain JSON object', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      const result = testEntity.toRawObject();
+
+      expect(result).toEqual({
+        arrayErrorMessage: 'APPROVED',
+        entityName: 'TestEntity',
+        propUsingReference: 10,
+        referencedProp: 5,
+        singleErrorMessage: 'APPROVED',
+      });
+      expect(testEntity instanceof JoiValidationEntity_New).toEqual(true);
+      expect(result instanceof JoiValidationEntity_New).toEqual(false);
+    });
+  });
+
+  describe('validateRawCollection', () => {
+    it('should throw an error when an item in the collection is NOT valid', () => {
+      const testEntity = new TestEntity({
+        arrayErrorMessage: 'APPROVED',
+        propUsingReference: 10,
+        singleErrorMessage: 'APPROVED',
+      });
+
+      expect(() =>
+        TestEntity.validateRawCollection([testEntity.toRawObject(), {}], {}),
+      ).toThrow();
     });
   });
 });
