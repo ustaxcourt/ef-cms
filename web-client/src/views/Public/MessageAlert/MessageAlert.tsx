@@ -1,21 +1,13 @@
-import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React, { useEffect, useRef } from 'react';
 
 export const MessageAlert = ({ alertType = 'error', message, title }) => {
   const alertTypeClassName = {
-    error: 'error-message-alert',
-    success: 'success-message-alert',
-    warning: 'warning-message-alert',
-  };
-
-  const iconDictionary = {
-    error: ['fas', 'exclamation-circle'],
-    success: ['fas', 'check-circle'],
-    warning: ['fas', 'exclamation-triangle'],
+    error: 'usa-alert--error',
+    info: 'usa-alert--info',
+    success: 'usa-alert--success',
+    warning: 'usa-alert--warning',
   };
   const className = alertTypeClassName[alertType] || alertTypeClassName.error;
-  const icon = iconDictionary[alertType] || iconDictionary.error;
-
   const notificationRef = useRef(null);
   useEffect(() => {
     const notification = notificationRef.current;
@@ -25,15 +17,18 @@ export const MessageAlert = ({ alertType = 'error', message, title }) => {
   });
 
   return (
-    <div className={`padding-3 ${className}`} ref={notificationRef}>
-      <div className="grid-row">
-        <div className="grid-col-1">
-          <Icon aria-label="icon" className="" icon={icon} size="2x" />
-        </div>
-        <div className="grid-col-11">
-          <h2>{title}</h2>
-          <p dangerouslySetInnerHTML={{ __html: message }}></p>
-        </div>
+    <div
+      aria-live="polite"
+      className={`usa-alert ${className} padding-right-3`}
+      ref={notificationRef}
+      role="alert"
+    >
+      <div className="usa-alert__body">
+        <h1 className="usa-alert__heading">{title}</h1>
+        <p
+          className="usa-alert__text"
+          dangerouslySetInnerHTML={{ __html: message }}
+        ></p>
       </div>
     </div>
   );
