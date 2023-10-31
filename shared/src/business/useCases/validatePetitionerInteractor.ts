@@ -26,10 +26,10 @@ export const validatePetitionerInteractor = (
 
   let updateUserEmailErrors;
   if (contactInfo.updatedEmail || contactInfo.confirmEmail) {
-    updateUserEmailErrors = new UpdateUserEmail(
-      { ...contactInfo, email: contactInfo.updatedEmail },
-      { applicationContext },
-    ).getFormattedValidationErrors();
+    updateUserEmailErrors = new UpdateUserEmail({
+      ...contactInfo,
+      email: contactInfo.updatedEmail,
+    }).getValidationErrors();
   }
 
   const aggregatedErrors = {
