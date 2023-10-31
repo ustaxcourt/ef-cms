@@ -1010,21 +1010,6 @@ header.usa-header {
 	}
 }
 
-.error-message-alert {
-	border-left: 5px solid color($theme-color-secondary);
-	background-color: rgb(243 227 219);
-}
-
-.success-message-alert {
-	border-left: 5px solid $color-green;
-	background-color: $color-success;
-}
-
-.warning-message-alert {
-	border-left: 5px solid color($theme-color-warning);
-	background-color: rgb(250 244 209);
-}
-
 .create-petitioner-form {
   input.usa-input {
     width: 100%;
