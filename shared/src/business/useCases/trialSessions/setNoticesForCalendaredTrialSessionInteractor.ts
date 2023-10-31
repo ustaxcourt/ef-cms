@@ -153,19 +153,17 @@ export const setNoticesForCalendaredTrialSessionInteractor = async (
   });
 };
 
-const waitForJobToFinish = ({ applicationContext, jobId }) => {
-  return new Promise(resolve => {
-    const interval = setInterval(async () => {
-      const jobStatus = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionJobStatusForCase({
-          applicationContext,
-          jobId,
-        });
-      if (jobStatus && jobStatus.unfinishedCases === 0) {
-        clearInterval(interval);
-        resolve(undefined);
-      }
-    }, 5000);
-  });
+const waitForJobToFinish = async ({ applicationContext, jobId }) => {
+  let unfinishedCases;
+  while (unfinishedCases !== 0) {
+    const jobStatus = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionJobStatusForCase({
+        applicationContext,
+        jobId,
+      });
+    ({ unfinishedCases } = jobStatus);
+
+    await applicationContext.getUtilities().sleep(5000);
+  }
 };
