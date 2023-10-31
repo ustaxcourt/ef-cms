@@ -1,3 +1,5 @@
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+
 export const MOCK_CASE_DEADLINE: RawCaseDeadline = {
   associatedJudge: 'Buch',
   caseDeadlineId: '1216b2e6-f308-42ec-88fe-9e4e6488cf90',
