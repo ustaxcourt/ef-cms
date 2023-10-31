@@ -127,6 +127,16 @@ describe('Joi Entity', () => {
         });
       });
 
+      it('should ONlY recursively validate items in an array when the list contains items which are instances of JoiValidationEntity', () => {
+        const testCaseEntity = new TestCaseEntity({
+          otherList: [{ aProperty: 'abc' }], // Other list is a plain list of objects
+        });
+
+        const errors = testCaseEntity.getValidationErrors();
+
+        expect(errors).toEqual(null);
+      });
+
       it('should return an object of errors when there is an error in a nested entity', () => {
         const testCaseEntity = new TestCaseEntity({
           nestedCase: { contactType: 'INVALID_1' },
