@@ -257,7 +257,7 @@ describe('User entity', () => {
       });
 
       expect(user.isValid()).toBeFalsy();
-      expect(user.getFormattedValidationErrors()).toEqual({
+      expect(user.getValidationErrors()).toEqual({
         pendingEmailVerificationToken: expect.anything(),
       });
     });
