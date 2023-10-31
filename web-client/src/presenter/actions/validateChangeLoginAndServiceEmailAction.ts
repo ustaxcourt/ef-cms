@@ -17,7 +17,7 @@ export const validateChangeLoginAndServiceEmailAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateUpdateUserEmailInteractor(applicationContext, {
+    .validateUpdateUserEmailInteractor({
       updateUserEmail: form,
     });
 
