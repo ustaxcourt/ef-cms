@@ -18,42 +18,33 @@ export class Batch extends JoiValidationEntity_New {
     this.pages = rawBatch.pages || [];
   }
 
-  /**
-   * adds a page to current Batch
-   *
-   * @param {object} page the page to add
-   * @returns {Batch} the batch entity after the page is added
-   */
-  addPage(page) {
+  static VALIDATION_RULES = joi.object().keys({
+    batchId: JoiValidationConstants.UUID.required(),
+    batchIndex: joi
+      .number()
+      .integer()
+      .min(0)
+      .required()
+      .messages({ '*': 'Invalid batch index' }),
+    createdAt: JoiValidationConstants.ISO_DATE.required(),
+    pages: joi
+      .array()
+      .min(1)
+      .required()
+      .messages({ '*': 'At least one page is required' }),
+  });
+
+  addPage(page): Batch {
     this.pages.push(page);
     return this;
   }
 
-  /**
-   * clears all pages within this Batch
-   *
-   * @returns {Batch} the batch entity after the pages are cleared
-   */
-  clear() {
+  clear(): Batch {
     this.pages = [];
     return this;
   }
 
   getValidationRules() {
-    return joi.object().keys({
-      batchId: JoiValidationConstants.UUID.required(),
-      batchIndex: joi
-        .number()
-        .integer()
-        .min(0)
-        .required()
-        .messages({ '*': 'Invalid batch index' }),
-      createdAt: JoiValidationConstants.ISO_DATE.required(),
-      pages: joi
-        .array()
-        .min(1)
-        .required()
-        .messages({ '*': 'At least one page is required' }),
-    });
+    return Batch.VALIDATION_RULES;
   }
 }
