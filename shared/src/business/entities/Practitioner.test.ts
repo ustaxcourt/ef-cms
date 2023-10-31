@@ -7,8 +7,6 @@ import { Practitioner } from './Practitioner';
 import { getTextByCount } from '../utilities/getTextByCount';
 
 describe('Practitioner', () => {
-  const mockUpdatedEmail = 'hello@example.com';
-  const invalidEmail = 'hello@';
   let validPractitioner;
 
   const mockPractitioner = {
@@ -127,6 +125,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Active',
       employer: 'IRS',
     });
+
     expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
@@ -135,6 +134,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Active',
       employer: 'DOJ',
     });
+
     expect(user.role).toEqual(ROLES.irsPractitioner);
   });
 
@@ -143,6 +143,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Active',
       employer: 'Private',
     });
+
     expect(user.role).toEqual(ROLES.privatePractitioner);
   });
 
@@ -151,6 +152,7 @@ describe('Practitioner', () => {
       admissionsStatus: 'Inactive',
       employer: 'Private',
     });
+
     expect(user.role).toEqual(ROLES.inactivePractitioner);
   });
 
@@ -185,6 +187,7 @@ describe('Practitioner', () => {
       middleName: 'Middle',
       suffix: 'Sfx',
     });
+
     expect(user.name).toEqual('Test Middle Practitioner Sfx');
   });
 
@@ -220,6 +223,9 @@ describe('Practitioner', () => {
   });
 
   describe('updatedEmail/confirmEmail', () => {
+    const mockUpdatedEmail = 'hello@example.com';
+    const invalidEmail = 'hello@';
+
     it('passes validation when updatedEmail and confirmEmail are undefined', () => {
       validPractitioner.updatedEmail = undefined;
       validPractitioner.confirmEmail = undefined;

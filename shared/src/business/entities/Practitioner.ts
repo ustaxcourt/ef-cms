@@ -8,6 +8,7 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from './EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { User } from './User';
 import joi from 'joi';
@@ -63,6 +64,8 @@ export class Practitioner extends User {
       this.role = ROLES.inactivePractitioner;
     }
   }
+
+  static ENTITY_NAME = 'IrsPractitioner';
 
   static VALIDATION_RULES = joi.object().keys({
     additionalPhone: JoiValidationConstants.STRING.max(100)
@@ -182,7 +185,7 @@ export class Practitioner extends User {
   }
 
   toRawObject() {
-    const result = super.toRawObjectFromJoi() as any;
+    const result = super.toRawObject() as any;
 
     // We don't want to persist these values as they are only used for validation
     result.confirmEmail = undefined;
@@ -224,8 +227,4 @@ const roleMap = {
   Private: ROLES.privatePractitioner,
 };
 
-declare global {
-  type RawPractitioner = ExcludeMethods<Practitioner>;
-}
-
-export const entityName = 'Practitioner';
+export type RawPractitioner = ExcludeMethods<Practitioner>;

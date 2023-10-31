@@ -2,12 +2,6 @@ import { JoiValidationEntity } from './JoiValidationEntity';
 import { ROLES } from './EntityConstants';
 import { User } from './User';
 
-/**
- * constructor
- *
- * @param {object} rawUser the raw user data
- * @constructor
- */
 export class PublicUser extends JoiValidationEntity {
   public name: string;
   public role: string;
@@ -31,6 +25,6 @@ export class PublicUser extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    return User.BASE_USER_VALIDATION as any;
+    return User.VALIDATION_RULES as any;
   }
 }

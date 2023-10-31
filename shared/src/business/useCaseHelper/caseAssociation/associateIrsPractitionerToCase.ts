@@ -1,5 +1,6 @@
 import { Case } from '../../entities/cases/Case';
 import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { UserCase } from '../../entities/UserCase';
 
 /**

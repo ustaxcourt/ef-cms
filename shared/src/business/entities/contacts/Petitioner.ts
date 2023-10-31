@@ -1,7 +1,8 @@
 import { CONTACT_TYPES, SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import { ExcludeMethods } from 'types/TEntity';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
-import { USER_CONTACT_VALIDATION_RULES } from '../User';
+import { User } from '@shared/business/entities/User';
 import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
 import joi from 'joi';
 
@@ -65,7 +66,7 @@ export class Petitioner extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
-    ...USER_CONTACT_VALIDATION_RULES,
+    ...User.USER_CONTACT_VALIDATION_RULES,
     additionalName: JoiValidationConstants.STRING.max(600).optional(),
     contactId: JoiValidationConstants.UUID.required().description(
       'Unique contact ID only used by the system.',
