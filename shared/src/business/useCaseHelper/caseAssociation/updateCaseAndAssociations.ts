@@ -226,8 +226,6 @@ const updateIrsPractitioners = ({
     currentIrsPractitioners.push(...unchangedIrsPractitioners);
   }
 
-  console.log('currentIrsPractitioners%%%%%', currentIrsPractitioners);
-
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     currentIrsPractitioners,
     { applicationContext },
