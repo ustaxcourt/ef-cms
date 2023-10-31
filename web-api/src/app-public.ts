@@ -139,9 +139,11 @@ app.get('/feature-flag', lambdaWrapper(getAllFeatureFlagsLambda));
 
 app.post('/public-api/account/create', lambdaWrapper(createUserCognitoLambda));
 
-app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
-
 app.post(
   '/account/resend-verification',
   lambdaWrapper(cognitoResendVerificationLinkLambda),
 );
+
+// This following endpoint is used only by cognito-local
+
+app.post('/confirm-signup-local', lambdaWrapper(confirmSignUpLocalLambda));
