@@ -3,7 +3,7 @@
  *   npx ts-node --transpile-only scripts/run-once-scripts/create-efcms-user-practitioner-firm-index.ts
  *
  * USAGE:
- *   npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts > ~/Desktop/firms-cases.csv
+ *   npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv
  *
  * CLEANUP:
  *   npx ts-node --transpile-only scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
@@ -13,37 +13,41 @@ import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityCo
 import { createApplicationContext } from '@web-api/applicationContext';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 
+const firmTerms = process.argv.slice(2);
+if (!firmTerms.length) {
+  console.error(
+    'usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts Firm Search Terms > ~/Desktop/firms-cases.csv',
+  );
+  process.exit(1);
+}
+
 const getFirmsPractitioners = async ({ applicationContext }) => {
+  const must: {}[] = [
+    {
+      term: {
+        'admissionsStatus.S': 'Active',
+      },
+    },
+    {
+      term: {
+        'role.S': 'privatePractitioner',
+      },
+    },
+  ];
+  for (const firmTerm of firmTerms) {
+    must.push({
+      wildcard: {
+        'firmName.S': {
+          value: `*${firmTerm}*`,
+        },
+      },
+    });
+  }
   const searchParameters = {
     body: {
       query: {
         bool: {
-          must: [
-            {
-              term: {
-                'admissionsStatus.S': 'Active',
-              },
-            },
-            {
-              term: {
-                'role.S': 'privatePractitioner',
-              },
-            },
-            {
-              wildcard: {
-                'firmName.S': {
-                  value: '*Jones*',
-                },
-              },
-            },
-            {
-              wildcard: {
-                'firmName.S': {
-                  value: '*Day*',
-                },
-              },
-            },
-          ],
+          must,
         },
       },
     },
