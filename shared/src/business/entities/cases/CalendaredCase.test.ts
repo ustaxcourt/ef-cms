@@ -1,16 +1,13 @@
 import { CalendaredCase } from './CalendaredCase';
 import { MOCK_CASE_WITH_SECONDARY_OTHERS } from '../../../test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
-import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('CalendaredCase', () => {
   it('allowlists the fields set within the entity, removing those not defined', () => {
-    const calendaredCase = new CalendaredCase(
-      MOCK_CASE_WITH_SECONDARY_OTHERS,
-      applicationContext,
-    );
+    const calendaredCase = new CalendaredCase(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
     expect(calendaredCase.getFormattedValidationErrors()).toBe(null);
+    expect((calendaredCase as any).docketEntries).toBeUndefined();
     expect((calendaredCase as any).consolidatedCases).toBeUndefined();
     expect((calendaredCase as any).petitioners).toBeUndefined();
     expect((calendaredCase as any).associatedJudge).toBeUndefined();
@@ -59,25 +56,26 @@ describe('CalendaredCase', () => {
   });
 
   it('retains irsPractitioners and privatePractitioners', () => {
-    const calendaredCase = new CalendaredCase(
-      MOCK_COMPLEX_CASE,
-      applicationContext,
-    );
+    const calendaredCase = new CalendaredCase(MOCK_COMPLEX_CASE);
 
     expect(calendaredCase.irsPractitioners!.length).toBeTruthy();
     expect(calendaredCase.privatePractitioners!.length).toEqual(0);
   });
 
   it('creates the docketNumberWithSuffix field correctly', () => {
-    const calendaredCase = new CalendaredCase(
-      {
-        ...MOCK_CASE_WITH_SECONDARY_OTHERS,
-        docketNumberSuffix: 'S',
-      },
-      applicationContext,
-    );
+    const calendaredCase = new CalendaredCase({
+      ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      docketNumberSuffix: 'S',
+    });
 
     expect(calendaredCase.getFormattedValidationErrors()).toBe(null);
     expect(calendaredCase.docketNumberWithSuffix).toBe('109-19S');
+  });
+
+  it('sets PMTServedPartiesCode when a case includes an unstricken PMT type document', () => {
+    const calendaredCase = new CalendaredCase(MOCK_COMPLEX_CASE);
+
+    expect(calendaredCase.getFormattedValidationErrors()).toBe(null);
+    expect(calendaredCase.PMTServedPartiesCode).toBe('P');
   });
 });
