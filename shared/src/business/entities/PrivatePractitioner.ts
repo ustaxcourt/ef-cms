@@ -25,6 +25,10 @@ export class PrivatePractitioner extends User {
 
   static ENTITY_NAME = 'PrivatePractitioner';
 
+  isRepresenting(petitionerContactId) {
+    return this.representing.includes(petitionerContactId);
+  }
+
   static VALIDATION_RULES = joi.object().keys({
     barNumber: JoiValidationConstants.STRING.max(100)
       .required()
@@ -40,7 +44,9 @@ export class PrivatePractitioner extends User {
       .optional()
       .allow(null)
       .description('The firm name for the practitioner.'),
-    name: JoiValidationConstants.STRING.max(100).required(),
+    name: JoiValidationConstants.STRING.max(100)
+      .required()
+      .messages({ '*': 'Enter name' }),
     representing: joi
       .array()
       .items(JoiValidationConstants.UUID)
@@ -56,12 +62,8 @@ export class PrivatePractitioner extends User {
     userId: JoiValidationConstants.UUID.required(),
   });
 
-  isRepresenting(petitionerContactId) {
-    return this.representing.includes(petitionerContactId);
-  }
-
   getValidationRules() {
-    return PrivatePractitioner.VALIDATION_RULES as any;
+    return PrivatePractitioner.VALIDATION_RULES;
   }
 }
 
