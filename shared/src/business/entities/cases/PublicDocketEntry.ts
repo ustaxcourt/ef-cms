@@ -4,10 +4,10 @@ import {
 } from '../EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import joi from 'joi';
 
-export class PublicDocketEntry extends JoiValidationEntity {
+export class PublicDocketEntry extends JoiValidationEntity_New {
   public additionalInfo?: string;
   public additionalInfo2?: string;
   public attachments?: boolean;
@@ -138,13 +138,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
     servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
   } as const;
 
-  static VALIDATION_ERROR_MESSAGES = {} as const;
-
   getValidationRules() {
     return PublicDocketEntry.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return PublicDocketEntry.VALIDATION_ERROR_MESSAGES;
   }
 }
