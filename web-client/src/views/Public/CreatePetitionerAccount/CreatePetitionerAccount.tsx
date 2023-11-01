@@ -26,8 +26,8 @@ export const CreatePetitionerAccount = connect(
             </div>
           )}
           <div className="grid-row bg-white padding-x-5 padding-y-4">
-            <CreatePetitionerAccountForm></CreatePetitionerAccountForm>
-            <CreatePetitionerAccountInfo></CreatePetitionerAccountInfo>
+            <CreatePetitionerAccountForm />
+            <CreatePetitionerAccountInfo />
           </div>
         </div>
       </>
