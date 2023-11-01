@@ -73,7 +73,7 @@ export class Practitioner extends User {
     Private: ROLES.privatePractitioner,
   };
 
-  static VALIDATION_RULES = {
+  static VALIDATION_RULES = joi.object().keys({
     additionalPhone: JoiValidationConstants.STRING.max(100)
       .optional()
       .allow(null)
@@ -184,7 +184,7 @@ export class Practitioner extends User {
         then: JoiValidationConstants.EMAIL.required(),
       })
       .messages({ '*': 'Enter a valid email address' }),
-  };
+  });
 
   getValidationRules() {
     return Practitioner.VALIDATION_RULES;
