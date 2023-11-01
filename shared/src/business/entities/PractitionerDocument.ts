@@ -6,6 +6,7 @@ import {
   PRACTITIONER_DOCUMENT_TYPES_MAP,
 } from './EntityConstants';
 import { createISODateString } from '../utilities/DateHandler';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class PractitionerDocument extends JoiValidationEntity {
@@ -56,6 +57,35 @@ export class PractitionerDocument extends JoiValidationEntity {
         otherwise: joi.optional().allow(null),
         then: joi.required(),
       }),
+      practitionerDocumentFileId:
+        JoiValidationConstants.UUID.required().description(
+          'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',
+        ),
+      uploadDate: JoiValidationConstants.ISO_DATE.required(),
+    };
+  }
+
+  getValidationRules_NEW() {
+    return {
+      categoryName: JoiValidationConstants.STRING.required().messages(
+        setDefaultErrorMessage('Enter a category name'),
+      ),
+      categoryType: JoiValidationConstants.STRING.valid(
+        ...Object.values(PRACTITIONER_DOCUMENT_TYPES),
+      )
+        .required()
+        .messages(setDefaultErrorMessage('Enter a category type')),
+      description: JoiValidationConstants.STRING.max(
+        MAX_PRACTITIONER_DOCUMENT_DESCRIPTION_CHARACTERS,
+      )
+        .optional()
+        .allow(''),
+      fileName: JoiValidationConstants.STRING.required(),
+      location: JoiValidationConstants.STRING.when('categoryType', {
+        is: PRACTITIONER_DOCUMENT_TYPES_MAP.CERTIFICATE_OF_GOOD_STANDING,
+        otherwise: joi.optional().allow(null),
+        then: joi.required(),
+      }).messages(setDefaultErrorMessage('Enter a location')),
       practitionerDocumentFileId:
         JoiValidationConstants.UUID.required().description(
           'System-generated unique ID for the documents. If the document is associated with a document in S3, this is also the S3 document key.',

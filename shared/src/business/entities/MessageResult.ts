@@ -39,4 +39,11 @@ export class MessageResult extends Message {
       ...MessageResult.VALIDATION_RULES,
     };
   }
+
+  getValidationRules_NEW() {
+    return {
+      ...super.getValidationRules_NEW(),
+      ...MessageResult.MESSAGE_RESULTS_VALIDATION_RULES,
+    } as any;
+  }
 }
