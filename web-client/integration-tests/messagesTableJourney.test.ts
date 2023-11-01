@@ -7,8 +7,6 @@ import { runCompute } from '@web-client/presenter/test.cerebral';
 import { userSendsMessage } from './journey/userSendsMessage';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
-
 describe('messages table journey', () => {
   const cerebralTest = setupTest();
   const calendaredCaseDocketNumber = '103-20';
@@ -25,8 +23,9 @@ describe('messages table journey', () => {
     .getJudgesChambers();
   const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
 
+  const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
+
   beforeAll(() => {
-    jest.setTimeout(40000);
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

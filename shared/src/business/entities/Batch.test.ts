@@ -1,8 +1,6 @@
 import { Batch } from './Batch';
 import { applicationContext } from '../test/createTestApplicationContext';
 
-const { VALIDATION_ERROR_MESSAGES } = Batch;
-
 describe('Batch entity', () => {
   it('adds a page', () => {
     const batch = new Batch({
@@ -27,8 +25,8 @@ describe('Batch entity', () => {
     it('validates minimum number of pages', () => {
       const batch = new Batch({ applicationContext, rawBatch: {} });
 
-      expect(batch.getFormattedValidationErrors()).toMatchObject({
-        pages: VALIDATION_ERROR_MESSAGES.pages,
+      expect(batch.getValidationErrors()).toMatchObject({
+        pages: 'At least one page is required',
       });
     });
 
@@ -41,8 +39,8 @@ describe('Batch entity', () => {
         },
       });
 
-      expect(batch.getFormattedValidationErrors()).toMatchObject({
-        batchIndex: VALIDATION_ERROR_MESSAGES.batchIndex,
+      expect(batch.getValidationErrors()).toMatchObject({
+        batchIndex: 'Invalid batch index',
       });
     });
   });

@@ -20,7 +20,7 @@ export const validateAddIrsPractitionerAction = ({
 
   const errors = applicationContext
     .getUseCases()
-    .validateAddIrsPractitionerInteractor(applicationContext, {
+    .validateAddIrsPractitionerInteractor({
       counsel,
     });
 

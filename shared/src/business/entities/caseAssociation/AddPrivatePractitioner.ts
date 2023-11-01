@@ -1,10 +1,9 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
-import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
-export class AddPrivatePractitioner extends JoiValidationEntity {
+export class AddPrivatePractitioner extends JoiValidationEntity_New {
   public email?: string;
   public representing: string[];
   public serviceIndicator: string;
@@ -12,6 +11,7 @@ export class AddPrivatePractitioner extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('AddPrivatePractitioner');
+
     this.email = rawProps.user?.email;
     this.representing = rawProps.representing;
     this.serviceIndicator = rawProps.serviceIndicator;
@@ -23,29 +23,8 @@ export class AddPrivatePractitioner extends JoiValidationEntity {
     representing: joi
       .array()
       .items(JoiValidationConstants.UUID.required())
-      .required(),
-    serviceIndicator: joi
-      .when('email', {
-        is: joi.exist().not(null),
-        otherwise: JoiValidationConstants.STRING.valid(
-          SERVICE_INDICATOR_TYPES.SI_NONE,
-          SERVICE_INDICATOR_TYPES.SI_PAPER,
-        ),
-        then: JoiValidationConstants.STRING.valid(
-          ...Object.values(SERVICE_INDICATOR_TYPES),
-        ),
-      })
-      .required(),
-    user: joi.object().required(),
-  } as const;
-
-  static VALIDATION_RULES_NEW = {
-    email: JoiValidationConstants.STRING.optional(),
-    representing: joi
-      .array()
-      .items(JoiValidationConstants.UUID.required())
       .required()
-      .messages(setDefaultErrorMessage('Select a represented party')),
+      .messages({ '*': 'Select a represented party' }),
     serviceIndicator: joi
       .when('email', {
         is: joi.exist().not(null),
@@ -59,39 +38,18 @@ export class AddPrivatePractitioner extends JoiValidationEntity {
       })
       .required()
       .messages({
-        ...setDefaultErrorMessage('Select service type'),
+        '*': 'Select service type',
         'any.only':
           'No email found for electronic service. Select a valid service preference.',
       }),
     user: joi
       .object()
       .required()
-      .messages(setDefaultErrorMessage('Select a petitioner counsel')),
-  } as const;
-
-  static VALIDATION_ERROR_MESSAGES = {
-    representing: 'Select a represented party',
-    serviceIndicator: [
-      {
-        contains: 'must be one of',
-        message:
-          'No email found for electronic service. Select a valid service preference.',
-      },
-      'Select service type',
-    ],
-    user: 'Select a petitioner counsel',
+      .messages({ '*': 'Select a petitioner counsel' }),
   } as const;
 
   getValidationRules() {
     return AddPrivatePractitioner.VALIDATION_RULES;
-  }
-
-  getValidationRules_NEW() {
-    return AddPrivatePractitioner.VALIDATION_RULES_NEW;
-  }
-
-  getErrorToMessageMap() {
-    return AddPrivatePractitioner.VALIDATION_ERROR_MESSAGES;
   }
 }
 
