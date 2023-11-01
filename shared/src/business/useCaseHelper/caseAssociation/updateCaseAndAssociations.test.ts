@@ -663,11 +663,37 @@ describe('updateCaseAndAssociations', () => {
         userId: practitionerId,
       });
     });
+
+    it('calls updateIrsPractitionerOnCase to update gsi1pk for unchanged irsPractitioners when the case is part of a consolidated group', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsPractitioners,
+          leadDocketNumber: '101-23',
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .removePrivatePractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
+          .mock.calls[0][0],
+      ).toMatchObject({
+        docketNumber: validMockCase.docketNumber,
+        practitioner: mockCaseWithIrsPractitioners.irsPractitioners![0],
+        userId: practitionerId,
+      });
+    });
   });
 
   describe('Private practitioners', () => {
     const practitionerId = applicationContext.getUniqueId();
-    const mockCaseWithIrsPractitioners = new Case(
+    const mockCaseWithIrsAndPrivatePractitioners = new Case(
       {
         ...MOCK_CASE,
         privatePractitioners: [
@@ -685,13 +711,15 @@ describe('updateCaseAndAssociations', () => {
     beforeAll(() => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCaseWithIrsPractitioners);
+        .getCaseByDocketNumber.mockReturnValue(
+          mockCaseWithIrsAndPrivatePractitioners,
+        );
     });
 
     it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
         applicationContext,
-        caseToUpdate: mockCaseWithIrsPractitioners,
+        caseToUpdate: mockCaseWithIrsAndPrivatePractitioners,
       });
       expect(
         applicationContext.getPersistenceGateway()
@@ -713,7 +741,7 @@ describe('updateCaseAndAssociations', () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
-          ...mockCaseWithIrsPractitioners,
+          ...mockCaseWithIrsAndPrivatePractitioners,
           privatePractitioners: [updatedPractitioner],
         },
       });
@@ -736,11 +764,39 @@ describe('updateCaseAndAssociations', () => {
       });
     });
 
+    it('calls updatePrivatePractitionerOnCase to update gsi1pk for unchanged privatePractitioners when the case is part of a consolidated group', async () => {
+      await updateCaseAndAssociations({
+        applicationContext,
+        caseToUpdate: {
+          ...mockCaseWithIrsAndPrivatePractitioners,
+          leadDocketNumber: '101-23',
+        },
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .removePrivatePractitionerOnCase,
+      ).not.toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updatePrivatePractitionerOnCase,
+      ).toHaveBeenCalled();
+      expect(
+        applicationContext.getPersistenceGateway()
+          .updatePrivatePractitionerOnCase.mock.calls[0][0],
+      ).toMatchObject({
+        docketNumber: validMockCase.docketNumber,
+        practitioner:
+          mockCaseWithIrsAndPrivatePractitioners.privatePractitioners![0],
+        userId: practitionerId,
+      });
+    });
+
     it('removes an privatePractitioner from a case with existing privatePractitioners', async () => {
       await updateCaseAndAssociations({
         applicationContext,
         caseToUpdate: {
-          ...mockCaseWithIrsPractitioners,
+          ...mockCaseWithIrsAndPrivatePractitioners,
           privatePractitioners: [],
         },
       });
