@@ -208,7 +208,7 @@ describe('DocketEntry entity', () => {
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );
 
-      expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
+      expect(createdDocketEntry.getValidationErrors()).toEqual({
         'filers[1]': '"filers[1]" must be a valid GUID',
       });
     });
@@ -240,9 +240,9 @@ describe('DocketEntry entity', () => {
         secondaryDocumentInfo: 'was set by accessor rather than init',
       };
       expect(createdDocketEntry.isValid()).toEqual(false);
-      expect(
-        Object.keys(createdDocketEntry.getFormattedValidationErrors()!),
-      ).toEqual([DOCUMENT_RELATIONSHIPS.SECONDARY]);
+      expect(Object.keys(createdDocketEntry.getValidationErrors()!)).toEqual([
+        DOCUMENT_RELATIONSHIPS.SECONDARY,
+      ]);
     });
 
     it('should be valid if secondaryDocument is undefined and the scenario is not Nonstandard H', () => {
@@ -297,9 +297,7 @@ describe('DocketEntry entity', () => {
       );
       expect(createdDocketEntry.isValid()).toEqual(false);
       expect(
-        Object.keys(
-          createdDocketEntry.getFormattedValidationErrors() as object,
-        ),
+        Object.keys(createdDocketEntry.getValidationErrors() as object),
       ).toEqual(['documentType', 'eventCode']);
     });
 
@@ -346,7 +344,7 @@ describe('DocketEntry entity', () => {
         { applicationContext, petitioners: MOCK_PETITIONERS },
       );
       expect(createdDocketEntry.isValid()).toEqual(false);
-      expect(createdDocketEntry.getFormattedValidationErrors()).toEqual({
+      expect(createdDocketEntry.getValidationErrors()).toEqual({
         servedParties: '"servedParties" must be an array',
       });
     });

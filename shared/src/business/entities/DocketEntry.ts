@@ -13,7 +13,7 @@ import {
   UNSERVABLE_EVENT_CODES,
 } from './EntityConstants';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
@@ -21,7 +21,7 @@ import {
   createISODateString,
 } from '../utilities/DateHandler';
 
-export class DocketEntry extends JoiValidationEntity {
+export class DocketEntry extends JoiValidationEntity_New {
   public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;
@@ -87,7 +87,7 @@ export class DocketEntry extends JoiValidationEntity {
   public userId?: string;
   public privatePractitioners?: any[];
   public servedParties?: any[];
-  public signedAt?: string;
+  public signedAt?: string | null;
   public draftOrderState?: object;
   public stampData!: object;
   public isDraft?: boolean;
@@ -102,9 +102,9 @@ export class DocketEntry extends JoiValidationEntity {
   };
   public qcAt?: string;
   public qcByUserId?: string;
-  public signedByUserId?: string;
-  public signedJudgeName?: string;
-  public signedJudgeUserId?: string;
+  public signedByUserId?: string | null;
+  public signedJudgeName?: string | null;
+  public signedJudgeUserId?: string | null;
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
@@ -531,25 +531,6 @@ export class DocketEntry extends JoiValidationEntity {
     return DOCKET_ENTRY_VALIDATION_RULES;
   }
 
-  getErrorToMessageMap() {
-    return {
-      filedBy: [
-        {
-          contains: 'must be less than or equal to',
-          message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-        },
-        'Enter a filed by',
-      ],
-      filingDate: [
-        {
-          contains: 'must be less than or equal to',
-          message: 'Filing date cannot be in the future. Enter a valid date.',
-        },
-        'Enter a valid filing date',
-      ],
-    };
-  }
-
   static isMinuteEntry(rawDocketEntry: RawDocketEntry): boolean {
     const MINUTE_ENTRIES_EVENT_CODES = Object.keys(MINUTE_ENTRIES_MAP).map(
       key => MINUTE_ENTRIES_MAP[key].eventCode,
@@ -576,7 +557,7 @@ export class DocketEntry extends JoiValidationEntity {
  * @returns {String} served parties code
  */
 export const getServedPartiesCode = (servedParties?: any[]) => {
-  let servedPartiesCode = undefined;
+  let servedPartiesCode: string | undefined = undefined;
   if (servedParties && servedParties.length > 0) {
     if (
       servedParties.length === 1 &&
