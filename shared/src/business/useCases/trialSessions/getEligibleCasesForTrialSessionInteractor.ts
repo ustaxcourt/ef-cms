@@ -58,7 +58,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
     .getEligibleCasesForTrialSession({
       applicationContext,
       limit:
-        trialSessionEntity.maxCases +
+        trialSessionEntity.maxCases! +
         TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
         calendaredCases.length,
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
