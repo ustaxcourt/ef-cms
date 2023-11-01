@@ -2,7 +2,7 @@ import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesC
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, setupTest, viewCaseDetail } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 
@@ -35,10 +35,15 @@ describe('Practitioner case association journey', () => {
 
   loginAs(cerebralTest, 'privatepractitioner@example.com');
   it('navigates to case detail and checks for case association', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    await viewCaseDetail({
+      cerebralTest,
       docketNumber: cerebralTest.docketNumber,
     });
-    expect(await cerebralTest.getState('isAssociated')).toBe(true);
-    expect(await cerebralTest.getState('isDirectlyAssociated')).toBe(false);
+
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
+    expect(cerebralTest.getState('screenMetadata.isAssociated')).toBe(true);
+    expect(cerebralTest.getState('screenMetadata.isDirectlyAssociated')).toBe(
+      false,
+    );
   });
 });
