@@ -4,7 +4,7 @@ import React from 'react';
 
 export const CreatePetitionerAccountInfo = connect({}, () => {
   return (
-    <div className="padding-x-205 margin-top-1 grid-col-12 desktop:grid-col-6">
+    <div className="padding-x-205 margin-top-1 grid-col-12 desktop:grid-col-6 create-petitioner-form">
       <h2>Are you filing a petition on behalf of someone else?</h2>
       <p>
         To file a case on behalf of another taxpayer, you must be authorized in
