@@ -3,29 +3,23 @@ import { Message } from './Message';
 import { TRIAL_CITY_STRINGS, TRIAL_LOCATION_MATCHER } from './EntityConstants';
 import joi from 'joi';
 
-/**
- * constructor
- *
- * @param {object} rawMessage the raw message data
- * @constructor
- */
 export class MessageResult extends Message {
   public trialDate: string;
   public trialLocation: string;
 
   constructor(rawMessage, { applicationContext }) {
     super(rawMessage, { applicationContext });
+
     this.entityName = 'MessageResult';
     this.trialDate = rawMessage.trialDate;
     this.trialLocation = rawMessage.trialLocation;
   }
 
-  static MESSAGE_RESULTS_VALIDATION_RULES = {
+  static VALIDATION_RULES = {
     entityName: JoiValidationConstants.STRING.valid('MessageResult').required(),
-    trialDate: joi
-      .alternatives()
-      .optional()
-      .description('When this case goes to trial.'),
+    trialDate: JoiValidationConstants.ISO_DATE.optional().description(
+      'When this case goes to trial.',
+    ),
     trialLocation: joi
       .alternatives()
       .try(
@@ -37,12 +31,12 @@ export class MessageResult extends Message {
       .description(
         'Where this case goes to trial. This may be different that the preferred trial location.',
       ),
-  };
+  } as any;
 
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      ...MessageResult.MESSAGE_RESULTS_VALIDATION_RULES,
-    } as any;
+      ...MessageResult.VALIDATION_RULES,
+    };
   }
 }

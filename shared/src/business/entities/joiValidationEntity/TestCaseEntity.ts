@@ -12,6 +12,7 @@ export const TEST_VALIDATION_RULES = joi.object().keys({
 export class TestCaseEntity extends JoiValidationEntity_New {
   public contactType: string;
   public caseList: TestCaseEntity[];
+  public otherList: { aProperty: string }[];
   public unhelpfulErrorMessage: string;
   public nestedCase: TestCaseEntity | undefined;
 
@@ -26,6 +27,13 @@ export class TestCaseEntity extends JoiValidationEntity_New {
         'VALID_3',
       )
         .required()
+        .messages({
+          'any.only': 'invalid contact type',
+        }),
+      otherList: joi
+        .array()
+        .items({ aProperty: joi.string().required() })
+        .optional()
         .messages({
           'any.only': 'invalid contact type',
         }),
@@ -48,6 +56,7 @@ export class TestCaseEntity extends JoiValidationEntity_New {
     this.caseList = (rawTestCase.caseList || []).map(
       d => new TestCaseEntity(d),
     );
+    this.otherList = rawTestCase.otherList;
     this.unhelpfulErrorMessage = rawTestCase.unhelpfulErrorMessage;
     this.nestedCase = rawTestCase.nestedCase
       ? new TestCaseEntity(rawTestCase.nestedCase)
