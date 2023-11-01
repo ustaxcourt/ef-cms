@@ -19,6 +19,7 @@ export const RemoteProceedingForm = connect(
           <input
             autoCapitalize="none"
             className="usa-input"
+            data-cy="trial-session-meeting-id"
             id="meeting-id"
             name="meetingId"
             type="text"
