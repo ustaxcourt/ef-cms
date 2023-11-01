@@ -1,4 +1,8 @@
-import { DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
+  DOCKET_NUMBER_SUFFIXES,
+} from '../EntityConstants';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
@@ -9,12 +13,13 @@ import joi from 'joi';
 export class CalendaredCase extends JoiValidationEntity {
   public caseCaption?: string;
   public docketNumber: string;
-  public PMTServedPartiesCode?: string;
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix?: string;
-  public leadDocketNumber?: string;
   public irsPractitioners?: IrsPractitioner[];
+  public leadDocketNumber?: string;
+  public PMTServedPartiesCode?: string;
   public privatePractitioners?: PrivatePractitioner[];
+  public status: CaseStatus;
 
   constructor(rawProps) {
     super('CalendaredCase');
@@ -25,6 +30,7 @@ export class CalendaredCase extends JoiValidationEntity {
     this.docketNumberSuffix = rawProps.docketNumberSuffix;
     this.docketNumberWithSuffix =
       rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
+    this.status = rawProps.status;
 
     // instead of sending EVERY docket entry over, the front end only cares about the filingPartiesCode on PMT documents not stricken
     this.PMTServedPartiesCode = setPretrialMemorandumFiler({
@@ -73,6 +79,9 @@ export class CalendaredCase extends JoiValidationEntity {
       .items(PrivatePractitioner.VALIDATION_RULES)
       .optional()
       .description('List of private practitioners associated with the case.'),
+    status: JoiValidationConstants.STRING.valid(
+      ...Object.values(CASE_STATUS_TYPES),
+    ),
   };
 
   static VALIDATION_ERROR_MESSAGES = {};
