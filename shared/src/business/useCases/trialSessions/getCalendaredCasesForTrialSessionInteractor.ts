@@ -1,4 +1,4 @@
-import { CalendaredCase } from '@shared/business/entities/cases/CalendaredCase';
+import { CalendaredCase } from '../../entities/cases/CalendaredCase';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -22,9 +22,7 @@ export const getCalendaredCasesForTrialSessionInteractor = async (
     });
 
   const casesWithMinimalRequiredInformation = cases.map(aCase => {
-    return new CalendaredCase(aCase, applicationContext)
-      .validate()
-      .toRawObject();
+    return new CalendaredCase(aCase).validate().toRawObject();
   });
 
   return casesWithMinimalRequiredInformation;

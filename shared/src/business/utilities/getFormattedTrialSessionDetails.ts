@@ -2,9 +2,9 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   PARTIES_CODES,
 } from '../entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { FORMATS } from './DateHandler';
 import { RawCalendaredCase } from '../entities/cases/CalendaredCase';
-import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import { RawEligibleCase } from '../entities/cases/EligibleCase';
 import { compact, partition } from 'lodash';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
@@ -108,7 +108,7 @@ export const formatCaseForTrialSession = ({
 };
 
 const getDocketNumberSortString = ({ allCases = [], theCase }) => {
-  const leadCase = allCases.find(
+  const leadCase = (allCases as { docketNumber: string }[]).find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 
