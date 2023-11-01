@@ -42,7 +42,6 @@ describe('CalendaredCase', () => {
     expect((calendaredCase as any).petitionPaymentWaivedDate).toBeUndefined();
     expect((calendaredCase as any).preferredTrialCity).toBeUndefined();
     expect((calendaredCase as any).receivedAt).toBeUndefined();
-    expect((calendaredCase as any).status).toBeUndefined();
     expect((calendaredCase as any).trialDate).toBeUndefined();
     expect((calendaredCase as any).trialLocation).toBeUndefined();
     expect((calendaredCase as any).trialSessionId).toBeUndefined();

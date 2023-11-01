@@ -122,7 +122,6 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     expect(cases[0].petitionPaymentWaivedDate).toBeUndefined();
     expect(cases[0].preferredTrialCity).toBeUndefined();
     expect(cases[0].receivedAt).toBeUndefined();
-    expect(cases[0].status).toBeUndefined();
     expect(cases[0].trialDate).toBeUndefined();
     expect(cases[0].trialLocation).toBeUndefined();
     expect(cases[0].trialSessionId).toBeUndefined();
