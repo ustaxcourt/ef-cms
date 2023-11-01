@@ -22,7 +22,7 @@ describe('DocketEntryFactory', () => {
     rawEntity.isDocumentRequired = true;
 
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+      new DocketEntryFactory(rawEntity).getValidationErrors()!
         .primaryDocumentFile,
     ).toBeDefined();
   });
@@ -32,7 +32,7 @@ describe('DocketEntryFactory', () => {
     rawEntity.primaryDocumentFileSize = 1;
 
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+      new DocketEntryFactory(rawEntity).getValidationErrors()!
         .primaryDocumentFile,
     ).toEqual(undefined);
   });
@@ -42,39 +42,34 @@ describe('DocketEntryFactory', () => {
     rawEntity.primaryDocumentFileSize = 0;
 
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+      new DocketEntryFactory(rawEntity).getValidationErrors()!
         .primaryDocumentFile,
     ).toEqual(undefined);
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+      new DocketEntryFactory(rawEntity).getValidationErrors()!
         .primaryDocumentFileSize,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.primaryDocumentFileSize[1],
-    );
+    ).toEqual('Your document file size is empty.');
   });
 
   it('should not require a filing status selection', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!.lodged,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.lodged,
     ).toEqual(undefined);
   });
 
   it('should not require an other iteration value', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .otherIteration,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.otherIteration,
     ).toEqual(undefined);
   });
 
   it('should require received date be entered', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .receivedAt,
-    ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.receivedAt[1]);
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.receivedAt,
+    ).toEqual('Enter a valid date received');
     rawEntity.receivedAt = createISODateString();
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .receivedAt,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.receivedAt,
     ).toEqual(undefined);
   });
 
@@ -82,60 +77,45 @@ describe('DocketEntryFactory', () => {
     rawEntity.receivedAt = calculateISODate({ howMuch: 1, units: 'days' });
 
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .receivedAt,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.receivedAt[0].message,
-    );
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.receivedAt,
+    ).toEqual('Received date cannot be in the future. Enter a valid date.');
   });
 
   it('should be invalid when additionalInfo is over 500 characters long', () => {
     rawEntity.additionalInfo = getTextByCount(1001);
-
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .additionalInfo,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.additionalInfo[0].message,
-    );
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.additionalInfo,
+    ).toEqual('Limit is 500 characters. Enter 500 or fewer characters.');
   });
 
   it('should be invalid when additionalInfo2 is over 500 characters long', () => {
     rawEntity.additionalInfo2 = getTextByCount(1001);
-
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .additionalInfo2,
-    ).toEqual(
-      DocketEntryFactory.VALIDATION_ERROR_MESSAGES.additionalInfo2[0].message,
-    );
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.additionalInfo2,
+    ).toEqual('Limit is 500 characters. Enter 500 or fewer characters.');
   });
 
   it('should require event code', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .eventCode,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.eventCode,
     ).toBeDefined();
   });
 
   it('should not require Additional info 1', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .additionalInfo,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.additionalInfo,
     ).toEqual(undefined);
   });
 
   it('should not require Additional info 2', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .additionalInfo2,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.additionalInfo2,
     ).toEqual(undefined);
   });
 
   it('should not require add to cover sheet', () => {
     expect(
-      new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-        .addToCoversheet,
+      new DocketEntryFactory(rawEntity).getValidationErrors()!.addToCoversheet,
     ).toEqual(undefined);
   });
 
@@ -147,8 +127,7 @@ describe('DocketEntryFactory', () => {
       };
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .objections,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
       ).toBeDefined();
     });
 
@@ -159,8 +138,7 @@ describe('DocketEntryFactory', () => {
       };
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .objections,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
       ).toBeDefined();
     });
 
@@ -168,8 +146,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.eventCode = 'APLD';
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .objections,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
       ).toBeDefined();
     });
 
@@ -178,8 +155,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.isPaper = true;
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .objections,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
       ).toBeUndefined();
     });
   });
@@ -197,13 +173,11 @@ describe('DocketEntryFactory', () => {
 
     it('should require non standard fields', () => {
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .ordinalValue,
-      ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.ordinalValue);
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.ordinalValue,
+      ).toEqual('Select an iteration');
       rawEntity.ordinalValue = 'First';
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .ordinalValue,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.ordinalValue,
       ).toEqual(undefined);
     });
   });
@@ -211,7 +185,7 @@ describe('DocketEntryFactory', () => {
   describe('Inclusions', () => {
     it('should not require Certificate of Service', () => {
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+        new DocketEntryFactory(rawEntity).getValidationErrors()!
           .certificateOfService,
       ).toEqual(undefined);
     });
@@ -223,15 +197,12 @@ describe('DocketEntryFactory', () => {
 
       it('should require certificate of service date be entered', () => {
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+          new DocketEntryFactory(rawEntity).getValidationErrors()!
             .certificateOfServiceDate,
-        ).toEqual(
-          DocketEntryFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[1],
-        );
+        ).toEqual('Enter date of service');
         rawEntity.certificateOfServiceDate = createISODateString();
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+          new DocketEntryFactory(rawEntity).getValidationErrors()!
             .certificateOfServiceDate,
         ).toEqual(undefined);
       });
@@ -241,28 +212,24 @@ describe('DocketEntryFactory', () => {
           howMuch: 1,
           units: 'days',
         });
-
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+          new DocketEntryFactory(rawEntity).getValidationErrors()!
             .certificateOfServiceDate,
         ).toEqual(
-          DocketEntryFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[0].message,
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
       });
     });
 
     it('should not require Attachments', () => {
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .attachments,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.attachments,
       ).toEqual(undefined);
     });
 
     it('should not require Objections', () => {
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-          .objections,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
       ).toEqual(undefined);
     });
 
@@ -274,13 +241,11 @@ describe('DocketEntryFactory', () => {
 
       it('should require Objections', () => {
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-            .objections,
-        ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.objections);
+          new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
+        ).toEqual('Enter selection for Objections.');
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-            .objections,
+          new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
         ).toEqual(undefined);
       });
 
@@ -290,15 +255,12 @@ describe('DocketEntryFactory', () => {
         rawEntity.previousDocument = {
           eventCode: 'M006',
         };
-
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-            .objections,
-        ).toEqual(DocketEntryFactory.VALIDATION_ERROR_MESSAGES.objections);
+          new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
+        ).toEqual('Enter selection for Objections.');
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
-            .objections,
+          new DocketEntryFactory(rawEntity).getValidationErrors()!.objections,
         ).toEqual(undefined);
       });
     });
@@ -310,7 +272,7 @@ describe('DocketEntryFactory', () => {
 
       it('should not require secondary file', () => {
         expect(
-          new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+          new DocketEntryFactory(rawEntity).getValidationErrors()!
             .secondaryDocumentFile,
         ).toEqual(undefined);
       });
@@ -322,12 +284,11 @@ describe('DocketEntryFactory', () => {
 
         it('should validate secondary document', () => {
           expect(
-            new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
+            new DocketEntryFactory(rawEntity).getValidationErrors()!
               .secondaryDocument,
           ).toEqual({
-            category: DocketEntryFactory.VALIDATION_ERROR_MESSAGES.category,
-            documentType:
-              DocketEntryFactory.VALIDATION_ERROR_MESSAGES.documentType[1],
+            category: 'Select a Category.',
+            documentType: 'Select a document type',
           });
         });
       });
@@ -348,7 +309,7 @@ describe('DocketEntryFactory', () => {
 
       const validationErrors = new DocketEntryFactory(
         rawEntity,
-      ).getFormattedValidationErrors()!;
+      ).getValidationErrors()!;
 
       expect(validationErrors.otherFilingParty).toBeDefined();
     });
@@ -359,7 +320,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
 
@@ -368,7 +329,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.otherFilingParty = 'An Other Party';
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
 
@@ -376,9 +337,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.hasOtherFilingParty = true;
       rawEntity.otherFilingParty = undefined;
 
-      expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
-      ).toEqual({
+      expect(new DocketEntryFactory(rawEntity).getValidationErrors()!).toEqual({
         otherFilingParty: 'Enter other filing party name.',
       });
     });
@@ -389,7 +348,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.otherFilingParty = undefined;
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
   });
@@ -409,7 +368,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.filers = undefined;
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
 
@@ -418,7 +377,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.otherFilingParty = 'Mike Tyson';
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
 
@@ -429,9 +388,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.hasOtherFilingParty = false;
       rawEntity.isAutoGenerated = false;
 
-      expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
-      ).toEqual({
+      expect(new DocketEntryFactory(rawEntity).getValidationErrors()!).toEqual({
         filers: 'Select a filing party',
       });
     });
@@ -441,7 +398,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.filers = ['b4379b44-df5c-43c9-8912-68a9c179a780'];
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
 
@@ -451,7 +408,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.partyPrivatePractitioner = true;
 
       expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
+        new DocketEntryFactory(rawEntity).getValidationErrors()!,
       ).toBeNull();
     });
 
@@ -462,9 +419,7 @@ describe('DocketEntryFactory', () => {
       rawEntity.partyIrsPractitioner = false;
       rawEntity.hasOtherFilingParty = false;
 
-      expect(
-        new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!,
-      ).toEqual({
+      expect(new DocketEntryFactory(rawEntity).getValidationErrors()!).toEqual({
         filers: 'Select a filing party',
       });
     });
