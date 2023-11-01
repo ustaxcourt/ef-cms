@@ -19,7 +19,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toContain(
+      expect(Object.keys(statistic.getValidationErrors()!)).toContain(
         'yearOrPeriod',
       );
     });
@@ -64,7 +64,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
+      expect(Object.keys(statistic.getValidationErrors()!)).toEqual([
         'irsDeficiencyAmount',
         'irsTotalPenalties',
         'year',
@@ -84,10 +84,8 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(statistic.getFormattedValidationErrors()).toMatchObject({
-        lastDateOfPeriod: (
-          Statistic.VALIDATION_ERROR_MESSAGES.lastDateOfPeriod[0] as any
-        ).message,
+      expect(statistic.getValidationErrors()).toMatchObject({
+        lastDateOfPeriod: 'Enter valid last date of period',
       });
     });
 
@@ -110,9 +108,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
-        'year',
-      ]);
+      expect(Object.keys(statistic.getValidationErrors()!)).toEqual(['year']);
     });
 
     it('passes validation with valid values', () => {
@@ -181,7 +177,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
+      expect(Object.keys(statistic.getValidationErrors()!)).toEqual([
         'determinationDeficiencyAmount',
       ]);
     });
@@ -207,7 +203,7 @@ describe('Statistic', () => {
       );
 
       expect(statistic.isValid()).toBeFalsy();
-      expect(Object.keys(statistic.getFormattedValidationErrors()!)).toEqual([
+      expect(Object.keys(statistic.getValidationErrors()!)).toEqual([
         'determinationTotalPenalties',
       ]);
     });
