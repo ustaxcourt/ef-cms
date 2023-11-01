@@ -10,13 +10,14 @@ import {
 } from './helpers';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 
-const docketSectionMessage = 'To CSS under Docket Section';
-const petitionsSectionMessage = 'To CSS under Petitions Section';
-const seedCaseServicesSupervisorUserid = '35959d1a-0981-40b2-a93d-f65c7977db52';
-const seededDocketNumber = '105-20';
-const seededDocketNumberWithDocumentQC = '101-21';
-
 describe('Case Services Supervisor Messages Journey', () => {
+  const docketSectionMessage = 'To CSS under Docket Section';
+  const petitionsSectionMessage = 'To CSS under Petitions Section';
+  const seedCaseServicesSupervisorUserid =
+    '35959d1a-0981-40b2-a93d-f65c7977db52';
+  const seededDocketNumber = '105-20';
+  const seededDocketNumberWithDocumentQC = '101-21';
+
   const cerebralTest = setupTest();
 
   afterAll(() => {
