@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { ExternalConsolidatedCaseGroupFilingCard } from '../FileDocument/ExternalConsolidatedCaseGroupFilingCard';
 import { Focus } from '../../ustc-ui/Focus/Focus';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { PartiesRepresenting } from './PartiesRepresenting';
@@ -14,9 +13,6 @@ import classNames from 'classnames';
 
 export const RequestAccess = connect(
   {
-    GENERATION_TYPES: state.constants.GENERATION_TYPES,
-    allowExternalConsolidatedGroupFiling:
-      state.allowExternalConsolidatedGroupFilingHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
     requestAccessHelper: state.requestAccessHelper,
@@ -29,10 +25,8 @@ export const RequestAccess = connect(
     validationErrors: state.validationErrors,
   },
   function RequestAccess({
-    allowExternalConsolidatedGroupFiling,
     form,
     formCancelToggleCancelSequence,
-    GENERATION_TYPES,
     requestAccessHelper,
     reviewRequestAccessInformationSequence,
     updateCaseAssociationFormValueSequence,
@@ -111,10 +105,7 @@ export const RequestAccess = connect(
             <PartiesRepresenting />
           )}
           <RequestAccessDocumentForm />
-          {allowExternalConsolidatedGroupFiling &&
-            form.generationType === GENERATION_TYPES.MANUAL && (
-              <ExternalConsolidatedCaseGroupFilingCard />
-            )}
+
           <div className="margin-top-5">
             <Button
               id="submit-document"

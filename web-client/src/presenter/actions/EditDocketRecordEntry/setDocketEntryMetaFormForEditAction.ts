@@ -17,24 +17,6 @@ export const setDocketEntryMetaFormForEditAction = ({
 }: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
   const { docketRecordIndex } = props;
-  const { deconstructDate } = applicationContext.getUtilities();
-
-  // TODO: Maybe move this to the DateHandler or its own utility
-  const deconstructDateWrapper = (date, fieldName) => {
-    let deconstructedDate = {};
-    if (date) {
-      const { day, month, year } = deconstructDate(date);
-
-      const dayFieldName = fieldName ? `${fieldName}Day` : 'day';
-      const monthFieldName = fieldName ? `${fieldName}Month` : 'month';
-      const yearFieldName = fieldName ? `${fieldName}Year` : 'year';
-
-      deconstructedDate[dayFieldName] = day;
-      deconstructedDate[monthFieldName] = month;
-      deconstructedDate[yearFieldName] = year;
-    }
-    return deconstructedDate;
-  };
 
   const documentDetail = docketEntries.find(
     ({ index }) => index === docketRecordIndex,
@@ -56,13 +38,6 @@ export const setDocketEntryMetaFormForEditAction = ({
   store.set(state.form, {
     ...documentDetail,
     lodged: !!documentDetail.lodged,
-    ...deconstructDateWrapper(documentDetail.filingDate, 'filingDate'),
-    ...deconstructDateWrapper(
-      documentDetail.certificateOfServiceDate,
-      'certificateOfService',
-    ),
-    ...deconstructDateWrapper(documentDetail.serviceDate, 'serviceDate'),
-    ...deconstructDateWrapper(documentDetail.date),
   });
 
   return {

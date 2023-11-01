@@ -1,10 +1,12 @@
 import { AuthenticationResult } from '../../support/login-types';
 import {
   blockCaseFromTrial,
+  goToCaseDetail,
   goToCaseOverview,
   manuallyAddCaseToCalendaredTrialSession,
   manuallyAddCaseToNewTrialSession,
   removeCaseFromTrialSession,
+  reviewAndServePetition,
   setCaseAsHighPriority,
   setCaseAsReadyForTrial,
   unblockCaseFromTrial,
@@ -54,9 +56,9 @@ const testData = {
 };
 const { login } = getEnvironmentSpecificFunctions();
 
-let firstDocketNumber;
-let secondDocketNumber;
-const caseTestData = { docketNumbers: [] };
+let firstDocketNumber: string;
+let secondDocketNumber: string;
+const caseTestData: { docketNumbers: string[] } = { docketNumbers: [] };
 
 describe('Petitions Clerk', () => {
   before(() => {
@@ -78,7 +80,7 @@ describe('Petitions Clerk', () => {
   });
 
   describe('Petitioner creates cases', () => {
-    let petitionerToken;
+    let petitionerToken: string;
 
     describe('Petitioner', () => {
       before(() => {
@@ -116,7 +118,9 @@ describe('Petitions Clerk', () => {
           goToWizardStep4();
           completeWizardStep4();
           goToWizardStep5();
-          submitPetition(caseTestData);
+          submitPetition().then(createdPaperDocketNumber => {
+            caseTestData.docketNumbers.push(createdPaperDocketNumber);
+          });
           goToDashboard();
         });
       });
@@ -147,7 +151,9 @@ describe('Petitions Clerk', () => {
           goToWizardStep4();
           completeWizardStep4();
           goToWizardStep5();
-          submitPetition(caseTestData);
+          submitPetition().then(createdPaperDocketNumber => {
+            caseTestData.docketNumbers.push(createdPaperDocketNumber);
+          });
           goToDashboard();
         });
       });
@@ -190,19 +196,29 @@ describe('Petitions Clerk', () => {
     // these are separated into their own steps so if they fail
     // they can be rerun without affecting other steps in the test
     it('view case detail for first case', () => {
-      goToCaseOverview(firstDocketNumber);
+      goToCaseDetail(firstDocketNumber);
+    });
+
+    it('serve first case to irs', () => {
+      reviewAndServePetition();
     });
 
     it('is possible to manually add, view, and remove first case from an UNSET trial session', () => {
+      goToCaseOverview(firstDocketNumber);
       manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
       removeCaseFromTrialSession();
     });
 
     it('view case detail for second case', () => {
-      goToCaseOverview(secondDocketNumber);
+      goToCaseDetail(secondDocketNumber);
+    });
+
+    it('serve second case to irs', () => {
+      reviewAndServePetition();
     });
 
     it('manually block second case', () => {
+      goToCaseOverview(secondDocketNumber);
       // block it
       blockCaseFromTrial();
       // do this well before we look for it on blocked cases report...
@@ -249,7 +265,7 @@ describe('Petitions Clerk', () => {
     });
 
     it('set second case as High Priority for a trial session', () => {
-      setCaseAsReadyForTrial(secondDocketNumber);
+      setCaseAsReadyForTrial();
       setCaseAsHighPriority();
     });
 

@@ -6,7 +6,6 @@ import { setCavAndSubmittedCasesAction } from './setCavAndSubmittedCasesAction';
 describe('setCavAndSubmittedCasesAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const totalCountForSubmittedAndCavCases = 15;
   const mockCases = [{ docketNumber: '101-20' }, { docketNumber: '102-20' }];
 
   it('should set cav and submitted related cases data on state.judgeActivityReport', async () => {
@@ -16,13 +15,11 @@ describe('setCavAndSubmittedCasesAction', () => {
       },
       props: {
         cases: mockCases,
-        totalCountForSubmittedAndCavCases,
       },
       state: {
         judgeActivityReport: {
           judgeActivityReportData: {
             submittedAndCavCasesByJudge: undefined,
-            totalCountForSubmittedAndCavCases: undefined,
           },
         },
       },
@@ -32,10 +29,5 @@ describe('setCavAndSubmittedCasesAction', () => {
       state.judgeActivityReport.judgeActivityReportData
         .submittedAndCavCasesByJudge,
     ).toEqual(mockCases);
-
-    expect(
-      state.judgeActivityReport.judgeActivityReportData
-        .totalCountForSubmittedAndCavCases,
-    ).toEqual(totalCountForSubmittedAndCavCases);
   });
 });

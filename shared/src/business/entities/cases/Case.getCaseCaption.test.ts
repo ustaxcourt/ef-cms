@@ -68,7 +68,7 @@ describe('getCaseCaption', () => {
       partyType: PARTY_TYPES.petitionerDeceasedSpouse,
     });
     expect(caseCaption).toEqual(
-      'Test Petitioner & Test Petitioner 2, Deceased, Test Petitioner, Surviving Spouse, Petitioners',
+      'Test Petitioner & Test Petitioner 2, Deceased, Petitioners',
     );
   });
 

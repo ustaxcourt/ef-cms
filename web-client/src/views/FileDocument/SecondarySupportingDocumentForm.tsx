@@ -188,14 +188,14 @@ export const SecondarySupportingDocumentForm = connect(
                   htmlFor={`secondary-supporting-document-file-${index}`}
                   id={`secondary-supporting-document-file-${index}-label`}
                 >
-                  Upload your supporting document{' '}
+                  Upload supporting document PDF (.pdf){' '}
                   <span className="success-message padding-left-1">
                     <FontAwesomeIcon icon="check-circle" size="sm" />
                   </span>
                 </label>
                 <span className="usa-hint">
-                  File must be in PDF format (.pdf). Max file size{' '}
-                  {constants.MAX_FILE_SIZE_MB}MB.
+                  Make sure file is not encrypted or password protected. Max
+                  file size {constants.MAX_FILE_SIZE_MB}MB.
                 </span>
                 <StateDrivenFileInput
                   aria-describedby={`secondary-supporting-document-file-${index}-label`}
@@ -212,8 +212,9 @@ export const SecondarySupportingDocumentForm = connect(
 
               <SupportingDocumentInclusionsForm
                 bind={`form.secondarySupportingDocuments.${index}`}
-                type={`secondarySupportingDocuments.${index}`}
-                validationBind={`validationErrors.supportingDocument${index}`}
+                index={index}
+                type={'secondarySupportingDocuments'}
+                validationBind={`validationErrors.secondarySupportingDocuments.${index}`}
               />
             </>
           )}

@@ -8,23 +8,28 @@ export type DocketNumberByStatusRequest = {
   excludeMemberCases?: boolean;
 };
 
+const source = [
+  'caseCaption',
+  'caseStatusHistory',
+  'docketNumber',
+  'docketNumberWithSuffix',
+  'associatedJudge',
+  'leadDocketNumber',
+  'petitioners',
+  'status',
+] as const;
+
+type CaseFields = (typeof source)[number];
+
+export type SubmittedCAVTableFields = Pick<RawCase, CaseFields>;
+
 export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
   params,
 }: {
   applicationContext: IApplicationContext;
   params: DocketNumberByStatusRequest;
-}): Promise<RawCase[]> => {
-  const source = [
-    'docketNumber',
-    'leadDocketNumber',
-    'caseCaption',
-    'caseStatusHistory',
-    'docketNumberWithSuffix',
-    'petitioners',
-    'status',
-  ];
-
+}): Promise<SubmittedCAVTableFields[]> => {
   const shouldFilters: QueryDslQueryContainer[] = [];
   const filters: QueryDslQueryContainer[] = [
     {

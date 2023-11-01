@@ -1,0 +1,31 @@
+{
+  "LambdaClient": {
+    "credentials": {
+      "accessKeyId": "local",
+      "secretAccessKey": "local"
+    },
+    "region": "local",
+    "endpoint": "http://localhost:9997"
+  },
+  "TokenConfig": {
+    "IssuerDomain": "http://localhost:9229"
+  },
+  "TriggerFunctions": {
+    "PostConfirmation": "cognito-triggers-sls-dev-PostConfirmation_ConfirmSignUp",
+    "PostAuthentication": "cognito-triggers-sls-dev-PostAuthentication_Authentication"
+  },
+  "LambdaConfig": {
+    "endpoint": "http://localhost:9997"
+  },
+  "UserPoolDefaults": {
+    "UsernameAttributes": ["email"],
+    "AutoVerifiedAttributes": ["email"]
+  },
+  "KMSConfig": {
+    "credentials": {
+      "accessKeyId": "local",
+      "secretAccessKey": "local"
+    },
+    "region": "local"
+  }
+}
