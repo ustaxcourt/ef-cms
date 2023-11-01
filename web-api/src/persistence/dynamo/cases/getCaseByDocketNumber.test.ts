@@ -282,6 +282,7 @@ describe('getCaseByDocketNumber', () => {
       consolidatedCases: [
         {
           docketNumber: leadDocketNumber,
+          entityName: 'ConsolidatedCaseSummary',
           irsPractitioners: [
             {
               userId: 'abc-123',
@@ -298,6 +299,7 @@ describe('getCaseByDocketNumber', () => {
         },
         {
           docketNumber: docketNumber1,
+          entityName: 'ConsolidatedCaseSummary',
           irsPractitioners: [
             {
               userId: 'abc-124',
