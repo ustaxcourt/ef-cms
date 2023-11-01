@@ -3,10 +3,15 @@ import {
   PARTIES_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
+import { RawCalendaredCase } from '../entities/cases/CalendaredCase';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { compact, partition } from 'lodash';
 
 export const setPretrialMemorandumFiler = ({ caseItem }): string => {
+  if (caseItem.PMTServedPartiesCode !== undefined) {
+    return caseItem.PMTServedPartiesCode;
+  }
+
   let filingPartiesCode: string = '';
   let numberOfPetitionerFilers = 0;
 
@@ -42,7 +47,7 @@ export const setPretrialMemorandumFiler = ({ caseItem }): string => {
   return filingPartiesCode;
 };
 
-export type FormattedTrialSessionCase = RawCase & {
+export type FormattedTrialSessionCase = (RawCase | RawCalendaredCase) & {
   inConsolidatedGroup: boolean;
   consolidatedIconTooltipText: string;
   shouldIndent: boolean;
@@ -60,7 +65,7 @@ export const formatCaseForTrialSession = ({
   setFilingPartiesCode = false,
 }: {
   applicationContext: IApplicationContext;
-  caseItem: RawCase;
+  caseItem: RawCase | RawCalendaredCase;
   eligibleCases?: RawEligibleCase[];
   setFilingPartiesCode?: boolean;
 }): FormattedTrialSessionCase => {
