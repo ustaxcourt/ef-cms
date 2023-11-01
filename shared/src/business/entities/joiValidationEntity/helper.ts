@@ -24,8 +24,10 @@ export function appendNestedEntitiesErrors(
     } else if (Array.isArray(entityPropertyValue)) {
       const errorsForNestedEntitiesInArray = entityPropertyValue
         .map((item, index) => {
-          const itemErrors = item.getValidationErrors();
-          return itemErrors ? { ...itemErrors, index } : null;
+          if (item.getValidationErrors) {
+            const itemErrors = item.getValidationErrors();
+            return itemErrors ? { ...itemErrors, index } : null;
+          }
         })
         .filter(itemErrors => !!itemErrors) as (TValidationError & {
         index: number;
