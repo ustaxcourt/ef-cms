@@ -2,20 +2,13 @@ import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity_New } from './joiValidationEntity/JoiValidationEntity_New';
 import joi from 'joi';
 
-/**
- * constructor
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.rawUpdateUserEmail the raw UpdateUserEmail data
- * @constructor
- */
 export class UpdateUserEmail extends JoiValidationEntity_New {
-  public email: string;
   public confirmEmail: string;
+  public email: string;
 
-  constructor(rawUpdateUserEmail) {
+  constructor(rawUpdateUserEmail: { email: string; confirmEmail: string }) {
     super('UpdateUserEmail');
+
     this.email = rawUpdateUserEmail.email;
     this.confirmEmail = rawUpdateUserEmail.confirmEmail;
   }
@@ -37,3 +30,5 @@ export class UpdateUserEmail extends JoiValidationEntity_New {
     return UpdateUserEmail.VALIDATION_RULES;
   }
 }
+
+export type RawUpdateUserEmail = ExcludeMethods<UpdateUserEmail>;

@@ -1,7 +1,7 @@
 import { validateUpdateUserEmailInteractor } from './validateUpdateUserEmailInteractor';
 
 describe('validateUpdateUserEmailInteractor', () => {
-  it('runs validation on update user email form data with no invalid properties', () => {
+  it('should NOT return validation errors when the updated email request is valid', () => {
     const errors = validateUpdateUserEmailInteractor({
       updateUserEmail: {
         confirmEmail: 'test@example.com',
@@ -9,14 +9,20 @@ describe('validateUpdateUserEmailInteractor', () => {
       },
     });
 
-    expect(errors).toBeFalsy();
+    expect(errors).toBeNull();
   });
 
-  it('runs validation on update user email form data with missing data', () => {
+  it('should return validation errors when the updated user email form is missing data', () => {
     const errors = validateUpdateUserEmailInteractor({
-      updateUserEmail: {},
+      updateUserEmail: {
+        confirmEmail: undefined, // this is a required property
+        email: 'abc', // not a valid email
+      } as any,
     });
 
-    expect(errors).toBeDefined();
+    expect(errors).toEqual({
+      confirmEmail: expect.anything(),
+      email: expect.anything(),
+    });
   });
 });
