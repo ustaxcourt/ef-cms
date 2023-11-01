@@ -82,4 +82,28 @@ describe('Case Search entity', () => {
 
     expect(validationErrors!.endDate).toBeDefined();
   });
+
+  it('should be invalid when start date is after today', () => {
+    const caseSearch = new CaseSearch({
+      endDate: '06/01/2000',
+      petitionerName: 'Solomon Grundy',
+      startDate: '06/01/9999',
+    });
+
+    const validationErrors = caseSearch.getValidationErrors();
+
+    expect(validationErrors!.startDate).toBeDefined();
+  });
+
+  it('should be invalid when start date is NOT a string', () => {
+    const caseSearch = new CaseSearch({
+      endDate: '06/01/2000',
+      petitionerName: 'Solomon Grundy',
+      startDate: 'WRONG FORMAT FOR DATE',
+    });
+
+    const validationErrors = caseSearch.getValidationErrors();
+
+    expect(validationErrors!.startDate).toBeDefined();
+  });
 });
