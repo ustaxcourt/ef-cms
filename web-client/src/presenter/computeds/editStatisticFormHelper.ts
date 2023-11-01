@@ -12,7 +12,7 @@ import { Get } from 'cerebral';
 export const editStatisticFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-) => {
+): any => {
   const { CASE_TYPES_MAP } = applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
