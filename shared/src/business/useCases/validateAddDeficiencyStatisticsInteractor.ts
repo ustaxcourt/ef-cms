@@ -1,19 +1,11 @@
 import { Statistic } from '../entities/Statistic';
+import { TValidationError } from '@shared/business/entities/joiValidationEntity/helper';
 
-/**
- * validateAddDeficiencyStatisticsInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.statistic the statistic data to validate
- * @returns {object} errors (null if no errors)
- */
 export const validateAddDeficiencyStatisticsInteractor = (
   applicationContext: IApplicationContext,
   { statistic }: { statistic: any },
-) => {
-  const errors = new Statistic(statistic, {
+): TValidationError | null => {
+  return new Statistic(statistic, {
     applicationContext,
-  }).getFormattedValidationErrors();
-  return errors || null;
+  }).getValidationErrors();
 };
