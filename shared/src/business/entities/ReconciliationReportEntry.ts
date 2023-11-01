@@ -1,8 +1,8 @@
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
-import { JoiValidationEntity } from './JoiValidationEntity';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { pick } from 'lodash';
 
-export class ReconciliationReportEntry extends JoiValidationEntity {
+export class ReconciliationReportEntry extends JoiValidationEntity_New {
   public caseCaption: string;
   public docketEntryId: string;
   public docketNumber: string;
@@ -45,10 +45,6 @@ export class ReconciliationReportEntry extends JoiValidationEntity {
       'servedAt',
       'servedPartiesCode',
     ]);
-  }
-
-  getErrorToMessageMap() {
-    return {};
   }
 }
 
