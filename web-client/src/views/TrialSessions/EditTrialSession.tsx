@@ -76,6 +76,7 @@ export const EditTrialSession = connect(
             </div>
 
             <Button
+              data-cy="submit-edit-trial-session"
               type="submit"
               onClick={() => {
                 updateTrialSessionSequence();
