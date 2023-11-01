@@ -1,4 +1,9 @@
 import { InvalidEntityError } from '../../../../../web-api/src/errors/errors';
+import {
+  TValidationError,
+  appendNestedEntitiesErrors,
+  removeUnhelpfulErrorMessagesFromContactValidations,
+} from '@shared/business/entities/joiValidationEntity/helper';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
 
@@ -44,18 +49,18 @@ export abstract class JoiValidationEntity_New {
 
   abstract getValidationRules(): any;
 
-  getValidationErrors(): Record<string, string> | null {
+  getValidationErrors(): TValidationError | null {
     const rules = this.getValidationRules();
+
     const schema = rules.validate ? rules : joi.object().keys(rules);
+
     const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });
 
-    if (!error) return null;
-
     let errors = {};
-    error.details.forEach(detail => {
+    error?.details.forEach(detail => {
       if (!Number.isInteger(detail.context.key)) {
         errors[detail.context.key || detail.type] = detail.message;
       } else {
@@ -63,10 +68,13 @@ export abstract class JoiValidationEntity_New {
       }
     });
 
-    return errors;
+    const purgedErrors =
+      removeUnhelpfulErrorMessagesFromContactValidations(errors);
+
+    return appendNestedEntitiesErrors(this, purgedErrors);
   }
 
-  isValid() {
+  isValid(): boolean {
     const validationErrors = this.getValidationErrors();
     return isEmpty(validationErrors);
   }
