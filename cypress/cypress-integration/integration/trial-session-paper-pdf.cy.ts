@@ -31,7 +31,10 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
     cy.wait('@createTrialSession').then(({ response }) => {
       expect(response?.body).to.have.property('trialSessionId');
       const createdTrialSessionId = response?.body.trialSessionId;
-      console.log(createdTrialSessionId);
+      cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
     });
+
+    cy.get('[data-cy="trial-session-judge"]').select('Colvin');
+    cy.get('[data-cy="submit-edit-trial-session"]').click();
   });
 });

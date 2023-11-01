@@ -105,6 +105,7 @@ export const TrialSessionInformation = connect(
                   <Button
                     link
                     className="margin-left-2 margin-top-2"
+                    data-cy="edit-trial-session"
                     href={`/edit-trial-session/${formattedTrialSessionDetails.trialSessionId}`}
                     icon="edit"
                   >
