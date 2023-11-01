@@ -44,9 +44,10 @@ describe('validateCreateMessageAction', () => {
         },
       },
     });
+
     expect(
       applicationContext.getUseCases().validateCreateMessageInteractor.mock
-        .calls[0][1].message,
+        .calls[0][0].message,
     ).toMatchObject({
       docketNumber: '123-45',
       from: 'yup',
@@ -85,6 +86,7 @@ describe('validateCreateMessageAction', () => {
         },
       },
     });
+
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });
