@@ -30,7 +30,8 @@ const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
 let token: string;
 
-const { closeScannerSetupDialog, login } = getEnvironmentSpecificFunctions();
+const { closeScannerSetupDialogIfExists, login } =
+  getEnvironmentSpecificFunctions();
 
 describe('Petitioner', () => {
   before(() => {
@@ -132,7 +133,7 @@ describe('Petitions clerk', () => {
   it('should be able to create a case and save for later', () => {
     goToMyDocumentQC();
     goToCreateCase();
-    closeScannerSetupDialog();
+    closeScannerSetupDialogIfExists();
     fillInCreateCaseFromPaperForm();
     goToReviewCase();
     saveCaseForLater();

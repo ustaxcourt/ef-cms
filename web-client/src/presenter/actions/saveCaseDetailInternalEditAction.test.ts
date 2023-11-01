@@ -39,12 +39,6 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates: {
-          ...caseDetail,
-          petitionFile: {},
-        },
-      },
       state: {
         caseDetail: {
           ...caseDetail,
@@ -54,6 +48,10 @@ describe('saveCaseDetailInternalEditAction', () => {
               eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
             },
           ],
+        },
+        form: {
+          ...caseDetail,
+          petitionFile: {},
         },
       },
     });
@@ -74,24 +72,20 @@ describe('saveCaseDetailInternalEditAction', () => {
       .getUseCases()
       .saveCaseDetailInternalEditInteractor.mockReturnValue(caseDetail);
 
-    const formWithComputedDates = {
-      ...caseDetail,
-      corporateDisclosureFile: {},
-    };
-
     await runAction(saveCaseDetailInternalEditAction, {
       modules: {
         presenter,
       },
-      props: {
-        formWithComputedDates,
-      },
       state: {
         caseDetail,
+        form: {
+          ...caseDetail,
+          corporateDisclosureFile: {},
+        },
       },
     });
 
-    const uploadedDocument = formWithComputedDates.docketEntries.find(
+    const uploadedDocument = caseDetail.docketEntries.find(
       document =>
         document.documentType ===
         INITIAL_DOCUMENT_TYPES.corporateDisclosure.documentType,
@@ -121,9 +115,9 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: { formWithComputedDates: caseDetail },
       state: {
         caseDetail,
+        form: caseDetail,
       },
     });
     expect(
@@ -145,9 +139,9 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: { formWithComputedDates: caseDetail },
       state: {
         caseDetail,
+        form: caseDetail,
       },
     });
     expect(
@@ -174,7 +168,9 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: { formWithComputedDates: caseDetail },
+      state: {
+        form: caseDetail,
+      },
     });
 
     expect(
@@ -218,7 +214,9 @@ describe('saveCaseDetailInternalEditAction', () => {
       modules: {
         presenter,
       },
-      props: { formWithComputedDates: caseDetail },
+      state: {
+        form: caseDetail,
+      },
     });
 
     expect(

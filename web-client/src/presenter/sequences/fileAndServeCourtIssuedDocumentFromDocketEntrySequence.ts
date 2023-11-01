@@ -4,7 +4,6 @@ import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPr
 import { computeJudgeNameWithTitleAction } from '../actions/computeJudgeNameWithTitleAction';
 import { fileAndServeCourtIssuedDocumentAction } from '../actions/CourtIssuedDocketEntry/fileAndServeCourtIssuedDocumentAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
-import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -31,7 +30,6 @@ export const fileAndServeCourtIssuedDocumentFromDocketEntrySequence = [
       stopShowValidationAction,
       clearAlertsAction,
       computeJudgeNameWithTitleAction,
-      getComputedFormDateFactoryAction(null),
       generateCourtIssuedDocumentTitleAction,
       getDocketNumbersForConsolidatedServiceAction,
       fileAndServeCourtIssuedDocumentAction,

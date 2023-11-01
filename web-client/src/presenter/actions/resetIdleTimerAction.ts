@@ -5,10 +5,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers the providers object
  * @param {Function} providers.get the cerebral get function used for getting state
  */
-export const resetIdleTimerAction = ({ get }: ActionProps) => {
-  const ref = get(state.idleTimerRef);
-
-  if (ref) {
-    ref.reset();
-  }
+export const resetIdleTimerAction = ({ store }: ActionProps) => {
+  store.set(state.lastIdleAction, Date.now());
+  store.set(state.idleLogoutState, {
+    logoutAt: undefined,
+    state: 'INITIAL',
+  });
 };

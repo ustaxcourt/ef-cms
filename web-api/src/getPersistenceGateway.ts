@@ -13,6 +13,7 @@ import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { caseAdvancedSearch } from './persistence/elasticsearch/caseAdvancedSearch';
 import { casePublicSearch as casePublicSearchPersistence } from './persistence/elasticsearch/casePublicSearch';
 import { confirmAuthCode } from './persistence/cognito/confirmAuthCode';
+import { confirmAuthCodeCognitoLocal } from '@web-api/persistence/cognito/confirmAuthCodeCognitoLocal';
 import { confirmAuthCodeLocal } from './persistence/cognito/confirmAuthCodeLocal';
 import { createCase } from './persistence/dynamo/cases/createCase';
 import { createCaseDeadline } from './persistence/dynamo/caseDeadlines/createCaseDeadline';
@@ -58,8 +59,7 @@ import { getCaseDeadlinesByDateRange } from './persistence/elasticsearch/caseDea
 import { getCaseDeadlinesByDocketNumber } from './persistence/dynamo/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseInventoryReport } from './persistence/elasticsearch/getCaseInventoryReport';
 import { getCaseMetadataWithCounsel } from './persistence/dynamo/cases/getCaseMetadataWithCounsel';
-import { getCaseWorksheet } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheet';
-import { getCaseWorksheets } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheets';
+import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/dynamo/caseWorksheet/getCaseWorksheetsByDocketNumber';
 import {
   getCasesAssociatedWithUser,
   getDocketNumbersByUser,
@@ -81,7 +81,6 @@ import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus'
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketNumbersByStatusAndByJudge } from './persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
-import { getDocketNumbersWithServedEventCodes } from './persistence/elasticsearch/getDocketNumbersWithServedEventCodes';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDocumentQCInboxForSection } from './persistence/elasticsearch/workitems/getDocumentQCInboxForSection';
@@ -238,16 +237,6 @@ const gatewayMethods = {
     deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
-    getCaseWorksheet,
-    getCaseWorksheets,
-    getConfigurationItemValue,
-    getFeatureFlagValue,
-    getMaintenanceMode,
-    getPractitionerDocumentByFileId,
-    getPractitionerDocuments,
-    getSesStatus,
-    getTrialSessionJobStatusForCase,
-    getTrialSessionProcessingStatus,
     incrementCounter,
     incrementKeyCount,
     markMessageThreadRepliedTo,
@@ -291,7 +280,9 @@ const gatewayMethods = {
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
-    ? confirmAuthCodeLocal
+    ? process.env.USE_COGNITO_LOCAL
+      ? confirmAuthCodeCognitoLocal
+      : confirmAuthCodeLocal
     : confirmAuthCode,
   createChangeOfAddressJob,
   decrementJobCounter,
@@ -318,6 +309,7 @@ const gatewayMethods = {
   getCaseDeadlinesByDocketNumber,
   getCaseInventoryReport,
   getCaseMetadataWithCounsel,
+  getCaseWorksheetsByDocketNumber,
   getCasesAssociatedWithUser,
   getCasesByDocketNumbers,
   getCasesByFilters,
@@ -330,13 +322,13 @@ const gatewayMethods = {
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
+  getConfigurationItemValue,
   getCountOfConsolidatedCases,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByStatusAndByJudge,
   getDocketNumbersByUser,
-  getDocketNumbersWithServedEventCodes,
   getDocument,
   getDocumentIdFromSQSMessage,
   getDocumentQCInboxForSection,
@@ -346,23 +338,30 @@ const gatewayMethods = {
   getDownloadPolicyUrl,
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
+  getFeatureFlagValue,
   getFirstSingleCaseRecord,
   getInternalUsers,
   getLimiterByKey,
+  getMaintenanceMode,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
   getPractitionerByBarNumber,
+  getPractitionerDocumentByFileId,
+  getPractitionerDocuments,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
   getReadyForTrialCases,
   getReconciliationReport,
   getSectionInboxMessages,
   getSectionOutboxMessages,
+  getSesStatus,
   getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,
+  getTrialSessionJobStatusForCase,
+  getTrialSessionProcessingStatus,
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,

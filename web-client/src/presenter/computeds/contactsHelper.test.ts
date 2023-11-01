@@ -27,6 +27,18 @@ describe('contactsHelper', () => {
       });
     });
 
+    it('should return an empty object if party type is undefined', () => {
+      const result = runCompute(contactsHelper, {
+        state: {
+          form: {
+            partyType: undefined,
+          },
+        },
+      });
+
+      expect(result).toMatchObject({});
+    });
+
     it('should validate form view information for party type Petitioner', () => {
       const result = runCompute(contactsHelper, {
         state: {
@@ -126,6 +138,18 @@ describe('contactsHelper', () => {
           nameLabel: 'Name',
         },
       });
+    });
+
+    it('should return an empty object if party type is undefined', () => {
+      const result = runCompute(contactsHelper, {
+        state: {
+          form: {
+            partyType: undefined,
+          },
+        },
+      });
+
+      expect(result).toMatchObject({});
     });
   });
 });

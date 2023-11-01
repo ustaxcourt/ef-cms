@@ -8,20 +8,24 @@ import React from 'react';
 
 export const AddEditCaseWorksheetModal = connect(
   {
+    DATE_FORMATS: state.constants.DATE_FORMATS,
     STATUS_OF_MATTER_OPTIONS: state.constants.STATUS_OF_MATTER_OPTIONS,
     addEditCaseWorksheetModalHelper: state.addEditCaseWorksheetModalHelper,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateCaseWorksheetSequence: sequences.validateCaseWorksheetSequence,
     validationErrors: state.validationErrors,
   },
   function AddEditCaseWorksheetModal({
     addEditCaseWorksheetModalHelper,
+    DATE_FORMATS,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     STATUS_OF_MATTER_OPTIONS,
     updateFormValueSequence,
+    validateCaseWorksheetSequence,
     validationErrors,
   }) {
     return (
@@ -47,8 +51,10 @@ export const AddEditCaseWorksheetModal = connect(
           onChange={e => {
             formatAndUpdateDateFromDatePickerSequence({
               key: 'finalBriefDueDate',
+              toFormat: DATE_FORMATS.YYYYMMDD,
               value: e.target.value,
             });
+            validateCaseWorksheetSequence();
           }}
         />
 

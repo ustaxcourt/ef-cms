@@ -15,9 +15,6 @@ describe('clearCaseAssociationWizardDataAction', () => {
           certificateOfServiceDate: applicationContext
             .getUtilities()
             .createISODateString(),
-          certificateOfServiceDay: 23,
-          certificateOfServiceMonth: 4,
-          certificateOfServiceYear: 2020,
         },
       },
     });

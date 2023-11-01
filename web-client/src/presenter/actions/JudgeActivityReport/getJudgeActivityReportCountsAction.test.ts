@@ -18,9 +18,9 @@ describe('getJudgeActivityReportCountsAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockReturnValue({
-        orders: mockCountOfOrdersIssuedByJudge,
-      });
+      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockResolvedValue(
+        mockCountOfOrdersIssuedByJudge,
+      );
   });
 
   it('should make a call to retrieve orders signed by the provided judge in the date range provided from persistence and return it to props', async () => {
@@ -54,9 +54,9 @@ describe('getJudgeActivityReportCountsAction', () => {
   it('should make a call to return opinions by the provided judge in the date range provided from persistence', async () => {
     applicationContext
       .getUseCases()
-      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockReturnValueOnce({
-        opinions: mockCountOfOpinionsIssuedByJudge,
-      });
+      .getCountOfCaseDocumentsFiledByJudgesInteractor.mockResolvedValue(
+        mockCountOfOpinionsIssuedByJudge,
+      );
     const result = await runAction(getJudgeActivityReportCountsAction, {
       modules: {
         presenter,

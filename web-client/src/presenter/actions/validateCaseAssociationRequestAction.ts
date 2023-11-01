@@ -13,9 +13,7 @@ export const validateCaseAssociationRequestAction = ({
   get,
   path,
 }: ActionProps) => {
-  const caseAssociationRequest = {
-    ...get(state.form),
-  };
+  const caseAssociationRequest = get(state.form);
 
   const errors = applicationContext
     .getUseCases()

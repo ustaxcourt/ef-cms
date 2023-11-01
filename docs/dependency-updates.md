@@ -28,10 +28,10 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
    To publish a new ECR docker image:
 
    - Increment the docker image version being used in `.circleci/config.yml` in the docker variable: 
-   `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.0.8` -> `ef-cms-us-east-1:3.0.9`
-   - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
+   `define: &efcms-docker-image`. e.g. `ef-cms-us-east-1:3.0.18` -> `ef-cms-us-east-1:3.0.19`
+   - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account. 
      - If you are on an M1 Machine, make sure to set the environment variable `DOCKER_DEFAULT_PLATFORM=linux/amd64`.
-     - example: `export DESTINATION_TAG=2.24.0 && npm run deploy:ci-image`
+     - example: `export DESTINATION_TAG=3.0.19 && npm run deploy:ci-image`
 
      > Refer to [ci-cd.md](ci-cd.md#docker) for more info on this as needed
 
@@ -41,10 +41,12 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
 	- ./shared/admin-tools/glue/glue_migrations/main.tf
 	- ./shared/admin-tools/glue/remote_role/main.tf
 	- ./web-api/terraform/main/main.tf
+	- ./web-api/workflow-terraform/glue-cron/main/main.tf
 	- ./web-api/workflow-terraform/migration/main/main.tf
 	- ./web-api/workflow-terraform/migration-cron/main/main.tf
 	- ./web-api/workflow-terraform/reindex-cron/main/main.tf
 	- ./web-api/workflow-terraform/switch-colors-cron/main/main.tf
+	- ./web-api/workflow-terraform/wait-for-workflow-cron/main/main.tf
 	- ./web-client/terraform/main/main.tf
 
 	> aws = "latest version"
@@ -69,15 +71,14 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - When updating puppeteer or puppeteer core in the project, make sure to also match versions in `web-api/runtimes/puppeteer/package.json` as this is our lambda layer which we use to generate pdfs. Puppeteer and chromium versions should always match between package.json and web-api/runtimes/puppeteer/package.json.  Remember to run `npm i` after updating the versions to update the package-lock.json.
 
-#### s3rver
-- As of 7/26/2023 there is a high security vulnerability for transitive dependency in s3rver for "fast-xml-parser". This cannot be fixed using the patch method above as it is a dependency of a dependency. Currently waiting for pull request to update fast-xml parser dependency(https://github.com/jamhall/s3rver/pull/813).
-- The s3rver package has been abandoned for two years now and is unlikely to be fixed. A community member has forked the repo and fixed the vulnerabilities so we are switching to the forked version here: github:20minutes/s3rver (https://github.com/20minutes/s3rver). This means the s3rver community version is unlikely to be updated however, the original npm package has been abandoned for over 2 years.
-
 ### pdfjs-dist
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 
-### Incrementing the Node Cache Key Version
+### s3-files (3.0.1)
+- (10/20/2023) Upgrading from 3.0.0 -> 3.0.1 for s3 files breaks the batch download for batchDownloadTrialSessionInteractor. The api will start emitting ```self.s3.send is not a function``` error from the s3-files directory. Locking the s3-files version to 3.0.0 so that application does not break. To test if an upgrade to s3-files is working run the integration test: web-client/integration-tests/judgeDownloadsAllCasesFromTrialSession.test.ts
+
+## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
 

@@ -1,3 +1,4 @@
+import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { UNSERVABLE_EVENT_CODES } from '../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper } from '../../src/presenter/computeds/addCourtIssuedDocketEntryHelper';
 import { caseDetailHeaderHelper } from '../../src/presenter/computeds/caseDetailHeaderHelper';
@@ -49,24 +50,11 @@ export const docketClerkAddsAnUnservableDocument = cerebralTest => {
     );
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'month',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2020',
+        key: 'date',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2020',
       },
     );
 
@@ -79,24 +67,11 @@ export const docketClerkAddsAnUnservableDocument = cerebralTest => {
     });
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
+      'formatAndUpdateDateFromDatePickerSequence',
       {
-        key: 'filingDateMonth',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '1',
-      },
-    );
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2021',
+        key: 'filingDate',
+        toFormat: FORMATS.ISO,
+        value: '1/1/2021',
       },
     );
 

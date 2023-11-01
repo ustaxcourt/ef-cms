@@ -43,22 +43,19 @@ export const progressIndicatorDoesNotExist = () => {
   cy.get('.progress-indicator').should('not.exist');
 };
 
-export const uploadCourtIssuedDocumentAndEditViaDocumentQC = attempt => {
+export const uploadCourtIssuedDocumentAndEditViaDocumentQC = () => {
   cy.visit('case-detail/104-20/upload-court-issued');
-  const freeText = `court document ${attempt}`;
-  cy.get('#upload-description').clear().type(freeText);
+  const freeText = `court document ${Math.random()}`;
+  cy.get('#upload-description').clear();
+  cy.get('#upload-description').type(freeText);
   cy.get('input#primary-document-file').attachFile('../fixtures/w3-dummy.pdf');
-
-  // Fix flaky test
-  // https://github.com/flexion/ef-cms/issues/10144
-  // eslint-disable-next-line cypress/no-unnecessary-waiting
-  cy.wait(0);
-
+  cy.get('[data-cy="upload-file-success"]');
   cy.get('#save-uploaded-pdf-button').click();
   cy.get('#add-court-issued-docket-entry-button').click();
-  cy.get('#document-type .select-react-element__input-container input')
-    .clear()
-    .type('Miscellaneous');
+  cy.get('#document-type .select-react-element__input-container input').clear();
+  cy.get('#document-type .select-react-element__input-container input').type(
+    'Miscellaneous',
+  );
   cy.get('#react-select-2-option-0').click({ force: true });
   cy.get('#save-entry-button').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');

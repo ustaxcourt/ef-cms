@@ -17,7 +17,7 @@ module.exports = {
     'function-no-unknown': [
       true,
       {
-        ignoreFunctions: ['units'],
+        ignoreFunctions: ['units', 'line-height'],
       },
     ],
     'no-descending-specificity': null,
