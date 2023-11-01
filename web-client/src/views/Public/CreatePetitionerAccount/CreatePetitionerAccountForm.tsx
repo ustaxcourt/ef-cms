@@ -241,7 +241,7 @@ export const CreatePetitionerAccountForm = connect(
                 className="usa-button--unstyled"
                 onClick={() => navigateToCognitoSequence()}
               >
-                Sign in
+                Log in
               </Button>
             </p>
           </div>
