@@ -18,7 +18,10 @@ export const validatePetitionerInteractor = (
   {
     contactInfo,
     existingPetitioners,
-  }: { contactInfo: RawContact; existingPetitioners: TPetitioner[] },
+  }: {
+    contactInfo: RawContact & { updatedEmail?: string; confirmEmail?: string };
+    existingPetitioners: TPetitioner[];
+  },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
