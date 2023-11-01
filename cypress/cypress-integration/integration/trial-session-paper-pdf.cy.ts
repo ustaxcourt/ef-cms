@@ -14,5 +14,24 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
       'Fresno, California',
     );
     cy.get('[data-cy="trial-session-meeting-id"]').type('123456789Meet');
+    cy.get('[data-cy="trial-session-password"]').type('iamTrialSessionPass');
+    cy.get('[data-cy="trial-session-join-phone-number"]').type('6473829180');
+    cy.get('[data-cy="trial-session-chambers-phone-number"]').type(
+      '9870654321',
+    );
+    cy.get('[data-cy="trial-session-judge"]').select('Buch');
+    cy.get('[data-cy="trial-session-trial-clerk"]').select('Other');
+    cy.get('[data-cy="trial-session-trial-clerk-alternate"]').type('Abu');
+    cy.get('[data-cy="trial-session-court-reporter"]').type('Fameet');
+    cy.get('[data-cy="trial-session-irs-calendar-administrator"]').type(
+      'rasta reporter',
+    );
+    cy.intercept('POST', '**/trial-sessions').as('createTrialSession');
+    cy.get('[data-cy="submit-trial-session"]').click();
+    cy.wait('@createTrialSession').then(({ response }) => {
+      expect(response?.body).to.have.property('trialSessionId');
+      const createdTrialSessionId = response?.body.trialSessionId;
+      console.log(createdTrialSessionId);
+    });
   });
 });
