@@ -1,4 +1,5 @@
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawOutboxItem } from '@shared/business/entities/OutboxItem';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { fieldsToOmitBeforePersisting } from '@web-api/persistence/dynamo/cases/createCase';
 
