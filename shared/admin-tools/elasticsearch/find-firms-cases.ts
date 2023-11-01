@@ -1,11 +1,13 @@
 /**
- * Before running this script, you will need to create a new ES index called
- *  efcms-user-practitioner-firm with the firmName.S field mapped as "text"
+ * INITIAL SETUP:
+ *   npx ts-node --transpile-only scripts/run-once-scripts/create-efcms-user-practitioner-firm-index.ts
  *
- * See find-firms-cases.md for more information
+ * USAGE:
+ *   npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts > ~/Desktop/firms-cases.csv
+ *
+ * CLEANUP:
+ *   npx ts-node --transpile-only scripts/run-once-scripts/delete-efcms-user-practitioner-firm-index.ts
  */
-
-// usage: npx ts-node --transpile-only shared/admin-tools/elasticsearch/find-firms-cases.ts > ~/Desktop/firms-cases.csv
 
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { createApplicationContext } from '@web-api/applicationContext';
