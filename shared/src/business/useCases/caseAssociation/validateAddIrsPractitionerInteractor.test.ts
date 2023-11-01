@@ -1,25 +1,30 @@
-import { AddIrsPractitioner } from '../../entities/caseAssociation/AddIrsPractitioner';
+import { RawAddIrsPractitioner } from '@shared/business/entities/caseAssociation/AddIrsPractitioner';
 import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { validateAddIrsPractitionerInteractor } from './validateAddIrsPractitionerInteractor';
 
 describe('validateAddIrsPractitionerInteractor', () => {
-  it('returns the expected errors object on an empty add irsPractitioner', () => {
-    const errors = validateAddIrsPractitionerInteractor(applicationContext, {
-      counsel: {},
+  it('should return the expected validation errors object when the practitioner to add is invalid', () => {
+    const errors = validateAddIrsPractitionerInteractor({
+      counsel: {
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        user: undefined, // User is a required property
+      },
     });
 
-    expect(Object.keys(errors)).toEqual(
-      Object.keys(AddIrsPractitioner.VALIDATION_ERROR_MESSAGES),
-    );
+    expect(errors).toEqual({
+      user: 'Select a respondent counsel',
+    });
   });
 
-  it('returns null when no errors occur', () => {
-    const errors = validateAddIrsPractitionerInteractor(applicationContext, {
-      counsel: {
-        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-        user: {},
-      },
+  it('should return null when the practitioner to add is valid', () => {
+    const mockAddIrsPractitioner: RawAddIrsPractitioner = {
+      entityName: 'AddIrsPractitioner',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+      user: {},
+    };
+
+    const errors = validateAddIrsPractitionerInteractor({
+      counsel: mockAddIrsPractitioner,
     });
 
     expect(errors).toEqual(null);
