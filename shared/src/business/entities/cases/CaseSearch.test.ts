@@ -1,8 +1,9 @@
 import { CaseSearch } from './CaseSearch';
 
 describe('Case Search entity', () => {
-  it('needs only a petitioner name to be valid', () => {
+  it('should only require a petitioner name to be valid', () => {
     const caseSearch = new CaseSearch({ petitionerName: 'Solomon Grundy' });
+
     expect(caseSearch).toMatchObject({
       countryType: undefined,
       endDate: undefined,
@@ -11,75 +12,73 @@ describe('Case Search entity', () => {
       startDate: undefined,
     });
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
-    expect(validationErrors).toEqual(null);
+    expect(validationErrors).toBeNull();
   });
 
-  it('fails validation without a petitioner name', () => {
+  it('should fail validation when a petitioner name is not provided', () => {
     const caseSearch = new CaseSearch({});
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
-    expect(validationErrors!.petitionerName).toEqual(
-      CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
-    );
+    expect(validationErrors!.petitionerName).toEqual('Enter a name');
   });
 
-  it('is valid with only startDate', () => {
+  it('should be valid when only a start date is provided (without an end date)', () => {
     const caseSearch = new CaseSearch({
       petitionerName: 'Solomon Grundy',
       startDate: '06/01/2000',
     });
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
-    expect(validationErrors).toEqual(null);
+    expect(validationErrors).toBeNull();
   });
 
-  it('is valid with only endDate', () => {
+  it('should be valid when only an end date is provided (without a start date)', () => {
     const caseSearch = new CaseSearch({
       endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
     });
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
-    expect(validationErrors).toEqual(null);
+    expect(validationErrors).toBeNull();
   });
 
-  it('is valid when startDate == endDate', () => {
+  it('should be valid when start date and end date are the same day', () => {
     const caseSearch = new CaseSearch({
       endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
       startDate: '06/01/2000',
     });
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
-    expect(validationErrors).toEqual(null);
+    expect(validationErrors).toBeNull();
   });
 
-  it('is valid when startDate < endDate', () => {
+  it('should be valid when start date is before end date', () => {
     const caseSearch = new CaseSearch({
       endDate: '06/01/2010',
       petitionerName: 'Solomon Grundy',
       startDate: '06/01/2000',
     });
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
-    expect(validationErrors).toEqual(null);
+    expect(validationErrors).toBeNull();
   });
 
-  it('is invalid when startDate > endDate', () => {
+  it('should be invalid when start date is after end date', () => {
     const caseSearch = new CaseSearch({
       endDate: '06/01/2000',
       petitionerName: 'Solomon Grundy',
       startDate: '06/01/2010',
     });
 
-    const validationErrors = caseSearch.getFormattedValidationErrors();
+    const validationErrors = caseSearch.getValidationErrors();
 
     expect(validationErrors!.endDate).toBeDefined();
   });
