@@ -731,8 +731,7 @@ export const presenterSequences = {
     filterCaseDeadlinesByJudgeSequence as unknown as Function,
   formCancelToggleCancelSequence:
     formCancelToggleCancelSequence as unknown as Function,
-  formatAndUpdateDateFromDatePickerSequence:
-    formatAndUpdateDateFromDatePickerSequence as unknown as Function,
+  formatAndUpdateDateFromDatePickerSequence,
   forwardMessageSequence: forwardMessageSequence as unknown as Function,
   generateCaseCaptionSequence:
     generateCaseCaptionSequence as unknown as Function,
@@ -1151,8 +1150,7 @@ export const presenterSequences = {
   setIdleStatusActiveSequence:
     setIdleStatusActiveSequence as unknown as Function,
   setIrsNoticeFalseSequence: setIrsNoticeFalseSequence as unknown as Function,
-  setJudgeActivityReportFiltersSequence:
-    setJudgeActivityReportFiltersSequence as unknown as Function,
+  setJudgeActivityReportFiltersSequence,
   setMessageDetailViewerDocumentToDisplaySequence:
     setMessageDetailViewerDocumentToDisplaySequence as unknown as Function,
   setPDFPageForSigningSequence:
@@ -1193,7 +1191,7 @@ export const presenterSequences = {
     showViewPetitionerCounselModalSequence as unknown as Function,
   signOutSequence: signOutSequence as unknown as Function,
   skipSigningOrderSequence: skipSigningOrderSequence as unknown as Function,
-  sortTableSequence: sortTableSequence as unknown as Function,
+  sortTableSequence,
   startRefreshIntervalSequence:
     startRefreshIntervalSequence as unknown as Function,
   startScanSequence: startScanSequence as unknown as Function,
@@ -1295,8 +1293,7 @@ export const presenterSequences = {
     toggleUseContactPrimaryAddressSequence as unknown as Function,
   toggleUseExistingAddressSequence:
     toggleUseExistingAddressSequence as unknown as Function,
-  toggleWorkingCopySortSequence:
-    toggleWorkingCopySortSequence as unknown as Function,
+  toggleWorkingCopySortSequence,
   unauthorizedErrorSequence: unauthorizedErrorSequence as unknown as Function,
   unblockCaseFromTrialSequence:
     unblockCaseFromTrialSequence as unknown as Function,
@@ -1375,8 +1372,7 @@ export const presenterSequences = {
   updateSearchTermSequence: updateSearchTermSequence as unknown as Function,
   updateSectionInCreateMessageModalSequence:
     updateSectionInCreateMessageModalSequence as unknown as Function,
-  updateSessionMetadataSequence:
-    updateSessionMetadataSequence as unknown as Function,
+  updateSessionMetadataSequence,
   updateStartCaseFormValueSequence:
     updateStartCaseFormValueSequence as unknown as Function,
   updateStartCaseInternalPartyTypeSequence:
