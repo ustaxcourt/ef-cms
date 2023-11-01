@@ -5,7 +5,7 @@ describe('UpdateUserEmail', () => {
     it('should fail validation when email is not provided', () => {
       const updateUserEmailEntity = new UpdateUserEmail({
         confirmEmail: 'test@example.com',
-        email: undefined,
+        email: undefined as any,
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
@@ -17,7 +17,7 @@ describe('UpdateUserEmail', () => {
 
     it('should fail validation when confirmEmail is not provided', () => {
       const updateUserEmailEntity = new UpdateUserEmail({
-        confirmEmail: undefined,
+        confirmEmail: undefined as any,
         email: 'test@example.com',
       });
 
@@ -41,8 +41,8 @@ describe('UpdateUserEmail', () => {
 
     it('should fail validation when email and confirmEmail are not provided', () => {
       const updateUserEmailEntity = new UpdateUserEmail({
-        confirmEmail: undefined,
-        email: undefined,
+        confirmEmail: undefined as any,
+        email: undefined as any,
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
