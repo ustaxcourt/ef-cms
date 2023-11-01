@@ -1,39 +1,35 @@
 import { DOCKET_NUMBER_SUFFIXES } from '../EntityConstants';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
+import { setPretrialMemorandumFiler } from '../../utilities/getFormattedTrialSessionDetails';
 import joi from 'joi';
 
 export class CalendaredCase extends JoiValidationEntity {
-  public docketEntries?: DocketEntry[];
   public caseCaption?: string;
   public docketNumber: string;
+  public PMTServedPartiesCode?: string;
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix?: string;
   public leadDocketNumber?: string;
   public irsPractitioners?: IrsPractitioner[];
   public privatePractitioners?: PrivatePractitioner[];
 
-  constructor(rawProps, applicationContext: IApplicationContext) {
+  constructor(rawProps) {
     super('CalendaredCase');
 
     this.caseCaption = rawProps.caseCaption;
-    this.docketEntries = rawProps.docketEntries;
     this.docketNumber = rawProps.docketNumber;
     this.leadDocketNumber = rawProps.leadDocketNumber;
     this.docketNumberSuffix = rawProps.docketNumberSuffix;
     this.docketNumberWithSuffix =
       rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
 
-    if (Array.isArray(rawProps.docketEntries)) {
-      this.docketEntries = rawProps.docketEntries.map(
-        docketEntry => new DocketEntry(docketEntry, { applicationContext }),
-      );
-    } else {
-      this.docketEntries = [];
-    }
+    // instead of sending EVERY docket entry over, the front end only cares about the filingPartiesCode on PMT documents not stricken
+    this.PMTServedPartiesCode = setPretrialMemorandumFiler({
+      caseItem: rawProps,
+    });
 
     if (Array.isArray(rawProps.privatePractitioners)) {
       this.privatePractitioners = rawProps.privatePractitioners.map(
@@ -53,8 +49,8 @@ export class CalendaredCase extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
+    PMTServedPartiesCode: JoiValidationConstants.STRING.allow('').optional(),
     caseCaption: JoiValidationConstants.CASE_CAPTION.optional(),
-    docketEntries: joi.array().optional(),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
       'Unique case identifier in XXXXX-YY format.',
     ),
