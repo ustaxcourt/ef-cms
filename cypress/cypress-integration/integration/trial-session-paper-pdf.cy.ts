@@ -59,29 +59,35 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           cy.get('#submit-case').click();
           cy.get('[data-cy="serve-to-irs"]').click();
           cy.get('#confirm').click();
+          cy.url().should(
+            'include',
+            `/case-detail/${docketNumber}/documents/${petitionId}/review`,
+          );
+
           cy.visit(`/case-detail/${docketNumber}`);
           cy.get('#tab-case-information').click();
+          cy.intercept('GET', '**/trial-sessions').as('getTrialSessions');
           cy.get('#add-to-trial-session-btn').click();
+          cy.wait('@getTrialSessions');
           cy.get('[data-cy="all-locations-option"]').click();
           cy.get('#trial-session').select(createdTrialSessionId);
           cy.get('#modal-button-confirm').click();
-          // eslint-disable-next-line cypress/no-unnecessary-waiting
-          cy.wait(2000); // TODO: FIX ME - why do we need this?
-          cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
+          cy.get(
+            `a[href="/trial-session-detail/${createdTrialSessionId}"]`,
+          ).click();
           cy.get(`label[for="${docketNumber}-complete"]`).click();
           cy.get('.progress-indicator').should('not.exist');
           cy.get('#set-calendar-button').click();
           cy.get('#modal-button-confirm').click();
           cy.get('.progress-indicator').should('not.exist');
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
+          cy.get('[data-cy="trial-session-judge"]').select('Colvin');
+          cy.get('[data-cy="submit-edit-trial-session"]').click();
+          cy.url().should('include', 'print-paper-trial-notices');
+          cy.get('[data-cy="printing-complete"]').click();
+          cy.get('[data-cy="edit-trial-session"]').should('exist');
         });
       },
     );
-
-    cy.get('[data-cy="trial-session-judge"]').select('Colvin');
-    cy.get('[data-cy="submit-edit-trial-session"]').click();
-    cy.url().should('include', 'print-paper-trial-notices');
-    cy.get('[data-cy="printing-complete"]').click();
-    cy.get('[data-cy="edit-trial-session"]').should('exist');
   });
 });
