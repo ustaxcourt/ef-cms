@@ -13,5 +13,5 @@ export const validateDocketEntryInteractor = ({
   entryMetadata: any;
 }) => {
   const docketEntry = new DocketEntryFactory(entryMetadata);
-  return docketEntry.getFormattedValidationErrors();
+  return docketEntry.getValidationErrors();
 };
