@@ -47,9 +47,8 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
         cy.intercept('POST', '**/paper').as('postPaperCase');
         cy.get('#submit-case').click();
         cy.wait('@postPaperCase').then(({ response: paperCaseResponse }) => {
-          // cy.visit(`/case-detail/${paperCaseResponse.body.docketNumber}`);
           const petitionId = paperCaseResponse?.body.docketEntries.find(
-            d => d.documentTitle === 'Petition',
+            (d: any) => d.documentTitle === 'Petition',
           ).docketEntryId;
           const docketNumber = paperCaseResponse?.body.docketNumber;
           cy.visit(
@@ -72,12 +71,28 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           cy.get('#set-calendar-button').click();
           cy.get('#modal-button-confirm').click();
           waitForLoadingComplete();
+          cy.url().should('include', 'print-paper-trial-notices');
+          cy.get('[data-cy="printing-complete"]').click();
+          cy.url().should(
+            'include',
+            `trial-session-detail/${createdTrialSessionId}`,
+          );
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
           cy.get('[data-cy="trial-session-judge"]').select('Colvin');
           cy.get('[data-cy="submit-edit-trial-session"]').click();
           cy.url().should('include', 'print-paper-trial-notices');
           cy.get('[data-cy="printing-complete"]').click();
-          cy.get('[data-cy="edit-trial-session"]').should('exist');
+          cy.url().should(
+            'include',
+            `trial-session-detail/${createdTrialSessionId}`,
+          );
+          cy.get('[data-cy="trial-session-open-paper-service-pdfs"]').click();
+          cy.get('[data-cy="trial-session-paper-pdf-options"]').contains(
+            'Initial Calendaring',
+          );
+          cy.get('[data-cy="trial-session-paper-pdf-options"]').contains(
+            'Notice of Change of Trial Judge',
+          );
         });
       },
     );

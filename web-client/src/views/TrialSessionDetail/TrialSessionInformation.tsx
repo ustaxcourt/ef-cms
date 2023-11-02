@@ -131,6 +131,7 @@ export const TrialSessionInformation = connect(
                 <Button
                   link
                   className="margin-top-2 margin-left-4"
+                  data-cy="trial-session-open-paper-service-pdfs"
                   icon="print"
                   onClick={() => openPrintGeneratedPaperServiceSequence()}
                 >
