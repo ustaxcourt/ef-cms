@@ -14,7 +14,7 @@ export const validateDocumentInteractor = (
 ) => {
   const errors = new DocketEntry(document, {
     applicationContext,
-  }).getFormattedValidationErrors();
+  }).getValidationErrors();
 
   return errors || null;
 };
