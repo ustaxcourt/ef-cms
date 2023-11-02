@@ -86,7 +86,7 @@ const getFirmsCases = async ({ applicationContext, firmsPractitionerIds }) => {
     await getFirmsPractitioners({
       applicationContext,
     })
-  )?.results.map(p => p.userId);
+  ).map(p => p.userId);
   const firmsCases = await getFirmsCases({
     applicationContext,
     firmsPractitionerIds,
