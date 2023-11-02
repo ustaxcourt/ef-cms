@@ -1,12 +1,11 @@
-import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-
 import { JoiValidationConstants } from '../JoiValidationConstants';
-import { MAX_FILE_SIZE_BYTES } from '../EntityConstants';
+import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { MAX_FILE_SIZE_BYTES, MAX_FILE_SIZE_MB } from '../EntityConstants';
 import { includes } from 'lodash';
 import { makeRequiredHelper } from './externalDocumentHelpers';
 import joi from 'joi';
 
-export class SupportingDocumentInformationFactory extends JoiValidationEntity {
+export class SupportingDocumentInformationFactory extends JoiValidationEntity_New {
   public attachments: string;
   public certificateOfService: boolean;
   public certificateOfServiceDate: string;
@@ -15,9 +14,7 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
   public supportingDocumentFileSize?: number;
   public supportingDocumentFreeText: string;
 
-  private supportingDocumentValidationRules: object;
-
-  constructor(rawProps, validationRules) {
+  constructor(rawProps) {
     super('SupportingDocumentInformationFactory');
     this.attachments = rawProps.attachments || false;
     this.certificateOfService = rawProps.certificateOfService;
@@ -26,27 +23,46 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     this.supportingDocumentFile = rawProps.supportingDocumentFile;
     this.supportingDocumentFileSize = rawProps.supportingDocumentFileSize;
     this.supportingDocumentFreeText = rawProps.supportingDocumentFreeText;
-
-    this.supportingDocumentValidationRules = validationRules;
   }
 
   getValidationRules() {
     let schema = {
-      attachments: joi.boolean().required(),
-      certificateOfService: joi.boolean().required(),
-      supportingDocument: JoiValidationConstants.STRING.required(),
+      attachments: joi
+        .boolean()
+        .required()
+        .messages({ '*': 'Enter selection for Attachments.' }),
+      certificateOfService: joi.boolean().required().messages({
+        '*': 'Indicate whether you are including a Certificate of Service',
+      }),
+      supportingDocument: JoiValidationConstants.STRING.required().messages({
+        '*': 'Select a document type',
+      }),
     };
 
     let schemaOptionalItems = {
-      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max('now'),
-      supportingDocumentFile: joi.object(),
+      certificateOfServiceDate: JoiValidationConstants.ISO_DATE.max(
+        'now',
+      ).messages({
+        '*': 'Enter date of service',
+        'date.max':
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
+      }),
+      supportingDocumentFile: joi
+        .object()
+        .messages({ '*': 'Upload a document' }),
       supportingDocumentFileSize: joi
         .number()
         .optional()
         .min(1)
         .max(MAX_FILE_SIZE_BYTES)
-        .integer(),
-      supportingDocumentFreeText: JoiValidationConstants.STRING,
+        .integer()
+        .messages({
+          '*': 'Your Supporting Document file size is empty.',
+          'number.max': `Your Supporting Document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
+        }),
+      supportingDocumentFreeText: JoiValidationConstants.STRING.messages({
+        '*': 'Enter name',
+      }),
     };
 
     const makeRequired = itemName => {
@@ -85,9 +101,5 @@ export class SupportingDocumentInformationFactory extends JoiValidationEntity {
     }
 
     return schema;
-  }
-
-  getErrorToMessageMap() {
-    return this.supportingDocumentValidationRules;
   }
 }
