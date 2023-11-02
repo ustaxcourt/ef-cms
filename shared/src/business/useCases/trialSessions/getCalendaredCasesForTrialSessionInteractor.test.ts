@@ -91,44 +91,50 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       },
     );
 
-    expect(cases[0].consolidatedCases).toBeUndefined();
-    expect(cases[0].docketEntries).toBeUndefined();
-    expect(cases[0].petitioners).toBeUndefined();
-    expect(cases[0].associatedJudge).toBeUndefined();
-    expect(cases[0].automaticBlocked).toBeUndefined();
-    expect(cases[0].caseStatusHistory).toBeUndefined();
-    expect(cases[0].qcCompleteForTrial).toBeUndefined();
-    expect(cases[0].noticeOfAttachments).toBeUndefined();
-    expect(cases[0].orderDesignatingPlaceOfTrial).toBeUndefined();
-    expect(cases[0].orderForAmendedPetition).toBeUndefined();
-    expect(cases[0].orderForAmendedPetitionAndFilingFee).toBeUndefined();
-    expect(cases[0].orderForFilingFee).toBeUndefined();
-    expect(cases[0].orderForCds).toBeUndefined();
-    expect(cases[0].archivedDocketEntries).toBeUndefined();
-    expect(cases[0].statistics).toBeUndefined();
-    expect(cases[0].correspondence).toBeUndefined();
-    expect(cases[0].archivedCorrespondences).toBeUndefined();
-    expect(cases[0].isSealed).toBeUndefined();
-    expect(cases[0].hearings).toBeUndefined();
-    expect(cases[0].createdAt).toBeUndefined();
-    expect(cases[0].filingType).toBeUndefined();
-    expect(cases[0].hasVerifiedIrsNotice).toBeUndefined();
-    expect(cases[0].irsNoticeDate).toBeUndefined();
-    expect(cases[0].isPaper).toBeUndefined();
-    expect(cases[0].partyType).toBeUndefined();
-    expect(cases[0].petitionPaymentDate).toBeUndefined();
-    expect(cases[0].petitionPaymentMethod).toBeUndefined();
-    expect(cases[0].petitionPaymentStatus).toBeUndefined();
-    expect(cases[0].petitionPaymentWaivedDate).toBeUndefined();
-    expect(cases[0].preferredTrialCity).toBeUndefined();
-    expect(cases[0].receivedAt).toBeUndefined();
-    expect(cases[0].trialDate).toBeUndefined();
-    expect(cases[0].trialLocation).toBeUndefined();
-    expect(cases[0].trialSessionId).toBeUndefined();
-    expect(cases[0].trialTime).toBeUndefined();
-    expect(cases[0].initialDocketNumberSuffix).toBeUndefined();
-    expect(cases[0].initialCaption).toBeUndefined();
-    expect(cases[0].hasPendingItems).toBeUndefined();
-    expect(cases[0].initialDocketNumberSuffix).toBeUndefined();
+    removedFields.forEach(field => {
+      expect(cases[0][field]).toBeUndefined();
+    });
   });
 });
+
+const removedFields = [
+  'docketEntries',
+  'consolidatedCases',
+  'petitioners',
+  'associatedJudge',
+  'automaticBlocked',
+  'caseStatusHistory',
+  'qcCompleteForTrial',
+  'noticeOfAttachments',
+  'orderDesignatingPlaceOfTrial',
+  'orderForAmendedPetition',
+  'orderForAmendedPetitionAndFilingFee',
+  'orderForFilingFee',
+  'orderForCds',
+  'archivedDocketEntries',
+  'statistics',
+  'correspondence',
+  'archivedCorrespondences',
+  'hearings',
+  'isSealed',
+  'createdAt',
+  'filingType',
+  'hasVerifiedIrsNotice',
+  'irsNoticeDate',
+  'isPaper',
+  'partyType',
+  'petitionPaymentDate',
+  'petitionPaymentMethod',
+  'petitionPaymentStatus',
+  'petitionPaymentWaivedDate',
+  'preferredTrialCity',
+  'receivedAt',
+  'trialDate',
+  'trialLocation',
+  'trialSessionId',
+  'trialTime',
+  'initialDocketNumberSuffix',
+  'initialCaption',
+  'hasPendingItems',
+  'initialDocketNumberSuffix',
+];
