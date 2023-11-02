@@ -18,13 +18,16 @@ describe('deleteCorrespondenceById', () => {
         applicationContext,
       },
     );
-    expect(myCase.correspondence.length).toEqual(1);
+
+    expect(myCase.correspondence!.length).toEqual(1);
+
     myCase.deleteCorrespondenceById({
       correspondenceId: mockCorrespondence.correspondenceId,
     });
-    expect(myCase.correspondence.length).toEqual(0);
+
+    expect(myCase.correspondence!.length).toEqual(0);
     expect(
-      myCase.correspondence.find(
+      myCase.correspondence!.find(
         d => d.correspondenceId === mockCorrespondence.correspondenceId,
       ),
     ).toBeUndefined();
@@ -37,10 +40,10 @@ describe('deleteCorrespondenceById', () => {
         applicationContext,
       },
     );
-    expect(myCase.correspondence.length).toEqual(1);
+    expect(myCase.correspondence!.length).toEqual(1);
     myCase.deleteCorrespondenceById({
       correspondenceId: '1234',
     });
-    expect(myCase.correspondence.length).toEqual(1);
+    expect(myCase.correspondence!.length).toEqual(1);
   });
 });
