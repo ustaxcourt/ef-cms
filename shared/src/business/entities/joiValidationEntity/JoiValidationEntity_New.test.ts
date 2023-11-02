@@ -1,5 +1,6 @@
 import { InvalidEntityError } from '@web-api/errors/errors';
 import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { TestCaseEntity } from '@shared/business/entities/joiValidationEntity/TestCaseEntity';
 import { TestEntity } from './TestEntity';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 
@@ -89,6 +90,65 @@ describe('Joi Entity', () => {
         expect(errors.propUsingReference).toEqual(
           'propUsingReference must be greater than referencedProp.',
         );
+      });
+    });
+
+    describe('remove unhelpful error messages from contact validations', () => {
+      it('should remove unhelpful error messages that end with "does not match any of the allowed types"', () => {
+        const testCaseEntity = new TestCaseEntity({
+          unhelpfulErrorMessage: 'INVALID',
+        });
+
+        const errors = testCaseEntity.getValidationErrors()!;
+        expect(errors).toEqual(null);
+      });
+    });
+
+    describe('nested entities', () => {
+      it('should return an array of errors when there is an error in a nested entity list', () => {
+        const testCaseEntity = new TestCaseEntity({
+          caseList: [
+            { contactType: 'VALID_1' },
+            { contactType: 'INVALID' },
+            { contactType: 'VALID_1' },
+          ],
+        });
+
+        const errors = testCaseEntity.getValidationErrors();
+
+        expect(errors).toEqual({
+          caseList: [
+            {
+              contactType: 'invalid contact type',
+              index: 1,
+            },
+          ],
+          contactType: 'invalid contact type',
+        });
+      });
+
+      it('should ONlY recursively validate items in an array when the list contains items which are instances of JoiValidationEntity', () => {
+        const testCaseEntity = new TestCaseEntity({
+          otherList: [{ aProperty: 'abc' }], // Other list is a plain list of objects
+        });
+
+        const errors = testCaseEntity.getValidationErrors();
+
+        expect(errors).toEqual(null);
+      });
+
+      it('should return an object of errors when there is an error in a nested entity', () => {
+        const testCaseEntity = new TestCaseEntity({
+          nestedCase: { contactType: 'INVALID_1' },
+        });
+
+        const errors = testCaseEntity.getValidationErrors();
+
+        expect(errors).toEqual({
+          nestedCase: {
+            contactType: 'invalid contact type',
+          },
+        });
       });
     });
   });
