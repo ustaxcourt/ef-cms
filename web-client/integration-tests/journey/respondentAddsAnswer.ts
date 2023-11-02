@@ -1,4 +1,3 @@
-import { ExternalDocumentInformationFactory } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
 
 export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
@@ -10,11 +9,8 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.category,
-      documentType:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
+      category: 'Select a Category.',
+      documentType: 'Select a document type',
     });
 
     await cerebralTest.runSequence(
@@ -27,9 +23,7 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
 
     await cerebralTest.runSequence('validateSelectDocumentTypeSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      documentType:
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
+      documentType: 'Select a document type',
     });
 
     const documentToSelect = {

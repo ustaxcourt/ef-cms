@@ -6,9 +6,8 @@ import {
   DOCUMENT_EXTERNAL_CATEGORIES_MAP,
   MAX_FILE_SIZE_MB,
 } from '../EntityConstants';
-import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '../EntityValidationConstants';
+import { DOCKET_ENTRY_VALIDATION_RULE_KEYS } from '@shared/business/entities/EntityValidationConstants';
 import { ExternalDocumentFactory } from '../externalDocument/ExternalDocumentFactory';
-import { ExternalDocumentInformationFactory } from '../externalDocument/ExternalDocumentInformationFactory';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import joi from 'joi';
@@ -96,31 +95,6 @@ export class DocketEntryFactory extends JoiValidationEntity_New {
     this.freeText2 = rawPropsParam.freeText2;
     this.selectedCases = rawPropsParam.selectedCases;
   }
-
-  static VALIDATION_ERROR_MESSAGES = {
-    ...ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES,
-    documentTitle:
-      'Document title must be 3000 characters or fewer. Update this document title and try again.',
-    eventCode: 'Select a document type',
-    filers: 'Select a filing party',
-    lodged: 'Enter selection for filing status.',
-    otherFilingParty: 'Enter other filing party name.',
-    primaryDocumentFileSize: [
-      {
-        contains: 'must be less than or equal to',
-        message: `Your document file size is too big. The maximum file size is ${MAX_FILE_SIZE_MB}MB.`,
-      },
-      'Your document file size is empty.',
-    ],
-    receivedAt: [
-      {
-        contains: 'must be less than or equal to',
-        message: 'Received date cannot be in the future. Enter a valid date.',
-      },
-      'Enter a valid date received',
-    ],
-    secondaryDocumentFile: 'A file was not selected.',
-  } as const;
 
   getValidationRules() {
     const eFiledObjectionRequiredEventCodes = [

@@ -14,5 +14,5 @@ export const validateExternalDocumentInformationInteractor = ({
     documentMetadata,
   );
 
-  return externalDocument.getFormattedValidationErrors();
+  return externalDocument.getValidationErrors();
 };
