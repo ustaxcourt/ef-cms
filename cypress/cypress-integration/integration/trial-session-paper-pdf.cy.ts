@@ -1,8 +1,7 @@
 import { fillInCreateCaseFromPaperForm } from '../support/pages/create-paper-petition';
-import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from '../support/pages/document-qc';
+import { getCreateACaseButton } from '../support/pages/document-qc';
+import { manuallyAddCaseToNewTrialSession } from '../../cypress-smoketests/support/pages/case-detail';
+import { waitForLoadingComplete } from '../support/generalCommands/waitForLoader';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
@@ -40,7 +39,7 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
         expect(trialSessionResponse?.body).to.have.property('trialSessionId');
         const createdTrialSessionId = trialSessionResponse?.body.trialSessionId;
 
-        navigateToDocumentQC('petitionsclerk');
+        cy.visit('/document-qc');
         getCreateACaseButton().click();
         cy.get('#tab-parties').parent().should('have.attr', 'aria-selected');
         fillInCreateCaseFromPaperForm();
@@ -58,28 +57,21 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
           );
           cy.get('#submit-case').click();
           cy.get('[data-cy="serve-to-irs"]').click();
+          cy.intercept(`/cases/${docketNumber}/serve-to-irs`).as('serveToIrs');
           cy.get('#confirm').click();
-          cy.url().should(
-            'include',
-            `/case-detail/${docketNumber}/documents/${petitionId}/review`,
-          );
-
-          cy.visit(`/case-detail/${docketNumber}`);
-          cy.get('#tab-case-information').click();
-          cy.intercept('GET', '**/trial-sessions').as('getTrialSessions');
-          cy.get('#add-to-trial-session-btn').click();
-          cy.wait('@getTrialSessions');
-          cy.get('[data-cy="all-locations-option"]').click();
-          cy.get('#trial-session').select(createdTrialSessionId);
-          cy.get('#modal-button-confirm').click();
+          cy.wait('@serveToIrs');
           cy.get(
-            `a[href="/trial-session-detail/${createdTrialSessionId}"]`,
+            '[data-cy="done-viewing-paper-petition-receipt-button"]',
           ).click();
+          cy.url().should('include', `/case-detail/${docketNumber}`);
+          cy.get('#tab-case-information').click();
+          manuallyAddCaseToNewTrialSession(createdTrialSessionId);
+          cy.visit(`/trial-session-detail/${createdTrialSessionId}`);
           cy.get(`label[for="${docketNumber}-complete"]`).click();
-          cy.get('.progress-indicator').should('not.exist');
+          waitForLoadingComplete();
           cy.get('#set-calendar-button').click();
           cy.get('#modal-button-confirm').click();
-          cy.get('.progress-indicator').should('not.exist');
+          waitForLoadingComplete();
           cy.visit(`/edit-trial-session/${createdTrialSessionId}`);
           cy.get('[data-cy="trial-session-judge"]').select('Colvin');
           cy.get('[data-cy="submit-edit-trial-session"]').click();
