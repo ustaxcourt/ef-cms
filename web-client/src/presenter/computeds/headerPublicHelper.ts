@@ -4,7 +4,9 @@ import { Get } from 'cerebral';
 
 export const headerPublicHelper = (get: Get) => {
   const currentPage = get(state.currentPage) || '';
-  const isOnSignUpPage = currentPage.startsWith('CreatePetitioner');
+  const inSignUpProcess =
+    currentPage.startsWith('CreatePetitionerAccount') ||
+    currentPage.startsWith('VerificationSent');
 
-  return { isOnSignUpPage };
+  return { inSignUpProcess };
 };
