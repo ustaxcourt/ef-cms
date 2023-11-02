@@ -3,7 +3,7 @@ import { MOCK_CASE_WITH_SECONDARY_OTHERS } from '../../../test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../test/mockComplexCase';
 
 describe('EligibleCase', () => {
-  it('white lists the fields set within the entity, removing those not defined', () => {
+  it('allowlists the fields set within the entity, removing those not defined', () => {
     const eligibleCase = new EligibleCase(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
     expect(eligibleCase.getFormattedValidationErrors()).toBe(null);

@@ -1,4 +1,5 @@
 import { PETITIONS_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { RawMessage } from '@shared/business/entities/Message';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updateMessage } from './updateMessage';
 
