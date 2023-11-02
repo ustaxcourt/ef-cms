@@ -1,5 +1,4 @@
 import { DOCUMENT_RELATIONSHIPS } from '../../../shared/src/business/entities/EntityConstants';
-import { DocketEntryFactory } from '../../../shared/src/business/entities/docketEntry/DocketEntryFactory';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { contactPrimaryFromState, waitForCondition } from '../helpers';
 
@@ -8,8 +7,6 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
   documentFormValues,
   expectedDocumentType,
 }) => {
-  const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
-
   return it('Docketclerk adds paper filed docket entry and saves for later', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -29,10 +26,10 @@ export const docketClerkAddsPaperFiledDocketEntryAndSavesForLater = ({
     });
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
-      documentType: VALIDATION_ERROR_MESSAGES.documentType[1],
-      eventCode: VALIDATION_ERROR_MESSAGES.eventCode,
-      filers: VALIDATION_ERROR_MESSAGES.filers,
-      receivedAt: VALIDATION_ERROR_MESSAGES.receivedAt[1],
+      documentType: 'Select a document type',
+      eventCode: 'Select a document type',
+      filers: 'Select a filing party',
+      receivedAt: 'Enter a valid date received',
     });
 
     const { contactId } = contactPrimaryFromState(cerebralTest);
