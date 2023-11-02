@@ -1,4 +1,3 @@
-import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestFactory } from './CaseAssociationRequestFactory';
 import { OBJECTIONS_OPTIONS_MAP } from '../EntityConstants';
 import {
@@ -19,101 +18,85 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require a file', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .primaryDocumentFile,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      );
+      ).toEqual('Upload a document');
 
       rawEntity.primaryDocumentFile = {};
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .primaryDocumentFile,
       ).toEqual(undefined);
     });
 
     it('should require a certificate Of Service selection', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .certificateOfService,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .certificateOfService,
-      );
+      ).toEqual('Indicate whether you are including a Certificate of Service');
 
       rawEntity.certificateOfService = false;
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .certificateOfService,
       ).toEqual(undefined);
     });
 
     it('should require document type', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .documentType,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentType[1],
-      );
+      ).toEqual('Select a document type');
 
       rawEntity.documentType = 'Entry of Appearance';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .documentType,
       ).toEqual(undefined);
     });
 
     it('should require document title template', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .documentTitleTemplate,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-          .documentTitleTemplate,
-      );
+      ).toEqual('Select a document');
 
       rawEntity.documentTitleTemplate =
         'Entry of Appearance for [Petitioner Names]';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .documentTitleTemplate,
       ).toEqual(undefined);
     });
 
     it('should require event code', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .eventCode,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.eventCode,
-      );
+      ).toEqual('Select a document');
 
       rawEntity.eventCode = 'P';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .eventCode,
       ).toEqual(undefined);
     });
 
     it('should require scenario title', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .scenario,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.scenario,
-      );
+      ).toEqual('Select a document');
 
       rawEntity.scenario = 'Standard';
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
           .scenario,
       ).toEqual(undefined);
     });
@@ -125,20 +108,15 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require certificate of service date to be entered', () => {
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.certificateOfServiceDate,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[1],
-        );
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .certificateOfServiceDate,
+        ).toEqual('Enter date of service');
 
         rawEntity.certificateOfServiceDate = createISODateString();
 
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.certificateOfServiceDate,
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .certificateOfServiceDate,
         ).toEqual(undefined);
       });
 
@@ -150,12 +128,10 @@ describe('CaseAssociationRequestFactory', () => {
         });
 
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.certificateOfServiceDate,
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .certificateOfServiceDate,
         ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[0].message,
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
       });
     });
@@ -169,20 +145,15 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require objections be selected', () => {
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.objections,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
             .objections,
-        );
+        ).toEqual('Enter selection for Objections.');
 
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.objections,
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .objections,
         ).toEqual(undefined);
       });
     });
@@ -197,58 +168,43 @@ describe('CaseAssociationRequestFactory', () => {
 
       it('should require attachments be selected', () => {
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.attachments,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
             .attachments,
-        );
+        ).toEqual('Enter selection for Attachments.');
 
         rawEntity.attachments = false;
 
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.attachments,
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .attachments,
         ).toEqual(undefined);
       });
 
       it('should require objections be selected', () => {
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.objections,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
             .objections,
-        );
+        ).toEqual('Enter selection for Objections.');
 
         rawEntity.objections = OBJECTIONS_OPTIONS_MAP.NO;
 
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.objections,
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .objections,
         ).toEqual(undefined);
       });
 
       it('should require has supporting documents be selected', () => {
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.hasSupportingDocuments,
-        ).toEqual(
-          CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
             .hasSupportingDocuments,
-        );
+        ).toEqual('Enter selection for Supporting Documents.');
 
         rawEntity.hasSupportingDocuments = false;
 
         expect(
-          CaseAssociationRequestFactory(
-            rawEntity,
-          ).getFormattedValidationErrors()!.hasSupportingDocuments,
+          CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+            .hasSupportingDocuments,
         ).toEqual(undefined);
       });
 
@@ -259,23 +215,18 @@ describe('CaseAssociationRequestFactory', () => {
             { attachments: false, certificateOfService: false },
           ];
         });
+
         it('should require supporting document type be entered', () => {
           expect(
-            CaseAssociationRequestFactory(
-              rawEntity,
-            ).getFormattedValidationErrors()!.supportingDocuments[0]
-              .supportingDocument,
-          ).toEqual(
-            CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
-          );
+            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+              .supportingDocuments[0].supportingDocument,
+          ).toEqual('Select a document type');
 
           rawEntity.supportingDocuments[0].supportingDocument = 'Brief';
 
           expect(
-            CaseAssociationRequestFactory(
-              rawEntity,
-            ).getFormattedValidationErrors()!.supportingDocuments,
+            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+              .supportingDocuments,
           ).toEqual(undefined);
         });
 
@@ -284,22 +235,16 @@ describe('CaseAssociationRequestFactory', () => {
           rawEntity.supportingDocuments[0].supportingDocument = 'brief';
 
           expect(
-            CaseAssociationRequestFactory(
-              rawEntity,
-            ).getFormattedValidationErrors()!.supportingDocuments[0]
-              .certificateOfServiceDate,
-          ).toEqual(
-            CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES
-              .certificateOfServiceDate[1],
-          );
+            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+              .supportingDocuments[0].certificateOfServiceDate,
+          ).toEqual('Enter date of service');
 
           rawEntity.supportingDocuments[0].certificateOfServiceDate =
             createISODateString();
 
           expect(
-            CaseAssociationRequestFactory(
-              rawEntity,
-            ).getFormattedValidationErrors()!.supportingDocuments,
+            CaseAssociationRequestFactory(rawEntity).getValidationErrors()!
+              .supportingDocuments,
           ).toEqual(undefined);
         });
       });
@@ -307,17 +252,13 @@ describe('CaseAssociationRequestFactory', () => {
 
     it('should require one filer to be selected', () => {
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
-          .filers,
-      ).toEqual(
-        CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.filers,
-      );
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!.filers,
+      ).toEqual('Select a party');
 
       rawEntity.filers = ['c41fdac6-cc16-4ca6-97fc-980ebb618dd5'];
 
       expect(
-        CaseAssociationRequestFactory(rawEntity).getFormattedValidationErrors()!
-          .filers,
+        CaseAssociationRequestFactory(rawEntity).getValidationErrors()!.filers,
       ).toEqual(undefined);
     });
 

@@ -1,4 +1,3 @@
-import { CaseAssociationRequestDocumentBase } from './CaseAssociationRequestDocumentBase';
 import { CaseAssociationRequestDocumentTypeA } from './CaseAssociationRequestDocumentTypeA';
 
 describe('CaseAssociationRequestFactory', () => {
@@ -8,8 +7,8 @@ describe('CaseAssociationRequestFactory', () => {
       documentType: 'Notice of Intervention',
     });
 
-    expect(entity.getFormattedValidationErrors()!.attachments).toEqual(
-      CaseAssociationRequestDocumentBase.VALIDATION_ERROR_MESSAGES.attachments,
+    expect(entity.getValidationErrors()!.attachments).toEqual(
+      'Enter selection for Attachments.',
     );
   });
 
