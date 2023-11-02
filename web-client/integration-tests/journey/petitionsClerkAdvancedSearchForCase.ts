@@ -2,7 +2,6 @@ import {
   ADVANCED_SEARCH_TABS,
   COUNTRY_TYPES,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { CaseSearch } from '../../../shared/src/business/entities/cases/CaseSearch';
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const petitionsClerkAdvancedSearchForCase = cerebralTest => {
@@ -14,7 +13,7 @@ export const petitionsClerkAdvancedSearchForCase = cerebralTest => {
     await cerebralTest.runSequence('submitCaseAdvancedSearchSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      petitionerName: CaseSearch.VALIDATION_ERROR_MESSAGES.petitionerName,
+      petitionerName: 'Enter a name',
     });
 
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
