@@ -32,6 +32,7 @@ const BetaBar = toggleBetaBarSequence => {
 
 export const HeaderPublic = connect(
   {
+    headerPublicHelper: state.headerPublicHelper,
     isTerminalUser: state.isTerminalUser,
     navigateToCognitoSequence: sequences.navigateToCognitoSequence,
     navigateToCreatePetitionerAccountSequence:
@@ -40,6 +41,7 @@ export const HeaderPublic = connect(
     toggleBetaBarSequence: sequences.toggleBetaBarSequence,
   },
   function HeaderPublic({
+    headerPublicHelper,
     isTerminalUser,
     navigateToCognitoSequence,
     navigateToCreatePetitionerAccountSequence,
@@ -65,41 +67,47 @@ export const HeaderPublic = connect(
                   Welcome to DAWSON{' '}
                   {isTerminalUser && ': US Tax Court Terminal'}
                 </h1>
-                <div className="login-container">
-                  <Button
-                    className="usa-button--unstyled"
-                    icon={['far', 'user']}
-                    onClick={() => navigateToCognitoSequence()}
-                  >
-                    Log In
-                  </Button>
-                </div>
-                <div className="login-container mobile">
-                  <button
-                    className="usa-menu-btn"
-                    onClick={() => navigateToCognitoSequence()}
-                  >
-                    Log In
-                  </button>
-                </div>
-
-                <div className="create-container">
-                  <Button
-                    className="usa-button--unstyled"
-                    onClick={() => navigateToCreatePetitionerAccountSequence()}
-                  >
-                    Create Account
-                  </Button>
-                </div>
-
-                <div className="create-container mobile">
-                  <button
-                    className="usa-menu-btn"
-                    onClick={() => navigateToCreatePetitionerAccountSequence()}
-                  >
-                    Create Account
-                  </button>
-                </div>
+                {!headerPublicHelper.inSignUpProcess && (
+                  <>
+                    <div className="login-container">
+                      <Button
+                        className="usa-button--unstyled"
+                        icon={['far', 'user']}
+                        onClick={() => navigateToCognitoSequence()}
+                      >
+                        Log In
+                      </Button>
+                    </div>
+                    <div className="login-container mobile">
+                      <button
+                        className="usa-menu-btn"
+                        onClick={() => navigateToCognitoSequence()}
+                      >
+                        Log In
+                      </button>
+                    </div>
+                    <div className="create-container">
+                      <Button
+                        className="usa-button--unstyled"
+                        onClick={() =>
+                          navigateToCreatePetitionerAccountSequence()
+                        }
+                      >
+                        Create Account
+                      </Button>
+                    </div>
+                    <div className="create-container mobile">
+                      <button
+                        className="usa-menu-btn"
+                        onClick={() =>
+                          navigateToCreatePetitionerAccountSequence()
+                        }
+                      >
+                        Create Account
+                      </button>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           </header>
