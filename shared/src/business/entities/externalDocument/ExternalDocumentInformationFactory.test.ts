@@ -9,11 +9,21 @@ describe('ExternalDocumentInformationFactory', () => {
   let baseDoc;
 
   const errors = () =>
-    new ExternalDocumentInformationFactory(
-      baseDoc,
-    ).getFormattedValidationErrors();
+    new ExternalDocumentInformationFactory(baseDoc).getValidationErrors()!;
 
   describe('Standard Document', () => {
+    const VALID_DOC = {
+      category: 'Application',
+      certificateOfService: true,
+      certificateOfServiceDate: '1993-09-10T01:49:58.119Z',
+      documentTitle: 'Application for Waiver of Filing Fee',
+      documentType: 'Application for Waiver of Filing Fee',
+      filers: ['d85d07b7-fdb8-4f94-9a09-69c2a38e95d4'],
+      hasSupportingDocuments: true,
+      primaryDocumentFile: {},
+      scenario: 'Standard',
+    };
+
     beforeEach(() => {
       baseDoc = {
         category: 'Application',
@@ -24,19 +34,23 @@ describe('ExternalDocumentInformationFactory', () => {
       };
     });
 
+    describe('Validation Errors', () => {
+      it('should return null if there are no validation error', () => {
+        const entity = new ExternalDocumentInformationFactory(VALID_DOC);
+        const formattedValidationErrors = entity.getValidationErrors();
+        expect(formattedValidationErrors).toEqual(null);
+      });
+    });
+
     it('should require primary document file', () => {
-      expect(errors().primaryDocumentFile).toEqual(
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .primaryDocumentFile,
-      );
+      expect(errors().primaryDocumentFile).toEqual('Upload a document');
       baseDoc.primaryDocumentFile = {};
       expect(errors().primaryDocumentFile).toEqual(undefined);
     });
 
     it('should require certificate of service radio be selected', () => {
       expect(errors().certificateOfService).toEqual(
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .certificateOfService,
+        'Indicate whether you are including a Certificate of Service',
       );
       baseDoc.certificateOfService = false;
       expect(errors().certificateOfService).toEqual(undefined);
@@ -58,8 +72,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require certificate of service date be entered', () => {
         expect(errors().certificateOfServiceDate).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[1],
+          'Enter date of service',
         );
         baseDoc.certificateOfServiceDate = createISODateString();
         expect(errors().certificateOfServiceDate).toEqual(undefined);
@@ -71,8 +84,7 @@ describe('ExternalDocumentInformationFactory', () => {
           units: 'days',
         });
         expect(errors().certificateOfServiceDate).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[0].message,
+          'Certificate of Service date cannot be in the future. Enter a valid date.',
         );
       });
     });
@@ -92,10 +104,7 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should require objections radio be selected', () => {
-        expect(errors().objections).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .objections,
-        );
+        expect(errors().objections).toEqual('Enter selection for Objections.');
         baseDoc.objections = OBJECTIONS_OPTIONS_MAP.YES;
 
         expect(errors().objections).toEqual(undefined);
@@ -112,10 +121,7 @@ describe('ExternalDocumentInformationFactory', () => {
           },
         };
 
-        expect(errors().objections).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .objections,
-        );
+        expect(errors().objections).toEqual('Enter selection for Objections.');
         baseDoc.objections = OBJECTIONS_OPTIONS_MAP.NO;
         expect(errors().objections).toEqual(undefined);
       });
@@ -137,8 +143,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
     it('should require has supporting documents radio be selected', () => {
       expect(errors().hasSupportingDocuments).toEqual(
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-          .hasSupportingDocuments,
+        'Enter selection for Supporting Documents.',
       );
       baseDoc.hasSupportingDocuments = false;
       expect(errors().hasSupportingDocuments).toEqual(undefined);
@@ -154,8 +159,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
       it('should require supporting document type be entered', () => {
         expect(errors().supportingDocuments[0].supportingDocument).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .supportingDocument,
+          'Select a document type',
         );
         baseDoc.supportingDocuments[0].supportingDocument = 'Brief';
         expect(errors().supportingDocuments).toEqual(undefined);
@@ -172,9 +176,7 @@ describe('ExternalDocumentInformationFactory', () => {
         ];
         expect(errors().supportingDocuments[0]).toEqual({
           index: 1,
-          supportingDocument:
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocument,
+          supportingDocument: 'Select a document type',
         });
       });
 
@@ -183,10 +185,7 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc.supportingDocuments[0].supportingDocument = 'brief';
         expect(
           errors().supportingDocuments[0].certificateOfServiceDate,
-        ).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-            .certificateOfServiceDate[1],
-        );
+        ).toEqual('Enter date of service');
         baseDoc.supportingDocuments[0].certificateOfServiceDate =
           createISODateString();
         expect(errors().supportingDocuments).toEqual(undefined);
@@ -206,10 +205,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document file to be selected', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
-          ).toEqual(
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFile,
-          );
+          ).toEqual('Upload a document');
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
           expect(errors().supportingDocuments).toEqual(undefined);
         });
@@ -225,10 +221,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document file to be selected', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
-          ).toEqual(
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFile,
-          );
+          ).toEqual('Upload a document');
           baseDoc.supportingDocuments[0].supportingDocumentFile = {};
           expect(
             errors().supportingDocuments[0].supportingDocumentFile,
@@ -238,10 +231,7 @@ describe('ExternalDocumentInformationFactory', () => {
         it('should require supporting document text to be added', () => {
           expect(
             errors().supportingDocuments[0].supportingDocumentFreeText,
-          ).toEqual(
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .supportingDocumentFreeText,
-          );
+          ).toEqual('Enter name');
           baseDoc.supportingDocuments[0].supportingDocumentFreeText =
             'Something';
           expect(
@@ -281,8 +271,7 @@ describe('ExternalDocumentInformationFactory', () => {
             documentType: 'Motion for Continuance',
           };
           expect(errors().secondaryDocument.objections).toEqual(
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .objections,
+            'Enter selection for Objections.',
           );
         });
 
@@ -297,8 +286,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
           it("should require 'has supporting secondary documents' radio be selected", () => {
             expect(errors().hasSecondarySupportingDocuments).toEqual(
-              ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                .hasSecondarySupportingDocuments,
+              'Enter selection for Secondary Supporting Documents.',
             );
             baseDoc.hasSecondarySupportingDocuments = false;
             expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
@@ -307,8 +295,7 @@ describe('ExternalDocumentInformationFactory', () => {
           it('should require certificateOfServiceDate if secondary document file is selected and certificateOfService is true', () => {
             baseDoc.secondaryDocument = { certificateOfService: true };
             expect(errors().secondaryDocument.certificateOfServiceDate).toEqual(
-              ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                .certificateOfServiceDate[1],
+              'Enter date of service',
             );
           });
         });
@@ -321,10 +308,7 @@ describe('ExternalDocumentInformationFactory', () => {
         });
 
         it('should require secondary document file be added', () => {
-          expect(errors().secondaryDocumentFile).toEqual(
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-              .secondaryDocumentFile,
-          );
+          expect(errors().secondaryDocumentFile).toEqual('Upload a document');
           baseDoc.secondaryDocumentFile = {};
           expect(errors().secondaryDocumentFile).toEqual(undefined);
         });
@@ -340,8 +324,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
           it("should require 'has supporting secondary documents' radio be selected", () => {
             expect(errors().hasSecondarySupportingDocuments).toEqual(
-              ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                .hasSecondarySupportingDocuments,
+              'Enter selection for Secondary Supporting Documents.',
             );
             baseDoc.hasSecondarySupportingDocuments = false;
             expect(errors().hasSecondarySupportingDocuments).toEqual(undefined);
@@ -363,10 +346,7 @@ describe('ExternalDocumentInformationFactory', () => {
           it('should require supporting secondary document type be entered', () => {
             expect(
               errors().secondarySupportingDocuments[0].supportingDocument,
-            ).toEqual(
-              ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                .supportingDocument,
-            );
+            ).toEqual('Select a document type');
             baseDoc.secondarySupportingDocuments[0].supportingDocument =
               'brief';
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
@@ -378,10 +358,7 @@ describe('ExternalDocumentInformationFactory', () => {
               'brief';
             expect(
               errors().secondarySupportingDocuments[0].certificateOfServiceDate,
-            ).toEqual(
-              ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                .certificateOfServiceDate[1],
-            );
+            ).toEqual('Enter date of service');
             baseDoc.secondarySupportingDocuments[0].certificateOfServiceDate =
               createISODateString();
             expect(errors().secondarySupportingDocuments).toEqual(undefined);
@@ -401,10 +378,7 @@ describe('ExternalDocumentInformationFactory', () => {
             it('should require supporting secondary document file to be added', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
-              ).toEqual(
-                ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                  .supportingDocumentFile,
-              );
+              ).toEqual('Upload a document');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
                 {};
               expect(errors().secondarySupportingDocuments).toEqual(undefined);
@@ -425,10 +399,7 @@ describe('ExternalDocumentInformationFactory', () => {
             it('should require supporting secondary document file to be selected', () => {
               expect(
                 errors().secondarySupportingDocuments[0].supportingDocumentFile,
-              ).toEqual(
-                ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                  .supportingDocumentFile,
-              );
+              ).toEqual('Upload a document');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFile =
                 {};
               expect(
@@ -440,10 +411,7 @@ describe('ExternalDocumentInformationFactory', () => {
               expect(
                 errors().secondarySupportingDocuments[0]
                   .supportingDocumentFreeText,
-              ).toEqual(
-                ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES
-                  .supportingDocumentFreeText,
-              );
+              ).toEqual('Enter name');
               baseDoc.secondarySupportingDocuments[0].supportingDocumentFreeText =
                 'Something';
               expect(
@@ -458,9 +426,7 @@ describe('ExternalDocumentInformationFactory', () => {
 
     it('should require one of [filers, partyIrsPractitioner] to be selected', () => {
       baseDoc.filers = [];
-      expect(errors().filers).toEqual(
-        ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.filers,
-      );
+      expect(errors().filers).toEqual('Select a filing party');
       baseDoc.partyIrsPractitioner = true;
       expect(errors().filers).toEqual(undefined);
     });
@@ -473,9 +439,7 @@ describe('ExternalDocumentInformationFactory', () => {
       });
 
       it('should require a party per case or partyIrsPractitioner to be selected', () => {
-        expect(errors().filers).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.filers,
-        );
+        expect(errors().filers).toEqual('Select a filing party');
       });
 
       it('should not have filers errors if selectedCases match casesWithAPartySelected', () => {
@@ -490,9 +454,7 @@ describe('ExternalDocumentInformationFactory', () => {
         baseDoc.casesParties = {
           '102-19': { filers: undefined },
         };
-        expect(errors().filers).toEqual(
-          ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.filers,
-        );
+        expect(errors().filers).toEqual('Select a filing party');
       });
 
       describe('IRS Practitioner Selected', () => {
@@ -513,9 +475,7 @@ describe('ExternalDocumentInformationFactory', () => {
         });
 
         it('should not allow having a insufficient account of parties to all cases', () => {
-          expect(errors().filers).toEqual(
-            ExternalDocumentInformationFactory.VALIDATION_ERROR_MESSAGES.filers,
-          );
+          expect(errors().filers).toEqual('Select a filing party');
         });
       });
     });
