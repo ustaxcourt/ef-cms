@@ -1,6 +1,5 @@
-import { state } from '@web-client/presenter/app.cerebral';
-
 import { Get } from 'cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 
 export const headerPublicHelper = (get: Get) => {
   const currentPage = get(state.currentPage) || '';
