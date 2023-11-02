@@ -57,7 +57,7 @@ export const HeaderPublic = connect(
             role="banner"
           >
             <div className="usa-nav-container">
-              <div className="usa-navbar">
+              <div className="usa-navbar usa-navbar-public">
                 <div className="usa-logo">
                   <a href="/">
                     <img alt="USTC Seal" src={seal} />
