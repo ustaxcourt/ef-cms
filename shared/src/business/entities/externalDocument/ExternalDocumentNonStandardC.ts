@@ -16,31 +16,22 @@ export class ExternalDocumentNonStandardC extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    freeText: JoiValidationConstants.STRING.max(1000).required(),
+    freeText: JoiValidationConstants.STRING.max(1000).required().messages({
+      'any.required': 'Enter name',
+      'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
+    }),
     previousDocument: joi
       .object()
       .keys({
         documentTitle: JoiValidationConstants.STRING.optional(),
         documentType: JoiValidationConstants.STRING.required(),
       })
-      .required(),
+      .required()
+      .messages({ '*': 'Select a document' }),
   };
 
   getValidationRules() {
     return ExternalDocumentNonStandardC.VALIDATION_RULES;
-  }
-
-  getErrorToMessageMap() {
-    return {
-      ...ExternalDocumentBase.VALIDATION_ERROR_MESSAGES,
-      freeText: [
-        { contains: 'is required', message: 'Enter name' },
-        {
-          contains: 'must be less than or equal to',
-          message: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
-        },
-      ],
-    };
   }
 
   getDocumentTitle(): string {

@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardF } from './ExternalDocumentNonStandardF';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardF', () => {
@@ -9,17 +8,11 @@ describe('ExternalDocumentNonStandardF', () => {
         scenario: 'Nonstandard F',
       });
 
-      expect(externalDocumentF.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        ordinalValue:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.ordinalValue,
-        previousDocument:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES
-            .previousDocument,
+      expect(externalDocumentF.getValidationErrors()).toEqual({
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        ordinalValue: 'Select an iteration',
+        previousDocument: 'Select a document',
       });
     });
 
@@ -33,7 +26,7 @@ describe('ExternalDocumentNonStandardF', () => {
         scenario: 'Nonstandard F',
       });
 
-      expect(externalDocumentF.getFormattedValidationErrors()).toEqual(null);
+      expect(externalDocumentF.getValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
@@ -46,9 +39,9 @@ describe('ExternalDocumentNonStandardF', () => {
         scenario: 'Nonstandard F',
       });
 
-      expect(externalDocumentF.getFormattedValidationErrors()).toEqual({
+      expect(externalDocumentF.getValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardF.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });

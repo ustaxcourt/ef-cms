@@ -8,12 +8,11 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        category: externalDocumentC.getErrorToMessageMap().category,
-        documentType: externalDocumentC.getErrorToMessageMap().documentType[1],
-        freeText: externalDocumentC.getErrorToMessageMap().freeText[0].message,
-        previousDocument:
-          externalDocumentC.getErrorToMessageMap().previousDocument,
+      expect(externalDocumentC.getValidationErrors()).toEqual({
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        freeText: 'Enter name',
+        previousDocument: 'Select a document',
       });
     });
 
@@ -27,7 +26,7 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getFormattedValidationErrors()).toEqual(null);
+      expect(externalDocumentC.getValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when freeText is over 1000 characters', () => {
@@ -40,8 +39,8 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        freeText: externalDocumentC.getErrorToMessageMap().freeText[1].message,
+      expect(externalDocumentC.getValidationErrors()).toEqual({
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 
@@ -55,8 +54,9 @@ describe('ExternalDocumentNonStandardC', () => {
         scenario: 'Nonstandard C',
       });
 
-      expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
-        documentTitle: externalDocumentC.getErrorToMessageMap().documentTitle,
+      expect(externalDocumentC.getValidationErrors()).toEqual({
+        documentTitle:
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });

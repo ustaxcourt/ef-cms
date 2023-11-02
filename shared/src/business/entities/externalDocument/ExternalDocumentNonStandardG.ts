@@ -17,12 +17,19 @@ export class ExternalDocumentNonStandardG extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    ordinalValue: JoiValidationConstants.STRING.required(),
-    otherIteration: joi.when('ordinalValue', {
-      is: 'Other',
-      otherwise: joi.optional().allow(null),
-      then: joi.number().max(999).required(),
+    ordinalValue: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select an iteration',
     }),
+    otherIteration: joi
+      .when('ordinalValue', {
+        is: 'Other',
+        otherwise: joi.optional().allow(null),
+        then: joi.number().max(999).required(),
+      })
+      .messages({
+        '*': 'Maximum iteration value is 999.',
+        'any.required': 'Enter an iteration number.',
+      }),
   };
 
   getValidationRules() {

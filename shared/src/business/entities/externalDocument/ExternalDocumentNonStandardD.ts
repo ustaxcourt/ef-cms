@@ -23,8 +23,14 @@ export class ExternalDocumentNonStandardD extends ExternalDocumentBase {
         documentTitle: JoiValidationConstants.STRING.optional(),
         documentType: JoiValidationConstants.STRING.required(),
       })
-      .required(),
-    serviceDate: JoiValidationConstants.ISO_DATE.max('now').required(),
+      .required()
+      .messages({ '*': 'Select a document' }),
+    serviceDate: JoiValidationConstants.ISO_DATE.max('now')
+      .required()
+      .messages({
+        '*': 'Provide a service date',
+        'date.max': 'Service date cannot be in the future. Enter a valid date.',
+      }),
   };
 
   getValidationRules() {

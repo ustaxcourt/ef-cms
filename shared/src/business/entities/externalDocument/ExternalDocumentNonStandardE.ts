@@ -13,7 +13,9 @@ export class ExternalDocumentNonStandardE extends ExternalDocumentBase {
 
   static VALIDATION_RULES = {
     ...ExternalDocumentBase.VALIDATION_RULES,
-    trialLocation: JoiValidationConstants.STRING.required(),
+    trialLocation: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a preferred trial location.',
+    }),
   };
 
   getValidationRules() {

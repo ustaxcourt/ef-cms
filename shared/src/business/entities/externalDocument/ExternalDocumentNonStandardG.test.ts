@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardG } from './ExternalDocumentNonStandardG';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardG', () => {
@@ -9,14 +8,10 @@ describe('ExternalDocumentNonStandardG', () => {
         scenario: 'Nonstandard G',
       });
 
-      expect(externalDocumentG.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        ordinalValue:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES.ordinalValue,
+      expect(externalDocumentG.getValidationErrors()).toEqual({
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        ordinalValue: 'Select an iteration',
       });
     });
 
@@ -29,7 +24,7 @@ describe('ExternalDocumentNonStandardG', () => {
         scenario: 'Nonstandard G',
       });
 
-      expect(externalDocumentG.getFormattedValidationErrors()).toEqual(null);
+      expect(externalDocumentG.getValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when documentTitle is over 3000 characters', () => {
@@ -41,9 +36,9 @@ describe('ExternalDocumentNonStandardG', () => {
         scenario: 'Nonstandard G',
       });
 
-      expect(externalDocumentG.getFormattedValidationErrors()).toEqual({
+      expect(externalDocumentG.getValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardG.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });

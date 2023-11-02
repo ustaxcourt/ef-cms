@@ -1,5 +1,4 @@
 import { ExternalDocumentFactory } from './ExternalDocumentFactory';
-import { ExternalDocumentNonStandardI } from './ExternalDocumentNonStandardI';
 import { getTextByCount } from '../../utilities/getTextByCount';
 
 describe('ExternalDocumentNonStandardI', () => {
@@ -9,17 +8,11 @@ describe('ExternalDocumentNonStandardI', () => {
         scenario: 'Nonstandard I',
       });
 
-      expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
-        category:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.category,
-        documentType:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES
-            .documentType[1],
-        freeText:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.freeText[0]
-            .message,
-        ordinalValue:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.ordinalValue,
+      expect(externalDocumentI.getValidationErrors()).toEqual({
+        category: 'Select a Category.',
+        documentType: 'Select a document type',
+        freeText: 'Provide an answer',
+        ordinalValue: 'Select an iteration',
       });
     });
 
@@ -33,7 +26,7 @@ describe('ExternalDocumentNonStandardI', () => {
         scenario: 'Nonstandard I',
       });
 
-      expect(externalDocumentI.getFormattedValidationErrors()).toEqual(null);
+      expect(externalDocumentI.getValidationErrors()).toEqual(null);
     });
 
     it('should be invalid when freeText is over 1000 characters', () => {
@@ -46,10 +39,8 @@ describe('ExternalDocumentNonStandardI', () => {
         scenario: 'Nonstandard I',
       });
 
-      expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
-        freeText:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.freeText[1]
-            .message,
+      expect(externalDocumentI.getValidationErrors()).toEqual({
+        freeText: 'Limit is 1000 characters. Enter 1000 or fewer characters.',
       });
     });
 
@@ -63,9 +54,9 @@ describe('ExternalDocumentNonStandardI', () => {
         scenario: 'Nonstandard I',
       });
 
-      expect(externalDocumentI.getFormattedValidationErrors()).toEqual({
+      expect(externalDocumentI.getValidationErrors()).toEqual({
         documentTitle:
-          ExternalDocumentNonStandardI.VALIDATION_ERROR_MESSAGES.documentTitle,
+          'Document title must be 3000 characters or fewer. Update this document title and try again.',
       });
     });
   });
