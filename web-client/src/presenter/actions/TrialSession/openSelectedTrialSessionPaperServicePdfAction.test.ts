@@ -23,12 +23,8 @@ describe('openSelectedTrialSessionPaperServicePdfsAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        modal: {
-          form: {
-            selectedPdf: fileId,
-          },
-        },
+      props: {
+        selectedPdf: fileId,
       },
     });
 
