@@ -85,8 +85,8 @@ describe('Scan entity', () => {
         rawScan: {},
       });
 
-      expect(scan.getValidationErrors()).toMatchObject({
-        batches: '#At least one batch is required',
+      expect(scan.getFormattedValidationErrors()).toMatchObject({
+        batches: 'At least one batch is required',
       });
     });
   });

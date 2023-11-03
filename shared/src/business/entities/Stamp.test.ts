@@ -14,7 +14,7 @@ describe('Stamp entity', () => {
     it('should be invalid when disposition is undefined', () => {
       const stamp = new Stamp({});
 
-      expect(stamp.getValidationErrors()).toMatchObject({
+      expect(stamp.getFormattedValidationErrors()).toMatchObject({
         disposition: 'Enter a disposition',
       });
     });
@@ -38,7 +38,7 @@ describe('Stamp entity', () => {
         dueDateMessage: 'something',
       });
 
-      expect(stamp.getValidationErrors()).toMatchObject({
+      expect(stamp.getFormattedValidationErrors()).toMatchObject({
         date: 'Due date cannot be prior to today. Enter a valid date.',
       });
     });
@@ -50,7 +50,7 @@ describe('Stamp entity', () => {
         dueDateMessage: 'something',
       });
 
-      expect(stamp.getValidationErrors()).toMatchObject({
+      expect(stamp.getFormattedValidationErrors()).toMatchObject({
         date: 'Enter a valid date',
       });
     });
@@ -62,7 +62,7 @@ describe('Stamp entity', () => {
         dueDateMessage: 'something',
       });
 
-      expect(stamp.getValidationErrors()).toBeNull();
+      expect(stamp.getFormattedValidationErrors()).toBeNull();
     });
 
     it('should be valid when date is today', () => {
@@ -74,7 +74,7 @@ describe('Stamp entity', () => {
         dueDateMessage: 'something',
       });
 
-      expect(stamp.getValidationErrors()).toBeNull();
+      expect(stamp.getFormattedValidationErrors()).toBeNull();
     });
   });
 });
