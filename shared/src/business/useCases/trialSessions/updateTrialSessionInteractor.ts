@@ -1,5 +1,9 @@
 import { Case } from '../../entities/cases/Case';
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
@@ -9,7 +13,6 @@ import {
 } from '../../entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 import { get } from 'lodash';
 
 export const updateTrialSessionInteractor = async (
@@ -28,6 +31,12 @@ export const updateTrialSessionInteractor = async (
       applicationContext,
       trialSessionId: trialSession.trialSessionId!,
     });
+
+  if (!currentTrialSession) {
+    throw new NotFoundError(
+      `Trial session ${trialSession.trialSessionId} was not found.`,
+    );
+  }
 
   if (
     currentTrialSession.startDate <

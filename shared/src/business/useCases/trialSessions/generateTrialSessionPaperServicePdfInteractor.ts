@@ -1,9 +1,12 @@
 import {
+  NotFoundError,
+  UnauthorizedError,
+} from '../../../../../web-api/src/errors/errors';
+import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
 
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
@@ -78,6 +81,10 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
       applicationContext,
       trialSessionId,
     });
+
+  if (!trialSession) {
+    throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
+  }
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
