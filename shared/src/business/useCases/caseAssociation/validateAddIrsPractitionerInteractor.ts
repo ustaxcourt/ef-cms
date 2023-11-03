@@ -5,7 +5,5 @@ export const validateAddIrsPractitionerInteractor = ({
 }: {
   counsel: any;
 }) => {
-  const errors = new AddIrsPractitioner(counsel).getValidationErrors();
-
-  return errors;
+  return new AddIrsPractitioner(counsel).getFormattedValidationErrors();
 };
