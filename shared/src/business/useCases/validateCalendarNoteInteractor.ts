@@ -8,11 +8,8 @@ import { CalendarNote } from '../entities/notes/CalendarNote';
  * @param {string} providers.note the note string
  * @returns {object} the errors or null
  */
-export const validateCalendarNoteInteractor = (
-  applicationContext: IApplicationContext,
-  { note }: { note: string },
-) => {
-  const errors = new CalendarNote({ note }).getFormattedValidationErrors();
+export const validateCalendarNoteInteractor = ({ note }: { note: string }) => {
+  const errors = new CalendarNote({ note }).getValidationErrors();
   if (!errors) return null;
   return errors;
 };
