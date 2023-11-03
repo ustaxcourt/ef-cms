@@ -99,9 +99,6 @@ describe('petitions clerk calendars a trial session and verifies the paper pdf l
           aCase => aCase.docketNumber === cerebralTest.docketNumber,
         ),
       ).toBeDefined();
-
-      console.log(trialSessionFormatted);
-      console.log(cerebralTest.docketNumber);
     });
   });
 
@@ -118,7 +115,6 @@ describe('petitions clerk calendars a trial session and verifies the paper pdf l
 
       await cerebralTest.runSequence('updateTrialSessionSequence');
 
-      // await waitForLoadingComponentToHide({ cerebralTest });
       await waitForExpectedItem({
         cerebralTest,
         currentItem: 'currentPage',
@@ -141,6 +137,4 @@ describe('petitions clerk calendars a trial session and verifies the paper pdf l
       expect(trialSessionFormatted.paperServicePdfs.length).toEqual(2);
     });
   });
-
-  // TODO: edit the trial session we just calendared
 });
