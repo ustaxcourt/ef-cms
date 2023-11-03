@@ -15,5 +15,5 @@ export const validateAddPractitionerDocumentFormInteractor = (
     {
       applicationContext,
     },
-  ).getValidationErrors();
+  ).getFormattedValidationErrors();
 };

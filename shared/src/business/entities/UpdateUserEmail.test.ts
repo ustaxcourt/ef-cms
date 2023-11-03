@@ -9,7 +9,7 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
         email: 'Enter a valid email address',
       });
@@ -22,7 +22,7 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
@@ -34,7 +34,7 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
       });
     });
@@ -46,7 +46,7 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
         email: 'Enter a valid email address',
       });
@@ -59,7 +59,7 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Email addresses do not match',
         email: 'Enter a valid email address',
       });
@@ -72,7 +72,7 @@ describe('UpdateUserEmail', () => {
       });
 
       expect(updateUserEmailEntity.isValid()).toBeFalsy();
-      expect(updateUserEmailEntity.getValidationErrors()).toEqual({
+      expect(updateUserEmailEntity.getFormattedValidationErrors()).toEqual({
         confirmEmail: 'Enter a valid email address',
       });
     });
