@@ -11,9 +11,9 @@ import {
   CASE_STATUS_RULE,
 } from '@shared/business/entities/EntityValidationConstants';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
-import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
+import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 
-export class ConsolidatedCaseSummary extends JoiValidationEntity_New {
+export class ConsolidatedCaseSummary extends JoiValidationEntity {
   public caseCaption: string;
   public docketNumber: string;
   public docketNumberWithSuffix: string;
