@@ -44,4 +44,20 @@ describe('aggregateTrialSessionItems', () => {
 
     expect(retval).toEqual(undefined);
   });
+
+  it('should filter out pdf links that are older than 3 days', () => {
+    const trialSessionAndTrialSessionItems = [
+      trialSessionRecord,
+      { ...initialCalendaringPaperServicePdf, ttl: 1000 },
+    ];
+
+    const aggregated = aggregateTrialSessionItems(
+      trialSessionAndTrialSessionItems,
+    );
+
+    expect(aggregated).toMatchObject({
+      ...trialSessionRecord,
+      paperServicePdfs: [],
+    });
+  });
 });
