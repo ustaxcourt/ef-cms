@@ -25,6 +25,7 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { createEndOfDayISO } from '../utilities/DateHandler';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export const SERVICE_INDICATOR_ERROR = {
@@ -493,6 +494,40 @@ export const DATE_RANGE_VALIDATION_RULE_KEYS = {
     .description(
       'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
     ),
+};
+
+export const DATE_RANGE_VALIDATION_RULE_KEYS_NEW = {
+  endDate: joi
+    .alternatives()
+    .conditional('startDate', {
+      is: JoiValidationConstants.ISO_DATE.exist().not(null),
+      otherwise: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+        .required()
+        .description('The end date search filter must be of valid date format'),
+      then: JoiValidationConstants.ISO_DATE.max(createEndOfDayISO())
+        .min(joi.ref('startDate'))
+        .required()
+        .description(
+          'The end date search filter must be of valid date format and greater than or equal to the start date',
+        ),
+    })
+    .messages({
+      ...setDefaultErrorMessage('Enter a valid end date.'),
+      'any.required': 'Enter an end date.',
+      'date.max': 'End date cannot be in the future. Enter a valid date.',
+      'date.min':
+        'End date cannot be prior to start date. Enter a valid end date.',
+    }),
+  startDate: JoiValidationConstants.ISO_DATE.max('now')
+    .required()
+    .description(
+      'The start date to search by, which cannot be greater than the current date, and is required when there is an end date provided',
+    )
+    .messages({
+      ...setDefaultErrorMessage('Enter a valid start date.'),
+      'any.required': 'Enter a start date.',
+      'date.max': 'Start date cannot be in the future. Enter a valid date.',
+    }),
 };
 
 export const DOCKET_ENTRY_VALIDATION_RULES = joi

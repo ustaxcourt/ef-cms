@@ -2,20 +2,16 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../../../web-api/src/errors/errors';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
-// eslint-disable-next-line spellcheck/spell-checker
-/**
- * generateTrialSessionPaperServicePdfInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.trialNoticePdfsKeys the trialNoticePdfsKeys
- * @returns {object} docketEntryId, hasPaper, pdfUrl
- */
 export const generateTrialSessionPaperServicePdfInteractor = async (
   applicationContext: IApplicationContext,
-  { trialNoticePdfsKeys }: { trialNoticePdfsKeys: string[] },
-) => {
+  {
+    trialNoticePdfsKeys,
+    trialSessionId,
+  }: { trialNoticePdfsKeys: string[]; trialSessionId: string },
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
@@ -64,32 +60,47 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
     });
   }
 
-  const hasPaper = !!paperServiceDocumentsPdf.getPageCount();
   const paperServicePdfData = await paperServiceDocumentsPdf.save();
 
-  let docketEntryId, pdfUrl;
+  let fileId, pdfUrl;
 
-  if (hasPaper) {
-    ({ fileId: docketEntryId, url: pdfUrl } = await applicationContext
-      .getUseCaseHelpers()
-      .saveFileAndGenerateUrl({
-        applicationContext,
-        file: paperServicePdfData,
-        useTempBucket: true,
-      }));
+  ({ fileId, url: pdfUrl } = await applicationContext
+    .getUseCaseHelpers()
+    .saveFileAndGenerateUrl({
+      applicationContext,
+      file: paperServicePdfData,
+      fileNamePrefix: 'paper-service-pdf/',
+    }));
 
-    applicationContext.logger.info(
-      `generated the printable paper service pdf at ${pdfUrl}`,
-      { pdfUrl },
-    );
-  }
+  const trialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId,
+    });
+
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
+
+  trialSessionEntity.addPaperServicePdf(fileId, 'Initial Calendaring');
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
+
+  applicationContext.logger.info(
+    `generated the printable paper service pdf at ${pdfUrl}`,
+    { pdfUrl },
+  );
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: 'paper_service_complete',
-      docketEntryId,
-      hasPaper,
+      action: 'set_trial_calendar_paper_service_complete',
+      fileId,
+      hasPaper: true,
       pdfUrl,
     },
     userId: user.userId,

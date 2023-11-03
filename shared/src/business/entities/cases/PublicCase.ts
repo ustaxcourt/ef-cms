@@ -18,6 +18,7 @@ import { PublicContact } from './PublicContact';
 import { PublicDocketEntry } from './PublicDocketEntry';
 import { compareStrings } from '../../utilities/sortFunctions';
 import { map } from 'lodash';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class PublicCase extends JoiValidationEntity {
@@ -207,6 +208,80 @@ export class PublicCase extends JoiValidationEntity {
 
   getValidationRules() {
     return PublicCase.VALIDATION_RULES;
+  }
+
+  static VALIDATION_RULES_NEW = {
+    canAllowDocumentService: joi.boolean().optional(),
+    canAllowPrintableDocketRecord: joi.boolean().optional(),
+    caseCaption: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.CASE_CAPTION.optional(),
+        then: joi.any().forbidden(),
+      })
+      .messages(setDefaultErrorMessage('Enter a case caption')),
+    createdAt: joi.when('isSealed', {
+      is: true,
+      otherwise: JoiValidationConstants.ISO_DATE.optional(),
+      then: joi.any().forbidden(),
+    }),
+    docketEntries: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: joi
+          .array()
+          .items(PublicDocketEntry.VALIDATION_RULES)
+          .required()
+          .description('List of DocketEntry Entities for the case.'),
+        then: joi.array().max(0),
+      })
+      .messages(
+        setDefaultErrorMessage('At least one valid docket entry is required'),
+      ),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required()
+      .description('Unique case identifier in XXXXX-YY format.')
+      .messages(setDefaultErrorMessage('Docket number is required')),
+    docketNumberSuffix: JoiValidationConstants.STRING.allow(null)
+      .valid(...Object.values(DOCKET_NUMBER_SUFFIXES))
+      .optional(),
+    docketNumberWithSuffix:
+      JoiValidationConstants.STRING.optional().description(
+        'Auto-generated from docket number and the suffix.',
+      ),
+    hasIrsPractitioner: joi.boolean().required(),
+    isPaper: joi.boolean().optional(),
+    isSealed: joi.boolean(),
+    partyType: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.STRING.valid(
+          ...Object.values(PARTY_TYPES),
+        )
+          .required()
+          .description('Party type of the case petitioner.'),
+        then: joi.any().forbidden(),
+      })
+      .messages(setDefaultErrorMessage('Select a party type')),
+    petitioners: joi.when('isSealed', {
+      is: true,
+      otherwise: joi.array().items(PublicContact.VALIDATION_RULES).required(),
+      then: joi.any().forbidden(),
+    }),
+    receivedAt: joi
+      .when('isSealed', {
+        is: true,
+        otherwise: JoiValidationConstants.ISO_DATE.optional(),
+        then: joi.any().forbidden(),
+      })
+      .messages({
+        ...setDefaultErrorMessage('Enter a valid date received'),
+        'date.max':
+          'Date received cannot be in the future. Enter a valid date.',
+      }),
+  };
+
+  getValidationRules_NEW() {
+    return PublicCase.VALIDATION_RULES_NEW;
   }
 }
 

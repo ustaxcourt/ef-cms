@@ -1,6 +1,7 @@
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity_New } from '@shared/business/entities/joiValidationEntity/JoiValidationEntity_New';
 import { SERVICE_INDICATOR_TYPES } from '../EntityConstants';
+import { setDefaultErrorMessage } from '@shared/business/entities/utilities/setDefaultErrorMessage';
 import joi from 'joi';
 
 export class AddIrsPractitioner extends JoiValidationEntity_New {
@@ -42,6 +43,33 @@ export class AddIrsPractitioner extends JoiValidationEntity_New {
 
   getValidationRules() {
     return AddIrsPractitioner.VALIDATION_RULES;
+  }
+
+  getValidationRules_NEW() {
+    return {
+      email: JoiValidationConstants.STRING.optional(),
+      serviceIndicator: joi
+        .when('email', {
+          is: joi.exist().not(null),
+          otherwise: JoiValidationConstants.STRING.valid(
+            SERVICE_INDICATOR_TYPES.SI_NONE,
+            SERVICE_INDICATOR_TYPES.SI_PAPER,
+          ),
+          then: JoiValidationConstants.STRING.valid(
+            ...Object.values(SERVICE_INDICATOR_TYPES),
+          ),
+        })
+        .required()
+        .messages({
+          ...setDefaultErrorMessage('Select service type'),
+          'any.only':
+            'No email found for electronic service. Select a valid service preference.',
+        }),
+      user: joi
+        .object()
+        .required()
+        .messages(setDefaultErrorMessage('Select a respondent counsel')),
+    };
   }
 }
 

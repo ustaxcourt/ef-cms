@@ -62,7 +62,6 @@ export class InternalDocumentSearchResult extends JoiValidationEntity_New {
     signedJudgeName: JoiValidationConstants.STRING.optional().allow(null),
   };
 
-  x;
   static DOCUMENT_SEARCH_PAGE_LOAD_SIZE = 6;
 
   getValidationRules() {

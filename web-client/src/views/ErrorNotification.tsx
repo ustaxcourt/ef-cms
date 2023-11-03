@@ -36,9 +36,9 @@ export const ErrorNotification = connect(
               )}
               {alertHelper.showMultipleMessages && (
                 <ul>
-                  {alertHelper.messagesDeduped.map(message => (
-                    <li key={message}>{message}</li>
-                  ))}
+                  {alertHelper.messagesDeduped.map(message => {
+                    return <li key={message}>{message}</li>;
+                  })}
                 </ul>
               )}
               {alertHelper.showTitleOnly && (

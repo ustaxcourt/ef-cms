@@ -383,6 +383,24 @@ describe('TrialSession entity', () => {
         });
       });
     });
+
+    describe('postal code', () => {
+      it('should return error messages when postal code does not match regex', () => {
+        const trialSession = new TrialSession(
+          {
+            ...MOCK_TRIAL_REGULAR,
+            postalCode: 'NOT A REAL POSTAL CODE',
+          },
+          {
+            applicationContext,
+          },
+        );
+
+        expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+          postalCode: 'Enter ZIP code',
+        });
+      });
+    });
   });
 
   describe('validate', () => {
@@ -616,6 +634,39 @@ describe('TrialSession entity', () => {
       );
 
       expect(trialSession.dismissedAlertForNOTT).toBe(false);
+    });
+  });
+
+  describe('paperServicePdfs', () => {
+    it('should default to an empty array when the trial session does not already have any paper service pdfs', () => {
+      const trialSession = new TrialSession(
+        {
+          ...MOCK_TRIAL_REGULAR,
+          paperServicePdfs: undefined,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.paperServicePdfs).toEqual([]);
+    });
+
+    it('should require a fileId and title on each entry to be valid', () => {
+      const trialSession = new TrialSession(
+        {
+          ...MOCK_TRIAL_REGULAR,
+          paperServicePdfs: [{}],
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.getFormattedValidationErrors()).toEqual({
+        fileId: '"paperServicePdfs[0].fileId" is required',
+        title: '"paperServicePdfs[0].title" is required',
+      });
     });
   });
 });
